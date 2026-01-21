@@ -29,6 +29,7 @@ import TeamMemberDetailDialog from "@/components/TeamMemberDetailDialog";
 import CEOLeadershipShowcase from "@/components/CEOLeadershipShowcase";
 import DepartmentInfoSection from "@/components/DepartmentInfoSection";
 import { companySummary } from "@/config/department-metadata";
+import teamHeroImage from "@/assets/team-hero-image.jpg";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -95,61 +96,50 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
 
           {/* Info - Positioned below photo, not overlapping */}
           <div className="p-5 flex flex-col bg-gradient-to-b from-[#FFFDF9] via-[#FBF7F0] to-[#F5EFE4]">
-            <div>
-              <h3 className="text-black font-semibold text-lg mb-1 line-clamp-1">{member.name}</h3>
+            <h3 className="text-black font-semibold text-lg mb-1 line-clamp-1">{member.name}</h3>
 
-              {/* Premium shiny job title */}
-              <p
-                className="text-sm font-medium mb-1 line-clamp-1 text-gold"
-              >
-                {member.role}
-              </p>
+            {/* Premium shiny job title */}
+            <p className="text-sm font-medium mb-1 line-clamp-1 text-gold">
+              {member.role}
+            </p>
 
-              <div className="flex items-center gap-2 text-zinc-600 text-xs mb-1">
-                <span>{member.department}</span>
-                {typeof member.yearsExperience === "number" && (
-                  <>
-                    <span>•</span>
-                    <span>{member.yearsExperience} yrs</span>
-                  </>
-                )}
-                {member.nationality && (
-                  <>
-                    <span>•</span>
-                    <span>{member.nationality}</span>
-                  </>
-                )}
-              </div>
-
-              {/* Reports To - Only show manager name (no hierarchy levels) */}
-              {reportsToMember && (
-                <div className="flex items-center gap-1.5 text-zinc-600 text-[11px] mb-2">
-                  <ArrowUpRight className="w-3 h-3 flex-shrink-0" />
-                  <span>Reports to {reportsToMember.name}</span>
-                </div>
+            <div className="flex items-center gap-2 text-zinc-600 text-xs mb-2">
+              <span>{member.department}</span>
+              {typeof member.yearsExperience === "number" && (
+                <>
+                  <span>•</span>
+                  <span>{member.yearsExperience} yrs</span>
+                </>
               )}
-
-              {/* Short Bio */}
-              {member.bio && (
-                <p className="text-zinc-600 text-xs line-clamp-2 mb-2">
-                  {member.bio}
-                </p>
+              {member.nationality && (
+                <>
+                  <span>•</span>
+                  <span>{member.nationality}</span>
+                </>
               )}
             </div>
 
-            {/* Bottom actions */}
-            <div className="pt-3 mt-3 border-t border-gold/30">
-              <button
-                type="button"
-                onClick={() => onReadMore(member)}
-                className="text-gold hover:text-black text-xs font-medium transition-colors"
-              >
-                Read more →
-              </button>
+            {/* Short Bio */}
+            {member.bio && (
+              <p className="text-zinc-600 text-xs line-clamp-2 mb-3">
+                {member.bio}
+              </p>
+            )}
 
-              {/* Languages - Always at bottom with small gap */}
+            {/* Read More - Above divider */}
+            <button
+              type="button"
+              onClick={() => onReadMore(member)}
+              className="text-gold hover:text-black text-xs font-medium transition-colors mb-3 text-left"
+            >
+              Read more →
+            </button>
+
+            {/* Divider between Read More and Languages */}
+            <div className="border-t border-gold/30 pt-3">
+              {/* Languages - Below divider */}
               {displayLanguages.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mt-2">
+                <div className="flex flex-wrap gap-1.5">
                   {displayLanguages.map((lang) => (
                     <Badge
                       key={lang}
@@ -274,15 +264,26 @@ const MeetTheTeam: React.FC = () => {
       />
 
       <div className="min-h-screen bg-black">
-        {/* Hero Section */}
-        <section className="relative py-20 md:py-28 overflow-hidden">
+        {/* Hero Section with Premium Team Image */}
+        <section className="relative min-h-[70vh] overflow-hidden">
+          {/* Hero Background Image */}
+          <div className="absolute inset-0">
+            <img
+              src={teamHeroImage}
+              alt="JBJ Global Real Estate Professional Team"
+              className="w-full h-full object-cover"
+            />
+            {/* Overlay gradient */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
+          </div>
+
           {/* Background effects */}
-          <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gold/10 rounded-full blur-[120px]" />
             <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-gold/5 rounded-full blur-[100px]" />
           </div>
 
-          <div className="container mx-auto px-4 relative z-10">
+          <div className="container mx-auto px-4 relative z-10 py-24 md:py-32">
             <motion.div
               initial="hidden"
               animate="visible"
@@ -333,6 +334,7 @@ const MeetTheTeam: React.FC = () => {
                 <Button
                   onClick={handleOpenContactForm}
                   variant="primary"
+                  size="lg"
                   className="px-8"
                 >
                   <MessageSquare className="w-4 h-4 mr-2" />

@@ -23,11 +23,11 @@ const CEOLeadershipShowcase = () => {
   const metrics = useTeamMetrics();
 
   return (
-    <section id="ceo-showcase" className="py-20 border-t border-zinc-800 relative overflow-hidden">
+    <section id="ceo-showcase" className="py-20 border-t border-gold/30 relative overflow-hidden bg-gradient-to-br from-[#FFFDF9] via-[#FBF7F0] to-[#F5EFE4]">
       {/* Background effects */}
       <div className="absolute inset-0">
-        <div className="absolute top-1/2 left-1/4 w-[600px] h-[600px] bg-gold/5 rounded-full blur-[150px]" />
-        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-[120px]" />
+        <div className="absolute top-1/2 left-1/4 w-[600px] h-[600px] bg-gold/10 rounded-full blur-[150px]" />
+        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-gold/5 rounded-full blur-[120px]" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
@@ -40,11 +40,11 @@ const CEOLeadershipShowcase = () => {
         >
           {/* Section Header */}
           <motion.div variants={fadeInUp} className="text-center mb-12">
-            <Badge className="bg-gold/15 text-gold border-gold/30 px-4 py-1.5 mb-6">
+            <Badge className="bg-white text-gold border-gold/40 px-4 py-1.5 mb-6 shadow-sm">
               <Sparkles className="w-3.5 h-3.5 mr-1.5" />
               Our Vision
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
               <span
                 style={{
                   background:
@@ -56,7 +56,7 @@ const CEOLeadershipShowcase = () => {
                 Excellence in Every Detail
               </span>
             </h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
+            <p className="text-zinc-600 max-w-2xl mx-auto">
               At JBJ GLOBAL REAL ESTATE, we're committed to delivering exceptional
               service through a world-class team of professionals.
             </p>
@@ -94,46 +94,46 @@ const CEOLeadershipShowcase = () => {
             </div>
           </motion.div>
 
-          {/* Company Stats - Animated Counters with Real Metrics */}
+          {/* Company Stats - Animated Counters with Real Metrics - JBJ Support Style */}
           <motion.div
             variants={fadeInUp}
             className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12"
           >
-            <div className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold/40 transition-all duration-300 hover:scale-[1.02]">
-              <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+            <div className="text-center p-6 bg-white border-2 border-gold/40 rounded-xl hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.3)] transition-all duration-300 hover:scale-[1.02]">
+              <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center mx-auto mb-3">
                 <Users className="w-6 h-6 text-gold" />
               </div>
               <p className="text-2xl font-bold text-gold mb-1">
                 <AnimatedCounter end={metrics.totalMembers} suffix="+" duration={2500} />
               </p>
-              <p className="text-zinc-500 text-sm">Team Members</p>
+              <p className="text-zinc-600 text-sm font-medium">Team Members</p>
             </div>
-            <div className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold/40 transition-all duration-300 hover:scale-[1.02]">
-              <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+            <div className="text-center p-6 bg-white border-2 border-gold/40 rounded-xl hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.3)] transition-all duration-300 hover:scale-[1.02]">
+              <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center mx-auto mb-3">
                 <Building2 className="w-6 h-6 text-gold" />
               </div>
               <p className="text-2xl font-bold text-gold mb-1">
                 <AnimatedCounter end={metrics.totalDepartments} duration={2000} />
               </p>
-              <p className="text-zinc-500 text-sm">Departments</p>
+              <p className="text-zinc-600 text-sm font-medium">Departments</p>
             </div>
-            <div className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold/40 transition-all duration-300 hover:scale-[1.02]">
-              <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+            <div className="text-center p-6 bg-white border-2 border-gold/40 rounded-xl hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.3)] transition-all duration-300 hover:scale-[1.02]">
+              <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center mx-auto mb-3">
                 <Languages className="w-6 h-6 text-gold" />
               </div>
               <p className="text-2xl font-bold text-gold mb-1">
                 <AnimatedCounter end={metrics.totalLanguages} suffix="+" duration={2200} />
               </p>
-              <p className="text-zinc-500 text-sm">Languages Spoken</p>
+              <p className="text-zinc-600 text-sm font-medium">Languages Spoken</p>
             </div>
-            <div className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold/40 transition-all duration-300 hover:scale-[1.02]">
-              <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+            <div className="text-center p-6 bg-white border-2 border-gold/40 rounded-xl hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.3)] transition-all duration-300 hover:scale-[1.02]">
+              <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center mx-auto mb-3">
                 <Globe className="w-6 h-6 text-gold" />
               </div>
               <p className="text-2xl font-bold text-gold mb-1">
                 <AnimatedCounter end={metrics.totalNationalities} suffix="+" duration={2300} />
               </p>
-              <p className="text-zinc-500 text-sm">Nationalities</p>
+              <p className="text-zinc-600 text-sm font-medium">Nationalities</p>
             </div>
           </motion.div>
 
@@ -143,8 +143,8 @@ const CEOLeadershipShowcase = () => {
             className="text-center max-w-3xl mx-auto"
           >
             <div className="relative">
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 text-6xl text-gold/20">"</div>
-              <p className="text-xl md:text-2xl text-zinc-300 italic leading-relaxed pt-8">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 text-6xl text-gold/30">"</div>
+              <p className="text-xl md:text-2xl text-zinc-700 italic leading-relaxed pt-8">
                 Innovation and excellence are not just goals—they are the foundation
                 of everything we build. At JBJ Global Real Estate, we're crafting futures and shaping skylines.
               </p>
