@@ -173,8 +173,8 @@ const GlobalHeader = () => {
     <header className="fixed top-0 left-0 right-0 z-[9999]">
       {/* Solid black background across entire header - no transparency */}
       <div className="absolute inset-0 bg-black" />
-      {/* Premium bottom accent line - gold only, no black extension */}
-      <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent z-10" />
+      {/* Premium bottom accent line - solid gold (no black/transparent extension) */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gold/40 z-10" />
       
       <div className="relative z-10 mx-auto w-full max-w-7xl px-2 sm:px-3 lg:px-4">
         <div className="flex items-center justify-between h-16 lg:h-20 w-full">
@@ -530,9 +530,9 @@ const GlobalHeader = () => {
             </Sheet>
           </div>
 
-          {/* CENTER: Desktop Navigation - Premium styling with elegant dropdowns - stretched left toward logo */}
-          <nav className="hidden lg:flex items-center justify-end flex-1 min-w-0 ml-1 mr-2">
-            <div className="flex items-center gap-1 bg-gradient-to-r from-[#FFFDF9] via-[#FBF7F0] to-[#F5EFE4] backdrop-blur-sm rounded-full px-3 py-0.5 border border-gold/30 shadow-lg">
+          {/* CENTER: Desktop Navigation - right-locked, stretched left, matches chat "Need Help?" banner */}
+          <nav className="hidden lg:flex items-center justify-end flex-1 min-w-0 ml-0 mr-2">
+            <div className="flex items-center gap-1 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] backdrop-blur-sm rounded-full pl-6 pr-3 py-0.5 border border-gold/40 shadow-lg">
               
               {/* 1. Home - No dropdown */}
               <Link
