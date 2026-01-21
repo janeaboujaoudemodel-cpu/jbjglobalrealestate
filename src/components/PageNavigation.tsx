@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowUp, ArrowDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 function getRouteString(loc: { pathname: string; search: string; hash: string }) {
@@ -67,23 +66,25 @@ export default function PageNavigation() {
   const previous = stack.length >= 2 ? stack[stack.length - 2] : null;
   const hasPrevious = previous && previous !== current;
 
+  // NOTE: We intentionally use native <button> here.
+  // The global <Button /> component sanitizes bg/gradient classes by design,
+  // which would strip the active champagne fill.
   const buttonBaseClass = cn(
-    "h-10 w-10 rounded-full shadow-lg transition-all duration-300",
-    // Force non-transparent fill regardless of Button variant styles
-    "!bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark",
+    "h-10 w-10 rounded-full",
+    "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark",
     "border-2 border-gold/70",
-    // Hover keeps the same fill; only the shadow/border intensity increases
-    "hover:shadow-[0_6px_26px_hsl(45_32%_39%_/_0.45)] hover:border-gold",
-    "focus:ring-2 focus:ring-gold focus:ring-offset-2"
+    "shadow-lg transition-all duration-300",
+    // Hover keeps same fill; only border/shadow intensity changes
+    "hover:border-gold hover:shadow-[0_6px_26px_hsl(var(--gold)_/_0.45)]",
+    "focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2",
+    "flex items-center justify-center"
   );
 
   return (
     <div className="fixed bottom-6 left-6 z-[9999] flex flex-col gap-2">
       {/* Scroll to Top */}
-      <Button
+      <button
         type="button"
-        variant="ghost"
-        size="icon"
         onClick={scrollToTop}
         className={cn(
           buttonBaseClass,
@@ -93,27 +94,23 @@ export default function PageNavigation() {
         aria-label="Scroll to top"
       >
         <ArrowUp className="w-4 h-4 text-black" />
-      </Button>
+      </button>
 
       {/* Back to Previous Page */}
       {hasPrevious && (
-        <Button
+        <button
           type="button"
-          variant="ghost"
-          size="icon"
           onClick={() => navigate(previous)}
           className={buttonBaseClass}
           aria-label="Go back"
         >
           <ArrowLeft className="w-4 h-4 text-black" />
-        </Button>
+        </button>
       )}
 
       {/* Scroll to Bottom */}
-      <Button
+      <button
         type="button"
-        variant="ghost"
-        size="icon"
         onClick={scrollToBottom}
         className={cn(
           buttonBaseClass,
@@ -123,7 +120,7 @@ export default function PageNavigation() {
         aria-label="Scroll to bottom"
       >
         <ArrowDown className="w-4 h-4 text-black" />
-      </Button>
+      </button>
     </div>
   );
 }
