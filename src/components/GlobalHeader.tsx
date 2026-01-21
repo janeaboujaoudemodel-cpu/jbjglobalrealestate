@@ -236,11 +236,11 @@ const GlobalHeader = () => {
                 {/* Menu Header - larger monogram with transparent bg (black J letters), one-line company name */}
                 <div className="relative border-b border-gold/30 flex items-center gap-3 px-4 py-3 shrink-0">
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-                  {/* Large monogram - transparent version with black J letters for light backgrounds */}
+                  {/* Monogram - same size as header (w-14 h-14) */}
                   <img 
                     src={jbjMonogramTransparent}
                     alt="JBJ"
-                    className="w-20 h-20 object-contain"
+                    className="w-14 h-14 object-contain"
                   />
                   <span 
                     className="text-black font-bold text-sm tracking-[0.06em] uppercase whitespace-nowrap leading-none"
