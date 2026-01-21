@@ -262,9 +262,9 @@ const Index = () => {
       </section>
 
 
-      {/* WHO IS THIS FOR - Clear Entry Points */}
-      <section className="py-16 md:py-20 bg-zinc-950">
-        <div className="container mx-auto px-4">
+      {/* WHO IS THIS FOR - Clear Entry Points with Champagne Layer */}
+      <section className="py-16 md:py-20 bg-black">
+        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg">
           <div className="text-center mb-10">
             <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full text-black text-xs uppercase tracking-[0.2em] font-medium shadow-md">
               <Users className="w-3 h-3 text-gold" />

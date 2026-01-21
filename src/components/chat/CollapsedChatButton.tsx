@@ -46,11 +46,11 @@ const CollapsedChatButton = ({ onToggle, showAttentionPulse = false }: Collapsed
             )}
           </button>
         ) : (
-          /* Small icon state - shown after first interaction or subsequent visits same day - ALL devices */
+          /* Small icon state - ACTIVE COLOR */
           <button
             onClick={onToggle}
             aria-label="Open chat support"
-            className="relative flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-all duration-300 group hover:scale-105"
+            className="relative flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-all duration-300 group hover:scale-105"
           >
             <SquareChatIcon className="w-6 h-6 text-gold" size={24} />
           </button>
