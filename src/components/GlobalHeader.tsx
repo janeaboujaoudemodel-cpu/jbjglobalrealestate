@@ -531,7 +531,7 @@ const GlobalHeader = () => {
           </div>
 
           {/* CENTER: Desktop Navigation - Premium styling with elegant dropdowns */}
-          <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 mx-4">
+          <nav className="hidden lg:flex items-center justify-end flex-1 min-w-0 ml-3 mr-6">
             <div className="flex items-center gap-0 bg-gradient-to-r from-[#FFFDF9] via-[#FBF7F0] to-[#F5EFE4] backdrop-blur-sm rounded-full px-1.5 py-1 border border-gold/30 shadow-lg">
               
               {/* 1. Home - No dropdown */}
@@ -596,33 +596,31 @@ const GlobalHeader = () => {
             </div>
           </nav>
 
-          {/* RIGHT: Actions - Desktop only - Compact premium icon buttons with inverted hover */}
-          <div className="hidden lg:flex items-center gap-4 shrink-0 ml-4">
-            {/* Search Icon - No border, no background */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="w-4 h-4 p-0 min-w-0 hover:opacity-70 transition-all duration-300"
+          {/* RIGHT: Actions - Desktop only - Icons grouped, same size, no borders */}
+          <div className="hidden lg:flex items-center gap-2 shrink-0">
+            {/* Search Icon */}
+            <button
+              className="p-0 hover:opacity-70 transition-opacity duration-200"
               onClick={() => setSearchOpen(true)}
+              aria-label="Search"
             >
-              <Search className="w-4 h-4 text-gold" />
-            </Button>
+              <Search className="w-5 h-5 text-gold" />
+            </button>
 
-            {/* Language Switcher - No border */}
+            {/* Language Switcher */}
             <LanguageSwitcher variant="icon-only" />
 
-            <div className="hidden lg:block">
+            {/* Account Icon */}
+            <div>
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button 
-                      variant="ghost" 
-                      size="icon"
-                      className="w-4 h-4 p-0 min-w-0 text-gold hover:opacity-70 transition-all duration-300"
+                    <button 
+                      className="p-0 hover:opacity-70 transition-opacity duration-200"
                       aria-label={t('nav.myAccount')}
                     >
-                      <User className="w-4 h-4" />
-                    </Button>
+                      <User className="w-5 h-5 text-gold" />
+                    </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent 
                     align="end" 
