@@ -284,10 +284,11 @@ END:VCARD`;
         </div>
       </section>
 
-      {/* Contact Cards - Filled champagne cards + gold divider */}
-      <section className="py-10 bg-black border-y border-zinc-800">
-        <div className="container mx-auto px-4">
-          <div className="mb-8 h-px w-full bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
+      {/* Contact Cards - Active Champagne Layer */}
+      <section className="py-10 bg-black">
+        {/* Active Champagne Section Layer */}
+        <div className="mx-4 md:mx-8 lg:mx-16 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg p-6 md:p-10">
+          <div className="mb-6 h-px w-full bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {contactCards.map((card) => (
               <div
@@ -313,9 +314,10 @@ END:VCARD`;
         </div>
       </section>
 
-      {/* Consultation Form Section - White background for brighter page */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
-        <div className="container mx-auto px-4">
+      {/* Consultation Form Section - Active Champagne Layer */}
+      <section className="py-16 md:py-20 bg-black">
+        {/* Active Champagne Section Layer */}
+        <div className="mx-4 md:mx-8 lg:mx-16 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg p-6 md:p-10">
           <div className="max-w-3xl mx-auto">
             {isSuccess ? (
               /* Success State */
