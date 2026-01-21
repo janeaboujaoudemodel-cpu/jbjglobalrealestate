@@ -114,8 +114,8 @@ const Index = () => {
             <span 
               className="bg-gradient-to-r from-[#FFF8E8] via-[#F5E6C8] to-[#E8D4A8] bg-clip-text text-transparent break-words"
               style={{ 
-                filter: 'drop-shadow(0 0 12px rgba(255, 248, 232, 0.5)) drop-shadow(0 0 25px rgba(245, 230, 200, 0.4)) drop-shadow(0 0 40px rgba(232, 212, 168, 0.3))',
-                textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)',
+                filter: 'drop-shadow(0 0 8px rgba(255, 248, 232, 0.35)) drop-shadow(0 0 16px rgba(245, 230, 200, 0.25))',
+                textShadow: '0 1px 3px rgba(0, 0, 0, 0.2)',
               }}
             >
               Delivered with Intelligence.
@@ -151,8 +151,8 @@ const Index = () => {
                   boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
                 }}
               >
-                <span className="text-white group-hover:text-black transition-colors" style={{ textShadow: '0 0 10px rgba(255,255,255,0.5), 0 0 20px rgba(255,255,255,0.3)' }}>Explore</span>
-                <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-5 md:h-5 text-white transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.8))' }} />
+                <span className="text-gold group-hover:text-black transition-colors" style={{ textShadow: '0 0 10px rgba(200,167,102,0.5), 0 0 20px rgba(200,167,102,0.3)' }}>Explore</span>
+                <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-5 md:h-5 text-gold group-hover:text-black transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                 {/* Hover fill overlay */}
                 <span className="absolute inset-0 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
               </button>

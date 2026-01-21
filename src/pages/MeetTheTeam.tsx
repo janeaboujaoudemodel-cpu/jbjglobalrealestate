@@ -512,24 +512,54 @@ const MeetTheTeam: React.FC = () => {
                 Ready to work with our exceptional team? Whether you're looking to buy, sell, or invest in luxury real estate, we're here to help.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
-                <Button 
+                {/* Primary Button - Book Consultation style */}
+                <button 
                   onClick={handleOpenContactForm}
-                  variant="primary"
-                  size="lg"
-                  className="px-8"
+                  className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(135deg, #FFFDF9 0%, #F5EBD7 50%, #E8DCC8 100%)',
+                    border: '2px solid rgba(200,167,102,0.5)',
+                    boxShadow: `
+                      0 8px 25px rgba(200,167,102,0.25),
+                      0 4px 12px rgba(0,0,0,0.08),
+                      inset 0 2px 4px rgba(255,255,255,0.9),
+                      inset 0 -2px 4px rgba(200,167,102,0.2),
+                      0 0 20px rgba(200,167,102,0.3)
+                    `,
+                  }}
                 >
-                  <MessageSquare className="w-4 h-4 mr-2" />
-                  Get in Touch
-                </Button>
+                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                  <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                  <span className="relative flex items-center justify-center gap-2">
+                    <MessageSquare className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
+                    <span className="text-black group-hover:text-gold transition-colors">Get in</span>
+                    <span className="text-gold group-hover:text-black transition-colors">Touch</span>
+                    <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                  </span>
+                </button>
+
+                {/* Secondary Button - Browse Properties style */}
                 <Link to="/careers">
-                  <Button
-                    variant="secondary"
-                    size="lg"
-                    className="px-8"
+                  <button 
+                    className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
+                    style={{
+                      background: 'transparent',
+                      border: '2px solid #000',
+                      boxShadow: `
+                        0 6px 20px rgba(0,0,0,0.15),
+                        0 4px 10px rgba(0,0,0,0.1),
+                        inset 0 1px 2px rgba(255,255,255,0.5)
+                      `,
+                    }}
                   >
-                    View Open Positions
-                    <ArrowUpRight className="w-4 h-4 ml-2" />
-                  </Button>
+                    <span className="absolute inset-x-0 top-0 h-1/3 rounded-t-xl bg-gradient-to-b from-white/20 to-transparent pointer-events-none" />
+                    <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none bg-black" />
+                    <span className="relative flex items-center justify-center gap-2 text-black group-hover:text-white transition-colors duration-300">
+                      View Open Positions
+                      <ArrowUpRight className="w-5 h-5" />
+                    </span>
+                  </button>
                 </Link>
               </div>
             </motion.div>
