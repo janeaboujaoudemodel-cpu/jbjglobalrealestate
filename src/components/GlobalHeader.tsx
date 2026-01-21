@@ -530,9 +530,9 @@ const GlobalHeader = () => {
             </Sheet>
           </div>
 
-          {/* CENTER: Desktop Navigation - Premium styling with elegant dropdowns */}
-          <nav className="hidden lg:flex items-center justify-end flex-1 min-w-0 ml-2 mr-2">
-            <div className="flex items-center gap-0.5 bg-gradient-to-r from-[#FFFDF9] via-[#FBF7F0] to-[#F5EFE4] backdrop-blur-sm rounded-full px-2 py-0.5 border border-gold/30 shadow-lg">
+          {/* CENTER: Desktop Navigation - Premium styling with elegant dropdowns - stretched left toward logo */}
+          <nav className="hidden lg:flex items-center justify-end flex-1 min-w-0 ml-1 mr-2">
+            <div className="flex items-center gap-1 bg-gradient-to-r from-[#FFFDF9] via-[#FBF7F0] to-[#F5EFE4] backdrop-blur-sm rounded-full px-3 py-0.5 border border-gold/30 shadow-lg">
               
               {/* 1. Home - No dropdown */}
               <Link
