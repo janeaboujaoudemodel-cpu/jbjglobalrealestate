@@ -177,8 +177,8 @@ const App = () => (
             {/* Auth route is always accessible for admin login */}
             <Routes>
               <Route path="/auth" element={<Auth />} />
-              <Route path="/vapi-prompt" element={<VapiPrompt />} />
               <Route element={<MainLayoutWrapper />}>
+                <Route path="/vapi-prompt" element={<VapiPrompt />} />
                 <Route path="/" element={<Index />} />
                 <Route path="/properties" element={<Properties />} />
                 <Route path="/project/:slug" element={<ProjectDetail />} />
