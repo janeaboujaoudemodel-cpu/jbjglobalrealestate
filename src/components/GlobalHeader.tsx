@@ -235,7 +235,7 @@ const GlobalHeader = () => {
                 {/* Menu Header with champagne styling - transparent logo (no black box) */}
                 <div className="relative h-20 bg-gradient-to-b from-[#F5EBD7] to-[#E8DCC8] border-b border-gold/30 flex items-center px-5 shrink-0">
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-                  <BrandMonogram variant="light" size="sm" layout="horizontal" />
+                  <BrandMonogram variant="light" size="md" layout="horizontal" />
                 </div>
 
                 {/* Quick Actions Row */}
