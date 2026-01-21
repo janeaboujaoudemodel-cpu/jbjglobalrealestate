@@ -351,8 +351,8 @@ const AreaGuides = () => {
 
       {/* Main Content with Right Padding for TOC */}
       <div className="lg:pr-80">
-        {/* Overview Section */}
-        <section id="overview" className="py-20 relative scroll-mt-24">
+        {/* Overview Section - Edge to Edge */}
+        <section id="overview" className="jj-section-champagne py-20 relative scroll-mt-24">
           <div className="container mx-auto px-4 max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -360,7 +360,7 @@ const AreaGuides = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.4, ease: "easeOut" }}
             >
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 md:p-12 border border-gold/30 shadow-lg">
+              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
                     <Compass className="w-6 h-6 text-gold" />
@@ -377,8 +377,8 @@ const AreaGuides = () => {
           </div>
         </section>
 
-        {/* Section 1: Choosing the Right Area */}
-        <section id="choosing-area" className="py-20 relative scroll-mt-24 border-t border-gold/20">
+        {/* Section 1: Choosing the Right Area - Edge to Edge */}
+        <section id="choosing-area" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
           <div className="container mx-auto px-4 max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -386,7 +386,7 @@ const AreaGuides = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.4, ease: "easeOut" }}
             >
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 md:p-12 border border-gold/30 shadow-lg">
+              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
                     <Target className="w-6 h-6 text-gold" />
@@ -416,8 +416,8 @@ const AreaGuides = () => {
           </div>
         </section>
 
-        {/* Section 2: Established vs Emerging Areas */}
-        <section id="established-emerging" className="py-20 relative scroll-mt-24 border-t border-gold/20">
+        {/* Section 2: Established vs Emerging Areas - Edge to Edge */}
+        <section id="established-emerging" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
           <div className="container mx-auto px-4 max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -425,7 +425,7 @@ const AreaGuides = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.4, ease: "easeOut" }}
             >
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 md:p-12 border border-gold/30 shadow-lg">
+              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
                     <Scale className="w-6 h-6 text-gold" />
@@ -439,7 +439,7 @@ const AreaGuides = () => {
                 </p>
                 
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div className="p-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-xl border border-gold/30">
+                  <div className="p-6 jj-box-active rounded-xl">
                     <h3 className="text-lg font-semibold text-black mb-4">Established Areas</h3>
                     <div className="space-y-3">
                       {establishedAreaTraits.map((trait, index) => (
@@ -451,7 +451,7 @@ const AreaGuides = () => {
                     </div>
                   </div>
                   
-                  <div className="p-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-xl border border-gold/30">
+                  <div className="p-6 jj-box-active rounded-xl">
                     <h3 className="text-lg font-semibold text-black mb-4">Emerging Areas</h3>
                     <div className="space-y-3">
                       {emergingAreaTraits.map((trait, index) => (
@@ -472,8 +472,8 @@ const AreaGuides = () => {
           </div>
         </section>
 
-        {/* Section 3: Lifestyle-Driven Communities */}
-        <section id="lifestyle" className="py-20 relative scroll-mt-24 border-t border-gold/20">
+        {/* Section 3: Lifestyle-Driven Communities - Edge to Edge */}
+        <section id="lifestyle" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
           <div className="container mx-auto px-4 max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -481,7 +481,7 @@ const AreaGuides = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.4, ease: "easeOut" }}
             >
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 md:p-12 border border-gold/30 shadow-lg">
+              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
                     <Heart className="w-6 h-6 text-gold" />
@@ -509,8 +509,8 @@ const AreaGuides = () => {
           </div>
         </section>
 
-        {/* Section 4: Family-Oriented Communities */}
-        <section id="family" className="py-20 relative scroll-mt-24 border-t border-gold/20">
+        {/* Section 4: Family-Oriented Communities - Edge to Edge */}
+        <section id="family" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
           <div className="container mx-auto px-4 max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -518,7 +518,7 @@ const AreaGuides = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.4, ease: "easeOut" }}
             >
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 md:p-12 border border-gold/30 shadow-lg">
+              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
                     <Users className="w-6 h-6 text-gold" />
@@ -546,8 +546,8 @@ const AreaGuides = () => {
           </div>
         </section>
 
-        {/* Section 5: Investment-Focused Areas */}
-        <section id="investment" className="py-20 relative scroll-mt-24 border-t border-gold/20">
+        {/* Section 5: Investment-Focused Areas - Edge to Edge */}
+        <section id="investment" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
           <div className="container mx-auto px-4 max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -555,7 +555,7 @@ const AreaGuides = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.4, ease: "easeOut" }}
             >
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 md:p-12 border border-gold/30 shadow-lg">
+              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
                     <TrendingUp className="w-6 h-6 text-gold" />
@@ -583,8 +583,8 @@ const AreaGuides = () => {
           </div>
         </section>
 
-        {/* Section 6: Infrastructure & Future Development */}
-        <section id="infrastructure" className="py-20 relative scroll-mt-24 border-t border-gold/20">
+        {/* Section 6: Infrastructure & Future Development - Edge to Edge */}
+        <section id="infrastructure" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
           <div className="container mx-auto px-4 max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -592,7 +592,7 @@ const AreaGuides = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.4, ease: "easeOut" }}
             >
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 md:p-12 border border-gold/30 shadow-lg">
+              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
                     <Building2 className="w-6 h-6 text-gold" />
@@ -620,8 +620,8 @@ const AreaGuides = () => {
           </div>
         </section>
 
-        {/* Section 7: Freehold vs Non-Freehold */}
-        <section id="freehold" className="py-20 relative scroll-mt-24 border-t border-gold/20">
+        {/* Section 7: Freehold vs Non-Freehold - Edge to Edge */}
+        <section id="freehold" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
           <div className="container mx-auto px-4 max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -629,7 +629,7 @@ const AreaGuides = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.4, ease: "easeOut" }}
             >
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 md:p-12 border border-gold/30 shadow-lg">
+              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
                     <Shield className="w-6 h-6 text-gold" />
@@ -659,8 +659,8 @@ const AreaGuides = () => {
           </div>
         </section>
 
-        {/* Section 8: Price Ranges & Market Behavior */}
-        <section id="pricing" className="py-20 relative scroll-mt-24 border-t border-gold/20">
+        {/* Section 8: Price Ranges & Market Behavior - Edge to Edge */}
+        <section id="pricing" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
           <div className="container mx-auto px-4 max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -668,7 +668,7 @@ const AreaGuides = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.4, ease: "easeOut" }}
             >
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 md:p-12 border border-gold/30 shadow-lg">
+              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
                     <DollarSign className="w-6 h-6 text-gold" />
@@ -696,8 +696,8 @@ const AreaGuides = () => {
           </div>
         </section>
 
-        {/* Section 9: Rental Demand by Area */}
-        <section id="rental-demand" className="py-20 relative scroll-mt-24 border-t border-gold/20">
+        {/* Section 9: Rental Demand by Area - Edge to Edge */}
+        <section id="rental-demand" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
           <div className="container mx-auto px-4 max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -705,7 +705,7 @@ const AreaGuides = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.4, ease: "easeOut" }}
             >
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 md:p-12 border border-gold/30 shadow-lg">
+              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
                     <Home className="w-6 h-6 text-gold" />
@@ -733,8 +733,8 @@ const AreaGuides = () => {
           </div>
         </section>
 
-        {/* Section 10: Matching Areas to Objectives */}
-        <section id="matching-objectives" className="py-20 relative scroll-mt-24 border-t border-gold/20">
+        {/* Section 10: Matching Areas to Objectives - Edge to Edge */}
+        <section id="matching-objectives" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
           <div className="container mx-auto px-4 max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -742,7 +742,7 @@ const AreaGuides = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.4, ease: "easeOut" }}
             >
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 md:p-12 border border-gold/30 shadow-lg">
+              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
                     <Target className="w-6 h-6 text-gold" />
@@ -756,7 +756,7 @@ const AreaGuides = () => {
                 </p>
                 <div className="space-y-4">
                   {objectiveExamples.map((item, index) => (
-                    <div key={index} className="flex items-center gap-4 p-4 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-xl border border-gold/30">
+                    <div key={index} className="flex items-center gap-4 p-4 jj-box-active rounded-xl">
                       <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
                         <span className="text-gold font-bold">{index + 1}</span>
                       </div>
@@ -778,8 +778,8 @@ const AreaGuides = () => {
           </div>
         </section>
 
-        {/* Section 11: How JBJ Supports */}
-        <section id="jbj-support" className="py-20 relative scroll-mt-24 border-t border-gold/20">
+        {/* Section 11: How JBJ Supports - Edge to Edge */}
+        <section id="jbj-support" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
           <div className="container mx-auto px-4 max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -787,7 +787,7 @@ const AreaGuides = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.4, ease: "easeOut" }}
             >
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 md:p-12 border border-gold/30 shadow-lg">
+              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
                     <CheckCircle2 className="w-6 h-6 text-gold" />
@@ -815,8 +815,8 @@ const AreaGuides = () => {
           </div>
         </section>
 
-        {/* Stats Bar - White/Champagne Theme */}
-        <section className="py-10 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-y border-gold/20">
+        {/* Stats Bar - Edge to Edge Champagne */}
+        <section className="jj-section-champagne py-10 border-y border-gold/20">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {highlights.map((item, index) => (
@@ -1030,8 +1030,8 @@ const AreaGuides = () => {
           </div>
         </section>
 
-        {/* FAQ Section */}
-        <section id="faq" className="py-20 relative scroll-mt-24 border-t border-gold/20">
+        {/* FAQ Section - Edge to Edge */}
+        <section id="faq" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
           <div className="container mx-auto px-4 max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -1041,22 +1041,22 @@ const AreaGuides = () => {
             >
               <div className="text-center mb-12">
                 <div className="inline-flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
                     <HelpCircle className="w-6 h-6 text-gold" />
                   </div>
                 </div>
-                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
                   <span className="text-gold">Area Guide</span> FAQ
                 </h2>
               </div>
 
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-6 md:p-8 border border-gold/30 shadow-lg">
+              <div className="jj-box-active rounded-2xl p-6 md:p-8 shadow-lg">
                 <Accordion type="single" collapsible className="space-y-4">
                   {faqs.map((faq, index) => (
                     <AccordionItem 
                       key={index} 
                       value={`item-${index}`}
-                      className="border border-gold/30 rounded-xl px-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark"
+                      className="border border-gold/30 rounded-xl px-6 jj-box-active"
                     >
                       <AccordionTrigger className="text-left font-semibold text-black hover:text-gold py-4">
                         {faq.question}
@@ -1088,8 +1088,8 @@ const AreaGuides = () => {
           </div>
         </section>
 
-        {/* Guide Navigation */}
-        <section className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
+        {/* Guide Navigation - Edge to Edge */}
+        <section className="jj-section-champagne py-12 border-t border-gold/20">
           <div className="container mx-auto px-4">
             <GuideNavigation current="/areas" guides={GUIDE_LINKS} showStartHere />
           </div>
