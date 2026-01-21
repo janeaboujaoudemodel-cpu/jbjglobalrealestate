@@ -567,8 +567,9 @@ const Index = () => {
                       <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
                       <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                       <span className="relative flex items-center justify-center gap-2">
-                        <span className="text-black group-hover:text-gold transition-colors">Learn More About</span>
-                        <span className="text-gold group-hover:text-black transition-colors">The Founder</span>
+                        <User className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
+                        <span className="text-black group-hover:text-gold transition-colors">Learn More</span>
+                        <span className="text-gold group-hover:text-black transition-colors">About The Founder</span>
                         <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
                       </span>
                     </button>
@@ -672,9 +673,10 @@ const Index = () => {
                     <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                     <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                     <span className="relative flex items-center justify-center gap-2">
-                      <Sparkles className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                      <Sparkles className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
                       <span className="text-black group-hover:text-gold transition-colors">Try Our AI</span>
                       <span className="text-gold group-hover:text-black transition-colors">Mortgage Calculator</span>
+                      <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
                     </span>
                   </button>
                 </Link>
@@ -743,9 +745,10 @@ const Index = () => {
                 <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
                 <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                 <span className="relative flex items-center justify-center gap-2">
+                  <Calendar className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
                   <span className="text-black group-hover:text-gold transition-colors">Book</span>
                   <span className="text-gold group-hover:text-black transition-colors">Consultation</span>
-                  <ArrowUpRight className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
+                  <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
                 </span>
               </button>
               <Link to="/properties">

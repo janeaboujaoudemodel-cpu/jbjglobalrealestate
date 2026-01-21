@@ -242,10 +242,10 @@ const BestIdeaAward = () => {
                         {/* Glow effect on hover */}
                         <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                         <span className="relative flex items-center gap-2">
-                          <Sparkles className="w-6 h-6 text-black group-hover:text-gold transition-colors" />
+                          <Lightbulb className="w-6 h-6 text-gold group-hover:text-black transition-colors" />
                           <span className="text-black group-hover:text-gold transition-colors">Drop Your</span>
                           <span className="text-gold group-hover:text-black transition-colors">Idea</span>
-                          <ArrowUpRight className="w-5 h-5 text-gold group-hover:text-black ml-1 transition-colors" />
+                          <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold ml-1 transition-colors" />
                         </span>
                       </Button>
                     </DialogTrigger>
