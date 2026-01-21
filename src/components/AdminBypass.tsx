@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import ComingSoon from "@/pages/ComingSoon";
 
@@ -8,23 +8,8 @@ interface AdminBypassProps {
 }
 
 // Public routes that bypass the Coming Soon gate (always accessible)
-const PUBLIC_ROUTES = [
-  "/",
-  "/install",
-  "/vapi-prompt",
-  "/areas",
-  "/area/",
-  "/seller-guide",
-  "/seller-listing",
-  "/video-builder",
-  "/about",
-  "/contact",
-  "/services",
-  "/communities",
-  "/properties",
-  "/founder",
-  "/team",
-];
+// IMPORTANT: This list is intentionally kept empty to avoid exposing unfinished pages publicly.
+const PUBLIC_ROUTES: string[] = [];
 
 /**
  * AdminBypass - Protects the entire site behind a Coming Soon page
@@ -33,7 +18,6 @@ const PUBLIC_ROUTES = [
  */
 const AdminBypass = ({ children }: AdminBypassProps) => {
   const location = useLocation();
-  const navigate = useNavigate();
   const [hasAccess, setHasAccess] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -44,12 +28,6 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
 
   // Admin routes require stricter admin verification
   const isAdminRoute = location.pathname.startsWith("/admin");
-
-  // CRM routes have their own access controls
-  const isCrmRoute = location.pathname.startsWith("/crm");
-
-  // Video Builder has its own exclusive access gate
-  const isVideoBuilderRoute = location.pathname === "/video-builder";
 
   useEffect(() => {
     const checkAccess = async () => {
@@ -89,10 +67,21 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
         const { data: hasListingAdminRole } = await supabase
           .rpc("has_role", { _user_id: session.user.id, _role: "listing_admin" });
 
-        const hasFullAccess = Boolean(hasAdminRole) || Boolean(hasOwnerRole) || Boolean(isCrmAdmin) || Boolean(hasListingAdminRole);
+        const hasFullAccess =
+          Boolean(hasAdminRole) ||
+          Boolean(hasOwnerRole) ||
+          Boolean(isCrmAdmin) ||
+          Boolean(hasListingAdminRole);
+
         const hasBrokerAccess = Boolean(hasBrokerRole);
 
-        // Full access for admins/owners/founders/listing_admins, or broker access for specific routes
+        // Admin routes require FULL access only (never broker-only)
+        if (isAdminRoute) {
+          setHasAccess(hasFullAccess);
+          return;
+        }
+
+        // Otherwise: allow full access, or broker access (internal users)
         setHasAccess(hasFullAccess || hasBrokerAccess);
       } catch (error) {
         console.error("Error checking access:", error);
@@ -109,10 +98,7 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
     });
 
     return () => subscription.unsubscribe();
-  }, [location.pathname, isPublicRoute]);
-
-  // CRM routes and Video Builder bypass this gate (they have their own access controls)
-  if (isCrmRoute || isVideoBuilderRoute) return <>{children}</>;
+  }, [location.pathname, isPublicRoute, isAdminRoute]);
 
   // Show loading spinner
   if (isLoading) {
