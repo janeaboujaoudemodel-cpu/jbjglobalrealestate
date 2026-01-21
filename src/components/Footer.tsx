@@ -162,8 +162,8 @@ const Footer = () => {
           </h2>
         </div>
 
-        {/* Premium White/Champagne Section - License + Newsletter + Social */}
-        <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-6 md:p-10 border border-gold/30 shadow-lg mb-10 max-w-3xl mx-auto">
+        {/* Premium Champagne Section - License + Newsletter + Social */}
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl p-6 md:p-10 border border-gold/30 shadow-lg mb-10 max-w-3xl mx-auto">
           {/* Licensed Badge */}
           <div className="flex items-center justify-center gap-3 mb-4">
             <div className="w-2 h-2 bg-gold rounded-full animate-pulse" />
@@ -199,8 +199,8 @@ const Footer = () => {
         {/* Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent mb-10" />
 
-        {/* Navigation Grid - Updated Structure */}
-        <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200 shadow-lg mb-10 max-w-6xl mx-auto">
+        {/* Navigation Grid - Champagne styling */}
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl p-6 md:p-8 border border-gold/30 shadow-lg mb-10 max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-0 lg:divide-x divide-gold/20">
             
             {/* Column 1: Properties + Services */}
@@ -345,8 +345,8 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Professional Tools Section */}
-        <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200 shadow-lg mb-10 max-w-6xl mx-auto">
+        {/* Professional Tools Section - Champagne styling */}
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl p-6 md:p-8 border border-gold/30 shadow-lg mb-10 max-w-6xl mx-auto">
           <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em] mb-4 text-center">
             Professional Tools
           </h4>
@@ -364,8 +364,8 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Contact Section - Matching Navigation Card Style */}
-        <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200 shadow-lg mb-10 max-w-6xl mx-auto">
+        {/* Contact Section - Champagne styling */}
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl p-6 md:p-8 border border-gold/30 shadow-lg mb-10 max-w-6xl mx-auto">
           <h4 className="text-gold font-semibold mb-5 text-sm uppercase tracking-[0.2em] text-center">
             Get in Touch
           </h4>

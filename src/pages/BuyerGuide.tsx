@@ -759,55 +759,57 @@ const BuyerGuide = () => {
       {/* Founder-Led Philosophy & Advisory Positioning */}
       <FounderPhilosophySection />
 
-      {/* Final CTA - Next Step */}
-      <section className="py-20 md:py-28 bg-gradient-to-b from-zinc-900 to-black relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center opacity-10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
+      {/* Final CTA - Next Step - Champagne background frame */}
+      <section className="py-20 md:py-28 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center opacity-5" />
         
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-6">
-              Next Step
-            </h2>
-            <p className="text-lg text-zinc-400 mb-10 max-w-2xl mx-auto">
-              If you are considering purchasing property in Dubai, the next step is a structured consultation to align your objective, budget, and market opportunities.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                asChild
-                size="lg"
-                className="bg-gold hover:bg-gold/90 text-black font-medium px-8 h-14 text-base"
-              >
-                <Link to="/contact">
-                  <Phone className="w-4 h-4 mr-2" />
-                  Book a Consultation
-                </Link>
-              </Button>
+          <div className="max-w-3xl mx-auto">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.2)] text-center">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-black mb-6">
+                Next Step
+              </h2>
+              <p className="text-lg text-zinc-600 mb-10 max-w-2xl mx-auto">
+                If you are considering purchasing property in Dubai, the next step is a structured consultation to align your objective, budget, and market opportunities.
+              </p>
               
-              <Button 
-                asChild
-                size="lg"
-                variant="outline"
-                className="border-white/30 text-white hover:bg-white/10 px-8 h-14 text-base"
-              >
-                <Link to="/properties">
-                  Explore Properties
-                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
-                  </svg>
-                </Link>
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button 
+                  asChild
+                  variant="primary"
+                  size="lg"
+                  className="px-8 h-14 text-base"
+                >
+                  <Link to="/contact">
+                    <Phone className="w-4 h-4 mr-2" />
+                    Book a Consultation
+                  </Link>
+                </Button>
+                
+                <Button 
+                  asChild
+                  size="lg"
+                  variant="secondary"
+                  className="px-8 h-14 text-base"
+                >
+                  <Link to="/properties">
+                    Explore Properties
+                    <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Legal Disclaimer - Black section with white box */}
-      <section className="py-8 bg-black">
+      {/* Legal Disclaimer - Champagne frame with premium card */}
+      <section className="py-8 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-white border border-zinc-200 rounded-lg p-6 shadow-lg">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-lg p-6 shadow-lg">
               <h4 className="text-black font-semibold mb-3 flex items-center gap-2">
                 <Shield className="w-4 h-4 text-gold" />
                 Important Disclaimer

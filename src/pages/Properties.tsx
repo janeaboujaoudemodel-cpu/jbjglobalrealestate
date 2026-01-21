@@ -1005,15 +1005,15 @@ const Properties = () => {
         </div>
       </section>
 
-      {/* Request Details Form Section */}
-      <section className="py-16 bg-black border-t border-zinc-800">
+      {/* Request Details Form Section - Champagne frame background */}
+      <section className="py-16 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-t border-gold/30">
         <div className="container mx-auto px-4">
           <div className="max-w-xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-2xl p-8 shadow-lg"
+              className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-8 shadow-lg"
             >
               <h2 className="text-2xl md:text-3xl font-semibold text-black text-center mb-8" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Request Details
@@ -1058,10 +1058,10 @@ const Properties = () => {
                 </div>
                 <Button 
                   onClick={handleInquirySubmit}
-                  variant="dark"
+                  variant="primary"
                   className="w-full h-14 text-lg rounded-lg mt-4"
                 >
-                  SUBMIT
+                  <span className="text-black group-hover:text-gold">SUBMIT</span>
                 </Button>
               </div>
 
