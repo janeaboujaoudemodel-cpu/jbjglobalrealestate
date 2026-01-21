@@ -35,7 +35,7 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
             variant="ghost"
             size="sm"
             className={isCompact 
-              ? "h-7 w-7 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
+              ? "h-7 w-7 p-0 rounded-none bg-transparent hover:bg-white/10 transition-all duration-300 group"
               : "h-10 lg:h-11 px-3 text-gold hover:text-gold-light rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group gap-2"
             }
           >
