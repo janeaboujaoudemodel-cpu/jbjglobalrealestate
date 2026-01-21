@@ -10,7 +10,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface LanguageSwitcherProps {
-  variant?: 'default' | 'compact';
+  variant?: 'default' | 'compact' | 'icon-only';
 }
 
 const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
@@ -18,6 +18,7 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
   const currentLang = getLanguageInfo(language);
 
   const isCompact = variant === 'compact';
+  const isIconOnly = variant === 'icon-only';
 
   return (
     <DropdownMenu>
@@ -25,13 +26,15 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
         <Button
           variant="ghost"
           size="sm"
-          className={isCompact 
-            ? "h-7 w-7 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
-            : "h-10 lg:h-11 px-3 text-gold hover:text-gold-light rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group gap-2"
+          className={isIconOnly
+            ? "h-5 w-5 p-0 hover:opacity-80 transition-all duration-300 group"
+            : isCompact 
+              ? "h-7 w-7 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
+              : "h-10 lg:h-11 px-3 text-gold hover:text-gold-light rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group gap-2"
           }
         >
-          <Globe className={isCompact ? "w-3 h-3 text-gold group-hover:text-gold-light" : "w-4 h-4 group-hover:scale-110 transition-transform"} />
-          {!isCompact && <span className="hidden sm:inline text-xs font-medium tracking-wide">{currentLang.flag} {currentLang.code.toUpperCase()}</span>}
+          <Globe className={isIconOnly ? "w-4 h-4 text-gold group-hover:text-gold-light" : isCompact ? "w-3 h-3 text-gold group-hover:text-gold-light" : "w-4 h-4 group-hover:scale-110 transition-transform"} />
+          {!isCompact && !isIconOnly && <span className="hidden sm:inline text-xs font-medium tracking-wide">{currentLang.flag} {currentLang.code.toUpperCase()}</span>}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
