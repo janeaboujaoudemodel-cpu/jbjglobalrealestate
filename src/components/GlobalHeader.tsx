@@ -176,12 +176,12 @@ const GlobalHeader = () => {
       {/* Premium top accent line */}
       <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent z-10" />
       
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-2 sm:px-4 lg:px-6">
-        <div className="flex items-center justify-between h-20 lg:h-24 w-full">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-2 sm:px-3 lg:px-4">
+        <div className="flex items-center justify-between h-16 lg:h-20 w-full">
           {/* LEFT: Brand Logo - Monogram only on mobile */}
           <Link 
             to="/" 
-            className="flex items-center gap-3 shrink-0 group transition-all duration-300"
+            className="flex items-center gap-2 shrink-0 group transition-all duration-300"
             style={{ fontFamily: "Poppins, sans-serif" }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
@@ -189,12 +189,12 @@ const GlobalHeader = () => {
               <img 
                 src={jbjMonogramDarkBg} 
                 alt="JBJ" 
-                className="w-10 h-10 lg:w-12 lg:h-12 object-contain transition-transform duration-300 group-hover:scale-105"
+                className="w-8 h-8 lg:w-10 lg:h-10 object-contain transition-transform duration-300 group-hover:scale-105"
               />
               {/* Subtle glow on hover */}
               <div className="absolute inset-0 rounded-full bg-gold/0 group-hover:bg-gold/10 transition-colors duration-300 blur-xl" />
             </div>
-            <span className="text-white font-semibold text-xs lg:text-sm tracking-[0.1em] uppercase whitespace-nowrap hidden lg:inline drop-shadow-sm">
+            <span className="text-white font-semibold text-[10px] lg:text-xs tracking-[0.08em] uppercase whitespace-nowrap hidden lg:inline drop-shadow-sm">
               JBJ Global Real Estate
             </span>
           </Link>
@@ -597,15 +597,15 @@ const GlobalHeader = () => {
           </nav>
 
           {/* RIGHT: Actions - Desktop only - Compact premium icon buttons with inverted hover */}
-          <div className="hidden lg:flex items-center gap-2 shrink-0 ml-4 pr-2">
+          <div className="hidden lg:flex items-center gap-1 shrink-0 ml-2">
             {/* Search Icon - White bg with gold icon normally, inverted on hover */}
             <Button
               variant="ghost"
               size="sm"
-              className="relative w-8 h-8 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
+              className="relative w-6 h-6 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
               onClick={() => setSearchOpen(true)}
             >
-              <Search className="w-3.5 h-3.5 text-gold group-hover:text-gold-light transition-colors" />
+              <Search className="w-3 h-3 text-gold group-hover:text-gold-light transition-colors" />
             </Button>
 
             {/* Language Switcher - Inverted style */}
@@ -621,10 +621,10 @@ const GlobalHeader = () => {
                     <Button 
                       variant="ghost" 
                       size="icon"
-                      className="relative text-gold hover:text-gold-light w-7 h-7 p-0 rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group"
+                      className="relative text-gold hover:text-gold-light w-6 h-6 p-0 rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group"
                       aria-label={t('nav.myAccount')}
                     >
-                      <User className="w-3 h-3 group-hover:scale-110 transition-transform" />
+                      <User className="w-2.5 h-2.5 group-hover:scale-110 transition-transform" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent 
@@ -745,9 +745,9 @@ const GlobalHeader = () => {
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="relative text-gold hover:text-gold-light w-10 h-10 lg:w-11 lg:h-11 p-0 rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group"
+                    className="relative text-gold hover:text-gold-light w-6 h-6 p-0 rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group"
                   >
-                    <User className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                    <User className="w-2.5 h-2.5 group-hover:scale-110 transition-transform" />
                   </Button>
                 </Link>
               )}

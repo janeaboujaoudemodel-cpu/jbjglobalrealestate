@@ -121,7 +121,7 @@ const AIComparisonWidget = () => {
               <BarChart3 className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
               <span className="text-black group-hover:text-gold transition-colors">Start</span>
               <span className="text-gold group-hover:text-black transition-colors">Comparing</span>
-              <ArrowUpRight className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
+              <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
             </span>
           </button>
         </Link>

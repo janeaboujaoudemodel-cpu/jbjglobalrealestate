@@ -15,23 +15,21 @@
 
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import founderPremium from "@/assets/founder-premium.png";
+import { ArrowUpRight, User } from "lucide-react";
+import founderPremium from "@/assets/founder-professional.jpeg";
 
 const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 }
 };
 
 export const FounderPhilosophySection = () => {
   return (
-    <section className="py-20 md:py-32 bg-black relative overflow-hidden">
-      {/* Subtle background glow */}
-      <div 
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse at center, hsl(40 32% 51% / 0.05) 0%, transparent 60%)",
-        }}
-      />
+    <section className="py-20 md:py-28 bg-black relative overflow-hidden">
+      {/* Subtle radial glow */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gold/5 rounded-full blur-3xl" />
+      </div>
       
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
@@ -39,183 +37,73 @@ export const FounderPhilosophySection = () => {
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
           variants={{
-            visible: { transition: { staggerChildren: 0.08 } }
+            visible: {
+              transition: { staggerChildren: 0.08 }
+            }
           }}
-          className="max-w-5xl mx-auto"
+          className="grid md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto"
         >
-          <div className="flex flex-col md:flex-row gap-10 md:gap-16 items-start">
-            {/* Founder Portrait */}
-            <motion.div 
-              variants={fadeInUp}
-              className="flex-shrink-0 mx-auto md:mx-0"
-            >
-              <Link to="/founder" className="block group">
-                {/* GLOBAL IMAGE RULE - LOCKED (FINAL):
-                    Lift photo up without zooming to show full body, don't crop hair */}
-                <div className="w-36 h-36 md:w-44 md:h-44 rounded-full overflow-hidden border-2 border-white/50 group-hover:border-white group-hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all duration-300 shadow-lg bg-zinc-900">
-                  <img 
-                    src={founderPremium}
-                    alt="Jane Abou Jaoude, Founder & CEO of JBJ GLOBAL REAL ESTATE"
-                    className="w-full h-full"
-                    style={{
-                      objectFit: 'cover',
-                      objectPosition: 'center 5%',
-                      transform: 'scale(1.0) translateY(-5%)',
-                    }}
-                    loading="lazy"
-                  />
-                </div>
-              </Link>
-              {/* Know More About the Founder - REVERSED: black text/gold Founder on normal, opposite on hover */}
-              <button 
-                onClick={() => window.location.href = '/founder'}
-                className="group/btn mt-4 relative inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold rounded-xl transition-all duration-300 overflow-hidden w-full"
-                style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
-                  border: '2px solid rgba(200,167,102,0.5)',
-                  boxShadow: `
-                    0 6px 20px rgba(200,167,102,0.3),
-                    0 4px 10px rgba(0,0,0,0.15),
-                    inset 0 2px 4px rgba(255,255,255,0.9),
-                    inset 0 -2px 4px rgba(200,167,102,0.2)
-                  `,
-                }}
-              >
-                <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                <span className="relative flex items-center justify-center gap-1">
-                  <span className="text-gold group-hover/btn:text-black transition-colors">Know More About the</span>
-                  <span className="text-black group-hover/btn:text-gold transition-colors">Founder</span>
-                  <span className="text-gold group-hover/btn:text-black transition-colors">↗</span>
-                </span>
-              </button>
-            </motion.div>
-
-            {/* Content */}
-            <motion.div 
-              variants={fadeInUp}
-              className="flex-1"
-            >
-              {/* Attribution - Premium styling with gold/champagne/pearl glow, no underlines */}
-              <p className="text-sm font-medium tracking-wide mb-6">
-                <span className="text-white uppercase tracking-[0.15em] text-lg md:text-xl">Written by Founder & CEO,</span>{" "}
-                <Link 
-                  to="/founder" 
-                  className="inline-block hover:opacity-90 transition-opacity"
-                  style={{
-                    textShadow: '0 0 15px rgba(200,167,102,0.5), 0 0 25px rgba(255,255,255,0.3)',
-                  }}
-                >
-                  <span className="text-gold text-xl md:text-2xl font-bold">
-                    Jane Abou Jaoude
-                  </span>
-                </Link>
-                <span className="block mt-2">
-                  <Link 
-                    to="/about" 
-                    className="group/jbj hover:opacity-90 transition-all"
-                    style={{
-                      textShadow: '0 0 12px rgba(200,167,102,0.5), 0 0 20px rgba(255,255,255,0.3)',
-                    }}
-                  >
-                    <span className="text-gold text-lg font-semibold">
-                      JBJ Global Real Estate
-                    </span>
-                  </Link>
-                  <span className="block h-0.5 w-24 bg-gradient-to-r from-gold/80 via-[#D4C4A8] to-gold/40 mt-2" style={{ boxShadow: '0 0 10px rgba(200,167,102,0.5)' }} />
-                </span>
-              </p>
-
-              {/* Premium White Text Box */}
-              <div className="bg-white rounded-2xl p-8 md:p-10 shadow-2xl shadow-gold/5">
-                {/* Philosophy Text - Premium Typography */}
-                <div className="space-y-5 text-zinc-800 leading-[1.9] text-[15px] md:text-base">
-                  <p className="text-lg md:text-xl text-black font-medium leading-relaxed">
-                    I believe real estate decisions should never be driven by commissions, pressure, or promises that do not exist in reality.
-                  </p>
-                  
-                  <p>
-                    There is no such thing as guaranteed ROI. No one in the world can guarantee outcomes. Real estate, like any investment, follows cycles, market forces, and external factors that cannot be controlled.
-                  </p>
-                  
-                  <p>
-                    My responsibility, as the founder, is to protect people from making decisions based on incomplete information or unrealistic expectations.
-                  </p>
-                  
-                  <p>
-                    At{" "}
-                    <Link 
-                      to="/about" 
-                      className="group/jbj inline-block hover:opacity-90 transition-all"
-                    >
-                      <span 
-                        className="text-gold font-bold transition-transform group-hover/jbj:scale-105"
-                        style={{ 
-                          textShadow: '0 2px 8px rgba(0,0,0,0.3), 0 0 15px rgba(200,167,102,0.4), 0 0 25px rgba(255,255,255,0.2)',
-                          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))',
-                        }}
-                      >
-                        JBJ Global Real Estate
-                      </span>
-                    </Link>
-                    , we work with clients as if we are investing our own capital. We do not treat a client's portfolio as a transaction. We treat it as if it were our own.
-                  </p>
-                  
-                  <p>
-                    For off-plan properties, we do not charge clients any fees. We do not take money from clients to sell them a project. Our role is to protect, guide, and educate not to push clients toward what benefits us or the company.
-                  </p>
-                  
-                  <p>
-                    Developers promote what they have. Sales agents sell what they are assigned. That is not our role.
-                  </p>
-                  
-                  <p>
-                    Our responsibility is to analyze the entire market across developers, projects, locations, and pricing and to advise based on data, not personal interest.
-                  </p>
-                  
-                  <p>
-                    We rely on official government data, public planning strategies, infrastructure roadmaps, and historical real estate cycles. We analyze pricing by area, by developer, by phase, and by investment objective.
-                  </p>
-                  
-                  <p>
-                    Based on this analysis, we guide clients toward what aligns with their goals whether capital appreciation, rental income, long-term holding, or end-use ownership.
-                  </p>
-                  
-                  <p>
-                    Clients always make the final decision. Our role is to illuminate the full picture so decisions are made with clarity, confidence, and protection.
-                  </p>
-                  
-                  <p>
-                    After handover, we continue supporting clients through rental strategy, resale planning, and long-term asset positioning. Developers do not manage rentals for clients. Developers do not manage resales. This is where an independent, licensed brokerage with full-market intelligence makes the difference.
-                  </p>
-                  
-                  <p>
-                    We do not sell based on personal relationships, higher commissions, or convenience. We respect the laws of the United Arab Emirates, we respect the client, and we respect the capital being invested.
-                  </p>
-                  
-                  <p className="text-lg text-black font-medium">
-                    We advise to the best of our knowledge, based on experience, verified data, and integrity so clients do not regret where their money goes.
-                  </p>
-                </div>
-
-                {/* Signature - Restored: Jane in black, CEO in gold, JBJ in black */}
-                <div className="pt-8 mt-8 border-t border-zinc-200">
-                  <Link to="/founder" className="hover:opacity-80 transition-opacity">
-                    <p className="text-black text-lg font-semibold tracking-wide">
-                      Jane Abou Jaoude
-                    </p>
-                  </Link>
-                  <p className="text-gold text-sm font-medium mt-1 tracking-wide">
-                    Founder & CEO
-                  </p>
-                  <Link to="/about" className="hover:opacity-80 transition-opacity">
-                    <p className="text-black text-sm mt-0.5 tracking-wide font-medium">
-                      JBJ Global Real Estate
-                    </p>
-                  </Link>
-                </div>
+          {/* Left - Portrait */}
+          <motion.div variants={fadeInUp} className="flex flex-col items-center">
+            <Link to="/founder" className="block relative group">
+              <div className="relative w-64 h-80 md:w-80 md:h-96 rounded-2xl overflow-hidden border-2 border-gold/30 shadow-2xl shadow-gold/20 group-hover:border-gold transition-all duration-300">
+                <img 
+                  src={founderPremium} 
+                  alt="Jane Abou Jaoude - Founder" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
               </div>
-            </motion.div>
-          </div>
+            </Link>
+            
+            {/* CTA Button - Primary button with correct color logic */}
+            <button 
+              onClick={() => window.location.href = '/founder'}
+              className="relative inline-flex items-center justify-center gap-2 px-8 py-5 mt-6 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
+              style={{
+                background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                boxShadow: `
+                  0 10px 30px rgba(200,167,102,0.4),
+                  0 6px 15px rgba(0,0,0,0.2),
+                  inset 0 2px 4px rgba(255,255,255,0.9),
+                  inset 0 -2px 4px rgba(200,167,102,0.2),
+                  0 0 20px rgba(200,167,102,0.3)
+                `,
+              }}
+            >
+              <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+              <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+              <span className="relative flex items-center justify-center gap-2">
+                <User className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
+                <span className="text-black group-hover:text-gold transition-colors">Know More About</span>
+                <span className="text-gold group-hover:text-black transition-colors">The Founder</span>
+                <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+              </span>
+            </button>
+          </motion.div>
+
+          {/* Right - Content */}
+          <motion.div variants={fadeInUp} className="space-y-6">
+            <div>
+              <span className="inline-block text-gold text-xs uppercase tracking-[0.3em] mb-4">Philosophy</span>
+              <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                A Founder-Led <span className="text-gold">Vision</span>
+              </h2>
+            </div>
+            
+            <div className="bg-gradient-to-br from-zinc-900/80 to-zinc-950/90 border border-gold/20 rounded-2xl p-6 md:p-8">
+              <p className="text-zinc-300 text-base leading-relaxed mb-4">
+                <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link> is a founder-led brokerage built on unwavering standards, discretion, and long-term vision.
+              </p>
+              <p className="text-zinc-400 text-sm leading-relaxed">
+                Founded by <Link to="/founder" className="text-gold hover:underline">Jane Abou Jaoude</Link>, our approach combines deep market expertise with personalized service, ensuring every client receives the attention and insight they deserve.
+              </p>
+            </div>
+            
+            <p className="text-zinc-500 text-xs">
+              Learn more about our <Link to="/about" className="text-gold hover:underline">company values</Link> and <Link to="/founder" className="text-gold hover:underline">leadership</Link>.
+            </p>
+          </motion.div>
         </motion.div>
       </div>
     </section>
