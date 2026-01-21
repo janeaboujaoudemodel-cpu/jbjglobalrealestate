@@ -61,15 +61,15 @@ export const GoogleMyBusinessLink = ({
     );
   }
 
-  // Badge variant (default)
+  // Badge variant (default) - Premium Champagne styling to match footer cards
   return (
     <a
       href={GMB_URL}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex items-center gap-3 bg-zinc-800/50 hover:bg-zinc-800 border border-zinc-700/50 rounded-xl px-4 py-3 transition-all group ${className}`}
+      className={`inline-flex items-center gap-3 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] hover:shadow-lg border border-gold/30 rounded-xl px-4 py-3 transition-all group ${className}`}
     >
-      <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+      <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center border border-gold/20">
         <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
           <path
             d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -98,7 +98,7 @@ export const GoogleMyBusinessLink = ({
             />
           ))}
         </div>
-        <p className="text-white text-sm font-medium group-hover:text-gold transition-colors">
+        <p className="text-black text-sm font-medium group-hover:text-gold transition-colors">
           Google Business Profile
         </p>
       </div>
