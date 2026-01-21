@@ -261,7 +261,7 @@ const BrokerFAQ = () => {
       </section>
 
       {/* Still Have Questions */}
-      <section className="py-16 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+      <section className="py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
         <div className="container mx-auto px-4">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -280,13 +280,13 @@ const BrokerFAQ = () => {
               we're here to provide guidance.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button asChild className="px-6 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-gold font-semibold border border-gold/40 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
+              <Button asChild variant="primary" className="px-6">
                 <Link to="/contact">
-                  <Phone className="w-4 h-4 mr-2 text-black" />
+                  <Phone className="w-4 h-4 mr-2" />
                   Contact Our Team
                 </Link>
               </Button>
-              <Button asChild className="px-6 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-gold font-semibold border border-gold/40 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
+              <Button asChild variant="primary" className="px-6">
                 <Link to="/broker-education">
                   Read Broker Education Guide
                 </Link>

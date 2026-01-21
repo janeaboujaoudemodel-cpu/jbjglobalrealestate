@@ -60,7 +60,17 @@ export const FAQFloatingSidebar = ({
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      // Use scrollTo with offset to prevent getting stuck
+      const offset = 120;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - offset;
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+      
+      setActiveId(id);
     }
   };
 
@@ -80,7 +90,7 @@ export const FAQFloatingSidebar = ({
             exit={{ opacity: 0, x: 20 }}
             className="absolute right-full mr-4 top-0 w-64 z-50"
           >
-            <div className="bg-white border border-gold/30 rounded-xl p-4 shadow-xl">
+            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl p-4 shadow-xl">
               <div className="flex items-start gap-3 mb-3">
                 <div className="w-8 h-8 bg-gold/10 rounded-lg flex items-center justify-center flex-shrink-0">
                   <HelpCircle className="w-4 h-4 text-gold" />
@@ -101,7 +111,7 @@ export const FAQFloatingSidebar = ({
               </Button>
             </div>
             {/* Arrow pointing to nav */}
-            <div className="absolute top-4 -right-2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-transparent border-l-white" />
+            <div className="absolute top-4 -right-2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-transparent border-l-champagne" />
           </motion.div>
         )}
       </AnimatePresence>
@@ -110,7 +120,11 @@ export const FAQFloatingSidebar = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white border border-gold/30 rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] overflow-y-auto"
+        className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gold/60 scrollbar-track-gold/10"
+        style={{
+          scrollbarWidth: 'thin',
+          scrollbarColor: 'rgba(200,167,102,0.6) rgba(200,167,102,0.1)'
+        }}
       >
         {/* Header with minimize button */}
         <div className="flex items-center justify-between p-4 border-b border-zinc-200 bg-gradient-to-r from-gold/5 to-transparent">
@@ -148,8 +162,8 @@ export const FAQFloatingSidebar = ({
                   className={cn(
                     "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm transition-all",
                     activeId === `category-${index}`
-                      ? "bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-medium shadow-md border border-gold/40"
-                      : "text-zinc-600 hover:text-black hover:bg-zinc-100 border border-transparent hover:border-zinc-200"
+                      ? "bg-gradient-to-r from-champagne-light via-champagne to-champagne-dark text-black font-medium shadow-md border border-gold/40"
+                      : "text-zinc-600 hover:text-black hover:bg-gold/10 border border-transparent hover:border-gold/30"
                   )}
                 >
                   <span className={cn(
@@ -177,21 +191,22 @@ export const FAQFloatingSidebar = ({
               ))}
               
               {/* CTA Actions - Compact */}
-              <div className="pt-3 mt-2 border-t border-zinc-200 space-y-2">
+              <div className="pt-3 mt-2 border-t border-gold/20 space-y-2">
                 <Link to="/contact" className="block">
                   <Button 
                     size="sm"
-                    className="w-full relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-gold font-medium py-2 text-xs border border-gold/40 shadow-[0_2px_10px_rgba(200,167,102,0.2)] hover:shadow-[0_4px_15px_rgba(200,167,102,0.4)] hover:scale-[1.02] transition-all duration-300"
+                    variant="primary"
+                    className="w-full py-2 text-xs"
                   >
-                    <Phone className="w-3 h-3 mr-1.5 text-black" />
-                    <span className="text-gold">Ask Our Team</span>
+                    <Phone className="w-3 h-3 mr-1.5" />
+                    Ask Our Team
                   </Button>
                 </Link>
                 <Link to="/buyer-guide" className="block">
                   <Button 
                     size="sm"
                     variant="outline"
-                    className="w-full text-xs py-2 border-zinc-200 text-zinc-600 hover:text-gold hover:border-gold/40"
+                    className="w-full text-xs py-2 border-gold/30 text-zinc-600 hover:text-gold hover:border-gold/50"
                   >
                     <Search className="w-3 h-3 mr-1.5" />
                     View Buyer Guide
