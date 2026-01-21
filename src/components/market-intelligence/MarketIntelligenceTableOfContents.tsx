@@ -67,7 +67,18 @@ export const MarketIntelligenceTableOfContents = ({
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      // Use scrollTo with offset to prevent getting stuck
+      const offset = 120; // Account for fixed header
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - offset;
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+      
+      // Force update active state
+      setActiveId(id);
     }
   };
 
@@ -87,7 +98,7 @@ export const MarketIntelligenceTableOfContents = ({
             exit={{ opacity: 0, x: 20 }}
             className="absolute right-full mr-4 top-0 w-64 z-50"
           >
-            <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-xl p-4 shadow-xl">
+            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl p-4 shadow-xl">
               <div className="flex items-start gap-3 mb-3">
                 <div className="w-8 h-8 bg-gold/10 rounded-lg flex items-center justify-center flex-shrink-0">
                   <HelpCircle className="w-4 h-4 text-gold" />
@@ -112,11 +123,15 @@ export const MarketIntelligenceTableOfContents = ({
         )}
       </AnimatePresence>
 
-      {/* Main TOC Container - Fixed position */}
+      {/* Main TOC Container - Fixed position with visible gold scrollbar */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] overflow-y-auto"
+        className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gold/60 scrollbar-track-gold/10 hover:scrollbar-thumb-gold"
+        style={{
+          scrollbarWidth: 'thin',
+          scrollbarColor: 'rgba(200,167,102,0.6) rgba(200,167,102,0.1)'
+        }}
       >
         {/* Header with minimize button */}
         <div className="flex items-center justify-between p-4 border-b border-zinc-200 bg-gradient-to-r from-gold/5 to-transparent">
@@ -154,8 +169,8 @@ export const MarketIntelligenceTableOfContents = ({
                   className={cn(
                     "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-sm transition-all",
                     activeId === item.id
-                      ? "bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-medium shadow-md border border-gold/40"
-                      : "text-zinc-600 hover:text-black hover:bg-zinc-100 border border-transparent hover:border-zinc-200"
+                      ? "bg-gradient-to-r from-champagne-light via-champagne to-champagne-dark text-black font-medium shadow-md border border-gold/40"
+                      : "text-zinc-600 hover:text-black hover:bg-gold/10 border border-transparent hover:border-gold/30"
                   )}
                 >
                   <span className={cn(

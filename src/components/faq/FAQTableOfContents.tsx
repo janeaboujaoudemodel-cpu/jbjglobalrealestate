@@ -168,9 +168,13 @@ export const FAQTableOfContents = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className={cn(
-        "bg-white border border-gold/30 rounded-xl overflow-hidden shadow-lg",
+        "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl overflow-hidden shadow-lg scrollbar-thin scrollbar-thumb-gold/60 scrollbar-track-gold/10",
         sticky ? "sticky top-4 z-[60] max-h-[calc(100vh-200px)] overflow-y-auto" : "max-h-[400px] overflow-y-auto"
       )}
+      style={{
+        scrollbarWidth: 'thin',
+        scrollbarColor: 'rgba(200,167,102,0.6) rgba(200,167,102,0.1)'
+      }}
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-zinc-200 bg-gradient-to-r from-gold/5 to-transparent">
@@ -322,8 +326,8 @@ export const FAQTableOfContents = ({
                   className={cn(
                     "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-sm transition-all",
                     activeId === `category-${index}`
-                      ? "bg-gradient-to-r from-[#D4C4A8] via-[#C8B89A] to-[#B8A888] text-black font-medium shadow-md border border-gold/40"
-                      : "text-zinc-600 hover:text-black hover:bg-zinc-100 border border-transparent hover:border-zinc-200"
+                      ? "bg-gradient-to-r from-champagne-light via-champagne to-champagne-dark text-black font-medium shadow-md border border-gold/40"
+                      : "text-zinc-600 hover:text-black hover:bg-gold/10 border border-transparent hover:border-gold/30"
                   )}
                 >
                   <category.icon className={cn(

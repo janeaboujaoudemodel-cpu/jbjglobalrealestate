@@ -150,7 +150,7 @@ const GlobalHeader = () => {
       <DropdownMenuContent 
         align="center" 
         sideOffset={12}
-        className="bg-gradient-to-b from-white to-zinc-50 border border-gold/30 min-w-[240px] shadow-2xl shadow-black/30 py-4 rounded-xl overflow-hidden"
+        className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 min-w-[240px] shadow-2xl shadow-black/30 py-4 rounded-xl overflow-hidden"
       >
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
         <div className="flex flex-col gap-1.5 px-2">

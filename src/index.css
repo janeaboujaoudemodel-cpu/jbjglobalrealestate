@@ -1215,4 +1215,41 @@ All colors MUST be HSL.
     opacity: 0.9;
     text-shadow: 0 0 8px hsl(42 45% 59% / 0.4);
   }
+
+  /* Gold scrollbar styling for TOC and navigation panels */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+  
+  .scrollbar-thumb-gold {
+    scrollbar-color: hsl(42 45% 59%) transparent;
+  }
+  
+  .scrollbar-thumb-gold\/60 {
+    scrollbar-color: hsl(42 45% 59% / 0.6) hsl(42 45% 59% / 0.1);
+  }
+  
+  .scrollbar-track-gold\/10 {
+    scrollbar-color: inherit hsl(42 45% 59% / 0.1);
+  }
+
+  /* Webkit scrollbar styling */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .scrollbar-thumb-gold\/60::-webkit-scrollbar-thumb {
+    background: hsl(42 45% 59% / 0.6);
+    border-radius: 3px;
+  }
+  
+  .scrollbar-thumb-gold\/60::-webkit-scrollbar-thumb:hover {
+    background: hsl(42 45% 59%);
+  }
+  
+  .scrollbar-track-gold\/10::-webkit-scrollbar-track {
+    background: hsl(42 45% 59% / 0.1);
+    border-radius: 3px;
+  }
 }
