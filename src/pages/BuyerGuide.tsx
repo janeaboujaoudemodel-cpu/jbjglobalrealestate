@@ -358,18 +358,18 @@ const BuyerGuide = () => {
       </div>
 
       {/* Introduction - Who This Guide Is For */}
-      <section id="who-this-guide-for" className="py-16 md:py-24 bg-black scroll-mt-20">
+      <section id="who-this-guide-for" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-6">
+              <h2 className="text-3xl md:text-4xl font-light text-black mb-6">
                 Who This Guide Is For
               </h2>
             </div>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {audienceTypes.map((item, index) => (
-                <div key={index} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl p-6 border border-gold/30 text-center hover:border-gold hover:shadow-lg transition-all">
+                <div key={index} className="jj-box-active p-6 text-center hover:border-gold hover:shadow-lg transition-all">
                   <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
                     <item.icon className="w-6 h-6 text-gold" />
                   </div>
@@ -383,11 +383,11 @@ const BuyerGuide = () => {
       </section>
 
       {/* Step-by-Step Buying Process */}
-      <section id="buying-process" className="py-16 md:py-24 bg-black scroll-mt-20">
+      <section id="buying-process" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
+              <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
                 Step-by-Step Buying Process
               </h2>
             </div>
@@ -396,7 +396,7 @@ const BuyerGuide = () => {
               {buyingSteps.map((step) => (
                 <div 
                   key={step.number}
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-6 md:p-8 border border-gold/30 hover:border-gold hover:shadow-lg transition-all duration-300"
+                  className="jj-box-active p-6 md:p-8 hover:border-gold hover:shadow-lg transition-all duration-300"
                 >
                   <div className="flex flex-col md:flex-row md:items-start gap-6">
                     <div className="flex-shrink-0">
@@ -517,18 +517,18 @@ const BuyerGuide = () => {
       <div className="h-px bg-black" />
 
       {/* Agency Fees & Buyer Costs (Important) */}
-      <section id="agency-fees" className="py-16 md:py-24 bg-black scroll-mt-20">
+      <section id="agency-fees" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
+              <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
                 Agency Fees & Buyer Costs (Important)
               </h2>
             </div>
 
             <div className="grid md:grid-cols-2 gap-6 mb-8">
               {/* Off-Plan Purchases */}
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30 hover:border-gold hover:shadow-lg transition-all">
+              <div className="jj-box-active p-8 hover:border-gold hover:shadow-lg transition-all">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
                     <Building2 className="w-6 h-6 text-gold" />
@@ -566,7 +566,7 @@ const BuyerGuide = () => {
               </div>
 
               {/* Ready Property Purchases */}
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30 hover:border-gold hover:shadow-lg transition-all">
+              <div className="jj-box-active p-8 hover:border-gold hover:shadow-lg transition-all">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
                     <Home className="w-6 h-6 text-gold" />
@@ -606,26 +606,26 @@ const BuyerGuide = () => {
       </section>
 
       {/* Divider */}
-      <div className="h-px bg-black" />
+      <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
 
       {/* Buyer Costs Overview */}
-      <section id="buyer-costs" className="py-16 md:py-24 bg-black scroll-mt-20">
+      <section id="buyer-costs" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
+              <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
                 Buyer Costs Overview
               </h2>
             </div>
 
             {/* Mandatory Government Fees */}
             <div className="mb-8">
-              <h3 className="text-xl font-semibold text-white mb-6">Mandatory Government Fees</h3>
+              <h3 className="text-xl font-semibold text-black mb-6">Mandatory Government Fees</h3>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {governmentFees.map((fee, index) => (
                   <div 
                     key={index}
-                    className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all"
+                    className="jj-box-active p-6 hover:border-gold hover:shadow-lg transition-all"
                   >
                     <div className="flex items-start gap-4">
                       <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
@@ -643,12 +643,12 @@ const BuyerGuide = () => {
 
             {/* Additional Costs */}
             <div>
-              <h3 className="text-xl font-semibold text-white mb-6">Additional Costs (If Applicable)</h3>
+              <h3 className="text-xl font-semibold text-black mb-6">Additional Costs (If Applicable)</h3>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {additionalCosts.map((cost, index) => (
                   <div 
                     key={index}
-                    className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all"
+                    className="jj-box-active p-6 hover:border-gold hover:shadow-lg transition-all"
                   >
                     <div className="flex items-start gap-4">
                       <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
@@ -668,13 +668,13 @@ const BuyerGuide = () => {
       </section>
 
       {/* Divider */}
-      <div className="h-px bg-black" />
+      <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
 
       {/* Mortgages & Financing */}
-      <section id="mortgages" className="py-16 md:py-24 bg-black scroll-mt-20">
+      <section id="mortgages" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.2)]">
+            <div className="jj-box-active p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.2)]">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
                   <Landmark className="w-6 h-6 text-gold" />
