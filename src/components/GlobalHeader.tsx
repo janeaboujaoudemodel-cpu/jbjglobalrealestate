@@ -176,25 +176,25 @@ const GlobalHeader = () => {
       {/* Premium bottom accent line - solid gold (no black/transparent extension) */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gold/40 z-10" />
       
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-2 sm:px-3 lg:px-4">
-        <div className="flex items-center justify-between h-16 lg:h-20 w-full">
+      <div className="relative z-10 mx-auto w-full max-w-[1400px] px-3 sm:px-4 lg:px-8 xl:px-12">
+        <div className="flex items-center justify-between h-14 lg:h-20 w-full">
           {/* LEFT: Brand Logo - Monogram only on mobile */}
           <Link 
             to="/" 
-            className="flex items-center gap-1.5 shrink-0 group transition-all duration-300"
+            className="flex items-center gap-2 sm:gap-2.5 shrink-0 group transition-all duration-300"
             style={{ fontFamily: "Poppins, sans-serif" }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
-            <div className="relative">
+            <div className="relative shrink-0">
               <img 
                 src={jbjMonogramDarkBg} 
                 alt="JBJ" 
-                className="w-10 h-10 lg:w-9 lg:h-9 object-contain transition-transform duration-300 group-hover:scale-105"
+                className="w-9 h-9 sm:w-10 sm:h-10 lg:w-9 lg:h-9 object-contain transition-transform duration-300 group-hover:scale-105"
               />
               {/* Subtle glow on hover */}
               <div className="absolute inset-0 rounded-full bg-gold/0 group-hover:bg-gold/10 transition-colors duration-300 blur-xl" />
             </div>
-            <span className="text-white font-semibold text-[10px] sm:text-xs lg:text-[10px] tracking-[0.06em] uppercase whitespace-nowrap drop-shadow-sm">
+            <span className="text-white font-bold text-xs sm:text-sm lg:text-[11px] tracking-[0.08em] uppercase whitespace-nowrap drop-shadow-sm">
               JBJ Global Real Estate
             </span>
           </Link>
