@@ -189,26 +189,26 @@ const GlobalHeader = () => {
               <img 
                 src={jbjMonogramDarkBg} 
                 alt="JBJ" 
-                className="w-8 h-8 lg:w-9 lg:h-9 object-contain transition-transform duration-300 group-hover:scale-105"
+                className="w-10 h-10 lg:w-9 lg:h-9 object-contain transition-transform duration-300 group-hover:scale-105"
               />
               {/* Subtle glow on hover */}
               <div className="absolute inset-0 rounded-full bg-gold/0 group-hover:bg-gold/10 transition-colors duration-300 blur-xl" />
             </div>
-            <span className="text-white font-semibold text-[10px] tracking-[0.08em] uppercase whitespace-nowrap hidden lg:inline drop-shadow-sm max-w-[160px] xl:max-w-none truncate">
+            <span className="text-white font-semibold text-xs lg:text-[10px] tracking-[0.08em] uppercase whitespace-nowrap drop-shadow-sm max-w-[140px] lg:max-w-[160px] xl:max-w-none truncate">
               JBJ Global Real Estate
             </span>
           </Link>
 
           {/* MOBILE RIGHT ICONS: Search, Language, Menu - visible on mobile only */}
-          <div className="flex items-center gap-1.5 ml-auto lg:hidden">
-            {/* Search Icon */}
+          <div className="flex items-center gap-1 ml-auto lg:hidden">
+            {/* Search Icon - smaller */}
             <Button
               variant="ghost"
               size="sm"
-              className="relative w-9 h-9 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
+              className="relative w-7 h-7 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
               onClick={() => setSearchOpen(true)}
             >
-              <Search className="w-4 h-4 text-gold group-hover:text-gold-light transition-colors" />
+              <Search className="w-3 h-3 text-gold group-hover:text-gold-light transition-colors" />
             </Button>
 
             {/* Language Switcher */}
@@ -216,16 +216,16 @@ const GlobalHeader = () => {
               <LanguageSwitcher variant="compact" />
             </div>
 
-            {/* Mobile Menu Trigger */}
+            {/* Mobile Menu Trigger - smaller */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="relative w-9 h-9 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
+                  className="relative w-7 h-7 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
                   aria-label="Open menu"
                 >
-                  <Menu className="w-4 h-4 text-gold group-hover:text-gold-light transition-colors" />
+                  <Menu className="w-3 h-3 text-gold group-hover:text-gold-light transition-colors" />
                 </Button>
               </SheetTrigger>
               <SheetContent
