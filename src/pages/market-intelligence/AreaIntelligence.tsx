@@ -66,79 +66,85 @@ const AreaIntelligence = () => {
       {/* Gold Glow Divider */}
       <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
 
-      {/* Main Content with TOC Sidebar */}
-      <div className="container mx-auto px-4 py-16">
+      {/* Main Content - Black background with 3-layer system */}
+      <div className="bg-black py-16">
         <div className="flex gap-8">
           {/* Main Content */}
-          <div className="flex-1 space-y-8">
+          <div className="flex-1 space-y-0">
             
-            {/* Introduction Section */}
-            <motion.section 
-              id="introduction" 
-              className="scroll-mt-24"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeInUp}
-            >
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
-                    <AlertTriangle className="w-6 h-6 text-gold" />
+            {/* Introduction Section - 3-layer system */}
+            <section id="introduction" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
+              <div className="container mx-auto px-4">
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeInUp}
+                  className="max-w-4xl mx-auto lg:mr-80"
+                >
+                  <div className="jj-card-inner p-8">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
+                        <AlertTriangle className="w-6 h-6 text-gold" />
+                      </div>
+                      <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                        <span className="text-gold">No</span> Assumptions, Projections, or Guarantees
+                      </h2>
+                    </div>
+                    <p className="text-zinc-700 text-lg leading-relaxed">
+                      No assumptions, projections, or guarantees are used. All insights are descriptive and based on registered activity from official government sources.
+                    </p>
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
-                    <span className="text-gold">No</span> Assumptions, Projections, or Guarantees
-                  </h2>
-                </div>
-                <p className="text-zinc-700 text-lg leading-relaxed">
-                  No assumptions, projections, or guarantees are used. All insights are descriptive and based on registered activity from official government sources.
-                </p>
+                </motion.div>
               </div>
-            </motion.section>
+            </section>
 
-            {/* What Area Intelligence Means */}
-            <motion.section 
-              id="what-area-intelligence-means" 
-              className="scroll-mt-24"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeInUp}
-            >
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
-                    <MapPin className="w-6 h-6 text-gold" />
+            {/* What Area Intelligence Means - 3-layer system */}
+            <section id="what-area-intelligence-means" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
+              <div className="container mx-auto px-4">
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeInUp}
+                  className="max-w-4xl mx-auto lg:mr-80"
+                >
+                  <div className="jj-card-inner p-8">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
+                        <MapPin className="w-6 h-6 text-gold" />
+                      </div>
+                      <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                        <span className="text-gold">What</span> "Area Intelligence" Means
+                      </h2>
+                    </div>
+                    <p className="text-zinc-700 text-lg leading-relaxed mb-6">
+                      Area Intelligence refers to the structured analysis of a specific location based on:
+                    </p>
+                    <ul className="grid md:grid-cols-2 gap-3">
+                      {[
+                        "Registered sales transactions",
+                        "Registered rental contracts",
+                        "Property type distribution",
+                        "Supply and handover activity",
+                        "Approved service charges",
+                        "Official rental benchmarks"
+                      ].map((item, idx) => (
+                        <li key={idx} className="flex items-center gap-3 text-zinc-700">
+                          <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="mt-6 p-4 bg-black/5 rounded-xl border border-gold/20">
+                      <p className="text-zinc-600 text-sm italic">
+                        Each area is assessed independently. No two locations behave the same, even within the same district.
+                      </p>
+                    </div>
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
-                    <span className="text-gold">What</span> "Area Intelligence" Means
-                  </h2>
-                </div>
-                <p className="text-zinc-700 text-lg leading-relaxed mb-6">
-                  Area Intelligence refers to the structured analysis of a specific location based on:
-                </p>
-                <ul className="grid md:grid-cols-2 gap-3">
-                  {[
-                    "Registered sales transactions",
-                    "Registered rental contracts",
-                    "Property type distribution",
-                    "Supply and handover activity",
-                    "Approved service charges",
-                    "Official rental benchmarks"
-                  ].map((item, idx) => (
-                    <li key={idx} className="flex items-center gap-3 text-zinc-700">
-                      <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-6 p-4 bg-black/5 rounded-xl border border-gold/20">
-                  <p className="text-zinc-600 text-sm italic">
-                    Each area is assessed independently. No two locations behave the same, even within the same district.
-                  </p>
-                </div>
+                </motion.div>
               </div>
-            </motion.section>
+            </section>
 
             {/* Official Data Sources */}
             <motion.section 
