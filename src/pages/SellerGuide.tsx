@@ -355,7 +355,7 @@ const SellerGuide = () => {
         </div>
 
         {/* Who This Guide Is For */}
-        <section id="who-is-this-for" className="py-16 bg-zinc-900/30 scroll-mt-20">
+        <section id="who-is-this-for" className="py-16 jj-section-champagne scroll-mt-20">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <motion.div
@@ -365,7 +365,7 @@ const SellerGuide = () => {
                 variants={staggerContainer}
                 className="text-center mb-12"
               >
-                <motion.h2 variants={fadeInUp} className="text-3xl font-bold text-white mb-4">
+                <motion.h2 variants={fadeInUp} className="text-3xl font-bold text-black mb-4">
                   Who This Guide Is For
                 </motion.h2>
               </motion.div>
@@ -378,7 +378,7 @@ const SellerGuide = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
-                    className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
+                    className="jj-box-active p-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
                   >
                     <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-gold/20 transition-colors">
                       <item.icon className="w-6 h-6 text-gold" />
@@ -393,7 +393,7 @@ const SellerGuide = () => {
         </section>
 
         {/* Step-by-Step Selling Process */}
-        <section id="selling-process" className="py-16 scroll-mt-20">
+        <section id="selling-process" className="py-16 jj-section-champagne scroll-mt-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <motion.div
@@ -403,7 +403,7 @@ const SellerGuide = () => {
                 variants={staggerContainer}
                 className="text-center mb-12"
               >
-                <motion.h2 variants={fadeInUp} className="text-3xl font-bold text-white mb-4">
+                <motion.h2 variants={fadeInUp} className="text-3xl font-bold text-black mb-4">
                   Step-by-Step Selling Process
                 </motion.h2>
               </motion.div>
@@ -416,7 +416,7 @@ const SellerGuide = () => {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.05 }}
-                    className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
+                    className="jj-box-active p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
                   >
                     <div className="flex items-start gap-4">
                       <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/20">
@@ -465,7 +465,7 @@ const SellerGuide = () => {
         </section>
 
         {/* Selling Costs & Fees */}
-        <section id="costs" className="py-16 bg-zinc-900/30 scroll-mt-20">
+        <section id="costs" className="py-16 jj-section-champagne scroll-mt-20">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <motion.div
@@ -475,13 +475,13 @@ const SellerGuide = () => {
                 variants={staggerContainer}
               >
                 <motion.div variants={fadeInUp} className="text-center mb-12">
-                  <h2 className="text-3xl font-bold text-white mb-4">
+                  <h2 className="text-3xl font-bold text-black mb-4">
                     Selling Costs & Fees (Important)
                   </h2>
                 </motion.div>
 
                 {/* Agency Commission */}
-                <motion.div variants={fadeInUp} className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl p-6 md:p-8 mb-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
+                <motion.div variants={fadeInUp} className="jj-box-active p-6 md:p-8 mb-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
                       <Banknote className="w-6 h-6 text-gold" />

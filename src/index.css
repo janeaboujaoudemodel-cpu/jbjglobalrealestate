@@ -240,6 +240,46 @@ All colors MUST be HSL.
    * ============================================================ */
 
   /* ============================================================
+   * GLOBAL SECTION THEMING SYSTEM - CHAMPAGNE SECTIONS (LOCKED)
+   * Rule: Full-width champagne section backgrounds with active 
+   * champagne boxes inside. Replaces all white backgrounds.
+   * ============================================================ */
+
+  /* Full-width champagne section background (edge-to-edge) */
+  .jj-section-champagne {
+    @apply w-full;
+    background: linear-gradient(to bottom right, #FDFBF7, #F5F0E6, #EDE4D3);
+  }
+
+  /* Active champagne card/box inside sections */
+  .jj-card-champagne {
+    @apply rounded-xl border border-gold/30;
+    background: linear-gradient(to bottom right, 
+      hsl(var(--champagne-1)), 
+      hsl(var(--champagne-2)), 
+      hsl(var(--champagne-3))
+    );
+  }
+
+  .jj-card-champagne:hover {
+    @apply border-gold;
+  }
+
+  /* Active champagne with black border (for inner boxes) */
+  .jj-box-active {
+    @apply rounded-xl border-2 border-black;
+    background: linear-gradient(to bottom right, 
+      hsl(var(--champagne-1)), 
+      hsl(var(--champagne-2)), 
+      hsl(var(--champagne-3))
+    );
+  }
+
+  .jj-box-active:hover {
+    @apply border-gold;
+  }
+
+  /* ============================================================
    * 0. GLOBAL CARD SYSTEM - LOCKED ARCHITECTURE
    * Applies to: Website · CRM · Employee Hub · Profiles · Listings
    * Cards are structured containers for decision-making
