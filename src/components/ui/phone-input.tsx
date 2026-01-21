@@ -469,10 +469,11 @@ export interface PhoneInputProps {
   className?: string;
   disabled?: boolean;
   showValidation?: boolean;
+  variant?: 'dark' | 'light';
 }
 
 const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
-  ({ value, onChange, placeholder, className, disabled = false, showValidation = true }, ref) => {
+  ({ value, onChange, placeholder, className, disabled = false, showValidation = true, variant = 'dark' }, ref) => {
     const [codeOpen, setCodeOpen] = useState(false);
     const [hasInitialized, setHasInitialized] = useState(false);
     
@@ -512,6 +513,36 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
       onChange(digits ? `${currentCode} ${formatted}` : '');
     };
 
+    // Theme-based styling
+    const isLight = variant === 'light';
+    const buttonStyles = isLight 
+      ? "bg-white border-gold/40 text-black hover:bg-zinc-50 hover:text-black"
+      : "bg-zinc-900 border-zinc-700 text-white hover:bg-zinc-800 hover:text-white";
+    const inputStyles = isLight
+      ? "bg-white border-gold/40 text-black placeholder:text-zinc-400 focus:border-gold"
+      : "bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold";
+    const popoverStyles = isLight
+      ? "bg-white border-gold/30"
+      : "bg-zinc-900 border-zinc-700";
+    const commandStyles = isLight
+      ? "bg-white"
+      : "bg-zinc-900";
+    const commandInputStyles = isLight
+      ? "text-black border-gold/30"
+      : "text-white border-zinc-700";
+    const commandItemStyles = isLight
+      ? "text-black hover:bg-zinc-100"
+      : "text-white hover:bg-zinc-800";
+    const commandEmptyStyles = isLight
+      ? "text-zinc-500"
+      : "text-zinc-400";
+    const helperTextStyles = isLight
+      ? "text-zinc-500"
+      : "text-zinc-500";
+    const countryNameStyles = isLight
+      ? "text-zinc-600"
+      : "text-zinc-300";
+
     return (
       <div className={cn("space-y-1.5 w-full", className)}>
         <div className="flex flex-col sm:flex-row gap-2 w-full">
@@ -524,7 +555,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                 role="combobox"
                 aria-expanded={codeOpen}
                 disabled={disabled}
-                className="w-full sm:w-[160px] h-12 bg-zinc-900 border-zinc-700 text-white hover:bg-zinc-800 hover:text-white justify-between shrink-0"
+                className={cn("w-full sm:w-[160px] h-12 justify-between shrink-0", buttonStyles)}
               >
                 <span className="flex items-center gap-2 truncate">
                   <span className="text-xl">{currentCountry.flag}</span>
@@ -534,20 +565,20 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               </Button>
             </PopoverTrigger>
             <PopoverContent 
-              className="w-[340px] p-0 bg-zinc-900 border-zinc-700 z-[100]" 
+              className={cn("w-[340px] p-0 z-[100]", popoverStyles)} 
               align="start"
               side="bottom"
               sideOffset={4}
               avoidCollisions={true}
               onOpenAutoFocus={(e) => e.preventDefault()}
             >
-              <Command className="bg-zinc-900">
+              <Command className={commandStyles}>
                 <CommandInput 
                   placeholder="Search country name or code..." 
-                  className="h-12 text-white border-zinc-700 text-base"
+                  className={cn("h-12 text-base", commandInputStyles)}
                 />
                 <CommandList className="max-h-[350px] overflow-y-auto overscroll-contain">
-                  <CommandEmpty className="text-zinc-400 text-sm py-6 text-center">
+                  <CommandEmpty className={cn("text-sm py-6 text-center", commandEmptyStyles)}>
                     No country found. Try searching by name or code.
                   </CommandEmpty>
                   {Object.entries(COUNTRY_CODES_BY_REGION).map(([region, countries]) => (
@@ -557,12 +588,12 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                           key={`${country.code}-${country.country}`}
                           value={`${region} ${country.country} ${country.code} ${country.flag}`}
                           onSelect={() => handleCodeChange(country.code)}
-                          className="text-white hover:bg-zinc-800 cursor-pointer py-2.5 px-2 rounded-md"
+                          className={cn("cursor-pointer py-2.5 px-2 rounded-md", commandItemStyles)}
                         >
                           <span className="flex items-center gap-3 w-full">
                             <span className="text-xl">{country.flag}</span>
                             <span className="font-semibold min-w-[65px]">{country.code}</span>
-                            <span className="text-zinc-300 text-sm truncate flex-1">{country.country}</span>
+                            <span className={cn("text-sm truncate flex-1", countryNameStyles)}>{country.country}</span>
                           </span>
                           {currentCode === country.code && (
                             <CheckCircle className="h-5 w-5 text-gold ml-auto shrink-0" />
@@ -585,7 +616,8 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               onChange={handleNumberChange}
               disabled={disabled}
               className={cn(
-                "h-12 bg-zinc-900 border-zinc-700 text-white text-base placeholder:text-zinc-500 focus:border-gold pr-10 w-full pl-3",
+                "h-12 text-base pr-10 w-full pl-3",
+                inputStyles,
                 localNumber && validation.isValid && "border-green-500/50",
                 localNumber && !validation.isValid && "border-amber-500/50"
               )}
@@ -603,7 +635,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
           <p className="text-amber-400 text-xs">{validation.message}</p>
         )}
         {!localNumber && (
-          <p className="text-zinc-500 text-xs">Select your country code, then enter your phone number</p>
+          <p className={cn("text-xs", helperTextStyles)}>Select your country code, then enter your phone number</p>
         )}
       </div>
     );
