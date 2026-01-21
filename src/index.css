@@ -309,18 +309,21 @@ All colors MUST be HSL.
     @apply border-gold;
   }
 
-  /* Active champagne with minimal black border (for inner boxes) */
+  /*
+   * COMPATIBILITY ALIAS (GLOBAL FIX)
+   * jj-box-active is deprecated. For the global 3-layer system, boxes inside
+   * jj-section-champagne must be champagne-pearl cards (jj-card-inner).
+   * Keeping the class name avoids needing to refactor every page.
+   */
   .jj-box-active {
-    @apply rounded-xl border border-black/20;
-    background: linear-gradient(to bottom right, 
-      hsl(var(--champagne-1)), 
-      hsl(var(--champagne-2)), 
-      hsl(var(--champagne-3))
-    );
+    @apply rounded-xl border-2 border-gold;
+    background: linear-gradient(to bottom right, #FDFBF7, #F5F0E6, #EDE4D3);
+    box-shadow: 0 0 15px rgba(200,167,102,0.25);
   }
 
   .jj-box-active:hover {
-    @apply border-gold;
+    @apply border-white;
+    box-shadow: 0 0 25px rgba(255,255,255,0.3);
   }
 
   /* Title styling: First word gold, rest black (Guides & Market Intelligence) */
