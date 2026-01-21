@@ -124,26 +124,10 @@ const AppDownloadPopup = ({
 
   const handleInstall = useCallback(async () => {
     if (isInstalling) return;
+    setIsInstalling(true);
 
-    // iOS: Try to trigger share sheet automatically for one-click experience
-    if (isIOS) {
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: 'JBJ Global Real Estate',
-            text: 'Install the JBJ Global Real Estate app',
-            url: window.location.origin,
-          });
-        } catch {
-          // User cancelled - silently dismiss
-        }
-      }
-      return;
-    }
-
-    // One-click install where supported
+    // One-click install where supported (Android/Chrome/Edge/etc.)
     if (deferredPrompt) {
-      setIsInstalling(true);
       try {
         await deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
@@ -152,7 +136,7 @@ const AppDownloadPopup = ({
           localStorage.setItem(STORAGE_KEYS.INSTALLED, "true");
           setIsInstalled(true);
           dismiss();
-          toast.success("App installed.");
+          toast.success("App installed successfully!");
         }
 
         setDeferredPrompt(null);
@@ -164,10 +148,20 @@ const AppDownloadPopup = ({
       return;
     }
 
-    // Silently dismiss if install not available - no error messages
+    // iOS: Show instructions since iOS Safari requires Add to Home Screen from share menu
+    if (isIOS) {
+      toast.info("Tap the Share button in Safari, then 'Add to Home Screen' to install.", {
+        duration: 5000,
+      });
+      setIsInstalling(false);
+      return;
+    }
+
+    // Fallback: silently dismiss if install not available
     localStorage.setItem(STORAGE_KEYS.DISMISSED_AT, Date.now().toString());
     setShouldShow(false);
     dismiss();
+    setIsInstalling(false);
   }, [deferredPrompt, dismiss, isInstalling, isIOS]);
 
   const handleDismiss = useCallback(() => {

@@ -530,23 +530,16 @@ Requirements:
                 </div>
               )}
               
-              {/* Seller Assistant CTA - Premium 3D White/Champagne/Gold Button */}
+              {/* Seller Assistant CTA - Premium 3D Primary Button */}
               <div className="mt-6">
                 <Button
                   type="button"
+                  variant="primary"
                   onClick={() => setShowAssistant(true)}
-                  className="relative px-8 py-4 text-sm font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] transform active:scale-95 group overflow-hidden bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40"
-                  style={{
-                    boxShadow: `
-                      0 4px 20px rgba(200,167,102,0.3),
-                      0 8px 30px rgba(0,0,0,0.15)
-                    `,
-                  }}
+                  className="px-8 py-4 text-sm"
                 >
-                  <span className="relative flex items-center gap-2">
-                    <Wand2 className="w-5 h-5 text-black" />
-                    <span className="text-gold font-bold">Get Help with JBJ Seller Assistant</span>
-                  </span>
+                  <Wand2 className="w-5 h-5" />
+                  <span>Get Help with JBJ Seller Assistant</span>
                 </Button>
               </div>
             </div>
@@ -1401,14 +1394,13 @@ Requirements:
                 )}
               </AnimatePresence>
 
-              {/* Navigation Buttons */}
-              <div className="flex justify-between items-center mt-8 pt-6 border-t border-zinc-200">
+              {/* Navigation Buttons - Primary Style */}
+              <div className="flex justify-between items-center mt-8 pt-6 border-t border-gold/20">
                 <Button
                   type="button"
-                  variant="outline"
+                  variant="secondary"
                   onClick={goToPrevStep}
                   disabled={currentStep === 1}
-                  className="border-zinc-300 text-black hover:bg-zinc-100"
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Previous
@@ -1417,28 +1409,28 @@ Requirements:
                 {currentStep < 7 ? (
                   <Button
                     type="button"
+                    variant="primary"
                     onClick={goToNextStep}
-                    className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110"
                   >
-                    Next Step
+                    <span>Next Step</span>
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 ) : (
                   <Button
                     type="button"
+                    variant="primary"
                     onClick={handleSubmit}
                     disabled={isSubmitting || !form.watch("submission_confirmed") || !titleDeedFile || (form.getValues("seller_type") === 'poa' && !poaFile)}
-                    className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110"
                   >
                     {isSubmitting ? (
                       <>
                         <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Submitting...
+                        <span>Submitting...</span>
                       </>
                     ) : (
                       <>
                         <CheckCircle2 className="w-4 h-4 mr-2" />
-                        Submit Listing
+                        <span>Submit Listing</span>
                       </>
                     )}
                   </Button>
@@ -1446,18 +1438,7 @@ Requirements:
               </div>
             </div>
 
-            {/* AI Assistant Toggle */}
-            <div className="mt-6 text-center">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setShowAssistant(!showAssistant)}
-                className="border-gold/50 text-gold hover:bg-gold/10"
-              >
-                <Sparkles className="w-4 h-4 mr-2" />
-                {showAssistant ? "Hide" : "Get Help with"} JBJ Seller Assistant
-              </Button>
-            </div>
+            {/* AI Assistant Panel Toggle - Removed duplicate button, keeping only top one */}
 
             {/* AI Assistant Panel */}
             <AnimatePresence>

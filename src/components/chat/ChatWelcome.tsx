@@ -47,22 +47,22 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
             </div>
           </button>
 
-          {/* WhatsApp Option */}
+          {/* WhatsApp Option - Matching styling with Chat with Team but green accents */}
           <a
             href={`https://wa.me/${CONTACT_INFO.whatsappNumber}?text=${encodeURIComponent(
               "Hi! I'd like to speak with someone about property in Dubai."
             )}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full p-4 bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 hover:border-green-500/50 rounded-xl text-left transition-all duration-300 group block"
+            className="w-full p-4 bg-gradient-to-r from-[#FDFBF7] via-white to-[#F5F0E6] border border-gold/40 hover:border-gold rounded-xl text-left transition-all duration-300 group block shadow-sm"
           >
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-lg bg-green-500 flex items-center justify-center">
-                <MessageCircle className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 rounded-lg bg-white border border-gold/30 flex items-center justify-center shadow-sm">
+                <MessageCircle className="w-6 h-6 text-green-500" />
               </div>
               <div className="flex-1">
-                <h5 className="text-black text-sm font-semibold mb-1">📱 Chat on WhatsApp</h5>
-                <p className="text-green-600 text-xs font-medium">Talk directly with our team</p>
+                <h5 className="text-green-600 text-sm font-semibold mb-1">📱 Talk Directly with Our Team</h5>
+                <p className="text-gold text-xs font-medium">⚡ Instant response • WhatsApp</p>
                 <p className="text-zinc-600 text-xs mt-1">
                   For urgent matters or personalized consultation
                 </p>

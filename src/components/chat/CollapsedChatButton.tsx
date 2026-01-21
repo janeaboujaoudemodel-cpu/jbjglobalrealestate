@@ -13,34 +13,7 @@ const CollapsedChatButton = ({ onToggle, showAttentionPulse = false }: Collapsed
 
   return (
     <div className={`fixed bottom-24 ${isRTL ? 'left-4' : 'right-4'} z-[9000]`}>
-      {/* Daily attention banner - shows medium rectangle on first daily load */}
-      <AnimatePresence>
-        {showAttentionPulse && (
-          <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.9 }}
-            transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-            className="absolute -top-20 right-0 w-64 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-2xl p-4 shadow-2xl shadow-gold/20 hidden sm:block"
-          >
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center flex-shrink-0">
-                <Sparkles className="w-4 h-4 text-gold" />
-              </div>
-              <div>
-                <p className="text-black font-bold text-sm">Need Help?</p>
-                <p className="text-black/80 text-xs mt-0.5">
-                  Chat with us now – we're online and ready to assist!
-                </p>
-              </div>
-            </div>
-            {/* Pointer arrow */}
-            <div className="absolute -bottom-2 right-6 w-4 h-4 bg-[#D4C4A8] rotate-45 border-r border-b border-gold/40" />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Main button - single click opens full chat */}
+      {/* Main button - On mobile and desktop, show medium box with pulse on first daily load */}
       <div className="relative">
         {showAttentionPulse && (
           <>
@@ -49,25 +22,15 @@ const CollapsedChatButton = ({ onToggle, showAttentionPulse = false }: Collapsed
           </>
         )}
 
-        {/* Mobile: always icon-only button - clicks open full chat */}
-        <button
-          onClick={onToggle}
-          aria-label="Open chat support"
-          className="relative flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-all duration-300 group hover:scale-105 sm:hidden"
-        >
-          <SquareChatIcon className="w-6 h-6 text-gold" size={24} />
-        </button>
-
-        {/* Desktop: Show medium box on first daily load, otherwise small icon */}
+        {/* Show medium box with attention pulse (first daily load) on ALL devices */}
         {showAttentionPulse ? (
-          /* Medium box state - first daily load - click opens full chat */
           <button
             onClick={onToggle}
             aria-label="Open chat support"
-            className="relative hidden sm:flex items-center gap-3 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold rounded-xl px-5 py-3.5 shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-all duration-300 group hover:scale-105"
+            className="relative flex items-center gap-3 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold rounded-xl px-4 sm:px-5 py-3 sm:py-3.5 shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-all duration-300 group hover:scale-105"
           >
-            <div className="w-11 h-11 rounded-lg bg-white border-2 border-gold flex items-center justify-center flex-shrink-0 shadow-md shadow-gold/20">
-              <SquareChatIcon className="w-5 h-5 text-gold" size={20} />
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-white border-2 border-gold flex items-center justify-center flex-shrink-0 shadow-md shadow-gold/20">
+              <SquareChatIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gold" size={20} />
             </div>
             <div className="flex flex-col items-start">
               <span className="text-black text-sm font-bold">JBJ Support</span>
@@ -83,11 +46,11 @@ const CollapsedChatButton = ({ onToggle, showAttentionPulse = false }: Collapsed
             )}
           </button>
         ) : (
-          /* Small icon state - shown after first interaction or subsequent visits same day */
+          /* Small icon state - shown after first interaction or subsequent visits same day - ALL devices */
           <button
             onClick={onToggle}
             aria-label="Open chat support"
-            className="relative hidden sm:flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-all duration-300 group hover:scale-105"
+            className="relative flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-all duration-300 group hover:scale-105"
           >
             <SquareChatIcon className="w-6 h-6 text-gold" size={24} />
           </button>

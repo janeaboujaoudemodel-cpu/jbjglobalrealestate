@@ -181,23 +181,23 @@ const GlobalSearchModal = ({ isOpen, onClose }: GlobalSearchModalProps) => {
             transition={{ duration: 0.2 }}
             className="fixed top-20 left-1/2 -translate-x-1/2 w-full max-w-xl z-50 px-4"
           >
-            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl overflow-hidden">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 rounded-2xl shadow-2xl overflow-hidden">
               {/* Search Input */}
-              <div className="relative border-b border-zinc-800">
+              <div className="relative border-b border-gold/30">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold" />
                 <Input
                   ref={inputRef}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Search pages, properties, services..."
-                  className="w-full h-14 pl-12 pr-12 bg-transparent border-0 text-white text-lg placeholder:text-zinc-500 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  placeholder="Search your shortcut to destination..."
+                  className="w-full h-14 pl-12 pr-12 bg-transparent border-0 text-black text-lg placeholder:text-gold/70 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
                 />
                 <button
                   onClick={onClose}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-1 rounded-lg hover:bg-zinc-800 transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-1 rounded-lg hover:bg-gold/10 transition-colors"
                 >
-                  <X className="w-5 h-5 text-zinc-500" />
+                  <X className="w-5 h-5 text-black" />
                 </button>
               </div>
 
@@ -209,32 +209,32 @@ const GlobalSearchModal = ({ isOpen, onClose }: GlobalSearchModalProps) => {
                     onClick={() => handleSelect(item.route)}
                     className={`w-full flex items-center gap-4 p-3 rounded-xl transition-all ${
                       idx === 0 && query.trim() 
-                        ? "bg-gold/10 border border-gold/30" 
-                        : "hover:bg-zinc-800"
+                        ? "bg-black/10 border border-gold/40" 
+                        : "hover:bg-gold/10"
                     }`}
                   >
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center border ${
                       idx === 0 && query.trim() 
-                        ? "bg-gold/20 text-gold" 
-                        : "bg-zinc-800 text-zinc-400"
+                        ? "bg-black text-gold border-gold/50" 
+                        : "bg-white border-gold/30 text-gold"
                     }`}>
                       <item.icon className="w-5 h-5" />
                     </div>
                     <div className="flex-1 text-left">
-                      <p className={`font-medium ${idx === 0 && query.trim() ? "text-gold" : "text-white"}`}>
+                      <p className={`font-medium ${idx === 0 && query.trim() ? "text-black" : "text-black"}`}>
                         {item.label}
                       </p>
-                      <p className="text-zinc-500 text-sm">{item.description}</p>
+                      <p className="text-gold text-sm">{item.description}</p>
                     </div>
-                    <ArrowRight className={`w-4 h-4 ${idx === 0 && query.trim() ? "text-gold" : "text-zinc-600"}`} />
+                    <ArrowRight className={`w-4 h-4 ${idx === 0 && query.trim() ? "text-black" : "text-gold"}`} />
                   </button>
                 ))}
               </div>
 
               {/* Footer hint */}
-              <div className="p-3 border-t border-zinc-800 bg-zinc-900/50">
-                <p className="text-zinc-500 text-xs text-center">
-                  Press <kbd className="px-1.5 py-0.5 bg-zinc-800 rounded text-zinc-400">Enter</kbd> to go • <kbd className="px-1.5 py-0.5 bg-zinc-800 rounded text-zinc-400">Esc</kbd> to close
+              <div className="p-3 border-t border-gold/30 bg-white/50">
+                <p className="text-zinc-600 text-xs text-center">
+                  Press <kbd className="px-1.5 py-0.5 bg-black/10 rounded text-black">Enter</kbd> to go • <kbd className="px-1.5 py-0.5 bg-black/10 rounded text-black">Esc</kbd> to close
                 </p>
               </div>
             </div>
