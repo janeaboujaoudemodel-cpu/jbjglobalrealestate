@@ -530,9 +530,9 @@ const GlobalHeader = () => {
             </Sheet>
           </div>
 
-          {/* CENTER: Desktop Navigation - stretched equally on both sides, stop before search icon on right and "E" on left */}
-          <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 mx-1">
-            <div className="flex items-center gap-1.5 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] backdrop-blur-sm rounded-full px-4 py-0.5 border border-gold/40 shadow-lg">
+          {/* CENTER: Desktop Navigation - stretched with reduced right-side icon gap for more nav space */}
+          <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 mx-3">
+            <div className="flex items-center gap-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] backdrop-blur-sm rounded-full px-5 py-1 border border-gold/40 shadow-lg">
               
               {/* 1. Home - No dropdown */}
               <Link
@@ -597,29 +597,30 @@ const GlobalHeader = () => {
           </nav>
 
           {/* RIGHT: Actions - Desktop only - Icons grouped, same size, same spacing */}
-          <div className="hidden lg:flex items-center gap-3 shrink-0">
+          {/* Right icons with reduced spacing - unified alignment */}
+          <div className="hidden lg:flex items-center gap-1.5 shrink-0">
             {/* Search Icon */}
             <button
-              className="w-8 h-8 flex items-center justify-center hover:opacity-70 transition-opacity duration-200"
+              className="w-7 h-7 flex items-center justify-center hover:opacity-70 transition-opacity duration-200"
               onClick={() => setSearchOpen(true)}
               aria-label="Search"
             >
-              <Search className="w-5 h-5 text-gold" />
+              <Search className="w-4 h-4 text-gold" />
             </button>
 
             {/* Language Switcher */}
             <LanguageSwitcher variant="icon-only" />
 
             {/* Account Icon */}
-            <div className="w-8 h-8 flex items-center justify-center">
+            <div className="w-7 h-7 flex items-center justify-center">
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button 
-                      className="w-8 h-8 flex items-center justify-center hover:opacity-70 transition-opacity duration-200"
+                      className="w-7 h-7 flex items-center justify-center hover:opacity-70 transition-opacity duration-200"
                       aria-label={t('nav.myAccount')}
                     >
-                      <User className="w-5 h-5 text-gold" />
+                      <User className="w-4 h-4 text-gold" />
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent 
@@ -737,13 +738,11 @@ const GlobalHeader = () => {
                 </DropdownMenu>
               ) : (
                 <Link to="/auth">
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className="w-4 h-4 p-0 min-w-0 text-gold hover:opacity-70 transition-all duration-300"
+                  <button 
+                    className="w-7 h-7 flex items-center justify-center hover:opacity-70 transition-opacity duration-200"
                   >
-                    <User className="w-4 h-4" />
-                  </Button>
+                    <User className="w-4 h-4 text-gold" />
+                  </button>
                 </Link>
               )}
             </div>
