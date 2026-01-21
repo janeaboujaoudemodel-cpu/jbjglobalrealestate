@@ -8,16 +8,11 @@
  */
 
 import CookiesConsentBanner from "@/components/CookiesConsentBanner";
-import AppDownloadPopup from "@/components/AppDownloadPopup";
-import InstallAppButton from "@/components/InstallAppButton";
 
 const PopupLayer = () => {
   return (
     <>
       <CookiesConsentBanner />
-
-      {/* Floating install button (no duplicate popup - removed AppDownloadPopup) */}
-      <InstallAppButton />
     </>
   );
 };
