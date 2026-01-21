@@ -247,75 +247,75 @@ const Index = () => {
             </p>
           </div>
 
-          {/* Audience Entry Cards - FILLED with white pearl gold champagne, gold border icon box, black icon, gold title */}
+          {/* Audience Entry Cards - FILLED with champagne gradient matching Need Help popup, black titles */}
           <div className="flex justify-center gap-2 md:gap-3 max-w-5xl mx-auto mb-10 flex-wrap md:flex-nowrap">
             <Link to="/buyer-guide" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.4)] shadow-[0_0_15px_rgba(200,167,102,0.25)] transition-all duration-300 relative overflow-hidden h-full">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.4)] shadow-[0_0_15px_rgba(200,167,102,0.25)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
                   <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 transition-colors">
                     <Heart className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-gold group-hover:text-black text-[10px] md:text-xs font-semibold transition-colors">Buyers</h4>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">Buyers</h4>
                 </div>
               </div>
             </Link>
             <Link to="/seller-guide" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.4)] shadow-[0_0_15px_rgba(200,167,102,0.25)] transition-all duration-300 relative overflow-hidden h-full">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.4)] shadow-[0_0_15px_rgba(200,167,102,0.25)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
                   <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 transition-colors">
                     <Target className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-gold group-hover:text-black text-[10px] md:text-xs font-semibold transition-colors">Sellers</h4>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">Sellers</h4>
                 </div>
               </div>
             </Link>
             <Link to="/rent-guide" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.4)] shadow-[0_0_15px_rgba(200,167,102,0.25)] transition-all duration-300 relative overflow-hidden h-full">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.4)] shadow-[0_0_15px_rgba(200,167,102,0.25)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
                   <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 transition-colors">
                     <Key className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-gold group-hover:text-black text-[10px] md:text-xs font-semibold transition-colors">Rentals</h4>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">Rentals</h4>
                 </div>
               </div>
             </Link>
             <Link to="/ai-hub" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.4)] shadow-[0_0_15px_rgba(200,167,102,0.25)] transition-all duration-300 relative overflow-hidden h-full">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.4)] shadow-[0_0_15px_rgba(200,167,102,0.25)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
                   <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 transition-colors">
                     <Layers className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-gold group-hover:text-black text-[10px] md:text-xs font-semibold transition-colors">Investors</h4>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">Investors</h4>
                 </div>
               </div>
             </Link>
             <Link to="/quiz" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.4)] shadow-[0_0_15px_rgba(200,167,102,0.25)] transition-all duration-300 relative overflow-hidden h-full">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.4)] shadow-[0_0_15px_rgba(200,167,102,0.25)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
                   <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 transition-colors">
                     <Users className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-gold group-hover:text-black text-[10px] md:text-xs font-semibold transition-colors">Visitors</h4>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">Visitors</h4>
                 </div>
               </div>
             </Link>
             <Link to="/referral" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.4)] shadow-[0_0_15px_rgba(200,167,102,0.25)] transition-all duration-300 relative overflow-hidden h-full">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.4)] shadow-[0_0_15px_rgba(200,167,102,0.25)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
                   <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 transition-colors">
                     <Award className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-gold group-hover:text-black text-[10px] md:text-xs font-semibold transition-colors">Referral</h4>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">Referral</h4>
                 </div>
               </div>
             </Link>
             <Link to="/join" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.4)] shadow-[0_0_15px_rgba(200,167,102,0.25)] transition-all duration-300 relative overflow-hidden h-full">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.4)] shadow-[0_0_15px_rgba(200,167,102,0.25)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
                   <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 transition-colors">
                     <GraduationCap className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-gold group-hover:text-black text-[10px] md:text-xs font-semibold transition-colors">Careers</h4>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">Careers</h4>
                 </div>
               </div>
             </Link>
