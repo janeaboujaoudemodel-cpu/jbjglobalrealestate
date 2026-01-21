@@ -232,48 +232,48 @@ const GlobalHeader = () => {
                 side="right"
                 className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] p-0 flex flex-col h-full pt-14"
               >
-                {/* Menu Header - compact, seamless with champagne background */}
-                <div className="relative h-12 border-b border-gold/30 flex items-center px-4 shrink-0">
+                {/* Menu Header - proper padding to prevent cropping, larger branding */}
+                <div className="relative border-b border-gold/30 flex items-center px-5 py-4 shrink-0">
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-                  <BrandMonogram variant="light" size="lg" layout="horizontal" />
+                  <BrandMonogram variant="light" size="xl" layout="horizontal" />
                 </div>
 
-                {/* Quick Actions Row - compact */}
-                <div className="flex items-center justify-around px-3 py-2 border-b border-gold/20">
+                {/* Quick Actions Row - more compact icons */}
+                <div className="flex items-center justify-around px-3 py-1.5 border-b border-gold/20">
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="flex flex-col items-center gap-0.5 text-black hover:text-gold h-auto py-1.5 px-2"
+                    className="flex flex-col items-center gap-0.5 text-black hover:text-gold h-auto py-1 px-2"
                     onClick={() => {
                       setMobileMenuOpen(false);
                       setSearchOpen(true);
                     }}
                   >
-                    <Search className="w-4 h-4" />
-                    <span className="text-[9px]">Search</span>
+                    <Search className="w-3.5 h-3.5" />
+                    <span className="text-[8px]">Search</span>
                   </Button>
                   <Link
                     to="/favorites"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex flex-col items-center gap-0.5 text-black hover:text-gold py-1.5 px-2"
+                    className="flex flex-col items-center gap-0.5 text-black hover:text-gold py-1 px-2"
                   >
                     <div className="relative">
-                      <Heart className="w-4 h-4" />
+                      <Heart className="w-3.5 h-3.5" />
                       {totalCount > 0 && (
-                        <span className="absolute -top-1 -right-1 bg-gold text-black text-[8px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-bold">
+                        <span className="absolute -top-1 -right-1 bg-gold text-black text-[8px] w-3 h-3 rounded-full flex items-center justify-center font-bold">
                           {totalCount}
                         </span>
                       )}
                     </div>
-                    <span className="text-[9px]">Favorites</span>
+                    <span className="text-[8px]">Favorites</span>
                   </Link>
                   <Link
                     to={user ? "/my-account" : "/auth"}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex flex-col items-center gap-0.5 text-black hover:text-gold py-1.5 px-2"
+                    className="flex flex-col items-center gap-0.5 text-black hover:text-gold py-1 px-2"
                   >
-                    <User className="w-4 h-4" />
-                    <span className="text-[9px]">{user ? "Account" : "Sign In"}</span>
+                    <User className="w-3.5 h-3.5" />
+                    <span className="text-[8px]">{user ? "Account" : "Sign In"}</span>
                   </Link>
                   <div className="shrink-0">
                     <LanguageSwitcher variant="compact" />
