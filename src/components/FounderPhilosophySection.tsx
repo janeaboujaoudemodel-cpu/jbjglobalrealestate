@@ -43,23 +43,34 @@ export const FounderPhilosophySection = () => {
           }}
           className="grid md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto"
         >
-          {/* Left - Portrait */}
+          {/* Left - Portrait with dark separation card on mobile */}
           <motion.div variants={fadeInUp} className="flex flex-col items-center">
-            <Link to="/founder" className="block relative group">
-              <div className="relative w-64 h-80 md:w-80 md:h-96 rounded-2xl overflow-hidden border-2 border-gold/30 shadow-2xl shadow-gold/20 group-hover:border-gold transition-all duration-300">
-                <img 
-                  src={founderPremium} 
-                  alt="Jane Abou Jaoude - Founder" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            {/* Dark card wrapper for mobile separation */}
+            <div className="bg-zinc-900/95 md:bg-transparent rounded-2xl p-4 md:p-0 border border-gold/20 md:border-0 shadow-xl md:shadow-none">
+              <Link to="/founder" className="block relative group">
+                <div className="relative w-64 h-80 md:w-80 md:h-96 rounded-2xl overflow-hidden border-2 border-gold/30 shadow-2xl shadow-gold/20 group-hover:border-gold transition-all duration-300">
+                  <img 
+                    src={founderPremium} 
+                    alt="Jane Abou Jaoude - Founder" 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                </div>
+              </Link>
+              
+              {/* Founder name label on mobile */}
+              <div className="text-center mt-4 md:hidden">
+                <Link to="/founder" className="text-gold font-semibold text-lg hover:underline">
+                  Jane Abou Jaoude
+                </Link>
+                <p className="text-zinc-400 text-sm">Founder &amp; CEO</p>
               </div>
-            </Link>
+            </div>
             
             {/* CTA Button - Primary button with correct color logic */}
             <button 
               onClick={() => window.location.href = '/founder'}
-              className="relative inline-flex items-center justify-center gap-2 px-8 py-5 mt-6 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
+              className="relative inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-4 sm:py-5 mt-6 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
               style={{
                 background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
                 boxShadow: `
@@ -74,10 +85,10 @@ export const FounderPhilosophySection = () => {
               <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
               <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
               <span className="relative flex items-center justify-center gap-2">
-                <User className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
+                <User className="w-4 h-4 sm:w-5 sm:h-5 text-gold group-hover:text-black transition-colors" />
                 <span className="text-black group-hover:text-gold transition-colors">Know More About</span>
                 <span className="text-gold group-hover:text-black transition-colors">The Founder</span>
-                <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-black group-hover:text-gold transition-colors" />
               </span>
             </button>
           </motion.div>
