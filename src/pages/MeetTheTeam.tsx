@@ -68,7 +68,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
   return (
     <motion.div variants={fadeInUp}>
       <Card 
-        className={`bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/30 hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.3)] transition-all duration-300 overflow-hidden group h-full ${isInternalUser ? 'cursor-pointer' : ''}`}
+        className={`bg-gradient-to-br from-[#FFFDF9] via-[#FBF7F0] to-[#F5EFE4] border-2 border-gold/40 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] transition-all duration-300 overflow-hidden group h-full ${isInternalUser ? 'cursor-pointer' : ''}`}
         onClick={handleCardClick}
       >
         <CardContent className="p-0">
@@ -82,7 +82,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
             <img
               src={member.avatar}
               alt={member.name}
-              className="w-full aspect-square group-hover:scale-105 transition-transform duration-500"
+              className="w-full aspect-[4/5] group-hover:scale-105 transition-transform duration-500"
               style={{
                 objectFit: "cover",
                 objectPosition: "center 15%",
@@ -91,12 +91,10 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
               decoding="async"
               fetchPriority="low"
             />
-            {/* Photo overlay gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-60" />
           </div>
 
-          {/* Info - Fixed height for symmetry */}
-          <div className="p-5 -mt-16 relative z-10 flex flex-col h-[280px] bg-gradient-to-t from-white via-[#FDFBF7] to-transparent">
+          {/* Info - Positioned below photo, not overlapping */}
+          <div className="p-5 flex flex-col bg-gradient-to-b from-[#FFFDF9] via-[#FBF7F0] to-[#F5EFE4]">
             <div>
               <h3 className="text-black font-semibold text-lg mb-1 line-clamp-1">{member.name}</h3>
 
@@ -139,8 +137,8 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
               )}
             </div>
 
-            {/* Bottom actions pinned for perfect card symmetry */}
-            <div className="mt-auto pt-2 border-t border-gold/20">
+            {/* Bottom actions */}
+            <div className="pt-3 mt-3 border-t border-gold/30">
               <button
                 type="button"
                 onClick={() => onReadMore(member)}
@@ -275,13 +273,13 @@ const MeetTheTeam: React.FC = () => {
         canonicalPath="/team"
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+      <div className="min-h-screen bg-black">
         {/* Hero Section */}
         <section className="relative py-20 md:py-28 overflow-hidden">
           {/* Background effects */}
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gold/5 rounded-full blur-[120px]" />
-            <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-gold/3 rounded-full blur-[100px]" />
+            <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gold/10 rounded-full blur-[120px]" />
+            <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-gold/5 rounded-full blur-[100px]" />
           </div>
 
           <div className="container mx-auto px-4 relative z-10">
@@ -292,7 +290,7 @@ const MeetTheTeam: React.FC = () => {
               className="text-center max-w-4xl mx-auto"
             >
               <motion.div variants={fadeInUp} className="mb-6">
-                <Badge className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-gold border-gold/40 px-4 py-1.5 shadow-md">
+                <Badge className="bg-gradient-to-r from-[#FFFDF9] via-[#FBF7F0] to-[#F5EFE4] text-gold border-gold/40 px-4 py-1.5 shadow-md">
                   <Users className="w-3.5 h-3.5 mr-1.5" />
                   Our Team
                 </Badge>
@@ -303,14 +301,14 @@ const MeetTheTeam: React.FC = () => {
                 variants={fadeInUp}
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
-                <span className="text-black">Meet the </span>
+                <span className="text-white">Meet the </span>
                 <span className="text-gold">
                   Experts
                 </span>
               </motion.h1>
 
               <motion.p
-                className="text-zinc-600 text-lg max-w-2xl mx-auto mb-6"
+                className="text-zinc-300 text-lg max-w-2xl mx-auto mb-6"
                 variants={fadeInUp}
               >
                 A world-class team of professionals dedicated to delivering
@@ -319,7 +317,7 @@ const MeetTheTeam: React.FC = () => {
 
               {/* Company Summary */}
               <motion.p
-                className="text-zinc-500 text-sm max-w-3xl mx-auto mb-8 italic"
+                className="text-zinc-400 text-sm max-w-3xl mx-auto mb-8 italic"
                 variants={fadeInUp}
               >
                 {companySummary}
@@ -373,14 +371,14 @@ const MeetTheTeam: React.FC = () => {
                         variants={fadeInUp}
                         className="flex items-center gap-3 mb-4"
                       >
-                        <div className="w-10 h-10 bg-black border border-gold rounded-lg flex items-center justify-center">
+                        <div className="w-10 h-10 bg-gradient-to-br from-[#FFFDF9] to-[#F5EFE4] border border-gold/40 rounded-lg flex items-center justify-center">
                           <Building2 className="w-5 h-5 text-gold" />
                         </div>
                         <div>
                           <h2 className="text-white text-2xl font-semibold">
                           {deptName}
                         </h2>
-                        <p className="text-zinc-500 text-sm">
+                        <p className="text-zinc-400 text-sm">
                           {total} member{total > 1 ? "s" : ""}
                         </p>
                       </div>
@@ -395,13 +393,13 @@ const MeetTheTeam: React.FC = () => {
                           salesHierarchy.getMembersByCategory(category);
                         if (categoryMembers.length === 0) return null;
 
-                        return (
+                          return (
                           <div key={category}>
                             <div className="flex items-center justify-between gap-4 mb-4">
-                              <h3 className="text-white text-lg font-semibold">
+                              <h3 className="text-gold text-lg font-semibold">
                                 {category}
                               </h3>
-                              <p className="text-zinc-500 text-sm">
+                              <p className="text-zinc-400 text-sm">
                                 {categoryMembers.length} member
                                 {categoryMembers.length > 1 ? "s" : ""}
                               </p>
@@ -444,14 +442,14 @@ const MeetTheTeam: React.FC = () => {
                     variants={fadeInUp}
                     className="flex items-center gap-3 mb-4"
                   >
-                    <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center">
+                    <div className="w-10 h-10 bg-gradient-to-br from-[#FFFDF9] to-[#F5EFE4] border border-gold/40 rounded-lg flex items-center justify-center">
                       <Building2 className="w-5 h-5 text-gold" />
                     </div>
                     <div>
                       <h2 className="text-white text-2xl font-semibold">
                         {deptName}
                       </h2>
-                      <p className="text-zinc-500 text-sm">
+                      <p className="text-zinc-400 text-sm">
                         {members.length} member{members.length > 1 ? "s" : ""}
                       </p>
                     </div>
