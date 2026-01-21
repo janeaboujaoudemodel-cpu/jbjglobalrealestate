@@ -213,7 +213,7 @@ const FAQ = () => {
                   variants={fadeInUp}
                   className="flex items-center gap-4 mb-6"
                 >
-                  <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl flex items-center justify-center">
                     <category.icon className="w-6 h-6 text-gold" />
                   </div>
                   <h2 className="text-2xl md:text-3xl font-bold text-white">{category.title}</h2>
@@ -227,7 +227,7 @@ const FAQ = () => {
                         <AccordionItem 
                           value={`${categoryIndex}-${faqIndex}`}
                           data-accordion-item={`${categoryIndex}-${faqIndex}`}
-                          className="bg-white border border-zinc-200 rounded-xl px-6 py-2 data-[state=open]:border-gold/50 data-[state=open]:shadow-md transition-all"
+                          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl px-6 py-2 data-[state=open]:border-gold/50 data-[state=open]:shadow-md transition-all"
                         >
                           <AccordionTrigger className="text-black text-left hover:text-gold hover:no-underline py-5 text-base font-medium">
                             {faq.question}

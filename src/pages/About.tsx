@@ -39,7 +39,7 @@ const Section = ({
   id?: string;
 }) => {
   const bgClass = light 
-    ? 'bg-white' 
+    ? 'bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]' 
     : dark 
       ? 'bg-zinc-950/80' 
       : 'bg-black';
@@ -102,7 +102,7 @@ const FeatureCard = ({
   light?: boolean;
 }) => (
   <motion.div 
-    className={`${light ? 'bg-white border-zinc-200 hover:border-gold shadow-sm' : 'bg-zinc-900/60 border-gold/30 hover:border-gold'} border rounded-xl p-6 md:p-8 transition-colors`}
+    className={`${light ? 'bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 hover:border-gold shadow-sm' : 'bg-zinc-900/60 border-gold/30 hover:border-gold'} border rounded-xl p-6 md:p-8 transition-colors`}
     variants={fadeInUp}
   >
     <div className={`w-14 h-14 rounded-lg ${light ? 'bg-black' : 'bg-black border border-gold'} flex items-center justify-center mb-5`}>

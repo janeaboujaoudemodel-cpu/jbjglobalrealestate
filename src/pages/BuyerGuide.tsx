@@ -369,7 +369,7 @@ const BuyerGuide = () => {
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {audienceTypes.map((item, index) => (
-                <div key={index} className="bg-white rounded-xl p-6 border border-zinc-200 text-center hover:border-gold/50 hover:shadow-lg transition-all">
+                <div key={index} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl p-6 border border-gold/30 text-center hover:border-gold hover:shadow-lg transition-all">
                   <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
                     <item.icon className="w-6 h-6 text-gold" />
                   </div>
@@ -396,7 +396,7 @@ const BuyerGuide = () => {
               {buyingSteps.map((step) => (
                 <div 
                   key={step.number}
-                  className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200 hover:border-gold/30 hover:shadow-lg transition-all duration-300"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-6 md:p-8 border border-gold/30 hover:border-gold hover:shadow-lg transition-all duration-300"
                 >
                   <div className="flex flex-col md:flex-row md:items-start gap-6">
                     <div className="flex-shrink-0">
@@ -528,7 +528,7 @@ const BuyerGuide = () => {
 
             <div className="grid md:grid-cols-2 gap-6 mb-8">
               {/* Off-Plan Purchases */}
-              <div className="bg-white rounded-2xl p-8 border border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30 hover:border-gold hover:shadow-lg transition-all">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
                     <Building2 className="w-6 h-6 text-gold" />
@@ -566,7 +566,7 @@ const BuyerGuide = () => {
               </div>
 
               {/* Ready Property Purchases */}
-              <div className="bg-white rounded-2xl p-8 border border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30 hover:border-gold hover:shadow-lg transition-all">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
                     <Home className="w-6 h-6 text-gold" />
@@ -625,7 +625,7 @@ const BuyerGuide = () => {
                 {governmentFees.map((fee, index) => (
                   <div 
                     key={index}
-                    className="bg-white border border-zinc-200 rounded-xl p-6 hover:border-gold/50 hover:shadow-lg transition-all"
+                    className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all"
                   >
                     <div className="flex items-start gap-4">
                       <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
@@ -648,7 +648,7 @@ const BuyerGuide = () => {
                 {additionalCosts.map((cost, index) => (
                   <div 
                     key={index}
-                    className="bg-white border border-zinc-200 rounded-xl p-6 hover:border-gold/50 hover:shadow-lg transition-all"
+                    className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all"
                   >
                     <div className="flex items-start gap-4">
                       <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
@@ -674,7 +674,7 @@ const BuyerGuide = () => {
       <section id="mortgages" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-white border border-zinc-200 rounded-2xl p-8 md:p-12 shadow-sm">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.2)]">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
                   <Landmark className="w-6 h-6 text-gold" />
@@ -719,7 +719,7 @@ const BuyerGuide = () => {
               ))}
             </div>
 
-            <div className="bg-white border border-zinc-200 rounded-xl p-6">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-6">
               <p className="text-zinc-700 text-sm leading-relaxed">
                 <span className="text-black font-semibold">JBJ Global Real Estate</span> is licensed for buying, selling, and renting property in Dubai. Mortgage, legal, and advisory services are introduced through licensed third-party partners.
               </p>
@@ -738,7 +738,7 @@ const BuyerGuide = () => {
               </h2>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-6 md:p-8 border border-gold/30">
               <Accordion type="single" collapsible className="w-full">
                 {faqs.map((faq, index) => (
                   <AccordionItem key={index} value={`faq-${index}`} className="border-b border-zinc-200 last:border-0">
