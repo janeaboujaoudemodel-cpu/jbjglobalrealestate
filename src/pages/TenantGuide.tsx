@@ -229,19 +229,19 @@ const TenantGuide = () => {
       </div>
 
       {/* Section 1: Understanding the Rental Market */}
-      <section id="rental-market" className="py-16 md:py-24 bg-black scroll-mt-20">
+      <section id="rental-market" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                Section 1: Understanding the Rental Market
+              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
+                Section 1: <span className="text-gold">Understanding</span> the Rental Market
               </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
                 Dubai's rental market is regulated and transparent, with clear rules governing pricing, contracts, and tenant rights.
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
+            <div className="jj-box-active p-6 md:p-8">
               <p className="text-zinc-700 mb-6 font-medium">What to know:</p>
               <ul className="space-y-3">
                 {rentalMarketPoints.map((item, index) => (
@@ -257,19 +257,19 @@ const TenantGuide = () => {
       </section>
 
       {/* Section 2: Budgeting for Rent */}
-      <section id="budgeting" className="py-16 md:py-24 bg-black scroll-mt-20">
+      <section id="budgeting" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                Section 2: Budgeting for Rent
+              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
+                Section 2: <span className="text-gold">Budgeting</span> for Rent
               </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
                 Before searching, tenants should understand the full cost of renting.
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
+            <div className="jj-box-active p-6 md:p-8">
               <p className="text-zinc-700 mb-6 font-medium">Typical costs include:</p>
               <ul className="space-y-3 mb-6">
                 {budgetCosts.map((item, index) => (
@@ -279,7 +279,7 @@ const TenantGuide = () => {
                   </li>
                 ))}
               </ul>
-              <p className="text-sm text-zinc-600 italic border-t border-zinc-200 pt-4">
+              <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
                 Rent is usually paid in post-dated cheques.
               </p>
             </div>
@@ -288,19 +288,19 @@ const TenantGuide = () => {
       </section>
 
       {/* Section 3: Property Search & Viewings */}
-      <section id="property-search" className="py-16 md:py-24 bg-black scroll-mt-20">
+      <section id="property-search" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                Section 3: Property Search & Viewings
+              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
+                Section 3: <span className="text-gold">Property Search</span> & Viewings
               </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
                 Choosing the right property is about more than price.
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
+            <div className="jj-box-active p-6 md:p-8">
               <p className="text-zinc-700 mb-6 font-medium">Key considerations:</p>
               <ul className="space-y-3 mb-6">
                 {searchConsiderations.map((item, index) => (
@@ -310,7 +310,7 @@ const TenantGuide = () => {
                   </li>
                 ))}
               </ul>
-              <p className="text-sm text-zinc-600 italic border-t border-zinc-200 pt-4">
+              <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
                 JBJ arranges verified listings and guided viewings to avoid misinformation.
               </p>
             </div>
@@ -319,19 +319,19 @@ const TenantGuide = () => {
       </section>
 
       {/* Section 4: Making an Offer */}
-      <section id="making-offer" className="py-16 md:py-24 bg-black scroll-mt-20">
+      <section id="making-offer" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                Section 4: Making an Offer
+              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
+                Section 4: <span className="text-gold">Making</span> an Offer
               </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
                 Once you select a property, an offer is submitted.
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
+            <div className="jj-box-active p-6 md:p-8">
               <p className="text-zinc-700 mb-6 font-medium">Offer typically includes:</p>
               <ul className="space-y-3 mb-6">
                 {offerIncludes.map((item, index) => (
@@ -341,7 +341,7 @@ const TenantGuide = () => {
                   </li>
                 ))}
               </ul>
-              <p className="text-sm text-zinc-600 italic border-t border-zinc-200 pt-4">
+              <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
                 Negotiation is common and handled formally.
               </p>
             </div>
@@ -350,19 +350,19 @@ const TenantGuide = () => {
       </section>
 
       {/* Section 5: Documents Required */}
-      <section id="documents" className="py-16 md:py-24 bg-black scroll-mt-20">
+      <section id="documents" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                Section 5: Documents Required from Tenants
+              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
+                Section 5: <span className="text-gold">Documents Required</span> from Tenants
               </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
                 To proceed, tenants must provide:
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
+            <div className="jj-box-active p-6 md:p-8">
               <ul className="space-y-3 mb-6">
                 {documentsRequired.map((item, index) => (
                   <li key={index} className="flex items-start gap-3">
@@ -371,7 +371,7 @@ const TenantGuide = () => {
                   </li>
                 ))}
               </ul>
-              <p className="text-sm text-zinc-600 italic border-t border-zinc-200 pt-4">
+              <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
                 All information is used for contract and Ejari registration.
               </p>
             </div>
@@ -380,19 +380,19 @@ const TenantGuide = () => {
       </section>
 
       {/* Section 6: Tenancy Contract & Ejari */}
-      <section id="contract-ejari" className="py-16 md:py-24 bg-black scroll-mt-20">
+      <section id="contract-ejari" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                Section 6: Tenancy Contract & Ejari
+              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
+                Section 6: <span className="text-gold">Tenancy Contract</span> & Ejari
               </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
                 Tenancy contracts are legally binding and must be registered.
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
+            <div className="jj-box-active p-6 md:p-8">
               <p className="text-zinc-700 mb-6 font-medium">Important points:</p>
               <ul className="space-y-3 mb-6">
                 {contractPoints.map((item, index) => (
@@ -402,7 +402,7 @@ const TenantGuide = () => {
                   </li>
                 ))}
               </ul>
-              <p className="text-sm text-zinc-600 italic border-t border-zinc-200 pt-4">
+              <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
                 Without Ejari, tenant protections are limited.
               </p>
             </div>
@@ -411,19 +411,19 @@ const TenantGuide = () => {
       </section>
 
       {/* Section 7: Move-In & Handover */}
-      <section id="move-in" className="py-16 md:py-24 bg-black scroll-mt-20">
+      <section id="move-in" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                Section 7: Move-In & Handover
+              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
+                Section 7: <span className="text-gold">Move-In</span> & Handover
               </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
                 Before moving in:
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
+            <div className="jj-box-active p-6 md:p-8">
               <p className="text-zinc-700 mb-6 font-medium">Checklist:</p>
               <ul className="space-y-3 mb-6">
                 {moveInChecklist.map((item, index) => (
@@ -433,7 +433,7 @@ const TenantGuide = () => {
                   </li>
                 ))}
               </ul>
-              <p className="text-sm text-zinc-600 italic border-t border-zinc-200 pt-4">
+              <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
                 Document the unit condition to avoid future disputes.
               </p>
             </div>
@@ -442,20 +442,20 @@ const TenantGuide = () => {
       </section>
 
       {/* Section 8: Tenant Rights & Responsibilities */}
-      <section id="rights-responsibilities" className="py-16 md:py-24 bg-black scroll-mt-20">
+      <section id="rights-responsibilities" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                Section 8: Tenant Rights & Responsibilities
+              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
+                Section 8: <span className="text-gold">Tenant Rights</span> & Responsibilities
               </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
                 Dubai law protects both tenants and landlords.
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
+              <div className="jj-box-active p-6 md:p-8">
                 <p className="text-zinc-700 mb-6 font-medium">Tenant rights include:</p>
                 <ul className="space-y-3">
                   {tenantRights.map((item, index) => (
@@ -467,7 +467,7 @@ const TenantGuide = () => {
                 </ul>
               </div>
 
-              <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
+              <div className="jj-box-active p-6 md:p-8">
                 <p className="text-zinc-700 mb-6 font-medium">Tenant responsibilities include:</p>
                 <ul className="space-y-3">
                   {tenantResponsibilities.map((item, index) => (
@@ -484,19 +484,19 @@ const TenantGuide = () => {
       </section>
 
       {/* Section 9: Renewals, Rent Increases & Notices */}
-      <section id="renewals" className="py-16 md:py-24 bg-black scroll-mt-20">
+      <section id="renewals" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                Section 9: Renewals, Rent Increases & Notices
+              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
+                Section 9: <span className="text-gold">Renewals</span>, Rent Increases & Notices
               </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
                 Tenancy renewals are regulated.
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
+            <div className="jj-box-active p-6 md:p-8">
               <p className="text-zinc-700 mb-6 font-medium">Key rules:</p>
               <ul className="space-y-3">
                 {renewalRules.map((item, index) => (
@@ -512,19 +512,19 @@ const TenantGuide = () => {
       </section>
 
       {/* Section 10: Ending a Tenancy */}
-      <section id="ending-tenancy" className="py-16 md:py-24 bg-black scroll-mt-20">
+      <section id="ending-tenancy" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                Section 10: Ending a Tenancy
+              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
+                Section 10: <span className="text-gold">Ending</span> a Tenancy
               </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
                 Ending a lease requires proper notice.
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
+            <div className="jj-box-active p-6 md:p-8">
               <p className="text-zinc-700 mb-6 font-medium">Important points:</p>
               <ul className="space-y-3 mb-6">
                 {endingTenancy.map((item, index) => (
@@ -534,7 +534,7 @@ const TenantGuide = () => {
                   </li>
                 ))}
               </ul>
-              <p className="text-sm text-zinc-600 italic border-t border-zinc-200 pt-4">
+              <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
                 Early termination may involve penalties depending on contract terms.
               </p>
             </div>
@@ -543,7 +543,7 @@ const TenantGuide = () => {
       </section>
 
       {/* How JBJ Global Real Estate Supports Tenants */}
-      <section id="jbj-support" className="py-16 md:py-24 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] scroll-mt-20">
+      <section id="jbj-support" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
@@ -555,7 +555,7 @@ const TenantGuide = () => {
               </p>
             </div>
 
-            <div className="bg-white border border-gold/30 rounded-2xl p-8 shadow-lg">
+            <div className="jj-box-active p-8">
               <p className="text-zinc-700 mb-6 font-medium">Our role includes:</p>
               <ul className="space-y-3 mb-6">
                 {jbjSupport.map((item, index) => (
@@ -565,7 +565,7 @@ const TenantGuide = () => {
                   </li>
                 ))}
               </ul>
-              <p className="text-sm text-zinc-600 italic border-t border-zinc-200 pt-4">
+              <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
                 We do not charge tenants hidden fees or misleading costs.
               </p>
             </div>
@@ -574,12 +574,12 @@ const TenantGuide = () => {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="py-16 md:py-24 bg-black scroll-mt-20">
+      <section id="faq" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                Tenant FAQ
+              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
+                <span className="text-gold">Tenant</span> FAQ
               </h2>
             </div>
 
@@ -587,7 +587,7 @@ const TenantGuide = () => {
               {tenantFAQs.map((faq, index) => (
                 <div
                   key={index}
-                  className="bg-white border border-zinc-200 rounded-xl p-6 hover:border-gold/30 transition-colors"
+                  className="jj-box-active p-6 hover:border-gold transition-colors"
                 >
                   <h3 className="text-lg font-medium text-black mb-3">{faq.question}</h3>
                   <p className="text-zinc-600">{faq.answer}</p>
@@ -614,7 +614,7 @@ const TenantGuide = () => {
       />
 
       {/* Guide Navigation */}
-      <div className="bg-white py-12 border-t border-zinc-200">
+      <div className="jj-section-champagne py-12">
         <div className="container mx-auto px-4">
           <GuideNavigation current="/tenant-guide" guides={GUIDE_LINKS} />
         </div>
