@@ -94,7 +94,7 @@ export const departmentMetadata: Record<string, DepartmentMetadata> = {
         status: 'Active',
       },
     ],
-    regionalCoverage: ['Lebanon', 'Syria', 'Jordan', 'Morocco', 'Algeria', 'Tunisia', 'GCC', 'Europe', 'Africa', 'Asia-Pacific', 'Americas'],
+    regionalCoverage: ['Global Coverage', 'GCC', 'MENA', 'Europe', 'UK', 'Americas', 'Asia-Pacific', 'Africa'],
   },
   'After Sales': {
     id: 'after-sales',

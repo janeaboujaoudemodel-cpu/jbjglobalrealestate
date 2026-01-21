@@ -597,23 +597,20 @@ const GlobalHeader = () => {
           </nav>
 
           {/* RIGHT: Actions - Desktop only - Compact premium icon buttons with inverted hover */}
-          <div className="hidden lg:flex items-center gap-3 shrink-0 ml-3">
-            {/* Search Icon - No border, just icon */}
+          <div className="hidden lg:flex items-center gap-4 shrink-0 ml-4">
+            {/* Search Icon - No border, no background */}
             <Button
               variant="ghost"
               size="sm"
-              className="relative w-5 h-5 p-0 hover:opacity-80 transition-all duration-300 group"
+              className="w-4 h-4 p-0 min-w-0 hover:opacity-70 transition-all duration-300"
               onClick={() => setSearchOpen(true)}
             >
-              <Search className="w-4 h-4 text-gold group-hover:text-gold-light transition-colors" />
+              <Search className="w-4 h-4 text-gold" />
             </Button>
 
             {/* Language Switcher - No border */}
-            <div className="shrink-0">
-              <LanguageSwitcher variant="icon-only" />
-            </div>
+            <LanguageSwitcher variant="icon-only" />
 
-            {/* User Menu - Desktop - Premium profile dropdown matching nav style */}
             <div className="hidden lg:block">
               {user ? (
                 <DropdownMenu>
@@ -621,10 +618,10 @@ const GlobalHeader = () => {
                     <Button 
                       variant="ghost" 
                       size="icon"
-                      className="relative text-gold hover:text-gold-light w-5 h-5 p-0 hover:opacity-80 transition-all duration-300 group"
+                      className="w-4 h-4 p-0 min-w-0 text-gold hover:opacity-70 transition-all duration-300"
                       aria-label={t('nav.myAccount')}
                     >
-                      <User className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                      <User className="w-4 h-4" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent 
@@ -745,9 +742,9 @@ const GlobalHeader = () => {
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="relative text-gold hover:text-gold-light w-5 h-5 p-0 hover:opacity-80 transition-all duration-300 group"
+                    className="w-4 h-4 p-0 min-w-0 text-gold hover:opacity-70 transition-all duration-300"
                   >
-                    <User className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                    <User className="w-4 h-4" />
                   </Button>
                 </Link>
               )}

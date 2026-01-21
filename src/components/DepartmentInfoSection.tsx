@@ -46,9 +46,9 @@ const ProjectHighlightCard = ({ highlight }: { highlight: ProjectHighlight }) =>
   const StatusIcon = config.icon;
 
   return (
-    <div className={`p-4 rounded-lg border ${config.borderColor} ${config.bgColor}`}>
+    <div className={`p-4 rounded-lg border-2 ${config.borderColor} bg-white/80`}>
       <div className="flex items-start justify-between gap-3 mb-2">
-        <h4 className="text-white text-sm font-medium line-clamp-1">{highlight.title}</h4>
+        <h4 className="text-black text-sm font-medium line-clamp-1">{highlight.title}</h4>
         <Badge 
           variant="outline" 
           className={`text-[10px] ${config.textColor} ${config.borderColor} shrink-0`}
@@ -57,7 +57,7 @@ const ProjectHighlightCard = ({ highlight }: { highlight: ProjectHighlight }) =>
           {highlight.status}
         </Badge>
       </div>
-      <p className="text-zinc-400 text-xs line-clamp-2">{highlight.description}</p>
+      <p className="text-zinc-600 text-xs line-clamp-2">{highlight.description}</p>
     </div>
   );
 };
@@ -72,7 +72,7 @@ const DepartmentInfoSection: React.FC<DepartmentInfoSectionProps> = ({ departmen
       variants={fadeInUp}
       initial="hidden"
       animate="visible"
-      className="mb-6 p-5 bg-zinc-900/40 border border-zinc-800 rounded-xl"
+      className="mb-6 p-5 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/30 rounded-xl shadow-md"
     >
       {/* Department Summary */}
       <div className="mb-5">
@@ -80,7 +80,7 @@ const DepartmentInfoSection: React.FC<DepartmentInfoSectionProps> = ({ departmen
           <Sparkles className="w-4 h-4 text-gold" />
           <span className="text-gold text-xs font-medium uppercase tracking-wider">Overview</span>
         </div>
-        <p className="text-zinc-300 text-sm leading-relaxed">{metadata.summary}</p>
+        <p className="text-zinc-700 text-sm leading-relaxed">{metadata.summary}</p>
       </div>
 
       {/* Tech Stack */}
@@ -94,7 +94,7 @@ const DepartmentInfoSection: React.FC<DepartmentInfoSectionProps> = ({ departmen
             <Badge
               key={tech}
               variant="outline"
-              className="text-xs border-zinc-700 text-zinc-300 bg-zinc-800/50 px-3 py-1"
+              className="text-xs border-gold/30 text-black bg-gold/10 px-3 py-1"
             >
               {tech}
             </Badge>
