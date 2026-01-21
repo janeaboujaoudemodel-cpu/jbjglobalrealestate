@@ -30,7 +30,7 @@ const AIComparisonWidget = () => {
       whileInView="visible"
       viewport={{ once: true, margin: "-50px" }}
       variants={fadeInUp}
-      className="bg-gradient-to-br from-white via-zinc-50 to-white border border-gold/20 rounded-3xl p-8 md:p-10 relative overflow-hidden shadow-xl"
+      className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-3xl p-8 md:p-10 relative overflow-hidden shadow-[0_0_40px_rgba(200,167,102,0.3)]"
     >
       {/* Background decoration */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-3xl" />

@@ -102,20 +102,19 @@ const Index = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          {/* H1 - Compact 2-line layout for better video visibility */}
+          {/* H1 - 2-line layout: Buy Sell Rent on line 1, Delivered with Intelligence on line 2 */}
           <motion.h1 
             variants={fadeInUp} 
             className="text-white text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-3 md:mb-5 px-2 sm:px-0"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            <span className="whitespace-nowrap">
+            <span className="block whitespace-nowrap">
               Buy<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle" style={{ background: 'linear-gradient(135deg, #D4AF37, #E8DCC8)', boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
               Sell<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle" style={{ background: 'linear-gradient(135deg, #D4AF37, #E8DCC8)', boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
               Rent
             </span>
-            <span className="inline-block w-1.5 h-1.5 rounded-full mx-1.5 align-middle" style={{ background: 'linear-gradient(135deg, #D4AF37, #E8DCC8)', boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
             <span 
-              className="bg-gradient-to-r from-[#FFF8E8] via-[#F5E6C8] to-[#E8D4A8] bg-clip-text text-transparent"
+              className="block bg-gradient-to-r from-[#FFF8E8] via-[#F5E6C8] to-[#E8D4A8] bg-clip-text text-transparent mt-1"
               style={{ 
                 filter: 'drop-shadow(0 0 8px rgba(255, 248, 232, 0.35)) drop-shadow(0 0 16px rgba(245, 230, 200, 0.25))',
                 textShadow: '0 1px 3px rgba(0, 0, 0, 0.2)',
@@ -630,7 +629,7 @@ const Index = () => {
       {/* MORTGAGE CALCULATOR SECTION - Premium White Style */}
       <section className="py-20 md:py-28 bg-black">
         <div className="container mx-auto px-4">
-          <div className="bg-gradient-to-br from-white via-zinc-50 to-white border border-gold/30 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-3xl p-8 md:p-12 shadow-[0_0_40px_rgba(200,167,102,0.3)] relative overflow-hidden">
             {/* Decorative glow elements */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
