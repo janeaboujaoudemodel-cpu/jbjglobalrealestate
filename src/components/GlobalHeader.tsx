@@ -31,6 +31,7 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
 import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
+import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
 
 const GlobalHeader = () => {
   const { user, isAdmin, signOut } = useAuth();
@@ -206,7 +207,7 @@ const GlobalHeader = () => {
             <Button
               variant="ghost"
               size="sm"
-              className="relative w-7 h-7 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
+               className="relative w-7 h-7 p-0 rounded-none bg-transparent hover:bg-white/10 transition-all duration-300 group"
               onClick={() => setSearchOpen(true)}
             >
               <Search className="w-3 h-3 text-gold group-hover:text-gold-light transition-colors" />
@@ -223,7 +224,7 @@ const GlobalHeader = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="relative w-7 h-7 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
+                   className="relative w-7 h-7 p-0 rounded-none bg-transparent hover:bg-white/10 transition-all duration-300 group"
                   aria-label="Open menu"
                 >
                   <Menu className="w-3 h-3 text-gold group-hover:text-gold-light transition-colors" />
@@ -238,9 +239,9 @@ const GlobalHeader = () => {
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
                   {/* Monogram - larger for mobile menu */}
                   <img 
-                    src={jbjMonogramTransparent}
+                     src={jbjMonogramNobuffer}
                     alt="JBJ"
-                    className="w-20 h-20 object-contain"
+                     className="w-24 h-24 shrink-0 object-contain scale-110"
                   />
                   <span 
                     className="text-black font-bold text-sm tracking-[0.06em] uppercase whitespace-nowrap leading-none"
