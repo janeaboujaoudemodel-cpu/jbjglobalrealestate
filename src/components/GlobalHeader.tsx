@@ -170,11 +170,11 @@ const GlobalHeader = () => {
   );
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[9999] border-b border-gold/20 shadow-2xl shadow-black/50">
+    <header className="fixed top-0 left-0 right-0 z-[9999]">
       {/* Solid black background across entire header - no transparency */}
       <div className="absolute inset-0 bg-black" />
-      {/* Premium top accent line */}
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent z-10" />
+      {/* Premium bottom accent line - gold only, no black extension */}
+      <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent z-10" />
       
       <div className="relative z-10 mx-auto w-full max-w-7xl px-2 sm:px-3 lg:px-4">
         <div className="flex items-center justify-between h-16 lg:h-20 w-full">
@@ -531,8 +531,8 @@ const GlobalHeader = () => {
           </div>
 
           {/* CENTER: Desktop Navigation - Premium styling with elegant dropdowns */}
-          <nav className="hidden lg:flex items-center justify-end flex-1 min-w-0 ml-3 mr-2">
-            <div className="flex items-center gap-0 bg-gradient-to-r from-[#FFFDF9] via-[#FBF7F0] to-[#F5EFE4] backdrop-blur-sm rounded-full px-1.5 py-0.5 border border-gold/30 shadow-lg">
+          <nav className="hidden lg:flex items-center justify-end flex-1 min-w-0 ml-2 mr-2">
+            <div className="flex items-center gap-0.5 bg-gradient-to-r from-[#FFFDF9] via-[#FBF7F0] to-[#F5EFE4] backdrop-blur-sm rounded-full px-2 py-0.5 border border-gold/30 shadow-lg">
               
               {/* 1. Home - No dropdown */}
               <Link
