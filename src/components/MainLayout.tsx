@@ -101,6 +101,13 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     setIsChatCollapsed((v) => !v);
   };
 
+  // Minimize without opening chat (for mobile medium box)
+  const handleMinimizeChat = () => {
+    markDailyShown();
+    setShowAttentionPulse(false);
+    // Keep collapsed, just remove the pulse
+  };
+
   // Chat is always an overlay – no content pushing
   const effectiveCollapsed = isAdminRoute ? true : isChatCollapsed;
 
@@ -119,6 +126,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         <AIChatWidget
           isCollapsed={effectiveCollapsed}
           onToggleCollapse={handleToggleChat}
+          onMinimize={handleMinimizeChat}
           showAttentionPulse={showAttentionPulse}
         />
       )}
