@@ -530,9 +530,9 @@ const GlobalHeader = () => {
             </Sheet>
           </div>
 
-          {/* CENTER: Desktop Navigation - right-locked at search icon, left stretched to equal distance from "Estate" E letter */}
-          <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0">
-            <div className="flex items-center gap-1 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] backdrop-blur-sm rounded-full px-3 py-0.5 border border-gold/40 shadow-lg mx-3">
+          {/* CENTER: Desktop Navigation - stretched equally on both sides, stop before search icon on right and "E" on left */}
+          <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 mx-1">
+            <div className="flex items-center gap-1.5 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] backdrop-blur-sm rounded-full px-4 py-0.5 border border-gold/40 shadow-lg">
               
               {/* 1. Home - No dropdown */}
               <Link
