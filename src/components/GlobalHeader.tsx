@@ -725,12 +725,12 @@ const GlobalHeader = () => {
                     
                     <DropdownMenuSeparator className="bg-gold/20" />
                     <div className="py-2">
-                      <DropdownMenuItem onClick={() => signOut()} className="py-0 px-0 cursor-pointer focus:bg-red-500/10">
-                        <div className="flex items-center gap-3 text-zinc-600 hover:text-red-500 py-3 px-5 transition-all w-full group">
-                          <div className="w-7 h-7 rounded-md bg-red-100 flex items-center justify-center group-hover:bg-red-200 transition-colors">
-                            <LogOut className="w-3.5 h-3.5 text-red-500" />
+                      <DropdownMenuItem onClick={() => signOut()} className="py-0 px-0 cursor-pointer focus:bg-gold/10">
+                        <div className="flex items-center gap-3 text-zinc-600 hover:text-black py-3 px-5 transition-all w-full group">
+                          <div className="w-7 h-7 rounded-md bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 flex items-center justify-center group-hover:border-gold transition-colors">
+                            <LogOut className="w-3.5 h-3.5 text-black" />
                           </div>
-                          <span className="font-medium text-sm">{t('nav.signOut')}</span>
+                          <span className="font-medium text-sm text-black">{t('nav.signOut')}</span>
                         </div>
                       </DropdownMenuItem>
                     </div>

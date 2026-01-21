@@ -519,8 +519,8 @@ const Index = () => {
               >
                 Meet the{" "}
                 <span 
-                  className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6]"
-                  style={{ filter: 'drop-shadow(0 0 15px rgba(200,167,102,0.5))' }}
+                  className="text-transparent bg-clip-text bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]"
+                  style={{ filter: 'drop-shadow(0 0 15px rgba(200,167,102,0.6))' }}
                 >
                   Founder
                 </span>

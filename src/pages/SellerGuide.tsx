@@ -378,7 +378,7 @@ const SellerGuide = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
-                    className="bg-white border border-zinc-200 rounded-xl p-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all group"
+                    className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
                   >
                     <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-gold/20 transition-colors">
                       <item.icon className="w-6 h-6 text-gold" />
@@ -416,7 +416,7 @@ const SellerGuide = () => {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.05 }}
-                    className="bg-white border border-zinc-200 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
+                    className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
                   >
                     <div className="flex items-start gap-4">
                       <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/20">
@@ -619,7 +619,7 @@ const SellerGuide = () => {
                   ))}
                 </motion.div>
 
-                <motion.div variants={fadeInUp} className="bg-white border border-zinc-200 rounded-xl p-6">
+                <motion.div variants={fadeInUp} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-6">
                   <p className="text-zinc-700 text-sm leading-relaxed">
                     <span className="text-black font-semibold">JBJ Global Real Estate</span> is licensed for buying, selling, and renting property in Dubai. Legal and banking services are coordinated through licensed third-party partners where required.
                   </p>
@@ -651,7 +651,7 @@ const SellerGuide = () => {
                       <AccordionItem 
                         key={index} 
                         value={`faq-${index}`}
-                        className="bg-white border border-zinc-200 rounded-xl px-6 data-[state=open]:border-gold hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
+                        className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl px-6 data-[state=open]:border-gold hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
                       >
                         <AccordionTrigger className="text-black text-left hover:text-gold hover:no-underline py-5">
                           {faq.question}
@@ -671,14 +671,14 @@ const SellerGuide = () => {
         {/* Founder-Led Philosophy & Advisory Positioning */}
         <FounderPhilosophySection />
 
-        {/* Final CTA Section - Next Step */}
-        <section className="py-20 bg-black">
+        {/* Final CTA Section - Next Step - Champagne frame */}
+        <section className="py-20 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
           <div className="container mx-auto px-4">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="max-w-3xl mx-auto text-center bg-white border border-zinc-200 rounded-2xl p-8 md:p-12 shadow-xl"
+              className="max-w-3xl mx-auto text-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-8 md:p-12 shadow-xl"
             >
               <Sparkles className="w-12 h-12 text-gold mx-auto mb-4" />
               <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
@@ -689,17 +689,17 @@ const SellerGuide = () => {
               </p>
               <div className="flex flex-wrap justify-center gap-4 mb-8">
                 <Link to="/seller-listing">
-                  <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110 px-8 py-4 text-lg">
+                  <Button variant="primary" className="px-8 py-4 text-lg">
                     <Building2 className="w-5 h-5 mr-2" />
                     List Your Property Now
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
                 </Link>
                 <Link to="/contact">
-                  <button className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white group">
-                    <Phone className="w-5 h-5" />
+                  <Button variant="secondary" className="px-8 py-4 text-lg">
+                    <Phone className="w-5 h-5 mr-2" />
                     Book Consultation
-                  </button>
+                  </Button>
                 </Link>
               </div>
               
@@ -733,11 +733,11 @@ const SellerGuide = () => {
           </div>
         </section>
 
-        {/* Compliance Disclaimer - Black section with white box */}
-        <section className="py-8 bg-black">
+        {/* Compliance Disclaimer - Champagne frame with premium card */}
+        <section className="py-8 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <div className="bg-white border border-zinc-200 rounded-lg p-6 shadow-lg">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-lg p-6 shadow-lg">
                 <h4 className="text-black font-semibold mb-3 flex items-center gap-2">
                   <Shield className="w-4 h-4 text-gold" />
                   Important Disclaimer
