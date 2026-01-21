@@ -6,6 +6,7 @@ import { FileText, Download, Phone, MessageCircle, Crown } from "lucide-react";
 import { Button } from "./ui/button";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { SafeImage } from "@/components/SafeImage";
+import AIMarketAnalyzer from "@/components/AIMarketAnalyzer";
 
 interface ProjectCardProps {
   project: Project;
@@ -164,6 +165,21 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           )}
         </div>
       </Link>
+
+      {/* AI Market Analyzer - Compact version */}
+      <div className="px-4 pb-2">
+        <AIMarketAnalyzer
+          type="property"
+          name={project.name}
+          location={project.location || project.community?.name}
+          pricePerSqft={project.price_from && project.size_min ? Math.round(project.price_from / project.size_min) : undefined}
+          totalPrice={project.price_from}
+          size={project.size_min}
+          bedrooms={project.bedrooms_min}
+          developer={project.developer?.name}
+          variant="compact"
+        />
+      </div>
 
       {/* Action Buttons - Fixed at bottom with 3D Premium Style */}
       <div className="p-4 pt-0 mt-auto space-y-3">
