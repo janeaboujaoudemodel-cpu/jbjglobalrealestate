@@ -1056,13 +1056,27 @@ const Properties = () => {
                     I agree to be contacted
                   </label>
                 </div>
-                <Button 
+                <button 
                   onClick={handleInquirySubmit}
-                  variant="primary"
-                  className="w-full h-14 text-lg rounded-lg mt-4"
+                  className="relative w-full h-14 text-lg rounded-xl font-bold transition-all duration-300 group overflow-hidden mt-4"
+                  style={{
+                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                    boxShadow: `
+                      0 6px 20px rgba(200,167,102,0.4),
+                      0 4px 10px rgba(0,0,0,0.15),
+                      inset 0 2px 4px rgba(255,255,255,0.9),
+                      inset 0 -2px 4px rgba(200,167,102,0.2),
+                      0 0 15px rgba(200,167,102,0.3)
+                    `,
+                  }}
                 >
-                  <span className="text-black group-hover:text-gold">SUBMIT</span>
-                </Button>
+                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 35px rgba(200,167,102,0.6), inset 0 0 18px rgba(200,167,102,0.1)' }} />
+                  <span className="relative flex items-center justify-center gap-2">
+                    <span className="text-black group-hover:text-gold transition-colors">SUB</span>
+                    <span className="text-gold group-hover:text-black transition-colors">MIT</span>
+                  </span>
+                </button>
               </div>
 
               {/* Current Filter Summary */}

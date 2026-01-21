@@ -411,7 +411,7 @@ const Footer = () => {
 
         {/* Comprehensive Copyright & Legal Section - Premium White */}
         <div className="max-w-4xl mx-auto mb-8">
-          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-2xl p-6 md:p-8 text-center shadow-lg">
+          <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-2xl p-6 md:p-8 text-center shadow-lg">
             <div className="flex items-center justify-center gap-2 mb-4">
               <div className="w-8 h-8 bg-gold/20 border border-gold/40 rounded-lg flex items-center justify-center">
                 <span className="text-gold text-lg font-bold">©</span>

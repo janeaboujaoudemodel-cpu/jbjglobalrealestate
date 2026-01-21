@@ -114,9 +114,9 @@ const Index = () => {
               Rent<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle" style={{ background: 'linear-gradient(135deg, #D4AF37, #E8DCC8)', boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
             </span>
             <span 
-              className="block bg-gradient-to-r from-[#FFF8E8] via-[#F5E6C8] to-[#E8D4A8] bg-clip-text text-transparent mt-1"
+              className="block bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] bg-clip-text text-transparent mt-1"
               style={{ 
-                filter: 'drop-shadow(0 0 8px rgba(255, 248, 232, 0.35)) drop-shadow(0 0 16px rgba(245, 230, 200, 0.25))',
+                filter: 'drop-shadow(0 0 12px rgba(200,167,102,0.5)) drop-shadow(0 0 20px rgba(200,167,102,0.35))',
                 textShadow: '0 1px 3px rgba(0, 0, 0, 0.2)',
               }}
             >
@@ -183,17 +183,17 @@ const Index = () => {
           transition={{ delay: 2, duration: 1 }}
         >
           <span 
-            className="text-[10px] uppercase tracking-[0.3em] bg-gradient-to-r from-[#FFF8E8] via-[#F5E6C8] to-[#E8D4A8] bg-clip-text text-transparent"
+            className="text-[10px] uppercase tracking-[0.3em] bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] bg-clip-text text-transparent"
             style={{ 
-              filter: 'drop-shadow(0 0 8px rgba(255, 248, 232, 0.35)) drop-shadow(0 0 16px rgba(245, 230, 200, 0.25))',
+              filter: 'drop-shadow(0 0 8px rgba(200,167,102,0.5)) drop-shadow(0 0 16px rgba(200,167,102,0.35))',
               textShadow: '0 1px 3px rgba(0, 0, 0, 0.2)',
             }}
           >Discover</span>
           <ChevronDown 
             className="w-5 h-5 animate-bounce" 
             style={{ 
-              color: '#FFF8E8',
-              filter: 'drop-shadow(0 0 8px rgba(255, 248, 232, 0.5)) drop-shadow(0 0 16px rgba(245, 230, 200, 0.3))',
+              color: '#E8DCC8',
+              filter: 'drop-shadow(0 0 8px rgba(200,167,102,0.6)) drop-shadow(0 0 16px rgba(200,167,102,0.4))',
             }} 
           />
         </motion.div>
