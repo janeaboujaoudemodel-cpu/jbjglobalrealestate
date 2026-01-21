@@ -83,9 +83,9 @@ export const FounderPhilosophySection = () => {
               >
                 <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                 <span className="relative flex items-center justify-center gap-1">
-                  <span className="text-black group-hover/btn:text-gold transition-colors">Know More About the</span>
-                  <span className="text-gold group-hover/btn:text-black transition-colors">Founder</span>
-                  <span className="text-black group-hover/btn:text-gold transition-colors">↗</span>
+                  <span className="text-gold group-hover/btn:text-black transition-colors">Know More About the</span>
+                  <span className="text-black group-hover/btn:text-gold transition-colors">Founder</span>
+                  <span className="text-gold group-hover/btn:text-black transition-colors">↗</span>
                 </span>
               </button>
             </motion.div>

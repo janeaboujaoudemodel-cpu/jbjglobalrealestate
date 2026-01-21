@@ -118,10 +118,10 @@ const AIComparisonWidget = () => {
             <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
             <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
             <span className="relative flex items-center justify-center gap-2">
-              <BarChart3 className="w-5 h-5 text-gold" />
-              <span className="text-gold">Start</span>
-              <span className="text-black">Comparing</span>
-              <ArrowUpRight className="w-5 h-5 text-black" />
+              <BarChart3 className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
+              <span className="text-black group-hover:text-gold transition-colors">Start</span>
+              <span className="text-gold group-hover:text-black transition-colors">Comparing</span>
+              <ArrowUpRight className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
             </span>
           </button>
         </Link>

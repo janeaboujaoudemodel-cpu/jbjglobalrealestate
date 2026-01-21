@@ -82,9 +82,9 @@ const MarketReportCTA = () => {
                   }}
                 />
                 <span className="relative flex items-center justify-center gap-2">
-                  <span className="text-gold">Download Your Free</span>
-                  <span className="text-black">Book Now</span>
-                  <ArrowUpRight className="w-5 h-5 text-black" />
+                  <span className="text-black group-hover:text-gold transition-colors">Download Your Free</span>
+                  <span className="text-gold group-hover:text-black transition-colors">Book Now</span>
+                  <ArrowUpRight className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
                 </span>
               </button>
             </Link>
