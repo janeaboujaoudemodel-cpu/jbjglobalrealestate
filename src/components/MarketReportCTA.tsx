@@ -36,10 +36,10 @@ const MarketReportCTA = () => {
       {/* Content - Right */}
       <div className="space-y-6">
         <div>
-          <h3 className="text-white text-2xl md:text-3xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h3 className="text-black text-2xl md:text-3xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
             Dubai Real Estate <span className="text-gold">Market Report</span>
           </h3>
-          <p className="text-zinc-300 text-base leading-relaxed">
+          <p className="text-zinc-700 text-base leading-relaxed">
             Get exclusive insights into Dubai's property market with our comprehensive guide.
           </p>
         </div>
@@ -47,7 +47,7 @@ const MarketReportCTA = () => {
         {/* Benefits */}
         <div className="space-y-3">
           {benefits.map((benefit, idx) => (
-            <div key={idx} className="flex items-center gap-3 text-zinc-200">
+            <div key={idx} className="flex items-center gap-3 text-zinc-700">
               <CheckCircle className="w-5 h-5 text-gold flex-shrink-0" />
               <span>{benefit}</span>
             </div>
@@ -81,7 +81,7 @@ const MarketReportCTA = () => {
         </Link>
 
         {/* Attribution */}
-        <p className="text-zinc-500 text-xs">
+        <p className="text-zinc-600 text-xs">
           Created by <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link>
         </p>
       </div>

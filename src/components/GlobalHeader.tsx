@@ -230,10 +230,10 @@ const GlobalHeader = () => {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="bg-gradient-to-b from-white via-[#FDFBF7] to-[#F5F0E6] border-l border-gold/30 w-[320px] p-0 flex flex-col h-full pt-20"
+                className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] p-0 flex flex-col h-full pt-20"
               >
-                {/* Menu Header with white pearl styling */}
-                <div className="relative h-20 bg-gradient-to-b from-white to-[#FDFBF7] border-b border-gold/30 flex items-center px-5 shrink-0">
+                {/* Menu Header with champagne styling */}
+                <div className="relative h-20 bg-gradient-to-b from-[#F5EBD7] to-[#E8DCC8] border-b border-gold/30 flex items-center px-5 shrink-0">
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
                   <BrandMonogram variant="light" size="sm" layout="horizontal" />
                 </div>
@@ -596,11 +596,11 @@ const GlobalHeader = () => {
             </div>
           </nav>
 
-          {/* RIGHT: Actions - Desktop only - Icons grouped, same size, no borders */}
-          <div className="hidden lg:flex items-center gap-2 shrink-0">
+          {/* RIGHT: Actions - Desktop only - Icons grouped, same size, same spacing */}
+          <div className="hidden lg:flex items-center gap-3 shrink-0">
             {/* Search Icon */}
             <button
-              className="p-0 hover:opacity-70 transition-opacity duration-200"
+              className="w-8 h-8 flex items-center justify-center hover:opacity-70 transition-opacity duration-200"
               onClick={() => setSearchOpen(true)}
               aria-label="Search"
             >
@@ -611,12 +611,12 @@ const GlobalHeader = () => {
             <LanguageSwitcher variant="icon-only" />
 
             {/* Account Icon */}
-            <div>
+            <div className="w-8 h-8 flex items-center justify-center">
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button 
-                      className="p-0 hover:opacity-70 transition-opacity duration-200"
+                      className="w-8 h-8 flex items-center justify-center hover:opacity-70 transition-opacity duration-200"
                       aria-label={t('nav.myAccount')}
                     >
                       <User className="w-5 h-5 text-gold" />
@@ -625,7 +625,7 @@ const GlobalHeader = () => {
                   <DropdownMenuContent 
                     align="end" 
                     sideOffset={12}
-                    className="bg-gradient-to-b from-white to-zinc-50 border border-gold/30 min-w-[260px] shadow-2xl shadow-black/30 py-3 rounded-xl overflow-hidden"
+                    className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 min-w-[260px] shadow-2xl shadow-black/30 py-3 rounded-xl overflow-hidden"
                   >
                     {/* Premium header matching nav dropdown style */}
                     <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
