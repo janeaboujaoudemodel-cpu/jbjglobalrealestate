@@ -42,9 +42,6 @@ verify_jwt = false
 [functions.send-welcome-email]
 verify_jwt = false
 
-[functions.stripe-webhook]
-verify_jwt = false
-
 [functions.send-inquiry-email]
 verify_jwt = false
 
@@ -54,103 +51,13 @@ verify_jwt = false
 [functions.user-registration]
 verify_jwt = false
 
-[functions.send-security-alert]
-verify_jwt = false
-
-[functions.hr-ai-tutor]
+[functions.hr-ai-agent]
 verify_jwt = false
 
 [functions.ai-chat-stream]
 verify_jwt = false
 
-[functions.newsletter-subscribe]
-verify_jwt = false
-
-[functions.ai-virtual-staging]
-verify_jwt = false
-
-[functions.ai-price-predictor]
-verify_jwt = false
-
-[functions.ai-neighborhood-insights]
-verify_jwt = false
-
-[functions.ai-lead-qualification]
-verify_jwt = false
-
-[functions.ai-followup-scheduler]
-verify_jwt = false
-
-[functions.ai-objection-handler]
-verify_jwt = false
-
-[functions.ai-market-report]
-verify_jwt = false
-
-[functions.ai-competitor-analysis]
-verify_jwt = false
-
-[functions.ai-roi-calculator]
-verify_jwt = false
-
-[functions.ai-meeting-summarizer]
-verify_jwt = false
-
-[functions.ai-translation-hub]
-verify_jwt = false
-
-[functions.ai-video-tour-script]
-verify_jwt = false
-
-[functions.ai-contract-reviewer]
-verify_jwt = false
-
-[functions.ai-document-generator]
-verify_jwt = false
-
-[functions.hr-ai-agent]
-verify_jwt = false
-
-[functions.send-bulk-email]
-verify_jwt = false
-
-[functions.generate-certificate]
-verify_jwt = false
-
-[functions.elevenlabs-conversation-token]
-verify_jwt = false
-
-[functions.elevenlabs-scribe-token]
-verify_jwt = false
-
-[functions.voice-to-text]
-verify_jwt = false
-
-[functions.ai-email-composer]
-verify_jwt = false
-
-[functions.ai-whatsapp-composer]
-verify_jwt = false
-
-[functions.elevenlabs-video-voice]
-verify_jwt = false
-
-[functions.elevenlabs-video-music]
-verify_jwt = false
-
-[functions.ai-chat]
-verify_jwt = false
-
 [functions.broker-chat]
-verify_jwt = false
-
-[functions.broker-send-email]
-verify_jwt = false
-
-[functions.broker-assign-lead]
-verify_jwt = false
-
-[functions.broker-log-call]
 verify_jwt = false
 
 [functions.broker-daily-report]
@@ -159,5 +66,20 @@ verify_jwt = false
 [functions.ai-market-narratives]
 verify_jwt = false
 
-[functions.broker-ai-assistant]
+[functions.ai-executive-assistant]
+verify_jwt = false
+
+[functions.executive-assistant]
+verify_jwt = false
+
+[functions.send-scheduled-report]
+verify_jwt = false
+
+[functions.submit-support-ticket]
+verify_jwt = false
+
+[functions.vapi-webhook]
+verify_jwt = false
+
+[functions.ai-outfit-changer]
 verify_jwt = false
