@@ -7,6 +7,7 @@ import ShareButton from "@/components/ShareButton";
 import FavoriteButton from "@/components/FavoriteButton";
 import PropertyReportModal from "@/components/PropertyReportModal";
 import ClientMarketContext from "@/components/client-intelligence/ClientMarketContext";
+import AIMarketAnalyzer from "@/components/AIMarketAnalyzer";
 import Footer from "@/components/Footer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -326,6 +327,21 @@ const ProjectDetail = () => {
                   Download & Share Report
                 </Button>
               </div>
+
+              {/* AI Market Analyzer - Full Analysis */}
+              <AIMarketAnalyzer
+                type="property"
+                name={project.name}
+                location={project.location || project.community?.name}
+                pricePerSqft={project.price_from && project.size_min ? Math.round(project.price_from / project.size_min) : undefined}
+                totalPrice={project.price_from}
+                size={project.size_min}
+                bedrooms={project.bedrooms_min}
+                developer={project.developer?.name}
+                amenities={project.amenities}
+                handoverDate={project.handover_date}
+                variant="full"
+              />
 
               {/* Market Context - Client Intelligence */}
               <ClientMarketContext
