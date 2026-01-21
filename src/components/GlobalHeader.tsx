@@ -177,8 +177,8 @@ const GlobalHeader = () => {
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gold/40 z-10" />
       
       <div className="relative z-10 mx-auto w-full max-w-[1400px] px-3 sm:px-4 lg:px-8 xl:px-12">
-        <div className="flex items-center justify-between h-14 lg:h-20 w-full">
-          {/* LEFT: Brand Logo - Monogram only on mobile */}
+        <div className="flex items-center justify-between h-16 lg:h-20 w-full">
+          {/* LEFT: Brand Logo - Monogram and company name on one line */}
           <Link 
             to="/" 
             className="flex items-center gap-2 sm:gap-3 shrink-0 group transition-all duration-300"
@@ -232,48 +232,59 @@ const GlobalHeader = () => {
                 side="right"
                 className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] p-0 flex flex-col h-full pt-14"
               >
-                {/* Menu Header - proper padding to prevent cropping, larger branding */}
-                <div className="relative border-b border-gold/30 flex items-center px-5 py-4 shrink-0">
+                {/* Menu Header - larger monogram, one-line company name */}
+                <div className="relative border-b border-gold/30 flex items-center gap-3 px-4 py-3 shrink-0">
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-                  <BrandMonogram variant="light" size="xl" layout="horizontal" />
+                  {/* Large monogram - using nobuffer version for transparent background */}
+                  <img 
+                    src="/lovable-uploads/33e37a38-06f2-4f92-a498-6cd33c066edc.png"
+                    alt="JBJ"
+                    className="w-14 h-14 object-contain"
+                  />
+                  <span 
+                    className="text-black font-bold text-sm tracking-[0.08em] uppercase whitespace-nowrap leading-none"
+                    style={{ fontFamily: "Poppins, sans-serif" }}
+                  >
+                    JBJ Global Real Estate
+                  </span>
                 </div>
 
-                {/* Quick Actions Row - more compact icons */}
-                <div className="flex items-center justify-around px-3 py-1.5 border-b border-gold/20">
+                {/* Quick Actions Row - smaller and more compact */}
+                <div className="flex items-center justify-around px-2 py-1 border-b border-gold/20">
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="flex flex-col items-center gap-0.5 text-black hover:text-gold h-auto py-1 px-2"
+                    className="flex flex-col items-center gap-0 text-black hover:text-gold h-auto py-0.5 px-1.5"
                     onClick={() => {
                       setMobileMenuOpen(false);
                       setSearchOpen(true);
                     }}
                   >
-                    <Search className="w-3.5 h-3.5" />
-                    <span className="text-[8px]">Search</span>
+                    <Search className="w-3 h-3" />
+                    <span className="text-[7px]">Search</span>
                   </Button>
                   <Link
                     to="/favorites"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex flex-col items-center gap-0.5 text-black hover:text-gold py-1 px-2"
+                    className="flex flex-col items-center gap-0 text-black hover:text-gold py-0.5 px-1.5"
                   >
                     <div className="relative">
-                      <Heart className="w-3.5 h-3.5" />
+                      <Heart className="w-3 h-3" />
                       {totalCount > 0 && (
-                        <span className="absolute -top-1 -right-1 bg-gold text-black text-[8px] w-3 h-3 rounded-full flex items-center justify-center font-bold">
+                        <span className="absolute -top-1 -right-1 bg-gold text-black text-[7px] w-2.5 h-2.5 rounded-full flex items-center justify-center font-bold">
                           {totalCount}
                         </span>
                       )}
                     </div>
-                    <span className="text-[8px]">Favorites</span>
+                    <span className="text-[7px]">Favorites</span>
                   </Link>
                   <Link
                     to={user ? "/my-account" : "/auth"}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex flex-col items-center gap-0.5 text-black hover:text-gold py-1 px-2"
+                    className="flex flex-col items-center gap-0 text-black hover:text-gold py-0.5 px-1.5"
                   >
-                    <User className="w-3.5 h-3.5" />
-                    <span className="text-[8px]">{user ? "Account" : "Sign In"}</span>
+                    <User className="w-3 h-3" />
+                    <span className="text-[7px]">{user ? "Account" : "Sign In"}</span>
                   </Link>
                   <div className="shrink-0">
                     <LanguageSwitcher variant="compact" />
