@@ -194,7 +194,7 @@ const GlobalHeader = () => {
               {/* Subtle glow on hover */}
               <div className="absolute inset-0 rounded-full bg-gold/0 group-hover:bg-gold/10 transition-colors duration-300 blur-xl" />
             </div>
-            <span className="text-white font-semibold text-[10px] lg:text-xs tracking-[0.08em] uppercase whitespace-nowrap hidden lg:inline drop-shadow-sm">
+            <span className="text-white font-semibold text-[8px] lg:text-[10px] tracking-[0.08em] uppercase whitespace-nowrap hidden lg:inline drop-shadow-sm">
               JBJ Global Real Estate
             </span>
           </Link>

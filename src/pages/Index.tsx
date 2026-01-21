@@ -110,10 +110,10 @@ const Index = () => {
           >
             Buy. Sell. Rent.<br />
             <span 
-              className="bg-gradient-to-r from-[#C9B896] via-[#E8DCC8] to-[#D4C4A8] bg-clip-text text-transparent break-words"
+              className="bg-gradient-to-r from-[#D4AF37] via-[#DAA520] to-[#B8860B] bg-clip-text text-transparent break-words"
               style={{ 
-                filter: 'drop-shadow(0 0 8px rgba(201, 184, 150, 0.4)) drop-shadow(0 0 15px rgba(255, 255, 255, 0.2))',
-                textShadow: '0 2px 4px rgba(0, 0, 0, 0.3), 0 0 20px rgba(201, 184, 150, 0.3)',
+                filter: 'drop-shadow(0 0 12px rgba(212, 175, 55, 0.5)) drop-shadow(0 0 20px rgba(218, 165, 32, 0.3))',
+                textShadow: '0 2px 6px rgba(0, 0, 0, 0.4), 0 0 25px rgba(212, 175, 55, 0.4)',
               }}
             >
               Delivered with Intelligence.
