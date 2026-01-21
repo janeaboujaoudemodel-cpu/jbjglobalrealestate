@@ -23,19 +23,26 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="sm"
-          className={isIconOnly
-            ? "p-0 min-w-0 hover:opacity-70 transition-opacity duration-200 bg-transparent border-0"
-            : isCompact 
+        {isIconOnly ? (
+          <button
+            className="w-7 h-7 flex items-center justify-center transition-all duration-200 group"
+            style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }}
+          >
+            <Globe className="w-4 h-4 text-white group-hover:text-gold transition-colors duration-200" style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' }} />
+          </button>
+        ) : (
+          <Button
+            variant="ghost"
+            size="sm"
+            className={isCompact 
               ? "h-7 w-7 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
               : "h-10 lg:h-11 px-3 text-gold hover:text-gold-light rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group gap-2"
-          }
-        >
-          <Globe className={isIconOnly ? "w-5 h-5 text-gold" : isCompact ? "w-3 h-3 text-gold group-hover:text-gold-light" : "w-4 h-4 group-hover:scale-110 transition-transform"} />
-          {!isCompact && !isIconOnly && <span className="hidden sm:inline text-xs font-medium tracking-wide">{currentLang.flag} {currentLang.code.toUpperCase()}</span>}
-        </Button>
+            }
+          >
+            <Globe className={isCompact ? "w-3 h-3 text-gold group-hover:text-gold-light" : "w-4 h-4 group-hover:scale-110 transition-transform"} />
+            {!isCompact && <span className="hidden sm:inline text-xs font-medium tracking-wide">{currentLang.flag} {currentLang.code.toUpperCase()}</span>}
+          </Button>
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         align="end" 

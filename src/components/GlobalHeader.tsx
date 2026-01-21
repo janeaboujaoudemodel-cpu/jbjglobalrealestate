@@ -599,28 +599,30 @@ const GlobalHeader = () => {
           {/* RIGHT: Actions - Desktop only - Icons grouped, same size, same spacing */}
           {/* Right icons with reduced spacing - unified alignment */}
           <div className="hidden lg:flex items-center gap-1.5 shrink-0">
-            {/* Search Icon */}
+            {/* Search Icon - White on normal, gold on hover with 3D effect */}
             <button
-              className="w-7 h-7 flex items-center justify-center hover:opacity-70 transition-opacity duration-200"
+              className="w-7 h-7 flex items-center justify-center transition-all duration-200 group"
               onClick={() => setSearchOpen(true)}
               aria-label="Search"
+              style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }}
             >
-              <Search className="w-4 h-4 text-gold" />
+              <Search className="w-4 h-4 text-white group-hover:text-gold transition-colors duration-200" style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' }} />
             </button>
 
             {/* Language Switcher */}
             <LanguageSwitcher variant="icon-only" />
 
-            {/* Account Icon */}
+            {/* Account Icon - White on normal, gold on hover with 3D effect */}
             <div className="w-7 h-7 flex items-center justify-center">
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button 
-                      className="w-7 h-7 flex items-center justify-center hover:opacity-70 transition-opacity duration-200"
+                      className="w-7 h-7 flex items-center justify-center transition-all duration-200 group"
                       aria-label={t('nav.myAccount')}
+                      style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }}
                     >
-                      <User className="w-4 h-4 text-gold" />
+                      <User className="w-4 h-4 text-white group-hover:text-gold transition-colors duration-200" style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' }} />
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent 
@@ -737,13 +739,14 @@ const GlobalHeader = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <Link to="/auth">
-                  <button 
-                    className="w-7 h-7 flex items-center justify-center hover:opacity-70 transition-opacity duration-200"
-                  >
-                    <User className="w-4 h-4 text-gold" />
-                  </button>
-                </Link>
+              <Link to="/auth">
+                <button 
+                  className="w-7 h-7 flex items-center justify-center transition-all duration-200 group"
+                  style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }}
+                >
+                  <User className="w-4 h-4 text-white group-hover:text-gold transition-colors duration-200" style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' }} />
+                </button>
+              </Link>
               )}
             </div>
           </div>
