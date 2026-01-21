@@ -68,7 +68,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
   return (
     <motion.div variants={fadeInUp}>
       <Card 
-        className={`bg-zinc-900/60 border-zinc-800 hover:border-gold/50 transition-all duration-300 overflow-hidden group h-full ${isInternalUser ? 'cursor-pointer' : ''}`}
+        className={`bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/30 hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.3)] transition-all duration-300 overflow-hidden group h-full ${isInternalUser ? 'cursor-pointer' : ''}`}
         onClick={handleCardClick}
       >
         <CardContent className="p-0">
@@ -92,29 +92,22 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
               fetchPriority="low"
             />
             {/* Photo overlay gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-80" />
+            <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-60" />
           </div>
 
           {/* Info - Fixed height for symmetry */}
-          <div className="p-5 -mt-16 relative z-10 flex flex-col h-[280px]">
+          <div className="p-5 -mt-16 relative z-10 flex flex-col h-[280px] bg-gradient-to-t from-white via-[#FDFBF7] to-transparent">
             <div>
-              <h3 className="text-white font-semibold text-lg mb-1 line-clamp-1">{member.name}</h3>
+              <h3 className="text-black font-semibold text-lg mb-1 line-clamp-1">{member.name}</h3>
 
               {/* Premium shiny job title */}
               <p
-                className="text-sm font-medium mb-1 line-clamp-1"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #CBA64B 0%, #E8D5A3 40%, #F5ECD7 50%, #E8D5A3 60%, #CBA64B 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
+                className="text-sm font-medium mb-1 line-clamp-1 text-gold"
               >
                 {member.role}
               </p>
 
-              <div className="flex items-center gap-2 text-zinc-500 text-xs mb-1">
+              <div className="flex items-center gap-2 text-zinc-600 text-xs mb-1">
                 <span>{member.department}</span>
                 {typeof member.yearsExperience === "number" && (
                   <>
@@ -132,7 +125,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
 
               {/* Reports To - Only show manager name (no hierarchy levels) */}
               {reportsToMember && (
-                <div className="flex items-center gap-1.5 text-zinc-500 text-[11px] mb-2">
+                <div className="flex items-center gap-1.5 text-zinc-600 text-[11px] mb-2">
                   <ArrowUpRight className="w-3 h-3 flex-shrink-0" />
                   <span>Reports to {reportsToMember.name}</span>
                 </div>
@@ -140,18 +133,18 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
 
               {/* Short Bio */}
               {member.bio && (
-                <p className="text-zinc-500 text-xs line-clamp-2 mb-2">
+                <p className="text-zinc-600 text-xs line-clamp-2 mb-2">
                   {member.bio}
                 </p>
               )}
             </div>
 
             {/* Bottom actions pinned for perfect card symmetry */}
-            <div className="mt-auto pt-2 border-t border-zinc-800/50">
+            <div className="mt-auto pt-2 border-t border-gold/20">
               <button
                 type="button"
                 onClick={() => onReadMore(member)}
-                className="text-gold hover:text-gold-light text-xs font-medium transition-colors"
+                className="text-gold hover:text-black text-xs font-medium transition-colors"
               >
                 Read more →
               </button>
@@ -163,7 +156,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
                     <Badge
                       key={lang}
                       variant="outline"
-                      className="text-[10px] border-zinc-700 text-zinc-400 px-2 py-0.5"
+                      className="text-[10px] border-gold/30 text-black bg-gold/10 px-2 py-0.5"
                     >
                       {lang}
                     </Badge>
@@ -171,7 +164,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
                   {remainingLanguages > 0 && (
                     <Badge
                       variant="outline"
-                      className="text-[10px] border-zinc-700 text-zinc-400 px-2 py-0.5"
+                      className="text-[10px] border-gold/30 text-black bg-gold/10 px-2 py-0.5"
                     >
                       +{remainingLanguages}
                     </Badge>
@@ -282,13 +275,13 @@ const MeetTheTeam: React.FC = () => {
         canonicalPath="/team"
       />
 
-      <div className="min-h-screen bg-[#0D0D0D]">
+      <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
         {/* Hero Section */}
         <section className="relative py-20 md:py-28 overflow-hidden">
           {/* Background effects */}
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gold/10 rounded-full blur-[120px]" />
-            <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-[100px]" />
+            <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gold/5 rounded-full blur-[120px]" />
+            <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-gold/3 rounded-full blur-[100px]" />
           </div>
 
           <div className="container mx-auto px-4 relative z-10">
@@ -299,7 +292,7 @@ const MeetTheTeam: React.FC = () => {
               className="text-center max-w-4xl mx-auto"
             >
               <motion.div variants={fadeInUp} className="mb-6">
-                <Badge className="bg-gold/15 text-gold border-gold/30 px-4 py-1.5">
+                <Badge className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-gold border-gold/40 px-4 py-1.5 shadow-md">
                   <Users className="w-3.5 h-3.5 mr-1.5" />
                   Our Team
                 </Badge>
@@ -310,21 +303,14 @@ const MeetTheTeam: React.FC = () => {
                 variants={fadeInUp}
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
-                <span className="text-white">Meet the </span>
-                <span
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #CBA64B 0%, #E8D5A3 50%, #CBA64B 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  }}
-                >
+                <span className="text-black">Meet the </span>
+                <span className="text-gold">
                   Experts
                 </span>
               </motion.h1>
 
               <motion.p
-                className="text-zinc-400 text-lg max-w-2xl mx-auto mb-6"
+                className="text-zinc-600 text-lg max-w-2xl mx-auto mb-6"
                 variants={fadeInUp}
               >
                 A world-class team of professionals dedicated to delivering

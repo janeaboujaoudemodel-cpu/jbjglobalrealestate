@@ -137,19 +137,22 @@ const DeveloperPartnersMarquee = () => {
                   to={`/properties?developer=${encodeURIComponent(
                     developer.developerId ?? developer.slug
                   )}`}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-black border-2 border-gold rounded-lg transition-all duration-300 hover:scale-105 hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] hover:border-black hover:shadow-[0_8px_25px_rgba(200,167,102,0.5)] shadow-[0_4px_15px_rgba(200,167,102,0.3)]"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-br from-zinc-900 via-black to-zinc-900 border-2 border-gold rounded-lg transition-all duration-300 hover:scale-105 hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] hover:border-black group"
                   style={{
                     boxShadow: `
+                      inset 0 2px 4px rgba(255,255,255,0.1),
+                      inset 0 -2px 4px rgba(0,0,0,0.3),
                       0 4px 15px rgba(200,167,102,0.3),
-                      0 0 20px rgba(200,167,102,0.2)
+                      0 0 20px rgba(200,167,102,0.2),
+                      0 8px 25px rgba(0,0,0,0.4)
                     `,
                   }}
                   title={developer.name}
                 >
-                  <span className="text-white group-hover:text-gold transition-colors font-semibold text-sm md:text-base whitespace-nowrap">
+                  <span className="text-white group-hover:text-gold transition-colors font-semibold text-sm md:text-base whitespace-nowrap" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>
                     {developer.name.split(' ')[0]}
                   </span>
-                  <span className="text-gold group-hover:text-black transition-colors font-semibold text-sm md:text-base whitespace-nowrap">
+                  <span className="text-gold group-hover:text-black transition-colors font-semibold text-sm md:text-base whitespace-nowrap" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
                     {developer.name.split(' ').slice(1).join(' ') || ''}
                   </span>
                 </Link>

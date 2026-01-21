@@ -108,12 +108,14 @@ const Index = () => {
             className="text-white text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.15] mb-3 md:mb-5 px-2 sm:px-0"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            Buy. Sell. Rent.<br />
+            Buy<span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 mx-0.5 align-middle" style={{ boxShadow: '0 0 8px rgba(52, 211, 153, 0.8)' }}></span>
+            Sell<span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 mx-0.5 align-middle" style={{ boxShadow: '0 0 8px rgba(52, 211, 153, 0.8)' }}></span>
+            Rent<span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 mx-0.5 align-middle" style={{ boxShadow: '0 0 8px rgba(52, 211, 153, 0.8)' }}></span><br />
             <span 
-              className="bg-gradient-to-r from-[#D4AF37] via-[#DAA520] to-[#B8860B] bg-clip-text text-transparent break-words"
+              className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] bg-clip-text text-transparent break-words"
               style={{ 
-                filter: 'drop-shadow(0 0 12px rgba(212, 175, 55, 0.5)) drop-shadow(0 0 20px rgba(218, 165, 32, 0.3))',
-                textShadow: '0 2px 6px rgba(0, 0, 0, 0.4), 0 0 25px rgba(212, 175, 55, 0.4)',
+                filter: 'drop-shadow(0 0 8px rgba(253, 251, 247, 0.3)) drop-shadow(0 0 15px rgba(245, 240, 230, 0.2))',
+                textShadow: '0 2px 6px rgba(0, 0, 0, 0.4)',
               }}
             >
               Delivered with Intelligence.
@@ -149,8 +151,8 @@ const Index = () => {
                   boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
                 }}
               >
-                <span className="text-white group-hover:text-black transition-colors">Explore</span>
-                <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-5 md:h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                <span className="text-white group-hover:text-black transition-colors" style={{ textShadow: '0 0 10px rgba(255,255,255,0.5), 0 0 20px rgba(255,255,255,0.3)' }}>Explore</span>
+                <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-5 md:h-5 text-white transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.8))' }} />
                 {/* Hover fill overlay */}
                 <span className="absolute inset-0 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
               </button>
@@ -173,13 +175,13 @@ const Index = () => {
         
         {/* Scroll indicator - Animated */}
         <motion.div 
-          className="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-2 text-gold/60 z-10"
+          className="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-2 z-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2, duration: 1 }}
         >
-          <span className="text-[10px] uppercase tracking-[0.3em]">Explore</span>
-          <ChevronDown className="w-5 h-5 animate-bounce" />
+          <span className="text-[10px] uppercase tracking-[0.3em] text-white/80" style={{ textShadow: '0 0 10px rgba(255,255,255,0.5)' }}>Explore</span>
+          <ChevronDown className="w-5 h-5 animate-bounce text-white" style={{ filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.6))' }} />
         </motion.div>
       </div>
 
