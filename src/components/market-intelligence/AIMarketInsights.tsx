@@ -127,8 +127,8 @@ export const AIMarketInsights = () => {
   };
 
   return (
-    <section className="jj-section-champagne py-16">
-      <div className="container mx-auto px-4">
+    <section className="py-16 bg-black">
+      <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -155,7 +155,7 @@ export const AIMarketInsights = () => {
           <div className="grid md:grid-cols-2 gap-6 mb-12">
             {PRESET_INSIGHTS.map((insight) => (
               <motion.div key={insight.id} variants={fadeInUp}>
-                <Card className="jj-box-active hover:border-gold/50 hover:shadow-lg transition-all h-full">
+                <Card className="jj-card-inner hover:border-white transition-all h-full">
                   <CardHeader className="pb-3">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center shrink-0">
@@ -179,7 +179,7 @@ export const AIMarketInsights = () => {
 
           {/* AI Narrative Generator */}
           <motion.div variants={fadeInUp}>
-            <Card className="jj-box-active shadow-lg">
+            <Card className="jj-card-inner shadow-lg">
               <CardContent className="p-8">
                 <div className="flex flex-col md:flex-row items-start gap-6 mb-6">
                   <div className="w-16 h-16 rounded-2xl bg-black flex items-center justify-center shrink-0">
@@ -253,7 +253,7 @@ export const AIMarketInsights = () => {
 
           {/* Disclaimer */}
           <motion.div 
-            className="mt-8 flex items-start gap-3 p-4 jj-box-active max-w-3xl mx-auto"
+            className="mt-8 flex items-start gap-3 p-4 jj-card-inner max-w-3xl mx-auto"
             variants={fadeInUp}
           >
             <Info className="w-5 h-5 text-gold shrink-0 mt-0.5" />

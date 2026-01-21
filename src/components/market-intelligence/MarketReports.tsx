@@ -117,8 +117,8 @@ export const MarketReports = () => {
   };
 
   return (
-    <section className="jj-section-champagne py-16">
-      <div className="container mx-auto px-4">
+    <section className="py-16 bg-black">
+      <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -145,7 +145,7 @@ export const MarketReports = () => {
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {REPORT_TYPES.map((report) => (
               <motion.div key={report.id} variants={fadeInUp} className="h-full">
-                <Card className="jj-box-active hover:border-gold/50 hover:shadow-lg transition-all h-full flex flex-col">
+                <Card className="jj-card-inner hover:border-white transition-all h-full flex flex-col">
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
@@ -207,7 +207,7 @@ export const MarketReports = () => {
 
           {/* Report Disclaimer - Active color */}
           <motion.div 
-            className="mt-10 p-6 jj-box-active max-w-3xl mx-auto text-center"
+            className="mt-10 p-6 jj-card-inner max-w-3xl mx-auto text-center"
             variants={fadeInUp}
           >
             <FileText className="w-8 h-8 text-gold mx-auto mb-4" />

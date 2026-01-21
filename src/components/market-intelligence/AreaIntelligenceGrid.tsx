@@ -53,7 +53,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
   
   return (
     <motion.div variants={fadeInUp}>
-      <Card className="jj-box-active hover:border-gold/50 hover:shadow-lg transition-all group h-full">
+      <Card className="jj-card-inner hover:border-white transition-all group h-full">
         <CardContent className="p-6">
           {/* Header */}
           <div className="flex items-start justify-between mb-4">
@@ -151,8 +151,8 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
 
 export const AreaIntelligenceGrid = () => {
   return (
-    <section className="jj-section-champagne py-16">
-      <div className="container mx-auto px-4">
+    <section className="py-16 bg-black">
+      <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
         <motion.div
           initial="hidden"
           whileInView="visible"

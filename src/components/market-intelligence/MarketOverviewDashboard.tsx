@@ -47,7 +47,7 @@ const StatCard = ({
   
   return (
     <motion.div variants={fadeInUp}>
-      <Card className="jj-box-active hover:border-gold/50 transition-all">
+      <Card className="jj-card-inner transition-all h-full">
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
@@ -60,7 +60,7 @@ const StatCard = ({
           </div>
           <div className="mt-4">
             <p className="text-black/60 text-sm mb-1">{title}</p>
-            <p className="text-black text-2xl font-bold">
+            <p className="text-black text-2xl font-bold truncate">
               {prefix}{typeof value === 'number' ? value.toLocaleString() : value}{suffix}
             </p>
           </div>
@@ -72,8 +72,8 @@ const StatCard = ({
 
 export const MarketOverviewDashboard = () => {
   return (
-    <section className="jj-section-champagne py-16">
-      <div className="container mx-auto px-4">
+    <section className="py-16 bg-black">
+      <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -130,7 +130,7 @@ export const MarketOverviewDashboard = () => {
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Quarterly Trends */}
             <motion.div variants={fadeInUp}>
-              <Card className="jj-box-active">
+              <Card className="jj-card-inner h-full">
                 <CardHeader>
                   <CardTitle className="text-black flex items-center gap-2">
                     <BarChart3 className="w-5 h-5 text-gold" />
@@ -166,7 +166,7 @@ export const MarketOverviewDashboard = () => {
 
             {/* Property Type Breakdown */}
             <motion.div variants={fadeInUp}>
-              <Card className="jj-box-active">
+              <Card className="jj-card-inner h-full">
                 <CardHeader>
                   <CardTitle className="text-black flex items-center gap-2">
                     <Building2 className="w-5 h-5 text-gold" />
@@ -200,7 +200,7 @@ export const MarketOverviewDashboard = () => {
             className="mt-8 text-center"
             variants={fadeInUp}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 jj-box-active rounded-full">
+            <div className="inline-flex items-center gap-2 px-4 py-2 jj-card-inner rounded-full">
               <Calendar className="w-4 h-4 text-gold" />
               <span className="text-black/70 text-sm">
                 Last updated: {new Date(MARKET_OVERVIEW_STATS.reportDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
