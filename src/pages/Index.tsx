@@ -112,10 +112,10 @@ const Index = () => {
             Sell<span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 mx-0.5 align-middle" style={{ boxShadow: '0 0 8px rgba(52, 211, 153, 0.8)' }}></span>
             Rent<span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 mx-0.5 align-middle" style={{ boxShadow: '0 0 8px rgba(52, 211, 153, 0.8)' }}></span><br />
             <span 
-              className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] bg-clip-text text-transparent break-words"
+              className="bg-gradient-to-r from-[#FFF8E8] via-[#F5E6C8] to-[#E8D4A8] bg-clip-text text-transparent break-words"
               style={{ 
-                filter: 'drop-shadow(0 0 8px rgba(253, 251, 247, 0.3)) drop-shadow(0 0 15px rgba(245, 240, 230, 0.2))',
-                textShadow: '0 2px 6px rgba(0, 0, 0, 0.4)',
+                filter: 'drop-shadow(0 0 12px rgba(255, 248, 232, 0.5)) drop-shadow(0 0 25px rgba(245, 230, 200, 0.4)) drop-shadow(0 0 40px rgba(232, 212, 168, 0.3))',
+                textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)',
               }}
             >
               Delivered with Intelligence.
