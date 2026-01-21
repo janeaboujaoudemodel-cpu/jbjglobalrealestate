@@ -359,38 +359,35 @@ const BuyerGuide = () => {
 
       {/* Introduction - Who This Guide Is For */}
       <section id="who-this-guide-for" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-black mb-6">
-                Who This Guide Is For
-              </h2>
-            </div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-              {audienceTypes.map((item, index) => (
-                <div key={index} className="jj-box-active p-6 text-center hover:border-gold hover:shadow-lg transition-all">
-                  <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <item.icon className="w-6 h-6 text-gold" />
-                  </div>
-                  <p className="font-medium text-black mb-1">{item.label}</p>
-                  <p className="text-sm text-zinc-600">{item.desc}</p>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-light text-black mb-6">
+              <span className="text-gold">Who</span> This Guide Is For
+            </h2>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            {audienceTypes.map((item, index) => (
+              <div key={index} className="jj-box-active p-6 text-center hover:border-gold hover:shadow-lg transition-all">
+                <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <item.icon className="w-6 h-6 text-gold" />
                 </div>
-              ))}
-            </div>
+                <p className="font-medium text-black mb-1">{item.label}</p>
+                <p className="text-sm text-zinc-600">{item.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Step-by-Step Buying Process */}
       <section id="buying-process" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
-                Step-by-Step Buying Process
-              </h2>
-            </div>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
+              <span className="text-gold">Step-by-Step</span> Buying Process
+            </h2>
+          </div>
 
             <div className="space-y-6">
               {buyingSteps.map((step) => (
@@ -507,8 +504,7 @@ const BuyerGuide = () => {
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
+            ))}
           </div>
         </div>
       </section>

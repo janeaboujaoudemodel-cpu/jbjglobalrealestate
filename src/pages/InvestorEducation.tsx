@@ -170,9 +170,9 @@ const InvestorEducation = () => {
       {/* Main Content with Right Padding for TOC */}
       <div className="lg:pr-80">
         {/* Overview Section */}
-        <section id="overview" className="py-20 relative scroll-mt-24">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 md:p-12 border border-gold/30 shadow-lg">
+        <section id="overview" className="py-20 jj-section-champagne scroll-mt-24">
+          <div className="max-w-5xl mx-auto">
+            <div className="jj-box-active">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
                   <Target className="w-6 h-6 text-gold" />
@@ -192,9 +192,9 @@ const InvestorEducation = () => {
         </section>
 
         {/* How Investment Works */}
-        <section id="how-it-works" className="py-20 relative scroll-mt-24 border-t border-gold/20">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 md:p-12 border border-gold/30 shadow-lg">
+        <section id="how-it-works" className="py-20 jj-section-champagne scroll-mt-24">
+          <div className="max-w-5xl mx-auto">
+            <div className="jj-box-active">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
                   <Briefcase className="w-6 h-6 text-gold" />
@@ -224,22 +224,22 @@ const InvestorEducation = () => {
         </section>
 
         {/* Types of Investments */}
-        <section id="types" className="py-20 relative scroll-mt-24 border-t border-gold/20">
-          <div className="container mx-auto px-4 max-w-4xl">
+        <section id="types" className="py-20 jj-section-champagne scroll-mt-24">
+          <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <div className="inline-flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 flex items-center justify-center">
+                <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
                   <Building className="w-6 h-6 text-gold" />
                 </div>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
                 <span className="text-gold">Types</span> of Real Estate Investments
               </h2>
             </div>
 
             <div className="space-y-8">
               {/* Off-Plan Properties */}
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 md:p-10 border border-gold/30 shadow-lg">
+              <div className="jj-box-active">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
                     <Clock className="w-6 h-6 text-gold" />
@@ -265,7 +265,7 @@ const InvestorEducation = () => {
               </div>
 
               {/* Ready Properties */}
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 md:p-10 border border-gold/30 shadow-lg">
+              <div className="jj-box-active">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
                     <Building className="w-6 h-6 text-gold" />
@@ -294,18 +294,18 @@ const InvestorEducation = () => {
         </section>
 
         {/* Investment Objectives */}
-        <section id="objectives" className="py-20 relative scroll-mt-24 border-t border-gold/20">
-          <div className="container mx-auto px-4 max-w-4xl">
+        <section id="objectives" className="py-20 jj-section-champagne scroll-mt-24">
+          <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <div className="inline-flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 flex items-center justify-center">
+                <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
                   <TrendingUp className="w-6 h-6 text-gold" />
                 </div>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
                 <span className="text-gold">Investment</span> Objectives
               </h2>
-              <p className="text-zinc-400 max-w-2xl mx-auto">
+              <p className="text-zinc-600 max-w-2xl mx-auto">
                 Every investor enters the market with a different objective. Understanding the objective is essential before selecting a location, property type, or developer.
               </p>
             </div>
@@ -314,7 +314,7 @@ const InvestorEducation = () => {
               {investmentObjectives.map((objective, index) => (
                 <div 
                   key={index}
-                  className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30 hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all"
+                  className="jj-box-active hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all"
                 >
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center flex-shrink-0">
@@ -330,9 +330,9 @@ const InvestorEducation = () => {
         </section>
 
         {/* Market Analysis */}
-        <section id="market-analysis" className="py-20 relative scroll-mt-24 border-t border-gold/20">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 md:p-12 border border-gold/30 shadow-lg">
+        <section id="market-analysis" className="py-20 jj-section-champagne scroll-mt-24">
+          <div className="max-w-5xl mx-auto">
+            <div className="jj-box-active">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
                   <Database className="w-6 h-6 text-gold" />
