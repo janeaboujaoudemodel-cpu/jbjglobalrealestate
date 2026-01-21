@@ -109,7 +109,7 @@ const Index = () => {
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
             Buy. Sell. Rent.<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold break-words">
+            <span className="bg-gradient-to-r from-[#B8A67A] via-[#D4C4A8] to-[#C9B896] bg-clip-text text-transparent break-words" style={{ filter: 'drop-shadow(0 0 8px rgba(180, 160, 120, 0.4))' }}>
               Delivered with Intelligence.
             </span>
           </motion.h1>
@@ -125,9 +125,9 @@ const Index = () => {
           {/* Partner microline - Hidden on smallest screens */}
           <motion.p 
             variants={fadeInUp}
-            className="hidden sm:block text-zinc-500 text-[10px] md:text-xs mb-6 md:mb-8"
+            className="hidden sm:block text-zinc-300/80 text-xs md:text-sm mb-6 md:mb-8 font-medium tracking-wide"
           >
-            Mortgage, legal & visa services provided through licensed partners.
+            Mortgage, Legal & Visa Services provided through licensed partners.
           </motion.p>
 
           {/* Hero CTA Buttons - Smaller on phone, current size on tablet/desktop */}
