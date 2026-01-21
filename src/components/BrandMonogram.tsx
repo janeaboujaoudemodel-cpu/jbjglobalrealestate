@@ -16,7 +16,7 @@ const sizeConfig: Record<BrandMonogramSize, {
   xs: { width: 32, height: 32, wordmark: "text-[9px]" },
   sm: { width: 48, height: 48, wordmark: "text-[10px] md:text-xs" },
   md: { width: 64, height: 64, wordmark: "text-xs md:text-sm" },
-  lg: { width: 96, height: 96, wordmark: "text-sm md:text-base" },
+  lg: { width: 56, height: 56, wordmark: "text-[11px] md:text-sm" },
   xl: { width: 120, height: 120, wordmark: "text-base md:text-lg" },
   footer: { width: 140, height: 140, wordmark: "text-sm" },
 };
