@@ -532,7 +532,7 @@ const GlobalHeader = () => {
 
           {/* CENTER: Desktop Navigation - Premium styling with elegant dropdowns */}
           <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 mx-4">
-            <div className="flex items-center gap-0 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] backdrop-blur-sm rounded-full px-1.5 py-1 border border-gold/30 shadow-lg">
+            <div className="flex items-center gap-0 bg-gradient-to-r from-[#FFFDF9] via-[#FBF7F0] to-[#F5EFE4] backdrop-blur-sm rounded-full px-1.5 py-1 border border-gold/30 shadow-lg">
               
               {/* 1. Home - No dropdown */}
               <Link
