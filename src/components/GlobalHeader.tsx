@@ -39,6 +39,9 @@ const GlobalHeader = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const { t } = useLanguage();
+
+  const mobileHeaderIconButtonClassName =
+    "inline-flex h-7 w-7 items-center justify-center p-0 bg-transparent border-0 rounded-none appearance-none transition-colors duration-300 focus:outline-none focus-visible:outline-none focus-visible:ring-0";
   
   const { data: favorites } = useFavorites();
   const { data: shortlist } = useShortlist();
@@ -204,14 +207,14 @@ const GlobalHeader = () => {
           {/* MOBILE RIGHT ICONS: Search, Language, Menu - visible on mobile only */}
           <div className="flex items-center gap-1 ml-auto lg:hidden">
             {/* Search Icon - smaller */}
-            <Button
-              variant="ghost"
-              size="sm"
-               className="relative w-7 h-7 p-0 rounded-none bg-transparent hover:bg-white/10 transition-all duration-300 group"
+            <button
+              type="button"
+              className={`${mobileHeaderIconButtonClassName} group`}
+              aria-label="Open search"
               onClick={() => setSearchOpen(true)}
             >
               <Search className="w-3 h-3 text-gold group-hover:text-gold-light transition-colors" />
-            </Button>
+            </button>
 
             {/* Language Switcher */}
             <div className="shrink-0">
@@ -221,14 +224,13 @@ const GlobalHeader = () => {
             {/* Mobile Menu Trigger - smaller */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                   className="relative w-7 h-7 p-0 rounded-none bg-transparent hover:bg-white/10 transition-all duration-300 group"
+                <button
+                  type="button"
+                  className={`${mobileHeaderIconButtonClassName} group`}
                   aria-label="Open menu"
                 >
                   <Menu className="w-3 h-3 text-gold group-hover:text-gold-light transition-colors" />
-                </Button>
+                </button>
               </SheetTrigger>
               <SheetContent
                 side="right"
