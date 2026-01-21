@@ -348,14 +348,30 @@ const ProjectDetail = () => {
                 <p className="text-zinc-500 mb-6">
                   Get in touch with our team for more information, pricing, and availability.
                 </p>
+                {/* Contact Us - Primary 3D Button */}
                 <a 
                   href="https://wa.me/971565911000"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block w-full py-3 px-6 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-gold border-2 border-gold/40 font-semibold rounded-lg hover:bg-gold hover:text-black transition-all duration-300 text-center shadow-sm"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
+                  className="relative block w-full py-3 px-6 rounded-xl font-bold transition-all duration-300 group overflow-hidden text-center hover:scale-[1.02]"
+                  style={{ 
+                    fontFamily: "Poppins, sans-serif",
+                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                    boxShadow: `
+                      0 6px 20px rgba(200,167,102,0.4),
+                      0 4px 10px rgba(0,0,0,0.15),
+                      inset 0 2px 3px rgba(255,255,255,0.9),
+                      inset 0 -2px 3px rgba(200,167,102,0.2),
+                      0 0 15px rgba(200,167,102,0.3)
+                    `,
+                  }}
                 >
-                  Contact Us
+                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 35px rgba(200,167,102,0.6), inset 0 0 18px rgba(200,167,102,0.1)' }} />
+                  <span className="relative">
+                    <span className="text-black group-hover:text-gold transition-colors">Contact</span>{' '}
+                    <span className="text-gold group-hover:text-black transition-colors">Us</span>
+                  </span>
                 </a>
               </div>
             </div>

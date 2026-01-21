@@ -1097,12 +1097,12 @@ const Properties = () => {
       <section className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-gold/20">
         <div className="container mx-auto px-4">
             <div className="flex flex-wrap items-center justify-center gap-4">
-              {/* Register Interest - Primary 3D Style */}
+              {/* Register Interest - Primary 3D Style with proper hover */}
               <a 
                 href={buildSureFormsUrl()} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="relative h-12 px-8 rounded-xl font-bold transition-all duration-300 group overflow-hidden inline-flex items-center justify-center"
+                className="relative h-12 px-8 rounded-xl font-bold transition-all duration-300 group overflow-hidden inline-flex items-center justify-center hover:scale-[1.02]"
                 style={{
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
                   boxShadow: `
@@ -1116,10 +1116,11 @@ const Properties = () => {
               >
                 <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                 <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 35px rgba(200,167,102,0.6), inset 0 0 18px rgba(200,167,102,0.1)' }} />
+                {/* Normal state: Black first half, Gold second half - Hover: inverts */}
                 <span className="relative flex items-center gap-2">
-                  <ArrowUpRight className="w-4 h-4 text-black" />
-                  <span className="text-gold">Register</span>
-                  <span className="text-black">Interest</span>
+                  <ArrowUpRight className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
+                  <span className="text-black group-hover:text-gold transition-colors">Register</span>
+                  <span className="text-gold group-hover:text-black transition-colors">Interest</span>
                 </span>
               </a>
 

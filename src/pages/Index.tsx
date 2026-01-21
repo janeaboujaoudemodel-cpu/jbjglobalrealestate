@@ -214,16 +214,24 @@ const Index = () => {
           >
             <Link to="/quiz" className="block group">
               <div 
-                className="relative bg-gradient-to-br from-purple-900/40 via-purple-800/30 to-purple-900/40 backdrop-blur-md border-2 border-purple-500/50 rounded-2xl p-8 md:p-10 text-center transition-all duration-500"
+                className="relative bg-gradient-to-br from-purple-900/40 via-purple-800/30 to-purple-900/40 backdrop-blur-md rounded-2xl p-8 md:p-10 text-center transition-all duration-500 group-hover:translate-y-[-4px] group-hover:scale-[1.02]"
                 style={{
-                  boxShadow: '0 0 15px rgba(255,255,255,0.15), 0 0 30px rgba(147,51,234,0.2)',
+                  border: '2px solid rgba(147,51,234,0.5)',
+                  boxShadow: '0 0 12px rgba(255,255,255,0.2), 0 0 25px rgba(147,51,234,0.15), inset 0 1px 2px rgba(255,255,255,0.1)',
                 }}
               >
-                {/* Hover glow overlay - switches to white */}
+                {/* White border glow on normal load */}
                 <div 
-                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  className="absolute inset-0 rounded-2xl pointer-events-none"
                   style={{
-                    boxShadow: '0 0 20px rgba(255,255,255,0.25), 0 0 40px rgba(147,51,234,0.2)',
+                    boxShadow: '0 0 15px rgba(255,255,255,0.15), 0 0 8px rgba(255,255,255,0.1)',
+                  }}
+                />
+                {/* 3D hover effect - coming out of screen */}
+                <div 
+                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none"
+                  style={{
+                    boxShadow: '0 12px 35px rgba(0,0,0,0.4), 0 0 25px rgba(255,255,255,0.3), 0 0 50px rgba(147,51,234,0.25), inset 0 -2px 5px rgba(0,0,0,0.2)',
                   }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-purple-600/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -235,8 +243,7 @@ const Index = () => {
                       className="text-white text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide" 
                       style={{ 
                         fontFamily: "Poppins, sans-serif",
-                        textShadow: '0 0 15px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.4), 0 0 45px rgba(255,255,255,0.2), 0 2px 4px rgba(0,0,0,0.3)',
-                        filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.5)) drop-shadow(0 4px 6px rgba(0,0,0,0.3))',
+                        textShadow: '0 2px 4px rgba(0,0,0,0.4)',
                       }}
                     >
                       AI Home Finder
