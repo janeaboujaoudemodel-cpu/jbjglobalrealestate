@@ -615,14 +615,19 @@ const Index = () => {
       {/* AI COMPARISON & ANALYZER PREVIEW */}
       <section className="py-16 md:py-20 bg-black">
         <div className="container mx-auto px-4">
-          <AIComparisonWidget />
+          {/* Active Champagne Section Layer */}
+          <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg p-6 md:p-10">
+            <AIComparisonWidget />
+          </div>
         </div>
       </section>
 
-      {/* MARKET REPORT CTA - Premium Champagne Frame */}
+      {/* MARKET REPORT CTA - Active Champagne Layer */}
       <section className="py-20 md:py-28 bg-black">
-        <div className="container mx-auto px-4">
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-3xl p-8 md:p-12 shadow-[0_0_40px_rgba(200,167,102,0.3)]">
+        {/* Active Champagne Section Layer */}
+        <div className="mx-4 md:mx-8 lg:mx-16 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg p-6 md:p-10">
+          {/* Pearl Card Inside */}
+          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-3xl p-8 md:p-12 shadow-xl">
             <motion.div
               className="text-center mb-10"
               initial={{ opacity: 0, y: 20 }}
@@ -650,10 +655,12 @@ const Index = () => {
         </div>
       </section>
 
-      {/* MORTGAGE CALCULATOR SECTION - Premium White Style */}
+      {/* MORTGAGE CALCULATOR SECTION - Active Champagne Layer */}
       <section className="py-20 md:py-28 bg-black">
-        <div className="container mx-auto px-4">
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-3xl p-8 md:p-12 shadow-[0_0_40px_rgba(200,167,102,0.3)] relative overflow-hidden">
+        {/* Active Champagne Section Layer */}
+        <div className="mx-4 md:mx-8 lg:mx-16 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg p-6 md:p-10">
+          {/* Pearl Card Inside */}
+          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-3xl p-8 md:p-12 shadow-xl relative overflow-hidden">
             {/* Decorative glow elements */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />

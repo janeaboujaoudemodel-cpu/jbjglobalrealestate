@@ -260,8 +260,10 @@ const SupportTicketBox = () => {
   };
 
   return (
-    <section className="py-16 md:py-20 bg-gradient-to-br from-zinc-900 via-black to-zinc-900">
+    <section className="py-16 md:py-20 bg-black">
       <div className="container mx-auto px-4">
+        {/* Active Champagne Section Layer */}
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg p-6 md:p-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -269,8 +271,8 @@ const SupportTicketBox = () => {
           transition={{ duration: 0.6 }}
           className="max-w-4xl mx-auto"
         >
-          {/* Main Card */}
-          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl border-2 border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.2)] overflow-hidden relative">
+          {/* Main Card - Pearl style inside champagne layer */}
+          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl border-2 border-gold/40 shadow-xl overflow-hidden relative">
             {/* Decorative elements */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
@@ -718,6 +720,7 @@ const SupportTicketBox = () => {
             </div>
           </div>
         </motion.div>
+        </div>
       </div>
     </section>
   );
