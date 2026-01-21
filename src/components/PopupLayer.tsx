@@ -16,10 +16,7 @@ const PopupLayer = () => {
     <>
       <CookiesConsentBanner />
 
-      {/* Small non-blocking install banner (no guide) */}
-      <AppDownloadPopup variant="compact" showOnLoad delayMs={3500} />
-
-      {/* Floating install button (also no guide) */}
+      {/* Floating install button (no duplicate popup - removed AppDownloadPopup) */}
       <InstallAppButton />
     </>
   );
