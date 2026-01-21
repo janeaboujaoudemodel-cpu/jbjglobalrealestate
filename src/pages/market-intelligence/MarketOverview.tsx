@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { BarChart3, TrendingUp, TrendingDown, Minus, Database, Shield, Search, Building2, FileText, Landmark, Scale, ExternalLink, Users } from "lucide-react";
+import { BarChart3, TrendingUp, TrendingDown, Minus, Database, Shield, Search, Building2, FileText, Landmark, Scale, ExternalLink, Users, Clock } from "lucide-react";
 import Footer from "@/components/Footer";
 import PreFooterSeparator from "@/components/PreFooterSeparator";
 import { SEOHead } from "@/components/SEOHead";
@@ -59,7 +59,7 @@ const SectionTitle = ({ title, centered = true }: { title: string; centered?: bo
   );
 };
 
-// Content Section Component for educational content
+// Content Section Component - Uses 3-layer system
 const ContentSection = ({ 
   id, 
   icon: Icon, 
@@ -78,50 +78,44 @@ const ContentSection = ({
   const restWords = words.slice(1).join(' ');
 
   return (
-    <section id={id} className="scroll-mt-24 px-4 md:px-8 lg:px-16 mb-12">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30 max-w-6xl mx-auto lg:mr-80"
-      >
-        <div className="flex items-start gap-4 mb-6">
-          <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center flex-shrink-0">
-            <Icon className="w-6 h-6 text-gold" />
+    <section id={id} className="scroll-mt-24 jj-section-champagne py-12 mb-8">
+      <div className="px-4 md:px-8 lg:px-16 max-w-6xl mx-auto lg:mr-80">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="jj-card-inner p-8"
+        >
+          <div className="flex items-start gap-4 mb-6">
+            <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center flex-shrink-0">
+              <Icon className="w-6 h-6 text-gold" />
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <span className="text-gold">{firstWord}</span>
+              <span className="text-black ml-2">{restWords}</span>
+            </h2>
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-            <span 
-              style={{ 
-                background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
-              {firstWord}
-            </span>
-            <span className="text-black ml-2">{restWords}</span>
-          </h2>
-        </div>
-        <div className="text-zinc-700 leading-relaxed space-y-4">
-          {children}
-        </div>
-        {links && links.length > 0 && (
-          <div className="mt-6 pt-6 border-t border-gold/20 space-y-2">
-            {links.map((link, idx) => (
-              <a 
-                key={idx}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-gold hover:text-gold-dark transition-colors text-sm font-medium"
-              >
-                <ExternalLink className="w-4 h-4" />
-                {link.label}
-              </a>
-            ))}
+          <div className="text-zinc-700 leading-relaxed space-y-4">
+            {children}
           </div>
-        )}
-      </motion.div>
+          {links && links.length > 0 && (
+            <div className="mt-6 pt-6 border-t border-gold/20 space-y-2">
+              {links.map((link, idx) => (
+                <a 
+                  key={idx}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-gold hover:text-gold-dark transition-colors text-sm font-medium"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          )}
+        </motion.div>
+      </div>
     </section>
   );
 };
@@ -198,32 +192,75 @@ const MarketOverview = () => {
         }}
       />
 
-      {/* Main Content - Full width edge-to-edge */}
-      <div className="py-16">
-        {/* Introduction */}
-        <ContentSection id="introduction" icon={FileText} title="About This Page">
-          <p>
-            This page is descriptive, not predictive. It explains how the market works today and how official data should be read.
-          </p>
-        </ContentSection>
+      {/* Main Content - Full width edge-to-edge with 3-layer system */}
+      <div className="py-16 bg-black">
+        {/* Introduction Section */}
+        <section id="introduction" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
+          <div className="px-4 md:px-8 lg:px-16 max-w-6xl mx-auto lg:mr-80">
+            <div className="jj-card-inner p-8">
+              <div className="flex items-start gap-4 mb-6">
+                <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center flex-shrink-0">
+                  <FileText className="w-6 h-6 text-gold" />
+                </div>
+                <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <span className="text-gold">About</span>
+                  <span className="text-black ml-2">This Page</span>
+                </h2>
+              </div>
+              <div className="text-zinc-700 leading-relaxed">
+                <p>
+                  This page is descriptive, not predictive. It explains how the market works today and how official data should be read.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
 
-        {/* Market Structure & Regulation */}
-        <ContentSection 
-          id="market-structure" 
-          icon={Landmark} 
-          title="Market Structure & Regulation"
-          links={[
-            { label: "DLD Real Estate Data Portal", url: "https://dubailand.gov.ae/en/open-data/real-estate-data/" },
-            { label: "DLD Research Portal", url: "https://dubailand.gov.ae/en/open-data/research/" }
-          ]}
-        >
-          <p>
-            All real estate transactions, rental registrations, and ownership records in Dubai are governed and recorded by the Dubai Land Department (DLD). Regulatory oversight, rent controls, service charge approvals, and brokerage licensing fall under RERA.
-          </p>
-          <p>
-            Official real estate data, transaction records, rental benchmarks, and sector research are published directly by DLD through its open data and research portals.
-          </p>
-        </ContentSection>
+        {/* Market Structure & Regulation Section */}
+        <section id="market-structure" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
+          <div className="px-4 md:px-8 lg:px-16 max-w-6xl mx-auto lg:mr-80">
+            <div className="jj-card-inner p-8">
+              <div className="flex items-start gap-4 mb-6">
+                <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Landmark className="w-6 h-6 text-gold" />
+                </div>
+                <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <span className="text-gold">Market</span>
+                  <span className="text-black ml-2">Structure & Regulation</span>
+                </h2>
+              </div>
+              <div className="text-zinc-700 leading-relaxed space-y-4">
+                <p>
+                  All real estate transactions, rental registrations, and ownership records in Dubai are governed and recorded by the Dubai Land Department (DLD). Regulatory oversight, rent controls, service charge approvals, and brokerage licensing fall under RERA.
+                </p>
+                <p>
+                  Official real estate data, transaction records, rental benchmarks, and sector research are published directly by DLD through its open data and research portals.
+                </p>
+              </div>
+              <div className="mt-6 pt-6 border-t border-gold/20 space-y-2">
+                <a 
+                  href="https://dubailand.gov.ae/en/open-data/real-estate-data/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-gold hover:text-gold-dark transition-colors text-sm font-medium"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  DLD Real Estate Data Portal
+                </a>
+                <a 
+                  href="https://dubailand.gov.ae/en/open-data/research/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-gold hover:text-gold-dark transition-colors text-sm font-medium"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  DLD Research Portal
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+        {/* Remaining sections use ContentSection component which now has 3-layer styling */}
 
         {/* How Market Activity Is Measured */}
         <ContentSection id="activity-measurement" icon={BarChart3} title="How Market Activity Is Measured">
@@ -310,9 +347,9 @@ const MarketOverview = () => {
           </div>
         </ContentSection>
 
-        {/* Key Stats Grid - White Pearl section */}
-        <section id="key-stats" className="scroll-mt-24 px-4 md:px-8 lg:px-16 mb-16">
-          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30 max-w-6xl mx-auto lg:mr-80">
+        {/* Key Stats Grid - 3-layer system: black bg > active champagne section > champagne cards */}
+        <section id="key-stats" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
+          <div className="px-4 md:px-8 lg:px-16 max-w-6xl mx-auto lg:mr-80">
             <SectionTitle title="Key Market Statistics" />
             
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
@@ -324,17 +361,9 @@ const MarketOverview = () => {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <Card className="bg-white border-2 border-black hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all text-center p-6">
+                  <Card className="jj-card-inner text-center p-6 h-full">
                     <CardContent className="p-0">
-                      <p 
-                        className="text-lg font-semibold mb-2"
-                        style={{ 
-                          background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                          WebkitBackgroundClip: "text",
-                          WebkitTextFillColor: "transparent",
-                          filter: "drop-shadow(0 1px 2px rgba(200,167,102,0.3))"
-                        }}
-                      >
+                      <p className="text-lg font-semibold mb-2 text-gold">
                         {stat.label}
                       </p>
                       <p className="text-black text-3xl font-bold mb-2">{stat.value}</p>
@@ -350,54 +379,37 @@ const MarketOverview = () => {
               ))}
             </div>
 
-            {/* Source Attribution - Enhanced */}
+            {/* Source Attribution */}
             <div className="text-center mt-8 pt-6 border-t border-gold/30">
               <p className="text-lg">
-                <span 
-                  className="font-semibold text-xl"
-                  style={{ 
-                    background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent"
-                  }}
-                >
-                  Source:
-                </span>
+                <span className="font-semibold text-xl text-gold">Source:</span>
                 {" "}
                 <span className="text-black font-medium text-lg">{MARKET_OVERVIEW_STATS.dataSource}</span>
               </p>
-              <p className="text-zinc-500 text-sm mt-1">
+              <p className="text-zinc-600 text-sm mt-1">
                 Last Updated: {MARKET_OVERVIEW_STATS.reportDate}
               </p>
             </div>
           </div>
         </section>
 
-        {/* Transaction Trends - White Pearl section */}
-        <section id="quarterly-trends" className="scroll-mt-24 px-4 md:px-8 lg:px-16 mb-16">
-          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30 max-w-6xl mx-auto lg:mr-80">
+        {/* Transaction Trends - 3-layer system */}
+        <section id="quarterly-trends" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
+          <div className="px-4 md:px-8 lg:px-16 max-w-6xl mx-auto lg:mr-80">
             <SectionTitle title="Quarterly Transaction Trends" />
             
             <div className="grid md:grid-cols-4 gap-4 max-w-4xl mx-auto">
               {QUARTERLY_TRENDS.map((quarter, index) => (
-                <Card key={quarter.quarter} className="bg-white border-2 border-black hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all">
+                <Card key={quarter.quarter} className="jj-card-inner">
                   <CardHeader className="pb-2">
-                    <CardTitle 
-                      className="text-lg"
-                      style={{ 
-                        background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        filter: "drop-shadow(0 1px 2px rgba(200,167,102,0.3))"
-                      }}
-                    >
+                    <CardTitle className="text-lg text-gold">
                       {quarter.quarter}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className="text-black text-2xl font-bold">{quarter.transactions.toLocaleString()}</p>
-                    <p className="text-zinc-500 text-xs">Transactions</p>
-                    <div className="mt-3 pt-3 border-t border-zinc-200">
+                    <p className="text-zinc-600 text-xs">Transactions</p>
+                    <div className="mt-3 pt-3 border-t border-gold/20">
                       <p className="text-zinc-700 text-sm">AED {quarter.avgPrice}/sqft</p>
                       <div className="w-full bg-zinc-200 rounded-full h-1.5 mt-2">
                         <div 
@@ -405,7 +417,7 @@ const MarketOverview = () => {
                           style={{ width: `${quarter.index}%` }}
                         />
                       </div>
-                      <p className="text-zinc-500 text-xs mt-1">Index: {quarter.index}</p>
+                      <p className="text-zinc-600 text-xs mt-1">Index: {quarter.index}</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -414,9 +426,9 @@ const MarketOverview = () => {
           </div>
         </section>
 
-        {/* Property Type Performance - White Pearl section with glow cards */}
-        <section id="property-performance" className="scroll-mt-24 px-4 md:px-8 lg:px-16 mb-16">
-          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30 max-w-6xl mx-auto lg:mr-80">
+        {/* Property Type Performance - 3-layer system */}
+        <section id="property-performance" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
+          <div className="px-4 md:px-8 lg:px-16 max-w-6xl mx-auto lg:mr-80">
             <SectionTitle title="Performance by Property Type" />
 
             <div className="max-w-3xl mx-auto space-y-4">
@@ -426,19 +438,10 @@ const MarketOverview = () => {
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  className="bg-white border-2 border-gold/50 rounded-xl p-5 flex items-center justify-between hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all group"
-                  style={{ boxShadow: '0 0 15px rgba(200,167,102,0.2)' }}
+                  className="jj-card-inner p-5 flex items-center justify-between"
                 >
                   <div>
-                    <p 
-                      className="text-2xl font-bold mb-1"
-                      style={{ 
-                        background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.4))"
-                      }}
-                    >
+                    <p className="text-2xl font-bold mb-1 text-gold">
                       {type.type}
                     </p>
                     <p className="text-black text-sm">{type.volume.toLocaleString()} transactions</p>
@@ -458,14 +461,14 @@ const MarketOverview = () => {
           </div>
         </section>
 
-        {/* Market Intelligence Navigation */}
-        <section id="navigation" className="py-16 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] scroll-mt-24">
+        {/* Market Intelligence Navigation - 3-layer system */}
+        <section id="navigation" className="jj-section-champagne py-16 scroll-mt-24">
           <div className="container mx-auto px-4 lg:pr-80">
             <MarketIntelligenceNavigation current="/market-intelligence/overview" showStartHere={false} />
             
-            {/* Disclaimer Box - White style */}
+            {/* Disclaimer Box */}
             <div className="max-w-3xl mx-auto mt-8">
-              <div className="bg-white border border-gold/30 rounded-xl p-6 text-center">
+              <div className="jj-card-inner p-6 text-center">
                 <div className="flex items-center justify-center gap-4 mb-4">
                   <Database className="w-5 h-5 text-gold" />
                   <Shield className="w-5 h-5 text-gold" />
