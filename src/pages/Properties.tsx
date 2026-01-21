@@ -1059,7 +1059,7 @@ const Properties = () => {
                 <Button
                   onClick={handleInquirySubmit}
                   variant="primary"
-                  className="w-full h-14 text-lg rounded-xl font-bold mt-4"
+                  className="w-full h-14 text-lg rounded-xl font-bold mt-4 group"
                 >
                   <span className="text-black group-hover:text-gold transition-colors">SUB</span>
                   <span className="text-gold group-hover:text-black transition-colors">MIT</span>

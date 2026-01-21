@@ -54,6 +54,11 @@ All colors MUST be HSL.
     --gold-muted: 42 35% 55%;
     --gold-foreground: 0 0% 100%;
 
+    /* Champagne / "Best Idea Award" Surface (HSL approximations of existing palette) */
+    --champagne-1: 39 52% 90%;
+    --champagne-2: 38 38% 85%;
+    --champagne-3: 38 28% 74%;
+
     /* Premium surfaces */
     --premium-bg: 0 0% 5%;
     --premium-card: 0 0% 9%;
