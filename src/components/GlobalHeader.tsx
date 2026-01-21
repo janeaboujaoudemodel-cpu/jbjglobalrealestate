@@ -174,8 +174,8 @@ const GlobalHeader = () => {
     <header className="fixed top-0 left-0 right-0 z-[9999] h-16 lg:h-20">
       {/* Solid black background - exactly fits header height, no overflow */}
       <div className="absolute inset-0 bg-black" />
-      {/* Premium bottom accent line - at exact bottom of header */}
-      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gold/50 z-10" />
+      {/* Subtle premium divider (no heavy gold bar) */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/35 to-transparent z-10" />
       
       <div className="relative z-10 mx-auto w-full max-w-[1400px] px-3 sm:px-4 lg:px-8 xl:px-12 h-full">
         <div className="flex items-center justify-between h-full w-full">
@@ -190,12 +190,12 @@ const GlobalHeader = () => {
               <img 
                 src={jbjMonogramDarkBg} 
                 alt="JBJ" 
-                className="w-11 h-11 sm:w-12 sm:h-12 lg:w-10 lg:h-10 object-contain transition-transform duration-300 group-hover:scale-105"
+                className="w-14 h-14 sm:w-14 sm:h-14 lg:w-10 lg:h-10 object-contain transition-transform duration-300 group-hover:scale-105"
               />
               {/* Subtle glow on hover */}
               <div className="absolute inset-0 rounded-full bg-gold/0 group-hover:bg-gold/10 transition-colors duration-300 blur-xl" />
             </div>
-            <span className="text-white font-bold text-sm sm:text-base lg:text-xs tracking-[0.08em] uppercase whitespace-nowrap drop-shadow-sm leading-none">
+            <span className="text-white font-bold text-[15px] sm:text-base lg:text-xs tracking-[0.1em] uppercase whitespace-nowrap drop-shadow-sm leading-none">
               JBJ Global Real Estate
             </span>
           </Link>
@@ -240,7 +240,7 @@ const GlobalHeader = () => {
                   <img 
                     src={jbjMonogramTransparent}
                     alt="JBJ"
-                    className="w-16 h-16 object-contain"
+                    className="w-20 h-20 object-contain"
                   />
                   <span 
                     className="text-black font-bold text-sm tracking-[0.06em] uppercase whitespace-nowrap leading-none"
