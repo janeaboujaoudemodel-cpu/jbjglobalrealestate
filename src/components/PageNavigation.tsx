@@ -69,13 +69,16 @@ export default function PageNavigation() {
 
   const buttonBaseClass = cn(
     "h-10 w-10 rounded-full shadow-lg transition-all duration-300",
-    "bg-white backdrop-blur-md border-2 border-gold",
-    "hover:bg-gold/10 hover:shadow-[0_4px_20px_hsl(45_32%_39%_/_0.4)]",
+    // Force non-transparent fill regardless of Button variant styles
+    "!bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark",
+    "border-2 border-gold/70",
+    // Hover keeps the same fill; only the shadow/border intensity increases
+    "hover:shadow-[0_6px_26px_hsl(45_32%_39%_/_0.45)] hover:border-gold",
     "focus:ring-2 focus:ring-gold focus:ring-offset-2"
   );
 
   return (
-    <div className="fixed bottom-6 left-6 z-50 flex flex-col gap-2">
+    <div className="fixed bottom-6 left-6 z-[9999] flex flex-col gap-2">
       {/* Scroll to Top */}
       <Button
         type="button"
@@ -89,7 +92,7 @@ export default function PageNavigation() {
         )}
         aria-label="Scroll to top"
       >
-        <ArrowUp className="w-4 h-4 text-gold" />
+        <ArrowUp className="w-4 h-4 text-black" />
       </Button>
 
       {/* Back to Previous Page */}
@@ -102,7 +105,7 @@ export default function PageNavigation() {
           className={buttonBaseClass}
           aria-label="Go back"
         >
-          <ArrowLeft className="w-4 h-4 text-gold" />
+          <ArrowLeft className="w-4 h-4 text-black" />
         </Button>
       )}
 
@@ -119,7 +122,7 @@ export default function PageNavigation() {
         )}
         aria-label="Scroll to bottom"
       >
-        <ArrowDown className="w-4 h-4 text-gold" />
+        <ArrowDown className="w-4 h-4 text-black" />
       </Button>
     </div>
   );
