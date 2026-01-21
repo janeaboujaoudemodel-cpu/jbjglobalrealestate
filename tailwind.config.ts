@@ -97,6 +97,11 @@ export default {
           dark: "hsl(var(--gold-dark))",
           foreground: "hsl(var(--gold-foreground))",
         },
+        champagne: {
+          light: "hsl(var(--champagne-1))",
+          DEFAULT: "hsl(var(--champagne-2))",
+          dark: "hsl(var(--champagne-3))",
+        },
         premium: {
           bg: "hsl(var(--premium-bg))",
           card: "hsl(var(--premium-card))",
