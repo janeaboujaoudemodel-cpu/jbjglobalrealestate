@@ -30,7 +30,7 @@ import { BrandMonogram } from "@/components/BrandMonogram";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
 import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
-import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
+import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
 
 const GlobalHeader = () => {
   const { user, isAdmin, signOut } = useAuth();
@@ -195,7 +195,7 @@ const GlobalHeader = () => {
               {/* Subtle glow on hover */}
               <div className="absolute inset-0 rounded-full bg-gold/0 group-hover:bg-gold/10 transition-colors duration-300 blur-xl" />
             </div>
-            <span className="text-white font-bold text-[11px] sm:text-sm lg:text-[11px] tracking-[0.06em] uppercase whitespace-nowrap drop-shadow-sm leading-none">
+            <span className="text-white font-bold text-sm sm:text-base lg:text-xs tracking-[0.08em] uppercase whitespace-nowrap drop-shadow-sm leading-none">
               JBJ Global Real Estate
             </span>
           </Link>
@@ -233,12 +233,12 @@ const GlobalHeader = () => {
                 side="right"
                 className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] p-0 flex flex-col h-full pt-14"
               >
-                {/* Menu Header - larger monogram with transparent bg, one-line company name */}
+                {/* Menu Header - larger monogram with transparent bg (black J letters), one-line company name */}
                 <div className="relative border-b border-gold/30 flex items-center gap-3 px-4 py-3 shrink-0">
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-                  {/* Large monogram - using nobuffer version (transparent, no white box) */}
+                  {/* Large monogram - transparent version with black J letters for light backgrounds */}
                   <img 
-                    src={jbjMonogramNobuffer}
+                    src={jbjMonogramTransparent}
                     alt="JBJ"
                     className="w-16 h-16 object-contain"
                   />
