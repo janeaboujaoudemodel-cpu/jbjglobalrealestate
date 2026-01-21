@@ -586,6 +586,25 @@ All colors MUST be HSL.
   }
 
   /* ============================================================
+   * GLOBAL CHAMPAGNE SECTION BACKGROUND - LOCKED
+   * Standard champagne gradient for white section backgrounds
+   * Matching Best Idea Award box styling
+   * ============================================================ */
+  .jj-section-champagne {
+    @apply bg-gradient-to-br;
+    --tw-gradient-from: #FDFBF7;
+    --tw-gradient-via: #F5F0E6;
+    --tw-gradient-to: #EDE4D3;
+  }
+
+  .jj-card-champagne {
+    @apply bg-gradient-to-br border-2 border-gold/40 shadow-[0_0_40px_rgba(200,167,102,0.3)];
+    --tw-gradient-from: #FDFBF7;
+    --tw-gradient-via: #F5F0E6;
+    --tw-gradient-to: #EDE4D3;
+  }
+
+  /* ============================================================
    * 1. GLOBAL IMAGE RULE - LOCKED
    * Applies to all images: users, staff, profiles, content
    * NO CROP + PERFECT CENTERING

@@ -233,7 +233,7 @@ const Services = () => {
               <motion.div
                 key={service.id}
                 variants={fadeInUp}
-                className="group relative overflow-hidden rounded-2xl bg-white border border-zinc-200 hover:border-gold hover:shadow-xl hover:shadow-gold/10 transition-all duration-500 flex flex-col"
+                className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 hover:border-gold hover:shadow-xl hover:shadow-gold/10 transition-all duration-500 flex flex-col"
               >
                 {/* Image */}
                 <div className="aspect-[16/10] overflow-hidden relative flex-shrink-0">

@@ -272,7 +272,7 @@ const RentGuide = () => {
                   desc: "All tenancies must be registered with Ejari (Dubai Land Department) to be legally valid." 
                 }
               ].map((item, index) => (
-                <div key={index} className="bg-white rounded-xl p-6 border border-zinc-200 hover:border-gold/30 transition-colors">
+                <div key={index} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl p-6 border border-gold/30 hover:border-gold transition-colors">
                   <div className="w-12 h-12 bg-black border border-gold/30 rounded-xl flex items-center justify-center mb-4">
                     <item.icon className="w-6 h-6 text-gold" />
                   </div>
@@ -302,7 +302,7 @@ const RentGuide = () => {
               {rentalProcess.map((step) => (
                 <div 
                   key={step.number}
-                  className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200 hover:border-gold/30 hover:shadow-lg transition-all duration-300"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-6 md:p-8 border border-gold/30 hover:border-gold hover:shadow-lg transition-all duration-300"
                 >
                   <div className="flex flex-col md:flex-row md:items-start gap-6">
                     <div className="flex-shrink-0">
@@ -352,7 +352,7 @@ const RentGuide = () => {
               {paymentStructures.map((structure, index) => (
                 <div 
                   key={index}
-                  className="bg-white border border-zinc-200 rounded-xl p-6 hover:border-gold/50 hover:shadow-lg transition-all"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all"
                 >
                   <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mb-4">
                     <structure.icon className="w-5 h-5 text-gold" />
@@ -383,7 +383,7 @@ const RentGuide = () => {
               {costs.map((cost, index) => (
                 <div 
                   key={index}
-                  className="bg-white border border-zinc-200 rounded-xl p-6 hover:border-gold/50 hover:shadow-lg transition-all"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all"
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
@@ -418,7 +418,7 @@ const RentGuide = () => {
               {jbjSupport.map((support, index) => (
                 <div 
                   key={index}
-                  className="bg-white rounded-2xl p-8 border border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30 hover:border-gold hover:shadow-lg transition-all"
                 >
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">

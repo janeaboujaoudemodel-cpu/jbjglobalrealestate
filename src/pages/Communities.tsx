@@ -9,13 +9,13 @@ const Communities = React.forwardRef<HTMLElement>((_, ref) => {
       <SEOHead {...pagesSEO.communities} />
       <section
         ref={ref}
-        className="relative w-full min-h-screen py-16 md:py-24 bg-zinc-950"
+        className="relative w-full min-h-screen py-16 md:py-24 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]"
       >
-        <div className="absolute top-0 left-0 right-0 h-[400px] pointer-events-none bg-gradient-to-b from-zinc-900/50 to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-[400px] pointer-events-none bg-gradient-to-b from-gold/5 to-transparent" />
 
         <div className="relative z-10 container mx-auto px-4">
           <h1
-            className="text-white font-bold mb-4"
+            className="text-black font-bold mb-4"
             style={{
               fontFamily: "Poppins, sans-serif",
               fontSize: "clamp(32px, 5vw, 64px)",
@@ -24,7 +24,7 @@ const Communities = React.forwardRef<HTMLElement>((_, ref) => {
           >
             UAE Communities
           </h1>
-          <p className="text-zinc-400 text-lg mb-10 max-w-2xl" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <p className="text-zinc-700 text-lg mb-10 max-w-2xl" style={{ fontFamily: "Poppins, sans-serif" }}>
             Explore the UAE's most prestigious communities and find your perfect home
           </p>
 
