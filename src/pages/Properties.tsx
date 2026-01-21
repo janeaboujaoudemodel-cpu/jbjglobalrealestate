@@ -1059,10 +1059,9 @@ const Properties = () => {
                 <Button
                   onClick={handleInquirySubmit}
                   variant="primary"
-                  className="w-full h-14 text-lg rounded-xl font-bold mt-4 group"
+                  className="w-full h-14 text-lg rounded-xl font-bold mt-4"
                 >
-                  <span className="text-black group-hover:text-gold transition-colors">SUB</span>
-                  <span className="text-gold group-hover:text-black transition-colors">MIT</span>
+                  Submit
                 </Button>
               </div>
 
@@ -1094,8 +1093,8 @@ const Properties = () => {
         </div>
       </section>
 
-      {/* Quick Contact CTA - Premium 3D Buttons */}
-      <section className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-gold/20">
+      {/* Quick Contact CTA - Premium 3D Buttons - Active Champagne Background */}
+      <section className="py-12 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-t border-gold/20">
         <div className="container mx-auto px-4">
             <div className="flex flex-wrap items-center justify-center gap-4">
               {/* Register Interest - Primary 3D Style with proper hover */}

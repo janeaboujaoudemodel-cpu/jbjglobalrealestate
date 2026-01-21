@@ -89,7 +89,7 @@ export const GuideTableOfContents = ({
             exit={{ opacity: 0, x: 20 }}
             className="absolute right-full mr-4 top-0 w-64 z-50"
           >
-            <div className="bg-white border border-gold/30 rounded-xl p-4 shadow-xl">
+            <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-xl p-4 shadow-xl">
               <div className="flex items-start gap-3 mb-3">
                 <div className="w-8 h-8 bg-gold/10 rounded-lg flex items-center justify-center flex-shrink-0">
                   <HelpCircle className="w-4 h-4 text-gold" />
@@ -110,7 +110,7 @@ export const GuideTableOfContents = ({
               </Button>
             </div>
             {/* Arrow pointing to nav */}
-            <div className="absolute top-4 -right-2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-transparent border-l-white" />
+            <div className="absolute top-4 -right-2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-transparent border-l-[#E8DCC8]" />
           </motion.div>
         )}
       </AnimatePresence>
@@ -119,7 +119,7 @@ export const GuideTableOfContents = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white border border-gold/30 rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] overflow-y-auto"
+        className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] overflow-y-auto"
       >
         {/* Header with minimize button */}
         <div className="flex items-center justify-between p-4 border-b border-zinc-200 bg-gradient-to-r from-gold/5 to-transparent">
