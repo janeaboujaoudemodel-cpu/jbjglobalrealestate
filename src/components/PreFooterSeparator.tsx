@@ -43,34 +43,34 @@ export const PreFooterSeparator = ({
   }
 
   return (
-    <section className="bg-black py-16 md:py-20">
-      <div className="container mx-auto px-6">
+    <section className="bg-black py-10 sm:py-14 md:py-16 lg:py-20">
+      <div className="container mx-auto px-4 sm:px-6">
         <div className="max-w-[1100px] mx-auto">
           {/* OUTER CARD (Active Champagne) */}
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-3xl p-2 md:p-3">
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
             {/* INNER CARD (Keep current pearl/champagne) */}
-            <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-2xl p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center">
+            <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-5 sm:p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center">
               {badgeText && (
-                <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-gold/20 via-[#F5F0E6] to-gold/20 border border-gold/50 rounded-full text-black text-xs uppercase tracking-[0.2em] mb-6 shadow-lg shadow-gold/20">
-                  <Sparkles className="w-3 h-3 text-gold" />
+                <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F5F0E6] to-gold/20 border border-gold/50 rounded-full text-black text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20">
+                  <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gold" />
                   {badgeText}
                 </div>
               )}
 
               <h2 
-                className="text-black text-2xl md:text-3xl lg:text-4xl font-semibold mb-4"
+                className="text-black text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-3 sm:mb-4 leading-tight"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 {title}
               </h2>
-              <p className="text-zinc-600 text-base md:text-lg max-w-2xl mx-auto mb-8">
+              <p className="text-zinc-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-5 sm:mb-8 leading-relaxed">
                 {subtitle}
               </p>
-              <div className="flex flex-wrap justify-center gap-4">
+              <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
                 {/* Primary Button - 3D Premium Style */}
-                <Link to={primaryLink}>
+                <Link to={primaryLink} className="w-full sm:w-auto">
                   <button 
-                    className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
+                    className="group relative inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 text-sm sm:text-base font-bold rounded-lg sm:rounded-xl transition-all duration-300 overflow-hidden"
                     style={{
                       background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
                       boxShadow: `
@@ -88,16 +88,16 @@ export const PreFooterSeparator = ({
                       <span className="text-black group-hover:text-gold transition-colors">{primaryText.split(' ')[0]}</span>
                       <span className="text-gold group-hover:text-black transition-colors">{primaryText.split(' ').slice(1).join(' ') || ''}</span>
                     </span>
-                    <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors relative z-10" />
+                    <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-black group-hover:text-gold transition-colors relative z-10" />
                   </button>
                 </Link>
                 {/* Secondary Button - Transparent with black border */}
-                <Link to={secondaryLink}>
+                <Link to={secondaryLink} className="w-full sm:w-auto">
                   <button 
-                    className="group inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
+                    className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 text-sm sm:text-base font-bold rounded-lg sm:rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
                   >
                     {secondaryText}
-                    <ArrowUpRight className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                   </button>
                 </Link>
               </div>

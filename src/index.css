@@ -1348,4 +1348,109 @@ All colors MUST be HSL.
     background: hsl(42 45% 59% / 0.1);
     border-radius: 3px;
   }
+
+  /* ============================================================
+   * GLOBAL RESPONSIVE UTILITIES - Mobile-First Design System
+   * These ensure consistent layouts across all device sizes
+   * ============================================================ */
+
+  /* Safe content container - prevents overflow on mobile */
+  .safe-container {
+    @apply w-full max-w-full overflow-x-hidden;
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+
+  /* Responsive text scaling */
+  .text-responsive-xs {
+    @apply text-[10px] sm:text-xs md:text-sm;
+  }
+
+  .text-responsive-sm {
+    @apply text-xs sm:text-sm md:text-base;
+  }
+
+  .text-responsive-base {
+    @apply text-sm sm:text-base md:text-lg;
+  }
+
+  .text-responsive-lg {
+    @apply text-base sm:text-lg md:text-xl lg:text-2xl;
+  }
+
+  .text-responsive-xl {
+    @apply text-lg sm:text-xl md:text-2xl lg:text-3xl;
+  }
+
+  .text-responsive-2xl {
+    @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl;
+  }
+
+  .text-responsive-hero {
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl;
+  }
+
+  /* Responsive spacing */
+  .py-responsive-section {
+    @apply py-8 sm:py-12 md:py-16 lg:py-20;
+  }
+
+  .px-responsive {
+    @apply px-4 sm:px-6 md:px-8 lg:px-12;
+  }
+
+  .gap-responsive {
+    @apply gap-3 sm:gap-4 md:gap-6 lg:gap-8;
+  }
+
+  /* Responsive grid layouts */
+  .grid-responsive-2 {
+    @apply grid grid-cols-1 sm:grid-cols-2;
+  }
+
+  .grid-responsive-3 {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3;
+  }
+
+  .grid-responsive-4 {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+  }
+
+  /* Mobile-optimized card sizing */
+  .card-mobile-full {
+    @apply w-full min-w-0;
+  }
+
+  /* Touch-friendly targets (44px minimum) */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+
+  .touch-target-sm {
+    @apply min-h-[36px] min-w-[36px];
+  }
+
+  /* Prevent text overflow */
+  .text-ellipsis-safe {
+    @apply truncate max-w-full;
+  }
+
+  /* Mobile-first flex wrapping */
+  .flex-mobile-wrap {
+    @apply flex flex-wrap;
+  }
+
+  .flex-mobile-col {
+    @apply flex flex-col sm:flex-row;
+  }
+
+  /* Safe image container */
+  .img-responsive {
+    @apply w-full h-auto max-w-full object-cover;
+  }
+
+  /* Prevent horizontal scroll globally */
+  .no-overflow-x {
+    @apply overflow-x-hidden max-w-full;
+  }
 }
