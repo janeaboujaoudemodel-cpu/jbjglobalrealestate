@@ -96,15 +96,16 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
 
           {/* Info - Positioned below photo, not overlapping */}
           <div className="p-5 flex flex-col bg-gradient-to-b from-[#FFFDF9] via-[#FBF7F0] to-[#F5EFE4]">
-            <h3 className="text-black font-semibold text-lg mb-1 line-clamp-1">{member.name}</h3>
+            <h3 className="text-black font-semibold text-lg mb-1">{member.name}</h3>
 
-            {/* Premium shiny job title */}
-            <p className="text-sm font-medium mb-1 line-clamp-1 text-gold">
+            {/* Premium shiny job title - allow wrapping */}
+            <p className="text-sm font-medium mb-1 text-gold">
               {member.role}
             </p>
 
-            <div className="flex items-center gap-2 text-zinc-600 text-xs mb-2">
-              <span>{member.department}</span>
+            {/* Department and details - allow text wrapping, no truncation */}
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-zinc-600 text-xs mb-2">
+              <span className="whitespace-normal">{member.department}</span>
               {typeof member.yearsExperience === "number" && (
                 <>
                   <span>•</span>
@@ -265,9 +266,24 @@ const MeetTheTeam: React.FC = () => {
 
       <div className="min-h-screen bg-black">
         {/* Hero Section with Premium Animated Team Collage */}
-        <section className="relative min-h-[85vh] overflow-hidden bg-gradient-to-b from-black via-zinc-950 to-black">
+        <section className="relative min-h-[85vh] overflow-hidden">
+          {/* Background Video */}
+          <div className="absolute inset-0 z-0">
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover"
+            >
+              <source src="/videos/hero-video.mp4" type="video/mp4" />
+            </video>
+            {/* Overlay gradient for readability */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black" />
+          </div>
+          
           {/* Background effects */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
             <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gold/10 rounded-full blur-[120px]" />
             <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-gold/5 rounded-full blur-[100px]" />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-gold/5 rounded-full blur-[150px]" />
@@ -499,19 +515,21 @@ const MeetTheTeam: React.FC = () => {
               <div className="flex flex-wrap justify-center gap-4">
                 <Button 
                   onClick={handleOpenContactForm}
-                  variant="dark"
-                  className="px-6"
+                  variant="primary"
+                  size="lg"
+                  className="px-8"
                 >
                   <MessageSquare className="w-4 h-4 mr-2" />
-                  Contact Us
+                  Get in Touch
                 </Button>
                 <Link to="/careers">
                   <Button
                     variant="secondary"
-                    className="border-black text-black hover:bg-black hover:text-white"
+                    size="lg"
+                    className="px-8"
                   >
                     View Open Positions
-                    <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
+                    <ArrowUpRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
               </div>
