@@ -426,7 +426,7 @@ const BuyerGuide = () => {
 
                       {step.isComparison && (
                         <div className="grid md:grid-cols-2 gap-4 mt-4">
-                          <div className="bg-zinc-50 rounded-xl p-5 border border-zinc-200">
+                          <div className="bg-black/5 rounded-xl p-5 border border-black/10">
                             <h4 className="font-semibold text-black mb-3">{step.offPlan?.title}</h4>
                             <ul className="space-y-2">
                               {step.offPlan?.points.map((point, idx) => (
@@ -437,7 +437,7 @@ const BuyerGuide = () => {
                               ))}
                             </ul>
                           </div>
-                          <div className="bg-zinc-50 rounded-xl p-5 border border-zinc-200">
+                          <div className="bg-black/5 rounded-xl p-5 border border-black/10">
                             <h4 className="font-semibold text-black mb-3">{step.ready?.title}</h4>
                             <ul className="space-y-2">
                               {step.ready?.points.map((point, idx) => (
@@ -453,7 +453,7 @@ const BuyerGuide = () => {
 
                       {step.isOfferComparison && (
                         <div className="grid md:grid-cols-2 gap-4 mt-4">
-                          <div className="bg-zinc-50 rounded-xl p-5 border border-zinc-200">
+                          <div className="bg-black/5 rounded-xl p-5 border border-black/10">
                             <h4 className="font-semibold text-black mb-3">{step.readyOffer?.title}</h4>
                             <ul className="space-y-2">
                               {step.readyOffer?.points.map((point, idx) => (
@@ -464,7 +464,7 @@ const BuyerGuide = () => {
                               ))}
                             </ul>
                           </div>
-                          <div className="bg-zinc-50 rounded-xl p-5 border border-zinc-200">
+                          <div className="bg-black/5 rounded-xl p-5 border border-black/10">
                             <h4 className="font-semibold text-black mb-3">{step.offPlanOffer?.title}</h4>
                             <ul className="space-y-2">
                               {step.offPlanOffer?.points.map((point, idx) => (
@@ -480,7 +480,7 @@ const BuyerGuide = () => {
 
                       {step.isTransferComparison && (
                         <div className="grid md:grid-cols-2 gap-4 mt-4">
-                          <div className="bg-zinc-50 rounded-xl p-5 border border-zinc-200">
+                          <div className="bg-black/5 rounded-xl p-5 border border-black/10">
                             <h4 className="font-semibold text-black mb-3">{step.readyTransfer?.title}</h4>
                             <ul className="space-y-2">
                               {step.readyTransfer?.points.map((point, idx) => (
@@ -491,7 +491,7 @@ const BuyerGuide = () => {
                               ))}
                             </ul>
                           </div>
-                          <div className="bg-zinc-50 rounded-xl p-5 border border-zinc-200">
+                          <div className="bg-black/5 rounded-xl p-5 border border-black/10">
                             <h4 className="font-semibold text-black mb-3">{step.offPlanTransfer?.title}</h4>
                             <ul className="space-y-2">
                               {step.offPlanTransfer?.points.map((point, idx) => (
@@ -686,7 +686,7 @@ const BuyerGuide = () => {
               
               <div className="grid md:grid-cols-2 gap-4 mb-8">
                 {mortgagePoints.map((point, index) => (
-                  <div key={index} className="flex items-start gap-3 bg-zinc-50 rounded-lg p-3">
+                  <div key={index} className="flex items-start gap-3 bg-black/5 rounded-lg p-3">
                     <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
                     <span className="text-zinc-700 text-sm leading-relaxed">{point}</span>
                   </div>

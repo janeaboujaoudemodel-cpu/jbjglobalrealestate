@@ -439,7 +439,7 @@ const AreaGuides = () => {
                 </p>
                 
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div className="p-6 bg-white rounded-xl border border-zinc-200">
+                  <div className="p-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-xl border border-gold/30">
                     <h3 className="text-lg font-semibold text-black mb-4">Established Areas</h3>
                     <div className="space-y-3">
                       {establishedAreaTraits.map((trait, index) => (
@@ -451,7 +451,7 @@ const AreaGuides = () => {
                     </div>
                   </div>
                   
-                  <div className="p-6 bg-white rounded-xl border border-zinc-200">
+                  <div className="p-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-xl border border-gold/30">
                     <h3 className="text-lg font-semibold text-black mb-4">Emerging Areas</h3>
                     <div className="space-y-3">
                       {emergingAreaTraits.map((trait, index) => (
@@ -756,7 +756,7 @@ const AreaGuides = () => {
                 </p>
                 <div className="space-y-4">
                   {objectiveExamples.map((item, index) => (
-                    <div key={index} className="flex items-center gap-4 p-4 bg-white rounded-xl border border-zinc-200">
+                    <div key={index} className="flex items-center gap-4 p-4 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-xl border border-gold/30">
                       <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
                         <span className="text-gold font-bold">{index + 1}</span>
                       </div>
@@ -768,7 +768,7 @@ const AreaGuides = () => {
                     </div>
                   ))}
                 </div>
-                <div className="mt-6 p-4 bg-zinc-100 border border-zinc-200 rounded-xl">
+                <div className="mt-6 p-4 bg-black/5 border border-gold/30 rounded-xl">
                   <p className="text-zinc-700 text-sm">
                     <strong>Note:</strong> There is no "best area" — only the best area for your objective.
                   </p>
@@ -1056,7 +1056,7 @@ const AreaGuides = () => {
                     <AccordionItem 
                       key={index} 
                       value={`item-${index}`}
-                      className="border border-zinc-200 rounded-xl px-6 bg-white"
+                      className="border border-gold/30 rounded-xl px-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark"
                     >
                       <AccordionTrigger className="text-left font-semibold text-black hover:text-gold py-4">
                         {faq.question}
