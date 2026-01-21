@@ -190,32 +190,34 @@ const MarketIntelligence = () => {
       {/* Founder-Led Philosophy & Advisory Positioning */}
       <FounderPhilosophySection />
 
-      {/* Market Overview Dashboard */}
+      {/* Market Overview Dashboard - Edge to Edge */}
       <div id="overview">
         <MarketOverviewDashboard />
       </div>
 
-      {/* Area Intelligence Grid */}
+      {/* Area Intelligence Grid - Edge to Edge */}
       <AreaIntelligenceGrid />
 
-      {/* AI Market Insights */}
+      {/* AI Market Insights - Edge to Edge */}
       <AIMarketInsights />
 
-      {/* Market Reports */}
+      {/* Market Reports - Edge to Edge */}
       <MarketReports />
 
-      {/* Data Sources Panel */}
+      {/* Data Sources Panel - Edge to Edge */}
       <DataSourcesPanel />
 
-      {/* Compliance Disclaimer - Premium champagne background */}
-      <section className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
+      {/* Compliance Disclaimer - Edge to Edge Champagne */}
+      <section className="jj-section-champagne py-12 border-t border-gold/20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            <div className="bg-zinc-50 border border-zinc-200 rounded-2xl p-8 text-center">
+            <div className="jj-box-active rounded-2xl p-8 text-center">
               <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center mx-auto mb-4">
                 <Info className="w-6 h-6 text-gold" />
               </div>
-              <h3 className="text-black text-xl font-bold mb-4">Compliance & Transparency</h3>
+              <h3 className="text-black text-xl font-bold mb-4">
+                <span className="text-gold">Compliance</span> & Transparency
+              </h3>
               <p className="text-zinc-600 text-sm leading-relaxed whitespace-pre-line">
                 {MARKET_DISCLAIMER}
               </p>
