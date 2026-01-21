@@ -110,10 +110,10 @@ const Index = () => {
           >
             Buy. Sell. Rent.<br />
             <span 
-              className="bg-gradient-to-r from-[#C9B896] via-[#E8DCC8] to-[#D4C4A8] bg-clip-text text-transparent break-words animate-pulse"
+              className="bg-gradient-to-r from-[#C9B896] via-[#E8DCC8] to-[#D4C4A8] bg-clip-text text-transparent break-words"
               style={{ 
-                filter: 'drop-shadow(0 0 12px rgba(201, 184, 150, 0.6)) drop-shadow(0 0 25px rgba(255, 255, 255, 0.4)) drop-shadow(0 0 40px rgba(201, 184, 150, 0.3))',
-                textShadow: '0 0 30px rgba(201, 184, 150, 0.5)',
+                filter: 'drop-shadow(0 0 8px rgba(201, 184, 150, 0.4)) drop-shadow(0 0 15px rgba(255, 255, 255, 0.2))',
+                textShadow: '0 2px 4px rgba(0, 0, 0, 0.3), 0 0 20px rgba(201, 184, 150, 0.3)',
               }}
             >
               Delivered with Intelligence.
@@ -407,11 +407,11 @@ const Index = () => {
 
           {/* Resources Grid - FILLED: JBJ in gold, Hub name in black on normal; reversed on hover */}
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {/* JBJ Broker Hub Card - Filled styling */}
+            {/* JBJ Broker Hub Card - Champagne filled styling with gold glow */}
             <Link to="/broker-toolkit" className="group">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_50px_rgba(200,167,102,0.5)] transition-all duration-300 shadow-[0_0_30px_rgba(200,167,102,0.3)]">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_60px_rgba(200,167,102,0.6)] transition-all duration-300 shadow-[0_0_40px_rgba(200,167,102,0.4)]">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 bg-transparent border-2 border-gold group-hover:border-black rounded-xl flex items-center justify-center shadow-lg shadow-gold/30 transition-all duration-300">
+                  <div className="w-12 h-12 bg-transparent border-2 border-gold group-hover:border-black rounded-xl flex items-center justify-center shadow-lg shadow-gold/40 transition-all duration-300">
                     <Briefcase className="w-6 h-6 text-black group-hover:text-gold transition-colors" />
                   </div>
                   <div>
@@ -425,7 +425,7 @@ const Index = () => {
                 <p className="text-zinc-700 group-hover:text-zinc-600 text-sm mb-4 transition-colors">
                   Access AI-powered broker tools, training modules, CRM, marketing resources, and everything you need to succeed.
                 </p>
-                <span className="text-gold group-hover:text-black text-sm font-medium flex items-center gap-1 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }}>
+                <span className="text-gold group-hover:text-black text-sm font-medium flex items-center gap-1 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.5))' }}>
                   Access Broker Hub
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
@@ -434,11 +434,11 @@ const Index = () => {
               </div>
             </Link>
 
-            {/* Investor Hub Card - Filled styling */}
+            {/* Investor Hub Card - Champagne filled styling with gold glow */}
             <Link to="/ai-hub" className="group">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_50px_rgba(200,167,102,0.5)] transition-all duration-300 shadow-[0_0_30px_rgba(200,167,102,0.3)]">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_60px_rgba(200,167,102,0.6)] transition-all duration-300 shadow-[0_0_40px_rgba(200,167,102,0.4)]">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 bg-transparent border-2 border-gold group-hover:border-black rounded-xl flex items-center justify-center shadow-lg shadow-gold/30 transition-all duration-300">
+                  <div className="w-12 h-12 bg-transparent border-2 border-gold group-hover:border-black rounded-xl flex items-center justify-center shadow-lg shadow-gold/40 transition-all duration-300">
                     <Layers className="w-6 h-6 text-black group-hover:text-gold transition-colors" />
                   </div>
                   <div>
@@ -452,7 +452,7 @@ const Index = () => {
                 <p className="text-zinc-700 group-hover:text-zinc-600 text-sm mb-4 transition-colors">
                   AI-powered property analysis, comparison, mortgage calculator, and productivity tools — all free for investors and homeowners.
                 </p>
-                <span className="text-gold group-hover:text-black text-sm font-medium flex items-center gap-1 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }}>
+                <span className="text-gold group-hover:text-black text-sm font-medium flex items-center gap-1 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.5))' }}>
                   Explore Investor Hub
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />

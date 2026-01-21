@@ -140,11 +140,11 @@ const GlobalHeader = () => {
   const renderDropdown = (label: string, links: typeof propertiesLinks, isActiveCheck?: () => boolean) => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className={`flex items-center gap-0.5 px-2.5 xl:px-3 py-1.5 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all rounded-full ${
+        <button className={`flex items-center gap-0.5 px-1.5 xl:px-2 py-1 text-[10px] xl:text-[11px] font-semibold whitespace-nowrap transition-all rounded-full ${
           isActiveCheck?.() ? 'text-gold bg-gold/10' : 'text-black hover:text-gold hover:bg-gold/10'
         }`}>
           {label}
-          <ChevronDown className="w-3 h-3 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+          <ChevronDown className="w-2.5 h-2.5 transition-transform duration-200 group-data-[state=open]:rotate-180" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
@@ -530,14 +530,14 @@ const GlobalHeader = () => {
             </Sheet>
           </div>
 
-          {/* CENTER: Desktop Navigation - Premium styling with elegant dropdowns - FULL WIDTH */}
-          <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 mx-2">
-            <div className="flex items-center gap-0 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] backdrop-blur-sm rounded-full px-2 xl:px-3 py-1.5 border border-gold/30 shadow-lg">
+          {/* CENTER: Desktop Navigation - Premium styling with elegant dropdowns */}
+          <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 mx-4">
+            <div className="flex items-center gap-0 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] backdrop-blur-sm rounded-full px-1.5 py-1 border border-gold/30 shadow-lg">
               
               {/* 1. Home - No dropdown */}
               <Link
                 to="/"
-                className={`px-2.5 xl:px-3 py-1.5 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all relative group rounded-full ${
+                className={`px-1.5 xl:px-2 py-1 text-[10px] xl:text-[11px] font-semibold whitespace-nowrap transition-all relative group rounded-full ${
                   isActive("/")
                     ? "text-gold bg-gold/10"
                     : "text-black hover:text-gold hover:bg-gold/10"
@@ -580,7 +580,7 @@ const GlobalHeader = () => {
               {/* 9. Contact - No dropdown */}
               <Link
                 to="/contact"
-                className={`px-2.5 xl:px-3 py-1.5 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all relative group rounded-full ${
+                className={`px-1.5 xl:px-2 py-1 text-[10px] xl:text-[11px] font-semibold whitespace-nowrap transition-all relative group rounded-full ${
                   isActive("/contact")
                     ? "text-gold bg-gold/10"
                     : "text-black hover:text-gold hover:bg-gold/10"
