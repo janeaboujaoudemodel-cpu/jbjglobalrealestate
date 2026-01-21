@@ -478,9 +478,8 @@ REQUIREMENTS:
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash-image-preview",
+        model: "google/gemini-3-pro-image-preview",
         messages: [{ role: "user", content }],
-        modalities: ["image", "text"],
       }),
     });
 
@@ -505,13 +504,56 @@ REQUIREMENTS:
     }
 
     const data = await response.json();
-    const imageUrl = data?.choices?.[0]?.message?.images?.[0]?.image_url?.url as string | undefined;
-    const notes = (data?.choices?.[0]?.message?.content as string | undefined) ?? "";
-
-    if (!imageUrl) {
-      throw new Error("No image was generated");
+    console.log("AI Gateway response structure:", JSON.stringify(Object.keys(data)));
+    
+    // Try multiple possible image extraction paths
+    const message = data?.choices?.[0]?.message;
+    let imageUrl: string | undefined;
+    let notes = "";
+    
+    // Path 1: images array with image_url object
+    if (message?.images?.[0]?.image_url?.url) {
+      imageUrl = message.images[0].image_url.url;
+    }
+    // Path 2: images array with direct URL string
+    else if (message?.images?.[0] && typeof message.images[0] === 'string') {
+      imageUrl = message.images[0];
+    }
+    // Path 3: image_url directly on message
+    else if (message?.image_url?.url) {
+      imageUrl = message.image_url.url;
+    }
+    // Path 4: content array with image parts
+    else if (Array.isArray(message?.content)) {
+      for (const part of message.content) {
+        if (part?.type === 'image_url' && part?.image_url?.url) {
+          imageUrl = part.image_url.url;
+          break;
+        }
+        if (part?.type === 'image' && part?.image) {
+          imageUrl = part.image;
+          break;
+        }
+        if (part?.type === 'text' && part?.text) {
+          notes += part.text;
+        }
+      }
+    }
+    // Path 5: inline_data format (Gemini native)
+    else if (message?.content?.[0]?.inline_data?.data) {
+      const mimeType = message.content[0].inline_data.mimeType || 'image/png';
+      imageUrl = `data:${mimeType};base64,${message.content[0].inline_data.data}`;
+    }
+    
+    // Get notes from content if not already extracted
+    if (!notes && typeof message?.content === 'string') {
+      notes = message.content;
     }
 
+    if (!imageUrl) {
+      console.error("Could not extract image from response. Message structure:", JSON.stringify(message));
+      throw new Error("No image was generated. The AI response format was unexpected.");
+    }
     console.log(`Interior design generation completed for user: ${user.id}`);
 
     return new Response(
