@@ -109,7 +109,13 @@ const Index = () => {
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
             Buy. Sell. Rent.<br />
-            <span className="bg-gradient-to-r from-[#B8A67A] via-[#D4C4A8] to-[#C9B896] bg-clip-text text-transparent break-words" style={{ filter: 'drop-shadow(0 0 8px rgba(180, 160, 120, 0.4))' }}>
+            <span 
+              className="bg-gradient-to-r from-[#C9B896] via-[#E8DCC8] to-[#D4C4A8] bg-clip-text text-transparent break-words animate-pulse"
+              style={{ 
+                filter: 'drop-shadow(0 0 12px rgba(201, 184, 150, 0.6)) drop-shadow(0 0 25px rgba(255, 255, 255, 0.4)) drop-shadow(0 0 40px rgba(201, 184, 150, 0.3))',
+                textShadow: '0 0 30px rgba(201, 184, 150, 0.5)',
+              }}
+            >
               Delivered with Intelligence.
             </span>
           </motion.h1>
@@ -528,19 +534,19 @@ const Index = () => {
                     Jane leads JBJ Global Real Estate with a commitment to excellence, integrity, and client success.
                   </p>
 
-                  {/* Stats Row - Gold borders and glow, hover: fill with pearl, numbers gold, text black */}
+                  {/* Stats Row - REVERSED: pearl fill on normal, black on hover */}
                   <div className="grid grid-cols-3 gap-4 mb-8">
-                    <div className="group text-center p-3 bg-black border-2 border-gold rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6]" style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}>
-                      <p className="text-gold group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#C8A766] group-hover:to-[#E8D4A8] text-2xl md:text-3xl font-bold transition-colors">12+</p>
-                      <p className="text-zinc-400 group-hover:text-black text-[10px] uppercase tracking-wider mt-1 transition-colors">Years Exp</p>
+                    <div className="group text-center p-3 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold rounded-xl transition-all duration-300 hover:bg-black hover:from-black hover:via-black hover:to-black" style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}>
+                      <p className="text-transparent bg-clip-text bg-gradient-to-r from-[#C8A766] to-[#E8D4A8] group-hover:text-gold text-2xl md:text-3xl font-bold transition-colors">12+</p>
+                      <p className="text-black group-hover:text-zinc-400 text-[10px] uppercase tracking-wider mt-1 transition-colors">Years Exp</p>
                     </div>
-                    <div className="group text-center p-3 bg-black border-2 border-gold rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6]" style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}>
-                      <p className="text-gold group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#C8A766] group-hover:to-[#E8D4A8] text-2xl md:text-3xl font-bold transition-colors">147+</p>
-                      <p className="text-zinc-400 group-hover:text-black text-[10px] uppercase tracking-wider mt-1 transition-colors">Team Members</p>
+                    <div className="group text-center p-3 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold rounded-xl transition-all duration-300 hover:bg-black hover:from-black hover:via-black hover:to-black" style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}>
+                      <p className="text-transparent bg-clip-text bg-gradient-to-r from-[#C8A766] to-[#E8D4A8] group-hover:text-gold text-2xl md:text-3xl font-bold transition-colors">147+</p>
+                      <p className="text-black group-hover:text-zinc-400 text-[10px] uppercase tracking-wider mt-1 transition-colors">Team Members</p>
                     </div>
-                    <div className="group text-center p-3 bg-black border-2 border-gold rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6]" style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}>
-                      <p className="text-gold group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#C8A766] group-hover:to-[#E8D4A8] text-2xl md:text-3xl font-bold transition-colors">4.8K+</p>
-                      <p className="text-zinc-400 group-hover:text-black text-[10px] uppercase tracking-wider mt-1 transition-colors">Brokers Trained</p>
+                    <div className="group text-center p-3 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold rounded-xl transition-all duration-300 hover:bg-black hover:from-black hover:via-black hover:to-black" style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}>
+                      <p className="text-transparent bg-clip-text bg-gradient-to-r from-[#C8A766] to-[#E8D4A8] group-hover:text-gold text-2xl md:text-3xl font-bold transition-colors">4.8K+</p>
+                      <p className="text-black group-hover:text-zinc-400 text-[10px] uppercase tracking-wider mt-1 transition-colors">Brokers Trained</p>
                     </div>
                   </div>
 
@@ -561,9 +567,9 @@ const Index = () => {
                       <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
                       <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                       <span className="relative flex items-center justify-center gap-2">
-                        <span className="text-gold group-hover:text-black transition-colors">Learn More About</span>
-                        <span className="text-black group-hover:text-gold transition-colors">The Founder</span>
-                        <ArrowUpRight className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
+                        <span className="text-black group-hover:text-gold transition-colors">Learn More About</span>
+                        <span className="text-gold group-hover:text-black transition-colors">The Founder</span>
+                        <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
                       </span>
                     </button>
                   </Link>
@@ -666,9 +672,9 @@ const Index = () => {
                     <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                     <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                     <span className="relative flex items-center justify-center gap-2">
-                      <Sparkles className="w-5 h-5 text-gold" />
-                      <span className="text-gold">Try Our AI</span>
-                      <span className="text-black">Mortgage Calculator</span>
+                      <Sparkles className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                      <span className="text-black group-hover:text-gold transition-colors">Try Our AI</span>
+                      <span className="text-gold group-hover:text-black transition-colors">Mortgage Calculator</span>
                     </span>
                   </button>
                 </Link>
@@ -737,9 +743,9 @@ const Index = () => {
                 <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
                 <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                 <span className="relative flex items-center justify-center gap-2">
-                  <span className="text-gold">Book</span>
-                  <span className="text-black">Consultation</span>
-                  <ArrowUpRight className="w-5 h-5 text-black" />
+                  <span className="text-black group-hover:text-gold transition-colors">Book</span>
+                  <span className="text-gold group-hover:text-black transition-colors">Consultation</span>
+                  <ArrowUpRight className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
                 </span>
               </button>
               <Link to="/properties">

@@ -73,13 +73,13 @@ const GlobalHeader = () => {
     { href: "/seller-listing", label: "List Your Property", icon: ClipboardCheck },
   ];
 
-  // Services dropdown (execution + advisory)
+  // Services dropdown - all redirect to main /services page
   const servicesLinks = [
-    { href: "/services/buyer-advisory", label: "Buying Advisory", icon: UserCircle },
-    { href: "/services/seller-advisory", label: "Selling Advisory", icon: ClipboardCheck },
-    { href: "/services/leasing-advisory", label: "Rental Advisory", icon: Building2 },
-    { href: "/services/investment-advisory", label: "Investment Advisory", icon: BarChart3 },
-    { href: "/services/partners", label: "Partner Introductions", icon: Users },
+    { href: "/services", label: "Buying Advisory", icon: UserCircle },
+    { href: "/services", label: "Selling Advisory", icon: ClipboardCheck },
+    { href: "/services", label: "Rental Advisory", icon: Building2 },
+    { href: "/services", label: "Investment Advisory", icon: BarChart3 },
+    { href: "/partners", label: "Partner Introductions", icon: Users },
   ];
 
   // Guides dropdown (education-only, client-facing)
@@ -530,9 +530,9 @@ const GlobalHeader = () => {
             </Sheet>
           </div>
 
-          {/* CENTER: Desktop Navigation - Premium styling with elegant dropdowns - STRETCHED */}
+          {/* CENTER: Desktop Navigation - Premium styling with elegant dropdowns - FULL WIDTH */}
           <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 mx-2">
-            <div className="flex items-center gap-0 min-w-0 max-w-full overflow-x-auto bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] backdrop-blur-sm rounded-full px-2 xl:px-3 py-1.5 border border-gold/30 shadow-lg [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+            <div className="flex items-center gap-0 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] backdrop-blur-sm rounded-full px-2 xl:px-3 py-1.5 border border-gold/30 shadow-lg">
               
               {/* 1. Home - No dropdown */}
               <Link
