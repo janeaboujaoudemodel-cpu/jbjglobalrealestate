@@ -259,6 +259,8 @@ const App = () => (
                 <Route path="/ai-budget-planner" element={<AIFinancialAdvisor />} />
                 <Route path="/ai-financial-advisor" element={<Navigate to="/ai-budget-planner" replace />} />
                 <Route path="/ai-personal-shopper" element={<AIPersonalShopper />} />
+                {/* Alias: AI Home Finder redirect to quiz */}
+                <Route path="/ai-home-finder" element={<Navigate to="/quiz" replace />} />
                 <Route path="/tools-guide" element={<Navigate to="/ai-hub" replace />} />
                 <Route path="/intellectual-property" element={<IntellectualProperty />} />
                 <Route path="/services/architecture" element={<Architecture />} />

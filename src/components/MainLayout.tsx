@@ -93,11 +93,10 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     };
   }, [isHomePage, isAdminRoute]);
 
-  // When user interacts with chat, mark daily shown and clear the pulse
+  // When user interacts with chat, mark daily shown and clear the pulse immediately
   const handleToggleChat = () => {
-    if (showAttentionPulse) {
-      markDailyShown();
-    }
+    // Always mark as shown and clear pulse when user interacts with chat
+    markDailyShown();
     setShowAttentionPulse(false);
     setIsChatCollapsed((v) => !v);
   };
