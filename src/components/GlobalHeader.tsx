@@ -140,7 +140,7 @@ const GlobalHeader = () => {
   const renderDropdown = (label: string, links: typeof propertiesLinks, isActiveCheck?: () => boolean) => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className={`flex items-center gap-0.5 px-1 xl:px-1.5 py-1 text-[9px] xl:text-[10px] font-semibold whitespace-nowrap transition-all rounded-full ${
+        <button className={`flex items-center gap-0.5 px-0.5 xl:px-1 py-1 text-[9px] xl:text-[10px] font-semibold whitespace-nowrap transition-all rounded-full ${
           isActiveCheck?.() ? 'text-gold bg-gold/10' : 'text-black hover:text-gold hover:bg-gold/10'
         }`}>
           {label}
@@ -181,7 +181,7 @@ const GlobalHeader = () => {
           {/* LEFT: Brand Logo - Monogram only on mobile */}
           <Link 
             to="/" 
-            className="flex items-center gap-2 shrink-0 group transition-all duration-300"
+            className="flex items-center gap-1.5 shrink-0 group transition-all duration-300"
             style={{ fontFamily: "Poppins, sans-serif" }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
@@ -189,12 +189,12 @@ const GlobalHeader = () => {
               <img 
                 src={jbjMonogramDarkBg} 
                 alt="JBJ" 
-                className="w-8 h-8 lg:w-10 lg:h-10 object-contain transition-transform duration-300 group-hover:scale-105"
+                className="w-8 h-8 lg:w-9 lg:h-9 object-contain transition-transform duration-300 group-hover:scale-105"
               />
               {/* Subtle glow on hover */}
               <div className="absolute inset-0 rounded-full bg-gold/0 group-hover:bg-gold/10 transition-colors duration-300 blur-xl" />
             </div>
-            <span className="text-white font-semibold text-[11px] lg:text-xs tracking-[0.08em] uppercase whitespace-nowrap hidden lg:inline drop-shadow-sm">
+            <span className="text-white font-semibold text-[10px] tracking-[0.08em] uppercase whitespace-nowrap hidden lg:inline drop-shadow-sm max-w-[160px] xl:max-w-none truncate">
               JBJ Global Real Estate
             </span>
           </Link>
@@ -531,7 +531,7 @@ const GlobalHeader = () => {
           </div>
 
           {/* CENTER: Desktop Navigation - stretched with reduced right-side icon gap for more nav space */}
-          <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 mx-3">
+          <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 mx-2">
             <div className="flex items-center gap-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] backdrop-blur-sm rounded-full px-5 py-1 border border-gold/40 shadow-lg">
               
               {/* 1. Home - No dropdown */}
@@ -598,31 +598,31 @@ const GlobalHeader = () => {
 
           {/* RIGHT: Actions - Desktop only - Icons grouped, same size, same spacing */}
           {/* Right icons with reduced spacing - unified alignment */}
-          <div className="hidden lg:flex items-center gap-1.5 shrink-0">
+          <div className="hidden lg:flex items-center gap-1 shrink-0">
             {/* Search Icon - White on normal, gold on hover with 3D effect */}
             <button
-              className="w-7 h-7 flex items-center justify-center transition-all duration-200 group"
+              className="w-6 h-6 flex items-center justify-center transition-all duration-200 group"
               onClick={() => setSearchOpen(true)}
               aria-label="Search"
               style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }}
             >
-              <Search className="w-4 h-4 text-white group-hover:text-gold transition-colors duration-200" style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' }} />
+              <Search className="w-3.5 h-3.5 text-gold group-hover:text-white transition-colors duration-200" style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' }} />
             </button>
 
             {/* Language Switcher */}
             <LanguageSwitcher variant="icon-only" />
 
             {/* Account Icon - White on normal, gold on hover with 3D effect */}
-            <div className="w-7 h-7 flex items-center justify-center">
+            <div className="w-6 h-6 flex items-center justify-center">
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button 
-                      className="w-7 h-7 flex items-center justify-center transition-all duration-200 group"
+                      className="w-6 h-6 flex items-center justify-center transition-all duration-200 group"
                       aria-label={t('nav.myAccount')}
                       style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }}
                     >
-                      <User className="w-4 h-4 text-white group-hover:text-gold transition-colors duration-200" style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' }} />
+                      <User className="w-3.5 h-3.5 text-gold group-hover:text-white transition-colors duration-200" style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' }} />
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent 
@@ -741,10 +741,10 @@ const GlobalHeader = () => {
               ) : (
               <Link to="/auth">
                 <button 
-                  className="w-7 h-7 flex items-center justify-center transition-all duration-200 group"
+                  className="w-6 h-6 flex items-center justify-center transition-all duration-200 group"
                   style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }}
                 >
-                  <User className="w-4 h-4 text-white group-hover:text-gold transition-colors duration-200" style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' }} />
+                  <User className="w-3.5 h-3.5 text-gold group-hover:text-white transition-colors duration-200" style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' }} />
                 </button>
               </Link>
               )}
