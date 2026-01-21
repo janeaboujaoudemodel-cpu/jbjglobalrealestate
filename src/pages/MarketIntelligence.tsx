@@ -207,11 +207,11 @@ const MarketIntelligence = () => {
       {/* Data Sources Panel - Edge to Edge */}
       <DataSourcesPanel />
 
-      {/* Compliance Disclaimer - Edge to Edge Champagne */}
-      <section className="jj-section-champagne py-12 border-t border-gold/20">
-        <div className="container mx-auto px-4">
+      {/* Compliance Disclaimer - 3-Layer System */}
+      <section className="py-12 bg-black">
+        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
           <div className="max-w-3xl mx-auto">
-            <div className="jj-box-active rounded-2xl p-8 text-center">
+            <div className="jj-card-inner rounded-2xl p-8 text-center">
               <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center mx-auto mb-4">
                 <Info className="w-6 h-6 text-gold" />
               </div>

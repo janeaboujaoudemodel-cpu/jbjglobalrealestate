@@ -34,8 +34,8 @@ const SplitTitle = ({ text }: { text: string }) => {
 
 export const DataSourcesPanel = () => {
   return (
-    <section className="jj-section-champagne py-16">
-      <div className="container mx-auto px-4">
+    <section className="py-16 bg-black">
+      <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -62,7 +62,7 @@ export const DataSourcesPanel = () => {
           <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {OPEN_DATA_SOURCES.map((source) => (
               <motion.div key={source.id} variants={fadeInUp}>
-                <Card className="jj-box-active hover:border-gold/50 transition-all h-full">
+                <Card className="jj-card-inner hover:border-white transition-all h-full">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">

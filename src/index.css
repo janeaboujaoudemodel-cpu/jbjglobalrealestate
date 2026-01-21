@@ -240,9 +240,15 @@ All colors MUST be HSL.
    * ============================================================ */
 
   /* ============================================================
-   * GLOBAL SECTION THEMING SYSTEM - CHAMPAGNE SECTIONS (LOCKED)
-   * Rule: Full-width champagne section backgrounds with active 
-   * champagne boxes inside. Replaces all white backgrounds.
+   * GLOBAL 3-LAYER UI SYSTEM (LOCKED) - v2.0
+   * 
+   * LAYER 1 (Page): Black background (bg-black)
+   * LAYER 2 (Section): Active champagne layer (jj-layer-active)
+   * LAYER 3 (Cards): Champagne cards with gold border (jj-card-inner)
+   * 
+   * EXCEPTION: First line on homepage (Buyers, Sellers, etc.) uses
+   * the active champagne style directly due to multiple colors.
+   * All other cards globally use jj-card-inner (Best Idea Award style).
    * ============================================================ */
 
   /* ============================================================
@@ -251,6 +257,13 @@ All colors MUST be HSL.
    * be full-width edge-to-edge, passing behind TOC navigator
    * ============================================================ */
 
+  /* LAYER 2: Active champagne section layer (placed on black background) */
+  .jj-layer-active {
+    @apply rounded-2xl border border-gold/30;
+    background: linear-gradient(to bottom right, #F5EBD7, #E8DCC8, #D4C4A8);
+    box-shadow: 0 0 40px rgba(200,167,102,0.2);
+  }
+
   /* Full-width champagne section background (edge-to-edge, no container limits) */
   .jj-section-champagne {
     @apply w-screen relative;
@@ -258,7 +271,7 @@ All colors MUST be HSL.
     right: 50%;
     margin-left: -50vw;
     margin-right: -50vw;
-    background: linear-gradient(to bottom right, #FDFBF7, #F5F0E6, #EDE4D3);
+    background: linear-gradient(to bottom right, #F5EBD7, #E8DCC8, #D4C4A8);
   }
 
   /* Edge-to-edge section on black background */
@@ -270,7 +283,19 @@ All colors MUST be HSL.
     margin-right: -50vw;
   }
 
-  /* Active champagne card/box inside sections */
+  /* LAYER 3: Inner cards inside the active layer (Best Idea Award style) */
+  .jj-card-inner {
+    @apply rounded-xl border-2 border-gold;
+    background: linear-gradient(to bottom right, #FDFBF7, #F5F0E6, #EDE4D3);
+    box-shadow: 0 0 15px rgba(200,167,102,0.25);
+  }
+
+  .jj-card-inner:hover {
+    @apply border-white;
+    box-shadow: 0 0 25px rgba(255,255,255,0.3);
+  }
+
+  /* Active champagne card/box inside sections (old style, kept for compatibility) */
   .jj-card-champagne {
     @apply rounded-xl border border-gold/30;
     background: linear-gradient(to bottom right, 
