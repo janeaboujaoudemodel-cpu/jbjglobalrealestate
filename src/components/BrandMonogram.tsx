@@ -16,8 +16,8 @@ const sizeConfig: Record<BrandMonogramSize, {
   xs: { width: 32, height: 32, wordmark: "text-[9px]" },
   sm: { width: 48, height: 48, wordmark: "text-[10px] md:text-xs" },
   md: { width: 64, height: 64, wordmark: "text-xs md:text-sm" },
-  lg: { width: 64, height: 64, wordmark: "text-sm md:text-sm" },  // Increased for mobile menu
-  xl: { width: 120, height: 120, wordmark: "text-base md:text-lg" },
+  lg: { width: 72, height: 72, wordmark: "text-sm md:text-base" },  // Mobile menu header
+  xl: { width: 80, height: 80, wordmark: "text-base md:text-lg" },  // Hamburger dropdown branding
   footer: { width: 140, height: 140, wordmark: "text-sm" },
 };
 
