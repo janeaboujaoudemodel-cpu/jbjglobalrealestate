@@ -481,7 +481,7 @@ const SellerGuide = () => {
                 </motion.div>
 
                 {/* Agency Commission */}
-                <motion.div variants={fadeInUp} className="bg-white border border-zinc-200 rounded-xl p-6 md:p-8 mb-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
+                <motion.div variants={fadeInUp} className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl p-6 md:p-8 mb-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
                       <Banknote className="w-6 h-6 text-gold" />
@@ -504,7 +504,7 @@ const SellerGuide = () => {
                 </motion.div>
 
                 {/* Government & Developer Fees */}
-                <motion.div variants={fadeInUp} className="bg-white border border-zinc-200 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
+                <motion.div variants={fadeInUp} className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
                       <Landmark className="w-6 h-6 text-gold" />
@@ -513,7 +513,7 @@ const SellerGuide = () => {
                   </div>
                   <div className="grid md:grid-cols-2 gap-4">
                     {governmentFees.map((fee, index) => (
-                      <div key={index} className="bg-zinc-50 rounded-lg p-4">
+                      <div key={index} className="bg-black/5 rounded-lg p-4">
                         <p className="text-black font-medium">{fee.title}</p>
                         <p className="text-zinc-600 text-sm">{fee.description}</p>
                       </div>
@@ -535,7 +535,7 @@ const SellerGuide = () => {
                 viewport={{ once: true }}
                 variants={staggerContainer}
               >
-                <motion.div variants={fadeInUp} className="bg-white border border-zinc-200 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
+                <motion.div variants={fadeInUp} className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
                       <Landmark className="w-6 h-6 text-gold" />
@@ -568,7 +568,7 @@ const SellerGuide = () => {
                 viewport={{ once: true }}
                 variants={staggerContainer}
               >
-                <motion.div variants={fadeInUp} className="bg-white border border-zinc-200 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
+                <motion.div variants={fadeInUp} className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
                       <Building2 className="w-6 h-6 text-gold" />
