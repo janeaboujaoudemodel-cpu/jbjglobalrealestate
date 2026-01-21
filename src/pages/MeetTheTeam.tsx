@@ -276,7 +276,7 @@ const MeetTheTeam: React.FC = () => {
               playsInline
               className="w-full h-full object-cover"
             >
-              <source src="/videos/hero-video.mp4" type="video/mp4" />
+              <source src="/videos/team-hero-dubai-skyline.mp4" type="video/mp4" />
             </video>
             {/* Overlay gradient for readability */}
             <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black" />
@@ -335,13 +335,12 @@ const MeetTheTeam: React.FC = () => {
                 className="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-8"
               />
 
-              {/* Contact Us Button - Before employees */}
+              {/* Contact Us Button - Hero style for video background */}
               <motion.div variants={fadeInUp}>
                 <Button
                   onClick={handleOpenContactForm}
-                  variant="primary"
+                  variant="media"
                   size="lg"
-                  className="px-8"
                 >
                   <MessageSquare className="w-4 h-4 mr-2" />
                   Contact Us
