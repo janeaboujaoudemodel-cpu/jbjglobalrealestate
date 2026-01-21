@@ -152,8 +152,9 @@ const DeveloperPartnersMarquee = () => {
                   <span className="text-white group-hover:text-gold transition-colors font-semibold text-sm md:text-base whitespace-nowrap" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>
                     {developer.name.split(' ')[0]}
                   </span>
-                  <span className="text-gold group-hover:text-black transition-colors font-semibold text-sm md:text-base whitespace-nowrap" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
-                    {developer.name.split(' ').slice(1).join(' ') || ''}
+                  <span className="text-gold font-semibold text-sm md:text-base whitespace-nowrap transition-all" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
+                    <span className="group-hover:hidden">{developer.name.split(' ').slice(1).join(' ') || ''}</span>
+                    <span className="hidden group-hover:inline text-black font-semibold">{developer.name.split(' ').slice(1).join(' ') || ''}</span>
                   </span>
                 </Link>
 

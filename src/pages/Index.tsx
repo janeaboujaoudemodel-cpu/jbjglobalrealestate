@@ -102,17 +102,20 @@ const Index = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          {/* H1 - Responsive Typography with proper word wrap */}
+          {/* H1 - Compact 2-line layout for better video visibility */}
           <motion.h1 
             variants={fadeInUp} 
-            className="text-white text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.15] mb-3 md:mb-5 px-2 sm:px-0"
+            className="text-white text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-3 md:mb-5 px-2 sm:px-0"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            Buy<span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 mx-0.5 align-middle" style={{ boxShadow: '0 0 8px rgba(52, 211, 153, 0.8)' }}></span>
-            Sell<span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 mx-0.5 align-middle" style={{ boxShadow: '0 0 8px rgba(52, 211, 153, 0.8)' }}></span>
-            Rent<span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 mx-0.5 align-middle" style={{ boxShadow: '0 0 8px rgba(52, 211, 153, 0.8)' }}></span><br />
+            <span className="whitespace-nowrap">
+              Buy<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle" style={{ background: 'linear-gradient(135deg, #D4AF37, #E8DCC8)', boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+              Sell<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle" style={{ background: 'linear-gradient(135deg, #D4AF37, #E8DCC8)', boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+              Rent
+            </span>
+            <span className="inline-block w-1.5 h-1.5 rounded-full mx-1.5 align-middle" style={{ background: 'linear-gradient(135deg, #D4AF37, #E8DCC8)', boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
             <span 
-              className="bg-gradient-to-r from-[#FFF8E8] via-[#F5E6C8] to-[#E8D4A8] bg-clip-text text-transparent break-words"
+              className="bg-gradient-to-r from-[#FFF8E8] via-[#F5E6C8] to-[#E8D4A8] bg-clip-text text-transparent"
               style={{ 
                 filter: 'drop-shadow(0 0 8px rgba(255, 248, 232, 0.35)) drop-shadow(0 0 16px rgba(245, 230, 200, 0.25))',
                 textShadow: '0 1px 3px rgba(0, 0, 0, 0.2)',
@@ -180,8 +183,8 @@ const Index = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2, duration: 1 }}
         >
-          <span className="text-[10px] uppercase tracking-[0.3em] text-gold" style={{ textShadow: '0 0 10px rgba(200,167,102,0.5), 0 0 20px rgba(200,167,102,0.3)' }}>Discover</span>
-          <ChevronDown className="w-5 h-5 animate-bounce text-gold" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+          <span className="text-[10px] uppercase tracking-[0.3em]" style={{ color: '#D4AF37', textShadow: '0 0 10px rgba(200,167,102,0.5), 0 0 20px rgba(200,167,102,0.3)' }}>Discover</span>
+          <ChevronDown className="w-5 h-5 animate-bounce" style={{ color: '#D4AF37', filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
         </motion.div>
       </div>
 
@@ -238,13 +241,10 @@ const Index = () => {
       <section className="py-16 md:py-20 bg-zinc-950">
         <div className="container mx-auto px-4">
           <div className="text-center mb-10">
-            <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full text-black text-xs uppercase tracking-[0.2em] font-medium mb-3 shadow-md">
+            <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full text-black text-xs uppercase tracking-[0.2em] font-medium shadow-md">
               <Users className="w-3 h-3 text-gold" />
-              Who We Serve
-            </span>
-            <p className="text-white text-xl md:text-2xl font-medium" style={{ fontFamily: "Poppins, sans-serif" }}>
               Find Your Starting Point
-            </p>
+            </span>
           </div>
 
           {/* Audience Entry Cards - FILLED with champagne gradient matching Need Help popup, black titles */}
