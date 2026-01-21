@@ -16,7 +16,7 @@ const sizeConfig: Record<BrandMonogramSize, {
   xs: { width: 32, height: 32, wordmark: "text-[9px]" },
   sm: { width: 48, height: 48, wordmark: "text-[10px] md:text-xs" },
   md: { width: 64, height: 64, wordmark: "text-xs md:text-sm" },
-  lg: { width: 56, height: 56, wordmark: "text-[11px] md:text-sm" },
+  lg: { width: 64, height: 64, wordmark: "text-sm md:text-sm" },  // Increased for mobile menu
   xl: { width: 120, height: 120, wordmark: "text-base md:text-lg" },
   footer: { width: 140, height: 140, wordmark: "text-sm" },
 };
@@ -93,21 +93,21 @@ export function BrandMonogram({
 }
 
 // Header-specific monogram - horizontal layout with transparent image (no black box)
+// Larger size on mobile for better visibility
 export function BrandMonogramHeader({ className = "" }: { className?: string }) {
   return (
     <div 
-      className={cn("flex items-center gap-3", className)}
+      className={cn("flex items-center gap-2 md:gap-3", className)}
       style={{ fontFamily: "Poppins, sans-serif" }}
     >
       <img 
         src={jbjMonogramTransparent}
         alt="JBJ"
-        width={40}
-        height={40}
-        className="object-contain"
-        style={{ width: 40, height: 40 }}
+        width={48}
+        height={48}
+        className="object-contain w-12 h-12 md:w-10 md:h-10"
       />
-      <span className="text-white font-semibold text-sm md:text-base tracking-[0.12em] uppercase">
+      <span className="text-white font-semibold text-base md:text-base tracking-[0.12em] uppercase">
         Global Real Estate
       </span>
     </div>
