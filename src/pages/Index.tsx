@@ -111,7 +111,7 @@ const Index = () => {
             <span className="block whitespace-nowrap">
               Buy<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle" style={{ background: 'linear-gradient(135deg, #D4AF37, #E8DCC8)', boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
               Sell<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle" style={{ background: 'linear-gradient(135deg, #D4AF37, #E8DCC8)', boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
-              Rent
+              Rent<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle" style={{ background: 'linear-gradient(135deg, #D4AF37, #E8DCC8)', boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
             </span>
             <span 
               className="block bg-gradient-to-r from-[#FFF8E8] via-[#F5E6C8] to-[#E8D4A8] bg-clip-text text-transparent mt-1"
@@ -182,8 +182,20 @@ const Index = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2, duration: 1 }}
         >
-          <span className="text-[10px] uppercase tracking-[0.3em]" style={{ color: '#D4AF37', textShadow: '0 0 10px rgba(200,167,102,0.5), 0 0 20px rgba(200,167,102,0.3)' }}>Discover</span>
-          <ChevronDown className="w-5 h-5 animate-bounce" style={{ color: '#D4AF37', filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+          <span 
+            className="text-[10px] uppercase tracking-[0.3em] bg-gradient-to-r from-[#FFF8E8] via-[#F5E6C8] to-[#E8D4A8] bg-clip-text text-transparent"
+            style={{ 
+              filter: 'drop-shadow(0 0 8px rgba(255, 248, 232, 0.35)) drop-shadow(0 0 16px rgba(245, 230, 200, 0.25))',
+              textShadow: '0 1px 3px rgba(0, 0, 0, 0.2)',
+            }}
+          >Discover</span>
+          <ChevronDown 
+            className="w-5 h-5 animate-bounce" 
+            style={{ 
+              color: '#FFF8E8',
+              filter: 'drop-shadow(0 0 8px rgba(255, 248, 232, 0.5)) drop-shadow(0 0 16px rgba(245, 230, 200, 0.3))',
+            }} 
+          />
         </motion.div>
       </div>
 
@@ -223,8 +235,8 @@ const Index = () => {
                       className="text-white text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide" 
                       style={{ 
                         fontFamily: "Poppins, sans-serif",
-                        textShadow: '0 0 10px rgba(255,255,255,0.4), 0 0 20px rgba(255,255,255,0.2), 0 2px 4px rgba(0,0,0,0.3)',
-                        filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.3))',
+                        textShadow: '0 0 15px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.4), 0 0 45px rgba(255,255,255,0.2), 0 2px 4px rgba(0,0,0,0.3)',
+                        filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.5)) drop-shadow(0 4px 6px rgba(0,0,0,0.3))',
                       }}
                     >
                       AI Home Finder
@@ -597,21 +609,23 @@ const Index = () => {
         </div>
       </section>
 
-      {/* MARKET REPORT CTA - Premium White Frame */}
+      {/* MARKET REPORT CTA - Premium Champagne Frame */}
       <section className="py-20 md:py-28 bg-black">
         <div className="container mx-auto px-4">
-          <motion.div
-            className="text-center mb-10"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <span className="inline-block text-gold text-xs uppercase tracking-[0.3em] mb-4">Exclusive Publication</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Free Market <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Intelligence Book</span>
-            </h2>
-          </motion.div>
-          <MarketReportCTA />
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-3xl p-8 md:p-12 shadow-[0_0_40px_rgba(200,167,102,0.3)]">
+            <motion.div
+              className="text-center mb-10"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <span className="inline-block text-gold text-xs uppercase tracking-[0.3em] mb-4">Exclusive Publication</span>
+              <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                Free Market <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Intelligence Book</span>
+              </h2>
+            </motion.div>
+            <MarketReportCTA />
+          </div>
         </div>
       </section>
 
