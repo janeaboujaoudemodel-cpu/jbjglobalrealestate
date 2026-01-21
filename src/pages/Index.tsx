@@ -448,9 +448,9 @@ const Index = () => {
                 <p className="text-zinc-700 group-hover:text-zinc-600 text-sm mb-4 transition-colors">
                   Access AI-powered broker tools, training modules, CRM, marketing resources, and everything you need to succeed.
                 </p>
-                <span className="text-gold group-hover:text-black text-sm font-medium flex items-center gap-1 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.5))' }}>
-                  Access Broker Hub
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <span className="text-sm font-medium flex items-center gap-1 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.5))' }}>
+                  <span className="text-black font-bold group-hover:text-gold transition-colors">Access Broker Hub</span>
+                  <svg className="w-3 h-3 text-gold" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
                   </svg>
                 </span>
@@ -475,9 +475,9 @@ const Index = () => {
                 <p className="text-zinc-700 group-hover:text-zinc-600 text-sm mb-4 transition-colors">
                   AI-powered property analysis, comparison, mortgage calculator, and productivity tools — all free for investors and homeowners.
                 </p>
-                <span className="text-gold group-hover:text-black text-sm font-medium flex items-center gap-1 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.5))' }}>
-                  Explore Investor Hub
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <span className="text-sm font-medium flex items-center gap-1 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.5))' }}>
+                  <span className="text-black font-bold group-hover:text-gold transition-colors">Explore Investor Hub</span>
+                  <svg className="w-3 h-3 text-gold" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
                   </svg>
                 </span>

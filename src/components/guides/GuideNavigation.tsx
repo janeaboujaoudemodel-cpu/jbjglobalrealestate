@@ -53,7 +53,7 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
           {prevGuide ? (
             <Link 
               to={prevGuide.path}
-              className="flex-1 group bg-gradient-to-br from-zinc-50 to-white border-2 border-zinc-200 hover:border-gold/50 rounded-2xl p-8 transition-all hover:shadow-xl"
+              className="flex-1 group bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border-2 border-gold/30 hover:border-gold/60 rounded-2xl p-8 transition-all hover:shadow-xl"
             >
               <div className="flex items-center gap-6">
                 <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center group-hover:bg-gold/10 transition-colors shadow-lg">
@@ -106,7 +106,7 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
                 className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                   guide.path === current
                     ? "bg-gradient-to-r from-[#D4C4A8] via-[#C8B89A] to-[#B8A888] text-black shadow-md border border-gold/50"
-                    : "bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-zinc-700 hover:text-black border border-gold/30 hover:border-gold/50 shadow-[0_2px_10px_rgba(200,167,102,0.2)] hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)] hover:scale-[1.02]"
+                    : "bg-gradient-to-r from-champagne-light via-champagne to-champagne-dark text-zinc-700 hover:text-black border border-gold/30 hover:border-gold/50 shadow-[0_2px_10px_rgba(200,167,102,0.2)] hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)] hover:scale-[1.02]"
                 }`}
               >
                 {guide.title}
