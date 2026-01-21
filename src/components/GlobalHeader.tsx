@@ -140,7 +140,7 @@ const GlobalHeader = () => {
   const renderDropdown = (label: string, links: typeof propertiesLinks, isActiveCheck?: () => boolean) => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className={`flex items-center gap-0.5 px-1.5 xl:px-2 py-1 text-[10px] xl:text-[11px] font-semibold whitespace-nowrap transition-all rounded-full ${
+        <button className={`flex items-center gap-0.5 px-2 xl:px-2.5 py-1.5 text-[11px] xl:text-xs font-semibold whitespace-nowrap transition-all rounded-full ${
           isActiveCheck?.() ? 'text-gold bg-gold/10' : 'text-black hover:text-gold hover:bg-gold/10'
         }`}>
           {label}
@@ -194,7 +194,7 @@ const GlobalHeader = () => {
               {/* Subtle glow on hover */}
               <div className="absolute inset-0 rounded-full bg-gold/0 group-hover:bg-gold/10 transition-colors duration-300 blur-xl" />
             </div>
-            <span className="text-white font-semibold text-[8px] lg:text-[10px] tracking-[0.08em] uppercase whitespace-nowrap hidden lg:inline drop-shadow-sm">
+            <span className="text-white font-semibold text-[11px] lg:text-xs tracking-[0.08em] uppercase whitespace-nowrap hidden lg:inline drop-shadow-sm">
               JBJ Global Real Estate
             </span>
           </Link>
@@ -597,20 +597,20 @@ const GlobalHeader = () => {
           </nav>
 
           {/* RIGHT: Actions - Desktop only - Compact premium icon buttons with inverted hover */}
-          <div className="hidden lg:flex items-center gap-1 shrink-0 ml-2">
-            {/* Search Icon - White bg with gold icon normally, inverted on hover */}
+          <div className="hidden lg:flex items-center gap-3 shrink-0 ml-3">
+            {/* Search Icon - No border, just icon */}
             <Button
               variant="ghost"
               size="sm"
-              className="relative w-6 h-6 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
+              className="relative w-5 h-5 p-0 hover:opacity-80 transition-all duration-300 group"
               onClick={() => setSearchOpen(true)}
             >
-              <Search className="w-3 h-3 text-gold group-hover:text-gold-light transition-colors" />
+              <Search className="w-4 h-4 text-gold group-hover:text-gold-light transition-colors" />
             </Button>
 
-            {/* Language Switcher - Inverted style */}
+            {/* Language Switcher - No border */}
             <div className="shrink-0">
-              <LanguageSwitcher variant="compact" />
+              <LanguageSwitcher variant="icon-only" />
             </div>
 
             {/* User Menu - Desktop - Premium profile dropdown matching nav style */}
@@ -621,10 +621,10 @@ const GlobalHeader = () => {
                     <Button 
                       variant="ghost" 
                       size="icon"
-                      className="relative text-gold hover:text-gold-light w-6 h-6 p-0 rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group"
+                      className="relative text-gold hover:text-gold-light w-5 h-5 p-0 hover:opacity-80 transition-all duration-300 group"
                       aria-label={t('nav.myAccount')}
                     >
-                      <User className="w-2.5 h-2.5 group-hover:scale-110 transition-transform" />
+                      <User className="w-4 h-4 group-hover:scale-110 transition-transform" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent 
@@ -745,9 +745,9 @@ const GlobalHeader = () => {
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="relative text-gold hover:text-gold-light w-6 h-6 p-0 rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group"
+                    className="relative text-gold hover:text-gold-light w-5 h-5 p-0 hover:opacity-80 transition-all duration-300 group"
                   >
-                    <User className="w-2.5 h-2.5 group-hover:scale-110 transition-transform" />
+                    <User className="w-4 h-4 group-hover:scale-110 transition-transform" />
                   </Button>
                 </Link>
               )}
