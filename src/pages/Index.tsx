@@ -491,7 +491,8 @@ const Index = () => {
 
       {/* FOUNDER SECTION - Meet The Leadership */}
       <section className="py-20 md:py-28 bg-black">
-        <div className="container mx-auto px-4">
+        {/* Active Champagne Section Layer */}
+        <div className="mx-4 md:mx-8 lg:mx-16 py-12 md:py-16 px-4 md:px-8 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -516,25 +517,25 @@ const Index = () => {
                 <span className="text-gold font-semibold text-sm uppercase tracking-[0.2em]">Leadership</span>
               </div>
               <h2
-                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mt-4 mb-4"
+                className="text-black text-4xl md:text-5xl lg:text-6xl font-bold mt-4 mb-4"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 Meet the{" "}
                 <span 
-                  className="text-transparent bg-clip-text bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]"
-                  style={{ filter: 'drop-shadow(0 0 15px rgba(200,167,102,0.6))' }}
+                  className="text-transparent bg-clip-text bg-gradient-to-r from-[#C8A766] via-[#D4AF37] to-[#C8A766]"
+                  style={{ filter: 'drop-shadow(0 0 8px rgba(200,167,102,0.4))' }}
                 >
                   Founder
                 </span>
               </h2>
-              <p className="text-zinc-300 text-lg max-w-2xl mx-auto">
+              <p className="text-zinc-700 text-lg max-w-2xl mx-auto">
                 <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link> is a founder-led brokerage for buying, selling, and renting built on unwavering standards, discretion, and long-term vision.
               </p>
             </motion.div>
 
-            {/* Founder Card - Premium champagne/gold gradient for photo, dark for content */}
+            {/* Founder Card - Pearl card inside active champagne layer */}
             <motion.div
-              className="rounded-3xl overflow-hidden shadow-2xl border border-gold/30"
+              className="rounded-3xl overflow-hidden shadow-2xl border-2 border-gold/40 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]"
               variants={fadeInUp}
             >
               <div className="grid md:grid-cols-2 gap-0">
@@ -549,8 +550,8 @@ const Index = () => {
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent to-zinc-900/40 md:block hidden pointer-events-none" />
                 </div>
 
-                {/* Content Side - Champagne/Gold for premium contrast */}
-                <div className="p-8 md:p-12 flex flex-col justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                {/* Content Side - Pearl white/champagne for internal card */}
+                <div className="p-8 md:p-12 flex flex-col justify-center bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
                   <h3 className="text-black text-3xl md:text-4xl font-bold mb-2">Jane Abou Jaoude</h3>
                   <p className="text-gold text-xl md:text-2xl font-semibold mb-6">Founder & CEO</p>
 
