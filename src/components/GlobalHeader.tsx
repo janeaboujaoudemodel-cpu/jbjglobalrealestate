@@ -232,28 +232,11 @@ const GlobalHeader = () => {
                 side="right"
                 className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] p-0 flex flex-col h-full pt-20"
               >
-                {/* Menu Header with champagne styling */}
+                {/* Menu Header with champagne styling - transparent logo (no black box) */}
                 <div className="relative h-20 bg-gradient-to-b from-[#F5EBD7] to-[#E8DCC8] border-b border-gold/30 flex items-center px-5 shrink-0">
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
                   <BrandMonogram variant="light" size="sm" layout="horizontal" />
                 </div>
-
-                {/* AI Home Finder Banner - Purple & White */}
-                <Link
-                  to="/quiz"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="mx-4 mt-4 p-4 rounded-xl bg-gradient-to-r from-purple-600 via-purple-500 to-purple-600 border border-purple-400/50 shadow-lg hover:shadow-purple-500/30 transition-all group"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                      <Sparkles className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-white font-semibold text-sm">AI Home Finder</p>
-                      <p className="text-purple-200 text-xs">Find your perfect match</p>
-                    </div>
-                  </div>
-                </Link>
 
                 {/* Quick Actions Row */}
                 <div className="flex items-center justify-around px-4 py-3 mt-3 border-b border-gold/20">

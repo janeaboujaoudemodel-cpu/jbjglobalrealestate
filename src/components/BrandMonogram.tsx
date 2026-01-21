@@ -1,6 +1,8 @@
 import { cn } from "@/lib/utils";
-import jbjMonogramDark from "@/assets/jbj-monogram-dark.png";
+// jbj-monogram-transparent.png: black J letters, no black box behind B - for light backgrounds
 import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
+// jbj-monogram-nobuffer.png: clean transparent variant (no buffer/black box)
+import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
 
 type BrandMonogramVariant = "dark" | "light" | "transparent";
 type BrandMonogramSize = "xs" | "sm" | "md" | "lg" | "xl" | "footer";
@@ -37,8 +39,9 @@ export function BrandMonogram({
   const cfg = sizeConfig[size];
   const wordmarkColor = variant === "light" ? "text-foreground" : "text-white";
 
-  // Use a dark monogram on light backgrounds, and a white/transparent monogram on dark backgrounds.
-  const logoSrc = variant === "light" ? jbjMonogramDark : jbjMonogramTransparent;
+  // Use transparent monogram (black J letters, no black box behind B) on light backgrounds
+  // Use nobuffer version on dark backgrounds (clean transparent)
+  const logoSrc = variant === "light" ? jbjMonogramTransparent : jbjMonogramNobuffer;
 
   return (
     <div
@@ -89,7 +92,7 @@ export function BrandMonogram({
   );
 }
 
-// Header-specific monogram - horizontal layout with image
+// Header-specific monogram - horizontal layout with transparent image (no black box)
 export function BrandMonogramHeader({ className = "" }: { className?: string }) {
   return (
     <div 
@@ -97,7 +100,7 @@ export function BrandMonogramHeader({ className = "" }: { className?: string }) 
       style={{ fontFamily: "Poppins, sans-serif" }}
     >
       <img 
-        src={jbjMonogramDark}
+        src={jbjMonogramTransparent}
         alt="JBJ"
         width={40}
         height={40}
