@@ -103,7 +103,7 @@ const ProjectDetail = () => {
           </div>
 
           {/* Pearl Content Card */}
-          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl p-6 md:p-8 border-2 border-gold/40 shadow-lg">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl p-6 md:p-8 border-2 border-gold/40 shadow-lg">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
@@ -165,7 +165,7 @@ const ProjectDetail = () => {
                       <Button
                         variant="outline"
                         size="sm"
-                        className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/40 text-gold hover:bg-gold hover:text-black font-medium shadow-sm"
+                        className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/40 text-gold hover:bg-gold hover:text-black font-medium shadow-sm"
                       >
                         <Map className="w-4 h-4 mr-2 text-black" />
                         View on Map
@@ -184,7 +184,7 @@ const ProjectDetail = () => {
               {/* Project Details Grid - Pearl Cards */}
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {project.location && (
-                  <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] p-4 rounded-lg border-2 border-gold/40 shadow-sm">
+                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-4 rounded-lg border-2 border-gold/40 shadow-sm">
                     <div className="flex items-center gap-2 text-gold mb-2">
                       <MapPin className="w-5 h-5" />
                       <span className="text-sm font-medium">Location</span>
@@ -194,7 +194,7 @@ const ProjectDetail = () => {
                 )}
 
                 {project.bedrooms_min && (
-                  <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] p-4 rounded-lg border-2 border-gold/40 shadow-sm">
+                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-4 rounded-lg border-2 border-gold/40 shadow-sm">
                     <div className="flex items-center gap-2 text-gold mb-2">
                       <Users className="w-5 h-5" />
                       <span className="text-sm font-medium">Bedrooms</span>
@@ -208,7 +208,7 @@ const ProjectDetail = () => {
                 )}
 
                 {project.floors && (
-                  <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] p-4 rounded-lg border-2 border-gold/40 shadow-sm">
+                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-4 rounded-lg border-2 border-gold/40 shadow-sm">
                     <div className="flex items-center gap-2 text-gold mb-2">
                       <Building className="w-5 h-5" />
                       <span className="text-sm font-medium">Floors</span>
@@ -218,7 +218,7 @@ const ProjectDetail = () => {
                 )}
 
                 {project.handover_date && (
-                  <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] p-4 rounded-lg border-2 border-gold/40 shadow-sm">
+                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-4 rounded-lg border-2 border-gold/40 shadow-sm">
                     <div className="flex items-center gap-2 text-gold mb-2">
                       <Calendar className="w-5 h-5" />
                       <span className="text-sm font-medium">Handover</span>
@@ -228,7 +228,7 @@ const ProjectDetail = () => {
                 )}
 
                 {project.service_charge && (
-                  <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] p-4 rounded-lg border-2 border-gold/40 shadow-sm">
+                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-4 rounded-lg border-2 border-gold/40 shadow-sm">
                     <div className="flex items-center gap-2 text-gold mb-2">
                       <DollarSign className="w-5 h-5" />
                       <span className="text-sm font-medium">Service Charge</span>
@@ -238,7 +238,7 @@ const ProjectDetail = () => {
                 )}
 
                 {project.payment_plan && (
-                  <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] p-4 rounded-lg border-2 border-gold/40 shadow-sm">
+                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-4 rounded-lg border-2 border-gold/40 shadow-sm">
                     <div className="flex items-center gap-2 text-gold mb-2">
                       <Layers className="w-5 h-5" />
                       <span className="text-sm font-medium">Payment Plan</span>
@@ -250,7 +250,7 @@ const ProjectDetail = () => {
 
               {/* Amenities - Pearl Card */}
               {project.amenities && project.amenities.length > 0 && (
-                <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] p-6 rounded-xl border-2 border-gold/40 shadow-sm">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-6 rounded-xl border-2 border-gold/40 shadow-sm">
                   <h2
                     className="text-black font-semibold mb-4"
                     style={{ fontFamily: "Poppins, sans-serif", fontSize: "24px" }}
@@ -271,7 +271,7 @@ const ProjectDetail = () => {
               )}
 
               {/* Project Location Map - Pearl Card */}
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] p-6 rounded-xl border-2 border-gold/40 shadow-sm">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-6 rounded-xl border-2 border-gold/40 shadow-sm">
                 <h2
                   className="text-black font-semibold mb-4"
                   style={{ fontFamily: "Poppins, sans-serif", fontSize: "24px" }}
@@ -299,7 +299,7 @@ const ProjectDetail = () => {
               </div>
 
               {/* Full Property Analysis Report - Pearl Card */}
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
                     <FileText className="w-5 h-5 text-gold" />
@@ -368,7 +368,7 @@ const ProjectDetail = () => {
               </div>
 
               {/* Exclusive Report & Share - Pearl Card */}
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl p-6 border-2 border-gold/40">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl p-6 border-2 border-gold/40">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
                     <FileText className="w-5 h-5 text-gold" />
@@ -392,7 +392,7 @@ const ProjectDetail = () => {
 
               {/* AI Property Comparison - Pearl Card */}
               <Link to={`/compare?project=${project.slug}`}>
-                <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl p-6 border-2 border-gold/40 hover:border-gold hover:shadow-lg transition-all cursor-pointer group">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl p-6 border-2 border-gold/40 hover:border-gold hover:shadow-lg transition-all cursor-pointer group">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
                       <Scale className="w-5 h-5 text-gold" />
@@ -409,7 +409,7 @@ const ProjectDetail = () => {
               </Link>
 
               {/* Market Context - Pearl Card */}
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl border-2 border-gold/40">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl border-2 border-gold/40">
                 <ClientMarketContext
                   areaName={project.community?.name || project.location || "Dubai"}
                   trendDirection="stable"
@@ -418,12 +418,12 @@ const ProjectDetail = () => {
               </div>
 
               {/* Downloads - Pearl Card */}
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl border-2 border-gold/40">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl border-2 border-gold/40">
                 <DocumentDownloads documents={project.documents || []} />
               </div>
 
               {/* Contact Card - Pearl Card */}
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl p-6 border-2 border-gold/40">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl p-6 border-2 border-gold/40">
                 <h3
                   className="text-black text-xl font-semibold mb-4"
                   style={{ fontFamily: "Poppins, sans-serif" }}

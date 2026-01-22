@@ -39,7 +39,7 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
             </p>
             <Link 
               to="/buyer-guide"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-xl transition-all text-sm font-semibold shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 rounded-xl transition-all text-sm font-semibold shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02]"
             >
               <span className="text-gold">Start Here:</span>
               <span className="text-black">Buyer Guide</span>

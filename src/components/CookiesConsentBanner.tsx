@@ -78,7 +78,7 @@ const CookiesConsentBanner = () => {
           transition={{ duration: 0.4, ease: "easeOut" }}
           className="fixed bottom-0 left-0 right-0 z-50 p-4"
         >
-          <div className="max-w-4xl mx-auto bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] backdrop-blur-xl border border-gold/40 rounded-2xl shadow-2xl shadow-gold/10 overflow-hidden">
+          <div className="max-w-4xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] backdrop-blur-xl border border-gold/40 rounded-2xl shadow-2xl shadow-gold/10 overflow-hidden">
             {/* Top gold accent line */}
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
             
