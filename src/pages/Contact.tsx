@@ -730,75 +730,87 @@ END:VCARD`;
       {/* Support Ticket Section - Above "Prefer to Reach Us Directly" */}
       <SupportTicketBox />
 
-      {/* Direct Contact CTAs - "Prefer to Reach Us Directly" */}
-      <section className="py-12 bg-zinc-900/30">
-        <div className="container mx-auto px-4">
-          <p className="text-center text-sm mb-6">
-            <span className="text-white">Prefer to Reach Us</span>{" "}
-            <span className="text-gold font-semibold drop-shadow-[0_0_6px_rgba(200,167,102,0.5)]">Directly?</span>
-          </p>
-          <div className="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-            {/* WhatsApp CTA */}
-            <a 
-              href={getWhatsAppUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-4 bg-black border border-green-800/50 hover:border-green-600 rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-green-600/20"
-            >
-              <div className="w-12 h-12 bg-green-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                <MessageCircle className="w-6 h-6 text-green-500" />
-              </div>
-              <div>
-                <h3 className="text-white font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  WhatsApp
-                </h3>
-                <p className="text-zinc-400 text-sm">{CONTACT_INFO.phone}</p>
-              </div>
-            </a>
+      {/* Direct Contact CTAs - "Prefer to Reach Us Directly" - 3-Layer System */}
+      <section className="py-12 bg-black">
+        {/* Thin black contour + Active Champagne Layer */}
+        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
+          {/* Inner Pearl Layer */}
+          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
+            <p className="text-center text-lg mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <span className="text-black">Prefer to Reach Us</span>{" "}
+              <span className="text-gold font-semibold">Directly?</span>
+            </p>
+            <div className="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+              {/* WhatsApp CTA */}
+              <a 
+                href={getWhatsAppUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
+              >
+                <div className="w-12 h-12 bg-green-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-green-500/30">
+                  <MessageCircle className="w-6 h-6 text-green-600" />
+                </div>
+                <div>
+                  <h3 className="text-black font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    WhatsApp
+                  </h3>
+                  <p className="text-gold text-sm">{CONTACT_INFO.phone}</p>
+                </div>
+              </a>
 
-            {/* Call CTA */}
-            <a 
-              href={getCallUrl()}
-              className="flex items-center gap-4 bg-black border border-blue-800/50 hover:border-blue-600 rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-blue-600/20"
-            >
-              <div className="w-12 h-12 bg-blue-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Phone className="w-6 h-6 text-blue-500" />
-              </div>
-              <div>
-                <h3 className="text-white font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  Call Us
-                </h3>
-                <p className="text-zinc-400 text-sm">{CONTACT_INFO.phone}</p>
-              </div>
-            </a>
+              {/* Call CTA */}
+              <a 
+                href={getCallUrl()}
+                className="flex items-center gap-4 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
+              >
+                <div className="w-12 h-12 bg-blue-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-blue-500/30">
+                  <Phone className="w-6 h-6 text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="text-black font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    Call Us
+                  </h3>
+                  <p className="text-gold text-sm">{CONTACT_INFO.phone}</p>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Important Notice - Directly above Footer */}
-      <section className="py-10 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto bg-white border-2 border-gold rounded-xl p-6 md:p-8">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
-                <Shield className="w-4 h-4 text-gold" />
+      {/* Important Notice - 3-Layer System */}
+      <section className="py-10 bg-black">
+        {/* Thin black contour + Active Champagne Layer */}
+        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
+          {/* Inner Pearl Layer */}
+          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
+            <div className="max-w-3xl mx-auto">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-black rounded-xl flex items-center justify-center">
+                  <Shield className="w-5 h-5 text-gold" />
+                </div>
+                <h3 className="text-black font-semibold text-lg" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <span className="text-gold">Important</span> Notice
+                </h3>
               </div>
-              <h3 className="text-black font-semibold">Important Notice</h3>
+              
+              <p className="text-zinc-700 text-sm leading-relaxed mb-4">
+                JBJ Global Real Estate provides real estate brokerage support and coordination. 
+                We can introduce you to independent, licensed partners for legal services, mortgages, and concierge support. 
+                Partner services are delivered under the partner's own licence and terms, and the client contracts directly with the partner. 
+                We do not provide legal, mortgage, financial, or investment advice.
+              </p>
+              
+              <div className="h-px w-full bg-gradient-to-r from-transparent via-gold/40 to-transparent my-4" />
+              
+              <p className="text-zinc-600 text-sm leading-relaxed" dir="rtl">
+                جي بي جي للعقارات تقدم خدمات وساطة عقارية ودعم تنسيقي. 
+                يمكننا ربطك بشركاء مستقلين ومرخصين للخدمات القانونية والتمويل العقاري. 
+                تُقدَّم خدمات الشركاء وفق ترخيصهم وشروطهم الخاصة، ويكون التعاقد مباشرة بين العميل والشريك. 
+                نحن لا نقدم استشارات قانونية أو تمويلية أو استثمارية.
+              </p>
             </div>
-            
-            <p className="text-zinc-600 text-sm leading-relaxed mb-4">
-              JBJ Global Real Estate provides real estate brokerage support and coordination. 
-              We can introduce you to independent, licensed partners for legal services, mortgages, and concierge support. 
-              Partner services are delivered under the partner's own licence and terms, and the client contracts directly with the partner. 
-              We do not provide legal, mortgage, financial, or investment advice.
-            </p>
-            
-            <p className="text-zinc-500 text-sm leading-relaxed" dir="rtl">
-              جي بي جي للعقارات تقدم خدمات وساطة عقارية ودعم تنسيقي. 
-              يمكننا ربطك بشركاء مستقلين ومرخصين للخدمات القانونية والتمويل العقاري. 
-              تُقدَّم خدمات الشركاء وفق ترخيصهم وشروطهم الخاصة، ويكون التعاقد مباشرة بين العميل والشريك. 
-              نحن لا نقدم استشارات قانونية أو تمويلية أو استثمارية.
-            </p>
           </div>
         </div>
       </section>

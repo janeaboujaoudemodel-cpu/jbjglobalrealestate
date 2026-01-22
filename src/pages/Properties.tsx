@@ -483,52 +483,62 @@ const Properties = () => {
             )}
           </div>
           
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide w-full">
-            {/* Keyword Search - Pearl Box Style */}
-            <div className="relative flex-1 min-w-[120px]">
-              <Input
-                placeholder="Keyword"
-                value={filters.search}
-                onChange={(e) => {
-                  const next = e.target.value;
-                  updateFilter("search", next);
-                  setAppliedFilters((prev) => ({ ...prev, search: next }));
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleSearch();
-                }}
-                className="h-10 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-sm px-4 shadow-sm"
-              />
-            </div>
+          {/* Keyword Search - Full Width */}
+          <div className="relative w-full">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold" />
+            <Input
+              placeholder="Search by project name, developer, location..."
+              value={filters.search}
+              onChange={(e) => {
+                const next = e.target.value;
+                updateFilter("search", next);
+                setAppliedFilters((prev) => ({ ...prev, search: next }));
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSearch();
+              }}
+              className="h-12 pl-12 pr-4 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-base shadow-sm w-full"
+            />
 
-            {/* Location - Pearl Box Style */}
+          </div>
+
+          {/* Second Row - All Filters in Two Lines for Readability */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mt-4">
+            {/* Location - All 7 Emirates */}
             <Select
               value={filters.emirate || "all"}
               onValueChange={(value) => updateFilter("emirate", value === "all" ? null : value)}
             >
-              <SelectTrigger className="w-[130px] h-10 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm flex-shrink-0 shadow-sm">
-                <MapPin className="w-3.5 h-3.5 mr-1.5 text-gold flex-shrink-0" />
-                <SelectValue placeholder="All Locations" />
+              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+                <MapPin className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
+                <span className="truncate text-left flex-1">{filters.emirate || "All Emirates"}</span>
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Locations</SelectItem>
+              <SelectContent className="bg-white border-gold/30 z-50">
+                <SelectItem value="all">All Emirates</SelectItem>
                 <SelectItem value="Dubai">Dubai</SelectItem>
                 <SelectItem value="Abu Dhabi">Abu Dhabi</SelectItem>
                 <SelectItem value="Sharjah">Sharjah</SelectItem>
+                <SelectItem value="Ajman">Ajman</SelectItem>
                 <SelectItem value="Ras Al Khaimah">Ras Al Khaimah</SelectItem>
+                <SelectItem value="Fujairah">Fujairah</SelectItem>
+                <SelectItem value="Umm Al Quwain">Umm Al Quwain</SelectItem>
               </SelectContent>
             </Select>
 
-            {/* Area/Community - Pearl Box Style */}
+            {/* Area/Community */}
             <Select
               value={filters.communityId || "all"}
               onValueChange={(value) => updateFilter("communityId", value === "all" ? null : value)}
             >
-              <SelectTrigger className="w-[140px] h-10 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm flex-shrink-0 shadow-sm">
-                <Home className="w-3.5 h-3.5 mr-1.5 text-gold flex-shrink-0" />
-                <SelectValue placeholder="All Areas" />
+              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+                <Home className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
+                <span className="truncate text-left flex-1">
+                  {filters.communityId 
+                    ? allAreasSorted?.find(a => a.id === filters.communityId)?.name || "All Areas"
+                    : "All Areas"}
+                </span>
               </SelectTrigger>
-              <SelectContent className="max-h-60">
+              <SelectContent className="max-h-60 bg-white border-gold/30 z-50">
                 <SelectItem value="all">All Areas</SelectItem>
                 {allAreasSorted?.map((area) => (
                   <SelectItem key={area.id} value={area.id}>
@@ -538,16 +548,20 @@ const Properties = () => {
               </SelectContent>
             </Select>
 
-            {/* Developer - Pearl Box Style - All developers sorted by rank */}
+            {/* Developer - ALL developers sorted by rank */}
             <Select
               value={filters.developerId || "all"}
               onValueChange={(value) => updateFilter("developerId", value === "all" ? null : value)}
             >
-              <SelectTrigger className="w-[150px] h-10 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm flex-shrink-0 shadow-sm">
-                <Building2 className="w-3.5 h-3.5 mr-1.5 text-gold flex-shrink-0" />
-                <SelectValue placeholder="All Developers" />
+              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+                <Building2 className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
+                <span className="truncate text-left flex-1">
+                  {filters.developerId 
+                    ? allDevelopersSorted?.find(d => d.id === filters.developerId)?.name || "All Developers"
+                    : "All Developers"}
+                </span>
               </SelectTrigger>
-              <SelectContent className="max-h-72">
+              <SelectContent className="max-h-72 bg-white border-gold/30 z-50">
                 <SelectItem value="all">All Developers</SelectItem>
                 {allDevelopersSorted?.map((dev) => (
                   <SelectItem key={dev.id} value={dev.id}>
@@ -557,7 +571,7 @@ const Properties = () => {
               </SelectContent>
             </Select>
 
-            {/* Price Range - Pearl Box Style */}
+            {/* Price Range - Full readable text */}
             <Select
               value={
                 filters.priceMin === 0 && filters.priceMax === 500000000 
@@ -575,78 +589,101 @@ const Properties = () => {
                 }
               }}
             >
-              <SelectTrigger className="w-[120px] h-10 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm flex-shrink-0 shadow-sm">
-                <DollarSign className="w-3.5 h-3.5 mr-1 text-gold flex-shrink-0" />
-                <SelectValue placeholder="Any Price" />
+              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+                <DollarSign className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
+                <span className="truncate text-left flex-1">
+                  {filters.priceMin === 0 && filters.priceMax === 500000000
+                    ? "Any Price"
+                    : filters.priceMax === 1000000
+                    ? "Under AED 1M"
+                    : filters.priceMax === 3000000
+                    ? "AED 1M - 3M"
+                    : filters.priceMax === 5000000
+                    ? "AED 3M - 5M"
+                    : filters.priceMax === 10000000
+                    ? "AED 5M - 10M"
+                    : "AED 10M+"}
+                </span>
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white border-gold/30 z-50">
                 <SelectItem value="all">Any Price</SelectItem>
-                <SelectItem value="0-1000000">Under 1M</SelectItem>
-                <SelectItem value="1000000-3000000">1M - 3M</SelectItem>
-                <SelectItem value="3000000-5000000">3M - 5M</SelectItem>
-                <SelectItem value="5000000-10000000">5M - 10M</SelectItem>
-                <SelectItem value="10000000-500000000">10M+</SelectItem>
+                <SelectItem value="0-1000000">Under AED 1M</SelectItem>
+                <SelectItem value="1000000-3000000">AED 1M - 3M</SelectItem>
+                <SelectItem value="3000000-5000000">AED 3M - 5M</SelectItem>
+                <SelectItem value="5000000-10000000">AED 5M - 10M</SelectItem>
+                <SelectItem value="10000000-500000000">AED 10M+</SelectItem>
               </SelectContent>
             </Select>
 
-            {/* Size Unit - Pearl Box Style */}
+            {/* Size Unit */}
             <Select
               value={filters.sizeUnit}
               onValueChange={(value) => updateFilter("sizeUnit", value as 'sqft' | 'sqm')}
             >
-              <SelectTrigger className="w-[80px] h-10 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm flex-shrink-0 shadow-sm">
-                <SelectValue />
+              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+                <Maximize2 className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
+                <span className="truncate text-left flex-1">{filters.sizeUnit === 'sqft' ? 'Square Feet' : 'Square Meters'}</span>
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="sqft">sq ft</SelectItem>
-                <SelectItem value="sqm">sq m</SelectItem>
+              <SelectContent className="bg-white border-gold/30 z-50">
+                <SelectItem value="sqft">Square Feet (sq ft)</SelectItem>
+                <SelectItem value="sqm">Square Meters (sq m)</SelectItem>
               </SelectContent>
             </Select>
 
-            {/* Currency - Pearl Box Style */}
+            {/* Currency */}
             <Select
               value={filters.currency}
               onValueChange={(value) => updateFilter("currency", value as ExtendedCurrency)}
             >
-              <SelectTrigger className="w-[80px] h-10 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm flex-shrink-0 shadow-sm">
-                <SelectValue />
+              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+                <span className="truncate text-left flex-1">
+                  {filters.currency === 'AED' ? 'AED (Dirham)' 
+                    : filters.currency === 'USD' ? 'USD (Dollar)' 
+                    : filters.currency === 'EUR' ? 'EUR (Euro)' 
+                    : filters.currency === 'GBP' ? 'GBP (Pound)' 
+                    : 'INR (Rupee)'}
+                </span>
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="AED">AED</SelectItem>
-                <SelectItem value="USD">USD</SelectItem>
-                <SelectItem value="EUR">EUR</SelectItem>
-                <SelectItem value="GBP">GBP</SelectItem>
-                <SelectItem value="INR">INR</SelectItem>
+              <SelectContent className="bg-white border-gold/30 z-50">
+                <SelectItem value="AED">AED (Dirham)</SelectItem>
+                <SelectItem value="USD">USD (Dollar)</SelectItem>
+                <SelectItem value="EUR">EUR (Euro)</SelectItem>
+                <SelectItem value="GBP">GBP (Pound)</SelectItem>
+                <SelectItem value="INR">INR (Rupee)</SelectItem>
               </SelectContent>
             </Select>
+          </div>
 
-            {/* Premium Filter Toggle - Pearl Box Style */}
+          {/* Third Row - Premium, Advanced Filters, Search */}
+          <div className="flex items-center gap-3 mt-4 flex-wrap">
+            {/* Premium Filter Toggle */}
             <Button
               variant={filters.premiumOnly ? "default" : "outline"}
               onClick={() => {
                 updateFilter("premiumOnly", !filters.premiumOnly);
                 setAppliedFilters(prev => ({ ...prev, premiumOnly: !filters.premiumOnly }));
               }}
-              className={`h-10 px-3 rounded-lg flex items-center gap-1.5 text-sm flex-shrink-0 shadow-sm ${
+              className={`h-11 px-4 rounded-lg flex items-center gap-2 text-sm shadow-sm ${
                 filters.premiumOnly 
                   ? "bg-gradient-to-r from-gold to-[#E8D5A3] text-black border-gold font-bold" 
                   : "bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black hover:border-gold"
               }`}
             >
-              <Crown className="w-3.5 h-3.5" />
-              Premium
+              <Crown className="w-4 h-4" />
+              Premium Only
             </Button>
 
-            {/* Advanced Filters Button - Pearl Box Style */}
+            {/* Advanced Filters Button */}
             <Dialog open={isAdvancedOpen} onOpenChange={setIsAdvancedOpen}>
               <DialogTrigger asChild>
                 <Button 
                   variant="outline" 
-                  className="h-10 px-3 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black hover:border-gold rounded-lg flex-shrink-0 shadow-sm"
+                  className="h-11 px-4 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black hover:border-gold rounded-lg shadow-sm flex items-center gap-2"
                 >
-                  <Filter className="w-3.5 h-3.5 text-gold" />
+                  <Filter className="w-4 h-4 text-gold" />
+                  <span>More Filters</span>
                   {activeFilterCount > 0 && (
-                    <span className="ml-1.5 px-1.5 py-0.5 bg-gold text-black text-xs font-bold rounded">
+                    <span className="px-2 py-0.5 bg-gold text-black text-xs font-bold rounded-full">
                       {activeFilterCount}
                     </span>
                   )}
