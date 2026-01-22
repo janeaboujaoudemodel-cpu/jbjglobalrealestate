@@ -105,7 +105,8 @@ export const FAQFloatingSidebar = ({
               <Button
                 onClick={handleDismissTooltip}
                 size="sm"
-                className="w-full bg-gold hover:bg-gold/90 text-black font-medium text-xs"
+                variant="primary"
+                className="w-full text-xs"
               >
                 I Understand
               </Button>
@@ -205,8 +206,8 @@ export const FAQFloatingSidebar = ({
                 <Link to="/buyer-guide" className="block">
                   <Button 
                     size="sm"
-                    variant="outline"
-                    className="w-full text-xs py-2 border-gold/30 text-zinc-600 hover:text-gold hover:border-gold/50"
+                    variant="secondary"
+                    className="w-full text-xs py-2"
                   >
                     <Search className="w-3 h-3 mr-1.5" />
                     View Buyer Guide

@@ -115,7 +115,8 @@ export const GuideTableOfContents = ({
               <Button
                 onClick={handleDismissTooltip}
                 size="sm"
-                className="w-full bg-gold hover:bg-gold/90 text-black font-medium text-xs"
+                variant="primary"
+                className="w-full text-xs"
               >
                 I Understand
               </Button>
