@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, Loader2 } from 'lucide-react';
+import { X, Send, Loader2, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -96,36 +96,43 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-lg bg-zinc-900 border-zinc-800 text-white max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-white">
-            Contact Us
-          </DialogTitle>
-          <DialogDescription className="text-zinc-400">
-            Fill in your details and our team will get back to you shortly.
-          </DialogDescription>
+      <DialogContent className="sm:max-w-lg bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black max-h-[90vh] overflow-y-auto shadow-[0_0_40px_rgba(200,167,102,0.3)]">
+        <DialogHeader className="pb-4 border-b border-gold/20">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 flex items-center justify-center shadow-md">
+              <MessageSquare className="w-5 h-5 text-gold" />
+            </div>
+            <div>
+              <DialogTitle className="text-xl font-bold text-black">
+                Contact Us
+              </DialogTitle>
+              <DialogDescription className="text-zinc-600">
+                Fill in your details and our team will get back to you shortly.
+              </DialogDescription>
+            </div>
+          </div>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-zinc-300">Full Name *</Label>
+              <Label className="text-black font-medium">Full Name *</Label>
               <Input
                 value={formData.name}
                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                 placeholder="Your full name"
-                className="bg-zinc-800 border-zinc-700 text-white"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-black placeholder:text-zinc-500 focus:border-gold focus:ring-gold/30"
                 required
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-zinc-300">Email *</Label>
+              <Label className="text-black font-medium">Email *</Label>
               <Input
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                 placeholder="your@email.com"
-                className="bg-zinc-800 border-zinc-700 text-white"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-black placeholder:text-zinc-500 focus:border-gold focus:ring-gold/30"
                 required
               />
             </div>
@@ -133,23 +140,23 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-zinc-300">Phone Number</Label>
+              <Label className="text-black font-medium">Phone Number</Label>
               <Input
                 value={formData.phone}
                 onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                 placeholder="+971 50 XXX XXXX"
-                className="bg-zinc-800 border-zinc-700 text-white"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-black placeholder:text-zinc-500 focus:border-gold focus:ring-gold/30"
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-zinc-300">Preferred Language</Label>
+              <Label className="text-black font-medium">Preferred Language</Label>
               <Select value={formData.preferredLanguage} onValueChange={(v) => setFormData(prev => ({ ...prev, preferredLanguage: v }))}>
-                <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-black">
                   <SelectValue placeholder="Select language" />
                 </SelectTrigger>
-                <SelectContent className="bg-zinc-800 border-zinc-700">
+                <SelectContent>
                   {LANGUAGES.map(lang => (
-                    <SelectItem key={lang} value={lang} className="text-white hover:bg-zinc-700">
+                    <SelectItem key={lang} value={lang}>
                       {lang}
                     </SelectItem>
                   ))}
@@ -160,14 +167,14 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-zinc-300">Nationality</Label>
+              <Label className="text-black font-medium">Nationality</Label>
               <Select value={formData.nationality} onValueChange={(v) => setFormData(prev => ({ ...prev, nationality: v }))}>
-                <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-black">
                   <SelectValue placeholder="Select nationality" />
                 </SelectTrigger>
-                <SelectContent className="bg-zinc-800 border-zinc-700 max-h-60">
+                <SelectContent className="max-h-60">
                   {NATIONALITIES.map(nat => (
-                    <SelectItem key={nat} value={nat} className="text-white hover:bg-zinc-700">
+                    <SelectItem key={nat} value={nat}>
                       {nat}
                     </SelectItem>
                   ))}
@@ -175,25 +182,25 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label className="text-zinc-300">Current Location</Label>
+              <Label className="text-black font-medium">Current Location</Label>
               <Input
                 value={formData.currentLocation}
                 onChange={(e) => setFormData(prev => ({ ...prev, currentLocation: e.target.value }))}
                 placeholder="City, Country"
-                className="bg-zinc-800 border-zinc-700 text-white"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-black placeholder:text-zinc-500 focus:border-gold focus:ring-gold/30"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label className="text-zinc-300">Service Interested In *</Label>
+            <Label className="text-black font-medium">Service Interested In *</Label>
             <Select value={formData.service} onValueChange={(v) => setFormData(prev => ({ ...prev, service: v }))}>
-              <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+              <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-black">
                 <SelectValue placeholder="Select a service" />
               </SelectTrigger>
-              <SelectContent className="bg-zinc-800 border-zinc-700">
+              <SelectContent>
                 {SERVICES.map(svc => (
-                  <SelectItem key={svc.value} value={svc.value} className="text-white hover:bg-zinc-700">
+                  <SelectItem key={svc.value} value={svc.value}>
                     {svc.label}
                   </SelectItem>
                 ))}
@@ -202,41 +209,55 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label className="text-zinc-300">Your Inquiry / Message</Label>
+            <Label className="text-black font-medium">Your Inquiry / Message</Label>
             <Textarea
               value={formData.inquiry}
               onChange={(e) => setFormData(prev => ({ ...prev, inquiry: e.target.value }))}
               placeholder="Tell us about your requirements, budget, preferred areas, or any questions..."
-              className="bg-zinc-800 border-zinc-700 text-white min-h-[100px] resize-none"
+              className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-black placeholder:text-zinc-500 min-h-[100px] resize-none focus:border-gold focus:ring-gold/30"
             />
           </div>
 
-          <div className="flex gap-3 pt-2">
+          <div className="flex gap-3 pt-4 border-t border-gold/20">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
-              className="flex-1 border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+              className="flex-1 border-2 border-black text-black hover:bg-black hover:text-white transition-all duration-300"
             >
               Cancel
             </Button>
-            <Button
+            <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 bg-gold hover:bg-gold-dark text-black font-semibold"
+              className="relative flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 group overflow-hidden disabled:opacity-50"
+              style={{
+                background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                boxShadow: `
+                  0 8px 20px rgba(200,167,102,0.35),
+                  0 4px 10px rgba(0,0,0,0.15),
+                  inset 0 2px 4px rgba(255,255,255,0.9),
+                  inset 0 -2px 4px rgba(200,167,102,0.2)
+                `,
+              }}
             >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Sending...
-                </>
-              ) : (
-                <>
-                  <Send className="w-4 h-4 mr-2" />
-                  Send Inquiry
-                </>
-              )}
-            </Button>
+              <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+              <span className="relative flex items-center justify-center gap-2">
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin text-gold" />
+                    <span className="text-black">Sending</span>
+                    <span className="text-gold">...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
+                    <span className="text-black group-hover:text-gold transition-colors">Send</span>
+                    <span className="text-gold group-hover:text-black transition-colors">Inquiry</span>
+                  </>
+                )}
+              </span>
+            </button>
           </div>
         </form>
       </DialogContent>

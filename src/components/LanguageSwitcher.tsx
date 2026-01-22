@@ -52,7 +52,7 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
       <DropdownMenuContent 
         align="end" 
         sideOffset={12}
-        className="bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 min-w-[200px] rounded-xl shadow-2xl shadow-black/20 p-0 overflow-hidden"
+        className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 min-w-[200px] rounded-xl shadow-2xl shadow-black/20 p-0 overflow-hidden"
       >
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
         <ScrollArea className="h-[320px]">
@@ -61,13 +61,15 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
               <DropdownMenuItem 
                 key={lang.code}
                 onClick={() => setLanguage(lang.code)}
-                className={`flex items-center justify-between hover:bg-[#D4C4A0]/40 cursor-pointer transition-all duration-200 rounded-lg px-4 py-3 my-0.5 ${
-                  language === lang.code ? 'bg-gold/15 text-black border border-gold/30' : 'text-zinc-800 hover:text-black'
+                className={`flex items-center justify-between cursor-pointer transition-all duration-200 rounded-lg px-4 py-3 my-0.5 group ${
+                  language === lang.code 
+                    ? 'bg-gold/15 text-black border border-gold/30' 
+                    : 'text-black hover:text-gold hover:bg-gold/10 hover:shadow-[0_4px_15px_rgba(200,167,102,0.2)] hover:-translate-y-0.5'
                 }`}
               >
                 <span className="flex items-center gap-3">
                   <span className="text-lg">{lang.flag}</span>
-                  <span className="text-sm font-medium">{lang.nativeName}</span>
+                  <span className="text-sm font-medium group-hover:text-gold transition-colors">{lang.nativeName}</span>
                 </span>
                 {language === lang.code && (
                   <Check className="w-4 h-4 text-gold" />
