@@ -411,8 +411,8 @@ const Founder = () => {
                 className="max-w-4xl mx-auto space-y-6"
                 variants={fadeInUp}
               >
-                {/* Pearl Inner Cards */}
-                <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-sm">
+                {/* Champagne Inner Cards */}
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-sm">
                   <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
                     <BookOpen className="w-6 h-6" />
                     Origins & Early Entrepreneurship
@@ -428,7 +428,7 @@ const Founder = () => {
                   </p>
                 </div>
 
-                <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-sm">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-sm">
                   <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
                     <TrendingUp className="w-6 h-6" />
                     The Dubai Chapter
@@ -444,7 +444,7 @@ const Founder = () => {
                   </p>
                 </div>
 
-                <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-sm">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-sm">
                   <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
                     <Users className="w-6 h-6" />
                     Brokerage Training & Development
@@ -460,7 +460,7 @@ const Founder = () => {
                   </p>
                 </div>
 
-                <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-sm">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-sm">
                   <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
                     <Award className="w-6 h-6" />
                     Leadership Philosophy
@@ -511,7 +511,7 @@ const Founder = () => {
             >
               {/* GCA Award 2025 */}
               <motion.div 
-                className="group relative aspect-[4/5] rounded-xl overflow-hidden border-2 border-gold/40 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] hover:border-gold transition-all duration-500 shadow-sm"
+                className="group relative aspect-[4/5] rounded-xl overflow-hidden border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-gold transition-all duration-500 shadow-sm"
                 variants={scaleIn}
               >
                 <SafeImage 
@@ -907,9 +907,9 @@ const Founder = () => {
                       <span className="text-gold font-bold text-xl">{item.year}</span>
                     </div>
                     
-                    {/* Content card - Pearl Style */}
+                    {/* Content card - Champagne Style */}
                     <div className={`flex-1 ${index % 2 === 0 ? 'md:pr-16 md:text-right' : 'md:pl-16'} pl-16 md:pl-0`}>
-                      <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-5 hover:border-gold transition-colors shadow-sm">
+                      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-5 hover:border-gold transition-colors shadow-sm">
                         <span className="hidden md:inline-block text-gold font-bold text-xl mb-2">{item.year}</span>
                         <h4 className="text-black text-lg font-semibold mb-2">{item.title}</h4>
                         <p className="text-zinc-600 text-sm mb-3">{item.description}</p>
@@ -937,9 +937,9 @@ const Founder = () => {
         <div className="container mx-auto px-3 sm:px-4 lg:px-8">
           {/* Active Champagne Layer */}
           <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-2xl p-4 sm:p-6 shadow-lg">
-            {/* Pearl Inner Card */}
+            {/* Champagne Inner Card */}
             <motion.div 
-              className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-8 md:p-12 shadow-sm max-w-4xl mx-auto text-center"
+              className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-8 md:p-12 shadow-sm max-w-4xl mx-auto text-center"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
@@ -1015,7 +1015,7 @@ const Founder = () => {
             >
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                 <motion.div 
-                  className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-2xl p-6 md:p-8 hover:border-gold transition-all duration-500 group text-center shadow-sm"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-6 md:p-8 hover:border-gold transition-all duration-500 group text-center shadow-sm"
                   variants={fadeInUp}
                 >
                   <div className="w-12 h-12 mx-auto mb-4 bg-black rounded-xl flex items-center justify-center border border-gold/30">
@@ -1026,7 +1026,7 @@ const Founder = () => {
                 </motion.div>
                 
                 <motion.div 
-                  className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-2xl p-6 md:p-8 hover:border-gold transition-all duration-500 group text-center shadow-sm"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-6 md:p-8 hover:border-gold transition-all duration-500 group text-center shadow-sm"
                   variants={fadeInUp}
                 >
                   <div className="w-12 h-12 mx-auto mb-4 bg-black rounded-xl flex items-center justify-center border border-gold/30">
@@ -1037,7 +1037,7 @@ const Founder = () => {
                 </motion.div>
                 
                 <motion.div 
-                  className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-2xl p-6 md:p-8 hover:border-gold transition-all duration-500 group text-center shadow-sm"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-6 md:p-8 hover:border-gold transition-all duration-500 group text-center shadow-sm"
                   variants={fadeInUp}
                 >
                   <div className="w-12 h-12 mx-auto mb-4 bg-black rounded-xl flex items-center justify-center border border-gold/30">
@@ -1048,7 +1048,7 @@ const Founder = () => {
                 </motion.div>
                 
                 <motion.div 
-                  className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-2xl p-6 md:p-8 hover:border-gold transition-all duration-500 group text-center shadow-sm"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-6 md:p-8 hover:border-gold transition-all duration-500 group text-center shadow-sm"
                   variants={fadeInUp}
                 >
                   <div className="w-12 h-12 mx-auto mb-4 bg-black rounded-xl flex items-center justify-center border border-gold/30">
@@ -1182,7 +1182,7 @@ const Founder = () => {
               {philosophyItems.map((item, index) => (
                 <motion.div 
                   key={item.title}
-                  className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6 md:p-8 hover:border-gold transition-all duration-500 text-center shadow-sm"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 md:p-8 hover:border-gold transition-all duration-500 text-center shadow-sm"
                   variants={fadeInUp}
                 >
                   <div className="w-14 h-14 mx-auto mb-6 bg-black rounded-xl flex items-center justify-center border border-gold/30">
@@ -1206,9 +1206,9 @@ const Founder = () => {
         <div className="container mx-auto px-3 sm:px-4 lg:px-8 relative z-10">
           {/* Active Champagne Layer */}
           <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-2xl p-4 sm:p-6 shadow-lg">
-            {/* Pearl Inner Card */}
+            {/* Champagne Inner Card */}
             <motion.div 
-              className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-8 md:p-12 lg:p-16 shadow-sm max-w-5xl mx-auto"
+              className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-8 md:p-12 lg:p-16 shadow-sm max-w-5xl mx-auto"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
@@ -1293,7 +1293,7 @@ const Founder = () => {
             >
               {/* Professional portrait */}
               <motion.div 
-                className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-2 shadow-sm group"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-2 shadow-sm group"
                 variants={scaleIn}
               >
                 <div className="aspect-[3/4] rounded-lg overflow-hidden">
@@ -1308,7 +1308,7 @@ const Founder = () => {
               
               {/* Red carpet photo */}
               <motion.div 
-                className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-2 shadow-sm group"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-2 shadow-sm group"
                 variants={scaleIn}
               >
                 <div className="aspect-[3/4] rounded-lg overflow-hidden">
@@ -1331,9 +1331,9 @@ const Founder = () => {
           <div className="max-w-[1100px] mx-auto">
             {/* OUTER CARD - Active Champagne Layer - Larger padding */}
             <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6">
-              {/* INNER CARD - Pearl Layer - Smaller */}
+              {/* INNER CARD - Champagne Layer - Smaller */}
               <motion.div 
-                className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}

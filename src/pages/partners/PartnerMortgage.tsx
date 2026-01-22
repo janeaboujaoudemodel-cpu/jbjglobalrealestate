@@ -239,7 +239,7 @@ const PartnerMortgage = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+        <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
           <div className="container mx-auto px-4">
             <div className="max-w-2xl mx-auto">
               <Card className="border-zinc-200 bg-white shadow-sm">

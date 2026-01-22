@@ -333,9 +333,9 @@ const DesignBuild = () => {
           <div className="max-w-[1100px] mx-auto">
             {/* OUTER CARD (Active Champagne) */}
             <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
-              {/* INNER CARD (Pearl) */}
+              {/* INNER CARD (Champagne) */}
               <motion.div
-                className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}

@@ -288,7 +288,7 @@ const SellerGuide = () => {
             <div className="max-w-4xl mx-auto text-center">
               {/* Badge */}
               <motion.div 
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full px-5 py-2.5 mb-6 shadow-lg"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 rounded-full px-5 py-2.5 mb-6 shadow-lg"
                 variants={fadeInUp}
               >
                 <Building2 className="w-4 h-4 text-black" />
@@ -323,13 +323,13 @@ const SellerGuide = () => {
               <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
                 <Button 
                   onClick={scrollToGuide}
-                  className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
+                  className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
                 >
                   <ArrowDown className="w-5 h-5 mr-2 text-black" />
                   <span className="text-gold font-semibold">Start the Guide</span>
                 </Button>
                 <Link to="/seller-listing">
-                  <Button className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
+                  <Button className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
                     <Building2 className="w-5 h-5 mr-2 text-black" />
                     <span className="text-gold font-semibold">List Your Property</span>
                     <svg className="w-5 h-5 ml-2 text-black" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -753,7 +753,7 @@ const SellerGuide = () => {
         </section>
 
         {/* Guide Navigation */}
-        <section className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
+        <section className="py-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-t border-zinc-200">
           <div className="container mx-auto px-4">
             <GuideNavigation current="/seller-guide" guides={GUIDE_LINKS} showStartHere={false} />
           </div>

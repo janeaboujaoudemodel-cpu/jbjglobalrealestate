@@ -339,9 +339,9 @@ const PressKit = () => {
               className="grid md:grid-cols-2 gap-8"
               variants={staggerContainer}
             >
-              {/* Company Info - White Card */}
+              {/* Company Info - Champagne Card */}
               <motion.div 
-                className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-2xl p-8 shadow-lg"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-8 shadow-lg"
                 variants={fadeInUp}
               >
                 <h4 className="text-gold text-sm uppercase tracking-wider mb-6 flex items-center gap-2">
@@ -375,9 +375,9 @@ const PressKit = () => {
                 </div>
               </motion.div>
 
-              {/* Key Metrics - White Card */}
+              {/* Key Metrics - Champagne Card */}
               <motion.div 
-                className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-2xl p-8 shadow-lg"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-8 shadow-lg"
                 variants={fadeInUp}
               >
                 <h4 className="text-gold text-sm uppercase tracking-wider mb-6 flex items-center gap-2">
@@ -409,7 +409,7 @@ const PressKit = () => {
       </section>
 
       {/* Media Contact - Premium champagne Section */}
-      <section className="py-20 md:py-28 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
+      <section className="py-20 md:py-28 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-t border-zinc-200">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"

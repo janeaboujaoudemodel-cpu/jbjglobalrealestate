@@ -869,7 +869,7 @@ const AreaGuides = () => {
                       placeholder="Search by community name..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-12 pr-10 h-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 focus:border-gold text-black placeholder:text-zinc-500 w-full shadow-sm"
+                      className="pl-12 pr-10 h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 focus:border-gold text-black placeholder:text-zinc-500 w-full shadow-sm"
                     />
                     {searchQuery && (
                       <button
@@ -889,7 +889,7 @@ const AreaGuides = () => {
                         onClick={() => setSelectedEmirate(emirate.id)}
                         className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
                           selectedEmirate === emirate.id
-                            ? "bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] text-black border-2 border-gold shadow-sm"
+                            ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-2 border-gold shadow-sm"
                             : "bg-white/50 text-black border-2 border-gold/30 hover:border-gold"
                         }`}
                       >
@@ -912,7 +912,7 @@ const AreaGuides = () => {
                         onClick={() => setSortBy(option.id)}
                         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                           sortBy === option.id
-                            ? "bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] text-black border-2 border-gold shadow-sm"
+                            ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-2 border-gold shadow-sm"
                             : "bg-white/50 text-black border-2 border-gold/30 hover:border-gold"
                         }`}
                       >
@@ -944,7 +944,7 @@ const AreaGuides = () => {
                 <motion.div key={area.slug} variants={fadeInUp}>
                   <Link 
                     to={`/area/${area.slug}`}
-                    className="group block relative overflow-hidden rounded-2xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 hover:border-gold transition-all duration-500 hover:shadow-xl hover:shadow-gold/20 h-full flex flex-col shadow-sm"
+                    className="group block relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold transition-all duration-500 hover:shadow-xl hover:shadow-gold/20 h-full flex flex-col shadow-sm"
                   >
                     {/* Image - Fixed Height */}
                     <div className="relative h-48 overflow-hidden flex-shrink-0">
@@ -965,13 +965,13 @@ const AreaGuides = () => {
                       )}
                       
                       {/* Hover Arrow */}
-                      <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 shadow-lg">
+                      <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 shadow-lg">
                         <ArrowUpRight className="w-5 h-5 text-gold" />
                       </div>
 
                       {/* Premium Badge */}
                       <div className="absolute bottom-4 left-4">
-                        <span className="px-3 py-1 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-full text-xs text-black font-medium shadow-md">
+                        <span className="px-3 py-1 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-full text-xs text-black font-medium shadow-md">
                           Premium Community
                         </span>
                       </div>

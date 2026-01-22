@@ -1056,7 +1056,7 @@ const ListingAdmin = () => {
                   <div className="flex justify-center gap-3">
                     <Button
                       onClick={handleCreateNew}
-                      className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300"
+                      className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300"
                     >
                       <Plus className="w-4 h-4 mr-2 text-gold" />
                       Create New Project
