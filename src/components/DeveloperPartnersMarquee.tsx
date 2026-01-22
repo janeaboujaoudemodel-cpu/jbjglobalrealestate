@@ -125,12 +125,12 @@ const DeveloperPartnersMarquee = () => {
                   key={`${developer.slug}-${index}`}
                   className="flex-shrink-0 flex items-center gap-4 group"
                 >
-                  {/* Developer Label - WHITE bg with split text */}
+                  {/* Developer Label - Transparent bg with gold border, 3D effect on hover */}
                   <Link
                     to={`/properties?developer=${encodeURIComponent(
                       developer.developerId ?? developer.slug
                     )}`}
-                    className="inline-flex items-center gap-1 px-4 py-2.5 bg-white border-2 border-gold/50 rounded-lg transition-all duration-300 hover:scale-105 hover:border-black hover:shadow-lg group"
+                    className="inline-flex items-center gap-1 px-4 py-2.5 bg-transparent border-2 border-gold/50 rounded-lg transition-all duration-300 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] group"
                     title={developer.name}
                   >
                     {/* Normal: First half black, second half gold. Hover: Invert */}
