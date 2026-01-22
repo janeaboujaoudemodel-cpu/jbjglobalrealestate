@@ -403,12 +403,12 @@ const Properties = () => {
         </motion.div>
       </section>
 
-      {/* Main Search Bar - Fixed under header (sticky on scroll) */}
-      <section className="sticky top-16 lg:top-[72px] z-40 bg-black/95 backdrop-blur-md border-b border-zinc-800 py-4 shadow-lg shadow-black/50">
+      {/* Filters Section - 3-Layer System: Black > Active Champagne > Pearl Filter Boxes */}
+      <section className="sticky top-16 lg:top-[72px] z-40 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border-b border-gold/30 py-4 shadow-lg">
         <div className="container mx-auto px-4">
           {/* Transaction Type Tabs - Buy / Rent */}
           <div className="flex items-center gap-2 mb-4 flex-wrap">
-            <span className="text-muted-foreground text-sm mr-2">I want to:</span>
+            <span className="text-black/70 text-sm mr-2 font-medium">I want to:</span>
             {[
               { value: 'buy', label: 'Buy' },
               { value: 'rent', label: 'Rent' },
@@ -435,7 +435,7 @@ const Properties = () => {
             {/* Buy-only Status Shortcuts */}
             {appliedFilters.transactionType === 'buy' && (
               <>
-                <div className="w-px h-6 bg-border mx-2" />
+                <div className="w-px h-6 bg-gold/30 mx-2" />
 
                 {/* All status */}
                 <Button
@@ -484,7 +484,7 @@ const Properties = () => {
           </div>
           
           <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide w-full">
-            {/* Keyword Search */}
+            {/* Keyword Search - Pearl Box Style */}
             <div className="relative flex-1 min-w-[120px]">
               <Input
                 placeholder="Keyword"
@@ -492,54 +492,53 @@ const Properties = () => {
                 onChange={(e) => {
                   const next = e.target.value;
                   updateFilter("search", next);
-                  // Keyword should work instantly without needing "Search"
                   setAppliedFilters((prev) => ({ ...prev, search: next }));
                 }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") handleSearch();
                 }}
-                className="h-10 bg-white border-zinc-300 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-sm px-4"
+                className="h-10 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-sm px-4 shadow-sm"
               />
             </div>
 
-            {/* Location */}
+            {/* Location - Pearl Box Style */}
             <Select
               value={filters.emirate || "all"}
               onValueChange={(value) => updateFilter("emirate", value === "all" ? null : value)}
             >
-              <SelectTrigger className="w-[130px] h-10 bg-white border-zinc-300 text-black rounded-lg text-sm flex-shrink-0">
-                <MapPin className="w-3.5 h-3.5 mr-1.5 text-zinc-500 flex-shrink-0" />
+              <SelectTrigger className="w-[130px] h-10 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm flex-shrink-0 shadow-sm">
+                <MapPin className="w-3.5 h-3.5 mr-1.5 text-gold flex-shrink-0" />
                 <SelectValue placeholder="All Locations" />
               </SelectTrigger>
-              <SelectContent className="bg-white border-zinc-200">
-                <SelectItem value="all" className="text-black hover:bg-zinc-100">All Locations</SelectItem>
-                <SelectItem value="Dubai" className="text-black hover:bg-zinc-100">Dubai</SelectItem>
-                <SelectItem value="Abu Dhabi" className="text-black hover:bg-zinc-100">Abu Dhabi</SelectItem>
-                <SelectItem value="Sharjah" className="text-black hover:bg-zinc-100">Sharjah</SelectItem>
-                <SelectItem value="Ras Al Khaimah" className="text-black hover:bg-zinc-100">Ras Al Khaimah</SelectItem>
+              <SelectContent>
+                <SelectItem value="all">All Locations</SelectItem>
+                <SelectItem value="Dubai">Dubai</SelectItem>
+                <SelectItem value="Abu Dhabi">Abu Dhabi</SelectItem>
+                <SelectItem value="Sharjah">Sharjah</SelectItem>
+                <SelectItem value="Ras Al Khaimah">Ras Al Khaimah</SelectItem>
               </SelectContent>
             </Select>
 
-            {/* Developer */}
+            {/* Developer - Pearl Box Style */}
             <Select
               value={filters.developerId || "all"}
               onValueChange={(value) => updateFilter("developerId", value === "all" ? null : value)}
             >
-              <SelectTrigger className="w-[150px] h-10 bg-white border-zinc-300 text-black rounded-lg text-sm flex-shrink-0">
-                <Building2 className="w-3.5 h-3.5 mr-1.5 text-zinc-500 flex-shrink-0" />
+              <SelectTrigger className="w-[150px] h-10 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm flex-shrink-0 shadow-sm">
+                <Building2 className="w-3.5 h-3.5 mr-1.5 text-gold flex-shrink-0" />
                 <SelectValue placeholder="All Developers" />
               </SelectTrigger>
-              <SelectContent className="bg-white border-zinc-200 max-h-60">
-                <SelectItem value="all" className="text-black hover:bg-zinc-100">All Developers</SelectItem>
+              <SelectContent className="max-h-60">
+                <SelectItem value="all">All Developers</SelectItem>
                 {availableDevelopers?.map((dev) => (
-                  <SelectItem key={dev.id} value={dev.id} className="text-black hover:bg-zinc-100">
+                  <SelectItem key={dev.id} value={dev.id}>
                     {dev.name}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
 
-            {/* Price Range */}
+            {/* Price Range - Pearl Box Style */}
             <Select
               value={
                 filters.priceMin === 0 && filters.priceMax === 500000000 
@@ -557,76 +556,76 @@ const Properties = () => {
                 }
               }}
             >
-              <SelectTrigger className="w-[120px] h-10 bg-white border-zinc-300 text-black rounded-lg text-sm flex-shrink-0">
-                <DollarSign className="w-3.5 h-3.5 mr-1 text-zinc-500 flex-shrink-0" />
+              <SelectTrigger className="w-[120px] h-10 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm flex-shrink-0 shadow-sm">
+                <DollarSign className="w-3.5 h-3.5 mr-1 text-gold flex-shrink-0" />
                 <SelectValue placeholder="Any Price" />
               </SelectTrigger>
-              <SelectContent className="bg-white border-zinc-200">
-                <SelectItem value="all" className="text-black hover:bg-zinc-100">Any Price</SelectItem>
-                <SelectItem value="0-1000000" className="text-black hover:bg-zinc-100">Under 1M</SelectItem>
-                <SelectItem value="1000000-3000000" className="text-black hover:bg-zinc-100">1M - 3M</SelectItem>
-                <SelectItem value="3000000-5000000" className="text-black hover:bg-zinc-100">3M - 5M</SelectItem>
-                <SelectItem value="5000000-10000000" className="text-black hover:bg-zinc-100">5M - 10M</SelectItem>
-                <SelectItem value="10000000-500000000" className="text-black hover:bg-zinc-100">10M+</SelectItem>
+              <SelectContent>
+                <SelectItem value="all">Any Price</SelectItem>
+                <SelectItem value="0-1000000">Under 1M</SelectItem>
+                <SelectItem value="1000000-3000000">1M - 3M</SelectItem>
+                <SelectItem value="3000000-5000000">3M - 5M</SelectItem>
+                <SelectItem value="5000000-10000000">5M - 10M</SelectItem>
+                <SelectItem value="10000000-500000000">10M+</SelectItem>
               </SelectContent>
             </Select>
 
-            {/* Size Unit */}
+            {/* Size Unit - Pearl Box Style */}
             <Select
               value={filters.sizeUnit}
               onValueChange={(value) => updateFilter("sizeUnit", value as 'sqft' | 'sqm')}
             >
-              <SelectTrigger className="w-[80px] h-10 bg-white border-zinc-300 text-black rounded-lg text-sm flex-shrink-0">
+              <SelectTrigger className="w-[80px] h-10 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm flex-shrink-0 shadow-sm">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-white border-zinc-200">
-                <SelectItem value="sqft" className="text-black hover:bg-zinc-100">sq ft</SelectItem>
-                <SelectItem value="sqm" className="text-black hover:bg-zinc-100">sq m</SelectItem>
+              <SelectContent>
+                <SelectItem value="sqft">sq ft</SelectItem>
+                <SelectItem value="sqm">sq m</SelectItem>
               </SelectContent>
             </Select>
 
-            {/* Currency */}
+            {/* Currency - Pearl Box Style */}
             <Select
               value={filters.currency}
               onValueChange={(value) => updateFilter("currency", value as ExtendedCurrency)}
             >
-              <SelectTrigger className="w-[80px] h-10 bg-white border-zinc-300 text-black rounded-lg text-sm flex-shrink-0">
+              <SelectTrigger className="w-[80px] h-10 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm flex-shrink-0 shadow-sm">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-white border-zinc-200">
-                <SelectItem value="AED" className="text-black hover:bg-zinc-100">AED</SelectItem>
-                <SelectItem value="USD" className="text-black hover:bg-zinc-100">USD</SelectItem>
-                <SelectItem value="EUR" className="text-black hover:bg-zinc-100">EUR</SelectItem>
-                <SelectItem value="GBP" className="text-black hover:bg-zinc-100">GBP</SelectItem>
-                <SelectItem value="INR" className="text-black hover:bg-zinc-100">INR</SelectItem>
+              <SelectContent>
+                <SelectItem value="AED">AED</SelectItem>
+                <SelectItem value="USD">USD</SelectItem>
+                <SelectItem value="EUR">EUR</SelectItem>
+                <SelectItem value="GBP">GBP</SelectItem>
+                <SelectItem value="INR">INR</SelectItem>
               </SelectContent>
             </Select>
 
-            {/* Premium Filter Toggle */}
+            {/* Premium Filter Toggle - Pearl Box Style */}
             <Button
               variant={filters.premiumOnly ? "default" : "outline"}
               onClick={() => {
                 updateFilter("premiumOnly", !filters.premiumOnly);
                 setAppliedFilters(prev => ({ ...prev, premiumOnly: !filters.premiumOnly }));
               }}
-              className={`h-10 px-3 rounded-lg flex items-center gap-1.5 text-sm flex-shrink-0 ${
+              className={`h-10 px-3 rounded-lg flex items-center gap-1.5 text-sm flex-shrink-0 shadow-sm ${
                 filters.premiumOnly 
                   ? "bg-gradient-to-r from-gold to-[#E8D5A3] text-black border-gold font-bold" 
-                  : "bg-white border-zinc-300 text-zinc-700 hover:bg-zinc-100 hover:text-black"
+                  : "bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black hover:border-gold"
               }`}
             >
               <Crown className="w-3.5 h-3.5" />
               Premium
             </Button>
 
-            {/* Advanced Filters Button */}
+            {/* Advanced Filters Button - Pearl Box Style */}
             <Dialog open={isAdvancedOpen} onOpenChange={setIsAdvancedOpen}>
               <DialogTrigger asChild>
                 <Button 
                   variant="outline" 
-                  className="h-10 px-3 bg-white border-zinc-300 text-zinc-700 hover:bg-zinc-100 hover:text-black rounded-lg flex-shrink-0"
+                  className="h-10 px-3 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black hover:border-gold rounded-lg flex-shrink-0 shadow-sm"
                 >
-                  <Filter className="w-3.5 h-3.5" />
+                  <Filter className="w-3.5 h-3.5 text-gold" />
                   {activeFilterCount > 0 && (
                     <span className="ml-1.5 px-1.5 py-0.5 bg-gold text-black text-xs font-bold rounded">
                       {activeFilterCount}
@@ -634,14 +633,14 @@ const Properties = () => {
                   )}
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-2xl bg-white border-gold/30 text-black p-0">
-                <DialogHeader className="p-6 border-b border-gold/20 bg-gradient-to-r from-[#F5F0E6] to-[#FBF8F3]">
-                  <DialogTitle className="text-xl font-semibold text-gold" style={{ fontFamily: "Poppins, sans-serif" }}>
-                    Advanced Filters
+              <DialogContent className="max-w-2xl bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border-gold/30 text-black p-0">
+                <DialogHeader className="p-6 border-b border-gold/30 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+                  <DialogTitle className="text-xl font-semibold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    Advanced <span className="text-gold">Filters</span>
                   </DialogTitle>
                 </DialogHeader>
                 <ScrollArea className="max-h-[70vh]">
-                  <div className="p-6 space-y-6 bg-white">
+                  <div className="p-6 space-y-6 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
                     {/* Property Type */}
                     <div>
                       <label className="text-sm text-gold font-medium mb-2 block">Property Type</label>
@@ -865,10 +864,10 @@ const Properties = () => {
               <button
                 key={option.value}
                 onClick={() => setSortBy(option.value)}
-                className={`px-4 py-2 rounded-full text-xs font-semibold transition-all border ${
+                className={`px-4 py-2 rounded-full text-xs font-semibold transition-all border-2 ${
                   sortBy === option.value
-                    ? "bg-white text-black border-gold shadow-[0_0_18px_rgba(200,167,102,0.25)]"
-                    : "bg-black text-gold border-black hover:bg-zinc-800"
+                    ? "bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] text-black border-gold shadow-[0_0_18px_rgba(200,167,102,0.25)]"
+                    : "bg-transparent text-black border-gold/30 hover:border-gold"
                 }`}
               >
                 {option.label}
@@ -881,7 +880,7 @@ const Properties = () => {
       {/* Divider between Search and Results */}
       <div className="h-1 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
-      {/* Results Section */}
+      {/* Results Section - Black Background with Pearl Property Cards */}
       <section className="py-12 bg-black">
         <div className="container mx-auto px-4">
           {/* Results Count */}

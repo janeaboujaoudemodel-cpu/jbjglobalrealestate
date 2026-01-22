@@ -840,8 +840,8 @@ const AreaGuides = () => {
           </div>
         </section>
 
-        {/* Area Cards Grid */}
-        <section id="explore-areas" className="py-20 relative scroll-mt-24">
+        {/* Area Cards Grid - 3-Layer System: Black > Active Champagne Section > Pearl Cards */}
+        <section id="explore-areas" className="py-20 bg-black relative scroll-mt-24">
           <div className="container mx-auto px-4">
             {/* Section Header */}
             <motion.div
@@ -858,30 +858,30 @@ const AreaGuides = () => {
                 Each area offers a unique lifestyle. Click to explore detailed guides with pricing, amenities, and local insights.
               </p>
 
-              {/* Search & Filter Bar */}
+              {/* Search & Filter Bar - Active Champagne Layer with Pearl Filter Boxes */}
               <div className="max-w-5xl mx-auto">
-              <div className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-4 md:p-6 border border-gold/30 shadow-lg">
-                {/* Search Input - Full Width */}
-                <div className="relative mb-4">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold pointer-events-none" />
-                  <Input
-                    type="text"
-                    placeholder="Search by community name..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-12 pr-10 h-12 bg-white border-gold/30 focus:border-gold text-black placeholder:text-zinc-500 w-full"
-                  />
-                  {searchQuery && (
-                    <button
-                      onClick={() => setSearchQuery("")}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-zinc-200 hover:bg-zinc-300 flex items-center justify-center transition-colors"
-                    >
-                      <X className="w-3 h-3 text-zinc-600" />
-                    </button>
-                  )}
-                </div>
+                <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl p-4 md:p-6 border border-gold/30 shadow-lg">
+                  {/* Search Input - Pearl Box Style */}
+                  <div className="relative mb-4">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold pointer-events-none" />
+                    <Input
+                      type="text"
+                      placeholder="Search by community name..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-12 pr-10 h-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 focus:border-gold text-black placeholder:text-zinc-500 w-full shadow-sm"
+                    />
+                    {searchQuery && (
+                      <button
+                        onClick={() => setSearchQuery("")}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-gold/20 hover:bg-gold/30 flex items-center justify-center transition-colors"
+                      >
+                        <X className="w-3 h-3 text-black" />
+                      </button>
+                    )}
+                  </div>
 
-                  {/* Emirate Filter - Horizontally Scrollable */}
+                  {/* Emirate Filter - Pearl Buttons */}
                   <div className="flex flex-wrap gap-2 justify-center">
                     {UAE_EMIRATES.map((emirate) => (
                       <button
@@ -889,8 +889,8 @@ const AreaGuides = () => {
                         onClick={() => setSelectedEmirate(emirate.id)}
                         className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
                           selectedEmirate === emirate.id
-                            ? "bg-black text-gold border border-gold/50"
-                            : "bg-white text-zinc-600 border border-zinc-300 hover:border-gold/50 hover:text-gold"
+                            ? "bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] text-black border-2 border-gold shadow-sm"
+                            : "bg-white/50 text-black border-2 border-gold/30 hover:border-gold"
                         }`}
                       >
                         {emirate.name}
@@ -898,9 +898,9 @@ const AreaGuides = () => {
                     ))}
                   </div>
 
-                  {/* Sort Options - Using Global Active Color System */}
+                  {/* Sort Options - Pearl Buttons */}
                   <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-                    <span className="text-sm text-zinc-500 mr-2">Sort by:</span>
+                    <span className="text-sm text-black/70 mr-2 font-medium">Sort by:</span>
                     {[
                       { id: "featured" as SortOption, label: "Featured", icon: Star },
                       { id: "trending" as SortOption, label: "Trending", icon: Flame },
@@ -912,21 +912,21 @@ const AreaGuides = () => {
                         onClick={() => setSortBy(option.id)}
                         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                           sortBy === option.id
-                            ? "jj-sort-active"
-                            : "jj-sort-inactive"
+                            ? "bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] text-black border-2 border-gold shadow-sm"
+                            : "bg-white/50 text-black border-2 border-gold/30 hover:border-gold"
                         }`}
                       >
-                        <option.icon className={`w-3 h-3 ${sortBy === option.id ? "text-black" : ""}`} />
+                        <option.icon className={`w-3 h-3 ${sortBy === option.id ? "text-gold" : ""}`} />
                         {option.label}
                       </button>
                     ))}
                   </div>
 
                   {/* Results Count */}
-                  <div className="mt-4 text-sm text-zinc-600 text-center">
+                  <div className="mt-4 text-sm text-black/70 text-center font-medium">
                     Showing <span className="font-semibold text-gold">{filteredGuides.length}</span> communities
                     {selectedEmirate !== "all" && (
-                      <span> in <span className="font-semibold">{UAE_EMIRATES.find(e => e.id === selectedEmirate)?.name}</span></span>
+                      <span> in <span className="font-semibold text-black">{UAE_EMIRATES.find(e => e.id === selectedEmirate)?.name}</span></span>
                     )}
                   </div>
                 </div>
@@ -944,7 +944,7 @@ const AreaGuides = () => {
                 <motion.div key={area.slug} variants={fadeInUp}>
                   <Link 
                     to={`/area/${area.slug}`}
-                    className="group block relative overflow-hidden rounded-2xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 hover:border-gold transition-all duration-500 hover:shadow-xl hover:shadow-gold/20 h-full flex flex-col"
+                    className="group block relative overflow-hidden rounded-2xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 hover:border-gold transition-all duration-500 hover:shadow-xl hover:shadow-gold/20 h-full flex flex-col shadow-sm"
                   >
                     {/* Image - Fixed Height */}
                     <div className="relative h-48 overflow-hidden flex-shrink-0">
@@ -965,13 +965,13 @@ const AreaGuides = () => {
                       )}
                       
                       {/* Hover Arrow */}
-                      <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 border border-gold/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 shadow-lg">
-                        <ArrowUpRight className="w-5 h-5 text-black" />
+                      <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 shadow-lg">
+                        <ArrowUpRight className="w-5 h-5 text-gold" />
                       </div>
 
                       {/* Premium Badge */}
                       <div className="absolute bottom-4 left-4">
-                        <span className="px-3 py-1 bg-white/90 backdrop-blur-sm border border-gold/30 rounded-full text-xs text-black font-medium shadow-md">
+                        <span className="px-3 py-1 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-full text-xs text-black font-medium shadow-md">
                           Premium Community
                         </span>
                       </div>
@@ -992,7 +992,7 @@ const AreaGuides = () => {
                         {area.shortDescription}
                       </p>
                       
-                      <div className="flex items-center justify-between pt-4 border-t border-zinc-200 mt-auto">
+                      <div className="flex items-center justify-between pt-4 border-t border-gold/20 mt-auto">
                         <span className="text-gold text-sm font-medium flex items-center gap-2 group-hover:gap-3 transition-all">
                           Read Full Guide
                           <ArrowUpRight className="w-4 h-4" />
