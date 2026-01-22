@@ -111,27 +111,27 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: 100, opacity: 0 }}
       className={cn(
-        'w-80 bg-white border-l border-gold/10 h-full overflow-hidden flex flex-col',
+        'w-full h-full overflow-hidden flex flex-col bg-transparent',
         className
       )}
     >
-      {/* Header */}
-      <div className="p-4 border-b border-gold/10 bg-gradient-to-r from-white to-[#FDFBF7]">
+      {/* Header - Champagne gradient */}
+      <div className="p-4 border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="p-2 bg-gradient-to-br from-gold/10 to-gold/5 rounded-lg">
+            <div className="p-2 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-lg border border-gold/30">
               <Sparkles className="w-5 h-5 text-gold" />
             </div>
             <div>
               <h3 className="font-semibold text-black">AI Insights</h3>
-              <p className="text-xs text-zinc-500">Real-time intelligence</p>
+              <p className="text-xs text-zinc-600">Real-time intelligence</p>
             </div>
           </div>
           <div className="flex items-center gap-1">
             <button
               onClick={onRefresh}
               className={cn(
-                'p-2 rounded-lg text-zinc-400 hover:text-gold hover:bg-gold/5 transition-colors',
+                'p-2 rounded-lg text-zinc-500 hover:text-gold hover:bg-gold/10 transition-colors',
                 isLoading && 'animate-spin'
               )}
             >
@@ -140,7 +140,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
             {onToggleCollapse && (
               <button
                 onClick={onToggleCollapse}
-                className="p-2 rounded-lg text-zinc-400 hover:text-gold hover:bg-gold/5 transition-colors"
+                className="p-2 rounded-lg text-zinc-500 hover:text-gold hover:bg-gold/10 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -149,25 +149,25 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
         </div>
       </div>
 
-      {/* Summary Stats */}
-      <div className="grid grid-cols-3 gap-2 p-4 border-b border-gold/10">
+      {/* Summary Stats - Champagne cards with gold borders */}
+      <div className="grid grid-cols-3 gap-2 p-4 border-b-2 border-gold/20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         {[
           { label: 'Score', value: '0%', icon: <Target className="w-3 h-3" />, color: 'text-emerald-600' },
-          { label: 'Tasks', value: '0', icon: <Clock className="w-3 h-3" />, color: 'text-amber-600' },
+          { label: 'Tasks', value: '0', icon: <Clock className="w-3 h-3" />, color: 'text-gold' },
           { label: 'Leads', value: '0', icon: <Users className="w-3 h-3" />, color: 'text-blue-600' },
         ].map((stat, i) => (
-          <div key={i} className="text-center p-2 rounded-lg bg-zinc-50">
+          <div key={i} className="text-center p-2 rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 shadow-sm">
             <div className={cn('flex items-center justify-center gap-1 text-lg font-bold', stat.color)}>
               {stat.icon}
               {stat.value}
             </div>
-            <div className="text-[10px] text-zinc-500 uppercase tracking-wider">{stat.label}</div>
+            <div className="text-[10px] text-zinc-600 uppercase tracking-wider">{stat.label}</div>
           </div>
         ))}
       </div>
 
-      {/* Insights List */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+      {/* Insights List - With champagne background */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <AnimatePresence mode="popLayout">
           {insights.map((insight, index) => (
             <motion.div
@@ -241,8 +241,8 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
         </AnimatePresence>
       </div>
 
-      {/* Footer */}
-      <div className="p-4 border-t border-gold/10 bg-gradient-to-r from-[#FDFBF7] to-white">
+      {/* Footer - Premium champagne */}
+      <div className="p-4 border-t-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <Button variant="primary" className="w-full" onClick={() => {}}>
           <Sparkles className="w-4 h-4 mr-2" />
           View All Insights
