@@ -246,7 +246,7 @@ export default function ReferralOnboarding() {
 
   return (
     <MainLayout>
-      <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] py-8 px-4">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-8 px-4">
         <div className="max-w-3xl mx-auto">
           {/* Header - Larger logo with breathable spacing */}
           <div className="text-center mb-10">

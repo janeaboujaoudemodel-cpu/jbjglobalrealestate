@@ -109,8 +109,8 @@ export default function LandlordRentalPortal() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section - White/Gold/Champagne Theme */}
-      <section className="relative py-20 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] overflow-hidden">
+      {/* Hero Section - Champagne Theme */}
+      <section className="relative py-20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] overflow-hidden">
         {/* Decorative Elements */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-gold/10 to-champagne/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-champagne/20 to-gold/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />

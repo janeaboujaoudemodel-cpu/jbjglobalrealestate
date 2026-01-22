@@ -362,7 +362,7 @@ const InvestorEducation = () => {
         {/* Risk Awareness */}
         <section id="risk" className="py-20 relative scroll-mt-24 border-t border-gold/20">
           <div className="container mx-auto px-4 max-w-4xl">
-            <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 md:p-12 border border-gold/30 shadow-lg">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 md:p-12 border border-gold/30 shadow-lg">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
                   <AlertTriangle className="w-6 h-6 text-gold" />
@@ -389,7 +389,7 @@ const InvestorEducation = () => {
         {/* Role of JBJ */}
         <section id="jbj-role" className="py-20 relative scroll-mt-24 border-t border-gold/20">
           <div className="container mx-auto px-4 max-w-4xl">
-            <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 md:p-12 border border-gold/30 shadow-lg">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 md:p-12 border border-gold/30 shadow-lg">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
                   <Shield className="w-6 h-6 text-gold" />
@@ -419,7 +419,7 @@ const InvestorEducation = () => {
         {/* Long-Term Perspective */}
         <section id="long-term" className="py-20 relative scroll-mt-24 border-t border-gold/20">
           <div className="container mx-auto px-4 max-w-4xl">
-            <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 md:p-12 border border-gold/30 shadow-lg">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 md:p-12 border border-gold/30 shadow-lg">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
                   <Eye className="w-6 h-6 text-gold" />
@@ -455,7 +455,7 @@ const InvestorEducation = () => {
         </section>
 
         {/* Guide Navigation */}
-        <section className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
+        <section className="py-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-t border-zinc-200">
           <div className="container mx-auto px-4">
             <GuideNavigation current="/investor-education" guides={GUIDE_LINKS} showStartHere />
           </div>
