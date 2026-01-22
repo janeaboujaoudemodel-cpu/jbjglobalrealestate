@@ -326,7 +326,7 @@ export default function BrokerAdminAssistant() {
                       <CardHeader>
                         <CardTitle className="text-white flex items-center gap-2">
                           <BarChart3 className="h-5 w-5 text-emerald-400" />
-                          Leila's Activity Today
+                          Sarah's Activity Today
                         </CardTitle>
                       </CardHeader>
                       <CardContent>

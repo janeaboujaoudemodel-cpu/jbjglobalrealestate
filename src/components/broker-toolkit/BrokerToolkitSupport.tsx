@@ -24,7 +24,7 @@ const SUPPORT_TEAM = [
   },
   {
     role: "Admin Coordinator", 
-    name: "Leila",
+    name: "Sarah Thompson",
     description: "RERA compliance and operational support",
     icon: HeartHandshake,
     link: "/broker-admin-assistant",
