@@ -60,7 +60,7 @@ const Methodology = () => {
       <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
 
       {/* Main Content with TOC Sidebar - Active Champagne Layer */}
-      <section className="jj-section-champagne py-16">
+      <section className="jj-section-champagne pt-8 pb-16">
         <div className="relative">
           {/* Full-bleed content area that stretches behind TOC */}
           <div className="space-y-10">
@@ -72,7 +72,7 @@ const Methodology = () => {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeInUp}
-                className="scroll-mt-24 py-12 jj-card-inner rounded-xl px-8"
+                className="scroll-mt-32 py-12 jj-card-inner rounded-xl px-8"
               >
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
