@@ -159,6 +159,7 @@ import CustomerHappiness from "./pages/CustomerHappiness";
 import Sitemap from "./pages/Sitemap";
 import SecurityConsole from "./pages/SecurityConsole";
 import ITDepartment from "./pages/ITDepartment";
+import EmployeeManagementHub from "./pages/EmployeeManagementHub";
 
 const queryClient = new QueryClient();
 
@@ -339,9 +340,10 @@ const App = () => (
                 <Route path="/customer-happiness" element={<CustomerHappiness />} />
                 <Route path="/sitemap" element={<Sitemap />} />
                 <Route path="/security-console" element={<SecurityConsole />} />
-                <Route path="/it-department" element={<ITDepartment />} />
+                <Route path="/it-department" element={<EmployeeManagementHub />} />
+                <Route path="/employee-management" element={<EmployeeManagementHub />} />
                 <Route path="/hr-dashboard" element={<HRDashboard />} />
-                <Route path="/hr-hub" element={<Navigate to="/hr-dashboard" replace />} />
+                <Route path="/hr-hub" element={<Navigate to="/employee-management" replace />} />
                 <Route path="/interior-design-studio" element={<Navigate to="/interior-design-ai" replace />} />
                 
                 <Route path="*" element={<NotFound />} />
