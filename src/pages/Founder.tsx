@@ -930,188 +930,136 @@ const Founder = () => {
         </div>
       </section>
 
-      {/* PRESS KIT CTA - Simple verified link */}
-      <section className="py-16 md:py-24 bg-gradient-to-b from-zinc-950/50 via-black to-zinc-950/50 relative">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={fadeInUp}
-            className="text-center"
-          >
-            <span className="text-gold text-sm uppercase tracking-[0.4em] mb-6 block">Media Resources</span>
-            <GoldLine className="w-32 mx-auto mb-8" />
-            <h2 
-              className="text-white text-3xl md:text-4xl font-bold mb-6"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Press <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Kit</span>
-            </h2>
-            <p className="text-zinc-400 text-lg mb-8 max-w-2xl mx-auto">
-              Download official photos, logos, and brand assets for media use
-            </p>
-            <Link
-              to="/press-kit"
-              className="inline-flex items-center gap-3 bg-gradient-to-r from-gold to-[#C4A962] text-black font-semibold px-8 py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg shadow-gold/30"
-            >
-              <Download className="w-5 h-5" />
-              Download Press Kit
-            </Link>
-          </motion.div>
-        </div>
-      </section>
+      {/* PRESS KIT REMOVED - No downloadable assets for public users */}
 
-      {/* FOUNDER QUOTE - "AS PER JANE" */}
-      <section className="py-16 md:py-24 relative">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
-            className="max-w-4xl mx-auto text-center"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={fadeInUp}
-          >
-            {/* Elegant quote marks */}
-            <div className="flex justify-center mb-8">
-              <div className="w-16 h-16 bg-gradient-to-br from-gold/30 to-gold/10 rounded-full flex items-center justify-center border border-gold/40">
-                <span className="text-gold text-4xl font-serif leading-none">"</span>
+      {/* FOUNDER QUOTE - "AS PER JANE" - 3-Layer System */}
+      <section className="py-16 md:py-24 bg-black relative">
+        <div className="container mx-auto px-3 sm:px-4 lg:px-8">
+          {/* Active Champagne Layer */}
+          <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-2xl p-4 sm:p-6 shadow-lg">
+            {/* Pearl Inner Card */}
+            <motion.div 
+              className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-8 md:p-12 shadow-sm max-w-4xl mx-auto text-center"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={fadeInUp}
+            >
+              {/* Elegant quote marks */}
+              <div className="flex justify-center mb-6">
+                <div className="w-14 h-14 bg-black rounded-full flex items-center justify-center border border-gold/40">
+                  <span className="text-gold text-3xl font-serif leading-none">"</span>
+                </div>
               </div>
-            </div>
-            
-            <blockquote 
-              className="text-white text-2xl md:text-3xl lg:text-4xl font-light leading-relaxed mb-10 italic"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Excellence is not a destination—it is the standard by which every decision is measured. 
-              We do not chase trends; we establish precedents.
-            </blockquote>
-            
-            {/* Divider */}
-            <div className="flex items-center justify-center gap-3 mb-8">
-              <div className="w-16 h-px bg-gradient-to-r from-transparent to-gold/50" />
-              <Star className="w-4 h-4 text-gold fill-gold/50" />
-              <div className="w-16 h-px bg-gradient-to-l from-transparent to-gold/50" />
-            </div>
-            
-            {/* Attribution */}
-            <div className="flex flex-col items-center gap-2">
-              <p className="text-zinc-500 text-sm uppercase tracking-[0.2em]">
-                Jane Abou Jaoude, Founder
-              </p>
-              <p className="text-gold/70 text-xs uppercase tracking-[0.15em]">
-                & Visionary Woman
-              </p>
-            </div>
-          </motion.div>
+              
+              <blockquote 
+                className="text-black text-xl md:text-2xl lg:text-3xl font-light leading-relaxed mb-8 italic"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                Excellence is not a destination—it is the standard by which every decision is measured. 
+                We do not chase trends; we establish precedents.
+              </blockquote>
+              
+              {/* Divider */}
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <div className="w-16 h-px bg-gradient-to-r from-transparent to-gold/50" />
+                <Star className="w-4 h-4 text-gold fill-gold/50" />
+                <div className="w-16 h-px bg-gradient-to-l from-transparent to-gold/50" />
+              </div>
+              
+              {/* Attribution */}
+              <div className="flex flex-col items-center gap-1">
+                <p className="text-gold font-semibold text-base">
+                  Jane Abou Jaoude
+                </p>
+                <p className="text-zinc-600 text-xs uppercase tracking-[0.15em]">
+                  Founder & CEO
+                </p>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* FOUNDER STATS - Highlights */}
-      <section className="py-24 md:py-32 bg-gradient-to-b from-zinc-950 via-black to-zinc-950 relative overflow-hidden">
-        {/* Premium pattern background */}
-        <div className="absolute inset-0 opacity-[0.03]">
-          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #A8925A 1px, transparent 0)', backgroundSize: '48px 48px' }} />
-        </div>
-        
-        {/* Gold gradient orbs */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
-        
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div 
-            className="text-center mb-16"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={fadeInUp}
-          >
-            <span className="inline-block px-5 py-2 bg-white border border-gold/30 rounded-full text-xs uppercase tracking-[0.2em] font-semibold shadow-sm">
-              <span className="text-gold">Track</span>
-              <span className="text-black"> Record</span>
-            </span>
-            <GoldLine className="w-32 mx-auto mt-4 mb-8" />
-            <h2 
-              className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
-              style={{ fontFamily: "Poppins, sans-serif" }}
+      {/* FOUNDER STATS - Highlights - 3-Layer System */}
+      <section className="py-24 md:py-32 bg-black relative overflow-hidden">
+        <div className="container mx-auto px-3 sm:px-4 lg:px-8 relative z-10">
+          {/* Active Champagne Layer */}
+          <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg">
+            <motion.div 
+              className="text-center mb-12"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={fadeInUp}
             >
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Highlights</span>
-            </h2>
-          </motion.div>
-
-          {/* Stats - 4 Chips with 12+ Years */}
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-              <motion.div 
-                className="bg-gradient-to-br from-zinc-900 via-zinc-900/95 to-black border border-zinc-800 rounded-3xl p-8 md:p-10 hover:border-gold/40 transition-all duration-500 group relative overflow-hidden text-center"
-                variants={fadeInUp}
+              <span className="inline-block px-5 py-2 bg-black border border-gold/30 rounded-full text-xs uppercase tracking-[0.2em] font-semibold shadow-sm mb-4">
+                <span className="text-gold">Track</span>
+                <span className="text-white"> Record</span>
+              </span>
+              <GoldLine className="w-32 mx-auto mb-8" />
+              <h2 
+                className="text-black text-4xl md:text-5xl lg:text-6xl font-bold"
+                style={{ fontFamily: "Poppins, sans-serif" }}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-gold/0 to-gold/0 group-hover:from-gold/5 group-hover:to-transparent transition-all duration-500 rounded-3xl" />
-                <div className="relative z-10">
-                  <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/20 group-hover:border-gold/50 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-gold/5">
+                <span className="text-gold">Highlights</span>
+              </h2>
+            </motion.div>
+
+            {/* Stats - 4 Cards */}
+            <motion.div 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={staggerContainer}
+            >
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                <motion.div 
+                  className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-2xl p-6 md:p-8 hover:border-gold transition-all duration-500 group text-center shadow-sm"
+                  variants={fadeInUp}
+                >
+                  <div className="w-12 h-12 mx-auto mb-4 bg-black rounded-xl flex items-center justify-center border border-gold/30">
                     <Calendar className="w-6 h-6 text-gold" />
                   </div>
-                  <p className="text-gold text-3xl md:text-4xl font-bold mb-1">
-                    <CounterStat end={12} suffix="+" prefix="" label="" />
-                  </p>
-                  <p className="text-white text-sm md:text-base font-medium">Years Experience</p>
-                </div>
-              </motion.div>
-              
-              <motion.div 
-                className="bg-gradient-to-br from-zinc-900 via-zinc-900/95 to-black border border-zinc-800 rounded-3xl p-8 md:p-10 hover:border-gold/40 transition-all duration-500 group relative overflow-hidden text-center"
-                variants={fadeInUp}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-gold/0 to-gold/0 group-hover:from-gold/5 group-hover:to-transparent transition-all duration-500 rounded-3xl" />
-                <div className="relative z-10">
-                  <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/20 group-hover:border-gold/50 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-gold/5">
+                  <p className="text-gold text-3xl md:text-4xl font-bold mb-1">12+</p>
+                  <p className="text-black text-sm md:text-base font-medium">Years Experience</p>
+                </motion.div>
+                
+                <motion.div 
+                  className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-2xl p-6 md:p-8 hover:border-gold transition-all duration-500 group text-center shadow-sm"
+                  variants={fadeInUp}
+                >
+                  <div className="w-12 h-12 mx-auto mb-4 bg-black rounded-xl flex items-center justify-center border border-gold/30">
                     <Users className="w-6 h-6 text-gold" />
                   </div>
-                  <p className="text-gold text-3xl md:text-4xl font-bold mb-1">
-                    <CounterStat end={1} suffix="M+" prefix="" label="" />
-                  </p>
-                  <p className="text-white text-sm md:text-base font-medium">Followers</p>
-                </div>
-              </motion.div>
-              
-              <motion.div 
-                className="bg-gradient-to-br from-zinc-900 via-zinc-900/95 to-black border border-zinc-800 rounded-3xl p-8 md:p-10 hover:border-gold/40 transition-all duration-500 group relative overflow-hidden text-center"
-                variants={fadeInUp}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-gold/0 to-gold/0 group-hover:from-gold/5 group-hover:to-transparent transition-all duration-500 rounded-3xl" />
-                <div className="relative z-10">
-                  <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/20 group-hover:border-gold/50 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-gold/5">
+                  <p className="text-gold text-3xl md:text-4xl font-bold mb-1">1M+</p>
+                  <p className="text-black text-sm md:text-base font-medium">Followers</p>
+                </motion.div>
+                
+                <motion.div 
+                  className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-2xl p-6 md:p-8 hover:border-gold transition-all duration-500 group text-center shadow-sm"
+                  variants={fadeInUp}
+                >
+                  <div className="w-12 h-12 mx-auto mb-4 bg-black rounded-xl flex items-center justify-center border border-gold/30">
                     <Award className="w-6 h-6 text-gold" />
                   </div>
-                  <p className="text-gold text-3xl md:text-4xl font-bold mb-1">
-                    <CounterStat end={2800} suffix="+" prefix="" label="" />
-                  </p>
-                  <p className="text-white text-sm md:text-base font-medium">Brokers Trained</p>
-                </div>
-              </motion.div>
-              
-              <motion.div 
-                className="bg-gradient-to-br from-zinc-900 via-zinc-900/95 to-black border border-zinc-800 rounded-3xl p-8 md:p-10 hover:border-gold/40 transition-all duration-500 group relative overflow-hidden text-center"
-                variants={fadeInUp}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-gold/0 to-gold/0 group-hover:from-gold/5 group-hover:to-transparent transition-all duration-500 rounded-3xl" />
-                <div className="relative z-10">
-                  <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/20 group-hover:border-gold/50 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-gold/5">
+                  <p className="text-gold text-3xl md:text-4xl font-bold mb-1">2,800+</p>
+                  <p className="text-black text-sm md:text-base font-medium">Brokers Trained</p>
+                </motion.div>
+                
+                <motion.div 
+                  className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-2xl p-6 md:p-8 hover:border-gold transition-all duration-500 group text-center shadow-sm"
+                  variants={fadeInUp}
+                >
+                  <div className="w-12 h-12 mx-auto mb-4 bg-black rounded-xl flex items-center justify-center border border-gold/30">
                     <Building2 className="w-6 h-6 text-gold" />
                   </div>
-                  <p className="text-gold text-3xl md:text-4xl font-bold mb-1">
-                    <CounterStat end={495} suffix="+" prefix="" label="" />
-                  </p>
-                  <p className="text-white text-sm md:text-base font-medium">Team Managed</p>
-                </div>
-              </motion.div>
-            </div>
-          </motion.div>
+                  <p className="text-gold text-3xl md:text-4xl font-bold mb-1">495+</p>
+                  <p className="text-black text-sm md:text-base font-medium">Team Managed</p>
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -1201,213 +1149,191 @@ const Founder = () => {
         </div>
       </section>
 
-      {/* LEADERSHIP PHILOSOPHY */}
-      <section className="py-24 md:py-40 bg-gradient-to-b from-black via-zinc-950/50 to-black relative">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
-            className="text-center mb-20 md:mb-24"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={fadeInUp}
-          >
-            <span className="text-gold text-sm uppercase tracking-[0.4em]">Philosophy</span>
-            <GoldLine className="w-32 mx-auto mt-4 mb-8" />
-            <h2 
-              className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
-              style={{ fontFamily: "Poppins, sans-serif" }}
+      {/* LEADERSHIP PHILOSOPHY - 3-Layer System */}
+      <section className="py-24 md:py-32 bg-black relative">
+        <div className="container mx-auto px-3 sm:px-4 lg:px-8">
+          {/* Active Champagne Layer */}
+          <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg">
+            <motion.div 
+              className="text-center mb-12"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={fadeInUp}
             >
-              Leadership <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Philosophy</span>
-            </h2>
-          </motion.div>
-
-          <motion.div 
-            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            {philosophyItems.map((item, index) => (
-              <motion.div 
-                key={item.title}
-                className="group bg-gradient-to-b from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 md:p-10 hover:border-gold/40 transition-all duration-500 text-center relative overflow-hidden"
-                variants={fadeInUp}
+              <span className="text-gold text-sm uppercase tracking-[0.4em]">Philosophy</span>
+              <GoldLine className="w-32 mx-auto mt-4 mb-8" />
+              <h2 
+                className="text-black text-4xl md:text-5xl lg:text-6xl font-bold"
+                style={{ fontFamily: "Poppins, sans-serif" }}
               >
-                <div className="absolute inset-0 bg-gradient-to-b from-gold/0 to-gold/0 group-hover:from-gold/5 group-hover:to-transparent transition-all duration-500 rounded-3xl" />
-                
-                <div className="relative z-10">
-                  <div className="w-16 h-16 mx-auto mb-8 bg-gradient-to-br from-gold/20 to-gold/5 rounded-full flex items-center justify-center border border-gold/30 group-hover:border-gold/60 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-gold/10">
-                    <item.icon className="w-7 h-7 text-gold" />
+                Leadership <span className="text-gold">Philosophy</span>
+              </h2>
+            </motion.div>
+
+            {/* Pearl Cards Grid */}
+            <motion.div 
+              className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={staggerContainer}
+            >
+              {philosophyItems.map((item, index) => (
+                <motion.div 
+                  key={item.title}
+                  className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6 md:p-8 hover:border-gold transition-all duration-500 text-center shadow-sm"
+                  variants={fadeInUp}
+                >
+                  <div className="w-14 h-14 mx-auto mb-6 bg-black rounded-xl flex items-center justify-center border border-gold/30">
+                    <item.icon className="w-6 h-6 text-gold" />
                   </div>
-                  <h4 className="text-gold text-lg font-semibold uppercase tracking-wider mb-4">
+                  <h4 className="text-gold text-lg font-semibold uppercase tracking-wider mb-3">
                     {item.title}
                   </h4>
-                  <p className="text-zinc-400 text-sm md:text-base leading-relaxed">
+                  <p className="text-zinc-600 text-sm md:text-base leading-relaxed">
                     {item.description}
                   </p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* PULL-QUOTE BLOCK - PREMIUM CINEMATIC */}
-      <section className="py-20 md:py-32 relative overflow-hidden">
-        {/* Elegant gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-zinc-950 to-black" />
-        
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div 
-            className="max-w-5xl mx-auto"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={fadeInUp}
-          >
-            {/* Premium Quote Card */}
-            <div className="bg-gradient-to-br from-zinc-900/90 via-zinc-900/70 to-black/95 border border-gold/30 rounded-3xl p-12 md:p-20 relative overflow-hidden shadow-2xl shadow-gold/5">
-              {/* Decorative gold corner accents */}
-              <div className="absolute top-0 left-0 w-32 h-32 border-l-2 border-t-2 border-gold/50 rounded-tl-3xl" />
-              <div className="absolute bottom-0 right-0 w-32 h-32 border-r-2 border-b-2 border-gold/50 rounded-br-3xl" />
-              <div className="absolute top-1/4 right-0 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
-              <div className="absolute bottom-1/4 left-0 w-64 h-64 bg-gold/3 rounded-full blur-3xl" />
-              
-              <div className="text-center relative z-10">
+      {/* PULL-QUOTE BLOCK - WE CREATE | WE ELEVATE | WE LEAD - 3-Layer System */}
+      <section className="py-20 md:py-32 bg-black relative overflow-hidden">
+        <div className="container mx-auto px-3 sm:px-4 lg:px-8 relative z-10">
+          {/* Active Champagne Layer */}
+          <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-2xl p-4 sm:p-6 shadow-lg">
+            {/* Pearl Inner Card */}
+            <motion.div 
+              className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-8 md:p-12 lg:p-16 shadow-sm max-w-5xl mx-auto"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={fadeInUp}
+            >
+              <div className="text-center">
                 {/* Quote Icon */}
-                <div className="w-20 h-20 mx-auto mb-10 bg-gradient-to-br from-gold/30 to-gold/10 rounded-2xl flex items-center justify-center border border-gold/40 shadow-lg shadow-gold/10">
-                  <span className="text-gold text-5xl font-serif leading-none">"</span>
+                <div className="w-16 h-16 mx-auto mb-8 bg-black rounded-xl flex items-center justify-center border border-gold/40 shadow-lg">
+                  <span className="text-gold text-4xl font-serif leading-none">"</span>
                 </div>
                 
                 {/* Quote Text */}
                 <blockquote 
-                  className="text-white text-3xl md:text-5xl lg:text-7xl font-light mb-14 leading-tight tracking-tight"
+                  className="text-black text-2xl md:text-4xl lg:text-5xl font-light mb-10 leading-tight tracking-tight"
                   style={{ fontFamily: "Poppins, sans-serif" }}
                 >
-                  We <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#D4B96A] to-gold font-medium">Create</span> | We <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#D4B96A] to-gold font-medium">Elevate</span> | We <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#D4B96A] to-gold font-medium">Lead</span>
+                  We <span className="text-gold font-medium">Create</span> | We <span className="text-gold font-medium">Elevate</span> | We <span className="text-gold font-medium">Lead</span>
                 </blockquote>
                 
                 {/* Elegant Divider */}
-                <div className="flex items-center justify-center gap-4 mb-10">
+                <div className="flex items-center justify-center gap-4 mb-8">
                   <div className="w-24 h-px bg-gradient-to-r from-transparent to-gold/50" />
                   <div className="w-2 h-2 bg-gold/60 rounded-full" />
                   <div className="w-24 h-px bg-gradient-to-l from-transparent to-gold/50" />
                 </div>
                 
-                {/* Founder Attribution - Premium Layout */}
-                <div className="flex flex-col items-center gap-5">
-                  {/* Larger avatar with premium ring */}
-                  <div className="relative">
-                    {/* GLOBAL IMAGE RULE - LOCKED (FINAL): max zoom, crop from bottom */}
-                    <div className="w-32 h-32 md:w-36 md:h-36 rounded-full p-1.5 bg-gradient-to-br from-gold via-[#C4A962] to-gold shadow-2xl shadow-gold/30">
-                      <div className="w-full h-full rounded-full overflow-hidden bg-zinc-950">
-                        <SafeImage 
-                          src={founderProfessional} 
-                          fallbackSrc={founderHero} 
-                          alt="Jane Abou Jaoude" 
-                          className="w-full h-full"
-                          style={{ objectFit: "cover", objectPosition: "center 15%" }}
-                        />
-                      </div>
+                {/* Founder Attribution */}
+                <div className="flex flex-col items-center gap-4">
+                  {/* Avatar with gold ring */}
+                  <div className="w-20 h-20 md:w-24 md:h-24 rounded-full p-1 bg-gradient-to-br from-gold via-[#C4A962] to-gold shadow-xl">
+                    <div className="w-full h-full rounded-full overflow-hidden bg-zinc-950">
+                      <SafeImage 
+                        src={founderProfessional} 
+                        fallbackSrc={founderHero} 
+                        alt="Jane Abou Jaoude" 
+                        className="w-full h-full"
+                        style={{ objectFit: "cover", objectPosition: "center 15%" }}
+                      />
                     </div>
-                    {/* Decorative glow ring */}
-                    <div className="absolute inset-0 rounded-full border border-gold/20 scale-125 animate-pulse" />
                   </div>
-                  <div className="text-center mt-2">
-                    <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#D4B96A] to-gold text-2xl md:text-3xl font-semibold tracking-wide mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>Jane Abou Jaoude</p>
-                    <p className="text-zinc-300 text-sm uppercase tracking-[0.25em] font-medium">Founder & CEO</p>
-                    <div className="mt-3 space-y-1">
-                      <p className="text-white text-base font-semibold tracking-wide">JBJ GLOBAL REAL ESTATE</p>
-                      <p className="text-zinc-400 text-xs">Real Estate Brokerage | Dubai, UAE</p>
-                    </div>
+                  <div className="text-center">
+                    <p className="text-gold text-xl md:text-2xl font-semibold tracking-wide mb-1" style={{ fontFamily: "Poppins, sans-serif" }}>Jane Abou Jaoude</p>
+                    <p className="text-zinc-600 text-sm uppercase tracking-[0.2em] font-medium">Founder & CEO</p>
+                    <p className="text-black text-sm font-semibold tracking-wide mt-2">JBJ GLOBAL REAL ESTATE</p>
                   </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* LIFESTYLE GALLERY */}
-      <section className="py-24 md:py-40">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
-            className="text-center mb-16 md:mb-20"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={fadeInUp}
-          >
-            <span className="text-gold text-sm uppercase tracking-[0.4em]">International</span>
-            <GoldLine className="w-32 mx-auto mt-4 mb-8" />
-            <h2 
-              className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Global <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Presence</span>
-            </h2>
-          </motion.div>
-          
-          <motion.div 
-            className="grid grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            {/* Professional portrait - Full height premium display */}
+      {/* LIFESTYLE GALLERY - 3-Layer System */}
+      <section className="py-24 md:py-32 bg-black">
+        <div className="container mx-auto px-3 sm:px-4 lg:px-8">
+          {/* Active Champagne Layer */}
+          <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg">
             <motion.div 
-              className="aspect-[3/4] rounded-3xl overflow-hidden border border-gold/20 shadow-2xl shadow-gold/10 group relative"
-              variants={scaleIn}
+              className="text-center mb-12"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={fadeInUp}
             >
-              <SafeImage 
-                src={founderProfessional} 
-                fallbackSrc={founderHero}
-                alt="Jane Abou Jaoude - Professional Portrait"
-                className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
-              />
-              {/* Premium overlay gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              {/* Gold corner accents */}
-              <div className="absolute top-4 left-4 w-12 h-12 border-l-2 border-t-2 border-gold/50 rounded-tl-xl" />
-              <div className="absolute bottom-4 right-4 w-12 h-12 border-r-2 border-b-2 border-gold/50 rounded-br-xl" />
+              <span className="text-gold text-sm uppercase tracking-[0.4em]">International</span>
+              <GoldLine className="w-32 mx-auto mt-4 mb-8" />
+              <h2 
+                className="text-black text-4xl md:text-5xl lg:text-6xl font-bold"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                Global <span className="text-gold">Presence</span>
+              </h2>
             </motion.div>
             
-            {/* Red carpet photo - Full height premium display */}
+            {/* Pearl Cards Grid */}
             <motion.div 
-              className="aspect-[3/4] rounded-3xl overflow-hidden border border-gold/20 shadow-2xl shadow-gold/10 group relative"
-              variants={scaleIn}
+              className="grid grid-cols-2 gap-4 md:gap-6 max-w-4xl mx-auto"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={staggerContainer}
             >
-              <SafeImage 
-                src={founderRedCarpet} 
-                fallbackSrc={founderHero}
-                alt="Jane Abou Jaoude - Red Carpet Event" 
-                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-1000"
-              />
-              {/* Premium overlay gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              {/* Gold corner accents */}
-              <div className="absolute top-4 left-4 w-12 h-12 border-l-2 border-t-2 border-gold/50 rounded-tl-xl" />
-              <div className="absolute bottom-4 right-4 w-12 h-12 border-r-2 border-b-2 border-gold/50 rounded-br-xl" />
+              {/* Professional portrait */}
+              <motion.div 
+                className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-2 shadow-sm group"
+                variants={scaleIn}
+              >
+                <div className="aspect-[3/4] rounded-lg overflow-hidden">
+                  <SafeImage 
+                    src={founderProfessional} 
+                    fallbackSrc={founderHero}
+                    alt="Jane Abou Jaoude - Professional Portrait"
+                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                  />
+                </div>
+              </motion.div>
+              
+              {/* Red carpet photo */}
+              <motion.div 
+                className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-2 shadow-sm group"
+                variants={scaleIn}
+              >
+                <div className="aspect-[3/4] rounded-lg overflow-hidden">
+                  <SafeImage 
+                    src={founderRedCarpet} 
+                    fallbackSrc={founderHero}
+                    alt="Jane Abou Jaoude - Red Carpet Event" 
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                  />
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* FINAL CTA - 3-Layer System: Black > Active Champagne > Pearl */}
+      {/* FINAL CTA - 3-Layer System: Black > Active Champagne > Pearl - Smaller 3rd layer */}
       <section className="py-16 sm:py-20 bg-black relative overflow-hidden">
-        {/* Background effects */}
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gold/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-gold/5 rounded-full blur-3xl" />
-        
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="container mx-auto px-3 sm:px-4 lg:px-8 relative z-10">
           <div className="max-w-[1100px] mx-auto">
-            {/* OUTER CARD - Active Champagne Layer */}
-            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
-              {/* INNER CARD - Pearl Layer */}
+            {/* OUTER CARD - Active Champagne Layer - Larger padding */}
+            <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6">
+              {/* INNER CARD - Pearl Layer - Smaller */}
               <motion.div 
-                className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-10 md:p-14 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+                className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}

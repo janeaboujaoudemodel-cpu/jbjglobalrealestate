@@ -176,79 +176,84 @@ const News = () => {
   return (
     <>
       <SEOHead {...pagesSEO.news} />
-      <section className="min-h-screen bg-zinc-950">
-      {/* Hero Section */}
-      <div className="relative py-16 md:py-24 bg-gradient-to-b from-black via-zinc-950 to-zinc-950">
-        {/* Background effects */}
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-[120px] pointer-events-none" />
-        </div>
-        
-        <div className="container mx-auto px-4 relative z-10">
+      <section className="min-h-screen bg-black">
+      {/* Hero Section - 3-Layer System */}
+      <div className="relative py-16 md:py-24 bg-black">
+        <div className="container mx-auto px-3 sm:px-4 relative z-10">
           <Link to="/" className="inline-flex items-center gap-2 text-zinc-400 hover:text-gold mb-8 transition-colors group">
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Back to Properties
           </Link>
           
-          <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/20 flex items-center justify-center">
-                <Newspaper className="w-7 h-7 text-gold" />
-              </div>
-              <div>
-                <h1 
-                  className="text-4xl md:text-5xl font-bold text-white"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
-                >
-                  News & <span className="text-gold">Insights</span>
-                </h1>
-                <div className="flex items-center gap-2 mt-1">
-                  <Badge variant="outline" className="text-gold border-gold/30 text-xs">
-                    Government Sources
-                  </Badge>
+          {/* Active Champagne Layer */}
+          <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-2xl p-4 sm:p-6 shadow-lg">
+            <div className="flex items-center justify-between gap-4 mb-4 flex-wrap">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
+                  <Newspaper className="w-7 h-7 text-gold" />
+                </div>
+                <div>
+                  <h1 
+                    className="text-3xl md:text-4xl font-bold text-black"
+                    style={{ fontFamily: "Poppins, sans-serif" }}
+                  >
+                    News & <span className="text-gold">Insights</span>
+                  </h1>
+                  <div className="flex items-center gap-2 mt-1">
+                    <Badge className="bg-black/80 text-gold border-gold/30 text-xs">
+                      Government Sources
+                    </Badge>
+                  </div>
                 </div>
               </div>
+              
+              {/* Refresh Button - Primary Style */}
+              <button
+                onClick={handleRefreshNews}
+                disabled={isRefreshing}
+                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300"
+                style={{
+                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+                  border: '2px solid rgba(200,167,102,0.5)',
+                  boxShadow: '0 6px 20px rgba(200,167,102,0.3)',
+                }}
+              >
+                {isRefreshing ? (
+                  <Loader2 className="w-4 h-4 animate-spin text-gold" />
+                ) : (
+                  <RefreshCw className="w-4 h-4 text-gold" />
+                )}
+                <span className="text-black">{isRefreshing ? "Updating..." : "Refresh"}</span>
+                <span className="text-gold">{isRefreshing ? "" : "News"}</span>
+              </button>
             </div>
-            
-            {/* Refresh Button */}
-            <Button
-              onClick={handleRefreshNews}
-              disabled={isRefreshing}
-              variant="outline"
-              className="border-gold/30 text-gold hover:bg-gold/10"
-            >
-              {isRefreshing ? (
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              ) : (
-                <RefreshCw className="w-4 h-4 mr-2" />
-              )}
-              {isRefreshing ? "Updating..." : "Refresh News"}
-            </Button>
+            <p className="text-zinc-700 text-base max-w-2xl">
+              Stay informed about the latest UAE real estate market updates, economic developments, and investment opportunities. 
+              <span className="text-gold font-medium"> Curated from official government sources daily.</span>
+            </p>
           </div>
-          <p className="text-zinc-400 text-lg max-w-2xl">
-            Stay informed about the latest UAE real estate market updates, economic developments, and investment opportunities. 
-            <span className="text-gold/80"> Curated by Victoria Hayes, our News Reporter, from official government sources daily.</span>
-          </p>
         </div>
       </div>
 
-      {/* Category Filter */}
-      <div className="border-b border-zinc-800 sticky top-16 bg-zinc-950/95 backdrop-blur-sm z-20">
-        <div className="container mx-auto px-4">
-          <div className="flex gap-2 py-4 overflow-x-auto scrollbar-hide">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category === "All" ? null : category)}
-                className={`px-5 py-2.5 text-sm whitespace-nowrap transition-all duration-300 rounded-full font-medium ${
-                  (category === "All" && !selectedCategory) || selectedCategory === category
-                    ? "bg-gradient-to-r from-gold to-gold-dark text-black shadow-lg shadow-gold/20"
-                    : "bg-zinc-900 text-zinc-400 hover:text-white hover:bg-zinc-800 border border-zinc-800"
-                }`}
-              >
-                {category}
-              </button>
-            ))}
+      {/* Category Filter - Active Champagne */}
+      <div className="border-b border-gold/20 sticky top-16 bg-black z-20">
+        <div className="container mx-auto px-3 sm:px-4">
+          <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl my-2 p-2">
+            <div className="flex gap-2 py-2 overflow-x-auto scrollbar-hide">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category === "All" ? null : category)}
+                  className={`px-5 py-2.5 text-sm whitespace-nowrap transition-all duration-300 rounded-full font-medium ${
+                    (category === "All" && !selectedCategory) || selectedCategory === category
+                      ? "bg-black text-gold shadow-lg"
+                      : "bg-white/80 text-black hover:bg-white border border-gold/30"
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>

@@ -48,24 +48,24 @@ export function BrokerToolkitGrowth() {
 
   return (
     <section id="section-growth" className="py-16 md:py-20 bg-black">
-      <div className="container mx-auto px-4">
-        {/* Active Rose/Gold Layer for Growth Section */}
-        <div className="bg-gradient-to-br from-rose-900/90 via-rose-900/80 to-rose-950/90 border border-rose-500/30 rounded-2xl p-6 md:p-8 shadow-lg">
+      <div className="container mx-auto px-3 sm:px-4">
+        {/* Active Champagne Layer for Growth Section - matching global design */}
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-2xl p-6 md:p-8 shadow-lg">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <Badge className="bg-rose-500/30 text-rose-200 border-rose-400/50 mb-4 shadow-sm">
-              <TrendingUp className="w-3 h-3 mr-1 text-rose-200" />
-              <span className="text-rose-200">Growth</span>
+            <Badge className="bg-black/80 text-gold border-gold/50 mb-4 shadow-sm">
+              <TrendingUp className="w-3 h-3 mr-1 text-gold" />
+              <span className="text-gold">Growth</span>
               <span className="text-white ml-1">& Rewards</span>
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
               Level Up Your <span className="text-gold">Career</span>
             </h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
+            <p className="text-zinc-700 max-w-2xl mx-auto">
               Earn points for every action, unlock rewards, and climb the leaderboard.
             </p>
           </motion.div>
@@ -140,7 +140,7 @@ export function BrokerToolkitGrowth() {
             viewport={{ once: true }}
             className="mb-12"
           >
-            <h3 className="text-xl font-semibold text-white mb-6 text-center flex items-center justify-center gap-2">
+            <h3 className="text-xl font-semibold text-black mb-6 text-center flex items-center justify-center gap-2">
               <Gift className="w-5 h-5 text-gold" />
               Redeem Rewards
             </h3>

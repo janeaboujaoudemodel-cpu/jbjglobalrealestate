@@ -1,192 +1,130 @@
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { 
-  Users,
-  UserCheck,
-  Shield,
-  Calendar,
-  Target,
-  UserCog,
-  Camera,
-  Video,
-  Palette,
-  Megaphone,
-  Instagram,
-  PenTool,
-  MessageCircle
-} from "lucide-react";
 import { Link } from "react-router-dom";
+import {
+  Users,
+  HeartHandshake,
+  BookOpen,
+  Headphones,
+  Camera,
+  Megaphone,
+  Video,
+  Share2,
+  ArrowRight,
+} from "lucide-react";
 
 const SUPPORT_TEAM = [
   {
-    role: 'HR Manager',
-    name: 'Jessica',
-    description: 'One-on-one support for recruitment, training, and career development.',
-    icon: UserCheck,
-    link: '/hr-agent',
+    role: "HR Manager",
+    name: "Jessica",
+    description: "Hiring, onboarding, and team development",
+    icon: Users,
+    link: "/hr-hub",
   },
   {
-    role: 'Broker Admin',
-    name: 'Nadia Al-Rashid',
-    description: 'Dedicated admin for broker operations, listings, and documentation.',
-    icon: Shield,
-    link: '/broker-admin-assistant',
+    role: "Admin Coordinator", 
+    name: "Leila",
+    description: "RERA compliance and operational support",
+    icon: HeartHandshake,
+    link: "/broker-admin-assistant",
   },
   {
-    role: 'Personal Assistant',
-    name: 'Layla',
-    description: 'Task scheduling, follow-ups, and daily coordination.',
-    icon: Calendar,
-    link: '/executive-assistant',
+    role: "Training Coach",
+    name: "Sarah",
+    description: "Sales scripts, objection handling, roleplay",
+    icon: BookOpen,
+    link: "/broker-toolkit",
   },
   {
-    role: 'Property Coach',
-    name: 'Senior Mentor',
-    description: 'Dedicated mentor for deal closing and performance improvement.',
-    icon: Target,
-    link: '/employee-hub',
-  },
-  {
-    role: 'HR Assistant',
-    name: 'Recruitment Support',
-    description: 'CV collection, interview scheduling, and candidate communication.',
-    icon: UserCog,
-    link: '/hr-agent',
+    role: "Client Support",
+    name: "Amanda",
+    description: "24/7 client communication support",
+    icon: Headphones,
+    link: "/contact",
   },
 ];
 
 const MEDIA_TEAM = [
   {
-    role: 'Photographer',
-    name: 'Visual Team',
-    description: 'Professional listing photography.',
+    role: "Photographer",
+    name: "Studio Team",
+    description: "Professional property photography",
     icon: Camera,
-    link: '/employee-hub',
+    link: "/jbj-design-studio",
   },
   {
-    role: 'Video Producer',
-    name: 'Oliver Wright',
-    description: 'Cinematic property tours and videos.',
-    icon: Video,
-    link: '/video-builder',
-  },
-  {
-    role: 'Graphic Designer',
-    name: 'Marcus Bennett',
-    description: 'Social media and brand materials.',
-    icon: Palette,
-    link: '/jbj-design-studio',
-  },
-  {
-    role: 'Digital Marketing',
-    name: 'Ryan Campbell',
-    description: 'Google, Meta, and TikTok ads.',
+    role: "Marketing",
+    name: "Digital Team",
+    description: "Campaigns, ads, and analytics",
     icon: Megaphone,
-    link: '/employee-hub',
+    link: "/ai-hub",
   },
   {
-    role: 'Social Media',
-    name: 'Content Strategy',
-    description: 'Posts and engagement strategy.',
-    icon: Instagram,
-    link: '/employee-hub',
+    role: "Video Producer",
+    name: "Production Team",
+    description: "Property tours and marketing videos",
+    icon: Video,
+    link: "/video-builder",
   },
   {
-    role: 'Content Editor',
-    name: 'Henry Crawford',
-    description: 'Post-production editing and effects.',
-    icon: PenTool,
-    link: '/video-builder',
+    role: "Social Media",
+    name: "Content Team",
+    description: "Brand growth and engagement",
+    icon: Share2,
+    link: "/ai-hub",
   },
 ];
 
 export function BrokerToolkitSupport() {
   return (
-    <section id="section-support" className="py-16 md:py-20 bg-black">
-      <div className="container mx-auto px-4">
-        {/* Active Pink Layer for Professional Support */}
-        <div className="bg-gradient-to-br from-pink-900/90 via-pink-900/80 to-pink-950/90 border border-pink-500/30 rounded-2xl p-6 md:p-8 shadow-lg">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <Badge className="bg-pink-500/30 text-pink-200 border-pink-400/50 mb-4">
-              <Users className="w-3 h-3 mr-1" />
-              Dedicated Support Team
-            </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Your Personal <span className="text-pink-300">Success Team</span>
-            </h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
-              A full team of professionals dedicated to helping you succeed — all included in your membership.
-            </p>
-          </motion.div>
+    <>
+      {/* SUPPORT TEAM SECTION - Pink Layer (Separate) */}
+      <section id="section-support" className="py-16 md:py-20 bg-black">
+        <div className="container mx-auto px-3 sm:px-4">
+          {/* Active Pink Layer */}
+          <div className="bg-gradient-to-br from-pink-900/90 via-pink-900/80 to-pink-950/90 border border-pink-500/30 rounded-2xl p-6 md:p-8 shadow-lg">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-10"
+            >
+              <Badge className="bg-pink-500/30 text-pink-200 border-pink-400/50 mb-4">
+                <Users className="w-3 h-3 mr-1" />
+                Dedicated Team
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                Your Personal <span className="text-pink-300">Success Team</span>
+              </h2>
+              <p className="text-pink-200/70 max-w-2xl mx-auto">
+                A dedicated team supporting your journey from onboarding to deal closing.
+              </p>
+            </motion.div>
 
-          {/* Professional Support */}
-          <div className="mb-12">
-            <h3 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
-              <MessageCircle className="w-5 h-5 text-pink-300" />
-              Professional Support
-            </h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
               {SUPPORT_TEAM.map((member, i) => (
                 <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  viewport={{ once: true }}
-                >
-                  <Link to={member.link}>
-                    <Card className="bg-pink-900/60 border border-pink-500/30 hover:border-pink-400 hover:bg-pink-900/80 transition-all h-full shadow-lg shadow-pink-500/10 cursor-pointer">
-                      <CardContent className="p-5">
-                        <div className="w-12 h-12 bg-pink-500/30 rounded-xl flex items-center justify-center mb-4">
-                          <member.icon className="w-6 h-6 text-pink-200" />
-                        </div>
-                        <h4 className="text-white font-semibold mb-1">{member.role}</h4>
-                        <p className="text-pink-300 text-sm mb-2">{member.name}</p>
-                        <p className="text-pink-200/60 text-xs">{member.description}</p>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-
-          {/* Media & Marketing Team - Teal theme as nested section */}
-          <div className="bg-gradient-to-br from-teal-900/90 via-teal-900/80 to-teal-950/90 rounded-2xl p-8 border border-teal-500/30">
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center gap-3 mb-2">
-                <Camera className="w-6 h-6 text-teal-300" />
-                <h3 className="text-2xl md:text-3xl font-bold text-white">
-                  Media & <span className="text-teal-300">Marketing Team</span>
-                </h3>
-              </div>
-              <p className="text-teal-200/70 text-sm max-w-lg mx-auto">
-                Professional photography, video production, and digital marketing support.
-              </p>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-              {MEDIA_TEAM.map((member, i) => (
-                <motion.div
-                  key={i}
+                  key={member.role}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
                   viewport={{ once: true }}
                 >
                   <Link to={member.link}>
-                    <Card className="bg-teal-900/60 border border-teal-500/30 hover:border-teal-400 hover:bg-teal-900/80 transition-all h-full shadow-lg shadow-teal-500/10 cursor-pointer">
-                      <CardContent className="p-4 text-center">
-                        <div className="w-10 h-10 bg-teal-500/30 rounded-lg flex items-center justify-center mx-auto mb-3">
-                          <member.icon className="w-5 h-5 text-teal-200" />
+                    <Card className="bg-pink-900/80 border-2 border-pink-500/50 hover:border-white hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] shadow-[0_0_20px_rgba(236,72,153,0.3)] h-full group cursor-pointer transition-all duration-300">
+                      <CardContent className="p-5">
+                        <div className="flex items-start gap-4">
+                          <div className="w-12 h-12 bg-pink-500/30 border border-pink-400/40 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                            <member.icon className="w-6 h-6 text-pink-300" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-pink-300 text-xs font-medium mb-1">{member.role}</p>
+                            <h3 className="font-semibold text-white truncate">{member.name}</h3>
+                            <p className="text-white/70 text-sm mt-1">{member.description}</p>
+                          </div>
+                          <ArrowRight className="w-5 h-5 text-pink-300 opacity-0 group-hover:opacity-100 group-hover:text-gold transition-all flex-shrink-0" />
                         </div>
-                        <h4 className="text-white font-medium text-sm mb-0.5">{member.role}</h4>
-                        <p className="text-teal-200/60 text-xs">{member.description}</p>
                       </CardContent>
                     </Card>
                   </Link>
@@ -195,7 +133,63 @@ export function BrokerToolkitSupport() {
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* MEDIA & MARKETING TEAM - Teal/Green Layer (Separate) */}
+      <section className="py-16 md:py-20 bg-black">
+        <div className="container mx-auto px-3 sm:px-4">
+          {/* Active Teal Layer */}
+          <div className="bg-gradient-to-br from-teal-900/90 via-teal-900/80 to-teal-950/90 border border-teal-500/30 rounded-2xl p-6 md:p-8 shadow-lg">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-10"
+            >
+              <Badge className="bg-teal-500/30 text-teal-200 border-teal-400/50 mb-4">
+                <Camera className="w-3 h-3 mr-1" />
+                Creative Team
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                Media & <span className="text-teal-300">Marketing Team</span>
+              </h2>
+              <p className="text-teal-200/70 max-w-2xl mx-auto">
+                Professional creative support for your listings and personal brand.
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {MEDIA_TEAM.map((member, i) => (
+                <motion.div
+                  key={member.role}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  viewport={{ once: true }}
+                >
+                  <Link to={member.link}>
+                    <Card className="bg-teal-900/80 border-2 border-teal-500/50 hover:border-white hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] shadow-[0_0_20px_rgba(20,184,166,0.3)] h-full group cursor-pointer transition-all duration-300">
+                      <CardContent className="p-5">
+                        <div className="flex items-start gap-4">
+                          <div className="w-12 h-12 bg-teal-500/30 border border-teal-400/40 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                            <member.icon className="w-6 h-6 text-teal-300" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-teal-300 text-xs font-medium mb-1">{member.role}</p>
+                            <h3 className="font-semibold text-white truncate">{member.name}</h3>
+                            <p className="text-white/70 text-sm mt-1">{member.description}</p>
+                          </div>
+                          <ArrowRight className="w-5 h-5 text-teal-300 opacity-0 group-hover:opacity-100 group-hover:text-gold transition-all flex-shrink-0" />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

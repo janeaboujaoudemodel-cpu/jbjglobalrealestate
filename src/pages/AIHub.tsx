@@ -600,26 +600,28 @@ const AIHub = () => {
         {/* Gold Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
-        {/* Quick Benefits Strip */}
-        <section className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {quickBenefits.map((benefit, idx) => (
-                <motion.div
-                  key={idx}
-                  className="text-center"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1 }}
-                >
-                  <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center mx-auto mb-3 shadow-lg">
-                    <benefit.icon className="w-7 h-7 text-gold" />
-                  </div>
-                  <h3 className="text-black font-semibold text-base mb-1">{benefit.title}</h3>
-                  <p className="text-zinc-600 text-sm">{benefit.desc}</p>
-                </motion.div>
-              ))}
+        {/* Quick Benefits Strip - Active Champagne Layer */}
+        <section className="py-12 bg-black">
+          <div className="container mx-auto px-3 sm:px-4">
+            <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-2xl p-6 md:p-8 shadow-lg">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                {quickBenefits.map((benefit, idx) => (
+                  <motion.div
+                    key={idx}
+                    className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-4 text-center shadow-sm"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: idx * 0.1 }}
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center mx-auto mb-3 shadow-lg">
+                      <benefit.icon className="w-6 h-6 text-gold" />
+                    </div>
+                    <h3 className="text-black font-semibold text-sm mb-1">{benefit.title}</h3>
+                    <p className="text-zinc-600 text-xs">{benefit.desc}</p>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -627,36 +629,39 @@ const AIHub = () => {
         {/* Gold Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
-        {/* ALL TOOLS SECTION - Bulk view with individual theme colors (glow/border only) */}
+        {/* ALL TOOLS SECTION - Bulk view with Active Color Layer */}
         <section className="py-16 md:py-20 bg-black">
-          <div className="container mx-auto px-4">
-            <motion.div
-              className="text-center mb-12"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 rounded-full shadow-[0_0_15px_rgba(200,167,102,0.25)] mb-4">
-                <Sparkles className="w-3.5 h-3.5 text-gold" />
-                <span className="text-black text-xs uppercase tracking-wider font-medium">All Free Tools</span>
-              </span>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                Discover All <span className="text-white">Free AI Tools</span>
-              </h2>
-              <p className="text-zinc-400 max-w-2xl mx-auto">
-                All tools in one place — each with its unique theme. Scroll down to see them organized by category.
-              </p>
-            </motion.div>
+          <div className="container mx-auto px-3 sm:px-4">
+            {/* Active Slate/Blue Layer - matching Broker Hub */}
+            <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 border border-slate-600/30 rounded-2xl p-6 md:p-8 shadow-lg">
+              <motion.div
+                className="text-center mb-12"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 rounded-full shadow-[0_0_15px_rgba(200,167,102,0.25)] mb-4">
+                  <Sparkles className="w-3.5 h-3.5 text-gold" />
+                  <span className="text-black text-xs uppercase tracking-wider font-medium">All Free Tools</span>
+                </span>
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                  Discover All <span className="text-sky-300">Free AI Tools</span>
+                </h2>
+                <p className="text-zinc-400 max-w-2xl mx-auto">
+                  All tools in one place — each with its unique theme. Scroll down to see them organized by category.
+                </p>
+              </motion.div>
 
-            <motion.div 
-              className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={staggerContainer}
-            >
-              {allTools.map((tool, idx) => renderBulkToolCard(tool, idx))}
-            </motion.div>
+              <motion.div 
+                className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={staggerContainer}
+              >
+                {allTools.map((tool, idx) => renderBulkToolCard(tool, idx))}
+              </motion.div>
+            </div>
           </div>
         </section>
 
