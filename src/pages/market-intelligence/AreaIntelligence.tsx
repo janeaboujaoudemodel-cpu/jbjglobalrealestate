@@ -67,7 +67,7 @@ const AreaIntelligence = () => {
       <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
 
       {/* Main Content - Black background with 3-layer system */}
-      <div className="bg-black py-16">
+      <div className="bg-black pt-8 pb-16">
         {/* Fixed TOC Sidebar */}
         <div className="hidden lg:block">
           <MarketIntelligenceTableOfContents 
@@ -84,7 +84,7 @@ const AreaIntelligence = () => {
         <div className="space-y-0">
             
           {/* Introduction Section - 3-layer system */}
-          <section id="introduction" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
+          <section id="introduction" className="scroll-mt-32 jj-section-champagne py-12 mb-8">
             <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
               <motion.div
                 initial="hidden"
