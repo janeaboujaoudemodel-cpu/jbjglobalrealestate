@@ -21,7 +21,8 @@ import {
   Filter,
   ExternalLink,
   Crown,
-  Mail
+  Mail,
+  Sparkles
 } from "lucide-react";
 import dubaiLandmarksVideo from "@/assets/videos/dubai-landmarks-hero.mp4";
 import { Button } from "@/components/ui/button";
@@ -1092,57 +1093,82 @@ const Properties = () => {
         </div>
       </section>
 
-      {/* Quick Contact CTA - Premium 3D Buttons - Active Champagne Background */}
-      <section className="py-12 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-t border-gold/20">
-        <div className="container mx-auto px-4">
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              {/* Register Interest - Primary 3D Style with proper hover */}
-              <a 
-                href={buildSureFormsUrl()} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="relative h-12 px-8 rounded-xl font-bold transition-all duration-300 group overflow-hidden inline-flex items-center justify-center hover:scale-[1.02]"
-                style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
-                  boxShadow: `
-                    0 8px 25px rgba(200,167,102,0.4),
-                    0 5px 12px rgba(0,0,0,0.15),
-                    inset 0 2px 4px rgba(255,255,255,0.9),
-                    inset 0 -2px 4px rgba(200,167,102,0.2),
-                    0 0 18px rgba(200,167,102,0.3)
-                  `,
-                }}
-              >
-                <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 35px rgba(200,167,102,0.6), inset 0 0 18px rgba(200,167,102,0.1)' }} />
-                {/* Normal state: Black first half, Gold second half - Hover: inverts */}
-                <span className="relative flex items-center gap-2">
-                  <ArrowUpRight className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
-                  <span className="text-black group-hover:text-gold transition-colors">Register</span>
-                  <span className="text-gold group-hover:text-black transition-colors">Interest</span>
-                </span>
-              </a>
+      {/* Quick Contact CTA - 3-Layer System: Black > Active Champagne > Pearl */}
+      <section className="py-16 sm:py-20 bg-black">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="max-w-[1100px] mx-auto">
+            {/* OUTER CARD - Active Champagne Layer */}
+            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
+              {/* INNER CARD - Pearl Layer */}
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-10 md:p-14 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center">
+                {/* Badge */}
+                <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F5F0E6] to-gold/20 border border-gold/50 rounded-full text-black text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20">
+                  <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gold" />
+                  Get in Touch
+                </div>
 
-              {/* WhatsApp - Secondary Style (transparent with border) */}
-              <a 
-                href={getWhatsAppUrl()} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="h-12 px-8 rounded-xl font-bold transition-all duration-300 inline-flex items-center justify-center gap-2 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
-              >
-                <MessageCircle className="w-4 h-4" />
-                WhatsApp
-              </a>
+                {/* Title */}
+                <h2 
+                  className="text-black text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-3 sm:mb-4 leading-tight"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  Ready to Find Your Perfect Property?
+                </h2>
+                <p className="text-zinc-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed">
+                  Connect with our expert team to explore Dubai's finest real estate opportunities.
+                </p>
 
-              {/* Call Now - Secondary Style (transparent with border) */}
-              <a 
-                href={`tel:${CONTACT_INFO.phoneRaw}`}
-                className="h-12 px-8 rounded-xl font-bold transition-all duration-300 inline-flex items-center justify-center gap-2 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
-              >
-                <Phone className="w-4 h-4" />
-                Call Now
-              </a>
+                {/* CTA Buttons */}
+                <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4">
+                  {/* Register Interest - Primary 3D Style */}
+                  <a 
+                    href={buildSureFormsUrl()} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="relative w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-10 rounded-xl font-bold transition-all duration-300 group overflow-hidden inline-flex items-center justify-center hover:scale-[1.02]"
+                    style={{
+                      background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                      boxShadow: `
+                        0 10px 30px rgba(200,167,102,0.4),
+                        0 6px 15px rgba(0,0,0,0.2),
+                        inset 0 2px 4px rgba(255,255,255,0.9),
+                        inset 0 -2px 4px rgba(200,167,102,0.2),
+                        0 0 20px rgba(200,167,102,0.3)
+                      `,
+                    }}
+                  >
+                    <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                    <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                    <span className="relative flex items-center gap-2">
+                      <span className="text-black group-hover:text-gold transition-colors">Register</span>
+                      <span className="text-gold group-hover:text-black transition-colors">Interest</span>
+                      <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-black group-hover:text-gold transition-colors" />
+                    </span>
+                  </a>
+
+                  {/* WhatsApp - Secondary Style */}
+                  <a 
+                    href={getWhatsAppUrl()} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-10 rounded-xl font-bold transition-all duration-300 inline-flex items-center justify-center gap-2 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    WhatsApp
+                  </a>
+
+                  {/* Call Now - Secondary Style */}
+                  <a 
+                    href={`tel:${CONTACT_INFO.phoneRaw}`}
+                    className="w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-10 rounded-xl font-bold transition-all duration-300 inline-flex items-center justify-center gap-2 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
+                  >
+                    <Phone className="w-4 h-4" />
+                    Call Now
+                  </a>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
       </section>
 
