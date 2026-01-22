@@ -177,16 +177,16 @@ const News = () => {
     <>
       <SEOHead {...pagesSEO.news} />
       <section className="min-h-screen bg-black">
-      {/* Hero Section - 3-Layer System */}
+      {/* Hero Section - 3-Layer System with global inset */}
       <div className="relative py-16 md:py-24 bg-black">
-        <div className="container mx-auto px-3 sm:px-4 relative z-10">
+        <div className="mx-4 md:mx-8 lg:mx-16">
           <Link to="/" className="inline-flex items-center gap-2 text-zinc-400 hover:text-gold mb-8 transition-colors group">
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Back to Properties
           </Link>
           
           {/* Active Champagne Layer */}
-          <div className="jj-layer-active p-4 sm:p-6 shadow-lg">
+          <div className="py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
             <div className="flex items-center justify-between gap-4 mb-4 flex-wrap">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-black/10 flex items-center justify-center shadow-sm">
@@ -233,9 +233,9 @@ const News = () => {
         </div>
       </div>
 
-      {/* Category Filter - Active Champagne */}
+      {/* Category Filter - Active Champagne with global inset */}
       <div className="border-b border-gold/20 sticky top-16 bg-black z-20">
-        <div className="container mx-auto px-3 sm:px-4">
+        <div className="mx-4 md:mx-8 lg:mx-16">
           <div className="jj-layer-active rounded-xl my-2 p-2">
             <div className="flex gap-2 py-2 overflow-x-auto scrollbar-hide">
               {categories.map((category) => (
@@ -258,18 +258,18 @@ const News = () => {
 
       {/* Loading State */}
       {isLoading && (
-        <div className="container mx-auto px-4 py-16 flex justify-center">
+        <div className="mx-4 md:mx-8 lg:mx-16 py-16 flex justify-center">
           <Loader2 className="w-8 h-8 text-gold animate-spin" />
         </div>
       )}
 
-      {/* News Grid */}
+      {/* News Grid - with global inset */}
       {!isLoading && (
-        <div className="container mx-auto px-4 py-12 md:py-16">
+        <div className="mx-4 md:mx-8 lg:mx-16 py-12 md:py-16">
           {/* Featured Article */}
           {filteredNews.length > 0 && (
             <div className="mb-12">
-              <div className="jj-layer-active p-3 md:p-4">
+              <div className="py-6 px-4 md:px-6 jj-layer-active rounded-2xl">
                 <article className="group relative jj-card-inner rounded-2xl overflow-hidden transition-all duration-500">
                   <div className="grid md:grid-cols-2 gap-0">
                     {/* Image */}

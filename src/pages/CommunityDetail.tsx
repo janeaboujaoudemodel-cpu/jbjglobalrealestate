@@ -75,12 +75,12 @@ const CommunityDetail = () => {
         </Link>
       </div>
 
-      {/* Content */}
-      <div className="container mx-auto px-4 -mt-20 relative z-10 pb-16">
+      {/* Content - Global inset for aligned widths */}
+      <div className="mx-4 md:mx-8 lg:mx-16 -mt-20 relative z-10 pb-16">
         {/* Layer 2: Active Champagne */}
-        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl p-4 md:p-6 border border-gold/30 shadow-xl mb-12">
+        <div className="py-10 px-4 md:px-8 jj-layer-active rounded-2xl shadow-xl mb-12">
           {/* Layer 3: Locked Champagne - Community Info Card */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl p-6 md:p-8 border-2 border-gold/40">
+          <div className="jj-card-inner rounded-xl p-6 md:p-8">
             <h1 className="text-black font-bold mb-2 text-3xl md:text-4xl lg:text-5xl">
               <span className="text-gold">{community.name.split(' ')[0]}</span> {community.name.split(' ').slice(1).join(' ')}
             </h1>
@@ -94,9 +94,9 @@ const CommunityDetail = () => {
         </div>
 
         {/* Projects Section - Layer 2: Active Champagne */}
-        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl p-4 md:p-6 border border-gold/30 shadow-lg">
+        <div className="py-10 px-4 md:px-8 jj-layer-active rounded-2xl shadow-lg">
           {/* Layer 3: Locked Champagne */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl p-6 md:p-8 border-2 border-gold/40">
+          <div className="jj-card-inner rounded-xl p-6 md:p-8">
             <h2 className="text-black font-semibold mb-6 text-2xl">
               <span className="text-gold">Projects</span> in {community.name}
             </h2>
@@ -148,8 +148,8 @@ const CommunityDetail = () => {
         </div>
 
         {/* Educational Disclaimer - Layer 2 + Layer 3 */}
-        <div className="mt-8 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl p-3 border border-gold/30">
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-lg p-5 border-2 border-gold/40">
+        <div className="mt-8 py-6 px-4 md:px-6 jj-layer-active rounded-xl">
+          <div className="jj-card-inner rounded-lg p-5">
             <div className="flex items-start gap-4">
               <div className="w-10 h-10 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-lg flex items-center justify-center flex-shrink-0 border border-gold/30">
                 <svg className="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
