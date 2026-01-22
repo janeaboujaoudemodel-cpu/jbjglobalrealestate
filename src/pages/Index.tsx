@@ -109,9 +109,9 @@ const Index = () => {
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
             <span className="block whitespace-nowrap">
-              Buy<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle" style={{ background: 'linear-gradient(135deg, #D4AF37, #E8DCC8)', boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
-              Sell<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle" style={{ background: 'linear-gradient(135deg, #D4AF37, #E8DCC8)', boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
-              Rent<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle" style={{ background: 'linear-gradient(135deg, #D4AF37, #E8DCC8)', boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+              Buy<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+              Sell<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+              Rent<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
             </span>
             <span 
               className="block bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] bg-clip-text text-transparent mt-1"
@@ -501,9 +501,9 @@ const Index = () => {
           >
             {/* Section Header - Leadership Label with Mixed Color Style */}
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              {/* Leadership Label - 3D Frame Style */}
+              {/* Leadership Label - 3D Frame Style with Gold Border */}
               <div 
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-black rounded-lg mb-4 shadow-md group cursor-default"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-lg mb-4 shadow-md group cursor-default"
                 style={{
                   boxShadow: `
                     0 4px 12px rgba(0,0,0,0.15),
@@ -520,10 +520,7 @@ const Index = () => {
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 Meet the{" "}
-                <span 
-                  className="text-transparent bg-clip-text bg-gradient-to-r from-[#C8A766] via-[#D4AF37] to-[#C8A766]"
-                  style={{ filter: 'drop-shadow(0 0 8px rgba(200,167,102,0.4))' }}
-                >
+                <span className="text-gold">
                   Founder
                 </span>
               </h2>
