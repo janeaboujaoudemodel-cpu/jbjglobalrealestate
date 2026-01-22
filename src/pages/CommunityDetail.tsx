@@ -75,10 +75,10 @@ const CommunityDetail = () => {
         </Link>
       </div>
 
-      {/* Content - Global inset for aligned widths */}
-      <div className="mx-4 md:mx-8 lg:mx-16 -mt-20 relative z-10 pb-16">
+      {/* Content - Global locked gutter */}
+      <div className="jj-layer-2 -mt-20 relative z-10 mb-12">
         {/* Layer 2: Active Champagne */}
-        <div className="py-10 px-4 md:px-8 jj-layer-active rounded-2xl shadow-xl mb-12">
+        <div className="jj-card-inner rounded-xl p-6 md:p-8 shadow-xl">
           {/* Layer 3: Locked Champagne - Community Info Card */}
           <div className="jj-card-inner rounded-xl p-6 md:p-8">
             <h1 className="text-black font-bold mb-2 text-3xl md:text-4xl lg:text-5xl">

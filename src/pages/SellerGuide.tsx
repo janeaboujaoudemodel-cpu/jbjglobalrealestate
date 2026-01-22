@@ -676,7 +676,7 @@ const SellerGuide = () => {
 
         {/* Final CTA Section - Next Step - 3-Layer System */}
         <section className="py-20 bg-black">
-          <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
+          <div className="jj-layer-2">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -740,7 +740,7 @@ const SellerGuide = () => {
 
         {/* Compliance Disclaimer - 3-Layer System */}
         <section className="py-8 bg-black">
-          <div className="mx-4 md:mx-8 lg:mx-16 py-6 px-4 md:px-8 jj-layer-active rounded-2xl">
+          <div className="jj-layer-2">
             <div className="max-w-4xl mx-auto">
               <div className="jj-card-inner rounded-lg p-6">
                 <h4 className="text-black font-semibold mb-3 flex items-center gap-2">

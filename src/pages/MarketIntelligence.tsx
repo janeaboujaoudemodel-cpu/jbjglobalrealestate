@@ -209,7 +209,7 @@ const MarketIntelligence = () => {
 
       {/* Compliance Disclaimer - 3-Layer System */}
       <section className="py-12 bg-black">
-        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
+        <div className="jj-layer-2">
           <div className="max-w-3xl mx-auto">
             <div className="jj-card-inner rounded-2xl p-8 text-center">
               <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center mx-auto mb-4">
