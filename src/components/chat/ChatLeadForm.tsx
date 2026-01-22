@@ -236,9 +236,11 @@ const ChatLeadForm = ({
 
         <Button
           onClick={handleSubmit}
-          className="w-full bg-gradient-to-r from-gold to-gold/80 hover:from-gold/90 hover:to-gold/70 text-black font-semibold mt-3"
+          variant="primary"
+          size="lg"
+          className="w-full mt-3"
         >
-          Continue
+          <span className="text-black">Continue</span>
         </Button>
       </div>
     </ScrollArea>

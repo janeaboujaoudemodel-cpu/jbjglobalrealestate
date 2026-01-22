@@ -1064,22 +1064,22 @@ const Properties = () => {
         </div>
       </section>
 
-      {/* Request Details Form Section - 3-Layer System: Black > Active Champagne > Form (form IS the 3rd layer) */}
+      {/* Request Details Form Section - 3-Layer System: Black > Active Champagne > Form (breathable Layer 3) */}
       <section className="py-16 sm:py-20 bg-black">
         {/* Full-width Active Champagne Layer matching listing section */}
-        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 sm:p-6">
-          {/* Form as 3rd Layer (Champagne Pearl) - directly on active layer, no extra wrapper */}
+        <div className="jj-layer-2 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 sm:p-8 md:p-12">
+          {/* Form as 3rd Layer - Breathable, centered, not stretched */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-10 shadow-[0_0_30px_rgba(200,167,102,0.25)]"
+            className="max-w-2xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10 shadow-[0_0_30px_rgba(200,167,102,0.25)]"
           >
             <h2 className="text-2xl md:text-3xl font-semibold text-black text-center mb-8" style={{ fontFamily: "Poppins, sans-serif" }}>
               <span className="text-gold">Request</span> Details
             </h2>
             
-            <div className="max-w-xl mx-auto space-y-4">
+            <div className="space-y-4">
               <Input
                 placeholder="Name"
                 className="h-14 bg-white border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] rounded-lg focus:border-gold"
@@ -1119,15 +1119,16 @@ const Properties = () => {
               <Button
                 onClick={handleInquirySubmit}
                 variant="primary"
-                className="w-full h-14 text-lg rounded-xl font-bold mt-4"
+                size="lg"
+                className="w-full mt-4"
               >
-                Submit
+                <span className="text-black">Submit</span> <span className="text-gold">Request</span>
               </Button>
             </div>
 
             {/* Current Filter Summary */}
             {activeFilterCount > 0 && (
-              <div className="mt-6 pt-6 border-t border-gold/20 max-w-xl mx-auto">
+              <div className="mt-6 pt-6 border-t border-gold/20">
                 <p className="text-zinc-600 text-sm mb-3">Your search includes:</p>
                 <div className="flex flex-wrap gap-2">
                   {filters.emirate && (
