@@ -86,9 +86,9 @@ export const GuideHero = ({
             {description}
           </motion.p>
           
-          {/* Actions - Hero CTA Buttons use transparent bg, white 3D border, white title, gold icon; filled on hover */}
+          {/* Actions - Hero CTA Buttons: transparent bg, white 3D border, white text, gold glowing icon; champagne fill on hover */}
           {actions && (
-            <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4 [&_button]:bg-transparent [&_button]:border-2 [&_button]:border-white/80 [&_button]:text-white [&_button:hover]:bg-gradient-to-r [&_button:hover]:from-white [&_button:hover]:via-[#FDFBF7] [&_button:hover]:to-[#F5F0E6] [&_button:hover]:text-black [&_button:hover]:border-gold [&_button_svg]:text-gold">
+            <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
               {actions}
             </motion.div>
           )}
