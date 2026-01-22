@@ -287,7 +287,12 @@ const Automations = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
-                    <Button variant="ghost" size="sm" className="text-zinc-500 hover:text-gold hover:bg-gold/10">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-zinc-500 hover:text-gold hover:bg-gold/10"
+                      onClick={() => toast.info(`Settings for "${rule.name}" - Configuration panel coming soon`)}
+                    >
                       <Settings className="h-4 w-4" />
                     </Button>
                     <Switch
