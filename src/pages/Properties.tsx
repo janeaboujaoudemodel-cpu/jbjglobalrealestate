@@ -961,15 +961,15 @@ const Properties = () => {
               )}
             </div>
 
-            {/* Projects Grid - Inside active layer */}
+            {/* Projects Grid - Inside active layer - 2-3 cards per row for wider balanced layout */}
             {isLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
-                {[...Array(8)].map((_, i) => (
-                  <div key={i} className="bg-white/50 rounded-xl h-[420px] animate-pulse" />
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 p-4">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl h-[480px] animate-pulse border-2 border-gold/30" />
                 ))}
               </div>
             ) : sortedProjects.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 p-4">
                 {sortedProjects.map((project) => (
                   <ProjectCard 
                     key={project.id} 
