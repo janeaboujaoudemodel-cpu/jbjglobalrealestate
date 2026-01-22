@@ -130,19 +130,31 @@ const BrokerEducation = () => {
         backgroundImage="https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?auto=format&fit=crop&w=2000&q=80"
         actions={
           <>
-            <Button 
-              className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
+            <button 
               onClick={() => document.getElementById('role')?.scrollIntoView({ behavior: 'smooth' })}
+              className="group relative inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 text-sm md:text-base font-bold rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
+              style={{
+                border: '2px solid rgba(255,255,255,0.8)',
+                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
+              }}
             >
-              <ArrowDown className="w-4 h-4 mr-2 text-black" />
-              <span className="text-gold font-semibold">Read the Full Guide</span>
-            </Button>
-            <Button asChild className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
-              <Link to="/broker-toolkit">
-                <Briefcase className="w-4 h-4 mr-2 text-black" />
-                <span className="text-gold font-semibold">View Broker Tools</span>
-              </Link>
-            </Button>
+              <ArrowDown className="w-4 h-4 text-gold group-hover:text-black transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+              <span className="text-white group-hover:text-black transition-colors">Read the Full Guide</span>
+              <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+            </button>
+            <Link to="/broker-toolkit">
+              <button 
+                className="group relative inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 text-sm md:text-base font-bold rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
+                style={{
+                  border: '2px solid rgba(255,255,255,0.8)',
+                  boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
+                }}
+              >
+                <Briefcase className="w-4 h-4 text-gold group-hover:text-black transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                <span className="text-white group-hover:text-black transition-colors">View Broker Tools</span>
+                <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+              </button>
+            </Link>
           </>
         }
       />
@@ -455,8 +467,8 @@ const BrokerEducation = () => {
         </div>
       </section>
 
-      {/* Guide Navigation */}
-      <section className="py-12 bg-zinc-950">
+      {/* Guide Navigation - Active Champagne Layer */}
+      <section className="jj-section-champagne py-12">
         <div className="container mx-auto px-4">
           <GuideNavigation 
             current="/broker-education"

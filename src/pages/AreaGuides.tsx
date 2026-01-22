@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { 
   MapPin, 
   ArrowUpRight, 
+  ArrowDown,
   Compass, 
   Building2, 
   Users, 
@@ -313,39 +314,33 @@ const AreaGuides = () => {
         description="Dubai is a city of distinct communities, each offering a different lifestyle, price range, and investment profile. This guide helps buyers, tenants, and investors understand how to evaluate areas correctly — beyond marketing names — using real market factors."
         backgroundImage="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=2000&q=80"
         actions={
-          <div className="flex flex-wrap justify-center gap-4">
-            {/* Primary 3D Button */}
+          <>
+            <button 
+              onClick={() => document.getElementById('overview')?.scrollIntoView({ behavior: 'smooth' })}
+              className="group relative inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 text-sm md:text-base font-bold rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
+              style={{
+                border: '2px solid rgba(255,255,255,0.8)',
+                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
+              }}
+            >
+              <ArrowDown className="w-4 h-4 text-gold group-hover:text-black transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+              <span className="text-white group-hover:text-black transition-colors">Read the Full Guide</span>
+              <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+            </button>
             <Link to="/properties">
               <button 
-                className="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
+                className="group relative inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 text-sm md:text-base font-bold rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
                 style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
-                  boxShadow: `
-                    0 8px 25px rgba(200,167,102,0.4),
-                    0 5px 12px rgba(0,0,0,0.15),
-                    inset 0 2px 4px rgba(255,255,255,0.9),
-                    inset 0 -2px 4px rgba(200,167,102,0.2),
-                    0 0 18px rgba(200,167,102,0.3)
-                  `,
+                  border: '2px solid rgba(255,255,255,0.8)',
+                  boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
                 }}
               >
-                <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 35px rgba(200,167,102,0.6), inset 0 0 18px rgba(200,167,102,0.1)' }} />
-                <span className="relative flex items-center gap-2">
-                  <span className="text-gold">Browse</span>
-                  <span className="text-black">Properties by Area</span>
-                  <ArrowUpRight className="w-4 h-4 text-black" />
-                </span>
+                <span className="text-white group-hover:text-black transition-colors">Browse Properties by Area</span>
+                <ArrowUpRight className="w-4 h-4 text-gold group-hover:text-black transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
               </button>
             </Link>
-            {/* Secondary Button */}
-            <Link to="/contact">
-              <button className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-white/30 text-white hover:border-gold hover:text-gold">
-                <Phone className="w-4 h-4" />
-                Speak to an Area Specialist
-              </button>
-            </Link>
-          </div>
+          </>
         }
       />
 
