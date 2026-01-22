@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Plus, Trash2, Shield, AlertTriangle, Search } from "lucide-react";
+import { Plus, Trash2, Shield, AlertTriangle, Search, Info } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -130,130 +130,135 @@ export function FilterManagerPanel() {
   const getTypeBadge = (type: string) => {
     switch (type) {
       case "block":
-        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Block</Badge>;
+        return <Badge className="bg-red-500/20 text-red-700 border-red-500/30">Block</Badge>;
       case "warn":
-        return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">Warn</Badge>;
+        return <Badge className="bg-amber-500/20 text-amber-700 border-amber-500/30">Warn</Badge>;
       case "replace":
-        return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">Replace</Badge>;
+        return <Badge className="bg-blue-500/20 text-blue-700 border-blue-500/30">Replace</Badge>;
       default:
         return null;
     }
   };
 
   return (
-    <Card className="bg-zinc-900 border-zinc-800">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-amber-500/20">
-              <Shield className="h-5 w-5 text-amber-400" />
+    <div className="space-y-4">
+      {/* Guidance Card */}
+      <div className="jj-card-inner flex items-start gap-4 p-4">
+        <div className="jj-icon-box-active w-10 h-10 flex-shrink-0">
+          <Info className="h-5 w-5" />
+        </div>
+        <div>
+          <h4 className="font-semibold text-black mb-1">What is the Filter Manager?</h4>
+          <p className="text-sm text-black/70">
+            The Filter Manager controls which words or phrases are restricted in broker communications. 
+            You can <strong>block</strong> keywords (message won't send), <strong>warn</strong> (alert but allow), 
+            or <strong>replace</strong> them with approved alternatives. Use this to maintain compliance and brand standards.
+          </p>
+        </div>
+      </div>
+
+      {/* Header with Add Button */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="jj-icon-box-active w-10 h-10">
+            <Shield className="h-5 w-5" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-black">Message Filters</h3>
+            <p className="text-sm text-black/60">{filters.length} filters configured</p>
+          </div>
+        </div>
+        <Button variant="primary" onClick={() => setAddDialogOpen(true)}>
+          <Plus className="h-4 w-4 mr-2" />
+          Add Filter
+        </Button>
+      </div>
+
+      {/* Search */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-black/50" />
+        <Input
+          placeholder="Search filters..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="pl-10"
+        />
+      </div>
+
+      {/* Filters List */}
+      <div className="space-y-2">
+        {filteredFilters.map((filter) => (
+          <div
+            key={filter.id}
+            className={`jj-card-inner flex items-center justify-between p-4 ${
+              !filter.is_active ? "opacity-60" : ""
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <AlertTriangle className={`h-4 w-4 ${
+                filter.filter_type === "block" ? "text-red-600" :
+                filter.filter_type === "warn" ? "text-amber-600" : "text-blue-600"
+              }`} />
+              <div>
+                <p className="text-black font-medium">{filter.keyword}</p>
+                {filter.replacement_text && (
+                  <p className="text-black/60 text-sm">
+                    Replace with: "{filter.replacement_text}"
+                  </p>
+                )}
+              </div>
             </div>
-            <div>
-              <CardTitle className="text-white">Message Filter Manager</CardTitle>
-              <p className="text-gray-400 text-sm mt-1">
-                Manage restricted keywords and content filters
-              </p>
+            <div className="flex items-center gap-2">
+              {getTypeBadge(filter.filter_type)}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleToggleActive(filter.id, filter.is_active)}
+                className={filter.is_active ? "text-emerald-600" : "text-black/50"}
+              >
+                {filter.is_active ? "Active" : "Inactive"}
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => handleDeleteFilter(filter.id)}
+                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
             </div>
           </div>
-          <Button
-            onClick={() => setAddDialogOpen(true)}
-            className="bg-gold hover:bg-gold-dark text-black"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Add Filter
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {/* Search */}
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            placeholder="Search filters..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-zinc-800 border-zinc-700 text-white"
-          />
-        </div>
+        ))}
 
-        {/* Filters List */}
-        <div className="space-y-2">
-          {filteredFilters.map((filter) => (
-            <div
-              key={filter.id}
-              className={`flex items-center justify-between p-3 rounded-lg border ${
-                filter.is_active
-                  ? "bg-zinc-800 border-zinc-700"
-                  : "bg-zinc-800/50 border-zinc-700/50 opacity-60"
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <AlertTriangle className={`h-4 w-4 ${
-                  filter.filter_type === "block" ? "text-red-400" :
-                  filter.filter_type === "warn" ? "text-amber-400" : "text-blue-400"
-                }`} />
-                <div>
-                  <p className="text-white font-medium">{filter.keyword}</p>
-                  {filter.replacement_text && (
-                    <p className="text-gray-400 text-sm">
-                      Replace with: "{filter.replacement_text}"
-                    </p>
-                  )}
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                {getTypeBadge(filter.filter_type)}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleToggleActive(filter.id, filter.is_active)}
-                  className={filter.is_active ? "text-emerald-400" : "text-gray-400"}
-                >
-                  {filter.is_active ? "Active" : "Inactive"}
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => handleDeleteFilter(filter.id)}
-                  className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          ))}
-
-          {filteredFilters.length === 0 && !loading && (
-            <div className="text-center py-8 text-gray-400">
-              {searchQuery ? "No filters match your search" : "No filters configured"}
-            </div>
-          )}
-        </div>
-      </CardContent>
+        {filteredFilters.length === 0 && !loading && (
+          <div className="jj-card-inner text-center py-8 text-black/60">
+            {searchQuery ? "No filters match your search" : "No filters configured. Add your first filter above."}
+          </div>
+        )}
+      </div>
 
       {/* Add Filter Dialog */}
       <Dialog open={addDialogOpen} onOpenChange={setAddDialogOpen}>
-        <DialogContent className="bg-zinc-900 border-zinc-700 text-white">
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
           <DialogHeader>
-            <DialogTitle>Add New Filter</DialogTitle>
+            <DialogTitle className="text-black">Add New Filter</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <label className="text-sm text-gray-400 mb-2 block">Keyword</label>
+              <label className="text-sm text-black/70 mb-2 block">Keyword to Filter</label>
               <Input
                 value={newKeyword}
                 onChange={(e) => setNewKeyword(e.target.value)}
                 placeholder="Enter restricted keyword..."
-                className="bg-zinc-800 border-zinc-700 text-white"
               />
             </div>
             <div>
-              <label className="text-sm text-gray-400 mb-2 block">Filter Type</label>
+              <label className="text-sm text-black/70 mb-2 block">Filter Type</label>
               <Select value={newFilterType} onValueChange={setNewFilterType}>
-                <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-zinc-800 border-zinc-700">
+                <SelectContent>
                   <SelectItem value="block">Block - Prevent message from sending</SelectItem>
                   <SelectItem value="warn">Warn - Show warning but allow</SelectItem>
                   <SelectItem value="replace">Replace - Substitute with safe text</SelectItem>
@@ -262,33 +267,28 @@ export function FilterManagerPanel() {
             </div>
             {newFilterType === "replace" && (
               <div>
-                <label className="text-sm text-gray-400 mb-2 block">Replacement Text</label>
+                <label className="text-sm text-black/70 mb-2 block">Replacement Text</label>
                 <Input
                   value={newReplacement}
                   onChange={(e) => setNewReplacement(e.target.value)}
                   placeholder="Enter replacement text..."
-                  className="bg-zinc-800 border-zinc-700 text-white"
                 />
               </div>
             )}
           </div>
           <DialogFooter>
             <Button
-              variant="outline"
+              variant="secondary"
               onClick={() => setAddDialogOpen(false)}
-              className="border-zinc-700 text-gray-300"
             >
               Cancel
             </Button>
-            <Button
-              onClick={handleAddFilter}
-              className="bg-gold hover:bg-gold-dark text-black"
-            >
+            <Button variant="primary" onClick={handleAddFilter}>
               Add Filter
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </Card>
+    </div>
   );
 }

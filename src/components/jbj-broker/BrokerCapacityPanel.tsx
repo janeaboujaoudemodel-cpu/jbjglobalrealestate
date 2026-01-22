@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Settings, Save, Users } from "lucide-react";
+import { Settings, Save, Users, Info } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 
 interface Broker {
@@ -65,21 +64,36 @@ export function BrokerCapacityPanel({ brokers, onUpdate }: BrokerCapacityPanelPr
   };
 
   return (
-    <Card className="bg-zinc-900 border-zinc-800">
-      <CardHeader>
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-blue-500/20">
-            <Settings className="h-5 w-5 text-blue-400" />
-          </div>
-          <div>
-            <CardTitle className="text-white">Broker Capacity Settings</CardTitle>
-            <p className="text-gray-400 text-sm mt-1">
-              Configure daily lead capacity for each broker
-            </p>
-          </div>
+    <div className="space-y-4">
+      {/* Guidance Card */}
+      <div className="jj-card-inner flex items-start gap-4 p-4">
+        <div className="jj-icon-box-active w-10 h-10 flex-shrink-0">
+          <Info className="h-5 w-5" />
         </div>
-      </CardHeader>
-      <CardContent className="space-y-6">
+        <div>
+          <h4 className="font-semibold text-black mb-1">What are Capacity Settings?</h4>
+          <p className="text-sm text-black/70">
+            Each broker has a daily lead capacity limit. This controls how many leads can be assigned to them 
+            before they are considered "at capacity." Adjust the slider or input a number to set the maximum 
+            leads per day for each broker. When a broker reaches 80%+ capacity, they show a warning; at 100%, 
+            new leads are redirected to available brokers.
+          </p>
+        </div>
+      </div>
+
+      {/* Header */}
+      <div className="flex items-center gap-3">
+        <div className="jj-icon-box-active w-10 h-10">
+          <Settings className="h-5 w-5" />
+        </div>
+        <div>
+          <h3 className="text-lg font-semibold text-black">Broker Capacity Settings</h3>
+          <p className="text-sm text-black/60">{brokers.length} brokers configured</p>
+        </div>
+      </div>
+
+      {/* Broker List */}
+      <div className="space-y-4">
         {brokers.map((broker) => {
           const currentCapacity = capacities[broker.id] || broker.capacity;
           const usagePercent = Math.min((broker.active_leads / currentCapacity) * 100, 100);
@@ -88,51 +102,49 @@ export function BrokerCapacityPanel({ brokers, onUpdate }: BrokerCapacityPanelPr
           return (
             <div
               key={broker.id}
-              className="p-4 rounded-lg bg-zinc-800 border border-zinc-700 space-y-4"
+              className="jj-card-inner space-y-4"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <Avatar className="h-12 w-12 border-2 border-zinc-600">
+                  <Avatar className="h-12 w-12 border-2 border-gold/40">
                     {broker.avatar_url ? (
                       <AvatarImage src={broker.avatar_url} alt={broker.name} />
                     ) : (
-                      <AvatarFallback className="bg-gradient-to-br from-gold to-gold-dark text-black font-bold">
+                      <AvatarFallback className="bg-gold/20 text-gold font-bold">
                         {getInitials(broker.name)}
                       </AvatarFallback>
                     )}
                   </Avatar>
                   <div>
-                    <h3 className="text-white font-medium">{broker.name}</h3>
-                    <p className="text-gray-400 text-sm">{broker.email}</p>
+                    <h3 className="text-black font-medium">{broker.name}</h3>
+                    <p className="text-black/60 text-sm">{broker.email}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Badge
-                    className={
-                      broker.status === "active"
-                        ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
-                        : broker.status === "paused"
-                        ? "bg-amber-500/20 text-amber-400 border-amber-500/30"
-                        : "bg-gray-500/20 text-gray-400 border-gray-500/30"
-                    }
-                  >
-                    {broker.status}
-                  </Badge>
-                </div>
+                <Badge
+                  className={
+                    broker.status === "active"
+                      ? "bg-emerald-500/20 text-emerald-700 border-emerald-500/30"
+                      : broker.status === "paused"
+                      ? "bg-amber-500/20 text-amber-700 border-amber-500/30"
+                      : "bg-gray-500/20 text-gray-700 border-gray-500/30"
+                  }
+                >
+                  {broker.status}
+                </Badge>
               </div>
 
               {/* Current Usage */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-400 flex items-center gap-2">
+                  <span className="text-black/60 flex items-center gap-2">
                     <Users className="h-4 w-4" />
                     Current Load
                   </span>
-                  <span className="text-white">
+                  <span className="text-black font-medium">
                     {broker.active_leads} / {currentCapacity} leads
                   </span>
                 </div>
-                <div className="h-2 bg-zinc-700 rounded-full overflow-hidden">
+                <div className="h-2 bg-black/10 rounded-full overflow-hidden">
                   <div
                     className={`h-full transition-all ${
                       usagePercent > 90
@@ -149,7 +161,7 @@ export function BrokerCapacityPanel({ brokers, onUpdate }: BrokerCapacityPanelPr
               {/* Capacity Slider */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <label className="text-gray-400 text-sm">Daily Capacity Limit</label>
+                  <label className="text-black/60 text-sm">Daily Capacity Limit</label>
                   <div className="flex items-center gap-2">
                     <Input
                       type="number"
@@ -160,11 +172,11 @@ export function BrokerCapacityPanel({ brokers, onUpdate }: BrokerCapacityPanelPr
                           [broker.id]: parseInt(e.target.value) || 0,
                         }))
                       }
-                      className="w-20 bg-zinc-700 border-zinc-600 text-white text-center"
+                      className="w-20 text-center"
                       min={1}
                       max={500}
                     />
-                    <span className="text-gray-400 text-sm">leads/day</span>
+                    <span className="text-black/60 text-sm">leads/day</span>
                   </div>
                 </div>
                 <Slider
@@ -175,7 +187,7 @@ export function BrokerCapacityPanel({ brokers, onUpdate }: BrokerCapacityPanelPr
                   step={10}
                   className="py-2"
                 />
-                <div className="flex justify-between text-xs text-gray-500">
+                <div className="flex justify-between text-xs text-black/40">
                   <span>50</span>
                   <span>150</span>
                   <span>200</span>
@@ -188,7 +200,8 @@ export function BrokerCapacityPanel({ brokers, onUpdate }: BrokerCapacityPanelPr
                 <Button
                   onClick={() => handleSave(broker.id)}
                   disabled={saving === broker.id}
-                  className="w-full bg-gold hover:bg-gold-dark text-black"
+                  variant="primary"
+                  className="w-full"
                 >
                   <Save className="h-4 w-4 mr-2" />
                   {saving === broker.id ? "Saving..." : "Save Changes"}
@@ -199,11 +212,11 @@ export function BrokerCapacityPanel({ brokers, onUpdate }: BrokerCapacityPanelPr
         })}
 
         {brokers.length === 0 && (
-          <div className="text-center py-8 text-gray-400">
-            No brokers configured
+          <div className="jj-card-inner text-center py-8 text-black/60">
+            No brokers configured. Add brokers to manage their capacity.
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

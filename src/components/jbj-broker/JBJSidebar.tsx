@@ -42,38 +42,37 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
   };
 
   return (
-    <aside className="w-64 bg-black fixed h-screen flex flex-col border-r border-zinc-800">
-      {/* Header */}
-      <div className="p-4 border-b border-zinc-800">
+    <aside className="w-64 bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] fixed h-screen flex flex-col border-r border-gold/30">
+      {/* Header - Company Name on ONE LINE */}
+      <div className="p-4 border-b border-gold/30">
         <h1 className="text-gold font-bold tracking-wide text-lg">
-          JBJ GLOBAL
+          JBJ Global Real Estate
         </h1>
-        <p className="text-gray-500 text-xs mt-0.5">REAL ESTATE</p>
       </div>
 
       {/* Broker Profile */}
       {brokerProfile && (
-        <div className="p-4 border-b border-zinc-800">
+        <div className="p-4 border-b border-gold/30">
           <div className="flex items-center gap-3">
-            <Avatar className="h-12 w-12 border-2 border-gold/30">
+            <Avatar className="h-12 w-12 border-2 border-gold/40">
               <AvatarImage src={brokerProfile.avatar_url || undefined} />
-              <AvatarFallback className="bg-gold/20 text-gold">
+              <AvatarFallback className="bg-gold/20 text-gold font-bold">
                 {brokerProfile.name.charAt(0)}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
-              <p className="text-white font-medium truncate">
+              <p className="text-black font-medium truncate">
                 {brokerProfile.name}
               </p>
-              <p className="text-gray-400 text-xs truncate">
+              <p className="text-black/60 text-xs truncate">
                 {brokerProfile.email}
               </p>
               <Badge
                 variant="outline"
                 className={`mt-1 text-xs ${
                   brokerProfile.status === "active"
-                    ? "border-green-500 text-green-400"
-                    : "border-amber-500 text-amber-400"
+                    ? "border-emerald-500 text-emerald-700 bg-emerald-50"
+                    : "border-amber-500 text-amber-700 bg-amber-50"
                 }`}
               >
                 {brokerProfile.status}
@@ -83,11 +82,11 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
 
           {/* Capacity Bar */}
           <div className="mt-4">
-            <div className="flex justify-between text-xs text-gray-400 mb-1">
+            <div className="flex justify-between text-xs text-black/60 mb-1">
               <span>Lead Capacity</span>
               <span>{brokerProfile.active_leads}/{brokerProfile.capacity}</span>
             </div>
-            <div className="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+            <div className="h-1.5 bg-black/10 rounded-full overflow-hidden">
               <div
                 className="h-full bg-gold rounded-full transition-all"
                 style={{
@@ -112,7 +111,7 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
             className={`w-full justify-start gap-3 ${
               activePage === item.id
                 ? "bg-gold/20 text-gold hover:bg-gold/30"
-                : "text-gray-400 hover:text-white hover:bg-zinc-800"
+                : "text-black/70 hover:text-black hover:bg-gold/10"
             }`}
           >
             <item.icon className="h-5 w-5" />
@@ -122,11 +121,11 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
       </nav>
 
       {/* Footer Actions */}
-      <div className="p-3 border-t border-zinc-800 space-y-1">
+      <div className="p-3 border-t border-gold/30 space-y-1">
         <Button
           variant="ghost"
           onClick={() => navigate("/jbj-broker-admin")}
-          className="w-full justify-start gap-3 text-gray-400 hover:text-white hover:bg-zinc-800"
+          className="w-full justify-start gap-3 text-black/70 hover:text-black hover:bg-gold/10"
         >
           <Settings className="h-5 w-5" />
           Admin Panel
@@ -134,7 +133,7 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
         <Button
           variant="ghost"
           onClick={() => navigate("/")}
-          className="w-full justify-start gap-3 text-gray-400 hover:text-white hover:bg-zinc-800"
+          className="w-full justify-start gap-3 text-black/70 hover:text-black hover:bg-gold/10"
         >
           <Home className="h-5 w-5" />
           Back to Site
@@ -142,10 +141,10 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
         <Button
           variant="ghost"
           onClick={handleLogout}
-          className="w-full justify-start gap-3 text-red-400 hover:text-red-300 hover:bg-red-500/10"
+          className="w-full justify-start gap-3 text-black/70 hover:text-black hover:bg-gold/10"
         >
           <LogOut className="h-5 w-5" />
-          Logout
+          Sign Out
         </Button>
       </div>
     </aside>

@@ -14,8 +14,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  LineChart,
-  Line,
   PieChart,
   Pie,
   Cell,
@@ -28,13 +26,12 @@ import {
   Mail,
   Clock,
   Download,
-  Calendar,
   Loader2,
-  CheckCircle,
   Target,
   Activity,
+  ArrowLeft,
+  BarChart3,
 } from "lucide-react";
-import { JBJSidebar } from "@/components/jbj-broker/JBJSidebar";
 
 interface ReportMetrics {
   totalLeads: number;
@@ -58,7 +55,7 @@ interface LeadStatus {
   count: number;
 }
 
-const COLORS = ["#D4AF37", "#10B981", "#3B82F6", "#8B5CF6", "#F59E0B"];
+const COLORS = ["#C8A766", "#10B981", "#3B82F6", "#8B5CF6", "#F59E0B"];
 
 export default function JBJBrokerReports() {
   const navigate = useNavigate();
@@ -75,7 +72,6 @@ export default function JBJBrokerReports() {
   });
   const [dailyActivity, setDailyActivity] = useState<DailyActivity[]>([]);
   const [leadStatuses, setLeadStatuses] = useState<LeadStatus[]>([]);
-  const [brokerProfile, setBrokerProfile] = useState<any>(null);
   const [dateRange, setDateRange] = useState<"week" | "month" | "quarter">("week");
 
   useEffect(() => {
@@ -86,26 +82,14 @@ export default function JBJBrokerReports() {
 
   useEffect(() => {
     if (user) {
-      fetchBrokerProfile();
       fetchReportData();
     }
   }, [user, dateRange]);
-
-  const fetchBrokerProfile = async () => {
-    const { data } = await supabase
-      .from("jbj_brokers")
-      .select("*")
-      .eq("user_id", user?.id)
-      .single();
-
-    setBrokerProfile(data);
-  };
 
   const fetchReportData = async () => {
     try {
       setLoading(true);
 
-      // Calculate date range
       const now = new Date();
       let startDate: Date;
       switch (dateRange) {
@@ -120,18 +104,15 @@ export default function JBJBrokerReports() {
           break;
       }
 
-      // Fetch leads
       const { data: leadsData } = await supabase
         .from("jbj_leads")
         .select("status, last_contact, created_at");
 
-      // Fetch messages
       const { data: messagesData } = await supabase
         .from("jbj_messages")
         .select("channel, created_at")
         .gte("created_at", startDate.toISOString());
 
-      // Calculate metrics
       const totalLeads = leadsData?.length || 0;
       const contactedLeads = leadsData?.filter((l) => l.last_contact).length || 0;
       const convertedLeads = leadsData?.filter((l) => l.status === "converted").length || 0;
@@ -145,13 +126,12 @@ export default function JBJBrokerReports() {
         totalLeads,
         contactedLeads,
         conversionRate,
-        avgResponseTime: 15, // Mock avg response time in minutes
+        avgResponseTime: 15,
         messagesSent,
         callsMade,
         emailsSent,
       });
 
-      // Calculate daily activity
       const days = dateRange === "week" ? 7 : dateRange === "month" ? 30 : 90;
       const dailyData: DailyActivity[] = [];
 
@@ -172,10 +152,8 @@ export default function JBJBrokerReports() {
         });
       }
 
-      // Only show last 7 data points for readability
       setDailyActivity(dailyData.slice(-7));
 
-      // Calculate lead status distribution
       const statusCounts: Record<string, number> = {};
       leadsData?.forEach((lead) => {
         const status = lead.status || "unknown";
@@ -209,248 +187,237 @@ export default function JBJBrokerReports() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
-      <JBJSidebar brokerProfile={brokerProfile} activePage="reports" />
+    <div className="min-h-screen bg-black">
+      {/* Header */}
+      <header className="sticky top-0 z-50 border-b border-gold/20">
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] px-6 py-4">
+          <div className="container mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate("/jbj-broker-admin")}
+                className="text-black hover:bg-gold/20"
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back
+              </Button>
+              <div className="flex items-center gap-3">
+                <div className="jj-icon-box-active w-10 h-10">
+                  <BarChart3 className="h-5 w-5" />
+                </div>
+                <div>
+                  <h1 className="text-xl font-bold text-black tracking-wide">
+                    Performance Reports
+                  </h1>
+                  <p className="text-black/70 text-sm">
+                    Analytics and insights for broker activities
+                  </p>
+                </div>
+              </div>
+            </div>
 
-      {/* Main Content */}
-      <div className="flex-1 ml-64">
-        {/* Header */}
-        <header className="bg-black border-b border-zinc-800 sticky top-0 z-40">
-          <div className="px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-xl font-bold text-gold tracking-wide">
-                  Performance Reports
-                </h1>
-                <p className="text-gray-400 text-sm">
-                  Analytics and insights for your broker activities
-                </p>
+            <div className="flex items-center gap-3">
+              <div className="flex gap-1 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-lg p-1 border border-gold/30">
+                {["week", "month", "quarter"].map((range) => (
+                  <Button
+                    key={range}
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setDateRange(range as any)}
+                    className={
+                      dateRange === range
+                        ? "bg-gold text-black hover:bg-gold/90"
+                        : "text-black hover:bg-gold/20"
+                    }
+                  >
+                    {range.charAt(0).toUpperCase() + range.slice(1)}
+                  </Button>
+                ))}
               </div>
 
-              <div className="flex items-center gap-3">
-                <div className="flex gap-1 bg-zinc-900 rounded-lg p-1">
-                  {["week", "month", "quarter"].map((range) => (
-                    <Button
-                      key={range}
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setDateRange(range as any)}
-                      className={
-                        dateRange === range
-                          ? "bg-gold text-black hover:bg-gold-dark"
-                          : "text-gray-400 hover:text-white"
-                      }
-                    >
-                      {range.charAt(0).toUpperCase() + range.slice(1)}
-                    </Button>
-                  ))}
-                </div>
+              <Button onClick={handleExport} variant="secondary">
+                <Download className="h-4 w-4 mr-2" />
+                Export
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
 
-                <Button
-                  onClick={handleExport}
-                  variant="outline"
-                  className="border-zinc-700 text-gray-300 hover:bg-zinc-800"
-                >
-                  <Download className="h-4 w-4 mr-2" />
-                  Export
-                </Button>
+      {/* Main Content - Layer 2 */}
+      <div className="p-6">
+        <div className="jj-layer-2 space-y-6">
+          {/* Summary Cards - Layer 3 */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="jj-card-inner">
+              <div className="flex items-center gap-3">
+                <div className="jj-icon-box-active w-12 h-12">
+                  <Users className="h-6 w-6" />
+                </div>
+                <div>
+                  <p className="text-black/60 text-sm">Total Leads</p>
+                  <p className="text-3xl font-bold text-black">
+                    {metrics.totalLeads}
+                  </p>
+                  <p className="text-xs text-black/50">
+                    {metrics.contactedLeads} contacted
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="jj-card-inner">
+              <div className="flex items-center gap-3">
+                <div className="jj-icon-box-active w-12 h-12">
+                  <Target className="h-6 w-6" />
+                </div>
+                <div>
+                  <p className="text-black/60 text-sm">Conversion Rate</p>
+                  <p className="text-3xl font-bold text-black">
+                    {metrics.conversionRate}%
+                  </p>
+                  <p className="text-xs text-gold flex items-center">
+                    <TrendingUp className="h-3 w-3 mr-1" />
+                    +5% vs last period
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="jj-card-inner">
+              <div className="flex items-center gap-3">
+                <div className="jj-icon-box-active w-12 h-12">
+                  <Clock className="h-6 w-6" />
+                </div>
+                <div>
+                  <p className="text-black/60 text-sm">Avg Response Time</p>
+                  <p className="text-3xl font-bold text-black">
+                    {metrics.avgResponseTime}m
+                  </p>
+                  <p className="text-xs text-black/50">Minutes to first reply</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="jj-card-inner">
+              <div className="flex items-center gap-3">
+                <div className="jj-icon-box-active w-12 h-12">
+                  <Activity className="h-6 w-6" />
+                </div>
+                <div>
+                  <p className="text-black/60 text-sm">Total Activities</p>
+                  <p className="text-3xl font-bold text-black">
+                    {metrics.messagesSent + metrics.callsMade + metrics.emailsSent}
+                  </p>
+                  <p className="text-xs text-black/50">
+                    This {dateRange}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-        </header>
-
-        <div className="p-6 space-y-6">
-          {/* Summary Cards */}
-          <div className="grid grid-cols-4 gap-4">
-            <Card className="bg-white border shadow-sm">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-lg bg-gold/20">
-                    <Users className="h-6 w-6 text-gold" />
-                  </div>
-                  <div>
-                    <p className="text-gray-500 text-sm">Total Leads</p>
-                    <p className="text-3xl font-bold text-gray-900">
-                      {metrics.totalLeads}
-                    </p>
-                    <p className="text-xs text-gray-400">
-                      {metrics.contactedLeads} contacted
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white border shadow-sm">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-lg bg-green-100">
-                    <Target className="h-6 w-6 text-green-600" />
-                  </div>
-                  <div>
-                    <p className="text-gray-500 text-sm">Conversion Rate</p>
-                    <p className="text-3xl font-bold text-gray-900">
-                      {metrics.conversionRate}%
-                    </p>
-                    <p className="text-xs text-green-600">
-                      <TrendingUp className="h-3 w-3 inline mr-1" />
-                      +5% vs last period
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white border shadow-sm">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-lg bg-blue-100">
-                    <Clock className="h-6 w-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="text-gray-500 text-sm">Avg Response Time</p>
-                    <p className="text-3xl font-bold text-gray-900">
-                      {metrics.avgResponseTime}m
-                    </p>
-                    <p className="text-xs text-gray-400">Minutes to first reply</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white border shadow-sm">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-lg bg-purple-100">
-                    <Activity className="h-6 w-6 text-purple-600" />
-                  </div>
-                  <div>
-                    <p className="text-gray-500 text-sm">Total Activities</p>
-                    <p className="text-3xl font-bold text-gray-900">
-                      {metrics.messagesSent + metrics.callsMade + metrics.emailsSent}
-                    </p>
-                    <p className="text-xs text-gray-400">
-                      This {dateRange}
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
 
           {/* Charts Row */}
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Daily Activity Chart */}
-            <Card className="col-span-2 bg-white border shadow-sm">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold text-gray-900">
-                  Daily Activity
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={dailyActivity}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date" tick={{ fontSize: 12 }} />
-                    <YAxis tick={{ fontSize: 12 }} />
-                    <Tooltip />
-                    <Bar dataKey="messages" fill="#22C55E" name="Messages" />
-                    <Bar dataKey="calls" fill="#8B5CF6" name="Calls" />
-                    <Bar dataKey="emails" fill="#3B82F6" name="Emails" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
+            <div className="lg:col-span-2 jj-card-inner">
+              <h3 className="text-lg font-semibold text-black mb-4">Daily Activity</h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={dailyActivity}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#D4C4A8" />
+                  <XAxis dataKey="date" tick={{ fontSize: 12, fill: '#1a1a1a' }} />
+                  <YAxis tick={{ fontSize: 12, fill: '#1a1a1a' }} />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#FDFBF7', 
+                      border: '1px solid #C8A766',
+                      borderRadius: '8px'
+                    }} 
+                  />
+                  <Bar dataKey="messages" fill="#22C55E" name="Messages" />
+                  <Bar dataKey="calls" fill="#8B5CF6" name="Calls" />
+                  <Bar dataKey="emails" fill="#3B82F6" name="Emails" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
 
             {/* Lead Status Pie Chart */}
-            <Card className="bg-white border shadow-sm">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold text-gray-900">
-                  Lead Distribution
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie
-                      data={leadStatuses}
-                      dataKey="count"
-                      nameKey="status"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={80}
-                      label={({ status, count }) => `${status}: ${count}`}
-                    >
-                      {leadStatuses.map((entry, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={COLORS[index % COLORS.length]}
-                        />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
+            <div className="jj-card-inner">
+              <h3 className="text-lg font-semibold text-black mb-4">Lead Distribution</h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={leadStatuses}
+                    dataKey="count"
+                    nameKey="status"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={80}
+                    label={({ status, count }) => `${status}: ${count}`}
+                  >
+                    {leadStatuses.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           </div>
 
           {/* Activity Breakdown */}
-          <div className="grid grid-cols-3 gap-4">
-            <Card className="bg-white border shadow-sm">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-green-100">
-                      <MessageSquare className="h-5 w-5 text-green-600" />
-                    </div>
-                    <span className="font-medium text-gray-900">WhatsApp Messages</span>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="jj-card-inner">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-emerald-500/20">
+                    <MessageSquare className="h-5 w-5 text-emerald-600" />
                   </div>
-                  <Badge className="bg-green-100 text-green-700">Active</Badge>
+                  <span className="font-medium text-black">WhatsApp Messages</span>
                 </div>
-                <p className="text-4xl font-bold text-gray-900">{metrics.messagesSent}</p>
-                <p className="text-sm text-gray-500 mt-1">
-                  Sent this {dateRange}
-                </p>
-              </CardContent>
-            </Card>
+                <Badge className="bg-emerald-500/20 text-emerald-700 border-emerald-500/30">Active</Badge>
+              </div>
+              <p className="text-4xl font-bold text-black">{metrics.messagesSent}</p>
+              <p className="text-sm text-black/60 mt-1">
+                Sent this {dateRange}
+              </p>
+            </div>
 
-            <Card className="bg-white border shadow-sm">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-purple-100">
-                      <Phone className="h-5 w-5 text-purple-600" />
-                    </div>
-                    <span className="font-medium text-gray-900">Phone Calls</span>
+            <div className="jj-card-inner">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-purple-500/20">
+                    <Phone className="h-5 w-5 text-purple-600" />
                   </div>
-                  <Badge className="bg-purple-100 text-purple-700">Active</Badge>
+                  <span className="font-medium text-black">Phone Calls</span>
                 </div>
-                <p className="text-4xl font-bold text-gray-900">{metrics.callsMade}</p>
-                <p className="text-sm text-gray-500 mt-1">
-                  Made this {dateRange}
-                </p>
-              </CardContent>
-            </Card>
+                <Badge className="bg-purple-500/20 text-purple-700 border-purple-500/30">Active</Badge>
+              </div>
+              <p className="text-4xl font-bold text-black">{metrics.callsMade}</p>
+              <p className="text-sm text-black/60 mt-1">
+                Made this {dateRange}
+              </p>
+            </div>
 
-            <Card className="bg-white border shadow-sm">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-blue-100">
-                      <Mail className="h-5 w-5 text-blue-600" />
-                    </div>
-                    <span className="font-medium text-gray-900">Emails</span>
+            <div className="jj-card-inner">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-blue-500/20">
+                    <Mail className="h-5 w-5 text-blue-600" />
                   </div>
-                  <Badge className="bg-blue-100 text-blue-700">Active</Badge>
+                  <span className="font-medium text-black">Emails</span>
                 </div>
-                <p className="text-4xl font-bold text-gray-900">{metrics.emailsSent}</p>
-                <p className="text-sm text-gray-500 mt-1">
-                  Sent this {dateRange}
-                </p>
-              </CardContent>
-            </Card>
+                <Badge className="bg-blue-500/20 text-blue-700 border-blue-500/30">Active</Badge>
+              </div>
+              <p className="text-4xl font-bold text-black">{metrics.emailsSent}</p>
+              <p className="text-sm text-black/60 mt-1">
+                Sent this {dateRange}
+              </p>
+            </div>
           </div>
         </div>
       </div>
