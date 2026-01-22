@@ -139,7 +139,7 @@ const MortgageCalculatorPage = () => {
             </p>
             <button 
               onClick={() => setIsInquiryOpen(true)}
-              className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-lg font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group"
+              className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-lg font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group"
               style={{
                 boxShadow: `
                   0 10px 30px rgba(200,167,102,0.4),

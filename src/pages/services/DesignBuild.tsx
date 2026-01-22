@@ -298,7 +298,7 @@ const DesignBuild = () => {
             {aiTools.map((tool) => (
               <motion.div key={tool.id} variants={fadeInUp}>
                 <Link to={tool.link} className="block group">
-                  <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 hover:border-gold hover:shadow-[0_0_40px_rgba(200,167,102,0.4)] transition-all duration-300 h-full">
+                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 hover:border-gold hover:shadow-[0_0_40px_rgba(200,167,102,0.4)] transition-all duration-300 h-full">
                     <CardContent className="p-8">
                       <div className="flex items-start gap-4 mb-4">
                         <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center border border-gold/30 group-hover:scale-110 transition-transform">
@@ -314,7 +314,7 @@ const DesignBuild = () => {
                         </div>
                       </div>
                       <p className="text-zinc-600 mb-6">{tool.description}</p>
-                      <Button className="w-full bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] text-black border-2 border-gold/60 shadow-[0_8px_30px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-black hover:text-gold hover:border-gold hover:shadow-[0_8px_40px_rgba(200,167,102,0.5)] font-semibold transition-all duration-300">
+                      <Button className="w-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-2 border-gold/60 shadow-[0_8px_30px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-black hover:text-gold hover:border-gold hover:shadow-[0_8px_40px_rgba(200,167,102,0.5)] font-semibold transition-all duration-300">
                         {tool.id === "interior-designer" ? "Design Your Space with AI" : "Measure Your Property with AI"}
                         <ArrowUpRight className="w-4 h-4 ml-2" />
                       </Button>

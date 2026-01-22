@@ -324,13 +324,13 @@ const BuyerGuide = () => {
         actions={
           <>
             <Button 
-              className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
+              className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
               onClick={() => document.getElementById('buying-process')?.scrollIntoView({ behavior: 'smooth' })}
             >
               <ArrowDown className="w-4 h-4 mr-2 text-black" />
               <span className="text-gold font-semibold">Read the Full Guide</span>
             </Button>
-            <Button asChild className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
+            <Button asChild className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
               <Link to="/properties">
                 <span className="text-gold font-semibold">Browse Properties</span>
                 <svg className="w-4 h-4 ml-2 text-black" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -819,7 +819,7 @@ const BuyerGuide = () => {
       </section>
 
       {/* Guide Navigation - Premium champagne background */}
-      <section className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
+      <section className="py-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-t border-zinc-200">
         <div className="container mx-auto px-4">
           <GuideNavigation current="/buyer-guide" guides={GUIDE_LINKS} showStartHere={false} />
         </div>
