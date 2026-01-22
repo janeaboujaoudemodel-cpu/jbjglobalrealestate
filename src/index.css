@@ -59,6 +59,13 @@ All colors MUST be HSL.
     --champagne-2: 38 38% 85%;
     --champagne-3: 38 28% 74%;
 
+    /* ============================================================
+     * GLOBAL WIDTH + GUTTER SYSTEM (LOCKED)
+     * Single source of truth for section sizing across Frontend + Backend.
+     * ============================================================ */
+    --jj-content-max: 1600px;
+    --jj-gutter: 1rem; /* 16px */
+
     /* Locked Champagne / Inner Card Surface (Layer 3) */
     /* Warmer + less bright than pure white; matches the global "Locked Champagne" requirement */
     --pearl-1: 40 38% 96%;
@@ -91,6 +98,18 @@ All colors MUST be HSL.
     --ai-amber: 38 90% 55%;
     --ai-rose: 350 75% 55%;
     --ai-glow: 270 90% 70%;
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --jj-gutter: 2rem; /* 32px */
+    }
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --jj-gutter: 4rem; /* 64px */
+    }
   }
 
   .dark {
@@ -285,35 +304,18 @@ All colors MUST be HSL.
    */
   .jj-section-champagne {
     @apply relative overflow-hidden bg-black;
-    /* Use global inset for vertical alignment */
-    padding-left: 1rem;
-    padding-right: 1rem;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
-  }
-
-  @media (min-width: 768px) {
-    .jj-section-champagne {
-      padding-left: 2rem;
-      padding-right: 2rem;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .jj-section-champagne {
-      padding-left: 4rem;
-      padding-right: 4rem;
-    }
   }
 
   .jj-section-champagne::before {
     content: "";
     position: absolute;
-    /* Match the global inset padding */
     top: 0.5rem;
     bottom: 0.5rem;
-    left: 1rem;
-    right: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(calc(100% - (var(--jj-gutter) * 2)), var(--jj-content-max));
     background: linear-gradient(
       to bottom right,
       hsl(var(--champagne-1)),
@@ -325,33 +327,27 @@ All colors MUST be HSL.
     box-shadow: 0 0 40px hsl(var(--gold) / 0.18);
   }
 
-  @media (min-width: 768px) {
-    .jj-section-champagne::before {
-      left: 2rem;
-      right: 2rem;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .jj-section-champagne::before {
-      left: 4rem;
-      right: 4rem;
-    }
-  }
-
   .jj-section-champagne > * {
     position: relative;
     z-index: 1;
-    /* Content padding inside the champagne layer */
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    max-width: var(--jj-content-max);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--jj-gutter);
+    padding-right: var(--jj-gutter);
   }
-  
-  @media (min-width: 768px) {
-    .jj-section-champagne > * {
-      padding-left: 2rem;
-      padding-right: 2rem;
-    }
+
+  /* ============================================================
+   * GLOBAL SECTION WIDTH WRAPPER (LOCKED)
+   * Use this wrapper for ANY section to ensure all Layer 2 starts/ends align.
+   * ============================================================ */
+  .jj-section-width {
+    width: 100%;
+    max-width: var(--jj-content-max);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--jj-gutter);
+    padding-right: var(--jj-gutter);
   }
 
   /* ============================================================
@@ -360,12 +356,23 @@ All colors MUST be HSL.
    * to ensure perfect vertical alignment across all pages.
    * ============================================================ */
   .jj-inset-active {
-    @apply mx-4 md:mx-8 lg:mx-16;
+    /* Backwards-compatible alias for jj-section-width */
+    width: 100%;
+    max-width: var(--jj-content-max);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--jj-gutter);
+    padding-right: var(--jj-gutter);
   }
 
   /* Alias for backwards compatibility */
   .jj-section-inset {
-    @apply mx-4 md:mx-8 lg:mx-16;
+    width: 100%;
+    max-width: var(--jj-content-max);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--jj-gutter);
+    padding-right: var(--jj-gutter);
   }
 
   /* Edge-to-edge section on black background */
