@@ -59,10 +59,11 @@ All colors MUST be HSL.
     --champagne-2: 38 38% 85%;
     --champagne-3: 38 28% 74%;
 
-    /* Pearl / Inner Card Surface (HSL approximations of existing palette) */
-    --pearl-1: 40 44% 97%;
-    --pearl-2: 38 33% 93%;
-    --pearl-3: 39 30% 88%;
+    /* Locked Champagne / Inner Card Surface (Layer 3) */
+    /* Warmer + less bright than pure white; matches the global "Locked Champagne" requirement */
+    --pearl-1: 40 38% 96%;
+    --pearl-2: 39 28% 92%;
+    --pearl-3: 38 24% 87%;
 
     /* Premium surfaces */
     --premium-bg: 0 0% 5%;
@@ -279,7 +280,7 @@ All colors MUST be HSL.
    * Global rule: show a THIN black contour around the active layer.
    */
   .jj-section-champagne {
-    @apply w-screen relative overflow-hidden bg-black;
+    @apply w-screen relative overflow-hidden bg-black px-4 md:px-6;
     left: 50%;
     right: 50%;
     margin-left: -50vw;
@@ -289,7 +290,7 @@ All colors MUST be HSL.
   .jj-section-champagne::before {
     content: "";
     position: absolute;
-    inset: 0.75rem;
+    inset: 1rem;
     background: linear-gradient(
       to bottom right,
       hsl(var(--champagne-1)),
