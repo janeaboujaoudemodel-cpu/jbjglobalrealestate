@@ -881,214 +881,221 @@ const Properties = () => {
       {/* Divider between Search and Results */}
       <div className="h-1 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
-      {/* Results Section - Black Background with Pearl Property Cards */}
+      {/* Results Section - 3-Layer System: Black > Active Champagne > Listings */}
       <section className="py-12 bg-black">
         <div className="container mx-auto px-4">
-          {/* Results Count */}
-          <div className="mb-8 flex items-center justify-between">
-            <p className="text-zinc-400">
-              Showing <span className="text-gold font-medium">{sortedProjects.length}</span> properties
-              {appliedFilters.transactionType === 'rent' && ' for rent'}
-              {appliedFilters.transactionType === 'buy' && ' for sale'}
-            </p>
-            {activeFilterCount > 0 && (
-              <Button
-                variant="ghost"
-                onClick={clearFilters}
-                className="text-zinc-500 hover:text-black"
-              >
-                <X className="w-4 h-4 mr-2" />
-                Clear all filters
-              </Button>
-            )}
-          </div>
-
-          {/* Projects Grid */}
-          {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {[...Array(8)].map((_, i) => (
-                <div key={i} className="bg-zinc-800 rounded-xl h-[420px] animate-pulse" />
-              ))}
-            </div>
-          ) : sortedProjects.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {sortedProjects.map((project) => (
-                <ProjectCard 
-                  key={project.id} 
-                  project={project} 
-                  currency={filters.currency}
-                  sizeUnit={filters.sizeUnit}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-20">
-              {/* Developer Selected but No Listings */}
-              {appliedFilters.developerId && developers?.find(d => d.id === appliedFilters.developerId) ? (
-                <>
-                  <div className="w-24 h-24 bg-gradient-to-br from-gold/20 to-gold/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30">
-                    <Building2 className="w-12 h-12 text-gold" />
-                  </div>
-                  <h3 className="text-2xl font-semibold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
-                    No Listings Yet for {developers.find(d => d.id === appliedFilters.developerId)?.name}
-                  </h3>
-                  <p className="text-zinc-500 mb-6 max-w-md mx-auto">
-                    We're currently adding properties from this developer to our portfolio. 
-                    Register your interest to be notified when listings become available.
-                  </p>
-                  <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                    <Button asChild variant="primary" className="h-12 px-8">
-                      <a 
-                        href={getWhatsAppUrl(`Hi, I'm interested in properties from ${developers.find(d => d.id === appliedFilters.developerId)?.name}. Please let me know when listings become available.`)}
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                      >
-                        <MessageCircle className="w-4 h-4 mr-2" />
-                        Register Interest via WhatsApp
-                      </a>
-                    </Button>
-                    <Button onClick={clearFilters} variant="outline" className="border-zinc-300 text-black hover:bg-zinc-100 h-12 px-6">
-                      Browse All Properties
-                    </Button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="w-20 h-20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30 shadow-[0_0_30px_rgba(200,167,102,0.3)]">
-                    <Search className="w-10 h-10 text-gold drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
-                  </div>
-                  {appliedFilters.transactionType === 'rent' ? (
-                    <>
-                      <h3 className="text-xl font-semibold text-black mb-2">No Rental Listings Available</h3>
-                      <p className="text-zinc-500 mb-4">We currently do not have rental properties listed. Please check back soon or contact us for assistance.</p>
-                      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
-                        <a href={`tel:${CONTACT_INFO.phoneRaw}`} className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors">
-                          <Phone className="w-4 h-4" />
-                          <span className="font-medium">{CONTACT_INFO.phone}</span>
-                        </a>
-                        <span className="hidden sm:inline text-zinc-400">|</span>
-                        <a href={`mailto:${CONTACT_INFO.email}`} className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors">
-                          <Mail className="w-4 h-4" />
-                          <span className="font-medium">{CONTACT_INFO.email}</span>
-                        </a>
-                      </div>
-                    </>
-                  ) : appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus === 'ready' ? (
-                    <>
-                      <h3 className="text-xl font-semibold text-black mb-2">No Ready Properties Found</h3>
-                      <p className="text-zinc-500 mb-6">Try adjusting your filters or search criteria to find available ready properties.</p>
-                    </>
-                  ) : appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus === 'off-plan' ? (
-                    <>
-                      <h3 className="text-xl font-semibold text-black mb-2">No Off-Plan Properties Found</h3>
-                      <p className="text-zinc-500 mb-6">Try adjusting your filters or search criteria to find available off-plan properties.</p>
-                    </>
-                  ) : appliedFilters.transactionType === 'buy' ? (
-                    <>
-                      <h3 className="text-xl font-semibold text-black mb-2">No Properties for Sale Found</h3>
-                      <p className="text-zinc-500 mb-6">Try adjusting your filters or search criteria to find available properties.</p>
-                    </>
-                  ) : (
-                    <>
-                      <h3 className="text-xl font-semibold text-black mb-2">No properties found</h3>
-                      <p className="text-zinc-500 mb-6">Try adjusting your filters or search criteria</p>
-                    </>
-                  )}
-                  <Button onClick={clearFilters} variant="primary" className="bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] border border-gold/30 text-black hover:bg-white">
-                    <X className="w-4 h-4 mr-2" />
-                    Clear Filters
-                  </Button>
-                </>
+          {/* OUTER LAYER - Active Champagne with black border visible at edges */}
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-3 sm:p-4">
+            {/* Results Count - Inside active layer */}
+            <div className="mb-6 flex items-center justify-between px-4 pt-4">
+              <p className="text-black/70">
+                Showing <span className="text-gold font-medium">{sortedProjects.length}</span> properties
+                {appliedFilters.transactionType === 'rent' && ' for rent'}
+                {appliedFilters.transactionType === 'buy' && ' for sale'}
+              </p>
+              {activeFilterCount > 0 && (
+                <Button
+                  variant="ghost"
+                  onClick={clearFilters}
+                  className="text-zinc-600 hover:text-black"
+                >
+                  <X className="w-4 h-4 mr-2" />
+                  Clear all filters
+                </Button>
               )}
             </div>
-          )}
+
+            {/* Projects Grid - Inside active layer */}
+            {isLoading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
+                {[...Array(8)].map((_, i) => (
+                  <div key={i} className="bg-white/50 rounded-xl h-[420px] animate-pulse" />
+                ))}
+              </div>
+            ) : sortedProjects.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
+                {sortedProjects.map((project) => (
+                  <ProjectCard 
+                    key={project.id} 
+                    project={project} 
+                    currency={filters.currency}
+                    sizeUnit={filters.sizeUnit}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-20 px-4">
+                {/* Developer Selected but No Listings */}
+                {appliedFilters.developerId && developers?.find(d => d.id === appliedFilters.developerId) ? (
+                  <>
+                    <div className="w-24 h-24 bg-gradient-to-br from-gold/20 to-gold/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30">
+                      <Building2 className="w-12 h-12 text-gold" />
+                    </div>
+                    <h3 className="text-2xl font-semibold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      No Listings Yet for {developers.find(d => d.id === appliedFilters.developerId)?.name}
+                    </h3>
+                    <p className="text-zinc-600 mb-6 max-w-md mx-auto">
+                      We're currently adding properties from this developer to our portfolio. 
+                      Register your interest to be notified when listings become available.
+                    </p>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                      <Button asChild variant="primary" className="h-12 px-8">
+                        <a 
+                          href={getWhatsAppUrl(`Hi, I'm interested in properties from ${developers.find(d => d.id === appliedFilters.developerId)?.name}. Please let me know when listings become available.`)}
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                        >
+                          <MessageCircle className="w-4 h-4 mr-2" />
+                          Register Interest via WhatsApp
+                        </a>
+                      </Button>
+                      <Button onClick={clearFilters} variant="outline" className="border-zinc-300 text-black hover:bg-zinc-100 h-12 px-6">
+                        Browse All Properties
+                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="w-20 h-20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30 shadow-[0_0_30px_rgba(200,167,102,0.3)]">
+                      <Search className="w-10 h-10 text-gold drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
+                    </div>
+                    {appliedFilters.transactionType === 'rent' ? (
+                      <>
+                        <h3 className="text-xl font-semibold text-black mb-2">No Rental Listings Available</h3>
+                        <p className="text-zinc-600 mb-4">We currently do not have rental properties listed. Please check back soon or contact us for assistance.</p>
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
+                          <a href={`tel:${CONTACT_INFO.phoneRaw}`} className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors">
+                            <Phone className="w-4 h-4" />
+                            <span className="font-medium">{CONTACT_INFO.phone}</span>
+                          </a>
+                          <span className="hidden sm:inline text-zinc-400">|</span>
+                          <a href={`mailto:${CONTACT_INFO.email}`} className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors">
+                            <Mail className="w-4 h-4" />
+                            <span className="font-medium">{CONTACT_INFO.email}</span>
+                          </a>
+                        </div>
+                      </>
+                    ) : appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus === 'ready' ? (
+                      <>
+                        <h3 className="text-xl font-semibold text-black mb-2">No Ready Properties Found</h3>
+                        <p className="text-zinc-600 mb-6">Try adjusting your filters or search criteria to find available ready properties.</p>
+                      </>
+                    ) : appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus === 'off-plan' ? (
+                      <>
+                        <h3 className="text-xl font-semibold text-black mb-2">No Off-Plan Properties Found</h3>
+                        <p className="text-zinc-600 mb-6">Try adjusting your filters or search criteria to find available off-plan properties.</p>
+                      </>
+                    ) : appliedFilters.transactionType === 'buy' ? (
+                      <>
+                        <h3 className="text-xl font-semibold text-black mb-2">No Properties for Sale Found</h3>
+                        <p className="text-zinc-600 mb-6">Try adjusting your filters or search criteria to find available properties.</p>
+                      </>
+                    ) : (
+                      <>
+                        <h3 className="text-xl font-semibold text-black mb-2">No properties found</h3>
+                        <p className="text-zinc-600 mb-6">Try adjusting your filters or search criteria</p>
+                      </>
+                    )}
+                    <Button onClick={clearFilters} variant="primary" className="bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] border border-gold/30 text-black hover:bg-white">
+                      <X className="w-4 h-4 mr-2" />
+                      Clear Filters
+                    </Button>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
-      {/* Request Details Form Section - Champagne frame background */}
-      <section className="py-16 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-t border-gold/30">
-        <div className="container mx-auto px-4">
-          <div className="max-w-xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-8 shadow-lg"
-            >
-              <h2 className="text-2xl md:text-3xl font-semibold text-black text-center mb-8" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Request Details
-              </h2>
-              
-              <div className="space-y-4">
-                <Input
-                  placeholder="Name"
-                  className="h-14 bg-white border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] rounded-lg focus:border-gold"
-                />
-                <Input
-                  type="email"
-                  placeholder="Email"
-                  className="h-14 bg-white border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] rounded-lg focus:border-gold"
-                />
-                <Input
-                  type="tel"
-                  placeholder="Phone"
-                  className="h-14 bg-white border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] rounded-lg focus:border-gold"
-                />
-                <Select>
-                  <SelectTrigger className="h-14 bg-white border-zinc-300 text-gold/70 rounded-lg [&>span]:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)]">
-                    <SelectValue placeholder="I am..." />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white border-zinc-200">
-                    <SelectItem value="investor" className="text-black hover:bg-zinc-100">An Investor</SelectItem>
-                    <SelectItem value="homeowner" className="text-black hover:bg-zinc-100">A Homeowner</SelectItem>
-                    <SelectItem value="agent" className="text-black hover:bg-zinc-100">A Real Estate Agent</SelectItem>
-                    <SelectItem value="other" className="text-black hover:bg-zinc-100">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-                <textarea
-                  placeholder="Message"
-                  rows={4}
-                  className="w-full px-4 py-3 bg-white border border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] rounded-lg resize-none focus:outline-none focus:border-gold"
-                />
-                <div className="flex items-center gap-3">
-                  <Checkbox id="consent" className="border-zinc-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold" />
-                  <label htmlFor="consent" className="text-black text-sm">
-                    I agree to be contacted
-                  </label>
-                </div>
-                <Button
-                  onClick={handleInquirySubmit}
-                  variant="primary"
-                  className="w-full h-14 text-lg rounded-xl font-bold mt-4"
-                >
-                  Submit
-                </Button>
-              </div>
-
-              {/* Current Filter Summary */}
-              {activeFilterCount > 0 && (
-                <div className="mt-6 pt-6 border-t border-zinc-200">
-                  <p className="text-zinc-500 text-sm mb-3">Your search includes:</p>
-                  <div className="flex flex-wrap gap-2">
-                    {filters.emirate && (
-                      <span className="px-3 py-1 bg-zinc-200 text-zinc-700 text-xs rounded-full">
-                        {filters.emirate}
-                      </span>
-                    )}
-                    {filters.developerId && developers?.find(d => d.id === filters.developerId) && (
-                      <span className="px-3 py-1 bg-zinc-200 text-zinc-700 text-xs rounded-full">
-                        {developers.find(d => d.id === filters.developerId)?.name}
-                      </span>
-                    )}
-                    {(filters.priceMin > 0 || filters.priceMax < 500000000) && (
-                      <span className="px-3 py-1 bg-zinc-200 text-zinc-700 text-xs rounded-full">
-                        {formatPrice(filters.priceMin)} - {formatPrice(filters.priceMax)}
-                      </span>
-                    )}
+      {/* Request Details Form Section - 3-Layer System: Black > Active Champagne > Pearl Form */}
+      <section className="py-16 sm:py-20 bg-black">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="max-w-[700px] mx-auto">
+            {/* OUTER CARD - Active Champagne Layer (shows black border at edges) */}
+            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
+              {/* INNER CARD - Pearl Layer */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-10 shadow-[0_0_30px_rgba(200,167,102,0.25)]"
+              >
+                <h2 className="text-2xl md:text-3xl font-semibold text-black text-center mb-8" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  Request Details
+                </h2>
+                
+                <div className="space-y-4">
+                  <Input
+                    placeholder="Name"
+                    className="h-14 bg-white border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] rounded-lg focus:border-gold"
+                  />
+                  <Input
+                    type="email"
+                    placeholder="Email"
+                    className="h-14 bg-white border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] rounded-lg focus:border-gold"
+                  />
+                  <Input
+                    type="tel"
+                    placeholder="Phone"
+                    className="h-14 bg-white border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] rounded-lg focus:border-gold"
+                  />
+                  <Select>
+                    <SelectTrigger className="h-14 bg-white border-zinc-300 text-gold/70 rounded-lg [&>span]:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)]">
+                      <SelectValue placeholder="I am..." />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white border-zinc-200">
+                      <SelectItem value="investor" className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-gold data-[highlighted]:bg-gold/10 data-[highlighted]:text-gold">An Investor</SelectItem>
+                      <SelectItem value="homeowner" className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-gold data-[highlighted]:bg-gold/10 data-[highlighted]:text-gold">A Homeowner</SelectItem>
+                      <SelectItem value="agent" className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-gold data-[highlighted]:bg-gold/10 data-[highlighted]:text-gold">A Real Estate Agent</SelectItem>
+                      <SelectItem value="other" className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-gold data-[highlighted]:bg-gold/10 data-[highlighted]:text-gold">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <textarea
+                    placeholder="Message"
+                    rows={4}
+                    className="w-full px-4 py-3 bg-white border border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] rounded-lg resize-none focus:outline-none focus:border-gold"
+                  />
+                  <div className="flex items-center gap-3">
+                    <Checkbox id="consent" className="border-zinc-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold" />
+                    <label htmlFor="consent" className="text-black text-sm">
+                      I agree to be contacted
+                    </label>
                   </div>
+                  <Button
+                    onClick={handleInquirySubmit}
+                    variant="primary"
+                    className="w-full h-14 text-lg rounded-xl font-bold mt-4"
+                  >
+                    Submit
+                  </Button>
                 </div>
-              )}
-            </motion.div>
+
+                {/* Current Filter Summary */}
+                {activeFilterCount > 0 && (
+                  <div className="mt-6 pt-6 border-t border-gold/20">
+                    <p className="text-zinc-600 text-sm mb-3">Your search includes:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {filters.emirate && (
+                        <span className="px-3 py-1 bg-gold/10 text-black border border-gold/30 text-xs rounded-full">
+                          {filters.emirate}
+                        </span>
+                      )}
+                      {filters.developerId && developers?.find(d => d.id === filters.developerId) && (
+                        <span className="px-3 py-1 bg-gold/10 text-black border border-gold/30 text-xs rounded-full">
+                          {developers.find(d => d.id === filters.developerId)?.name}
+                        </span>
+                      )}
+                      {(filters.priceMin > 0 || filters.priceMax < 500000000) && (
+                        <span className="px-3 py-1 bg-gold/10 text-black border border-gold/30 text-xs rounded-full">
+                          {formatPrice(filters.priceMin)} - {formatPrice(filters.priceMax)}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>
