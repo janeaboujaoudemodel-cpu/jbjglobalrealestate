@@ -82,8 +82,8 @@ const DeveloperPartnersMarquee = () => {
 
   return (
     <section className="py-10 md:py-16 bg-black border-y border-zinc-800/50 overflow-hidden">
-      {/* Champagne Layer - test: half gutter to reduce black edge gap */}
-      <div className="jj-layer-2 jj-gutter-half">
+      {/* Champagne Layer - uses global locked gutter */}
+      <div className="jj-layer-2">
         <div className="mb-8 md:mb-10">
           <h3 className="text-center text-xl md:text-2xl lg:text-3xl font-bold uppercase tracking-[0.15em]">
             <span className="text-black">Partnering with UAE's </span>

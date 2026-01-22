@@ -60,11 +60,12 @@ All colors MUST be HSL.
     --champagne-3: 38 28% 74%;
 
     /* ============================================================
-     * GLOBAL WIDTH + GUTTER SYSTEM (LOCKED)
+     * GLOBAL WIDTH + GUTTER SYSTEM (LOCKED - FINAL)
      * Single source of truth for section sizing across Frontend + Backend.
+     * These values are LOCKED and match the approved "Developer Partners" spacing.
      * ============================================================ */
     --jj-content-max: 1600px;
-    --jj-gutter: 1rem; /* 16px */
+    --jj-gutter: 0.125rem; /* Locked: minimal gap on mobile */
 
     /* Locked Champagne / Inner Card Surface (Layer 3) */
     /* Warmer + less bright than pure white; matches the global "Locked Champagne" requirement */
@@ -102,25 +103,25 @@ All colors MUST be HSL.
 
   @media (min-width: 768px) {
     :root {
-      --jj-gutter: 2rem; /* 32px on tablet */
+      --jj-gutter: 0.5rem; /* Locked: tablet */
     }
   }
 
   @media (min-width: 1024px) {
     :root {
-      --jj-gutter: 4rem; /* 64px on desktop */
+      --jj-gutter: 1rem; /* Locked: desktop */
     }
   }
 
   @media (min-width: 1280px) {
     :root {
-      --jj-gutter: 5rem; /* 80px on large screens */
+      --jj-gutter: 1.5rem; /* Locked: large screens */
     }
   }
 
   @media (min-width: 1536px) {
     :root {
-      --jj-gutter: 6rem; /* 96px on extra large screens */
+      --jj-gutter: 2rem; /* Locked: extra large screens */
     }
   }
 
@@ -374,33 +375,10 @@ All colors MUST be HSL.
   }
 
   /* ============================================================
-   * LOCAL GUTTER OVERRIDE (TEST)
-   * Use to reduce the left/right black gap for a single section
-   * without changing the global layout system.
+   * GUTTER VALUES ARE NOW LOCKED GLOBALLY
+   * The --jj-gutter variable is set in :root and applies to all
+   * .jj-layer-2 sections automatically. No override class needed.
    * ============================================================ */
-  .jj-gutter-half {
-    --jj-gutter: 0.125rem;
-  }
-  @media (min-width: 768px) {
-    .jj-gutter-half {
-      --jj-gutter: 0.5rem;
-    }
-  }
-  @media (min-width: 1024px) {
-    .jj-gutter-half {
-      --jj-gutter: 1rem;
-    }
-  }
-  @media (min-width: 1280px) {
-    .jj-gutter-half {
-      --jj-gutter: 1.5rem;
-    }
-  }
-  @media (min-width: 1536px) {
-    .jj-gutter-half {
-      --jj-gutter: 2rem;
-    }
-  }
 
   /* ============================================================
    * GLOBAL SECTION WIDTH WRAPPER (LOCKED)
