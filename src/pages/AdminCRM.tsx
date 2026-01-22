@@ -266,7 +266,7 @@ const AdminCRM = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] p-6 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-6 flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
       </div>
     );
@@ -275,12 +275,12 @@ const AdminCRM = () => {
   if (!isAdmin) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
       {/* Command Palette */}
       <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
       
       {/* Premium Header */}
-      <header className="border-b-2 border-gold/30 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+      <header className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={() => navigate("/crm")} className="text-gold hover:text-black hover:bg-gold/10">
             <ArrowLeft className="h-5 w-5" />

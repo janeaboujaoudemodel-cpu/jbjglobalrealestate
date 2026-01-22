@@ -208,7 +208,7 @@ const InvestorDashboard = () => {
   return (
     <div className="space-y-8">
       {/* Profile Header */}
-      <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row items-center gap-6">
             <Avatar className="h-24 w-24 border-4 border-gold/30">

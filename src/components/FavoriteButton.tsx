@@ -90,8 +90,8 @@ const FavoriteButton = ({
             disabled={toggleUserFavorite.isPending}
             className={`${sizeClasses[size]} flex items-center justify-center rounded-full transition-all duration-200 border ${
               isFavorite 
-                ? "bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/40 shadow-lg"
-                : "bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/30 hover:border-gold hover:shadow-lg"
+                ? "bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/40 shadow-lg"
+                : "bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 hover:border-gold hover:shadow-lg"
             }`}
           >
             <Heart
@@ -116,8 +116,8 @@ const FavoriteButton = ({
               disabled={toggleUserShortlist.isPending}
               className={`${sizeClasses[size]} flex items-center justify-center rounded-full transition-all duration-200 border ${
                 isShortlisted
-                  ? "bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold shadow-lg"
-                  : "bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/30 hover:border-gold hover:shadow-lg"
+                  ? "bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold shadow-lg"
+                  : "bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 hover:border-gold hover:shadow-lg"
               }`}
             >
               {isShortlisted ? (

@@ -365,7 +365,7 @@ export default function ExecutiveAssistant() {
   if (authLoading) {
     return (
       <MainLayout>
-        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
           <Loader2 className="h-8 w-8 animate-spin text-gold" />
         </div>
       </MainLayout>
@@ -374,7 +374,7 @@ export default function ExecutiveAssistant() {
 
   return (
     <MainLayout>
-      <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         {/* Command Palette */}
         <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
         

@@ -187,7 +187,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
   return (
     <div className="flex flex-col h-full bg-white rounded-xl border border-zinc-200 overflow-hidden">
       {/* Header */}
-      <div className="flex items-center gap-3 p-4 border-b border-zinc-200 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6]">
+      <div className="flex items-center gap-3 p-4 border-b border-zinc-200 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <Avatar className="w-10 h-10 border-2 border-gold/30">
           <AvatarImage src={adminPersona?.avatar} alt={adminPersona?.name} />
           <AvatarFallback className="bg-gold/20 text-gold font-semibold">SM</AvatarFallback>
@@ -307,7 +307,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
           <Button
             onClick={handleSendMessage}
             disabled={!input.trim() || isLoading}
-            className="h-10 w-10 p-0 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 hover:bg-black hover:border-black group transition-all duration-300"
+            className="h-10 w-10 p-0 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 hover:bg-black hover:border-black group transition-all duration-300"
           >
             {isLoading ? (
               <Loader2 className="w-5 h-5 animate-spin text-gold group-hover:text-gold" />

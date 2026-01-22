@@ -640,7 +640,7 @@ const AIHub = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
               >
-                <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 rounded-full shadow-[0_0_15px_rgba(200,167,102,0.25)] mb-4">
+                <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 rounded-full shadow-[0_0_15px_rgba(200,167,102,0.25)] mb-4">
                   <Sparkles className="w-3.5 h-3.5 text-gold" />
                   <span className="text-black text-xs uppercase tracking-wider font-medium">All Free Tools</span>
                 </span>
@@ -836,7 +836,7 @@ const AIHub = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
               >
-                <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full flex flex-col">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full flex flex-col">
                   <CardContent className="p-6 flex flex-col flex-1">
                     <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center mb-4">
                       <GraduationCap className="w-7 h-7 text-gold" />
@@ -863,7 +863,7 @@ const AIHub = () => {
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
               >
-                <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full flex flex-col">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full flex flex-col">
                   <CardContent className="p-6 flex flex-col flex-1">
                     <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center mb-4">
                       <Briefcase className="w-7 h-7 text-gold" />
@@ -890,7 +890,7 @@ const AIHub = () => {
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
               >
-                <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full flex flex-col">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full flex flex-col">
                   <CardContent className="p-6 flex flex-col flex-1">
                     <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center mb-4">
                       <Award className="w-7 h-7 text-gold" />

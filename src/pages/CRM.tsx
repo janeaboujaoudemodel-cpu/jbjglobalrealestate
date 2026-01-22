@@ -223,7 +223,7 @@ const CRM = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] p-6">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-6">
         <div className="max-w-7xl mx-auto space-y-6">
           <Skeleton className="h-12 w-64 bg-gold/10" />
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -239,7 +239,7 @@ const CRM = () => {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] flex items-center justify-center p-6">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex items-center justify-center p-6">
         <Card className="w-full max-w-lg border-2 border-gold/30 bg-white shadow-[0_10px_40px_rgba(200,167,102,0.15)]">
           <CardHeader>
             <CardTitle className="text-black">CRM access unavailable</CardTitle>
@@ -300,7 +300,7 @@ const CRM = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] flex">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex">
       {/* Command Palette */}
       <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
 
@@ -317,7 +317,7 @@ const CRM = () => {
 
       <div className="flex-1">
         {/* Premium Header - White/Gold/Champagne */}
-        <header className="border-b-2 border-gold/30 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+        <header className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
           <div className="max-w-[1600px] w-full mx-auto px-6 py-4 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 md:gap-4">
               <Button
@@ -613,7 +613,7 @@ const CRM = () => {
 
           {/* AI Insights Panel - Fixed positioning adjusted */}
           {showAIInsights && (
-            <aside className="fixed right-0 top-20 bottom-0 w-72 border-l-2 border-gold/30 bg-gradient-to-b from-white via-[#FDFBF7] to-[#F5F0E6] overflow-y-auto z-40">
+            <aside className="fixed right-0 top-20 bottom-0 w-72 border-l-2 border-gold/30 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] overflow-y-auto z-40">
               <AIInsightsPanel 
                 insights={aiInsights}
                 isLoading={false}

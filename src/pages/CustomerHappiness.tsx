@@ -171,7 +171,7 @@ const SupportTicketForm = () => {
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           required
           rows={5}
-          className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
           placeholder="Please describe your inquiry in detail..."
         />
       </div>

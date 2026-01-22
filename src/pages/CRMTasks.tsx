@@ -196,7 +196,7 @@ const CRMTasks = () => {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`bg-white border rounded-xl p-4 shadow-sm hover:shadow-lg hover:border-gold/50 transition-all duration-300 ${
+      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 shadow-sm hover:shadow-lg hover:border-gold/50 transition-all duration-300 ${
         task.status === 'done' ? 'opacity-60' : ''
       }`}
     >
@@ -286,7 +286,7 @@ const CRMTasks = () => {
                 Add Task
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-white border-gold/30">
+            <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30">
               <DialogHeader>
                 <DialogTitle className="text-black">Add New Task</DialogTitle>
               </DialogHeader>
@@ -352,7 +352,7 @@ const CRMTasks = () => {
               placeholder="Search tasks..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-white border-zinc-300"
+              className="pl-10 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30"
             />
           </div>
           <div className="flex gap-2 flex-wrap">
@@ -369,7 +369,7 @@ const CRMTasks = () => {
                 onClick={() => setFilterStatus(status.key)}
                 className={filterStatus === status.key 
                   ? "bg-gold text-black" 
-                  : "bg-white border-zinc-300 text-zinc-700 hover:border-gold"
+                  : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-zinc-700 hover:border-gold"
                 }
               >
                 {status.label}
@@ -380,7 +380,7 @@ const CRMTasks = () => {
 
         {/* Task Sections */}
         {filteredTasks.length === 0 ? (
-          <div className="bg-white border border-zinc-200 rounded-2xl p-12 text-center">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-12 text-center">
             <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle2 className="h-8 w-8 text-gold" />
             </div>

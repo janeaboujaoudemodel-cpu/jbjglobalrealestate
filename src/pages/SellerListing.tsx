@@ -511,7 +511,7 @@ Requirements:
       
       <main className="min-h-screen bg-black pt-20 pb-16">
         {/* White/Gold Champagne Hero Section */}
-        <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
           <div className="container mx-auto px-4 py-12">
             <div className="max-w-4xl mx-auto text-center">
               <span className="inline-block px-4 py-1.5 rounded-full bg-black text-gold text-sm font-medium mb-4 border border-gold/30">
@@ -594,7 +594,7 @@ Requirements:
 
           {/* Form Content - White/Champagne/Gold Theme */}
           <div className="max-w-3xl mx-auto">
-            <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-2xl p-6 md:p-8 shadow-xl">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-6 md:p-8 shadow-xl">
               <AnimatePresence mode="wait">
                 {/* Step 1: Seller Details */}
                 {currentStep === 1 && (

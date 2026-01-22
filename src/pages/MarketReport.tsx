@@ -1993,7 +1993,7 @@ const MarketReport = () => {
                 </p>
                 <button
                   onClick={handleDirectDownload}
-                  className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group w-full"
+                  className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group w-full"
                   style={{
                     boxShadow: `
                       0 10px 30px rgba(200,167,102,0.4),
@@ -2130,7 +2130,7 @@ const MarketReport = () => {
             className="lg:col-span-2 space-y-6"
           >
             {/* What You'll Receive - White/Champagne Theme */}
-            <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-3xl p-8 shadow-lg">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-3xl p-8 shadow-lg">
               <h2 className="text-black text-xl font-bold mb-6">What You'll Receive</h2>
               <ul className="space-y-4">
                 {[
@@ -2149,7 +2149,7 @@ const MarketReport = () => {
             </div>
 
             {/* Brand Box - White/Champagne Theme - JBJ Global Real Estate links to About */}
-            <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-2xl p-6 text-center shadow-lg">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-6 text-center shadow-lg">
               <p className="text-zinc-600 text-xs mb-1">
                 Created by <span className="text-black font-semibold">Jane Abou Jaoude</span>
               </p>
