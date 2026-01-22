@@ -282,8 +282,8 @@ const FAQ = () => {
         </div>
       </section>
 
-      {/* Guide Navigation */}
-      <section className="py-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-t border-zinc-200">
+      {/* Guide Navigation - Active Champagne Layer */}
+      <section className="jj-section-champagne py-12">
         <div className="container mx-auto px-4">
           <GuideNavigation current="/faq" guides={GUIDE_LINKS} />
         </div>

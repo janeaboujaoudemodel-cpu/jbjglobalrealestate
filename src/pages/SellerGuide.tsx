@@ -319,23 +319,32 @@ const SellerGuide = () => {
                 This guide explains how to sell, what you pay, how pricing works, and how JBJ Global Real Estate manages the process from listing to transfer.
               </motion.p>
               
-              {/* Actions */}
+              {/* Actions - Hero style buttons matching homepage */}
               <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
-                <Button 
+                <button 
                   onClick={scrollToGuide}
-                  className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
+                  className="group relative inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 text-sm md:text-base font-bold rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
+                  style={{
+                    border: '2px solid rgba(255,255,255,0.8)',
+                    boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
+                  }}
                 >
-                  <ArrowDown className="w-5 h-5 mr-2 text-black" />
-                  <span className="text-gold font-semibold">Start the Guide</span>
-                </Button>
+                  <ArrowDown className="w-4 h-4 text-gold group-hover:text-black transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                  <span className="text-white group-hover:text-black transition-colors">Start the Guide</span>
+                  <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                </button>
                 <Link to="/seller-listing">
-                  <Button className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
-                    <Building2 className="w-5 h-5 mr-2 text-black" />
-                    <span className="text-gold font-semibold">List Your Property</span>
-                    <svg className="w-5 h-5 ml-2 text-black" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
-                    </svg>
-                  </Button>
+                  <button 
+                    className="group relative inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 text-sm md:text-base font-bold rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
+                    style={{
+                      border: '2px solid rgba(255,255,255,0.8)',
+                      boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
+                    }}
+                  >
+                    <Building2 className="w-4 h-4 text-gold group-hover:text-black transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                    <span className="text-white group-hover:text-black transition-colors">List Your Property</span>
+                    <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                  </button>
                 </Link>
               </motion.div>
             </div>
@@ -752,8 +761,8 @@ const SellerGuide = () => {
           </div>
         </section>
 
-        {/* Guide Navigation */}
-        <section className="py-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-t border-zinc-200">
+        {/* Guide Navigation - Active Champagne Layer */}
+        <section className="jj-section-champagne py-12">
           <div className="container mx-auto px-4">
             <GuideNavigation current="/seller-guide" guides={GUIDE_LINKS} showStartHere={false} />
           </div>
