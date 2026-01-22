@@ -214,20 +214,17 @@ const Properties = () => {
 
   const filteredProjects = useFilteredProjects(projects, standardFilters);
 
-  const availableDevelopers = useMemo(() => {
+  // Show ALL developers sorted by rank (top to lowest)
+  const allDevelopersSorted = useMemo(() => {
     if (!developers) return [];
+    return [...developers].sort((a, b) => (a.rank ?? 999) - (b.rank ?? 999));
+  }, [developers]);
 
-    const ids = new Set<string>();
-    (projects ?? []).forEach((p) => {
-      const developerId = p.developer?.id ?? (p as unknown as { developer_id?: string }).developer_id;
-      if (developerId) ids.add(developerId);
-    });
-
-    // If we don't have projects yet (or none are published), fall back to full list
-    if (!projects || ids.size === 0) return developers;
-
-    return developers.filter((d) => ids.has(d.id));
-  }, [developers, projects]);
+  // Get all communities/areas sorted alphabetically
+  const allAreasSorted = useMemo(() => {
+    if (!communities) return [];
+    return [...communities].sort((a, b) => a.name.localeCompare(b.name));
+  }, [communities]);
   // Sort projects
   const sortedProjects = useMemo(() => {
     let sorted = [...filteredProjects];
@@ -522,7 +519,26 @@ const Properties = () => {
               </SelectContent>
             </Select>
 
-            {/* Developer - Pearl Box Style */}
+            {/* Area/Community - Pearl Box Style */}
+            <Select
+              value={filters.communityId || "all"}
+              onValueChange={(value) => updateFilter("communityId", value === "all" ? null : value)}
+            >
+              <SelectTrigger className="w-[140px] h-10 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm flex-shrink-0 shadow-sm">
+                <Home className="w-3.5 h-3.5 mr-1.5 text-gold flex-shrink-0" />
+                <SelectValue placeholder="All Areas" />
+              </SelectTrigger>
+              <SelectContent className="max-h-60">
+                <SelectItem value="all">All Areas</SelectItem>
+                {allAreasSorted?.map((area) => (
+                  <SelectItem key={area.id} value={area.id}>
+                    {area.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {/* Developer - Pearl Box Style - All developers sorted by rank */}
             <Select
               value={filters.developerId || "all"}
               onValueChange={(value) => updateFilter("developerId", value === "all" ? null : value)}
@@ -531,9 +547,9 @@ const Properties = () => {
                 <Building2 className="w-3.5 h-3.5 mr-1.5 text-gold flex-shrink-0" />
                 <SelectValue placeholder="All Developers" />
               </SelectTrigger>
-              <SelectContent className="max-h-60">
+              <SelectContent className="max-h-72">
                 <SelectItem value="all">All Developers</SelectItem>
-                {availableDevelopers?.map((dev) => (
+                {allDevelopersSorted?.map((dev) => (
                   <SelectItem key={dev.id} value={dev.id}>
                     {dev.name}
                   </SelectItem>
