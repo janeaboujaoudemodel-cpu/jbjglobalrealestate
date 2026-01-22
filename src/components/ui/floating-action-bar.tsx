@@ -17,7 +17,6 @@ import {
   TrendingUp
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useCommandPalette } from './command-palette';
 
 /**
  * Floating Action Bar - Premium Quick Actions
@@ -40,7 +39,6 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
   const navigate = useNavigate();
   const location = useLocation();
   const [isExpanded, setIsExpanded] = useState(false);
-  const commandPalette = useCommandPalette();
 
   // Context-aware actions based on current page
   const getContextualActions = (): ActionItem[] => {
@@ -51,7 +49,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
         id: 'search',
         label: 'Search',
         icon: <Command className="w-4 h-4" />,
-        action: commandPalette.open,
+        action: () => window.dispatchEvent(new Event('jj:open-command-palette')),
         color: 'bg-gradient-to-br from-gold to-gold-dark'
       },
     ];
@@ -71,14 +69,14 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
           id: 'call',
           label: 'Call',
           icon: <Phone className="w-4 h-4" />,
-          action: () => navigate('/crm-calendar'),
+          action: () => navigate('/crm/calendar'),
           color: 'bg-gradient-to-br from-blue-500 to-blue-600'
         },
         {
           id: 'task',
           label: 'Task',
           icon: <ClipboardList className="w-4 h-4" />,
-          action: () => navigate('/crm-tasks'),
+          action: () => navigate('/crm/tasks'),
           color: 'bg-gradient-to-br from-purple-500 to-purple-600'
         },
       ];
@@ -99,7 +97,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
           id: 'calendar',
           label: 'Schedule',
           icon: <Calendar className="w-4 h-4" />,
-          action: () => navigate('/crm-calendar'),
+          action: () => navigate('/crm/calendar'),
           color: 'bg-gradient-to-br from-blue-500 to-blue-600'
         },
       ];
@@ -147,7 +145,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
         id: 'calendar',
         label: 'Calendar',
         icon: <Calendar className="w-4 h-4" />,
-        action: () => navigate('/crm-calendar'),
+        action: () => navigate('/crm/calendar'),
         color: 'bg-gradient-to-br from-purple-500 to-purple-600'
       },
     ];
