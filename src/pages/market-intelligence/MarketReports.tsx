@@ -60,7 +60,6 @@ const reports = [
   },
 ];
 
-// Monthly Archive - consolidated list for download selector
 const monthlyArchive = [
   { month: 'January 2026', date: '2026-01-15', available: true },
   { month: 'December 2025', date: '2025-12-15', available: true },
@@ -83,6 +82,19 @@ const quarterlyArchive = [
   { quarter: 'Q2 2025', date: '2025-07-05', available: true },
   { quarter: 'Q1 2025', date: '2025-04-05', available: true },
 ];
+
+// Reusable Section Wrapper Component - 3 Layer System
+const SectionWrapper = ({ id, children }: { id: string; children: React.ReactNode }) => (
+  <section id={id} className="scroll-mt-24">
+    {/* Layer 2: Active Champagne with thin black contour */}
+    <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl p-3 shadow-lg">
+      {/* Layer 3: Champagne Card with gold border */}
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl p-8 border-2 border-gold/40">
+        {children}
+      </div>
+    </div>
+  </section>
+);
 
 const MarketReportsPage = () => {
   const [selectedMonthlyDownload, setSelectedMonthlyDownload] = useState<string | null>(null);
@@ -131,14 +143,14 @@ const MarketReportsPage = () => {
       <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
 
       {/* Main Content with TOC Sidebar */}
-      <div className="container mx-auto px-4 py-16">
-        <div className="flex gap-8">
-          {/* Main Content */}
-          <div className="flex-1 space-y-16">
+      <div className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="flex gap-8">
+            {/* Main Content */}
+            <div className="flex-1 space-y-8">
 
-            {/* Introduction Section */}
-            <section id="introduction" className="scroll-mt-24">
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30">
+              {/* Introduction Section */}
+              <SectionWrapper id="introduction">
                 <h2 
                   className="text-3xl md:text-4xl font-bold mb-6"
                   style={{ 
@@ -157,21 +169,11 @@ const MarketReportsPage = () => {
                 <p className="text-zinc-700 leading-relaxed">
                   All figures and statements are derived from Dubai Land Department (DLD) and RERA-recognized sources only.
                 </p>
-              </div>
-            </section>
+              </SectionWrapper>
 
-            {/* Gold Glow Divider */}
-            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
-
-            {/* Purpose Section */}
-            <section id="purpose" className="scroll-mt-24">
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30">
-                <h2 
-                  className="text-3xl md:text-4xl font-bold mb-6"
-                  style={{ 
-                    fontFamily: "Poppins, sans-serif"
-                  }}
-                >
+              {/* Purpose Section */}
+              <SectionWrapper id="purpose">
+                <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
                   <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
@@ -180,45 +182,19 @@ const MarketReportsPage = () => {
                   }}>Purpose</span>{" "}
                   <span className="text-black">of Market Reports</span>
                 </h2>
-                <p className="text-black text-lg leading-relaxed mb-6">
-                  Market Reports exist to:
-                </p>
+                <p className="text-black text-lg leading-relaxed mb-6">Market Reports exist to:</p>
                 <ul className="space-y-3 text-black">
-                  <li className="flex items-start gap-3">
-                    <span className="text-gold mt-1">•</span>
-                    <span>Summarize registered market activity</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-gold mt-1">•</span>
-                    <span>Present verified transaction trends</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-gold mt-1">•</span>
-                    <span>Explain rental and ownership behavior</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-gold mt-1">•</span>
-                    <span>Provide regulatory context for decisions</span>
-                  </li>
+                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Summarize registered market activity</span></li>
+                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Present verified transaction trends</span></li>
+                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Explain rental and ownership behavior</span></li>
+                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Provide regulatory context for decisions</span></li>
                 </ul>
-                <p className="text-zinc-700 leading-relaxed mt-6">
-                  They are designed to help readers understand market movement, not to speculate on outcomes.
-                </p>
-              </div>
-            </section>
+                <p className="text-zinc-700 leading-relaxed mt-6">They are designed to help readers understand market movement, not to speculate on outcomes.</p>
+              </SectionWrapper>
 
-            {/* Gold Glow Divider */}
-            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
-
-            {/* Data Sources Section */}
-            <section id="data-sources" className="scroll-mt-24">
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30">
-                <h2 
-                  className="text-3xl md:text-4xl font-bold mb-6"
-                  style={{ 
-                    fontFamily: "Poppins, sans-serif"
-                  }}
-                >
+              {/* Data Sources Section */}
+              <SectionWrapper id="data-sources">
+                <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
                   <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
@@ -227,65 +203,31 @@ const MarketReportsPage = () => {
                   }}>Data</span>{" "}
                   <span className="text-black">Sources Used in Market Reports</span>
                 </h2>
-                <p className="text-black text-lg leading-relaxed mb-6">
-                  Every Market Report is compiled using the following official sources:
-                </p>
+                <p className="text-black text-lg leading-relaxed mb-6">Every Market Report is compiled using the following official sources:</p>
                 <div className="space-y-4">
-                  <a 
-                    href="https://dubailand.gov.ae/en/open-data/real-estate-data/" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 text-black hover:text-gold transition-colors group"
-                  >
+                  <a href="https://dubailand.gov.ae/en/open-data/real-estate-data/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-black hover:text-gold transition-colors group">
                     <ExternalLink className="w-5 h-5 text-gold group-hover:scale-110 transition-transform" />
                     <span className="font-medium">Dubai Land Department – Open Data</span>
                   </a>
-                  <a 
-                    href="https://dubailand.gov.ae/en/open-data/research/" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 text-black hover:text-gold transition-colors group"
-                  >
+                  <a href="https://dubailand.gov.ae/en/open-data/research/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-black hover:text-gold transition-colors group">
                     <ExternalLink className="w-5 h-5 text-gold group-hover:scale-110 transition-transform" />
                     <span className="font-medium">Dubai Land Department – Research & Market Studies</span>
                   </a>
-                  <a 
-                    href="https://dubailand.gov.ae/en/eservices/rental-index/" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 text-black hover:text-gold transition-colors group"
-                  >
+                  <a href="https://dubailand.gov.ae/en/eservices/rental-index/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-black hover:text-gold transition-colors group">
                     <ExternalLink className="w-5 h-5 text-gold group-hover:scale-110 transition-transform" />
                     <span className="font-medium">RERA Rental Index</span>
                   </a>
-                  <a 
-                    href="https://dubailand.gov.ae/en/eservices/service-charge-index-overview/" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 text-black hover:text-gold transition-colors group"
-                  >
+                  <a href="https://dubailand.gov.ae/en/eservices/service-charge-index-overview/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-black hover:text-gold transition-colors group">
                     <ExternalLink className="w-5 h-5 text-gold group-hover:scale-110 transition-transform" />
                     <span className="font-medium">RERA Service Charge Index</span>
                   </a>
                 </div>
-                <p className="text-zinc-700 leading-relaxed mt-6 pt-4 border-t border-gold/20">
-                  No private dashboards, promotional statistics, or third-party estimations are used.
-                </p>
-              </div>
-            </section>
+                <p className="text-zinc-700 leading-relaxed mt-6 pt-4 border-t border-gold/30">No private dashboards, promotional statistics, or third-party estimations are used.</p>
+              </SectionWrapper>
 
-            {/* Gold Glow Divider */}
-            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
-
-            {/* Report Structure Section */}
-            <section id="report-structure" className="scroll-mt-24">
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30">
-                <h2 
-                  className="text-3xl md:text-4xl font-bold mb-6"
-                  style={{ 
-                    fontFamily: "Poppins, sans-serif"
-                  }}
-                >
+              {/* Report Structure Section */}
+              <SectionWrapper id="report-structure">
+                <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
                   <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
@@ -294,9 +236,7 @@ const MarketReportsPage = () => {
                   }}>What</span>{" "}
                   <span className="text-black">a Market Report Covers</span>
                 </h2>
-                <p className="text-black text-lg leading-relaxed mb-6">
-                  Each report follows the same fixed structure:
-                </p>
+                <p className="text-black text-lg leading-relaxed mb-6">Each report follows the same fixed structure:</p>
                 <div className="space-y-6">
                   <div className="border-l-4 border-gold pl-6">
                     <h3 className="text-xl font-bold text-black mb-2">1. Transaction Volume Overview</h3>
@@ -319,21 +259,11 @@ const MarketReportsPage = () => {
                     <p className="text-zinc-700">Reference to approved service charges and their role in total ownership cost during the period.</p>
                   </div>
                 </div>
-              </div>
-            </section>
+              </SectionWrapper>
 
-            {/* Gold Glow Divider */}
-            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
-
-            {/* Exclusions Section */}
-            <section id="exclusions" className="scroll-mt-24">
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30">
-                <h2 
-                  className="text-3xl md:text-4xl font-bold mb-6"
-                  style={{ 
-                    fontFamily: "Poppins, sans-serif"
-                  }}
-                >
+              {/* Exclusions Section */}
+              <SectionWrapper id="exclusions">
+                <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
                   <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
@@ -342,49 +272,20 @@ const MarketReportsPage = () => {
                   }}>What</span>{" "}
                   <span className="text-black">Market Reports Do Not Include</span>
                 </h2>
-                <p className="text-black text-lg leading-relaxed mb-6">
-                  Market Reports do not:
-                </p>
+                <p className="text-black text-lg leading-relaxed mb-6">Market Reports do not:</p>
                 <ul className="space-y-3 text-black">
-                  <li className="flex items-start gap-3">
-                    <span className="text-gold mt-1">•</span>
-                    <span>Forecast prices or rents</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-gold mt-1">•</span>
-                    <span>Assign performance scores</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-gold mt-1">•</span>
-                    <span>Rank developers or projects</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-gold mt-1">•</span>
-                    <span>Provide investment guarantees</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-gold mt-1">•</span>
-                    <span>Suggest expected returns</span>
-                  </li>
+                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Forecast prices or rents</span></li>
+                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Assign performance scores</span></li>
+                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Rank developers or projects</span></li>
+                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Provide investment guarantees</span></li>
+                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Suggest expected returns</span></li>
                 </ul>
-                <p className="text-zinc-700 leading-relaxed mt-6 pt-4 border-t border-gold/20">
-                  Any interpretation remains grounded in past and current registered activity only.
-                </p>
-              </div>
-            </section>
+                <p className="text-zinc-700 leading-relaxed mt-6 pt-4 border-t border-gold/30">Any interpretation remains grounded in past and current registered activity only.</p>
+              </SectionWrapper>
 
-            {/* Gold Glow Divider */}
-            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
-
-            {/* Reporting Frequency Section */}
-            <section id="frequency" className="scroll-mt-24">
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30">
-                <h2 
-                  className="text-3xl md:text-4xl font-bold mb-6"
-                  style={{ 
-                    fontFamily: "Poppins, sans-serif"
-                  }}
-                >
+              {/* Reporting Frequency Section */}
+              <SectionWrapper id="frequency">
+                <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
                   <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
@@ -393,38 +294,17 @@ const MarketReportsPage = () => {
                   }}>Reporting</span>{" "}
                   <span className="text-black">Frequency</span>
                 </h2>
-                <p className="text-black text-lg leading-relaxed mb-6">
-                  Market Reports are issued based on data availability and official publication cycles. Updates align with:
-                </p>
+                <p className="text-black text-lg leading-relaxed mb-6">Market Reports are issued based on data availability and official publication cycles. Updates align with:</p>
                 <ul className="space-y-3 text-black">
-                  <li className="flex items-start gap-3">
-                    <span className="text-gold mt-1">•</span>
-                    <span>Monthly or quarterly DLD releases</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-gold mt-1">•</span>
-                    <span>Official research publications</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-gold mt-1">•</span>
-                    <span>Regulatory updates impacting the sector</span>
-                  </li>
+                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Monthly or quarterly DLD releases</span></li>
+                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Official research publications</span></li>
+                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Regulatory updates impacting the sector</span></li>
                 </ul>
-              </div>
-            </section>
+              </SectionWrapper>
 
-            {/* Gold Glow Divider */}
-            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
-
-            {/* JBJ Approach Section */}
-            <section id="jbj-approach" className="scroll-mt-24">
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30">
-                <h2 
-                  className="text-3xl md:text-4xl font-bold mb-6"
-                  style={{ 
-                    fontFamily: "Poppins, sans-serif"
-                  }}
-                >
+              {/* JBJ Approach Section */}
+              <SectionWrapper id="jbj-approach">
+                <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
                   <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
@@ -433,42 +313,19 @@ const MarketReportsPage = () => {
                   }}>How</span>{" "}
                   <span className="text-black">JBJ Global Real Estate Uses Market Reports</span>
                 </h2>
-                <p className="text-black text-lg leading-relaxed mb-6">
-                  JBJ Global Real Estate uses Market Reports to:
-                </p>
+                <p className="text-black text-lg leading-relaxed mb-6">JBJ Global Real Estate uses Market Reports to:</p>
                 <ul className="space-y-3 text-black">
-                  <li className="flex items-start gap-3">
-                    <span className="text-gold mt-1">•</span>
-                    <span>Support factual market explanations</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-gold mt-1">•</span>
-                    <span>Provide context during advisory discussions</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-gold mt-1">•</span>
-                    <span>Align property selection with verified market behavior</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-gold mt-1">•</span>
-                    <span>Maintain compliance with UAE real estate regulations</span>
-                  </li>
+                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Support factual market explanations</span></li>
+                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Provide context during advisory discussions</span></li>
+                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Align property selection with verified market behavior</span></li>
+                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Maintain compliance with UAE real estate regulations</span></li>
                 </ul>
-                <p className="text-zinc-700 leading-relaxed mt-6 pt-4 border-t border-gold/20">
-                  All guidance references published data rather than assumptions.
-                </p>
-                <p className="text-zinc-600 leading-relaxed mt-4 text-sm italic">
-                  Market Reports are supported by Methodology & Sources, which explain how data is selected, validated, and presented.
-                </p>
-              </div>
-            </section>
+                <p className="text-zinc-700 leading-relaxed mt-6 pt-4 border-t border-gold/30">All guidance references published data rather than assumptions.</p>
+                <p className="text-zinc-600 leading-relaxed mt-4 text-sm italic">Market Reports are supported by Methodology & Sources, which explain how data is selected, validated, and presented.</p>
+              </SectionWrapper>
 
-            {/* Gold Glow Divider */}
-            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
-
-            {/* Featured Reports - Premium champagne Cards */}
-            <section id="latest-reports" className="scroll-mt-24">
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30">
+              {/* Featured Reports Section */}
+              <SectionWrapper id="latest-reports">
                 <h2 
                   className="text-3xl md:text-4xl font-bold mb-8 text-center"
                   style={{ 
@@ -491,11 +348,11 @@ const MarketReportsPage = () => {
                       viewport={{ once: true }}
                       transition={{ delay: index * 0.1 }}
                     >
-                      <Card className="bg-white border-2 border-black hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all h-full group">
+                      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] hover:scale-[1.02] transition-all h-full group">
                         <CardContent className="p-6 flex flex-col h-full">
                           <div className="flex items-start justify-between mb-4">
                             {getTypeBadge(report.type)}
-                            <span className="text-zinc-400 text-xs bg-zinc-100 px-2 py-1 rounded">{report.pages} pages</span>
+                            <span className="text-zinc-500 text-xs bg-black/5 px-2 py-1 rounded">{report.pages} pages</span>
                           </div>
 
                           <h3 
@@ -512,8 +369,8 @@ const MarketReportsPage = () => {
                           <p className="text-black font-medium text-sm mb-3">{report.subtitle}</p>
                           <p className="text-zinc-600 text-sm mb-6 flex-grow leading-relaxed">{report.description}</p>
 
-                          <div className="flex items-center justify-between pt-4 border-t border-zinc-200">
-                            <div className="flex items-center gap-2 text-zinc-400 text-xs">
+                          <div className="flex items-center justify-between pt-4 border-t border-gold/30">
+                            <div className="flex items-center gap-2 text-zinc-500 text-xs">
                               <Calendar className="w-3 h-3" />
                               {new Date(report.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                             </div>
@@ -529,15 +386,10 @@ const MarketReportsPage = () => {
                     </motion.div>
                   ))}
                 </div>
-              </div>
-            </section>
+              </SectionWrapper>
 
-            {/* Gold Glow Divider */}
-            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
-
-            {/* Report Archive - White Pearl section */}
-            <section id="report-archive" className="scroll-mt-24">
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30">
+              {/* Report Archive Section */}
+              <SectionWrapper id="report-archive">
                 <h2 
                   className="text-3xl md:text-4xl font-bold mb-8 text-center"
                   style={{ 
@@ -553,11 +405,11 @@ const MarketReportsPage = () => {
 
                 <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                   {/* Monthly Reports Selector */}
-                  <Card className="bg-white border-2 border-black hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all">
+                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all">
                     <CardContent className="p-6">
                       <div className="flex items-center gap-3 mb-4">
-                        <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                          <Calendar className="w-6 h-6 text-blue-500" />
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center border border-gold/30">
+                          <Calendar className="w-6 h-6 text-gold" />
                         </div>
                         <div>
                           <h3 
@@ -570,14 +422,12 @@ const MarketReportsPage = () => {
                           >
                             Monthly Snapshots
                           </h3>
-                          <p className="text-zinc-500 text-sm">Quick monthly market overviews</p>
+                          <p className="text-zinc-600 text-sm">Quick monthly market overviews</p>
                         </div>
                       </div>
-                      <p className="text-zinc-600 text-sm mb-4">
-                        Download any monthly report from our archive. Data sourced from Dubai Government Open Data.
-                      </p>
+                      <p className="text-zinc-700 text-sm mb-4">Download any monthly report from our archive. Data sourced from Dubai Government Open Data.</p>
                       <select 
-                        className="w-full p-3 border-2 border-black rounded-lg text-black bg-white mb-4 focus:border-gold focus:ring-1 focus:ring-gold"
+                        className="w-full p-3 border-2 border-gold/40 rounded-lg text-black bg-white mb-4 focus:border-gold focus:ring-1 focus:ring-gold"
                         value={selectedMonthlyDownload || ''}
                         onChange={(e) => setSelectedMonthlyDownload(e.target.value)}
                       >
@@ -587,11 +437,7 @@ const MarketReportsPage = () => {
                         ))}
                       </select>
                       <Link to="/market-report">
-                        <Button 
-                          variant="primary"
-                          className="w-full"
-                          disabled={!selectedMonthlyDownload}
-                        >
+                        <Button variant="primary" className="w-full" disabled={!selectedMonthlyDownload}>
                           <Download className="w-4 h-4 mr-2" />
                           Download Report
                         </Button>
@@ -600,11 +446,11 @@ const MarketReportsPage = () => {
                   </Card>
 
                   {/* Quarterly Reports Selector */}
-                  <Card className="bg-white border-2 border-black hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all">
+                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all">
                     <CardContent className="p-6">
                       <div className="flex items-center gap-3 mb-4">
-                        <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
-                          <FileText className="w-6 h-6 text-purple-500" />
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center border border-gold/30">
+                          <FileText className="w-6 h-6 text-gold" />
                         </div>
                         <div>
                           <h3 
@@ -617,14 +463,12 @@ const MarketReportsPage = () => {
                           >
                             Quarterly Reviews
                           </h3>
-                          <p className="text-zinc-500 text-sm">In-depth quarterly analysis</p>
+                          <p className="text-zinc-600 text-sm">In-depth quarterly analysis</p>
                         </div>
                       </div>
-                      <p className="text-zinc-600 text-sm mb-4">
-                        Comprehensive quarterly reports with area breakdowns and property type analysis.
-                      </p>
+                      <p className="text-zinc-700 text-sm mb-4">Comprehensive quarterly reports with area breakdowns and property type analysis.</p>
                       <select 
-                        className="w-full p-3 border-2 border-black rounded-lg text-black bg-white mb-4 focus:border-gold focus:ring-1 focus:ring-gold"
+                        className="w-full p-3 border-2 border-gold/40 rounded-lg text-black bg-white mb-4 focus:border-gold focus:ring-1 focus:ring-gold"
                         value={selectedQuarterlyDownload || ''}
                         onChange={(e) => setSelectedQuarterlyDownload(e.target.value)}
                       >
@@ -634,11 +478,7 @@ const MarketReportsPage = () => {
                         ))}
                       </select>
                       <Link to="/market-report">
-                        <Button 
-                          variant="primary"
-                          className="w-full"
-                          disabled={!selectedQuarterlyDownload}
-                        >
+                        <Button variant="primary" className="w-full" disabled={!selectedQuarterlyDownload}>
                           <Download className="w-4 h-4 mr-2" />
                           Download Report
                         </Button>
@@ -664,62 +504,60 @@ const MarketReportsPage = () => {
                     <span className="text-black font-medium">Dubai Government Open Data</span>
                   </p>
                 </div>
-              </div>
-            </section>
+              </SectionWrapper>
 
-            {/* Gold Glow Divider */}
-            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
+              {/* Custom Report CTA */}
+              <section id="custom-report" className="scroll-mt-24">
+                <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl p-3 shadow-lg">
+                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 overflow-hidden">
+                    <CardContent className="p-8 md:p-10 text-center relative">
+                      <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-gold/20 to-transparent rounded-full -translate-x-1/2 -translate-y-1/2" />
+                      <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-gold/15 to-transparent rounded-full translate-x-1/2 translate-y-1/2" />
+                      
+                      <div className="relative z-10">
+                        <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center mx-auto mb-5">
+                          <FileText className="w-7 h-7 text-gold" />
+                        </div>
+                        <h3 
+                          className="text-2xl md:text-3xl font-bold mb-4"
+                          style={{ 
+                            fontFamily: "Poppins, sans-serif",
+                            background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                            filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
+                          }}
+                        >
+                          Need a Custom Report?
+                        </h3>
+                        <p className="text-zinc-700 mb-6 max-w-lg mx-auto leading-relaxed">
+                          Our market intelligence team can prepare bespoke analysis for specific areas, property types, or investment scenarios tailored to your requirements.
+                        </p>
+                        <Link to="/contact">
+                          <Button variant="primary" size="lg" className="font-semibold px-8">
+                            Request Custom Report
+                            <ExternalLink className="w-4 h-4 ml-2" />
+                          </Button>
+                        </Link>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </section>
+            </div>
 
-            {/* Custom Report CTA */}
-            <section id="custom-report" className="scroll-mt-24">
-              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 overflow-hidden hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] transition-all">
-                <CardContent className="p-8 md:p-10 text-center relative">
-                  {/* Subtle decorative elements */}
-                  <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-gold/20 to-transparent rounded-full -translate-x-1/2 -translate-y-1/2" />
-                  <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-gold/15 to-transparent rounded-full translate-x-1/2 translate-y-1/2" />
-                  
-                  <div className="relative z-10">
-                    <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center mx-auto mb-5">
-                      <FileText className="w-7 h-7 text-gold" />
-                    </div>
-                    <h3 
-                      className="text-2xl md:text-3xl font-bold mb-4"
-                      style={{ 
-                        fontFamily: "Poppins, sans-serif",
-                        background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
-                      }}
-                    >
-                      Need a Custom Report?
-                    </h3>
-                    <p className="text-zinc-700 mb-6 max-w-lg mx-auto leading-relaxed">
-                      Our market intelligence team can prepare bespoke analysis for specific areas, property types, or investment scenarios tailored to your requirements.
-                    </p>
-                    <Link to="/contact">
-                      <Button variant="primary" size="lg" className="font-semibold px-8">
-                        Request Custom Report
-                        <ExternalLink className="w-4 h-4 ml-2" />
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            </section>
-          </div>
-
-          {/* Table of Contents Sidebar */}
-          <div className="hidden lg:block w-72">
-            <MarketIntelligenceTableOfContents 
-              items={tocItems}
-              title="In This Section"
-              ctaAction={{
-                label: "Find Your Property",
-                href: "/properties",
-                icon: Search
-              }}
-            />
+            {/* Table of Contents Sidebar */}
+            <div className="hidden lg:block w-72">
+              <MarketIntelligenceTableOfContents 
+                items={tocItems}
+                title="In This Section"
+                ctaAction={{
+                  label: "Find Your Property",
+                  href: "/properties",
+                  icon: Search
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -728,18 +566,18 @@ const MarketReportsPage = () => {
       <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
 
       {/* Market Intelligence Navigation */}
-      <section id="navigation" className="py-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] scroll-mt-24">
+      <section id="navigation" className="py-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] scroll-mt-24">
         <div className="container mx-auto px-4">
           <MarketIntelligenceNavigation current="/market-intelligence/reports" />
           
-          {/* Disclaimer Box - White style */}
+          {/* Disclaimer Box */}
           <div className="max-w-3xl mx-auto mt-8">
-            <div className="bg-white border border-gold/30 rounded-xl p-6 text-center">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 text-center">
               <div className="flex items-center justify-center gap-4 mb-4">
                 <Database className="w-5 h-5 text-gold" />
                 <Shield className="w-5 h-5 text-gold" />
               </div>
-              <p className="text-zinc-600 text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
+              <p className="text-zinc-700 text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
             </div>
           </div>
         </div>
