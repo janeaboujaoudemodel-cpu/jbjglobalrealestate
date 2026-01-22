@@ -60,7 +60,7 @@ const Methodology = () => {
       <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
 
       {/* Main Content with TOC Sidebar - Active Champagne Layer */}
-      <section className="jj-section-champagne pt-8 pb-16">
+      <section className="jj-section-champagne pt-16 pb-16">
         <div className="relative">
           {/* Full-bleed content area that stretches behind TOC */}
           <div className="space-y-10">

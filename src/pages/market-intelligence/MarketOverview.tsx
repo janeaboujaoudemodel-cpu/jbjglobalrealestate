@@ -193,7 +193,7 @@ const MarketOverview = () => {
       />
 
       {/* Main Content - Full width edge-to-edge with 3-layer system */}
-      <div className="pt-8 pb-16 bg-black">
+      <div className="pt-16 pb-16 bg-black">
         {/* Introduction Section */}
         <section id="introduction" className="scroll-mt-32 jj-section-champagne py-12 mb-8">
           <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
