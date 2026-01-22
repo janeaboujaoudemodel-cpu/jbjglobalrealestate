@@ -317,13 +317,12 @@ END:VCARD`;
         </div>
       </section>
 
-      {/* Consultation Form Section - 3-Layer System with thin black contour */}
+      {/* Consultation Form Section - Form IS the 3rd layer (directly on active champagne, no extra pearl wrapper) */}
       <section className="py-16 md:py-20 bg-black">
         {/* Thin black contour + Active Champagne Layer */}
-        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
-          {/* Inner Pearl Layer */}
-          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
-            <div className="max-w-3xl mx-auto">
+        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 md:p-6">
+          {/* Form IS the 3rd layer - champagne pearl styling */}
+          <div className="max-w-3xl mx-auto">
             {isSuccess ? (
               /* Success State */
               <div className="bg-zinc-900/50 border border-green-800/50 rounded-2xl p-8 md:p-12 text-center">
@@ -730,51 +729,49 @@ END:VCARD`;
       {/* Support Ticket Section - Above "Prefer to Reach Us Directly" */}
       <SupportTicketBox />
 
-      {/* Direct Contact CTAs - "Prefer to Reach Us Directly" - 3-Layer System */}
+      {/* Direct Contact CTAs - "Prefer to Reach Us Directly" - Cards ARE the 3rd layer (on active champagne) */}
       <section className="py-12 bg-black">
         {/* Thin black contour + Active Champagne Layer */}
-        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
-          {/* Inner Pearl Layer */}
-          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
-            <p className="text-center text-lg mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
-              <span className="text-black">Prefer to Reach Us</span>{" "}
-              <span className="text-gold font-semibold">Directly?</span>
-            </p>
-            <div className="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-              {/* WhatsApp CTA */}
-              <a 
-                href={getWhatsAppUrl()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-4 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
-              >
-                <div className="w-12 h-12 bg-green-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-green-500/30">
-                  <MessageCircle className="w-6 h-6 text-green-600" />
-                </div>
-                <div>
-                  <h3 className="text-black font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
-                    WhatsApp
-                  </h3>
-                  <p className="text-gold text-sm">{CONTACT_INFO.phone}</p>
-                </div>
-              </a>
+        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8">
+          <p className="text-center text-lg mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <span className="text-black">Prefer to Reach Us</span>{" "}
+            <span className="text-gold font-semibold">Directly?</span>
+          </p>
+          {/* Cards are the 3rd layer - champagne pearl styling */}
+          <div className="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+            {/* WhatsApp CTA */}
+            <a 
+              href={getWhatsAppUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-4 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
+            >
+              <div className="w-12 h-12 bg-green-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-green-500/30">
+                <MessageCircle className="w-6 h-6 text-green-600" />
+              </div>
+              <div>
+                <h3 className="text-black font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  WhatsApp
+                </h3>
+                <p className="text-gold text-sm">{CONTACT_INFO.phone}</p>
+              </div>
+            </a>
 
-              {/* Call CTA */}
-              <a 
-                href={getCallUrl()}
-                className="flex items-center gap-4 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
-              >
-                <div className="w-12 h-12 bg-blue-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-blue-500/30">
-                  <Phone className="w-6 h-6 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="text-black font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
-                    Call Us
-                  </h3>
-                  <p className="text-gold text-sm">{CONTACT_INFO.phone}</p>
-                </div>
-              </a>
-            </div>
+            {/* Call CTA */}
+            <a 
+              href={getCallUrl()}
+              className="flex items-center gap-4 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
+            >
+              <div className="w-12 h-12 bg-blue-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-blue-500/30">
+                <Phone className="w-6 h-6 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="text-black font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  Call Us
+                </h3>
+                <p className="text-gold text-sm">{CONTACT_INFO.phone}</p>
+              </div>
+            </a>
           </div>
         </div>
       </section>

@@ -1064,172 +1064,164 @@ const Properties = () => {
         </div>
       </section>
 
-      {/* Request Details Form Section - 3-Layer System: Black > Active Champagne > Pearl Form */}
+      {/* Request Details Form Section - 3-Layer System: Black > Active Champagne > Form (form IS the 3rd layer) */}
       <section className="py-16 sm:py-20 bg-black">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="max-w-[700px] mx-auto">
-            {/* OUTER CARD - Active Champagne Layer (shows black border at edges) */}
-            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
-              {/* INNER CARD - Pearl Layer */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-10 shadow-[0_0_30px_rgba(200,167,102,0.25)]"
+        {/* Full-width Active Champagne Layer matching listing section */}
+        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 sm:p-6">
+          {/* Form as 3rd Layer (Champagne Pearl) - directly on active layer, no extra wrapper */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-10 shadow-[0_0_30px_rgba(200,167,102,0.25)]"
+          >
+            <h2 className="text-2xl md:text-3xl font-semibold text-black text-center mb-8" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <span className="text-gold">Request</span> Details
+            </h2>
+            
+            <div className="max-w-xl mx-auto space-y-4">
+              <Input
+                placeholder="Name"
+                className="h-14 bg-white border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] rounded-lg focus:border-gold"
+              />
+              <Input
+                type="email"
+                placeholder="Email"
+                className="h-14 bg-white border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] rounded-lg focus:border-gold"
+              />
+              <Input
+                type="tel"
+                placeholder="Phone"
+                className="h-14 bg-white border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] rounded-lg focus:border-gold"
+              />
+              <Select>
+                <SelectTrigger className="h-14 bg-white border-zinc-300 text-gold/70 rounded-lg [&>span]:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)]">
+                  <SelectValue placeholder="I am..." />
+                </SelectTrigger>
+                <SelectContent className="bg-white border-zinc-200">
+                  <SelectItem value="investor" className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-gold data-[highlighted]:bg-gold/10 data-[highlighted]:text-gold">An Investor</SelectItem>
+                  <SelectItem value="homeowner" className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-gold data-[highlighted]:bg-gold/10 data-[highlighted]:text-gold">A Homeowner</SelectItem>
+                  <SelectItem value="agent" className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-gold data-[highlighted]:bg-gold/10 data-[highlighted]:text-gold">A Real Estate Agent</SelectItem>
+                  <SelectItem value="other" className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-gold data-[highlighted]:bg-gold/10 data-[highlighted]:text-gold">Other</SelectItem>
+                </SelectContent>
+              </Select>
+              <textarea
+                placeholder="Message"
+                rows={4}
+                className="w-full px-4 py-3 bg-white border border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] rounded-lg resize-none focus:outline-none focus:border-gold"
+              />
+              <div className="flex items-center gap-3">
+                <Checkbox id="consent" className="border-zinc-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold" />
+                <label htmlFor="consent" className="text-black text-sm">
+                  I agree to be contacted
+                </label>
+              </div>
+              <Button
+                onClick={handleInquirySubmit}
+                variant="primary"
+                className="w-full h-14 text-lg rounded-xl font-bold mt-4"
               >
-                <h2 className="text-2xl md:text-3xl font-semibold text-black text-center mb-8" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  Request Details
-                </h2>
-                
-                <div className="space-y-4">
-                  <Input
-                    placeholder="Name"
-                    className="h-14 bg-white border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] rounded-lg focus:border-gold"
-                  />
-                  <Input
-                    type="email"
-                    placeholder="Email"
-                    className="h-14 bg-white border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] rounded-lg focus:border-gold"
-                  />
-                  <Input
-                    type="tel"
-                    placeholder="Phone"
-                    className="h-14 bg-white border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] rounded-lg focus:border-gold"
-                  />
-                  <Select>
-                    <SelectTrigger className="h-14 bg-white border-zinc-300 text-gold/70 rounded-lg [&>span]:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)]">
-                      <SelectValue placeholder="I am..." />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white border-zinc-200">
-                      <SelectItem value="investor" className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-gold data-[highlighted]:bg-gold/10 data-[highlighted]:text-gold">An Investor</SelectItem>
-                      <SelectItem value="homeowner" className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-gold data-[highlighted]:bg-gold/10 data-[highlighted]:text-gold">A Homeowner</SelectItem>
-                      <SelectItem value="agent" className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-gold data-[highlighted]:bg-gold/10 data-[highlighted]:text-gold">A Real Estate Agent</SelectItem>
-                      <SelectItem value="other" className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-gold data-[highlighted]:bg-gold/10 data-[highlighted]:text-gold">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <textarea
-                    placeholder="Message"
-                    rows={4}
-                    className="w-full px-4 py-3 bg-white border border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] rounded-lg resize-none focus:outline-none focus:border-gold"
-                  />
-                  <div className="flex items-center gap-3">
-                    <Checkbox id="consent" className="border-zinc-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold" />
-                    <label htmlFor="consent" className="text-black text-sm">
-                      I agree to be contacted
-                    </label>
-                  </div>
-                  <Button
-                    onClick={handleInquirySubmit}
-                    variant="primary"
-                    className="w-full h-14 text-lg rounded-xl font-bold mt-4"
-                  >
-                    Submit
-                  </Button>
-                </div>
-
-                {/* Current Filter Summary */}
-                {activeFilterCount > 0 && (
-                  <div className="mt-6 pt-6 border-t border-gold/20">
-                    <p className="text-zinc-600 text-sm mb-3">Your search includes:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {filters.emirate && (
-                        <span className="px-3 py-1 bg-gold/10 text-black border border-gold/30 text-xs rounded-full">
-                          {filters.emirate}
-                        </span>
-                      )}
-                      {filters.developerId && developers?.find(d => d.id === filters.developerId) && (
-                        <span className="px-3 py-1 bg-gold/10 text-black border border-gold/30 text-xs rounded-full">
-                          {developers.find(d => d.id === filters.developerId)?.name}
-                        </span>
-                      )}
-                      {(filters.priceMin > 0 || filters.priceMax < 500000000) && (
-                        <span className="px-3 py-1 bg-gold/10 text-black border border-gold/30 text-xs rounded-full">
-                          {formatPrice(filters.priceMin)} - {formatPrice(filters.priceMax)}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </motion.div>
+                Submit
+              </Button>
             </div>
-          </div>
+
+            {/* Current Filter Summary */}
+            {activeFilterCount > 0 && (
+              <div className="mt-6 pt-6 border-t border-gold/20 max-w-xl mx-auto">
+                <p className="text-zinc-600 text-sm mb-3">Your search includes:</p>
+                <div className="flex flex-wrap gap-2">
+                  {filters.emirate && (
+                    <span className="px-3 py-1 bg-gold/10 text-black border border-gold/30 text-xs rounded-full">
+                      {filters.emirate}
+                    </span>
+                  )}
+                  {filters.developerId && developers?.find(d => d.id === filters.developerId) && (
+                    <span className="px-3 py-1 bg-gold/10 text-black border border-gold/30 text-xs rounded-full">
+                      {developers.find(d => d.id === filters.developerId)?.name}
+                    </span>
+                  )}
+                  {(filters.priceMin > 0 || filters.priceMax < 500000000) && (
+                    <span className="px-3 py-1 bg-gold/10 text-black border border-gold/30 text-xs rounded-full">
+                      {formatPrice(filters.priceMin)} - {formatPrice(filters.priceMax)}
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
+          </motion.div>
         </div>
       </section>
 
-      {/* Quick Contact CTA - 3-Layer System: Black > Active Champagne > Pearl */}
+      {/* Quick Contact CTA - 3-Layer System: Black > Active Champagne > Pearl (noticeable size difference) */}
       <section className="py-16 sm:py-20 bg-black">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="max-w-[1100px] mx-auto">
-            {/* OUTER CARD - Active Champagne Layer */}
-            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
-              {/* INNER CARD - Pearl Layer */}
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-10 md:p-14 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center">
-                {/* Badge */}
-                <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F5F0E6] to-gold/20 border border-gold/50 rounded-full text-black text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20">
-                  <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gold" />
-                  Get in Touch
-                </div>
+        {/* Active Champagne Layer - Full width with thin black contour */}
+        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 sm:p-8 md:p-10">
+          {/* Pearl Layer - Noticeably smaller than active layer */}
+          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-10 md:p-14 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F5F0E6] to-gold/20 border border-gold/50 rounded-full text-black text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20">
+              <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gold" />
+              Begin Your Journey
+            </div>
 
-                {/* Title */}
-                <h2 
-                  className="text-black text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-3 sm:mb-4 leading-tight"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
-                >
-                  Ready to Find Your Perfect Property?
-                </h2>
-                <p className="text-zinc-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed">
-                  Connect with our expert team to explore Dubai's finest real estate opportunities.
-                </p>
+            {/* Title */}
+            <h2 
+              className="text-black text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-3 sm:mb-4 leading-tight"
+              style={{ fontFamily: "Poppins, sans-serif" }}
+            >
+              <span className="text-gold">Ready</span> to Find Your Perfect Property?
+            </h2>
+            <p className="text-zinc-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed">
+              Connect with our expert team to explore Dubai's finest real estate opportunities.
+            </p>
 
-                {/* CTA Buttons */}
-                <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4">
-                  {/* Register Interest - Primary 3D Style */}
-                  <a 
-                    href={buildSureFormsUrl()} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="relative w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-10 rounded-xl font-bold transition-all duration-300 group overflow-hidden inline-flex items-center justify-center hover:scale-[1.02]"
-                    style={{
-                      background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
-                      boxShadow: `
-                        0 10px 30px rgba(200,167,102,0.4),
-                        0 6px 15px rgba(0,0,0,0.2),
-                        inset 0 2px 4px rgba(255,255,255,0.9),
-                        inset 0 -2px 4px rgba(200,167,102,0.2),
-                        0 0 20px rgba(200,167,102,0.3)
-                      `,
-                    }}
-                  >
-                    <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                    <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-                    <span className="relative flex items-center gap-2">
-                      <span className="text-black group-hover:text-gold transition-colors">Register</span>
-                      <span className="text-gold group-hover:text-black transition-colors">Interest</span>
-                      <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-black group-hover:text-gold transition-colors" />
-                    </span>
-                  </a>
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4">
+              {/* Register Interest - Primary 3D Style */}
+              <a 
+                href={buildSureFormsUrl()} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="relative w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-10 rounded-xl font-bold transition-all duration-300 group overflow-hidden inline-flex items-center justify-center hover:scale-[1.02]"
+                style={{
+                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                  boxShadow: `
+                    0 10px 30px rgba(200,167,102,0.4),
+                    0 6px 15px rgba(0,0,0,0.2),
+                    inset 0 2px 4px rgba(255,255,255,0.9),
+                    inset 0 -2px 4px rgba(200,167,102,0.2),
+                    0 0 20px rgba(200,167,102,0.3)
+                  `,
+                }}
+              >
+                <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                <span className="relative flex items-center gap-2">
+                  <span className="text-black group-hover:text-gold transition-colors">Register</span>
+                  <span className="text-gold group-hover:text-black transition-colors">Interest</span>
+                  <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-black group-hover:text-gold transition-colors" />
+                </span>
+              </a>
 
-                  {/* WhatsApp - Secondary Style */}
-                  <a 
-                    href={getWhatsAppUrl()} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-10 rounded-xl font-bold transition-all duration-300 inline-flex items-center justify-center gap-2 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    WhatsApp
-                  </a>
+              {/* WhatsApp - Secondary Style */}
+              <a 
+                href={getWhatsAppUrl()} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-10 rounded-xl font-bold transition-all duration-300 inline-flex items-center justify-center gap-2 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
+              >
+                <MessageCircle className="w-4 h-4" />
+                WhatsApp
+              </a>
 
-                  {/* Call Now - Secondary Style */}
-                  <a 
-                    href={`tel:${CONTACT_INFO.phoneRaw}`}
-                    className="w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-10 rounded-xl font-bold transition-all duration-300 inline-flex items-center justify-center gap-2 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
-                  >
-                    <Phone className="w-4 h-4" />
-                    Call Now
-                  </a>
-                </div>
-              </div>
+              {/* Call Now - Secondary Style */}
+              <a 
+                href={`tel:${CONTACT_INFO.phoneRaw}`}
+                className="w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-10 rounded-xl font-bold transition-all duration-300 inline-flex items-center justify-center gap-2 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
+              >
+                <Phone className="w-4 h-4" />
+                Call Now
+              </a>
             </div>
           </div>
         </div>
