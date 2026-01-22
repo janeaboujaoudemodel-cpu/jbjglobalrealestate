@@ -131,25 +131,25 @@ const VIPExportButton = () => {
         <Button 
           variant="outline" 
           size="sm"
-          className="text-gold border-gold/50 hover:bg-gold/20"
+          className="text-black border-gold/50 hover:bg-gold/20"
           disabled={exporting}
         >
-          <Crown className="h-4 w-4 mr-2" />
+          <Crown className="h-4 w-4 mr-2 text-gold" />
           Export VIP
           <ChevronDown className="h-3 w-3 ml-2" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="bg-card border-border">
+      <DropdownMenuContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
         <DropdownMenuItem 
           onClick={exportToCSV}
-          className="text-white hover:bg-muted cursor-pointer"
+          className="text-black hover:bg-gold/20 cursor-pointer"
         >
           <FileSpreadsheet className="h-4 w-4 mr-2" />
           Export as CSV
         </DropdownMenuItem>
         <DropdownMenuItem 
           onClick={exportToJSON}
-          className="text-white hover:bg-muted cursor-pointer"
+          className="text-black hover:bg-gold/20 cursor-pointer"
         >
           <FileText className="h-4 w-4 mr-2" />
           Export as JSON

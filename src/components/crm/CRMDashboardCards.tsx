@@ -255,18 +255,18 @@ const CRMDashboardCards = ({ userId, isAdmin }: CRMDashboardCardsProps) => {
           {cards.map((card, index) => (
             <Tooltip key={index}>
               <TooltipTrigger asChild>
-                <Card className="border-border bg-card hover:bg-muted/50 transition-colors cursor-help">
+                <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:shadow-[0_8px_25px_rgba(200,167,102,0.2)] transition-all cursor-help">
                   <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-3">
-                    <CardTitle className="text-xs font-semibold text-foreground truncate">
+                    <CardTitle className="text-xs font-semibold text-black whitespace-nowrap">
                       {card.title}
                     </CardTitle>
                     <card.icon className={`h-4 w-4 ${card.color} flex-shrink-0`} />
                   </CardHeader>
                   <CardContent className="px-3 pb-3">
-                    <div className="text-xl font-bold text-foreground">
+                    <div className="text-xl font-bold text-black">
                       {loading ? "..." : card.value}
                     </div>
-                    <p className="text-[10px] text-muted-foreground mt-0.5 truncate">
+                    <p className="text-[10px] text-zinc-600 mt-0.5 whitespace-nowrap">
                       {loading ? "" : card.subValue}
                     </p>
                   </CardContent>
@@ -284,18 +284,18 @@ const CRMDashboardCards = ({ userId, isAdmin }: CRMDashboardCardsProps) => {
           {metricsCards.map((card, index) => (
             <Tooltip key={index}>
               <TooltipTrigger asChild>
-                <Card className="border-border bg-card hover:bg-muted/50 transition-colors cursor-help">
+                <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:shadow-[0_8px_25px_rgba(200,167,102,0.2)] transition-all cursor-help">
                   <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-3">
-                    <CardTitle className="text-xs font-semibold text-foreground">
+                    <CardTitle className="text-xs font-semibold text-black whitespace-nowrap">
                       {card.title}
                     </CardTitle>
                     <card.icon className={`h-4 w-4 ${card.color}`} />
                   </CardHeader>
                   <CardContent className="px-3 pb-3">
-                    <div className="text-xl font-bold text-foreground">
+                    <div className="text-xl font-bold text-black">
                       {loading ? "..." : card.value}
                     </div>
-                    <p className="text-[10px] text-muted-foreground mt-0.5">
+                    <p className="text-[10px] text-zinc-600 mt-0.5 whitespace-nowrap">
                       {loading ? "" : card.subValue}
                     </p>
                   </CardContent>
