@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DUBAI_AREAS_MARKET_DATA, MARKET_DISCLAIMER } from "@/config/open-data-config";
+import { sanitizeMarkdownHtml } from "@/utils/secureInputValidation";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -178,11 +179,14 @@ const MarketAreaDetail = () => {
             </CardHeader>
             <CardContent>
               <div className="prose prose-invert max-w-none">
-                {generateExplanation().split('\n\n').map((para, i) => (
-                  <p key={i} className="text-zinc-400 mb-4" dangerouslySetInnerHTML={{ 
-                    __html: para.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>') 
-                  }} />
-                ))}
+                {generateExplanation().split('\n\n').map((para, i) => {
+                  // Security: Sanitize before rendering with dangerouslySetInnerHTML
+                  const htmlContent = para.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>');
+                  const sanitizedHtml = sanitizeMarkdownHtml(htmlContent);
+                  return (
+                    <p key={i} className="text-zinc-400 mb-4" dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />
+                  );
+                })}
               </div>
             </CardContent>
           </Card>
