@@ -694,60 +694,56 @@ const BuyerGuide = () => {
       </section>
 
       {/* How JBJ Global Real Estate Supports Buyers */}
-      <section id="jbj-support" className="py-16 md:py-24 bg-black scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                How JBJ Global Real Estate Supports Buyers
-              </h2>
-            </div>
+      <section id="jbj-support" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
+              <span className="text-gold">How JBJ</span> Global Real Estate Supports Buyers
+            </h2>
+          </div>
 
-            <div className="grid md:grid-cols-2 gap-4 mb-8">
-              {jbjSupport.map((item, index) => (
-                <div 
-                  key={index}
-                  className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-xl p-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
-                >
-                  <h4 className="text-black font-semibold mb-2">{item.title}</h4>
-                  <p className="text-zinc-600 text-sm">{item.description}</p>
-                </div>
-              ))}
-            </div>
+          <div className="grid md:grid-cols-2 gap-4 mb-8">
+            {jbjSupport.map((item, index) => (
+              <div 
+                key={index}
+                className="jj-card-inner p-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
+              >
+                <h4 className="text-black font-semibold mb-2">{item.title}</h4>
+                <p className="text-zinc-600 text-sm">{item.description}</p>
+              </div>
+            ))}
+          </div>
 
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-6">
-              <p className="text-zinc-700 text-sm leading-relaxed">
-                <span className="text-black font-semibold">JBJ Global Real Estate</span> is licensed for buying, selling, and renting property in Dubai. Mortgage, legal, and advisory services are introduced through licensed third-party partners.
-              </p>
-            </div>
+          <div className="jj-card-inner rounded-xl p-6">
+            <p className="text-zinc-700 text-sm leading-relaxed">
+              <span className="text-black font-semibold">JBJ Global Real Estate</span> is licensed for buying, selling, and renting property in Dubai. Mortgage, legal, and advisory services are introduced through licensed third-party partners.
+            </p>
           </div>
         </div>
       </section>
 
       {/* FAQs */}
-      <section id="faqs" className="py-16 md:py-24 bg-black scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
-                Buyer Guide – FAQs
-              </h2>
-            </div>
+      <section id="faqs" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
+              <span className="text-gold">Buyer Guide</span> – FAQs
+            </h2>
+          </div>
 
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-6 md:p-8 border border-gold/30">
-              <Accordion type="single" collapsible className="w-full">
-                {faqs.map((faq, index) => (
-                  <AccordionItem key={index} value={`faq-${index}`} className="border-b border-zinc-200 last:border-0">
-                    <AccordionTrigger className="text-left text-black font-medium hover:text-gold py-4">
-                      {faq.question}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-zinc-600 pb-4">
-                      {faq.answer}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
+          <div className="jj-card-inner rounded-2xl p-6 md:p-8">
+            <Accordion type="single" collapsible className="w-full">
+              {faqs.map((faq, index) => (
+                <AccordionItem key={index} value={`faq-${index}`} className="border-b border-zinc-200 last:border-0">
+                  <AccordionTrigger className="text-left text-black font-medium hover:text-gold py-4">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-zinc-600 pb-4">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </div>
         </div>
       </section>
@@ -755,15 +751,15 @@ const BuyerGuide = () => {
       {/* Founder-Led Philosophy & Advisory Positioning */}
       <FounderPhilosophySection />
 
-      {/* Final CTA - Next Step - Champagne background frame */}
-      <section className="py-20 md:py-28 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] relative overflow-hidden">
+      {/* Final CTA - Next Step - 3-Layer System */}
+      <section className="py-20 md:py-28 bg-black relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center opacity-5" />
         
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl relative z-10">
           <div className="max-w-3xl mx-auto">
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.2)] text-center">
+            <div className="jj-card-inner rounded-2xl p-8 md:p-12 text-center">
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-black mb-6">
-                Next Step
+                <span className="text-gold">Next</span> Step
               </h2>
               <p className="text-lg text-zinc-600 mb-10 max-w-2xl mx-auto">
                 If you are considering purchasing property in Dubai, the next step is a structured consultation to align your objective, budget, and market opportunities.
@@ -801,11 +797,11 @@ const BuyerGuide = () => {
         </div>
       </section>
 
-      {/* Legal Disclaimer - Champagne frame with premium card */}
-      <section className="py-8 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
-        <div className="container mx-auto px-4">
+      {/* Legal Disclaimer - 3-Layer System */}
+      <section className="py-8 bg-black">
+        <div className="mx-4 md:mx-8 lg:mx-16 py-6 px-4 md:px-8 jj-layer-active rounded-2xl">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-lg p-6 shadow-lg">
+            <div className="jj-card-inner rounded-lg p-6">
               <h4 className="text-black font-semibold mb-3 flex items-center gap-2">
                 <Shield className="w-4 h-4 text-gold" />
                 Important Disclaimer
