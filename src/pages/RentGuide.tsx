@@ -241,202 +241,192 @@ const RentGuide = () => {
       </div>
 
       {/* How Renting Works in Dubai */}
-      <section id="how-renting-works" className="py-16 md:py-24 bg-black scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-6">
-                How Renting Works in Dubai
-              </h2>
-              <p className="text-lg text-zinc-400 leading-relaxed max-w-3xl mx-auto">
-                Dubai's rental market is well-regulated, offering protection for both tenants and landlords. 
-                Understanding the basics helps you navigate the process with confidence.
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-3 gap-6">
-              {[
-                { 
-                  icon: Calendar, 
-                  title: "Typical Lease Terms", 
-                  desc: "Most residential leases are 12 months, with renewal options. Shorter terms may be available but often at a premium." 
-                },
-                { 
-                  icon: CreditCard, 
-                  title: "Payment by Cheques", 
-                  desc: "Rent is typically paid via post-dated cheques (1, 2, 4, or more). This is standard practice in Dubai." 
-                },
-                { 
-                  icon: Shield, 
-                  title: "Ejari Protection", 
-                  desc: "All tenancies must be registered with Ejari (Dubai Land Department) to be legally valid." 
-                }
-              ].map((item, index) => (
-                <div key={index} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl p-6 border border-gold/30 hover:border-gold transition-colors">
-                  <div className="w-12 h-12 bg-black border border-gold/30 rounded-xl flex items-center justify-center mb-4">
-                    <item.icon className="w-6 h-6 text-gold" />
-                  </div>
-                  <h3 className="font-medium text-black mb-2">{item.title}</h3>
-                  <p className="text-sm text-zinc-600">{item.desc}</p>
+      <section id="how-renting-works" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-light text-black mb-6">
+              <span className="text-gold">How</span> Renting Works in Dubai
+            </h2>
+            <p className="text-lg text-zinc-600 leading-relaxed max-w-3xl mx-auto">
+              Dubai's rental market is well-regulated, offering protection for both tenants and landlords. 
+              Understanding the basics helps you navigate the process with confidence.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              { 
+                icon: Calendar, 
+                title: "Typical Lease Terms", 
+                desc: "Most residential leases are 12 months, with renewal options. Shorter terms may be available but often at a premium." 
+              },
+              { 
+                icon: CreditCard, 
+                title: "Payment by Cheques", 
+                desc: "Rent is typically paid via post-dated cheques (1, 2, 4, or more). This is standard practice in Dubai." 
+              },
+              { 
+                icon: Shield, 
+                title: "Ejari Protection", 
+                desc: "All tenancies must be registered with Ejari (Dubai Land Department) to be legally valid." 
+              }
+            ].map((item, index) => (
+              <div key={index} className="jj-card-inner p-6 hover:border-gold transition-colors">
+                <div className="w-12 h-12 bg-black border border-gold/30 rounded-xl flex items-center justify-center mb-4">
+                  <item.icon className="w-6 h-6 text-gold" />
                 </div>
-              ))}
-            </div>
+                <h3 className="font-medium text-black mb-2">{item.title}</h3>
+                <p className="text-sm text-zinc-600">{item.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Rental Process Steps */}
-      <section id="rental-process" className="py-16 md:py-24 bg-black scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                The 6-Step Rental Process
-              </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-                From initial search to move-in day — here's what to expect when renting in Dubai.
-              </p>
-            </div>
+      <section id="rental-process" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
+              <span className="text-gold">The 6-Step</span> Rental Process
+            </h2>
+            <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              From initial search to move-in day — here's what to expect when renting in Dubai.
+            </p>
+          </div>
 
-            <div className="space-y-6">
-              {rentalProcess.map((step) => (
-                <div 
-                  key={step.number}
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-6 md:p-8 border border-gold/30 hover:border-gold hover:shadow-lg transition-all duration-300"
-                >
-                  <div className="flex flex-col md:flex-row md:items-start gap-6">
-                    <div className="flex-shrink-0">
-                      <div className="w-16 h-16 bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 rounded-2xl flex items-center justify-center">
-                        <span className="text-gold text-2xl font-semibold">{step.number}</span>
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-3">
-                        <step.icon className="w-5 h-5 text-gold" />
-                        <h3 className="text-xl md:text-2xl font-medium text-zinc-900">
-                          {step.title}
-                        </h3>
-                      </div>
-                      <p className="text-zinc-500 mb-4">{step.description}</p>
-                      <ul className="grid md:grid-cols-2 gap-3">
-                        {step.items.map((item, itemIndex) => (
-                          <li key={itemIndex} className="flex items-start gap-3">
-                            <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
-                            <span className="text-zinc-600 text-sm">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
+          <div className="space-y-6">
+            {rentalProcess.map((step) => (
+              <div 
+                key={step.number}
+                className="jj-card-inner p-6 md:p-8 hover:border-gold hover:shadow-lg transition-all duration-300"
+              >
+                <div className="flex flex-col md:flex-row md:items-start gap-6">
+                  <div className="flex-shrink-0">
+                    <div className="w-16 h-16 bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 rounded-2xl flex items-center justify-center">
+                      <span className="text-gold text-2xl font-semibold">{step.number}</span>
                     </div>
                   </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-3">
+                      <step.icon className="w-5 h-5 text-gold" />
+                      <h3 className="text-xl md:text-2xl font-medium text-zinc-900">
+                        {step.title}
+                      </h3>
+                    </div>
+                    <p className="text-zinc-500 mb-4">{step.description}</p>
+                    <ul className="grid md:grid-cols-2 gap-3">
+                      {step.items.map((item, itemIndex) => (
+                        <li key={itemIndex} className="flex items-start gap-3">
+                          <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
+                          <span className="text-zinc-600 text-sm">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Payment Structures */}
-      <section id="payment-structures" className="py-16 md:py-24 bg-black scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
-                Payment Structures
-              </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-                Dubai's rental market uses a cheque-based payment system. Understanding your options helps in negotiation.
-              </p>
-            </div>
+      <section id="payment-structures" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
+              <span className="text-gold">Payment</span> Structures
+            </h2>
+            <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              Dubai's rental market uses a cheque-based payment system. Understanding your options helps in negotiation.
+            </p>
+          </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {paymentStructures.map((structure, index) => (
-                <div 
-                  key={index}
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all"
-                >
-                  <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mb-4">
-                    <structure.icon className="w-5 h-5 text-gold" />
-                  </div>
-                  <h3 className="text-lg font-medium text-black mb-2">{structure.title}</h3>
-                  <p className="text-sm text-zinc-600">{structure.description}</p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {paymentStructures.map((structure, index) => (
+              <div 
+                key={index}
+                className="jj-card-inner p-6 hover:border-gold hover:shadow-lg transition-all"
+              >
+                <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mb-4">
+                  <structure.icon className="w-5 h-5 text-gold" />
                 </div>
-              ))}
-            </div>
+                <h3 className="text-lg font-medium text-black mb-2">{structure.title}</h3>
+                <p className="text-sm text-zinc-600">{structure.description}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Costs & Fees */}
-      <section id="costs-fees" className="py-16 md:py-24 bg-black scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
-                Rental Costs & Fees
-              </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-                Beyond the monthly rent, budget for these one-time and recurring costs.
-              </p>
-            </div>
+      <section id="costs-fees" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
+              <span className="text-gold">Rental</span> Costs & Fees
+            </h2>
+            <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              Beyond the monthly rent, budget for these one-time and recurring costs.
+            </p>
+          </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {costs.map((cost, index) => (
-                <div 
-                  key={index}
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all"
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
-                      <cost.icon className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-medium text-black mb-1">{cost.title}</h3>
-                      <p className="text-sm text-zinc-600">{cost.description}</p>
-                    </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {costs.map((cost, index) => (
+              <div 
+                key={index}
+                className="jj-card-inner p-6 hover:border-gold hover:shadow-lg transition-all"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
+                    <cost.icon className="w-5 h-5 text-gold" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-medium text-black mb-1">{cost.title}</h3>
+                    <p className="text-sm text-zinc-600">{cost.description}</p>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* How JBJ Supports Tenants & Landlords */}
-      <section id="jbj-support" className="py-16 md:py-24 bg-black scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                How JBJ GLOBAL REAL ESTATE Supports You
-              </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-                Licensed for BUY, SELL & RENT, we provide professional brokerage services for both tenants and landlords.
-              </p>
-            </div>
+      <section id="jbj-support" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
+              <span className="text-gold">How JBJ</span> GLOBAL REAL ESTATE Supports You
+            </h2>
+            <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              Licensed for BUY, SELL & RENT, we provide professional brokerage services for both tenants and landlords.
+            </p>
+          </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              {jbjSupport.map((support, index) => (
-                <div 
-                  key={index}
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30 hover:border-gold hover:shadow-lg transition-all"
-                >
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
-                      <support.icon className="w-6 h-6 text-gold" />
-                    </div>
-                    <h3 className="text-xl font-medium text-black">{support.title}</h3>
+          <div className="grid md:grid-cols-2 gap-6">
+            {jbjSupport.map((support, index) => (
+              <div 
+                key={index}
+                className="jj-card-inner rounded-2xl p-8 hover:border-gold hover:shadow-lg transition-all"
+              >
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+                    <support.icon className="w-6 h-6 text-gold" />
                   </div>
-                  <ul className="space-y-3">
-                    {support.points.map((point, pointIndex) => (
-                      <li key={pointIndex} className="flex items-start gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                        <span className="text-zinc-700 text-sm">{point}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  <h3 className="text-xl font-medium text-black">{support.title}</h3>
                 </div>
-              ))}
-            </div>
+                <ul className="space-y-3">
+                  {support.points.map((point, pointIndex) => (
+                    <li key={pointIndex} className="flex items-start gap-3">
+                      <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                      <span className="text-zinc-700 text-sm">{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
       </section>

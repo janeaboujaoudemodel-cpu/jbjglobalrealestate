@@ -588,68 +588,66 @@ const SellerGuide = () => {
         </section>
 
         {/* How JBJ Global Real Estate Supports Sellers */}
-        <section id="jbj-support" className="py-16 scroll-mt-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={staggerContainer}
-              >
-                <motion.div variants={fadeInUp} className="text-center mb-12">
-                  <h2 className="text-3xl font-bold text-white mb-4">
-                    How JBJ Global Real Estate Supports Sellers
-                  </h2>
-                </motion.div>
-
-                <motion.div variants={fadeInUp} className="grid md:grid-cols-2 gap-4 mb-8">
-                  {jbjSupport.map((item, index) => (
-                    <div 
-                      key={index}
-                      className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-xl p-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
-                    >
-                      <h4 className="text-black font-semibold mb-2">{item.title}</h4>
-                      <p className="text-zinc-600 text-sm">{item.description}</p>
-                    </div>
-                  ))}
-                </motion.div>
-
-                <motion.div variants={fadeInUp} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-6">
-                  <p className="text-zinc-700 text-sm leading-relaxed">
-                    <span className="text-black font-semibold">JBJ Global Real Estate</span> is licensed for buying, selling, and renting property in Dubai. Legal and banking services are coordinated through licensed third-party partners where required.
-                  </p>
-                </motion.div>
+        <section id="jbj-support" className="py-16 jj-section-champagne scroll-mt-20">
+          <div className="max-w-4xl mx-auto px-4">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+            >
+              <motion.div variants={fadeInUp} className="text-center mb-12">
+                <h2 className="text-3xl font-bold text-black mb-4">
+                  <span className="text-gold">How JBJ</span> Global Real Estate Supports Sellers
+                </h2>
               </motion.div>
-            </div>
+
+              <motion.div variants={fadeInUp} className="grid md:grid-cols-2 gap-4 mb-8">
+                {jbjSupport.map((item, index) => (
+                  <div 
+                    key={index}
+                    className="jj-card-inner p-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
+                  >
+                    <h4 className="text-black font-semibold mb-2">{item.title}</h4>
+                    <p className="text-zinc-600 text-sm">{item.description}</p>
+                  </div>
+                ))}
+              </motion.div>
+
+              <motion.div variants={fadeInUp} className="jj-card-inner rounded-xl p-6">
+                <p className="text-zinc-700 text-sm leading-relaxed">
+                  <span className="text-black font-semibold">JBJ Global Real Estate</span> is licensed for buying, selling, and renting property in Dubai. Legal and banking services are coordinated through licensed third-party partners where required.
+                </p>
+              </motion.div>
+            </motion.div>
           </div>
         </section>
 
         {/* FAQ Section */}
-        <section id="faqs" className="py-16 bg-zinc-900/30 scroll-mt-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={staggerContainer}
-              >
-                <motion.div variants={fadeInUp} className="text-center mb-12">
-                  <h2 className="text-3xl font-bold text-white mb-4">
-                    Seller Guide – FAQs
-                  </h2>
-                </motion.div>
-                
-                <motion.div variants={fadeInUp}>
-                  <Accordion type="single" collapsible className="space-y-3">
+        <section id="faqs" className="py-16 jj-section-champagne scroll-mt-20">
+          <div className="max-w-4xl mx-auto px-4">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+            >
+              <motion.div variants={fadeInUp} className="text-center mb-12">
+                <h2 className="text-3xl font-bold text-black mb-4">
+                  <span className="text-gold">Seller Guide</span> – FAQs
+                </h2>
+              </motion.div>
+              
+              <motion.div variants={fadeInUp}>
+                <div className="jj-card-inner rounded-2xl p-6 md:p-8">
+                  <Accordion type="single" collapsible className="w-full">
                     {faqs.map((faq, index) => (
                       <AccordionItem 
                         key={index} 
                         value={`faq-${index}`}
-                        className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl px-6 data-[state=open]:border-gold hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
+                        className="border-b border-zinc-200 last:border-0"
                       >
-                        <AccordionTrigger className="text-black text-left hover:text-gold hover:no-underline py-5">
+                        <AccordionTrigger className="text-black text-left font-medium hover:text-gold hover:no-underline py-5">
                           {faq.question}
                         </AccordionTrigger>
                         <AccordionContent className="text-zinc-600 pb-5">
@@ -658,82 +656,84 @@ const SellerGuide = () => {
                       </AccordionItem>
                     ))}
                   </Accordion>
-                </motion.div>
+                </div>
               </motion.div>
-            </div>
+            </motion.div>
           </div>
         </section>
 
         {/* Founder-Led Philosophy & Advisory Positioning */}
         <FounderPhilosophySection />
 
-        {/* Final CTA Section - Next Step - Champagne frame */}
-        <section className="py-20 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
-          <div className="container mx-auto px-4">
+        {/* Final CTA Section - Next Step - 3-Layer System */}
+        <section className="py-20 bg-black">
+          <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="max-w-3xl mx-auto text-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-8 md:p-12 shadow-xl"
+              className="max-w-3xl mx-auto"
             >
-              <Sparkles className="w-12 h-12 text-gold mx-auto mb-4" />
-              <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
-                Next Step
-              </h2>
-              <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
-                If you are considering selling your property, the next step is a structured pricing and market review to determine the correct exit strategy.
-              </p>
-              <div className="flex flex-wrap justify-center gap-4 mb-8">
-                <Link to="/seller-listing">
-                  <Button variant="primary" className="px-8 py-4 text-lg">
-                    <Building2 className="w-5 h-5 mr-2" />
-                    List Your Property Now
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </Button>
-                </Link>
-                <Link to="/contact">
-                  <Button variant="secondary" className="px-8 py-4 text-lg">
-                    <Phone className="w-5 h-5 mr-2" />
-                    Book Consultation
-                  </Button>
-                </Link>
-              </div>
-              
-              {/* Quick Contact Actions */}
-              <div className="flex flex-wrap justify-center gap-4 text-sm">
-                <a 
-                  href={getWhatsAppUrl("Hi, I'd like to discuss selling my property in Dubai.")}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-zinc-600 hover:text-gold transition-colors"
-                >
-                  <MessageCircle className="w-4 h-4 text-green-500" />
-                  WhatsApp: {CONTACT_INFO.phone}
-                </a>
-                <a 
-                  href={getCallUrl()}
-                  className="flex items-center gap-2 text-zinc-600 hover:text-gold transition-colors"
-                >
-                  <Phone className="w-4 h-4 text-blue-500" />
-                  Call: {CONTACT_INFO.phone}
-                </a>
-                <a 
-                  href={getEmailUrl()}
-                  className="flex items-center gap-2 text-zinc-600 hover:text-gold transition-colors"
-                >
-                  <Mail className="w-4 h-4 text-orange-500" />
-                  {CONTACT_INFO.email}
-                </a>
+              <div className="jj-card-inner rounded-2xl p-8 md:p-12 text-center">
+                <Sparkles className="w-12 h-12 text-gold mx-auto mb-4" />
+                <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
+                  <span className="text-gold">Next</span> Step
+                </h2>
+                <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
+                  If you are considering selling your property, the next step is a structured pricing and market review to determine the correct exit strategy.
+                </p>
+                <div className="flex flex-wrap justify-center gap-4 mb-8">
+                  <Link to="/seller-listing">
+                    <Button variant="primary" className="px-8 py-4 text-lg">
+                      <Building2 className="w-5 h-5 mr-2" />
+                      List Your Property Now
+                      <ArrowRight className="w-5 h-5 ml-2" />
+                    </Button>
+                  </Link>
+                  <Link to="/contact">
+                    <Button variant="secondary" className="px-8 py-4 text-lg">
+                      <Phone className="w-5 h-5 mr-2" />
+                      Book Consultation
+                    </Button>
+                  </Link>
+                </div>
+                
+                {/* Quick Contact Actions */}
+                <div className="flex flex-wrap justify-center gap-4 text-sm">
+                  <a 
+                    href={getWhatsAppUrl("Hi, I'd like to discuss selling my property in Dubai.")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-zinc-600 hover:text-gold transition-colors"
+                  >
+                    <MessageCircle className="w-4 h-4 text-green-500" />
+                    WhatsApp: {CONTACT_INFO.phone}
+                  </a>
+                  <a 
+                    href={getCallUrl()}
+                    className="flex items-center gap-2 text-zinc-600 hover:text-gold transition-colors"
+                  >
+                    <Phone className="w-4 h-4 text-blue-500" />
+                    Call: {CONTACT_INFO.phone}
+                  </a>
+                  <a 
+                    href={getEmailUrl()}
+                    className="flex items-center gap-2 text-zinc-600 hover:text-gold transition-colors"
+                  >
+                    <Mail className="w-4 h-4 text-orange-500" />
+                    {CONTACT_INFO.email}
+                  </a>
+                </div>
               </div>
             </motion.div>
           </div>
         </section>
 
-        {/* Compliance Disclaimer - Champagne frame with premium card */}
-        <section className="py-8 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
-          <div className="container mx-auto px-4">
+        {/* Compliance Disclaimer - 3-Layer System */}
+        <section className="py-8 bg-black">
+          <div className="mx-4 md:mx-8 lg:mx-16 py-6 px-4 md:px-8 jj-layer-active rounded-2xl">
             <div className="max-w-4xl mx-auto">
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-lg p-6 shadow-lg">
+              <div className="jj-card-inner rounded-lg p-6">
                 <h4 className="text-black font-semibold mb-3 flex items-center gap-2">
                   <Shield className="w-4 h-4 text-gold" />
                   Important Disclaimer
