@@ -18,7 +18,7 @@ import hudaMarzooqLawyer from '@/assets/team/huda-marzooq-lawyer-office.jpg';
 // NEW Legal Team additions (to reach 4)
 import williamThorntonLegal from '@/assets/team/william-thornton-legal.png';
 import nadiaHassanLegal from '@/assets/team/nadia-hassan-legal.png';
-import michaelBrennanLegal from '@/assets/team/michael-brennan-legal.png';
+import michaelBrennanLegal from '@/assets/team/michael-brennan-legal-v2.png';
 
 // Import team portraits - Property Operations
 import sarahMitchellListingAdmin from '@/assets/team/sarah-mitchell-listing-admin.png';
@@ -50,34 +50,34 @@ import raniaHaddadSales from '@/assets/team/rania-haddad-sales.jpg';
 import karimBerradaSales from '@/assets/team/karim-berrada-sales.jpg';
 import amiraBensaidSales from '@/assets/team/amira-bensaid-sales.jpg';
 import nabilTrabelsiSales from '@/assets/team/nabil-trabelsi-sales.jpg';
-import laylaHaririSales from '@/assets/team/layla-hariri-sales.jpg';
+import laylaHaririSales from '@/assets/team/layla-hariri-sales-v2.jpg';
 
 // Import team portraits - Software Engineering Team
-import jamesWoodwardTechLead from '@/assets/team/james-woodward-tech-lead-v2.png'; // LOCKED_EXISTING - refreshed photo
-import michaelWeberWebDev from '@/assets/team/michael-weber-web-developer.png'; // LOCKED_EXISTING
-import amelieMartinUxDesigner from '@/assets/team/amelie-martin-ux-designer-v2.png'; // LOCKED_EXISTING - refreshed photo
+import jamesWoodwardTechLead from '@/assets/team/james-woodward-tech-lead-v3.png'; // LOCKED_EXISTING - refreshed photo
+import michaelWeberWebDev from '@/assets/team/michael-weber-web-developer-v2.png'; // LOCKED_EXISTING - refreshed photo
+import amelieMartinUxDesigner from '@/assets/team/amelie-martin-ux-designer-v3.png'; // LOCKED_EXISTING - refreshed photo
 import emmaCollinsScriptWriter from '@/assets/team/emma-collins-script-writer.png';
 import andrewTaylorIdeaCreator from '@/assets/team/andrew-taylor-idea-v2.png'; // LOCKED_EXISTING - refreshed
 import erikLindqvistBackend from '@/assets/team/erik-lindqvist-backend.png';
 import jiYeonKimQa from '@/assets/team/ji-yeon-kim-qa.png';
 // NEW Software Engineering Team additions (to reach 8)
-import kevinLiuSoftware from '@/assets/team/kevin-liu-software.png';
+import kevinLiuSoftware from '@/assets/team/kevin-liu-software-v2.png'; // LOCKED_EXISTING - refreshed photo
 import ingridLarsenSoftware from '@/assets/team/ingrid-larsen-software.png';
 
 // Import team portraits - Customer Happiness Team
 // LOCKED_GLOBAL = false (temporary) - synced across /team, /customer-happiness, /crm
 // Tools: ChatBGCRM Pro, Zendesk, Intercom, WhatsApp Business, HubSpot, Typeform
-import lisaHendersonCustomerHappiness from '@/assets/team/lisa-henderson-customer-v2.png'; // LOCKED_EXISTING - refreshed photo
-import jackThompsonCustomerSupport from '@/assets/team/jack-thompson-customer-v2.png'; // LOCKED_EXISTING - refreshed photo
-import nataliaPetrovaHelpdesk from '@/assets/team/natalia-petrova-helpdesk-v2.png'; // LOCKED_EXISTING - refreshed photo
+import lisaHendersonCustomerHappiness from '@/assets/team/lisa-henderson-customer-v3.png'; // LOCKED_EXISTING - refreshed photo
+import jackThompsonCustomerSupport from '@/assets/team/jack-thompson-customer-v3.png'; // LOCKED_EXISTING - refreshed photo
+import nataliaPetrovaHelpdesk from '@/assets/team/natalia-petrova-helpdesk-v3.png'; // LOCKED_EXISTING - refreshed photo
 import danielMurphyCustomer from '@/assets/team/daniel-murphy-customer.png';
 // Customer Happiness team (4 total)
-import mariaSantosCustomer from '@/assets/team/maria-santos-customer.png'; // LOCKED_EXISTING
+import mariaSantosCustomer from '@/assets/team/maria-santos-customer-v2.png'; // LOCKED_EXISTING - refreshed photo
 
 import michaelAndersonSalesDirector from '@/assets/team/michael-anderson-sales-director.png';
 import emmaHartleySalesManager from '@/assets/team/emma-hartley-sales-manager.png';
 import victoriaSterlingMarketing from '@/assets/team/victoria-sterling-marketing.png';
-import georgeHamiltonClientRelations from '@/assets/team/george-hamilton-client-relations-v2.png'; // LOCKED_EXISTING - refreshed photo
+import georgeHamiltonClientRelations from '@/assets/team/george-hamilton-client-relations-v3.png'; // LOCKED_EXISTING - refreshed photo
 // NEW Client Relations additions (to reach 4)
 import khalilHaddadClient from '@/assets/team/khalil-haddad-client.png';
 import oliviaHendersonClient from '@/assets/team/olivia-henderson-client.png';
@@ -122,72 +122,72 @@ import sarahMcintyreContent from '@/assets/team/sarah-mcintyre-content.png';
 
 // Import team portraits - HR Team
 import jessicaHrManager from '@/assets/team/jessica-hr-manager.png';
-import elizabethBennettHr from '@/assets/team/elizabeth-bennett-hr-v2.png'; // LOCKED_EXISTING - refreshed photo
-import jamesHarrisonRecruitment from '@/assets/team/james-harrison-hr-v2.png'; // LOCKED_EXISTING - refreshed photo
+import elizabethBennettHr from '@/assets/team/elizabeth-bennett-hr-v3.png'; // LOCKED_EXISTING - refreshed photo
+import jamesHarrisonRecruitment from '@/assets/team/james-harrison-hr-v3.png'; // LOCKED_EXISTING - refreshed photo
 import alessandraMorettiHrAssistant from '@/assets/team/alessandra-moretti-hr-assistant.png';
 
 // Import team portraits - Creative Team
 import sophiaAndersonMedia from '@/assets/team/sophia-anderson-media.png'; // LOCKED_EXISTING
-import marcusBennettDesigner from '@/assets/team/marcus-bennett-creative-v2.png'; // LOCKED_EXISTING - refreshed photo
+import marcusBennettDesigner from '@/assets/team/marcus-bennett-creative-v3.png'; // LOCKED_EXISTING - refreshed photo
 import oliverWrightVideographer from '@/assets/team/oliver-wright-video-v2.png'; // LOCKED_EXISTING - refreshed photo
 import charlotteEvansPhotographer from '@/assets/team/charlotte-evans-photographer.png'; // LOCKED_EXISTING
 import henryCrawfordEditor from '@/assets/team/henry-crawford-editor.png'; // LOCKED_EXISTING
-import evaVanDerBergMotion from '@/assets/team/eva-van-der-berg-motion.png'; // LOCKED_EXISTING
+import evaVanDerBergMotion from '@/assets/team/eva-van-der-berg-motion-v2.png'; // LOCKED_EXISTING - refreshed photo
 import jamesVenterSound from '@/assets/team/james-venter-sound.png'; // LOCKED_EXISTING
 
 // Import team portraits - Finance Team
 import catherineBrooksFinance from '@/assets/team/catherine-brooks-finance.png'; // LOCKED_EXISTING
-import edwardColeAccountant from '@/assets/team/edward-cole-accountant-v2.png'; // LOCKED_EXISTING - refreshed photo
-import isabellaRomanoAnalyst from '@/assets/team/isabella-romano-analyst-v2.png'; // LOCKED_EXISTING - refreshed photo
+import edwardColeAccountant from '@/assets/team/edward-cole-accountant-v3.png'; // LOCKED_EXISTING - refreshed photo
+import isabellaRomanoAnalyst from '@/assets/team/isabella-romano-analyst-v3.png'; // LOCKED_EXISTING - refreshed photo
 import stefanWeberFinance from '@/assets/team/stefan-weber-finance-realistic.png'; // LOCKED_EXISTING
 
 // Import team portraits - Operations & Technology
 import thomasMitchellCrm from '@/assets/team/thomas-mitchell-crm.png'; // LOCKED_EXISTING
 import robertMaxwellDigital from '@/assets/team/robert-maxwell-digital.png';
-import alexanderShawOperations from '@/assets/team/alexander-shaw-operations-v2.png'; // LOCKED_EXISTING - refreshed photo
+import alexanderShawOperations from '@/assets/team/alexander-shaw-operations-v3.png'; // LOCKED_EXISTING - refreshed photo
 import meeraPatelOperations from '@/assets/team/meera-patel-operations.png';
 import keremYilmazOperations from '@/assets/team/kerem-yilmaz-operations.png';
 import lucasferreiraOperations from '@/assets/team/lucas-ferreira-operations.png';
 import jessicaWalkerOperations from '@/assets/team/jessica-walker-operations.png';
 // Additional operations team members for symmetric layout (8 total)
 import benjaminClarkeOperations from '@/assets/team/benjamin-clarke-operations.png'; // LOCKED_EXISTING
-import ninaKowalskiOperations from '@/assets/team/nina-kowalski-operations-v2.png'; // LOCKED_EXISTING - refreshed photo
+import ninaKowalskiOperations from '@/assets/team/nina-kowalski-operations-v3.png'; // LOCKED_EXISTING - refreshed photo
 import marcusThompsonOperations from '@/assets/team/marcus-thompson-operations.png'; // LOCKED_EXISTING
 
 // Import team portraits - IT Team
 // LOCKED_GLOBAL = true - synced across /team, /crm, /intranet
-import danielParkerItManager from '@/assets/team/daniel-parker-it-director-v2.png'; // LOCKED_EXISTING - refreshed photo
+import danielParkerItManager from '@/assets/team/daniel-parker-it-director-v3.png'; // LOCKED_EXISTING - refreshed photo
 import matthewCollinsSysadmin from '@/assets/team/matthew-collins-sysadmin-realistic.png'; // LOCKED_EXISTING
 import emmaOCallaghanNetwork from '@/assets/team/emma-ocallaghan-network-realistic.png'; // LOCKED_EXISTING
-import rajPatelItAssistant from '@/assets/team/raj-patel-it-support-v2.png'; // LOCKED_EXISTING - refreshed photo
+import rajPatelItAssistant from '@/assets/team/raj-patel-it-support-v3.png'; // LOCKED_EXISTING - refreshed photo
 import angusMacKenzieIt from '@/assets/team/angus-mackenzie-it-realistic.png'; // LOCKED_EXISTING
 import priyaMehtaIt from '@/assets/team/priya-mehta-it.png'; // LOCKED_EXISTING
 import oluwaseunAdeyemiIt from '@/assets/team/oluwaseun-adeyemi-it.png'; // LOCKED_EXISTING
-import tomaszKowalczykItSupport from '@/assets/team/tomasz-kowalczyk-it-tech-v2.png'; // LOCKED_EXISTING - refreshed photo
+import tomaszKowalczykItSupport from '@/assets/team/tomasz-kowalczyk-it-tech-v3.png'; // LOCKED_EXISTING - refreshed photo
 
 // Import team portraits - After Sales Team
 import charlesAshfordAfterSalesDir from '@/assets/team/charles-ashford-after-sales.png'; // LOCKED_EXISTING - refreshed photo
-import catherineWellsAfterSalesMgr from '@/assets/team/catherine-wells-aftersales-manager.png';
+import catherineWellsAfterSalesMgr from '@/assets/team/catherine-wells-aftersales-manager-v2.png'; // LOCKED_EXISTING - refreshed photo
 import marcusVanDerBergAfterSalesCoord from '@/assets/team/marcus-van-der-berg-aftersales-coord.png';
 import mariaSantosAfterSalesAssistant from '@/assets/team/maria-santos-aftersales-assistant.png';
-import graceReyesAfterSales from '@/assets/team/grace-reyes-customer-v2.png';
+import graceReyesAfterSales from '@/assets/team/grace-reyes-customer-v3.png'; // LOCKED_EXISTING - refreshed photo
 
 // Import team portraits - Admin & Front Desk
 // LOCKED_GLOBAL = false (temporary) - synced across /team, /admin, /workspace
 // Tools: Microsoft Office 365, Google Workspace, Notion, Slack, Asana, DocuSign, SharePoint, Envoy, Kisi
-import emilyWatsonAdminManager from '@/assets/team/emily-watson-admin-manager-v2.png'; // LOCKED_EXISTING - refreshed photo
+import emilyWatsonAdminManager from '@/assets/team/emily-watson-admin-manager-v3.png'; // LOCKED_EXISTING - refreshed photo
 import mariaSantosAdminAssistant from '@/assets/team/maria-santos-admin-v2.png'; // LOCKED_EXISTING - refreshed photo
 import sophieRichardsReceptionist from '@/assets/team/sophie-richards-receptionist.png'; // LOCKED_EXISTING
-import gabrielaCostaReceptionist from '@/assets/team/gabriela-costa-receptionist-v2.png'; // LOCKED_EXISTING - refreshed photo
+import gabrielaCostaReceptionist from '@/assets/team/gabriela-costa-receptionist-v3.png'; // LOCKED_EXISTING - refreshed photo
 import claireDuboisReceptionist from '@/assets/team/claire-dubois-receptionist-v2.png'; // LOCKED_EXISTING - refreshed photo
 import fionaCampbellAdmin from '@/assets/team/fiona-campbell-admin.png';
 // Admin Team additions (8 total)
-import aoifeBrennanAdmin from '@/assets/team/aoife-brennan-admin-v2.png'; // LOCKED_EXISTING - refreshed photo
+import aoifeBrennanAdmin from '@/assets/team/aoife-brennan-admin-v3.png'; // LOCKED_EXISTING - refreshed photo
 import youssefBenaliAdmin from '@/assets/team/youssef-benali-admin-realistic.png'; // LOCKED_EXISTING
-import leilaRahmanBrokerAdmin from '@/assets/team/leila-rahman-broker-admin.png'; // NEW: Broker Admin persona
+import sarahThompsonBrokerAdmin from '@/assets/team/sarah-thompson-broker-admin.png'; // NEW: Broker Admin persona (replaces Leila Rahman)
 
 // NEW Project Management addition (to reach 4)
-import carmenGarciaProject from '@/assets/team/carmen-garcia-project-v2.png'; // LOCKED_EXISTING - refreshed photo
+import carmenGarciaProject from '@/assets/team/carmen-garcia-project-v3.png'; // LOCKED_EXISTING - refreshed photo
 
 // NEW Diverse Team Member Additions (25+ new nationalities)
 import thiNguyenSales from '@/assets/team/thi-nguyen-sales.png';
@@ -211,7 +211,7 @@ import janaNovakovaLegal from '@/assets/team/jana-novakova-legal.png';
 import rahulKrishnanIt from '@/assets/team/rahul-krishnan-it.png';
 import camilaReyesClient from '@/assets/team/camila-reyes-client.png';
 import aishaNurbekovaSales from '@/assets/team/aisha-nurbekova-sales.png';
-import kwameMensahSales from '@/assets/team/kwame-mensah-sales.png';
+import kwameMensahSales from '@/assets/team/kwame-mensah-sales-v2.png'; // LOCKED_EXISTING - refreshed photo
 import armenPetrosyanFinance from '@/assets/team/armen-petrosyan-finance.png';
 import anaHorvatAdmin from '@/assets/team/ana-horvat-admin.png';
 import alejandroHerreraSales from '@/assets/team/alejandro-herrera-sales-v2.png';
@@ -263,8 +263,8 @@ import jamesThompsonPortfolio from '@/assets/team/james-thompson-portfolio.png';
 import emilyRichardsonVip from '@/assets/team/emily-richardson-vip.png';
 // NEW VIP additions to reach 8 total
 import meiLingChenVip from '@/assets/team/mei-ling-chen-vip-senior.png';
-import omarAlFahadVip from '@/assets/team/omar-al-fahad-vip-v2.png'; // LOCKED_EXISTING - refreshed photo
-import sophieBeaumontVip from '@/assets/team/sophie-beaumont-vip-v2.png'; // LOCKED_EXISTING - refreshed photo
+import oliverAshworthVip from '@/assets/team/oliver-ashworth-vip-advisor.png'; // NEW: replaces Omar Al Fahad
+import sophieBeaumontVip from '@/assets/team/sophie-beaumont-vip-v3.png'; // LOCKED_EXISTING - refreshed photo
 
 // Import Sales Hierarchy Classification
 // AUTO_SYNC_HIERARCHY = TRUE, LOCKED_GLOBAL = TRUE
@@ -1583,7 +1583,7 @@ export const vipClientRelationsTeam: TeamMember[] = sortByHierarchy([
     yearsExperience: 11,
     hierarchyLevel: 4,
     reportsTo: 'victoria-ashworth',
-    directReports: ['omar-al-fahad'],
+    directReports: ['oliver-ashworth'],
     status: 'online',
     canConductInterviews: true,
   },
@@ -1637,16 +1637,16 @@ export const vipClientRelationsTeam: TeamMember[] = sortByHierarchy([
     status: 'online',
   },
   {
-    id: 'omar-al-fahad',
-    name: 'Omar Al Fahad',
-    role: 'VIP Client Advisor (GCC)',
+    id: 'oliver-ashworth',
+    name: 'Oliver Ashworth',
+    role: 'VIP Client Advisor (Europe)',
     department: 'VIP Client Relations',
-    avatar: omarAlFahadVip, // LOCKED_EXISTING
+    avatar: oliverAshworthVip, // NEW: replaces Omar Al Fahad
     isAI: true,
-    bio: 'Expert advisor specializing in Emirati and Gulf-region investor relations, managing luxury client portfolios and elite real estate partnerships.',
-    specializations: ['Emirati Clients', 'Gulf Markets', 'Premium Properties', 'VIP Coordination'],
-    languages: ['English', 'Arabic'],
-    nationality: 'Emirati',
+    bio: 'Expert advisor specializing in European high-net-worth investor relations, managing luxury client portfolios and elite real estate partnerships across the UK and Europe.',
+    specializations: ['European Clients', 'Luxury Markets', 'Premium Properties', 'VIP Coordination'],
+    languages: ['English', 'French'],
+    nationality: 'British',
     yearsExperience: 8,
     hierarchyLevel: 5,
     reportsTo: 'abdullah-al-rashid',
@@ -2335,7 +2335,7 @@ export const adminTeam: TeamMember[] = sortByHierarchy([
     yearsExperience: 11,
     hierarchyLevel: 4,
     reportsTo: 'richard-pemberton',
-    directReports: ['sarah-mitchell', 'aoife-brennan', 'leila-rahman', 'youssef-benali', 'maria-santos-admin', 'sophie-richards', 'gabriela-costa', 'claire-dubois'],
+    directReports: ['sarah-mitchell', 'aoife-brennan', 'sarah-thompson-admin', 'youssef-benali', 'maria-santos-admin', 'sophie-richards', 'gabriela-costa', 'claire-dubois'],
     status: 'online',
     canConductInterviews: true,
     // Photo Status: LOCKED_EXISTING
@@ -2376,16 +2376,16 @@ export const adminTeam: TeamMember[] = sortByHierarchy([
     // Photo Status: LOCKED_EXISTING
   },
   {
-    id: 'leila-rahman',
-    name: 'Leila Rahman',
+    id: 'sarah-thompson-admin',
+    name: 'Sarah Thompson',
     role: 'Broker Administrator (Broker\'s Admin)',
     department: 'Administration',
-    avatar: leilaRahmanBrokerAdmin,
+    avatar: sarahThompsonBrokerAdmin,
     isAI: true,
     bio: 'Dedicated broker network administrator managing onboarding, RERA compliance, documentation, and operational support. Ensures seamless broker lifecycle from recruitment to activation with proactive follow-ups and empowering guidance.',
     specializations: ['Broker Onboarding', 'RERA License Coordination', 'Compliance Documentation', 'CRM Administration', 'Broker Training', 'Performance Tracking'],
-    languages: ['English', 'Arabic'],
-    nationality: 'Emirati',
+    languages: ['English'],
+    nationality: 'British',
     yearsExperience: 6,
     hierarchyLevel: 5,
     reportsTo: 'emily-watson',
@@ -2446,15 +2446,15 @@ export const adminTeam: TeamMember[] = sortByHierarchy([
   },
   {
     id: 'gabriela-costa',
-    name: 'Gabriela Costa',
+    name: 'Gabriella Costa',
     role: 'Front Desk Receptionist',
     department: 'Administration',
     avatar: gabrielaCostaReceptionist, // LOCKED_EXISTING - refreshed photo
     isAI: true,
     bio: 'Friendly and multilingual receptionist ensuring smooth visitor flow and communication support. Skilled in handling guest relations and bilingual correspondence.',
     specializations: ['Guest Relations', 'Bilingual Correspondence', 'Visitor Flow'],
-    languages: ['English', 'Portuguese', 'Spanish'],
-    nationality: 'Brazilian',
+    languages: ['English', 'Italian'],
+    nationality: 'Italian',
     yearsExperience: 4,
     hierarchyLevel: 6,
     reportsTo: 'emily-watson',
