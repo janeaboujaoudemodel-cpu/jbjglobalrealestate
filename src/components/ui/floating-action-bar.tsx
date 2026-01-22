@@ -10,13 +10,13 @@ import {
   MessageSquare,
   Search,
   Sparkles,
-  X,
-  Command,
   Mic,
   FileText,
-  TrendingUp
+  TrendingUp,
+  Brain
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 /**
  * Floating Action Bar - Premium Quick Actions
@@ -28,7 +28,6 @@ interface ActionItem {
   label: string;
   icon: React.ReactNode;
   action: () => void;
-  color?: string;
 }
 
 interface FloatingActionBarProps {
@@ -39,6 +38,65 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
   const navigate = useNavigate();
   const location = useLocation();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+
+  // Voice command handler
+  const handleVoiceCommand = () => {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      toast.error('Voice recognition not supported in this browser');
+      return;
+    }
+
+    const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+
+    recognition.onstart = () => {
+      setIsListening(true);
+      toast.info('Listening... Speak now');
+    };
+
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript.toLowerCase();
+      setIsListening(false);
+      
+      // Process voice commands
+      if (transcript.includes('new lead') || transcript.includes('add lead')) {
+        navigate('/crm?action=new-lead');
+        toast.success('Opening new lead form');
+      } else if (transcript.includes('calendar') || transcript.includes('schedule')) {
+        navigate('/crm/calendar');
+        toast.success('Opening calendar');
+      } else if (transcript.includes('task') || transcript.includes('tasks')) {
+        navigate('/crm/tasks');
+        toast.success('Opening tasks');
+      } else if (transcript.includes('note') || transcript.includes('notes')) {
+        navigate('/crm/notes');
+        toast.success('Opening notes');
+      } else if (transcript.includes('analytics') || transcript.includes('dashboard')) {
+        navigate('/jbj-analytics');
+        toast.success('Opening analytics');
+      } else if (transcript.includes('search')) {
+        window.dispatchEvent(new Event('jj:open-command-palette'));
+        toast.success('Opening search');
+      } else {
+        toast.info(`Heard: "${transcript}". Try "new lead", "calendar", "tasks", or "notes"`);
+      }
+    };
+
+    recognition.onerror = () => {
+      setIsListening(false);
+      toast.error('Voice recognition failed');
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
+  };
 
   // Context-aware actions based on current page
   const getContextualActions = (): ActionItem[] => {
@@ -48,9 +106,8 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
       {
         id: 'search',
         label: 'Search',
-        icon: <Command className="w-4 h-4" />,
+        icon: <Search className="w-4 h-4" />,
         action: () => window.dispatchEvent(new Event('jj:open-command-palette')),
-        color: 'bg-gradient-to-br from-gold to-gold-dark'
       },
     ];
 
@@ -63,21 +120,22 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
           label: 'New Lead',
           icon: <UserPlus className="w-4 h-4" />,
           action: () => navigate('/crm?action=new-lead'),
-          color: 'bg-gradient-to-br from-emerald-500 to-emerald-600'
         },
         {
           id: 'call',
           label: 'Call',
           icon: <Phone className="w-4 h-4" />,
-          action: () => navigate('/crm/calendar'),
-          color: 'bg-gradient-to-br from-blue-500 to-blue-600'
+          action: () => {
+            // Open dialer or call functionality
+            toast.info('Select a lead to call from the CRM');
+            navigate('/crm');
+          },
         },
         {
           id: 'task',
           label: 'Task',
           icon: <ClipboardList className="w-4 h-4" />,
           action: () => navigate('/crm/tasks'),
-          color: 'bg-gradient-to-br from-purple-500 to-purple-600'
         },
       ];
     }
@@ -90,15 +148,13 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
           id: 'review',
           label: 'Review',
           icon: <FileText className="w-4 h-4" />,
-          action: () => navigate('/hr-dashboard'),
-          color: 'bg-gradient-to-br from-purple-500 to-purple-600'
+          action: () => navigate('/employee-management'),
         },
         {
           id: 'calendar',
           label: 'Schedule',
           icon: <Calendar className="w-4 h-4" />,
           action: () => navigate('/crm/calendar'),
-          color: 'bg-gradient-to-br from-blue-500 to-blue-600'
         },
       ];
     }
@@ -112,14 +168,12 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
           label: 'Analytics',
           icon: <TrendingUp className="w-4 h-4" />,
           action: () => navigate('/jbj-analytics'),
-          color: 'bg-gradient-to-br from-blue-500 to-blue-600'
         },
         {
           id: 'ai',
           label: 'AI Tools',
           icon: <Sparkles className="w-4 h-4" />,
           action: () => navigate('/ai-hub'),
-          color: 'bg-gradient-to-br from-purple-500 to-purple-600'
         },
       ];
     }
@@ -132,21 +186,18 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
         label: 'New Lead',
         icon: <UserPlus className="w-4 h-4" />,
         action: () => navigate('/crm?action=new-lead'),
-        color: 'bg-gradient-to-br from-emerald-500 to-emerald-600'
       },
       {
         id: 'message',
         label: 'Message',
         icon: <MessageSquare className="w-4 h-4" />,
         action: () => navigate('/jbj-broker-messages'),
-        color: 'bg-gradient-to-br from-blue-500 to-blue-600'
       },
       {
         id: 'calendar',
         label: 'Calendar',
         icon: <Calendar className="w-4 h-4" />,
         action: () => navigate('/crm/calendar'),
-        color: 'bg-gradient-to-br from-purple-500 to-purple-600'
       },
     ];
   };
@@ -155,8 +206,6 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
 
   return (
     <>
-      {/* Command Palette is managed globally */}
-      
       {/* Floating Action Bar */}
       <div className={cn(
         'fixed bottom-6 left-1/2 -translate-x-1/2 z-50',
@@ -168,8 +217,8 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           className="relative"
         >
-          {/* Main Bar */}
-          <div className="flex items-center gap-1 p-1.5 bg-white/95 backdrop-blur-xl border border-gold/20 rounded-2xl shadow-xl shadow-black/10">
+          {/* Main Bar - Champagne styling */}
+          <div className="flex items-center gap-1 p-1.5 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] backdrop-blur-xl border-2 border-gold/40 rounded-2xl shadow-[0_10px_40px_rgba(200,167,102,0.25)]">
             {/* Quick Action Buttons */}
             <AnimatePresence mode="popLayout">
               {actions.map((action, index) => (
@@ -181,24 +230,29 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
                   transition={{ delay: index * 0.05 }}
                   onClick={action.action}
                   className={cn(
-                    'flex items-center gap-2 px-4 py-2.5 rounded-xl text-white font-medium text-sm transition-all duration-200',
-                    action.color || 'bg-gradient-to-br from-gold to-gold-dark',
-                    'hover:shadow-lg hover:scale-105 active:scale-95'
+                    'flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-300',
+                    'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/30',
+                    'hover:shadow-[0_8px_25px_rgba(200,167,102,0.35)] hover:-translate-y-0.5 active:translate-y-0'
                   )}
                 >
-                  {action.icon}
+                  <span className="text-gold">{action.icon}</span>
                   <span className="hidden sm:inline">{action.label}</span>
                 </motion.button>
               ))}
             </AnimatePresence>
 
             {/* Divider */}
-            <div className="w-px h-8 bg-gold/20 mx-1" />
+            <div className="w-px h-8 bg-gold/30 mx-1" />
 
             {/* Voice Command */}
             <button
-              onClick={() => {/* TODO: Implement voice command */}}
-              className="p-2.5 rounded-xl text-gold hover:bg-gold/10 transition-colors"
+              onClick={handleVoiceCommand}
+              className={cn(
+                'p-2.5 rounded-xl transition-all duration-300',
+                isListening 
+                  ? 'bg-gold text-black animate-pulse' 
+                  : 'text-gold hover:bg-gold/10'
+              )}
               title="Voice Command"
             >
               <Mic className="w-5 h-5" />
@@ -210,7 +264,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
               className={cn(
                 'p-2.5 rounded-xl transition-all duration-200',
                 isExpanded 
-                  ? 'bg-gold text-white rotate-45' 
+                  ? 'bg-gold text-black rotate-45' 
                   : 'text-gold hover:bg-gold/10'
               )}
             >
@@ -225,23 +279,23 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
                 initial={{ opacity: 0, y: 10, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                className="absolute bottom-full mb-3 right-0 min-w-[200px] bg-white/95 backdrop-blur-xl border border-gold/20 rounded-xl shadow-xl shadow-black/10 p-2"
+                className="absolute bottom-full mb-3 right-0 min-w-[200px] bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl shadow-[0_10px_40px_rgba(200,167,102,0.25)] p-2"
               >
                 <div className="text-xs uppercase tracking-wider text-gold font-semibold px-3 py-2">
                   AI Quick Actions
                 </div>
                 {[
-                  { icon: <Sparkles />, label: 'AI Summary', action: () => navigate('/ai-hub') },
-                  { icon: <MessageSquare />, label: 'Draft Message', action: () => navigate('/crm/notes') },
-                  { icon: <TrendingUp />, label: 'Predict Outcome', action: () => navigate('/jbj-analytics') },
-                  { icon: <FileText />, label: 'Generate Report', action: () => navigate('/jbj-broker-reports') },
+                  { icon: <Brain className="w-4 h-4" />, label: 'AI Summary', action: () => navigate('/crm/assistant') },
+                  { icon: <MessageSquare className="w-4 h-4" />, label: 'Draft Message', action: () => navigate('/crm/notes') },
+                  { icon: <TrendingUp className="w-4 h-4" />, label: 'Deal Insights', action: () => navigate('/crm') },
+                  { icon: <FileText className="w-4 h-4" />, label: 'Generate Report', action: () => navigate('/jbj-broker-reports') },
                 ].map((item, i) => (
                   <button
                     key={i}
                     onClick={() => { item.action(); setIsExpanded(false); }}
-                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-zinc-700 hover:bg-gold/10 hover:text-gold transition-colors"
+                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-black hover:bg-gold/10 hover:text-gold transition-colors"
                   >
-                    <span className="w-4 h-4">{item.icon}</span>
+                    <span className="text-gold">{item.icon}</span>
                     <span className="text-sm font-medium">{item.label}</span>
                   </button>
                 ))}
