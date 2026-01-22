@@ -429,11 +429,11 @@ const Index = () => {
           </div>
 
 
-          {/* Resources Grid - Active color fill with gold glow */}
+          {/* Resources Grid - Active color fill with 3D hover effect */}
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {/* JBJ Broker Hub Card - Active color styling with gold glow */}
+            {/* JBJ Broker Hub Card - 3D styling matching other cards */}
             <Link to="/broker-toolkit" className="group">
-              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_60px_rgba(200,167,102,0.6)] transition-all duration-300 shadow-[0_0_40px_rgba(200,167,102,0.4)]">
+              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 bg-transparent border-2 border-gold group-hover:border-black rounded-xl flex items-center justify-center shadow-lg shadow-gold/40 transition-all duration-300">
                     <Briefcase className="w-6 h-6 text-black group-hover:text-gold transition-colors" />
@@ -458,9 +458,9 @@ const Index = () => {
               </div>
             </Link>
 
-            {/* Investor Hub Card - Active color styling with gold glow */}
+            {/* Investor Hub Card - 3D styling matching other cards */}
             <Link to="/ai-hub" className="group">
-              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_60px_rgba(200,167,102,0.6)] transition-all duration-300 shadow-[0_0_40px_rgba(200,167,102,0.4)]">
+              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 bg-transparent border-2 border-gold group-hover:border-black rounded-xl flex items-center justify-center shadow-lg shadow-gold/40 transition-all duration-300">
                     <Layers className="w-6 h-6 text-black group-hover:text-gold transition-colors" />
@@ -626,7 +626,7 @@ const Index = () => {
         {/* Active Champagne Section Layer */}
         <div className="mx-4 md:mx-8 lg:mx-16 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg p-6 md:p-10">
           {/* Pearl Card Inside */}
-          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-3xl p-8 md:p-12 shadow-xl">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-3xl p-8 md:p-12 shadow-xl">
             <motion.div
               className="text-center mb-10"
               initial={{ opacity: 0, y: 20 }}
@@ -659,7 +659,7 @@ const Index = () => {
         {/* Active Champagne Section Layer */}
         <div className="mx-4 md:mx-8 lg:mx-16 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg p-6 md:p-10">
           {/* Pearl Card Inside */}
-          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-3xl p-8 md:p-12 shadow-xl relative overflow-hidden">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-3xl p-8 md:p-12 shadow-xl relative overflow-hidden">
             {/* Decorative glow elements */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
