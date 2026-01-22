@@ -1,265 +1,300 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { 
+  PenTool, Building2, Compass, Layers, Award,
+  ChevronLeft, ArrowRight, CheckCircle, MapPin
+} from "lucide-react";
 import Footer from "@/components/Footer";
+import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
-import { ArrowUpRight, Ruler, Building2, Home, TreePine, Compass, Award } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { CONTACT_INFO } from "@/constants/stats";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] } }
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
 };
 
 const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.1 }
+    transition: { staggerChildren: 0.1 }
   }
+};
+
+// Split title helper
+const SplitTitle = ({ text }: { text: string }) => {
+  const words = text.split(' ');
+  const firstWord = words[0];
+  const restWords = words.slice(1).join(' ');
+  
+  return (
+    <span className="jj-title-split">
+      <span>{firstWord}</span>{restWords && <span> {restWords}</span>}
+    </span>
+  );
 };
 
 const services = [
   {
-    icon: Home,
-    title: "Luxury Villa Design",
-    description: "Bespoke residential architecture that combines elegance with functionality, creating homes that are both stunning and livable.",
+    icon: Compass,
+    title: "Concept Design",
+    description: "Transform your vision into architectural concepts that inspire and innovate.",
+    features: ["Site Analysis", "Feasibility Studies", "Initial Sketches", "3D Visualization"]
+  },
+  {
+    icon: Layers,
+    title: "Technical Design",
+    description: "Detailed technical drawings and specifications for construction.",
+    features: ["Construction Drawings", "Structural Planning", "MEP Coordination", "Material Selection"]
   },
   {
     icon: Building2,
-    title: "Commercial Architecture",
-    description: "Innovative commercial spaces designed to inspire, from boutique offices to landmark towers.",
+    title: "Project Management",
+    description: "End-to-end project oversight ensuring quality and timely delivery.",
+    features: ["Timeline Management", "Quality Control", "Contractor Coordination", "Budget Oversight"]
   },
   {
-    icon: TreePine,
-    title: "Sustainable Design",
-    description: "Eco-conscious architecture that minimizes environmental impact while maximizing beauty and efficiency.",
-  },
-  {
-    icon: Compass,
-    title: "Master Planning",
-    description: "Comprehensive urban and community planning that creates cohesive, thriving environments.",
-  },
+    icon: Award,
+    title: "Sustainability",
+    description: "Eco-friendly design solutions for a sustainable future.",
+    features: ["Green Building", "Energy Efficiency", "LEED Certification", "Sustainable Materials"]
+  }
 ];
 
-const projects = [
+const portfolio = [
   {
-    title: "Palm Jumeirah Villa",
-    location: "Dubai, UAE",
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
-    size: "15,000 sq ft",
+    title: "Marina Residence",
+    location: "Dubai Marina",
+    size: "15,000 sqft",
+    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80"
   },
   {
-    title: "Business Bay Tower",
-    location: "Dubai, UAE",
-    image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80",
-    size: "250,000 sq ft",
+    title: "Palm Villa",
+    location: "Palm Jumeirah",
+    size: "12,000 sqft",
+    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80"
   },
   {
-    title: "Emirates Hills Estate",
-    location: "Dubai, UAE",
-    image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80",
-    size: "22,000 sq ft",
-  },
+    title: "Downtown Tower",
+    location: "Downtown Dubai",
+    size: "50,000 sqft",
+    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80"
+  }
 ];
 
 const Architecture = () => {
   return (
-    <section className="relative w-full min-h-screen bg-black">
+    <div className="min-h-screen bg-black">
+      <SEOHead 
+        title="Architecture Services Dubai | Design & Build | JBJ GLOBAL REAL ESTATE"
+        description="Visionary architecture services in Dubai. Concept design, technical drawings, project management, and sustainable building solutions. Partner with licensed architects."
+        keywords="Dubai architecture, architectural design Dubai, building design, sustainable architecture, villa design Dubai"
+        canonicalPath="/services/architecture"
+      />
+
       {/* Hero Section */}
-      <div className="relative h-[70vh] min-h-[500px] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[60vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <img 
-            src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=1920&q=80"
+            src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&q=80" 
             alt="Architecture"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover opacity-30"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/80 to-black" />
         </div>
-
+        
         <motion.div 
-          className="relative z-10 text-center px-4 max-w-4xl mx-auto"
+          className="relative z-10 container mx-auto px-4 py-32"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
           <motion.div variants={fadeInUp}>
-            <Link to="/services/design-build" className="inline-flex items-center gap-2 text-zinc-400 text-xs uppercase tracking-[0.2em] mb-4 hover:text-gold transition-colors">
-              ← Back to Design & Build
+            <Link 
+              to="/services/design-build" 
+              className="inline-flex items-center gap-2 text-gold hover:text-white transition-colors mb-6"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Back to Design & Build
             </Link>
           </motion.div>
 
-          <motion.div variants={fadeInUp}>
-            <button 
-              className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 cursor-default"
-              style={{
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
-                backdropFilter: 'blur(20px)',
-                border: '1.5px solid rgba(200,167,102,0.6)',
-                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
-              }}
-            >
-              <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-              <span className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Architecture Services</span>
-            </button>
+          <motion.div 
+            className="flex items-center gap-2 mb-6"
+            variants={fadeInUp}
+          >
+            <PenTool className="w-6 h-6 text-gold" />
+            <span className="text-gold text-sm uppercase tracking-[0.3em]">
+              Partner Network
+            </span>
           </motion.div>
 
           <motion.h1 
-            className="text-white text-4xl md:text-6xl lg:text-7xl font-bold tracking-wide mb-6"
-            variants={fadeInUp}
+            className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl"
             style={{ fontFamily: "Poppins, sans-serif" }}
+            variants={fadeInUp}
           >
-            Visionary{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">
-              Architecture
-            </span>
+            Visionary Architecture
           </motion.h1>
 
           <motion.p 
-            className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto mb-8"
+            className="text-zinc-400 text-lg md:text-xl max-w-2xl mb-8"
             variants={fadeInUp}
           >
-            Creating iconic structures that define skylines and inspire generations.
+            Partner with licensed architects to bring your vision to life. 
+            From concept to completion.
           </motion.p>
 
           <motion.div variants={fadeInUp}>
-            <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-              <button 
-                className="group relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent"
-                style={{
-                  border: '2px solid rgba(255,255,255,0.8)',
-                  boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-                }}
-              >
-                <span className="text-white group-hover:text-black transition-colors">Start Your Project</span>
-                <ArrowUpRight className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                {/* Hover fill overlay */}
-                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
-              </button>
-            </a>
+            <Button variant="primary" size="lg" asChild>
+              <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
+                <span className="text-black">Start Your</span><span className="text-gold"> Project</span>
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </a>
+            </Button>
           </motion.div>
         </motion.div>
-      </div>
+      </section>
 
-      {/* Services Grid */}
-      <section className="py-20 bg-gradient-to-b from-black to-zinc-950">
-        <div className="container mx-auto px-4">
+      {/* Services - 3-Layer System */}
+      <section className="py-16 bg-black">
+        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
           <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">What We Offer</span>
-            <h2 
-              className="text-white text-3xl md:text-4xl font-bold"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Architectural Excellence
-            </h2>
-          </motion.div>
-
-          <motion.div 
-            className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
           >
-            {services.map((service, idx) => (
-              <motion.div
-                key={idx}
-                className="p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800 hover:border-gold/30 transition-all"
-                variants={fadeInUp}
-              >
-                <div className="w-14 h-14 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center mb-4">
-                  <service.icon className="w-7 h-7 text-gold" />
-                </div>
-                <h3 className="text-white font-semibold text-lg mb-2">{service.title}</h3>
-                <p className="text-zinc-400 text-sm">{service.description}</p>
-              </motion.div>
-            ))}
+            <motion.div className="text-center mb-12" variants={fadeInUp}>
+              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+                Our Services
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <SplitTitle text="Architectural Excellence" />
+              </h2>
+              <p className="text-black/70 max-w-2xl mx-auto">
+                Comprehensive architectural services for residential and commercial projects.
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {services.map((service, index) => (
+                <motion.div key={service.title} variants={fadeInUp}>
+                  <Card className="jj-card-inner hover:border-white transition-all group h-full">
+                    <CardContent className="p-6">
+                      <div className="flex items-start gap-4">
+                        <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                          <service.icon className="w-7 h-7 text-gold" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-black font-semibold text-xl mb-2 group-hover:text-gold transition-colors">
+                            {service.title}
+                          </h3>
+                          <p className="text-black/70 text-sm mb-4">
+                            {service.description}
+                          </p>
+                          <div className="grid grid-cols-2 gap-2">
+                            {service.features.map((feature) => (
+                              <div key={feature} className="flex items-center gap-2 text-xs text-black/60">
+                                <CheckCircle className="w-3 h-3 text-gold" />
+                                {feature}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Portfolio */}
-      <section className="py-20 bg-zinc-950">
-        <div className="container mx-auto px-4">
+      {/* Portfolio - 3-Layer System */}
+      <section className="py-16 bg-black">
+        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
           <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Portfolio</span>
-            <h2 
-              className="text-white text-3xl md:text-4xl font-bold"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Featured Projects
-            </h2>
-          </motion.div>
-
-          <motion.div 
-            className="grid md:grid-cols-3 gap-6"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
           >
-            {projects.map((project, idx) => (
-              <motion.div
-                key={idx}
-                className="group relative overflow-hidden rounded-2xl aspect-[4/3]"
-                variants={fadeInUp}
-              >
-                <img 
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 className="text-white font-bold text-xl mb-1">{project.title}</h3>
-                  <p className="text-zinc-400 text-sm">{project.location} • {project.size}</p>
-                </div>
-              </motion.div>
-            ))}
+            <motion.div className="text-center mb-12" variants={fadeInUp}>
+              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+                Portfolio
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <SplitTitle text="Featured Projects" />
+              </h2>
+            </motion.div>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              {portfolio.map((project, index) => (
+                <motion.div key={project.title} variants={fadeInUp}>
+                  <Card className="jj-card-inner overflow-hidden group h-full">
+                    <div className="relative h-48 overflow-hidden">
+                      <img 
+                        src={project.image} 
+                        alt={project.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    </div>
+                    <CardContent className="p-4">
+                      <h3 className="text-black font-semibold text-lg mb-1">
+                        {project.title}
+                      </h3>
+                      <div className="flex items-center gap-1 text-black/60 text-sm mb-1">
+                        <MapPin className="w-3 h-3" />
+                        {project.location}
+                      </div>
+                      <p className="text-gold text-sm font-medium">
+                        {project.size}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-20 bg-black">
-        <div className="container mx-auto px-4">
+      {/* CTA Section - 3-Layer System */}
+      <section className="py-16 bg-black">
+        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
           <motion.div
-            className="text-center max-w-3xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
+            variants={fadeInUp}
+            className="text-center"
           >
-            <Award className="w-12 h-12 text-gold mx-auto mb-6" />
-            <h2 
-              className="text-white text-3xl md:text-4xl font-bold mb-6"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Let's Build Your Vision
-            </h2>
-            <p className="text-zinc-400 mb-8">
-              From concept sketches to completed masterpieces, our architects bring your dreams to life.
-            </p>
-            <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-              <Button variant="media" className="px-8 py-6 text-base">
-                Schedule Consultation
-                <ArrowUpRight className="w-5 h-5 ml-2" />
+            <div className="jj-card-inner rounded-2xl p-8 md:p-12 max-w-3xl mx-auto">
+              <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <SplitTitle text="Let's Build Your Vision" />
+              </h2>
+              <p className="text-black/70 mb-8 max-w-xl mx-auto">
+                Ready to transform your architectural vision into reality? 
+                Connect with our partner architects today.
+              </p>
+              <Button variant="primary" size="lg" asChild>
+                <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
+                  <span className="text-black">Schedule</span><span className="text-gold"> Consultation</span>
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </a>
               </Button>
-            </a>
+            </div>
           </motion.div>
         </div>
       </section>
 
       <Footer />
-    </section>
+    </div>
   );
 };
 

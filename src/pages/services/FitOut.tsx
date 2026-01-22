@@ -1,238 +1,293 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { 
+  Hammer, Wrench, Shield, Clock, Award, Users,
+  ChevronLeft, ArrowRight, CheckCircle
+} from "lucide-react";
 import Footer from "@/components/Footer";
+import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
-import { ArrowUpRight, Hammer, Home, Wrench, Cpu, ClipboardCheck, HardHat } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { CONTACT_INFO } from "@/constants/stats";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] } }
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
 };
 
 const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.1 }
+    transition: { staggerChildren: 0.1 }
   }
+};
+
+// Split title helper
+const SplitTitle = ({ text }: { text: string }) => {
+  const words = text.split(' ');
+  const firstWord = words[0];
+  const restWords = words.slice(1).join(' ');
+  
+  return (
+    <span className="jj-title-split">
+      <span>{firstWord}</span>{restWords && <span> {restWords}</span>}
+    </span>
+  );
 };
 
 const services = [
   {
-    icon: Home,
-    title: "Full Renovations",
-    description: "Complete transformation of residential and commercial spaces from concept to completion.",
+    icon: Hammer,
+    title: "Full Fit-Out",
+    description: "Complete transformation of shell and core spaces into functional environments.",
+    features: ["MEP Works", "Flooring", "Ceiling Systems", "Joinery"]
   },
   {
     icon: Wrench,
-    title: "Kitchen & Bath",
-    description: "Luxury kitchen and bathroom renovations with premium fixtures and finishes.",
+    title: "Renovation",
+    description: "Upgrade and refresh existing spaces to meet modern standards.",
+    features: ["Structural Changes", "System Upgrades", "Finish Updates", "Layout Changes"]
   },
   {
-    icon: Cpu,
-    title: "Smart Home Integration",
-    description: "Cutting-edge home automation systems seamlessly integrated into your space.",
+    icon: Shield,
+    title: "Commercial Fit-Out",
+    description: "Professional office and retail space development and customization.",
+    features: ["Office Spaces", "Retail Shops", "Restaurants", "Showrooms"]
   },
   {
-    icon: ClipboardCheck,
-    title: "Project Management",
-    description: "End-to-end project oversight ensuring quality, timeline, and budget compliance.",
+    icon: Clock,
+    title: "Fast-Track Projects",
+    description: "Accelerated delivery for time-sensitive projects without compromising quality.",
+    features: ["Rapid Execution", "24/7 Teams", "Phased Delivery", "Minimal Disruption"]
+  }
+];
+
+const whyChooseUs = [
+  {
+    icon: Award,
+    title: "Licensed Contractors",
+    description: "Fully licensed and insured professionals"
   },
+  {
+    icon: Users,
+    title: "Expert Teams",
+    description: "Skilled craftsmen and project managers"
+  },
+  {
+    icon: Shield,
+    title: "Quality Guarantee",
+    description: "Warranty on all workmanship"
+  },
+  {
+    icon: Clock,
+    title: "On-Time Delivery",
+    description: "Commitment to project timelines"
+  }
 ];
 
 const FitOut = () => {
   return (
-    <section className="relative w-full min-h-screen bg-black">
+    <div className="min-h-screen bg-black">
+      <SEOHead 
+        title="Fit-Out & Renovation Dubai | Commercial & Residential | JBJ GLOBAL REAL ESTATE"
+        description="Professional fit-out and renovation services in Dubai. Full fit-out, renovations, commercial spaces, and fast-track projects. Licensed contractors with quality guarantee."
+        keywords="Dubai fit-out, renovation Dubai, office fit-out, commercial renovation, residential renovation Dubai"
+        canonicalPath="/services/fit-out"
+      />
+
       {/* Hero Section */}
-      <div className="relative h-[70vh] min-h-[500px] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[60vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <img 
-            src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1920&q=80"
+            src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80" 
             alt="Fit-Out & Renovation"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover opacity-30"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/80 to-black" />
         </div>
-
+        
         <motion.div 
-          className="relative z-10 text-center px-4 max-w-4xl mx-auto"
+          className="relative z-10 container mx-auto px-4 py-32"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
           <motion.div variants={fadeInUp}>
-            <Link to="/services/design-build" className="inline-flex items-center gap-2 text-zinc-400 text-xs uppercase tracking-[0.2em] mb-4 hover:text-gold transition-colors">
-              ← Back to Design & Build
+            <Link 
+              to="/services/design-build" 
+              className="inline-flex items-center gap-2 text-gold hover:text-white transition-colors mb-6"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Back to Design & Build
             </Link>
           </motion.div>
 
-          <motion.div variants={fadeInUp}>
-            <button 
-              className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 cursor-default"
-              style={{
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
-                backdropFilter: 'blur(20px)',
-                border: '1.5px solid rgba(200,167,102,0.6)',
-                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
-              }}
-            >
-              <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-              <span className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Fit-Out & Renovation</span>
-            </button>
+          <motion.div 
+            className="flex items-center gap-2 mb-6"
+            variants={fadeInUp}
+          >
+            <Hammer className="w-6 h-6 text-gold" />
+            <span className="text-gold text-sm uppercase tracking-[0.3em]">
+              Partner Network
+            </span>
           </motion.div>
 
           <motion.h1 
-            className="text-white text-4xl md:text-6xl lg:text-7xl font-bold tracking-wide mb-6"
-            variants={fadeInUp}
+            className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl"
             style={{ fontFamily: "Poppins, sans-serif" }}
+            variants={fadeInUp}
           >
-            Precision{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">
-              Craftsmanship
-            </span>
+            Fit-Out & Renovation
           </motion.h1>
 
           <motion.p 
-            className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto mb-8"
+            className="text-zinc-400 text-lg md:text-xl max-w-2xl mb-8"
             variants={fadeInUp}
           >
-            Turnkey solutions that transform spaces with uncompromising quality and attention to detail.
+            Quality fit-out and renovation services by licensed contractors. 
+            Transform your space with expert craftsmanship.
           </motion.p>
 
           <motion.div variants={fadeInUp}>
-            <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-              <button 
-                className="group relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent"
-                style={{
-                  border: '2px solid rgba(255,255,255,0.8)',
-                  boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-                }}
-              >
-                <span className="text-white group-hover:text-black transition-colors">Get a Quote</span>
-                <ArrowUpRight className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                {/* Hover fill overlay */}
-                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
-              </button>
-            </a>
+            <Button variant="primary" size="lg" asChild>
+              <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
+                <span className="text-black">Get a</span><span className="text-gold"> Quote</span>
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </a>
+            </Button>
           </motion.div>
         </motion.div>
-      </div>
+      </section>
 
-      {/* Services Grid */}
-      <section className="py-20 bg-gradient-to-b from-black to-zinc-950">
-        <div className="container mx-auto px-4">
+      {/* Services - 3-Layer System */}
+      <section className="py-16 bg-black">
+        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
           <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Services</span>
-            <h2 
-              className="text-white text-3xl md:text-4xl font-bold"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Complete Renovation Solutions
-            </h2>
-          </motion.div>
-
-          <motion.div 
-            className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
           >
-            {services.map((service, idx) => (
-              <motion.div
-                key={idx}
-                className="p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800 hover:border-gold/30 transition-all"
-                variants={fadeInUp}
-              >
-                <div className="w-14 h-14 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center mb-4">
-                  <service.icon className="w-7 h-7 text-gold" />
-                </div>
-                <h3 className="text-white font-semibold text-lg mb-2">{service.title}</h3>
-                <p className="text-zinc-400 text-sm">{service.description}</p>
-              </motion.div>
-            ))}
+            <motion.div className="text-center mb-12" variants={fadeInUp}>
+              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+                Our Services
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <SplitTitle text="Fit-Out Solutions" />
+              </h2>
+              <p className="text-black/70 max-w-2xl mx-auto">
+                Comprehensive fit-out and renovation services for all project types.
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {services.map((service, index) => (
+                <motion.div key={service.title} variants={fadeInUp}>
+                  <Card className="jj-card-inner hover:border-white transition-all group h-full">
+                    <CardContent className="p-6">
+                      <div className="flex items-start gap-4">
+                        <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                          <service.icon className="w-7 h-7 text-gold" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-black font-semibold text-xl mb-2 group-hover:text-gold transition-colors">
+                            {service.title}
+                          </h3>
+                          <p className="text-black/70 text-sm mb-4">
+                            {service.description}
+                          </p>
+                          <div className="grid grid-cols-2 gap-2">
+                            {service.features.map((feature) => (
+                              <div key={feature} className="flex items-center gap-2 text-xs text-black/60">
+                                <CheckCircle className="w-3 h-3 text-gold" />
+                                {feature}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Why Choose Us */}
-      <section className="py-20 bg-zinc-950">
-        <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Why Choose Us</span>
-              <h2 
-                className="text-white text-3xl md:text-4xl font-bold mb-6"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                Excellence in Every Detail
+      {/* Why Choose Us - 3-Layer System */}
+      <section className="py-16 bg-black">
+        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
+            <motion.div className="text-center mb-12" variants={fadeInUp}>
+              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+                Our Advantage
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <SplitTitle text="Why Choose Us" />
               </h2>
-              <div className="space-y-4">
-                {[
-                  { title: "Licensed Contractors", desc: "Fully certified and insured professionals" },
-                  { title: "Premium Materials", desc: "Only the finest quality materials and finishes" },
-                  { title: "On-Time Delivery", desc: "Strict adherence to project timelines" },
-                  { title: "Transparent Pricing", desc: "No hidden costs or surprise expenses" },
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-start gap-4 p-4 rounded-xl bg-zinc-900/30 border border-zinc-800">
-                    <div className="w-2 h-2 rounded-full bg-gold mt-2" />
-                    <div>
-                      <h3 className="text-white font-semibold">{item.title}</h3>
-                      <p className="text-zinc-400 text-sm">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {whyChooseUs.map((item, index) => (
+                <motion.div key={item.title} variants={fadeInUp}>
+                  <Card className="jj-card-inner h-full">
+                    <CardContent className="p-6 text-center">
+                      <div className="w-16 h-16 rounded-full bg-black flex items-center justify-center mx-auto mb-4">
+                        <item.icon className="w-8 h-8 text-gold" />
+                      </div>
+                      <h3 className="text-black font-semibold text-lg mb-2">
+                        {item.title}
+                      </h3>
+                      <p className="text-black/70 text-sm">
+                        {item.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
             </div>
-            <div className="relative">
-              <img 
-                src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80"
-                alt="Quality Fit-Out"
-                className="rounded-2xl w-full aspect-[4/3] object-cover"
-              />
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/50 to-transparent" />
-            </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-20 bg-black">
-        <div className="container mx-auto px-4">
+      {/* CTA Section - 3-Layer System */}
+      <section className="py-16 bg-black">
+        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
           <motion.div
-            className="text-center max-w-3xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
+            variants={fadeInUp}
+            className="text-center"
           >
-            <HardHat className="w-12 h-12 text-gold mx-auto mb-6" />
-            <h2 
-              className="text-white text-3xl md:text-4xl font-bold mb-6"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Ready to Renovate?
-            </h2>
-            <p className="text-zinc-400 mb-8">
-              From minor updates to complete transformations, our team delivers exceptional results every time.
-            </p>
-            <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-              <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base">
-                Request Free Consultation
-                <ArrowUpRight className="w-5 h-5 ml-2" />
+            <div className="jj-card-inner rounded-2xl p-8 md:p-12 max-w-3xl mx-auto">
+              <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <SplitTitle text="Start Your Project" />
+              </h2>
+              <p className="text-black/70 mb-8 max-w-xl mx-auto">
+                Ready to transform your space? Get a detailed quote from our 
+                licensed fit-out contractors.
+              </p>
+              <Button variant="primary" size="lg" asChild>
+                <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
+                  <span className="text-black">Request</span><span className="text-gold"> Quote</span>
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </a>
               </Button>
-            </a>
+            </div>
           </motion.div>
         </div>
       </section>
 
       <Footer />
-    </section>
+    </div>
   );
 };
 
