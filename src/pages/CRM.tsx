@@ -317,120 +317,86 @@ const CRM = () => {
 
       {/* Premium Header - Champagne with Gold border */}
       <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
-        <div className="max-w-[1600px] w-full mx-auto px-6 py-4 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 md:gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowToolsSidebar(!showToolsSidebar)}
-              className="text-black hover:text-gold hover:bg-gold/10 shrink-0 transition-all duration-200 ease-in-out"
-            >
-              {showToolsSidebar ? (
-                <PanelLeftClose className="h-5 w-5" />
-              ) : (
-                <PanelLeftOpen className="h-5 w-5" />
-              )}
-            </Button>
-            
-            {/* Role Title - Dynamic based on logged-in user */}
-            <div className="min-w-0">
-              <p className="text-sm md:text-base font-bold text-black truncate">
+        <div className="max-w-[1600px] w-full mx-auto px-6 py-3">
+          {/* First Line - Role Only */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowToolsSidebar(!showToolsSidebar)}
+                className="text-black hover:text-gold hover:bg-gold/10 shrink-0"
+              >
+                {showToolsSidebar ? <PanelLeftClose className="h-5 w-5" /> : <PanelLeftOpen className="h-5 w-5" />}
+              </Button>
+              <p className="text-base font-bold text-black">
                 {getRoleTitle()} — {isFounder ? "Jane Abou Jaoude" : (profile.display_name || "Team Member")}
               </p>
             </div>
+            
+            <div className="flex items-center gap-2">
+              {isAdmin && (
+                <Button variant="secondary" size="sm" onClick={() => navigate("/admin/crm")} className="font-semibold">
+                  Admin Dashboard
+                </Button>
+              )}
+              <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-black hover:text-gold hover:bg-gold/10">
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
           </div>
           
-          {/* Search & Quick Actions */}
-          <div className="hidden lg:flex items-center gap-2 flex-1 max-w-sm mx-4">
+          {/* Second Line - Search & Quick Actions */}
+          <div className="flex items-center justify-between mt-3 pt-3 border-t border-gold/20">
+            {/* Search Bar */}
             <button
               onClick={() => setShowCommandPalette(true)}
-              className="flex items-center gap-2 w-full px-4 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 text-zinc-600 hover:border-gold/50 transition-all"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 text-zinc-600 hover:border-gold/50 transition-all max-w-xs"
             >
               <Search className="h-4 w-4 text-gold" />
               <span className="text-sm">Search leads…</span>
-              <kbd className="ml-auto px-2 py-0.5 bg-gold/10 text-gold text-xs rounded font-mono">⌘K</kbd>
+              <kbd className="ml-2 px-2 py-0.5 bg-gold/10 text-gold text-xs rounded font-mono">⌘K</kbd>
             </button>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            {/* AI Insights Toggle */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowAIInsights(!showAIInsights)}
-              className={`text-gold hover:text-black hover:bg-gold/20 ${showAIInsights ? 'bg-gold/10' : ''}`}
-            >
-              <Brain className="h-4 w-4" />
-            </Button>
             
-            {/* Notifications (no placeholder counts) */}
-            <NotificationBell
-              count={0}
-              onClick={() => setShowNotifications(true)}
-              className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30"
-            />
-            
-            {/* Quick Navigation Buttons */}
-            <div className="hidden md:flex items-center gap-1 mr-2">
+            {/* Quick Actions */}
+            <div className="flex items-center gap-2">
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => navigate("/crm/tasks")}
-                className="text-black hover:text-gold hover:bg-gold/10 text-xs"
+                onClick={() => setShowAIInsights(!showAIInsights)}
+                className={`text-gold hover:text-black hover:bg-gold/20 ${showAIInsights ? 'bg-gold/10' : ''}`}
               >
-                <CheckSquare className="h-4 w-4 mr-1" />
-                Tasks
+                <Brain className="h-4 w-4" />
               </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => navigate("/crm/calendar")}
-                className="text-black hover:text-gold hover:bg-gold/10 text-xs"
-              >
-                <Calendar className="h-4 w-4 mr-1" />
-                Calendar
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => navigate("/crm/employees")}
-                className="text-black hover:text-gold hover:bg-gold/10 text-xs"
-              >
-                <Users className="h-4 w-4 mr-1" />
-                Team
-              </Button>
-              {isAdmin && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => navigate("/crm/automations")}
-                  className="text-gold hover:text-black hover:bg-gold/20 text-xs font-semibold"
-                >
-                  <Zap className="h-4 w-4 mr-1" />
-                  Automations
+              
+              <NotificationBell
+                count={0}
+                onClick={() => setShowNotifications(true)}
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30"
+              />
+              
+              <div className="hidden md:flex items-center gap-1 ml-2">
+                <Button variant="ghost" size="sm" onClick={() => navigate("/crm/tasks")} className="text-black hover:text-gold hover:bg-gold/10 text-xs">
+                  <CheckSquare className="h-4 w-4 mr-1" />
+                  Tasks
                 </Button>
-              )}
+                <Button variant="ghost" size="sm" onClick={() => navigate("/crm/calendar")} className="text-black hover:text-gold hover:bg-gold/10 text-xs">
+                  <Calendar className="h-4 w-4 mr-1" />
+                  Calendar
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => navigate("/employee-hub")} className="text-black hover:text-gold hover:bg-gold/10 text-xs">
+                  <Users className="h-4 w-4 mr-1" />
+                  Team
+                </Button>
+                {isAdmin && (
+                  <Button variant="ghost" size="sm" onClick={() => navigate("/automations")} className="text-gold hover:text-black hover:bg-gold/20 text-xs font-semibold">
+                    <Zap className="h-4 w-4 mr-1" />
+                    Automations
+                  </Button>
+                )}
+              </div>
             </div>
-
-            {isAdmin && (
-              <Button 
-                variant="secondary" 
-                size="sm" 
-                onClick={() => navigate("/admin/crm")} 
-                className="font-semibold"
-              >
-                Admin Dashboard
-              </Button>
-            )}
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={handleSignOut} 
-              className="text-black hover:text-gold hover:bg-gold/10"
-            >
-              <LogOut className="h-4 w-4 mr-2" />
-              Sign Out
-            </Button>
           </div>
         </div>
       </header>
