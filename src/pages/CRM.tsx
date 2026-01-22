@@ -73,17 +73,7 @@ const CRM = () => {
   const [statusCounts, setStatusCounts] = useState<Record<string, number>>({});
 
   // AI Insights (no placeholders)
-  const aiInsights = [];
-
-  // Show force password change screen if needed
-  if (needsPasswordChange && !passwordCheckLoading) {
-    return (
-      <ForcePasswordChange 
-        userName={userName} 
-        onComplete={() => setNeedsPasswordChange(false)} 
-      />
-    );
-  }
+  const aiInsights: any[] = [];
 
   useEffect(() => {
     if (authLoading) return;
@@ -113,6 +103,16 @@ const CRM = () => {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  // Show force password change screen if needed - AFTER all hooks
+  if (needsPasswordChange && !passwordCheckLoading) {
+    return (
+      <ForcePasswordChange 
+        userName={userName} 
+        onComplete={() => setNeedsPasswordChange(false)} 
+      />
+    );
+  }
 
   const checkCRMAccess = async () => {
     if (!user) return;
@@ -223,15 +223,15 @@ const CRM = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-6">
+      <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] p-6">
         <div className="max-w-7xl mx-auto space-y-6">
-          <Skeleton className="h-12 w-64 bg-gold/10" />
+          <Skeleton className="h-12 w-64 bg-gold/20" />
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {[1, 2, 3, 4].map(i => (
-              <Skeleton key={i} className="h-32 bg-gold/10" />
+              <Skeleton key={i} className="h-32 bg-gold/20 border-2 border-gold/30 rounded-lg" />
             ))}
           </div>
-          <Skeleton className="h-96 bg-gold/10" />
+          <Skeleton className="h-96 bg-gold/20 border-2 border-gold/30 rounded-lg" />
         </div>
       </div>
     );
@@ -239,8 +239,8 @@ const CRM = () => {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex items-center justify-center p-6">
-        <Card className="w-full max-w-lg border-2 border-gold/30 bg-white shadow-[0_10px_40px_rgba(200,167,102,0.15)]">
+      <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center p-6">
+        <Card className="w-full max-w-lg border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_10px_40px_rgba(200,167,102,0.2)]">
           <CardHeader>
             <CardTitle className="text-black">CRM access unavailable</CardTitle>
           </CardHeader>
@@ -300,7 +300,7 @@ const CRM = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex">
+    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
       {/* Command Palette */}
       <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
 
@@ -315,135 +315,134 @@ const CRM = () => {
       {/* Tools Sidebar */}
       <CRMToolsSidebar isOpen={showToolsSidebar} onClose={() => setShowToolsSidebar(false)} />
 
-      <div className="flex-1">
-        {/* Premium Header - White/Gold/Champagne */}
-        <header className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-          <div className="max-w-[1600px] w-full mx-auto px-6 py-4 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3 md:gap-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowToolsSidebar(!showToolsSidebar)}
-                className="text-black hover:text-gold hover:bg-gold/10 shrink-0 transition-all duration-200 ease-in-out"
-              >
-                {showToolsSidebar ? (
-                  <PanelLeftClose className="h-5 w-5" />
-                ) : (
-                  <PanelLeftOpen className="h-5 w-5" />
-                )}
-              </Button>
-              
-              {/* Role Title - Dynamic based on logged-in user */}
-              <div className="min-w-0">
-                <p className="text-sm md:text-base font-bold text-black truncate">
-                  {getRoleTitle()} — {isFounder ? "Jane Abou Jaoude" : (profile.display_name || "Team Member")}
-                </p>
-              </div>
-            </div>
-            
-            {/* Search & Quick Actions */}
-            <div className="hidden lg:flex items-center gap-2 flex-1 max-w-sm mx-4">
-              <button
-                onClick={() => setShowCommandPalette(true)}
-                className="flex items-center gap-2 w-full px-4 py-2 rounded-xl bg-white/80 border-2 border-gold/30 text-zinc-500 hover:border-gold/50 transition-all"
-              >
-                <Search className="h-4 w-4 text-gold" />
-                <span className="text-sm">Search leads…</span>
-                <kbd className="ml-auto px-2 py-0.5 bg-gold/10 text-gold text-xs rounded font-mono">⌘K</kbd>
-              </button>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              {/* AI Insights Toggle */}
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowAIInsights(!showAIInsights)}
-                className={`text-gold hover:text-black hover:bg-gold/20 ${showAIInsights ? 'bg-gold/10' : ''}`}
-              >
-                <Brain className="h-4 w-4" />
-              </Button>
-              
-              {/* Notifications (no placeholder counts) */}
-              <NotificationBell
-                count={0}
-                onClick={() => setShowNotifications(true)}
-                className="bg-white/80 border-2 border-gold/30"
-              />
-              
-              {/* Quick Navigation Buttons */}
-              <div className="hidden md:flex items-center gap-1 mr-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => navigate("/crm/tasks")}
-                  className="text-black hover:text-gold hover:bg-gold/10 text-xs"
-                >
-                  <CheckSquare className="h-4 w-4 mr-1" />
-                  Tasks
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => navigate("/crm/calendar")}
-                  className="text-black hover:text-gold hover:bg-gold/10 text-xs"
-                >
-                  <Calendar className="h-4 w-4 mr-1" />
-                  Calendar
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => navigate("/crm/employees")}
-                  className="text-black hover:text-gold hover:bg-gold/10 text-xs"
-                >
-                  <Users className="h-4 w-4 mr-1" />
-                  Team
-                </Button>
-                {isAdmin && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => navigate("/crm/automations")}
-                    className="text-gold hover:text-black hover:bg-gold/20 text-xs font-semibold"
-                  >
-                    <Zap className="h-4 w-4 mr-1" />
-                    Automations
-                  </Button>
-                )}
-              </div>
-
-              {isAdmin && (
-                <Button 
-                  variant="secondary" 
-                  size="sm" 
-                  onClick={() => navigate("/admin/crm")} 
-                  className="font-semibold"
-                >
-                  Admin Dashboard
-                </Button>
+      {/* Premium Header - Champagne with Gold border */}
+      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <div className="max-w-[1600px] w-full mx-auto px-6 py-4 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 md:gap-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowToolsSidebar(!showToolsSidebar)}
+              className="text-black hover:text-gold hover:bg-gold/10 shrink-0 transition-all duration-200 ease-in-out"
+            >
+              {showToolsSidebar ? (
+                <PanelLeftClose className="h-5 w-5" />
+              ) : (
+                <PanelLeftOpen className="h-5 w-5" />
               )}
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={handleSignOut} 
-                className="text-black hover:text-gold hover:bg-gold/10"
-              >
-                <LogOut className="h-4 w-4 mr-2" />
-                Sign Out
-              </Button>
+            </Button>
+            
+            {/* Role Title - Dynamic based on logged-in user */}
+            <div className="min-w-0">
+              <p className="text-sm md:text-base font-bold text-black truncate">
+                {getRoleTitle()} — {isFounder ? "Jane Abou Jaoude" : (profile.display_name || "Team Member")}
+              </p>
             </div>
           </div>
-        </header>
+          
+          {/* Search & Quick Actions */}
+          <div className="hidden lg:flex items-center gap-2 flex-1 max-w-sm mx-4">
+            <button
+              onClick={() => setShowCommandPalette(true)}
+              className="flex items-center gap-2 w-full px-4 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 text-zinc-600 hover:border-gold/50 transition-all"
+            >
+              <Search className="h-4 w-4 text-gold" />
+              <span className="text-sm">Search leads…</span>
+              <kbd className="ml-auto px-2 py-0.5 bg-gold/10 text-gold text-xs rounded font-mono">⌘K</kbd>
+            </button>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            {/* AI Insights Toggle */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowAIInsights(!showAIInsights)}
+              className={`text-gold hover:text-black hover:bg-gold/20 ${showAIInsights ? 'bg-gold/10' : ''}`}
+            >
+              <Brain className="h-4 w-4" />
+            </Button>
+            
+            {/* Notifications (no placeholder counts) */}
+            <NotificationBell
+              count={0}
+              onClick={() => setShowNotifications(true)}
+              className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30"
+            />
+            
+            {/* Quick Navigation Buttons */}
+            <div className="hidden md:flex items-center gap-1 mr-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate("/crm/tasks")}
+                className="text-black hover:text-gold hover:bg-gold/10 text-xs"
+              >
+                <CheckSquare className="h-4 w-4 mr-1" />
+                Tasks
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate("/crm/calendar")}
+                className="text-black hover:text-gold hover:bg-gold/10 text-xs"
+              >
+                <Calendar className="h-4 w-4 mr-1" />
+                Calendar
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate("/crm/employees")}
+                className="text-black hover:text-gold hover:bg-gold/10 text-xs"
+              >
+                <Users className="h-4 w-4 mr-1" />
+                Team
+              </Button>
+              {isAdmin && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => navigate("/crm/automations")}
+                  className="text-gold hover:text-black hover:bg-gold/20 text-xs font-semibold"
+                >
+                  <Zap className="h-4 w-4 mr-1" />
+                  Automations
+                </Button>
+              )}
+            </div>
 
-        <div className="flex">
-          {/* Main Content */}
-          <main className={`flex-1 max-w-[1600px] w-full mx-auto px-4 pt-8 pb-24 space-y-6 ${showAIInsights ? 'mr-72' : ''}`}>
-            {/* Deal Value Tracker */}
-            <DealValueTracker userId={user?.id || ""} />
+            {isAdmin && (
+              <Button 
+                variant="secondary" 
+                size="sm" 
+                onClick={() => navigate("/admin/crm")} 
+                className="font-semibold"
+              >
+                Admin Dashboard
+              </Button>
+            )}
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={handleSignOut} 
+              className="text-black hover:text-gold hover:bg-gold/10"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Sign Out
+            </Button>
+          </div>
+        </div>
+      </header>
 
-            {/* Enhanced Dashboard with Charts */}
-            <CRMEnhancedDashboard userId={user?.id || ""} isAdmin={isAdmin} />
+      {/* Main Content Area */}
+      <div className="flex">
+        <main className={`flex-1 max-w-[1600px] w-full mx-auto px-6 py-8 space-y-6 transition-all duration-300 ${showAIInsights ? 'pr-80' : ''}`}>
+          {/* Deal Value Tracker */}
+          <DealValueTracker userId={user?.id || ""} />
+
+          {/* Enhanced Dashboard with Charts */}
+          <CRMEnhancedDashboard userId={user?.id || ""} isAdmin={isAdmin} />
 
             {/* Smart Reminders, Automation & Communication - Compact layout */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -459,11 +458,13 @@ const CRM = () => {
               <div className="space-y-4">
                 <SmartReminders userId={user?.id || ""} limit={4} />
                 
-                {/* Smart Automations - Premium Card */}
-                <Card className="border-2 border-gold/30 bg-white shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+                {/* Smart Automations - Premium Champagne Card */}
+                <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.2)]">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-black font-bold text-base flex items-center gap-2">
-                      <Zap className="h-4 w-4 text-gold" />
+                      <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+                        <Zap className="h-4 w-4 text-black" />
+                      </div>
                       Smart Automations
                       <Badge className="ml-auto text-xs bg-gold/10 text-gold border-gold/30">
                         Active
@@ -610,18 +611,19 @@ const CRM = () => {
               </TabsContent>
             </Tabs>
           </main>
-
-          {/* AI Insights Panel - Fixed positioning adjusted */}
-          {showAIInsights && (
-            <aside className="fixed right-0 top-20 bottom-0 w-72 border-l-2 border-gold/30 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] overflow-y-auto z-40">
-              <AIInsightsPanel 
-                insights={aiInsights}
-                isLoading={false}
-                onRefresh={() => toast.info("Refreshing AI insights...")}
-              />
-            </aside>
-          )}
         </div>
+
+        {/* AI Insights Panel - Properly positioned sidebar */}
+        {showAIInsights && (
+          <aside className="fixed right-0 top-[73px] bottom-0 w-72 border-l-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] overflow-y-auto z-30 shadow-[-4px_0_20px_rgba(200,167,102,0.15)]">
+            <AIInsightsPanel 
+              insights={aiInsights}
+              isLoading={false}
+              onRefresh={() => toast.info("Refreshing AI insights...")}
+              onToggleCollapse={() => setShowAIInsights(false)}
+            />
+          </aside>
+        )}
 
         {/* Floating Action Bar */}
         <FloatingActionBar />
