@@ -161,9 +161,9 @@ const GlobalHeader = () => {
         <div className="flex flex-col gap-1.5 px-2">
           {links.map((link) => (
             <DropdownMenuItem key={link.href} asChild className="p-0 focus:bg-gold/10 rounded-lg">
-              <Link to={link.href} className="flex items-center gap-3 text-gold hover:text-zinc-800 hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
+              <Link to={link.href} className="flex items-center gap-3 text-black hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
                 <div className="w-7 h-7 rounded-md bg-transparent border border-black group-hover:bg-black flex items-center justify-center transition-colors">
-                  <link.icon className="w-3.5 h-3.5 text-black group-hover:text-gold transition-colors" />
+                  <link.icon className="w-3.5 h-3.5 text-gold group-hover:text-gold transition-colors" />
                 </div>
                 <span className="font-medium text-sm">{link.label}</span>
               </Link>

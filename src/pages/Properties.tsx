@@ -405,8 +405,10 @@ const Properties = () => {
       </section>
 
       {/* Filters Section - 3-Layer System: Black > Active Champagne > Pearl Filter Boxes */}
-      <section className="sticky top-16 lg:top-[72px] z-40 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border-b border-gold/30 py-4 shadow-lg">
-        <div className="container mx-auto px-4">
+      <section className="sticky top-16 lg:top-[72px] z-40 bg-black py-4 border-b border-gold/30">
+        <div className="container mx-auto px-3 sm:px-4">
+          {/* Active Champagne Layer with thin black contour visible at edges */}
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg">
           {/* Transaction Type Tabs - Buy / Rent */}
           <div className="flex items-center gap-2 mb-4 flex-wrap">
             <span className="text-black/70 text-sm mr-2 font-medium">I want to:</span>
@@ -875,6 +877,7 @@ const Properties = () => {
               </button>
             ))}
           </div>
+          </div>
         </div>
       </section>
 
@@ -883,9 +886,9 @@ const Properties = () => {
 
       {/* Results Section - 3-Layer System: Black > Active Champagne > Listings */}
       <section className="py-12 bg-black">
-        <div className="container mx-auto px-4">
-          {/* OUTER LAYER - Active Champagne with black border visible at edges */}
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-3 sm:p-4">
+        <div className="container mx-auto px-3 sm:px-4">
+          {/* OUTER LAYER - Active Champagne with thin black contour visible at edges */}
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5">
             {/* Results Count - Inside active layer */}
             <div className="mb-6 flex items-center justify-between px-4 pt-4">
               <p className="text-black/70">
