@@ -61,10 +61,9 @@ const Methodology = () => {
 
       {/* Main Content with TOC Sidebar - Active Champagne Layer */}
       <section className="jj-section-champagne py-16">
-        <div className="container mx-auto px-4">
-          <div className="flex gap-8">
-            {/* Main Content */}
-            <div className="flex-1 max-w-4xl space-y-10">
+        <div className="relative">
+          {/* Full-bleed content area that stretches behind TOC */}
+          <div className="container mx-auto px-4 lg:pr-80 xl:pr-96 space-y-10">
           
               {/* SECTION 1 — Introduction */}
               <motion.section
@@ -423,20 +422,19 @@ const Methodology = () => {
                 </div>
               </motion.section>
 
-            </div>
+          </div>
 
-            {/* Table of Contents Sidebar */}
-            <div className="hidden lg:block w-72">
-              <MarketIntelligenceTableOfContents 
-                items={tocItems}
-                title="In This Section"
-                ctaAction={{
-                  label: "Find Your Property",
-                  href: "/properties",
-                  icon: Search
-                }}
-              />
-            </div>
+          {/* Table of Contents Sidebar - Fixed position */}
+          <div className="hidden lg:block fixed right-4 xl:right-8 top-32 w-72 z-40">
+            <MarketIntelligenceTableOfContents 
+              items={tocItems}
+              title="In This Section"
+              ctaAction={{
+                label: "Find Your Property",
+                href: "/properties",
+                icon: Search
+              }}
+            />
           </div>
         </div>
       </section>
