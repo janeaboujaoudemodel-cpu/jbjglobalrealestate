@@ -35,9 +35,9 @@ const CollapsedChatButton = ({ onToggle, onMinimize, showAttentionPulse = false 
             <button
               onClick={onToggle}
               aria-label="Open chat support"
-              className="relative flex items-center gap-3 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold rounded-xl px-4 sm:px-5 py-3 sm:py-3.5 shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-all duration-300 group hover:scale-105"
+              className="relative flex items-center gap-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl px-4 sm:px-5 py-3 sm:py-3.5 shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-all duration-300 group hover:scale-105"
             >
-              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-white border-2 border-gold flex items-center justify-center flex-shrink-0 shadow-md shadow-gold/20">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold flex items-center justify-center flex-shrink-0 shadow-md shadow-gold/20">
                 <SquareChatIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gold" size={20} />
               </div>
               <div className="flex flex-col items-start">

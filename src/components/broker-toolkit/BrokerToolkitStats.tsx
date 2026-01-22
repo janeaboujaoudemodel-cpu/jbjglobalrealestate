@@ -47,7 +47,7 @@ const STATS = [
 
 export function BrokerToolkitStats() {
   return (
-    <section className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] relative">
+    <section className="py-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] relative">
       {/* Top gold glow divider */}
       <div 
         className="absolute top-0 left-0 right-0 h-1"

@@ -497,7 +497,7 @@ const Properties = () => {
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleSearch();
               }}
-              className="h-12 pl-12 pr-4 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-base shadow-sm w-full"
+              className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-base shadow-sm w-full"
             />
 
           </div>
@@ -509,7 +509,7 @@ const Properties = () => {
               value={filters.emirate || "all"}
               onValueChange={(value) => updateFilter("emirate", value === "all" ? null : value)}
             >
-              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
                 <MapPin className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                 <span className="truncate text-left flex-1">{filters.emirate || "All Emirates"}</span>
               </SelectTrigger>
@@ -530,7 +530,7 @@ const Properties = () => {
               value={filters.communityId || "all"}
               onValueChange={(value) => updateFilter("communityId", value === "all" ? null : value)}
             >
-              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
                 <Home className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                 <span className="truncate text-left flex-1">
                   {filters.communityId 
@@ -553,7 +553,7 @@ const Properties = () => {
               value={filters.developerId || "all"}
               onValueChange={(value) => updateFilter("developerId", value === "all" ? null : value)}
             >
-              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
                 <Building2 className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                 <span className="truncate text-left flex-1">
                   {filters.developerId 
@@ -589,7 +589,7 @@ const Properties = () => {
                 }
               }}
             >
-              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
                 <DollarSign className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                 <span className="truncate text-left flex-1">
                   {filters.priceMin === 0 && filters.priceMax === 500000000
@@ -620,7 +620,7 @@ const Properties = () => {
               value={filters.sizeUnit}
               onValueChange={(value) => updateFilter("sizeUnit", value as 'sqft' | 'sqm')}
             >
-              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
                 <Maximize2 className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                 <span className="truncate text-left flex-1">{filters.sizeUnit === 'sqft' ? 'Square Feet' : 'Square Meters'}</span>
               </SelectTrigger>
@@ -635,7 +635,7 @@ const Properties = () => {
               value={filters.currency}
               onValueChange={(value) => updateFilter("currency", value as ExtendedCurrency)}
             >
-              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
                 <span className="truncate text-left flex-1">
                   {filters.currency === 'AED' ? 'AED (Dirham)' 
                     : filters.currency === 'USD' ? 'USD (Dollar)' 
@@ -666,7 +666,7 @@ const Properties = () => {
               className={`h-11 px-4 rounded-lg flex items-center gap-2 text-sm shadow-sm ${
                 filters.premiumOnly 
                   ? "bg-gradient-to-r from-gold to-[#E8D5A3] text-black border-gold font-bold" 
-                  : "bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black hover:border-gold"
+                  : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black hover:border-gold"
               }`}
             >
               <Crown className="w-4 h-4" />
@@ -678,7 +678,7 @@ const Properties = () => {
               <DialogTrigger asChild>
                 <Button 
                   variant="outline" 
-                  className="h-11 px-4 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black hover:border-gold rounded-lg shadow-sm flex items-center gap-2"
+                  className="h-11 px-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black hover:border-gold rounded-lg shadow-sm flex items-center gap-2"
                 >
                   <Filter className="w-4 h-4 text-gold" />
                   <span>More Filters</span>
@@ -690,13 +690,13 @@ const Properties = () => {
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-2xl bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border-gold/30 text-black p-0">
-                <DialogHeader className="p-6 border-b border-gold/30 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+                <DialogHeader className="p-6 border-b border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
                   <DialogTitle className="text-xl font-semibold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
                     Advanced <span className="text-gold">Filters</span>
                   </DialogTitle>
                 </DialogHeader>
                 <ScrollArea className="max-h-[70vh]">
-                  <div className="p-6 space-y-6 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+                  <div className="p-6 space-y-6 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
                     {/* Property Type */}
                     <div>
                       <label className="text-sm text-gold font-medium mb-2 block">Property Type</label>
@@ -922,7 +922,7 @@ const Properties = () => {
                 onClick={() => setSortBy(option.value)}
                 className={`px-4 py-2 rounded-full text-xs font-semibold transition-all border-2 ${
                   sortBy === option.value
-                    ? "bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] text-black border-gold shadow-[0_0_18px_rgba(200,167,102,0.25)]"
+                    ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-gold shadow-[0_0_18px_rgba(200,167,102,0.25)]"
                     : "bg-transparent text-black border-gold/30 hover:border-gold"
                 }`}
               >

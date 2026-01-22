@@ -14,9 +14,9 @@ type SectionVariant = 'white' | 'champagne' | 'cream' | 'ivory' | 'pearl';
 const sectionVariants: Record<SectionVariant, string> = {
   white: 'bg-white',
   champagne: 'bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]',
-  cream: 'bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]',
+  cream: 'bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]',
   ivory: 'bg-gradient-to-r from-[#FFFEF9] to-[#FBF9F3]',
-  pearl: 'bg-gradient-to-br from-[#F8F6F0] via-white to-[#F5F0E6]',
+  pearl: 'bg-gradient-to-br from-[#F8F6F0] via-[#FDFBF7] to-[#F5F0E6]',
 };
 
 // Main layout wrapper for backend pages
@@ -31,7 +31,7 @@ export const PremiumBackendLayout: React.FC<PremiumBackendLayoutProps> = ({
 }) => {
   return (
     <div className={cn(
-      "min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]",
+      "min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]",
       className
     )}>
       {children}

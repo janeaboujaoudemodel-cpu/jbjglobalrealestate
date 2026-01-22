@@ -52,7 +52,7 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
       <DropdownMenuContent 
         align="end" 
         sideOffset={12}
-        className="bg-gradient-to-b from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 min-w-[200px] rounded-xl shadow-2xl shadow-black/20 p-0 overflow-hidden"
+        className="bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 min-w-[200px] rounded-xl shadow-2xl shadow-black/20 p-0 overflow-hidden"
       >
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
         <ScrollArea className="h-[320px]">

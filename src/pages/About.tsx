@@ -217,8 +217,8 @@ const About = () => {
                 variants={fadeInUp}
               >
                 <div className="relative">
-                  {/* Champagne/white background card for premium look */}
-                  <div className="absolute inset-0 -m-6 bg-gradient-to-br from-white via-[#faf8f5] to-[#f5f0e8] rounded-2xl border border-gold/30 shadow-lg" />
+                  {/* Champagne background card for premium look */}
+                  <div className="absolute inset-0 -m-6 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl border border-gold/30 shadow-lg" />
                   
                   {/* Circular portrait - GLOBAL PORTRAIT RULE: object-position center 5%, lifted up, no cropping */}
                   {/* KEEP gold border always, add 3D lift on hover */}
@@ -322,21 +322,21 @@ const About = () => {
                   </p>
                 </ContentText>
                 
-                {/* Feature Cards - champagne/white style to match founder card */}
+                {/* Feature Cards - champagne style to match founder card */}
                 <div className="grid sm:grid-cols-2 gap-4 mt-8">
-                  <div className="bg-gradient-to-br from-white via-[#faf8f5] to-[#f5f0e8] border border-gold/30 rounded-lg p-5 shadow-sm">
+                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-lg p-5 shadow-sm">
                     <Users className="w-6 h-6 text-gold mb-3" />
                     <p className="text-black text-base font-semibold leading-snug">Client-First Advisory</p>
                   </div>
-                  <div className="bg-gradient-to-br from-white via-[#faf8f5] to-[#f5f0e8] border border-gold/30 rounded-lg p-5 shadow-sm">
+                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-lg p-5 shadow-sm">
                     <Shield className="w-6 h-6 text-gold mb-3" />
                     <p className="text-black text-base font-semibold leading-snug">Capital Protection</p>
                   </div>
-                  <div className="bg-gradient-to-br from-white via-[#faf8f5] to-[#f5f0e8] border border-gold/30 rounded-lg p-5 shadow-sm">
+                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-lg p-5 shadow-sm">
                     <TrendingUp className="w-6 h-6 text-gold mb-3" />
                     <p className="text-black text-base font-semibold leading-snug">Long-Term Strategy</p>
                   </div>
-                  <div className="bg-gradient-to-br from-white via-[#faf8f5] to-[#f5f0e8] border border-gold/30 rounded-lg p-5 shadow-sm">
+                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-lg p-5 shadow-sm">
                     <Target className="w-6 h-6 text-gold mb-3" />
                     <p className="text-black text-base font-semibold leading-snug">Goal Alignment</p>
                   </div>

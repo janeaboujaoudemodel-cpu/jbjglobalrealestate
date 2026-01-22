@@ -77,8 +77,8 @@ const CommunityDetail = () => {
 
       {/* Content */}
       <div className="container mx-auto px-4 -mt-20 relative z-10 pb-16">
-        {/* Community Info Card - White/Gold/Champagne */}
-        <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-6 md:p-8 border border-gold/30 shadow-xl mb-12">
+        {/* Community Info Card - Champagne */}
+        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-6 md:p-8 border border-gold/30 shadow-xl mb-12">
           <h1 className="text-black font-bold mb-2 text-3xl md:text-4xl lg:text-5xl">
             {community.name}
           </h1>
@@ -91,7 +91,7 @@ const CommunityDetail = () => {
         </div>
 
         {/* Projects Section */}
-        <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-6 md:p-8 border border-gold/30 shadow-lg">
+        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-6 md:p-8 border border-gold/30 shadow-lg">
           <h2 className="text-black font-semibold mb-6 text-2xl">
             Projects in {community.name}
           </h2>
@@ -142,7 +142,7 @@ const CommunityDetail = () => {
         </div>
 
         {/* Educational Disclaimer */}
-        <div className="mt-8 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl p-6 border border-gold/30">
+        <div className="mt-8 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl p-6 border border-gold/30">
           <div className="flex items-start gap-4">
             <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
               <svg className="w-5 h-5 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -160,7 +160,7 @@ const CommunityDetail = () => {
         <div className="mt-8 text-center">
           <Link 
             to="/areas"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 px-6 py-3 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
           >
             <span className="text-gold font-semibold">View All Area Guides</span>
             <svg className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
