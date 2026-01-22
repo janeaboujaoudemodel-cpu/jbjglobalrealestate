@@ -28,8 +28,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
-// Leila Rahman portrait
-import leilaPortrait from "@/assets/team/leila-rahman-broker-admin.png";
+// Sarah Thompson portrait (Broker Administrator)
+import sarahThompsonPortrait from "@/assets/team/sarah-thompson-broker-admin.png";
 
 interface BrokerStats {
   totalBrokers: number;
@@ -105,8 +105,8 @@ export default function BrokerAdminAssistant() {
                   <div className="absolute inset-0 rounded-full bg-gradient-to-br from-emerald-400/40 to-emerald-600/10 blur-md animate-pulse" />
                   <div className="relative w-16 h-16 rounded-full border-2 border-emerald-500/50 overflow-hidden bg-gradient-to-br from-emerald-500/20 to-emerald-600/5">
                     <img 
-                      src={leilaPortrait} 
-                      alt="Leila Rahman" 
+                      src={sarahThompsonPortrait} 
+                      alt="Sarah Thompson" 
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -114,7 +114,7 @@ export default function BrokerAdminAssistant() {
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-                    Leila Rahman
+                    Sarah Thompson
                     <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">
                       Broker's Admin
                     </Badge>

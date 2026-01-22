@@ -143,7 +143,7 @@ export default function ReportsManagementPanel() {
       'Jessica': 'HR',
       'Catherine Brooks': 'Finance',
       'Victoria Sterling': 'Marketing',
-      'Leila Rahman': 'Broker Admin',
+      'Sarah Thompson': 'Broker Admin',
     };
     return deptMap[name] || 'Operations';
   };
