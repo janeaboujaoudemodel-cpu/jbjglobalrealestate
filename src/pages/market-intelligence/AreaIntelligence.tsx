@@ -68,20 +68,30 @@ const AreaIntelligence = () => {
 
       {/* Main Content - Black background with 3-layer system */}
       <div className="bg-black py-16">
-        <div className="flex gap-8">
-          {/* Main Content */}
-          <div className="flex-1 space-y-0">
+        {/* Fixed TOC Sidebar */}
+        <div className="hidden lg:block">
+          <MarketIntelligenceTableOfContents 
+            items={tocItems}
+            title="In This Section"
+            ctaAction={{
+              label: "Find Your Property",
+              href: "/properties",
+              icon: Search
+            }}
+          />
+        </div>
+        
+        <div className="space-y-0">
             
-            {/* Introduction Section - 3-layer system */}
-            <section id="introduction" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
-              <div className="container mx-auto px-4">
-                <motion.div
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={fadeInUp}
-                  className="max-w-4xl mx-auto lg:mr-80"
-                >
+          {/* Introduction Section - 3-layer system */}
+          <section id="introduction" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
+            <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeInUp}
+              >
                   <div className="jj-card-inner p-8">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="jj-icon-box-active w-12 h-12 rounded-xl">
@@ -99,16 +109,15 @@ const AreaIntelligence = () => {
               </div>
             </section>
 
-            {/* What Area Intelligence Means - 3-layer system */}
-            <section id="what-area-intelligence-means" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
-              <div className="container mx-auto px-4">
-                <motion.div
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={fadeInUp}
-                  className="max-w-4xl mx-auto lg:mr-80"
-                >
+          {/* What Area Intelligence Means - 3-layer system */}
+          <section id="what-area-intelligence-means" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
+            <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeInUp}
+              >
                   <div className="jj-card-inner p-8">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="jj-icon-box-active w-12 h-12 rounded-xl">
@@ -146,16 +155,15 @@ const AreaIntelligence = () => {
               </div>
             </section>
 
-            {/* Official Data Sources - 3-layer system */}
-            <section id="official-data-sources" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
-              <div className="container mx-auto px-4">
-                <motion.div
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={fadeInUp}
-                  className="max-w-4xl mx-auto lg:mr-80"
-                >
+          {/* Official Data Sources - 3-layer system */}
+          <section id="official-data-sources" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
+            <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeInUp}
+              >
                   <div className="jj-card-inner p-8">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
@@ -197,16 +205,15 @@ const AreaIntelligence = () => {
               </div>
             </section>
 
-            {/* How an Area Is Evaluated - 3-layer system */}
-            <section id="how-area-evaluated" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
-              <div className="container mx-auto px-4">
-                <motion.div
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={fadeInUp}
-                  className="max-w-4xl mx-auto lg:mr-80"
-                >
+          {/* How an Area Is Evaluated - 3-layer system */}
+          <section id="how-area-evaluated" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
+            <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeInUp}
+              >
                   <div className="jj-card-inner p-8">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
@@ -243,16 +250,15 @@ const AreaIntelligence = () => {
               </div>
             </section>
 
-            {/* What Area Intelligence Does Not Do - 3-layer system */}
-            <section id="what-it-does-not-do" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
-              <div className="container mx-auto px-4">
-                <motion.div
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={fadeInUp}
-                  className="max-w-4xl mx-auto lg:mr-80"
-                >
+          {/* What Area Intelligence Does Not Do - 3-layer system */}
+          <section id="what-it-does-not-do" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
+            <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeInUp}
+              >
                   <div className="jj-card-inner p-8">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
@@ -290,25 +296,24 @@ const AreaIntelligence = () => {
               </div>
             </section>
 
-            {/* Why Area-Level Analysis Matters - 3-layer system */}
-            <section id="why-it-matters" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
-              <div className="container mx-auto px-4">
-                <motion.div
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={fadeInUp}
-                  className="max-w-4xl mx-auto lg:mr-80"
-                >
-                  <div className="jj-card-inner p-8">
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
-                        <Building2 className="w-6 h-6 text-gold" />
-                      </div>
-                      <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
-                        <span className="text-gold">Why</span> Area-Level Analysis Matters
-                      </h2>
+          {/* Why Area-Level Analysis Matters - 3-layer system */}
+          <section id="why-it-matters" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
+            <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeInUp}
+              >
+                <div className="jj-card-inner p-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
+                      <Building2 className="w-6 h-6 text-gold" />
                     </div>
+                    <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      <span className="text-gold">Why</span> Area-Level Analysis Matters
+                    </h2>
+                  </div>
                     <p className="text-zinc-700 text-lg leading-relaxed mb-6">
                       Dubai's real estate market is not uniform. Performance, demand, and tenant behavior vary significantly between areas due to:
                     </p>
@@ -336,16 +341,15 @@ const AreaIntelligence = () => {
               </div>
             </section>
 
-            {/* How JBJ Uses Area Intelligence - 3-layer system */}
-            <section id="how-jbj-uses" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
-              <div className="container mx-auto px-4">
-                <motion.div
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={fadeInUp}
-                  className="max-w-4xl mx-auto lg:mr-80"
-                >
+          {/* How JBJ Uses Area Intelligence - 3-layer system */}
+          <section id="how-jbj-uses" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
+            <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeInUp}
+              >
                   <div className="jj-card-inner p-8">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
@@ -389,16 +393,15 @@ const AreaIntelligence = () => {
             {/* Gold Divider */}
             <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)] rounded-full" />
             
-            {/* Areas Grid - 3-layer system */}
-            <section id="area-grid" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
-              <div className="container mx-auto px-4">
-                <motion.div
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={fadeInUp}
-                  className="max-w-6xl mx-auto lg:mr-80"
-                >
+          {/* Areas Grid - 3-layer system */}
+          <section id="area-grid" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
+            <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeInUp}
+              >
                   <div className="jj-card-inner p-8">
                     <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
                       <span className="text-gold">Dubai</span>{" "}
@@ -492,21 +495,7 @@ const AreaIntelligence = () => {
                   </div>
                 </motion.div>
               </div>
-            </section>
-          </div>
-
-          {/* Table of Contents Sidebar */}
-          <div className="hidden lg:block w-72">
-            <MarketIntelligenceTableOfContents 
-              items={tocItems}
-              title="In This Section"
-              ctaAction={{
-                label: "Find Your Property",
-                href: "/properties",
-                icon: Search
-              }}
-            />
-          </div>
+          </section>
         </div>
       </div>
 
