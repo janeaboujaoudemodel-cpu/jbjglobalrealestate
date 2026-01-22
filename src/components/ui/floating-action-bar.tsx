@@ -231,10 +231,10 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
                   AI Quick Actions
                 </div>
                 {[
-                  { icon: <Sparkles />, label: 'AI Summary', action: () => {} },
-                  { icon: <MessageSquare />, label: 'Draft Message', action: () => {} },
-                  { icon: <TrendingUp />, label: 'Predict Outcome', action: () => {} },
-                  { icon: <FileText />, label: 'Generate Report', action: () => {} },
+                  { icon: <Sparkles />, label: 'AI Summary', action: () => navigate('/ai-hub') },
+                  { icon: <MessageSquare />, label: 'Draft Message', action: () => navigate('/crm/notes') },
+                  { icon: <TrendingUp />, label: 'Predict Outcome', action: () => navigate('/jbj-analytics') },
+                  { icon: <FileText />, label: 'Generate Report', action: () => navigate('/jbj-broker-reports') },
                 ].map((item, i) => (
                   <button
                     key={i}

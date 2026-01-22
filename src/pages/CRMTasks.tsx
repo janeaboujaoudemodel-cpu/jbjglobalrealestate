@@ -46,6 +46,17 @@ const CATEGORY_COLORS: Record<string, string> = {
   security: "bg-red-500/20 text-red-400 border-red-500/30",
   marketing: "bg-green-500/20 text-green-400 border-green-500/30",
   development: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+  other: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+};
+
+// Map legacy statuses to valid ones
+const normalizeStatus = (status: string | null): 'todo' | 'in_progress' | 'done' => {
+  if (!status) return 'todo';
+  const s = status.toLowerCase();
+  if (s === 'done' || s === 'completed') return 'done';
+  if (s === 'in_progress' || s === 'in-progress' || s === 'active') return 'in_progress';
+  // pending, todo, new, or anything else → todo
+  return 'todo';
 };
 
 const CRMTasks = () => {
@@ -86,7 +97,12 @@ const CRMTasks = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setTasks((data || []) as Task[]);
+      // Normalize statuses from DB (handles 'pending', etc.)
+      const normalizedTasks = (data || []).map((t: any) => ({
+        ...t,
+        status: normalizeStatus(t.status),
+      })) as Task[];
+      setTasks(normalizedTasks);
     } catch (err) {
       console.error("Failed to fetch tasks:", err);
       toast.error("Failed to load tasks");
@@ -314,6 +330,7 @@ const CRMTasks = () => {
                     <option value="security">Security</option>
                     <option value="marketing">Marketing</option>
                     <option value="development">Development</option>
+                    <option value="other">Other</option>
                   </select>
                   
                   <select
