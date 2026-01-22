@@ -59,7 +59,18 @@ export const FAQTableOfContents = ({
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      // Set active immediately for better UX
+      setActiveId(id);
+      
+      // Use a larger offset to account for sticky headers (same as GuideTableOfContents)
+      const offset = 150;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - offset;
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
     }
   };
 
