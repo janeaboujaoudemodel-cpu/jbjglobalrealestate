@@ -1,280 +1,302 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { 
+  Scale, FileText, Building2, Users, Shield, Award,
+  ChevronLeft, Phone, ArrowRight, CheckCircle, Gavel,
+  BookOpen, Briefcase, FileCheck
+} from "lucide-react";
 import Footer from "@/components/Footer";
+import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
-import { ArrowUpRight, Scale, FileText, Shield, Building2, Briefcase, Globe, Users, Award } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { CONTACT_INFO } from "@/constants/stats";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] } }
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
 };
 
 const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.1 }
+    transition: { staggerChildren: 0.1 }
   }
+};
+
+// Split title helper
+const SplitTitle = ({ text }: { text: string }) => {
+  const words = text.split(' ');
+  const firstWord = words[0];
+  const restWords = words.slice(1).join(' ');
+  
+  return (
+    <span className="jj-title-split">
+      <span>{firstWord}</span>{restWords && <span> {restWords}</span>}
+    </span>
+  );
 };
 
 const practiceAreas = [
   {
     icon: Building2,
-    title: "Real Estate Law",
-    description: "Comprehensive legal support for property transactions, development agreements, and real estate disputes.",
-    services: ["Property Acquisition", "Sale Agreements", "Title Due Diligence", "RERA Compliance"],
-  },
-  {
-    icon: Briefcase,
-    title: "Corporate Law",
-    description: "Expert guidance on company formation, mergers & acquisitions, and corporate governance.",
-    services: ["Company Formation", "M&A Advisory", "Shareholder Agreements", "Corporate Restructuring"],
-  },
-  {
-    icon: Globe,
-    title: "Immigration Law",
-    description: "Visa and residency solutions for investors, entrepreneurs, and high-net-worth individuals.",
-    services: ["Golden Visa", "Investor Visa", "Family Residency", "Work Permits"],
+    title: "Property Transactions",
+    description: "Complete legal support for buying, selling, and transferring property ownership.",
+    services: ["Title Verification", "Contract Drafting", "Due Diligence", "Transfer Processing"]
   },
   {
     icon: FileText,
     title: "Contract Law",
-    description: "Drafting, review, and negotiation of commercial contracts and legal agreements.",
-    services: ["Contract Drafting", "Dispute Resolution", "Negotiation", "Legal Review"],
+    description: "Drafting, reviewing, and negotiating real estate contracts and agreements.",
+    services: ["Sale Agreements", "Lease Contracts", "MOU Drafting", "Dispute Resolution"]
   },
+  {
+    icon: Gavel,
+    title: "Dispute Resolution",
+    description: "Expert representation in property disputes and litigation matters.",
+    services: ["Mediation", "Arbitration", "Court Representation", "Settlement Negotiation"]
+  },
+  {
+    icon: BookOpen,
+    title: "Regulatory Compliance",
+    description: "Ensuring compliance with RERA, DLD, and other regulatory requirements.",
+    services: ["RERA Registration", "DLD Compliance", "Licensing Support", "Regulatory Filings"]
+  }
 ];
 
 const whyChooseUs = [
-  { icon: Shield, title: "Confidentiality", desc: "Absolute discretion in all client matters" },
-  { icon: Award, title: "Expertise", desc: "Specialized in UAE & international law" },
-  { icon: Users, title: "Personal Service", desc: "Direct access to senior legal counsel" },
-  { icon: Globe, title: "Global Network", desc: "International legal partnerships" },
+  {
+    icon: Award,
+    title: "Licensed Advocates",
+    description: "Fully licensed legal professionals in UAE"
+  },
+  {
+    icon: Users,
+    title: "Dedicated Team",
+    description: "Specialized real estate legal experts"
+  },
+  {
+    icon: Shield,
+    title: "Confidential",
+    description: "Strict client confidentiality protocols"
+  },
+  {
+    icon: Briefcase,
+    title: "End-to-End",
+    description: "Comprehensive legal support services"
+  }
 ];
 
 const LawFirm = () => {
   return (
-    <section className="relative w-full min-h-screen bg-black">
+    <div className="min-h-screen bg-black">
+      <SEOHead 
+        title="Legal Services Dubai | Real Estate Law | JBJ GLOBAL REAL ESTATE"
+        description="Expert legal services for Dubai real estate. Property transactions, contract law, dispute resolution, and regulatory compliance. Licensed legal professionals."
+        keywords="Dubai real estate lawyer, property legal services, RERA compliance, property dispute resolution, real estate contract lawyer Dubai"
+        canonicalPath="/services/legal"
+      />
+
       {/* Hero Section */}
-      <div className="relative h-[70vh] min-h-[500px] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[60vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <img 
-            src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1920&q=80"
-            alt="Law Firm"
-            className="w-full h-full object-cover"
+            src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80" 
+            alt="Legal services"
+            className="w-full h-full object-cover opacity-30"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/80 to-black" />
         </div>
-
+        
         <motion.div 
-          className="relative z-10 text-center px-4 max-w-4xl mx-auto"
+          className="relative z-10 container mx-auto px-4 py-32"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
           <motion.div variants={fadeInUp}>
-            <button 
-              className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 cursor-default"
-              style={{
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
-                backdropFilter: 'blur(20px)',
-                border: '1.5px solid rgba(200,167,102,0.6)',
-                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
-              }}
+            <Link 
+              to="/services" 
+              className="inline-flex items-center gap-2 text-gold hover:text-white transition-colors mb-6"
             >
-              <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-              <span className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Legal Division</span>
-            </button>
+              <ChevronLeft className="w-4 h-4" />
+              Back to Services
+            </Link>
+          </motion.div>
+
+          <motion.div 
+            className="flex items-center gap-2 mb-6"
+            variants={fadeInUp}
+          >
+            <Scale className="w-6 h-6 text-gold" />
+            <span className="text-gold text-sm uppercase tracking-[0.3em]">
+              Legal Division
+            </span>
           </motion.div>
 
           <motion.h1 
-            className="text-white text-4xl md:text-6xl lg:text-7xl font-bold tracking-wide mb-6"
-            variants={fadeInUp}
+            className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl"
             style={{ fontFamily: "Poppins, sans-serif" }}
+            variants={fadeInUp}
           >
-            Expert{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">
-              Legal Counsel
-            </span>
+            Legal Services
           </motion.h1>
 
           <motion.p 
-            className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto mb-8"
+            className="text-zinc-400 text-lg md:text-xl max-w-2xl mb-8"
             variants={fadeInUp}
           >
-            Trusted legal advisory for investors, businesses, and high-net-worth individuals in the UAE and beyond.
+            Expert legal support for all your real estate transactions. 
+            Licensed advocates specializing in UAE property law.
           </motion.p>
 
           <motion.div variants={fadeInUp}>
-            <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-              <button 
-                className="group relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent"
-                style={{
-                  border: '2px solid rgba(255,255,255,0.8)',
-                  boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-                }}
-              >
-                <span className="text-white group-hover:text-black transition-colors">Schedule Legal Consultation</span>
-                <ArrowUpRight className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                {/* Hover fill overlay */}
-                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
-              </button>
-            </a>
+            <Button variant="primary" size="lg" asChild>
+              <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
+                <span className="text-black">Schedule</span><span className="text-gold"> Consultation</span>
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </a>
+            </Button>
           </motion.div>
         </motion.div>
-      </div>
+      </section>
 
-      {/* Practice Areas */}
-      <section className="py-20 bg-gradient-to-b from-black to-zinc-950">
-        <div className="container mx-auto px-4">
+      {/* Practice Areas - 3-Layer System */}
+      <section className="py-16 bg-black">
+        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
           <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Practice Areas</span>
-            <h2 
-              className="text-white text-3xl md:text-4xl font-bold"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Our Legal Expertise
-            </h2>
-          </motion.div>
-
-          <motion.div 
-            className="grid md:grid-cols-2 gap-6"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
           >
-            {practiceAreas.map((area, idx) => (
-              <motion.div
-                key={idx}
-                className="p-8 rounded-2xl bg-zinc-900/50 border border-zinc-800 hover:border-gold/30 transition-all"
-                variants={fadeInUp}
-              >
-                <div className="flex items-start gap-6">
-                  <div className="w-16 h-16 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center flex-shrink-0">
-                    <area.icon className="w-8 h-8 text-gold" />
-                  </div>
-                  <div>
-                    <h3 className="text-white font-bold text-xl mb-2">{area.title}</h3>
-                    <p className="text-zinc-400 text-sm mb-4">{area.description}</p>
-                    <ul className="grid grid-cols-2 gap-2">
-                      {area.services.map((service, sidx) => (
-                        <li key={sidx} className="flex items-center gap-2 text-zinc-300 text-sm">
-                          <div className="w-1.5 h-1.5 rounded-full bg-gold" />
-                          {service}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+            <motion.div className="text-center mb-12" variants={fadeInUp}>
+              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+                Expertise
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <SplitTitle text="Practice Areas" />
+              </h2>
+              <p className="text-black/70 max-w-2xl mx-auto">
+                Comprehensive legal services covering all aspects of real estate law in Dubai.
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {practiceAreas.map((area, index) => (
+                <motion.div key={area.title} variants={fadeInUp}>
+                  <Card className="jj-card-inner hover:border-white transition-all group h-full">
+                    <CardContent className="p-6">
+                      <div className="flex items-start gap-4">
+                        <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                          <area.icon className="w-7 h-7 text-gold" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-black font-semibold text-xl mb-2 group-hover:text-gold transition-colors">
+                            {area.title}
+                          </h3>
+                          <p className="text-black/70 text-sm mb-4">
+                            {area.description}
+                          </p>
+                          <div className="grid grid-cols-2 gap-2">
+                            {area.services.map((service) => (
+                              <div key={service} className="flex items-center gap-2 text-xs text-black/60">
+                                <CheckCircle className="w-3 h-3 text-gold" />
+                                {service}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Why Choose Us */}
-      <section className="py-20 bg-zinc-950">
-        <div className="container mx-auto px-4">
+      {/* Why Choose Us - 3-Layer System */}
+      <section className="py-16 bg-black">
+        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
           <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Why Choose Us</span>
-            <h2 
-              className="text-white text-3xl md:text-4xl font-bold"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              The JBJ Legal Difference
-            </h2>
-          </motion.div>
-
-          <motion.div 
-            className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
           >
-            {whyChooseUs.map((item, idx) => (
-              <motion.div
-                key={idx}
-                className="text-center p-6 rounded-2xl bg-zinc-900/30 border border-zinc-800/50 hover:border-gold/20 transition-all"
-                variants={fadeInUp}
-              >
-                <div className="w-14 h-14 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center mx-auto mb-4">
-                  <item.icon className="w-7 h-7 text-gold" />
-                </div>
-                <h3 className="text-white font-semibold mb-2">{item.title}</h3>
-                <p className="text-zinc-500 text-sm">{item.desc}</p>
-              </motion.div>
-            ))}
+            <motion.div className="text-center mb-12" variants={fadeInUp}>
+              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+                Our Advantage
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <SplitTitle text="Why Choose Us" />
+              </h2>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {whyChooseUs.map((item, index) => (
+                <motion.div key={item.title} variants={fadeInUp}>
+                  <Card className="jj-card-inner h-full">
+                    <CardContent className="p-6 text-center">
+                      <div className="w-16 h-16 rounded-full bg-black flex items-center justify-center mx-auto mb-4">
+                        <item.icon className="w-8 h-8 text-gold" />
+                      </div>
+                      <h3 className="text-black font-semibold text-lg mb-2">
+                        {item.title}
+                      </h3>
+                      <p className="text-black/70 text-sm">
+                        {item.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-20 bg-black">
-        <div className="container mx-auto px-4">
+      {/* CTA Section - 3-Layer System */}
+      <section className="py-16 bg-black">
+        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
           <motion.div
-            className="text-center max-w-3xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
+            variants={fadeInUp}
+            className="text-center"
           >
-            <Scale className="w-12 h-12 text-gold mx-auto mb-6" />
-            <h2 
-              className="text-white text-3xl md:text-4xl font-bold mb-6"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Need Legal Assistance?
-            </h2>
-            <p className="text-zinc-400 mb-8">
-              Our experienced legal team is ready to provide the counsel and representation you need. Schedule a confidential consultation today.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                <button 
-                  className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
-                  style={{
-                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
-                    boxShadow: `
-                      0 10px 30px rgba(200,167,102,0.4),
-                      0 6px 15px rgba(0,0,0,0.2),
-                      inset 0 2px 4px rgba(255,255,255,0.9),
-                      inset 0 -2px 4px rgba(200,167,102,0.2),
-                      0 0 20px rgba(200,167,102,0.3)
-                    `,
-                  }}
-                >
-                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-                  <span className="relative flex items-center gap-2">
-                    <span className="text-gold">Book</span>
-                    <span className="text-black">Consultation</span>
-                    <ArrowUpRight className="w-5 h-5 text-black" />
-                  </span>
-                </button>
-              </a>
-              <a href={`tel:${CONTACT_INFO.phoneRaw}`}>
-                <button className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-white text-white hover:bg-white hover:text-black">
-                  Call {CONTACT_INFO.phone}
-                </button>
-              </a>
+            <div className="jj-card-inner rounded-2xl p-8 md:p-12 max-w-3xl mx-auto">
+              <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <SplitTitle text="Need Legal Assistance?" />
+              </h2>
+              <p className="text-black/70 mb-8 max-w-xl mx-auto">
+                Our legal team is ready to assist with your real estate legal needs. 
+                Schedule a confidential consultation today.
+              </p>
+              <div className="flex flex-wrap justify-center gap-4">
+                <Button variant="primary" size="lg" asChild>
+                  <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
+                    <span className="text-black">Book</span><span className="text-gold"> Consultation</span>
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </a>
+                </Button>
+                <Button variant="secondary" size="lg" asChild>
+                  <a href={`tel:${CONTACT_INFO.phoneRaw}`}>
+                    <Phone className="w-5 h-5 mr-2" />
+                    Call Now
+                  </a>
+                </Button>
+              </div>
             </div>
           </motion.div>
         </div>
       </section>
 
       <Footer />
-    </section>
+    </div>
   );
 };
 

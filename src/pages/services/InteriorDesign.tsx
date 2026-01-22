@@ -1,304 +1,352 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { 
+  Palette, Sofa, Lightbulb, Layers, Sparkles,
+  ChevronLeft, ArrowRight, CheckCircle
+} from "lucide-react";
 import Footer from "@/components/Footer";
+import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
-import { ArrowUpRight, Paintbrush, Sofa, Lamp, Frame, Palette, Sparkles } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { CONTACT_INFO } from "@/constants/stats";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] } }
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
 };
 
 const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.1 }
+    transition: { staggerChildren: 0.1 }
   }
+};
+
+// Split title helper
+const SplitTitle = ({ text }: { text: string }) => {
+  const words = text.split(' ');
+  const firstWord = words[0];
+  const restWords = words.slice(1).join(' ');
+  
+  return (
+    <span className="jj-title-split">
+      <span>{firstWord}</span>{restWords && <span> {restWords}</span>}
+    </span>
+  );
 };
 
 const services = [
   {
-    icon: Sofa,
-    title: "Luxury Residential",
-    description: "Transform your home into a sanctuary of style with bespoke interior design tailored to your lifestyle.",
-  },
-  {
-    icon: Lamp,
-    title: "Hospitality Design",
-    description: "Create memorable guest experiences through innovative hotel and restaurant interior concepts.",
-  },
-  {
-    icon: Frame,
-    title: "Art Consultation",
-    description: "Curate exceptional art collections that complement your space and express your personal aesthetic.",
-  },
-  {
     icon: Palette,
-    title: "Furniture Curation",
-    description: "Source and customize premium furniture pieces from the world's finest artisans and manufacturers.",
+    title: "Concept Development",
+    description: "Create cohesive design concepts that reflect your personal style and lifestyle needs.",
+    features: ["Mood Boards", "Color Schemes", "Material Selection", "Style Direction"]
   },
+  {
+    icon: Sofa,
+    title: "Space Planning",
+    description: "Optimize your space for functionality, flow, and aesthetic appeal.",
+    features: ["Layout Design", "Furniture Planning", "Traffic Flow", "Zoning"]
+  },
+  {
+    icon: Lightbulb,
+    title: "Lighting Design",
+    description: "Create ambiance and functionality with expert lighting solutions.",
+    features: ["Natural Light", "Ambient Lighting", "Task Lighting", "Accent Lighting"]
+  },
+  {
+    icon: Layers,
+    title: "FF&E Selection",
+    description: "Curated furniture, fixtures, and equipment selection for every space.",
+    features: ["Furniture Sourcing", "Custom Pieces", "Art Curation", "Accessories"]
+  }
 ];
 
 const portfolio = [
   {
     title: "Penthouse Suite",
-    style: "Contemporary Minimalist",
-    image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80",
+    style: "Contemporary Luxury",
+    image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80"
   },
   {
-    title: "Villa Living Room",
-    style: "Modern Arabic Fusion",
-    image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=800&q=80",
+    title: "Family Villa",
+    style: "Modern Arabic",
+    image: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&q=80"
   },
   {
-    title: "Master Bedroom",
-    style: "Luxury Contemporary",
-    image: "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=800&q=80",
-  },
-  {
-    title: "Dining Experience",
-    style: "Elegant Traditional",
-    image: "https://images.unsplash.com/photo-1617806118233-18e1de247200?w=800&q=80",
-  },
+    title: "Executive Office",
+    style: "Minimalist",
+    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80"
+  }
+];
+
+const process = [
+  { step: "01", title: "Consultation", description: "Understand your vision and requirements" },
+  { step: "02", title: "Concept Design", description: "Develop design concepts and mood boards" },
+  { step: "03", title: "Development", description: "Detailed design and specifications" },
+  { step: "04", title: "Implementation", description: "Procurement and installation" }
 ];
 
 const InteriorDesign = () => {
   return (
-    <section className="relative w-full min-h-screen bg-black">
+    <div className="min-h-screen bg-black">
+      <SEOHead 
+        title="Interior Design Services Dubai | Luxury Interiors | JBJ GLOBAL REAL ESTATE"
+        description="Premium interior design services in Dubai. Concept development, space planning, lighting design, and FF&E selection. Transform your space with expert designers."
+        keywords="Dubai interior design, luxury interiors, home design Dubai, interior decorator, residential interior design"
+        canonicalPath="/services/interior-design"
+      />
+
       {/* Hero Section */}
-      <div className="relative h-[70vh] min-h-[500px] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[60vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <img 
-            src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1920&q=80"
+            src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80" 
             alt="Interior Design"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover opacity-30"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/80 to-black" />
         </div>
-
+        
         <motion.div 
-          className="relative z-10 text-center px-4 max-w-4xl mx-auto"
+          className="relative z-10 container mx-auto px-4 py-32"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
           <motion.div variants={fadeInUp}>
-            <Link to="/services/design-build" className="inline-flex items-center gap-2 text-zinc-400 text-xs uppercase tracking-[0.2em] mb-4 hover:text-gold transition-colors">
-              ← Back to Design & Build
+            <Link 
+              to="/services/design-build" 
+              className="inline-flex items-center gap-2 text-gold hover:text-white transition-colors mb-6"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Back to Design & Build
             </Link>
           </motion.div>
 
-          <motion.div variants={fadeInUp}>
-            <button 
-              className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 cursor-default"
-              style={{
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
-                backdropFilter: 'blur(20px)',
-                border: '1.5px solid rgba(200,167,102,0.6)',
-                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
-              }}
-            >
-              <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-              <span className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Interior Design Services</span>
-            </button>
+          <motion.div 
+            className="flex items-center gap-2 mb-6"
+            variants={fadeInUp}
+          >
+            <Palette className="w-6 h-6 text-gold" />
+            <span className="text-gold text-sm uppercase tracking-[0.3em]">
+              Partner Network
+            </span>
           </motion.div>
 
           <motion.h1 
-            className="text-white text-4xl md:text-6xl lg:text-7xl font-bold tracking-wide mb-6"
-            variants={fadeInUp}
+            className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl"
             style={{ fontFamily: "Poppins, sans-serif" }}
+            variants={fadeInUp}
           >
-            Curated{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">
-              Interiors
-            </span>
+            Interior Design
           </motion.h1>
 
           <motion.p 
-            className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto mb-8"
+            className="text-zinc-400 text-lg md:text-xl max-w-2xl mb-8"
             variants={fadeInUp}
           >
-            Where artistry meets functionality to create spaces that inspire and delight.
+            Transform your space into a reflection of your lifestyle. 
+            Premium interior design by licensed professionals.
           </motion.p>
 
           <motion.div variants={fadeInUp}>
-            <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-              <button 
-                className="group relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent"
-                style={{
-                  border: '2px solid rgba(255,255,255,0.8)',
-                  boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-                }}
-              >
-                <span className="text-white group-hover:text-black transition-colors">Book a Consultation</span>
-                <ArrowUpRight className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                {/* Hover fill overlay */}
-                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
-              </button>
-            </a>
+            <Button variant="primary" size="lg" asChild>
+              <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
+                <span className="text-black">Book a</span><span className="text-gold"> Consultation</span>
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </a>
+            </Button>
           </motion.div>
         </motion.div>
-      </div>
+      </section>
 
-      {/* Services Grid */}
-      <section className="py-20 bg-gradient-to-b from-black to-zinc-950">
-        <div className="container mx-auto px-4">
+      {/* Services - 3-Layer System */}
+      <section className="py-16 bg-black">
+        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
           <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Expertise</span>
-            <h2 
-              className="text-white text-3xl md:text-4xl font-bold"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Design Services
-            </h2>
-          </motion.div>
-
-          <motion.div 
-            className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
           >
-            {services.map((service, idx) => (
-              <motion.div
-                key={idx}
-                className="p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800 hover:border-gold/30 transition-all"
-                variants={fadeInUp}
-              >
-                <div className="w-14 h-14 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center mb-4">
-                  <service.icon className="w-7 h-7 text-gold" />
-                </div>
-                <h3 className="text-white font-semibold text-lg mb-2">{service.title}</h3>
-                <p className="text-zinc-400 text-sm">{service.description}</p>
-              </motion.div>
-            ))}
+            <motion.div className="text-center mb-12" variants={fadeInUp}>
+              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+                Our Services
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <SplitTitle text="Design Services" />
+              </h2>
+              <p className="text-black/70 max-w-2xl mx-auto">
+                Comprehensive interior design services for residential and commercial spaces.
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {services.map((service, index) => (
+                <motion.div key={service.title} variants={fadeInUp}>
+                  <Card className="jj-card-inner hover:border-white transition-all group h-full">
+                    <CardContent className="p-6">
+                      <div className="flex items-start gap-4">
+                        <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                          <service.icon className="w-7 h-7 text-gold" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-black font-semibold text-xl mb-2 group-hover:text-gold transition-colors">
+                            {service.title}
+                          </h3>
+                          <p className="text-black/70 text-sm mb-4">
+                            {service.description}
+                          </p>
+                          <div className="grid grid-cols-2 gap-2">
+                            {service.features.map((feature) => (
+                              <div key={feature} className="flex items-center gap-2 text-xs text-black/60">
+                                <CheckCircle className="w-3 h-3 text-gold" />
+                                {feature}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Portfolio Gallery */}
-      <section className="py-20 bg-zinc-950">
-        <div className="container mx-auto px-4">
+      {/* Portfolio - 3-Layer System */}
+      <section className="py-16 bg-black">
+        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
           <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Portfolio</span>
-            <h2 
-              className="text-white text-3xl md:text-4xl font-bold"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Our Work
-            </h2>
-          </motion.div>
-
-          <motion.div 
-            className="grid md:grid-cols-2 gap-6"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
           >
-            {portfolio.map((item, idx) => (
-              <motion.div
-                key={idx}
-                className="group relative overflow-hidden rounded-2xl aspect-[16/10]"
-                variants={fadeInUp}
-              >
-                <img 
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 className="text-white font-bold text-xl mb-1">{item.title}</h3>
-                  <p className="text-gold text-sm">{item.style}</p>
-                </div>
-              </motion.div>
-            ))}
+            <motion.div className="text-center mb-12" variants={fadeInUp}>
+              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+                Portfolio
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <SplitTitle text="Our Work" />
+              </h2>
+            </motion.div>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              {portfolio.map((project, index) => (
+                <motion.div key={project.title} variants={fadeInUp}>
+                  <Card className="jj-card-inner overflow-hidden group h-full">
+                    <div className="relative h-64 overflow-hidden">
+                      <img 
+                        src={project.image} 
+                        alt={project.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    </div>
+                    <CardContent className="p-4">
+                      <h3 className="text-black font-semibold text-lg mb-1">
+                        {project.title}
+                      </h3>
+                      <p className="text-gold text-sm">
+                        {project.style}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Process */}
-      <section className="py-20 bg-black">
-        <div className="container mx-auto px-4">
+      {/* Process - 3-Layer System */}
+      <section className="py-16 bg-black">
+        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
           <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
+            variants={staggerContainer}
           >
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Process</span>
-            <h2 
-              className="text-white text-3xl md:text-4xl font-bold"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              How We Work
-            </h2>
-          </motion.div>
+            <motion.div className="text-center mb-12" variants={fadeInUp}>
+              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+                How We Work
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <SplitTitle text="Our Process" />
+              </h2>
+            </motion.div>
 
-          <div className="grid md:grid-cols-4 gap-8">
-            {["Discovery", "Concept", "Design", "Delivery"].map((step, idx) => (
-              <div key={step} className="text-center">
-                <div className="w-16 h-16 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center mx-auto mb-4">
-                  <span className="text-gold text-2xl font-bold">{idx + 1}</span>
-                </div>
-                <h3 className="text-white font-semibold mb-2">{step}</h3>
-                <p className="text-zinc-500 text-sm">
-                  {idx === 0 && "Understanding your vision and requirements"}
-                  {idx === 1 && "Creating mood boards and initial concepts"}
-                  {idx === 2 && "Detailed design development and sourcing"}
-                  {idx === 3 && "Implementation and final styling"}
-                </p>
+            <div className="grid md:grid-cols-4 gap-6">
+              {process.map((item, index) => (
+                <motion.div key={item.step} variants={fadeInUp}>
+                  <Card className="jj-card-inner h-full">
+                    <CardContent className="p-6 text-center">
+                      <div className="text-4xl font-bold text-gold mb-4">
+                        {item.step}
+                      </div>
+                      <h3 className="text-black font-semibold text-lg mb-2">
+                        {item.title}
+                      </h3>
+                      <p className="text-black/70 text-sm">
+                        {item.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* CTA Section - 3-Layer System */}
+      <section className="py-16 bg-black">
+        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+            className="text-center"
+          >
+            <div className="jj-card-inner rounded-2xl p-8 md:p-12 max-w-3xl mx-auto">
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <Sparkles className="w-5 h-5 text-gold" />
+                <span className="text-gold text-sm uppercase tracking-wider">Try AI First</span>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-20 bg-gradient-to-b from-black to-zinc-950">
-        <div className="container mx-auto px-4">
-          <motion.div
-            className="text-center max-w-3xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <Sparkles className="w-12 h-12 text-gold mx-auto mb-6" />
-            <h2 
-              className="text-white text-3xl md:text-4xl font-bold mb-6"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Transform Your Space
-            </h2>
-            <p className="text-zinc-400 mb-8">
-              Let our award-winning designers create an interior that reflects your unique style and elevates your everyday life.
-            </p>
-            <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-              <Button variant="primary" className="px-8 py-6 text-base">
-                Start Your Design Journey
-                <ArrowUpRight className="w-5 h-5 ml-2" />
-              </Button>
-            </a>
+              <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <SplitTitle text="Visualize Your Space" />
+              </h2>
+              <p className="text-black/70 mb-8 max-w-xl mx-auto">
+                Try our AI Interior Designer to visualize concepts, 
+                then connect with our partner designers for full implementation.
+              </p>
+              <div className="flex flex-wrap justify-center gap-4">
+                <Button variant="primary" size="lg" asChild>
+                  <Link to="/tools/interior-ai">
+                    <Sparkles className="w-5 h-5 mr-2" />
+                    <span className="text-black">Try AI</span><span className="text-gold"> Designer</span>
+                  </Link>
+                </Button>
+                <Button variant="secondary" size="lg" asChild>
+                  <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
+                    Book Consultation
+                  </a>
+                </Button>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
 
       <Footer />
-    </section>
+    </div>
   );
 };
 
