@@ -132,9 +132,8 @@ const StatsCounter = () => {
 
   return (
     <section ref={sectionRef} className="py-16 md:py-20 bg-black">
-      <div className="container mx-auto px-4">
-        {/* Active Champagne Section Layer - 3-layer system compliant */}
-        <div className="mx-0 md:mx-4 lg:mx-8 py-10 px-4 md:px-8 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg">
+      {/* Active Champagne Section Layer - using global jj-layer-2 */}
+      <div className="jj-layer-2">
           {/* Section Header - Premium Label */}
           <div className="text-center mb-10">
             <span className="inline-block px-5 py-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-3 shadow-sm">
@@ -150,7 +149,6 @@ const StatsCounter = () => {
               <StatItem key={index} {...stat} isVisible={isVisible} />
             ))}
           </div>
-        </div>
       </div>
     </section>
   );

@@ -102,13 +102,25 @@ All colors MUST be HSL.
 
   @media (min-width: 768px) {
     :root {
-      --jj-gutter: 2rem; /* 32px */
+      --jj-gutter: 2rem; /* 32px on tablet */
     }
   }
 
   @media (min-width: 1024px) {
     :root {
-      --jj-gutter: 4rem; /* 64px */
+      --jj-gutter: 4rem; /* 64px on desktop */
+    }
+  }
+
+  @media (min-width: 1280px) {
+    :root {
+      --jj-gutter: 5rem; /* 80px on large screens */
+    }
+  }
+
+  @media (min-width: 1536px) {
+    :root {
+      --jj-gutter: 6rem; /* 96px on extra large screens */
     }
   }
 
@@ -313,9 +325,8 @@ All colors MUST be HSL.
     position: absolute;
     top: 0.5rem;
     bottom: 0.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(calc(100% - (var(--jj-gutter) * 2)), var(--jj-content-max));
+    left: var(--jj-gutter);
+    right: var(--jj-gutter);
     background: linear-gradient(
       to bottom right,
       hsl(var(--champagne-1)),
@@ -330,11 +341,36 @@ All colors MUST be HSL.
   .jj-section-champagne > * {
     position: relative;
     z-index: 1;
-    max-width: var(--jj-content-max);
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: var(--jj-gutter);
-    padding-right: var(--jj-gutter);
+    margin-left: var(--jj-gutter);
+    margin-right: var(--jj-gutter);
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  /* ============================================================
+   * GLOBAL LAYER 2 WRAPPER (LOCKED)
+   * Use this for all champagne sections to ensure perfect alignment.
+   * Applies IDENTICAL left/right gutters globally.
+   * ============================================================ */
+  .jj-layer-2 {
+    margin-left: var(--jj-gutter);
+    margin-right: var(--jj-gutter);
+    padding: 2.5rem 1.5rem;
+    background: linear-gradient(
+      to bottom right,
+      hsl(var(--champagne-1)),
+      hsl(var(--champagne-2)),
+      hsl(var(--champagne-3))
+    );
+    border: 1px solid hsl(var(--gold) / 0.3);
+    border-radius: 1rem;
+    box-shadow: 0 0 40px hsl(var(--gold) / 0.18);
+  }
+
+  @media (min-width: 768px) {
+    .jj-layer-2 {
+      padding: 3rem 2rem;
+    }
   }
 
   /* ============================================================
@@ -343,7 +379,6 @@ All colors MUST be HSL.
    * ============================================================ */
   .jj-section-width {
     width: 100%;
-    max-width: var(--jj-content-max);
     margin-left: auto;
     margin-right: auto;
     padding-left: var(--jj-gutter);
@@ -356,23 +391,14 @@ All colors MUST be HSL.
    * to ensure perfect vertical alignment across all pages.
    * ============================================================ */
   .jj-inset-active {
-    /* Backwards-compatible alias for jj-section-width */
-    width: 100%;
-    max-width: var(--jj-content-max);
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: var(--jj-gutter);
-    padding-right: var(--jj-gutter);
+    margin-left: var(--jj-gutter);
+    margin-right: var(--jj-gutter);
   }
 
   /* Alias for backwards compatibility */
   .jj-section-inset {
-    width: 100%;
-    max-width: var(--jj-content-max);
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: var(--jj-gutter);
-    padding-right: var(--jj-gutter);
+    margin-left: var(--jj-gutter);
+    margin-right: var(--jj-gutter);
   }
 
   /* Edge-to-edge section on black background */
