@@ -97,7 +97,7 @@ const AreaDetail = () => {
       </section>
 
       {/* Overview Section - White/Gold Theme */}
-      <section className="py-20 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+      <section className="py-20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <div className="container mx-auto px-4">
           <motion.div 
             className="max-w-4xl mx-auto"
@@ -173,7 +173,7 @@ const AreaDetail = () => {
             <div className="grid md:grid-cols-2 gap-8">
               {/* Landmarks - White Card */}
               <motion.div 
-                className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-2xl p-8 shadow-lg"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-8 shadow-lg"
                 variants={fadeInUp}
               >
                 <h3 className="text-black text-xl font-bold mb-6 flex items-center gap-3">
@@ -192,7 +192,7 @@ const AreaDetail = () => {
 
               {/* Connectivity - White Card */}
               <motion.div 
-                className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-2xl p-8 shadow-lg"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-8 shadow-lg"
                 variants={fadeInUp}
               >
                 <h3 className="text-black text-xl font-bold mb-6 flex items-center gap-3">
@@ -214,7 +214,7 @@ const AreaDetail = () => {
       </section>
 
       {/* Lifestyle & Amenities - White/Champagne Theme */}
-      <section className="py-20 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+      <section className="py-20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -290,7 +290,7 @@ const AreaDetail = () => {
               {area.propertyTypes.map((type, idx) => (
                 <div 
                   key={idx}
-                  className="flex items-center gap-3 p-4 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-xl shadow-md hover:border-gold hover:shadow-lg transition-all"
+                  className="flex items-center gap-3 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl shadow-md hover:border-gold hover:shadow-lg transition-all"
                 >
                   <Building2 className="w-5 h-5 text-gold flex-shrink-0" />
                   <span className="text-black font-medium">{type}</span>
@@ -302,7 +302,7 @@ const AreaDetail = () => {
       </section>
 
       {/* Who Lives Here - White/Champagne Theme */}
-      <section className="py-20 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+      <section className="py-20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -343,7 +343,7 @@ const AreaDetail = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+      <section className="py-20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <div className="container mx-auto px-4">
           <motion.div 
             className="max-w-4xl mx-auto text-center bg-white rounded-3xl p-12 border border-zinc-200 shadow-sm"

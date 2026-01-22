@@ -154,7 +154,7 @@ const DesignBuild = () => {
                 <span className="text-white group-hover:text-black transition-colors">Book a Consultation</span>
                 <ArrowUpRight className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                 {/* Hover fill overlay */}
-                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
               </button>
             </a>
           </motion.div>
@@ -209,7 +209,7 @@ const DesignBuild = () => {
                 className="group"
                 variants={fadeInUp}
               >
-                <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-500 overflow-hidden h-full">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-500 overflow-hidden h-full">
                   {/* Image */}
                   <div className="relative h-56 overflow-hidden">
                     <img 
@@ -251,7 +251,7 @@ const DesignBuild = () => {
                     </ul>
 
                     <Link to={`/services/${service.slug}`}>
-                      <Button className="w-full bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] text-black border-2 border-gold/60 shadow-[0_8px_30px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-black hover:text-gold hover:border-gold hover:shadow-[0_8px_40px_rgba(200,167,102,0.5)] font-semibold transition-all duration-300">
+                      <Button className="w-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-2 border-gold/60 shadow-[0_8px_30px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-black hover:text-gold hover:border-gold hover:shadow-[0_8px_40px_rgba(200,167,102,0.5)] font-semibold transition-all duration-300">
                         Explore {service.title}
                         <ArrowUpRight className="w-4 h-4 ml-2" />
                       </Button>

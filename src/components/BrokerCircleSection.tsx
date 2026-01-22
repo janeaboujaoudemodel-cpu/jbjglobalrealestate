@@ -172,7 +172,7 @@ const BrokerCircleSection = () => {
                 <Card className="bg-zinc-900/60 border-zinc-800 hover:border-gold/40 transition-all duration-300 h-full">
                   <CardContent className="p-5">
                     {/* Icon container with white/gold/champagne pearl fill */}
-                    <div className="w-12 h-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl flex items-center justify-center mb-4 border border-gold/30 shadow-md shadow-gold/20">
+                    <div className="w-12 h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl flex items-center justify-center mb-4 border border-gold/30 shadow-md shadow-gold/20">
                       <member.icon className="h-6 w-6 text-gold" />
                     </div>
                     <h4 className="text-white font-semibold mb-1">{member.role}</h4>

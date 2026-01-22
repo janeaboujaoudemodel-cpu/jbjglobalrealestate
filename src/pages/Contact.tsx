@@ -301,7 +301,7 @@ END:VCARD`;
                     else if (card.action && card.clickable) window.location.href = card.action;
                   }}
                   className={
-                    `group bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold rounded-xl p-5 transition-all hover:border-black hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_18px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1 ` +
+                    `group bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl p-5 transition-all hover:border-black hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_18px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1 ` +
                     (card.clickable ? "cursor-pointer" : "")
                   }
                 >
@@ -379,7 +379,7 @@ END:VCARD`;
                             <FormControl>
                               <Input 
                                 {...field} 
-                                className="h-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold focus:bg-white"
+                                className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold focus:bg-white"
                                 placeholder="John Doe"
                               />
                             </FormControl>
@@ -399,7 +399,7 @@ END:VCARD`;
                                 <Input 
                                   {...field} 
                                   type="email"
-                                  className="h-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold focus:bg-white"
+                                  className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold focus:bg-white"
                                   placeholder="email@example.com"
                                 />
                               </FormControl>

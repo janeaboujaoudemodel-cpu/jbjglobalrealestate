@@ -156,7 +156,7 @@ const Index = () => {
                 <span className="text-white group-hover:text-black transition-colors">Explore</span>
                 <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-5 md:h-5 text-gold group-hover:text-black transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                 {/* Hover fill overlay */}
-                <span className="absolute inset-0 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                <span className="absolute inset-0 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
               </button>
             </Link>
             <button 
@@ -170,7 +170,7 @@ const Index = () => {
               <span className="text-white group-hover:text-black transition-colors">Book a Consultation</span>
               <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-5 md:h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
               {/* Hover fill overlay */}
-              <span className="absolute inset-0 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+              <span className="absolute inset-0 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
             </button>
           </motion.div>
         </motion.div>
@@ -503,7 +503,7 @@ const Index = () => {
             <motion.div className="text-center mb-12" variants={fadeInUp}>
               {/* Leadership Label - 3D Frame Style */}
               <div 
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-black rounded-lg mb-4 shadow-md group cursor-default"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-black rounded-lg mb-4 shadow-md group cursor-default"
                 style={{
                   boxShadow: `
                     0 4px 12px rgba(0,0,0,0.15),
@@ -534,7 +534,7 @@ const Index = () => {
 
             {/* Founder Card - Pearl card inside active champagne layer */}
             <motion.div
-              className="rounded-3xl overflow-hidden shadow-2xl border-2 border-gold/40 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]"
+              className="rounded-3xl overflow-hidden shadow-2xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]"
               variants={fadeInUp}
             >
               <div className="grid md:grid-cols-2 gap-0">
@@ -550,7 +550,7 @@ const Index = () => {
                 </div>
 
                 {/* Content Side - Pearl white/champagne for internal card */}
-                <div className="p-8 md:p-12 flex flex-col justify-center bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+                <div className="p-8 md:p-12 flex flex-col justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
                   <h3 className="text-black text-3xl md:text-4xl font-bold mb-2">Jane Abou Jaoude</h3>
                   <p className="text-gold text-xl md:text-2xl font-semibold mb-6">Founder & CEO</p>
 
@@ -561,15 +561,15 @@ const Index = () => {
 
                   {/* Stats Row - Active color on normal, champagne on hover */}
                   <div className="grid grid-cols-3 gap-4 mb-8">
-                    <div className="group text-center p-3 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6]" style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}>
+                    <div className="group text-center p-3 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-[#FDFBF7] hover:via-[#F5F0E6] hover:to-[#EDE4D3]" style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}>
                       <p className="text-black group-hover:text-black text-2xl md:text-3xl font-bold transition-colors">12<span className="text-gold">+</span></p>
                       <p className="text-zinc-700 group-hover:text-zinc-600 text-[10px] uppercase tracking-wider mt-1 transition-colors">Years Exp</p>
                     </div>
-                    <div className="group text-center p-3 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6]" style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}>
+                    <div className="group text-center p-3 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-[#FDFBF7] hover:via-[#F5F0E6] hover:to-[#EDE4D3]" style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}>
                       <p className="text-black group-hover:text-black text-2xl md:text-3xl font-bold transition-colors">147<span className="text-gold">+</span></p>
                       <p className="text-zinc-700 group-hover:text-zinc-600 text-[10px] uppercase tracking-wider mt-1 transition-colors">Team Members</p>
                     </div>
-                    <div className="group text-center p-3 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6]" style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}>
+                    <div className="group text-center p-3 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-[#FDFBF7] hover:via-[#F5F0E6] hover:to-[#EDE4D3]" style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}>
                       <p className="text-black group-hover:text-black text-2xl md:text-3xl font-bold transition-colors">4.8K<span className="text-gold">+</span></p>
                       <p className="text-zinc-700 group-hover:text-zinc-600 text-[10px] uppercase tracking-wider mt-1 transition-colors">Brokers Trained</p>
                     </div>
@@ -577,7 +577,7 @@ const Index = () => {
 
                   <Link to="/founder">
                     <button 
-                      className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group w-full md:w-auto"
+                      className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group w-full md:w-auto"
                       style={{
                         boxShadow: `
                           0 10px 30px rgba(200,167,102,0.4),

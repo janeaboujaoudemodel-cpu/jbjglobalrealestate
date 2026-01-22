@@ -103,7 +103,7 @@ const AIComparisonWidget = () => {
         {/* CTA - Premium 3D Champagne Button */}
         <Link to="/compare">
           <button 
-            className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group w-full md:w-auto"
+            className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group w-full md:w-auto"
             style={{
               boxShadow: `
                 0 10px 30px rgba(200,167,102,0.4),
