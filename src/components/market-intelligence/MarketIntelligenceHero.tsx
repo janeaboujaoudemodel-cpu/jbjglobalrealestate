@@ -37,7 +37,7 @@ export const MarketIntelligenceHero = ({
   actions 
 }: MarketIntelligenceHeroProps) => {
   return (
-    <section className="relative min-h-[55vh] flex items-center overflow-hidden mb-8">
+    <section className="relative min-h-[55vh] flex items-center overflow-hidden mb-12">
       {/* Video or Image Background */}
       <div className="absolute inset-0 z-0">
         {videoSrc ? (
@@ -58,7 +58,7 @@ export const MarketIntelligenceHero = ({
           />
         ) : null}
         {/* Overlay gradients */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/60 to-black" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/70 to-black" />
       </div>
       
       {/* Decorative radial gradient */}
@@ -69,7 +69,7 @@ export const MarketIntelligenceHero = ({
       <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gold/3 rounded-full blur-3xl z-[1]" />
       
       <motion.div 
-        className="jj-layer-2 relative z-10 !bg-transparent py-24"
+        className="relative z-10 w-full py-24"
         initial="hidden"
         animate="visible"
         variants={staggerContainer}
