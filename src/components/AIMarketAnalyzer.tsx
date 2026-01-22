@@ -1,4 +1,4 @@
-import { useState, forwardRef } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Brain, TrendingUp, TrendingDown, AlertTriangle, ChevronDown, ChevronUp, Sparkles, BarChart3, Target, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ interface AIMarketAnalyzerProps {
   variant?: 'compact' | 'full';
 }
 
-export const AIMarketAnalyzer = forwardRef<HTMLDivElement, AIMarketAnalyzerProps>(({
+export const AIMarketAnalyzer = ({
   type,
   name,
   location,
@@ -43,7 +43,7 @@ export const AIMarketAnalyzer = forwardRef<HTMLDivElement, AIMarketAnalyzerProps
   amenities,
   handoverDate,
   variant = 'compact',
-}, ref) => {
+}: AIMarketAnalyzerProps) => {
   const [insights, setInsights] = useState<MarketInsight | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -365,8 +365,6 @@ export const AIMarketAnalyzer = forwardRef<HTMLDivElement, AIMarketAnalyzerProps
       )}
     </div>
   );
-});
-
-AIMarketAnalyzer.displayName = 'AIMarketAnalyzer';
+};
 
 export default AIMarketAnalyzer;
