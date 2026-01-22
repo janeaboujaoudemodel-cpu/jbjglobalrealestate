@@ -6,16 +6,11 @@ import {
   CheckCircle2, 
   FileText, 
   Users,
-  ArrowRight,
   ArrowDown,
   Shield,
-  Target,
   Building,
   BarChart3,
   Clock,
-  AlertTriangle,
-  Database,
-  HelpCircle,
   Phone,
   Briefcase,
   UserCheck,
@@ -174,14 +169,15 @@ const BrokerEducation = () => {
         />
       </div>
 
-      {/* Section 1 - The Role of a Professional Broker */}
-      <section id="role" className="py-16 md:py-24 bg-black scroll-mt-20">
-        <div className="container mx-auto px-4">
+      {/* Section 1 - The Role of a Professional Broker - Layer 2 */}
+      <section id="role" className="py-16 md:py-24 scroll-mt-20">
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-2xl p-8 md:p-12 border border-zinc-200 shadow-lg">
+            {/* Layer 3 Card */}
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 md:p-12">
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
-                  <Briefcase className="w-6 h-6 text-gold" />
+                <div className="w-12 h-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl flex items-center justify-center">
+                  <Briefcase className="w-6 h-6 text-black" />
                 </div>
                 <h2 className="text-3xl md:text-4xl font-semibold text-black">
                   Understanding the Broker's Responsibility
@@ -203,25 +199,26 @@ const BrokerEducation = () => {
         </div>
       </section>
 
-      {/* Section 2 - Ethics & Client-First Practice */}
-      <section id="ethics" className="py-16 md:py-24 bg-black scroll-mt-20">
-        <div className="container mx-auto px-4">
+      {/* Section 2 - Ethics & Client-First Practice - Layer 2 */}
+      <section id="ethics" className="py-16 md:py-24 scroll-mt-20">
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
+              <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
                 Ethics Before Commission
               </h2>
             </div>
 
+            {/* Layer 3 Cards Grid */}
             <div className="grid md:grid-cols-2 gap-6">
               {ethicsCards.map((card, index) => (
                 <div 
                   key={index}
-                  className="bg-white rounded-2xl p-8 border border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 hover:border-gold/50 hover:shadow-lg transition-all"
                 >
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center flex-shrink-0">
-                      <card.icon className="w-6 h-6 text-gold" />
+                    <div className="w-12 h-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <card.icon className="w-6 h-6 text-black" />
                     </div>
                     <h3 className="text-xl font-semibold text-black">{card.title}</h3>
                   </div>
@@ -233,14 +230,15 @@ const BrokerEducation = () => {
         </div>
       </section>
 
-      {/* Section 3 - Regulatory Awareness */}
-      <section id="regulatory" className="py-16 md:py-24 bg-black scroll-mt-20">
-        <div className="container mx-auto px-4">
+      {/* Section 3 - Regulatory Awareness - Layer 2 */}
+      <section id="regulatory" className="py-16 md:py-24 scroll-mt-20">
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-2xl p-8 md:p-12 border border-zinc-200 shadow-lg">
+            {/* Layer 3 Card */}
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 md:p-12">
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
-                  <Shield className="w-6 h-6 text-gold" />
+                <div className="w-12 h-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl flex items-center justify-center">
+                  <Shield className="w-6 h-6 text-black" />
                 </div>
                 <h2 className="text-3xl md:text-4xl font-semibold text-black">
                   Operating Within UAE Regulations
@@ -263,7 +261,7 @@ const BrokerEducation = () => {
                 ))}
               </ul>
               
-              <div className="bg-zinc-50 border border-zinc-200 rounded-xl p-5">
+              <div className="bg-white/60 border border-gold/20 rounded-xl p-5">
                 <p className="text-zinc-700 font-medium text-center">
                   Professional credibility is non-negotiable.
                 </p>
@@ -273,14 +271,15 @@ const BrokerEducation = () => {
         </div>
       </section>
 
-      {/* Section 4 - Market Knowledge & Data Discipline */}
-      <section id="market-knowledge" className="py-16 md:py-24 bg-black scroll-mt-20">
-        <div className="container mx-auto px-4">
+      {/* Section 4 - Market Knowledge & Data Discipline - Layer 2 */}
+      <section id="market-knowledge" className="py-16 md:py-24 scroll-mt-20">
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-2xl p-8 md:p-12 border border-zinc-200 shadow-lg">
+            {/* Layer 3 Card */}
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 md:p-12">
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
-                  <BarChart3 className="w-6 h-6 text-gold" />
+                <div className="w-12 h-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl flex items-center justify-center">
+                  <BarChart3 className="w-6 h-6 text-black" />
                 </div>
                 <h2 className="text-3xl md:text-4xl font-semibold text-black">
                   Data Over Opinions
@@ -309,22 +308,23 @@ const BrokerEducation = () => {
         </div>
       </section>
 
-      {/* Section 5 - Off-Plan & Ready Property Representation */}
-      <section id="representation" className="py-16 md:py-24 bg-black scroll-mt-20">
-        <div className="container mx-auto px-4">
+      {/* Section 5 - Off-Plan & Ready Property Representation - Layer 2 */}
+      <section id="representation" className="py-16 md:py-24 scroll-mt-20">
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
+              <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
                 Responsible Property Representation
               </h2>
             </div>
 
+            {/* Layer 3 Cards Grid */}
             <div className="grid md:grid-cols-2 gap-6">
               {/* Off-Plan */}
-              <div className="bg-white rounded-2xl p-8 border border-zinc-200 hover:border-gold/50 transition-all">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 hover:border-gold/50 transition-all">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
-                    <Clock className="w-6 h-6 text-gold" />
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl flex items-center justify-center">
+                    <Clock className="w-6 h-6 text-black" />
                   </div>
                   <h3 className="text-xl font-semibold text-black">Off-Plan Representation</h3>
                 </div>
@@ -339,10 +339,10 @@ const BrokerEducation = () => {
               </div>
 
               {/* Ready */}
-              <div className="bg-white rounded-2xl p-8 border border-zinc-200 hover:border-gold/50 transition-all">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 hover:border-gold/50 transition-all">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
-                    <Building className="w-6 h-6 text-gold" />
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl flex items-center justify-center">
+                    <Building className="w-6 h-6 text-black" />
                   </div>
                   <h3 className="text-xl font-semibold text-black">Ready Property Representation</h3>
                 </div>
@@ -360,14 +360,15 @@ const BrokerEducation = () => {
         </div>
       </section>
 
-      {/* Section 6 - Communication & Client Education */}
-      <section id="communication" className="py-16 md:py-24 bg-black scroll-mt-20">
-        <div className="container mx-auto px-4">
+      {/* Section 6 - Communication & Client Education - Layer 2 */}
+      <section id="communication" className="py-16 md:py-24 scroll-mt-20">
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-2xl p-8 md:p-12 border border-zinc-200 shadow-lg">
+            {/* Layer 3 Card */}
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 md:p-12">
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
-                  <MessageSquare className="w-6 h-6 text-gold" />
+                <div className="w-12 h-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl flex items-center justify-center">
+                  <MessageSquare className="w-6 h-6 text-black" />
                 </div>
                 <h2 className="text-3xl md:text-4xl font-semibold text-black">
                   Educating, Not Convincing
@@ -379,7 +380,7 @@ const BrokerEducation = () => {
                 balanced insights, and respectful dialogue build confidence.
               </p>
               
-              <div className="bg-zinc-50 border border-zinc-200 rounded-xl p-5">
+              <div className="bg-white/60 border border-gold/20 rounded-xl p-5">
                 <p className="text-zinc-700 font-medium text-center">
                   Clients should leave interactions feeling informed — not pressured.
                 </p>
@@ -389,24 +390,25 @@ const BrokerEducation = () => {
         </div>
       </section>
 
-      {/* Section 7 - Long-Term Career Positioning */}
-      <section id="career" className="py-16 md:py-24 bg-black scroll-mt-20">
-        <div className="container mx-auto px-4">
+      {/* Section 7 - Long-Term Career Positioning - Layer 2 */}
+      <section id="career" className="py-16 md:py-24 scroll-mt-20">
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
+              <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
                 Building a Sustainable Brokerage Career
               </h2>
             </div>
 
+            {/* Layer 3 Cards Grid */}
             <div className="grid md:grid-cols-3 gap-6">
               {careerCards.map((card, index) => (
                 <div 
                   key={index}
-                  className="bg-white rounded-2xl p-8 border border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all text-center"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 hover:border-gold/50 hover:shadow-lg transition-all text-center"
                 >
-                  <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <card.icon className="w-7 h-7 text-gold" />
+                  <div className="w-14 h-14 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <card.icon className="w-7 h-7 text-black" />
                   </div>
                   <h3 className="text-xl font-semibold text-black mb-3">{card.title}</h3>
                   <p className="text-zinc-600 leading-relaxed text-sm">{card.description}</p>
@@ -420,44 +422,46 @@ const BrokerEducation = () => {
       {/* Founder-Led Philosophy */}
       <FounderPhilosophySection />
 
-      {/* Final CTA */}
-      <section className="py-20 md:py-28 bg-gradient-to-b from-zinc-900 to-black relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center opacity-10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-6">
-              Elevate Your Professional Practice
-            </h2>
-            <p className="text-lg text-zinc-400 mb-10 max-w-2xl mx-auto">
-              Access professional tools, training resources, and industry insights designed for 
-              serious real estate professionals.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 px-8 py-4 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
-                <Link to="/broker-toolkit">
-                  <Briefcase className="w-5 h-5 mr-2 text-black" />
-                  <span className="text-gold font-semibold">Join Broker Hub</span>
-                </Link>
-              </Button>
-              <Button asChild className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 px-8 py-4 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
-                <Link to="/broker-toolkit">
-                  <FileText className="w-5 h-5 mr-2 text-black" />
-                  <span className="text-gold font-semibold">View Broker Tools</span>
-                </Link>
-              </Button>
+      {/* Final CTA - Layer 2 */}
+      <section className="py-20 md:py-28">
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center opacity-5 rounded-2xl" />
+          
+          <div className="container mx-auto px-4 relative z-10">
+            {/* Layer 3 Card */}
+            <div className="max-w-3xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 md:p-12 text-center">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-black mb-6">
+                Elevate Your Professional Practice
+              </h2>
+              <p className="text-lg text-zinc-600 mb-10 max-w-2xl mx-auto">
+                Access professional tools, training resources, and industry insights designed for 
+                serious real estate professionals.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button asChild variant="primary" className="px-8 py-4">
+                  <Link to="/broker-toolkit">
+                    <Briefcase className="w-5 h-5 mr-2" />
+                    Join Broker Hub
+                  </Link>
+                </Button>
+                <Button asChild variant="primary" className="px-8 py-4">
+                  <Link to="/broker-toolkit">
+                    <FileText className="w-5 h-5 mr-2" />
+                    View Broker Tools
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Final Disclaimer */}
-      <section className="py-12 bg-black border-t border-zinc-800">
-        <div className="container mx-auto px-4">
+      {/* Final Disclaimer - Layer 2 with Layer 3 */}
+      <section className="py-12">
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
           <div className="max-w-3xl mx-auto">
-            <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6">
-              <p className="text-zinc-500 text-sm text-center leading-relaxed">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6">
+              <p className="text-zinc-600 text-sm text-center leading-relaxed">
                 This content is educational in nature. It does not replace regulatory requirements or 
                 professional licensing obligations. Brokers are responsible for ensuring compliance 
                 with all applicable laws and regulations.
@@ -467,18 +471,20 @@ const BrokerEducation = () => {
         </div>
       </section>
 
-      {/* Guide Navigation - Active Champagne Layer */}
-      <section className="jj-section-champagne py-12">
-        <div className="container mx-auto px-4">
-          <GuideNavigation 
-            current="/broker-education"
-            guides={[
-              ...GUIDE_LINKS,
-              { title: "Investor Education", path: "/investor-education", description: "Investment framework" },
-              { title: "Investor FAQ", path: "/investor-faq", description: "Investment questions" },
-              { title: "Broker Education", path: "/broker-education", description: "Professional training" },
-            ]}
-          />
+      {/* Guide Navigation - Layer 2 */}
+      <section className="py-12">
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12 mb-8">
+          <div className="container mx-auto px-4">
+            <GuideNavigation 
+              current="/broker-education"
+              guides={[
+                ...GUIDE_LINKS,
+                { title: "Investor Education", path: "/investor-education", description: "Investment framework" },
+                { title: "Investor FAQ", path: "/investor-faq", description: "Investment questions" },
+                { title: "Broker Education", path: "/broker-education", description: "Professional training" },
+              ]}
+            />
+          </div>
         </div>
       </section>
 
