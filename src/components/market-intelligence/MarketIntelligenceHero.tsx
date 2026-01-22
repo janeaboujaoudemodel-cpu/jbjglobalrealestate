@@ -69,7 +69,7 @@ export const MarketIntelligenceHero = ({
       <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gold/3 rounded-full blur-3xl z-[1]" />
       
       <motion.div 
-        className="container mx-auto px-4 relative z-10 py-24"
+        className="mx-4 md:mx-8 lg:mx-16 relative z-10 py-24"
         initial="hidden"
         animate="visible"
         variants={staggerContainer}

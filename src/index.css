@@ -284,20 +284,36 @@ All colors MUST be HSL.
    * This is the "active layer" sitting on the black page background.
    */
   .jj-section-champagne {
-    @apply w-screen relative overflow-hidden bg-black;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
-    /* Padding creates the thin black contour around the champagne layer */
-    padding: 0.5rem;
+    @apply relative overflow-hidden bg-black;
+    /* Use global inset for vertical alignment */
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .jj-section-champagne {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .jj-section-champagne {
+      padding-left: 4rem;
+      padding-right: 4rem;
+    }
   }
 
   .jj-section-champagne::before {
     content: "";
     position: absolute;
-    /* Thin black edge contour (0.5rem on all sides) */
-    inset: 0.5rem;
+    /* Match the global inset padding */
+    top: 0.5rem;
+    bottom: 0.5rem;
+    left: 1rem;
+    right: 1rem;
     background: linear-gradient(
       to bottom right,
       hsl(var(--champagne-1)),
@@ -307,6 +323,20 @@ All colors MUST be HSL.
     border: 1px solid hsl(var(--gold) / 0.3);
     border-radius: 1rem;
     box-shadow: 0 0 40px hsl(var(--gold) / 0.18);
+  }
+
+  @media (min-width: 768px) {
+    .jj-section-champagne::before {
+      left: 2rem;
+      right: 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .jj-section-champagne::before {
+      left: 4rem;
+      right: 4rem;
+    }
   }
 
   .jj-section-champagne > * {
@@ -324,9 +354,18 @@ All colors MUST be HSL.
     }
   }
 
-  /* Standardized inset wrapper for active layers inside black sections */
+  /* ============================================================
+   * GLOBAL ACTIVE LAYER MARGIN SYSTEM (LOCKED)
+   * All sections with active champagne layer MUST use this class
+   * to ensure perfect vertical alignment across all pages.
+   * ============================================================ */
   .jj-inset-active {
-    @apply mx-3 sm:mx-4 md:mx-5 lg:mx-6;
+    @apply mx-4 md:mx-8 lg:mx-16;
+  }
+
+  /* Alias for backwards compatibility */
+  .jj-section-inset {
+    @apply mx-4 md:mx-8 lg:mx-16;
   }
 
   /* Edge-to-edge section on black background */
