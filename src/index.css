@@ -59,6 +59,11 @@ All colors MUST be HSL.
     --champagne-2: 38 38% 85%;
     --champagne-3: 38 28% 74%;
 
+    /* Pearl / Inner Card Surface (HSL approximations of existing palette) */
+    --pearl-1: 40 44% 97%;
+    --pearl-2: 38 33% 93%;
+    --pearl-3: 39 30% 88%;
+
     /* Premium surfaces */
     --premium-bg: 0 0% 5%;
     --premium-card: 0 0% 9%;
@@ -260,18 +265,50 @@ All colors MUST be HSL.
   /* LAYER 2: Active champagne section layer (placed on black background) */
   .jj-layer-active {
     @apply rounded-2xl border border-gold/30;
-    background: linear-gradient(to bottom right, #F5EBD7, #E8DCC8, #D4C4A8);
-    box-shadow: 0 0 40px rgba(200,167,102,0.2);
+    background: linear-gradient(
+      to bottom right,
+      hsl(var(--champagne-1)),
+      hsl(var(--champagne-2)),
+      hsl(var(--champagne-3))
+    );
+    box-shadow: 0 0 40px hsl(var(--gold) / 0.18);
   }
 
-  /* Full-width champagne section background (edge-to-edge, no container limits) */
+  /*
+   * Full-width champagne section background (edge-to-edge)
+   * Global rule: show a THIN black contour around the active layer.
+   */
   .jj-section-champagne {
-    @apply w-screen relative;
+    @apply w-screen relative overflow-hidden bg-black;
     left: 50%;
     right: 50%;
     margin-left: -50vw;
     margin-right: -50vw;
-    background: linear-gradient(to bottom right, #F5EBD7, #E8DCC8, #D4C4A8);
+  }
+
+  .jj-section-champagne::before {
+    content: "";
+    position: absolute;
+    inset: 0.75rem;
+    background: linear-gradient(
+      to bottom right,
+      hsl(var(--champagne-1)),
+      hsl(var(--champagne-2)),
+      hsl(var(--champagne-3))
+    );
+    border: 1px solid hsl(var(--gold) / 0.3);
+    border-radius: 1rem;
+    box-shadow: 0 0 40px hsl(var(--gold) / 0.18);
+  }
+
+  .jj-section-champagne > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Standardized inset wrapper for active layers inside black sections */
+  .jj-inset-active {
+    @apply mx-3 sm:mx-4 md:mx-5 lg:mx-6;
   }
 
   /* Edge-to-edge section on black background */
@@ -286,13 +323,33 @@ All colors MUST be HSL.
   /* LAYER 3: Inner cards inside the active layer (Best Idea Award style) */
   .jj-card-inner {
     @apply rounded-xl border-2 border-gold;
-    background: linear-gradient(to bottom right, #FDFBF7, #F5F0E6, #EDE4D3);
-    box-shadow: 0 0 15px rgba(200,167,102,0.25);
+    background: linear-gradient(
+      to bottom right,
+      hsl(var(--pearl-1)),
+      hsl(var(--pearl-2)),
+      hsl(var(--pearl-3))
+    );
+    box-shadow: 0 0 15px hsl(var(--gold) / 0.22);
   }
 
   .jj-card-inner:hover {
-    @apply border-white;
-    box-shadow: 0 0 25px rgba(255,255,255,0.3);
+    @apply border-gold;
+    box-shadow:
+      0 0 25px hsl(var(--gold) / 0.28),
+      0 18px 50px hsl(0 0% 0% / 0.35);
+  }
+
+  /* Optional 3D hover lift (use on key cards like Team members) */
+  .jj-hover-3d {
+    transition: transform 300ms ease, box-shadow 300ms ease, border-color 300ms ease;
+    will-change: transform;
+  }
+
+  .jj-hover-3d:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 0 25px hsl(var(--gold) / 0.28),
+      0 22px 60px hsl(0 0% 0% / 0.45);
   }
 
   /* Active champagne card/box inside sections (old style, kept for compatibility) */
@@ -317,13 +374,20 @@ All colors MUST be HSL.
    */
   .jj-box-active {
     @apply rounded-xl border-2 border-gold;
-    background: linear-gradient(to bottom right, #FDFBF7, #F5F0E6, #EDE4D3);
-    box-shadow: 0 0 15px rgba(200,167,102,0.25);
+    background: linear-gradient(
+      to bottom right,
+      hsl(var(--pearl-1)),
+      hsl(var(--pearl-2)),
+      hsl(var(--pearl-3))
+    );
+    box-shadow: 0 0 15px hsl(var(--gold) / 0.22);
   }
 
   .jj-box-active:hover {
-    @apply border-white;
-    box-shadow: 0 0 25px rgba(255,255,255,0.3);
+    @apply border-gold;
+    box-shadow:
+      0 0 25px hsl(var(--gold) / 0.28),
+      0 18px 50px hsl(0 0% 0% / 0.35);
   }
 
   /* Title styling: First word gold, rest black (Guides & Market Intelligence) */
