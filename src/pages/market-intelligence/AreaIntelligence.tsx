@@ -180,12 +180,12 @@ const AreaIntelligence = () => {
                           href={source.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="block p-4 bg-white/80 border-2 border-black hover:border-gold rounded-xl transition-all group"
+                          className="block p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold rounded-xl transition-all group shadow-sm"
                         >
                           <div className="flex items-start justify-between">
                             <div>
                               <h4 className="font-semibold text-black group-hover:text-gold transition-colors">{source.title}</h4>
-                              <p className="text-zinc-500 text-sm mt-1">{source.desc}</p>
+                              <p className="text-zinc-600 text-sm mt-1">{source.desc}</p>
                             </div>
                             <ExternalLink className="w-4 h-4 text-gold opacity-0 group-hover:opacity-100 transition-opacity" />
                           </div>
@@ -227,7 +227,7 @@ const AreaIntelligence = () => {
                         { num: "4", title: "Supply Status", desc: "Existing stock versus registered handovers and newly delivered units, as published by DLD." },
                         { num: "5", title: "Cost Structure", desc: "Approved service charges and municipality fees applicable to properties within the area." }
                       ].map((item, idx) => (
-                        <div key={idx} className="flex gap-4 p-4 bg-white/80 border-2 border-black rounded-xl">
+                        <div key={idx} className="flex gap-4 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl">
                           <div className="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0">
                             <span className="text-gold font-bold">{item.num}</span>
                           </div>
@@ -415,7 +415,7 @@ const AreaIntelligence = () => {
                           transition={{ delay: index * 0.05 }}
                         >
                           <Link to={`/market-intelligence/areas/${area.area.toLowerCase().replace(/\s+/g, '-')}`}>
-                            <Card className="bg-white/80 border-2 border-black hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all h-full group cursor-pointer">
+                            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all h-full group cursor-pointer">
                               <CardContent className="p-6">
                                 <div className="flex items-start justify-between mb-4">
                                   <div>
@@ -440,17 +440,17 @@ const AreaIntelligence = () => {
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4 mb-4">
-                                  <div className="bg-zinc-100 rounded-lg p-2">
+                                  <div className="bg-white/60 border border-gold/20 rounded-lg p-2">
                                     <p className="text-zinc-500 text-xs">Price Index</p>
                                     <p className="text-black font-semibold">{area.priceIndex}</p>
                                   </div>
-                                  <div className="bg-zinc-100 rounded-lg p-2">
+                                  <div className="bg-white/60 border border-gold/20 rounded-lg p-2">
                                     <p className="text-zinc-500 text-xs">Rental Index</p>
                                     <p className="text-black font-semibold">{area.rentalIndex}</p>
                                   </div>
                                   <div>
                                     <p className="text-zinc-500 text-xs">Demand</p>
-                                    <div className="w-full bg-zinc-200 rounded-full h-1.5 mt-1">
+                                    <div className="w-full bg-black/10 rounded-full h-1.5 mt-1">
                                       <div 
                                         className="bg-emerald-500 h-1.5 rounded-full" 
                                         style={{ width: `${area.demandScore}%` }}
@@ -459,7 +459,7 @@ const AreaIntelligence = () => {
                                   </div>
                                   <div>
                                     <p className="text-zinc-500 text-xs">Supply</p>
-                                    <div className="w-full bg-zinc-200 rounded-full h-1.5 mt-1">
+                                    <div className="w-full bg-black/10 rounded-full h-1.5 mt-1">
                                       <div 
                                         className="bg-gold h-1.5 rounded-full" 
                                         style={{ width: `${area.supplyScore}%` }}
@@ -468,7 +468,7 @@ const AreaIntelligence = () => {
                                   </div>
                                 </div>
 
-                                <div className="border-t border-zinc-200 pt-4">
+                                <div className="border-t border-gold/30 pt-4">
                                   <ul className="space-y-1">
                                     {area.highlights.slice(0, 2).map((highlight, i) => (
                                       <li key={i} className="text-zinc-600 text-xs flex items-start gap-2">
