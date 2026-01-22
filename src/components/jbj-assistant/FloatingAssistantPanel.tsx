@@ -19,6 +19,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useJBJAssistant, AIAgent } from './JBJAssistantProvider';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { useAuth } from '@/contexts/AuthContext';
+import { getUserAssistant, UserAssistant } from '@/config/user-assistants';
 
 interface Message {
   id: string;
@@ -29,6 +31,7 @@ interface Message {
 }
 
 const FloatingAssistantPanel: React.FC = () => {
+  const { user } = useAuth();
   const { 
     agents, 
     activeAgent, 
@@ -46,6 +49,9 @@ const FloatingAssistantPanel: React.FC = () => {
   const [sessionId] = useState(() => crypto.randomUUID());
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Get user-specific assistant
+  const userAssistant: UserAssistant = getUserAssistant(user?.id || '');
 
   // Welcome message when assistant opens
   useEffect(() => {
@@ -72,21 +78,21 @@ const FloatingAssistantPanel: React.FC = () => {
     
     switch (agent.role) {
       case 'admin':
-        return `Hello! I'm ${agent.name}, your Administrative Director.${toolContext}How can I assist you with property listings, documents, or system administration today?`;
+        return `Hello! I'm ${userAssistant.name}, your ${userAssistant.role}.${toolContext}How can I assist you with property listings, documents, or system administration today?`;
       case 'hr':
-        return `Hi there! I'm ${agent.name}, your HR Manager.${toolContext}I'm here to help with onboarding, training, and any workplace questions you might have.`;
+        return `Hi there! I'm ${userAssistant.name}, your ${userAssistant.role}.${toolContext}I'm here to help with onboarding, training, and any workplace questions you might have.`;
       case 'receptionist':
-        return `Welcome to JBJ Global Real Estate! I'm ${agent.name}.${toolContext}How may I direct your inquiry today?`;
+        return `Welcome to JBJ Global Real Estate! I'm ${userAssistant.name}.${toolContext}How may I direct your inquiry today?`;
       case 'broker':
-        return `Good day! I'm ${agent.name}, your Senior Property Advisor.${toolContext}Whether you're looking to buy, sell, rent, or explore UAE real estate, I'm here to guide you.`;
+        return `Good day! I'm ${userAssistant.name}, your ${userAssistant.role}.${toolContext}Whether you're looking to buy, sell, rent, or explore UAE real estate, I'm here to guide you.`;
       case 'property_manager':
-        return `Hello! I'm ${agent.name}, your Property Management Specialist.${toolContext}Need help with maintenance, tenant matters, or property inspections?`;
+        return `Hello! I'm ${userAssistant.name}, your ${userAssistant.role}.${toolContext}Need help with maintenance, tenant matters, or property inspections?`;
       case 'marketing_coordinator':
-        return `Hi! I'm ${agent.name}, your Marketing Director.${toolContext}Let's create something amazing for your brand and properties!`;
+        return `Hi! I'm ${userAssistant.name}, your ${userAssistant.role}.${toolContext}Let's create something amazing for your brand and properties!`;
       case 'graphic_designer':
-        return `Hey! I'm ${agent.name}, your Creative Design Lead.${toolContext}Ready to bring your visual ideas to life. What shall we create?`;
+        return `Hey! I'm ${userAssistant.name}, your ${userAssistant.role}.${toolContext}Ready to bring your visual ideas to life. What shall we create?`;
       default:
-        return `Hello! I'm ${agent.name}, and I'm here to help you.${toolContext}What can I assist you with today?`;
+        return `Hello! I'm ${userAssistant.name}, and I'm here to help you.${toolContext}What can I assist you with today?`;
     }
   };
 
@@ -128,8 +134,8 @@ const FloatingAssistantPanel: React.FC = () => {
           message: userMessage.content,
           history: conversationHistory,
           systemPrompt,
-          agentName: activeAgent.name,
-          agentRole: activeAgent.role,
+          agentName: userAssistant.name,
+          agentRole: userAssistant.role,
           tool: currentTool,
         },
       });
@@ -152,7 +158,7 @@ const FloatingAssistantPanel: React.FC = () => {
       // Log interaction
       addLog({
         agentId: activeAgent.id,
-        agentName: activeAgent.name,
+        agentName: userAssistant.name,
         message: userMessage.content,
         response: assistantResponse,
         tool: currentTool || undefined,
@@ -176,7 +182,7 @@ const FloatingAssistantPanel: React.FC = () => {
   };
 
   const buildAgentPrompt = (agent: AIAgent, tool: string | null): string => {
-    let prompt = `You are ${agent.name}, ${agent.title} at JBJ Global Real Estate in Dubai. 
+    let prompt = `You are ${userAssistant.name}, ${userAssistant.role} at JBJ Global Real Estate in Dubai. 
 ${agent.personality}
 
 Your capabilities include: ${agent.capabilities.join(', ')}.
@@ -214,11 +220,11 @@ JBJ Contact Information:
       <motion.button
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
-        className="fixed bottom-24 right-6 z-[8000] w-14 h-14 bg-gradient-to-br from-purple-600 to-fuchsia-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
+        className="fixed bottom-24 right-6 z-[8000] w-14 h-14 bg-gradient-to-br from-gold to-amber-600 text-black rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center border-2 border-gold/50"
         onClick={() => setIsAssistantOpen(true)}
       >
         <MessageCircle className="w-6 h-6" />
-        <span className="absolute -top-1 -right-1 w-4 h-4 bg-gold rounded-full animate-pulse" />
+        <span className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full animate-pulse border-2 border-white" />
       </motion.button>
     );
   }
@@ -229,34 +235,34 @@ JBJ Contact Information:
         initial={{ opacity: 0, y: 50, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 50, scale: 0.95 }}
-        className="fixed bottom-6 right-6 z-[9000] w-[380px] h-[550px] bg-zinc-900 border border-zinc-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+        className="fixed bottom-6 right-6 z-[9000] w-[380px] h-[550px] bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 rounded-2xl shadow-[0_20px_60px_rgba(200,167,102,0.3)] flex flex-col overflow-hidden"
       >
-        {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 to-fuchsia-600 p-4 flex items-center justify-between">
+        {/* Header - Premium Champagne */}
+        <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] p-4 flex items-center justify-between border-b-2 border-gold/30">
           <div className="flex items-center gap-3">
             <div className="relative">
-              <Avatar className="w-10 h-10 border-2 border-white/20">
-                <AvatarImage src={activeAgent?.avatar} alt={activeAgent?.name} />
-                <AvatarFallback>{activeAgent?.name?.[0]}</AvatarFallback>
+              <Avatar className="w-10 h-10 border-2 border-gold/50 shadow-md">
+                <AvatarImage src={userAssistant.avatar} alt={userAssistant.name} />
+                <AvatarFallback className="bg-gold/20 text-gold">{userAssistant.name[0]}</AvatarFallback>
               </Avatar>
-              <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-zinc-900 rounded-full" />
+              <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
             </div>
             <div>
               <button 
                 onClick={() => setShowAgentPicker(!showAgentPicker)}
-                className="flex items-center gap-1 text-white font-medium hover:text-white/80 transition-colors"
+                className="flex items-center gap-1 text-black font-semibold hover:text-gold transition-colors"
               >
-                {activeAgent?.name}
+                {userAssistant.name}
                 <ChevronDown className="w-4 h-4" />
               </button>
-              <p className="text-white/70 text-xs">{activeAgent?.title}</p>
+              <p className="text-zinc-600 text-xs">{userAssistant.role}</p>
             </div>
           </div>
           <button
             onClick={() => setIsAssistantOpen(false)}
-            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-full bg-white/50 hover:bg-white flex items-center justify-center transition-colors border border-gold/30"
           >
-            <X className="w-4 h-4 text-white" />
+            <X className="w-4 h-4 text-black" />
           </button>
         </div>
 
@@ -267,7 +273,7 @@ JBJ Contact Information:
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="absolute top-16 left-4 right-4 bg-zinc-800 border border-zinc-700 rounded-xl shadow-xl z-10 max-h-64 overflow-y-auto"
+              className="absolute top-16 left-4 right-4 bg-white border-2 border-gold/30 rounded-xl shadow-xl z-10 max-h-64 overflow-y-auto"
             >
               {agents.map(agent => (
                 <button
@@ -282,17 +288,17 @@ JBJ Contact Information:
                       timestamp: new Date(),
                     }]);
                   }}
-                  className={`w-full flex items-center gap-3 p-3 hover:bg-zinc-700 transition-colors ${
-                    activeAgent?.id === agent.id ? 'bg-zinc-700' : ''
+                  className={`w-full flex items-center gap-3 p-3 hover:bg-gold/10 transition-colors ${
+                    activeAgent?.id === agent.id ? 'bg-gold/20' : ''
                   }`}
                 >
-                  <Avatar className="w-8 h-8">
+                  <Avatar className="w-8 h-8 border border-gold/30">
                     <AvatarImage src={agent.avatar} alt={agent.name} />
-                    <AvatarFallback>{agent.name[0]}</AvatarFallback>
+                    <AvatarFallback className="bg-gold/20 text-gold">{agent.name[0]}</AvatarFallback>
                   </Avatar>
                   <div className="text-left">
-                    <p className="text-white text-sm font-medium">{agent.name}</p>
-                    <p className="text-zinc-400 text-xs">{agent.title}</p>
+                    <p className="text-black text-sm font-medium">{agent.name}</p>
+                    <p className="text-zinc-500 text-xs">{agent.title}</p>
                   </div>
                 </button>
               ))}
@@ -300,8 +306,8 @@ JBJ Contact Information:
           )}
         </AnimatePresence>
 
-        {/* Messages */}
-        <ScrollArea className="flex-1 p-4" ref={scrollRef}>
+        {/* Messages - Champagne background */}
+        <ScrollArea className="flex-1 p-4 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6]" ref={scrollRef}>
           <div className="space-y-4">
             {messages.map(message => (
               <motion.div
@@ -312,14 +318,14 @@ JBJ Contact Information:
               >
                 <div className={`max-w-[85%] ${
                   message.role === 'user' 
-                    ? 'bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white' 
-                    : 'bg-zinc-800 text-zinc-100'
+                    ? 'bg-gradient-to-r from-gold to-amber-500 text-black' 
+                    : 'bg-white text-black border border-gold/30 shadow-sm'
                 } rounded-2xl px-4 py-3`}>
                   {message.isTyping ? (
                     <div className="flex gap-1">
-                      <span className="w-2 h-2 bg-zinc-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                      <span className="w-2 h-2 bg-zinc-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                      <span className="w-2 h-2 bg-zinc-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                      <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                     </div>
                   ) : (
                     <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
@@ -330,8 +336,8 @@ JBJ Contact Information:
           </div>
         </ScrollArea>
 
-        {/* Input */}
-        <div className="p-4 border-t border-zinc-800">
+        {/* Input - Premium champagne */}
+        <div className="p-4 border-t-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
           <div className="flex items-center gap-2">
             <Input
               ref={inputRef}
@@ -339,13 +345,13 @@ JBJ Contact Information:
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type your message..."
-              className="flex-1 bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
+              className="flex-1 bg-white border-2 border-gold/30 text-black placeholder:text-zinc-400 focus:border-gold"
               disabled={isLoading}
             />
             <Button
               onClick={handleSendMessage}
               disabled={!input.trim() || isLoading}
-              className="bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500"
+              className="bg-gradient-to-r from-gold to-amber-500 hover:from-amber-500 hover:to-gold text-black"
             >
               <Send className="w-4 h-4" />
             </Button>
