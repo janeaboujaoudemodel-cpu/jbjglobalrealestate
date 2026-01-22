@@ -160,9 +160,19 @@ const Services = () => {
         canonicalPath="/services"
       />
 
-      {/* Hero Section */}
+      {/* Hero Section with Video */}
       <section className="relative min-h-[60vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 via-black to-black" />
+        {/* Background Video */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover opacity-30"
+        >
+          <source src="/videos/hero-video.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 via-black/70 to-black" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/5 via-transparent to-transparent" />
         
         <motion.div 
@@ -198,9 +208,10 @@ const Services = () => {
           </motion.p>
 
           <motion.div variants={fadeInUp}>
-            <Button variant="primary" size="lg" asChild>
+            <Button variant="hero" size="lg" asChild>
               <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                <span className="text-black">Get</span><span className="text-gold"> Started</span>
+                <Sparkles className="w-5 h-5 mr-2" />
+                <span>Get Started</span>
                 <ArrowRight className="w-5 h-5 ml-2" />
               </a>
             </Button>

@@ -379,8 +379,8 @@ const BuyerGuide = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {audienceTypes.map((item, index) => (
               <div key={index} className="jj-box-active p-6 text-center hover:border-gold hover:shadow-lg transition-all">
-                <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <item.icon className="w-6 h-6 text-gold" />
+                <div className="jj-icon-box-active w-12 h-12 rounded-xl mx-auto mb-4">
+                  <item.icon className="w-6 h-6" />
                 </div>
                 <p className="font-medium text-black mb-1">{item.label}</p>
                 <p className="text-sm text-zinc-600">{item.desc}</p>
@@ -536,8 +536,8 @@ const BuyerGuide = () => {
               {/* Off-Plan Purchases */}
               <div className="jj-box-active p-8 hover:border-gold hover:shadow-lg transition-all">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
-                    <Building2 className="w-6 h-6 text-gold" />
+                  <div className="jj-icon-box-active w-12 h-12 rounded-xl">
+                    <Building2 className="w-6 h-6" />
                   </div>
                   <h3 className="text-xl font-semibold text-black">Off-Plan Purchases</h3>
                 </div>
@@ -574,8 +574,8 @@ const BuyerGuide = () => {
               {/* Ready Property Purchases */}
               <div className="jj-box-active p-8 hover:border-gold hover:shadow-lg transition-all">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
-                    <Home className="w-6 h-6 text-gold" />
+                  <div className="jj-icon-box-active w-12 h-12 rounded-xl">
+                    <Home className="w-6 h-6" />
                   </div>
                   <h3 className="text-xl font-semibold text-black">Ready Property Purchases</h3>
                 </div>
@@ -634,8 +634,8 @@ const BuyerGuide = () => {
                     className="jj-box-active p-6 hover:border-gold hover:shadow-lg transition-all"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
-                        <fee.icon className="w-5 h-5 text-gold" />
+                      <div className="jj-icon-box-active w-10 h-10 rounded-lg flex-shrink-0">
+                        <fee.icon className="w-5 h-5" />
                       </div>
                       <div>
                         <h4 className="text-black font-semibold mb-1">{fee.title}</h4>
@@ -657,8 +657,8 @@ const BuyerGuide = () => {
                     className="jj-box-active p-6 hover:border-gold hover:shadow-lg transition-all"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
-                        <cost.icon className="w-5 h-5 text-gold" />
+                      <div className="jj-icon-box-active w-10 h-10 rounded-lg flex-shrink-0">
+                        <cost.icon className="w-5 h-5" />
                       </div>
                       <div>
                         <h4 className="text-black font-semibold mb-1">{cost.title}</h4>
@@ -682,8 +682,8 @@ const BuyerGuide = () => {
           <div className="max-w-4xl mx-auto">
             <div className="jj-box-active p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.2)]">
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
-                  <Landmark className="w-6 h-6 text-gold" />
+                <div className="jj-icon-box-active w-12 h-12 rounded-xl">
+                  <Landmark className="w-6 h-6" />
                 </div>
                 <h2 className="text-3xl md:text-4xl font-semibold text-black">
                   Mortgages & Financing (If Applicable)
@@ -761,13 +761,13 @@ const BuyerGuide = () => {
       {/* Founder-Led Philosophy & Advisory Positioning */}
       <FounderPhilosophySection />
 
-      {/* Final CTA - Next Step - 3-Layer System */}
+      {/* Final CTA - Next Step - 3-Layer System with 3D Card */}
       <section className="py-20 md:py-28 bg-black relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center opacity-5" />
         
         <div className="jj-layer-2 relative z-10">
           <div className="max-w-3xl mx-auto">
-            <div className="jj-card-inner rounded-2xl p-8 md:p-12 text-center">
+            <div className="jj-card-inner jj-hover-3d rounded-2xl p-8 md:p-12 text-center border-2 border-gold/50 shadow-[0_8px_30px_rgba(200,167,102,0.2)]">
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-black mb-6">
                 <span className="text-gold">Next</span> Step
               </h2>
@@ -784,7 +784,8 @@ const BuyerGuide = () => {
                 >
                   <Link to="/contact">
                     <Phone className="w-4 h-4 mr-2" />
-                    Book a Consultation
+                    <span className="text-black">Book a</span>
+                    <span className="text-gold ml-1">Consultation</span>
                   </Link>
                 </Button>
                 
