@@ -936,7 +936,7 @@ const AIHub = () => {
                         JBJ GLOBAL REAL ESTATE
                       </span>
                     </div>
-                    <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 rounded-full shadow-lg mb-4">
+                    <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 rounded-full shadow-lg mb-4">
                       <Handshake className="w-3.5 h-3.5 text-black" />
                       <span className="text-black text-xs uppercase tracking-wider font-medium">How Referral Works</span>
                     </span>
@@ -975,7 +975,7 @@ const AIHub = () => {
                   {/* Commission Tiers */}
                   <div className="grid md:grid-cols-2 gap-6 mb-8">
                     {/* Passive Referral */}
-                    <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6">
+                    <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6">
                       <Badge className="bg-blue-500/20 text-blue-600 border-blue-500/30 mb-3">
                         Passive Referral — 2.5%
                       </Badge>
@@ -986,7 +986,7 @@ const AIHub = () => {
                     </div>
 
                     {/* Active Referral */}
-                    <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6">
+                    <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6">
                       <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30 mb-3">
                         Active Referral — 5%
                       </Badge>
@@ -1046,7 +1046,7 @@ const AIHub = () => {
               <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
                 {/* INNER CARD (Pearl) */}
                 <motion.div
-                  className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}

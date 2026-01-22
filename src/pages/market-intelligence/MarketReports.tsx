@@ -138,7 +138,7 @@ const MarketReportsPage = () => {
 
             {/* Introduction Section */}
             <section id="introduction" className="scroll-mt-24">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30">
                 <h2 
                   className="text-3xl md:text-4xl font-bold mb-6"
                   style={{ 
@@ -165,7 +165,7 @@ const MarketReportsPage = () => {
 
             {/* Purpose Section */}
             <section id="purpose" className="scroll-mt-24">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30">
                 <h2 
                   className="text-3xl md:text-4xl font-bold mb-6"
                   style={{ 
@@ -212,7 +212,7 @@ const MarketReportsPage = () => {
 
             {/* Data Sources Section */}
             <section id="data-sources" className="scroll-mt-24">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30">
                 <h2 
                   className="text-3xl md:text-4xl font-bold mb-6"
                   style={{ 
@@ -279,7 +279,7 @@ const MarketReportsPage = () => {
 
             {/* Report Structure Section */}
             <section id="report-structure" className="scroll-mt-24">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30">
                 <h2 
                   className="text-3xl md:text-4xl font-bold mb-6"
                   style={{ 
@@ -327,7 +327,7 @@ const MarketReportsPage = () => {
 
             {/* Exclusions Section */}
             <section id="exclusions" className="scroll-mt-24">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30">
                 <h2 
                   className="text-3xl md:text-4xl font-bold mb-6"
                   style={{ 
@@ -378,7 +378,7 @@ const MarketReportsPage = () => {
 
             {/* Reporting Frequency Section */}
             <section id="frequency" className="scroll-mt-24">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30">
                 <h2 
                   className="text-3xl md:text-4xl font-bold mb-6"
                   style={{ 
@@ -418,7 +418,7 @@ const MarketReportsPage = () => {
 
             {/* JBJ Approach Section */}
             <section id="jbj-approach" className="scroll-mt-24">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30">
                 <h2 
                   className="text-3xl md:text-4xl font-bold mb-6"
                   style={{ 
@@ -468,7 +468,7 @@ const MarketReportsPage = () => {
 
             {/* Featured Reports - Premium champagne Cards */}
             <section id="latest-reports" className="scroll-mt-24">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30">
                 <h2 
                   className="text-3xl md:text-4xl font-bold mb-8 text-center"
                   style={{ 
@@ -537,7 +537,7 @@ const MarketReportsPage = () => {
 
             {/* Report Archive - White Pearl section */}
             <section id="report-archive" className="scroll-mt-24">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-8 border border-gold/30">
                 <h2 
                   className="text-3xl md:text-4xl font-bold mb-8 text-center"
                   style={{ 
@@ -672,7 +672,7 @@ const MarketReportsPage = () => {
 
             {/* Custom Report CTA */}
             <section id="custom-report" className="scroll-mt-24">
-              <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 overflow-hidden hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] transition-all">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 overflow-hidden hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] transition-all">
                 <CardContent className="p-8 md:p-10 text-center relative">
                   {/* Subtle decorative elements */}
                   <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-gold/20 to-transparent rounded-full -translate-x-1/2 -translate-y-1/2" />
@@ -728,7 +728,7 @@ const MarketReportsPage = () => {
       <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
 
       {/* Market Intelligence Navigation */}
-      <section id="navigation" className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] scroll-mt-24">
+      <section id="navigation" className="py-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] scroll-mt-24">
         <div className="container mx-auto px-4">
           <MarketIntelligenceNavigation current="/market-intelligence/reports" />
           

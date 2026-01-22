@@ -31,18 +31,18 @@ import { cn } from "@/lib/utils";
  * - On HOVER: All colors invert
  */
 
-// Champagne gradient: from-white via-[#FDFBF7] to-[#F5F0E6]
+// Champagne gradient: from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]
 const BRAND_PRIMARY =
-  "bg-white text-gold border-2 border-gold hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] hover:text-gold";
+  "bg-white text-gold border-2 border-gold hover:bg-gradient-to-r hover:from-[#FDFBF7] hover:via-[#F5F0E6] hover:to-[#EDE4D3] hover:text-gold";
 const BRAND_SECONDARY =
-  "bg-transparent text-gold border-2 border-gold hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] hover:text-gold";
+  "bg-transparent text-gold border-2 border-gold hover:bg-gradient-to-r hover:from-[#FDFBF7] hover:via-[#F5F0E6] hover:to-[#EDE4D3] hover:text-gold";
 // TERTIARY: For dark backgrounds - white/champagne filled with black text/border, hover: gold text
 const BRAND_TERTIARY =
-  "bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-black border-2 border-black hover:text-gold hover:border-gold";
+  "bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-2 border-black hover:text-gold hover:border-gold";
 const BRAND_MEDIA =
-  "bg-transparent text-white border-2 border-white hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] hover:text-gold hover:border-gold";
+  "bg-transparent text-white border-2 border-white hover:bg-gradient-to-r hover:from-[#FDFBF7] hover:via-[#F5F0E6] hover:to-[#EDE4D3] hover:text-gold hover:border-gold";
 const BRAND_DARK =
-  "bg-black text-gold border-2 border-gold hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] hover:text-gold hover:border-gold";
+  "bg-black text-gold border-2 border-gold hover:bg-gradient-to-r hover:from-[#FDFBF7] hover:via-[#F5F0E6] hover:to-[#EDE4D3] hover:text-gold hover:border-gold";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer tracking-[0.02em]",

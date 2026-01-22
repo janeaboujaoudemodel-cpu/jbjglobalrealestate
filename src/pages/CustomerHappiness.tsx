@@ -235,7 +235,7 @@ const FeedbackForm = () => {
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             required
-            className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black"
           />
         </div>
         <div>
@@ -246,7 +246,7 @@ const FeedbackForm = () => {
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black"
           />
         </div>
       </div>
@@ -272,7 +272,7 @@ const FeedbackForm = () => {
       <div>
         <Label htmlFor="serviceType" className="text-black">Service Used *</Label>
         <Select value={formData.serviceType} onValueChange={(v) => setFormData({ ...formData, serviceType: v })}>
-          <SelectTrigger className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black">
+          <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black">
             <SelectValue placeholder="Select service" />
           </SelectTrigger>
           <SelectContent>
@@ -295,7 +295,7 @@ const FeedbackForm = () => {
           onChange={(e) => setFormData({ ...formData, review: e.target.value })}
           required
           rows={5}
-          className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70"
           placeholder="Share your experience with JBJ Global Real Estate..."
         />
       </div>
@@ -303,7 +303,7 @@ const FeedbackForm = () => {
       <div>
         <Label htmlFor="recommend" className="text-black">Would you recommend us?</Label>
         <Select value={formData.wouldRecommend} onValueChange={(v) => setFormData({ ...formData, wouldRecommend: v })}>
-          <SelectTrigger className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black">
+          <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black">
             <SelectValue placeholder="Select option" />
           </SelectTrigger>
           <SelectContent>
@@ -394,7 +394,7 @@ const IssueReportForm = () => {
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             required
-            className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black"
           />
         </div>
         <div>
@@ -405,7 +405,7 @@ const IssueReportForm = () => {
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black"
           />
         </div>
       </div>
@@ -417,13 +417,13 @@ const IssueReportForm = () => {
             id="issuePhone"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black"
           />
         </div>
         <div>
           <Label htmlFor="browser" className="text-black">Browser *</Label>
           <Select value={formData.browser} onValueChange={(v) => setFormData({ ...formData, browser: v })}>
-            <SelectTrigger className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black">
+            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black">
               <SelectValue placeholder="Select browser" />
             </SelectTrigger>
             <SelectContent>
@@ -442,7 +442,7 @@ const IssueReportForm = () => {
         <div>
           <Label htmlFor="device" className="text-black">Device *</Label>
           <Select value={formData.device} onValueChange={(v) => setFormData({ ...formData, device: v })}>
-            <SelectTrigger className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black">
+            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black">
               <SelectValue placeholder="Select device" />
             </SelectTrigger>
             <SelectContent>
@@ -463,7 +463,7 @@ const IssueReportForm = () => {
             value={formData.pageUrl}
             onChange={(e) => setFormData({ ...formData, pageUrl: e.target.value })}
             required
-            className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70"
             placeholder="https://jbjglobalrealestate.lovable.app/..."
           />
         </div>
@@ -475,7 +475,7 @@ const IssueReportForm = () => {
           id="errorMessage"
           value={formData.errorMessage}
           onChange={(e) => setFormData({ ...formData, errorMessage: e.target.value })}
-          className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70"
           placeholder="Copy and paste any error message you see"
         />
       </div>
@@ -488,7 +488,7 @@ const IssueReportForm = () => {
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           required
           rows={4}
-          className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70"
           placeholder="Describe what's not working..."
         />
       </div>
@@ -500,14 +500,14 @@ const IssueReportForm = () => {
           value={formData.stepsToReproduce}
           onChange={(e) => setFormData({ ...formData, stepsToReproduce: e.target.value })}
           rows={3}
-          className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70"
           placeholder="1. Go to page X&#10;2. Click on Y&#10;3. Error appears"
         />
       </div>
 
       <div>
         <Label className="text-black">Screenshot (optional)</Label>
-        <div className="mt-2 border-2 border-dashed border-gold/40 rounded-lg p-6 text-center hover:border-gold transition-colors bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+        <div className="mt-2 border-2 border-dashed border-gold/40 rounded-lg p-6 text-center hover:border-gold transition-colors bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
           <input
             type="file"
             accept="image/*"
@@ -614,7 +614,7 @@ const IdeaBoxForm = () => {
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             required
-            className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black"
           />
         </div>
         <div>
@@ -625,7 +625,7 @@ const IdeaBoxForm = () => {
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black"
           />
         </div>
       </div>
@@ -637,13 +637,13 @@ const IdeaBoxForm = () => {
             id="ideaPhone"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black"
           />
         </div>
         <div>
           <Label htmlFor="ideaCategory" className="text-black">Idea Category *</Label>
           <Select value={formData.ideaCategory} onValueChange={(v) => setFormData({ ...formData, ideaCategory: v })}>
-            <SelectTrigger className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black">
+            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black">
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>
@@ -666,7 +666,7 @@ const IdeaBoxForm = () => {
           value={formData.ideaTitle}
           onChange={(e) => setFormData({ ...formData, ideaTitle: e.target.value })}
           required
-          className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70"
           placeholder="Give your idea a catchy title"
         />
       </div>
@@ -679,7 +679,7 @@ const IdeaBoxForm = () => {
           onChange={(e) => setFormData({ ...formData, ideaDescription: e.target.value })}
           required
           rows={5}
-          className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70"
           placeholder="Describe your creative idea in detail. Be as specific as possible!"
         />
       </div>
@@ -691,7 +691,7 @@ const IdeaBoxForm = () => {
           value={formData.expectedBenefit}
           onChange={(e) => setFormData({ ...formData, expectedBenefit: e.target.value })}
           rows={2}
-          className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70"
           placeholder="How would this idea benefit JBJ Global Real Estate or our clients?"
         />
       </div>
