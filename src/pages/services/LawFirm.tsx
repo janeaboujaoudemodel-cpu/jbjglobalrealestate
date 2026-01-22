@@ -163,7 +163,7 @@ const LawFirm = () => {
 
       {/* Practice Areas - 3-Layer System */}
       <section className="py-16 bg-black">
-        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -219,7 +219,7 @@ const LawFirm = () => {
 
       {/* Why Choose Us - 3-Layer System */}
       <section className="py-16 bg-black">
-        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -260,7 +260,7 @@ const LawFirm = () => {
 
       {/* CTA Section - 3-Layer System */}
       <section className="py-16 bg-black">
-        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"

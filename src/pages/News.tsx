@@ -177,9 +177,9 @@ const News = () => {
     <>
       <SEOHead {...pagesSEO.news} />
       <section className="min-h-screen bg-black">
-      {/* Hero Section - 3-Layer System with global inset */}
+      {/* Hero Section - 3-Layer System with global gutter */}
       <div className="relative py-16 md:py-24 bg-black">
-        <div className="mx-4 md:mx-8 lg:mx-16">
+        <div className="jj-layer-2 !bg-transparent">
           <Link to="/" className="inline-flex items-center gap-2 text-zinc-400 hover:text-gold mb-8 transition-colors group">
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Back to Properties
@@ -233,9 +233,9 @@ const News = () => {
         </div>
       </div>
 
-      {/* Category Filter - Active Champagne with global inset */}
+      {/* Category Filter - Active Champagne with global gutter */}
       <div className="border-b border-gold/20 sticky top-16 bg-black z-20">
-        <div className="mx-4 md:mx-8 lg:mx-16">
+        <div className="jj-layer-2 !bg-transparent !py-0">
           <div className="jj-layer-active rounded-xl my-2 p-2">
             <div className="flex gap-2 py-2 overflow-x-auto scrollbar-hide">
               {categories.map((category) => (
@@ -258,14 +258,14 @@ const News = () => {
 
       {/* Loading State */}
       {isLoading && (
-        <div className="mx-4 md:mx-8 lg:mx-16 py-16 flex justify-center">
+        <div className="jj-layer-2 !bg-transparent py-16 flex justify-center">
           <Loader2 className="w-8 h-8 text-gold animate-spin" />
         </div>
       )}
 
-      {/* News Grid - with global inset */}
+      {/* News Grid - with global gutter */}
       {!isLoading && (
-        <div className="mx-4 md:mx-8 lg:mx-16 py-12 md:py-16">
+        <div className="jj-layer-2 !bg-transparent py-12 md:py-16">
           {/* Featured Article */}
           {filteredNews.length > 0 && (
             <div className="mb-12">

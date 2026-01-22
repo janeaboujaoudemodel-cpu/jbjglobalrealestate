@@ -12,8 +12,8 @@ const Communities = React.forwardRef<HTMLElement>((_, ref) => {
         ref={ref}
         className="relative w-full min-h-screen py-16 md:py-24 bg-black"
       >
-        {/* Layer 2: Active Champagne - using global inset for aligned widths */}
-        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
+        {/* Layer 2: Active Champagne - using global locked gutter */}
+        <div className="jj-layer-2">
           <h1
             className="text-black font-bold mb-4"
             style={{

@@ -765,7 +765,7 @@ const BuyerGuide = () => {
       <section className="py-20 md:py-28 bg-black relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center opacity-5" />
         
-        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl relative z-10">
+        <div className="jj-layer-2 relative z-10">
           <div className="max-w-3xl mx-auto">
             <div className="jj-card-inner rounded-2xl p-8 md:p-12 text-center">
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-black mb-6">
@@ -809,7 +809,7 @@ const BuyerGuide = () => {
 
       {/* Legal Disclaimer - 3-Layer System */}
       <section className="py-8 bg-black">
-        <div className="mx-4 md:mx-8 lg:mx-16 py-6 px-4 md:px-8 jj-layer-active rounded-2xl">
+        <div className="jj-layer-2">
           <div className="max-w-4xl mx-auto">
             <div className="jj-card-inner rounded-lg p-6">
               <h4 className="text-black font-semibold mb-3 flex items-center gap-2">
@@ -830,7 +830,7 @@ const BuyerGuide = () => {
 
       {/* Guide Navigation - Active Layer Background */}
       <section className="py-12 bg-black">
-        <div className="mx-4 md:mx-8 lg:mx-16 py-8 px-4 md:px-8 jj-layer-active rounded-2xl">
+        <div className="jj-layer-2">
           <GuideNavigation current="/buyer-guide" guides={GUIDE_LINKS} showStartHere={false} />
         </div>
       </section>
