@@ -31,7 +31,8 @@ export const FounderPhilosophySection = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gold/5 rounded-full blur-3xl" />
       </div>
       
-      <div className="container mx-auto px-4 relative z-10">
+      {/* Active Layer Container */}
+      <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl relative z-10">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -102,8 +103,8 @@ export const FounderPhilosophySection = () => {
               </h2>
             </div>
             
-            {/* Card with ACTIVE COLOR */}
-            <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-2xl p-6 md:p-8">
+            {/* Card with CHAMPAGNE COLOR (Layer 3) */}
+            <div className="jj-card-inner rounded-2xl p-6 md:p-8">
               <p className="text-zinc-800 text-base leading-relaxed mb-4">
                 <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link> is a founder-led brokerage built on unwavering standards, discretion, and long-term vision.
               </p>
