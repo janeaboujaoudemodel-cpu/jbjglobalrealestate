@@ -266,9 +266,10 @@ const Index = () => {
       <section className="py-16 md:py-20 bg-black">
         <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg">
           <div className="text-center mb-10">
-            <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full text-black text-xs uppercase tracking-[0.2em] font-medium shadow-md">
+            <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-xs uppercase tracking-[0.2em] font-semibold shadow-md">
               <Users className="w-3 h-3 text-gold" />
-              Find Your Starting Point
+              <span className="text-black">Find Your</span>
+              <span className="text-gold">Starting Point</span>
             </span>
           </div>
 
@@ -428,11 +429,11 @@ const Index = () => {
           </div>
 
 
-          {/* Resources Grid - FILLED: JBJ in gold, Hub name in black on normal; reversed on hover */}
+          {/* Resources Grid - Active color fill with gold glow */}
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {/* JBJ Broker Hub Card - Champagne filled styling with gold glow */}
+            {/* JBJ Broker Hub Card - Active color styling with gold glow */}
             <Link to="/broker-toolkit" className="group">
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_60px_rgba(200,167,102,0.6)] transition-all duration-300 shadow-[0_0_40px_rgba(200,167,102,0.4)]">
+              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_60px_rgba(200,167,102,0.6)] transition-all duration-300 shadow-[0_0_40px_rgba(200,167,102,0.4)]">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 bg-transparent border-2 border-gold group-hover:border-black rounded-xl flex items-center justify-center shadow-lg shadow-gold/40 transition-all duration-300">
                     <Briefcase className="w-6 h-6 text-black group-hover:text-gold transition-colors" />
@@ -457,9 +458,9 @@ const Index = () => {
               </div>
             </Link>
 
-            {/* Investor Hub Card - Champagne filled styling with gold glow */}
+            {/* Investor Hub Card - Active color styling with gold glow */}
             <Link to="/ai-hub" className="group">
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_60px_rgba(200,167,102,0.6)] transition-all duration-300 shadow-[0_0_40px_rgba(200,167,102,0.4)]">
+              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_60px_rgba(200,167,102,0.6)] transition-all duration-300 shadow-[0_0_40px_rgba(200,167,102,0.4)]">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 bg-transparent border-2 border-gold group-hover:border-black rounded-xl flex items-center justify-center shadow-lg shadow-gold/40 transition-all duration-300">
                     <Layers className="w-6 h-6 text-black group-hover:text-gold transition-colors" />
@@ -558,19 +559,19 @@ const Index = () => {
                     Jane leads JBJ Global Real Estate with a commitment to excellence, integrity, and client success.
                   </p>
 
-                  {/* Stats Row - REVERSED: pearl fill on normal, black on hover */}
+                  {/* Stats Row - Active color on normal, champagne on hover */}
                   <div className="grid grid-cols-3 gap-4 mb-8">
-                    <div className="group text-center p-3 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold rounded-xl transition-all duration-300 hover:bg-black hover:from-black hover:via-black hover:to-black" style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}>
-                      <p className="text-transparent bg-clip-text bg-gradient-to-r from-[#C8A766] to-[#E8D4A8] group-hover:text-gold text-2xl md:text-3xl font-bold transition-colors">12+</p>
-                      <p className="text-black group-hover:text-zinc-400 text-[10px] uppercase tracking-wider mt-1 transition-colors">Years Exp</p>
+                    <div className="group text-center p-3 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6]" style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}>
+                      <p className="text-black group-hover:text-black text-2xl md:text-3xl font-bold transition-colors">12<span className="text-gold">+</span></p>
+                      <p className="text-zinc-700 group-hover:text-zinc-600 text-[10px] uppercase tracking-wider mt-1 transition-colors">Years Exp</p>
                     </div>
-                    <div className="group text-center p-3 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold rounded-xl transition-all duration-300 hover:bg-black hover:from-black hover:via-black hover:to-black" style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}>
-                      <p className="text-transparent bg-clip-text bg-gradient-to-r from-[#C8A766] to-[#E8D4A8] group-hover:text-gold text-2xl md:text-3xl font-bold transition-colors">147+</p>
-                      <p className="text-black group-hover:text-zinc-400 text-[10px] uppercase tracking-wider mt-1 transition-colors">Team Members</p>
+                    <div className="group text-center p-3 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6]" style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}>
+                      <p className="text-black group-hover:text-black text-2xl md:text-3xl font-bold transition-colors">147<span className="text-gold">+</span></p>
+                      <p className="text-zinc-700 group-hover:text-zinc-600 text-[10px] uppercase tracking-wider mt-1 transition-colors">Team Members</p>
                     </div>
-                    <div className="group text-center p-3 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold rounded-xl transition-all duration-300 hover:bg-black hover:from-black hover:via-black hover:to-black" style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}>
-                      <p className="text-transparent bg-clip-text bg-gradient-to-r from-[#C8A766] to-[#E8D4A8] group-hover:text-gold text-2xl md:text-3xl font-bold transition-colors">4.8K+</p>
-                      <p className="text-black group-hover:text-zinc-400 text-[10px] uppercase tracking-wider mt-1 transition-colors">Brokers Trained</p>
+                    <div className="group text-center p-3 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6]" style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}>
+                      <p className="text-black group-hover:text-black text-2xl md:text-3xl font-bold transition-colors">4.8K<span className="text-gold">+</span></p>
+                      <p className="text-zinc-700 group-hover:text-zinc-600 text-[10px] uppercase tracking-wider mt-1 transition-colors">Brokers Trained</p>
                     </div>
                   </div>
 
@@ -592,8 +593,8 @@ const Index = () => {
                       <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                       <span className="relative flex items-center justify-center gap-2">
                         <User className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
-                        <span className="text-black group-hover:text-gold transition-colors">Learn More</span>
-                        <span className="text-gold group-hover:text-black transition-colors">About The Founder</span>
+                        <span className="text-black group-hover:text-gold transition-colors">Learn More About</span>
+                        <span className="text-gold group-hover:text-black transition-colors">The Founder</span>
                         <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
                       </span>
                     </button>
@@ -736,12 +737,12 @@ const Index = () => {
       {/* Contact CTA Section - 3-Layer System: Black > Active Champagne > Pearl Card */}
       <section className="py-16 md:py-20 bg-black">
         <div className="container mx-auto px-4">
-          <div className="max-w-[1100px] mx-auto">
-            {/* OUTER CARD (Active Champagne) */}
-            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
-              {/* INNER CARD (Pearl) */}
+          <div className="mx-0">
+            {/* OUTER CARD (Active Champagne) - Matching section width */}
+            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8">
+              {/* INNER CARD (Champagne Pearl) - Noticeably smaller */}
               <motion.div 
-                className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 md:p-10 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
