@@ -67,8 +67,11 @@ export const MarketIntelligenceTableOfContents = ({
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      // Use scrollTo with offset to prevent getting stuck
-      const offset = 120; // Account for fixed header
+      // Set active immediately for better UX
+      setActiveId(id);
+      
+      // Use a larger offset to account for sticky headers
+      const offset = 150;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.scrollY - offset;
       
@@ -76,9 +79,6 @@ export const MarketIntelligenceTableOfContents = ({
         top: offsetPosition,
         behavior: "smooth"
       });
-      
-      // Force update active state
-      setActiveId(id);
     }
   };
 
