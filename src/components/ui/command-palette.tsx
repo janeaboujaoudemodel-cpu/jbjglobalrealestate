@@ -53,9 +53,9 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
   const commands: CommandItem[] = [
     // Quick Actions
     { id: 'new-lead', title: 'Create New Lead', subtitle: 'Add a new lead to CRM', icon: <UserPlus className="w-4 h-4" />, action: () => { navigate('/crm?action=new-lead'); onClose(); }, category: 'Quick Actions', keywords: ['add', 'create', 'lead', 'new'], shortcut: '⌘N' },
-    { id: 'new-task', title: 'Create Task', subtitle: 'Add a new task', icon: <ClipboardList className="w-4 h-4" />, action: () => { navigate('/crm-tasks?action=new'); onClose(); }, category: 'Quick Actions', keywords: ['task', 'todo', 'reminder'], shortcut: '⌘T' },
-    { id: 'schedule-call', title: 'Schedule Call', subtitle: 'Book a call with a lead', icon: <Phone className="w-4 h-4" />, action: () => { navigate('/crm-calendar'); onClose(); }, category: 'Quick Actions', keywords: ['call', 'schedule', 'phone'] },
-    { id: 'send-message', title: 'Send Message', subtitle: 'Message a lead or team member', icon: <MessageSquare className="w-4 h-4" />, action: () => { navigate('/jbj-broker-messages'); onClose(); }, category: 'Quick Actions', keywords: ['message', 'chat', 'whatsapp'] },
+    { id: 'new-task', title: 'Create Task', subtitle: 'Add a new task', icon: <ClipboardList className="w-4 h-4" />, action: () => { navigate('/crm/tasks?action=new'); onClose(); }, category: 'Quick Actions', keywords: ['task', 'todo', 'reminder'], shortcut: '⌘T' },
+    { id: 'schedule-call', title: 'Schedule Call', subtitle: 'Book a call with a lead', icon: <Phone className="w-4 h-4" />, action: () => { navigate('/crm/calendar'); onClose(); }, category: 'Quick Actions', keywords: ['call', 'schedule', 'phone'] },
+    { id: 'send-message', title: 'Send Message', subtitle: 'Message a lead or team member', icon: <MessageSquare className="w-4 h-4" />, action: () => { navigate('/crm/notes'); onClose(); }, category: 'Quick Actions', keywords: ['message', 'chat', 'notes'] },
     
     // Navigation
     { id: 'crm', title: 'CRM Dashboard', subtitle: 'Leads, deals, and pipeline', icon: <LayoutDashboard className="w-4 h-4" />, action: () => { navigate('/crm'); onClose(); }, category: 'Navigation', keywords: ['crm', 'dashboard', 'sales'] },
@@ -65,7 +65,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
     { id: 'founder-assistant', title: "Founder's Assistant", subtitle: 'Executive dashboard', icon: <Sparkles className="w-4 h-4" />, action: () => { navigate('/founders-assistant'); onClose(); }, category: 'Navigation', keywords: ['founder', 'ceo', 'executive'] },
     { id: 'analytics', title: 'Analytics Dashboard', subtitle: 'Performance metrics', icon: <TrendingUp className="w-4 h-4" />, action: () => { navigate('/jbj-analytics'); onClose(); }, category: 'Navigation', keywords: ['analytics', 'metrics', 'stats'] },
     { id: 'listing-admin', title: 'Listing Admin', subtitle: 'Property management', icon: <Building2 className="w-4 h-4" />, action: () => { navigate('/listing-admin'); onClose(); }, category: 'Navigation', keywords: ['listings', 'properties', 'real estate'] },
-    { id: 'calendar', title: 'Calendar', subtitle: 'Schedule and events', icon: <Calendar className="w-4 h-4" />, action: () => { navigate('/crm-calendar'); onClose(); }, category: 'Navigation', keywords: ['calendar', 'schedule', 'events'] },
+    { id: 'calendar', title: 'Calendar', subtitle: 'Schedule and events', icon: <Calendar className="w-4 h-4" />, action: () => { navigate('/crm/calendar'); onClose(); }, category: 'Navigation', keywords: ['calendar', 'schedule', 'events'] },
+    { id: 'notes', title: 'Notes', subtitle: 'View and manage notes', icon: <FileText className="w-4 h-4" />, action: () => { navigate('/crm/notes'); onClose(); }, category: 'Navigation', keywords: ['notes', 'memos', 'documents'] },
     
     // AI Tools
     { id: 'ai-hub', title: 'AI Hub', subtitle: 'All AI tools in one place', icon: <Sparkles className="w-4 h-4" />, action: () => { navigate('/ai-hub'); onClose(); }, category: 'AI Tools', keywords: ['ai', 'tools', 'automation'] },
