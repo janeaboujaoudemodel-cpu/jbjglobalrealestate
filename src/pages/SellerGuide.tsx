@@ -531,68 +531,64 @@ const SellerGuide = () => {
         </section>
 
         {/* Selling Mortgaged Properties */}
-        <section id="mortgaged-properties" className="py-16 scroll-mt-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={staggerContainer}
-              >
-                <motion.div variants={fadeInUp} className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
-                      <Landmark className="w-6 h-6 text-gold" />
-                    </div>
-                    <h3 className="text-xl font-bold text-black">Selling Mortgaged Properties</h3>
+        <section id="mortgaged-properties" className="py-16 jj-section-champagne scroll-mt-20">
+          <div className="max-w-4xl mx-auto px-4">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+            >
+              <motion.div variants={fadeInUp} className="jj-box-active p-6 md:p-8">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 jj-icon-box-active rounded-xl">
+                    <Landmark className="w-6 h-6" />
                   </div>
-                  <p className="text-zinc-700 mb-4">If your property has an existing mortgage:</p>
-                  <ul className="space-y-3 mb-4">
-                    {mortgagedPropertySteps.map((step, index) => (
-                      <li key={index} className="flex items-start gap-3 text-zinc-700">
-                        <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                        <span>{step}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="text-zinc-500 text-sm italic">This process is handled step-by-step to avoid delays.</p>
-                </motion.div>
+                  <h3 className="text-xl font-bold text-black">Selling Mortgaged Properties</h3>
+                </div>
+                <p className="text-zinc-700 mb-4">If your property has an existing mortgage:</p>
+                <ul className="space-y-3 mb-4">
+                  {mortgagedPropertySteps.map((step, index) => (
+                    <li key={index} className="flex items-start gap-3 text-zinc-700">
+                      <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                      <span>{step}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-zinc-500 text-sm italic">This process is handled step-by-step to avoid delays.</p>
               </motion.div>
-            </div>
+            </motion.div>
           </div>
         </section>
 
         {/* Selling Off-Plan Properties (Resale) */}
-        <section id="off-plan-resale" className="py-16 bg-zinc-900/30 scroll-mt-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={staggerContainer}
-              >
-                <motion.div variants={fadeInUp} className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
-                      <Building2 className="w-6 h-6 text-gold" />
-                    </div>
-                    <h3 className="text-xl font-bold text-black">Selling Off-Plan Properties (Resale)</h3>
+        <section id="off-plan-resale" className="py-16 jj-section-champagne scroll-mt-20">
+          <div className="max-w-4xl mx-auto px-4">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+            >
+              <motion.div variants={fadeInUp} className="jj-box-active p-6 md:p-8">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 jj-icon-box-active rounded-xl">
+                    <Building2 className="w-6 h-6" />
                   </div>
-                  <p className="text-zinc-700 mb-4">Off-plan resale depends on:</p>
-                  <ul className="space-y-3 mb-4">
-                    {offPlanResaleConditions.map((condition, index) => (
-                      <li key={index} className="flex items-start gap-3 text-zinc-700">
-                        <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                        <span>{condition}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="text-zinc-500 text-sm italic">Not all off-plan units are immediately resellable — eligibility is verified before listing.</p>
-                </motion.div>
+                  <h3 className="text-xl font-bold text-black">Selling Off-Plan Properties (Resale)</h3>
+                </div>
+                <p className="text-zinc-700 mb-4">Off-plan resale depends on:</p>
+                <ul className="space-y-3 mb-4">
+                  {offPlanResaleConditions.map((condition, index) => (
+                    <li key={index} className="flex items-start gap-3 text-zinc-700">
+                      <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                      <span>{condition}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-zinc-500 text-sm italic">Not all off-plan units are immediately resellable — eligibility is verified before listing.</p>
               </motion.div>
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -692,17 +688,17 @@ const SellerGuide = () => {
                   If you are considering selling your property, the next step is a structured pricing and market review to determine the correct exit strategy.
                 </p>
                 <div className="flex flex-wrap justify-center gap-4 mb-8">
-                  <Link to="/seller-listing">
+                  <Link to="/contact">
                     <Button variant="primary" className="px-8 py-4 text-lg">
-                      <Building2 className="w-5 h-5 mr-2" />
-                      List Your Property Now
+                      <Phone className="w-5 h-5 mr-2" />
+                      Book a Consultation
                       <ArrowRight className="w-5 h-5 ml-2" />
                     </Button>
                   </Link>
-                  <Link to="/contact">
+                  <Link to="/properties">
                     <Button variant="secondary" className="px-8 py-4 text-lg">
-                      <Phone className="w-5 h-5 mr-2" />
-                      Book Consultation
+                      <Building2 className="w-5 h-5 mr-2" />
+                      Explore Properties
                     </Button>
                   </Link>
                 </div>
