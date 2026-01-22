@@ -74,26 +74,42 @@ const ImageCarousel = ({ images, projectName = "project" }: ImageCarouselProps) 
             className="w-full h-full object-cover"
           />
           
-          {/* Overlay Controls */}
-          <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="bg-black/50 hover:bg-black/70 text-white rounded-full w-10 h-10"
+          {/* Overlay Controls - Always Visible with 3D Premium Style */}
+          <div className="absolute top-4 right-4 flex gap-2">
+            <button
+              className="relative w-11 h-11 rounded-xl font-bold transition-all duration-300 overflow-hidden flex items-center justify-center hover:scale-105"
+              style={{
+                background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                boxShadow: `
+                  0 4px 14px rgba(200,167,102,0.4),
+                  0 3px 8px rgba(0,0,0,0.15),
+                  inset 0 1px 3px rgba(255,255,255,0.9),
+                  0 0 12px rgba(200,167,102,0.3)
+                `,
+              }}
               onClick={() => handleDownload(images[currentIndex].image_url, currentIndex)}
               title="Download this image"
             >
-              <Download className="w-5 h-5" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="bg-black/50 hover:bg-black/70 text-white rounded-full w-10 h-10"
+              <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/70 to-transparent pointer-events-none" />
+              <Download className="w-5 h-5 text-black relative z-10" />
+            </button>
+            <button
+              className="relative w-11 h-11 rounded-xl font-bold transition-all duration-300 overflow-hidden flex items-center justify-center hover:scale-105"
+              style={{
+                background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                boxShadow: `
+                  0 4px 14px rgba(200,167,102,0.4),
+                  0 3px 8px rgba(0,0,0,0.15),
+                  inset 0 1px 3px rgba(255,255,255,0.9),
+                  0 0 12px rgba(200,167,102,0.3)
+                `,
+              }}
               onClick={() => setIsFullscreen(true)}
               title="View fullscreen"
             >
-              <Maximize2 className="w-5 h-5" />
-            </Button>
+              <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/70 to-transparent pointer-events-none" />
+              <Maximize2 className="w-5 h-5 text-black relative z-10" />
+            </button>
           </div>
 
           {/* Image Counter */}

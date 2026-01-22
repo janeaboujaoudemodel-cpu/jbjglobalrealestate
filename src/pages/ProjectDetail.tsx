@@ -267,6 +267,65 @@ const ProjectDetail = () => {
                   </div>
                 </div>
               )}
+
+              {/* Project Location Map - Rectangular Embed */}
+              <div>
+                <h2
+                  className="text-black font-semibold mb-4"
+                  style={{ fontFamily: "Poppins, sans-serif", fontSize: "24px" }}
+                >
+                  <span className="text-gold">Location</span> Map
+                </h2>
+                <div className="rounded-xl overflow-hidden border-2 border-gold/40 shadow-lg">
+                  <iframe
+                    src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${encodeURIComponent(project.name + (project.location ? ", " + project.location : "") + ", Dubai, UAE")}&maptype=satellite`}
+                    width="100%"
+                    height="300"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title={`${project.name} Location Map`}
+                    className="w-full"
+                  />
+                </div>
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(project.name + (project.location ? ", " + project.location : "") + ", Dubai, UAE")}&basemap=satellite`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 mt-3 text-gold hover:text-gold/80 text-sm font-medium transition-colors"
+                >
+                  <Map className="w-4 h-4" />
+                  Open in Google Maps
+                </a>
+              </div>
+
+              {/* Full Property Analysis Report */}
+              <div className="bg-gradient-to-br from-zinc-50 via-white to-zinc-50 border-2 border-gold/40 rounded-xl p-6">
+                <h2
+                  className="text-black font-semibold mb-4"
+                  style={{ fontFamily: "Poppins, sans-serif", fontSize: "24px" }}
+                >
+                  <span className="text-gold">Full</span> Property Report
+                </h2>
+                <p className="text-zinc-600 text-sm mb-4">
+                  Get comprehensive AI-powered analysis including market position, investment potential, comparable properties, and future projections.
+                </p>
+                
+                <AIMarketAnalyzer
+                  type="property"
+                  name={project.name}
+                  location={project.location || project.community?.name}
+                  pricePerSqft={project.price_from && project.size_min ? Math.round(project.price_from / project.size_min) : undefined}
+                  totalPrice={project.price_from}
+                  size={project.size_min}
+                  bedrooms={project.bedrooms_min}
+                  developer={project.developer?.name}
+                  amenities={project.amenities}
+                  handoverDate={project.handover_date}
+                  variant="full"
+                />
+              </div>
             </div>
 
             {/* Sidebar */}
