@@ -72,60 +72,61 @@ export function BrokerToolkitOperations() {
   return (
     <section id="section-operations" className="py-16 md:py-20 bg-black">
       <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <Badge className="bg-indigo-500/30 text-indigo-200 border-indigo-400/50 mb-4">
-            <Headphones className="w-3 h-3 mr-1" />
-            Operations Team
-          </Badge>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Operations <span className="text-indigo-300">Support</span>
-          </h2>
-          <p className="text-zinc-400 max-w-2xl mx-auto">
-            Dedicated operations team to handle contracts, compliance, and administrative tasks so you can focus on closing deals.
-          </p>
-        </motion.div>
+        {/* Active Indigo Layer */}
+        <div className="bg-gradient-to-br from-indigo-900/90 via-indigo-900/80 to-indigo-950/90 border border-indigo-500/30 rounded-2xl p-6 md:p-8 shadow-lg">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <Badge className="bg-indigo-500/30 text-indigo-200 border-indigo-400/50 mb-4">
+              <Headphones className="w-3 h-3 mr-1" />
+              Operations Team
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Operations <span className="text-indigo-300">Support</span>
+            </h2>
+            <p className="text-zinc-400 max-w-2xl mx-auto">
+              Dedicated operations team to handle contracts, compliance, and administrative tasks so you can focus on closing deals.
+            </p>
+          </motion.div>
 
-        {/* Services Grid */}
-        <div className="grid md:grid-cols-2 gap-6 mb-12">
-          {OPERATIONS_SERVICES.map((service, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              viewport={{ once: true }}
-            >
-              <Card className="bg-indigo-900/40 border border-indigo-500/30 hover:border-indigo-400 transition-all h-full">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-indigo-500/30 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <service.icon className="w-6 h-6 text-indigo-200" />
-                    </div>
-                    <div>
-                      <h3 className="text-white font-semibold text-lg mb-2">{service.title}</h3>
-                      <p className="text-indigo-200/70 text-sm mb-3">{service.description}</p>
-                      <div className="space-y-1">
-                        {service.features.map((feature, j) => (
-                          <div key={j} className="flex items-center gap-2 text-xs text-indigo-300/80">
-                            <CheckCircle className="w-3 h-3 text-indigo-400" />
-                            <span>{feature}</span>
-                          </div>
-                        ))}
+          {/* Services Grid */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {OPERATIONS_SERVICES.map((service, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Card className="bg-indigo-900/40 border border-indigo-500/30 hover:border-indigo-400 transition-all h-full">
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-indigo-500/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <service.icon className="w-6 h-6 text-indigo-200" />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-semibold text-lg mb-2">{service.title}</h3>
+                        <p className="text-indigo-200/70 text-sm mb-3">{service.description}</p>
+                        <div className="space-y-1">
+                          {service.features.map((feature, j) => (
+                            <div key={j} className="flex items-center gap-2 text-xs text-indigo-300/80">
+                              <CheckCircle className="w-3 h-3 text-indigo-400" />
+                              <span>{feature}</span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
         </div>
-
-        {/* Contact Operations box removed as per user request */}
       </div>
     </section>
   );

@@ -49,155 +49,158 @@ export function BrokerToolkitGrowth() {
   return (
     <section id="section-growth" className="py-16 md:py-20 bg-black">
       <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <Badge className="bg-white text-black border-gold/30 mb-4 shadow-sm">
-            <TrendingUp className="w-3 h-3 mr-1 text-gold" />
-            <span className="text-gold">Growth</span>
-            <span className="text-black ml-1">& Rewards</span>
-          </Badge>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Level Up Your <span className="text-gold">Career</span>
-          </h2>
-          <p className="text-zinc-400 max-w-2xl mx-auto">
-            Earn points for every action, unlock rewards, and climb the leaderboard.
-          </p>
-        </motion.div>
-
-        <div className="grid lg:grid-cols-2 gap-8 mb-12">
-          {/* Levels Card - White background to match Earn Points */}
+        {/* Active Rose/Gold Layer for Growth Section */}
+        <div className="bg-gradient-to-br from-rose-900/90 via-rose-900/80 to-rose-950/90 border border-rose-500/30 rounded-2xl p-6 md:p-8 shadow-lg">
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            className="text-center mb-12"
           >
-            <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-semibold text-black mb-6 flex items-center gap-2">
-                  <Crown className="w-5 h-5 text-gold" />
-                  Broker Levels
-                </h3>
-                <div className="space-y-4">
-                  {LEVELS.map((level, i) => (
-                    <div key={i} className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/50 flex items-center justify-center text-black font-bold text-sm shadow-md">
-                        {level.level}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex justify-between items-center mb-1">
-                          <span className="text-black font-medium">{level.name}</span>
-                          <span className="text-gold text-sm font-semibold">{level.points.toLocaleString()} pts</span>
-                        </div>
-                        <Progress value={i === 0 ? 100 : 0} className="h-1.5 bg-zinc-200" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <Badge className="bg-rose-500/30 text-rose-200 border-rose-400/50 mb-4 shadow-sm">
+              <TrendingUp className="w-3 h-3 mr-1 text-rose-200" />
+              <span className="text-rose-200">Growth</span>
+              <span className="text-white ml-1">& Rewards</span>
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Level Up Your <span className="text-gold">Career</span>
+            </h2>
+            <p className="text-zinc-400 max-w-2xl mx-auto">
+              Earn points for every action, unlock rewards, and climb the leaderboard.
+            </p>
           </motion.div>
 
-          {/* Point Activities Card - White background */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
-            <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-semibold text-black mb-6 flex items-center gap-2">
-                  <Zap className="w-5 h-5 text-gold" />
-                  Earn Points
-                </h3>
-                <div className="space-y-3">
-                  {POINT_ACTIVITIES.map((activity, i) => (
-                    <div key={i} className="flex items-center justify-between py-2 border-b border-gold/20 last:border-0">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center">
-                          <activity.icon className="w-4 h-4 text-gold" />
+          <div className="grid lg:grid-cols-2 gap-8 mb-12">
+            {/* Levels Card - White background to match Earn Points */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-semibold text-black mb-6 flex items-center gap-2">
+                    <Crown className="w-5 h-5 text-gold" />
+                    Broker Levels
+                  </h3>
+                  <div className="space-y-4">
+                    {LEVELS.map((level, i) => (
+                      <div key={i} className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/50 flex items-center justify-center text-black font-bold text-sm shadow-md">
+                          {level.level}
                         </div>
-                        <span className="text-zinc-700 text-sm">{activity.activity}</span>
+                        <div className="flex-1">
+                          <div className="flex justify-between items-center mb-1">
+                            <span className="text-black font-medium">{level.name}</span>
+                            <span className="text-gold text-sm font-semibold">{level.points.toLocaleString()} pts</span>
+                          </div>
+                          <Progress value={i === 0 ? 100 : 0} className="h-1.5 bg-zinc-200" />
+                        </div>
                       </div>
-                      <span className="text-gold font-semibold">+{activity.points}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Point Activities Card - White background */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-semibold text-black mb-6 flex items-center gap-2">
+                    <Zap className="w-5 h-5 text-gold" />
+                    Earn Points
+                  </h3>
+                  <div className="space-y-3">
+                    {POINT_ACTIVITIES.map((activity, i) => (
+                      <div key={i} className="flex items-center justify-between py-2 border-b border-gold/20 last:border-0">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center">
+                            <activity.icon className="w-4 h-4 text-gold" />
+                          </div>
+                          <span className="text-zinc-700 text-sm">{activity.activity}</span>
+                        </div>
+                        <span className="text-gold font-semibold">+{activity.points}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+
+          {/* Rewards Grid */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-12"
+          >
+            <h3 className="text-xl font-semibold text-white mb-6 text-center flex items-center justify-center gap-2">
+              <Gift className="w-5 h-5 text-gold" />
+              Redeem Rewards
+            </h3>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              {REWARDS.map((reward, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 hover:border-gold/60 hover:shadow-xl hover:shadow-gold/20 transition-all cursor-pointer h-full">
+                    <CardContent className="p-5 text-center">
+                      <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-3">
+                        <reward.icon className="w-6 h-6 text-gold" />
+                      </div>
+                      <h4 className="text-black font-medium mb-1">{reward.name}</h4>
+                      <p className="text-gold font-semibold">{reward.points.toLocaleString()} points</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* CTA - Premium 3D Button Style */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <button 
+              className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
+              style={{
+                background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+                border: '2px solid rgba(200,167,102,0.5)',
+                boxShadow: `
+                  0 10px 30px rgba(200,167,102,0.4),
+                  0 6px 15px rgba(0,0,0,0.2),
+                  inset 0 2px 4px rgba(255,255,255,0.9),
+                  inset 0 -2px 4px rgba(200,167,102,0.2),
+                  0 0 20px rgba(200,167,102,0.3)
+                `,
+              }}
+              onClick={() => navigate(user ? '/my-account' : '/auth?redirect=/my-account')}
+            >
+              <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+              <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+              <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+              <span className="relative flex items-center justify-center gap-2">
+                <Trophy className="w-5 h-5 text-gold" />
+                <span className="text-gold">{user ? 'View My' : 'Start Earning'}</span>
+                <span className="text-black">{user ? 'Progress' : 'Points'}</span>
+                <ArrowUpRight className="w-5 h-5 text-black" />
+              </span>
+            </button>
           </motion.div>
         </div>
-
-        {/* Rewards Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-12"
-        >
-          <h3 className="text-xl font-semibold text-white mb-6 text-center flex items-center justify-center gap-2">
-            <Gift className="w-5 h-5 text-gold" />
-            Redeem Rewards
-          </h3>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {REWARDS.map((reward, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 hover:border-gold/60 hover:shadow-xl hover:shadow-gold/20 transition-all cursor-pointer h-full">
-                  <CardContent className="p-5 text-center">
-                    <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-3">
-                      <reward.icon className="w-6 h-6 text-gold" />
-                    </div>
-                    <h4 className="text-black font-medium mb-1">{reward.name}</h4>
-                    <p className="text-gold font-semibold">{reward.points.toLocaleString()} points</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* CTA - Premium 3D Button Style */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center"
-        >
-          <button 
-            className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
-            style={{
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
-              border: '2px solid rgba(200,167,102,0.5)',
-              boxShadow: `
-                0 10px 30px rgba(200,167,102,0.4),
-                0 6px 15px rgba(0,0,0,0.2),
-                inset 0 2px 4px rgba(255,255,255,0.9),
-                inset 0 -2px 4px rgba(200,167,102,0.2),
-                0 0 20px rgba(200,167,102,0.3)
-              `,
-            }}
-            onClick={() => navigate(user ? '/my-account' : '/auth?redirect=/my-account')}
-          >
-            <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-            <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
-            <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-            <span className="relative flex items-center justify-center gap-2">
-              <Trophy className="w-5 h-5 text-gold" />
-              <span className="text-gold">{user ? 'View My' : 'Start Earning'}</span>
-              <span className="text-black">{user ? 'Progress' : 'Points'}</span>
-              <ArrowUpRight className="w-5 h-5 text-black" />
-            </span>
-          </button>
-        </motion.div>
       </div>
     </section>
   );
