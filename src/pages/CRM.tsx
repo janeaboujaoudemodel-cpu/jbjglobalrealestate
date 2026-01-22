@@ -385,7 +385,7 @@ const CRM = () => {
                   <Calendar className="h-4 w-4 mr-1" />
                   Calendar
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => navigate("/employee-hub")} className="text-black hover:text-gold hover:bg-gold/10 text-xs">
+                <Button variant="ghost" size="sm" onClick={() => setActiveTab("employees")} className="text-black hover:text-gold hover:bg-gold/10 text-xs">
                   <Users className="h-4 w-4 mr-1" />
                   Team
                 </Button>
@@ -503,7 +503,7 @@ const CRM = () => {
                 className="text-gold border-gold/30"
               >
                 <Sparkles className="h-4 w-4 mr-2" />
-                AI Assistant
+                Assistant
               </Button>
               {isAdmin && (
                 <VIPExportButton />
