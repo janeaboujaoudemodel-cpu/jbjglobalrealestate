@@ -519,7 +519,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                           <Button 
                             size="sm"
                             onClick={() => handleScheduleInterview(cv)}
-                            className="bg-[#F1C40F] hover:bg-[#FFD700] text-black font-bold shadow-lg px-5 py-2.5 transition-all duration-200 hover:scale-105 border-2 border-amber-600"
+                            className="bg-gold hover:bg-gold-light text-black font-bold shadow-lg px-5 py-2.5 transition-all duration-200 hover:scale-105 border-2 border-gold-dark"
                           >
                             <Video className="h-4 w-4 mr-2" />
                             Schedule Interview
@@ -535,7 +535,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                           <Button 
                             size="sm"
                             onClick={() => handleContact(cv)}
-                            className="bg-[#F1C40F] hover:bg-[#FFD700] text-black font-bold shadow-lg px-5 py-2.5 transition-all duration-200 hover:scale-105 border-2 border-amber-600"
+                            className="bg-gold hover:bg-gold-light text-black font-bold shadow-lg px-5 py-2.5 transition-all duration-200 hover:scale-105 border-2 border-gold-dark"
                           >
                             <Mail className="h-4 w-4 mr-2" />
                             Contact
