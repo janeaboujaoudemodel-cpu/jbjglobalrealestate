@@ -196,12 +196,12 @@ const Automations = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background p-6">
+      <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] p-6">
         <div className="max-w-5xl mx-auto space-y-6">
-          <Skeleton className="h-12 w-64" />
+          <Skeleton className="h-12 w-64 bg-gold/20" />
           <div className="grid gap-4">
             {[1, 2, 3, 4].map(i => (
-              <Skeleton key={i} className="h-24" />
+              <Skeleton key={i} className="h-24 bg-gold/20 border-2 border-gold/30 rounded-xl" />
             ))}
           </div>
         </div>
@@ -212,29 +212,29 @@ const Automations = () => {
   const activeCount = rules.filter(r => r.isActive).length;
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-zinc-200 bg-white sticky top-0 z-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+      {/* Header - Premium Champagne */}
+      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link to="/crm">
-              <Button variant="ghost" size="sm" className="text-zinc-600 hover:text-zinc-900">
+              <Button variant="ghost" size="sm" className="text-black hover:text-gold hover:bg-gold/10">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to CRM
               </Button>
             </Link>
-            <div className="h-6 w-px bg-zinc-200" />
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-gold/20">
+            <div className="h-6 w-px bg-gold/30" />
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-gradient-to-br from-gold/20 to-gold/10 border border-gold/30">
                 <Zap className="h-5 w-5 text-gold" />
               </div>
               <div>
-                <h1 className="text-lg font-bold text-zinc-900">Smart Automations</h1>
-                <p className="text-xs text-zinc-500">{activeCount} of {rules.length} active</p>
+                <h1 className="text-xl font-bold text-black">Smart Automations</h1>
+                <p className="text-xs text-zinc-600">{activeCount} of {rules.length} active</p>
               </div>
             </div>
           </div>
-          <Button variant="primary">
+          <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110 shadow-lg shadow-gold/20">
             <Plus className="h-4 w-4 mr-2" />
             Create Rule
           </Button>
@@ -247,43 +247,47 @@ const Automations = () => {
           {rules.map((rule) => (
             <Card 
               key={rule.id} 
-              className={`border-zinc-200 bg-white transition-all ${
+              className={`border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] transition-all duration-300 hover:shadow-[0_10px_40px_rgba(200,167,102,0.25)] hover:scale-[1.01] ${
                 rule.isActive ? 'border-l-4 border-l-gold' : 'opacity-70'
               }`}
             >
               <CardContent className="p-5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className={`p-3 rounded-xl ${rule.isActive ? 'bg-gold/20' : 'bg-zinc-100'}`}>
-                      <rule.icon className={`h-5 w-5 ${rule.isActive ? 'text-gold' : 'text-zinc-400'}`} />
+                    <div className={`p-3 rounded-xl border transition-all ${
+                      rule.isActive 
+                        ? 'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-gold/40' 
+                        : 'bg-zinc-100 border-zinc-200'
+                    }`}>
+                      <rule.icon className={`h-5 w-5 ${rule.isActive ? 'text-black' : 'text-zinc-400'}`} />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="font-semibold text-zinc-900">{rule.name}</h3>
+                        <h3 className="font-semibold text-black">{rule.name}</h3>
                         {rule.adminOnly && (
-                          <Badge variant="outline" className="text-xs border-amber-500/30 text-amber-600">
+                          <Badge variant="outline" className="text-xs border-amber-500/30 text-amber-600 bg-amber-50">
                             Admin Only
                           </Badge>
                         )}
                       </div>
-                      <p className="text-sm text-zinc-500 mt-0.5">{rule.description}</p>
+                      <p className="text-sm text-zinc-600 mt-0.5">{rule.description}</p>
                       <div className="flex items-center gap-4 mt-2">
-                        <span className="text-xs text-zinc-400">
-                          <strong>Trigger:</strong> {rule.trigger}
+                        <span className="text-xs text-zinc-500">
+                          <strong className="text-black">Trigger:</strong> {rule.trigger}
                         </span>
-                        <span className="text-xs text-zinc-400">
-                          <strong>Action:</strong> {rule.action}
+                        <span className="text-xs text-zinc-500">
+                          <strong className="text-black">Action:</strong> {rule.action}
                         </span>
                         {rule.frequency && (
-                          <span className="text-xs text-zinc-400">
-                            <strong>Frequency:</strong> {rule.frequency}
+                          <span className="text-xs text-zinc-500">
+                            <strong className="text-black">Frequency:</strong> {rule.frequency}
                           </span>
                         )}
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
-                    <Button variant="ghost" size="sm" className="text-zinc-500 hover:text-zinc-900">
+                    <Button variant="ghost" size="sm" className="text-zinc-500 hover:text-gold hover:bg-gold/10">
                       <Settings className="h-4 w-4" />
                     </Button>
                     <Switch
@@ -297,15 +301,15 @@ const Automations = () => {
           ))}
         </div>
 
-        {/* Info Card */}
-        <Card className="mt-8 border-zinc-200 bg-zinc-50">
+        {/* Info Card - Premium Champagne */}
+        <Card className="mt-8 border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.15)]">
           <CardContent className="p-6">
             <div className="flex items-start gap-4">
-              <div className="p-3 rounded-xl bg-blue-500/10">
-                <Shield className="h-6 w-6 text-blue-500" />
+              <div className="p-3 rounded-xl bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30">
+                <Shield className="h-6 w-6 text-black" />
               </div>
               <div>
-                <h3 className="font-semibold text-zinc-900">About Smart Automations</h3>
+                <h3 className="font-semibold text-black">About Smart Automations</h3>
                 <p className="text-sm text-zinc-600 mt-1">
                   Automations run in the background to help your team work more efficiently. 
                   Rules marked "Admin Only" can only be modified by administrators. 
