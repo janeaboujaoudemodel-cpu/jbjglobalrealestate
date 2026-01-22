@@ -41,11 +41,11 @@ const MarketAreaDetail = () => {
   const getTrendBadge = (trend: string) => {
     switch (trend) {
       case 'bullish':
-        return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-lg px-4 py-1">Bullish</Badge>;
+        return <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30 text-lg px-4 py-1">Bullish</Badge>;
       case 'bearish':
-        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30 text-lg px-4 py-1">Bearish</Badge>;
+        return <Badge className="bg-red-500/20 text-red-600 border-red-500/30 text-lg px-4 py-1">Bearish</Badge>;
       default:
-        return <Badge className="bg-zinc-500/20 text-zinc-400 border-zinc-500/30 text-lg px-4 py-1">Neutral</Badge>;
+        return <Badge className="bg-zinc-500/20 text-zinc-600 border-zinc-500/30 text-lg px-4 py-1">Neutral</Badge>;
     }
   };
 
@@ -129,62 +129,62 @@ const MarketAreaDetail = () => {
         </motion.div>
       </section>
 
-      {/* Key Metrics */}
-      <section className="py-12 border-t border-zinc-900">
+      {/* Key Metrics - 3-layer system */}
+      <section className="py-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
               <CardContent className="p-6 text-center">
                 <BarChart3 className="w-8 h-8 text-gold mx-auto mb-3" />
                 <p className="text-zinc-500 text-sm mb-1">Price Index</p>
-                <p className="text-white text-3xl font-bold">{area.priceIndex}</p>
+                <p className="text-black text-3xl font-bold">{area.priceIndex}</p>
               </CardContent>
             </Card>
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
               <CardContent className="p-6 text-center">
                 <Home className="w-8 h-8 text-gold mx-auto mb-3" />
                 <p className="text-zinc-500 text-sm mb-1">Rental Index</p>
-                <p className="text-white text-3xl font-bold">{area.rentalIndex}</p>
+                <p className="text-black text-3xl font-bold">{area.rentalIndex}</p>
               </CardContent>
             </Card>
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
               <CardContent className="p-6 text-center">
                 <Users className="w-8 h-8 text-gold mx-auto mb-3" />
                 <p className="text-zinc-500 text-sm mb-1">Demand Score</p>
-                <p className="text-white text-3xl font-bold">{area.demandScore}%</p>
+                <p className="text-black text-3xl font-bold">{area.demandScore}%</p>
               </CardContent>
             </Card>
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
               <CardContent className="p-6 text-center">
                 <Building2 className="w-8 h-8 text-gold mx-auto mb-3" />
                 <p className="text-zinc-500 text-sm mb-1">Supply Score</p>
-                <p className="text-white text-3xl font-bold">{area.supplyScore}%</p>
+                <p className="text-black text-3xl font-bold">{area.supplyScore}%</p>
               </CardContent>
             </Card>
           </div>
         </div>
       </section>
 
-      {/* AI Explanation */}
-      <section className="py-12 border-t border-zinc-900">
+      {/* AI Explanation - 3-layer system */}
+      <section className="py-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
         <div className="container mx-auto px-4">
-          <Card className="bg-gradient-to-br from-zinc-900 to-zinc-950 border-gold/20 max-w-4xl mx-auto">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 max-w-4xl mx-auto">
             <CardHeader>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center">
                   <Info className="w-5 h-5 text-gold" />
                 </div>
-                <CardTitle className="text-white">Why This Area Performs This Way</CardTitle>
+                <CardTitle className="text-black">Why This Area Performs This Way</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
-              <div className="prose prose-invert max-w-none">
+              <div className="prose max-w-none">
                 {generateExplanation().split('\n\n').map((para, i) => {
                   // Security: Sanitize before rendering with dangerouslySetInnerHTML
-                  const htmlContent = para.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>');
+                  const htmlContent = para.replace(/\*\*(.*?)\*\*/g, '<strong class="text-black">$1</strong>');
                   const sanitizedHtml = sanitizeMarkdownHtml(htmlContent);
                   return (
-                    <p key={i} className="text-zinc-400 mb-4" dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />
+                    <p key={i} className="text-zinc-700 mb-4" dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />
                   );
                 })}
               </div>
@@ -193,39 +193,39 @@ const MarketAreaDetail = () => {
         </div>
       </section>
 
-      {/* Key Highlights */}
-      <section className="py-12 border-t border-zinc-900">
+      {/* Key Highlights - 3-layer system */}
+      <section className="py-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
         <div className="container mx-auto px-4">
-          <h2 className="text-white text-2xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
-            Market Highlights
+          <h2 className="text-black text-2xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <span className="text-gold">Market</span> Highlights
           </h2>
           <div className="max-w-2xl mx-auto space-y-4">
             {area.highlights.map((highlight, i) => (
-              <div key={i} className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 flex items-start gap-4">
-                <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center shrink-0">
+              <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-4 flex items-start gap-4">
+                <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center shrink-0">
                   <span className="text-gold font-bold">{i + 1}</span>
                 </div>
-                <p className="text-zinc-300">{highlight}</p>
+                <p className="text-zinc-700">{highlight}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-12 border-t border-zinc-900">
+      {/* CTA - 3-layer system */}
+      <section className="py-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
         <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto text-center">
-            <h3 className="text-white text-xl font-bold mb-4">Interested in {area.area}?</h3>
-            <p className="text-zinc-400 mb-6">Speak with our team for personalized guidance based on current market conditions.</p>
+          <div className="max-w-2xl mx-auto text-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8">
+            <h3 className="text-black text-xl font-bold mb-4">Interested in {area.area}?</h3>
+            <p className="text-zinc-600 mb-6">Speak with our team for personalized guidance based on current market conditions.</p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/contact">
-                <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold">
+                <Button variant="primary">
                   Speak With Our Team
                 </Button>
               </Link>
               <Link to={`/properties?location=${encodeURIComponent(area.area)}`}>
-                <Button variant="outline" className="border-white/30 text-white hover:bg-white/10">
+                <Button variant="outline" className="border-black text-black hover:bg-black/10">
                   View Properties in {area.area}
                 </Button>
               </Link>
@@ -234,15 +234,15 @@ const MarketAreaDetail = () => {
         </div>
       </section>
 
-      {/* Internal Links */}
-      <section className="py-12 border-t border-zinc-900">
+      {/* Internal Links - 3-layer system */}
+      <section className="py-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
         <div className="container mx-auto px-4">
-          <h3 className="text-white text-xl font-bold mb-6 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
-            Continue Exploring
+          <h3 className="text-black text-xl font-bold mb-6 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <span className="text-gold">Continue</span> Exploring
           </h3>
           <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
             <Link to="/market-intelligence/overview" className="group">
-              <Card className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 hover:border-gold/50 hover:shadow-lg transition-all shadow-sm">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold hover:shadow-lg transition-all shadow-sm">
                 <CardContent className="p-4 flex items-center justify-between">
                   <span className="text-gold font-medium group-hover:text-gold-dark transition-colors">Market Overview</span>
                   <ArrowRight className="w-4 h-4 text-black" />
@@ -250,7 +250,7 @@ const MarketAreaDetail = () => {
               </Card>
             </Link>
             <Link to="/market-intelligence/reports" className="group">
-              <Card className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 hover:border-gold/50 hover:shadow-lg transition-all shadow-sm">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold hover:shadow-lg transition-all shadow-sm">
                 <CardContent className="p-4 flex items-center justify-between">
                   <span className="text-gold font-medium group-hover:text-gold-dark transition-colors">Market Reports</span>
                   <ArrowRight className="w-4 h-4 text-black" />
@@ -258,7 +258,7 @@ const MarketAreaDetail = () => {
               </Card>
             </Link>
             <Link to="/market-intelligence/methodology" className="group">
-              <Card className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 hover:border-gold/50 hover:shadow-lg transition-all shadow-sm">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold hover:shadow-lg transition-all shadow-sm">
                 <CardContent className="p-4 flex items-center justify-between">
                   <span className="text-gold font-medium group-hover:text-gold-dark transition-colors">Methodology</span>
                   <ArrowRight className="w-4 h-4 text-black" />
@@ -267,9 +267,9 @@ const MarketAreaDetail = () => {
             </Link>
           </div>
           
-          {/* Disclaimer Box - White style */}
+          {/* Disclaimer Box - Champagne style */}
           <div className="max-w-3xl mx-auto mt-8">
-            <div className="bg-white border border-zinc-200 rounded-xl p-6 text-center">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 text-center">
               <div className="flex items-center justify-center gap-4 mb-4">
                 <Database className="w-5 h-5 text-gold" />
                 <Shield className="w-5 h-5 text-gold" />
