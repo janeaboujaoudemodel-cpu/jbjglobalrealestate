@@ -264,7 +264,7 @@ const InquiryFormModal = ({
         }}
       >
         <DialogContent 
-          className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/30 text-zinc-900 max-w-lg p-0 overflow-hidden max-h-[90vh] overflow-y-auto shadow-2xl shadow-gold/20"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 text-zinc-900 max-w-lg p-0 overflow-hidden max-h-[90vh] overflow-y-auto shadow-2xl shadow-gold/20"
           dir={isRTL ? 'rtl' : 'ltr'}
           onInteractOutside={(e) => {
             // Prevent closing on outside click during submission

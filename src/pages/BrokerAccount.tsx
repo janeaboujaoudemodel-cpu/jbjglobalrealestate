@@ -196,7 +196,7 @@ const BrokerAccount = () => {
   if (!isEmployee && !isBroker && user) {
     return (
       <MainLayout>
-        <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+        <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
           <div className="container mx-auto px-4 py-8">
             <InvestorDashboard />
           </div>

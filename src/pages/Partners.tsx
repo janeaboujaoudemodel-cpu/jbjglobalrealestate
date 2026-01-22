@@ -250,8 +250,8 @@ const Partners = () => {
             <div className="max-w-[1100px] mx-auto">
               {/* OUTER CARD (Active Champagne) */}
               <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
-                {/* INNER CARD (Pearl) */}
-                <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center">
+                {/* INNER CARD (Champagne) */}
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center">
                   <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">Need <span className="text-gold">Assistance?</span></h2>
                   <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
                     Whether you're buying, selling, renting, or need a partner introduction, 

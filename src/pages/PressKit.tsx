@@ -207,7 +207,7 @@ const PressKit = () => {
             className="max-w-4xl mx-auto"
           >
             <motion.div 
-              className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-3xl p-8 md:p-12 shadow-lg"
+              className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-3xl p-8 md:p-12 shadow-lg"
               variants={fadeInUp}
             >
               <div className="flex items-start justify-between mb-6">
@@ -258,7 +258,7 @@ const PressKit = () => {
                   Jane Abou Jaoude <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Headshots</span>
                 </h2>
               </div>
-              <div className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-lg px-4 py-2 shadow-sm">
+              <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-lg px-4 py-2 shadow-sm">
                 <p className="text-zinc-700 text-sm">
                   <Mail className="w-4 h-4 inline mr-2 text-gold" />
                   For media inquiries: <span className="text-gold font-medium">media@JBJ.ae</span>
@@ -273,7 +273,7 @@ const PressKit = () => {
               {founderHeadshots.map((asset) => (
                 <motion.div
                   key={asset.id}
-                  className="group bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-2xl overflow-hidden hover:border-gold/60 hover:shadow-lg hover:shadow-gold/10 transition-all duration-300"
+                  className="group bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl overflow-hidden hover:border-gold/60 hover:shadow-lg hover:shadow-gold/10 transition-all duration-300"
                   variants={fadeInUp}
                 >
                   <div className="aspect-[4/5] relative overflow-hidden">
