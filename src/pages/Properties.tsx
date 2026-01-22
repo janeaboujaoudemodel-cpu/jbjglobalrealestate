@@ -1073,7 +1073,7 @@ const Properties = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="max-w-2xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10 shadow-[0_0_30px_rgba(200,167,102,0.25)]"
+            className="max-w-2xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10 shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)]"
           >
             <h2 className="text-2xl md:text-3xl font-semibold text-black text-center mb-8" style={{ fontFamily: "Poppins, sans-serif" }}>
               <span className="text-gold">Request</span> Details
@@ -1116,14 +1116,30 @@ const Properties = () => {
                   I agree to be contacted
                 </label>
               </div>
-              <Button
+              <button
                 onClick={handleInquirySubmit}
-                variant="primary"
-                size="lg"
-                className="w-full mt-4"
+                type="button"
+                className="group relative w-full inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden mt-4 hover:scale-[1.02] transform active:scale-95"
+                style={{
+                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                  border: '2px solid rgba(200,167,102,0.6)',
+                  boxShadow: `
+                    0 10px 30px rgba(200,167,102,0.4),
+                    0 6px 15px rgba(0,0,0,0.2),
+                    inset 0 2px 4px rgba(255,255,255,0.9),
+                    inset 0 -2px 4px rgba(200,167,102,0.2),
+                    0 0 20px rgba(200,167,102,0.3)
+                  `,
+                }}
               >
-                <span className="text-black">Submit</span> <span className="text-gold">Request</span>
-              </Button>
+                <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+                <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                <span className="relative flex items-center justify-center gap-2">
+                  <span className="text-black group-hover:text-gold transition-colors">Submit</span>
+                  <span className="text-gold group-hover:text-black transition-colors">Request</span>
+                </span>
+              </button>
             </div>
 
             {/* Current Filter Summary */}

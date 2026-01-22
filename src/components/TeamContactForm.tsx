@@ -96,7 +96,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-lg bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black max-h-[90vh] overflow-y-auto shadow-[0_0_40px_rgba(200,167,102,0.3)]">
+      <DialogContent className="sm:max-w-lg bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold text-black max-h-[90vh] overflow-y-auto shadow-[0_8px_40px_rgba(200,167,102,0.4),0_4px_20px_rgba(0,0,0,0.2)]">
         <DialogHeader className="pb-4 border-b border-gold/20">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 flex items-center justify-center shadow-md">
@@ -221,18 +221,19 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
           <div className="flex gap-3 pt-4 border-t border-gold/20">
             <Button
               type="button"
-              variant="outline"
+              variant="secondary"
               onClick={onClose}
-              className="flex-1 border-2 border-black text-black hover:bg-black hover:text-white transition-all duration-300"
+              className="flex-1"
             >
               Cancel
             </Button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="relative flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 group overflow-hidden disabled:opacity-50"
+              className="relative flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 group overflow-hidden disabled:opacity-50 hover:scale-[1.02] transform active:scale-95"
               style={{
                 background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                border: '2px solid rgba(200,167,102,0.6)',
                 boxShadow: `
                   0 8px 20px rgba(200,167,102,0.35),
                   0 4px 10px rgba(0,0,0,0.15),
@@ -242,6 +243,8 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
               }}
             >
               <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+              <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+              <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
               <span className="relative flex items-center justify-center gap-2">
                 {isSubmitting ? (
                   <>

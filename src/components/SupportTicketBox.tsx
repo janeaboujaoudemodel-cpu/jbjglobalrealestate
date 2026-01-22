@@ -261,9 +261,8 @@ const SupportTicketBox = () => {
 
   return (
     <section className="py-16 md:py-20 bg-black">
-      <div className="container mx-auto px-4">
-        {/* Active Champagne Section Layer */}
-        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg p-6 md:p-10">
+      {/* Active Champagne Section Layer with proper gutter */}
+      <div className="jj-layer-2 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -272,7 +271,7 @@ const SupportTicketBox = () => {
           className="max-w-4xl mx-auto"
         >
           {/* Main Card - Pearl style inside champagne layer */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl border-2 border-gold/40 shadow-xl overflow-hidden relative">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl border-2 border-gold shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)] overflow-hidden relative">
             {/* Decorative elements */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
@@ -364,7 +363,7 @@ const SupportTicketBox = () => {
                       </Button>
                     </DialogTrigger>
 
-                    <DialogContent className="bg-white border-zinc-200 max-w-lg max-h-[calc(100vh-60px)] z-[100] fixed top-[30px] left-1/2 -translate-x-1/2 translate-y-0 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 overflow-hidden flex flex-col">
+                    <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold max-w-lg max-h-[calc(100vh-60px)] z-[100] fixed top-[30px] left-1/2 -translate-x-1/2 translate-y-0 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 overflow-hidden flex flex-col shadow-[0_8px_40px_rgba(200,167,102,0.4),0_4px_20px_rgba(0,0,0,0.2)]">
                       <DialogHeader>
                         <DialogTitle className="text-black text-xl font-bold flex items-center gap-2">
                           <Headphones className="w-5 h-5 text-red-500" />
@@ -418,15 +417,16 @@ const SupportTicketBox = () => {
                               <div className="space-y-3">
                                 <Button
                                   onClick={submitAnotherTicket}
-                                  variant="outline"
-                                  className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300"
+                                  variant="secondary"
+                                  className="w-full"
                                 >
                                   <Plus className="w-4 h-4 mr-2" />
                                   Have Another Problem? Submit Another Ticket
                                 </Button>
                                 <Button
                                   onClick={resetForm}
-                                  className="w-full bg-black text-white hover:bg-zinc-800"
+                                  variant="dark"
+                                  className="w-full"
                                 >
                                   Close
                                 </Button>
@@ -452,7 +452,7 @@ const SupportTicketBox = () => {
                                   placeholder="John Doe"
                                   value={formData.fullName}
                                   onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                                  className="mt-1 border-zinc-300 focus:border-gold"
+                                  className="mt-1 bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg"
                                   required
                                 />
                               </div>
@@ -466,7 +466,7 @@ const SupportTicketBox = () => {
                                   placeholder="john@example.com"
                                   value={formData.email}
                                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                  className="mt-1 border-zinc-300 focus:border-gold"
+                                  className="mt-1 bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg"
                                   required
                                 />
                               </div>
@@ -482,7 +482,7 @@ const SupportTicketBox = () => {
                                 placeholder="+971 50 123 4567"
                                 value={formData.phone}
                                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                className="mt-1 border-zinc-300 focus:border-gold"
+                                className="mt-1 bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg"
                               />
                             </div>
 
@@ -496,7 +496,7 @@ const SupportTicketBox = () => {
                                 value={formData.serviceCategory}
                                 onValueChange={(value) => setFormData({ ...formData, serviceCategory: value, otherCategoryDetail: value !== "Other" ? "" : formData.otherCategoryDetail })}
                               >
-                                <SelectTrigger className="mt-1 border-zinc-300 focus:border-gold bg-white">
+                                <SelectTrigger className="mt-1 bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg">
                                   <SelectValue placeholder="Select the service" />
                                 </SelectTrigger>
                                 <SelectContent className="max-h-60 bg-white border border-zinc-200 shadow-lg z-[200]">
@@ -524,7 +524,7 @@ const SupportTicketBox = () => {
                                   placeholder="Describe what service or feature the issue relates to..."
                                   value={formData.otherCategoryDetail}
                                   onChange={(e) => setFormData({ ...formData, otherCategoryDetail: e.target.value })}
-                                  className="mt-1 border-zinc-300 focus:border-gold"
+                                  className="mt-1 bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg"
                                   required
                                 />
                                 <p className="text-xs text-zinc-500 mt-1">
@@ -544,7 +544,7 @@ const SupportTicketBox = () => {
                                   placeholder="Brief description of the issue"
                                   value={formData.subject}
                                   onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                                  className="flex-1 border-zinc-300 focus:border-gold"
+                                  className="flex-1 bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg"
                                   required
                                 />
                                 <VoiceNoteRecorder
@@ -566,7 +566,7 @@ const SupportTicketBox = () => {
                                 value={formData.priority}
                                 onValueChange={(value) => setFormData({ ...formData, priority: value })}
                               >
-                                <SelectTrigger className="mt-1 border-zinc-300 focus:border-gold bg-white">
+                                <SelectTrigger className="mt-1 bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg">
                                   <SelectValue placeholder="Select priority" />
                                 </SelectTrigger>
                                 <SelectContent className="bg-white border border-zinc-200 shadow-lg z-[200]">
@@ -595,7 +595,7 @@ const SupportTicketBox = () => {
                                 placeholder="Please describe the issue in detail. Include steps to reproduce, expected behavior, and what actually happened..."
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                className="mt-1 min-h-[120px] border-zinc-300 focus:border-gold"
+                                className="mt-1 min-h-[120px] bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg"
                                 required
                               />
                               <p className="text-xs text-zinc-400 mt-1 flex items-center gap-1">
@@ -674,12 +674,13 @@ const SupportTicketBox = () => {
                               </p>
                             </div>
 
-                            <Button
+                            <button
                               type="submit"
                               disabled={isSubmitting}
-                              className="w-full relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-2 border-gold/50 py-6 font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] transform active:scale-95 group"
+                              className="w-full relative inline-flex items-center justify-center gap-2 py-5 font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] transform active:scale-95 group disabled:opacity-50 disabled:cursor-not-allowed"
                               style={{
-                                textShadow: 'none',
+                                background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                                border: '2px solid rgba(200,167,102,0.6)',
                                 boxShadow: `
                                   0 10px 30px rgba(200,167,102,0.4),
                                   0 6px 15px rgba(0,0,0,0.2),
@@ -699,12 +700,12 @@ const SupportTicketBox = () => {
                                 <span className="relative text-gold">Submitting...</span>
                               ) : (
                                 <span className="relative flex items-center justify-center gap-2">
-                                  <Send className="w-5 h-5 text-gold" />
-                                  <span className="text-gold">Create Ticket</span>
-                                  <span className="text-black">& Notify Support</span>
+                                  <Send className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
+                                  <span className="text-black group-hover:text-gold transition-colors">Create Ticket</span>
+                                  <span className="text-gold group-hover:text-black transition-colors">& Notify Support</span>
                                 </span>
                               )}
-                            </Button>
+                            </button>
                           </motion.form>
                         )}
                       </AnimatePresence>
@@ -721,7 +722,6 @@ const SupportTicketBox = () => {
           </div>
         </motion.div>
         </div>
-      </div>
     </section>
   );
 };

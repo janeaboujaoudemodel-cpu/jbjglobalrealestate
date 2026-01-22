@@ -353,7 +353,7 @@ END:VCARD`;
               </div>
             ) : (
               /* Form */
-              <div className="bg-white border-2 border-gold rounded-2xl p-6 md:p-10 shadow-sm">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-2xl p-6 md:p-10 shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)]">
                 <div className="text-center mb-8">
                   <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
                     <Shield className="w-7 h-7 text-gold" />
@@ -379,7 +379,7 @@ END:VCARD`;
                             <FormControl>
                               <Input 
                                 {...field} 
-                                className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold focus:bg-white"
+                                className="h-12 bg-white border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold focus:bg-white rounded-lg"
                                 placeholder="John Doe"
                               />
                             </FormControl>
@@ -399,7 +399,7 @@ END:VCARD`;
                                 <Input 
                                   {...field} 
                                   type="email"
-                                  className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold focus:bg-white"
+                                  className="h-12 bg-white border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold focus:bg-white rounded-lg"
                                   placeholder="email@example.com"
                                 />
                               </FormControl>
@@ -501,7 +501,7 @@ END:VCARD`;
                             <FormControl>
                               <Input 
                                 {...field} 
-                                className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-black text-black placeholder:text-gold/70 focus:border-gold focus:bg-white hover:border-gold"
+                                className="h-12 bg-white border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold focus:bg-white hover:border-gold rounded-lg"
                                 placeholder="e.g., Dubai, UAE or London, UK"
                               />
                             </FormControl>
@@ -523,7 +523,7 @@ END:VCARD`;
                             <FormLabel className="text-zinc-700 text-sm font-medium">Service Needed *</FormLabel>
                             <Select onValueChange={field.onChange} value={field.value}>
                               <FormControl>
-                                <SelectTrigger className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black hover:border-gold focus:border-gold">
+                                <SelectTrigger className="h-12 bg-white border-2 border-gold/40 text-black hover:border-gold focus:border-gold rounded-lg">
                                   <SelectValue placeholder="Select a service" />
                                 </SelectTrigger>
                               </FormControl>
@@ -549,7 +549,7 @@ END:VCARD`;
                               <FormLabel className="text-zinc-700 text-sm font-medium">Budget Range (Optional)</FormLabel>
                               <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
-                                  <SelectTrigger className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black hover:border-gold focus:border-gold">
+                                  <SelectTrigger className="h-12 bg-white border-2 border-gold/40 text-black hover:border-gold focus:border-gold rounded-lg">
                                     <SelectValue placeholder="Select budget" />
                                   </SelectTrigger>
                                 </FormControl>
@@ -573,7 +573,7 @@ END:VCARD`;
                               <FormLabel className="text-zinc-700 text-sm font-medium">Timeline (Optional)</FormLabel>
                               <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
-                                  <SelectTrigger className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black hover:border-gold focus:border-gold">
+                                  <SelectTrigger className="h-12 bg-white border-2 border-gold/40 text-black hover:border-gold focus:border-gold rounded-lg">
                                     <SelectValue placeholder="Select timeline" />
                                   </SelectTrigger>
                                 </FormControl>
@@ -599,7 +599,7 @@ END:VCARD`;
                             <FormControl>
                               <Textarea 
                                 {...field} 
-                                className="min-h-[100px] bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold focus:bg-white resize-none"
+                                className="min-h-[100px] bg-white border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold focus:bg-white resize-none rounded-lg"
                                 placeholder="Tell us more about your requirements..."
                               />
                             </FormControl>

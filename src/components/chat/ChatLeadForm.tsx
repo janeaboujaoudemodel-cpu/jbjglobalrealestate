@@ -234,14 +234,28 @@ const ChatLeadForm = ({
           {formErrors.consentPrivacy && <p className="text-red-400 text-xs ml-6">{formErrors.consentPrivacy}</p>}
         </div>
 
-        <Button
+        <button
           onClick={handleSubmit}
-          variant="primary"
-          size="lg"
-          className="w-full mt-3"
+          type="button"
+          className="group relative w-full inline-flex items-center justify-center gap-2 px-6 py-4 text-sm font-bold rounded-xl transition-all duration-300 overflow-hidden mt-3 hover:scale-[1.02] transform active:scale-95"
+          style={{
+            background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+            border: '2px solid rgba(200,167,102,0.6)',
+            boxShadow: `
+              0 8px 20px rgba(200,167,102,0.35),
+              0 4px 10px rgba(0,0,0,0.15),
+              inset 0 2px 4px rgba(255,255,255,0.9),
+              inset 0 -2px 4px rgba(200,167,102,0.2)
+            `,
+          }}
         >
-          <span className="text-black">Continue</span>
-        </Button>
+          <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+          <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+          <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+          <span className="relative flex items-center justify-center gap-2">
+            <span className="text-black group-hover:text-gold transition-colors">Continue</span>
+          </span>
+        </button>
       </div>
     </ScrollArea>
   );
