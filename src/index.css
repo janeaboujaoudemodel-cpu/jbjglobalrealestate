@@ -64,7 +64,7 @@ All colors MUST be HSL.
      * Single source of truth for section sizing across Frontend + Backend.
      * ============================================================ */
     --jj-content-max: 1600px;
-    --jj-gutter: 0.625rem; /* ~10px = 1cm gap on each side */
+    --jj-gutter: 0.25rem; /* ~4px minimal edge gap */
 
     /* Locked Champagne / Inner Card Surface (Layer 3) */
     /* Warmer + less bright than pure white; matches the global "Locked Champagne" requirement */
