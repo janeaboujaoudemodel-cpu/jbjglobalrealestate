@@ -81,16 +81,16 @@ const MonthlyMarketBrief = () => {
   }
 
   const getTrendIcon = (change: number) => {
-    if (change > 0) return <TrendingUp className="w-4 h-4 text-emerald-500" />;
-    if (change < 0) return <TrendingDown className="w-4 h-4 text-red-500" />;
-    return <Activity className="w-4 h-4 text-zinc-400" />;
+    if (change > 0) return <TrendingUp className="w-4 h-4 text-emerald-600" />;
+    if (change < 0) return <TrendingDown className="w-4 h-4 text-red-600" />;
+    return <Activity className="w-4 h-4 text-zinc-500" />;
   };
 
   const getMomentumColor = (momentum: "high" | "medium" | "low") => {
     switch (momentum) {
-      case "high": return "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
-      case "medium": return "bg-amber-500/20 text-amber-400 border-amber-500/30";
-      default: return "bg-zinc-500/20 text-zinc-400 border-zinc-500/30";
+      case "high": return "bg-emerald-500/20 text-emerald-600 border-emerald-500/30";
+      case "medium": return "bg-amber-500/20 text-amber-600 border-amber-500/30";
+      default: return "bg-zinc-500/20 text-zinc-600 border-zinc-500/30";
     }
   };
 
@@ -102,203 +102,206 @@ const MonthlyMarketBrief = () => {
         keywords="Dubai market brief, monthly real estate report, Dubai property data, Jane Abou jaoude"
       />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header */}
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={fadeInUp}
-          className="mb-8"
-        >
-          <Link
-            to="/market-intelligence/reports"
-            className="inline-flex items-center gap-2 text-zinc-400 hover:text-white mb-6 transition-colors"
+      {/* Main Content - 3-layer system */}
+      <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] min-h-screen">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          {/* Header */}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={fadeInUp}
+            className="mb-8"
           >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Reports
-          </Link>
+            <Link
+              to="/market-intelligence/reports"
+              className="inline-flex items-center gap-2 text-zinc-600 hover:text-black mb-6 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Reports
+            </Link>
 
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <Badge className="mb-3 bg-white text-black border-gold/30 shadow-sm">
-                <span className="text-gold">MONTHLY</span>
-                <span className="text-black ml-1">MARKET BRIEF</span>
-              </Badge>
-              <h1 className="text-3xl md:text-4xl font-bold text-white">
-                {data.period}
-              </h1>
-              <p className="text-zinc-400 mt-2 flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
-                Published: {new Date(data.publishDate).toLocaleDateString("en-US", { 
-                  year: "numeric", 
-                  month: "long", 
-                  day: "numeric" 
-                })}
-              </p>
-            </div>
-            <Button variant="primary">
-              <Download className="w-4 h-4 mr-2" />
-              Download PDF
-            </Button>
-          </div>
-        </motion.div>
-
-        {/* Executive Summary */}
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={fadeInUp}
-          transition={{ delay: 0.1 }}
-          className="mb-8"
-        >
-          <Card className="bg-zinc-900 border-zinc-800">
-            <CardHeader>
-              <CardTitle className="text-lg text-white">Executive Summary</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-zinc-300 leading-relaxed">{data.summary}</p>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        {/* Key Metrics */}
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={fadeInUp}
-          transition={{ delay: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8"
-        >
-          <Card className="bg-zinc-900 border-zinc-800">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-zinc-400 flex items-center gap-2">
-                <Building className="w-4 h-4" />
-                Transaction Volume
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-2">
-                <span className="text-2xl font-bold text-white">
-                  {data.transactionVolume.value.toLocaleString()}
-                </span>
-                {getTrendIcon(data.transactionVolume.change)}
-              </div>
-              <p className="text-xs text-zinc-500 mt-1">
-                {data.transactionVolume.change > 0 ? "+" : ""}
-                {data.transactionVolume.change}% vs. previous month
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-zinc-900 border-zinc-800">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-zinc-400 flex items-center gap-2">
-                <Key className="w-4 h-4" />
-                RENT Trend
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-2">
-                {data.rentTrend.direction === "up" && <TrendingUp className="w-5 h-5 text-emerald-500" />}
-                {data.rentTrend.direction === "down" && <TrendingDown className="w-5 h-5 text-red-500" />}
-                {data.rentTrend.direction === "stable" && <Activity className="w-5 h-5 text-zinc-400" />}
-                <span className="text-lg font-semibold text-white capitalize">
-                  {data.rentTrend.direction}
-                </span>
-              </div>
-              <p className="text-xs text-zinc-500 mt-1">{data.rentTrend.description}</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-zinc-900 border-zinc-800">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-zinc-400 flex items-center gap-2">
-                <Home className="w-4 h-4" />
-                Avg. Price/sqft
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-2">
-                <span className="text-2xl font-bold text-white">
-                  AED {data.avgPricePerSqft.value.toLocaleString()}
-                </span>
-                {getTrendIcon(data.avgPricePerSqft.change)}
-              </div>
-              <p className="text-xs text-zinc-500 mt-1">
-                {data.avgPricePerSqft.change > 0 ? "+" : ""}
-                {data.avgPricePerSqft.change}% vs. previous month
-              </p>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        {/* Area Highlights */}
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={fadeInUp}
-          transition={{ delay: 0.3 }}
-          className="mb-8"
-        >
-          <Card className="bg-zinc-900 border-zinc-800">
-            <CardHeader>
-              <CardTitle className="text-lg text-white flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-gold" />
-                Area Highlights
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {data.areaHighlights.map((area, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-4 bg-zinc-800/50 rounded-lg"
-                  >
-                    <div>
-                      <p className="text-white font-medium">{area.name}</p>
-                      <p className="text-sm text-zinc-400">{area.note}</p>
-                    </div>
-                    <Badge className={getMomentumColor(area.momentum)}>
-                      {area.momentum.toUpperCase()}
-                    </Badge>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        {/* Methodology & Disclaimer */}
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={fadeInUp}
-          transition={{ delay: 0.4 }}
-        >
-          <Card className="bg-zinc-900/50 border-zinc-800">
-            <CardContent className="pt-6">
-              <h3 className="text-sm font-semibold text-white mb-3">Methodology & Disclaimer</h3>
-              <p className="text-sm text-zinc-500 mb-4">
-                This report is based on aggregated official government Open Data and descriptive analytics.
-                It is provided for informational purposes only and does not constitute financial, investment, or legal advice.
-              </p>
-              <div className="flex flex-wrap gap-4 text-xs text-zinc-600">
-                <span>Data Sources: Dubai Land Department Open Data</span>
-                <span>•</span>
-                <span>Update Frequency: Monthly</span>
-                <span>•</span>
-                <Link to="/market-intelligence/methodology" className="text-gold hover:underline">
-                  Full Methodology
-                </Link>
-              </div>
-              <div className="mt-4 pt-4 border-t border-zinc-800">
-                <p className="text-xs text-zinc-600">
-                  JBJ GLOBAL REAL ESTATE • Jane Abou jaoude, Founder & CEO
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <Badge className="mb-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-gold/30 shadow-sm">
+                  <span className="text-gold">MONTHLY</span>
+                  <span className="text-black ml-1">MARKET BRIEF</span>
+                </Badge>
+                <h1 className="text-3xl md:text-4xl font-bold text-black">
+                  {data.period}
+                </h1>
+                <p className="text-zinc-600 mt-2 flex items-center gap-2">
+                  <Calendar className="w-4 h-4" />
+                  Published: {new Date(data.publishDate).toLocaleDateString("en-US", { 
+                    year: "numeric", 
+                    month: "long", 
+                    day: "numeric" 
+                  })}
                 </p>
               </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+              <Button variant="primary">
+                <Download className="w-4 h-4 mr-2" />
+                Download PDF
+              </Button>
+            </div>
+          </motion.div>
+
+          {/* Executive Summary */}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={fadeInUp}
+            transition={{ delay: 0.1 }}
+            className="mb-8"
+          >
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+              <CardHeader>
+                <CardTitle className="text-lg text-black">Executive Summary</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-zinc-700 leading-relaxed">{data.summary}</p>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* Key Metrics */}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={fadeInUp}
+            transition={{ delay: 0.2 }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8"
+          >
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-zinc-600 flex items-center gap-2">
+                  <Building className="w-4 h-4" />
+                  Transaction Volume
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl font-bold text-black">
+                    {data.transactionVolume.value.toLocaleString()}
+                  </span>
+                  {getTrendIcon(data.transactionVolume.change)}
+                </div>
+                <p className="text-xs text-zinc-500 mt-1">
+                  {data.transactionVolume.change > 0 ? "+" : ""}
+                  {data.transactionVolume.change}% vs. previous month
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-zinc-600 flex items-center gap-2">
+                  <Key className="w-4 h-4" />
+                  RENT Trend
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center gap-2">
+                  {data.rentTrend.direction === "up" && <TrendingUp className="w-5 h-5 text-emerald-600" />}
+                  {data.rentTrend.direction === "down" && <TrendingDown className="w-5 h-5 text-red-600" />}
+                  {data.rentTrend.direction === "stable" && <Activity className="w-5 h-5 text-zinc-500" />}
+                  <span className="text-lg font-semibold text-black capitalize">
+                    {data.rentTrend.direction}
+                  </span>
+                </div>
+                <p className="text-xs text-zinc-500 mt-1">{data.rentTrend.description}</p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-zinc-600 flex items-center gap-2">
+                  <Home className="w-4 h-4" />
+                  Avg. Price/sqft
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl font-bold text-black">
+                    AED {data.avgPricePerSqft.value.toLocaleString()}
+                  </span>
+                  {getTrendIcon(data.avgPricePerSqft.change)}
+                </div>
+                <p className="text-xs text-zinc-500 mt-1">
+                  {data.avgPricePerSqft.change > 0 ? "+" : ""}
+                  {data.avgPricePerSqft.change}% vs. previous month
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* Area Highlights */}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={fadeInUp}
+            transition={{ delay: 0.3 }}
+            className="mb-8"
+          >
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+              <CardHeader>
+                <CardTitle className="text-lg text-black flex items-center gap-2">
+                  <MapPin className="w-5 h-5 text-gold" />
+                  Area Highlights
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {data.areaHighlights.map((area, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-4 bg-white/50 border border-gold/20 rounded-lg"
+                    >
+                      <div>
+                        <p className="text-black font-medium">{area.name}</p>
+                        <p className="text-sm text-zinc-600">{area.note}</p>
+                      </div>
+                      <Badge className={getMomentumColor(area.momentum)}>
+                        {area.momentum.toUpperCase()}
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* Methodology & Disclaimer */}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={fadeInUp}
+            transition={{ delay: 0.4 }}
+          >
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+              <CardContent className="pt-6">
+                <h3 className="text-sm font-semibold text-black mb-3">Methodology & Disclaimer</h3>
+                <p className="text-sm text-zinc-600 mb-4">
+                  This report is based on aggregated official government Open Data and descriptive analytics.
+                  It is provided for informational purposes only and does not constitute financial, investment, or legal advice.
+                </p>
+                <div className="flex flex-wrap gap-4 text-xs text-zinc-500">
+                  <span>Data Sources: Dubai Land Department Open Data</span>
+                  <span>•</span>
+                  <span>Update Frequency: Monthly</span>
+                  <span>•</span>
+                  <Link to="/market-intelligence/methodology" className="text-gold hover:underline">
+                    Full Methodology
+                  </Link>
+                </div>
+                <div className="mt-4 pt-4 border-t border-gold/30">
+                  <p className="text-xs text-zinc-500">
+                    JBJ GLOBAL REAL ESTATE • Jane Abou jaoude, Founder & CEO
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </div>
       </div>
 
       <Footer />
