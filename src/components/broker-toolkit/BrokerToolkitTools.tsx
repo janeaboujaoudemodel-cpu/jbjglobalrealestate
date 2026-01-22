@@ -447,31 +447,50 @@ export function BrokerToolkitTools() {
   return (
     <section id="section-tools" className="py-16 md:py-20 bg-black">
       <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <Badge className="bg-purple-500/30 text-purple-200 border-purple-400/50 mb-4">
-            <Wrench className="w-3 h-3 mr-1" />
-            AI-Powered Tools
-          </Badge>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Professional Tools for <span className="text-purple-300">Modern Brokers</span>
-          </h2>
-          <p className="text-zinc-400 max-w-2xl mx-auto">
-            All tools in one place (shortcuts). Scroll down to see the same tools organized by category.
-          </p>
-        </motion.div>
+        {/* Discover All Free Tools - Light Cyan/Slate Layer */}
+        <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 border border-slate-600/30 rounded-2xl p-6 md:p-8 shadow-lg mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <Badge className="bg-purple-500/30 text-purple-200 border-purple-400/50 mb-4">
+              <Wrench className="w-3 h-3 mr-1" />
+              AI-Powered Tools
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Discover All <span className="text-sky-300">Free Tools</span>
+            </h2>
+            <p className="text-zinc-400 max-w-2xl mx-auto">
+              All tools in one place (shortcuts). Scroll down to see the same tools organized by category.
+            </p>
+          </motion.div>
 
-        {/* ALL TOOLS (shortcuts) - glow/border only with per-tool color */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {TOOLS.map((tool, i) => renderBulkToolCard(tool, i))}
+          {/* ALL TOOLS (shortcuts) - glow/border only with per-tool color */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {TOOLS.map((tool, i) => renderBulkToolCard(tool, i))}
+          </div>
+        </div>
+
+        {/* UNLOCK MORE - Green Premium Layer */}
+        <div className="bg-gradient-to-br from-emerald-900/90 via-emerald-900/80 to-emerald-950/90 border border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-lg mb-12">
+          <div className="text-center mb-8">
+            <Badge className="bg-emerald-500/30 text-emerald-200 border-emerald-400/50 mb-4">
+              <Lock className="w-3 h-3 mr-1" />
+              Member Exclusive
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Unlock More with <span className="text-emerald-300">JBJ Broker Hub</span>
+            </h2>
+            <p className="text-emerald-200/70 max-w-2xl mx-auto">
+              Join our team to access premium tools, exclusive training, and dedicated support.
+            </p>
+          </div>
         </div>
 
         {/* CATEGORY BREAKDOWN - Active color layer with filled cards */}
-        <div className="mt-14 space-y-12">
+        <div className="space-y-12">
           {CATEGORY_ORDER.map((category) => {
             const meta = CATEGORY_META[category];
             const items = TOOLS.filter((t) => t.category === category);
