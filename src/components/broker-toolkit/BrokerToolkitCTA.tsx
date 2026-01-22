@@ -22,14 +22,14 @@ export function BrokerToolkitCTA() {
     <section className="py-16 md:py-20 bg-black">
       <div className="container mx-auto px-4">
         <div className="max-w-[1100px] mx-auto">
-          {/* OUTER CARD (Active Champagne) */}
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
-            {/* INNER CARD (Pearl) */}
+          {/* OUTER CARD (Active Champagne) - Larger padding for 3rd layer visibility */}
+          <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6">
+            {/* INNER CARD (Pearl) - Significantly smaller to show more champagne layer */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+              className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 md:p-10 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
             >
               {/* Icon container */}
               <div className="w-16 h-16 bg-black border border-gold/30 rounded-2xl flex items-center justify-center mx-auto mb-6">
