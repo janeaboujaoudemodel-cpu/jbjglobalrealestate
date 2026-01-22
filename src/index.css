@@ -379,26 +379,26 @@ All colors MUST be HSL.
    * without changing the global layout system.
    * ============================================================ */
   .jj-gutter-half {
-    --jj-gutter: 0.25rem;
+    --jj-gutter: 0.125rem;
   }
   @media (min-width: 768px) {
     .jj-gutter-half {
-      --jj-gutter: 0.75rem;
+      --jj-gutter: 0.5rem;
     }
   }
   @media (min-width: 1024px) {
     .jj-gutter-half {
-      --jj-gutter: 1.5rem;
+      --jj-gutter: 1rem;
     }
   }
   @media (min-width: 1280px) {
     .jj-gutter-half {
-      --jj-gutter: 2rem;
+      --jj-gutter: 1.5rem;
     }
   }
   @media (min-width: 1536px) {
     .jj-gutter-half {
-      --jj-gutter: 2.5rem;
+      --jj-gutter: 2rem;
     }
   }
 
