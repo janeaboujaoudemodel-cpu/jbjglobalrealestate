@@ -111,7 +111,7 @@ const GlobalHeader = () => {
   // Investor Hub dropdown (tools + dashboard)
   const investorHubLinks = [
     { href: "/my-account", label: "Investor Dashboard", icon: UserCircle },
-    { href: "/investment-playbooks", label: "Investor Tools", icon: Briefcase },
+    { href: "/ai-hub", label: "Investor Tools", icon: Briefcase },
     { href: "/favorites", label: "Portfolio Views", icon: Heart },
     { href: "/market-intelligence/reports", label: "Reports Access", icon: FileText },
   ];
@@ -546,7 +546,7 @@ const GlobalHeader = () => {
 
               {/* 6. Investor Hub Dropdown */}
               {renderDropdown("Investor Hub", investorHubLinks, () => 
-                location.pathname.includes('investment-playbooks') || location.pathname === '/favorites'
+                location.pathname.includes('ai-hub') || location.pathname === '/favorites'
               )}
 
               {/* 7. Broker Hub Dropdown */}

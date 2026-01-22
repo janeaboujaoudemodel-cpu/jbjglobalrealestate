@@ -86,7 +86,7 @@ const Footer = () => {
   const investorHubLinks = [
     { label: "Investor Education", href: "/investor-education" },
     { label: "Investor FAQs", href: "/investor-faq" },
-    { label: "Investment Playbooks", href: "/investment-playbooks" },
+    { label: "Investor Tools", href: "/ai-hub" },
   ];
 
   // Broker Hub
