@@ -11,7 +11,7 @@ import AIMarketAnalyzer from "@/components/AIMarketAnalyzer";
 import Footer from "@/components/Footer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, MapPin, Building, Calendar, DollarSign, Layers, Users, Map, Download, FileText, MessageCircle, Phone } from "lucide-react";
+import { ChevronLeft, MapPin, Building, Calendar, DollarSign, Layers, Users, Map, Download, FileText, MessageCircle, Phone, Scale, Info } from "lucide-react";
 import { toast } from "sonner";
 
 const WHATSAPP_NUMBER = "971565911000";
@@ -66,42 +66,44 @@ const ProjectDetail = () => {
 
   return (
     <>
-    <section className="relative w-full py-8 md:py-16 bg-zinc-950">
+    <section className="relative w-full py-8 md:py-16 bg-black">
       <div className="container mx-auto px-4 max-w-7xl">
-        {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-sm mb-8 flex-wrap">
-          <Link to="/" className="text-gray-400 hover:text-white transition-colors">
-            <ChevronLeft className="w-4 h-4 inline mr-1" />
-            Home
-          </Link>
-          {project.developer && (
-            <>
-              <span className="text-gray-600">/</span>
-              <Link
-                to={`/developer/${project.developer.slug}`}
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                {project.developer.name}
-              </Link>
-            </>
-          )}
-          {project.community && (
-            <>
-              <span className="text-gray-600">/</span>
-              <Link
-                to={`/community/${project.community.slug}`}
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                {project.community.name}
-              </Link>
-            </>
-          )}
-          <span className="text-gray-600">/</span>
-          <span className="text-white">{project.name}</span>
-        </div>
+        {/* Active Champagne Layer */}
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl p-4 md:p-6 shadow-xl mb-8">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-sm mb-6 flex-wrap">
+            <Link to="/" className="text-zinc-600 hover:text-black transition-colors">
+              <ChevronLeft className="w-4 h-4 inline mr-1" />
+              Home
+            </Link>
+            {project.developer && (
+              <>
+                <span className="text-zinc-500">/</span>
+                <Link
+                  to={`/developer/${project.developer.slug}`}
+                  className="text-zinc-600 hover:text-black transition-colors"
+                >
+                  {project.developer.name}
+                </Link>
+              </>
+            )}
+            {project.community && (
+              <>
+                <span className="text-zinc-500">/</span>
+                <Link
+                  to={`/community/${project.community.slug}`}
+                  className="text-zinc-600 hover:text-black transition-colors"
+                >
+                  {project.community.name}
+                </Link>
+              </>
+            )}
+            <span className="text-zinc-500">/</span>
+            <span className="text-black font-medium">{project.name}</span>
+          </div>
 
-        {/* White Content Area */}
-        <div className="bg-white rounded-2xl p-6 md:p-10 shadow-xl mb-8">
+          {/* Pearl Content Card */}
+          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl p-6 md:p-8 border-2 border-gold/40 shadow-lg">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
@@ -179,10 +181,10 @@ const ProjectDetail = () => {
                 )}
               </div>
 
-              {/* Project Details Grid */}
+              {/* Project Details Grid - Pearl Cards */}
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {project.location && (
-                  <div className="bg-zinc-50 p-4 rounded-lg border border-zinc-200">
+                  <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] p-4 rounded-lg border-2 border-gold/40 shadow-sm">
                     <div className="flex items-center gap-2 text-gold mb-2">
                       <MapPin className="w-5 h-5" />
                       <span className="text-sm font-medium">Location</span>
@@ -192,7 +194,7 @@ const ProjectDetail = () => {
                 )}
 
                 {project.bedrooms_min && (
-                  <div className="bg-zinc-50 p-4 rounded-lg border border-zinc-200">
+                  <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] p-4 rounded-lg border-2 border-gold/40 shadow-sm">
                     <div className="flex items-center gap-2 text-gold mb-2">
                       <Users className="w-5 h-5" />
                       <span className="text-sm font-medium">Bedrooms</span>
@@ -206,7 +208,7 @@ const ProjectDetail = () => {
                 )}
 
                 {project.floors && (
-                  <div className="bg-zinc-50 p-4 rounded-lg border border-zinc-200">
+                  <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] p-4 rounded-lg border-2 border-gold/40 shadow-sm">
                     <div className="flex items-center gap-2 text-gold mb-2">
                       <Building className="w-5 h-5" />
                       <span className="text-sm font-medium">Floors</span>
@@ -216,7 +218,7 @@ const ProjectDetail = () => {
                 )}
 
                 {project.handover_date && (
-                  <div className="bg-zinc-50 p-4 rounded-lg border border-zinc-200">
+                  <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] p-4 rounded-lg border-2 border-gold/40 shadow-sm">
                     <div className="flex items-center gap-2 text-gold mb-2">
                       <Calendar className="w-5 h-5" />
                       <span className="text-sm font-medium">Handover</span>
@@ -226,7 +228,7 @@ const ProjectDetail = () => {
                 )}
 
                 {project.service_charge && (
-                  <div className="bg-zinc-50 p-4 rounded-lg border border-zinc-200">
+                  <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] p-4 rounded-lg border-2 border-gold/40 shadow-sm">
                     <div className="flex items-center gap-2 text-gold mb-2">
                       <DollarSign className="w-5 h-5" />
                       <span className="text-sm font-medium">Service Charge</span>
@@ -236,7 +238,7 @@ const ProjectDetail = () => {
                 )}
 
                 {project.payment_plan && (
-                  <div className="bg-zinc-50 p-4 rounded-lg border border-zinc-200">
+                  <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] p-4 rounded-lg border-2 border-gold/40 shadow-sm">
                     <div className="flex items-center gap-2 text-gold mb-2">
                       <Layers className="w-5 h-5" />
                       <span className="text-sm font-medium">Payment Plan</span>
@@ -246,9 +248,9 @@ const ProjectDetail = () => {
                 )}
               </div>
 
-              {/* Amenities */}
+              {/* Amenities - Pearl Card */}
               {project.amenities && project.amenities.length > 0 && (
-                <div>
+                <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] p-6 rounded-xl border-2 border-gold/40 shadow-sm">
                   <h2
                     className="text-black font-semibold mb-4"
                     style={{ fontFamily: "Poppins, sans-serif", fontSize: "24px" }}
@@ -268,8 +270,8 @@ const ProjectDetail = () => {
                 </div>
               )}
 
-              {/* Project Location Map - Rectangular Embed */}
-              <div>
+              {/* Project Location Map - Pearl Card */}
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] p-6 rounded-xl border-2 border-gold/40 shadow-sm">
                 <h2
                   className="text-black font-semibold mb-4"
                   style={{ fontFamily: "Poppins, sans-serif", fontSize: "24px" }}
@@ -289,25 +291,26 @@ const ProjectDetail = () => {
                     className="w-full"
                   />
                 </div>
-                <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(project.name + (project.location ? ", " + project.location : "") + ", Dubai, UAE")}&basemap=satellite`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 mt-3 text-gold hover:text-gold/80 text-sm font-medium transition-colors"
-                >
-                  <Map className="w-4 h-4" />
-                  Open in Google Maps
-                </a>
+                {/* Map zoom guide */}
+                <div className="flex items-center gap-2 mt-3 text-zinc-500 text-xs">
+                  <Info className="w-3 h-3" />
+                  <span>Use two fingers to zoom in/out on touch devices, or scroll wheel on desktop</span>
+                </div>
               </div>
 
-              {/* Full Property Analysis Report */}
-              <div className="bg-gradient-to-br from-zinc-50 via-white to-zinc-50 border-2 border-gold/40 rounded-xl p-6">
-                <h2
-                  className="text-black font-semibold mb-4"
-                  style={{ fontFamily: "Poppins, sans-serif", fontSize: "24px" }}
-                >
-                  <span className="text-gold">Full</span> Property Report
-                </h2>
+              {/* Full Property Analysis Report - Pearl Card */}
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
+                    <FileText className="w-5 h-5 text-gold" />
+                  </div>
+                  <h2
+                    className="text-black font-semibold"
+                    style={{ fontFamily: "Poppins, sans-serif", fontSize: "24px" }}
+                  >
+                    <span className="text-gold">Full</span> Property Report
+                  </h2>
+                </div>
                 <p className="text-zinc-600 text-sm mb-4">
                   Get comprehensive AI-powered analysis including market position, investment potential, comparable properties, and future projections.
                 </p>
@@ -364,11 +367,11 @@ const ProjectDetail = () => {
                 </button>
               </div>
 
-              {/* Exclusive Report & Share */}
-              <div className="bg-zinc-50 rounded-lg p-6 border border-zinc-200">
+              {/* Exclusive Report & Share - Pearl Card */}
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl p-6 border-2 border-gold/40">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-gold flex items-center justify-center">
-                    <FileText className="w-5 h-5 text-black" />
+                  <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
+                    <FileText className="w-5 h-5 text-gold" />
                   </div>
                   <div>
                     <h3 className="text-black font-semibold">Property Report</h3>
@@ -387,33 +390,40 @@ const ProjectDetail = () => {
                 </Button>
               </div>
 
-              {/* AI Market Analyzer - Full Analysis */}
-              <AIMarketAnalyzer
-                type="property"
-                name={project.name}
-                location={project.location || project.community?.name}
-                pricePerSqft={project.price_from && project.size_min ? Math.round(project.price_from / project.size_min) : undefined}
-                totalPrice={project.price_from}
-                size={project.size_min}
-                bedrooms={project.bedrooms_min}
-                developer={project.developer?.name}
-                amenities={project.amenities}
-                handoverDate={project.handover_date}
-                variant="full"
-              />
+              {/* AI Property Comparison - Pearl Card */}
+              <Link to={`/compare?project=${project.slug}`}>
+                <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl p-6 border-2 border-gold/40 hover:border-gold hover:shadow-lg transition-all cursor-pointer group">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
+                      <Scale className="w-5 h-5 text-gold" />
+                    </div>
+                    <div>
+                      <h3 className="text-black font-semibold group-hover:text-gold transition-colors">AI Property Comparison</h3>
+                      <p className="text-zinc-500 text-sm">Compare similar properties</p>
+                    </div>
+                  </div>
+                  <p className="text-zinc-500 text-sm">
+                    Compare this property with similar options to make the best investment decision.
+                  </p>
+                </div>
+              </Link>
 
-              {/* Market Context - Client Intelligence */}
-              <ClientMarketContext
-                areaName={project.community?.name || project.location || "Dubai"}
-                trendDirection="stable"
-                rentDemandLevel="moderate"
-              />
+              {/* Market Context - Pearl Card */}
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl border-2 border-gold/40">
+                <ClientMarketContext
+                  areaName={project.community?.name || project.location || "Dubai"}
+                  trendDirection="stable"
+                  rentDemandLevel="moderate"
+                />
+              </div>
 
-              {/* Downloads */}
-              <DocumentDownloads documents={project.documents || []} />
+              {/* Downloads - Pearl Card */}
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl border-2 border-gold/40">
+                <DocumentDownloads documents={project.documents || []} />
+              </div>
 
-              {/* Contact Card */}
-              <div className="bg-zinc-50 rounded-lg p-6 border border-zinc-200">
+              {/* Contact Card - Pearl Card */}
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl p-6 border-2 border-gold/40">
                 <h3
                   className="text-black text-xl font-semibold mb-4"
                   style={{ fontFamily: "Poppins, sans-serif" }}
@@ -451,6 +461,7 @@ const ProjectDetail = () => {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </section>
