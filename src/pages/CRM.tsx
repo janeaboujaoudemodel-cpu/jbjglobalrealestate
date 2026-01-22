@@ -437,7 +437,7 @@ const CRM = () => {
 
       {/* Main Content Area */}
       <div className="flex">
-        <main className={`flex-1 max-w-[1600px] w-full mx-auto px-6 py-8 space-y-6 transition-all duration-300 ${showAIInsights ? 'pr-80' : ''}`}>
+        <main className="flex-1 max-w-[1600px] w-full mx-auto px-6 py-8 space-y-6">
           {/* Deal Value Tracker */}
           <DealValueTracker userId={user?.id || ""} />
 
@@ -456,6 +456,23 @@ const CRM = () => {
               
               {/* Right Column: Smart Automations (scrollable) */}
               <div className="space-y-4">
+                {/* AI Insights - In-page card (no floating sidebar) */}
+                {showAIInsights && (
+                  <Card className="overflow-hidden border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
+                    <CardContent className="p-0">
+                      <div className="h-[520px]">
+                        <AIInsightsPanel
+                          className="h-full"
+                          insights={aiInsights}
+                          isLoading={false}
+                          onRefresh={() => toast.info("Refreshing AI insights...")}
+                          onToggleCollapse={() => setShowAIInsights(false)}
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
                 <SmartReminders userId={user?.id || ""} limit={4} />
                 
                 {/* Smart Automations - Premium Champagne Card */}
@@ -611,18 +628,6 @@ const CRM = () => {
               </TabsContent>
             </Tabs>
         </main>
-
-        {/* AI Insights Panel - Properly positioned sidebar */}
-        {showAIInsights && (
-          <aside className="fixed right-0 top-[73px] bottom-0 w-72 border-l-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] overflow-y-auto z-30 shadow-[-4px_0_20px_rgba(200,167,102,0.15)]">
-            <AIInsightsPanel 
-              insights={aiInsights}
-              isLoading={false}
-              onRefresh={() => toast.info("Refreshing AI insights...")}
-              onToggleCollapse={() => setShowAIInsights(false)}
-            />
-          </aside>
-        )}
 
         {/* Floating Action Bar */}
         <FloatingActionBar />
