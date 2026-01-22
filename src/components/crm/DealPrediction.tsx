@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { 
   TrendingUp, Clock, Target, AlertTriangle, CheckCircle2, XCircle
 } from "lucide-react";
@@ -117,19 +116,19 @@ const DealPrediction = ({ lead, currentStatus, activities = [] }: DealPrediction
   if (!prediction) return null;
 
   const getProbabilityColor = (prob: number) => {
-    if (prob >= 70) return "text-green-500";
-    if (prob >= 40) return "text-amber-400";
-    return "text-red-400";
+    if (prob >= 70) return "text-emerald-600";
+    if (prob >= 40) return "text-amber-600";
+    return "text-red-500";
   };
 
   const getRiskBadge = (risk: string) => {
     switch (risk) {
       case 'low':
-        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Low Risk</Badge>;
+        return <Badge className="bg-emerald-100 text-emerald-700 border-emerald-300">Low Risk</Badge>;
       case 'medium':
-        return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">Medium Risk</Badge>;
+        return <Badge className="bg-amber-100 text-amber-700 border-amber-300">Medium Risk</Badge>;
       case 'high':
-        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">High Risk</Badge>;
+        return <Badge className="bg-red-100 text-red-600 border-red-300">High Risk</Badge>;
       default:
         return null;
     }
@@ -139,11 +138,13 @@ const DealPrediction = ({ lead, currentStatus, activities = [] }: DealPrediction
   const currentStageIndex = stages.indexOf(prediction.stage);
 
   return (
-    <Card className="border-border bg-card">
+    <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Target className="h-5 w-5 text-primary" />
+          <CardTitle className="text-lg flex items-center gap-2 text-black">
+            <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+              <Target className="h-5 w-5 text-gold" />
+            </div>
             Deal Prediction
           </CardTitle>
           {getRiskBadge(prediction.riskLevel)}
@@ -151,66 +152,66 @@ const DealPrediction = ({ lead, currentStatus, activities = [] }: DealPrediction
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Close Probability */}
-        <div className="text-center py-4">
+        <div className="text-center py-4 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl border border-gold/30">
           <div className={cn("text-4xl font-bold", getProbabilityColor(prediction.closeProbability))}>
             {prediction.closeProbability}%
           </div>
-          <p className="text-sm text-muted-foreground mt-1">Close Probability</p>
+          <p className="text-sm text-zinc-600 mt-1">Close Probability</p>
         </div>
 
         {/* Sales Stage Progress */}
         <div className="space-y-2">
-          <p className="text-sm font-medium text-foreground">Sales Stage</p>
+          <p className="text-sm font-medium text-black">Sales Stage</p>
           <div className="flex gap-1">
             {stages.map((stage, i) => (
               <div
                 key={stage}
                 className={cn(
-                  "flex-1 h-2 rounded-full",
+                  "flex-1 h-2 rounded-full transition-all",
                   i <= currentStageIndex 
-                    ? "bg-primary" 
-                    : "bg-muted"
+                    ? "bg-gold shadow-[0_2px_8px_rgba(200,167,102,0.4)]" 
+                    : "bg-zinc-200"
                 )}
               />
             ))}
           </div>
-          <p className="text-xs text-muted-foreground capitalize text-center">
+          <p className="text-xs text-zinc-500 capitalize text-center">
             {prediction.stage}
           </p>
         </div>
 
         {/* Estimated Timeline */}
-        <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
-          <Clock className="h-5 w-5 text-muted-foreground" />
+        <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30">
+          <Clock className="h-5 w-5 text-gold" />
           <div>
-            <p className="text-sm font-medium text-foreground">
+            <p className="text-sm font-medium text-black">
               Est. {prediction.estimatedDays} days to close
             </p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-zinc-600">
               Based on current engagement
             </p>
           </div>
         </div>
 
         {/* Next Best Action */}
-        <div className="p-3 rounded-lg bg-primary/10 border border-primary/20">
+        <div className="p-3 rounded-lg bg-gold/10 border border-gold/30">
           <div className="flex items-center gap-2 mb-1">
-            <TrendingUp className="h-4 w-4 text-primary" />
-            <span className="text-sm font-semibold text-foreground">Next Best Action</span>
+            <TrendingUp className="h-4 w-4 text-gold" />
+            <span className="text-sm font-semibold text-black">Next Best Action</span>
           </div>
-          <p className="text-sm text-muted-foreground">{prediction.nextBestAction}</p>
+          <p className="text-sm text-zinc-700">{prediction.nextBestAction}</p>
         </div>
 
         {/* Blockers */}
         {prediction.blockers.length > 0 && (
           <div className="space-y-2">
-            <p className="text-sm font-medium text-foreground flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-amber-400" />
+            <p className="text-sm font-medium text-black flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4 text-amber-500" />
               Potential Blockers
             </p>
             {prediction.blockers.map((blocker, i) => (
-              <div key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
-                <XCircle className="h-3 w-3 text-red-400" />
+              <div key={i} className="flex items-center gap-2 text-sm text-zinc-600">
+                <XCircle className="h-3 w-3 text-red-500" />
                 {blocker}
               </div>
             ))}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -49,6 +49,7 @@ interface CRMProfile {
 const CRM = () => {
   const { user, loading: authLoading, signOut } = useAuth();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<CRMProfile | null>(null);
   const [activeTab, setActiveTab] = useState("all");
@@ -85,6 +86,17 @@ const CRM = () => {
 
     checkCRMAccess();
   }, [authLoading, user, navigate]);
+
+  // Handle URL action parameter for opening new lead modal
+  useEffect(() => {
+    const action = searchParams.get('action');
+    if (action === 'new-lead') {
+      setShowLeadModal(true);
+      // Clear the action param after handling
+      searchParams.delete('action');
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   useEffect(() => {
     if (user?.id) {
