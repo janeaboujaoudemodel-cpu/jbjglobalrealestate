@@ -196,11 +196,11 @@ const BrokerFAQ = () => {
         />
       </div>
 
-      {/* FAQ Content */}
-      <section id="faq-content" className="py-16 bg-black relative">
+      {/* FAQ Content - Layer 2 Active Champagne Edge-to-Edge */}
+      <section id="faq-content" className="py-16 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl relative">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           {/* Sticky FAQ Quick Access - Mobile/Tablet Only */}
-          <div className="lg:hidden sticky top-0 z-50 -mx-4 px-4 py-3 bg-black/95 backdrop-blur-sm border-b border-gold/20 shadow-lg">
+          <div className="lg:hidden sticky top-0 z-50 -mx-4 px-4 py-3 bg-gradient-to-br from-[#F5EBD7]/95 via-[#E8DCC8]/95 to-[#D4C4A8]/95 backdrop-blur-sm border-b border-gold/20 shadow-lg">
             <div className="w-full">
               <FAQTableOfContents 
                 categories={categories}
@@ -227,13 +227,13 @@ const BrokerFAQ = () => {
                   variants={fadeInUp}
                   className="flex items-center gap-4 mb-6"
                 >
-                  <div className="w-12 h-12 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/40 rounded-xl flex items-center justify-center">
-                    <category.icon className="w-6 h-6 text-gold" />
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl flex items-center justify-center">
+                    <category.icon className="w-6 h-6 text-black" />
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-white">{category.title}</h2>
+                  <h2 className="text-2xl md:text-3xl font-bold text-black">{category.title}</h2>
                 </motion.div>
 
-                {/* Questions */}
+                {/* Questions - Layer 3 Locked Champagne Cards */}
                 <motion.div variants={fadeInUp}>
                   <div className="space-y-4">
                     {category.questions.map((faq, faqIndex) => (
@@ -241,12 +241,12 @@ const BrokerFAQ = () => {
                         <AccordionItem 
                           value={`${categoryIndex}-${faqIndex}`}
                           data-accordion-item={`${categoryIndex}-${faqIndex}`}
-                          className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl px-6 py-2 data-[state=open]:border-gold/60 data-[state=open]:shadow-md transition-all"
+                          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl px-6 py-2 data-[state=open]:border-gold/60 data-[state=open]:shadow-md transition-all"
                         >
                           <AccordionTrigger className="text-black text-left hover:text-gold hover:no-underline py-5 text-base font-medium">
                             {faq.question}
                           </AccordionTrigger>
-                          <AccordionContent className="text-zinc-600 pb-5 leading-relaxed">
+                          <AccordionContent className="text-zinc-600 pb-5 leading-relaxed whitespace-pre-line">
                             {faq.answer}
                           </AccordionContent>
                         </AccordionItem>
@@ -260,58 +260,63 @@ const BrokerFAQ = () => {
         </div>
       </section>
 
-      {/* Still Have Questions */}
-      <section className="py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+      {/* Still Have Questions - Layer 2 */}
+      <section className="py-16 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl mt-8">
         <div className="container mx-auto px-4">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="max-w-3xl mx-auto text-center"
+            className="max-w-3xl mx-auto"
           >
-            <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
-              <Shield className="w-7 h-7 text-gold" />
-            </div>
-            <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
-              Still Have Questions?
-            </h2>
-            <p className="text-zinc-600 mb-8 max-w-xl mx-auto leading-relaxed">
-              Our team is here to help. Whether you're seeking clarity on professional standards or ready to elevate your practice, 
-              we're here to provide guidance.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Button asChild variant="primary" className="px-6">
-                <Link to="/contact">
-                  <Phone className="w-4 h-4 mr-2" />
-                  Contact Our Team
-                </Link>
-              </Button>
-              <Button asChild variant="primary" className="px-6">
-                <Link to="/broker-education">
-                  Read Broker Education Guide
-                </Link>
-              </Button>
+            {/* Layer 3 Card */}
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 md:p-12 text-center">
+              <div className="w-14 h-14 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-7 h-7 text-black" />
+              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
+                Still Have Questions?
+              </h2>
+              <p className="text-zinc-600 mb-8 max-w-xl mx-auto leading-relaxed">
+                Our team is here to help. Whether you're seeking clarity on professional standards or ready to elevate your practice, 
+                we're here to provide guidance.
+              </p>
+              <div className="flex flex-wrap justify-center gap-4">
+                <Button asChild variant="primary" className="px-6">
+                  <Link to="/contact">
+                    <Phone className="w-4 h-4 mr-2" />
+                    Contact Our Team
+                  </Link>
+                </Button>
+                <Button asChild variant="primary" className="px-6">
+                  <Link to="/broker-education">
+                    Read Broker Education Guide
+                  </Link>
+                </Button>
+              </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Guide Navigation - Active Champagne Layer */}
-      <section className="jj-section-champagne py-12">
+      {/* Guide Navigation - Layer 2 */}
+      <section className="py-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl mt-8">
         <div className="container mx-auto px-4">
           <GuideNavigation current="/broker-faq" guides={GUIDE_LINKS} />
         </div>
       </section>
 
-      {/* Disclaimer */}
-      <section className="py-8 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-t border-zinc-200">
+      {/* Disclaimer - Layer 2 with Layer 3 Card */}
+      <section className="py-8 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl mt-8 mb-8">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <p className="text-center text-zinc-500 text-sm leading-relaxed">
-              <span className="text-zinc-600 font-medium">Disclaimer:</span> This FAQ is educational in nature 
-              and does not replace regulatory obligations. Brokers remain responsible for ensuring full compliance 
-              with UAE laws and licensing requirements at all times.
-            </p>
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6">
+              <p className="text-center text-zinc-600 text-sm leading-relaxed">
+                <span className="text-black font-medium">Disclaimer:</span> This FAQ is educational in nature 
+                and does not replace regulatory obligations. Brokers remain responsible for ensuring full compliance 
+                with UAE laws and licensing requirements at all times.
+              </p>
+            </div>
           </div>
         </div>
       </section>
