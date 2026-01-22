@@ -4509,6 +4509,69 @@ export type Database = {
         }
         Relationships: []
       }
+      employee_activity_audit: {
+        Row: {
+          actions_performed: Json | null
+          activity_score: number | null
+          calls_made: number | null
+          clicks_count: number | null
+          created_at: string
+          device_info: string | null
+          documents_accessed: number | null
+          id: string
+          idle_time_minutes: number | null
+          ip_address: unknown
+          leads_viewed: number | null
+          login_at: string | null
+          logout_at: string | null
+          messages_sent: number | null
+          pages_visited: string[] | null
+          session_duration_minutes: number | null
+          session_id: string | null
+          user_id: string
+        }
+        Insert: {
+          actions_performed?: Json | null
+          activity_score?: number | null
+          calls_made?: number | null
+          clicks_count?: number | null
+          created_at?: string
+          device_info?: string | null
+          documents_accessed?: number | null
+          id?: string
+          idle_time_minutes?: number | null
+          ip_address?: unknown
+          leads_viewed?: number | null
+          login_at?: string | null
+          logout_at?: string | null
+          messages_sent?: number | null
+          pages_visited?: string[] | null
+          session_duration_minutes?: number | null
+          session_id?: string | null
+          user_id: string
+        }
+        Update: {
+          actions_performed?: Json | null
+          activity_score?: number | null
+          calls_made?: number | null
+          clicks_count?: number | null
+          created_at?: string
+          device_info?: string | null
+          documents_accessed?: number | null
+          id?: string
+          idle_time_minutes?: number | null
+          ip_address?: unknown
+          leads_viewed?: number | null
+          login_at?: string | null
+          logout_at?: string | null
+          messages_sent?: number | null
+          pages_visited?: string[] | null
+          session_duration_minutes?: number | null
+          session_id?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       employee_activity_sessions: {
         Row: {
           actions_performed: Json | null
@@ -4755,6 +4818,53 @@ export type Database = {
         }
         Relationships: []
       }
+      employee_journey_logs: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          employee_id: string | null
+          event_category: string
+          event_type: string
+          id: string
+          new_value: Json | null
+          notes: string | null
+          previous_value: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          employee_id?: string | null
+          event_category?: string
+          event_type: string
+          id?: string
+          new_value?: Json | null
+          notes?: string | null
+          previous_value?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          employee_id?: string | null
+          event_category?: string
+          event_type?: string
+          id?: string
+          new_value?: Json | null
+          notes?: string | null
+          previous_value?: Json | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "employee_journey_logs_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "crm_users_profile"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       employee_notifications: {
         Row: {
           content: string | null
@@ -4859,6 +4969,81 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      employee_performance_summary: {
+        Row: {
+          achievements: Json | null
+          activity_score_avg: number | null
+          avg_call_duration_seconds: number | null
+          avg_session_duration_minutes: number | null
+          calls_made: number | null
+          commission_earned: number | null
+          conversion_rate: number | null
+          created_at: string
+          deals_closed: number | null
+          id: string
+          leads_converted: number | null
+          leads_handled: number | null
+          messages_sent: number | null
+          month: string
+          notes: string | null
+          response_time_avg_minutes: number | null
+          revenue_generated: number | null
+          total_active_hours: number | null
+          total_logins: number | null
+          updated_at: string
+          user_id: string
+          warnings_received: number | null
+        }
+        Insert: {
+          achievements?: Json | null
+          activity_score_avg?: number | null
+          avg_call_duration_seconds?: number | null
+          avg_session_duration_minutes?: number | null
+          calls_made?: number | null
+          commission_earned?: number | null
+          conversion_rate?: number | null
+          created_at?: string
+          deals_closed?: number | null
+          id?: string
+          leads_converted?: number | null
+          leads_handled?: number | null
+          messages_sent?: number | null
+          month: string
+          notes?: string | null
+          response_time_avg_minutes?: number | null
+          revenue_generated?: number | null
+          total_active_hours?: number | null
+          total_logins?: number | null
+          updated_at?: string
+          user_id: string
+          warnings_received?: number | null
+        }
+        Update: {
+          achievements?: Json | null
+          activity_score_avg?: number | null
+          avg_call_duration_seconds?: number | null
+          avg_session_duration_minutes?: number | null
+          calls_made?: number | null
+          commission_earned?: number | null
+          conversion_rate?: number | null
+          created_at?: string
+          deals_closed?: number | null
+          id?: string
+          leads_converted?: number | null
+          leads_handled?: number | null
+          messages_sent?: number | null
+          month?: string
+          notes?: string | null
+          response_time_avg_minutes?: number | null
+          revenue_generated?: number | null
+          total_active_hours?: number | null
+          total_logins?: number | null
+          updated_at?: string
+          user_id?: string
+          warnings_received?: number | null
+        }
+        Relationships: []
       }
       employee_reports: {
         Row: {
@@ -7379,6 +7564,80 @@ export type Database = {
           },
         ]
       }
+      it_provisioning_records: {
+        Row: {
+          application_id: string | null
+          created_at: string
+          crm_access_granted: boolean | null
+          email_signature_html: string | null
+          email_signature_plain: string | null
+          employee_email: string
+          id: string
+          permissions_granted: Json | null
+          provisioned_at: string | null
+          provisioned_by: string | null
+          software_licenses: Json | null
+          status: string
+          temporary_password: string | null
+          tools_access: Json | null
+          updated_at: string
+          user_id: string | null
+          welcome_email_sent: boolean | null
+          welcome_email_sent_at: string | null
+          workstation_assigned: string | null
+        }
+        Insert: {
+          application_id?: string | null
+          created_at?: string
+          crm_access_granted?: boolean | null
+          email_signature_html?: string | null
+          email_signature_plain?: string | null
+          employee_email: string
+          id?: string
+          permissions_granted?: Json | null
+          provisioned_at?: string | null
+          provisioned_by?: string | null
+          software_licenses?: Json | null
+          status?: string
+          temporary_password?: string | null
+          tools_access?: Json | null
+          updated_at?: string
+          user_id?: string | null
+          welcome_email_sent?: boolean | null
+          welcome_email_sent_at?: string | null
+          workstation_assigned?: string | null
+        }
+        Update: {
+          application_id?: string | null
+          created_at?: string
+          crm_access_granted?: boolean | null
+          email_signature_html?: string | null
+          email_signature_plain?: string | null
+          employee_email?: string
+          id?: string
+          permissions_granted?: Json | null
+          provisioned_at?: string | null
+          provisioned_by?: string | null
+          software_licenses?: Json | null
+          status?: string
+          temporary_password?: string | null
+          tools_access?: Json | null
+          updated_at?: string
+          user_id?: string | null
+          welcome_email_sent?: boolean | null
+          welcome_email_sent_at?: string | null
+          workstation_assigned?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "it_provisioning_records_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "new_joiner_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       jbj_activity_logs: {
         Row: {
           action: string
@@ -8766,6 +9025,7 @@ export type Database = {
           assigned_to_it: string | null
           assigned_to_webdev: string | null
           completed_at: string | null
+          contract_type: string | null
           created_at: string
           crm_role: string
           crm_user_id: string | null
@@ -8775,16 +9035,24 @@ export type Database = {
           full_name: string
           generated_company_id: string | null
           generated_email: string | null
+          hr_approved_at: string | null
+          hr_approved_by: string | null
+          hr_notes: string | null
           id: string
+          it_completed_at: string | null
           it_notes: string | null
+          it_started_at: string | null
           job_title: string
           languages: string[] | null
           nationality: string
+          onboarding_checklist: Json | null
           phone: string | null
           photo_url: string | null
+          probation_end_date: string | null
           rejection_reason: string | null
           reports_to: string | null
           requested_by: string | null
+          start_date: string | null
           status: string
           updated_at: string
           webdev_notes: string | null
@@ -8794,6 +9062,7 @@ export type Database = {
           assigned_to_it?: string | null
           assigned_to_webdev?: string | null
           completed_at?: string | null
+          contract_type?: string | null
           created_at?: string
           crm_role?: string
           crm_user_id?: string | null
@@ -8803,16 +9072,24 @@ export type Database = {
           full_name: string
           generated_company_id?: string | null
           generated_email?: string | null
+          hr_approved_at?: string | null
+          hr_approved_by?: string | null
+          hr_notes?: string | null
           id?: string
+          it_completed_at?: string | null
           it_notes?: string | null
+          it_started_at?: string | null
           job_title: string
           languages?: string[] | null
           nationality: string
+          onboarding_checklist?: Json | null
           phone?: string | null
           photo_url?: string | null
+          probation_end_date?: string | null
           rejection_reason?: string | null
           reports_to?: string | null
           requested_by?: string | null
+          start_date?: string | null
           status?: string
           updated_at?: string
           webdev_notes?: string | null
@@ -8822,6 +9099,7 @@ export type Database = {
           assigned_to_it?: string | null
           assigned_to_webdev?: string | null
           completed_at?: string | null
+          contract_type?: string | null
           created_at?: string
           crm_role?: string
           crm_user_id?: string | null
@@ -8831,16 +9109,24 @@ export type Database = {
           full_name?: string
           generated_company_id?: string | null
           generated_email?: string | null
+          hr_approved_at?: string | null
+          hr_approved_by?: string | null
+          hr_notes?: string | null
           id?: string
+          it_completed_at?: string | null
           it_notes?: string | null
+          it_started_at?: string | null
           job_title?: string
           languages?: string[] | null
           nationality?: string
+          onboarding_checklist?: Json | null
           phone?: string | null
           photo_url?: string | null
+          probation_end_date?: string | null
           rejection_reason?: string | null
           reports_to?: string | null
           requested_by?: string | null
+          start_date?: string | null
           status?: string
           updated_at?: string
           webdev_notes?: string | null
