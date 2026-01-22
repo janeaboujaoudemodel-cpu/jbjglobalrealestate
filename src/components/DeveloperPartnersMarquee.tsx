@@ -82,8 +82,8 @@ const DeveloperPartnersMarquee = () => {
 
   return (
     <section className="py-10 md:py-16 bg-black border-y border-zinc-800/50 overflow-hidden">
-      {/* Champagne Layer */}
-      <div className="mx-4 md:mx-8 lg:mx-16 py-8 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg">
+      {/* Champagne Layer - using global jj-layer-2 */}
+      <div className="jj-layer-2">
         <div className="mb-8 md:mb-10">
           <h3 className="text-center text-xl md:text-2xl lg:text-3xl font-bold uppercase tracking-[0.15em]">
             <span className="text-black">Partnering with UAE's </span>

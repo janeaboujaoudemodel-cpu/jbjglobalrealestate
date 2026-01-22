@@ -31,8 +31,8 @@ export const FounderPhilosophySection = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gold/5 rounded-full blur-3xl" />
       </div>
       
-      {/* Active Layer Container */}
-      <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 md:px-8 jj-layer-active rounded-2xl relative z-10">
+      {/* Active Layer Container - using global jj-layer-2 */}
+      <div className="jj-layer-2 relative z-10">
         <motion.div
           initial="hidden"
           whileInView="visible"

@@ -121,9 +121,8 @@ const BestIdeaAward = () => {
 
   return (
     <section className="py-16 md:py-20 bg-black">
-      <div className="container mx-auto px-4">
-        {/* Active Champagne Section Layer */}
-        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg p-6 md:p-10">
+      {/* Active Champagne Section Layer - using global jj-layer-2 */}
+      <div className="jj-layer-2">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -425,7 +424,6 @@ const BestIdeaAward = () => {
             </CardContent>
           </Card>
         </motion.div>
-        </div>
       </div>
     </section>
   );

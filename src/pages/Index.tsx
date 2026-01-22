@@ -264,7 +264,7 @@ const Index = () => {
 
       {/* WHO IS THIS FOR - Clear Entry Points with Champagne Layer */}
       <section className="py-16 md:py-20 bg-black">
-        <div className="mx-4 md:mx-8 lg:mx-16 py-10 px-4 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg">
+        <div className="jj-layer-2">
           <div className="text-center mb-10">
             <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-xs uppercase tracking-[0.2em] font-semibold shadow-md">
               <Users className="w-3 h-3 text-gold" />
@@ -490,8 +490,8 @@ const Index = () => {
 
       {/* FOUNDER SECTION - Meet The Leadership */}
       <section className="py-20 md:py-28 bg-black">
-        {/* Active Champagne Section Layer */}
-        <div className="mx-4 md:mx-8 lg:mx-16 py-12 md:py-16 px-4 md:px-8 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg">
+        {/* Active Champagne Section Layer - using global jj-layer-2 */}
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -613,18 +613,16 @@ const Index = () => {
 
       {/* AI COMPARISON & ANALYZER PREVIEW */}
       <section className="py-16 md:py-20 bg-black">
-        <div className="container mx-auto px-4">
-          {/* Active Champagne Section Layer */}
-          <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg p-6 md:p-10">
-            <AIComparisonWidget />
-          </div>
+        {/* Active Champagne Section Layer - using global jj-layer-2 */}
+        <div className="jj-layer-2">
+          <AIComparisonWidget />
         </div>
       </section>
 
       {/* MARKET REPORT CTA - Active Champagne Layer */}
       <section className="py-20 md:py-28 bg-black">
-        {/* Active Champagne Section Layer */}
-        <div className="mx-4 md:mx-8 lg:mx-16 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg p-6 md:p-10">
+        {/* Active Champagne Section Layer - using global jj-layer-2 */}
+        <div className="jj-layer-2">
           {/* Pearl Card Inside */}
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-3xl p-8 md:p-12 shadow-xl">
             <motion.div
@@ -656,8 +654,8 @@ const Index = () => {
 
       {/* MORTGAGE CALCULATOR SECTION - Active Champagne Layer */}
       <section className="py-20 md:py-28 bg-black">
-        {/* Active Champagne Section Layer */}
-        <div className="mx-4 md:mx-8 lg:mx-16 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg p-6 md:p-10">
+        {/* Active Champagne Section Layer - using global jj-layer-2 */}
+        <div className="jj-layer-2">
           {/* Pearl Card Inside */}
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-3xl p-8 md:p-12 shadow-xl relative overflow-hidden">
             {/* Decorative glow elements */}
@@ -736,10 +734,8 @@ const Index = () => {
 
       {/* Contact CTA Section - 3-Layer System: Black > Active Champagne > Pearl Card */}
       <section className="py-16 md:py-20 bg-black">
-        <div className="container mx-auto px-4">
-          <div className="mx-0">
-            {/* OUTER CARD (Active Champagne) - Matching section width */}
-            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8">
+        {/* Active Champagne Section Layer - using global jj-layer-2 */}
+        <div className="jj-layer-2">
               {/* INNER CARD (Champagne Pearl) - Noticeably smaller */}
               <motion.div 
                 className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 md:p-10 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
@@ -799,8 +795,6 @@ const Index = () => {
                   </Link>
                 </div>
               </motion.div>
-            </div>
-          </div>
         </div>
       </section>
 
