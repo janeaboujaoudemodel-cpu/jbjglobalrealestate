@@ -508,7 +508,7 @@ const MeetTheTeam: React.FC = () => {
               <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8">
                 {/* INNER CARD - Pearl Layer - Smaller for balance */}
                 <motion.div 
-                  className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}

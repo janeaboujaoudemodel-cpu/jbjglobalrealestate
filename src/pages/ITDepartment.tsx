@@ -121,7 +121,7 @@ const ITDepartment: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gold" />
       </div>
     );
@@ -129,7 +129,7 @@ const ITDepartment: React.FC = () => {
 
   if (!isAuthorized) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <GlobalHeader />
         <div className="container mx-auto px-4 py-20 text-center">
           <div className="w-20 h-20 rounded-2xl bg-gold/10 flex items-center justify-center mx-auto mb-6">
@@ -152,7 +152,7 @@ const ITDepartment: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
       <GlobalHeader />
       
       {/* Command Palette */}

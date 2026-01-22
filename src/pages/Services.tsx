@@ -185,7 +185,7 @@ const Services = () => {
                 <span className="text-white group-hover:text-black transition-colors">Browse Properties</span>
                 <ArrowUpRight className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                 {/* Hover fill overlay */}
-                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
               </button>
             </Link>
             <Link to="/contact">
@@ -199,7 +199,7 @@ const Services = () => {
                 <span className="text-white group-hover:text-black transition-colors">Speak With Us</span>
                 <ArrowUpRight className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                 {/* Hover fill overlay */}
-                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
               </button>
             </Link>
           </motion.div>
@@ -221,7 +221,7 @@ const Services = () => {
       <section className="py-20 md:py-32 bg-black">
         <div className="container mx-auto px-4">
           {/* White background wrapper for service cards */}
-          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-3xl p-6 md:p-10">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-3xl p-6 md:p-10">
             <motion.div 
               className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
               initial="hidden"
@@ -335,7 +335,7 @@ const Services = () => {
           </motion.div>
 
           {/* White background container for AI tools */}
-          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-3xl p-8 mb-8 mx-4 md:mx-8">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-3xl p-8 mb-8 mx-4 md:mx-8">
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
                 { name: "AI Property Comparison", icon: FileSearch, link: "/compare" },

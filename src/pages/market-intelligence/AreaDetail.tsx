@@ -238,7 +238,7 @@ const MarketAreaDetail = () => {
           </h3>
           <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
             <Link to="/market-intelligence/overview" className="group">
-              <Card className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/30 hover:border-gold/50 hover:shadow-lg transition-all shadow-sm">
+              <Card className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 hover:border-gold/50 hover:shadow-lg transition-all shadow-sm">
                 <CardContent className="p-4 flex items-center justify-between">
                   <span className="text-gold font-medium group-hover:text-gold-dark transition-colors">Market Overview</span>
                   <ArrowRight className="w-4 h-4 text-black" />
@@ -246,7 +246,7 @@ const MarketAreaDetail = () => {
               </Card>
             </Link>
             <Link to="/market-intelligence/reports" className="group">
-              <Card className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/30 hover:border-gold/50 hover:shadow-lg transition-all shadow-sm">
+              <Card className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 hover:border-gold/50 hover:shadow-lg transition-all shadow-sm">
                 <CardContent className="p-4 flex items-center justify-between">
                   <span className="text-gold font-medium group-hover:text-gold-dark transition-colors">Market Reports</span>
                   <ArrowRight className="w-4 h-4 text-black" />
@@ -254,7 +254,7 @@ const MarketAreaDetail = () => {
               </Card>
             </Link>
             <Link to="/market-intelligence/methodology" className="group">
-              <Card className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/30 hover:border-gold/50 hover:shadow-lg transition-all shadow-sm">
+              <Card className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 hover:border-gold/50 hover:shadow-lg transition-all shadow-sm">
                 <CardContent className="p-4 flex items-center justify-between">
                   <span className="text-gold font-medium group-hover:text-gold-dark transition-colors">Methodology</span>
                   <ArrowRight className="w-4 h-4 text-black" />
