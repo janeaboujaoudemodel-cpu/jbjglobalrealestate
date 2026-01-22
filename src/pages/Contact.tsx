@@ -284,41 +284,46 @@ END:VCARD`;
         </div>
       </section>
 
-      {/* Contact Cards - Active Champagne Layer */}
+      {/* Contact Cards - 3-Layer System with thin black contour */}
       <section className="py-10 bg-black">
-        {/* Active Champagne Section Layer */}
-        <div className="mx-4 md:mx-8 lg:mx-16 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg p-6 md:p-10">
-          <div className="mb-6 h-px w-full bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-            {contactCards.map((card) => (
-              <div
-                key={card.title}
-                onClick={() => {
-                  if (card.action === "phone-actions") setPhoneActionsOpen(true);
-                  else if (card.action === "meeting") setMeetingModalOpen(true);
-                  else if (card.action && card.clickable) window.location.href = card.action;
-                }}
-                className={
-                  `group bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold rounded-xl p-5 transition-all hover:border-black ` +
-                  (card.clickable ? "cursor-pointer" : "")
-                }
-              >
-                <div className="w-10 h-10 bg-transparent border-2 border-black rounded-lg flex items-center justify-center mb-3 transition-colors">
-                  <card.icon className="w-5 h-5 text-gold transition-colors" />
+        {/* Thin black contour + Active Champagne Layer */}
+        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
+          {/* Inner Pearl Layer */}
+          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
+            <div className="mb-6 h-px w-full bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+              {contactCards.map((card) => (
+                <div
+                  key={card.title}
+                  onClick={() => {
+                    if (card.action === "phone-actions") setPhoneActionsOpen(true);
+                    else if (card.action === "meeting") setMeetingModalOpen(true);
+                    else if (card.action && card.clickable) window.location.href = card.action;
+                  }}
+                  className={
+                    `group bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold rounded-xl p-5 transition-all hover:border-black hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_18px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1 ` +
+                    (card.clickable ? "cursor-pointer" : "")
+                  }
+                >
+                  <div className="w-10 h-10 bg-transparent border-2 border-black rounded-lg flex items-center justify-center mb-3 transition-colors">
+                    <card.icon className="w-5 h-5 text-gold transition-colors" />
+                  </div>
+                  <h3 className="font-semibold text-sm mb-1 text-black transition-colors">{card.title}</h3>
+                  <p className="text-sm text-gold transition-colors">{card.value}</p>
                 </div>
-                <h3 className="font-semibold text-sm mb-1 text-black transition-colors">{card.title}</h3>
-                <p className="text-sm text-gold transition-colors">{card.value}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Consultation Form Section - Active Champagne Layer */}
+      {/* Consultation Form Section - 3-Layer System with thin black contour */}
       <section className="py-16 md:py-20 bg-black">
-        {/* Active Champagne Section Layer */}
-        <div className="mx-4 md:mx-8 lg:mx-16 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg p-6 md:p-10">
-          <div className="max-w-3xl mx-auto">
+        {/* Thin black contour + Active Champagne Layer */}
+        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
+          {/* Inner Pearl Layer */}
+          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
+            <div className="max-w-3xl mx-auto">
             {isSuccess ? (
               /* Success State */
               <div className="bg-zinc-900/50 border border-green-800/50 rounded-2xl p-8 md:p-12 text-center">
@@ -717,6 +722,7 @@ END:VCARD`;
                 </Form>
               </div>
             )}
+            </div>
           </div>
         </div>
       </section>

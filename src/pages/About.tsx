@@ -23,8 +23,8 @@ const staggerContainer = {
   }
 };
 
-// Section wrapper with consistent vertical rhythm
-// Updated: Support for white theme to separate from dark footer
+// Section wrapper with 3-layer system: Black page > Active Champagne section > Pearl content
+// Thin black contour on sides (~0.75rem / mx-3)
 const Section = ({ 
   children, 
   className = "", 
@@ -38,20 +38,19 @@ const Section = ({
   light?: boolean;
   id?: string;
 }) => {
-  const bgClass = light 
-    ? 'bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]' 
-    : dark 
-      ? 'bg-zinc-950/80' 
-      : 'bg-black';
-  
+  // All sections now use 3-layer system on black background
   return (
     <section 
       id={id}
-      className={`py-10 md:py-14 lg:py-[72px] ${bgClass} ${className}`}
+      className={`py-10 md:py-14 lg:py-[72px] bg-black ${className}`}
     >
-      <div className="container mx-auto px-6">
-        <div className="max-w-[1100px] mx-auto">
-          {children}
+      {/* Thin black contour + Active Champagne Layer */}
+      <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3 sm:p-4">
+        {/* Inner Pearl Layer */}
+        <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
+          <div className="max-w-[1100px] mx-auto">
+            {children}
+          </div>
         </div>
       </div>
     </section>
@@ -68,48 +67,45 @@ const SectionLabel = ({ children, dark = true }: { children: React.ReactNode; da
   </span>
 );
 
-// Section headline component - supports light backgrounds
-const SectionHeadline = ({ children, className = "", light = false }: { children: React.ReactNode; className?: string; light?: boolean }) => (
+// Section headline component - now defaults to black text on pearl background
+const SectionHeadline = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <h2 
-    className={`${light ? 'text-black' : 'text-white'} text-2xl md:text-[32px] lg:text-[40px] font-semibold mb-6 leading-tight ${className}`}
+    className={`text-black text-2xl md:text-[32px] lg:text-[40px] font-semibold mb-6 leading-tight ${className}`}
     style={{ fontFamily: "Poppins, sans-serif" }}
   >
     {children}
   </h2>
 );
 
-// Content text wrapper for readability - supports light backgrounds
-const ContentText = ({ children, className = "", light = false }: { children: React.ReactNode; className?: string; light?: boolean }) => (
+// Content text wrapper for readability - now defaults to dark text on pearl background
+const ContentText = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <div 
-    className={`max-w-[680px] space-y-4 ${light ? 'text-zinc-700' : 'text-zinc-300'} ${className}`}
+    className={`max-w-[680px] space-y-4 text-zinc-700 ${className}`}
     style={{ fontSize: '17px', lineHeight: 1.75 }}
   >
     {children}
   </div>
 );
 
-// Card component for standards/policies - supports light backgrounds
-// UPDATED: Larger content inside cards per user request
+// Card component for standards/policies - 3D hover with gold border
 const FeatureCard = ({ 
   icon: Icon, 
   title, 
-  description,
-  light = false
+  description
 }: { 
   icon: React.ComponentType<{ className?: string }>; 
   title: string; 
   description: string;
-  light?: boolean;
 }) => (
   <motion.div 
-    className={`${light ? 'bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 hover:border-gold shadow-sm' : 'bg-zinc-900/60 border-gold/30 hover:border-gold'} border rounded-xl p-6 md:p-8 transition-colors`}
+    className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 hover:border-gold rounded-xl p-6 md:p-8 transition-all duration-300 hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_18px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1"
     variants={fadeInUp}
   >
-    <div className={`w-14 h-14 rounded-lg ${light ? 'bg-black' : 'bg-black border border-gold'} flex items-center justify-center mb-5`}>
+    <div className="w-14 h-14 rounded-lg bg-black flex items-center justify-center mb-5">
       <Icon className="w-7 h-7 text-gold" />
     </div>
-    <h3 className={`${light ? 'text-black' : 'text-white'} text-xl font-semibold mb-3`}>{title}</h3>
-    <p className={`${light ? 'text-zinc-600' : 'text-zinc-400'} text-base leading-relaxed`}>{description}</p>
+    <h3 className="text-black text-xl font-semibold mb-3">{title}</h3>
+    <p className="text-zinc-600 text-base leading-relaxed">{description}</p>
   </motion.div>
 );
 
@@ -225,12 +221,13 @@ const About = () => {
                   <div className="absolute inset-0 -m-6 bg-gradient-to-br from-white via-[#faf8f5] to-[#f5f0e8] rounded-2xl border border-gold/30 shadow-lg" />
                   
                   {/* Circular portrait - GLOBAL PORTRAIT RULE: object-position center 5%, lifted up, no cropping */}
+                  {/* KEEP gold border always, add 3D lift on hover */}
                   <Link to="/founder" className="block group relative z-10">
-                    <div className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto rounded-full overflow-hidden border-2 border-gold/50 group-hover:border-white group-hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all duration-300">
+                    <div className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto rounded-full overflow-hidden border-2 border-gold transition-all duration-300 group-hover:shadow-[0_0_30px_rgba(200,167,102,0.4),0_20px_50px_rgba(0,0,0,0.35)] group-hover:-translate-y-2">
                       <img 
                         src={founderProfessional}
                         alt="Founder & CEO Jane Abou Jaoude of JBJ GLOBAL REAL ESTATE"
-                        className="w-full h-full"
+                        className="w-full h-full transition-transform duration-300 group-hover:scale-110"
                         style={{ 
                           objectFit: 'cover',
                           objectPosition: 'center 5%',
@@ -240,25 +237,26 @@ const About = () => {
                         decoding="async"
                       />
                     </div>
-                    {/* Know More About the Founder - Primary 3D on normal, Secondary on hover */}
+                    {/* Know More About the Founder - REVERSED: secondary on normal, primary on hover */}
                     <button 
-                      className="group/btn mt-4 relative inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold rounded-xl transition-all duration-300 overflow-hidden w-full"
+                      className="group/btn mt-4 relative inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold rounded-xl transition-all duration-300 overflow-hidden w-full bg-transparent border-2 border-black hover:border-gold"
                       style={{
-                        background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
-                        border: '2px solid rgba(200,167,102,0.5)',
-                        boxShadow: `
-                          0 6px 20px rgba(200,167,102,0.3),
-                          0 4px 10px rgba(0,0,0,0.15),
-                          inset 0 2px 4px rgba(255,255,255,0.9),
-                          inset 0 -2px 4px rgba(200,167,102,0.2)
-                        `,
+                        background: 'transparent',
                       }}
                     >
-                      <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                      {/* Hover overlay - 3D gold gradient */}
+                      <span 
+                        className="absolute inset-0 rounded-xl opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 pointer-events-none"
+                        style={{
+                          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                          boxShadow: '0 6px 20px rgba(200,167,102,0.3), 0 4px 10px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.9), inset 0 -2px 4px rgba(200,167,102,0.2)',
+                        }}
+                      />
+                      <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/0 group-hover/btn:from-white/80 to-transparent pointer-events-none transition-all duration-300" />
                       <span className="relative flex items-center justify-center gap-1">
-                        <span className="text-gold group-hover/btn:text-black transition-colors">Know More About the</span>
-                        <span className="text-black group-hover/btn:text-gold transition-colors">Founder</span>
-                        <span className="text-gold group-hover/btn:text-black transition-colors">↗</span>
+                        <span className="text-black group-hover/btn:text-gold transition-colors">Know More About the</span>
+                        <span className="text-gold group-hover/btn:text-black transition-colors">Founder</span>
+                        <span className="text-black group-hover/btn:text-gold transition-colors">↗</span>
                       </span>
                     </button>
                   </Link>
@@ -286,7 +284,7 @@ const About = () => {
                   </span>
                 </p>
                 
-                <ContentText light>
+                <ContentText>
                   <p>
                     I believe real estate decisions should never be driven by pressure, commissions, or promises that do not exist in reality.
                   </p>
@@ -377,22 +375,19 @@ const About = () => {
               <SectionHeadline className="max-w-2xl mx-auto">No Fees. No Pressure.</SectionHeadline>
             </motion.div>
 
-            {/* 3 Card Grid - WHITE CARDS on BLACK background */}
+            {/* 3 Card Grid */}
             <div className="grid md:grid-cols-3 gap-6">
               <FeatureCard 
-                light
                 icon={FileCheck}
                 title="No Client Fees"
                 description="For off-plan properties, we do not charge clients any fees. We do not take money from clients to sell them a project."
               />
               <FeatureCard 
-                light
                 icon={Shield}
                 title="No Pressure"
                 description="Our role is to protect, guide, and educate. It is not to push clients toward what benefits us or the company."
               />
               <FeatureCard 
-                light
                 icon={Heart}
                 title="Client Protection First"
                 description="We prioritize client interests above all else. Every recommendation is made with your financial wellbeing in mind."
@@ -401,8 +396,8 @@ const About = () => {
           </motion.div>
         </Section>
 
-        {/* SECTION 5: MARKET INTELLIGENCE - BLACK BACKGROUND */}
-        <Section dark>
+        {/* SECTION 5: MARKET INTELLIGENCE */}
+        <Section>
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -426,19 +421,19 @@ const About = () => {
                 
                 {/* Overlay Cards - Market Intelligence Visual - LARGER CONTENT */}
                 <div className="absolute bottom-6 left-6 right-6 grid grid-cols-2 gap-4">
-                  <div className="bg-black/85 backdrop-blur-sm border border-zinc-700/50 rounded-lg p-5">
+                  <div className="bg-black/85 backdrop-blur-sm border border-gold/30 rounded-lg p-5">
                     <BarChart3 className="w-8 h-8 text-gold mb-3" />
                     <p className="text-white text-base font-semibold">Government Data</p>
                   </div>
-                  <div className="bg-black/85 backdrop-blur-sm border border-zinc-700/50 rounded-lg p-5">
+                  <div className="bg-black/85 backdrop-blur-sm border border-gold/30 rounded-lg p-5">
                     <Building2 className="w-8 h-8 text-gold mb-3" />
                     <p className="text-white text-base font-semibold">Infrastructure</p>
                   </div>
-                  <div className="bg-black/85 backdrop-blur-sm border border-zinc-700/50 rounded-lg p-5">
+                  <div className="bg-black/85 backdrop-blur-sm border border-gold/30 rounded-lg p-5">
                     <TrendingUp className="w-8 h-8 text-gold mb-3" />
                     <p className="text-white text-base font-semibold">Market Cycles</p>
                   </div>
-                  <div className="bg-black/85 backdrop-blur-sm border border-zinc-700/50 rounded-lg p-5">
+                  <div className="bg-black/85 backdrop-blur-sm border border-gold/30 rounded-lg p-5">
                     <Target className="w-8 h-8 text-gold mb-3" />
                     <p className="text-white text-base font-semibold">Planning Strategy</p>
                   </div>
@@ -465,36 +460,31 @@ const About = () => {
           </motion.div>
         </Section>
 
-        {/* SECTION 6: YOUR DECISION - BLACK BACKGROUND with WHITE CARD */}
+        {/* SECTION 6: YOUR DECISION */}
         <Section>
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
             variants={fadeInUp}
+            className="text-center"
           >
-            {/* WHITE Callout Card on BLACK background */}
-            <div className="relative bg-white border border-zinc-200 rounded-2xl p-10 md:p-14 text-center overflow-hidden shadow-lg">
-              {/* Subtle gold accent */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-px bg-gradient-to-r from-transparent via-gold to-transparent" />
-              
-              <SectionLabel dark={false}>Your Decision</SectionLabel>
-              <SectionHeadline light className="max-w-3xl mx-auto">
-                Clarity, Confidence, Protection
-              </SectionHeadline>
-              <ContentText light className="max-w-2xl mx-auto text-center">
-                <p>
-                  Clients always make the final decision.
-                </p>
-                <p>
-                  Our role is to provide clarity, structure, and protection so decisions are made with confidence.
-                </p>
-              </ContentText>
-            </div>
+            <SectionLabel>Your Decision</SectionLabel>
+            <SectionHeadline className="max-w-3xl mx-auto">
+              Clarity, Confidence, Protection
+            </SectionHeadline>
+            <ContentText className="max-w-2xl mx-auto text-center">
+              <p>
+                Clients always make the final decision.
+              </p>
+              <p>
+                Our role is to provide clarity, structure, and protection so decisions are made with confidence.
+              </p>
+            </ContentText>
           </motion.div>
         </Section>
 
-        {/* SECTION 7: OUR STANDARDS - Card Grid - BLACK BACKGROUND with WHITE CARDS */}
+        {/* SECTION 7: OUR STANDARDS - Card Grid */}
         <Section>
           <motion.div
             initial="hidden"
@@ -507,28 +497,24 @@ const About = () => {
               <SectionHeadline className="max-w-2xl mx-auto">Integrity in Every Transaction</SectionHeadline>
             </motion.div>
 
-            {/* 4 Card Grid - WHITE CARDS on BLACK background */}
+            {/* 4 Card Grid */}
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
               <FeatureCard 
-                light
                 icon={Scale}
                 title="Ethical Practice"
                 description="We do not sell based on personal relationships, commission levels, or convenience."
               />
               <FeatureCard 
-                light
                 icon={Shield}
                 title="Legal Compliance"
                 description="We respect the laws of the United Arab Emirates."
               />
               <FeatureCard 
-                light
                 icon={Heart}
                 title="Client Respect"
                 description="We respect the client. We respect the capital being invested."
               />
               <FeatureCard 
-                light
                 icon={TrendingUp}
                 title="Post-Handover Support"
                 description="We continue supporting clients through rental strategy, resale planning, and long-term asset positioning."
@@ -538,40 +524,38 @@ const About = () => {
           </motion.div>
         </Section>
 
-        {/* SECTION 8: SIGNATURE - BLACK BACKGROUND with WHITE CARD */}
+        {/* SECTION 8: SIGNATURE */}
         <Section className="py-8 md:py-12 lg:py-16">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
+            className="text-center max-w-2xl mx-auto"
           >
-            {/* WHITE CARD with signature content */}
-            <div className="bg-white border border-zinc-200 rounded-2xl p-10 md:p-14 text-center shadow-lg max-w-2xl mx-auto">
-              <p className="text-zinc-700 text-base md:text-lg mb-6 leading-relaxed">
-                Developers do not manage rentals or resales. This is where an independent, licensed brokerage adds real value.
+            <p className="text-zinc-700 text-base md:text-lg mb-6 leading-relaxed">
+              Developers do not manage rentals or resales. This is where an independent, licensed brokerage adds real value.
+            </p>
+            
+            <div className="w-20 h-px bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-6" />
+            
+            <Link 
+              to="/founder" 
+              className="inline-block group"
+            >
+              <p className="text-black text-xl md:text-2xl font-medium mb-2 group-hover:text-gold transition-colors">
+                Founder & CEO Jane Abou Jaoude
               </p>
-              
-              <div className="w-20 h-px bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-6" />
-              
-              <Link 
-                to="/founder" 
-                className="inline-block group"
-              >
-                <p className="text-black text-xl md:text-2xl font-medium mb-2 group-hover:text-gold transition-colors">
-                  Founder & CEO Jane Abou Jaoude
-                </p>
-              </Link>
-              <p 
-                className="text-gold text-xs uppercase tracking-[0.18em] mb-4"
-              >
-                JBJ GLOBAL REAL ESTATE
-              </p>
-              
-              {/* Initials */}
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-black border-2 border-gold">
-                <span className="text-gold text-xl font-bold">JBJ</span>
-              </div>
+            </Link>
+            <p 
+              className="text-gold text-xs uppercase tracking-[0.18em] mb-4"
+            >
+              JBJ GLOBAL REAL ESTATE
+            </p>
+            
+            {/* Initials */}
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-black border-2 border-gold">
+              <span className="text-gold text-xl font-bold">JBJ</span>
             </div>
           </motion.div>
         </Section>
