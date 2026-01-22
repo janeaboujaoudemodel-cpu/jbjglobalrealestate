@@ -253,7 +253,7 @@ const brokerOnlyTools = [
   },
   {
     id: "broker-admin-support",
-    title: "Leila — Broker Admin",
+    title: "Sarah — Broker Admin",
     description: "RERA compliance and broker operational support.",
     icon: User,
     link: "/broker-toolkit",
