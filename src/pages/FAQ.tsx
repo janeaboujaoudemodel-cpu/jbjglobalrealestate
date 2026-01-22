@@ -183,87 +183,78 @@ const FAQ = () => {
       </div>
 
       {/* FAQ Content with Sticky TOC Above */}
-      <section id="faq-content" className="py-16 bg-black relative">
-        <div className="w-full px-4 sm:px-6 lg:px-8">
-          {/* Sticky FAQ Quick Access - Compact & Above Content (Mobile/Tablet Only) */}
-          <div className="lg:hidden sticky top-0 z-50 -mx-4 px-4 py-3 bg-black/95 backdrop-blur-sm border-b border-gold/20 shadow-lg">
-            <div className="w-full">
-              <FAQTableOfContents 
-                categories={categories}
-                title="FAQ Quick Access"
-                sticky={true}
-              />
-            </div>
-          </div>
+      <section id="faq-content" className="bg-black relative">
+        {/* Sticky FAQ Quick Access - Compact & Above Content (Mobile/Tablet Only) */}
+        <div className="lg:hidden sticky top-0 z-50 px-4 py-3 bg-black/95 backdrop-blur-sm border-b border-gold/20 shadow-lg">
+          <FAQTableOfContents categories={categories} title="FAQ Quick Access" sticky={true} />
+        </div>
 
-          {/* Main Content - Full Bleed Width Stretched Edge-to-Edge */}
-          <div className="w-full space-y-16 mt-8">
-            {categories.map((category, categoryIndex) => (
-              <motion.div
-                key={categoryIndex}
-                id={`category-${categoryIndex}`}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-                variants={staggerContainer}
-                className="scroll-mt-40"
-              >
-                {/* Category Header */}
-                <motion.div 
-                  variants={fadeInUp}
-                  className="flex items-center gap-4 mb-6"
+        {/* Categories - each category gets Layer 2 (active) full-bleed, and questions are Layer 3 */}
+        <div className="divide-y divide-gold/20">
+          {categories.map((category, categoryIndex) => (
+            <section
+              key={categoryIndex}
+              id={`category-${categoryIndex}`}
+              className="py-12 md:py-16 bg-black scroll-mt-40"
+            >
+              <div className="jj-layer-2">
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-100px" }}
+                  variants={staggerContainer}
                 >
-                  <div className="w-12 h-12 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/40 rounded-xl flex items-center justify-center">
-                    <category.icon className="w-6 h-6 text-gold" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-white">{category.title}</h2>
-                </motion.div>
+                  {/* Category Header (inside Layer 2) */}
+                  <motion.div variants={fadeInUp} className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 jj-icon-box-active rounded-xl">
+                      <category.icon className="w-6 h-6" />
+                    </div>
+                    <h2 className="text-2xl md:text-3xl font-bold text-black">{category.title}</h2>
+                  </motion.div>
 
-                {/* Questions - FULL WIDTH single column per category */}
-                <motion.div variants={fadeInUp}>
-                  <div className="space-y-4">
-                    {category.questions.map((faq, faqIndex) => (
-                      <Accordion key={faqIndex} type="single" collapsible className="w-full">
-                        <AccordionItem 
-                          value={`${categoryIndex}-${faqIndex}`}
-                          data-accordion-item={`${categoryIndex}-${faqIndex}`}
-                          className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl px-6 py-2 data-[state=open]:border-gold/60 data-[state=open]:shadow-md transition-all"
-                        >
-                          <AccordionTrigger className="text-black text-left hover:text-gold hover:no-underline py-5 text-base font-medium">
-                            {faq.question}
-                          </AccordionTrigger>
-                          <AccordionContent className="text-zinc-600 pb-5 leading-relaxed">
-                            {faq.answer}
-                          </AccordionContent>
-                        </AccordionItem>
-                      </Accordion>
-                    ))}
-                  </div>
+                  {/* Questions (Layer 3 cards) */}
+                  <motion.div variants={fadeInUp}>
+                    <div className="space-y-4">
+                      {category.questions.map((faq, faqIndex) => (
+                        <Accordion key={faqIndex} type="single" collapsible className="w-full">
+                          <AccordionItem
+                            value={`${categoryIndex}-${faqIndex}`}
+                            data-accordion-item={`${categoryIndex}-${faqIndex}`}
+                            className="jj-card-inner p-0 overflow-hidden data-[state=open]:border-gold transition-all"
+                          >
+                            <AccordionTrigger className="px-6 py-5 text-black text-left hover:text-gold hover:no-underline text-base font-medium">
+                              {faq.question}
+                            </AccordionTrigger>
+                            <AccordionContent className="px-6 pb-5 text-zinc-700 leading-relaxed">
+                              {faq.answer}
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
+                      ))}
+                    </div>
+                  </motion.div>
                 </motion.div>
-              </motion.div>
-            ))}
-          </div>
+              </div>
+            </section>
+          ))}
         </div>
       </section>
 
       {/* Still Have Questions */}
-      <section className="py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
-        <div className="container mx-auto px-4">
-          <motion.div 
+      <section className="py-16 bg-black">
+        <div className="jj-layer-2">
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="max-w-3xl mx-auto text-center"
+            className="jj-card-inner max-w-3xl mx-auto text-center"
           >
-            <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
-              <Shield className="w-7 h-7 text-gold" />
+            <div className="w-14 h-14 jj-icon-box-active rounded-xl mx-auto mb-4">
+              <Shield className="w-7 h-7" />
             </div>
-            <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
-              Still Have Questions?
-            </h2>
-            <p className="text-zinc-600 mb-8 max-w-xl mx-auto leading-relaxed">
-              Our team is here to help. Whether you're exploring options or ready to proceed, 
-              we're happy to provide guidance tailored to your situation.
+            <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">Still Have Questions?</h2>
+            <p className="text-zinc-700 mb-8 max-w-xl mx-auto leading-relaxed">
+              Our team is here to help. Whether you're exploring options or ready to proceed, we’re happy to provide guidance tailored to your situation.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button asChild variant="primary" className="px-6">
@@ -272,10 +263,8 @@ const FAQ = () => {
                   Contact Our Team
                 </Link>
               </Button>
-              <Button asChild variant="primary" className="px-6">
-                <Link to="/buyer-guide">
-                  Read Buyer Guide
-                </Link>
+              <Button asChild variant="secondary" className="px-6">
+                <Link to="/buyer-guide">Read Buyer Guide</Link>
               </Button>
             </div>
           </motion.div>
@@ -283,21 +272,18 @@ const FAQ = () => {
       </section>
 
       {/* Guide Navigation - Active Champagne Layer */}
-      <section className="jj-section-champagne py-12">
-        <div className="container mx-auto px-4">
+      <section className="py-12 bg-black">
+        <div className="jj-layer-2">
           <GuideNavigation current="/faq" guides={GUIDE_LINKS} />
         </div>
       </section>
 
       {/* Disclaimer - Premium champagne background */}
-      <section className="py-8 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-t border-zinc-200">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <p className="text-center text-zinc-500 text-sm leading-relaxed">
-              <span className="text-zinc-600 font-medium">Disclaimer:</span> This FAQ is provided 
-              for general informational purposes only. It does not constitute legal, financial, or 
-              professional advice. Regulations and requirements may change. Consult with qualified 
-              professionals for advice specific to your situation.
+      <section className="py-10 bg-black border-t border-gold/20">
+        <div className="jj-layer-2">
+          <div className="jj-card-inner max-w-4xl mx-auto">
+            <p className="text-center text-zinc-700 text-sm leading-relaxed">
+              <span className="text-black font-semibold">Disclaimer:</span> This FAQ is provided for general informational purposes only. It does not constitute legal, financial, or professional advice. Regulations and requirements may change. Consult qualified professionals for advice specific to your situation.
             </p>
           </div>
         </div>
