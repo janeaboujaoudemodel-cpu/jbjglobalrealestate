@@ -111,7 +111,7 @@ const MarketIntelligence = () => {
       />
 
       {/* Hero Section */}
-      <section className="relative min-h-[60vh] flex items-center overflow-hidden">
+      <section className="relative min-h-[60vh] flex items-center overflow-hidden mb-12">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 via-black to-black" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/5 via-transparent to-transparent" />
         

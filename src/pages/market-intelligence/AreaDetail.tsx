@@ -83,7 +83,7 @@ const MarketAreaDetail = () => {
       />
 
       {/* Hero */}
-      <section className="relative min-h-[40vh] flex items-center overflow-hidden">
+      <section className="relative min-h-[40vh] flex items-center overflow-hidden mb-12">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 via-black to-black" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/5 via-transparent to-transparent" />
         
@@ -130,7 +130,7 @@ const MarketAreaDetail = () => {
       </section>
 
       {/* Key Metrics - 3-layer system with proper gutters */}
-      <section className="py-12 bg-black">
+      <section className="pt-16 py-12 bg-black">
         <div className="jj-layer-2">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="jj-card-inner">
