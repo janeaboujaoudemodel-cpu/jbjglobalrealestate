@@ -68,7 +68,7 @@ const CommunityDetail = () => {
         
         <Link
           to="/communities"
-          className="absolute top-6 left-6 flex items-center gap-2 text-white/80 hover:text-white transition-colors bg-black/30 backdrop-blur-sm px-4 py-2 rounded-full"
+          className="absolute top-6 left-6 flex items-center gap-2 text-black hover:text-gold transition-colors bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] backdrop-blur-sm px-4 py-2 rounded-full border border-gold/40 shadow-md"
         >
           <ChevronLeft className="w-5 h-5" />
           <span className="font-medium">Back to Communities</span>
@@ -77,81 +77,89 @@ const CommunityDetail = () => {
 
       {/* Content */}
       <div className="container mx-auto px-4 -mt-20 relative z-10 pb-16">
-        {/* Community Info Card - Champagne */}
-        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-6 md:p-8 border border-gold/30 shadow-xl mb-12">
-          <h1 className="text-black font-bold mb-2 text-3xl md:text-4xl lg:text-5xl">
-            {community.name}
-          </h1>
-          {community.location && (
-            <p className="text-gold text-lg mb-4 font-medium">{community.location}</p>
-          )}
-          {community.description && (
-            <p className="text-zinc-700 text-lg max-w-3xl">{community.description}</p>
-          )}
+        {/* Layer 2: Active Champagne */}
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl p-4 md:p-6 border border-gold/30 shadow-xl mb-12">
+          {/* Layer 3: Locked Champagne - Community Info Card */}
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl p-6 md:p-8 border-2 border-gold/40">
+            <h1 className="text-black font-bold mb-2 text-3xl md:text-4xl lg:text-5xl">
+              <span className="text-gold">{community.name.split(' ')[0]}</span> {community.name.split(' ').slice(1).join(' ')}
+            </h1>
+            {community.location && (
+              <p className="text-gold text-lg mb-4 font-medium">{community.location}</p>
+            )}
+            {community.description && (
+              <p className="text-zinc-700 text-lg max-w-3xl">{community.description}</p>
+            )}
+          </div>
         </div>
 
-        {/* Projects Section */}
-        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-6 md:p-8 border border-gold/30 shadow-lg">
-          <h2 className="text-black font-semibold mb-6 text-2xl">
-            Projects in {community.name}
-          </h2>
+        {/* Projects Section - Layer 2: Active Champagne */}
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl p-4 md:p-6 border border-gold/30 shadow-lg">
+          {/* Layer 3: Locked Champagne */}
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl p-6 md:p-8 border-2 border-gold/40">
+            <h2 className="text-black font-semibold mb-6 text-2xl">
+              <span className="text-gold">Projects</span> in {community.name}
+            </h2>
 
-          <ProjectFilters
-            filters={filters}
-            onFiltersChange={setFilters}
-            developers={developers}
-            trendingAreas={trendingAreas}
-            showCommunityFilter={false}
-          />
+            <ProjectFilters
+              filters={filters}
+              onFiltersChange={setFilters}
+              developers={developers}
+              trendingAreas={trendingAreas}
+              showCommunityFilter={false}
+            />
 
-          {hasFiltersApplied && (
-            <p className="text-zinc-600 mb-6">
-              Found <span className="text-gold font-semibold">{filteredProjects.length}</span> project{filteredProjects.length !== 1 ? "s" : ""}
-            </p>
-          )}
-
-          {loadingProjects ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[...Array(4)].map((_, i) => (
-                <Skeleton key={i} className="aspect-[4/3] rounded-lg bg-zinc-200" />
-              ))}
-            </div>
-          ) : filteredProjects.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {filteredProjects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12 bg-white rounded-lg border border-zinc-200">
-              <p className="text-zinc-600 mb-2">
-                {hasFiltersApplied
-                  ? "No projects match your filters"
-                  : "No projects available in this community yet."}
+            {hasFiltersApplied && (
+              <p className="text-zinc-600 mb-6">
+                Found <span className="text-gold font-semibold">{filteredProjects.length}</span> project{filteredProjects.length !== 1 ? "s" : ""}
               </p>
-              {hasFiltersApplied && (
-                <button
-                  onClick={() => setFilters(defaultFilters)}
-                  className="text-gold hover:underline font-medium"
-                >
-                  Clear all filters
-                </button>
-              )}
-            </div>
-          )}
+            )}
+
+            {loadingProjects ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[...Array(4)].map((_, i) => (
+                  <Skeleton key={i} className="aspect-[4/3] rounded-lg bg-champagne/50" />
+                ))}
+              </div>
+            ) : filteredProjects.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {filteredProjects.map((project) => (
+                  <ProjectCard key={project.id} project={project} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-lg border-2 border-gold/30">
+                <p className="text-zinc-700 mb-2">
+                  {hasFiltersApplied
+                    ? "No projects match your filters"
+                    : "No projects available in this community yet."}
+                </p>
+                {hasFiltersApplied && (
+                  <button
+                    onClick={() => setFilters(defaultFilters)}
+                    className="text-gold hover:underline font-medium"
+                  >
+                    Clear all filters
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Educational Disclaimer */}
-        <div className="mt-8 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl p-6 border border-gold/30">
-          <div className="flex items-start gap-4">
-            <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
-              <svg className="w-5 h-5 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <div>
-              <h3 className="text-gold font-semibold mb-1">Information provided is for general guidance only</h3>
-              <p className="text-black text-sm">This community guide provides educational information about {community.name}. For specific property inquiries, please contact our team.</p>
+        {/* Educational Disclaimer - Layer 2 + Layer 3 */}
+        <div className="mt-8 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl p-3 border border-gold/30">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-lg p-5 border-2 border-gold/40">
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-lg flex items-center justify-center flex-shrink-0 border border-gold/30">
+                <svg className="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-gold font-semibold mb-1">Information provided is for general guidance only</h3>
+                <p className="text-zinc-700 text-sm">This community guide provides educational information about {community.name}. For specific property inquiries, please contact our team.</p>
+              </div>
             </div>
           </div>
         </div>

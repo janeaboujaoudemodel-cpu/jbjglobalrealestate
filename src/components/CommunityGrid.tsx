@@ -11,7 +11,7 @@ const CommunityGrid = React.forwardRef<HTMLDivElement>((_, ref) => {
     return (
       <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[...Array(8)].map((_, i) => (
-          <Skeleton key={i} className="aspect-[4/3] rounded-xl bg-zinc-900" />
+          <Skeleton key={i} className="aspect-[4/3] rounded-xl bg-champagne/50" />
         ))}
       </div>
     );
@@ -32,7 +32,7 @@ const CommunityGrid = React.forwardRef<HTMLDivElement>((_, ref) => {
           <Link
             key={community.id}
             to={`/community/${community.slug}`}
-            className="group relative overflow-hidden rounded-xl aspect-[4/3] border border-zinc-800 hover:border-zinc-600 transition-all duration-300"
+            className="group relative overflow-hidden rounded-xl aspect-[4/3] border-2 border-gold/30 hover:border-gold/60 transition-all duration-300 shadow-md hover:shadow-xl"
           >
             <img
               src={community.image_url || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"}
@@ -41,11 +41,11 @@ const CommunityGrid = React.forwardRef<HTMLDivElement>((_, ref) => {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
             
-            {/* Premium badge - Black with gold accent */}
+            {/* Premium badge - Champagne with gold accent */}
             {isPremium && (
-              <div className="absolute top-3 right-3 bg-black/90 backdrop-blur-sm text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5 border border-gold/30">
+              <div className="absolute top-3 right-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] backdrop-blur-sm text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5 border border-gold/40 shadow-md">
                 <TrendingUp className="w-3 h-3 text-gold" />
-                <span className="text-gold-light">Trending</span>
+                <span className="text-black">Trending</span>
               </div>
             )}
             
@@ -57,13 +57,13 @@ const CommunityGrid = React.forwardRef<HTMLDivElement>((_, ref) => {
                 {community.name}
               </h3>
               {community.location && (
-                <p className="text-zinc-400 text-sm flex items-center gap-1">
-                  <MapPin className="w-3 h-3" />
+                <p className="text-zinc-300 text-sm flex items-center gap-1">
+                  <MapPin className="w-3 h-3 text-gold" />
                   {community.location}
                 </p>
               )}
             </div>
-            <div className="absolute inset-0 border-2 border-transparent group-hover:border-zinc-600 rounded-xl transition-colors duration-300" />
+            <div className="absolute inset-0 border-2 border-transparent group-hover:border-gold/50 rounded-xl transition-colors duration-300" />
           </Link>
         );
       })}

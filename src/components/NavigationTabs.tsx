@@ -29,27 +29,39 @@ const NavigationTabs = React.forwardRef<HTMLDivElement, NavigationTabsProps>(
           <div className="flex items-center gap-3 flex-wrap">
             <Link
               to="/"
-              className={`inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all border ${
+              className={`inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all border-2 ${
                 isDeveloperActive
-                  ? "bg-white text-black border-white shadow-lg"
-                  : "bg-zinc-900/80 text-zinc-400 hover:text-white hover:bg-zinc-800 border-zinc-800"
+                  ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-gold/60 shadow-lg"
+                  : "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark text-zinc-600 hover:text-black hover:border-gold/40 border-gold/20"
               }`}
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              <Building2 className="w-4 h-4" />
+              <div className={`w-6 h-6 rounded-md flex items-center justify-center ${
+                isDeveloperActive 
+                  ? "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark" 
+                  : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]"
+              }`}>
+                <Building2 className="w-3.5 h-3.5 text-black" />
+              </div>
               By Developer
             </Link>
 
             <Link
               to="/communities"
-              className={`inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all border ${
+              className={`inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all border-2 ${
                 isCommunityActive
-                  ? "bg-white text-black border-white shadow-lg"
-                  : "bg-zinc-900/80 text-zinc-400 hover:text-white hover:bg-zinc-800 border-zinc-800"
+                  ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-gold/60 shadow-lg"
+                  : "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark text-zinc-600 hover:text-black hover:border-gold/40 border-gold/20"
               }`}
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              <MapPin className="w-4 h-4" />
+              <div className={`w-6 h-6 rounded-md flex items-center justify-center ${
+                isCommunityActive 
+                  ? "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark" 
+                  : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]"
+              }`}>
+                <MapPin className="w-3.5 h-3.5 text-black" />
+              </div>
               By Community
             </Link>
           </div>
@@ -60,20 +72,24 @@ const NavigationTabs = React.forwardRef<HTMLDivElement, NavigationTabsProps>(
               <Button
                 onClick={() => setIsDeveloperSearchOpen(true)}
                 variant="outline"
-                className="px-6 py-3 h-auto rounded-full border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white bg-transparent"
+                className="px-6 py-3 h-auto rounded-full border-2 border-gold/30 text-black hover:bg-gradient-to-br hover:from-[#FDFBF7] hover:via-[#F5F0E6] hover:to-[#EDE4D3] hover:border-gold/50 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
-                <Search className="w-4 h-4 mr-2" />
+                <div className="w-6 h-6 rounded-md flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] mr-2">
+                  <Search className="w-3.5 h-3.5 text-black" />
+                </div>
                 Search Developer
               </Button>
             ) : (
               <Button
                 onClick={() => setIsCommunitySearchOpen(true)}
                 variant="outline"
-                className="px-6 py-3 h-auto rounded-full border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white bg-transparent"
+                className="px-6 py-3 h-auto rounded-full border-2 border-gold/30 text-black hover:bg-gradient-to-br hover:from-[#FDFBF7] hover:via-[#F5F0E6] hover:to-[#EDE4D3] hover:border-gold/50 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
-                <Search className="w-4 h-4 mr-2" />
+                <div className="w-6 h-6 rounded-md flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] mr-2">
+                  <Search className="w-3.5 h-3.5 text-black" />
+                </div>
                 Search Community
               </Button>
             )}
@@ -83,13 +99,15 @@ const NavigationTabs = React.forwardRef<HTMLDivElement, NavigationTabsProps>(
               <Button
                 onClick={onFiltersClick}
                 variant="outline"
-                className="px-6 py-3 h-auto rounded-full border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white bg-transparent"
+                className="px-6 py-3 h-auto rounded-full border-2 border-gold/30 text-black hover:bg-gradient-to-br hover:from-[#FDFBF7] hover:via-[#F5F0E6] hover:to-[#EDE4D3] hover:border-gold/50 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
-                <SlidersHorizontal className="w-4 h-4 mr-2" />
+                <div className="w-6 h-6 rounded-md flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] mr-2">
+                  <SlidersHorizontal className="w-3.5 h-3.5 text-black" />
+                </div>
                 Filters
                 {activeFiltersCount > 0 && (
-                  <span className="ml-2 px-2 py-0.5 bg-white text-black text-xs font-bold rounded-full">
+                  <span className="ml-2 px-2 py-0.5 bg-gold text-black text-xs font-bold rounded-full">
                     {activeFiltersCount}
                   </span>
                 )}
