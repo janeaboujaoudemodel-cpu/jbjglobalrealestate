@@ -86,7 +86,7 @@ const StatItem = ({ end, suffix, prefix, label, icon: Icon, isVisible }: StatIte
   return (
     <div className="relative group">
       {/* Pearl Card with Gold Border - 3-layer compliant */}
-      <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-2xl p-6 md:p-8 text-center hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-500">
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-6 md:p-8 text-center hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-500">
         {/* Icon - Black circle with gold icon */}
         <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-black flex items-center justify-center shadow-lg">
           <Icon className="w-6 h-6 text-gold" />
@@ -137,7 +137,7 @@ const StatsCounter = () => {
         <div className="mx-0 md:mx-4 lg:mx-8 py-10 px-4 md:px-8 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg">
           {/* Section Header - Premium Label */}
           <div className="text-center mb-10">
-            <span className="inline-block px-5 py-2 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-3 shadow-sm">
+            <span className="inline-block px-5 py-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-3 shadow-sm">
               <span className="text-gold">Track</span>
               <span className="text-black"> Record</span>
             </span>

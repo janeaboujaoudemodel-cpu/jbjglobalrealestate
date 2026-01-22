@@ -272,7 +272,7 @@ const SupportTicketBox = () => {
           className="max-w-4xl mx-auto"
         >
           {/* Main Card - Pearl style inside champagne layer */}
-          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl border-2 border-gold/40 shadow-xl overflow-hidden relative">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl border-2 border-gold/40 shadow-xl overflow-hidden relative">
             {/* Decorative elements */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
@@ -338,7 +338,7 @@ const SupportTicketBox = () => {
                   <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <DialogTrigger asChild>
                       <Button
-                        className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-black border-2 border-gold/50 px-10 py-7 text-lg font-bold rounded-xl transition-all duration-300 hover:scale-105 transform active:scale-95 group"
+                        className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-2 border-gold/50 px-10 py-7 text-lg font-bold rounded-xl transition-all duration-300 hover:scale-105 transform active:scale-95 group"
                         style={{
                           textShadow: 'none',
                           boxShadow: `
@@ -677,7 +677,7 @@ const SupportTicketBox = () => {
                             <Button
                               type="submit"
                               disabled={isSubmitting}
-                              className="w-full relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-black border-2 border-gold/50 py-6 font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] transform active:scale-95 group"
+                              className="w-full relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-2 border-gold/50 py-6 font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] transform active:scale-95 group"
                               style={{
                                 textShadow: 'none',
                                 boxShadow: `
