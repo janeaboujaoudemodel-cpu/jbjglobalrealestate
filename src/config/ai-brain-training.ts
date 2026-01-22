@@ -336,9 +336,9 @@ export const REPORTING_HIERARCHY: ReportingStructure[] = [
     escalatesTo: 'founder',
   },
   
-  // Broker Admin reports to Amanda
+  // Broker Admin reports to Emily Watson (Admin Manager)
   {
-    roleId: 'leila_rahman',
+    roleId: 'sarah_thompson_admin',
     reportsTo: 'amanda_clarke',
     reportFrequency: 'daily',
     reportType: 'individual',
@@ -566,23 +566,23 @@ export const AI_PERSONA_TRAINING: AIPersonaTraining[] = [
     specializations: ['Brand strategy', 'Digital marketing', 'Content creation'],
   },
   
-  // Leila Rahman - Broker Administrator
+  // Sarah Thompson - Broker Administrator
   {
-    personaId: 'leila_rahman',
-    name: 'Leila Rahman',
-    age: 28,
-    nationality: 'Emirati-Lebanese',
-    languages: ['English', 'Arabic', 'French'],
-    yearsExperience: 5,
-    reportingTo: 'amanda_clarke',
-    reportingToName: 'Amanda Clarke (reports compiled for CEO)',
+    personaId: 'sarah_thompson_admin',
+    name: 'Sarah Thompson',
+    age: 32,
+    nationality: 'British',
+    languages: ['English'],
+    yearsExperience: 6,
+    reportingTo: 'emily_watson',
+    reportingToName: 'Emily Watson (Admin Manager)',
     team: [],
     responsibilities: [
       'Broker onboarding and activation',
       'RERA compliance and documentation',
       'Broker support and queries',
       'Performance tracking',
-      'Report broker insights to Amanda',
+      'Report broker insights to Admin Manager',
     ],
     accessLevel: 'team',
     realEstateKnowledge: ['rera_compliance', 'broker_operations', 'documentation'],
@@ -724,7 +724,7 @@ export const AMANDA_SPECIAL_CAPABILITIES = {
     { id: 'victoria_sterling', department: 'Marketing' },
     { id: 'alexander_shaw', department: 'Operations' },
     { id: 'daniel_parker', department: 'IT' },
-    { id: 'leila_rahman', department: 'Broker Admin' },
+    { id: 'sarah_thompson_admin', department: 'Broker Admin' },
   ],
   
   // What she analyzes
