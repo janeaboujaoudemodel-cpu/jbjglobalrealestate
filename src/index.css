@@ -315,229 +315,66 @@ All colors MUST be HSL.
    * LAYER 2: Active Champagne Section (Full-width with thin black contour)
    * This is the "active layer" sitting on the black page background.
    */
-  .jj-section-champagne {
-    @apply relative overflow-hidden bg-black;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
-  }
+.jj-section-champagne {
+  @apply py-12 md:py-16 bg-black;
+}
 
-  .jj-section-champagne::before {
-    content: "";
-    position: absolute;
-    top: 0.75rem;
-    bottom: 0.75rem;
-    left: var(--jj-gutter);
-    right: var(--jj-gutter);
-    background: linear-gradient(
-      to bottom right,
-      hsl(var(--champagne-1)),
-      hsl(var(--champagne-2)),
-      hsl(var(--champagne-3))
-    );
-    border: 1px solid hsl(var(--gold) / 0.3);
-    border-radius: 1rem;
-    box-shadow: 0 0 40px hsl(var(--gold) / 0.18);
-  }
+.jj-section-champagne > div,
+.jj-section-champagne > .container,
+.jj-section-champagne > .max-w-5xl,
+.jj-section-champagne > .max-w-4xl {
+  @apply mx-3 md:mx-4 lg:mx-6 rounded-2xl border border-gold/30 p-4 md:p-6 lg:p-8;
+  background: linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%);
+  box-shadow: 0 0 40px rgba(200,167,102,0.18);
+}
 
-  .jj-section-champagne > * {
-    position: relative;
-    z-index: 1;
-    margin-left: var(--jj-gutter);
-    margin-right: var(--jj-gutter);
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
+/* Layer 2 wrapper with proper gutters */
+.jj-layer-2 {
+  @apply mx-3 md:mx-4 lg:mx-6 rounded-2xl border border-gold/30 p-3 sm:p-4;
+  background: linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%);
+  box-shadow: 0 0 40px rgba(200,167,102,0.18);
+}
 
-  @media (min-width: 768px) {
-    .jj-section-champagne > * {
-      padding-left: 2.5rem;
-      padding-right: 2.5rem;
-    }
-  }
+/* Layer 3 - Inner content with champagne fill */
+.jj-card-inner {
+  @apply rounded-xl border-2 border-gold/40 p-6;
+  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%);
+  box-shadow: 0 0 15px rgba(200,167,102,0.22), inset 0 1px 2px hsl(0 0% 100% / 0.4);
+  transition: all 0.3s ease;
+}
 
-  /* ============================================================
-   * GLOBAL LAYER 2 WRAPPER (LOCKED)
-   * Use this for all champagne sections to ensure perfect alignment.
-   * Applies IDENTICAL left/right gutters globally.
-   * ============================================================ */
-  .jj-layer-2 {
-    margin-left: var(--jj-gutter);
-    margin-right: var(--jj-gutter);
-    padding: 2.5rem 1.5rem;
-    background: linear-gradient(
-      to bottom right,
-      hsl(var(--champagne-1)),
-      hsl(var(--champagne-2)),
-      hsl(var(--champagne-3))
-    );
-    border: 1px solid hsl(var(--gold) / 0.3);
-    border-radius: 1rem;
-    box-shadow: 0 0 40px hsl(var(--gold) / 0.18);
-  }
+.jj-card-inner:hover {
+  @apply border-gold;
+  transform: translateY(-3px);
+  box-shadow: 0 0 25px rgba(200,167,102,0.28), 0 18px 50px rgba(0,0,0,0.35);
+}
 
-  @media (min-width: 768px) {
-    .jj-layer-2 {
-      padding: 3rem 2rem;
-    }
-  }
+/* Active box - for inner content cards (Layer 3) */
+.jj-box-active {
+  @apply rounded-xl border-2 border-gold/40 p-6;
+  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%);
+  box-shadow: 0 0 15px rgba(200,167,102,0.22), inset 0 1px 2px hsl(0 0% 100% / 0.4);
+  transition: all 0.3s ease;
+}
 
-  /* ============================================================
-   * GUTTER VALUES ARE NOW LOCKED GLOBALLY
-   * The --jj-gutter variable is set in :root and applies to all
-   * .jj-layer-2 sections automatically. No override class needed.
-   * ============================================================ */
+.jj-box-active:hover {
+  @apply border-gold;
+  transform: translateY(-3px);
+  box-shadow: 0 0 25px rgba(200,167,102,0.28), 0 18px 50px rgba(0,0,0,0.35);
+}
 
-  /* ============================================================
-   * GLOBAL SECTION WIDTH WRAPPER (LOCKED)
-   * Use this wrapper for ANY section to ensure all Layer 2 starts/ends align.
-   * ============================================================ */
-  .jj-section-width {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: var(--jj-gutter);
-    padding-right: var(--jj-gutter);
-  }
+/* Icon box with active champagne color - Black icons on active bg */
+.jj-icon-box-active {
+  @apply rounded-lg flex items-center justify-center border border-gold/30;
+  background: linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%);
+}
 
-  /* ============================================================
-   * GLOBAL ACTIVE LAYER MARGIN SYSTEM (LOCKED)
-   * All sections with active champagne layer MUST use this class
-   * to ensure perfect vertical alignment across all pages.
-   * ============================================================ */
-  .jj-inset-active {
-    margin-left: var(--jj-gutter);
-    margin-right: var(--jj-gutter);
-  }
+.jj-icon-box-active svg {
+  @apply text-black;
+}
 
-  /* Alias for backwards compatibility */
-  .jj-section-inset {
-    margin-left: var(--jj-gutter);
-    margin-right: var(--jj-gutter);
-  }
-
-  /* Edge-to-edge section on black background */
-  .jj-section-edge {
-    @apply w-screen relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
-  }
-
-  /* 
-   * LAYER 3: Inner cards inside the active layer (Locked Champagne Pearl)
-   * These cards must be VISIBLY SMALLER than the Layer 2 container with proper inset.
-   * Uses warmer pearl tones (not bright white) for premium look.
-   */
-  .jj-card-inner {
-    @apply rounded-xl border-2 border-gold/40;
-    background: linear-gradient(
-      135deg,
-      hsl(40 32% 95%),
-      hsl(38 26% 91%),
-      hsl(36 22% 86%)
-    );
-    box-shadow: 
-      inset 0 1px 2px hsl(0 0% 100% / 0.4),
-      0 2px 8px hsl(var(--gold) / 0.12);
-  }
-
-  .jj-card-inner:hover {
-    @apply border-gold/60;
-    box-shadow:
-      inset 0 1px 2px hsl(0 0% 100% / 0.5),
-      0 4px 16px hsl(var(--gold) / 0.2),
-      0 8px 24px hsl(0 0% 0% / 0.15);
-  }
-
-  /* Optional 3D hover lift (use on key cards like Team members) */
-  .jj-hover-3d {
-    transition: transform 300ms ease, box-shadow 300ms ease, border-color 300ms ease;
-    will-change: transform;
-  }
-
-  .jj-hover-3d:hover {
-    transform: translateY(-4px);
-    box-shadow:
-      0 0 25px hsl(var(--gold) / 0.28),
-      0 22px 60px hsl(0 0% 0% / 0.45);
-  }
-
-  /* ============================================================
-   * ICON BOX (for cards on Light/Champagne surfaces)
-   * Requirement: NOT black; premium champagne/gold box with black icons.
-   * ============================================================ */
-  .jj-icon-box {
-    @apply flex items-center justify-center flex-shrink-0 rounded-xl border border-gold/40;
-    width: 3rem;
-    height: 3rem;
-    background: linear-gradient(
-      to bottom right,
-      hsl(var(--champagne-1)),
-      hsl(var(--champagne-2)),
-      hsl(var(--champagne-3))
-    );
-    box-shadow:
-      inset 0 1px 0 hsl(0 0% 100% / 0.45),
-      0 4px 14px hsl(var(--gold) / 0.15);
-  }
-
-  .jj-icon-box > svg {
-    color: hsl(var(--foreground));
-  }
-
-  /* Active champagne card/box inside sections (old style, kept for compatibility) */
-  .jj-card-champagne {
-    @apply rounded-xl border border-gold/30;
-    background: linear-gradient(to bottom right, 
-      hsl(var(--champagne-1)), 
-      hsl(var(--champagne-2)), 
-      hsl(var(--champagne-3))
-    );
-  }
-
-  .jj-card-champagne:hover {
-    @apply border-gold;
-  }
-
-  /*
-   * COMPATIBILITY ALIAS (GLOBAL FIX)
-   * jj-box-active is deprecated. For the global 3-layer system, boxes inside
-   * jj-section-champagne must be champagne-pearl cards (jj-card-inner).
-   * Keeping the class name avoids needing to refactor every page.
-   */
-  /* 
-   * jj-box-active: Layer 3 boxes (Locked Champagne Pearl)
-   * Must be visibly nested INSIDE the champagne layer with warmer tones.
-   */
-  .jj-box-active {
-    @apply rounded-xl border-2 border-gold/50;
-    background: linear-gradient(
-      135deg,
-      hsl(40 32% 95%),
-      hsl(38 26% 91%),
-      hsl(36 22% 86%)
-    );
-    box-shadow: 
-      inset 0 1px 2px hsl(0 0% 100% / 0.4),
-      0 4px 12px hsl(var(--gold) / 0.15);
-    transition: all 0.3s ease;
-  }
-
-  .jj-box-active:hover {
-    @apply border-gold;
-    box-shadow:
-      inset 0 1px 2px hsl(0 0% 100% / 0.5),
-      0 8px 25px hsl(var(--gold) / 0.25),
-      0 12px 35px hsl(0 0% 0% / 0.18);
-    transform: translateY(-3px);
-  }
-
-  /* ============================================================
-   * ACTIVE COLOR ICON BOX (for navigation arrows, guides)
-   * Requirement: NOT black/gold; uses active champagne gradient.
-   * ============================================================ */
-  .jj-icon-box-active {
+/* Premium icon box - black background with gold icon */
+.jj-icon-box {
     @apply flex items-center justify-center flex-shrink-0 rounded-xl border border-gold/40;
     background: linear-gradient(
       to bottom right,

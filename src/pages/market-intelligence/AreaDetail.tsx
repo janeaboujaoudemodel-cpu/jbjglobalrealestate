@@ -129,34 +129,42 @@ const MarketAreaDetail = () => {
         </motion.div>
       </section>
 
-      {/* Key Metrics - 3-layer system */}
-      <section className="py-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
-        <div className="container mx-auto px-4">
+      {/* Key Metrics - 3-layer system with proper gutters */}
+      <section className="py-12 bg-black">
+        <div className="jj-layer-2">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+            <Card className="jj-card-inner">
               <CardContent className="p-6 text-center">
-                <BarChart3 className="w-8 h-8 text-gold mx-auto mb-3" />
+                <div className="w-12 h-12 jj-icon-box-active rounded-xl mx-auto mb-3">
+                  <BarChart3 className="w-6 h-6" />
+                </div>
                 <p className="text-zinc-500 text-sm mb-1">Price Index</p>
                 <p className="text-black text-3xl font-bold">{area.priceIndex}</p>
               </CardContent>
             </Card>
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+            <Card className="jj-card-inner">
               <CardContent className="p-6 text-center">
-                <Home className="w-8 h-8 text-gold mx-auto mb-3" />
+                <div className="w-12 h-12 jj-icon-box-active rounded-xl mx-auto mb-3">
+                  <Home className="w-6 h-6" />
+                </div>
                 <p className="text-zinc-500 text-sm mb-1">Rental Index</p>
                 <p className="text-black text-3xl font-bold">{area.rentalIndex}</p>
               </CardContent>
             </Card>
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+            <Card className="jj-card-inner">
               <CardContent className="p-6 text-center">
-                <Users className="w-8 h-8 text-gold mx-auto mb-3" />
+                <div className="w-12 h-12 jj-icon-box-active rounded-xl mx-auto mb-3">
+                  <Users className="w-6 h-6" />
+                </div>
                 <p className="text-zinc-500 text-sm mb-1">Demand Score</p>
                 <p className="text-black text-3xl font-bold">{area.demandScore}%</p>
               </CardContent>
             </Card>
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+            <Card className="jj-card-inner">
               <CardContent className="p-6 text-center">
-                <Building2 className="w-8 h-8 text-gold mx-auto mb-3" />
+                <div className="w-12 h-12 jj-icon-box-active rounded-xl mx-auto mb-3">
+                  <Building2 className="w-6 h-6" />
+                </div>
                 <p className="text-zinc-500 text-sm mb-1">Supply Score</p>
                 <p className="text-black text-3xl font-bold">{area.supplyScore}%</p>
               </CardContent>
@@ -166,13 +174,13 @@ const MarketAreaDetail = () => {
       </section>
 
       {/* AI Explanation - 3-layer system */}
-      <section className="py-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
-        <div className="container mx-auto px-4">
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 max-w-4xl mx-auto">
+      <section className="py-12 bg-black">
+        <div className="jj-layer-2">
+          <Card className="jj-card-inner max-w-4xl mx-auto">
             <CardHeader>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center">
-                  <Info className="w-5 h-5 text-gold" />
+                <div className="w-10 h-10 jj-icon-box-active rounded-xl">
+                  <Info className="w-5 h-5" />
                 </div>
                 <CardTitle className="text-black">Why This Area Performs This Way</CardTitle>
               </div>
@@ -194,16 +202,16 @@ const MarketAreaDetail = () => {
       </section>
 
       {/* Key Highlights - 3-layer system */}
-      <section className="py-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
-        <div className="container mx-auto px-4">
+      <section className="py-12 bg-black">
+        <div className="jj-layer-2">
           <h2 className="text-black text-2xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
             <span className="text-gold">Market</span> Highlights
           </h2>
           <div className="max-w-2xl mx-auto space-y-4">
             {area.highlights.map((highlight, i) => (
-              <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-4 flex items-start gap-4">
-                <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center shrink-0">
-                  <span className="text-gold font-bold">{i + 1}</span>
+              <div key={i} className="jj-card-inner p-4 flex items-start gap-4">
+                <div className="w-8 h-8 jj-icon-box-active rounded-lg shrink-0">
+                  <span className="text-black font-bold text-sm">{i + 1}</span>
                 </div>
                 <p className="text-zinc-700">{highlight}</p>
               </div>
@@ -213,9 +221,9 @@ const MarketAreaDetail = () => {
       </section>
 
       {/* CTA - 3-layer system */}
-      <section className="py-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
-        <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto text-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8">
+      <section className="py-12 bg-black">
+        <div className="jj-layer-2">
+          <div className="max-w-2xl mx-auto text-center jj-card-inner p-8">
             <h3 className="text-black text-xl font-bold mb-4">Interested in {area.area}?</h3>
             <p className="text-zinc-600 mb-6">Speak with our team for personalized guidance based on current market conditions.</p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -225,7 +233,7 @@ const MarketAreaDetail = () => {
                 </Button>
               </Link>
               <Link to={`/properties?location=${encodeURIComponent(area.area)}`}>
-                <Button variant="outline" className="border-black text-black hover:bg-black/10">
+                <Button variant="secondary">
                   View Properties in {area.area}
                 </Button>
               </Link>
@@ -235,33 +243,39 @@ const MarketAreaDetail = () => {
       </section>
 
       {/* Internal Links - 3-layer system */}
-      <section className="py-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
-        <div className="container mx-auto px-4">
+      <section className="py-12 bg-black">
+        <div className="jj-layer-2">
           <h3 className="text-black text-xl font-bold mb-6 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
             <span className="text-gold">Continue</span> Exploring
           </h3>
           <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
             <Link to="/market-intelligence/overview" className="group">
-              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold hover:shadow-lg transition-all shadow-sm">
+              <Card className="jj-card-inner">
                 <CardContent className="p-4 flex items-center justify-between">
                   <span className="text-gold font-medium group-hover:text-gold-dark transition-colors">Market Overview</span>
-                  <ArrowRight className="w-4 h-4 text-black" />
+                  <div className="w-8 h-8 jj-icon-box-active rounded-lg">
+                    <ArrowRight className="w-4 h-4" />
+                  </div>
                 </CardContent>
               </Card>
             </Link>
             <Link to="/market-intelligence/reports" className="group">
-              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold hover:shadow-lg transition-all shadow-sm">
+              <Card className="jj-card-inner">
                 <CardContent className="p-4 flex items-center justify-between">
                   <span className="text-gold font-medium group-hover:text-gold-dark transition-colors">Market Reports</span>
-                  <ArrowRight className="w-4 h-4 text-black" />
+                  <div className="w-8 h-8 jj-icon-box-active rounded-lg">
+                    <ArrowRight className="w-4 h-4" />
+                  </div>
                 </CardContent>
               </Card>
             </Link>
             <Link to="/market-intelligence/methodology" className="group">
-              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold hover:shadow-lg transition-all shadow-sm">
+              <Card className="jj-card-inner">
                 <CardContent className="p-4 flex items-center justify-between">
                   <span className="text-gold font-medium group-hover:text-gold-dark transition-colors">Methodology</span>
-                  <ArrowRight className="w-4 h-4 text-black" />
+                  <div className="w-8 h-8 jj-icon-box-active rounded-lg">
+                    <ArrowRight className="w-4 h-4" />
+                  </div>
                 </CardContent>
               </Card>
             </Link>
@@ -269,10 +283,14 @@ const MarketAreaDetail = () => {
           
           {/* Disclaimer Box - Champagne style */}
           <div className="max-w-3xl mx-auto mt-8">
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 text-center">
+            <div className="jj-card-inner p-6 text-center">
               <div className="flex items-center justify-center gap-4 mb-4">
-                <Database className="w-5 h-5 text-gold" />
-                <Shield className="w-5 h-5 text-gold" />
+                <div className="w-8 h-8 jj-icon-box-active rounded-lg">
+                  <Database className="w-4 h-4" />
+                </div>
+                <div className="w-8 h-8 jj-icon-box-active rounded-lg">
+                  <Shield className="w-4 h-4" />
+                </div>
               </div>
               <p className="text-zinc-600 text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
             </div>

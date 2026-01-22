@@ -283,9 +283,9 @@ const RentGuide = () => {
                 desc: "All tenancies must be registered with Ejari (Dubai Land Department) to be legally valid." 
               }
             ].map((item, index) => (
-              <div key={index} className="jj-card-inner p-6 hover:border-gold transition-colors">
-                <div className="w-12 h-12 bg-black border border-gold/30 rounded-xl flex items-center justify-center mb-4">
-                  <item.icon className="w-6 h-6 text-gold" />
+              <div key={index} className="jj-card-inner p-6">
+                <div className="w-12 h-12 jj-icon-box-active rounded-xl mb-4">
+                  <item.icon className="w-6 h-6" />
                 </div>
                 <h3 className="font-medium text-black mb-2">{item.title}</h3>
                 <p className="text-sm text-zinc-600">{item.desc}</p>
@@ -359,10 +359,10 @@ const RentGuide = () => {
             {paymentStructures.map((structure, index) => (
               <div 
                 key={index}
-                className="jj-card-inner p-6 hover:border-gold hover:shadow-lg transition-all"
+                className="jj-card-inner p-6"
               >
-                <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mb-4">
-                  <structure.icon className="w-5 h-5 text-gold" />
+                <div className="w-10 h-10 jj-icon-box-active rounded-lg mb-4">
+                  <structure.icon className="w-5 h-5" />
                 </div>
                 <h3 className="text-lg font-medium text-black mb-2">{structure.title}</h3>
                 <p className="text-sm text-zinc-600">{structure.description}</p>
@@ -388,11 +388,11 @@ const RentGuide = () => {
             {costs.map((cost, index) => (
               <div 
                 key={index}
-                className="jj-card-inner p-6 hover:border-gold hover:shadow-lg transition-all"
+                className="jj-card-inner p-6"
               >
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
-                    <cost.icon className="w-5 h-5 text-gold" />
+                  <div className="w-10 h-10 jj-icon-box-active rounded-lg flex-shrink-0">
+                    <cost.icon className="w-5 h-5" />
                   </div>
                   <div>
                     <h3 className="text-lg font-medium text-black mb-1">{cost.title}</h3>
