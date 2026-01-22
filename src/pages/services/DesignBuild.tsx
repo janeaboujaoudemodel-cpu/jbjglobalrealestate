@@ -327,44 +327,67 @@ const DesignBuild = () => {
         </div>
       </section>
 
-      {/* CTA Section - Book Consultation with Licensed Partners */}
-      <section className="py-20 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+      {/* CTA Section - 3-Layer System */}
+      <section className="py-16 md:py-20 bg-black">
         <div className="container mx-auto px-4">
-          <motion.div
-            className="text-center max-w-3xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <Badge className="bg-gold/20 text-gold border-gold/40 mb-4">
-              <Users className="w-3 h-3 mr-1" />
-              Through Our Partners
-            </Badge>
-            <h2 
-              className="text-black text-3xl md:text-4xl font-bold mb-6"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Ready to Transform Your Space?
-            </h2>
-            <p className="text-zinc-600 mb-8">
-              Book a consultation with our licensed partners now. Our expert network is ready to bring your vision to life.
-            </p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                <Button className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] text-black border-2 border-gold/60 shadow-[0_8px_30px_rgba(200,167,102,0.4),0_4px_15px_rgba(0,0,0,0.2)] hover:bg-black hover:text-gold hover:border-gold hover:shadow-[0_8px_40px_rgba(200,167,102,0.6)] px-8 py-6 text-base font-semibold transition-all duration-300">
-                  <Calendar className="w-5 h-5 mr-2" />
-                  Book a Consultation
-                  <ArrowUpRight className="w-5 h-5 ml-2" />
-                </Button>
-              </a>
-              <a href={`https://wa.me/${CONTACT_INFO.phone.replace(/\D/g, '')}?text=Hello, I'm interested in Design & Build services.`} target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" className="border-2 border-black text-black hover:bg-black hover:text-white px-8 py-6 text-base font-semibold transition-all duration-300">
-                  <MessageCircle className="w-5 h-5 mr-2" />
-                  WhatsApp Us
-                </Button>
-              </a>
+          <div className="max-w-[1100px] mx-auto">
+            {/* OUTER CARD (Active Champagne) */}
+            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
+              {/* INNER CARD (Pearl) */}
+              <motion.div
+                className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                <Badge className="bg-gold/20 text-gold border-gold/40 mb-4">
+                  <Users className="w-3 h-3 mr-1" />
+                  Through Our Partners
+                </Badge>
+                <h2 
+                  className="text-black text-2xl md:text-3xl font-bold mb-4"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  Ready to Transform <span className="text-gold">Your Space?</span>
+                </h2>
+                <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
+                  Book a consultation with our licensed partners now. Our expert network is ready to bring your vision to life.
+                </p>
+                <div className="flex flex-wrap gap-4 justify-center">
+                  <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
+                    <button 
+                      className="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] group"
+                      style={{
+                        background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                        boxShadow: `
+                          0 10px 30px rgba(200,167,102,0.4),
+                          0 6px 15px rgba(0,0,0,0.2),
+                          inset 0 2px 4px rgba(255,255,255,0.9),
+                          inset 0 -2px 4px rgba(200,167,102,0.2),
+                          0 0 20px rgba(200,167,102,0.3)
+                        `,
+                      }}
+                    >
+                      <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                      <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                      <span className="relative flex items-center gap-1">
+                        <Calendar className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
+                        <span className="text-black group-hover:text-gold transition-colors">Book a</span>
+                        <span className="text-gold group-hover:text-black transition-colors">Consultation</span>
+                        <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                      </span>
+                    </button>
+                  </a>
+                  <a href={`https://wa.me/${CONTACT_INFO.phone.replace(/\D/g, '')}?text=Hello, I'm interested in Design & Build services.`} target="_blank" rel="noopener noreferrer">
+                    <button className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white">
+                      <MessageCircle className="w-5 h-5" />
+                      WhatsApp Us
+                    </button>
+                  </a>
+                </div>
+              </motion.div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 

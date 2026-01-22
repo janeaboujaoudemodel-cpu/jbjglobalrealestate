@@ -244,45 +244,51 @@ const Partners = () => {
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+        {/* CTA Section - 3-Layer System */}
+        <section className="py-16 md:py-20 bg-black">
           <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-3xl font-bold text-black mb-4">Need Assistance?</h2>
-              <p className="text-zinc-600 mb-8">
-                Whether you're buying, selling, renting, or need a partner introduction, 
-                our team is here to help guide you through the process.
-              </p>
-              
-              <div className="flex flex-wrap justify-center gap-4">
-                <Link to="/properties">
-                  <button 
-                    className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
-                    style={{
-                      background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
-                      boxShadow: `
-                        0 10px 30px rgba(200,167,102,0.4),
-                        0 6px 15px rgba(0,0,0,0.2),
-                        inset 0 2px 4px rgba(255,255,255,0.9),
-                        inset 0 -2px 4px rgba(200,167,102,0.2),
-                        0 0 20px rgba(200,167,102,0.3)
-                      `,
-                    }}
-                  >
-                    <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                    <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-                    <span className="relative flex items-center gap-2">
-                      <span className="text-gold">Browse</span>
-                      <span className="text-black">Properties</span>
-                      <ArrowUpRight className="w-5 h-5 text-black" />
-                    </span>
-                  </button>
-                </Link>
-                <Link to="/contact">
-                  <button className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white group">
-                    Contact Us
-                  </button>
-                </Link>
+            <div className="max-w-[1100px] mx-auto">
+              {/* OUTER CARD (Active Champagne) */}
+              <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
+                {/* INNER CARD (Pearl) */}
+                <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center">
+                  <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">Need <span className="text-gold">Assistance?</span></h2>
+                  <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
+                    Whether you're buying, selling, renting, or need a partner introduction, 
+                    our team is here to help guide you through the process.
+                  </p>
+                  
+                  <div className="flex flex-wrap justify-center gap-4">
+                    <Link to="/properties">
+                      <button 
+                        className="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] group"
+                        style={{
+                          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                          boxShadow: `
+                            0 10px 30px rgba(200,167,102,0.4),
+                            0 6px 15px rgba(0,0,0,0.2),
+                            inset 0 2px 4px rgba(255,255,255,0.9),
+                            inset 0 -2px 4px rgba(200,167,102,0.2),
+                            0 0 20px rgba(200,167,102,0.3)
+                          `,
+                        }}
+                      >
+                        <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                        <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                        <span className="relative flex items-center gap-1">
+                          <span className="text-black group-hover:text-gold transition-colors">Browse</span>
+                          <span className="text-gold group-hover:text-black transition-colors">Properties</span>
+                          <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                        </span>
+                      </button>
+                    </Link>
+                    <Link to="/contact">
+                      <button className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white">
+                        Contact Us
+                      </button>
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

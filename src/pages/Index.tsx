@@ -735,80 +735,73 @@ const Index = () => {
       {/* Stats Counter Section */}
       <StatsCounter />
 
-      {/* Contact CTA Section - Premium Champagne Design */}
-      <section className="py-20 md:py-28 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] relative overflow-hidden">
-        <div className="container mx-auto px-4 relative z-10">
-          <motion.div 
-            className="text-center max-w-3xl mx-auto"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            {/* Premium badge with glow */}
-            <motion.span 
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-gold/20 via-[#F5F0E6] to-gold/20 border border-gold/50 rounded-full text-black text-xs uppercase tracking-[0.2em] mb-6 shadow-lg shadow-gold/20"
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              <Sparkles className="w-3 h-3 text-gold animate-pulse" />
-              Begin Your Journey
-            </motion.span>
-            
-            <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Ready to <span className="text-gold">Get Started?</span>
-            </h3>
-            <p className="text-zinc-600 text-base md:text-lg mb-10 leading-relaxed max-w-xl mx-auto">
-              Connect with our expert team to explore exclusive opportunities in Dubai's premier real estate market.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <button 
-                onClick={() => setIsInquiryOpen(true)}
-                className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group"
-                style={{
-                  boxShadow: `
-                    0 10px 30px rgba(200,167,102,0.4),
-                    0 6px 15px rgba(0,0,0,0.2),
-                    inset 0 2px 4px rgba(255,255,255,0.9),
-                    inset 0 -2px 4px rgba(200,167,102,0.2),
-                    0 0 20px rgba(200,167,102,0.3)
-                  `,
-                }}
+      {/* Contact CTA Section - 3-Layer System: Black > Active Champagne > Pearl Card */}
+      <section className="py-16 md:py-20 bg-black">
+        <div className="container mx-auto px-4">
+          <div className="max-w-[1100px] mx-auto">
+            {/* OUTER CARD (Active Champagne) */}
+            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
+              {/* INNER CARD (Pearl) */}
+              <motion.div 
+                className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
               >
-                <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
-                <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-                <span className="relative flex items-center justify-center gap-2">
-                  <Calendar className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
-                  <span className="text-black group-hover:text-gold transition-colors">Book</span>
-                  <span className="text-gold group-hover:text-black transition-colors">Consultation</span>
-                  <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
-                </span>
-              </button>
-              <Link to="/properties">
-                <button 
-                  className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
-                  style={{
-                    background: 'transparent',
-                    border: '2px solid #000',
-                    boxShadow: `
-                      0 6px 20px rgba(0,0,0,0.15),
-                      0 4px 10px rgba(0,0,0,0.1),
-                      inset 0 1px 2px rgba(255,255,255,0.5)
-                    `,
-                  }}
+                {/* Premium badge with glow */}
+                <motion.span 
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-gold/20 via-[#F5F0E6] to-gold/20 border border-gold/50 rounded-full text-black text-xs uppercase tracking-[0.2em] mb-6 shadow-lg shadow-gold/20"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.2 }}
                 >
-                  <span className="absolute inset-x-0 top-0 h-1/3 rounded-t-xl bg-gradient-to-b from-white/20 to-transparent pointer-events-none" />
-                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none bg-black" />
-                  <span className="relative flex items-center justify-center gap-2 text-black group-hover:text-white transition-colors duration-300">
-                    Browse Properties
-                    <ArrowUpRight className="w-5 h-5" />
-                  </span>
-                </button>
-              </Link>
+                  <Sparkles className="w-3 h-3 text-gold animate-pulse" />
+                  Begin Your Journey
+                </motion.span>
+                
+                <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  Ready to <span className="text-gold">Get Started?</span>
+                </h3>
+                <p className="text-zinc-600 text-sm md:text-base lg:text-lg mb-8 leading-relaxed max-w-xl mx-auto">
+                  Connect with our expert team to explore exclusive opportunities in Dubai's premier real estate market.
+                </p>
+                <div className="flex flex-col sm:flex-row justify-center gap-4">
+                  <button 
+                    onClick={() => setIsInquiryOpen(true)}
+                    className="relative inline-flex items-center justify-center gap-2 px-8 md:px-10 py-4 md:py-5 text-sm md:text-base font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] transform active:scale-95 group"
+                    style={{
+                      background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                      boxShadow: `
+                        0 10px 30px rgba(200,167,102,0.4),
+                        0 6px 15px rgba(0,0,0,0.2),
+                        inset 0 2px 4px rgba(255,255,255,0.9),
+                        inset 0 -2px 4px rgba(200,167,102,0.2),
+                        0 0 20px rgba(200,167,102,0.3)
+                      `,
+                    }}
+                  >
+                    <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                    <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                    <span className="relative flex items-center justify-center gap-1">
+                      <Calendar className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
+                      <span className="text-black group-hover:text-gold transition-colors">Book</span>
+                      <span className="text-gold group-hover:text-black transition-colors">Consultation</span>
+                      <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                    </span>
+                  </button>
+                  <Link to="/properties">
+                    <button 
+                      className="inline-flex items-center justify-center gap-2 px-8 md:px-10 py-4 md:py-5 text-sm md:text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white group"
+                    >
+                      Browse Properties
+                      <ArrowUpRight className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    </button>
+                  </Link>
+                </div>
+              </motion.div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
