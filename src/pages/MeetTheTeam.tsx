@@ -69,7 +69,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
   return (
     <motion.div variants={fadeInUp} className="min-w-[280px]">
       <Card 
-        className={`bg-gradient-to-br from-[#FFFDF9] via-[#FBF7F0] to-[#F5EFE4] border-2 border-gold shadow-[0_0_20px_rgba(200,167,102,0.2)] hover:shadow-[0_0_25px_rgba(200,167,102,0.35),0_22px_60px_rgba(0,0,0,0.45)] hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 overflow-hidden group h-full ${isInternalUser ? 'cursor-pointer' : ''}`}
+        className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold shadow-[0_0_20px_rgba(200,167,102,0.2)] hover:shadow-[0_0_25px_rgba(200,167,102,0.35),0_22px_60px_rgba(0,0,0,0.45)] hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 overflow-hidden group h-full ${isInternalUser ? 'cursor-pointer' : ''}`}
         onClick={handleCardClick}
       >
         <CardContent className="p-0">
@@ -95,7 +95,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
           </div>
 
           {/* Info - Positioned below photo, not overlapping */}
-          <div className="p-5 flex flex-col bg-gradient-to-b from-[#FFFDF9] via-[#FBF7F0] to-[#F5EFE4]">
+          <div className="p-5 flex flex-col bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
             <h3 className="text-black font-semibold text-lg mb-1">{member.name}</h3>
 
             {/* Premium shiny job title - allow wrapping */}
@@ -297,7 +297,7 @@ const MeetTheTeam: React.FC = () => {
               className="text-center max-w-4xl mx-auto"
             >
               <motion.div variants={fadeInUp} className="mb-6">
-                <Badge className="bg-gradient-to-r from-[#FFFDF9] via-[#FBF7F0] to-[#F5EFE4] text-gold border-gold/40 px-4 py-1.5 shadow-md">
+                <Badge className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-gold border-gold/40 px-4 py-1.5 shadow-md">
                   <Users className="w-3.5 h-3.5 mr-1.5" />
                   Our Team
                 </Badge>
@@ -390,7 +390,7 @@ const MeetTheTeam: React.FC = () => {
                           variants={fadeInUp}
                           className="flex items-center gap-3 mb-4"
                         >
-                          <div className="w-10 h-10 bg-gradient-to-br from-[#FFFDF9] to-[#F5EFE4] border border-gold/40 rounded-lg flex items-center justify-center">
+                      <div className="w-10 h-10 bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border border-gold/40 rounded-lg flex items-center justify-center">
                             <Building2 className="w-5 h-5 text-gold" />
                           </div>
                           <div>
@@ -465,7 +465,7 @@ const MeetTheTeam: React.FC = () => {
                       variants={fadeInUp}
                       className="flex items-center gap-3 mb-4"
                     >
-                      <div className="w-10 h-10 bg-gradient-to-br from-[#FFFDF9] to-[#F5EFE4] border border-gold/40 rounded-lg flex items-center justify-center">
+                      <div className="w-10 h-10 bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border border-gold/40 rounded-lg flex items-center justify-center">
                         <Building2 className="w-5 h-5 text-gold" />
                       </div>
                       <div>
