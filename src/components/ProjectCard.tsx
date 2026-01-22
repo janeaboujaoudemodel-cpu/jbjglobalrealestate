@@ -86,7 +86,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   };
 
   return (
-    <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold hover:shadow-xl hover:shadow-gold/30 transition-all duration-300 flex flex-col">
+    <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:shadow-[0_12px_40px_rgba(200,167,102,0.35),0_8px_25px_rgba(0,0,0,0.15)] hover:-translate-y-2 transition-all duration-300 flex flex-col">
       {/* Favorite Button */}
       {showFavorite && (
         <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
