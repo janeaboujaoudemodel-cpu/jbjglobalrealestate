@@ -721,7 +721,6 @@ END:VCARD`;
                 </Form>
               </div>
             )}
-            </div>
           </div>
         </div>
       </section>
