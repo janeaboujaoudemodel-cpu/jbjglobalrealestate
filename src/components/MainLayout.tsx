@@ -5,6 +5,7 @@ import AIChatWidget from "@/components/AIChatWidget";
 import MarketingScripts from "@/components/marketing/MarketingScripts";
 import SecurityShield from "@/components/SecurityShield";
 import PopupLayer from "@/components/PopupLayer";
+import CommandPaletteRoot from "@/components/ui/command-palette-root";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -115,6 +116,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     <div className="min-h-screen bg-black">
       <SecurityShield />
       <MarketingScripts />
+      <CommandPaletteRoot />
       <GlobalHeader />
       {/* Match content offset to exact fixed header height: h-16 mobile, h-20 desktop */}
       <main className="pt-16 lg:pt-20">
