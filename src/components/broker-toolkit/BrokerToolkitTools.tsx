@@ -470,14 +470,24 @@ export function BrokerToolkitTools() {
           {TOOLS.map((tool, i) => renderBulkToolCard(tool, i))}
         </div>
 
-        {/* CATEGORY BREAKDOWN - filled cards by category color */}
+        {/* CATEGORY BREAKDOWN - Active color layer with filled cards */}
         <div className="mt-14 space-y-12">
           {CATEGORY_ORDER.map((category) => {
             const meta = CATEGORY_META[category];
             const items = TOOLS.filter((t) => t.category === category);
 
+            // Get category-specific background color for the active layer
+            const categoryBgMap: Record<ToolCategory, string> = {
+              property: 'bg-gradient-to-br from-purple-900/90 via-purple-900/80 to-purple-950/90 border-purple-500/30',
+              marketing: 'bg-gradient-to-br from-emerald-900/90 via-emerald-900/80 to-emerald-950/90 border-emerald-500/30',
+              documents: 'bg-gradient-to-br from-teal-900/90 via-teal-900/80 to-teal-950/90 border-teal-500/30',
+              design: 'bg-gradient-to-br from-pink-900/90 via-pink-900/80 to-pink-950/90 border-pink-500/30',
+              productivity: 'bg-gradient-to-br from-indigo-900/90 via-indigo-900/80 to-indigo-950/90 border-indigo-500/30',
+              operations: 'bg-gradient-to-br from-cyan-900/90 via-cyan-900/80 to-cyan-950/90 border-cyan-500/30',
+            };
+
             return (
-              <div key={category}>
+              <div key={category} className={`${categoryBgMap[category]} border rounded-2xl p-4 sm:p-6 shadow-lg`}>
                 <div className="text-center mb-8">
                   <Badge className={`${meta.badgeClass} mb-3`}>{meta.label} {meta.coloredLabel}</Badge>
                   <h3 className="text-2xl md:text-3xl font-bold">

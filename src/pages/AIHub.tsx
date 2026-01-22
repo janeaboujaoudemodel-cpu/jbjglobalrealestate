@@ -663,46 +663,57 @@ const AIHub = () => {
         {/* Gold Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
-        {/* CATEGORY SECTIONS - Filled cards matching Broker Hub */}
+        {/* CATEGORY SECTIONS - Active color layer with filled cards */}
         {(['property', 'productivity', 'design', 'marketing'] as ToolCategory[]).map((category) => {
           const meta = CATEGORY_META[category];
           const categoryTools = toolsByCategory[category] || [];
           if (categoryTools.length === 0) return null;
 
+          // Get category-specific background color for the active layer
+          const categoryBgMap: Record<ToolCategory, string> = {
+            property: 'bg-gradient-to-br from-purple-900/90 via-purple-900/80 to-purple-950/90',
+            productivity: 'bg-gradient-to-br from-blue-900/90 via-blue-900/80 to-blue-950/90',
+            design: 'bg-gradient-to-br from-pink-900/90 via-pink-900/80 to-pink-950/90',
+            marketing: 'bg-gradient-to-br from-emerald-900/90 via-emerald-900/80 to-emerald-950/90',
+          };
+
           return (
             <section key={category} id={category === 'property' ? 'investor-tools' : `${category}-tools`} className="py-16 md:py-20 bg-black">
-              <div className="container mx-auto px-4">
-                <motion.div
-                  className="text-center mb-12"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                >
-                  <Badge className={`${meta.badgeClass} mb-4`}>
-                    <Sparkles className="w-3 h-3 mr-1" />
-                    {meta.label} {meta.coloredLabel}
-                  </Badge>
-                  <h2 className="text-2xl md:text-3xl font-bold mb-2">
-                    <span className="text-white">{meta.label} </span>
-                    <span className={meta.iconClass}>{meta.coloredLabel}</span>
-                  </h2>
-                  <p className="text-zinc-400 max-w-2xl mx-auto">
-                    {category === 'property' && "Powerful AI tools for property analysis, valuation, and investment decisions."}
-                    {category === 'productivity' && "Video meetings, documents, calendar, and signing tools."}
-                    {category === 'design' && "Creative tools for interior design and visual content."}
-                    {category === 'marketing' && "Marketing and content creation tools."}
-                  </p>
-                </motion.div>
+              <div className="container mx-auto px-3 sm:px-4">
+                {/* Active Color Layer - Category-specific */}
+                <div className={`${categoryBgMap[category]} border border-${category === 'property' ? 'purple' : category === 'productivity' ? 'blue' : category === 'design' ? 'pink' : 'emerald'}-500/30 rounded-2xl p-4 sm:p-6 shadow-lg`}>
+                  <motion.div
+                    className="text-center mb-8"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                  >
+                    <Badge className={`${meta.badgeClass} mb-4`}>
+                      <Sparkles className="w-3 h-3 mr-1" />
+                      {meta.label} {meta.coloredLabel}
+                    </Badge>
+                    <h2 className="text-2xl md:text-3xl font-bold mb-2">
+                      <span className="text-white">{meta.label} </span>
+                      <span className={meta.iconClass}>{meta.coloredLabel}</span>
+                    </h2>
+                    <p className="text-white/70 max-w-2xl mx-auto">
+                      {category === 'property' && "Powerful AI tools for property analysis, valuation, and investment decisions."}
+                      {category === 'productivity' && "Video meetings, documents, calendar, and signing tools."}
+                      {category === 'design' && "Creative tools for interior design and visual content."}
+                      {category === 'marketing' && "Marketing and content creation tools."}
+                    </p>
+                  </motion.div>
 
-                <motion.div 
-                  className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={staggerContainer}
-                >
-                  {categoryTools.map((tool, idx) => renderCategoryToolCard(tool, idx))}
-                </motion.div>
+                  <motion.div 
+                    className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={staggerContainer}
+                  >
+                    {categoryTools.map((tool, idx) => renderCategoryToolCard(tool, idx))}
+                  </motion.div>
+                </div>
               </div>
 
               {/* Gold Divider */}

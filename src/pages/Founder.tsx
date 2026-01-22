@@ -385,135 +385,133 @@ const Founder = () => {
         </div>
       </section>
 
-      {/* DETAILED BIOGRAPHY */}
-      <section className="py-24 md:py-32 bg-gradient-to-b from-black via-zinc-950/30 to-black relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.02]">
-          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #A8925A 1px, transparent 0)', backgroundSize: '40px 40px' }} />
-        </div>
-        
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            <motion.div className="text-center mb-16" variants={fadeInUp}>
-              <span className="text-gold text-sm uppercase tracking-[0.4em]">Biography</span>
-              <GoldLine className="w-32 mx-auto mt-4 mb-8" />
-              <h2 
-                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                The Full <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Story</span>
-              </h2>
-            </motion.div>
-
-            <motion.div 
-              className="max-w-4xl mx-auto space-y-8 text-zinc-300 leading-relaxed"
-              variants={fadeInUp}
+      {/* DETAILED BIOGRAPHY - 3-Layer System */}
+      <section className="py-24 md:py-32 bg-black relative overflow-hidden">
+        <div className="container mx-auto px-3 sm:px-4 lg:px-8 relative z-10">
+          {/* Active Champagne Layer */}
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={staggerContainer}
             >
-              <div className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 md:p-12">
-                <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
-                  <BookOpen className="w-6 h-6" />
-                  Origins & Early Entrepreneurship
-                </h3>
-                <p className="text-lg mb-4">
-                  Jane Abou Jaoude was born on August 25, 1998, in Lebanon. Fluent in French and Arabic from childhood, she later taught herself English and Spanish—developing a global perspective from an early age.
-                </p>
-                <p className="text-lg mb-4 text-zinc-400">
-                  At 16, Jane launched Jane's Beauty in 2015, offering beauty services while also selling products via importing and shipping from China. Active on social media since 2012, she built a following that now exceeds 1M+ across platforms.
-                </p>
-                <p className="text-lg text-zinc-400">
-                  With 12+ years of experience in sales, customer experience, and business development, these early ventures taught her the fundamentals of service excellence and client relationships.
-                </p>
-              </div>
+              <motion.div className="text-center mb-12" variants={fadeInUp}>
+                <span className="text-gold text-sm uppercase tracking-[0.4em] drop-shadow-sm">Biography</span>
+                <div className="w-32 mx-auto mt-4 mb-8 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+                <h2 
+                  className="text-black text-4xl md:text-5xl lg:text-6xl font-bold"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  The Full <span className="text-gold">Story</span>
+                </h2>
+              </motion.div>
 
-              <div className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 md:p-12">
-                <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
-                  <TrendingUp className="w-6 h-6" />
-                  The Dubai Chapter
-                </h3>
-                <p className="text-lg mb-4">
-                  In 2020, Jane relocated to Dubai and began building her career and network in the UAE. She started her real estate career with DAMAC in 2021, gaining valuable exposure to the Dubai property market.
-                </p>
-                <p className="text-lg mb-4 text-zinc-400">
-                  From 2021–2022, she served as Head of Quality & Operations at Al-Ghazal Transportation Company, a luxury B2B transportation and hospitality services provider. Managing teams of 495+ employees, she trained coordinators and drivers while implementing service standards and KPIs.
-                </p>
-                <p className="text-lg text-zinc-400">
-                  This corporate leadership experience provided invaluable insights into operations management, team building, and institutional standards—skills that would later define JBJ Global Real Estate's approach to excellence.
-                </p>
-              </div>
+              <motion.div 
+                className="max-w-4xl mx-auto space-y-6"
+                variants={fadeInUp}
+              >
+                {/* Pearl Inner Cards */}
+                <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-sm">
+                  <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
+                    <BookOpen className="w-6 h-6" />
+                    Origins & Early Entrepreneurship
+                  </h3>
+                  <p className="text-lg mb-4 text-black">
+                    Jane Abou Jaoude was born on August 25, 1998, in Lebanon. Fluent in French and Arabic from childhood, she later taught herself English and Spanish—developing a global perspective from an early age.
+                  </p>
+                  <p className="text-lg mb-4 text-zinc-600">
+                    At 16, Jane launched Jane's Beauty in 2015, offering beauty services while also selling products via importing and shipping from China. Active on social media since 2012, she built a following that now exceeds 1M+ across platforms.
+                  </p>
+                  <p className="text-lg text-zinc-600">
+                    With 12+ years of experience in sales, customer experience, and business development, these early ventures taught her the fundamentals of service excellence and client relationships.
+                  </p>
+                </div>
 
-              <div className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 md:p-12">
-                <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
-                  <Users className="w-6 h-6" />
-                  Brokerage Training & Development
-                </h3>
-                <p className="text-lg mb-4">
-                  From 2022–2024, Jane worked with a brokerage company to develop the business across divisions including marketing, projects, sales, objection handling, and training brokers and teams. She has trained 2,800+ brokers through her intensive programs.
-                </p>
-                <p className="text-lg mb-4 text-zinc-400">
-                  In 2025–2026, she worked with Sobha Realty, supporting real estate growth through structured sales and client experience systems.
-                </p>
-                <p className="text-lg text-zinc-400">
-                  In 2025, Jane founded JBJ Global Real Estate — a Dubai-based real estate brokerage specializing in property sales and rental services across the UAE.
-                </p>
-              </div>
+                <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-sm">
+                  <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
+                    <TrendingUp className="w-6 h-6" />
+                    The Dubai Chapter
+                  </h3>
+                  <p className="text-lg mb-4 text-black">
+                    In 2020, Jane relocated to Dubai and began building her career and network in the UAE. She started her real estate career with DAMAC in 2021, gaining valuable exposure to the Dubai property market.
+                  </p>
+                  <p className="text-lg mb-4 text-zinc-600">
+                    From 2021–2022, she served as Head of Quality & Operations at Al-Ghazal Transportation Company, a luxury B2B transportation and hospitality services provider. Managing teams of 495+ employees, she trained coordinators and drivers while implementing service standards and KPIs.
+                  </p>
+                  <p className="text-lg text-zinc-600">
+                    This corporate leadership experience provided invaluable insights into operations management, team building, and institutional standards—skills that would later define JBJ Global Real Estate's approach to excellence.
+                  </p>
+                </div>
 
-              <div className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 md:p-12">
-                <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
-                  <Award className="w-6 h-6" />
-                  Leadership Philosophy
-                </h3>
-                <p className="text-lg mb-4">
-                  Jane's approach to business emphasizes quality over quantity, discretion over publicity, and long-term value over short-term gains.
-                </p>
-                <p className="text-lg text-zinc-400">
-                  Her leadership philosophy has become a model for founder-led enterprises in the region. Today, JBJ Global Real Estate 
-                  serves UAE-based and international clients seeking premium property solutions in the Emirates.
-                </p>
-              </div>
+                <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-sm">
+                  <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
+                    <Users className="w-6 h-6" />
+                    Brokerage Training & Development
+                  </h3>
+                  <p className="text-lg mb-4 text-black">
+                    From 2022–2024, Jane worked with a brokerage company to develop the business across divisions including marketing, projects, sales, objection handling, and training brokers and teams. She has trained 2,800+ brokers through her intensive programs.
+                  </p>
+                  <p className="text-lg mb-4 text-zinc-600">
+                    In 2025–2026, she worked with Sobha Realty, supporting real estate growth through structured sales and client experience systems.
+                  </p>
+                  <p className="text-lg text-zinc-600">
+                    In 2025, Jane founded JBJ Global Real Estate — a Dubai-based real estate brokerage specializing in property sales and rental services across the UAE.
+                  </p>
+                </div>
+
+                <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-sm">
+                  <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
+                    <Award className="w-6 h-6" />
+                    Leadership Philosophy
+                  </h3>
+                  <p className="text-lg mb-4 text-black">
+                    Jane's approach to business emphasizes quality over quantity, discretion over publicity, and long-term value over short-term gains.
+                  </p>
+                  <p className="text-lg text-zinc-600">
+                    Her leadership philosophy has become a model for founder-led enterprises in the region. Today, JBJ Global Real Estate 
+                    serves UAE-based and international clients seeking premium property solutions in the Emirates.
+                  </p>
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* AWARDS & RECOGNITION */}
-      <section className="py-24 md:py-32 bg-gradient-to-b from-black via-zinc-950 to-black relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.02]">
-          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #A8925A 1px, transparent 0)', backgroundSize: '48px 48px' }} />
-        </div>
-        
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            <motion.div className="text-center mb-16" variants={fadeInUp}>
-              <span className="text-gold text-sm uppercase tracking-[0.4em]">Recognition</span>
-              <GoldLine className="w-32 mx-auto mt-4 mb-8" />
-              <h2 
-                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                Awards & <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Achievements</span>
-              </h2>
-              <p className="text-zinc-400 text-lg mt-6 max-w-2xl mx-auto">
-                Recognized globally for excellence in leadership and innovation
-              </p>
-            </motion.div>
+      {/* AWARDS & RECOGNITION - 3-Layer System */}
+      <section className="py-24 md:py-32 bg-black relative overflow-hidden">
+        <div className="container mx-auto px-3 sm:px-4 lg:px-8 relative z-10">
+          {/* Active Champagne Layer */}
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={staggerContainer}
+            >
+              <motion.div className="text-center mb-12" variants={fadeInUp}>
+                <span className="text-gold text-sm uppercase tracking-[0.4em] drop-shadow-sm">Recognition</span>
+                <div className="w-32 mx-auto mt-4 mb-8 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+                <h2 
+                  className="text-black text-4xl md:text-5xl lg:text-6xl font-bold"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  Awards & <span className="text-gold">Achievements</span>
+                </h2>
+                <p className="text-zinc-600 text-lg mt-6 max-w-2xl mx-auto">
+                  Recognized globally for excellence in leadership and innovation
+                </p>
+              </motion.div>
 
-            {/* Awards Grid */}
+            {/* Awards Grid - Pearl Inner Cards */}
             <motion.div 
-              className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-4"
               variants={staggerContainer}
             >
               {/* GCA Award 2025 */}
               <motion.div 
-                className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
+                className="group relative aspect-[4/5] rounded-xl overflow-hidden border-2 border-gold/40 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] hover:border-gold transition-all duration-500 shadow-sm"
                 variants={scaleIn}
               >
                 <SafeImage 
@@ -523,10 +521,10 @@ const Founder = () => {
                   className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
-                <div className="absolute bottom-0 left-0 right-0 p-6">
+                <div className="absolute bottom-0 left-0 right-0 p-5">
                   <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">2025</span>
                   <h4 className="text-white text-lg font-semibold mb-1">Global Cinema Award (GCA)</h4>
-                  <p className="text-zinc-400 text-sm">Excellence in Innovation</p>
+                  <p className="text-zinc-300 text-sm">Excellence in Innovation</p>
                 </div>
               </motion.div>
 
@@ -686,6 +684,7 @@ const Founder = () => {
               </motion.div>
             </motion.div>
           </motion.div>
+          </div>
         </div>
       </section>
 
@@ -866,65 +865,68 @@ const Founder = () => {
         </div>
       </section>
 
-      {/* CAREER TIMELINE */}
-      <section className="py-24 md:py-32 relative overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            <motion.div className="text-center mb-16" variants={fadeInUp}>
-              <span className="text-gold text-sm uppercase tracking-[0.4em]">Journey</span>
-              <GoldLine className="w-32 mx-auto mt-4 mb-8" />
-              <h2 
-                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                Career <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Timeline</span>
-              </h2>
-            </motion.div>
-
-            <div className="max-w-4xl mx-auto relative">
-              {/* Timeline line */}
-              <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-gold/50 via-gold/30 to-gold/50" />
-              
-              {careerTimeline.map((item, index) => (
-                <motion.div
-                  key={item.year}
-                  className={`relative flex items-start gap-8 mb-12 ${
-                    index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
-                  }`}
-                  variants={fadeInUp}
+      {/* CAREER TIMELINE - 3-Layer System */}
+      <section className="py-24 md:py-32 bg-black relative overflow-hidden">
+        <div className="container mx-auto px-3 sm:px-4 lg:px-8">
+          {/* Active Champagne Layer */}
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={staggerContainer}
+            >
+              <motion.div className="text-center mb-12" variants={fadeInUp}>
+                <span className="text-gold text-sm uppercase tracking-[0.4em] drop-shadow-sm">Journey</span>
+                <div className="w-32 mx-auto mt-4 mb-8 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+                <h2 
+                  className="text-black text-4xl md:text-5xl lg:text-6xl font-bold"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
                 >
-                  {/* Timeline dot */}
-                  <div className="absolute left-8 md:left-1/2 -translate-x-1/2 w-4 h-4 bg-gold rounded-full border-4 border-black shadow-lg shadow-gold/30 z-10" />
-                  
-                  {/* Year badge - mobile */}
-                  <div className="md:hidden pl-16 flex items-center gap-4 mb-4">
-                    <span className="text-gold font-bold text-xl">{item.year}</span>
-                  </div>
-                  
-                  {/* Content card */}
-                  <div className={`flex-1 ${index % 2 === 0 ? 'md:pr-16 md:text-right' : 'md:pl-16'} pl-16 md:pl-0`}>
-                    <div className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-2xl p-6 hover:border-gold/30 transition-colors">
-                      <span className="hidden md:inline-block text-gold font-bold text-xl mb-2">{item.year}</span>
-                      <h4 className="text-white text-lg font-semibold mb-2">{item.title}</h4>
-                      <p className="text-zinc-400 text-sm mb-3">{item.description}</p>
-                      <div className={`flex items-center gap-2 text-zinc-500 text-xs ${index % 2 === 0 ? 'md:justify-end' : ''}`}>
-                        <MapPin className="w-3 h-3" />
-                        {item.location}
+                  Career <span className="text-gold">Timeline</span>
+                </h2>
+              </motion.div>
+
+              <div className="max-w-4xl mx-auto relative">
+                {/* Timeline line */}
+                <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-gold/70 via-gold/50 to-gold/70" />
+                
+                {careerTimeline.map((item, index) => (
+                  <motion.div
+                    key={item.year}
+                    className={`relative flex items-start gap-8 mb-8 ${
+                      index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                    }`}
+                    variants={fadeInUp}
+                  >
+                    {/* Timeline dot */}
+                    <div className="absolute left-8 md:left-1/2 -translate-x-1/2 w-4 h-4 bg-gold rounded-full border-4 border-white shadow-lg shadow-gold/30 z-10" />
+                    
+                    {/* Year badge - mobile */}
+                    <div className="md:hidden pl-16 flex items-center gap-4 mb-4">
+                      <span className="text-gold font-bold text-xl">{item.year}</span>
+                    </div>
+                    
+                    {/* Content card - Pearl Style */}
+                    <div className={`flex-1 ${index % 2 === 0 ? 'md:pr-16 md:text-right' : 'md:pl-16'} pl-16 md:pl-0`}>
+                      <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-5 hover:border-gold transition-colors shadow-sm">
+                        <span className="hidden md:inline-block text-gold font-bold text-xl mb-2">{item.year}</span>
+                        <h4 className="text-black text-lg font-semibold mb-2">{item.title}</h4>
+                        <p className="text-zinc-600 text-sm mb-3">{item.description}</p>
+                        <div className={`flex items-center gap-2 text-zinc-500 text-xs ${index % 2 === 0 ? 'md:justify-end' : ''}`}>
+                          <MapPin className="w-3 h-3" />
+                          {item.location}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  
-                  {/* Spacer for desktop alternating layout */}
-                  <div className="hidden md:block flex-1" />
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+                    
+                    {/* Spacer for desktop alternating layout */}
+                    <div className="hidden md:block flex-1" />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
