@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Building2, Gem, Film, Mail, Phone, ExternalLink, Award, Globe, Users, TrendingUp, Star, MessageCircle, Calendar, MapPin, Mic, Video, Newspaper, BookOpen, Download, GraduationCap } from "lucide-react";
+import { ArrowUpRight, Building2, Gem, Film, Mail, Phone, ExternalLink, Award, Globe, Users, TrendingUp, Star, MessageCircle, Calendar, MapPin, Mic, Video, Newspaper, BookOpen, Download, GraduationCap, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import Footer from "@/components/Footer";
 import { SafeImage } from "@/components/SafeImage";
@@ -1393,115 +1393,134 @@ const Founder = () => {
         </div>
       </section>
 
-      {/* FINAL CTA - JBJ GLOBAL REAL ESTATE - Reduced gap */}
-      <section className="py-16 md:py-24 bg-gradient-to-b from-black via-zinc-950/50 to-black border-t border-gold/10 relative overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-24 bg-gradient-to-b from-gold to-transparent" />
+      {/* FINAL CTA - 3-Layer System: Black > Active Champagne > Pearl */}
+      <section className="py-16 sm:py-20 bg-black relative overflow-hidden">
+        {/* Background effects */}
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gold/5 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-gold/5 rounded-full blur-3xl" />
         
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div 
-            className="max-w-5xl mx-auto text-center"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            <motion.div className="mb-8" variants={fadeInUp}>
-              <span className="text-gold text-sm uppercase tracking-[0.4em]">Get in Touch</span>
-              <GoldLine className="w-32 mx-auto mt-4" />
-            </motion.div>
-            
-            <motion.h2 
-              className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-              variants={fadeInUp}
-            >
-              Connect with <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">JBJ Global Real Estate</span>
-            </motion.h2>
-            
-            <motion.p 
-              className="text-zinc-400 text-lg md:text-xl mb-10 max-w-3xl mx-auto"
-              variants={fadeInUp}
-            >
-              For property inquiries, partnership discussions, collaboration, or career opportunities, we welcome your correspondence.
-            </motion.p>
+          <div className="max-w-[1100px] mx-auto">
+            {/* OUTER CARD - Active Champagne Layer */}
+            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
+              {/* INNER CARD - Pearl Layer */}
+              <motion.div 
+                className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-10 md:p-14 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={staggerContainer}
+              >
+                {/* Badge */}
+                <motion.div 
+                  className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F5F0E6] to-gold/20 border border-gold/50 rounded-full text-black text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20"
+                  variants={fadeInUp}
+                >
+                  <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gold" />
+                  Get in Touch
+                </motion.div>
+                
+                <motion.h2 
+                  className="text-black text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                  variants={fadeInUp}
+                >
+                  Connect with <span className="text-gold">JBJ Global Real Estate</span>
+                </motion.h2>
+                
+                <motion.p 
+                  className="text-zinc-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-6 sm:mb-10"
+                  variants={fadeInUp}
+                >
+                  For property inquiries, partnership discussions, collaboration, or career opportunities, we welcome your correspondence.
+                </motion.p>
 
-            <motion.div 
-              className="flex flex-wrap justify-center gap-4 md:gap-5 mb-12"
-              variants={fadeInUp}
-            >
-              <Link 
-                to="/contact"
-                className="inline-flex items-center gap-3 bg-gradient-to-r from-gold via-[#D4B96A] to-gold text-black font-semibold px-10 py-4 rounded-2xl hover:opacity-90 transition-all duration-300 shadow-xl shadow-gold/40 hover:shadow-gold/50 hover:scale-[1.03]"
-              >
-                Connect <ArrowUpRight className="w-5 h-5" />
-              </Link>
-              <a 
-                href="mailto:Contact@JBJ.ae"
-                className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
-              >
-                Partnership <ArrowUpRight className="w-5 h-5" />
-              </a>
-              <a 
-                href="mailto:Contact@JBJ.ae"
-                className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
-              >
-                Collaboration <ArrowUpRight className="w-5 h-5" />
-              </a>
-              <a 
-                href="mailto:Contact@JBJ.ae"
-                className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
-              >
-                Careers <ArrowUpRight className="w-5 h-5" />
-              </a>
-            </motion.div>
+                <motion.div 
+                  className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-8 sm:mb-10"
+                  variants={fadeInUp}
+                >
+                  {/* Primary Button - Connect */}
+                  <Link 
+                    to="/contact"
+                    className="relative w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-10 py-4 sm:py-5 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
+                    style={{
+                      background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                      boxShadow: `
+                        0 10px 30px rgba(200,167,102,0.4),
+                        0 6px 15px rgba(0,0,0,0.2),
+                        inset 0 2px 4px rgba(255,255,255,0.9),
+                        inset 0 -2px 4px rgba(200,167,102,0.2),
+                        0 0 20px rgba(200,167,102,0.3)
+                      `,
+                    }}
+                  >
+                    <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                    <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                    <span className="relative flex items-center gap-1">
+                      <span className="text-black group-hover:text-gold transition-colors">Connect</span>
+                    </span>
+                    <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-gold group-hover:text-black transition-colors relative z-10" />
+                  </Link>
 
-            <motion.div 
-              className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-10"
-              variants={fadeInUp}
-            >
-              <a 
-                href={getEmailUrl()} 
-                className="hover:text-gold transition-colors flex items-center gap-3 group"
-              >
-                <div className="w-11 h-11 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-gold/50 group-hover:scale-110 transition-all">
-                  <Mail className="w-5 h-5 text-gold" />
-                </div>
-                <span className="text-zinc-300">{CONTACT_INFO.emailCapitalized}</span>
-              </a>
-              <a 
-                href={`mailto:${CONTACT_INFO.privacyEmail}`} 
-                className="hover:text-gold transition-colors flex items-center gap-3 group"
-              >
-                <div className="w-11 h-11 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-gold/50 group-hover:scale-110 transition-all">
-                  <Mail className="w-5 h-5 text-gold" />
-                </div>
-                <span className="text-zinc-300">{CONTACT_INFO.privacyEmail}</span>
-              </a>
-              <a 
-                href={getCallUrl()} 
-                className="hover:text-gold transition-colors flex items-center gap-3 group"
-              >
-                <div className="w-11 h-11 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-gold/50 group-hover:scale-110 transition-all">
-                  <Phone className="w-5 h-5 text-gold" />
-                </div>
-                <span className="text-zinc-300">{CONTACT_INFO.phone}</span>
-              </a>
-              <a 
-                href={getWhatsAppUrl()} 
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-green-400 transition-colors flex items-center gap-3 group"
-              >
-                <div className="w-11 h-11 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-green-500/50 group-hover:scale-110 transition-all">
-                  <MessageCircle className="w-5 h-5 text-green-500" />
-                </div>
-                <span className="text-zinc-300">WhatsApp</span>
-              </a>
-            </motion.div>
-          </motion.div>
+                  {/* Secondary Buttons */}
+                  <a 
+                    href="mailto:Contact@JBJ.ae"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-10 py-4 sm:py-5 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
+                  >
+                    Partnership <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </a>
+                  <a 
+                    href="mailto:Contact@JBJ.ae"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-10 py-4 sm:py-5 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
+                  >
+                    Collaboration <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </a>
+                  <a 
+                    href="mailto:Contact@JBJ.ae"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-10 py-4 sm:py-5 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
+                  >
+                    Careers <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </a>
+                </motion.div>
+
+                {/* Contact Info */}
+                <motion.div 
+                  className="flex flex-wrap items-center justify-center gap-4 sm:gap-6"
+                  variants={fadeInUp}
+                >
+                  <a 
+                    href={getEmailUrl()} 
+                    className="hover:text-gold transition-colors flex items-center gap-2 group"
+                  >
+                    <div className="w-9 h-9 sm:w-11 sm:h-11 bg-black border border-gold/40 rounded-full flex items-center justify-center group-hover:border-gold group-hover:scale-110 transition-all">
+                      <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
+                    </div>
+                    <span className="text-zinc-700 text-sm sm:text-base">{CONTACT_INFO.emailCapitalized}</span>
+                  </a>
+                  <a 
+                    href={getCallUrl()} 
+                    className="hover:text-gold transition-colors flex items-center gap-2 group"
+                  >
+                    <div className="w-9 h-9 sm:w-11 sm:h-11 bg-black border border-gold/40 rounded-full flex items-center justify-center group-hover:border-gold group-hover:scale-110 transition-all">
+                      <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
+                    </div>
+                    <span className="text-zinc-700 text-sm sm:text-base">{CONTACT_INFO.phone}</span>
+                  </a>
+                  <a 
+                    href={getWhatsAppUrl()} 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-green-600 transition-colors flex items-center gap-2 group"
+                  >
+                    <div className="w-9 h-9 sm:w-11 sm:h-11 bg-black border border-green-500/40 rounded-full flex items-center justify-center group-hover:border-green-500 group-hover:scale-110 transition-all">
+                      <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" />
+                    </div>
+                    <span className="text-zinc-700 text-sm sm:text-base">WhatsApp</span>
+                  </a>
+                </motion.div>
+              </motion.div>
+            </div>
+          </div>
         </div>
       </section>
 

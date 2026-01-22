@@ -366,8 +366,8 @@ const MeetTheTeam: React.FC = () => {
         {/* Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
-        {/* Team Sections by Department */}
-        <section className="py-12">
+        {/* Team Sections by Department - Each wrapped in Active Champagne Layer */}
+        <section className="py-12 bg-black">
           <div className="container mx-auto px-4 space-y-12">
             {departmentOrder.map((deptName) => {
               if (deptName === "Sales") {
@@ -404,38 +404,41 @@ const MeetTheTeam: React.FC = () => {
                     {/* Department Info Section */}
                     <DepartmentInfoSection departmentName={deptName} />
 
-                    <div className="space-y-10">
-                      {salesHierarchy.activeCategories.map((category) => {
-                        const categoryMembers =
-                          salesHierarchy.getMembersByCategory(category);
-                        if (categoryMembers.length === 0) return null;
+                    {/* Active Champagne Layer for Cards */}
+                    <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-3 sm:p-4">
+                      <div className="space-y-10 p-4 sm:p-6">
+                        {salesHierarchy.activeCategories.map((category) => {
+                          const categoryMembers =
+                            salesHierarchy.getMembersByCategory(category);
+                          if (categoryMembers.length === 0) return null;
 
-                          return (
-                          <div key={category}>
-                            <div className="flex items-center justify-between gap-4 mb-4">
-                              <h3 className="text-gold text-lg font-semibold">
-                                {category}
-                              </h3>
-                              <p className="text-zinc-400 text-sm">
-                                {categoryMembers.length} member
-                                {categoryMembers.length > 1 ? "s" : ""}
-                              </p>
-                            </div>
+                            return (
+                            <div key={category}>
+                              <div className="flex items-center justify-between gap-4 mb-4">
+                                <h3 className="text-black text-lg font-semibold">
+                                  {category}
+                                </h3>
+                                <p className="text-zinc-600 text-sm">
+                                  {categoryMembers.length} member
+                                  {categoryMembers.length > 1 ? "s" : ""}
+                                </p>
+                              </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                              {categoryMembers.map((member) => (
-                                <TeamMemberCard
-                                  key={member.id}
-                                  member={member}
-                                  onReadMore={handleReadMore}
-                                  isInternalUser={isInternalUser}
-                                  onDirectClick={handleDirectClick}
-                                />
-                              ))}
+                              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                {categoryMembers.map((member) => (
+                                  <TeamMemberCard
+                                    key={member.id}
+                                    member={member}
+                                    onReadMore={handleReadMore}
+                                    isInternalUser={isInternalUser}
+                                    onDirectClick={handleDirectClick}
+                                  />
+                                ))}
+                              </div>
                             </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
+                      </div>
                     </div>
                   </motion.div>
                 );
@@ -475,17 +478,19 @@ const MeetTheTeam: React.FC = () => {
                   {/* Department Info Section */}
                   <DepartmentInfoSection departmentName={deptName} />
 
-                  {/* Team Grid - 4 columns for perfect alignment */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {members.map((member) => (
-                      <TeamMemberCard
-                        key={member.id}
-                        member={member}
-                        onReadMore={handleReadMore}
-                        isInternalUser={isInternalUser}
-                        onDirectClick={handleDirectClick}
-                      />
-                    ))}
+                  {/* Active Champagne Layer for Cards */}
+                  <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-3 sm:p-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4 sm:p-6">
+                      {members.map((member) => (
+                        <TeamMemberCard
+                          key={member.id}
+                          member={member}
+                          onReadMore={handleReadMore}
+                          isInternalUser={isInternalUser}
+                          onDirectClick={handleDirectClick}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </motion.div>
               );
@@ -493,76 +498,87 @@ const MeetTheTeam: React.FC = () => {
           </div>
         </section>
 
-        {/* CTA Section with Contact Us */}
-        <section className="py-16 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
-          <div className="container mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="bg-white rounded-2xl border border-zinc-200 p-8 md:p-12 text-center max-w-4xl mx-auto shadow-sm"
-            >
-              <div className="w-16 h-16 bg-black rounded-xl flex items-center justify-center mx-auto mb-6">
-                <Sparkles className="w-8 h-8 text-gold" />
-              </div>
-              <h3 className="text-black text-2xl md:text-3xl font-bold mb-4">
-                Get in Touch
-              </h3>
-              <p className="text-zinc-600 max-w-xl mx-auto mb-8">
-                Ready to work with our exceptional team? Whether you're looking to buy, sell, or invest in luxury real estate, we're here to help.
-              </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                {/* Primary Button - Book Consultation style */}
-                <button 
-                  onClick={handleOpenContactForm}
-                  className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
-                  style={{
-                    background: 'linear-gradient(135deg, #FFFDF9 0%, #F5EBD7 50%, #E8DCC8 100%)',
-                    border: '2px solid rgba(200,167,102,0.5)',
-                    boxShadow: `
-                      0 8px 25px rgba(200,167,102,0.25),
-                      0 4px 12px rgba(0,0,0,0.08),
-                      inset 0 2px 4px rgba(255,255,255,0.9),
-                      inset 0 -2px 4px rgba(200,167,102,0.2),
-                      0 0 20px rgba(200,167,102,0.3)
-                    `,
-                  }}
+        {/* CTA Section - 3-Layer System: Black > Active Champagne > Pearl */}
+        <section className="py-16 sm:py-20 bg-black">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="max-w-[1100px] mx-auto">
+              {/* OUTER CARD - Active Champagne Layer */}
+              <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
+                {/* INNER CARD - Pearl Layer */}
+                <motion.div 
+                  className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-10 md:p-14 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={staggerContainer}
                 >
-                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                  <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
-                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-                  <span className="relative flex items-center justify-center gap-2">
-                    <MessageSquare className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
-                    <span className="text-black group-hover:text-gold transition-colors">Get in</span>
-                    <span className="text-gold group-hover:text-black transition-colors">Touch</span>
-                    <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
-                  </span>
-                </button>
-
-                {/* Secondary Button - Browse Properties style */}
-                <Link to="/careers">
-                  <button 
-                    className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
-                    style={{
-                      background: 'transparent',
-                      border: '2px solid #000',
-                      boxShadow: `
-                        0 6px 20px rgba(0,0,0,0.15),
-                        0 4px 10px rgba(0,0,0,0.1),
-                        inset 0 1px 2px rgba(255,255,255,0.5)
-                      `,
-                    }}
+                  {/* Badge */}
+                  <motion.div 
+                    className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F5F0E6] to-gold/20 border border-gold/50 rounded-full text-black text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20"
+                    variants={fadeInUp}
                   >
-                    <span className="absolute inset-x-0 top-0 h-1/3 rounded-t-xl bg-gradient-to-b from-white/20 to-transparent pointer-events-none" />
-                    <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none bg-black" />
-                    <span className="relative flex items-center justify-center gap-2 text-black group-hover:text-white transition-colors duration-300">
-                      View Open Positions
-                      <ArrowUpRight className="w-5 h-5" />
-                    </span>
-                  </button>
-                </Link>
+                    <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gold" />
+                    Join Our Team
+                  </motion.div>
+
+                  {/* Title */}
+                  <motion.h3 
+                    className="text-black text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-3 sm:mb-4 leading-tight"
+                    style={{ fontFamily: "Poppins, sans-serif" }}
+                    variants={fadeInUp}
+                  >
+                    Ready to Work With Our Experts?
+                  </motion.h3>
+                  <motion.p 
+                    className="text-zinc-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed"
+                    variants={fadeInUp}
+                  >
+                    Whether you're looking to buy, sell, or invest in luxury real estate, we're here to help.
+                  </motion.p>
+
+                  {/* CTA Buttons */}
+                  <motion.div 
+                    className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4"
+                    variants={fadeInUp}
+                  >
+                    {/* Primary Button - Get in Touch */}
+                    <button 
+                      onClick={handleOpenContactForm}
+                      className="relative w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-10 py-4 sm:py-5 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
+                      style={{
+                        background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                        boxShadow: `
+                          0 10px 30px rgba(200,167,102,0.4),
+                          0 6px 15px rgba(0,0,0,0.2),
+                          inset 0 2px 4px rgba(255,255,255,0.9),
+                          inset 0 -2px 4px rgba(200,167,102,0.2),
+                          0 0 20px rgba(200,167,102,0.3)
+                        `,
+                      }}
+                    >
+                      <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                      <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                      <span className="relative flex items-center justify-center gap-2">
+                        <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-gold group-hover:text-black transition-colors" />
+                        <span className="text-black group-hover:text-gold transition-colors">Get in</span>
+                        <span className="text-gold group-hover:text-black transition-colors">Touch</span>
+                        <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-black group-hover:text-gold transition-colors" />
+                      </span>
+                    </button>
+
+                    {/* Secondary Button - View Careers */}
+                    <Link to="/careers" className="w-full sm:w-auto">
+                      <button 
+                        className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-5 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
+                      >
+                        View Open Positions
+                        <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                      </button>
+                    </Link>
+                  </motion.div>
+                </motion.div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </section>
 

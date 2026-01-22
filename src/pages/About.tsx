@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Shield, Users, TrendingUp, Building2, BarChart3, FileCheck, Scale, Heart, Target } from "lucide-react";
+import { ArrowUpRight, Shield, Users, TrendingUp, Building2, BarChart3, FileCheck, Scale, Heart, Target, Sparkles } from "lucide-react";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
@@ -576,54 +576,86 @@ const About = () => {
           </motion.div>
         </Section>
 
-        {/* SECTION 9: CTA - Premium champagne background for separation from dark footer */}
-        <section className="py-14 md:py-18 lg:py-24 bg-gradient-to-br from-white via-[#faf8f5] to-[#f5f0e8]">
-          <div className="container mx-auto px-6">
+        {/* SECTION 9: CTA - 3-Layer System: Black > Active Champagne > Pearl */}
+        <section className="py-16 sm:py-20 bg-black">
+          <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-[1100px] mx-auto">
-              <motion.div 
-                className="text-center"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={staggerContainer}
-              >
-                <motion.h2 
-                  className="text-black text-2xl md:text-3xl lg:text-4xl font-semibold mb-4"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
-                  variants={fadeInUp}
-                >
-                  Ready to Find Your Perfect Property?
-                </motion.h2>
-                <motion.p 
-                  className="text-zinc-600 text-lg mb-10 max-w-xl mx-auto"
-                  variants={fadeInUp}
-                >
-                  Connect with our brokerage team for expert guidance on buying, selling, or renting in the UAE.
-                </motion.p>
+              {/* OUTER CARD - Active Champagne Layer */}
+              <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
+                {/* INNER CARD - Pearl Layer */}
                 <motion.div 
-                  className="flex flex-wrap justify-center gap-4"
-                  variants={fadeInUp}
+                  className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-10 md:p-14 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={staggerContainer}
                 >
-                  <Link to="/contact" className="relative z-10">
-                    <Button 
-                      variant="dark"
-                      className="px-8 py-6 text-base"
-                    >
-                      Contact Us
-                      <ArrowUpRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </Link>
-                  <Link to="/properties" className="relative z-10">
-                    <Button 
-                      variant="secondary"
-                      className="px-8 py-6 text-base border-black text-black hover:bg-black hover:text-white"
-                    >
-                      Browse Properties
-                      <ArrowUpRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </Link>
+                  {/* Badge */}
+                  <motion.div 
+                    className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F5F0E6] to-gold/20 border border-gold/50 rounded-full text-black text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20"
+                    variants={fadeInUp}
+                  >
+                    <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gold" />
+                    Begin Your Journey
+                  </motion.div>
+
+                  {/* Title */}
+                  <motion.h2 
+                    className="text-black text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-3 sm:mb-4 leading-tight"
+                    style={{ fontFamily: "Poppins, sans-serif" }}
+                    variants={fadeInUp}
+                  >
+                    Ready to Find Your Perfect Property?
+                  </motion.h2>
+                  <motion.p 
+                    className="text-zinc-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed"
+                    variants={fadeInUp}
+                  >
+                    Connect with our brokerage team for expert guidance on buying, selling, or renting in the UAE.
+                  </motion.p>
+
+                  {/* CTA Buttons */}
+                  <motion.div 
+                    className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4"
+                    variants={fadeInUp}
+                  >
+                    {/* Primary Button - Contact Us */}
+                    <Link to="/contact" className="w-full sm:w-auto">
+                      <button 
+                        className="group relative inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-5 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
+                        style={{
+                          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                          boxShadow: `
+                            0 10px 30px rgba(200,167,102,0.4),
+                            0 6px 15px rgba(0,0,0,0.2),
+                            inset 0 2px 4px rgba(255,255,255,0.9),
+                            inset 0 -2px 4px rgba(200,167,102,0.2),
+                            0 0 20px rgba(200,167,102,0.3)
+                          `,
+                        }}
+                      >
+                        <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                        <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                        <span className="relative flex items-center gap-1">
+                          <span className="text-black group-hover:text-gold transition-colors">Contact</span>
+                          <span className="text-gold group-hover:text-black transition-colors">Us</span>
+                        </span>
+                        <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-black group-hover:text-gold transition-colors relative z-10" />
+                      </button>
+                    </Link>
+
+                    {/* Secondary Button - Browse Properties */}
+                    <Link to="/properties" className="w-full sm:w-auto">
+                      <button 
+                        className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-5 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
+                      >
+                        Browse Properties
+                        <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                      </button>
+                    </Link>
+                  </motion.div>
                 </motion.div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </section>
