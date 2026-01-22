@@ -610,8 +610,7 @@ const CRM = () => {
                 <EmployeesHub userId={user?.id || ""} />
               </TabsContent>
             </Tabs>
-          </main>
-        </div>
+        </main>
 
         {/* AI Insights Panel - Properly positioned sidebar */}
         {showAIInsights && (
