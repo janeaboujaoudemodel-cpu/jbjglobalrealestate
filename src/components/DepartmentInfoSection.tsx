@@ -46,7 +46,7 @@ const ProjectHighlightCard = ({ highlight }: { highlight: ProjectHighlight }) =>
   const StatusIcon = config.icon;
 
   return (
-    <div className={`p-4 rounded-lg border-2 ${config.borderColor} bg-white/80`}>
+    <div className="p-4 rounded-lg border-2 border-gold bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] shadow-[0_0_15px_rgba(200,167,102,0.22)] hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_18px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1 transition-all duration-300">
       <div className="flex items-start justify-between gap-3 mb-2">
         <h4 className="text-black text-sm font-medium line-clamp-1">{highlight.title}</h4>
         <Badge 
@@ -72,67 +72,73 @@ const DepartmentInfoSection: React.FC<DepartmentInfoSectionProps> = ({ departmen
       variants={fadeInUp}
       initial="hidden"
       animate="visible"
-      className="mb-6 p-5 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/30 rounded-xl shadow-md"
+      className="mb-6"
     >
-      {/* Department Summary */}
-      <div className="mb-5">
-        <div className="flex items-center gap-2 mb-2">
-          <Sparkles className="w-4 h-4 text-gold" />
-          <span className="text-gold text-xs font-medium uppercase tracking-wider">Overview</span>
-        </div>
-        <p className="text-zinc-700 text-sm leading-relaxed">{metadata.summary}</p>
-      </div>
-
-      {/* Tech Stack */}
-      <div className="mb-5">
-        <div className="flex items-center gap-2 mb-3">
-          <Cpu className="w-4 h-4 text-gold" />
-          <span className="text-gold text-xs font-medium uppercase tracking-wider">Tech Stack</span>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {metadata.techStack.map((tech) => (
-            <Badge
-              key={tech}
-              variant="outline"
-              className="text-xs border-gold/30 text-black bg-gold/10 px-3 py-1"
-            >
-              {tech}
-            </Badge>
-          ))}
-        </div>
-      </div>
-
-      {/* Regional Coverage (if applicable) */}
-      {metadata.regionalCoverage && metadata.regionalCoverage.length > 0 && (
-        <div className="mb-5">
-          <div className="flex items-center gap-2 mb-3">
-            <Globe className="w-4 h-4 text-gold" />
-            <span className="text-gold text-xs font-medium uppercase tracking-wider">Regional Coverage</span>
+      {/* OUTER: Active Champagne Layer */}
+      <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-3 shadow-[0_0_40px_rgba(200,167,102,0.18)]">
+        {/* INNER: Pearl Layer */}
+        <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-5 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
+          {/* Department Summary */}
+          <div className="mb-5">
+            <div className="flex items-center gap-2 mb-2">
+              <Sparkles className="w-4 h-4 text-gold" />
+              <span className="text-gold text-xs font-medium uppercase tracking-wider">Overview</span>
+            </div>
+            <p className="text-zinc-700 text-sm leading-relaxed">{metadata.summary}</p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {metadata.regionalCoverage.map((region) => (
-              <Badge
-                key={region}
-                variant="outline"
-                className="text-xs border-gold/30 text-gold bg-gold/5 px-3 py-1"
-              >
-                {region}
-              </Badge>
-            ))}
-          </div>
-        </div>
-      )}
 
-      {/* Project Highlights */}
-      <div>
-        <div className="flex items-center gap-2 mb-3">
-          <Rocket className="w-4 h-4 text-gold" />
-          <span className="text-gold text-xs font-medium uppercase tracking-wider">Project Highlights</span>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {metadata.projectHighlights.map((highlight) => (
-            <ProjectHighlightCard key={highlight.title} highlight={highlight} />
-          ))}
+          {/* Tech Stack */}
+          <div className="mb-5">
+            <div className="flex items-center gap-2 mb-3">
+              <Cpu className="w-4 h-4 text-gold" />
+              <span className="text-gold text-xs font-medium uppercase tracking-wider">Tech Stack</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {metadata.techStack.map((tech) => (
+                <Badge
+                  key={tech}
+                  variant="outline"
+                  className="text-xs border-gold/30 text-black bg-gold/10 px-3 py-1"
+                >
+                  {tech}
+                </Badge>
+              ))}
+            </div>
+          </div>
+
+          {/* Regional Coverage (if applicable) */}
+          {metadata.regionalCoverage && metadata.regionalCoverage.length > 0 && (
+            <div className="mb-5">
+              <div className="flex items-center gap-2 mb-3">
+                <Globe className="w-4 h-4 text-gold" />
+                <span className="text-gold text-xs font-medium uppercase tracking-wider">Regional Coverage</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {metadata.regionalCoverage.map((region) => (
+                  <Badge
+                    key={region}
+                    variant="outline"
+                    className="text-xs border-gold/30 text-gold bg-gold/5 px-3 py-1"
+                  >
+                    {region}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Project Highlights */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <Rocket className="w-4 h-4 text-gold" />
+              <span className="text-gold text-xs font-medium uppercase tracking-wider">Project Highlights</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {metadata.projectHighlights.map((highlight) => (
+                <ProjectHighlightCard key={highlight.title} highlight={highlight} />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </motion.div>

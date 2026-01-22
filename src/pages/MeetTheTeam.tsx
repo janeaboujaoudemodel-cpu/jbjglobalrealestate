@@ -69,7 +69,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
   return (
     <motion.div variants={fadeInUp}>
       <Card 
-        className={`bg-gradient-to-br from-[#FFFDF9] via-[#FBF7F0] to-[#F5EFE4] border-2 border-gold/40 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] transition-all duration-300 overflow-hidden group h-full ${isInternalUser ? 'cursor-pointer' : ''}`}
+        className={`bg-gradient-to-br from-[#FFFDF9] via-[#FBF7F0] to-[#F5EFE4] border-2 border-gold hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_22px_60px_rgba(0,0,0,0.45)] hover:-translate-y-1 transition-all duration-300 overflow-hidden group h-full ${isInternalUser ? 'cursor-pointer' : ''}`}
         onClick={handleCardClick}
       >
         <CardContent className="p-0">
