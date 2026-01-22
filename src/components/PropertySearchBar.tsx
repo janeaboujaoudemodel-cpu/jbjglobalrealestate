@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useDevelopers, useProjects } from "@/hooks/useProjects";
+import { useDevelopers } from "@/hooks/useProjects";
 
 interface PropertySearchBarProps {
   className?: string;
@@ -20,23 +20,12 @@ interface PropertySearchBarProps {
 const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBarProps) => {
   const navigate = useNavigate();
   const { data: developers } = useDevelopers();
-  const { data: projects } = useProjects();
 
-  const availableDeveloperIds = useMemo(() => {
-    const ids = new Set<string>();
-    (projects ?? []).forEach((p) => {
-      const developerId = p.developer?.id ?? (p as any).developer_id;
-      if (developerId) ids.add(developerId);
-    });
-    return ids;
-  }, [projects]);
-
-  const availableDevelopers = useMemo(() => {
+  // Show ALL developers sorted by rank (top to lowest)
+  const allDevelopersSorted = useMemo(() => {
     if (!developers) return [];
-    // If we don't have projects yet, or none are published, fall back to full list
-    if (!projects || availableDeveloperIds.size === 0) return developers;
-    return developers.filter((d) => availableDeveloperIds.has(d.id));
-  }, [developers, projects, availableDeveloperIds]);
+    return [...developers].sort((a, b) => (a.rank ?? 999) - (b.rank ?? 999));
+  }, [developers]);
 
   const [keyword, setKeyword] = useState("");
   const [location, setLocation] = useState<string | null>(null);
@@ -123,17 +112,17 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
           </SelectContent>
         </Select>
 
-        {/* Developer (only show developers that have published listings) */}
+        {/* Developer - All developers sorted by rank (top to lowest) */}
         <Select value={developerId || "all"} onValueChange={(value) => setDeveloperId(value === "all" ? null : value)}>
           <SelectTrigger className="w-[140px] h-12 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg">
             <Building2 className="w-4 h-4 mr-2 text-zinc-500" />
             <SelectValue placeholder="Developer" />
           </SelectTrigger>
-          <SelectContent className="bg-zinc-900 border-zinc-700 max-h-60">
+          <SelectContent className="bg-zinc-900 border-zinc-700 max-h-72">
             <SelectItem value="all" className="text-white hover:bg-zinc-800">
               All Developers
             </SelectItem>
-            {availableDevelopers.map((dev) => (
+            {allDevelopersSorted.map((dev) => (
               <SelectItem key={dev.id} value={dev.id} className="text-white hover:bg-zinc-800">
                 {dev.name}
               </SelectItem>
