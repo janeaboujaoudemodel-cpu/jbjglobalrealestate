@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
-import { Search, UserPlus, Loader2 } from "lucide-react";
+import { Search, UserPlus, Loader2, Users, PlusCircle } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -18,6 +18,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Broker {
   id: string;
@@ -29,6 +31,15 @@ interface Broker {
   status: string;
 }
 
+interface ExistingLead {
+  id: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  status: string;
+  assigned_broker_id: string | null;
+}
+
 interface AssignLeadModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -37,17 +48,87 @@ interface AssignLeadModalProps {
 }
 
 export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: AssignLeadModalProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedBroker, setSelectedBroker] = useState("");
+  const [activeTab, setActiveTab] = useState<"existing" | "new">("existing");
+  
+  // Existing lead state
+  const [existingLeads, setExistingLeads] = useState<ExistingLead[]>([]);
+  const [leadSearchQuery, setLeadSearchQuery] = useState("");
+  const [selectedExistingLead, setSelectedExistingLead] = useState<ExistingLead | null>(null);
+  const [loadingLeads, setLoadingLeads] = useState(false);
+  
+  // New lead state
   const [leadName, setLeadName] = useState("");
   const [leadEmail, setLeadEmail] = useState("");
   const [leadPhone, setLeadPhone] = useState("");
   const [leadInterest, setLeadInterest] = useState("");
+  
+  // Common state
+  const [selectedBroker, setSelectedBroker] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const activeBrokers = brokers.filter(b => b.status === "active");
 
-  const handleSubmit = async () => {
+  // Fetch existing unassigned leads
+  useEffect(() => {
+    if (open && activeTab === "existing") {
+      fetchExistingLeads();
+    }
+  }, [open, activeTab]);
+
+  const fetchExistingLeads = async () => {
+    setLoadingLeads(true);
+    try {
+      const { data, error } = await supabase
+        .from("jbj_leads")
+        .select("id, name, email, phone, status, assigned_broker_id")
+        .is("assigned_broker_id", null)
+        .order("created_at", { ascending: false })
+        .limit(50);
+
+      if (error) throw error;
+      setExistingLeads(data || []);
+    } catch (error) {
+      console.error("Error fetching leads:", error);
+      toast.error("Failed to load existing leads");
+    } finally {
+      setLoadingLeads(false);
+    }
+  };
+
+  const filteredExistingLeads = existingLeads.filter(lead =>
+    lead.name.toLowerCase().includes(leadSearchQuery.toLowerCase()) ||
+    (lead.email && lead.email.toLowerCase().includes(leadSearchQuery.toLowerCase())) ||
+    (lead.phone && lead.phone.includes(leadSearchQuery))
+  );
+
+  const handleAssignExisting = async () => {
+    if (!selectedExistingLead || !selectedBroker) {
+      toast.error("Please select a lead and a broker");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const { error } = await supabase
+        .from("jbj_leads")
+        .update({ assigned_broker_id: selectedBroker })
+        .eq("id", selectedExistingLead.id);
+
+      if (error) throw error;
+
+      toast.success(`${selectedExistingLead.name} assigned successfully`);
+      onOpenChange(false);
+      resetForm();
+      onAssigned();
+    } catch (error) {
+      console.error("Error assigning lead:", error);
+      toast.error("Failed to assign lead");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleCreateAndAssign = async () => {
     if (!leadName.trim() || !selectedBroker) {
       toast.error("Please fill in required fields");
       return;
@@ -66,13 +147,13 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
 
       if (error) throw error;
 
-      toast.success("Lead assigned successfully");
+      toast.success("Lead created and assigned successfully");
       onOpenChange(false);
       resetForm();
       onAssigned();
     } catch (error) {
-      console.error("Error assigning lead:", error);
-      toast.error("Failed to assign lead");
+      console.error("Error creating lead:", error);
+      toast.error("Failed to create lead");
     } finally {
       setSubmitting(false);
     }
@@ -84,94 +165,204 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
     setLeadPhone("");
     setLeadInterest("");
     setSelectedBroker("");
+    setSelectedExistingLead(null);
+    setLeadSearchQuery("");
+    setActiveTab("existing");
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-zinc-900 border-zinc-700 text-white max-w-md">
+      <DialogContent className="max-w-lg bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
+          <DialogTitle className="flex items-center gap-2 text-black">
             <UserPlus className="h-5 w-5 text-gold" />
-            Assign New Lead
+            Assign Lead to Broker
           </DialogTitle>
         </DialogHeader>
-        <div className="space-y-4">
-          <div>
-            <label className="text-sm text-gray-400 mb-2 block">Lead Name *</label>
-            <Input
-              value={leadName}
-              onChange={(e) => setLeadName(e.target.value)}
-              placeholder="Enter lead name"
-              className="bg-zinc-800 border-zinc-700 text-white"
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="text-sm text-gray-400 mb-2 block">Email</label>
+
+        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "existing" | "new")}>
+          <TabsList className="grid w-full grid-cols-2 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+            <TabsTrigger value="existing" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-black">
+              <Users className="h-4 w-4" />
+              Existing Lead
+            </TabsTrigger>
+            <TabsTrigger value="new" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-black">
+              <PlusCircle className="h-4 w-4" />
+              New Lead
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Existing Lead Tab */}
+          <TabsContent value="existing" className="space-y-4 mt-4">
+            <p className="text-sm text-black/70">
+              Select an unassigned lead from your database to assign to a broker.
+            </p>
+            
+            {/* Search */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-black/50" />
               <Input
-                type="email"
-                value={leadEmail}
-                onChange={(e) => setLeadEmail(e.target.value)}
-                placeholder="email@example.com"
-                className="bg-zinc-800 border-zinc-700 text-white"
+                placeholder="Search by name, email, or phone..."
+                value={leadSearchQuery}
+                onChange={(e) => setLeadSearchQuery(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+
+            {/* Leads List */}
+            <ScrollArea className="h-48 rounded-lg border border-gold/30 bg-white/50">
+              {loadingLeads ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="h-6 w-6 animate-spin text-gold" />
+                </div>
+              ) : filteredExistingLeads.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-8 text-black/60">
+                  <Users className="h-8 w-8 mb-2" />
+                  <p className="text-sm">No unassigned leads found</p>
+                </div>
+              ) : (
+                <div className="p-2 space-y-1">
+                  {filteredExistingLeads.map((lead) => (
+                    <button
+                      key={lead.id}
+                      onClick={() => setSelectedExistingLead(lead)}
+                      className={`w-full text-left p-3 rounded-lg transition-all ${
+                        selectedExistingLead?.id === lead.id
+                          ? "bg-gold/20 border-2 border-gold"
+                          : "hover:bg-gold/10 border border-transparent"
+                      }`}
+                    >
+                      <p className="font-medium text-black">{lead.name}</p>
+                      <p className="text-xs text-black/60">
+                        {lead.email || lead.phone || "No contact info"}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </ScrollArea>
+
+            {/* Broker Selection */}
+            <div>
+              <label className="text-sm text-black/70 mb-2 block">Assign to Broker *</label>
+              <Select value={selectedBroker} onValueChange={setSelectedBroker}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a broker" />
+                </SelectTrigger>
+                <SelectContent>
+                  {activeBrokers.map((broker) => (
+                    <SelectItem key={broker.id} value={broker.id}>
+                      <div className="flex items-center gap-2">
+                        <span>{broker.name}</span>
+                        <span className="text-black/50 text-xs">
+                          ({broker.active_leads}/{broker.capacity})
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex gap-2 pt-2">
+              <Button
+                variant="secondary"
+                onClick={() => onOpenChange(false)}
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                onClick={handleAssignExisting}
+                disabled={submitting || !selectedExistingLead || !selectedBroker}
+                className="flex-1"
+              >
+                {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Assign Lead"}
+              </Button>
+            </div>
+          </TabsContent>
+
+          {/* New Lead Tab */}
+          <TabsContent value="new" className="space-y-4 mt-4">
+            <p className="text-sm text-black/70">
+              Create a new lead and assign them directly to a broker.
+            </p>
+
+            <div>
+              <label className="text-sm text-black/70 mb-2 block">Lead Name *</label>
+              <Input
+                value={leadName}
+                onChange={(e) => setLeadName(e.target.value)}
+                placeholder="Enter lead name"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="text-sm text-black/70 mb-2 block">Email</label>
+                <Input
+                  type="email"
+                  value={leadEmail}
+                  onChange={(e) => setLeadEmail(e.target.value)}
+                  placeholder="email@example.com"
+                />
+              </div>
+              <div>
+                <label className="text-sm text-black/70 mb-2 block">Phone</label>
+                <Input
+                  value={leadPhone}
+                  onChange={(e) => setLeadPhone(e.target.value)}
+                  placeholder="+971..."
+                />
+              </div>
+            </div>
+            <div>
+              <label className="text-sm text-black/70 mb-2 block">Property Interest</label>
+              <Input
+                value={leadInterest}
+                onChange={(e) => setLeadInterest(e.target.value)}
+                placeholder="e.g., 2BR apartment in Downtown"
               />
             </div>
             <div>
-              <label className="text-sm text-gray-400 mb-2 block">Phone</label>
-              <Input
-                value={leadPhone}
-                onChange={(e) => setLeadPhone(e.target.value)}
-                placeholder="+971..."
-                className="bg-zinc-800 border-zinc-700 text-white"
-              />
+              <label className="text-sm text-black/70 mb-2 block">Assign to Broker *</label>
+              <Select value={selectedBroker} onValueChange={setSelectedBroker}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a broker" />
+                </SelectTrigger>
+                <SelectContent>
+                  {activeBrokers.map((broker) => (
+                    <SelectItem key={broker.id} value={broker.id}>
+                      <div className="flex items-center gap-2">
+                        <span>{broker.name}</span>
+                        <span className="text-black/50 text-xs">
+                          ({broker.active_leads}/{broker.capacity})
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-          </div>
-          <div>
-            <label className="text-sm text-gray-400 mb-2 block">Property Interest</label>
-            <Input
-              value={leadInterest}
-              onChange={(e) => setLeadInterest(e.target.value)}
-              placeholder="e.g., 2BR apartment in Downtown"
-              className="bg-zinc-800 border-zinc-700 text-white"
-            />
-          </div>
-          <div>
-            <label className="text-sm text-gray-400 mb-2 block">Assign to Broker *</label>
-            <Select value={selectedBroker} onValueChange={setSelectedBroker}>
-              <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
-                <SelectValue placeholder="Select a broker" />
-              </SelectTrigger>
-              <SelectContent className="bg-zinc-800 border-zinc-700">
-                {activeBrokers.map((broker) => (
-                  <SelectItem key={broker.id} value={broker.id}>
-                    <div className="flex items-center gap-2">
-                      <span>{broker.name}</span>
-                      <span className="text-gray-400 text-xs">
-                        ({broker.active_leads}/{broker.capacity})
-                      </span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="flex gap-2 pt-2">
-            <Button
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-              className="flex-1 border-zinc-700 text-gray-300"
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleSubmit}
-              disabled={submitting}
-              className="flex-1 bg-gold hover:bg-gold-dark text-black"
-            >
-              {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Assign Lead"}
-            </Button>
-          </div>
-        </div>
+            <div className="flex gap-2 pt-2">
+              <Button
+                variant="secondary"
+                onClick={() => onOpenChange(false)}
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                onClick={handleCreateAndAssign}
+                disabled={submitting}
+                className="flex-1"
+              >
+                {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Create & Assign"}
+              </Button>
+            </div>
+          </TabsContent>
+        </Tabs>
       </DialogContent>
     </Dialog>
   );
