@@ -67,9 +67,9 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
   };
 
   return (
-    <motion.div variants={fadeInUp}>
+    <motion.div variants={fadeInUp} className="min-w-[280px]">
       <Card 
-        className={`bg-gradient-to-br from-[#FFFDF9] via-[#FBF7F0] to-[#F5EFE4] border-2 border-gold hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_22px_60px_rgba(0,0,0,0.45)] hover:-translate-y-1 transition-all duration-300 overflow-hidden group h-full ${isInternalUser ? 'cursor-pointer' : ''}`}
+        className={`bg-gradient-to-br from-[#FFFDF9] via-[#FBF7F0] to-[#F5EFE4] border-2 border-gold shadow-[0_0_20px_rgba(200,167,102,0.2)] hover:shadow-[0_0_25px_rgba(200,167,102,0.35),0_22px_60px_rgba(0,0,0,0.45)] hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 overflow-hidden group h-full ${isInternalUser ? 'cursor-pointer' : ''}`}
         onClick={handleCardClick}
       >
         <CardContent className="p-0">
@@ -383,30 +383,31 @@ const MeetTheTeam: React.FC = () => {
                       variants={staggerContainer}
                       className="mb-8"
                     >
-                      {/* Department Header */}
-                      <motion.div
-                        variants={fadeInUp}
-                        className="flex items-center gap-3 mb-4"
-                      >
-                        <div className="w-10 h-10 bg-gradient-to-br from-[#FFFDF9] to-[#F5EFE4] border border-gold/40 rounded-lg flex items-center justify-center">
-                          <Building2 className="w-5 h-5 text-gold" />
+                      {/* Active Champagne Layer - Starts from Department Title */}
+                      <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-6">
+                        {/* Department Header - Inside Active Layer */}
+                        <motion.div
+                          variants={fadeInUp}
+                          className="flex items-center gap-3 mb-4"
+                        >
+                          <div className="w-10 h-10 bg-gradient-to-br from-[#FFFDF9] to-[#F5EFE4] border border-gold/40 rounded-lg flex items-center justify-center">
+                            <Building2 className="w-5 h-5 text-gold" />
+                          </div>
+                          <div>
+                            <h2 className="text-black text-2xl font-semibold">
+                            {deptName}
+                          </h2>
+                          <p className="text-zinc-600 text-sm">
+                            {total} member{total > 1 ? "s" : ""}
+                          </p>
                         </div>
-                        <div>
-                          <h2 className="text-white text-2xl font-semibold">
-                          {deptName}
-                        </h2>
-                        <p className="text-zinc-400 text-sm">
-                          {total} member{total > 1 ? "s" : ""}
-                        </p>
-                      </div>
-                    </motion.div>
+                      </motion.div>
 
-                    {/* Department Info Section */}
-                    <DepartmentInfoSection departmentName={deptName} />
+                      {/* Department Info Section - Inside Active Layer */}
+                      <DepartmentInfoSection departmentName={deptName} />
 
-                    {/* Active Champagne Layer for Cards */}
-                    <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-3 sm:p-4">
-                      <div className="space-y-10 p-4 sm:p-6">
+                      {/* Cards Grid - Inside Active Layer */}
+                      <div className="space-y-10 mt-4">
                         {salesHierarchy.activeCategories.map((category) => {
                           const categoryMembers =
                             salesHierarchy.getMembersByCategory(category);
@@ -424,7 +425,7 @@ const MeetTheTeam: React.FC = () => {
                                 </p>
                               </div>
 
-                              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
                                 {categoryMembers.map((member) => (
                                   <TeamMemberCard
                                     key={member.id}
@@ -457,30 +458,31 @@ const MeetTheTeam: React.FC = () => {
                   variants={staggerContainer}
                   className="mb-8"
                 >
-                  {/* Department Header */}
-                  <motion.div
-                    variants={fadeInUp}
-                    className="flex items-center gap-3 mb-4"
-                  >
-                    <div className="w-10 h-10 bg-gradient-to-br from-[#FFFDF9] to-[#F5EFE4] border border-gold/40 rounded-lg flex items-center justify-center">
-                      <Building2 className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <h2 className="text-white text-2xl font-semibold">
-                        {deptName}
-                      </h2>
-                      <p className="text-zinc-400 text-sm">
-                        {members.length} member{members.length > 1 ? "s" : ""}
-                      </p>
-                    </div>
-                  </motion.div>
+                  {/* Active Champagne Layer - Starts from Department Title */}
+                  <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-6">
+                    {/* Department Header - Inside Active Layer */}
+                    <motion.div
+                      variants={fadeInUp}
+                      className="flex items-center gap-3 mb-4"
+                    >
+                      <div className="w-10 h-10 bg-gradient-to-br from-[#FFFDF9] to-[#F5EFE4] border border-gold/40 rounded-lg flex items-center justify-center">
+                        <Building2 className="w-5 h-5 text-gold" />
+                      </div>
+                      <div>
+                        <h2 className="text-black text-2xl font-semibold">
+                          {deptName}
+                        </h2>
+                        <p className="text-zinc-600 text-sm">
+                          {members.length} member{members.length > 1 ? "s" : ""}
+                        </p>
+                      </div>
+                    </motion.div>
 
-                  {/* Department Info Section */}
-                  <DepartmentInfoSection departmentName={deptName} />
+                    {/* Department Info Section - Inside Active Layer */}
+                    <DepartmentInfoSection departmentName={deptName} />
 
-                  {/* Active Champagne Layer for Cards */}
-                  <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-3 sm:p-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4 sm:p-6">
+                    {/* Cards Grid - Inside Active Layer */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 mt-4">
                       {members.map((member) => (
                         <TeamMemberCard
                           key={member.id}
@@ -500,13 +502,13 @@ const MeetTheTeam: React.FC = () => {
 
         {/* CTA Section - 3-Layer System: Black > Active Champagne > Pearl */}
         <section className="py-16 sm:py-20 bg-black">
-          <div className="container mx-auto px-4 sm:px-6">
-            <div className="max-w-[1100px] mx-auto">
-              {/* OUTER CARD - Active Champagne Layer */}
-              <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
-                {/* INNER CARD - Pearl Layer */}
+          <div className="container mx-auto px-3 sm:px-4 md:px-6">
+            <div className="max-w-[1200px] mx-auto">
+              {/* OUTER CARD - Active Champagne Layer - Larger padding for visible contrast */}
+              <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8">
+                {/* INNER CARD - Pearl Layer - Smaller for balance */}
                 <motion.div 
-                  className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-10 md:p-14 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+                  className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
