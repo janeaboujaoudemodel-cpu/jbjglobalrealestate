@@ -64,7 +64,7 @@ All colors MUST be HSL.
      * Single source of truth for section sizing across Frontend + Backend.
      * ============================================================ */
     --jj-content-max: 1600px;
-    --jj-gutter: 0rem; /* Edge to edge - no gap */
+    --jj-gutter: 1rem; /* 16px */
 
     /* Locked Champagne / Inner Card Surface (Layer 3) */
     /* Warmer + less bright than pure white; matches the global "Locked Champagne" requirement */
@@ -370,6 +370,35 @@ All colors MUST be HSL.
   @media (min-width: 768px) {
     .jj-layer-2 {
       padding: 3rem 2rem;
+    }
+  }
+
+  /* ============================================================
+   * LOCAL GUTTER OVERRIDE (TEST)
+   * Use to reduce the left/right black gap for a single section
+   * without changing the global layout system.
+   * ============================================================ */
+  .jj-gutter-half {
+    --jj-gutter: 0.5rem;
+  }
+  @media (min-width: 768px) {
+    .jj-gutter-half {
+      --jj-gutter: 1rem; /* half of 2rem */
+    }
+  }
+  @media (min-width: 1024px) {
+    .jj-gutter-half {
+      --jj-gutter: 2rem; /* half of 4rem */
+    }
+  }
+  @media (min-width: 1280px) {
+    .jj-gutter-half {
+      --jj-gutter: 2.5rem; /* half of 5rem */
+    }
+  }
+  @media (min-width: 1536px) {
+    .jj-gutter-half {
+      --jj-gutter: 3rem; /* half of 6rem */
     }
   }
 
