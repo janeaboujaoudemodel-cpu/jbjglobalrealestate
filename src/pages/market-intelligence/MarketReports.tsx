@@ -143,11 +143,21 @@ const MarketReportsPage = () => {
       <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
 
       {/* Main Content with TOC Sidebar */}
-      <div className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="flex gap-8">
-            {/* Main Content */}
-            <div className="flex-1 space-y-8">
+      <div className="py-16 bg-black">
+        {/* Fixed TOC Sidebar */}
+        <div className="hidden lg:block">
+          <MarketIntelligenceTableOfContents 
+            items={tocItems}
+            title="In This Section"
+            ctaAction={{
+              label: "Find Your Property",
+              href: "/properties",
+              icon: Search
+            }}
+          />
+        </div>
+
+        <div className="space-y-8">
 
               {/* Introduction Section */}
               <SectionWrapper id="introduction">
@@ -544,21 +554,6 @@ const MarketReportsPage = () => {
                   </Card>
                 </div>
               </section>
-            </div>
-
-            {/* Table of Contents Sidebar */}
-            <div className="hidden lg:block w-72">
-              <MarketIntelligenceTableOfContents 
-                items={tocItems}
-                title="In This Section"
-                ctaAction={{
-                  label: "Find Your Property",
-                  href: "/properties",
-                  icon: Search
-                }}
-              />
-            </div>
-          </div>
         </div>
       </div>
 

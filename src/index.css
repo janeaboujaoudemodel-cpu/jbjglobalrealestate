@@ -328,6 +328,16 @@ All colors MUST be HSL.
   box-shadow: 0 0 40px rgba(200,167,102,0.18);
 }
 
+/* Market Intelligence pages: full-bleed sections stretch behind fixed TOC */
+@media (min-width: 1024px) {
+  .jj-section-champagne > div,
+  .jj-section-champagne > .container,
+  .jj-section-champagne > .max-w-5xl,
+  .jj-section-champagne > .max-w-4xl {
+    margin-right: var(--jj-gutter);
+  }
+}
+
 /* Layer 2 wrapper with proper gutters */
 .jj-layer-2 {
   @apply mx-3 md:mx-4 lg:mx-6 rounded-2xl border border-gold/30 p-3 sm:p-4;
