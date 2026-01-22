@@ -63,7 +63,7 @@ const Methodology = () => {
       <section className="jj-section-champagne py-16">
         <div className="relative">
           {/* Full-bleed content area that stretches behind TOC */}
-          <div className="container mx-auto px-4 lg:pr-80 xl:pr-96 space-y-10">
+          <div className="space-y-10">
           
               {/* SECTION 1 — Introduction */}
               <motion.section
@@ -424,8 +424,8 @@ const Methodology = () => {
 
           </div>
 
-          {/* Table of Contents Sidebar - Fixed position */}
-          <div className="hidden lg:block fixed right-4 xl:right-8 top-32 w-72 z-40">
+          {/* Table of Contents Sidebar (component is fixed-position) */}
+          <div className="hidden lg:block">
             <MarketIntelligenceTableOfContents 
               items={tocItems}
               title="In This Section"
