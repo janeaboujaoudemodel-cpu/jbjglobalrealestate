@@ -6280,6 +6280,48 @@ export type Database = {
         }
         Relationships: []
       }
+      hr_access_logs: {
+        Row: {
+          access_type: string
+          accessed_at: string
+          id: string
+          ip_address: unknown
+          metadata: Json | null
+          records_accessed: number | null
+          resource_id: string | null
+          resource_type: string
+          user_agent: string | null
+          user_email: string | null
+          user_id: string | null
+        }
+        Insert: {
+          access_type: string
+          accessed_at?: string
+          id?: string
+          ip_address?: unknown
+          metadata?: Json | null
+          records_accessed?: number | null
+          resource_id?: string | null
+          resource_type: string
+          user_agent?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          access_type?: string
+          accessed_at?: string
+          id?: string
+          ip_address?: unknown
+          metadata?: Json | null
+          records_accessed?: number | null
+          resource_id?: string | null
+          resource_type?: string
+          user_agent?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       hr_agent_conversations: {
         Row: {
           application_id: string | null
@@ -13615,6 +13657,16 @@ export type Database = {
       is_team_member: {
         Args: { _team_id: string; _user_id: string }
         Returns: boolean
+      }
+      log_hr_access: {
+        Args: {
+          _access_type?: string
+          _metadata?: Json
+          _records_accessed?: number
+          _resource_id?: string
+          _resource_type: string
+        }
+        Returns: string
       }
       log_pii_access: {
         Args: {
