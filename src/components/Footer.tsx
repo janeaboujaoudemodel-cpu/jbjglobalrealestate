@@ -16,8 +16,8 @@ import {
 } from "@/components/ui/collapsible";
 import { SocialLinks } from "@/components/marketing/SocialLinks";
 import { NewsletterBrevo } from "@/components/marketing/NewsletterBrevo";
-
 import { GoogleMyBusinessLink } from "@/components/marketing/GoogleMyBusinessLink";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const DivisionAccordion = ({
   title,
@@ -65,84 +65,85 @@ const DivisionAccordion = ({
 };
 
 const Footer = () => {
+  const { t } = useLanguage();
   const currentYear = new Date().getFullYear();
 
   // Properties
   const propertiesLinks = [
-    { label: "Buy Properties", href: "/properties?transaction=buy" },
-    { label: "Rent Properties", href: "/properties?transaction=rent" },
-    { label: "List Your Property", href: "/seller-listing" },
+    { label: t('footer.buyProperties') || "Buy Properties", href: "/properties?transaction=buy" },
+    { label: t('footer.rentProperties') || "Rent Properties", href: "/properties?transaction=rent" },
+    { label: t('footer.listYourProperty') || "List Your Property", href: "/seller-listing" },
   ];
 
   // Services
   const servicesLinks = [
-    { label: "Buyer Advisory", href: "/services/buyer-advisory" },
-    { label: "Seller Advisory", href: "/services/seller-advisory" },
-    { label: "Leasing Advisory", href: "/services/leasing-advisory" },
-    { label: "Investment Advisory", href: "/services/investment-advisory" },
+    { label: t('footer.buyerAdvisory') || "Buyer Advisory", href: "/services/buyer-advisory" },
+    { label: t('footer.sellerAdvisory') || "Seller Advisory", href: "/services/seller-advisory" },
+    { label: t('footer.leasingAdvisory') || "Leasing Advisory", href: "/services/leasing-advisory" },
+    { label: t('footer.investmentAdvisory') || "Investment Advisory", href: "/services/investment-advisory" },
   ];
 
   // Investor Hub
   const investorHubLinks = [
-    { label: "Investor Education", href: "/investor-education" },
-    { label: "Investor FAQs", href: "/investor-faq" },
-    { label: "Investor Tools", href: "/ai-hub" },
+    { label: t('footer.investorEducation') || "Investor Education", href: "/investor-education" },
+    { label: t('footer.investorFaqs') || "Investor FAQs", href: "/investor-faq" },
+    { label: t('footer.investorTools') || "Investor Tools", href: "/ai-hub" },
   ];
 
   // Broker Hub
   const brokerHubLinks = [
-    { label: "Broker Tools", href: "/broker-toolkit" },
-    { label: "Broker Education", href: "/broker-education" },
-    { label: "Broker FAQs", href: "/broker-faq" },
+    { label: t('footer.brokerTools') || "Broker Tools", href: "/broker-toolkit" },
+    { label: t('footer.brokerEducation') || "Broker Education", href: "/broker-education" },
+    { label: t('footer.brokerFaqs') || "Broker FAQs", href: "/broker-faq" },
   ];
 
-  // Guides (CLEANED)
+  // Guides
   const guidesLinks = [
-    { label: "Buyer Guide", href: "/buyer-guide" },
-    { label: "Seller Guide", href: "/seller-guide" },
-    { label: "Landlord Guide", href: "/landlord-guide" },
-    { label: "Tenant Guide", href: "/tenant-guide" },
-    { label: "Area Guides", href: "/areas" },
-    { label: "General FAQs", href: "/faq" },
+    { label: t('footer.buyerGuide') || "Buyer Guide", href: "/buyer-guide" },
+    { label: t('footer.sellerGuide') || "Seller Guide", href: "/seller-guide" },
+    { label: t('footer.landlordGuide') || "Landlord Guide", href: "/landlord-guide" },
+    { label: t('footer.tenantGuide') || "Tenant Guide", href: "/tenant-guide" },
+    { label: t('footer.areaGuides') || "Area Guides", href: "/areas" },
+    { label: t('footer.generalFaqs') || "General FAQs", href: "/faq" },
   ];
 
   // Market Intelligence
   const marketIntelLinks = [
-    { label: "Market Overview", href: "/market-intelligence/overview" },
-    { label: "Area Intelligence", href: "/market-intelligence/areas" },
-    { label: "Market Reports", href: "/market-intelligence/reports" },
-    { label: "Methodology & Data Sources", href: "/market-intelligence/methodology" },
+    { label: t('footer.marketOverview') || "Market Overview", href: "/market-intelligence/overview" },
+    { label: t('footer.areaIntelligence') || "Area Intelligence", href: "/market-intelligence/areas" },
+    { label: t('footer.marketReports') || "Market Reports", href: "/market-intelligence/reports" },
+    { label: t('footer.methodology') || "Methodology & Data Sources", href: "/market-intelligence/methodology" },
   ];
 
   // About
   const aboutLinks = [
-    { label: "About JBJ", href: "/about" },
-    { label: "Founder & Leadership", href: "/founder" },
-    { label: "Meet the Team", href: "/team" },
-    { label: "Awards & Recognition", href: "/awards" },
-    { label: "News & Insights", href: "/news" },
-    { label: "Careers", href: "/join" },
+    { label: t('footer.aboutJbj') || "About JBJ", href: "/about" },
+    { label: t('footer.founderLeadership') || "Founder & Leadership", href: "/founder" },
+    { label: t('footer.meetTheTeam') || "Meet the Team", href: "/team" },
+    { label: t('footer.awardsRecognition') || "Awards & Recognition", href: "/awards" },
+    { label: t('footer.newsInsights') || "News & Insights", href: "/news" },
+    { label: t('footer.careers') || "Careers", href: "/join" },
   ];
 
   // Professional Tools
   const professionalTools = [
-    { href: "/compare", label: "Property Comparison" },
-    { href: "/property-evaluator", label: "JBJ Property Evaluator" },
-    { href: "/rental-index", label: "JBJ Rental Index" },
-    { href: "/mortgage-calculator", label: "Mortgage Calculator" },
-    { href: "/quiz", label: "AI Home Finder" },
-    { href: "/interior-design-ai", label: "AI Interior Design" },
-    { href: "/business-card-scanner", label: "Business Card Scanner" },
-    { href: "/documents", label: "Documents & Spreadsheets" },
-    { href: "/video-meeting", label: "Video Meet" },
-    { href: "/ai-calendar", label: "Calendar & Notes" },
+    { href: "/compare", label: t('footer.propertyComparison') || "Property Comparison" },
+    { href: "/property-evaluator", label: t('footer.propertyEvaluator') || "JBJ Property Evaluator" },
+    { href: "/rental-index", label: t('footer.rentalIndex') || "JBJ Rental Index" },
+    { href: "/mortgage-calculator", label: t('footer.mortgageCalculator') || "Mortgage Calculator" },
+    { href: "/quiz", label: t('footer.aiHomeFinder') || "AI Home Finder" },
+    { href: "/interior-design-ai", label: t('footer.aiInteriorDesign') || "AI Interior Design" },
+    { href: "/business-card-scanner", label: t('footer.businessCardScanner') || "Business Card Scanner" },
+    { href: "/documents", label: t('footer.documentsSpreadsheets') || "Documents & Spreadsheets" },
+    { href: "/video-meeting", label: t('footer.videoMeet') || "Video Meet" },
+    { href: "/ai-calendar", label: t('footer.calendarNotes') || "Calendar & Notes" },
   ];
 
   // Career Links
   const careerLinks = [
-    { href: "/join", label: "Apply to Join Our Team" },
-    { href: "/hr-agent", label: "Contact Our HR · Jessica" },
-    { href: "/onboarding", label: "Training Portal" },
+    { href: "/join", label: t('footer.applyJoin') || "Apply to Join Our Team" },
+    { href: "/hr-agent", label: t('footer.contactHr') || "Contact Our HR · Jessica" },
+    { href: "/onboarding", label: t('footer.trainingPortal') || "Training Portal" },
   ];
 
   return (
@@ -206,7 +207,7 @@ const Footer = () => {
             {/* Column 1: Properties + Services */}
             <div className="lg:px-5 lg:first:pl-0">
               <h4 className="text-gold font-semibold text-xs sm:text-sm uppercase tracking-[0.1em] sm:tracking-[0.15em] mb-2 sm:mb-4 pb-1 sm:pb-2 border-b border-gold/20 lg:border-b-0">
-                Properties
+                {t('footer.properties') || 'Properties'}
               </h4>
               <ul className="space-y-1.5 sm:space-y-2 mb-4 sm:mb-6">
                 {propertiesLinks.map((link) => (
@@ -222,7 +223,7 @@ const Footer = () => {
               </ul>
               
               <h4 className="text-gold font-semibold text-xs sm:text-sm uppercase tracking-[0.1em] sm:tracking-[0.15em] mb-2 sm:mb-4 pb-1 sm:pb-2 border-b border-gold/20 lg:border-b-0">
-                Services
+                {t('footer.servicesSection') || 'Services'}
               </h4>
               <ul className="space-y-1.5 sm:space-y-2">
                 {servicesLinks.map((link) => (
@@ -241,7 +242,7 @@ const Footer = () => {
             {/* Column 2: Investor Hub + Broker Hub */}
             <div className="lg:px-5">
               <h4 className="text-gold font-semibold text-xs sm:text-sm uppercase tracking-[0.1em] sm:tracking-[0.15em] mb-2 sm:mb-4 pb-1 sm:pb-2 border-b border-gold/20 lg:border-b-0">
-                Investor Hub
+                {t('footer.investorHub') || 'Investor Hub'}
               </h4>
               <ul className="space-y-1.5 sm:space-y-2 mb-4 sm:mb-6">
                 {investorHubLinks.map((link) => (
@@ -257,7 +258,7 @@ const Footer = () => {
               </ul>
               
               <h4 className="text-gold font-semibold text-xs sm:text-sm uppercase tracking-[0.1em] sm:tracking-[0.15em] mb-2 sm:mb-4 pb-1 sm:pb-2 border-b border-gold/20 lg:border-b-0">
-                Broker Hub
+                {t('footer.brokerHub') || 'Broker Hub'}
               </h4>
               <ul className="space-y-1.5 sm:space-y-2">
                 {brokerHubLinks.map((link) => (
@@ -276,7 +277,7 @@ const Footer = () => {
             {/* Column 3: Guides + Market Intelligence */}
             <div className="lg:px-5">
               <h4 className="text-gold font-semibold text-xs sm:text-sm uppercase tracking-[0.1em] sm:tracking-[0.15em] mb-2 sm:mb-4 pb-1 sm:pb-2 border-b border-gold/20 lg:border-b-0">
-                Guides
+                {t('footer.guides') || 'Guides'}
               </h4>
               <ul className="space-y-1.5 sm:space-y-2 mb-4 sm:mb-6">
                 {guidesLinks.map((link) => (

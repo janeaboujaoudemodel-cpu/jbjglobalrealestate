@@ -212,8 +212,8 @@ END:VCARD`;
   const contactCards = [
     {
       icon: MapPin,
-      title: "Location",
-      value: "Downtown Dubai, UAE",
+      title: t('contact.location') || "Location",
+      value: t('contact.locationValue') || "Downtown Dubai, UAE",
       action: null,
       iconColor: "text-gold",
       titleColor: "text-black",
@@ -222,7 +222,7 @@ END:VCARD`;
     },
     {
       icon: Phone,
-      title: "Phone",
+      title: t('contact.phone') || "Phone",
       value: CONTACT_INFO.phone,
       action: 'phone-actions',
       iconColor: "text-gold",
@@ -232,7 +232,7 @@ END:VCARD`;
     },
     {
       icon: Mail,
-      title: "Email",
+      title: t('contact.email') || "Email",
       value: CONTACT_INFO.email,
       action: getEmailUrl(),
       iconColor: "text-gold",
@@ -242,8 +242,8 @@ END:VCARD`;
     },
     {
       icon: Calendar,
-      title: "Availability",
-      value: "Book Online Meeting",
+      title: t('contact.availability') || "Availability",
+      value: t('contact.bookOnline') || "Book Online Meeting",
       action: 'meeting',
       iconColor: "text-gold",
       titleColor: "text-black",
@@ -256,30 +256,29 @@ END:VCARD`;
     <>
       <SEOHead {...pagesSEO.contact} />
       <div className="min-h-screen bg-black">
-      {/* Hero Section with Image */}
-      <section className="relative py-20 md:py-28">
+      {/* Hero Section with Image - Fixed padding to prevent cropping */}
+      <section className="relative pt-28 pb-20 md:pt-36 md:pb-28">
         <div className="absolute inset-0">
           <img 
             src={contactHero} 
-            alt="Book a consultation" 
+            alt={t('contact.heroAlt') || 'Book a consultation'} 
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black" />
         </div>
         <div className="relative container mx-auto px-4">
-          <p className="text-gold text-sm uppercase tracking-[0.2em] mb-4">Real Estate Brokerage</p>
+          <p className="text-gold text-sm uppercase tracking-[0.2em] mb-4">{t('contact.brokerage') || 'Real Estate Brokerage'}</p>
           <h1 
             className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            Book a Consultation
+            {t('hero.bookConsultation')}
           </h1>
           <p className="text-zinc-300 text-lg md:text-xl max-w-3xl leading-relaxed mb-4">
-            Brokerage support for buying, selling, and renting property in Dubai and the UAE. 
-            We also coordinate introductions to independent licensed partners for legal, mortgage, and concierge support.
+            {t('contact.heroDescription') || 'Brokerage support for buying, selling, and renting property in Dubai and the UAE. We also coordinate introductions to independent licensed partners for legal, mortgage, and concierge support.'}
           </p>
           <p className="text-zinc-400 text-sm max-w-2xl leading-relaxed border-l-2 border-gold/30 pl-4">
-            Introductions and coordination only — partner services are delivered under the partner's own terms and licence.
+            {t('contact.partnerDisclaimer') || 'Introductions and coordination only — partner services are delivered under the partner\'s own terms and licence.'}
           </p>
         </div>
       </section>
