@@ -11,11 +11,16 @@ import { motion, AnimatePresence } from "framer-motion";
 // Import CEO photo - same as used in team/leadership
 import janePhoto from '@/assets/ceo/jane-ceo-private-jet.jpg';
 
-// Contact info constants - LOCKED
+// Contact info constants - LOCKED (from BRAND_LOCK)
 const CONTACT_INFO = {
+  // LOCKED: English name
   name: "Jane Bou Jaoude",
+  // LOCKED: Arabic name (exact spelling from founder)
   nameArabic: "جاين بو جودة",
+  // LOCKED: English title
   title: "Founder & CEO",
+  // LOCKED: Arabic title (feminine form with diacritics)
+  titleArabic: "ٱلْمُؤَسِّسَةُ وَٱلرَّئِيسَةُ ٱلتَّنْفِيذِيَّةُ",
   company: "JBJ Global Real Estate LLC",
   email: "contact@jbj.ae",
   phone: "+971 56 591 1000",

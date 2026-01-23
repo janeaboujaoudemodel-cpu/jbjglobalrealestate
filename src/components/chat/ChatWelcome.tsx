@@ -1,13 +1,15 @@
 import { MessageCircle } from 'lucide-react';
 import { CONTACT_INFO } from '@/constants/stats';
 import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
-import { T } from '@/components/ui/T';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface ChatWelcomeProps {
   onStartChat: () => void;
 }
 
 const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
+  const { t } = useLanguage();
+  
   return (
     <div className="flex-1 p-6 flex flex-col">
       {/* Logo stays at top */}
@@ -25,9 +27,9 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
       <div className="flex-1 flex flex-col justify-center">
         <div className="text-center mb-4">
           <h4 className="text-black text-lg font-semibold mb-1">
-            <T>Welcome to JBJ Global Real Estate</T> 👋
+            {t('chat.welcomeTitle', 'Welcome to JBJ Global Real Estate')} 👋
           </h4>
-          <p className="text-zinc-600 text-sm"><T>Your premium Real Estate partner in Dubai</T></p>
+          <p className="text-zinc-600 text-sm">{t('chat.welcomeSubtitle', 'Your premium Real Estate partner in Dubai')}</p>
         </div>
 
         <div className="space-y-3">
@@ -41,9 +43,9 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
                 <MessageCircle className="w-6 h-6 text-gold" />
               </div>
               <div className="flex-1">
-                <h5 className="text-black text-sm font-semibold mb-1">💬 <T>Chat with our team</T></h5>
-                <p className="text-gold text-xs font-medium">⚡ <T>Quick answers • Available 24/7</T></p>
-                <p className="text-zinc-600 text-xs mt-1"><T>One of our realty members will assist you</T></p>
+                <h5 className="text-black text-sm font-semibold mb-1">💬 {t('chat.chatWithTeam', 'Chat with our team')}</h5>
+                <p className="text-gold text-xs font-medium">⚡ {t('chat.quickAnswers', 'Quick answers • Available 24/7')}</p>
+                <p className="text-zinc-600 text-xs mt-1">{t('chat.teamAssist', 'One of our team members will assist you')}</p>
               </div>
             </div>
           </button>
@@ -62,10 +64,10 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
                 <MessageCircle className="w-6 h-6 text-green-500" />
               </div>
               <div className="flex-1">
-                <h5 className="text-green-600 text-sm font-semibold mb-1">📱 <T>Talk Directly with Our Team</T></h5>
-                <p className="text-gold text-xs font-medium">⚡ <T>Instant response • WhatsApp</T></p>
+                <h5 className="text-green-600 text-sm font-semibold mb-1">📱 {t('chat.talkDirectly', 'Talk Directly with Our Team')}</h5>
+                <p className="text-gold text-xs font-medium">⚡ {t('chat.instantResponse', 'Instant response • WhatsApp')}</p>
                 <p className="text-zinc-600 text-xs mt-1">
-                  <T>For urgent matters or personalized consultation</T>
+                  {t('chat.urgentMatters', 'For urgent matters or personalized consultation')}
                 </p>
               </div>
             </div>
@@ -77,8 +79,8 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
       <div className="text-center mt-2 mb-4 sm:mb-2 px-4 py-2 bg-white/80 rounded-lg border border-gold/30">
         <p className="text-xs flex flex-wrap items-center justify-center gap-1 sm:gap-2">
           <span className="text-gold">💡</span>
-          <span className="text-black font-semibold"><T>Tip:</T></span>
-          <span className="text-zinc-700"><T>Our team can answer most questions right away. For complex matters, we'll connect you to a specialist!</T></span>
+          <span className="text-black font-semibold">{t('chat.tip', 'Tip:')}</span>
+          <span className="text-zinc-700">{t('chat.tipText', "Our team can answer most questions right away. For complex matters, we'll connect you to a specialist!")}</span>
         </p>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, Minus, MessageCircle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Minus, MessageCircle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ChatStep, getRandomAgent } from './types';
 import { useMemo } from 'react';
@@ -12,20 +12,20 @@ interface ChatHeaderProps {
 }
 
 const ChatHeader = ({ step, isExistingUser, onBack, onToggleCollapse }: ChatHeaderProps) => {
-  const { isRTL } = useLanguage();
+  const { isRTL, t } = useLanguage();
   const agent = useMemo(() => getRandomAgent(), []);
 
   const getStatusText = () => {
     switch (step) {
-      case 'welcome_choice': return 'How can we help you?';
-      case 'check_email': return 'Just need your email';
-      case 'collect_info': return "Let's get to know you";
-      case 'chat_history': return 'Your conversations';
-      case 'select_service': return "What can we help with?";
-      case 'agent_joining': return 'Connecting you...';
-      case 'chatting': return '🟢 Online • Here to help';
-      case 'rating': return 'How did we do?';
-      case 'submitted': return 'Thank you!';
+      case 'welcome_choice': return t('chat.howCanWeHelp', 'How can we help you?');
+      case 'check_email': return t('chat.justNeedEmail', 'Just need your email');
+      case 'collect_info': return t('chat.letsGetToKnow', "Let's get to know you");
+      case 'chat_history': return t('chat.yourConversations', 'Your conversations');
+      case 'select_service': return t('chat.whatCanWeHelp', "What can we help with?");
+      case 'agent_joining': return t('chat.connectingYou', 'Connecting you...');
+      case 'chatting': return t('chat.onlineHereToHelp', '🟢 Online • Here to help');
+      case 'rating': return t('chat.howDidWeDo', 'How did we do?');
+      case 'submitted': return t('chat.thankYou', 'Thank you!');
       default: return '';
     }
   };
@@ -43,7 +43,7 @@ const ChatHeader = ({ step, isExistingUser, onBack, onToggleCollapse }: ChatHead
             onClick={onBack}
             className="text-black hover:text-gold hover:bg-black/5 mr-1"
           >
-            <ChevronLeft className="w-5 h-5" />
+            {isRTL ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
           </Button>
         )}
         {showAgentPhoto ? (
@@ -61,7 +61,7 @@ const ChatHeader = ({ step, isExistingUser, onBack, onToggleCollapse }: ChatHead
         )}
         <div>
           <h3 className="text-black font-bold text-sm flex items-center gap-1.5">
-            {showAgentPhoto ? agent.name : 'JBJ Support'}
+            {showAgentPhoto ? agent.name : t('chat.title', 'JBJ Support')}
           </h3>
           <p className="text-zinc-600 text-xs font-medium">{getStatusText()}</p>
         </div>
@@ -69,7 +69,7 @@ const ChatHeader = ({ step, isExistingUser, onBack, onToggleCollapse }: ChatHead
       <div className="flex items-center gap-2">
         <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 bg-gold/10 rounded-full border border-gold/40">
           <div className="w-2 h-2 rounded-full bg-gold animate-pulse" />
-          <span className="text-gold text-[10px] font-semibold">Available 24/7</span>
+          <span className="text-gold text-[10px] font-semibold">{t('chat.available247', 'Available 24/7')}</span>
         </div>
         {/* Minimize button instead of X */}
         <Button
@@ -77,7 +77,7 @@ const ChatHeader = ({ step, isExistingUser, onBack, onToggleCollapse }: ChatHead
           size="icon"
           onClick={onToggleCollapse}
           className="w-10 h-10 rounded-lg bg-white border-2 border-gold text-gold hover:bg-gold/10 hover:shadow-lg hover:shadow-gold/20 transition-all"
-          title="Minimize chat"
+          title={t('chat.minimize', 'Minimize chat')}
         >
           <Minus className="w-5 h-5" />
         </Button>
