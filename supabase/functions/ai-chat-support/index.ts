@@ -258,7 +258,7 @@ JBJ GLOBAL REAL ESTATE - COMPLETE SERVICES & INFORMATION:
 
 COMPANY OVERVIEW:
 - JBJ GLOBAL REAL ESTATE is a Dubai-based real estate brokerage licensed for BUY, SELL & RENT only
-- Founded by Jane Abou Jaoude
+- Founded by Jane Bou Jaoude
 - Headquarters: Dubai, UAE
 
 CONTACT INFORMATION (USE ONLY THESE):

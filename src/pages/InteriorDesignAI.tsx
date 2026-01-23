@@ -1170,7 +1170,7 @@ const downloadPdf = async () => {
 
                   <div className="text-center pt-4 border-t border-zinc-800">
                     <p className="text-zinc-500 text-sm leading-relaxed">
-                      Software developed and implemented by The Founder & CEO, Jane Abou Jaoude<br />
+                      Software developed and implemented by The Founder & CEO, Jane Bou Jaoude<br />
                       Designed exclusively for JBJ Global Real Estate
                     </p>
                   </div>

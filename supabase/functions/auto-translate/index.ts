@@ -104,7 +104,7 @@ serve(async (req) => {
 
 RULES:
 1. Maintain the same tone - professional, elegant, luxury
-2. Keep brand names unchanged: "JBJ Global Real Estate", "Jane Abou Jaoude"
+2. Keep brand names unchanged: "JBJ Global Real Estate", "Jane Bou Jaoude"
 3. Keep technical terms, URLs, and email addresses unchanged
 4. Use formal register appropriate for business contexts
 5. For Arabic/Persian: Use Modern Standard Arabic (not dialect)

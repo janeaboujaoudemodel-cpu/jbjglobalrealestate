@@ -17,7 +17,7 @@ const CopyrightNotice = ({ variant = "inline", className = "" }: CopyrightNotice
             <p className="text-zinc-400 text-xs md:text-sm">
               <span className="text-gold font-semibold">© {currentYear} JBJ Global Real Estate.</span>{" "}
               All rights reserved. This platform, including all AI tools, designs, and intellectual property, 
-              is exclusively owned by <span className="text-white">Founder & CEO Jane Abou Jaoude</span>.
+              is exclusively owned by <span className="text-white">Founder & CEO Jane Bou Jaoude</span>.
               Unauthorized reproduction is strictly prohibited.
             </p>
             <Lock className="w-4 h-4 text-gold/60 flex-shrink-0 hidden md:block" />

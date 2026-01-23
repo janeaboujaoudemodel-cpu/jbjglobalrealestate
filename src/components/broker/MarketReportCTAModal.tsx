@@ -163,7 +163,7 @@ export default function MarketReportCTAModal({
         </div>
 
         <div className="text-center mt-4">
-          <p className="text-zinc-300 text-xs font-medium">Jane Abou Jaoude</p>
+          <p className="text-zinc-300 text-xs font-medium">Jane Bou Jaoude</p>
           <p className="text-gold text-xs mt-0.5">Founder & CEO</p>
           <p className="text-zinc-500 text-xs mt-0.5">JBJ Global Real Estate</p>
         </div>

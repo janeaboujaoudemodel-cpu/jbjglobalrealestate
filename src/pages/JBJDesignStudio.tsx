@@ -392,7 +392,7 @@ const JBJDesignStudio: React.FC = () => {
                           <Input
                             value={signatureData.name}
                             onChange={(e) => setSignatureData(prev => ({ ...prev, name: e.target.value }))}
-                            placeholder="Jane Abou Jaoude"
+                            placeholder="Jane Bou Jaoude"
                             className="bg-zinc-800 border-zinc-700 text-white mt-1"
                           />
                         </div>

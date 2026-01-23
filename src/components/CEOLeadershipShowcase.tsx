@@ -74,13 +74,13 @@ const CEOLeadershipShowcase = () => {
                 {/* Desktop: use object-cover for better visual */}
                 <img
                   src={ceoLandscapeFlags}
-                  alt="Jane Abou Jaoude - Founder & CEO at JBJ Global Real Estate with Lebanese and UAE flags"
+                  alt="Jane Bou Jaoude - Founder & CEO at JBJ Global Real Estate with Lebanese and UAE flags"
                   className="w-full h-auto min-h-[200px] sm:min-h-[300px] md:min-h-[400px] object-contain md:object-cover bg-zinc-900"
                 />
                 {/* Overlay with name & title at bottom center only - no duplicate labels */}
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 sm:p-6 md:p-10">
                   <div className="text-center">
-                    <h3 className="text-white text-xl sm:text-2xl md:text-5xl font-bold mb-1 sm:mb-2">Jane Abou Jaoude</h3>
+                    <h3 className="text-white text-xl sm:text-2xl md:text-5xl font-bold mb-1 sm:mb-2">Jane Bou Jaoude</h3>
                     <p
                       className="text-lg sm:text-xl md:text-3xl font-semibold"
                       style={{
@@ -157,7 +157,7 @@ const CEOLeadershipShowcase = () => {
                   Innovation and excellence are not just goals—they are the foundation
                   of everything we build. At JBJ Global Real Estate, we're crafting futures and shaping skylines.
                 </p>
-                <p className="mt-6 text-gold font-semibold">— Jane Abou Jaoude</p>
+                <p className="mt-6 text-gold font-semibold">— Jane Bou Jaoude</p>
                 <p className="text-zinc-600 text-sm">Founder & CEO</p>
               </div>
             </motion.div>

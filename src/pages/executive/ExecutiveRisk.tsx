@@ -393,7 +393,7 @@ const ExecutiveRisk = () => {
                 <p className="text-xs text-zinc-500">
                   Risk & Compliance Monitor • All events logged and auditable
                 </p>
-                <p className="text-xs text-zinc-500 mt-1">Jane Abou Jaoude</p>
+                <p className="text-xs text-zinc-500 mt-1">Jane Bou Jaoude</p>
                 <p className="text-xs text-gold mt-0.5">Founder & CEO</p>
                 <p className="text-xs text-zinc-600 mt-0.5">JBJ Global Real Estate</p>
               </div>

@@ -138,7 +138,7 @@ const AnnualMarketSummary = () => {
       <SEOHead
         title={`${data.year} Annual Summary | Dubai Real Estate | JBJ GLOBAL REAL ESTATE`}
         description={`Annual market summary for ${data.year} covering Dubai real estate across BUY · SELL · RENT. Comprehensive year-in-review by JBJ GLOBAL REAL ESTATE.`}
-        keywords="Dubai annual summary, real estate year review, market analysis, Jane Abou jaoude"
+        keywords="Dubai annual summary, real estate year review, market analysis, Jane Bou Jaoude"
       />
 
       {/* Main Content - 3-layer system */}
@@ -409,7 +409,7 @@ const AnnualMarketSummary = () => {
                 </div>
                 <div className="mt-4 pt-4 border-t border-gold/30">
                   <p className="text-xs text-zinc-500">
-                    JBJ GLOBAL REAL ESTATE • Jane Abou jaoude, Founder & CEO
+                    JBJ GLOBAL REAL ESTATE • Jane Bou Jaoude, Founder & CEO
                   </p>
                 </div>
               </CardContent>

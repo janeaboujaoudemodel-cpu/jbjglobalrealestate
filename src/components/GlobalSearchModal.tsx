@@ -86,7 +86,7 @@ const SEARCHABLE_ITEMS = [
     route: "/founder", 
     label: "Founder & Leadership", 
     icon: User,
-    description: "Meet Jane Abou Jaoude"
+    description: "Meet Jane Bou Jaoude"
   },
   { 
     keywords: ["award", "awards", "recognition", "achievement"], 

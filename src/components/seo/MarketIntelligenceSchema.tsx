@@ -17,7 +17,7 @@ const organizationSchema = {
   logo: "https://jbjglobalrealestate.lovable.app/lovable-uploads/c6c68c7f-b5b7-4e7a-9f66-3ff7e08fd37f.png",
   founder: {
     "@type": "Person",
-    name: "Jane Abou jaoude"
+    name: "Jane Bou Jaoude"
   },
   sameAs: [
     "https://www.instagram.com/jbjglobalrealestate",
