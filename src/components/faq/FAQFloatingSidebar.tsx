@@ -1,9 +1,10 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { LucideIcon, List, ChevronDown, ChevronUp, HelpCircle, Search, Phone } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { scrollToId } from "@/lib/scroll";
 
 interface FAQCategory {
   id: string;
@@ -26,6 +27,7 @@ export const FAQFloatingSidebar = ({
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isMinimized, setIsMinimized] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const isScrollingRef = useRef(false);
 
   useEffect(() => {
     // Check if tooltip was already dismissed
@@ -40,13 +42,22 @@ export const FAQFloatingSidebar = ({
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
+        // Skip observer updates during programmatic scroll
+        if (isScrollingRef.current) return;
+        
+        const visibleEntries = entries.filter(entry => entry.isIntersecting);
+        if (visibleEntries.length > 0) {
+          // Sort by top position to get the topmost visible section
+          const sorted = visibleEntries.sort((a, b) => {
+            return a.boundingClientRect.top - b.boundingClientRect.top;
+          });
+          const bestEntry = sorted.find(entry => entry.boundingClientRect.top >= -100) || sorted[0];
+          if (bestEntry) {
+            setActiveId(bestEntry.target.id);
           }
-        });
+        }
       },
-      { rootMargin: "-100px 0px -50% 0px" }
+      { rootMargin: "-140px 0px -50% 0px", threshold: [0, 0.25, 0.5] }
     );
 
     categories.forEach((_, index) => {
@@ -58,20 +69,16 @@ export const FAQFloatingSidebar = ({
   }, [categories]);
 
   const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      // Use scrollTo with offset to prevent getting stuck
-      const offset = 120;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - offset;
-      
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth"
-      });
-      
-      setActiveId(id);
-    }
+    // Lock observer during scroll
+    isScrollingRef.current = true;
+    setActiveId(id);
+    
+    scrollToId(id, { extraOffset: 20 });
+
+    // Re-enable observer after scroll animation completes
+    setTimeout(() => {
+      isScrollingRef.current = false;
+    }, 900);
   };
 
   const handleDismissTooltip = () => {

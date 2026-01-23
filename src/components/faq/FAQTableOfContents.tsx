@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { scrollToId } from "@/lib/scroll";
 
 interface FAQCategory {
   id: string;
@@ -35,17 +36,27 @@ export const FAQTableOfContents = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const isScrollingRef = useRef(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
+        // Skip observer updates during programmatic scroll
+        if (isScrollingRef.current) return;
+        
+        const visibleEntries = entries.filter(entry => entry.isIntersecting);
+        if (visibleEntries.length > 0) {
+          // Sort by top position to get the topmost visible section
+          const sorted = visibleEntries.sort((a, b) => {
+            return a.boundingClientRect.top - b.boundingClientRect.top;
+          });
+          const bestEntry = sorted.find(entry => entry.boundingClientRect.top >= -100) || sorted[0];
+          if (bestEntry) {
+            setActiveId(bestEntry.target.id);
           }
-        });
+        }
       },
-      { rootMargin: "-100px 0px -50% 0px" }
+      { rootMargin: "-140px 0px -50% 0px", threshold: [0, 0.25, 0.5] }
     );
 
     categories.forEach((category, index) => {
@@ -57,21 +68,16 @@ export const FAQTableOfContents = ({
   }, [categories]);
 
   const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      // Set active immediately for better UX
-      setActiveId(id);
-      
-      // Use a larger offset to account for sticky headers (same as GuideTableOfContents)
-      const offset = 150;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - offset;
-      
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth"
-      });
-    }
+    // Lock observer during scroll
+    isScrollingRef.current = true;
+    setActiveId(id);
+    
+    scrollToId(id, { extraOffset: 20 });
+
+    // Re-enable observer after scroll animation completes
+    setTimeout(() => {
+      isScrollingRef.current = false;
+    }, 900);
   };
 
   const handleSearch = (query: string) => {
