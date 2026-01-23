@@ -90,9 +90,9 @@ export const GROUP_MANAGEMENT_RULES = {
 
   // Founder Access
   founderAccess: {
-    rule: 'Founder (Jane Abou Jaoude) is automatically member of ALL groups',
+    rule: 'Founder (Jane Bou Jaoude) is automatically member of ALL groups',
     reason: 'Full oversight and ability to track daily messages',
-    action: 'Include jane-abou-jaoude in every group member list',
+    action: 'Include jane-bou-jaoude in every group member list',
   },
 };
 
@@ -106,7 +106,7 @@ export const REPORTING_FLOW_RULES = {
     level2: 'Managers → Department heads',
     level3: 'Department heads → Richard Pemberton (COO) or David Thornton (MD)',
     level4: 'Richard/David → Amanda Clarke',
-    level5: 'Amanda Clarke → Founder (Jane Abou Jaoude)',
+    level5: 'Amanda Clarke → Founder (Jane Bou Jaoude)',
   },
 
   reportTypes: {
@@ -271,7 +271,7 @@ export const TASK_MANAGEMENT_RULES = {
 
 export const FOUNDER_RECOGNITION_RULES = {
   founderIdentity: {
-    name: 'Miss Jane Abou Jaoude',
+    name: 'Miss Jane Bou Jaoude',
     title: 'Founder & CEO',
     email: ['admin@jbj.ae', 'jane@jbj.ae', 'ceo@jbj.ae'],
     action: 'When this user logs in, treat them as the EMPLOYER',

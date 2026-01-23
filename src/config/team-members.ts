@@ -335,8 +335,8 @@ const classifySalesDepartment = (members: TeamMember[]): TeamMember[] => {
 // LOCKED_GLOBAL = true - Leadership Department dataset is locked and synced globally
 export const executiveTeam: TeamMember[] = sortByHierarchy([
   {
-    id: 'jane-abou-jaoude',
-    name: 'Jane Abou Jaoude',
+    id: 'jane-bou-jaoude',
+    name: 'Jane Bou Jaoude',
     role: 'Founder & CEO JBJ Global Real Estate',
     department: 'Executive',
     avatar: janeAbouJaoudeCeo, // LOCKED_EXISTING - Do not modify
@@ -2921,7 +2921,7 @@ export const legalTeam: TeamMember[] = sortByHierarchy([
     department: 'Legal',
     avatar: hudaMarzooqLawyer,
     isAI: false,
-    bio: 'Official legal counsel representing Jane Abou Jaoude and JBJ Global Real Estate. Provides advisory oversight on UAE legal matters, property transactions, and corporate documentation.',
+    bio: 'Official legal counsel representing Jane Bou Jaoude and JBJ Global Real Estate. Provides advisory oversight on UAE legal matters, property transactions, and corporate documentation.',
     specializations: ['UAE Property Law', 'Contract Law', 'Corporate Governance', 'Real Estate Transactions'],
     languages: ['English', 'Arabic'],
     nationality: 'Emirati',

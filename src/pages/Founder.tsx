@@ -180,7 +180,7 @@ const Founder = () => {
           <SafeImage 
             src={ceoHeroOfficeFlags} 
             fallbackSrc={founderHero}
-            alt="Jane Abou Jaoude - Founder & CEO"
+            alt="Jane Bou Jaoude - Founder & CEO"
             className="w-full h-full bg-zinc-950"
             style={{ objectFit: "cover", objectPosition: "center 15%" }}
           />
@@ -285,7 +285,7 @@ const Founder = () => {
                   <SafeImage 
                     src={founderPremium} 
                     fallbackSrc={founderProfessional}
-                    alt="Jane Abou Jaoude, Founder & CEO of JBJ GLOBAL REAL ESTATE" 
+                    alt="Jane Bou Jaoude, Founder & CEO of JBJ GLOBAL REAL ESTATE" 
                     className="w-full h-full"
                     style={{ objectFit: "cover", objectPosition: "center 15%" }}
                   />
@@ -419,7 +419,7 @@ const Founder = () => {
                     Origins & Early Entrepreneurship
                   </h3>
                   <p className="text-lg mb-4 text-black">
-                    Jane Abou Jaoude was born on August 25, 1998, in Lebanon. Fluent in French and Arabic from childhood, she later taught herself English and Spanish—developing a global perspective from an early age.
+                    Jane Bou Jaoude was born on August 25, 1998, in Lebanon. Fluent in French and Arabic from childhood, she later taught herself English and Spanish—developing a global perspective from an early age.
                   </p>
                   <p className="text-lg mb-4 text-zinc-600">
                     At 16, Jane launched Jane's Beauty in 2015, offering beauty services while also selling products via importing and shipping from China. Active on social media since 2012, she built a following that now exceeds 1M+ across platforms.
@@ -556,7 +556,7 @@ const Founder = () => {
                 <SafeImage 
                   src={ceoBusinessPortrait} 
                   fallbackSrc={founderHero}
-                  alt="Jane Abou Jaoude - Business Portrait" 
+                  alt="Jane Bou Jaoude - Business Portrait" 
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
@@ -728,7 +728,7 @@ const Founder = () => {
                   <SafeImage 
                     src={founderProfessional} 
                     fallbackSrc={founderHero}
-                    alt="Jane Abou Jaoude - Professional Portrait" 
+                    alt="Jane Bou Jaoude - Professional Portrait" 
                     className="w-full h-full group-hover:scale-105 transition-transform duration-700"
                     style={{ objectFit: "cover", objectPosition: "center 15%" }}
                   />

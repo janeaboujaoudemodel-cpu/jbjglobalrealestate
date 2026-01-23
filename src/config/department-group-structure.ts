@@ -66,8 +66,8 @@ export interface ReportingNode {
 // ============================================
 
 const DEPARTMENT_LEADERS: Record<string, { leaderId: string; leaderName: string; reportsTo: string }> = {
-  'Executive': { leaderId: 'jane-abou-jaoude', leaderName: 'Jane Abou Jaoude', reportsTo: '' },
-  'Sales': { leaderId: 'roy-davi', leaderName: 'Roy Davi', reportsTo: 'jane-abou-jaoude' },
+  'Executive': { leaderId: 'jane-bou-jaoude', leaderName: 'Jane Bou Jaoude', reportsTo: '' },
+  'Sales': { leaderId: 'roy-davi', leaderName: 'Roy Davi', reportsTo: 'jane-bou-jaoude' },
   'After Sales': { leaderId: 'charles-ashford', leaderName: 'Charles Ashford', reportsTo: 'richard-pemberton' },
   'Marketing & Content': { leaderId: 'victoria-sterling', leaderName: 'Victoria Sterling', reportsTo: 'david-thornton' },
   'Client Relations': { leaderId: 'george-hamilton', leaderName: 'George Hamilton', reportsTo: 'michael-anderson' },
@@ -268,8 +268,8 @@ export const COMPANY_LEADERSHIP_GROUP: DepartmentGroup = {
     ...Object.values(DEPARTMENT_LEADERS).map(l => l.leaderId).filter(Boolean),
   ].filter((id, index, self) => self.indexOf(id) === index), // Remove duplicates
   memberDetails: executiveTeam,
-  leaderId: 'jane-abou-jaoude',
-  leaderName: 'Jane Abou Jaoude',
+  leaderId: 'jane-bou-jaoude',
+  leaderName: 'Jane Bou Jaoude',
   reportsTo: '',
   description: 'Company leadership team for strategic decisions',
   founderAccess: true,

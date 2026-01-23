@@ -497,7 +497,7 @@ const ScanSignDocuments = () => {
             <p className="text-zinc-400 max-w-2xl mx-auto">
               Use this assistant to scan, sign, and manage your documents easily. Design your signature or upload one to get started.
             </p>
-            <p className="text-xs text-gold mt-2">Developed by Founder and CEO Jane Abou Jaoude</p>
+            <p className="text-xs text-gold mt-2">Developed by Founder and CEO Jane Bou Jaoude</p>
           </motion.div>
         </div>
       </div>

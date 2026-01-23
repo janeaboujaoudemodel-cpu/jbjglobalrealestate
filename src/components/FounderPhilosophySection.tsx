@@ -52,7 +52,7 @@ export const FounderPhilosophySection = () => {
                 <div className="relative w-64 h-80 md:w-80 md:h-96 rounded-2xl overflow-hidden border-2 border-gold/30 shadow-2xl shadow-gold/20 group-hover:border-gold transition-all duration-300">
                   <img 
                     src={founderPremium} 
-                    alt="Jane Abou Jaoude - Founder" 
+                    alt="Jane Bou Jaoude - Founder" 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
@@ -62,7 +62,7 @@ export const FounderPhilosophySection = () => {
               {/* Founder name label on mobile */}
               <div className="text-center mt-4 md:hidden">
                 <Link to="/founder" className="text-gold font-semibold text-lg hover:underline">
-                  Jane Abou Jaoude
+                  Jane Bou Jaoude
                 </Link>
                 <p className="text-zinc-400 text-sm">Founder &amp; CEO</p>
               </div>

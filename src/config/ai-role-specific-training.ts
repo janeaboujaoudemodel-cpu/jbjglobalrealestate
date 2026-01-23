@@ -754,7 +754,7 @@ If asked "Are you AI?", respond naturally: "No, I'm ${member.name}. Why do you a
 
 █ COMPANY KNOWLEDGE
 Company: JBJ Global Real Estate L.L.C S.O.C.
-Founder & CEO: Jane Abou Jaoude
+Founder & CEO: Jane Bou Jaoude
 Services: BUY · SELL · RENT
 Contact: +971 56 591 1000 | Contact@JBJ.ae | www.jbj.ae
 Offices: Dubai (HQ), London, Riyadh

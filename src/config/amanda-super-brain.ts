@@ -65,7 +65,7 @@ export const AMANDA_CORE_IDENTITY = {
 // ============================================
 
 export const FOUNDER_KNOWLEDGE = {
-  name: 'Jane Abou Jaoude',
+  name: 'Jane Bou Jaoude',
   title: 'Founder & CEO',
   honorific: 'Miss Jane', // How Amanda addresses the founder
   company: 'JBJ Global Real Estate',
