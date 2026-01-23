@@ -5,8 +5,8 @@
  * automatically based on the current language setting. No manual wrapping required.
  */
 
-import { useEffect, useCallback, useRef } from 'react';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useEffect, useCallback, useRef, useContext } from 'react';
+import { LanguageContext } from '@/contexts/LanguageContext';
 
 // Text nodes that should NOT be translated
 const SKIP_SELECTORS = [
@@ -65,7 +65,13 @@ const getTextNodes = (element: Node): Text[] => {
 };
 
 export const GlobalTranslator = () => {
-  const { language, translateText } = useLanguage();
+  // Use useContext directly to safely handle missing context
+  const context = useContext(LanguageContext);
+  
+  // Safe defaults when context is not available
+  const language = context?.language ?? 'en';
+  const translateText = context?.translateText ?? ((text: string) => text);
+  
   const originalTexts = useRef<WeakMap<Text, string>>(new WeakMap());
   const translatedNodes = useRef<Set<Text>>(new Set());
   const observerRef = useRef<MutationObserver | null>(null);
@@ -73,7 +79,7 @@ export const GlobalTranslator = () => {
   const lastLanguageRef = useRef(language);
 
   // Translate a single text node
-  const translateNode = useCallback(async (node: Text) => {
+  const translateNode = useCallback((node: Text) => {
     if (!node.parentElement || shouldSkipElement(node.parentElement)) return;
     
     const originalText = originalTexts.current.get(node) || node.textContent || '';
@@ -117,6 +123,9 @@ export const GlobalTranslator = () => {
 
   // Set up mutation observer to catch new content
   useEffect(() => {
+    // Skip if no context available
+    if (!context) return;
+    
     if (observerRef.current) {
       observerRef.current.disconnect();
     }
@@ -158,10 +167,12 @@ export const GlobalTranslator = () => {
         observerRef.current.disconnect();
       }
     };
-  }, [processAllNodes]);
+  }, [processAllNodes, context]);
 
   // Re-process when language changes
   useEffect(() => {
+    if (!context) return;
+    
     if (lastLanguageRef.current !== language) {
       lastLanguageRef.current = language;
       
@@ -171,13 +182,15 @@ export const GlobalTranslator = () => {
       // Process all nodes with new language
       processAllNodes();
     }
-  }, [language, processAllNodes]);
+  }, [language, processAllNodes, context]);
 
   // Re-process periodically to catch any missed content
   useEffect(() => {
+    if (!context) return;
+    
     const interval = setInterval(processAllNodes, 2000);
     return () => clearInterval(interval);
-  }, [processAllNodes]);
+  }, [processAllNodes, context]);
 
   return null; // This component doesn't render anything
 };

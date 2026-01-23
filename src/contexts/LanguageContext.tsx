@@ -26,7 +26,7 @@ const translations: Record<Language, Record<string, string>> = {
   en, ar, es, fr, ru, zh, hi, fa, tr, de, it, nl
 };
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+export const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 const LANGUAGE_KEY = 'jj_language';
 const LANGUAGE_CHANGE_TIME_KEY = 'jj_language_change_time';
