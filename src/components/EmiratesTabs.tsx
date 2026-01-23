@@ -38,16 +38,16 @@ const EmiratesTabs = ({ projects, selectedEmirate, onEmirateSelect }: EmiratesTa
 
   return (
     <div className="mb-8">
-      <p className="text-zinc-500 text-sm mb-3 uppercase tracking-wider font-medium">
+      <p className="text-foreground/60 text-sm mb-3 uppercase tracking-wider font-medium">
         Active in
       </p>
       <div className="flex flex-wrap gap-2">
         <button
           onClick={() => onEmirateSelect(null)}
-          className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
+          className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 border-2 ${
             selectedEmirate === null
-              ? "bg-gold text-black"
-              : "bg-zinc-800/50 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-300 border border-zinc-700/50"
+              ? "bg-gold text-black border-gold shadow-[0_4px_12px_rgba(200,167,102,0.3)]"
+              : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-foreground border-gold/40 hover:border-gold hover:shadow-[0_4px_12px_rgba(200,167,102,0.25)]"
           }`}
         >
           All Emirates
@@ -58,17 +58,17 @@ const EmiratesTabs = ({ projects, selectedEmirate, onEmirateSelect }: EmiratesTa
             <button
               key={emirate}
               onClick={() => onEmirateSelect(emirate)}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 border-2 ${
                 selectedEmirate === emirate
-                  ? "bg-gold text-black"
-                  : "bg-zinc-800/50 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-300 border border-zinc-700/50"
+                  ? "bg-gold text-black border-gold shadow-[0_4px_12px_rgba(200,167,102,0.3)]"
+                  : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-foreground border-gold/40 hover:border-gold hover:shadow-[0_4px_12px_rgba(200,167,102,0.25)]"
               }`}
             >
               {emirate}
               <span className={`text-xs px-1.5 py-0.5 rounded-full ${
                 selectedEmirate === emirate
                   ? "bg-black/20 text-black"
-                  : "bg-zinc-700 text-zinc-400"
+                  : "bg-gold/20 text-foreground/80"
               }`}>
                 {projectCount}
               </span>
