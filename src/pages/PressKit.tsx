@@ -23,7 +23,7 @@ import {
   AlertDialogTitle,
   AlertDialogDescription,
 } from "@/components/ui/alert-dialog";
-import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
+import { COMPANY_STATS, CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { toast } from "sonner";
 
 // Import founder images
@@ -391,7 +391,7 @@ const PressKit = () => {
                   </div>
                   <div className="flex justify-between border-b border-gold/20 pb-3">
                     <span className="text-zinc-500">Brokers Trained</span>
-                    <span className="text-gold font-bold">2,800+</span>
+                    <span className="text-gold font-bold">{`${COMPANY_STATS.brokersTrainedBy.end.toLocaleString()}${COMPANY_STATS.brokersTrainedBy.suffix}`}</span>
                   </div>
                   <div className="flex justify-between border-b border-gold/20 pb-3">
                     <span className="text-zinc-500">Team Members</span>
