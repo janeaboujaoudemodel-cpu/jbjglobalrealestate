@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useMemo, useState, useCallback, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight, ArrowUp, ArrowDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageContext } from "@/contexts/LanguageContext";
+
 function getRouteString(loc: { pathname: string; search: string; hash: string }) {
   return `${loc.pathname}${loc.search}${loc.hash}`;
 }
@@ -10,7 +11,9 @@ function getRouteString(loc: { pathname: string; search: string; hash: string })
 export default function PageNavigation() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { isRTL } = useLanguage();
+  // Safe access - fallback to LTR if context not available
+  const languageContext = useContext(LanguageContext);
+  const isRTL = languageContext?.isRTL ?? false;
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [showScrollBottom, setShowScrollBottom] = useState(true);
   const [stack, setStack] = useState<string[]>(() => {
