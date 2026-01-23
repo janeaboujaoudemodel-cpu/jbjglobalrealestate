@@ -1,0 +1,98 @@
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
+serve(async (req) => {
+  // Handle CORS preflight
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  try {
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    const body = await req.json();
+    const { 
+      event_type, 
+      violation_type, 
+      fingerprint, 
+      user_agent,
+      violation_count 
+    } = body;
+
+    // Get IP from headers
+    const forwarded = req.headers.get('x-forwarded-for');
+    const ip = forwarded ? forwarded.split(',')[0].trim() : 'unknown';
+
+    // Check if this fingerprint is already blocked
+    const { data: existingBlock } = await supabase
+      .from('scraping_blocks')
+      .select('id')
+      .eq('fingerprint', fingerprint)
+      .gt('expires_at', new Date().toISOString())
+      .maybeSingle();
+
+    if (existingBlock) {
+      return new Response(
+        JSON.stringify({ blocked: true, message: 'Access blocked' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 403 }
+      );
+    }
+
+    // Log the security event
+    const { error: logError } = await supabase
+      .from('security_events')
+      .insert({
+        event_type: 'unauthorized_access',
+        severity: violation_count >= 3 ? 'high' : 'medium',
+        description: `Security violation: ${violation_type}`,
+        metadata: {
+          ip_address: ip,
+          fingerprint,
+          user_agent,
+          violation_type,
+          violation_count,
+          timestamp: new Date().toISOString()
+        }
+      });
+
+    if (logError) {
+      console.error('Failed to log security event:', logError);
+    }
+
+    // After 5 violations from same fingerprint, block it
+    if (violation_count >= 5) {
+      await supabase
+        .from('scraping_blocks')
+        .insert({
+          fingerprint,
+          ip_address: ip,
+          block_reason: `Multiple security violations: ${violation_type}`,
+          expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 hours
+        });
+
+      return new Response(
+        JSON.stringify({ blocked: true, message: 'Access blocked due to security violations' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 403 }
+      );
+    }
+
+    return new Response(
+      JSON.stringify({ logged: true }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+
+  } catch (error) {
+    console.error('Error in log-security-event:', error);
+    return new Response(
+      JSON.stringify({ error: 'Internal error' }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+    );
+  }
+});

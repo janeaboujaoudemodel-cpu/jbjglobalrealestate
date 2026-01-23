@@ -11081,6 +11081,39 @@ export type Database = {
         }
         Relationships: []
       }
+      scraping_blocks: {
+        Row: {
+          block_reason: string
+          blocked_at: string
+          created_at: string
+          expires_at: string
+          fingerprint: string
+          id: string
+          ip_address: string | null
+          is_permanent: boolean | null
+        }
+        Insert: {
+          block_reason: string
+          blocked_at?: string
+          created_at?: string
+          expires_at?: string
+          fingerprint: string
+          id?: string
+          ip_address?: string | null
+          is_permanent?: boolean | null
+        }
+        Update: {
+          block_reason?: string
+          blocked_at?: string
+          created_at?: string
+          expires_at?: string
+          fingerprint?: string
+          id?: string
+          ip_address?: string | null
+          is_permanent?: boolean | null
+        }
+        Relationships: []
+      }
       security_access_logs: {
         Row: {
           action_type: string
@@ -13408,6 +13441,10 @@ export type Database = {
         Args: { p_email: string; p_ip_address: string }
         Returns: Json
       }
+      check_forms_submission_rate_limit: {
+        Args: { p_email: string; p_ip?: string }
+        Returns: boolean
+      }
       check_hr_application_rate_limit: {
         Args: { p_email: string }
         Returns: boolean
@@ -13555,6 +13592,10 @@ export type Database = {
         Args: { email_address: string }
         Returns: boolean
       }
+      is_fingerprint_blocked: {
+        Args: { p_fingerprint: string }
+        Returns: boolean
+      }
       is_hr_admin: { Args: { _user_id: string }; Returns: boolean }
       is_hr_admin_strict: { Args: { _user_id: string }; Returns: boolean }
       is_hr_manager: { Args: { _user_id: string }; Returns: boolean }
@@ -13606,6 +13647,16 @@ export type Database = {
           p_resource_type?: string
           p_severity: Database["public"]["Enums"]["security_severity"]
           p_user_id?: string
+        }
+        Returns: string
+      }
+      log_security_violation: {
+        Args: {
+          p_details?: Json
+          p_fingerprint?: string
+          p_ip_address?: string
+          p_user_agent?: string
+          p_violation_type: string
         }
         Returns: string
       }
