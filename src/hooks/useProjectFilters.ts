@@ -145,9 +145,14 @@ export function useFilteredProjects(
       // Handover status filter
       if (filters.handoverStatus) {
         const handover = project.handover_date?.toLowerCase();
+        const projectStatus = project.status?.toLowerCase() || '';
         
-        // If no handover date is set, treat it as off-plan by default
-        if (!handover) {
+        // Check both handover_date and status columns for ready/off-plan status
+        const isReady = handover?.includes("ready") || projectStatus === "ready";
+        const isUnderConstruction = projectStatus === "under construction";
+        
+        // If no handover date is set, check status column
+        if (!handover && !projectStatus) {
           // Only pass if we're specifically looking for off-plan properties
           if (filters.handoverStatus !== "off-plan") {
             return false;
@@ -155,11 +160,12 @@ export function useFilteredProjects(
         } else {
           switch (filters.handoverStatus) {
             case "ready":
-              if (!handover.includes("ready")) return false;
+              // Match if handover says "ready" OR status column is "Ready"
+              if (!isReady) return false;
               break;
             case "off-plan":
-              // Properties without handover date or not marked "ready" are off-plan
-              if (handover.includes("ready")) return false;
+              // Properties marked as under construction OR not ready are off-plan
+              if (isReady) return false;
               break;
             case "close-to-handover":
               if (!isCloseToHandover(project.handover_date)) return false;
@@ -169,7 +175,7 @@ export function useFilteredProjects(
               if (!year || year < 2029) return false;
               break;
             default:
-              if (!handover.includes(filters.handoverStatus)) return false;
+              if (!handover?.includes(filters.handoverStatus)) return false;
           }
         }
       }
