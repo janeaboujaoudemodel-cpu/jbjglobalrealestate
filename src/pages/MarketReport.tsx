@@ -92,12 +92,11 @@ const MarketReport = () => {
     const websiteUrl = "https://JBJ.ae";
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(websiteUrl + "/quiz")}`;
     
-    // Villa images for visual enhancement
+    // Villa images for visual enhancement (removed banned placeholder photo-1512917774080-9991f1c4c750)
     const villaImages = [
       "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&q=80",
       "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80",
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80",
-      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&q=80",
       "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=1200&q=80",
       "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=1200&q=80",
     ];

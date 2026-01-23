@@ -263,7 +263,7 @@ const Developers = () => {
                         {/* Header with Logo */}
                         <div className="p-6 border-b border-zinc-800">
                           <div className="flex items-start justify-between mb-4">
-                            <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center overflow-hidden">
+                            <div className="w-16 h-16 bg-champagne-light rounded-lg flex items-center justify-center overflow-hidden border border-gold/20">
                               {developer.logo_url ? (
                                 <SafeImage
                                   src={developer.logo_url}

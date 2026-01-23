@@ -59,11 +59,15 @@ const CommunityDetail = () => {
     <section className="relative w-full min-h-screen bg-black">
       {/* Hero Image */}
       <div className="relative h-[40vh] md:h-[50vh]">
-        <img
-          src={community.image_url || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600"}
-          alt={community.name}
-          className="w-full h-full object-cover"
-        />
+        {community.image_url ? (
+          <img
+            src={community.image_url}
+            alt={community.name}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-b from-premium-card to-premium-bg" aria-label={community.name} />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
         
         <Link

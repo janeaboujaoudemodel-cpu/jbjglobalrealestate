@@ -34,11 +34,15 @@ const CommunityGrid = React.forwardRef<HTMLDivElement>((_, ref) => {
             to={`/community/${community.slug}`}
             className="group relative overflow-hidden rounded-xl aspect-[4/3] border-2 border-gold/30 hover:border-gold/60 transition-all duration-300 shadow-md hover:shadow-xl"
           >
-            <img
-              src={community.image_url || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"}
-              alt={community.name}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-            />
+            {community.image_url ? (
+              <img
+                src={community.image_url}
+                alt={community.name}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-b from-premium-card to-premium-bg" aria-label={community.name} />
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
             
             {/* Premium badge - Champagne with gold accent */}
