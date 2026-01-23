@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { CertificateGenerator } from "@/components/onboarding/CertificateGenerator";
+import Footer from "@/components/Footer";
 
 interface Application {
   id: string;
@@ -167,11 +168,11 @@ export default function Onboarding() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "pending":
-        return <Badge variant="outline" className="border-yellow-500 text-yellow-500"><Clock className="w-3 h-3 mr-1" /> Pending Review</Badge>;
+        return <Badge className="bg-gold/20 text-gold border border-gold/40"><Clock className="w-3 h-3 mr-1" /> Pending Review</Badge>;
       case "approved":
-        return <Badge variant="outline" className="border-green-500 text-green-500"><CheckCircle className="w-3 h-3 mr-1" /> Approved</Badge>;
+        return <Badge className="bg-green-500/20 text-green-600 border border-green-500/40"><CheckCircle className="w-3 h-3 mr-1" /> Approved</Badge>;
       case "rejected":
-        return <Badge variant="outline" className="border-red-500 text-red-500"><XCircle className="w-3 h-3 mr-1" /> Rejected</Badge>;
+        return <Badge className="bg-red-500/20 text-red-600 border border-red-500/40"><XCircle className="w-3 h-3 mr-1" /> Rejected</Badge>;
       default:
         return null;
     }
@@ -211,89 +212,89 @@ export default function Onboarding() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-gold" />
       </div>
     );
   }
 
-  // No application yet
+  // No application yet - 3-Layer System
   if (!application) {
     return (
-      <div className="min-h-screen bg-background py-16 px-4">
-        <div className="max-w-lg mx-auto text-center">
-          <Card className="bg-card border-border">
-            <CardHeader>
-              <CardTitle className="text-2xl text-foreground">No Application Found</CardTitle>
-              <CardDescription>
-                You haven't submitted an application yet.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button asChild variant="dark">
-                <Link to="/join">Apply Now</Link>
-              </Button>
-            </CardContent>
-          </Card>
+      <div className="min-h-screen bg-black py-16">
+        <div className="jj-layer-2">
+          <div className="max-w-lg mx-auto">
+            <div className="jj-layer-active rounded-2xl p-6">
+              <div className="jj-card-inner border-2 border-gold rounded-xl p-8 text-center">
+                <h2 className="text-2xl font-bold text-black mb-4">No Application Found</h2>
+                <p className="text-zinc-600 mb-6">You haven't submitted an application yet.</p>
+                <Button asChild variant="primary">
+                  <Link to="/join">Apply Now</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
+        <Footer />
       </div>
     );
   }
 
-  // Pending or Rejected status
+  // Pending or Rejected status - 3-Layer System
   if (application.status === "pending" || application.status === "rejected") {
     return (
-      <div className="min-h-screen bg-background py-16 px-4">
-        <div className="max-w-lg mx-auto">
-          <Card className="bg-card border-border">
-            <CardHeader className="text-center">
-              {application.status === "pending" ? (
-                <Clock className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
-              ) : (
-                <XCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
-              )}
-              <CardTitle className="text-2xl text-foreground">
-                {application.status === "pending" ? "Application Under Review" : "Application Not Approved"}
-              </CardTitle>
-              <div className="mt-2">{getStatusBadge(application.status)}</div>
-            </CardHeader>
-            <CardContent className="text-center space-y-4">
-              {application.status === "pending" ? (
-                <>
-                  <p className="text-muted-foreground">
-                    Thank you for your application, {application.full_name}. Our team is reviewing your submission and will get back to you soon.
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    Submitted on {new Date(application.created_at).toLocaleDateString()}
-                  </p>
-                </>
-              ) : (
-                <>
-                  <p className="text-muted-foreground">
-                    Unfortunately, your application was not approved at this time.
-                  </p>
-                  {application.rejection_reason && (
-                    <div className="bg-muted p-4 rounded-lg text-left">
-                      <p className="text-sm font-medium text-foreground mb-1">Reason:</p>
-                      <p className="text-sm text-muted-foreground">{application.rejection_reason}</p>
-                    </div>
-                  )}
-                  <p className="text-sm text-muted-foreground">
-                    If you have questions, please contact us at{" "}
-                    <a href="mailto:Contact@JBJ.ae" className="text-gold hover:underline">
-                      Contact@JBJ.ae
-                    </a>
-                  </p>
-                </>
-              )}
-            </CardContent>
-          </Card>
+      <div className="min-h-screen bg-black py-16">
+        <div className="jj-layer-2">
+          <div className="max-w-lg mx-auto">
+            <div className="jj-layer-active rounded-2xl p-6">
+              <div className="jj-card-inner border-2 border-gold rounded-xl p-8 text-center">
+                {application.status === "pending" ? (
+                  <Clock className="h-16 w-16 text-gold mx-auto mb-4" />
+                ) : (
+                  <XCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
+                )}
+                <h2 className="text-2xl font-bold text-black mb-4">
+                  {application.status === "pending" ? "Application Under Review" : "Application Not Approved"}
+                </h2>
+                <div className="mt-2 mb-6">{getStatusBadge(application.status)}</div>
+                {application.status === "pending" ? (
+                  <>
+                    <p className="text-zinc-600 mb-4">
+                      Thank you for your application, {application.full_name}. Our team is reviewing your submission and will get back to you soon.
+                    </p>
+                    <p className="text-sm text-zinc-500">
+                      Submitted on {new Date(application.created_at).toLocaleDateString()}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-zinc-600 mb-4">
+                      Unfortunately, your application was not approved at this time.
+                    </p>
+                    {application.rejection_reason && (
+                      <div className="jj-card-inner border border-gold/20 p-4 rounded-lg text-left mb-4">
+                        <p className="text-sm font-medium text-black mb-1">Reason:</p>
+                        <p className="text-sm text-zinc-600">{application.rejection_reason}</p>
+                      </div>
+                    )}
+                    <p className="text-sm text-zinc-500">
+                      If you have questions, please contact us at{" "}
+                      <a href="mailto:Contact@JBJ.ae" className="text-gold hover:underline">
+                        Contact@JBJ.ae
+                      </a>
+                    </p>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
+        <Footer />
       </div>
     );
   }
 
-  // Approved - show training dashboard
+  // Approved - show training dashboard - 3-Layer System
   const companyProgress = calculateTrackProgress("company_knowledge");
   const realEstateProgress = calculateTrackProgress("real_estate_basics");
   const combinedAvg = (companyProgress.avgScore + realEstateProgress.avgScore) / 2;
@@ -302,116 +303,102 @@ export default function Onboarding() {
   const realEstateModules = modules.filter((m) => m.track === "real_estate_basics");
 
   return (
-    <div className="min-h-screen bg-background py-8 px-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-black py-8">
+      <div className="jj-layer-2">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">
-            Welcome, {application.full_name}!
+        <div className="jj-layer-active rounded-2xl p-6 md:p-8 mb-6">
+          <h1 className="text-3xl font-bold text-black mb-2">
+            Welcome, <span className="text-gold">{application.full_name}!</span>
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-zinc-600">
             Complete your training modules and quizzes to become a certified broker partner.
           </p>
           <div className="mt-2">{getStatusBadge(application.status)}</div>
         </div>
 
         {/* Score Overview */}
-        <div className="grid md:grid-cols-3 gap-4 mb-8">
-          <Card className="bg-card border-border">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                <Building2 className="h-4 w-4" />
-                Company Knowledge
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">
-                {companyProgress.avgScore.toFixed(0)}%
+        <div className="grid md:grid-cols-3 gap-4 mb-6">
+          <div className="jj-card-inner border-2 border-gold rounded-xl p-6 transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center border-2 border-gold"
+                style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}>
+                <Building2 className="h-5 w-5 text-black" />
               </div>
-              <Progress 
-                value={companyProgress.avgScore} 
-                className="mt-2 h-2"
-              />
-              <p className="text-xs text-muted-foreground mt-2">
-                {companyProgress.completed}/{companyProgress.total} modules passed (min {passThresholds.company}%)
-              </p>
-            </CardContent>
-          </Card>
+              <span className="text-sm font-medium text-zinc-600">Company Knowledge</span>
+            </div>
+            <div className="text-2xl font-bold text-gold">
+              {companyProgress.avgScore.toFixed(0)}%
+            </div>
+            <Progress value={companyProgress.avgScore} className="mt-2 h-2" />
+            <p className="text-xs text-zinc-500 mt-2">
+              {companyProgress.completed}/{companyProgress.total} modules passed (min {passThresholds.company}%)
+            </p>
+          </div>
 
-          <Card className="bg-card border-border">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                <Briefcase className="h-4 w-4" />
-                Real Estate Basics
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">
-                {realEstateProgress.avgScore.toFixed(0)}%
+          <div className="jj-card-inner border-2 border-gold rounded-xl p-6 transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center border-2 border-gold"
+                style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}>
+                <Briefcase className="h-5 w-5 text-black" />
               </div>
-              <Progress 
-                value={realEstateProgress.avgScore} 
-                className="mt-2 h-2"
-              />
-              <p className="text-xs text-muted-foreground mt-2">
-                {realEstateProgress.completed}/{realEstateProgress.total} modules passed (min {passThresholds.realEstate}%)
-              </p>
-            </CardContent>
-          </Card>
+              <span className="text-sm font-medium text-zinc-600">Real Estate Basics</span>
+            </div>
+            <div className="text-2xl font-bold text-gold">
+              {realEstateProgress.avgScore.toFixed(0)}%
+            </div>
+            <Progress value={realEstateProgress.avgScore} className="mt-2 h-2" />
+            <p className="text-xs text-zinc-500 mt-2">
+              {realEstateProgress.completed}/{realEstateProgress.total} modules passed (min {passThresholds.realEstate}%)
+            </p>
+          </div>
 
-          <Card className="bg-card border-border">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                <Trophy className="h-4 w-4" />
-                Combined Score
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">
-                {combinedAvg.toFixed(0)}%
+          <div className="jj-card-inner border-2 border-gold rounded-xl p-6 transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center border-2 border-gold"
+                style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}>
+                <Trophy className="h-5 w-5 text-black" />
               </div>
-              <Progress 
-                value={combinedAvg} 
-                className="mt-2 h-2"
-              />
-              <p className="text-xs text-muted-foreground mt-2">
-                Target: {passThresholds.combined}% to complete training
-              </p>
-            </CardContent>
-          </Card>
+              <span className="text-sm font-medium text-zinc-600">Combined Score</span>
+            </div>
+            <div className="text-2xl font-bold text-gold">
+              {combinedAvg.toFixed(0)}%
+            </div>
+            <Progress value={combinedAvg} className="mt-2 h-2" />
+            <p className="text-xs text-zinc-500 mt-2">
+              Target: {passThresholds.combined}% to complete training
+            </p>
+          </div>
         </div>
 
         {/* Training Modules */}
-        <Tabs defaultValue="company" className="space-y-6">
-          <TabsList className="grid w-full max-w-md grid-cols-2">
-            <TabsTrigger value="company" className="flex items-center gap-2">
-              <Building2 className="h-4 w-4" />
-              Company Knowledge
-            </TabsTrigger>
-            <TabsTrigger value="realestate" className="flex items-center gap-2">
-              <Briefcase className="h-4 w-4" />
-              Real Estate
-            </TabsTrigger>
-          </TabsList>
+        <div className="jj-layer-active rounded-2xl p-6 md:p-8">
+          <Tabs defaultValue="company" className="space-y-6">
+            <TabsList className="grid w-full max-w-md grid-cols-2 bg-champagne border border-gold/30">
+              <TabsTrigger value="company" className="flex items-center gap-2 data-[state=active]:bg-black data-[state=active]:text-gold">
+                <Building2 className="h-4 w-4" />
+                Company Knowledge
+              </TabsTrigger>
+              <TabsTrigger value="realestate" className="flex items-center gap-2 data-[state=active]:bg-black data-[state=active]:text-gold">
+                <Briefcase className="h-4 w-4" />
+                Real Estate
+              </TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="company" className="space-y-4">
-            {companyModules.length === 0 ? (
-              <Card className="bg-card border-border">
-                <CardContent className="py-12 text-center">
-                  <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">No modules available yet. Check back soon!</p>
-                </CardContent>
-              </Card>
-            ) : (
-              companyModules.map((module) => {
-                const bestAttempt = getBestAttempt(module.id);
-                return (
-                  <Card key={module.id} className="bg-card border-border hover:border-gold/50 transition-colors">
-                    <CardContent className="py-4">
+            <TabsContent value="company" className="space-y-4">
+              {companyModules.length === 0 ? (
+                <div className="jj-card-inner border-2 border-gold rounded-xl p-12 text-center">
+                  <BookOpen className="h-12 w-12 text-gold mx-auto mb-4" />
+                  <p className="text-zinc-600">No modules available yet. Check back soon!</p>
+                </div>
+              ) : (
+                companyModules.map((module) => {
+                  const bestAttempt = getBestAttempt(module.id);
+                  return (
+                    <div key={module.id} className="jj-card-inner border-2 border-gold rounded-xl p-4 transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                            bestAttempt?.passed ? 'bg-green-500/20 text-green-500' : 'bg-muted text-muted-foreground'
+                            bestAttempt?.passed ? 'bg-green-500/20 text-green-600' : 'bg-gold/20 text-gold'
                           }`}>
                             {bestAttempt?.passed ? (
                               <CheckCircle className="h-5 w-5" />
@@ -420,14 +407,14 @@ export default function Onboarding() {
                             )}
                           </div>
                           <div>
-                            <h3 className="font-medium text-foreground">{module.title}</h3>
+                            <h3 className="font-medium text-black">{module.title}</h3>
                             {bestAttempt ? (
-                              <p className="text-sm text-muted-foreground">
+                              <p className="text-sm text-zinc-600">
                                 Best score: {bestAttempt.score.toFixed(0)}%
                                 {bestAttempt.passed ? " ✓ Passed" : " (needs " + passThresholds.company + "% to pass)"}
                               </p>
                             ) : (
-                              <p className="text-sm text-muted-foreground">Not started</p>
+                              <p className="text-sm text-zinc-500">Not started</p>
                             )}
                           </div>
                         </div>
@@ -438,31 +425,27 @@ export default function Onboarding() {
                           </Link>
                         </Button>
                       </div>
-                    </CardContent>
-                  </Card>
-                );
-              })
-            )}
-          </TabsContent>
+                    </div>
+                  );
+                })
+              )}
+            </TabsContent>
 
-          <TabsContent value="realestate" className="space-y-4">
-            {realEstateModules.length === 0 ? (
-              <Card className="bg-card border-border">
-                <CardContent className="py-12 text-center">
-                  <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">No modules available yet. Check back soon!</p>
-                </CardContent>
-              </Card>
-            ) : (
-              realEstateModules.map((module) => {
-                const bestAttempt = getBestAttempt(module.id);
-                return (
-                  <Card key={module.id} className="bg-card border-border hover:border-gold/50 transition-colors">
-                    <CardContent className="py-4">
+            <TabsContent value="realestate" className="space-y-4">
+              {realEstateModules.length === 0 ? (
+                <div className="jj-card-inner border-2 border-gold rounded-xl p-12 text-center">
+                  <BookOpen className="h-12 w-12 text-gold mx-auto mb-4" />
+                  <p className="text-zinc-600">No modules available yet. Check back soon!</p>
+                </div>
+              ) : (
+                realEstateModules.map((module) => {
+                  const bestAttempt = getBestAttempt(module.id);
+                  return (
+                    <div key={module.id} className="jj-card-inner border-2 border-gold rounded-xl p-4 transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                            bestAttempt?.passed ? 'bg-green-500/20 text-green-500' : 'bg-muted text-muted-foreground'
+                            bestAttempt?.passed ? 'bg-green-500/20 text-green-600' : 'bg-gold/20 text-gold'
                           }`}>
                             {bestAttempt?.passed ? (
                               <CheckCircle className="h-5 w-5" />
@@ -471,14 +454,14 @@ export default function Onboarding() {
                             )}
                           </div>
                           <div>
-                            <h3 className="font-medium text-foreground">{module.title}</h3>
+                            <h3 className="font-medium text-black">{module.title}</h3>
                             {bestAttempt ? (
-                              <p className="text-sm text-muted-foreground">
+                              <p className="text-sm text-zinc-600">
                                 Best score: {bestAttempt.score.toFixed(0)}%
                                 {bestAttempt.passed ? " ✓ Passed" : " (needs " + passThresholds.realEstate + "% to pass)"}
                               </p>
                             ) : (
-                              <p className="text-sm text-muted-foreground">Not started</p>
+                              <p className="text-sm text-zinc-500">Not started</p>
                             )}
                           </div>
                         </div>
@@ -489,51 +472,27 @@ export default function Onboarding() {
                           </Link>
                         </Button>
                       </div>
-                    </CardContent>
-                  </Card>
-                );
-              })
-            )}
-          </TabsContent>
-        </Tabs>
+                    </div>
+                  );
+                })
+              )}
+            </TabsContent>
+          </Tabs>
+        </div>
 
         {/* Certificate Section */}
-        <div className="mt-12">
-          <h2 className="text-xl font-semibold text-foreground mb-4">Your Certificate</h2>
-          <CertificateGenerator 
-            isEligible={
-              companyProgress.completed >= companyProgress.total &&
-              realEstateProgress.completed >= realEstateProgress.total &&
-              combinedAvg >= passThresholds.combined &&
-              companyProgress.total > 0 &&
-              realEstateProgress.total > 0
-            }
-            existingCertificate={certificate}
-            onCertificateGenerated={(cert) => setCertificate(cert)}
-          />
-        </div>
-
-        {/* Coming Soon Section */}
-        <div className="mt-12">
-          <h2 className="text-xl font-semibold text-foreground mb-4">Coming Soon</h2>
-          <div className="grid md:grid-cols-2 gap-4">
-            <Card className="bg-muted/50 border-border opacity-60">
-              <CardContent className="py-6 text-center">
-                <Lock className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                <h3 className="font-medium text-muted-foreground">Broker Perks</h3>
-                <p className="text-xs text-muted-foreground mt-1">Exclusive partner benefits</p>
-              </CardContent>
-            </Card>
-            <Card className="bg-muted/50 border-border opacity-60">
-              <CardContent className="py-6 text-center">
-                <Lock className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                <h3 className="font-medium text-muted-foreground">Lead Allocation</h3>
-                <p className="text-xs text-muted-foreground mt-1">Receive qualified leads</p>
-              </CardContent>
-            </Card>
+        {certificate && (
+          <div className="jj-layer-active rounded-2xl p-6 md:p-8 mt-6">
+            <div className="jj-card-inner border-2 border-gold rounded-xl p-8 text-center">
+              <GraduationCap className="h-16 w-16 text-gold mx-auto mb-4" />
+              <h3 className="text-2xl font-bold text-black mb-2">Congratulations!</h3>
+              <p className="text-zinc-600 mb-6">You have completed your training and earned your certificate.</p>
+              <CertificateGenerator isEligible={true} existingCertificate={certificate} />
+            </div>
           </div>
-        </div>
+        )}
       </div>
+      <Footer />
     </div>
   );
 }
