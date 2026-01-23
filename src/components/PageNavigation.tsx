@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useCallback, useContext } from "react";
+import { useEffect, useMemo, useState, useCallback, useContext, forwardRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight, ArrowUp, ArrowDown } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -8,7 +8,7 @@ function getRouteString(loc: { pathname: string; search: string; hash: string })
   return `${loc.pathname}${loc.search}${loc.hash}`;
 }
 
-export default function PageNavigation() {
+const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref) => {
   const location = useLocation();
   const navigate = useNavigate();
   // Safe access - fallback to LTR if context not available
@@ -85,10 +85,12 @@ export default function PageNavigation() {
   );
 
   return (
-    <div className={cn(
-      "fixed bottom-6 z-[9999] flex flex-col gap-2",
-      isRTL ? "right-6" : "left-6"
-    )}>
+    <div 
+      ref={ref}
+      className={cn(
+        "fixed bottom-6 z-[9999] flex flex-col gap-2",
+        isRTL ? "right-6" : "left-6"
+      )}>
       {/* Scroll to Top */}
       <button
         type="button"
@@ -130,4 +132,8 @@ export default function PageNavigation() {
       </button>
     </div>
   );
-}
+});
+
+PageNavigation.displayName = 'PageNavigation';
+
+export default PageNavigation;
