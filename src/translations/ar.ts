@@ -981,4 +981,14 @@ export const ar = {
   'footer.licensedText': 'شراء · بيع · تأجير · العقارات في الإمارات',
   'footer.partnerServicesNote': 'خدمات التمويل والقانون والتأشيرات والشركات من خلال شركاء مرخصين.',
   'footer.stayInTheLoop': 'ابق على اطلاع',
+  'footer.allRightsReserved': 'جميع الحقوق محفوظة.',
+  
+  // Coming Soon Page
+  'comingSoon.title': 'قريباً',
+  'comingSoon.subtitle': 'نصنع لك شيئاً استثنائياً.',
+  'comingSoon.tagline': 'وساطة عقارية في الإمارات',
+  'comingSoon.joinCircle': 'انضم إلى دائرتنا',
+  'comingSoon.joinCircleDesc': 'املأ النموذج للانضمام إلى دائرتنا وكن أول من يصل إلى العقارات الحصرية ورؤى السوق.',
+  'comingSoon.joinNow': 'انضم الآن',
+  'comingSoon.teamLogin': 'دخول الفريق',
 };

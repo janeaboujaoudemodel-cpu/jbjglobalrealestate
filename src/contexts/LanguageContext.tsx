@@ -164,16 +164,36 @@ const trackLanguageChange = async (fromLang: Language, toLang: Language) => {
   }
 };
 
+// Detect device/browser language
+const detectDeviceLanguage = (): Language => {
+  try {
+    const browserLang = navigator.language || (navigator as any).userLanguage || 'en';
+    const langCode = browserLang.split('-')[0].toLowerCase();
+    
+    // Check if browser language is supported
+    const supported = SUPPORTED_LANGUAGES.find(l => l.code === langCode);
+    if (supported) {
+      return supported.code;
+    }
+    
+    // Default to English
+    return 'en';
+  } catch {
+    return 'en';
+  }
+};
+
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguageState] = useState<Language>(() => {
     const stored = localStorage.getItem(LANGUAGE_KEY) as Language;
     if (stored && SUPPORTED_LANGUAGES.some(l => l.code === stored)) {
       return stored;
     }
-    // Default to Arabic for all users
-    localStorage.setItem(LANGUAGE_KEY, 'ar');
+    // Auto-detect device language (default to English if undetectable)
+    const detected = detectDeviceLanguage();
+    localStorage.setItem(LANGUAGE_KEY, detected);
     localStorage.setItem(LANGUAGE_CHANGE_TIME_KEY, new Date().toISOString());
-    return 'ar';
+    return detected;
   });
 
   // State to trigger re-renders when translations complete

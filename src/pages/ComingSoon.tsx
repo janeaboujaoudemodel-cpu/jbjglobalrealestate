@@ -4,12 +4,15 @@ import { Link } from "react-router-dom";
 import { Crown, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import InquiryFormModal from "@/components/InquiryFormModal";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useLanguage } from "@/contexts/LanguageContext";
 // Official JBJ logos - USE ONLY THESE
 import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png"; // Monogram only for dark backgrounds
 
 const ComingSoon = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState<'buyer' | 'broker' | 'visitor' | undefined>(undefined);
+  const { t, isRTL } = useLanguage();
 
   const openForm = (role?: 'buyer' | 'broker' | 'visitor') => {
     setSelectedRole(role);
@@ -18,7 +21,12 @@ const ComingSoon = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-black flex flex-col items-center justify-center px-4 py-12 md:py-16 relative overflow-hidden">
+      <div className={`min-h-screen bg-black flex flex-col items-center justify-center px-4 py-12 md:py-16 relative overflow-hidden ${isRTL ? 'rtl' : 'ltr'}`}>
+        {/* Language Switcher - Top Right */}
+        <div className="absolute top-4 right-4 z-50">
+          <LanguageSwitcher variant="default" />
+        </div>
+        
         {/* Subtle gradient overlays for depth */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-b from-white/[0.02] to-transparent" />
@@ -52,7 +60,7 @@ const ComingSoon = () => {
             transition={{ delay: 0.4, duration: 0.6 }}
             className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-tight"
           >
-            Coming Soon
+            {t('comingSoon.title', 'Coming Soon')}
           </motion.h1>
 
           {/* Company Name */}
@@ -72,10 +80,10 @@ const ComingSoon = () => {
             className="space-y-4"
           >
             <p className="text-lg md:text-xl text-white/60 font-light">
-              We're crafting something extraordinary for you.
+              {t('comingSoon.subtitle', "We're crafting something extraordinary for you.")}
             </p>
             <p className="text-sm md:text-base text-white/40 tracking-[0.2em] uppercase">
-              UAE Real Estate Brokerage
+              {t('comingSoon.tagline', 'UAE Real Estate Brokerage')}
             </p>
           </motion.div>
 
@@ -105,11 +113,11 @@ const ComingSoon = () => {
             </div>
 
             <h3 className="text-2xl md:text-3xl font-semibold text-white mb-4">
-              Join the Circle
+              {t('comingSoon.joinCircle', 'Join the Circle')}
             </h3>
             
             <p className="text-white/50 text-sm md:text-base mb-8 max-w-xl mx-auto">
-              Fill the form to join our circle and be the first to access exclusive properties and market insights.
+              {t('comingSoon.joinCircleDesc', 'Fill the form to join our circle and be the first to access exclusive properties and market insights.')}
             </p>
 
             {/* GLOBAL BUTTON SYSTEM - Type A: White Base, Gold text/border, Inverted hover */}
@@ -119,7 +127,7 @@ const ComingSoon = () => {
               className="px-10 py-6 text-lg gap-3"
             >
               <Crown className="w-5 h-5" />
-              Join Now
+              {t('comingSoon.joinNow', 'Join Now')}
             </Button>
           </motion.div>
 
@@ -165,7 +173,7 @@ const ComingSoon = () => {
                   <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg>
               </span>
-              <span className="font-medium tracking-wide">Team Login</span>
+              <span className="font-medium tracking-wide">{t('comingSoon.teamLogin', 'Team Login')}</span>
             </Link>
           </motion.div>
 
@@ -176,7 +184,7 @@ const ComingSoon = () => {
             transition={{ delay: 1.2, duration: 0.6 }}
             className="mt-12 text-xs text-white/30"
           >
-            © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.
+            © {new Date().getFullYear()} JBJ Global Real Estate. {t('footer.allRightsReserved', 'All Rights Reserved.')}
           </motion.p>
         </motion.div>
       </div>

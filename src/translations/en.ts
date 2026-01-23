@@ -982,4 +982,14 @@ export const en = {
   'footer.licensedText': 'BUY · SELL · RENT · REAL ESTATE In The UAE',
   'footer.partnerServicesNote': 'Mortgage, legal, visa, and corporate services are provided through licensed partners.',
   'footer.stayInTheLoop': 'Stay in the Loop',
+  'footer.allRightsReserved': 'All Rights Reserved.',
+  
+  // Coming Soon Page
+  'comingSoon.title': 'Coming Soon',
+  'comingSoon.subtitle': "We're crafting something extraordinary for you.",
+  'comingSoon.tagline': 'UAE Real Estate Brokerage',
+  'comingSoon.joinCircle': 'Join the Circle',
+  'comingSoon.joinCircleDesc': 'Fill the form to join our circle and be the first to access exclusive properties and market insights.',
+  'comingSoon.joinNow': 'Join Now',
+  'comingSoon.teamLogin': 'Team Login',
 };

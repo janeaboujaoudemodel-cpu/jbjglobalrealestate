@@ -246,30 +246,38 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
   const handleBulkUpload = async () => {
     if (!bulkUploadUrl.trim()) {
-      toast.error("Please enter a valid Google Drive URL");
+      toast.error("Please enter a valid URL");
       return;
     }
 
-    // More permissive URL validation - accept any Google URL
-    const isGoogleUrl = bulkUploadUrl.includes("google.com") || 
-                        bulkUploadUrl.includes("googleapis.com") ||
-                        bulkUploadUrl.includes("gstatic.com");
+    // Accept Google URLs, property portals, or any https URL
+    const isValidUrl = bulkUploadUrl.startsWith("http://") || bulkUploadUrl.startsWith("https://");
     
-    if (!isGoogleUrl) {
-      toast.error("Please enter a Google Drive or Google Docs link");
+    if (!isValidUrl) {
+      toast.error("Please enter a valid URL (Google Drive, property portal, or web link)");
       return;
     }
+
+    const isGoogleUrl = bulkUploadUrl.includes("google.com");
+    const isPropertyPortal = bulkUploadUrl.includes("bayut.com") || 
+                             bulkUploadUrl.includes("propertyfinder.ae") || 
+                             bulkUploadUrl.includes("dubizzle.com");
+    const isDeveloperSite = bulkUploadUrl.includes("emaar.com") || 
+                            bulkUploadUrl.includes("damac") ||
+                            bulkUploadUrl.includes("sobha") ||
+                            bulkUploadUrl.includes("azizi");
 
     onBulkUpload?.(bulkUploadUrl);
     
     const uploadMessage: Message = {
       id: Date.now().toString(),
       role: "user",
-      content: `I'd like to bulk upload from this Google Drive: ${bulkUploadUrl}`,
+      content: `I'd like to extract listing data from this link: ${bulkUploadUrl}`,
       timestamp: new Date(),
     };
 
     setMessages((prev) => [...prev, uploadMessage]);
+    const urlToProcess = bulkUploadUrl;
     setBulkUploadUrl("");
     setShowBulkUpload(false);
     setIsLoading(true);
@@ -278,33 +286,84 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       // Call the process-drive-upload edge function
       const { data, error } = await supabase.functions.invoke("process-drive-upload", {
         body: {
-          driveUrl: bulkUploadUrl,
+          url: urlToProcess,
           userId: user?.id,
+          type: isGoogleUrl ? "drive" : isPropertyPortal ? "portal" : isDeveloperSite ? "developer" : "web",
         },
       });
 
       if (error) throw error;
 
+      let responseContent = "";
+      
+      if (data?.success && data?.extractedProject) {
+        const p = data.extractedProject;
+        responseContent = `**Link processed successfully!**
+
+I've extracted the following information:
+
+**Project Name**: ${p.name || "Not detected"}
+**Developer**: ${p.developer || "Not detected"}
+**Location**: ${p.location || "Not specified"}, ${p.emirate || "Dubai"}
+**Price Range**: ${p.priceFrom ? `AED ${(p.priceFrom/1000000).toFixed(1)}M` : "TBD"} - ${p.priceTo ? `AED ${(p.priceTo/1000000).toFixed(1)}M` : "TBD"}
+**Bedrooms**: ${p.bedroomsMin || "?"} - ${p.bedroomsMax || "?"} BR
+**Handover**: ${p.handoverDate || "Not specified"}
+
+**Next Steps:**
+1. Click "Add New Project" on the left panel
+2. Review and fill in missing details
+3. Upload images and documents
+4. Save as draft for review
+
+Would you like me to help with any specific details?`;
+      } else {
+        responseContent = `I've received the link and started processing.
+
+**Link**: ${urlToProcess}
+**Status**: Processing...
+
+The extraction may take a moment. You can:
+1. Click "Add New Project" to start manually
+2. Wait for the extraction to complete
+3. Share additional details about this project
+
+How would you like to proceed?`;
+      }
+
       const responseMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: `Perfect! I've received your Google Drive link.\n\n**Processing started...**\n\nI'll analyze and organize:\n\n• Project brochures - Auto-detect project name\n• Floor plans - Match to project\n• Renders and images - Group by project\n• Fact sheets - Extract pricing data\n• Payment plans - Link to project\n\nEach project will be organized separately.\nYou'll review before anything goes live.\nAutomatic developer detection enabled.\n\nI'll notify you once processing is complete.`,
+        content: responseContent,
         timestamp: new Date(),
-        type: "processing",
+        type: data?.success ? "success" : "processing",
       };
       setMessages((prev) => [...prev, responseMessage]);
-      toast.success("Bulk upload initiated! Processing files...");
+      
+      if (data?.success) {
+        toast.success("Link processed! Review the extracted data.");
+      } else {
+        toast.info("Processing link...");
+      }
 
     } catch (error: any) {
-      console.error("Bulk upload error:", error);
+      console.error("Link processing error:", error);
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: "I encountered an issue processing the Google Drive link. Please ensure the link is accessible and try again.",
+        content: `I encountered an issue processing the link. 
+
+**Error**: ${error.message || "Unknown error"}
+
+Please try:
+1. Checking if the link is accessible
+2. Using a different link format
+3. Manually creating the listing using "Add New Project"
+
+Would you like to try a different approach?`,
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, errorMessage]);
-      toast.error("Failed to process Google Drive link");
+      toast.error("Failed to process link. Try manually creating the listing.");
     } finally {
       setIsLoading(false);
     }
@@ -486,7 +545,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
         <div className="p-4 border-t border-zinc-200 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
           <div className="flex items-center gap-2 mb-3">
             <FolderOpen className="w-5 h-5 text-gold" />
-            <span className="font-medium text-black">{t('listingAdminChat.bulkUploadTitle') || 'Bulk Upload from Google Drive'}</span>
+            <span className="font-medium text-black">{t('listingAdminChat.bulkUploadTitle') || 'Extract Listing from URL'}</span>
             <Button
               variant="ghost"
               size="sm"
@@ -497,30 +556,36 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
             </Button>
           </div>
           <p className="text-xs text-zinc-600 mb-3">
-            {t('listingAdminChat.bulkUploadDesc') || "Paste a Google Drive folder link. I'll automatically organize files by project and developer."}
+            {t('listingAdminChat.bulkUploadDesc') || "Paste any link: Google Drive, Bayut, PropertyFinder, Dubizzle, or developer websites. I'll extract the project data automatically."}
           </p>
           <div className="flex gap-2">
             <Input
               value={bulkUploadUrl}
               onChange={(e) => setBulkUploadUrl(e.target.value)}
-              placeholder="https://drive.google.com/drive/folders/..."
+              placeholder="https://drive.google.com/... or https://bayut.com/..."
               className="flex-1 bg-white border-zinc-300 text-black"
             />
             <Button 
               onClick={handleBulkUpload} 
               variant="primary" 
               size="sm"
-              disabled={isLoading}
+              disabled={isLoading || !bulkUploadUrl.trim()}
             >
               {isLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
                 <>
                   <Upload className="w-4 h-4 mr-1" />
-                  {t('listingAdminChat.process') || 'Process'}
+                  {t('listingAdminChat.extract') || 'Extract'}
                 </>
               )}
             </Button>
+          </div>
+          <div className="flex flex-wrap gap-2 mt-2">
+            <span className="text-[10px] px-2 py-0.5 bg-green-100 text-green-700 rounded">Google Drive</span>
+            <span className="text-[10px] px-2 py-0.5 bg-blue-100 text-blue-700 rounded">Bayut</span>
+            <span className="text-[10px] px-2 py-0.5 bg-purple-100 text-purple-700 rounded">PropertyFinder</span>
+            <span className="text-[10px] px-2 py-0.5 bg-orange-100 text-orange-700 rounded">Developer Sites</span>
           </div>
         </div>
       )}
