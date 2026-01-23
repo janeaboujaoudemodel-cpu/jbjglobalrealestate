@@ -5,9 +5,9 @@
  * automatically based on the current language setting. No manual wrapping required.
  * 
  * CRITICAL RULES:
- * - Numbers in English (12, 4800, 1M) → Arabic numerals (١٢, ٤٨٠٠, ١م)
- * - No value changes allowed - only translation of text
- * - Instant language switching - no delays
+ * - When language is ENGLISH: ALL content must be in ENGLISH (Western numerals)
+ * - When language is ARABIC: Apply Arabic text + Arabic-Indic numerals
+ * - No mixing allowed - English mode = 100% English
  */
 
 import { useEffect, useCallback, useRef, useContext } from 'react';
@@ -19,13 +19,23 @@ const ARABIC_NUMERALS: Record<string, string> = {
   '5': '٥', '6': '٦', '7': '٧', '8': '٨', '9': '٩',
 };
 
+// Reverse mapping: Arabic-Indic to Western
+const WESTERN_NUMERALS: Record<string, string> = {
+  '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4',
+  '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9',
+};
+
 // Convert Western numerals to Arabic-Indic numerals
 const toArabicNumerals = (text: string): string => {
   return text.replace(/[0-9]/g, (digit) => ARABIC_NUMERALS[digit] || digit);
 };
 
-// Preserve leading/trailing whitespace from original to avoid “glued words”
-// when translations trim spaces (common when text is split across multiple spans).
+// Convert Arabic-Indic numerals back to Western numerals
+const toWesternNumerals = (text: string): string => {
+  return text.replace(/[٠-٩]/g, (digit) => WESTERN_NUMERALS[digit] || digit);
+};
+
+// Preserve leading/trailing whitespace from original to avoid "glued words"
 const preserveOuterWhitespace = (original: string, translated: string): string => {
   const leading = (original.match(/^\s+/) ?? [""])[0];
   const trailing = (original.match(/\s+$/) ?? [""])[0];
@@ -115,22 +125,30 @@ export const GlobalTranslator = () => {
   const translateNode = useCallback((node: Text) => {
     if (!node.parentElement || shouldSkipElement(node.parentElement)) return;
     
-    const originalText = originalTexts.current.get(node) || node.textContent || '';
-    if (!originalText || shouldSkipText(originalText)) return;
+    const currentText = node.textContent || '';
+    if (!currentText || shouldSkipText(currentText)) return;
 
-    // Store original if not already stored
-    if (!originalTexts.current.has(node)) {
+    // Get or determine the original English text
+    let originalText = originalTexts.current.get(node);
+    
+    if (!originalText) {
+      // If we don't have the original, try to extract it
+      // by converting any Arabic numerals back to Western
+      originalText = toWesternNumerals(currentText);
       originalTexts.current.set(node, originalText);
     }
 
-    // If English, restore original
+    // CRITICAL: If English, ALWAYS restore to original English (Western numerals)
     if (language === 'en') {
-      if (node.textContent !== originalText) {
-        node.textContent = originalText;
+      // Convert any Arabic numerals back to Western numerals
+      const westernText = toWesternNumerals(currentText);
+      if (node.textContent !== westernText) {
+        node.textContent = westernText;
       }
       return;
     }
 
+    // For non-English languages (e.g., Arabic), apply translation
     // Get translation first
     let translated = translateText(originalText);
 
@@ -226,8 +244,11 @@ export const GlobalTranslator = () => {
       // Clear translated nodes tracking for fresh translation
       translatedNodes.current.clear();
       
-      // Process all nodes with new language immediately
+      // Force immediate reprocessing to restore/convert numerals
+      // Run multiple times to catch dynamic content
       processAllNodes();
+      setTimeout(processAllNodes, 50);
+      setTimeout(processAllNodes, 150);
     }
   }, [language, processAllNodes, context]);
 
