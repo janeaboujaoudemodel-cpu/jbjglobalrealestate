@@ -5,6 +5,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getListingAdmin } from "@/config/team-members";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
 import {
   Send,
@@ -17,6 +19,7 @@ import {
   FolderOpen,
   CheckCircle,
   Clock,
+  Trash2,
 } from "lucide-react";
 
 interface Message {
@@ -34,14 +37,18 @@ interface ListingAdminChatProps {
 
 const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatProps) => {
   const adminPersona = getListingAdmin();
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "welcome",
-      role: "assistant",
-      content: `Hello! I'm ${adminPersona?.name || "Sarah Mitchell"}, your Senior Listing Administrator. I can help you with:\n\n• **Off-Plan Listings** - New developer projects\n• **Secondary Market** - Resale properties\n• **Bulk Uploads** - Share a Google Drive link and I'll process all files\n• **Developer Relations** - Documentation and coordination\n\nWhat would you like to list today?`,
-      timestamp: new Date(),
-    },
-  ]);
+  const { user } = useAuth();
+  const { language, t } = useLanguage();
+  
+  const getWelcomeMessage = (): Message => ({
+    id: "welcome",
+    role: "assistant",
+    content: `Hello! I'm ${adminPersona?.name || "Sarah Mitchell"}, your Senior Listing Administrator. I can help you with:\n\n• **Off-Plan Listings** - New developer projects\n• **Secondary Market** - Resale properties\n• **Bulk Uploads** - Share a Google Drive link and I'll process all files\n• **Developer Relations** - Documentation and coordination\n\nWhat would you like to list today?`,
+    timestamp: new Date(),
+  });
+
+  const [messages, setMessages] = useState<Message[]>([getWelcomeMessage()]);
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -53,11 +60,125 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
   const audioChunksRef = useRef<Blob[]>([]);
   const streamRef = useRef<MediaStream | null>(null);
 
+  // Load existing chat session on mount
+  useEffect(() => {
+    const loadChatSession = async () => {
+      if (!user) return;
+
+      try {
+        // Try to find an active session
+        const { data: sessions, error } = await supabase
+          .from("listing_admin_chat_sessions")
+          .select("*")
+          .eq("user_id", user.id)
+          .eq("status", "active")
+          .order("updated_at", { ascending: false })
+          .limit(1);
+
+        if (error) {
+          console.error("Error loading chat session:", error);
+          return;
+        }
+
+        if (sessions && sessions.length > 0) {
+          const session = sessions[0];
+          setSessionId(session.id);
+          
+          // Parse messages from JSON
+          const savedMessages = (session.messages as any[]).map((m: any) => ({
+            ...m,
+            timestamp: new Date(m.timestamp),
+          }));
+          
+          if (savedMessages.length > 0) {
+            setMessages(savedMessages);
+          }
+        } else {
+          // Create new session
+          const { data: newSession, error: createError } = await supabase
+            .from("listing_admin_chat_sessions")
+            .insert({
+              user_id: user.id,
+              messages: JSON.stringify([getWelcomeMessage()]),
+              status: "active",
+            } as any)
+            .select()
+            .single();
+
+          if (!createError && newSession) {
+            setSessionId(newSession.id);
+          }
+        }
+      } catch (err) {
+        console.error("Error loading chat:", err);
+      }
+    };
+
+    loadChatSession();
+  }, [user]);
+
+  // Save messages to database whenever they change
+  useEffect(() => {
+    const saveMessages = async () => {
+      if (!sessionId || messages.length <= 1) return;
+
+      try {
+        await supabase
+          .from("listing_admin_chat_sessions")
+          .update({ 
+            messages: messages.map(m => ({
+              ...m,
+              timestamp: m.timestamp.toISOString(),
+            })),
+          })
+          .eq("id", sessionId);
+      } catch (err) {
+        console.error("Error saving chat:", err);
+      }
+    };
+
+    const debounce = setTimeout(saveMessages, 500);
+    return () => clearTimeout(debounce);
+  }, [messages, sessionId]);
+
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
+
+  const handleClearChat = async () => {
+    if (!confirm("Are you sure you want to clear this chat? This cannot be undone.")) {
+      return;
+    }
+
+    if (sessionId) {
+      await supabase
+        .from("listing_admin_chat_sessions")
+        .update({ status: "completed" })
+        .eq("id", sessionId);
+    }
+
+    // Create new session
+    if (user) {
+      const { data: newSession } = await supabase
+        .from("listing_admin_chat_sessions")
+        .insert({
+          user_id: user.id,
+          messages: JSON.stringify([getWelcomeMessage()]),
+          status: "active",
+        } as any)
+        .select()
+        .single();
+
+      if (newSession) {
+        setSessionId(newSession.id);
+      }
+    }
+
+    setMessages([getWelcomeMessage()]);
+    toast.success("Chat cleared");
+  };
 
   const handleSendMessage = async (messageText?: string) => {
     const textToSend = messageText || input.trim();
@@ -86,15 +207,20 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
           conversationHistory,
           personaName: adminPersona?.name || "Sarah Mitchell",
           personaRole: adminPersona?.role || "Senior Listing Administrator",
+          language: language,
         },
       });
 
       if (error) throw error;
 
+      // Clean up response - remove emojis and add proper spacing
+      let responseText = data?.response || "I apologize, I couldn't process that request. Please try again.";
+      responseText = responseText.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F000}-\u{1F02F}]|[\u{1F0A0}-\u{1F0FF}]|[\u{1F100}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F910}-\u{1F96B}]|[\u{1F980}-\u{1F9E0}]/gu, '');
+      
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: data?.response || "I apologize, I couldn't process that request. Please try again.",
+        content: responseText.trim(),
         timestamp: new Date(),
       };
 
@@ -124,8 +250,13 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       return;
     }
 
-    if (!bulkUploadUrl.includes("drive.google.com") && !bulkUploadUrl.includes("docs.google.com")) {
-      toast.error("Please enter a valid Google Drive link");
+    // More permissive URL validation - accept any Google URL
+    const isGoogleUrl = bulkUploadUrl.includes("google.com") || 
+                        bulkUploadUrl.includes("googleapis.com") ||
+                        bulkUploadUrl.includes("gstatic.com");
+    
+    if (!isGoogleUrl) {
+      toast.error("Please enter a Google Drive or Google Docs link");
       return;
     }
 
@@ -148,7 +279,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       const { data, error } = await supabase.functions.invoke("process-drive-upload", {
         body: {
           driveUrl: bulkUploadUrl,
-          userId: (await supabase.auth.getUser()).data.user?.id,
+          userId: user?.id,
         },
       });
 
@@ -157,7 +288,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       const responseMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: `Perfect! I've received your Google Drive link.\n\n📁 **Processing started...**\n\nI'll analyze and organize:\n• Project brochures → Auto-detect project name\n• Floor plans → Match to project\n• Renders & images → Group by project\n• Fact sheets → Extract pricing data\n• Payment plans → Link to project\n\n✅ Each project will be organized separately\n✅ You'll review before anything goes live\n✅ Automatic developer detection\n\nI'll notify you once processing is complete.`,
+        content: `Perfect! I've received your Google Drive link.\n\n**Processing started...**\n\nI'll analyze and organize:\n\n• Project brochures - Auto-detect project name\n• Floor plans - Match to project\n• Renders and images - Group by project\n• Fact sheets - Extract pricing data\n• Payment plans - Link to project\n\nEach project will be organized separately.\nYou'll review before anything goes live.\nAutomatic developer detection enabled.\n\nI'll notify you once processing is complete.`,
         timestamp: new Date(),
         type: "processing",
       };
@@ -212,9 +343,9 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
           const base64Audio = (reader.result as string).split(',')[1];
           
           try {
-            // Call voice-to-text edge function
+            // Call voice-to-text edge function with language header
             const { data, error } = await supabase.functions.invoke('voice-to-text', {
-              body: { audio: base64Audio }
+              body: { audio: base64Audio, language: language },
             });
             
             if (error) throw error;
@@ -247,7 +378,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       console.error("Failed to start recording:", error);
       toast.error("Could not access microphone. Please check permissions.");
     }
-  }, []);
+  }, [language]);
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && isRecording) {
@@ -276,9 +407,18 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
           <h3 className="font-semibold text-black text-sm">{adminPersona?.name || "Sarah Mitchell"}</h3>
           <p className="text-xs text-zinc-600">{adminPersona?.role || "Senior Listing Administrator"}</p>
         </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleClearChat}
+          className="h-8 w-8 p-0 text-zinc-500 hover:text-red-500 hover:bg-red-50"
+          title="Clear chat"
+        >
+          <Trash2 className="w-4 h-4" />
+        </Button>
         <div className="flex items-center gap-1.5">
           <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-          <span className="text-xs text-zinc-600">Online</span>
+          <span className="text-xs text-zinc-600">{t('listingAdminChat.online') || 'Online'}</span>
         </div>
       </div>
 
@@ -310,16 +450,16 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
                 {message.type === "processing" && (
                   <div className="flex items-center gap-2 mb-2 text-amber-600">
                     <Clock className="w-4 h-4" />
-                    <span className="text-xs font-medium">Processing...</span>
+                    <span className="text-xs font-medium">{t('listingAdminChat.processing') || 'Processing...'}</span>
                   </div>
                 )}
                 {message.type === "success" && (
                   <div className="flex items-center gap-2 mb-2 text-green-600">
                     <CheckCircle className="w-4 h-4" />
-                    <span className="text-xs font-medium">Complete</span>
+                    <span className="text-xs font-medium">{t('listingAdminChat.complete') || 'Complete'}</span>
                   </div>
                 )}
-                <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</p>
                 <p className="text-[10px] mt-1 opacity-60">
                   {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                 </p>
@@ -334,7 +474,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
               </Avatar>
               <div className="bg-zinc-100 rounded-xl px-4 py-3 flex items-center gap-2">
                 <Loader2 className="w-4 h-4 animate-spin text-gold" />
-                <span className="text-sm text-zinc-600">Typing...</span>
+                <span className="text-sm text-zinc-600">{t('listingAdminChat.typing') || 'Typing...'}</span>
               </div>
             </div>
           )}
@@ -346,7 +486,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
         <div className="p-4 border-t border-zinc-200 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
           <div className="flex items-center gap-2 mb-3">
             <FolderOpen className="w-5 h-5 text-gold" />
-            <span className="font-medium text-black">Bulk Upload from Google Drive</span>
+            <span className="font-medium text-black">{t('listingAdminChat.bulkUploadTitle') || 'Bulk Upload from Google Drive'}</span>
             <Button
               variant="ghost"
               size="sm"
@@ -357,7 +497,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
             </Button>
           </div>
           <p className="text-xs text-zinc-600 mb-3">
-            Paste a Google Drive folder link. I'll automatically organize files by project and developer.
+            {t('listingAdminChat.bulkUploadDesc') || "Paste a Google Drive folder link. I'll automatically organize files by project and developer."}
           </p>
           <div className="flex gap-2">
             <Input
@@ -377,7 +517,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
               ) : (
                 <>
                   <Upload className="w-4 h-4 mr-1" />
-                  Process
+                  {t('listingAdminChat.process') || 'Process'}
                 </>
               )}
             </Button>
@@ -409,7 +549,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
                 ? "text-gold bg-gold/10"
                 : "text-zinc-600 hover:text-gold hover:bg-gold/10"
             }`}
-            title={isRecording ? "Stop Recording" : isProcessingVoice ? "Processing..." : "Voice Message"}
+            title={isRecording ? t('listingAdminChat.stopRecording') || "Stop Recording" : isProcessingVoice ? t('listingAdminChat.processing') || "Processing..." : t('listingAdminChat.voiceMessage') || "Voice Message"}
           >
             {isProcessingVoice ? (
               <Loader2 className="w-5 h-5 animate-spin" />
@@ -423,7 +563,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSendMessage()}
-            placeholder="Ask Sarah anything about listings..."
+            placeholder={t('listingAdminChat.askAnything') || "Ask Sarah anything about listings..."}
             className="flex-1 bg-zinc-50 border-zinc-300 text-black"
             disabled={isLoading || isRecording}
           />
@@ -442,12 +582,12 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
         {isRecording && (
           <div className="flex items-center justify-center gap-2 mt-2 text-sm text-red-500">
             <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-            <span>Recording... Click mic to stop</span>
+            <span>{t('listingAdminChat.recording') || 'Recording... Click mic to stop'}</span>
           </div>
         )}
         {!isRecording && (
           <div className="flex items-center justify-center gap-1 mt-2 text-[10px] text-zinc-400">
-            <span>Powered by AI • Sarah can create listings, process bulk uploads, and answer questions</span>
+            <span>{t('listingAdminChat.poweredByAI') || 'Powered by AI - Sarah can create listings, process bulk uploads, and answer questions'}</span>
           </div>
         )}
       </div>

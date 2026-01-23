@@ -2,7 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, accept-language",
 };
 
 serve(async (req) => {
@@ -11,20 +11,70 @@ serve(async (req) => {
   }
 
   try {
+    const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
-    }
+    
+    // Get preferred language from header or default to English
+    const preferredLang = req.headers.get("accept-language")?.split(",")[0]?.split("-")[0] || "en";
 
-    const { audio } = await req.json();
+    const { audio, language } = await req.json();
+    const targetLang = language || preferredLang;
     
     if (!audio) {
       throw new Error("No audio data provided");
     }
 
-    // Use Gemini's multimodal capabilities to transcribe audio
-    // The audio is sent as a data URL for multimodal processing
+    // Decode base64 audio to binary
+    const audioBytes = Uint8Array.from(atob(audio), c => c.charCodeAt(0));
+    const audioBlob = new Blob([audioBytes], { type: "audio/webm" });
+
+    // Try ElevenLabs Scribe first (if API key available)
+    if (ELEVENLABS_API_KEY) {
+      try {
+        const formData = new FormData();
+        formData.append("file", audioBlob, "recording.webm");
+        formData.append("model_id", "scribe_v2");
+        // Set language code for better accuracy (ISO 639-3)
+        const langCode = targetLang === "ar" ? "ara" : targetLang === "en" ? "eng" : "eng";
+        formData.append("language_code", langCode);
+
+        const elevenLabsResponse = await fetch("https://api.elevenlabs.io/v1/speech-to-text", {
+          method: "POST",
+          headers: {
+            "xi-api-key": ELEVENLABS_API_KEY,
+          },
+          body: formData,
+        });
+
+        if (elevenLabsResponse.ok) {
+          const result = await elevenLabsResponse.json();
+          const transcribedText = result.text?.trim();
+          
+          if (transcribedText && transcribedText.length > 0) {
+            return new Response(JSON.stringify({ 
+              text: transcribedText,
+              success: true,
+              provider: "elevenlabs"
+            }), {
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
+          }
+        }
+        console.log("ElevenLabs STT failed or empty, falling back to Gemini");
+      } catch (elevenLabsError) {
+        console.error("ElevenLabs STT error:", elevenLabsError);
+      }
+    }
+
+    // Fallback to Gemini multimodal with explicit language instruction
+    if (!LOVABLE_API_KEY) {
+      throw new Error("No transcription service available");
+    }
+
     const audioDataUrl = `data:audio/webm;base64,${audio}`;
+    const langInstruction = targetLang === "ar" 
+      ? "Transcribe this audio in Arabic. Return ONLY the Arabic transcription."
+      : "Transcribe this audio in English. Return ONLY the English transcription.";
     
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -40,7 +90,7 @@ serve(async (req) => {
             content: [
               {
                 type: "text",
-                text: "Please transcribe the following audio recording accurately. Return ONLY the transcribed text with no additional commentary, formatting, or explanation. If the audio is unclear or silent, respond with exactly: [NO_SPEECH_DETECTED]"
+                text: `${langInstruction} If the audio is silent or unclear, respond with exactly: [NO_SPEECH_DETECTED]. Do not add any commentary.`
               },
               {
                 type: "image_url",
@@ -56,8 +106,7 @@ serve(async (req) => {
     });
 
     if (!response.ok) {
-      // Fallback: return a message that voice is being processed
-      console.error("Transcription API error:", response.status);
+      console.error("Gemini transcription error:", response.status);
       return new Response(JSON.stringify({ 
         text: null,
         error: "Voice transcription is temporarily unavailable. Please type your message instead."
@@ -81,7 +130,8 @@ serve(async (req) => {
 
     return new Response(JSON.stringify({ 
       text: transcribedText,
-      success: true
+      success: true,
+      provider: "gemini"
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

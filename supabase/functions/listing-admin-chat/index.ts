@@ -11,6 +11,7 @@ interface ChatRequest {
   personaName: string;
   personaRole: string;
   driveUrl?: string;
+  language?: string;
 }
 
 serve(async (req) => {
@@ -24,7 +25,12 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    const { message, conversationHistory, personaName, personaRole, driveUrl }: ChatRequest = await req.json();
+    const { message, conversationHistory, personaName, personaRole, driveUrl, language }: ChatRequest = await req.json();
+
+    const isArabic = language === "ar";
+    const langInstruction = isArabic 
+      ? "Respond in Arabic. Use formal Arabic."
+      : "Respond in English.";
 
     const systemPrompt = `You are ${personaName}, the ${personaRole} at JBJ Global Real Estate in Dubai, UAE.
 
@@ -65,7 +71,16 @@ When a user provides a Google Drive link:
 - Ask clarifying questions when information is incomplete
 - Suggest best practices for listing optimization
 - Confirm all details before finalizing a listing
-- Remind users that listings need approval before going live`;
+- Remind users that listings need approval before going live
+- NEVER use emojis in your responses
+- Use clear paragraph breaks and spacing for readability
+- Keep responses concise and action-oriented
+- ${langInstruction}
+
+## Permissions
+- You can GENERATE and CREATE draft listings
+- You can PUBLISH listings after founder approval
+- You CANNOT delete any listings - only the founder can delete`;
 
     const messages = [
       { role: "system", content: systemPrompt },
@@ -113,7 +128,10 @@ When a user provides a Google Drive link:
     }
 
     const data = await response.json();
-    const assistantResponse = data.choices?.[0]?.message?.content || "I couldn't process that request.";
+    let assistantResponse = data.choices?.[0]?.message?.content || "I couldn't process that request.";
+    
+    // Remove any emojis from response
+    assistantResponse = assistantResponse.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F000}-\u{1F02F}]|[\u{1F0A0}-\u{1F0FF}]|[\u{1F100}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F910}-\u{1F96B}]|[\u{1F980}-\u{1F9E0}]/gu, '');
 
     // Detect if the response suggests creating a listing
     const suggestsListing = assistantResponse.toLowerCase().includes("project name:") || 
