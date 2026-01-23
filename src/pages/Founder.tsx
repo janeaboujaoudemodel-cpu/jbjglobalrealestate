@@ -34,9 +34,10 @@ import ceoBackdropFlags from "@/assets/jane-ceo-executive-office-final-v9.jpg";
 import ceoHeroOfficeFlags from "@/assets/ceo-hero-office-flags.jpg";
 
 // Animation variants
+// Animation variants - NO y-axis animations to avoid "broken/falling" effect
 const fadeInUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] } }
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.6, ease: "easeOut" } }
 };
 
 const fadeIn = {
@@ -257,13 +258,11 @@ const Founder = () => {
         </div>
       </section>
 
-      {/* THE FOUNDER - PREMIUM EDITORIAL LAYOUT */}
-      <section className="pt-24 md:pt-32 pb-24 md:pb-40 relative overflow-hidden">
-        {/* Subtle background elements */}
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-gold/3 to-transparent" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
-        
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* THE FOUNDER - PREMIUM EDITORIAL LAYOUT - 3-Layer System */}
+      <section className="py-24 md:py-32 bg-black relative overflow-hidden">
+        <div className="jj-layer-2">
+          {/* Active Champagne Layer */}
+          <div className="jj-layer-active rounded-2xl p-4 sm:p-6 md:p-8">
           <motion.div 
             className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-center"
             initial="hidden"
@@ -307,7 +306,7 @@ const Founder = () => {
             </motion.div>
             
             {/* Text Content - Right */}
-            <motion.div className="lg:col-span-7 order-1 lg:order-2" variants={fadeInUp}>
+            <motion.div className="lg:col-span-7 order-1 lg:order-2 space-y-6" variants={fadeInUp}>
               <div className="mb-8">
                 <span className="inline-flex items-center gap-2 text-gold text-sm uppercase tracking-[0.4em]">
                   <Star className="w-4 h-4 fill-gold" />
@@ -317,71 +316,73 @@ const Founder = () => {
               </div>
               
               <h2 
-                className="text-white text-4xl md:text-5xl lg:text-7xl font-bold mb-8"
+                className="text-black text-4xl md:text-5xl lg:text-7xl font-bold mb-8"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 Jane Abou
                 <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#D4B96A] to-gold">Jaoude</span>
+                <span className="text-gold">Jaoude</span>
               </h2>
               
-              <p className="text-gold text-sm uppercase tracking-[0.3em] mb-8 font-medium">
+              <p className="text-gold text-sm uppercase tracking-[0.3em] mb-6 font-medium">
                 Dubai-Based Real Estate Brokerage
               </p>
               
-              <div className="space-y-6 text-zinc-300 leading-relaxed max-w-2xl">
-                <p className="text-xl md:text-2xl font-light text-white/90">
+              {/* Bio Card - Champagne Inner */}
+              <div className="jj-card-inner border-2 border-gold rounded-xl p-6 space-y-4">
+                <p className="text-lg md:text-xl font-light text-black">
                   Born August 25, 1998, in Lebanon. Fluent in French and Arabic, with self-taught English and Spanish. Active on social media since 2012 with 1M+ followers across platforms.
                 </p>
-                <p className="text-lg">
+                <p className="text-base text-zinc-700">
                   At 16, Jane launched Jane's Beauty (beauty services) and began selling products via importing and shipping from China. With 12+ years of industry experience in sales, customer experience, and business development, she relocated to Dubai in 2020 to pursue real estate.
                 </p>
-                <p className="text-lg text-zinc-400">
+                <p className="text-base text-zinc-600">
                   Her career includes working with DAMAC in 2021, leading quality and operations at Al-Ghazal Transportation Company (495+ team), and developing brokerage business divisions from 2022–2024. In 2025, she worked with Sobha Realty before founding JBJ Global Real Estate — a Dubai-based real estate brokerage for property sales and rentals.
                 </p>
               </div>
               
-              {/* Accolades row - All 4 with consistent spacing */}
-              <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30 flex-shrink-0">
-                    <Globe className="w-5 h-5 text-gold" />
+              {/* Accolades row - All 4 as champagne stat cards with gold borders */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                <div className="jj-card-inner border-2 border-gold rounded-xl p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
+                  <div className="w-10 h-10 mx-auto mb-3 rounded-xl flex items-center justify-center border-2 border-gold"
+                    style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}>
+                    <Globe className="w-5 h-5 text-black" />
                   </div>
-                  <div>
-                    <p className="text-white font-medium text-sm">4 Languages</p>
-                    <p className="text-zinc-500 text-xs">FR · EN · AR · ES</p>
-                  </div>
+                  <p className="text-gold text-xl font-bold">4</p>
+                  <p className="text-black text-xs font-medium">Languages</p>
+                  <p className="text-zinc-500 text-[10px]">FR · EN · AR · ES</p>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30 flex-shrink-0">
-                    <Users className="w-5 h-5 text-gold" />
+                <div className="jj-card-inner border-2 border-gold rounded-xl p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
+                  <div className="w-10 h-10 mx-auto mb-3 rounded-xl flex items-center justify-center border-2 border-gold"
+                    style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}>
+                    <Users className="w-5 h-5 text-black" />
                   </div>
-                  <div>
-                    <p className="text-white font-medium text-sm">2,800+ Trained</p>
-                    <p className="text-zinc-500 text-xs">Brokers Mentored</p>
-                  </div>
+                  <p className="text-gold text-xl font-bold">2,800+</p>
+                  <p className="text-black text-xs font-medium">Trained</p>
+                  <p className="text-zinc-500 text-[10px]">Brokers Mentored</p>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30 flex-shrink-0">
-                    <TrendingUp className="w-5 h-5 text-gold" />
+                <div className="jj-card-inner border-2 border-gold rounded-xl p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
+                  <div className="w-10 h-10 mx-auto mb-3 rounded-xl flex items-center justify-center border-2 border-gold"
+                    style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}>
+                    <TrendingUp className="w-5 h-5 text-black" />
                   </div>
-                  <div>
-                    <p className="text-white font-medium text-sm">495+ Managed</p>
-                    <p className="text-zinc-500 text-xs">Operations Team</p>
-                  </div>
+                  <p className="text-gold text-xl font-bold">495+</p>
+                  <p className="text-black text-xs font-medium">Managed</p>
+                  <p className="text-zinc-500 text-[10px]">Operations Team</p>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30 flex-shrink-0">
-                    <Award className="w-5 h-5 text-gold" />
+                <div className="jj-card-inner border-2 border-gold rounded-xl p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
+                  <div className="w-10 h-10 mx-auto mb-3 rounded-xl flex items-center justify-center border-2 border-gold"
+                    style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}>
+                    <Award className="w-5 h-5 text-black" />
                   </div>
-                  <div>
-                    <p className="text-white font-medium text-sm">12+ Years</p>
-                    <p className="text-zinc-500 text-xs">Industry Experience</p>
-                  </div>
+                  <p className="text-gold text-xl font-bold">12+</p>
+                  <p className="text-black text-xs font-medium">Years</p>
+                  <p className="text-zinc-500 text-[10px]">Industry Experience</p>
                 </div>
               </div>
             </motion.div>
           </motion.div>
+          </div>
         </div>
       </section>
 
@@ -688,29 +689,27 @@ const Founder = () => {
         </div>
       </section>
 
-      {/* JOURNEY PHOTO GALLERY */}
-      <section className="py-24 md:py-32 bg-gradient-to-b from-zinc-950 via-black to-zinc-950 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.02]">
-          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #A8925A 1px, transparent 0)', backgroundSize: '48px 48px' }} />
-        </div>
-        
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* JOURNEY PHOTO GALLERY - 3-Layer System */}
+      <section className="py-24 md:py-32 bg-black relative overflow-hidden">
+        <div className="jj-layer-2">
+          {/* Active Champagne Layer */}
+          <div className="jj-layer-active rounded-2xl p-4 sm:p-6 md:p-8">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerContainer}
           >
-            <motion.div className="text-center mb-16" variants={fadeInUp}>
+              <motion.div className="text-center mb-16" variants={fadeInUp}>
               <span className="text-gold text-sm uppercase tracking-[0.4em]">Visual Journey</span>
               <GoldLine className="w-32 mx-auto mt-4 mb-8" />
               <h2 
-                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
+                className="text-black text-4xl md:text-5xl lg:text-6xl font-bold"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
-                From Lebanon <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">to Dubai</span>
+                From Lebanon <span className="text-gold">to Dubai</span>
               </h2>
-              <p className="text-zinc-400 text-lg mt-6 max-w-2xl mx-auto">
+              <p className="text-zinc-600 text-lg mt-6 max-w-2xl mx-auto">
                 A visual chronicle of entrepreneurship, leadership, and the pursuit of excellence
               </p>
             </motion.div>
@@ -720,23 +719,25 @@ const Founder = () => {
               className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
               variants={staggerContainer}
             >
-              {/* Photo 1 - Professional Portrait */}
+              {/* Photo 1 - Professional Portrait - with thin champagne frame */}
               <motion.div 
-                className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
+                className="group jj-card-inner border-2 border-gold p-2 rounded-xl transition-all duration-500 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1"
                 variants={scaleIn}
               >
-                <SafeImage 
-                  src={founderProfessional} 
-                  fallbackSrc={founderHero}
-                  alt="Jane Abou Jaoude - Professional Portrait" 
-                  className="w-full h-full group-hover:scale-105 transition-transform duration-700"
-                  style={{ objectFit: "cover", objectPosition: "center 15%" }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">2025</span>
-                  <h4 className="text-white text-lg font-semibold mb-1">Founder</h4>
-                  <p className="text-zinc-400 text-sm">JBJ Global Real Estate, Dubai</p>
+                <div className="relative aspect-[4/5] rounded-lg overflow-hidden">
+                  <SafeImage 
+                    src={founderProfessional} 
+                    fallbackSrc={founderHero}
+                    alt="Jane Abou Jaoude - Professional Portrait" 
+                    className="w-full h-full group-hover:scale-105 transition-transform duration-700"
+                    style={{ objectFit: "cover", objectPosition: "center 15%" }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">2025</span>
+                    <h4 className="text-white text-lg font-semibold mb-1">Founder</h4>
+                    <p className="text-zinc-400 text-sm">JBJ Global Real Estate, Dubai</p>
+                  </div>
                 </div>
               </motion.div>
 
@@ -862,6 +863,7 @@ const Founder = () => {
               </div>
             </motion.div>
           </motion.div>
+          </div>
         </div>
       </section>
 
@@ -1063,11 +1065,11 @@ const Founder = () => {
         </div>
       </section>
 
-      {/* VISION FOR THE FUTURE */}
-      <section className="py-24 md:py-32 bg-gradient-to-b from-black via-zinc-950/30 to-black relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gold/5 rounded-full blur-3xl" />
-        
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* VISION FOR THE FUTURE - 3-Layer System */}
+      <section className="py-24 md:py-32 bg-black relative overflow-hidden">
+        <div className="jj-layer-2">
+          {/* Active Champagne Layer */}
+          <div className="jj-layer-active rounded-2xl p-4 sm:p-6 md:p-8">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -1078,74 +1080,79 @@ const Founder = () => {
               <span className="text-gold text-sm uppercase tracking-[0.4em]">Looking Ahead</span>
               <GoldLine className="w-32 mx-auto mt-4 mb-8" />
               <h2 
-                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
+                className="text-black text-4xl md:text-5xl lg:text-6xl font-bold"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
-                Vision for the <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Future</span>
+                Vision for the <span className="text-gold">Future</span>
               </h2>
             </motion.div>
 
             <motion.div 
-              className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8"
+              className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6"
               variants={staggerContainer}
             >
               {/* Innovation Card */}
               <motion.div 
-                className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 hover:border-gold/40 transition-all duration-500 group"
+                className="jj-card-inner border-2 border-gold rounded-xl p-8 transition-all duration-500 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1 group"
                 variants={fadeInUp}
               >
-                <div className="w-16 h-16 mb-6 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/30 group-hover:scale-110 transition-transform">
-                  <Gem className="w-8 h-8 text-gold" />
+                <div className="w-14 h-14 mb-6 rounded-xl flex items-center justify-center border-2 border-gold"
+                  style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}>
+                  <Gem className="w-7 h-7 text-black" />
                 </div>
-                <h3 className="text-white text-xl font-bold mb-4">Technology & Innovation</h3>
-                <p className="text-zinc-400 leading-relaxed">
+                <h3 className="text-black text-xl font-bold mb-4">Technology & Innovation</h3>
+                <p className="text-zinc-600 leading-relaxed">
                   Building the first global real estate platform of its kind with AI-powered tools, free resources, and cutting-edge technology to empower brokers, buyers, and sellers worldwide.
                 </p>
               </motion.div>
 
               {/* Expansion Card */}
               <motion.div 
-                className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 hover:border-gold/40 transition-all duration-500 group"
+                className="jj-card-inner border-2 border-gold rounded-xl p-8 transition-all duration-500 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1 group"
                 variants={fadeInUp}
               >
-                <div className="w-16 h-16 mb-6 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/30 group-hover:scale-110 transition-transform">
-                  <Globe className="w-8 h-8 text-gold" />
+                <div className="w-14 h-14 mb-6 rounded-xl flex items-center justify-center border-2 border-gold"
+                  style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}>
+                  <Globe className="w-7 h-7 text-black" />
                 </div>
-                <h3 className="text-white text-xl font-bold mb-4">Global Expansion</h3>
-                <p className="text-zinc-400 leading-relaxed">
+                <h3 className="text-black text-xl font-bold mb-4">Global Expansion</h3>
+                <p className="text-zinc-600 leading-relaxed">
                   Establishing JBJ Global Real Estate as a leading name across the Middle East, Europe, and beyond—while maintaining the founder-led standards and personalized service that define our brand.
                 </p>
               </motion.div>
 
               {/* Training Card */}
               <motion.div 
-                className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 hover:border-gold/40 transition-all duration-500 group"
+                className="jj-card-inner border-2 border-gold rounded-xl p-8 transition-all duration-500 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1 group"
                 variants={fadeInUp}
               >
-                <div className="w-16 h-16 mb-6 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/30 group-hover:scale-110 transition-transform">
-                  <GraduationCap className="w-8 h-8 text-gold" />
+                <div className="w-14 h-14 mb-6 rounded-xl flex items-center justify-center border-2 border-gold"
+                  style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}>
+                  <GraduationCap className="w-7 h-7 text-black" />
                 </div>
-                <h3 className="text-white text-xl font-bold mb-4">Broker Excellence</h3>
-                <p className="text-zinc-400 leading-relaxed">
+                <h3 className="text-black text-xl font-bold mb-4">Broker Excellence</h3>
+                <p className="text-zinc-600 leading-relaxed">
                   Scaling our broker training programs to reach 10,000+ professionals, providing world-class education, tools, and mentorship to elevate the industry standard.
                 </p>
               </motion.div>
 
               {/* Legacy Card */}
               <motion.div 
-                className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 hover:border-gold/40 transition-all duration-500 group"
+                className="jj-card-inner border-2 border-gold rounded-xl p-8 transition-all duration-500 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1 group"
                 variants={fadeInUp}
               >
-                <div className="w-16 h-16 mb-6 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/30 group-hover:scale-110 transition-transform">
-                  <Award className="w-8 h-8 text-gold" />
+                <div className="w-14 h-14 mb-6 rounded-xl flex items-center justify-center border-2 border-gold"
+                  style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}>
+                  <Award className="w-7 h-7 text-black" />
                 </div>
-                <h3 className="text-white text-xl font-bold mb-4">Building Legacy</h3>
-                <p className="text-zinc-400 leading-relaxed">
+                <h3 className="text-black text-xl font-bold mb-4">Building Legacy</h3>
+                <p className="text-zinc-600 leading-relaxed">
                   Creating an organization designed to endure for generations—built on values of accountability, discretion, and unwavering commitment to excellence.
                 </p>
               </motion.div>
             </motion.div>
           </motion.div>
+          </div>
         </div>
       </section>
 

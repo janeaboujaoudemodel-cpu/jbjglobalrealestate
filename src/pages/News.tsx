@@ -351,7 +351,7 @@ const News = () => {
             {filteredNews.slice(1).map((article) => (
               <article 
                 key={article.id}
-                className="group jj-card-inner rounded-xl overflow-hidden hover:border-gold/60 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-gold/10"
+                className="group jj-card-inner border-2 border-gold rounded-xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)]"
               >
                 {/* Image */}
                 <div className="aspect-video relative overflow-hidden">
