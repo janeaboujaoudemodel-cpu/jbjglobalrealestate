@@ -400,7 +400,7 @@ const handler = async (req: Request): Promise<Response> => {
           <div class="footer">
             <p class="footer-brand">JBJ Global Real Estate</p>
             <p class="footer-tagline">First Global Real Estate Platform of Its Kind</p>
-            <p>Developed, Created & Implemented by The Founder & CEO, <span class="gold">Jane Abou Jaoude</span></p>
+            <p>Developed, Created & Implemented by The Founder & CEO, <span class="gold">Jane Bou Jaoude</span></p>
             <p style="margin-top: 15px;">© 2026 JBJ Global Real Estate. All rights reserved.</p>
             <p style="margin-top: 10px; font-size: 10px; color: #666;"><strong>This is an automated confirmation. Do not reply to this email.</strong></p>
           </div>

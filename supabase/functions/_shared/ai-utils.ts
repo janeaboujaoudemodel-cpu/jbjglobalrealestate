@@ -43,7 +43,7 @@ export const APPROVED_CONTACT = {
   whatsapp: "+971565911000",
   companyName: "JBJ Global Real Estate",
   companyFull: "JBJ Global Real Estate L.L.C S.O.C.",
-  founder: "Jane Abou Jaoude",
+  founder: "Jane Bou Jaoude",
 };
 
 export const APPROVED_EMAILS = [

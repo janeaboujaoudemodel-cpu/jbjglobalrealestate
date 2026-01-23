@@ -19,7 +19,7 @@ const APPROVED_CONTACT = {
   whatsapp: "+971565911000",
   website: "jbj.ae",
   companyName: "JBJ Global Real Estate",
-  founder: "Jane Abou Jaoude",
+  founder: "Jane Bou Jaoude",
 };
 
 // AI Department Personas (no "AI" in titles - they are human professionals)
@@ -50,7 +50,7 @@ const AMANDA_SUPER_BRAIN = {
   },
   
   founder: {
-    name: "Jane Abou Jaoude",
+    name: "Jane Bou Jaoude",
     title: "Founder & CEO",
     honorific: "Miss Jane",
     languages: ["English", "French", "Arabic", "Spanish"],
@@ -138,7 +138,7 @@ const AMANDA_SUPER_BRAIN = {
   },
   
   meetingScripts: {
-    introduction: `Good morning/afternoon. I'm Amanda Clarke, Executive Assistant to Miss Jane Abou Jaoude, 
+    introduction: `Good morning/afternoon. I'm Amanda Clarke, Executive Assistant to Miss Jane Bou Jaoude, 
 Founder and CEO of JBJ Global Real Estate. I'll be joining from our London office. 
 How may I assist you today?`,
     

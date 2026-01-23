@@ -84,7 +84,7 @@ const DEFAULT_CHANNELS: Channel[] = [
 // Initial messages per channel (independent)
 const INITIAL_MESSAGES: Record<string, ChatMessage[]> = {
   'jbj-group': [
-    { id: '1', sender: 'Jane Abou Jaoude', senderId: '1', message: 'Welcome to JBJ Group! This is our main company channel.', timestamp: '09:00 AM', channelId: 'jbj-group' },
+    { id: '1', sender: 'Jane Bou Jaoude', senderId: '1', message: 'Welcome to JBJ Group! This is our main company channel.', timestamp: '09:00 AM', channelId: 'jbj-group' },
     { id: '2', sender: 'Victoria Sterling', senderId: '7', message: 'Good morning everyone! Marketing report is ready.', timestamp: '09:15 AM', channelId: 'jbj-group' },
   ],
   'general': [
@@ -99,7 +99,7 @@ const INITIAL_MESSAGES: Record<string, ChatMessage[]> = {
     { id: '1', sender: 'System', senderId: 'system', message: 'Hot leads will be posted here automatically.', timestamp: '08:00 AM', channelId: 'leads' },
   ],
   'announcements': [
-    { id: '1', sender: 'Jane Abou Jaoude', senderId: '1', message: 'Team meeting tomorrow at 10 AM in the main conference room.', timestamp: '08:30 AM', channelId: 'announcements' },
+    { id: '1', sender: 'Jane Bou Jaoude', senderId: '1', message: 'Team meeting tomorrow at 10 AM in the main conference room.', timestamp: '08:30 AM', channelId: 'announcements' },
   ],
 };
 

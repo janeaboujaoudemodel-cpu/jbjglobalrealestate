@@ -141,7 +141,7 @@ export const COMPANY_KNOWLEDGE = {
   services: ['BUY', 'SELL', 'RENT', 'Property Management', 'Investment Advisory'],
   
   founder: {
-    name: 'Jane Abou Jaoude',
+    name: 'Jane Bou Jaoude',
     title: 'Founder & CEO',
     role: 'Visionary leader with strategic oversight of all operations',
   },
@@ -419,7 +419,7 @@ export const AI_PERSONA_TRAINING: AIPersonaTraining[] = [
     languages: ['English', 'Spanish'],
     yearsExperience: 8,
     reportingTo: 'founder',
-    reportingToName: 'Jane Abou Jaoude (Founder & CEO)',
+    reportingToName: 'Jane Bou Jaoude (Founder & CEO)',
     team: [],
     responsibilities: [
       'Manage CEO calendar and meetings',

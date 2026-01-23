@@ -98,7 +98,7 @@ export const UNIFIED_APPROVAL_WORKFLOW: ApprovalStep[] = [
     step: 4,
     name: 'Final Approval',
     role: 'founder',
-    approverName: 'Jane Abou Jaoude',
+    approverName: 'Jane Bou Jaoude',
     approverTitle: 'Founder & CEO',
     approverDepartment: 'Executive',
     approverPhoto: janeAbouJaoudeCeo,

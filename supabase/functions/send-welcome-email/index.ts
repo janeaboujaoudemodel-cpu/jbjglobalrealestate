@@ -278,7 +278,7 @@ serve(async (req) => {
                         <p style="color: #C8A766; font-size: 14px; margin: 0 0 5px 0; font-weight: 600;">JBJ Global Real Estate</p>
                         <p style="color: #888; font-size: 12px; margin: 0 0 10px 0;">First Global Real Estate Platform of Its Kind</p>
                         <p style="color: #666; font-size: 11px; margin: 0 0 15px 0;">
-                          Developed, Created & Implemented by The Founder & CEO, <span style="color: #C8A766;">Jane Abou Jaoude</span>
+                          Developed, Created & Implemented by The Founder & CEO, <span style="color: #C8A766;">Jane Bou Jaoude</span>
                         </p>
                         
                         <p style="color: #555; font-size: 11px; margin: 15px 0 0 0;">

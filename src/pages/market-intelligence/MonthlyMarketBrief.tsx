@@ -99,7 +99,7 @@ const MonthlyMarketBrief = () => {
       <SEOHead
         title={`${data.period} Market Brief | Dubai Real Estate | JBJ GLOBAL REAL ESTATE`}
         description={`Monthly market brief for ${data.period} covering Dubai real estate across BUY · SELL · RENT. Official report by JBJ GLOBAL REAL ESTATE.`}
-        keywords="Dubai market brief, monthly real estate report, Dubai property data, Jane Abou jaoude"
+        keywords="Dubai market brief, monthly real estate report, Dubai property data, Jane Bou Jaoude"
       />
 
       {/* Main Content - 3-layer system */}
@@ -295,7 +295,7 @@ const MonthlyMarketBrief = () => {
                 </div>
                 <div className="mt-4 pt-4 border-t border-gold/30">
                   <p className="text-xs text-zinc-500">
-                    JBJ GLOBAL REAL ESTATE • Jane Abou jaoude, Founder & CEO
+                    JBJ GLOBAL REAL ESTATE • Jane Bou Jaoude, Founder & CEO
                   </p>
                 </div>
               </CardContent>

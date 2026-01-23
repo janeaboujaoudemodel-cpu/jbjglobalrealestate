@@ -737,7 +737,7 @@ const MarketReport = () => {
       <div class="subtitle">Property Education & Decision Framework</div>
       <div class="edition">Latest Edition 2026</div>
       <div class="author-box">
-        <div class="author-name">Jane Abou Jaoude</div>
+        <div class="author-name">Jane Bou Jaoude</div>
         <div class="author-title">Founder • JBJ Global Real Estate</div>
         <div style="margin-top: 8px; font-size: 11px; color: #888;">Real Estate Brokerage • Dubai, UAE</div>
       </div>
@@ -773,8 +773,8 @@ const MarketReport = () => {
   <div class="page">
     <div class="founder-section">
       <h2 style="text-align: center; border-bottom: none; margin-bottom: 40px;">From the Founder</h2>
-      <img src="${founderProfessional}" alt="Jane Abou Jaoude" class="founder-image" onerror="this.style.display='none'" />
-      <h3 style="color: #A8925A; text-align: center; margin-bottom: 10px;">Jane Abou Jaoude</h3>
+      <img src="${founderProfessional}" alt="Jane Bou Jaoude" class="founder-image" onerror="this.style.display='none'" />
+      <h3 style="color: #A8925A; text-align: center; margin-bottom: 10px;">Jane Bou Jaoude</h3>
       <p style="color: #888; text-align: center; font-size: 13px; margin-bottom: 8px;">Founder, JBJ Global Real Estate</p>
       <p style="color: #666; text-align: center; font-size: 11px; margin-bottom: 30px;">Real Estate Brokerage • Dubai, UAE</p>
     </div>
@@ -1499,7 +1499,7 @@ const MarketReport = () => {
     
     <div style="background: linear-gradient(135deg, #ffffff 0%, #f5f5f0 100%); border: 1px solid #d4d4d4; border-radius: 16px; padding: 25px; margin: 25px 0;">
       <p style="color: #A8925A; font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 10px;">Premium AI Technology</p>
-      <p style="color: #000; font-size: 16px; margin-bottom: 5px; font-weight: 600;">Developed by the Founder & CEO, Jane Abou Jaoude</p>
+      <p style="color: #000; font-size: 16px; margin-bottom: 5px; font-weight: 600;">Developed by the Founder & CEO, Jane Bou Jaoude</p>
       <p style="color: #555; font-size: 13px; margin-bottom: 0;">Exclusive for JBJ Global Real Estate • Real Estate Brokerage</p>
     </div>
     
@@ -1849,7 +1849,7 @@ const MarketReport = () => {
                         <span className="block text-gold">Market Intelligence</span>
                       </h3>
                       
-                      <p className="text-zinc-500 text-xs mt-4">By Founder & CEO Jane Abou Jaoude</p>
+                      <p className="text-zinc-500 text-xs mt-4">By Founder & CEO Jane Bou Jaoude</p>
                       
                       {/* JJ Logo */}
                       <div className="mt-6 pt-4 border-t border-zinc-800">
@@ -1946,7 +1946,7 @@ const MarketReport = () => {
             <div className="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 border-gold/50 mx-auto mb-6 bg-zinc-900">
               <img 
                 src={founderProfessional} 
-                alt="Jane Abou Jaoude, Founder & CEO of JBJ GLOBAL REAL ESTATE"
+                alt="Jane Bou Jaoude, Founder & CEO of JBJ GLOBAL REAL ESTATE"
                 className="w-full h-full"
                 style={{
                   objectFit: 'cover',
@@ -1958,7 +1958,7 @@ const MarketReport = () => {
               "This book represents years of experience in UAE real estate, distilled into actionable frameworks. I created it so investors can make informed decisions with confidence."
             </blockquote>
             <div>
-              <p className="text-white font-semibold text-lg tracking-wide">Jane Abou Jaoude</p>
+              <p className="text-white font-semibold text-lg tracking-wide">Jane Bou Jaoude</p>
               <p className="text-gold text-sm font-medium mt-1">Founder & CEO</p>
               <p className="text-zinc-400 text-sm mt-0.5">JBJ Global Real Estate</p>
             </div>
@@ -2151,7 +2151,7 @@ const MarketReport = () => {
             {/* Brand Box - White/Champagne Theme - JBJ Global Real Estate links to About */}
             <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-6 text-center shadow-lg">
               <p className="text-zinc-600 text-xs mb-1">
-                Created by <span className="text-black font-semibold">Jane Abou Jaoude</span>
+                Created by <span className="text-black font-semibold">Jane Bou Jaoude</span>
               </p>
               <p className="text-zinc-700 text-sm">
                 Exclusive for <a href="/about" className="text-gold font-semibold hover:underline">JBJ Global Real Estate</a>
