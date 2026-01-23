@@ -9,6 +9,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CONTACT_INFO } from "@/constants/stats";
+import fitOutHeroVideo from "@/assets/videos/fit-out-hero.mp4";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -96,15 +97,20 @@ const FitOut = () => {
         canonicalPath="/services/fit-out"
       />
 
-      {/* Hero Section */}
+      {/* Hero Section - Bright Video Background */}
       <section className="relative min-h-[60vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
-          <img 
-            src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80" 
-            alt="Fit-Out & Renovation"
-            className="w-full h-full object-cover opacity-30"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/80 to-black" />
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
+            poster="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&q=80"
+          >
+            <source src={fitOutHeroVideo} type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black" />
         </div>
         
         <motion.div 
@@ -142,7 +148,7 @@ const FitOut = () => {
           </motion.h1>
 
           <motion.p 
-            className="text-zinc-400 text-lg md:text-xl max-w-2xl mb-8"
+            className="text-zinc-300 text-lg md:text-xl max-w-2xl mb-8"
             variants={fadeInUp}
           >
             Quality fit-out and renovation services by licensed contractors. 
@@ -182,13 +188,13 @@ const FitOut = () => {
             </motion.div>
 
             <div className="grid md:grid-cols-2 gap-6">
-              {services.map((service, index) => (
+              {services.map((service) => (
                 <motion.div key={service.title} variants={fadeInUp}>
-                  <Card className="jj-card-inner hover:border-white transition-all group h-full">
+                  <Card className="jj-card-inner hover:border-gold transition-all group h-full">
                     <CardContent className="p-6">
                       <div className="flex items-start gap-4">
-                        <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                          <service.icon className="w-7 h-7 text-gold" />
+                        <div className="jj-icon-box-active w-14 h-14 flex-shrink-0 group-hover:scale-110 transition-transform">
+                          <service.icon className="w-7 h-7" />
                         </div>
                         <div className="flex-1">
                           <h3 className="text-black font-semibold text-xl mb-2 group-hover:text-gold transition-colors">
@@ -200,7 +206,7 @@ const FitOut = () => {
                           <div className="grid grid-cols-2 gap-2">
                             {service.features.map((feature) => (
                               <div key={feature} className="flex items-center gap-2 text-xs text-black/60">
-                                <CheckCircle className="w-3 h-3 text-gold" />
+                                <CheckCircle className="w-3 h-3 text-gold flex-shrink-0" />
                                 {feature}
                               </div>
                             ))}
@@ -235,12 +241,12 @@ const FitOut = () => {
             </motion.div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {whyChooseUs.map((item, index) => (
+              {whyChooseUs.map((item) => (
                 <motion.div key={item.title} variants={fadeInUp}>
                   <Card className="jj-card-inner h-full">
                     <CardContent className="p-6 text-center">
-                      <div className="w-16 h-16 rounded-full bg-black flex items-center justify-center mx-auto mb-4">
-                        <item.icon className="w-8 h-8 text-gold" />
+                      <div className="jj-icon-box-active w-16 h-16 rounded-full mx-auto mb-4">
+                        <item.icon className="w-8 h-8" />
                       </div>
                       <h3 className="text-black font-semibold text-lg mb-2">
                         {item.title}
