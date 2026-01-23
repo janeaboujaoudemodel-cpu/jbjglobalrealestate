@@ -185,13 +185,9 @@ export const FAQTableOfContents = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className={cn(
-        "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl overflow-hidden shadow-lg scrollbar-thin scrollbar-thumb-gold/60 scrollbar-track-gold/10",
-        sticky ? "sticky top-4 z-[60] max-h-[calc(100vh-200px)] overflow-y-auto" : "max-h-[400px] overflow-y-auto"
+        "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl overflow-hidden shadow-lg jj-scrollbar-gold",
+        sticky ? "sticky top-4 z-[60] max-h-[calc(100vh-200px)]" : "max-h-[400px]"
       )}
-      style={{
-        scrollbarWidth: 'thin',
-        scrollbarColor: 'rgba(200,167,102,0.6) rgba(200,167,102,0.1)'
-      }}
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-zinc-200 bg-gradient-to-r from-gold/5 to-transparent">
