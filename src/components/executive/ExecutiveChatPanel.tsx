@@ -22,6 +22,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Message {
   id: string;
@@ -39,6 +40,7 @@ interface ExecutiveChatPanelProps {
 
 const ExecutiveChatPanel: React.FC<ExecutiveChatPanelProps> = ({ isOpen, onClose, userName }) => {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -298,14 +300,14 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
                     <button
                       onClick={async () => {
                         await navigator.clipboard.writeText(message.content);
-                        toast.success('Message copied');
+                        toast.success(t('chat.messageCopied') || 'Message copied');
                       }}
                       className={`flex items-center gap-1 mt-1 text-[10px] text-gray-500 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
                         message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
                       }`}
                     >
                       <Copy className="w-3 h-3" />
-                      <span>Copy</span>
+                      <span>{t('chat.copy') || 'Copy'}</span>
                     </button>
                   )}
                 </div>

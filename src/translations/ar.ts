@@ -997,4 +997,15 @@ export const ar = {
   'comingSoon.joinCircleDesc': 'املأ النموذج للانضمام إلى دائرتنا وكن أول من يصل إلى العقارات الحصرية ورؤى السوق.',
   'comingSoon.joinNow': 'انضم الآن',
   'comingSoon.teamLogin': 'دخول الفريق',
+  
+  // Global Chat Translations
+  'chat.copy': 'نسخ',
+  'chat.copied': 'تم النسخ',
+  'chat.messageCopied': 'تم نسخ الرسالة',
+  'chat.typing': 'جاري الكتابة...',
+  'chat.loading': 'جاري التحميل...',
+  'chat.send': 'إرسال',
+  'chat.typeMessage': 'اكتب رسالة...',
+  'chat.online': 'متصل',
+  'chat.offline': 'غير متصل',
 };

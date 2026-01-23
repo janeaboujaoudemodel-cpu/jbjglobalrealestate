@@ -529,14 +529,14 @@ Would you like to try a different approach?`,
                 <button
                   onClick={async () => {
                     await navigator.clipboard.writeText(message.content);
-                    toast.success('Message copied');
+                    toast.success(t('chat.messageCopied') || 'Message copied');
                   }}
                   className={`flex items-center gap-1 mt-1 text-[10px] text-zinc-400 hover:text-zinc-700 transition-colors opacity-0 group-hover:opacity-100 ${
                     message.role === "user" ? "self-end mr-1" : "self-start ml-1"
                   }`}
                 >
                   <Copy className="w-3 h-3" />
-                  <span>Copy</span>
+                  <span>{t('chat.copy') || 'Copy'}</span>
                 </button>
               </div>
             </div>
