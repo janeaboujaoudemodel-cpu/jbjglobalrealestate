@@ -1,18 +1,174 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
 /**
- * SecurityShield - Anti-inspection and content protection component
- * Provides multiple layers of protection against code inspection and copying
+ * SecurityShield - Enterprise-grade anti-inspection and content protection
+ * Provides multiple layers of protection against:
+ * - Code inspection (DevTools)
+ * - Content scraping (bots, crawlers)
+ * - Data extraction (copy, select, drag)
+ * - Automated attacks (headless browsers)
  * 
- * IMPORTANT: This is client-side protection only. True security comes from
+ * IMPORTANT: This is client-side protection. True security comes from
  * proper backend authentication, RLS policies, and encrypted data transmission.
  */
 const SecurityShield = () => {
+  const violationCountRef = useRef(0);
+  const fingerprintRef = useRef<string>('');
+
+  // Generate device fingerprint
+  const getFingerprint = useCallback(() => {
+    if (fingerprintRef.current) return fingerprintRef.current;
+    
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.textBaseline = 'top';
+      ctx.font = '14px Arial';
+      ctx.fillText('JBJ-Security-Check', 2, 2);
+    }
+    
+    const components = [
+      navigator.userAgent,
+      screen.width + 'x' + screen.height,
+      screen.colorDepth,
+      new Date().getTimezoneOffset(),
+      navigator.language,
+      navigator.hardwareConcurrency || 0,
+      navigator.platform,
+      canvas.toDataURL().slice(-50)
+    ];
+    
+    fingerprintRef.current = btoa(components.join('|')).slice(0, 32);
+    return fingerprintRef.current;
+  }, []);
+
+  // Log security violation to database
+  const logViolation = useCallback(async (type: string) => {
+    violationCountRef.current += 1;
+    const fingerprint = getFingerprint();
+    
+    console.warn(`[JBJ Security] Violation #${violationCountRef.current}: ${type}`);
+    
+    // Log to database via edge function (non-blocking)
+    try {
+      await supabase.functions.invoke('log-security-event', {
+        body: {
+          event_type: 'security_violation',
+          violation_type: type,
+          fingerprint,
+          user_agent: navigator.userAgent,
+          violation_count: violationCountRef.current
+        }
+      }).catch(() => {}); // Silent fail - don't block UI
+    } catch {
+      // Silent fail
+    }
+    
+    // After 3 violations, show warning
+    if (violationCountRef.current >= 3) {
+      showSecurityWarning();
+    }
+  }, [getFingerprint]);
+
+  // Show security warning modal
+  const showSecurityWarning = useCallback(() => {
+    // Check if warning already exists
+    if (document.getElementById('jbj-security-warning')) return;
+    
+    const warning = document.createElement('div');
+    warning.id = 'jbj-security-warning';
+    warning.innerHTML = `
+      <div style="
+        position: fixed;
+        inset: 0;
+        z-index: 999999;
+        background: rgba(0,0,0,0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      ">
+        <div style="
+          max-width: 600px;
+          background: #1a1a1a;
+          border: 2px solid #dc2626;
+          border-radius: 12px;
+          padding: 32px;
+          text-align: center;
+          color: white;
+          font-family: system-ui, -apple-system, sans-serif;
+        ">
+          <div style="
+            width: 80px;
+            height: 80px;
+            background: rgba(220,38,38,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+          ">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          
+          <h1 style="color: #dc2626; font-size: 24px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            ⚠️ SECURITY NOTICE
+          </h1>
+          
+          <div style="text-align: left; font-size: 14px; line-height: 1.6; color: #d1d5db;">
+            <p style="margin-bottom: 12px;">
+              <strong>Unauthorized access, inspection, extraction, duplication, mirroring, or synchronization</strong> of this website's content, listings, data, design, UI, or code is <strong>strictly prohibited</strong>.
+            </p>
+            
+            <p style="margin-bottom: 12px;">
+              <strong>JBJ Global Real Estate</strong> is a licensed and registered entity in Dubai, UAE.
+            </p>
+            
+            <p style="margin-bottom: 12px;">
+              All content, data, listings, and digital assets are legally protected, tracked, and registered under applicable UAE commercial, cybercrime, and intellectual property laws.
+            </p>
+            
+            <p style="color: #f87171; margin-bottom: 16px;">
+              Any attempt to scrape, copy, reuse, or extract content is logged and may result in <strong>civil and criminal legal action</strong> under UAE law.
+            </p>
+            
+            <div style="background: #262626; border-radius: 8px; padding: 12px; border: 1px solid #404040;">
+              <p style="font-size: 12px; color: #9ca3af; display: flex; align-items: center; gap: 8px;">
+                🔒 Your IP address, device fingerprint, and activity have been recorded.
+              </p>
+              <p style="font-size: 11px; color: #6b7280; margin-top: 8px;">
+                Incident ID: ${getFingerprint().slice(0, 16)}...
+              </p>
+            </div>
+          </div>
+          
+          <button onclick="this.closest('#jbj-security-warning').remove(); window.location.reload();" style="
+            margin-top: 24px;
+            padding: 12px 24px;
+            background: #C8A766;
+            color: black;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+          ">
+            I Understand - Reload Page
+          </button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(warning);
+  }, [getFingerprint]);
+
   useEffect(() => {
-    // Disable right-click context menu (except on inputs)
+    // ========== 1. DISABLE RIGHT-CLICK ==========
     const handleContextMenu = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      // Allow right-click on form inputs
+      // Allow right-click on form inputs for paste functionality
       if (
         target.tagName === 'INPUT' ||
         target.tagName === 'TEXTAREA' ||
@@ -21,30 +177,74 @@ const SecurityShield = () => {
         return true;
       }
       e.preventDefault();
+      logViolation('context_menu');
       return false;
     };
 
-    // Disable keyboard shortcuts for dev tools
+    // ========== 2. BLOCK DEVTOOLS SHORTCUTS ==========
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Block F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U
-      if (
-        e.key === 'F12' ||
-        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) ||
-        (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j')) ||
-        (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c')) ||
-        (e.ctrlKey && (e.key === 'U' || e.key === 'u')) ||
-        // Mac equivalents
-        (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'i')) ||
-        (e.metaKey && e.altKey && (e.key === 'J' || e.key === 'j')) ||
-        (e.metaKey && (e.key === 'U' || e.key === 'u'))
-      ) {
+      // F12
+      if (e.key === 'F12') {
         e.preventDefault();
         e.stopPropagation();
+        logViolation('devtools_f12');
+        return false;
+      }
+      // Ctrl+Shift+I (DevTools)
+      if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) {
+        e.preventDefault();
+        e.stopPropagation();
+        logViolation('devtools_ctrl_shift_i');
+        return false;
+      }
+      // Ctrl+Shift+J (Console)
+      if (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j')) {
+        e.preventDefault();
+        e.stopPropagation();
+        logViolation('devtools_console');
+        return false;
+      }
+      // Ctrl+Shift+C (Element picker)
+      if (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c')) {
+        e.preventDefault();
+        e.stopPropagation();
+        logViolation('devtools_element_picker');
+        return false;
+      }
+      // Ctrl+U (View Source)
+      if (e.ctrlKey && (e.key === 'U' || e.key === 'u')) {
+        e.preventDefault();
+        e.stopPropagation();
+        logViolation('view_source');
+        return false;
+      }
+      // Ctrl+S (Save)
+      if (e.ctrlKey && (e.key === 'S' || e.key === 's')) {
+        e.preventDefault();
+        return false;
+      }
+      // Mac equivalents
+      if (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'i')) {
+        e.preventDefault();
+        e.stopPropagation();
+        logViolation('devtools_mac');
+        return false;
+      }
+      if (e.metaKey && e.altKey && (e.key === 'J' || e.key === 'j')) {
+        e.preventDefault();
+        e.stopPropagation();
+        logViolation('console_mac');
+        return false;
+      }
+      if (e.metaKey && (e.key === 'U' || e.key === 'u')) {
+        e.preventDefault();
+        e.stopPropagation();
+        logViolation('view_source_mac');
         return false;
       }
     };
 
-    // Disable text selection on sensitive elements
+    // ========== 3. DISABLE TEXT SELECTION ==========
     const handleSelectStart = (e: Event) => {
       const target = e.target as HTMLElement;
       // Allow selection in form inputs
@@ -56,12 +256,11 @@ const SecurityShield = () => {
       ) {
         return true;
       }
-      // Prevent selection on everything else
       e.preventDefault();
       return false;
     };
 
-    // Disable drag and drop of images
+    // ========== 4. DISABLE IMAGE DRAG ==========
     const handleDragStart = (e: DragEvent) => {
       if ((e.target as HTMLElement).tagName === 'IMG') {
         e.preventDefault();
@@ -69,15 +268,69 @@ const SecurityShield = () => {
       }
     };
 
-    // Detect DevTools opening (basic detection)
+    // ========== 5. DETECT DEVTOOLS OPENING ==========
+    let devtoolsOpen = false;
     const detectDevTools = () => {
       const threshold = 160;
       const widthThreshold = window.outerWidth - window.innerWidth > threshold;
       const heightThreshold = window.outerHeight - window.innerHeight > threshold;
       
       if (widthThreshold || heightThreshold) {
-        // DevTools might be open - clear console for privacy
-        console.clear();
+        if (!devtoolsOpen) {
+          devtoolsOpen = true;
+          logViolation('devtools_opened');
+          // Clear console to hide sensitive info
+          console.clear();
+          console.log('%c⚠️ JBJ SECURITY', 'color: #dc2626; font-size: 24px; font-weight: bold;');
+          console.log('%cThis is a protected website. All access is logged.', 'color: #f87171; font-size: 14px;');
+        }
+      } else {
+        devtoolsOpen = false;
+      }
+    };
+
+    // ========== 6. DETECT HEADLESS BROWSERS ==========
+    const detectHeadless = () => {
+      const isHeadless = 
+        /HeadlessChrome/.test(navigator.userAgent) ||
+        navigator.webdriver === true ||
+        !navigator.languages ||
+        navigator.languages.length === 0 ||
+        (navigator as any).plugins?.length === 0;
+      
+      if (isHeadless) {
+        logViolation('headless_browser');
+        showSecurityWarning();
+      }
+    };
+
+    // ========== 7. DETECT AUTOMATION TOOLS ==========
+    const detectAutomation = () => {
+      const win = window as any;
+      const doc = document as any;
+      
+      const automationIndicators = [
+        win.__webdriver_script_fn,
+        win.__driver_evaluate,
+        win.__webdriver_evaluate,
+        win.__selenium_evaluate,
+        win.__fxdriver_evaluate,
+        win.__driver_unwrapped,
+        win.__webdriver_unwrapped,
+        win.__selenium_unwrapped,
+        win.__fxdriver_unwrapped,
+        win._Selenium_IDE_Recorder,
+        win._selenium,
+        win.callSelenium,
+        win._WEBDRIVER_ELEM_CACHE,
+        doc.__webdriver_script_function,
+        doc.$cdc_asdjflasutopfhvcZLmcfl_,
+        doc.$chrome_asyncScriptInfo
+      ];
+
+      if (automationIndicators.some(indicator => indicator !== undefined)) {
+        logViolation('automation_detected');
+        showSecurityWarning();
       }
     };
 
@@ -88,13 +341,16 @@ const SecurityShield = () => {
     document.addEventListener('dragstart', handleDragStart);
     window.addEventListener('resize', detectDevTools);
 
-    // Initial detection
-    detectDevTools();
+    // Initial checks
+    const devToolsInterval = setInterval(detectDevTools, 1000);
+    detectHeadless();
+    detectAutomation();
 
-    // Add CSS to prevent selection globally (with exceptions for form inputs)
+    // ========== 8. CSS PROTECTION ==========
     const style = document.createElement('style');
-    style.id = 'security-shield-styles';
+    style.id = 'jbj-security-shield-styles';
     style.textContent = `
+      /* Disable text selection globally */
       body {
         -webkit-user-select: none;
         -moz-user-select: none;
@@ -102,6 +358,7 @@ const SecurityShield = () => {
         user-select: none;
       }
       
+      /* Re-enable for form inputs */
       input, textarea, [contenteditable="true"], [data-allow-select], [data-allow-select] * {
         -webkit-user-select: text;
         -moz-user-select: text;
@@ -109,17 +366,25 @@ const SecurityShield = () => {
         user-select: text;
       }
       
+      /* Disable image dragging */
       img {
         -webkit-user-drag: none;
         -khtml-user-drag: none;
         -moz-user-drag: none;
         -o-user-drag: none;
         user-drag: none;
+        pointer-events: none;
       }
       
       /* Re-enable pointer events for interactive images */
-      a img, button img, [role="button"] img, .interactive-img {
+      a img, button img, [role="button"] img, .interactive-img, 
+      .project-card img, .gallery img, [data-clickable] img {
         pointer-events: auto;
+      }
+      
+      /* Disable print (basic) */
+      @media print {
+        body { display: none !important; }
       }
     `;
     document.head.appendChild(style);
@@ -131,13 +396,14 @@ const SecurityShield = () => {
       document.removeEventListener('selectstart', handleSelectStart);
       document.removeEventListener('dragstart', handleDragStart);
       window.removeEventListener('resize', detectDevTools);
+      clearInterval(devToolsInterval);
       
-      const styleElement = document.getElementById('security-shield-styles');
+      const styleElement = document.getElementById('jbj-security-shield-styles');
       if (styleElement) {
         styleElement.remove();
       }
     };
-  }, []);
+  }, [logViolation, showSecurityWarning]);
 
   return null;
 };
