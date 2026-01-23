@@ -13399,6 +13399,7 @@ export type Database = {
       }
       can_access_payment_vault: { Args: { _user_id: string }; Returns: boolean }
       can_access_salary_data: { Args: { _user_id: string }; Returns: boolean }
+      can_access_salary_vault: { Args: { _user_id: string }; Returns: boolean }
       check_chat_rate_limit: {
         Args: { p_session_id: string }
         Returns: boolean
