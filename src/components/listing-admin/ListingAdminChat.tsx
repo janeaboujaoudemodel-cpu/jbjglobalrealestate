@@ -183,32 +183,42 @@ What would you like me to do?`,
       return;
     }
 
-    if (sessionId) {
-      await supabase
-        .from("listing_admin_chat_sessions")
-        .update({ status: "completed" })
-        .eq("id", sessionId);
-    }
-
-    // Create new session
-    if (user) {
-      const { data: newSession } = await supabase
-        .from("listing_admin_chat_sessions")
-        .insert({
-          user_id: user.id,
-          messages: JSON.stringify([getWelcomeMessage()]),
-          status: "active",
-        } as any)
-        .select()
-        .single();
-
-      if (newSession) {
-        setSessionId(newSession.id);
+    try {
+      // Delete the current session entirely instead of just marking completed
+      if (sessionId) {
+        await supabase
+          .from("listing_admin_chat_sessions")
+          .delete()
+          .eq("id", sessionId);
       }
-    }
 
-    setMessages([getWelcomeMessage()]);
-    toast.success("Chat cleared");
+      // Reset state immediately
+      const welcomeMsg = getWelcomeMessage();
+      setMessages([welcomeMsg]);
+      setSessionId(null);
+
+      // Create new session
+      if (user) {
+        const { data: newSession, error } = await supabase
+          .from("listing_admin_chat_sessions")
+          .insert({
+            user_id: user.id,
+            messages: [{ ...welcomeMsg, timestamp: welcomeMsg.timestamp.toISOString() }],
+            status: "active",
+          } as any)
+          .select()
+          .single();
+
+        if (!error && newSession) {
+          setSessionId(newSession.id);
+        }
+      }
+
+      toast.success("Chat cleared successfully");
+    } catch (err) {
+      console.error("Error clearing chat:", err);
+      toast.error("Failed to clear chat");
+    }
   };
 
   const handleSendMessage = async (messageText?: string) => {

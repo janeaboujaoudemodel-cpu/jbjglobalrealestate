@@ -18,6 +18,7 @@ interface ExternalProject {
   handover_date?: string;
   amenities?: string[];
   description?: string;
+  image_url?: string;
 }
 
 interface MatchResult {
@@ -27,7 +28,7 @@ interface MatchResult {
   match_method: string;
 }
 
-// Smart matching function - matches by project name or number
+// Smart matching function
 function findBestMatch(
   externalProject: ExternalProject,
   existingListings: any[]
@@ -45,26 +46,19 @@ function findBestMatch(
     const listingName = (listing.name || listing.project_name || "").toLowerCase().trim();
     const listingNumber = (listing.project_number || listing.rera_number || "").toLowerCase().trim();
 
-    // Exact project number match (highest confidence)
     if (externalNumber && listingNumber && externalNumber === listingNumber) {
       score = 0.95;
       method = "exact_project_number";
-    }
-    // Exact name match
-    else if (externalName && listingName && externalName === listingName) {
+    } else if (externalName && listingName && externalName === listingName) {
       score = 0.90;
       method = "exact_name";
-    }
-    // Name contains match
-    else if (externalName && listingName && 
-             (listingName.includes(externalName) || externalName.includes(listingName))) {
+    } else if (externalName && listingName && 
+               (listingName.includes(externalName) || externalName.includes(listingName))) {
       const overlap = Math.min(externalName.length, listingName.length) / 
                       Math.max(externalName.length, listingName.length);
       score = 0.70 + (overlap * 0.15);
       method = "partial_name";
-    }
-    // Fuzzy name matching (Levenshtein-like)
-    else if (externalName && listingName) {
+    } else if (externalName && listingName) {
       const similarity = calculateSimilarity(externalName, listingName);
       if (similarity > 0.75) {
         score = similarity * 0.85;
@@ -86,7 +80,6 @@ function findBestMatch(
   return bestMatch;
 }
 
-// Simple similarity calculation
 function calculateSimilarity(str1: string, str2: string): number {
   const longer = str1.length > str2.length ? str1 : str2;
   const shorter = str1.length > str2.length ? str2 : str1;
@@ -106,54 +99,116 @@ function calculateSimilarity(str1: string, str2: string): number {
   return matches / Math.max(shorterWords.length, longerWords.length);
 }
 
-// Compare values and detect what's new (safe update logic - only ADD new info)
-function detectNewInfo(
-  externalData: ExternalProject,
-  existingListing: any
-): { field: string; current: string | null; proposed: string }[] {
-  const changes: { field: string; current: string | null; proposed: string }[] = [];
+// Extract projects from scraped content using Lovable AI
+async function extractProjectsWithAI(markdown: string, sourceName: string): Promise<ExternalProject[]> {
+  const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
   
-  const fieldsToCheck = [
-    { external: "developer", existing: "developer" },
-    { external: "location", existing: "location" },
-    { external: "handover_date", existing: "handover_date" },
-    { external: "price_from", existing: "price_from" },
-    { external: "price_to", existing: "price_to" },
-    { external: "description", existing: "description" },
+  if (!LOVABLE_API_KEY) {
+    console.log("No Lovable API key - using regex extraction");
+    return extractProjectsWithRegex(markdown);
+  }
+
+  try {
+    const response = await fetch("https://api.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-flash",
+        messages: [
+          {
+            role: "system",
+            content: `You are a real estate data extractor. Extract all property/project listings from the content.
+For each REAL project listing (not generic headers or promotional text), extract:
+- project_name: The actual name of the property/project (e.g., "The Grand at Downtown", "Marina Heights")
+- developer: The developer company name (e.g., "Emaar", "DAMAC", "Sobha")
+- location: The specific area/community (e.g., "Downtown Dubai", "Dubai Marina")
+- emirate: Dubai, Abu Dhabi, etc.
+- status: Off-Plan, Ready, Under Construction, etc.
+- price_from: Starting price in AED (number only)
+- price_to: Maximum price in AED (number only)
+- handover_date: Expected handover date/quarter (e.g., "Q4 2025", "2026")
+- description: Brief description of the project
+- amenities: Array of amenities if mentioned
+
+IMPORTANT: Only extract REAL project names. Ignore generic text like "Premium Quality", "Strong Investment Returns", or section headers. A real project name is specific like "Damac Hills 2" or "Emaar Beachfront".
+
+Return ONLY valid JSON array. No markdown, no explanation.`
+          },
+          {
+            role: "user",
+            content: `Extract all real estate project listings from this ${sourceName} webpage content:\n\n${markdown.substring(0, 20000)}`
+          }
+        ],
+        temperature: 0.1,
+        max_tokens: 4000,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Lovable AI extraction failed:", errorText);
+      return extractProjectsWithRegex(markdown);
+    }
+
+    const data = await response.json();
+    const content = data.choices?.[0]?.message?.content || "[]";
+    
+    // Clean and parse JSON
+    let cleanJson = content.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+    
+    const projects = JSON.parse(cleanJson);
+    console.log(`Lovable AI extracted ${projects.length} real projects`);
+    return projects;
+  } catch (e) {
+    console.error("AI extraction error:", e);
+    return extractProjectsWithRegex(markdown);
+  }
+}
+
+// Fallback regex extraction
+function extractProjectsWithRegex(markdown: string): ExternalProject[] {
+  const projects: ExternalProject[] = [];
+  
+  // Look for patterns like "Project Name - Developer" or headers with project info
+  const projectPatterns = [
+    /##\s*([A-Z][^#\n]+)/g,  // Markdown headers
+    /\*\*([A-Z][^*]+)\*\*/g, // Bold text
+    /Project:\s*([^\n]+)/gi,
+    /Property:\s*([^\n]+)/gi,
   ];
 
-  for (const field of fieldsToCheck) {
-    const externalValue = externalData[field.external as keyof ExternalProject];
-    const existingValue = existingListing[field.existing];
-
-    // Only propose if external has value AND existing is empty/null
-    if (externalValue && !existingValue) {
-      changes.push({
-        field: field.existing,
-        current: null,
-        proposed: String(externalValue),
-      });
+  const seen = new Set<string>();
+  
+  for (const pattern of projectPatterns) {
+    let match;
+    while ((match = pattern.exec(markdown)) !== null) {
+      const name = match[1].trim();
+      if (name.length > 3 && name.length < 100 && !seen.has(name.toLowerCase())) {
+        seen.add(name.toLowerCase());
+        
+        // Try to extract more context around this match
+        const context = markdown.substring(Math.max(0, match.index - 200), match.index + 500);
+        
+        const priceMatch = context.match(/AED\s*([\d,]+)/i);
+        const locationMatch = context.match(/(?:in|at|location:?)\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/i);
+        const developerMatch = context.match(/(?:by|developer:?)\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/i);
+        
+        projects.push({
+          project_name: name,
+          developer: developerMatch?.[1] || undefined,
+          location: locationMatch?.[1] || undefined,
+          emirate: "Dubai",
+          price_from: priceMatch ? parseInt(priceMatch[1].replace(/,/g, "")) : undefined,
+        });
+      }
     }
   }
 
-  // Handle amenities array (merge, don't replace)
-  if (externalData.amenities && externalData.amenities.length > 0) {
-    const existingAmenities = existingListing.amenities || [];
-    const newAmenities = externalData.amenities.filter(
-      a => !existingAmenities.some((e: string) => 
-        e.toLowerCase() === a.toLowerCase()
-      )
-    );
-    if (newAmenities.length > 0) {
-      changes.push({
-        field: "amenities_additions",
-        current: JSON.stringify(existingAmenities),
-        proposed: JSON.stringify(newAmenities),
-      });
-    }
-  }
-
-  return changes;
+  console.log(`Regex extracted ${projects.length} projects`);
+  return projects;
 }
 
 serve(async (req) => {
@@ -168,7 +223,7 @@ serve(async (req) => {
   try {
     const { sourceId, manual = false } = await req.json().catch(() => ({}));
 
-    console.log("Starting scheduled extraction job...");
+    console.log("Starting scheduled extraction job...", { sourceId, manual });
 
     // Get active data sources
     let sourcesQuery = supabase
@@ -185,34 +240,23 @@ serve(async (req) => {
     if (sourcesError || !sources?.length) {
       console.log("No active data sources found");
       return new Response(
-        JSON.stringify({ success: true, message: "No active data sources" }),
+        JSON.stringify({ success: true, message: "No active data sources", recordsFound: 0 }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Get all existing listings for matching
+    // Get existing listings for matching
     const { data: existingProjects } = await supabase
       .from("projects")
       .select("id, name, developer, location, handover_date, price_from, price_to, amenities, description, rera_number");
 
-    const { data: rentalListings } = await supabase
-      .from("rental_listings")
-      .select("id, property_name, location, emirate");
-
-    const { data: sellerListings } = await supabase
-      .from("seller_listings")
-      .select("id, property_name, location, emirate");
-
-    const allListings = [
-      ...(existingProjects || []).map(p => ({ ...p, _table: "projects" })),
-      ...(rentalListings || []).map(r => ({ ...r, name: r.property_name, _table: "rental_listings" })),
-      ...(sellerListings || []).map(s => ({ ...s, name: s.property_name, _table: "seller_listings" })),
-    ];
+    const allListings = (existingProjects || []).map(p => ({ ...p, _table: "projects" }));
 
     const results = [];
+    const FIRECRAWL_KEY = Deno.env.get("FIRECRAWL_API_KEY");
 
     for (const source of sources) {
-      console.log(`Processing source: ${source.name}`);
+      console.log(`Processing source: ${source.name} (${source.base_url})`);
 
       // Create job log entry
       const { data: jobLog, error: jobError } = await supabase
@@ -221,6 +265,7 @@ serve(async (req) => {
           source_id: source.id,
           status: "running",
           started_at: new Date().toISOString(),
+          metadata: { manual, triggered_at: new Date().toISOString() },
         })
         .select()
         .single();
@@ -231,45 +276,45 @@ serve(async (req) => {
       }
 
       try {
-        // Fetch data from external source
-        // Note: In production, this would call the actual API
-        // For now, we simulate with mock data or use Firecrawl
         let externalProjects: ExternalProject[] = [];
+        let scrapedContent = "";
 
-        if (source.base_url.includes("dubailand.gov.ae")) {
-          // Dubai REST API simulation - in production, use actual API
-          console.log("Fetching from Dubai REST API...");
-          // This would be: const response = await fetch(source.base_url + "/api/projects");
-          // For now, we'll check if Firecrawl can help
-          const FIRECRAWL_KEY = Deno.env.get("FIRECRAWL_API_KEY");
-          if (FIRECRAWL_KEY) {
-            try {
-              const scrapeResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
-                method: "POST",
-                headers: {
-                  "Authorization": `Bearer ${FIRECRAWL_KEY}`,
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  url: source.base_url,
-                  formats: ["markdown", "links"],
-                  onlyMainContent: true,
-                }),
-              });
-              
-              if (scrapeResponse.ok) {
-                const scraped = await scrapeResponse.json();
-                console.log("Scraped Dubai REST data:", scraped.data?.markdown?.length || 0, "chars");
-                // Parse the scraped data for project info
-                // This is where AI extraction would happen
+        // Use Firecrawl to scrape the source
+        if (FIRECRAWL_KEY && source.base_url) {
+          console.log(`Scraping ${source.base_url} with Firecrawl...`);
+          
+          try {
+            const scrapeResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
+              method: "POST",
+              headers: {
+                "Authorization": `Bearer ${FIRECRAWL_KEY}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                url: source.base_url,
+                formats: ["markdown"],
+                onlyMainContent: true,
+                waitFor: 3000,
+              }),
+            });
+
+            if (scrapeResponse.ok) {
+              const scraped = await scrapeResponse.json();
+              scrapedContent = scraped.data?.markdown || "";
+              console.log(`Scraped ${scrapedContent.length} characters from ${source.name}`);
+
+              if (scrapedContent.length > 100) {
+                externalProjects = await extractProjectsWithAI(scrapedContent, source.name);
               }
-            } catch (e) {
-              console.log("Firecrawl extraction failed:", e);
+            } else {
+              const errorText = await scrapeResponse.text();
+              console.error("Firecrawl error:", errorText);
             }
+          } catch (scrapeErr) {
+            console.error("Scraping failed:", scrapeErr);
           }
-        } else if (source.base_url.includes("alnair.ae")) {
-          console.log("Fetching from Al Nair Registry...");
-          // Similar approach for Al Nair
+        } else {
+          console.log("No Firecrawl API key configured - skipping web scraping");
         }
 
         // Process extracted projects
@@ -283,17 +328,31 @@ serve(async (req) => {
           if (match) {
             recordsMatched++;
             
-            // Get the existing listing details
             const existingListing = allListings.find(l => l.id === match.listing_id);
             if (!existingListing) continue;
 
-            // Detect new information (safe update - only additions)
-            const newInfo = detectNewInfo(extProject, existingListing);
+            // Check for fields that can be added (not replaced)
+            const fieldsToAdd: { field: string; current: string | null; proposed: string }[] = [];
+            
+            if (extProject.developer && !existingListing.developer) {
+              fieldsToAdd.push({ field: "developer", current: null, proposed: extProject.developer });
+            }
+            if (extProject.location && !existingListing.location) {
+              fieldsToAdd.push({ field: "location", current: null, proposed: extProject.location });
+            }
+            if (extProject.handover_date && !existingListing.handover_date) {
+              fieldsToAdd.push({ field: "handover_date", current: null, proposed: extProject.handover_date });
+            }
+            if (extProject.price_from && !existingListing.price_from) {
+              fieldsToAdd.push({ field: "price_from", current: null, proposed: String(extProject.price_from) });
+            }
+            if (extProject.description && !existingListing.description) {
+              fieldsToAdd.push({ field: "description", current: null, proposed: extProject.description });
+            }
 
-            for (const change of newInfo) {
+            for (const change of fieldsToAdd) {
               recordsPending++;
               
-              // Insert into pending updates queue
               await supabase.from("listing_pending_updates").insert({
                 listing_id: match.listing_id,
                 listing_table: match.listing_table,
@@ -308,6 +367,23 @@ serve(async (req) => {
                 status: "pending",
               });
             }
+          } else {
+            // No match - this could be a new project to add
+            recordsPending++;
+            
+            await supabase.from("listing_pending_updates").insert({
+              listing_id: null,
+              listing_table: "projects",
+              source_id: source.id,
+              job_id: jobLog.id,
+              field_name: "new_project",
+              current_value: null,
+              proposed_value: JSON.stringify(extProject),
+              change_type: "create",
+              confidence_score: 0,
+              match_method: "new_record",
+              status: "pending",
+            });
           }
         }
 
@@ -320,6 +396,11 @@ serve(async (req) => {
             records_found: recordsFound,
             records_matched: recordsMatched,
             records_pending: recordsPending,
+            metadata: { 
+              manual, 
+              content_length: scrapedContent.length,
+              projects_extracted: externalProjects.length,
+            },
           })
           .eq("id", jobLog.id);
 
@@ -336,6 +417,8 @@ serve(async (req) => {
           matched: recordsMatched,
           pending: recordsPending,
         });
+
+        console.log(`Source ${source.name} completed: found=${recordsFound}, matched=${recordsMatched}, pending=${recordsPending}`);
 
       } catch (sourceError) {
         console.error(`Error processing source ${source.name}:`, sourceError);
@@ -359,11 +442,16 @@ serve(async (req) => {
 
     console.log("Extraction job completed:", results);
 
+    const totalFound = results.reduce((sum, r) => sum + (r.found || 0), 0);
+    const totalMatched = results.reduce((sum, r) => sum + (r.matched || 0), 0);
+    const totalPending = results.reduce((sum, r) => sum + (r.pending || 0), 0);
+
     return new Response(
       JSON.stringify({
         success: true,
         message: "Extraction job completed",
         results,
+        summary: { totalFound, totalMatched, totalPending },
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
