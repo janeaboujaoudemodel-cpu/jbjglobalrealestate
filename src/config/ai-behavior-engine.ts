@@ -117,13 +117,13 @@ export const FOUNDER_DECISION_RULES: DecisionRule[] = [
 ];
 
 // ============================================
-// EXECUTIVE ASSISTANT (OLIVIA) DECISION LOGIC
+// EXECUTIVE ASSISTANT (AMANDA CLARKE) DECISION LOGIC
 // ============================================
 
-export const OLIVIA_DECISION_RULES: DecisionRule[] = [
+export const AMANDA_DECISION_RULES: DecisionRule[] = [
   {
-    id: 'olivia_no_confirmation',
-    role: 'olivia',
+    id: 'amanda_no_confirmation',
+    role: 'amanda_clarke',
     trigger: 'meeting_invite',
     condition: (ctx) => {
       const hoursSinceInvite = ctx.data.hoursSinceInvite as number || 0;
@@ -138,8 +138,8 @@ export const OLIVIA_DECISION_RULES: DecisionRule[] = [
     priority: 1,
   },
   {
-    id: 'olivia_ceo_missed_update',
-    role: 'olivia',
+    id: 'amanda_ceo_missed_update',
+    role: 'amanda_clarke',
     trigger: 'ceo_update_missed',
     condition: (ctx) => ctx.data.missedUpdate === true,
     action: (ctx) => ({
@@ -152,8 +152,8 @@ export const OLIVIA_DECISION_RULES: DecisionRule[] = [
     priority: 2,
   },
   {
-    id: 'olivia_schedule_conflict',
-    role: 'olivia',
+    id: 'amanda_schedule_conflict',
+    role: 'amanda_clarke',
     trigger: 'schedule_conflict',
     condition: () => true,
     action: (ctx) => ({
@@ -476,8 +476,8 @@ export const FINANCE_DECISION_RULES: DecisionRule[] = [
 export const ESCALATION_CHAIN = [
   { level: 1, roles: ['broker', 'staff'], escalateTo: 'christopher_adams' },
   { level: 2, roles: ['christopher_adams'], escalateTo: 'james_morgan' },
-  { level: 3, roles: ['james_morgan', 'maya_khalid', 'jessica'], escalateTo: 'olivia' },
-  { level: 4, roles: ['olivia'], escalateTo: 'founder' },
+  { level: 3, roles: ['james_morgan', 'maya_khalid', 'jessica'], escalateTo: 'amanda_clarke' },
+  { level: 4, roles: ['amanda_clarke'], escalateTo: 'founder' },
 ];
 
 export function getEscalationTarget(currentRole: string): string {
@@ -591,7 +591,7 @@ export function getCapacityStatus(current: number, max: number): {
 
 export const ALL_DECISION_RULES: DecisionRule[] = [
   ...FOUNDER_DECISION_RULES,
-  ...OLIVIA_DECISION_RULES,
+  ...AMANDA_DECISION_RULES,
   ...SALES_DECISION_RULES,
   ...FRONT_DESK_DECISION_RULES,
   ...HR_DECISION_RULES,

@@ -333,21 +333,21 @@ export interface EscalationRule {
 export const ESCALATION_RULES: EscalationRule[] = [
   {
     condition: (a) => a.emotion === 'angry' && a.confidence >= 70,
-    targets: ['christopher_adams', 'jessica', 'olivia'],
+    targets: ['christopher_adams', 'jessica', 'amanda_clarke'],
     reason: 'Client expressed significant dissatisfaction',
     priority: 'high',
     responseDeadlineMinutes: 10,
   },
   {
     condition: (a) => a.urgency === 'critical',
-    targets: ['olivia', 'founder'],
+    targets: ['amanda_clarke', 'founder'],
     reason: 'Critical urgency detected',
     priority: 'critical',
     responseDeadlineMinutes: 10,
   },
   {
     condition: (a) => a.emotion === 'frustrated' && a.confidence >= 80,
-    targets: ['christopher_adams', 'olivia'],
+    targets: ['christopher_adams', 'amanda_clarke'],
     reason: 'Client showing signs of frustration',
     priority: 'high',
     responseDeadlineMinutes: 15,

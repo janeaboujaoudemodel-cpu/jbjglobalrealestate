@@ -23,7 +23,9 @@ serve(async (req) => {
     }
 
     // Use Gemini's multimodal capabilities to transcribe audio
-    // Convert base64 audio to a format Gemini can process
+    // The audio is sent as a data URL for multimodal processing
+    const audioDataUrl = `data:audio/webm;base64,${audio}`;
+    
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -38,13 +40,12 @@ serve(async (req) => {
             content: [
               {
                 type: "text",
-                text: "Please transcribe the following audio recording accurately. Return only the transcribed text, nothing else."
+                text: "Please transcribe the following audio recording accurately. Return ONLY the transcribed text with no additional commentary, formatting, or explanation. If the audio is unclear or silent, respond with exactly: [NO_SPEECH_DETECTED]"
               },
               {
-                type: "input_audio",
-                input_audio: {
-                  data: audio,
-                  format: "webm"
+                type: "image_url",
+                image_url: {
+                  url: audioDataUrl
                 }
               }
             ]
@@ -66,11 +67,21 @@ serve(async (req) => {
     }
 
     const data = await response.json();
-    const transcribedText = data.choices?.[0]?.message?.content?.trim();
+    let transcribedText = data.choices?.[0]?.message?.content?.trim();
+    
+    // Handle no speech detected
+    if (transcribedText === "[NO_SPEECH_DETECTED]" || !transcribedText) {
+      return new Response(JSON.stringify({ 
+        text: null,
+        error: "No speech detected. Please speak clearly and try again."
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     return new Response(JSON.stringify({ 
-      text: transcribedText || null,
-      success: !!transcribedText
+      text: transcribedText,
+      success: true
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

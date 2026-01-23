@@ -403,7 +403,7 @@ export const AI_SELF_REGULATION = {
   consistencyCheckInterval: 300000, // 5 minutes
   integrityScoreThreshold: 85, // Below this triggers review
   allowedAIAgents: [
-    'olivia_ai', 'hr_ai', 'broker_ai', 'admin_ai', 
+    'amanda_clarke_ai', 'hr_ai', 'broker_ai', 'admin_ai', 
     'finance_ai', 'marketing_ai', 'compliance_ai'
   ]
 };
@@ -576,7 +576,7 @@ export const AISHA_CONFIG = {
     'Daily security briefings'
   ],
   accessLevel: 'audit',
-  reportingTo: ['founder', 'olivia_ai'],
+  reportingTo: ['founder', 'amanda_clarke_ai'],
   workingHours: '24/7',
   responseTime: '<2 seconds',
   languages: ['English', 'Arabic']

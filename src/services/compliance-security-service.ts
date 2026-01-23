@@ -448,7 +448,7 @@ class ComplianceSecurityService {
         compliance_status: status,
         findings,
         recommendations,
-        audited_by: 'olivia_ai'
+        audited_by: 'amanda_clarke_ai'
       })
       .select()
       .single();
@@ -614,7 +614,7 @@ class ComplianceSecurityService {
 
       return {
         id: data,
-        triggered_by: 'olivia_ai',
+        triggered_by: 'amanda_clarke_ai',
         trigger_reason: reason,
         severity,
         affected_departments: departments,
