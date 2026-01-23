@@ -11,6 +11,7 @@ const isLovablePreview =
 
 async function prepareRuntime() {
   // In dev/preview AND production: remove all service workers to eliminate any PWA capability.
+  // IMPORTANT: This must never block the initial React render (white-screen risk).
   try {
     if ("serviceWorker" in navigator) {
       const regs = await navigator.serviceWorker.getRegistrations();
@@ -31,16 +32,6 @@ async function prepareRuntime() {
 
       const regs2 = await navigator.serviceWorker.getRegistrations();
       await Promise.all(regs2.map((r) => r.unregister()));
-
-      // If a SW is controlling this page, force a single reload after unregistering.
-      if (navigator.serviceWorker.controller) {
-        const flagKey = "__lovable_sw_cleanup_reload_done__";
-        if (!sessionStorage.getItem(flagKey)) {
-          sessionStorage.setItem(flagKey, "1");
-          window.location.reload();
-          return { shouldRender: false } as const;
-        }
-      }
     }
 
     if ("caches" in window) {
@@ -50,18 +41,17 @@ async function prepareRuntime() {
   } catch {
     // best-effort cleanup; continue to render
   }
-
-  return { shouldRender: true } as const;
 }
 
 const rootElement = document.getElementById("root");
 if (rootElement) {
-  prepareRuntime().then(({ shouldRender }) => {
-    if (!shouldRender) return;
-    createRoot(rootElement).render(
-      <StrictMode>
-        <App />
-      </StrictMode>
-    );
-  });
+  // Always render immediately; run runtime cleanup in the background.
+  createRoot(rootElement).render(
+    <StrictMode>
+      <App />
+    </StrictMode>
+  );
+
+  // Fire-and-forget cleanup.
+  void prepareRuntime();
 }
