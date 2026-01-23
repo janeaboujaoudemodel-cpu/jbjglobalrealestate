@@ -1,6 +1,7 @@
 import { MessageCircle } from 'lucide-react';
 import { SERVICES } from './types';
 import { CONTACT_INFO } from '@/constants/stats';
+import { T } from '@/components/ui/T';
 
 interface ChatServiceSelectorProps {
   userFirstName: string;
@@ -13,10 +14,10 @@ const ChatServiceSelector = ({ userFirstName, isExistingUser, onSelectService }:
     <div className="flex-1 p-4 overflow-y-auto">
       <div className="text-center mb-4">
         <h4 className="text-white text-lg font-semibold mb-1">
-          {isExistingUser ? `Welcome back, ${userFirstName}!` : `Hi ${userFirstName}!`}
+          {isExistingUser ? <T>{`Welcome back, ${userFirstName}!`}</T> : <T>{`Hi ${userFirstName}!`}</T>}
         </h4>
         <p className="text-zinc-400 text-sm">
-          {isExistingUser ? 'Great to see you again! How can we help?' : 'Which service are you looking for?'}
+          {isExistingUser ? <T>Great to see you again! How can we help?</T> : <T>Which service are you looking for?</T>}
         </p>
       </div>
 
@@ -32,8 +33,8 @@ const ChatServiceSelector = ({ userFirstName, isExistingUser, onSelectService }:
             <MessageCircle className="w-6 h-6 text-white" />
           </div>
           <div className="flex-1">
-            <h5 className="text-white text-sm font-semibold">Chat on WhatsApp</h5>
-            <p className="text-green-400 text-xs">Direct access • Instant response</p>
+            <h5 className="text-white text-sm font-semibold"><T>Chat on WhatsApp</T></h5>
+            <p className="text-green-400 text-xs"><T>Direct access • Instant response</T></p>
           </div>
           <div className="text-green-400 group-hover:translate-x-1 transition-transform">
             →
@@ -42,7 +43,7 @@ const ChatServiceSelector = ({ userFirstName, isExistingUser, onSelectService }:
       )}
 
       <p className="text-zinc-500 text-xs text-center mb-3">
-        {isExistingUser ? 'Or chat with our team:' : 'Select a topic to get started:'}
+        {isExistingUser ? <T>Or chat with our team:</T> : <T>Select a topic to get started:</T>}
       </p>
 
       <div className="grid grid-cols-2 gap-3">
@@ -57,8 +58,8 @@ const ChatServiceSelector = ({ userFirstName, isExistingUser, onSelectService }:
               <div className="w-10 h-10 rounded-lg bg-gold/10 group-hover:bg-gold/20 flex items-center justify-center mb-3">
                 <Icon className="w-5 h-5 text-gold" />
               </div>
-              <h5 className="text-white text-sm font-medium mb-1">{service.label}</h5>
-              <p className="text-zinc-500 text-xs">{service.description}</p>
+              <h5 className="text-white text-sm font-medium mb-1"><T>{service.label}</T></h5>
+              <p className="text-zinc-500 text-xs"><T>{service.description}</T></p>
             </button>
           );
         })}

@@ -6,6 +6,7 @@ import { User, Send, MessageCircle, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Message, SERVICES, getRandomAgent } from './types';
 import { CONTACT_INFO } from '@/constants/stats';
+import { T } from '@/components/ui/T';
 
 interface ChatMessagesProps {
   messages: Message[];
@@ -122,7 +123,7 @@ const ChatMessages = ({
                     transition={{ duration: 0.6, repeat: Infinity, delay: 0.3 }}
                   />
                 </div>
-                <p className="text-gold/80 text-xs font-medium ml-1">{agent.name} is typing...</p>
+                <p className="text-gold/80 text-xs font-medium ml-1"><T>{`${agent.name} is typing...`}</T></p>
               </div>
             </motion.div>
           )}
@@ -139,7 +140,7 @@ const ChatMessages = ({
             className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white text-sm py-2.5 rounded-lg transition-colors font-semibold shadow-lg"
           >
             <MessageCircle className="w-4 h-4" />
-            WhatsApp
+            <T>WhatsApp</T>
           </a>
         )}
         <Button
@@ -147,7 +148,7 @@ const ChatMessages = ({
           className={`${isExistingUser ? 'flex-1' : 'w-full'} bg-gold hover:bg-gold-light text-black text-sm py-2.5 font-bold shadow-lg shadow-gold/20`}
         >
           <Shield className="w-4 h-4 mr-2" />
-          Submit to Team
+          <T>Submit to Team</T>
         </Button>
       </div>
 

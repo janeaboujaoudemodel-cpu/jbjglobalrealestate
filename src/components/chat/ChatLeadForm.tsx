@@ -7,6 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { UserCircle, Mail, Phone as PhoneIcon, Globe, MapPin, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { UserInfo, AGE_RANGES, LANGUAGES, validateEmail, validateE164Phone } from './types';
+import { T } from '@/components/ui/T';
 
 interface ChatLeadFormProps {
   userInfo: UserInfo;
@@ -65,32 +66,32 @@ const ChatLeadForm = ({
         <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center">
           <UserCircle className="w-7 h-7 text-gold" />
         </div>
-        <h4 className="text-white text-lg font-semibold mb-1">Quick intro!</h4>
-        <p className="text-zinc-400 text-sm">So I can personalize your experience</p>
+        <h4 className="text-white text-lg font-semibold mb-1"><T>Quick intro!</T></h4>
+        <p className="text-zinc-400 text-sm"><T>So I can personalize your experience</T></p>
       </div>
 
       <div className="space-y-3">
         {/* Name Row */}
         <div className="grid grid-cols-2 gap-2">
           <div>
-            <Label className="text-zinc-300 text-xs mb-1 block">First Name *</Label>
+            <Label className="text-zinc-300 text-xs mb-1 block"><T>First Name</T> *</Label>
             <Input
               value={userInfo.firstName}
               onChange={(e) => updateField('firstName', e.target.value)}
               placeholder="First"
               className={`bg-white/10 border-gold/20 text-white placeholder:text-white/40 h-9 text-sm ${formErrors.firstName ? 'border-red-500' : ''}`}
             />
-            {formErrors.firstName && <p className="text-red-400 text-xs mt-0.5">{formErrors.firstName}</p>}
+            {formErrors.firstName && <p className="text-red-400 text-xs mt-0.5"><T>{formErrors.firstName}</T></p>}
           </div>
           <div>
-            <Label className="text-zinc-300 text-xs mb-1 block">Last Name *</Label>
+            <Label className="text-zinc-300 text-xs mb-1 block"><T>Last Name</T> *</Label>
             <Input
               value={userInfo.lastName}
               onChange={(e) => updateField('lastName', e.target.value)}
               placeholder="Last"
               className={`bg-white/10 border-gold/20 text-white placeholder:text-white/40 h-9 text-sm ${formErrors.lastName ? 'border-red-500' : ''}`}
             />
-            {formErrors.lastName && <p className="text-red-400 text-xs mt-0.5">{formErrors.lastName}</p>}
+            {formErrors.lastName && <p className="text-red-400 text-xs mt-0.5"><T>{formErrors.lastName}</T></p>}
           </div>
         </div>
 
@@ -98,7 +99,7 @@ const ChatLeadForm = ({
         <div>
           <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
             <Mail className="w-3 h-3 text-gold" />
-            Email Address *
+            <T>Email Address</T> *
           </Label>
           <Input
             type="email"
@@ -107,14 +108,14 @@ const ChatLeadForm = ({
             placeholder="your@email.com"
             className={`bg-white/10 border-gold/20 text-white placeholder:text-white/40 h-9 text-sm ${formErrors.email ? 'border-red-500' : ''}`}
           />
-          {formErrors.email && <p className="text-red-400 text-xs mt-0.5">{formErrors.email}</p>}
+          {formErrors.email && <p className="text-red-400 text-xs mt-0.5"><T>{formErrors.email}</T></p>}
         </div>
 
         {/* Phone */}
         <div>
           <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
             <PhoneIcon className="w-3 h-3 text-gold" />
-            Phone (with country code) *
+            <T>Phone (with country code)</T> *
           </Label>
           <Input
             type="tel"
@@ -123,7 +124,7 @@ const ChatLeadForm = ({
             placeholder="+971 50 123 4567"
             className={`bg-white/10 border-gold/20 text-white placeholder:text-white/40 h-9 text-sm ${formErrors.phone ? 'border-red-500' : ''}`}
           />
-          {formErrors.phone && <p className="text-red-400 text-xs mt-0.5">{formErrors.phone}</p>}
+          {formErrors.phone && <p className="text-red-400 text-xs mt-0.5"><T>{formErrors.phone}</T></p>}
         </div>
 
         {/* Nationality & Location Row */}
@@ -131,7 +132,7 @@ const ChatLeadForm = ({
           <div>
             <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
               <Globe className="w-3 h-3 text-gold" />
-              Nationality *
+              <T>Nationality</T> *
             </Label>
             <Input
               value={userInfo.nationality}
@@ -139,12 +140,12 @@ const ChatLeadForm = ({
               placeholder="e.g., British"
               className={`bg-white/10 border-gold/20 text-white placeholder:text-white/40 h-9 text-sm ${formErrors.nationality ? 'border-red-500' : ''}`}
             />
-            {formErrors.nationality && <p className="text-red-400 text-xs mt-0.5">{formErrors.nationality}</p>}
+            {formErrors.nationality && <p className="text-red-400 text-xs mt-0.5"><T>{formErrors.nationality}</T></p>}
           </div>
           <div>
             <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
               <MapPin className="w-3 h-3 text-gold" />
-              Current Location *
+              <T>Current Location</T> *
             </Label>
             <Input
               value={userInfo.currentLocation}
@@ -152,14 +153,14 @@ const ChatLeadForm = ({
               placeholder="City, Country"
               className={`bg-white/10 border-gold/20 text-white placeholder:text-white/40 h-9 text-sm ${formErrors.currentLocation ? 'border-red-500' : ''}`}
             />
-            {formErrors.currentLocation && <p className="text-red-400 text-xs mt-0.5">{formErrors.currentLocation}</p>}
+            {formErrors.currentLocation && <p className="text-red-400 text-xs mt-0.5"><T>{formErrors.currentLocation}</T></p>}
           </div>
         </div>
 
         {/* Language & Age Row */}
         <div className="grid grid-cols-2 gap-2">
           <div>
-            <Label className="text-zinc-300 text-xs mb-1 block">Preferred Language</Label>
+            <Label className="text-zinc-300 text-xs mb-1 block"><T>Preferred Language</T></Label>
             <Select value={userInfo.language} onValueChange={(v) => updateField('language', v)}>
               <SelectTrigger className="bg-white/10 border-gold/20 text-white h-9 text-sm">
                 <SelectValue />
@@ -174,7 +175,7 @@ const ChatLeadForm = ({
           <div>
             <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
               <Calendar className="w-3 h-3 text-gold" />
-              Age Range *
+              <T>Age Range</T> *
             </Label>
             <Select value={userInfo.ageRange} onValueChange={(v) => updateField('ageRange', v)}>
               <SelectTrigger className={`bg-white/10 border-gold/20 text-white h-9 text-sm ${formErrors.ageRange ? 'border-red-500' : ''}`}>
@@ -186,7 +187,7 @@ const ChatLeadForm = ({
                 ))}
               </SelectContent>
             </Select>
-            {formErrors.ageRange && <p className="text-red-400 text-xs mt-0.5">{formErrors.ageRange}</p>}
+            {formErrors.ageRange && <p className="text-red-400 text-xs mt-0.5"><T>{formErrors.ageRange}</T></p>}
           </div>
         </div>
 
@@ -194,7 +195,7 @@ const ChatLeadForm = ({
         <div>
           <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
             <Calendar className="w-3 h-3 text-gold" />
-            Birthday (Optional)
+            <T>Birthday (Optional)</T>
           </Label>
           <Input
             type="date"
@@ -202,7 +203,7 @@ const ChatLeadForm = ({
             onChange={(e) => updateField('birthday', e.target.value)}
             className="bg-white/10 border-gold/20 text-white h-9 text-sm [color-scheme:dark]"
           />
-          <p className="text-zinc-500 text-[10px] mt-0.5">🎁 We'll send you exclusive birthday offers!</p>
+          <p className="text-zinc-500 text-[10px] mt-0.5">🎁 <T>We'll send you exclusive birthday offers!</T></p>
         </div>
 
         {/* Consent Checkboxes */}
@@ -215,10 +216,10 @@ const ChatLeadForm = ({
               className="border-gold/50 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
             />
             <label htmlFor="consent-accurate" className="text-zinc-300 text-xs leading-tight cursor-pointer">
-              I confirm the information provided is accurate. *
+              <T>I confirm the information provided is accurate.</T> *
             </label>
           </div>
-          {formErrors.consentAccurate && <p className="text-red-400 text-xs ml-6">{formErrors.consentAccurate}</p>}
+          {formErrors.consentAccurate && <p className="text-red-400 text-xs ml-6"><T>{formErrors.consentAccurate}</T></p>}
           
           <div className="flex items-start gap-2">
             <Checkbox
@@ -228,10 +229,10 @@ const ChatLeadForm = ({
               className="border-gold/50 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
             />
             <label htmlFor="consent-privacy" className="text-zinc-300 text-xs leading-tight cursor-pointer">
-              I agree to the <Link to="/privacy" className="text-gold hover:underline">Privacy Policy</Link> and <Link to="/terms" className="text-gold hover:underline">Terms</Link>. *
+              <T>I agree to the</T> <Link to="/privacy" className="text-gold hover:underline"><T>Privacy Policy</T></Link> <T>and</T> <Link to="/terms" className="text-gold hover:underline"><T>Terms</T></Link>. *
             </label>
           </div>
-          {formErrors.consentPrivacy && <p className="text-red-400 text-xs ml-6">{formErrors.consentPrivacy}</p>}
+          {formErrors.consentPrivacy && <p className="text-red-400 text-xs ml-6"><T>{formErrors.consentPrivacy}</T></p>}
         </div>
 
         <button
@@ -253,7 +254,7 @@ const ChatLeadForm = ({
           <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
           <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
           <span className="relative flex items-center justify-center gap-2">
-            <span className="text-black group-hover:text-gold transition-colors">Continue</span>
+            <span className="text-black group-hover:text-gold transition-colors"><T>Continue</T></span>
           </span>
         </button>
       </div>

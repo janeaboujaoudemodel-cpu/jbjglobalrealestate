@@ -7,6 +7,7 @@ import { Button } from "./ui/button";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { SafeImage } from "@/components/SafeImage";
 import AIMarketAnalyzer from "@/components/AIMarketAnalyzer";
+import { T } from "@/components/ui/T";
 
 interface ProjectCardProps {
   project: Project & { is_sold_out?: boolean | null };
@@ -113,7 +114,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Sold Out Badge */}
           {project.is_sold_out && (
             <div className="absolute top-3 right-3 z-10 bg-destructive text-destructive-foreground px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">
-              Sold Out
+              <T>Sold Out</T>
             </div>
           )}
         </div>
@@ -139,7 +140,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Developer */}
           {project.developer && (
             <p className="text-zinc-500 text-sm mb-2">
-              by <span className="text-zinc-700">{project.developer.name}</span>
+              <T>by</T> <span className="text-zinc-700">{project.developer.name}</span>
             </p>
           )}
           
@@ -147,8 +148,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {project.bedrooms_min && (
             <p className="text-zinc-500 text-sm mb-3">
               {project.bedrooms_min === project.bedrooms_max
-                ? `${project.bedrooms_min} Bedrooms`
-                : `${project.bedrooms_min}-${project.bedrooms_max} Bedrooms`}
+                ? <><T>{`${project.bedrooms_min} Bedrooms`}</T></>
+                : <><T>{`${project.bedrooms_min}-${project.bedrooms_max} Bedrooms`}</T></>}
             </p>
           )}
           
@@ -164,7 +165,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Price */}
           {project.price_from && (
             <p className="text-gold font-semibold text-lg">
-              From {formatPriceWithCurrency(project.price_from, currency)}
+              <T>From</T> {formatPriceWithCurrency(project.price_from, currency)}
             </p>
           )}
         </div>
@@ -205,7 +206,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-lg bg-gradient-to-b from-white/70 to-transparent pointer-events-none" />
             <span className="relative flex items-center justify-center gap-1.5 text-gold">
               <FileText className="w-3.5 h-3.5" />
-              Brochure
+              <T>Brochure</T>
             </span>
           </button>
           <button
@@ -224,7 +225,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-lg bg-gradient-to-b from-white/70 to-transparent pointer-events-none" />
             <span className="relative flex items-center justify-center gap-1.5 text-gold">
               <Download className="w-3.5 h-3.5" />
-              Materials
+              <T>Materials</T>
             </span>
           </button>
         </div>
@@ -254,7 +255,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 25px rgba(200,167,102,0.5)' }} />
             <span className="relative flex items-center gap-1.5">
               <MessageCircle className="w-3.5 h-3.5 text-green-600" />
-              <span className="text-black">WhatsApp</span>
+              <span className="text-black"><T>WhatsApp</T></span>
             </span>
           </a>
           <a
@@ -280,7 +281,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 25px rgba(200,167,102,0.5)' }} />
             <span className="relative flex items-center gap-1.5">
               <Phone className="w-3.5 h-3.5 text-blue-600" />
-              <span className="text-black">Call</span>
+              <span className="text-black"><T>Call</T></span>
             </span>
           </a>
         </div>
