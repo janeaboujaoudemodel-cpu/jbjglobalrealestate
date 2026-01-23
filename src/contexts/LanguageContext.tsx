@@ -20,6 +20,8 @@ interface LanguageContextType {
   t: (key: string, fallbackText?: string) => string;
   isRTL: boolean;
   translateText: (text: string) => string;
+  /** Increments whenever async translations resolve; lets DOM translators re-process instantly */
+  translationVersion: number;
 }
 
 const translations: Record<Language, Record<string, string>> = {
@@ -29,6 +31,7 @@ const translations: Record<Language, Record<string, string>> = {
 export const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 const LANGUAGE_KEY = 'jj_language';
+const LANGUAGE_MANUAL_KEY = 'jj_language_manual';
 const LANGUAGE_CHANGE_TIME_KEY = 'jj_language_change_time';
 const TRANSLATION_CACHE_KEY = 'jj_auto_translations';
 
@@ -185,19 +188,24 @@ const detectDeviceLanguage = (): Language => {
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguageState] = useState<Language>(() => {
-    const stored = localStorage.getItem(LANGUAGE_KEY) as Language;
-    if (stored && SUPPORTED_LANGUAGES.some(l => l.code === stored)) {
+    const stored = localStorage.getItem(LANGUAGE_KEY) as Language | null;
+    const isManual = localStorage.getItem(LANGUAGE_MANUAL_KEY) === 'true';
+
+    // Use stored language ONLY if the user explicitly selected it.
+    if (isManual && stored && SUPPORTED_LANGUAGES.some(l => l.code === stored)) {
       return stored;
     }
-    // Auto-detect device language (default to English if undetectable)
+
+    // Otherwise, always follow the device/browser language.
     const detected = detectDeviceLanguage();
     localStorage.setItem(LANGUAGE_KEY, detected);
+    localStorage.removeItem(LANGUAGE_MANUAL_KEY);
     localStorage.setItem(LANGUAGE_CHANGE_TIME_KEY, new Date().toISOString());
     return detected;
   });
 
   // State to trigger re-renders when translations complete
-  const [, setTranslationTick] = useState(0);
+  const [translationVersion, setTranslationVersion] = useState(0);
   const pendingTranslations = useRef<Set<string>>(new Set());
 
   // Load translation cache on mount
@@ -214,6 +222,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     
     setLanguageState(lang);
     localStorage.setItem(LANGUAGE_KEY, lang);
+    localStorage.setItem(LANGUAGE_MANUAL_KEY, 'true');
     document.documentElement.lang = lang;
     document.documentElement.dir = isRTLLanguage(lang) ? 'rtl' : 'ltr';
   }, [language]);
@@ -253,7 +262,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
       
       queueTranslation(textToTranslate, language).then(() => {
         pendingTranslations.current.delete(`${language}:${textToTranslate}`);
-        setTranslationTick(t => t + 1);
+        setTranslationVersion(v => v + 1);
       });
     }
 
@@ -276,7 +285,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
       
       queueTranslation(text, language).then(() => {
         pendingTranslations.current.delete(`${language}:${text}`);
-        setTranslationTick(t => t + 1);
+        setTranslationVersion(v => v + 1);
       });
     }
 
@@ -286,7 +295,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const isRTL = isRTLLanguage(language);
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t, isRTL, translateText }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t, isRTL, translateText, translationVersion }}>
       {children}
     </LanguageContext.Provider>
   );
