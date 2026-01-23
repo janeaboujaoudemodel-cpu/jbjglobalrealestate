@@ -686,7 +686,7 @@ const Index = () => {
                 {/* Primary 3D Button - Try Our AI Mortgage Calculator */}
                 <Link to="/mortgage">
                   <button 
-                    className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
+                    className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden whitespace-nowrap"
                     style={{
                       background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
                       boxShadow: `
@@ -700,10 +700,9 @@ const Index = () => {
                   >
                     <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                     <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-                    <span className="relative flex items-center justify-center gap-2">
+                    <span className="relative flex items-center justify-center gap-2 whitespace-nowrap">
                       <Sparkles className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
-                      <span className="text-black group-hover:text-gold transition-colors">Try Our AI</span>
-                      <span className="text-gold group-hover:text-black transition-colors">Mortgage Calculator</span>
+                      <span className="whitespace-nowrap"><span className="text-black group-hover:text-gold transition-colors">Try Our AI </span><span className="text-gold group-hover:text-black transition-colors">Mortgage Calculator</span></span>
                       <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
                     </span>
                   </button>

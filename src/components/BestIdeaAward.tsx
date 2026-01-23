@@ -207,7 +207,7 @@ const BestIdeaAward = () => {
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-gold mt-0.5">✦</span>
-                        <span>Official <span className="text-gold font-semibold">Certificate of Creativity</span> from JBJ Global Real Estate</span>
+                        <span>Official <span className="text-gold font-semibold">Certificate of Creativity</span> from <span data-no-translate>JBJ Global Real Estate</span></span>
                       </li>
                     </ul>
                   </div>
@@ -224,7 +224,7 @@ const BestIdeaAward = () => {
                   <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <DialogTrigger asChild>
                       <Button
-                        className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-2 border-gold/50 px-10 py-7 text-lg font-bold rounded-xl transition-all duration-300 hover:scale-105 transform active:scale-95 group"
+                        className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-2 border-gold/50 px-10 py-7 text-lg font-bold rounded-xl transition-all duration-300 hover:scale-105 transform active:scale-95 group whitespace-nowrap"
                         style={{
                           textShadow: 'none',
                           boxShadow: `
@@ -242,10 +242,9 @@ const BestIdeaAward = () => {
                         <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
                         {/* Glow effect on hover */}
                         <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-                        <span className="relative flex items-center gap-2">
+                        <span className="relative flex items-center gap-2 whitespace-nowrap">
                           <Lightbulb className="w-6 h-6 text-gold group-hover:text-black transition-colors" />
-                          <span className="text-black group-hover:text-gold transition-colors">Drop Your</span>
-                          <span className="text-gold group-hover:text-black transition-colors">Idea</span>
+                          <span className="whitespace-nowrap"><span className="text-black group-hover:text-gold transition-colors">Drop Your </span><span className="text-gold group-hover:text-black transition-colors">Idea</span></span>
                           <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold ml-1 transition-colors" />
                         </span>
                       </Button>
