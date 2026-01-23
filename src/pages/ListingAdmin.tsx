@@ -38,6 +38,7 @@ import {
   ExternalLink,
   MessageCircle,
   Users,
+  Loader2,
 } from "lucide-react";
 import ListingSearchFilters from "@/components/listing-admin/ListingSearchFilters";
 import ListingAdminChat from "@/components/listing-admin/ListingAdminChat";
@@ -441,12 +442,22 @@ const ListingAdmin = () => {
     // Pre-fill form data from AI response
   };
 
+  // View state - 'chat', 'projects', or 'editor'
+  const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor'>('chat');
+
+  // When editing a project, switch to editor view
+  const handleEditProjectWithView = async (project: any) => {
+    await handleEditProject(project);
+    setActiveView('editor');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] pt-24 lg:pt-28">
       {/* Header - Premium Champagne Style - sticky below global header (h-20 mobile, h-24 desktop) */}
       <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between gap-4">
+        <div className="px-4 py-4">
+          {/* Row 1: Title and actions */}
+          <div className="flex items-center justify-between gap-4 mb-4">
             <div className="flex items-center gap-4">
               <Button
                 variant="ghost"
@@ -470,13 +481,6 @@ const ListingAdmin = () => {
             </div>
             <div className="flex items-center gap-3">
               <Button
-                onClick={() => setShowChat(!showChat)}
-                variant="secondary"
-              >
-                <MessageCircle className="w-4 h-4 mr-2" />
-                {t('listingAdmin.chatWithSarah')}
-              </Button>
-              <Button
                 onClick={() => navigate("/team")}
                 variant="secondary"
               >
@@ -492,617 +496,585 @@ const ListingAdmin = () => {
               </Button>
             </div>
           </div>
+
+          {/* Row 2: Navigation Tabs + Stats */}
+          <div className="flex items-center justify-between gap-4 flex-wrap">
+            <div className="flex items-center gap-2">
+              <Button
+                onClick={() => { setActiveView('chat'); setShowChat(true); }}
+                variant={activeView === 'chat' ? 'primary' : 'secondary'}
+                className={activeView === 'chat' ? '' : 'border-gold/30'}
+              >
+                <MessageCircle className="w-4 h-4 mr-2" />
+                {t('listingAdmin.chatWithSarah')}
+              </Button>
+              <Button
+                onClick={() => { setActiveView('projects'); setShowChat(false); setIsEditing(false); setIsCreating(false); }}
+                variant={activeView === 'projects' ? 'primary' : 'secondary'}
+                className={activeView === 'projects' ? '' : 'border-gold/30'}
+              >
+                <FolderOpen className="w-4 h-4 mr-2" />
+                {t('listingAdmin.projects')} ({projects?.length || 0})
+              </Button>
+              <Button
+                onClick={() => { handleCreateNew(); setActiveView('editor'); }}
+                variant="secondary"
+                className="border-gold/30"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                {t('listingAdmin.addNewProject')}
+              </Button>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-lg border border-gold/20">
+                <Building2 className="w-4 h-4 text-gold" />
+                <span className="text-sm text-black font-medium">{projects?.length || 0} {t('listingAdmin.projects')}</span>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-lg border border-gold/20">
+                <Crown className="w-4 h-4 text-gold" />
+                <span className="text-sm text-black font-medium">{projects?.filter((p) => p.is_premium).length || 0} {t('listingAdmin.premium')}</span>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Panel - Project List */}
-          <div className="lg:col-span-1 space-y-4">
-            {/* Stats */}
-            <div className="grid grid-cols-2 gap-3">
-              <Card className="bg-white border-zinc-200">
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="w-6 h-6 rounded-full bg-black flex items-center justify-center">
-                      <Building2 className="w-3 h-3 text-gold" />
-                    </div>
-                    <span className="text-zinc-600 text-sm">{t('listingAdmin.projects')}</span>
-                  </div>
-                  <p className="text-black text-2xl font-bold">{projects?.length || 0}</p>
-                </CardContent>
-              </Card>
-              <Card className="bg-white border-zinc-200">
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="w-6 h-6 rounded-full bg-black flex items-center justify-center">
-                      <Crown className="w-3 h-3 text-gold" />
-                    </div>
-                    <span className="text-zinc-600 text-sm">{t('listingAdmin.premium')}</span>
-                  </div>
-                  <p className="text-black text-2xl font-bold">
-                    {projects?.filter((p) => p.is_premium).length || 0}
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
+      <main className="h-[calc(100vh-220px)]">
+        {/* Chat View - Full Width Edge to Edge */}
+        {activeView === 'chat' && (
+          <div className="h-full">
+            <ListingAdminChat
+              onBulkUpload={handleBulkUpload}
+              onCreateListing={handleCreateListing}
+            />
+          </div>
+        )}
 
-            {/* Actions */}
-            <Button
-              onClick={handleCreateNew}
-              className="w-full bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300"
-            >
-              <Plus className="w-4 h-4 mr-2 text-gold" />
-              {t('listingAdmin.addNewProject')}
-            </Button>
+        {/* Projects View - Grid */}
+        {activeView === 'projects' && (
+          <div className="container mx-auto px-4 py-6">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+              {/* Search Filters */}
+              <div className="lg:col-span-1">
+                <Card className="bg-white border-zinc-200 sticky top-44">
+                  <CardContent className="p-4">
+                    <ListingSearchFilters
+                      developers={developers || []}
+                      onSearchChange={setSearchQuery}
+                      onDeveloperChange={setFilterDeveloper}
+                      onEmirateChange={setFilterEmirate}
+                      onLocationChange={setFilterLocation}
+                      searchValue={searchQuery}
+                      developerValue={filterDeveloper}
+                      emirateValue={filterEmirate}
+                      locationValue={filterLocation}
+                    />
+                  </CardContent>
+                </Card>
+              </div>
 
-            {/* Search Filters */}
-            <Card className="bg-white border-zinc-200">
-              <CardContent className="p-4">
-                <ListingSearchFilters
-                  developers={developers || []}
-                  onSearchChange={setSearchQuery}
-                  onDeveloperChange={setFilterDeveloper}
-                  onEmirateChange={setFilterEmirate}
-                  onLocationChange={setFilterLocation}
-                  searchValue={searchQuery}
-                  developerValue={filterDeveloper}
-                  emirateValue={filterEmirate}
-                  locationValue={filterLocation}
-                />
-              </CardContent>
-            </Card>
-
-            {/* Project List */}
-            <Card className="bg-white border-zinc-200">
-              <CardHeader className="py-3 px-4 border-b border-zinc-200">
-                <CardTitle className="text-black text-sm font-medium">
-                  {t('listingAdmin.allListedProjects')} ({filteredProjects?.length || 0})
-                </CardTitle>
-              </CardHeader>
-              <ScrollArea className="h-[calc(100vh-520px)]">
-                <div className="p-2 space-y-2">
+              {/* Project Grid */}
+              <div className="lg:col-span-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                   {filteredProjects?.map((project) => (
-                    <div
+                    <Card
                       key={project.id}
-                      className={`p-3 rounded-lg cursor-pointer transition-all border ${
-                        selectedProject?.id === project.id
-                          ? "border-gold bg-gold/10"
-                          : "border-zinc-200 hover:border-gold/50 bg-zinc-50"
+                      className={`bg-white border-zinc-200 cursor-pointer transition-all hover:shadow-lg hover:border-gold/50 ${
+                        selectedProject?.id === project.id ? "border-gold ring-2 ring-gold/20" : ""
                       }`}
-                      onClick={() => handleEditProject(project)}
+                      onClick={() => handleEditProjectWithView(project)}
                     >
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="min-w-0 flex-1">
-                          <h3 className="text-black font-medium truncate text-sm">
-                            {project.name}
-                          </h3>
-                          <p className="text-zinc-500 text-xs truncate">
-                            {project.developer?.name || "No Developer"}
-                          </p>
-                          {project.emirate && (
-                            <p className="text-zinc-400 text-xs">{project.emirate}</p>
-                          )}
+                      <CardContent className="p-4">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="min-w-0 flex-1">
+                            <h3 className="text-black font-medium truncate">{project.name}</h3>
+                            <p className="text-zinc-500 text-sm truncate">{project.developer?.name || "No Developer"}</p>
+                            {project.emirate && <p className="text-zinc-400 text-xs">{project.emirate}</p>}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            {project.is_premium && <Crown className="w-4 h-4 text-gold flex-shrink-0" />}
+                            {project.is_sold_out && <Badge variant="destructive" className="text-[10px]">Sold Out</Badge>}
+                          </div>
                         </div>
-                        {project.is_premium && (
-                          <Crown className="w-4 h-4 text-gold flex-shrink-0" />
-                        )}
-                      </div>
-                    </div>
+                      </CardContent>
+                    </Card>
                   ))}
                   {filteredProjects?.length === 0 && (
-                    <div className="text-center py-8 text-zinc-500">
-                      <FolderOpen className="w-10 h-10 mx-auto mb-2 opacity-50" />
-                      <p className="text-sm">{t('listingAdmin.noProjectsFound')}</p>
+                    <div className="col-span-full text-center py-16 text-zinc-500">
+                      <FolderOpen className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                      <p className="text-lg">{t('listingAdmin.noProjectsFound')}</p>
                     </div>
                   )}
                 </div>
-              </ScrollArea>
-            </Card>
-          </div>
-
-          {/* Right Panel - Editor or Chat */}
-          <div className="lg:col-span-2">
-            {showChat ? (
-              <div className="h-[calc(100vh-220px)]">
-                <ListingAdminChat
-                  onBulkUpload={handleBulkUpload}
-                  onCreateListing={handleCreateListing}
-                />
               </div>
-            ) : (isEditing || isCreating) ? (
-              <Card className="bg-white border-zinc-200">
+            </div>
+          </div>
+        )}
+
+        {/* Editor View */}
+        {activeView === 'editor' && (isEditing || isCreating) && (
+          <div className="container mx-auto px-4 py-6">
+            <Card className="bg-white border-zinc-200">
               <CardHeader className="border-b border-zinc-200">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-black">
-                      {isCreating ? t('listingAdmin.createNewProject') : `${t('listingAdmin.editProject')}: ${selectedProject?.name}`}
-                    </CardTitle>
-                    <div className="flex items-center gap-2">
-                      {!isCreating && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => window.open(`/project/${selectedProject?.slug}`, "_blank")}
-                          className="text-zinc-600 hover:text-black"
-                        >
-                          <ExternalLink className="w-4 h-4 mr-1" />
-                          {t('listingAdmin.view')}
-                        </Button>
-                      )}
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-black">
+                    {isCreating ? t('listingAdmin.createNewProject') : `${t('listingAdmin.editProject')}: ${selectedProject?.name}`}
+                  </CardTitle>
+                  <div className="flex items-center gap-2">
+                    {!isCreating && (
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => {
-                          setIsEditing(false);
-                          setIsCreating(false);
-                          setSelectedProject(null);
-                        }}
+                        onClick={() => window.open(`/project/${selectedProject?.slug}`, "_blank")}
                         className="text-zinc-600 hover:text-black"
                       >
-                        <X className="w-4 h-4" />
+                        <ExternalLink className="w-4 h-4 mr-1" />
+                        {t('listingAdmin.view')}
                       </Button>
-                    </div>
+                    )}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setIsEditing(false);
+                        setIsCreating(false);
+                        setSelectedProject(null);
+                        setActiveView('projects');
+                      }}
+                      className="text-zinc-600 hover:text-black"
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
                   </div>
-                </CardHeader>
-                <CardContent className="p-6">
-                  <Tabs defaultValue="details" className="space-y-6">
-                    <TabsList className="bg-zinc-100 border border-zinc-200">
-                      <TabsTrigger value="details" className="data-[state=active]:bg-black data-[state=active]:text-white">
-                        {t('listingAdmin.details')}
-                      </TabsTrigger>
-                      <TabsTrigger 
-                        value="documents" 
-                        className="data-[state=active]:bg-black data-[state=active]:text-white"
-                        disabled={isCreating}
-                      >
-                        {t('listingAdmin.documents')}
-                      </TabsTrigger>
-                      <TabsTrigger 
-                        value="images" 
-                        className="data-[state=active]:bg-black data-[state=active]:text-white"
-                        disabled={isCreating}
-                      >
-                        {t('listingAdmin.images')}
-                      </TabsTrigger>
-                    </TabsList>
+                </div>
+              </CardHeader>
+              <CardContent className="p-6 max-h-[calc(100vh-300px)] overflow-y-auto">
+                <Tabs defaultValue="details" className="space-y-6">
+                  <TabsList className="bg-zinc-100 border border-zinc-200">
+                    <TabsTrigger value="details" className="data-[state=active]:bg-black data-[state=active]:text-white">
+                      {t('listingAdmin.details')}
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="documents" 
+                      className="data-[state=active]:bg-black data-[state=active]:text-white"
+                      disabled={isCreating}
+                    >
+                      {t('listingAdmin.documents')}
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="images" 
+                      className="data-[state=active]:bg-black data-[state=active]:text-white"
+                      disabled={isCreating}
+                    >
+                      {t('listingAdmin.images')}
+                    </TabsTrigger>
+                  </TabsList>
 
-                    <TabsContent value="details" className="space-y-6">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* Name */}
-                        <div className="md:col-span-2">
-                          <Label className="text-zinc-600">{t('listingAdmin.projectName')} *</Label>
-                          <Input
-                            value={formData.name}
-                            onChange={(e) => {
-                              setFormData({
-                                ...formData,
-                                name: e.target.value,
-                                slug: generateSlug(e.target.value),
-                              });
-                            }}
-                            placeholder="e.g., Sobha Hartland II"
-                            className="bg-zinc-50 border-zinc-300 text-black mt-1"
-                          />
-                        </div>
-
-                        {/* Developer */}
-                        <div>
-                          <Label className="text-zinc-600">{t('listingAdmin.developer')} *</Label>
-                          <Select
-                            value={formData.developer_id}
-                            onValueChange={(value) =>
-                              setFormData({ ...formData, developer_id: value })
-                            }
-                          >
-                            <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
-                              <SelectValue placeholder={t('listingAdmin.selectDeveloper')} />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {developers?.map((dev) => (
-                                <SelectItem key={dev.id} value={dev.id}>
-                                  {dev.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-
-                        {/* Community */}
-                        <div>
-                          <Label className="text-zinc-600">{t('listingAdmin.community')}</Label>
-                          <Select
-                            value={formData.community_id}
-                            onValueChange={(value) =>
-                              setFormData({ ...formData, community_id: value })
-                            }
-                          >
-                            <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
-                              <SelectValue placeholder={t('listingAdmin.selectCommunity')} />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {communities?.map((comm) => (
-                                <SelectItem key={comm.id} value={comm.id}>
-                                  {comm.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-
-                        {/* Location */}
-                        <div>
-                          <Label className="text-zinc-600">{t('listingAdmin.location')}</Label>
-                          <Input
-                            value={formData.location}
-                            onChange={(e) =>
-                              setFormData({ ...formData, location: e.target.value })
-                            }
-                            placeholder="e.g., MBR City, Dubai"
-                            className="bg-zinc-50 border-zinc-300 text-black mt-1"
-                          />
-                        </div>
-
-                        {/* Emirate */}
-                        <div>
-                          <Label className="text-zinc-600">{t('listingAdmin.emirate')}</Label>
-                          <Select
-                            value={formData.emirate}
-                            onValueChange={(value) =>
-                              setFormData({ ...formData, emirate: value })
-                            }
-                          >
-                            <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Dubai">Dubai</SelectItem>
-                              <SelectItem value="Abu Dhabi">Abu Dhabi</SelectItem>
-                              <SelectItem value="Sharjah">Sharjah</SelectItem>
-                              <SelectItem value="Ajman">Ajman</SelectItem>
-                              <SelectItem value="Ras Al Khaimah">Ras Al Khaimah</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-
-                        {/* Price Range */}
-                        <div>
-                          <Label className="text-zinc-600">{t('listingAdmin.priceFrom')}</Label>
-                          <Input
-                            type="number"
-                            value={formData.price_from}
-                            onChange={(e) =>
-                              setFormData({ ...formData, price_from: e.target.value })
-                            }
-                            placeholder="e.g., 1500000"
-                            className="bg-zinc-50 border-zinc-300 text-black mt-1"
-                          />
-                        </div>
-
-                        <div>
-                          <Label className="text-zinc-600">{t('listingAdmin.priceTo')}</Label>
-                          <Input
-                            type="number"
-                            value={formData.price_to}
-                            onChange={(e) =>
-                              setFormData({ ...formData, price_to: e.target.value })
-                            }
-                            placeholder="e.g., 5000000"
-                            className="bg-zinc-50 border-zinc-300 text-black mt-1"
-                          />
-                        </div>
-
-                        {/* Bedrooms */}
-                        <div>
-                          <Label className="text-zinc-600">{t('listingAdmin.bedroomsMin')}</Label>
-                          <Input
-                            type="number"
-                            value={formData.bedrooms_min}
-                            onChange={(e) =>
-                              setFormData({ ...formData, bedrooms_min: e.target.value })
-                            }
-                            placeholder="e.g., 1"
-                            className="bg-zinc-50 border-zinc-300 text-black mt-1"
-                          />
-                        </div>
-
-                        <div>
-                          <Label className="text-zinc-600">{t('listingAdmin.bedroomsMax')}</Label>
-                          <Input
-                            type="number"
-                            value={formData.bedrooms_max}
-                            onChange={(e) =>
-                              setFormData({ ...formData, bedrooms_max: e.target.value })
-                            }
-                            placeholder="e.g., 4"
-                            className="bg-zinc-50 border-zinc-300 text-black mt-1"
-                          />
-                        </div>
-
-                        {/* Handover & Service Charge */}
-                        <div>
-                          <Label className="text-zinc-600">{t('listingAdmin.handoverDate')}</Label>
-                          <Input
-                            value={formData.handover_date}
-                            onChange={(e) =>
-                              setFormData({ ...formData, handover_date: e.target.value })
-                            }
-                            placeholder="e.g., Q4 2026"
-                            className="bg-zinc-50 border-zinc-300 text-black mt-1"
-                          />
-                        </div>
-
-                        <div>
-                          <Label className="text-zinc-600">{t('listingAdmin.serviceCharge')}</Label>
-                          <Input
-                            value={formData.service_charge}
-                            onChange={(e) =>
-                              setFormData({ ...formData, service_charge: e.target.value })
-                            }
-                            placeholder="e.g., 15 AED/sqft"
-                            className="bg-zinc-50 border-zinc-300 text-black mt-1"
-                          />
-                        </div>
-
-                        {/* Payment Plan */}
-                        <div className="md:col-span-2">
-                          <Label className="text-zinc-600">{t('listingAdmin.paymentPlan')}</Label>
-                          <Input
-                            value={formData.payment_plan}
-                            onChange={(e) =>
-                              setFormData({ ...formData, payment_plan: e.target.value })
-                            }
-                            placeholder="e.g., 60/40 or 10/90"
-                            className="bg-zinc-50 border-zinc-300 text-black mt-1"
-                          />
-                        </div>
-
-                        {/* Description */}
-                        <div className="md:col-span-2">
-                          <Label className="text-zinc-600">{t('listingAdmin.description')}</Label>
-                          <Textarea
-                            value={formData.description}
-                            onChange={(e) =>
-                              setFormData({ ...formData, description: e.target.value })
-                            }
-                            placeholder="Enter project description..."
-                            className="bg-zinc-50 border-zinc-300 text-black mt-1 min-h-[120px]"
-                          />
-                        </div>
-
-                        {/* Premium Listing */}
-                        <div className="md:col-span-2 flex items-center justify-between p-4 bg-gradient-to-r from-gold/10 to-transparent border border-gold/20 rounded-lg">
-                          <div>
-                            <Label className="text-black font-medium flex items-center gap-2">
-                              <Crown className="w-4 h-4 text-gold" />
-                              {t('listingAdmin.premiumListing')}
-                            </Label>
-                            <p className="text-zinc-500 text-sm">
-                              {t('listingAdmin.premiumDesc')}
-                            </p>
-                          </div>
-                          <Switch
-                            checked={formData.is_premium}
-                            onCheckedChange={(checked) =>
-                              setFormData({ ...formData, is_premium: checked })
-                            }
-                          />
-                        </div>
-
-                        {/* Sold Out Toggle */}
-                        <div className="md:col-span-2 flex items-center justify-between p-4 bg-gradient-to-r from-destructive/10 to-transparent border border-destructive/20 rounded-lg">
-                          <div>
-                            <Label className="text-black font-medium flex items-center gap-2">
-                              <X className="w-4 h-4 text-destructive" />
-                              {t('listingAdmin.soldOut')}
-                            </Label>
-                            <p className="text-zinc-500 text-sm">
-                              {t('listingAdmin.soldOutDesc')}
-                            </p>
-                          </div>
-                          <Switch
-                            checked={formData.is_sold_out}
-                            onCheckedChange={(checked) =>
-                              setFormData({ ...formData, is_sold_out: checked })
-                            }
-                          />
-                        </div>
+                  <TabsContent value="details" className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Name */}
+                      <div className="md:col-span-2">
+                        <Label className="text-zinc-600">{t('listingAdmin.projectName')} *</Label>
+                        <Input
+                          value={formData.name}
+                          onChange={(e) => {
+                            setFormData({
+                              ...formData,
+                              name: e.target.value,
+                              slug: generateSlug(e.target.value),
+                            });
+                          }}
+                          placeholder="e.g., Sobha Hartland II"
+                          className="bg-zinc-50 border-zinc-300 text-black mt-1"
+                        />
                       </div>
 
-                      {/* Action Buttons */}
-                      <div className="flex items-center justify-between pt-4 border-t border-zinc-200">
-                        {!isCreating && (
-                          <Button
-                            variant="destructive"
-                            onClick={handleDeleteProject}
-                            className="bg-red-100 text-red-600 hover:bg-red-200 border-red-200"
-                          >
-                            <Trash2 className="w-4 h-4 mr-2" />
-                            {t('listingAdmin.deleteProject')}
-                          </Button>
-                        )}
-                        <div className="flex gap-3 ml-auto">
-                          <Button
-                            variant="outline"
-                            onClick={() => {
-                              setIsEditing(false);
-                              setIsCreating(false);
-                              setSelectedProject(null);
-                            }}
-                            className="border-zinc-300 text-zinc-600"
-                          >
-                            {t('listingAdmin.cancel')}
-                          </Button>
-                          <Button
-                            onClick={handleSaveProject}
-                            disabled={isSaving}
-                            className="bg-black text-white hover:bg-zinc-800"
-                          >
-                            {isSaving ? t('listingAdmin.saving') : isCreating ? t('listingAdmin.createNewProject') : t('listingAdmin.saveChanges')}
-                          </Button>
-                        </div>
+                      {/* Developer */}
+                      <div>
+                        <Label className="text-zinc-600">{t('listingAdmin.developer')} *</Label>
+                        <Select
+                          value={formData.developer_id}
+                          onValueChange={(value) =>
+                            setFormData({ ...formData, developer_id: value })
+                          }
+                        >
+                          <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
+                            <SelectValue placeholder={t('listingAdmin.selectDeveloper')} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {developers?.map((dev) => (
+                              <SelectItem key={dev.id} value={dev.id}>
+                                {dev.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </div>
-                    </TabsContent>
 
-                    <TabsContent value="documents" className="space-y-4">
-                      <div className="flex items-center gap-4 p-4 bg-zinc-100 rounded-lg border border-zinc-200">
-                        <Select value={selectedDocType} onValueChange={setSelectedDocType}>
-                          <SelectTrigger className="w-40 bg-white border-zinc-300">
+                      {/* Community */}
+                      <div>
+                        <Label className="text-zinc-600">{t('listingAdmin.community')}</Label>
+                        <Select
+                          value={formData.community_id}
+                          onValueChange={(value) =>
+                            setFormData({ ...formData, community_id: value })
+                          }
+                        >
+                          <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
+                            <SelectValue placeholder={t('listingAdmin.selectCommunity')} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {communities?.map((comm) => (
+                              <SelectItem key={comm.id} value={comm.id}>
+                                {comm.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Location */}
+                      <div>
+                        <Label className="text-zinc-600">{t('listingAdmin.location')}</Label>
+                        <Input
+                          value={formData.location}
+                          onChange={(e) =>
+                            setFormData({ ...formData, location: e.target.value })
+                          }
+                          placeholder="e.g., MBR City, Dubai"
+                          className="bg-zinc-50 border-zinc-300 text-black mt-1"
+                        />
+                      </div>
+
+                      {/* Emirate */}
+                      <div>
+                        <Label className="text-zinc-600">{t('listingAdmin.emirate')}</Label>
+                        <Select
+                          value={formData.emirate}
+                          onValueChange={(value) =>
+                            setFormData({ ...formData, emirate: value })
+                          }
+                        >
+                          <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="brochure">{t('listingAdmin.brochure')}</SelectItem>
-                            <SelectItem value="floorplan">{t('listingAdmin.floorPlan')}</SelectItem>
-                            <SelectItem value="factsheet">{t('listingAdmin.factSheet')}</SelectItem>
-                            <SelectItem value="payment_plan">{t('listingAdmin.paymentPlan')}</SelectItem>
-                            <SelectItem value="other">{t('listingAdmin.other')}</SelectItem>
+                            <SelectItem value="Dubai">Dubai</SelectItem>
+                            <SelectItem value="Abu Dhabi">Abu Dhabi</SelectItem>
+                            <SelectItem value="Sharjah">Sharjah</SelectItem>
+                            <SelectItem value="Ajman">Ajman</SelectItem>
+                            <SelectItem value="Ras Al Khaimah">Ras Al Khaimah</SelectItem>
                           </SelectContent>
                         </Select>
-                        <Button
-                          onClick={() => fileInputRef.current?.click()}
-                          disabled={isUploadingDocument}
-                          className="bg-black text-white hover:bg-zinc-800"
-                        >
-                          <Upload className="w-4 h-4 mr-2" />
-                          {isUploadingDocument ? t('listingAdmin.uploading') : t('listingAdmin.uploadDocument')}
-                        </Button>
-                        <input
-                          ref={fileInputRef}
-                          type="file"
-                          className="hidden"
-                          accept=".pdf,.doc,.docx,.xls,.xlsx"
-                          onChange={handleFileUpload}
+                      </div>
+
+                      {/* Price Range */}
+                      <div>
+                        <Label className="text-zinc-600">{t('listingAdmin.priceFrom')}</Label>
+                        <Input
+                          type="number"
+                          value={formData.price_from}
+                          onChange={(e) =>
+                            setFormData({ ...formData, price_from: e.target.value })
+                          }
+                          placeholder="e.g., 1500000"
+                          className="bg-zinc-50 border-zinc-300 text-black mt-1"
                         />
                       </div>
 
-                      <div className="space-y-2">
-                        {projectDocuments.length === 0 ? (
-                          <div className="text-center py-12 text-zinc-500">
-                            <FolderOpen className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                            <p>{t('listingAdmin.noDocuments')}</p>
-                          </div>
+                      <div>
+                        <Label className="text-zinc-600">{t('listingAdmin.priceTo')}</Label>
+                        <Input
+                          type="number"
+                          value={formData.price_to}
+                          onChange={(e) =>
+                            setFormData({ ...formData, price_to: e.target.value })
+                          }
+                          placeholder="e.g., 5000000"
+                          className="bg-zinc-50 border-zinc-300 text-black mt-1"
+                        />
+                      </div>
+
+                      {/* Bedrooms */}
+                      <div>
+                        <Label className="text-zinc-600">{t('listingAdmin.bedroomsMin')}</Label>
+                        <Input
+                          type="number"
+                          value={formData.bedrooms_min}
+                          onChange={(e) =>
+                            setFormData({ ...formData, bedrooms_min: e.target.value })
+                          }
+                          placeholder="e.g., 1"
+                          className="bg-zinc-50 border-zinc-300 text-black mt-1"
+                        />
+                      </div>
+
+                      <div>
+                        <Label className="text-zinc-600">{t('listingAdmin.bedroomsMax')}</Label>
+                        <Input
+                          type="number"
+                          value={formData.bedrooms_max}
+                          onChange={(e) =>
+                            setFormData({ ...formData, bedrooms_max: e.target.value })
+                          }
+                          placeholder="e.g., 4"
+                          className="bg-zinc-50 border-zinc-300 text-black mt-1"
+                        />
+                      </div>
+
+                      {/* Handover & Service Charge */}
+                      <div>
+                        <Label className="text-zinc-600">{t('listingAdmin.handoverDate')}</Label>
+                        <Input
+                          value={formData.handover_date}
+                          onChange={(e) =>
+                            setFormData({ ...formData, handover_date: e.target.value })
+                          }
+                          placeholder="e.g., Q4 2026"
+                          className="bg-zinc-50 border-zinc-300 text-black mt-1"
+                        />
+                      </div>
+
+                      <div>
+                        <Label className="text-zinc-600">{t('listingAdmin.serviceCharge')}</Label>
+                        <Input
+                          value={formData.service_charge}
+                          onChange={(e) =>
+                            setFormData({ ...formData, service_charge: e.target.value })
+                          }
+                          placeholder="e.g., 15 AED/sqft"
+                          className="bg-zinc-50 border-zinc-300 text-black mt-1"
+                        />
+                      </div>
+
+                      {/* Payment Plan */}
+                      <div className="md:col-span-2">
+                        <Label className="text-zinc-600">{t('listingAdmin.paymentPlan')}</Label>
+                        <Input
+                          value={formData.payment_plan}
+                          onChange={(e) =>
+                            setFormData({ ...formData, payment_plan: e.target.value })
+                          }
+                          placeholder="e.g., 60/40 or 10/90"
+                          className="bg-zinc-50 border-zinc-300 text-black mt-1"
+                        />
+                      </div>
+
+                      {/* Description */}
+                      <div className="md:col-span-2">
+                        <Label className="text-zinc-600">{t('listingAdmin.description')}</Label>
+                        <Textarea
+                          value={formData.description}
+                          onChange={(e) =>
+                            setFormData({ ...formData, description: e.target.value })
+                          }
+                          placeholder="Enter project description..."
+                          className="bg-zinc-50 border-zinc-300 text-black mt-1 min-h-[120px]"
+                        />
+                      </div>
+
+                      {/* Premium Listing */}
+                      <div className="md:col-span-2 flex items-center justify-between p-4 bg-gradient-to-r from-gold/10 to-transparent border border-gold/20 rounded-lg">
+                        <div>
+                          <Label className="text-black font-medium flex items-center gap-2">
+                            <Crown className="w-4 h-4 text-gold" />
+                            {t('listingAdmin.premiumListing')}
+                          </Label>
+                          <p className="text-zinc-500 text-sm">
+                            {t('listingAdmin.premiumDesc')}
+                          </p>
+                        </div>
+                        <Switch
+                          checked={formData.is_premium}
+                          onCheckedChange={(checked) =>
+                            setFormData({ ...formData, is_premium: checked })
+                          }
+                        />
+                      </div>
+
+                      {/* Sold Out Toggle */}
+                      <div className="md:col-span-2 flex items-center justify-between p-4 bg-gradient-to-r from-destructive/10 to-transparent border border-destructive/20 rounded-lg">
+                        <div>
+                          <Label className="text-black font-medium flex items-center gap-2">
+                            <X className="w-4 h-4 text-destructive" />
+                            {t('listingAdmin.soldOut')}
+                          </Label>
+                          <p className="text-zinc-500 text-sm">
+                            {t('listingAdmin.soldOutDesc')}
+                          </p>
+                        </div>
+                        <Switch
+                          checked={formData.is_sold_out}
+                          onCheckedChange={(checked) =>
+                            setFormData({ ...formData, is_sold_out: checked })
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    {/* Save/Delete Actions */}
+                    <div className="flex items-center justify-between pt-4 border-t border-zinc-200">
+                      <div className="flex gap-2">
+                        <Button
+                          onClick={handleSaveProject}
+                          disabled={isSaving}
+                          variant="primary"
+                        >
+                          {isSaving ? (
+                            <>
+                              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                              {t('listingAdmin.saving')}
+                            </>
+                          ) : (
+                            <>
+                              <Upload className="w-4 h-4 mr-2" />
+                              {isCreating ? t('listingAdmin.createProject') : t('listingAdmin.saveChanges')}
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                      {!isCreating && (
+                        <Button
+                          variant="destructive"
+                          onClick={handleDeleteProject}
+                        >
+                          <Trash2 className="w-4 h-4 mr-2" />
+                          {t('listingAdmin.delete')}
+                        </Button>
+                      )}
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="documents" className="space-y-4">
+                    {/* Document Upload */}
+                    <div className="flex items-center gap-4">
+                      <Select value={selectedDocType} onValueChange={setSelectedDocType}>
+                        <SelectTrigger className="w-48 bg-zinc-50 border-zinc-300 text-black">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="brochure">{t('listingAdmin.brochure')}</SelectItem>
+                          <SelectItem value="floor_plan">{t('listingAdmin.floorPlan')}</SelectItem>
+                          <SelectItem value="payment_plan">{t('listingAdmin.paymentPlanDoc')}</SelectItem>
+                          <SelectItem value="fact_sheet">{t('listingAdmin.factSheet')}</SelectItem>
+                          <SelectItem value="other">{t('listingAdmin.other')}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Button
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={isUploadingDocument}
+                        variant="secondary"
+                      >
+                        {isUploadingDocument ? (
+                          <Loader2 className="w-4 h-4 animate-spin mr-2" />
                         ) : (
-                          projectDocuments.map((doc) => (
-                            <div
-                              key={doc.id}
-                              className="flex items-center justify-between p-3 bg-zinc-50 rounded-lg border border-zinc-200"
-                            >
-                              <div className="flex items-center gap-3">
-                                <File className="w-5 h-5 text-gold" />
-                                <div>
-                                  <p className="text-black text-sm">{doc.file_name}</p>
-                                  <p className="text-zinc-500 text-xs">
-                                    {doc.document_type} • {formatFileSize(doc.file_size)}
-                                  </p>
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => window.open(doc.file_url, "_blank")}
-                                  className="text-zinc-600 hover:text-black"
-                                >
-                                  <Download className="w-4 h-4" />
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => handleDeleteDocument(doc)}
-                                  className="text-red-500 hover:text-red-600"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </Button>
-                              </div>
-                            </div>
-                          ))
+                          <Upload className="w-4 h-4 mr-2" />
                         )}
-                      </div>
-                    </TabsContent>
+                        {t('listingAdmin.uploadDocument')}
+                      </Button>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        className="hidden"
+                        accept=".pdf,.doc,.docx,.xls,.xlsx"
+                        onChange={handleFileUpload}
+                      />
+                    </div>
 
-                    <TabsContent value="images" className="space-y-4">
-                      <div className="p-4 bg-zinc-100 rounded-lg border border-zinc-200">
-                        <Button
-                          onClick={() => imageInputRef.current?.click()}
-                          className="bg-black text-white hover:bg-zinc-800"
+                    {/* Document List */}
+                    <div className="space-y-2">
+                      {projectDocuments.map((doc) => (
+                        <div
+                          key={doc.id}
+                          className="flex items-center justify-between p-3 bg-zinc-50 rounded-lg border border-zinc-200"
                         >
-                          <Image className="w-4 h-4 mr-2" />
-                          {t('listingAdmin.uploadImages')}
-                        </Button>
-                        <input
-                          ref={imageInputRef}
-                          type="file"
-                          className="hidden"
-                          accept="image/*"
-                          multiple
-                          onChange={handleImageUpload}
-                        />
-                        <p className="text-zinc-500 text-sm mt-2">
-                          {t('listingAdmin.selectMultiple')}
-                        </p>
-                      </div>
+                          <div className="flex items-center gap-3">
+                            <File className="w-5 h-5 text-zinc-600" />
+                            <div>
+                              <p className="text-black text-sm font-medium">{doc.file_name}</p>
+                              <p className="text-zinc-500 text-xs">
+                                {doc.document_type} • {formatFileSize(doc.file_size)}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => window.open(doc.file_url, "_blank")}
+                            >
+                              <Download className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDeleteDocument(doc)}
+                              className="text-destructive hover:text-destructive"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                      {projectDocuments.length === 0 && (
+                        <div className="text-center py-12 text-zinc-500">
+                          <FolderOpen className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                          <p>{t('listingAdmin.noDocuments')}</p>
+                        </div>
+                      )}
+                    </div>
+                  </TabsContent>
 
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        {selectedProject?.images?.map((img: any) => (
-                          <div
-                            key={img.id}
-                            className="relative aspect-video rounded-lg overflow-hidden bg-zinc-100 border border-zinc-200"
-                          >
-                            <img
-                              src={img.image_url}
-                              alt="Project"
-                              className="w-full h-full object-cover"
-                            />
-                            {img.is_primary && (
-                              <Badge className="absolute top-2 left-2 bg-gold text-black">
-                                {t('listingAdmin.primary')}
-                              </Badge>
-                            )}
-                          </div>
-                        ))}
-                        {(!selectedProject?.images || selectedProject.images.length === 0) && (
-                          <div className="col-span-full text-center py-12 text-zinc-500">
-                            <Image className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                            <p>{t('listingAdmin.noImages')}</p>
-                          </div>
-                        )}
-                      </div>
-                    </TabsContent>
-                  </Tabs>
-                </CardContent>
-              </Card>
-            ) : (
-              <Card className="bg-white border-zinc-200">
-                <CardContent className="p-12 text-center">
-                  <div className="w-20 h-20 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <Building2 className="w-10 h-10 text-gold" />
-                  </div>
-                  <h2 className="text-black text-xl font-semibold mb-2">
-                    {t('listingAdmin.selectProjectToEdit')}
-                  </h2>
-                  <p className="text-zinc-600 mb-6">
-                    {t('listingAdmin.chooseFromList')}
-                  </p>
-                  <div className="flex justify-center gap-3">
+                  <TabsContent value="images" className="space-y-4">
+                    {/* Image Upload */}
                     <Button
-                      onClick={handleCreateNew}
-                      className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300"
+                      onClick={() => imageInputRef.current?.click()}
+                      variant="secondary"
                     >
-                      <Plus className="w-4 h-4 mr-2 text-gold" />
-                      {t('listingAdmin.createNewProject')}
+                      <Image className="w-4 h-4 mr-2" />
+                      {t('listingAdmin.uploadImages')}
                     </Button>
-                    <Button
-                      onClick={() => setShowChat(true)}
-                      className="bg-black text-white hover:bg-zinc-800"
-                    >
-                      <MessageCircle className="w-4 h-4 mr-2" />
-                      {t('listingAdmin.askSarah')}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+                    <input
+                      ref={imageInputRef}
+                      type="file"
+                      className="hidden"
+                      accept="image/*"
+                      multiple
+                      onChange={handleImageUpload}
+                    />
+
+                    {/* Image Grid */}
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                      {selectedProject?.images?.map((img: any) => (
+                        <div
+                          key={img.id}
+                          className="relative aspect-video rounded-lg overflow-hidden bg-zinc-100 border border-zinc-200"
+                        >
+                          <img
+                            src={img.image_url}
+                            alt="Project"
+                            className="w-full h-full object-cover"
+                          />
+                          {img.is_primary && (
+                            <Badge className="absolute top-2 left-2 bg-gold text-black">
+                              {t('listingAdmin.primary')}
+                            </Badge>
+                          )}
+                        </div>
+                      ))}
+                      {(!selectedProject?.images || selectedProject.images.length === 0) && (
+                        <div className="col-span-full text-center py-12 text-zinc-500">
+                          <Image className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                          <p>{t('listingAdmin.noImages')}</p>
+                        </div>
+                      )}
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </CardContent>
+            </Card>
           </div>
-        </div>
+        )}
       </main>
     </div>
   );

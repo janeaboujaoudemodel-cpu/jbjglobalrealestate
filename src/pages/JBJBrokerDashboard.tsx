@@ -23,7 +23,6 @@ import {
   List,
 } from "lucide-react";
 import { JBJLeadCard } from "@/components/jbj-broker/JBJLeadCard";
-import { JBJSidebar } from "@/components/jbj-broker/JBJSidebar";
 
 interface Lead {
   id: string;
@@ -147,197 +146,195 @@ export default function JBJBrokerDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
-      <JBJSidebar 
-        brokerProfile={brokerProfile} 
-        activePage="leads" 
-      />
-
-      {/* Main Content */}
-      <div className="flex-1 ml-64">
-        {/* Header */}
-        <header className="bg-black border-b border-zinc-800 sticky top-0 z-40">
-          <div className="px-6 py-4">
-            <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] pt-24 lg:pt-28">
+      {/* Header */}
+      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <div className="px-4 py-4">
+          <div className="flex items-center justify-between gap-4 mb-4">
+            <div className="flex items-center gap-4">
+              <div className="p-2 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+                <Users className="w-5 h-5 text-black" />
+              </div>
               <div>
-                <h1 className="text-xl font-bold text-gold tracking-wide">
+                <h1 className="text-black text-xl font-bold tracking-wide">
                   My Leads
                 </h1>
-                <p className="text-gray-400 text-sm">
+                <p className="text-zinc-600 text-sm">
                   Manage and contact your assigned leads
                 </p>
               </div>
+            </div>
 
+            <div className="flex items-center gap-3">
               <Button
-                className="bg-gold hover:bg-gold-dark text-black font-medium"
+                variant="primary"
                 onClick={() => navigate("/jbj-broker-messages")}
               >
                 <MessageSquare className="h-4 w-4 mr-2" />
                 Messages
               </Button>
-            </div>
-          </div>
-        </header>
-
-        <div className="p-6">
-          {/* Stats Cards */}
-          <div className="grid grid-cols-4 gap-4 mb-6">
-            <Card className="bg-white border shadow-sm">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-blue-100">
-                    <Users className="h-5 w-5 text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="text-gray-500 text-xs">Total Leads</p>
-                    <p className="text-2xl font-bold text-gray-900">
-                      {stats.totalLeads}
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white border shadow-sm">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-green-100">
-                    <CheckCircle className="h-5 w-5 text-green-600" />
-                  </div>
-                  <div>
-                    <p className="text-gray-500 text-xs">Contacted Today</p>
-                    <p className="text-2xl font-bold text-gray-900">
-                      {stats.contactedToday}
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white border shadow-sm">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-amber-100">
-                    <Clock className="h-5 w-5 text-amber-600" />
-                  </div>
-                  <div>
-                    <p className="text-gray-500 text-xs">Pending Follow-up</p>
-                    <p className="text-2xl font-bold text-gray-900">
-                      {stats.pendingFollowUp}
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white border shadow-sm">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-gold/20">
-                    <AlertCircle className="h-5 w-5 text-gold" />
-                  </div>
-                  <div>
-                    <p className="text-gray-500 text-xs">Converted</p>
-                    <p className="text-2xl font-bold text-gray-900">
-                      {stats.converted}
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Filters and Search */}
-          <div className="flex items-center justify-between gap-4 mb-6">
-            <div className="flex items-center gap-3 flex-1">
-              <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
-                  placeholder="Search leads..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-
-              <div className="flex gap-2">
-                {["all", "new", "contacted", "follow_up", "qualified", "converted"].map(
-                  (status) => (
-                    <Button
-                      key={status}
-                      variant={statusFilter === status ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setStatusFilter(status)}
-                      className={
-                        statusFilter === status
-                          ? "bg-gold text-black hover:bg-gold-dark"
-                          : ""
-                      }
-                    >
-                      {status === "all"
-                        ? "All"
-                        : status.charAt(0).toUpperCase() +
-                          status.slice(1).replace("_", " ")}
-                    </Button>
-                  )
-                )}
-              </div>
-            </div>
-
-            <div className="flex gap-2">
               <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setViewMode("grid")}
-                className={viewMode === "grid" ? "bg-gray-100" : ""}
+                variant="secondary"
+                onClick={async () => { await supabase.auth.signOut(); navigate("/auth"); }}
               >
-                <LayoutGrid className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setViewMode("list")}
-                className={viewMode === "list" ? "bg-gray-100" : ""}
-              >
-                <List className="h-4 w-4" />
+                Sign Out
               </Button>
             </div>
           </div>
 
-          {/* Leads Grid */}
-          <div
-            className={
-              viewMode === "grid"
-                ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
-                : "flex flex-col gap-3"
-            }
-          >
-            {filteredLeads.map((lead) => (
-              <JBJLeadCard
-                key={lead.id}
-                lead={lead}
-                viewMode={viewMode}
-                onAction={handleLeadAction}
-              />
-            ))}
-
-            {filteredLeads.length === 0 && (
-              <div className="col-span-full flex flex-col items-center justify-center py-16 text-center">
-                <Users className="h-16 w-16 text-gray-300 mb-4" />
-                <h3 className="text-gray-600 text-lg font-medium mb-2">
-                  No Leads Found
-                </h3>
-                <p className="text-gray-400">
-                  {searchQuery
-                    ? "Try adjusting your search or filters"
-                    : "No leads assigned to you yet"}
-                </p>
-              </div>
+          {/* Filter Tabs */}
+          <div className="flex items-center gap-2 flex-wrap">
+            {["all", "new", "contacted", "follow_up", "qualified", "converted"].map(
+              (status) => (
+                <Button
+                  key={status}
+                  variant={statusFilter === status ? "primary" : "secondary"}
+                  size="sm"
+                  onClick={() => setStatusFilter(status)}
+                >
+                  {status === "all"
+                    ? "All"
+                    : status.charAt(0).toUpperCase() +
+                      status.slice(1).replace("_", " ")}
+                </Button>
+              )
             )}
           </div>
         </div>
-      </div>
+      </header>
+
+      <main className="px-4 py-6">
+        {/* Stats Cards */}
+        <div className="grid grid-cols-4 gap-4 mb-6">
+          <Card className="bg-white border border-gold/20 shadow-sm">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8]">
+                  <Users className="h-5 w-5 text-black" />
+                </div>
+                <div>
+                  <p className="text-zinc-500 text-xs">Total Leads</p>
+                  <p className="text-2xl font-bold text-black">
+                    {stats.totalLeads}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white border border-gold/20 shadow-sm">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8]">
+                  <CheckCircle className="h-5 w-5 text-green-600" />
+                </div>
+                <div>
+                  <p className="text-zinc-500 text-xs">Contacted Today</p>
+                  <p className="text-2xl font-bold text-black">
+                    {stats.contactedToday}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white border border-gold/20 shadow-sm">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8]">
+                  <Clock className="h-5 w-5 text-amber-600" />
+                </div>
+                <div>
+                  <p className="text-zinc-500 text-xs">Pending Follow-up</p>
+                  <p className="text-2xl font-bold text-black">
+                    {stats.pendingFollowUp}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white border border-gold/20 shadow-sm">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8]">
+                  <AlertCircle className="h-5 w-5 text-gold" />
+                </div>
+                <div>
+                  <p className="text-zinc-500 text-xs">Converted</p>
+                  <p className="text-2xl font-bold text-black">
+                    {stats.converted}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Search */}
+        <div className="flex items-center justify-between gap-4 mb-6">
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+            <Input
+              placeholder="Search leads..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+
+          <div className="flex gap-2">
+            <Button
+              variant="secondary"
+              size="icon"
+              onClick={() => setViewMode("grid")}
+              className={viewMode === "grid" ? "bg-gold/20 border-gold" : ""}
+            >
+              <LayoutGrid className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="secondary"
+              size="icon"
+              onClick={() => setViewMode("list")}
+              className={viewMode === "list" ? "bg-gold/20 border-gold" : ""}
+            >
+              <List className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Leads Grid */}
+        <div
+          className={
+            viewMode === "grid"
+              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+              : "flex flex-col gap-3"
+          }
+        >
+          {filteredLeads.map((lead) => (
+            <JBJLeadCard
+              key={lead.id}
+              lead={lead}
+              viewMode={viewMode}
+              onAction={handleLeadAction}
+            />
+          ))}
+
+          {filteredLeads.length === 0 && (
+            <div className="col-span-full flex flex-col items-center justify-center py-16 text-center">
+              <Users className="h-16 w-16 text-zinc-300 mb-4" />
+              <h3 className="text-black text-lg font-medium mb-2">
+                No Leads Found
+              </h3>
+              <p className="text-zinc-500">
+                {searchQuery
+                  ? "Try adjusting your search or filters"
+                  : "No leads assigned to you yet"}
+              </p>
+            </div>
+          )}
+        </div>
+      </main>
     </div>
   );
 }
