@@ -93,6 +93,7 @@ const ListingAdmin = () => {
     community_id: "",
     emirate: "Dubai",
     is_premium: false,
+    is_sold_out: false,
     furnished_status: "unfurnished",
     payment_plan: "",
     service_charge: "",
@@ -167,6 +168,7 @@ const ListingAdmin = () => {
       community_id: project.community?.id || "",
       emirate: project.emirate || "Dubai",
       is_premium: project.is_premium || false,
+      is_sold_out: project.is_sold_out || false,
       furnished_status: project.furnished_status || "unfurnished",
       payment_plan: project.payment_plan || "",
       service_charge: project.service_charge || "",
@@ -200,6 +202,7 @@ const ListingAdmin = () => {
       community_id: "",
       emirate: "Dubai",
       is_premium: false,
+      is_sold_out: false,
       furnished_status: "unfurnished",
       payment_plan: "",
       service_charge: "",
@@ -361,6 +364,7 @@ const ListingAdmin = () => {
         community_id: formData.community_id || null,
         emirate: formData.emirate,
         is_premium: formData.is_premium,
+        is_sold_out: formData.is_sold_out,
         furnished_status: formData.furnished_status,
         payment_plan: formData.payment_plan || null,
         service_charge: formData.service_charge || null,
@@ -880,6 +884,25 @@ const ListingAdmin = () => {
                             checked={formData.is_premium}
                             onCheckedChange={(checked) =>
                               setFormData({ ...formData, is_premium: checked })
+                            }
+                          />
+                        </div>
+
+                        {/* Sold Out Toggle */}
+                        <div className="md:col-span-2 flex items-center justify-between p-4 bg-gradient-to-r from-destructive/10 to-transparent border border-destructive/20 rounded-lg">
+                          <div>
+                            <Label className="text-black font-medium flex items-center gap-2">
+                              <X className="w-4 h-4 text-destructive" />
+                              {t('listingAdmin.soldOut')}
+                            </Label>
+                            <p className="text-zinc-500 text-sm">
+                              {t('listingAdmin.soldOutDesc')}
+                            </p>
+                          </div>
+                          <Switch
+                            checked={formData.is_sold_out}
+                            onCheckedChange={(checked) =>
+                              setFormData({ ...formData, is_sold_out: checked })
                             }
                           />
                         </div>

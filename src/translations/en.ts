@@ -811,6 +811,8 @@ export const en = {
   'listingAdmin.description': 'Description',
   'listingAdmin.premiumListing': 'Premium Listing',
   'listingAdmin.premiumDesc': 'Premium properties appear with special badge in search & listings',
+  'listingAdmin.soldOut': 'Sold Out',
+  'listingAdmin.soldOutDesc': 'Mark this project as sold out - displays a "Sold Out" badge on the property card',
   'listingAdmin.deleteProject': 'Delete Project',
   'listingAdmin.cancel': 'Cancel',
   'listingAdmin.saveChanges': 'Save Changes',

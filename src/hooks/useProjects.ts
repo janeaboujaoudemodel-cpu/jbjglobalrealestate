@@ -25,6 +25,7 @@ export interface Project {
   status: string | null;
   is_featured: boolean | null;
   is_premium: boolean | null;
+  is_sold_out: boolean | null;
   created_at: string;
   updated_at: string;
   developer: {
@@ -48,6 +49,7 @@ export interface Project {
     document_type: string;
     file_url: string;
     file_name: string;
+    display_order?: number | null;
   }[];
 }
 
@@ -140,7 +142,7 @@ export function useProjects() {
           developer:developers(id, name, slug),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
-          documents:project_documents(id, document_type, file_url, file_name)
+          documents:project_documents(id, document_type, file_url, file_name, display_order)
         `)
         .order("created_at", { ascending: false });
       
@@ -161,7 +163,7 @@ export function useProjectsByCommunity(communitySlug: string) {
           developer:developers(id, name, slug),
           community:communities!inner(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
-          documents:project_documents(id, document_type, file_url, file_name)
+          documents:project_documents(id, document_type, file_url, file_name, display_order)
         `)
         .eq("community.slug", communitySlug)
         .order("created_at", { ascending: false });
@@ -184,7 +186,7 @@ export function useProjectsByDeveloper(developerSlug: string) {
           developer:developers!inner(id, name, slug),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
-          documents:project_documents(id, document_type, file_url, file_name)
+          documents:project_documents(id, document_type, file_url, file_name, display_order)
         `)
         .eq("developer.slug", developerSlug)
         .order("created_at", { ascending: false });
@@ -207,7 +209,7 @@ export function useProject(projectSlug: string) {
           developer:developers(id, name, slug),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
-          documents:project_documents(id, document_type, file_url, file_name)
+          documents:project_documents(id, document_type, file_url, file_name, display_order)
         `)
         .eq("slug", projectSlug)
         .maybeSingle();

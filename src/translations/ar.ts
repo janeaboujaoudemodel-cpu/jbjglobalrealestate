@@ -810,6 +810,8 @@ export const ar = {
   'listingAdmin.description': 'الوصف',
   'listingAdmin.premiumListing': 'قائمة مميزة',
   'listingAdmin.premiumDesc': 'تظهر العقارات المميزة بشارة خاصة في البحث والقوائم',
+  'listingAdmin.soldOut': 'نفد الكمية',
+  'listingAdmin.soldOutDesc': 'وضع علامة على هذا المشروع بأنه نفد - يعرض شارة "نفد" على بطاقة العقار',
   'listingAdmin.deleteProject': 'حذف المشروع',
   'listingAdmin.cancel': 'إلغاء',
   'listingAdmin.saveChanges': 'حفظ التغييرات',

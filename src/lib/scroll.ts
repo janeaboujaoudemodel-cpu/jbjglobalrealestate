@@ -29,18 +29,17 @@ export function scrollToId(id: string, options: ScrollToIdOptions = {}): boolean
   const behavior: ScrollBehavior =
     options.behavior ?? (prefersReducedMotion() ? "auto" : "smooth");
 
-  // Prefer native scrollIntoView when scroll-margin-top is set on the target.
-  // This avoids double-applying offsets across pages that already use `scroll-mt-*`.
-  const scrollMarginTop = Number.parseFloat(getComputedStyle(el).scrollMarginTop || "0");
-  if (scrollMarginTop > 0) {
-    el.scrollIntoView({ behavior, block: "start" });
-    return true;
-  }
-
-  // Fallback: manual offset for targets without scroll margin.
+  // Always use manual offset calculation for consistent behavior across all pages
+  // This prevents jumping issues caused by inconsistent scroll-margin-top values
   const offset = getDefaultScrollOffset() + (options.extraOffset ?? 0);
-  const top = el.getBoundingClientRect().top + window.scrollY - offset;
+  const currentScrollY = window.scrollY;
+  const elementTop = el.getBoundingClientRect().top + currentScrollY;
+  const targetTop = Math.max(0, elementTop - offset);
 
-  window.scrollTo({ top: Math.max(0, top), behavior });
+  // Only scroll if we're not already at the target position (within 5px tolerance)
+  if (Math.abs(currentScrollY - targetTop) > 5) {
+    window.scrollTo({ top: targetTop, behavior });
+  }
+  
   return true;
 }

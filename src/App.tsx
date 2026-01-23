@@ -45,6 +45,7 @@ import Compare from "./pages/Compare";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import AdminLeads from "./pages/AdminLeads";
+import AdminRoleManagement from "./pages/AdminRoleManagement";
 import NotFound from "./pages/NotFound";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
@@ -289,6 +290,7 @@ const App = () => (
                 <Route path="/onboarding" element={<Onboarding />} />
                 <Route path="/onboarding/module/:moduleId" element={<OnboardingModule />} />
                 <Route path="/admin/onboarding" element={<AdminOnboarding />} />
+                <Route path="/admin/roles" element={<AdminRoleManagement />} />
                 <Route path="/verify-certificate/:token" element={<VerifyCertificate />} />
                 <Route path="/map" element={<PropertyMap />} />
                 <Route path="/admin/developers" element={<AdminDevelopers />} />
