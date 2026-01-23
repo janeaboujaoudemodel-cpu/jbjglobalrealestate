@@ -149,6 +149,8 @@ const ListingAdmin = () => {
   });
 
   const handleEditProject = async (project: any) => {
+    // Hide chat and show editor when a project is selected
+    setShowChat(false);
     setSelectedProject(project);
     setFormData({
       name: project.name || "",
