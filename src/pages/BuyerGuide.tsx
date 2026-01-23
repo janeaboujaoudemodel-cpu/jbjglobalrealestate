@@ -35,6 +35,7 @@ import {
 import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
 import { GuideHero } from "@/components/guides/GuideHero";
 import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
+import { GuideSectionHeader } from "@/components/guides/GuideSectionHeader";
 import Footer from "@/components/Footer";
 import {
   Accordion,
@@ -393,11 +394,7 @@ const BuyerGuide = () => {
       {/* Step-by-Step Buying Process */}
       <section id="buying-process" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
-              <span className="text-gold">Step-by-Step</span> Buying Process
-            </h2>
-          </div>
+          <GuideSectionHeader icon={FileText} title="Step by Step Buying Process" centered />
 
             <div className="space-y-6">
               {buyingSteps.map((step) => (
@@ -520,184 +517,152 @@ const BuyerGuide = () => {
       </section>
 
       {/* Divider */}
-      <div className="h-px bg-black" />
-
-      {/* Agency Fees & Buyer Costs (Important) */}
+      {/* Agency Fees & Buyer Costs */}
       <section id="agency-fees" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
-                Agency Fees & Buyer Costs (Important)
-              </h2>
+        <div className="max-w-5xl mx-auto">
+          <GuideSectionHeader icon={Wallet} title="Agency Fees & Buyer Costs" centered />
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Off-Plan Purchases */}
+            <div className="jj-card-inner p-8 hover:border-gold transition-all">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="jj-icon-box-active w-12 h-12 rounded-xl">
+                  <Building2 className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-semibold text-black">Off-Plan Purchases</h3>
+              </div>
+              <ul className="space-y-3 mb-6">
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700 text-sm">No agency fees are paid by the buyer</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700 text-sm">Developers pay the brokerage commission</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700 text-sm">Buyer pays only: Unit price as per payment plan</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700 text-sm">Dubai Land Department (DLD) registration fees</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700 text-sm">Oqood registration (for off-plan)</span>
+                </li>
+              </ul>
+              <div className="jj-card-inner rounded-lg p-4 border-gold/50">
+                <p className="text-black text-sm font-medium flex items-center gap-2">
+                  <ArrowRight className="w-4 h-4 text-gold" />
+                  You do not pay JBJ Global Real Estate any commission when purchasing off-plan.
+                </p>
+              </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6 mb-8">
-              {/* Off-Plan Purchases */}
-              <div className="jj-box-active p-8 hover:border-gold hover:shadow-lg transition-all">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="jj-icon-box-active w-12 h-12 rounded-xl">
-                    <Building2 className="w-6 h-6" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-black">Off-Plan Purchases</h3>
+            {/* Ready Property Purchases */}
+            <div className="jj-card-inner p-8 hover:border-gold transition-all">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="jj-icon-box-active w-12 h-12 rounded-xl">
+                  <Home className="w-6 h-6" />
                 </div>
-                <ul className="space-y-3 mb-6">
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700 text-sm">No agency fees are paid by the buyer</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700 text-sm">Developers pay the brokerage commission</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700 text-sm">Buyer pays only: Unit price as per payment plan</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700 text-sm">Dubai Land Department (DLD) registration fees</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700 text-sm">Oqood registration (for off-plan)</span>
-                  </li>
-                </ul>
-                <div className="bg-gold/10 border border-gold/30 rounded-lg p-4">
-                  <p className="text-black text-sm font-medium flex items-center gap-2">
-                    <ArrowRight className="w-4 h-4 text-gold" />
-                    You do not pay JBJ Global Real Estate any commission when purchasing off-plan.
-                  </p>
-                </div>
+                <h3 className="text-xl font-semibold text-black">Ready Property Purchases</h3>
               </div>
-
-              {/* Ready Property Purchases */}
-              <div className="jj-box-active p-8 hover:border-gold hover:shadow-lg transition-all">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="jj-icon-box-active w-12 h-12 rounded-xl">
-                    <Home className="w-6 h-6" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-black">Ready Property Purchases</h3>
-                </div>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700 text-sm">Buyer pays agency commission</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700 text-sm">Standard market rate: 2% + VAT</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700 text-sm">This fee covers: Property sourcing & shortlisting</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700 text-sm">Negotiation support</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700 text-sm">Transaction coordination</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700 text-sm">Legal & transfer guidance</span>
-                  </li>
-                </ul>
-              </div>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700 text-sm">Buyer pays agency commission</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700 text-sm">Standard market rate: 2% + VAT</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700 text-sm">This fee covers: Property sourcing & shortlisting</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700 text-sm">Negotiation support</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700 text-sm">Transaction coordination</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700 text-sm">Legal & transfer guidance</span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
       </section>
-
-      {/* Divider */}
-      <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
 
       {/* Buyer Costs Overview */}
       <section id="buyer-costs" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
-                Buyer Costs Overview
-              </h2>
-            </div>
+        <div className="max-w-5xl mx-auto">
+          <GuideSectionHeader icon={Calculator} title="Buyer Costs Overview" centered />
 
-            {/* Mandatory Government Fees */}
-            <div className="mb-8">
-              <h3 className="text-xl font-semibold text-black mb-6">Mandatory Government Fees</h3>
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {governmentFees.map((fee, index) => (
-                  <div 
-                    key={index}
-                    className="jj-box-active p-6 hover:border-gold hover:shadow-lg transition-all"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="jj-icon-box-active w-10 h-10 rounded-lg flex-shrink-0">
-                        <fee.icon className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <h4 className="text-black font-semibold mb-1">{fee.title}</h4>
-                        <p className="text-zinc-600 text-sm leading-relaxed">{fee.description}</p>
-                      </div>
+          <div className="mb-8">
+            <h3 className="text-xl font-semibold text-black mb-6">Mandatory Government Fees</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {governmentFees.map((fee, index) => (
+                <div 
+                  key={index}
+                  className="jj-card-inner p-6 hover:border-gold transition-all"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="jj-icon-box-active w-10 h-10 rounded-lg flex-shrink-0">
+                      <fee.icon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-black font-semibold mb-1">{fee.title}</h4>
+                      <p className="text-zinc-600 text-sm leading-relaxed">{fee.description}</p>
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
+          </div>
 
-            {/* Additional Costs */}
-            <div>
-              <h3 className="text-xl font-semibold text-black mb-6">Additional Costs (If Applicable)</h3>
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {additionalCosts.map((cost, index) => (
-                  <div 
-                    key={index}
-                    className="jj-box-active p-6 hover:border-gold hover:shadow-lg transition-all"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="jj-icon-box-active w-10 h-10 rounded-lg flex-shrink-0">
-                        <cost.icon className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <h4 className="text-black font-semibold mb-1">{cost.title}</h4>
-                        <p className="text-zinc-600 text-sm leading-relaxed">{cost.description}</p>
-                      </div>
+          <div>
+            <h3 className="text-xl font-semibold text-black mb-6">Additional Costs (If Applicable)</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {additionalCosts.map((cost, index) => (
+                <div 
+                  key={index}
+                  className="jj-card-inner p-6 hover:border-gold transition-all"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="jj-icon-box-active w-10 h-10 rounded-lg flex-shrink-0">
+                      <cost.icon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-black font-semibold mb-1">{cost.title}</h4>
+                      <p className="text-zinc-600 text-sm leading-relaxed">{cost.description}</p>
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Divider */}
-      <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
-
       {/* Mortgages & Financing */}
       <section id="mortgages" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="jj-box-active p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.2)]">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="jj-icon-box-active w-12 h-12 rounded-xl">
-                  <Landmark className="w-6 h-6" />
+        <div className="max-w-4xl mx-auto">
+          <div className="jj-card-inner p-8 md:p-12">
+            <GuideSectionHeader icon={Landmark} title="Mortgages & Financing" />
+            <div className="grid md:grid-cols-2 gap-4">
+              {mortgagePoints.map((point, index) => (
+                <div key={index} className="flex items-start gap-3 jj-card-inner rounded-lg p-4">
+                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700 text-sm leading-relaxed">{point}</span>
                 </div>
-                <h2 className="text-3xl md:text-4xl font-semibold text-black">
-                  Mortgages & Financing (If Applicable)
-                </h2>
-              </div>
-              
-              <div className="grid md:grid-cols-2 gap-4 mb-8">
-                {mortgagePoints.map((point, index) => (
-                  <div key={index} className="flex items-start gap-3 bg-black/5 rounded-lg p-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700 text-sm leading-relaxed">{point}</span>
-                  </div>
-                ))}
-              </div>
+              ))}
             </div>
           </div>
         </div>
@@ -705,18 +670,14 @@ const BuyerGuide = () => {
 
       {/* How JBJ Global Real Estate Supports Buyers */}
       <section id="jbj-support" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
-              <span className="text-gold">How JBJ</span> Global Real Estate Supports Buyers
-            </h2>
-          </div>
+        <div className="max-w-4xl mx-auto">
+          <GuideSectionHeader icon={HandshakeIcon} title="How JBJ Supports Buyers" centered />
 
           <div className="grid md:grid-cols-2 gap-4 mb-8">
             {jbjSupport.map((item, index) => (
               <div 
                 key={index}
-                className="jj-card-inner p-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
+                className="jj-card-inner p-6 hover:border-gold transition-all"
               >
                 <h4 className="text-black font-semibold mb-2">{item.title}</h4>
                 <p className="text-zinc-600 text-sm">{item.description}</p>
@@ -734,12 +695,8 @@ const BuyerGuide = () => {
 
       {/* FAQs */}
       <section id="faqs" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
-              <span className="text-gold">Buyer Guide</span> – FAQs
-            </h2>
-          </div>
+        <div className="max-w-4xl mx-auto">
+          <GuideSectionHeader icon={HelpCircle} title="Buyer Guide FAQs" centered />
 
           <div className="jj-card-inner rounded-2xl p-6 md:p-8">
             <Accordion type="single" collapsible className="w-full">
@@ -761,16 +718,14 @@ const BuyerGuide = () => {
       {/* Founder-Led Philosophy & Advisory Positioning */}
       <FounderPhilosophySection />
 
-      {/* Final CTA - Next Step - 3-Layer System with 3D Card */}
+      {/* Final CTA - Next Step - 3-Layer System */}
       <section className="py-20 md:py-28 bg-black relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center opacity-5" />
         
         <div className="jj-layer-2 relative z-10">
           <div className="max-w-3xl mx-auto">
-            <div className="jj-card-inner jj-hover-3d rounded-2xl p-8 md:p-12 text-center border-2 border-gold/50 shadow-[0_8px_30px_rgba(200,167,102,0.2)]">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-black mb-6">
-                <span className="text-gold">Next</span> Step
-              </h2>
+            <div className="jj-card-inner rounded-2xl p-8 md:p-12 text-center border-2 border-gold/50">
+              <GuideSectionHeader icon={Sparkles} title="Next Step" centered />
               <p className="text-lg text-zinc-600 mb-10 max-w-2xl mx-auto">
                 If you are considering purchasing property in Dubai, the next step is a structured consultation to align your objective, budget, and market opportunities.
               </p>
@@ -797,9 +752,7 @@ const BuyerGuide = () => {
                 >
                   <Link to="/properties">
                     Explore Properties
-                    <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
-                    </svg>
+                    <ArrowRight className="w-4 h-4 ml-2" />
                   </Link>
                 </Button>
               </div>
