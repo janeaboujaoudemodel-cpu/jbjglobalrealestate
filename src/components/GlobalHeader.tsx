@@ -75,7 +75,7 @@ const GlobalHeader = () => {
   const propertiesLinks = [
     { href: "/properties?transaction=buy", label: t('header.buyProperties') || "Buy Properties", icon: Home },
     { href: "/properties?transaction=rent", label: t('header.rentProperties') || "Rent Properties", icon: Building2 },
-    { href: "/", label: t('header.developers') || "Developers", icon: Building2 },
+    { href: "/developers", label: "Developers", icon: Building2 },
     { href: "/seller-listing", label: t('header.listProperty') || "List Your Property", icon: ClipboardCheck },
   ];
 
