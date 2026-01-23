@@ -327,7 +327,7 @@ const AICalendar = () => {
             <p className="text-zinc-400 max-w-2xl mx-auto">
               Manage your meetings, notes, and schedules. Automatic email and phone reminders for all your events.
             </p>
-            <p className="text-xs text-gold mt-2">Developed by Founder & CEO Jane Abou Jaoude</p>
+            <p className="text-xs text-gold mt-2">Developed by Founder & CEO Jane Bou Jaoude</p>
           </motion.div>
         </div>
       </div>

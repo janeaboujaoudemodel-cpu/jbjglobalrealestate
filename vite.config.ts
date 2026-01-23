@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => ({
       manifest: {
         name: "JBJ Global Real Estate - Dubai Property Brokerage",
         short_name: "JBJ Real Estate",
-        description: "Buy, sell, or rent luxury properties in Dubai with JBJ Global Real Estate. Founded by Jane Abou Jaoude. Expert brokerage services across UAE.",
+        description: "Buy, sell, or rent luxury properties in Dubai with JBJ Global Real Estate. Founded by Jane Bou Jaoude. Expert brokerage services across UAE.",
         theme_color: "#0a0a0a",
         background_color: "#0a0a0a",
         display: "standalone",

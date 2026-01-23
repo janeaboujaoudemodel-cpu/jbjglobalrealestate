@@ -1,6 +1,6 @@
 # JBJ Global Real Estate - Robots.txt
 # https://jbj.ae
-# Founder: Jane Abou Jaoude
+# Founder: Jane Bou Jaoude
 
 # Allow all major search engines
 User-agent: Googlebot

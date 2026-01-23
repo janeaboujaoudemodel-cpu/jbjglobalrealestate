@@ -4,7 +4,7 @@
  * Each department has: 1 WhatsApp group + 1 Website Team Communication group
  * 
  * HIERARCHY RULES:
- * - Founder (Jane Abou Jaoude) is member of ALL groups
+ * - Founder (Jane Bou Jaoude) is member of ALL groups
  * - Reports flow: Agent -> Senior -> Department Head -> Amanda Clarke -> Founder
  * - Each department leader sends consolidated reports to Amanda Clarke
  * 

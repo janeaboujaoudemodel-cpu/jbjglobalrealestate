@@ -5,7 +5,7 @@
  * LOCKED_GLOBAL = TRUE
  * 
  * RULES (Taught to Amanda Clarke):
- * 1. Founder (Jane Abou Jaoude) is member of ALL groups
+ * 1. Founder (Jane Bou Jaoude) is member of ALL groups
  * 2. New joiners are AUTOMATICALLY added to eligible groups based on department
  * 3. News & Updates group for company announcements (all employees)
  * 4. Events group for launches and developer events (all employees can opt-in)

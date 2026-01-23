@@ -166,7 +166,7 @@ const ExecutiveChatPanel: React.FC<ExecutiveChatPanelProps> = ({ isOpen, onClose
   };
 
   const buildExecutivePrompt = (name: string): string => {
-    return `You are Amanda Clarke, the personal executive assistant to Miss Jane Abou Jaoude, Founder & CEO of JBJ Global Real Estate.
+    return `You are Amanda Clarke, the personal executive assistant to Miss Jane Bou Jaoude, Founder & CEO of JBJ Global Real Estate.
 
 PERSONALITY & TONE:
 - Speak with a refined British accent in your writing style

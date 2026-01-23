@@ -68,19 +68,19 @@ export const zh = {
   'founder.learnMore': '了解更多关于我们的创始人',
   'founder.title': '创始人兼首席执行官 JBJ Global Real Estate',
   'founder.description1': 'JBJ Global Real Estate是由创始人领导的房地产经纪公司，建立在坚定的标准、谨慎和长远愿景之上。',
-  'founder.description2': 'Jane Abou Jaoude 创始人兼首席执行官 JBJ Global Real Estate 以责任和谨慎为根基的理念领导，建立旨在持久而非简单扩张的组织。',
+  'founder.description2': 'Jane Bou Jaoude 创始人兼首席执行官 JBJ Global Real Estate 以责任和谨慎为根基的理念领导，建立旨在持久而非简单扩张的组织。',
   
   // Market Report
   'report.exclusive': '独家免费下载',
   'report.title': 'JBJ Global Real Estate',
   'report.edition': '2026年最新版',
-  'report.description': '由Jane Abou Jaoude撰写的独家教育书籍，涵盖阿联酋房地产市场，提供政府支持的数据和结构化框架。',
+  'report.description': '由Jane Bou Jaoude撰写的独家教育书籍，涵盖阿联酋房地产市场，提供政府支持的数据和结构化框架。',
   'report.download': '立即下载免费书籍',
   'report.highlight1': '市场指标与交易分析',
   'report.highlight2': '开发商比较框架',
   'report.highlight3': '房产尽职调查清单',
   'report.highlight4': '社区投资回报率排名',
-  'report.createdBy': '由 Jane Abou Jaoude 创始人兼首席执行官 JBJ Global Real Estate 创作',
+  'report.createdBy': '由 Jane Bou Jaoude 创始人兼首席执行官 JBJ Global Real Estate 创作',
   'report.exclusiveFor': 'JBJ Global Real Estate独家',
   'report.poweredBy': '房地产经纪 | 迪拜，阿联酋',
   

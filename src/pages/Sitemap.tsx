@@ -86,7 +86,7 @@ const sitemapSections: SitemapSection[] = [
     color: "text-gold",
     links: [
       { href: "/about", label: "About Us", description: "Our story and mission" },
-      { href: "/founder", label: "Founder & Leadership", description: "Meet Jane Abou Jaoude" },
+      { href: "/founder", label: "Founder & Leadership", description: "Meet Jane Bou Jaoude" },
       { href: "/team", label: "Meet The Team", description: "Our professional team members" },
       { href: "/brokers", label: "Our Brokers", description: "Browse our broker directory" },
       { href: "/company-profile", label: "Company Profile", description: "Corporate information" },

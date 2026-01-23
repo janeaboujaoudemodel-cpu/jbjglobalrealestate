@@ -31,7 +31,7 @@ const organizationSchema = {
   logo: "https://jbjglobalrealestate.lovable.app/lovable-uploads/c6c68c7f-b5b7-4e7a-9f66-3ff7e08fd37f.png",
   founder: {
     "@type": "Person",
-    name: "Jane Abou jaoude"
+    name: "Jane Bou Jaoude"
   },
   contactPoint: {
     "@type": "ContactPoint",
@@ -106,7 +106,7 @@ const MarketIntelligence = () => {
       <SEOHead 
         title="Market Intelligence | Dubai Real Estate Insights | BUY · SELL · RENT | JBJ GLOBAL REAL ESTATE"
         description="Data-driven Dubai real estate insights powered by official government Open Data. Explore market trends, area analysis, and AI-generated reports. No predictions, just trusted insights."
-        keywords="Dubai real estate market, property trends, market intelligence, open data, Dubai property analysis, rent trends Dubai, BUY SELL RENT Dubai, Jane Abou jaoude"
+        keywords="Dubai real estate market, property trends, market intelligence, open data, Dubai property analysis, rent trends Dubai, BUY SELL RENT Dubai, Jane Bou Jaoude"
         canonicalPath="/market-intelligence"
       />
 
