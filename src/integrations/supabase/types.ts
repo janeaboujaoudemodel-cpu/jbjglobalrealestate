@@ -8295,6 +8295,33 @@ export type Database = {
         }
         Relationships: []
       }
+      listing_admin_chat_sessions: {
+        Row: {
+          created_at: string
+          id: string
+          messages: Json
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          messages?: Json
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          messages?: Json
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       listing_admins: {
         Row: {
           assigned_at: string | null
@@ -8426,6 +8453,42 @@ export type Database = {
           notification_type?: string
           step_completed?: string | null
           title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      listing_uploads: {
+        Row: {
+          created_at: string
+          drive_url: string
+          error_message: string | null
+          extracted_projects: Json | null
+          id: string
+          processed_at: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          drive_url: string
+          error_message?: string | null
+          extracted_projects?: Json | null
+          id?: string
+          processed_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          drive_url?: string
+          error_message?: string | null
+          extracted_projects?: Json | null
+          id?: string
+          processed_at?: string | null
+          status?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
@@ -9595,6 +9658,7 @@ export type Database = {
       project_documents: {
         Row: {
           created_at: string
+          display_order: number | null
           document_type: string
           file_name: string
           file_size: number | null
@@ -9604,6 +9668,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          display_order?: number | null
           document_type: string
           file_name: string
           file_size?: number | null
@@ -9613,6 +9678,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          display_order?: number | null
           document_type?: string
           file_name?: string
           file_size?: number | null
@@ -9682,6 +9748,7 @@ export type Database = {
           id: string
           is_featured: boolean | null
           is_premium: boolean | null
+          is_sold_out: boolean | null
           location: string | null
           name: string
           payment_plan: string | null
@@ -9711,6 +9778,7 @@ export type Database = {
           id?: string
           is_featured?: boolean | null
           is_premium?: boolean | null
+          is_sold_out?: boolean | null
           location?: string | null
           name: string
           payment_plan?: string | null
@@ -9740,6 +9808,7 @@ export type Database = {
           id?: string
           is_featured?: boolean | null
           is_premium?: boolean | null
+          is_sold_out?: boolean | null
           location?: string | null
           name?: string
           payment_plan?: string | null
