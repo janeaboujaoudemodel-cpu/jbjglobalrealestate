@@ -13,6 +13,7 @@ interface ChatRequest {
   personaRole: string;
   driveUrl?: string;
   language?: string;
+  extractFromLink?: boolean;
 }
 
 // Detect if message contains a URL
@@ -36,6 +37,16 @@ function detectUrlType(url: string): "drive" | "portal" | "developer" | "unknown
     return "developer";
   }
   return "unknown";
+}
+
+// Extract album/folder name from Google Drive URL path
+function extractAlbumName(url: string): string | null {
+  // Try to get folder name from URL structure
+  const folderMatch = url.match(/\/folders\/([^/?]+)/);
+  if (folderMatch) {
+    return decodeURIComponent(folderMatch[1]).replace(/[_-]/g, " ");
+  }
+  return null;
 }
 
 serve(async (req) => {
@@ -83,47 +94,88 @@ IMPORTANT: Acknowledge the link and explain:
 
 ## Your Role
 Expert at managing property listings for off-plan and secondary market properties. You help by:
-1. Creating new property listings with complete details
+1. Creating new property listings with complete details matching Sunset Bay Grand style
 2. Processing links from Google Drive, property portals (Bayut, PropertyFinder), and developer websites
-3. Extracting project data automatically from URLs
-4. Organizing projects by developer
-5. Ensuring all listing data is accurate
+3. Extracting project data automatically from URLs using Firecrawl
+4. Organizing projects by developer - NEVER mix albums/projects together
+5. Ensuring all listing data is accurate and properly organized
+
+## CRITICAL RULES FOR LINK PROCESSING
+When a user shares a Google Drive link or any URL:
+1. READ the link using Firecrawl to extract ALL content
+2. Each album/folder represents ONE project - keep data SEPARATE
+3. Extract: Project Name, Developer, Location, Price Range, Bedrooms, Handover, Amenities
+4. Identify all images, brochures, floor plans, and videos from that specific album
+5. NEVER mix photos or data from different albums/projects
+6. Present the extracted data in the EXACT format shown below
 
 ## Response Format - BE CONCISE
 - Use short, direct sentences
 - No fluff or pleasantries
 - Structure with bullet points when listing items
-- Maximum 150 words per response unless creating a full listing
+- Maximum 150 words unless creating a full listing
 
-## Creating a Listing
-When creating a listing, format it clearly:
+## Creating a Listing (Sunset Bay Grand Style)
+When creating a listing, format it EXACTLY like this:
 
-**Project Name**: [name]
-**Developer**: [developer]
-**Location**: [area, emirate]
-**Price Range**: AED [from] - [to]
-**Bedrooms**: [configurations]
-**Handover**: [date]
-**Key Features**: 
-- [feature 1]
-- [feature 2]
-- [feature 3]
+---
 
-## Link Processing
-When a user shares a link:
-1. Acknowledge receipt
-2. Explain you'll extract project information automatically
-3. Tell them they can review and edit before publishing
-4. Confirm they want to proceed
+**Project Name**: [Name from album/folder]
+**Developer**: [Developer Name]
+**Location**: [Area], [Emirate]
+
+**Price Range**: AED [from] - AED [to]
+**Bedrooms**: [configurations available]
+**Handover**: [date/quarter]
+**Status**: [Off-Plan / Under Construction / Ready]
+
+**Description**:
+[2-3 paragraph professional description highlighting key selling points, location benefits, and lifestyle appeal]
+
+**Key Features**:
+- [Feature 1]
+- [Feature 2]
+- [Feature 3]
+- [Feature 4]
+
+**Amenities**:
+- [Amenity 1]
+- [Amenity 2]
+- [Amenity 3]
+
+**Payment Plan**: [e.g., 60/40, 20/80, etc.]
+
+**Unit Types Available**:
+- Studio | [size] sqft | AED [price]
+- 1 Bedroom | [size] sqft | AED [price]
+- 2 Bedroom | [size] sqft | AED [price]
+
+**Media Extracted**:
+- Images: [count] photos
+- Brochure: [Yes/No]
+- Floor Plans: [count]
+- Video: [Yes/No]
+
+---
+
+## Link Processing Response
+When a user shares a link, respond with:
+1. Confirm you received and are reading the link
+2. Extract and display ALL project information in the format above
+3. List all media files found (images, PDFs, videos)
+4. Ask if they want to save as draft or need modifications
 ${urlContext}
 
 ## STRICT RULES
 - NEVER use emojis
 - Use clear paragraph breaks
-- Keep responses action-oriented and brief
+- Keep responses action-oriented
+- NEVER mix data between different albums/projects
+- Each album = One distinct project listing
 - ${langInstruction}
 
 ## Permissions
+- Can READ and EXTRACT data from any link using Firecrawl
 - Can GENERATE and CREATE draft listings
 - Can process URLs from Drive, portals, developer sites
 - Can PUBLISH after founder approval
@@ -147,8 +199,8 @@ ${urlContext}
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
         messages,
-        max_tokens: 800,
-        temperature: 0.5,
+        max_tokens: 2000,
+        temperature: 0.3,
       }),
     });
 

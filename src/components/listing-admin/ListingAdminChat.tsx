@@ -284,12 +284,12 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
     setIsLoading(true);
 
     try {
-      // Call the process-drive-upload edge function
-      const { data, error } = await supabase.functions.invoke("process-drive-upload", {
+      // Call the new extract-listing-from-link edge function with Firecrawl
+      const { data, error } = await supabase.functions.invoke("extract-listing-from-link", {
         body: {
           url: urlToProcess,
           userId: user?.id,
-          type: isGoogleUrl ? "drive" : isPropertyPortal ? "portal" : isDeveloperSite ? "developer" : "web",
+          albumName: null, // Will be extracted from URL
         },
       });
 
@@ -299,29 +299,55 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       
       if (data?.success && data?.extractedProject) {
         const p = data.extractedProject;
+        const keyFeatures = data.keyFeatures || [];
+        const mediaCount = data.mediaCount || { images: 0, pdfs: 0 };
+        
         responseContent = `**Link processed successfully!**
 
-I've extracted the following information:
+---
 
 **Project Name**: ${p.name || "Not detected"}
 **Developer**: ${p.developer || "Not detected"}
 **Location**: ${p.location || "Not specified"}, ${p.emirate || "Dubai"}
+
 **Price Range**: ${p.priceFrom ? `AED ${(p.priceFrom/1000000).toFixed(1)}M` : "TBD"} - ${p.priceTo ? `AED ${(p.priceTo/1000000).toFixed(1)}M` : "TBD"}
 **Bedrooms**: ${p.bedroomsMin || "?"} - ${p.bedroomsMax || "?"} BR
 **Handover**: ${p.handoverDate || "Not specified"}
+**Status**: ${p.projectStatus || "Off-Plan"}
+
+**Description**:
+${p.description || "No description extracted. Please add manually."}
+
+${p.amenities?.length > 0 ? `**Amenities**:\n${p.amenities.map((a: string) => `- ${a}`).join("\n")}` : ""}
+
+${keyFeatures.length > 0 ? `**Key Features**:\n${keyFeatures.map((f: string) => `- ${f}`).join("\n")}` : ""}
+
+${p.paymentPlan ? `**Payment Plan**: ${p.paymentPlan}` : ""}
+
+${p.unitTypes?.length > 0 ? `**Unit Types Available**:\n${p.unitTypes.map((u: string) => `- ${u}`).join("\n")}` : ""}
+
+**Media Extracted**:
+- Images: ${mediaCount.images} photos
+- Brochure: ${p.brochureUrl ? "Yes" : "No"}
+- Floor Plans: ${p.floorPlanUrls?.length || 0}
+- Video: ${p.videoUrl ? "Yes" : "No"}
+
+---
 
 **Next Steps:**
 1. Click "Add New Project" on the left panel
-2. Review and fill in missing details
-3. Upload images and documents
+2. Review and fill in any missing details
+3. Upload the extracted images (${mediaCount.images} found)
 4. Save as draft for review
 
-Would you like me to help with any specific details?`;
+Would you like me to help with any specific details or create another listing from a different album?`;
       } else {
         responseContent = `I've received the link and started processing.
 
 **Link**: ${urlToProcess}
 **Status**: Processing...
+
+${data?.error ? `**Note**: ${data.error}` : ""}
 
 The extraction may take a moment. You can:
 1. Click "Add New Project" to start manually
