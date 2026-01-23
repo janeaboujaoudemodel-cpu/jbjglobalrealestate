@@ -207,7 +207,7 @@ const BestIdeaAward = () => {
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-gold mt-0.5">✦</span>
-                        <span>Official <span className="text-gold font-semibold">Certificate of Creativity</span> from JBJ Global</span>
+                        <span>Official <span className="text-gold font-semibold">Certificate of Creativity</span> from JBJ Global Real Estate</span>
                       </li>
                     </ul>
                   </div>

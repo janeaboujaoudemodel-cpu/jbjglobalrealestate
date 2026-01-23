@@ -1,6 +1,18 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Briefcase, Clock, Home, Users } from 'lucide-react';
 import { COMPANY_STATS } from '@/constants/stats';
+import { useLanguage } from '@/contexts/LanguageContext';
+
+// Arabic-Indic numerals mapping
+const ARABIC_NUMERALS: Record<string, string> = {
+  '0': '٠', '1': '١', '2': '٢', '3': '٣', '4': '٤',
+  '5': '٥', '6': '٦', '7': '٧', '8': '٨', '9': '٩',
+};
+
+// Convert Western numerals to Arabic-Indic numerals
+const toArabicNumerals = (text: string): string => {
+  return text.replace(/[0-9]/g, (digit) => ARABIC_NUMERALS[digit] || digit);
+};
 
 const stats = [
   {
@@ -28,9 +40,11 @@ interface StatItemProps {
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   isVisible: boolean;
+  language: string;
+  t: (key: string, fallback?: string) => string;
 }
 
-const StatItem = ({ end, suffix, prefix, label, icon: Icon, isVisible }: StatItemProps) => {
+const StatItem = ({ end, suffix, prefix, label, icon: Icon, isVisible, language, t }: StatItemProps) => {
   const [count, setCount] = useState(0);
   const hasAnimatedRef = React.useRef(false);
 
@@ -76,12 +90,27 @@ const StatItem = ({ end, suffix, prefix, label, icon: Icon, isVisible }: StatIte
   // Format large numbers with abbreviation (1M+ for millions)
   const formatNumber = (num: number): string => {
     if (num >= 1000000) {
-      return (num / 1000000).toFixed(0) + 'M';
+      const millions = (num / 1000000).toFixed(0);
+      const abbr = language === 'ar' ? 'م' : 'M';
+      const formatted = language === 'ar' ? toArabicNumerals(millions) : millions;
+      return `${formatted}${abbr}`;
     }
-    return num.toLocaleString();
+    const formatted = num.toLocaleString('en-US');
+    return language === 'ar' ? toArabicNumerals(formatted) : formatted;
   };
 
-  const formattedValue = `${prefix}${formatNumber(count)}${suffix}`;
+  const formattedPrefix = language === 'ar' ? toArabicNumerals(prefix) : prefix;
+  const formattedSuffix = language === 'ar' ? toArabicNumerals(suffix) : suffix;
+  const formattedValue = `${formattedPrefix}${formatNumber(count)}${formattedSuffix}`;
+
+  // Translate labels based on stat type
+  const getTranslatedLabel = () => {
+    if (label === 'Years Experience') return t('home.stats.yearsInDubai', 'Years Experience');
+    if (label === 'Brokers Trained') return t('home.stats.brokersTrainedBy', 'Brokers Trained');
+    if (label === 'Social Followers') return t('home.stats.clientSatisfaction', 'Social Followers');
+    if (label === 'Team Members') return t('home.stats.teamMembers', 'Team Members');
+    return label;
+  };
 
   return (
     <div className="relative group">
@@ -102,7 +131,7 @@ const StatItem = ({ end, suffix, prefix, label, icon: Icon, isVisible }: StatIte
         
         {/* Label */}
         <div className="text-zinc-600 text-xs md:text-sm font-medium">
-          {label}
+          {getTranslatedLabel()}
         </div>
       </div>
     </div>
@@ -112,6 +141,7 @@ const StatItem = ({ end, suffix, prefix, label, icon: Icon, isVisible }: StatIte
 const StatsCounter = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const { language, t } = useLanguage();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -137,16 +167,16 @@ const StatsCounter = () => {
           {/* Section Header - Premium Label */}
           <div className="text-center mb-10">
             <span className="inline-block px-5 py-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-3 shadow-sm">
-              <span className="text-gold">Track</span>
-              <span className="text-black"> Record</span>
+              <span className="text-gold">{t('home.stats.trackRecord', 'Track Record').split(' ')[0]}</span>
+              <span className="text-black"> {t('home.stats.trackRecord', 'Track Record').split(' ').slice(1).join(' ')}</span>
             </span>
-            <p className="text-zinc-700 text-sm">Founder experience</p>
+            <p className="text-zinc-700 text-sm">{t('founder.experience', 'Founder experience')}</p>
           </div>
           
           {/* Stats Grid - Pearl Cards inside Champagne Layer */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-4xl mx-auto">
             {stats.map((stat, index) => (
-              <StatItem key={index} {...stat} isVisible={isVisible} />
+              <StatItem key={index} {...stat} isVisible={isVisible} language={language} t={t} />
             ))}
           </div>
       </div>
