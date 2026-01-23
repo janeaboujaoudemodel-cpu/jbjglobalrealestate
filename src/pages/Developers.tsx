@@ -1,17 +1,17 @@
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { 
-  Building2, 
-  MapPin, 
-  Calendar,
+import {
   ArrowRight,
-  Search,
+  Briefcase,
+  Building2,
+  Calendar,
   Crown,
+  Filter,
+  MapPin,
+  Search,
   Star,
   TrendingUp,
-  Briefcase,
-  Filter
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,14 +28,45 @@ import { SafeImage } from "@/components/SafeImage";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 
+import developersHeroVideo from "@/assets/videos/dubai-landmarks-hero.mp4";
+
 // Developer tier badges based on rank
 const getTierInfo = (rank: number | null) => {
-  if (!rank) return { label: "Partner", color: "bg-zinc-700", icon: Building2 };
-  if (rank === 1) return { label: "Elite", color: "bg-gradient-to-r from-amber-500 to-yellow-400", icon: Crown };
-  if (rank <= 3) return { label: "Premium", color: "bg-gradient-to-r from-purple-500 to-indigo-500", icon: Star };
-  if (rank <= 6) return { label: "Top Tier", color: "bg-gradient-to-r from-blue-500 to-cyan-500", icon: TrendingUp };
-  if (rank <= 10) return { label: "Established", color: "bg-gradient-to-r from-emerald-500 to-teal-500", icon: Briefcase };
-  return { label: "Partner", color: "bg-zinc-700", icon: Building2 };
+  if (!rank)
+    return {
+      label: "Partner",
+      badgeClassName: "bg-premium-card border border-gold/20 text-primary-foreground",
+      icon: Building2,
+    };
+  if (rank === 1)
+    return {
+      label: "Elite",
+      badgeClassName: "bg-premium-card border border-gold/50 text-gold",
+      icon: Crown,
+    };
+  if (rank <= 3)
+    return {
+      label: "Premium",
+      badgeClassName: "bg-premium-card border border-gold/35 text-primary-foreground",
+      icon: Star,
+    };
+  if (rank <= 6)
+    return {
+      label: "Top Tier",
+      badgeClassName: "bg-premium-card border border-gold/30 text-primary-foreground",
+      icon: TrendingUp,
+    };
+  if (rank <= 10)
+    return {
+      label: "Established",
+      badgeClassName: "bg-premium-card border border-gold/25 text-primary-foreground",
+      icon: Briefcase,
+    };
+  return {
+    label: "Partner",
+    badgeClassName: "bg-premium-card border border-gold/20 text-primary-foreground",
+    icon: Building2,
+  };
 };
 
 // Format large numbers
@@ -119,13 +150,13 @@ const Developers = () => {
         keywords="UAE developers, Dubai developers, Emaar, Nakheel, DAMAC, off-plan properties, new developments"
       />
       
-      <div className="min-h-screen bg-black">
+      <div className="min-h-screen bg-premium-bg text-primary-foreground">
         {/* Hero Section */}
-        <section className="relative py-20 md:py-28 bg-gradient-to-b from-zinc-900 to-black overflow-hidden">
+        <section className="relative py-16 md:py-20 overflow-hidden">
           {/* Background elements */}
-          <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/5 rounded-full blur-[100px] pointer-events-none" />
-          <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/10 rounded-full blur-[120px] pointer-events-none" />
-          
+          <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/15 rounded-full blur-[120px] pointer-events-none" />
+
           <div className="container mx-auto px-4 relative z-10">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -134,58 +165,66 @@ const Developers = () => {
               className="text-center max-w-4xl mx-auto"
             >
               {/* Label */}
-              <div 
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
-                  backdropFilter: 'blur(20px)',
-                  border: '1.5px solid rgba(200,167,102,0.6)',
-                }}
-              >
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-premium-card/60 backdrop-blur-md">
                 <Building2 className="w-4 h-4 text-gold" />
                 <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
                   Developer-Direct Properties
                 </span>
               </div>
               
-              <h1 
-                className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-[-0.02em]"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
+              <h1 className="text-4xl md:text-6xl font-bold text-primary-foreground mb-6 tracking-[-0.02em]">
                 UAE's Premier Developers
               </h1>
               
-              <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+              <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
                 Explore off-plan and ready properties directly from UAE's most trusted developers. 
                 No secondary market — only developer-direct listings.
               </p>
             </motion.div>
           </div>
+
+          {/* Hero Video (under title) */}
+          <div className="container mx-auto px-4 relative z-10 mt-10 md:mt-12">
+            <div className="mx-auto max-w-5xl">
+              <div className="relative overflow-hidden rounded-2xl border border-gold/30 bg-premium-card">
+                <video
+                  className="h-full w-full object-cover"
+                  src={developersHeroVideo}
+                  muted
+                  playsInline
+                  autoPlay
+                  loop
+                  preload="metadata"
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-premium-bg/70 via-premium-bg/10 to-transparent" />
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* Filters */}
-        <section className="sticky top-16 lg:top-[72px] z-40 bg-black/95 backdrop-blur-md border-b border-gold/20 py-4">
+        <section className="sticky top-16 lg:top-[72px] z-40 bg-premium-bg/95 backdrop-blur-md border-b border-gold/20 py-4">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
               <div className="flex items-center gap-3 w-full md:w-auto">
                 <div className="relative flex-1 md:w-80">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
                     placeholder="Search developers..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500"
+                    className="pl-10 bg-premium-card border-gold/20 text-primary-foreground placeholder:text-muted-foreground"
                   />
                 </div>
               </div>
               
               <div className="flex items-center gap-3 w-full md:w-auto">
                 <Select value={filterTier} onValueChange={setFilterTier}>
-                  <SelectTrigger className="w-[140px] bg-zinc-900 border-zinc-700 text-white">
-                    <Filter className="w-4 h-4 mr-2 text-zinc-500" />
+                  <SelectTrigger className="w-[140px] bg-premium-card border-gold/20 text-primary-foreground">
+                    <Filter className="w-4 h-4 mr-2 text-muted-foreground" />
                     <SelectValue placeholder="All Tiers" />
                   </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-zinc-700">
+                  <SelectContent className="bg-premium-card border-gold/20 text-primary-foreground">
                     <SelectItem value="all">All Tiers</SelectItem>
                     <SelectItem value="elite">Elite</SelectItem>
                     <SelectItem value="premium">Premium</SelectItem>
@@ -195,10 +234,10 @@ const Developers = () => {
                 </Select>
                 
                 <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-[150px] bg-zinc-900 border-zinc-700 text-white">
+                  <SelectTrigger className="w-[150px] bg-premium-card border-gold/20 text-primary-foreground">
                     <SelectValue placeholder="Sort by" />
                   </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-zinc-700">
+                  <SelectContent className="bg-premium-card border-gold/20 text-primary-foreground">
                     <SelectItem value="rank">By Rank</SelectItem>
                     <SelectItem value="name">By Name</SelectItem>
                     <SelectItem value="projects">By Projects</SelectItem>
@@ -212,57 +251,56 @@ const Developers = () => {
 
         {/* Developer Grid */}
         <section className="py-12 md:py-16">
-          <div className="container mx-auto px-4">
-            {/* Stats */}
-            <div className="flex items-center gap-6 mb-8 text-sm text-zinc-500">
-              <span>{filteredDevelopers.length} Developers</span>
-              <span className="w-1 h-1 rounded-full bg-zinc-600" />
-              <span>{projects?.length || 0} Developer-Direct Projects</span>
-            </div>
+          <div className="jj-layer-2">
+            <div className="jj-card-inner">
+              {/* Stats */}
+              <div className="flex flex-wrap items-center gap-4 md:gap-6 mb-8 text-sm text-foreground/70">
+                <span>
+                  <span className="text-gold font-semibold">{filteredDevelopers.length}</span> Developers
+                </span>
+                <span className="w-1 h-1 rounded-full bg-gold/40" />
+                <span>
+                  <span className="text-gold font-semibold">{projects?.length || 0}</span> Developer-Direct Projects
+                </span>
+              </div>
 
-            {isLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {Array.from({ length: 9 }).map((_, i) => (
-                  <Skeleton key={i} className="h-80 rounded-xl bg-zinc-900" />
-                ))}
-              </div>
-            ) : filteredDevelopers.length === 0 ? (
-              <div className="text-center py-20">
-                <Building2 className="w-16 h-16 text-zinc-700 mx-auto mb-4" />
-                <h3 className="text-xl text-white mb-2">No developers found</h3>
-                <p className="text-zinc-500 mb-6">Try adjusting your search or filters</p>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setSearchTerm("");
-                    setFilterTier("all");
-                  }}
-                  className="border-gold/50 text-gold hover:bg-gold/10"
-                >
-                  Clear Filters
-                </Button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {filteredDevelopers.map((developer, index) => {
-                  const tier = getTierInfo(developer.rank);
-                  const TierIcon = tier.icon;
-                  const projectCount = projectCounts[developer.id] || 0;
-                  
-                  return (
-                    <motion.div
-                      key={developer.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: index * 0.05 }}
-                    >
-                      <Link
-                        to={`/developer/${developer.slug}`}
-                        className="group block bg-zinc-900/50 border-2 border-gold/30 rounded-xl overflow-hidden hover:border-gold transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.15)]"
+              {isLoading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {Array.from({ length: 9 }).map((_, i) => (
+                    <Skeleton key={i} className="h-80 rounded-xl bg-champagne/50" />
+                  ))}
+                </div>
+              ) : filteredDevelopers.length === 0 ? (
+                <div className="text-center py-20">
+                  <Building2 className="w-16 h-16 text-gold mx-auto mb-4" />
+                  <h3 className="text-xl text-foreground mb-2">No developers found</h3>
+                  <p className="text-foreground/70 mb-6">Try adjusting your search or filters</p>
+                  <Button
+                    variant="secondary"
+                    onClick={() => {
+                      setSearchTerm("");
+                      setFilterTier("all");
+                    }}
+                  >
+                    Clear Filters
+                  </Button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {filteredDevelopers.map((developer, index) => {
+                    const tier = getTierInfo(developer.rank);
+                    const TierIcon = tier.icon;
+                    const projectCount = projectCounts[developer.id] || 0;
+
+                    return (
+                      <motion.div
+                        key={developer.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, delay: index * 0.05 }}
                       >
-                        {/* Header with Logo */}
-                        <div className="p-6 border-b border-zinc-800">
-                          <div className="flex items-start justify-between mb-4">
+                        <Link to={`/developer/${developer.slug}`} className="group block jj-box-active">
+                          <div className="flex items-start justify-between gap-4 mb-4">
                             <div className="w-16 h-16 bg-champagne-light rounded-lg flex items-center justify-center overflow-hidden border border-gold/20">
                               {developer.logo_url ? (
                                 <SafeImage
@@ -274,71 +312,69 @@ const Developers = () => {
                                 <Building2 className="w-8 h-8 text-gold" />
                               )}
                             </div>
-                            
-                            {/* Tier Badge */}
-                            <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-white ${tier.color}`}>
-                              <TierIcon className="w-3.5 h-3.5" />
+
+                            <div
+                              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold ${tier.badgeClassName}`}
+                            >
+                              <TierIcon className="w-3.5 h-3.5 text-gold" />
                               {tier.label}
                             </div>
                           </div>
-                          
-                          <h3 className="text-xl font-bold text-white group-hover:text-gold transition-colors mb-1">
+
+                          <h3 className="text-xl font-semibold text-foreground group-hover:text-gold transition-colors mb-1">
                             {developer.name}
                           </h3>
-                          
+
                           {developer.headquarters && (
-                            <div className="flex items-center gap-1.5 text-sm text-zinc-500">
-                              <MapPin className="w-3.5 h-3.5" />
+                            <div className="flex items-center gap-1.5 text-sm text-foreground/70">
+                              <MapPin className="w-3.5 h-3.5 text-gold" />
                               {developer.headquarters}
                             </div>
                           )}
-                        </div>
-                        
-                        {/* Stats */}
-                        <div className="p-6">
-                          <div className="grid grid-cols-3 gap-4 mb-4">
+
+                          <div className="grid grid-cols-3 gap-4 mt-5">
                             <div>
                               <div className="text-xl font-bold text-gold">{projectCount}</div>
-                              <div className="text-xs text-zinc-500">Projects</div>
+                              <div className="text-xs text-foreground/70">Projects</div>
                             </div>
                             {developer.founded_year && (
                               <div>
-                                <div className="text-xl font-bold text-white">{developer.founded_year}</div>
-                                <div className="text-xs text-zinc-500">Founded</div>
+                                <div className="text-xl font-bold text-foreground">{developer.founded_year}</div>
+                                <div className="text-xs text-foreground/70">Founded</div>
                               </div>
                             )}
                             {developer.completed_projects && (
                               <div>
-                                <div className="text-xl font-bold text-white">{developer.completed_projects}</div>
-                                <div className="text-xs text-zinc-500">Completed</div>
+                                <div className="text-xl font-bold text-foreground">{developer.completed_projects}</div>
+                                <div className="text-xs text-foreground/70">Completed</div>
                               </div>
                             )}
                           </div>
-                          
+
                           {developer.description && (
-                            <p className="text-sm text-zinc-400 line-clamp-2 mb-4">
+                            <p className="text-sm text-foreground/75 line-clamp-2 mt-4">
                               {developer.description}
                             </p>
                           )}
-                          
-                          <div className="flex items-center justify-between pt-4 border-t border-zinc-800">
-                            <span className="text-sm text-gold">View Projects</span>
+
+                          <div className="flex items-center justify-between pt-4 mt-4 border-t border-gold/20">
+                            <span className="text-sm text-gold font-medium">View Projects</span>
                             <ArrowRight className="w-4 h-4 text-gold group-hover:translate-x-1 transition-transform" />
                           </div>
-                        </div>
-                      </Link>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            )}
+                        </Link>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
         </section>
 
         {/* Legal Notice */}
-        <section className="py-8 border-t border-zinc-800">
+        <section className="py-8 border-t border-gold/15">
           <div className="container mx-auto px-4">
-            <p className="text-xs text-zinc-600 text-center max-w-3xl mx-auto">
+            <p className="text-xs text-primary-foreground/50 text-center max-w-3xl mx-auto">
               Content protected under UAE law. Unauthorized use is subject to legal action. 
               All listings shown are developer-direct off-plan or ready properties only. 
               No secondary market or resale listings are included.
