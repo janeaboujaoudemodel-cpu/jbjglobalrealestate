@@ -20,6 +20,7 @@ import ProjectDetail from "./pages/ProjectDetail";
 import Communities from "./pages/Communities";
 import CommunityDetail from "./pages/CommunityDetail";
 import DeveloperDetail from "./pages/DeveloperDetail";
+import Developers from "./pages/Developers";
 import Quiz from "./pages/Quiz";
 import QuizResults from "./pages/QuizResults";
 import Contact from "./pages/Contact";
@@ -193,6 +194,7 @@ const App = () => (
                 <Route path="/project/:slug" element={<ProjectDetail />} />
                 <Route path="/communities" element={<Communities />} />
                 <Route path="/community/:slug" element={<CommunityDetail />} />
+                <Route path="/developers" element={<Developers />} />
                 <Route path="/developer/:slug" element={<DeveloperDetail />} />
                 <Route path="/areas" element={<AreaGuides />} />
                 <Route path="/area/:slug" element={<AreaDetail />} />

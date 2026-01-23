@@ -4137,6 +4137,47 @@ export type Database = {
           },
         ]
       }
+      developer_sync_status: {
+        Row: {
+          created_at: string | null
+          developer_id: string | null
+          flag_reason: string | null
+          id: string
+          is_flagged_for_review: boolean | null
+          last_seen_at: string | null
+          source_name: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          developer_id?: string | null
+          flag_reason?: string | null
+          id?: string
+          is_flagged_for_review?: boolean | null
+          last_seen_at?: string | null
+          source_name: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          developer_id?: string | null
+          flag_reason?: string | null
+          id?: string
+          is_flagged_for_review?: boolean | null
+          last_seen_at?: string | null
+          source_name?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_sync_status_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       developer_visit_checkins: {
         Row: {
           check_in_latitude: number | null
@@ -10017,6 +10058,50 @@ export type Database = {
           },
         ]
       }
+      project_sync_status: {
+        Row: {
+          created_at: string | null
+          flag_reason: string | null
+          id: string
+          is_flagged_for_review: boolean | null
+          last_seen_at: string | null
+          project_id: string | null
+          source_name: string
+          source_url: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          flag_reason?: string | null
+          id?: string
+          is_flagged_for_review?: boolean | null
+          last_seen_at?: string | null
+          project_id?: string | null
+          source_name: string
+          source_url?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          flag_reason?: string | null
+          id?: string
+          is_flagged_for_review?: boolean | null
+          last_seen_at?: string | null
+          project_id?: string | null
+          source_name?: string
+          source_url?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_sync_status_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       projects: {
         Row: {
           amenities: string[] | null
@@ -10032,7 +10117,9 @@ export type Database = {
           furnished_status: string | null
           handover_date: string | null
           id: string
+          is_developer_direct: boolean | null
           is_featured: boolean | null
+          is_offplan: boolean | null
           is_premium: boolean | null
           is_sold_out: boolean | null
           location: string | null
@@ -10044,6 +10131,7 @@ export type Database = {
           size_max: number | null
           size_min: number | null
           slug: string
+          source_url: string | null
           status: string | null
           updated_at: string
           views: string[] | null
@@ -10062,7 +10150,9 @@ export type Database = {
           furnished_status?: string | null
           handover_date?: string | null
           id?: string
+          is_developer_direct?: boolean | null
           is_featured?: boolean | null
+          is_offplan?: boolean | null
           is_premium?: boolean | null
           is_sold_out?: boolean | null
           location?: string | null
@@ -10074,6 +10164,7 @@ export type Database = {
           size_max?: number | null
           size_min?: number | null
           slug: string
+          source_url?: string | null
           status?: string | null
           updated_at?: string
           views?: string[] | null
@@ -10092,7 +10183,9 @@ export type Database = {
           furnished_status?: string | null
           handover_date?: string | null
           id?: string
+          is_developer_direct?: boolean | null
           is_featured?: boolean | null
+          is_offplan?: boolean | null
           is_premium?: boolean | null
           is_sold_out?: boolean | null
           location?: string | null
@@ -10104,6 +10197,7 @@ export type Database = {
           size_max?: number | null
           size_min?: number | null
           slug?: string
+          source_url?: string | null
           status?: string | null
           updated_at?: string
           views?: string[] | null
