@@ -8,10 +8,11 @@ import FavoriteButton from "@/components/FavoriteButton";
 import PropertyReportModal from "@/components/PropertyReportModal";
 import ClientMarketContext from "@/components/client-intelligence/ClientMarketContext";
 import AIMarketAnalyzer from "@/components/AIMarketAnalyzer";
+import MortgageCalculator from "@/components/MortgageCalculator";
 import Footer from "@/components/Footer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, MapPin, Building, Calendar, DollarSign, Layers, Users, Map, Download, FileText, MessageCircle, Phone, Scale, Info } from "lucide-react";
+import { ChevronLeft, MapPin, Building, Calendar, DollarSign, Layers, Users, Map, Download, FileText, MessageCircle, Phone, Scale, Info, Calculator } from "lucide-react";
 import { toast } from "sonner";
 
 const WHATSAPP_NUMBER = "971565911000";
@@ -407,6 +408,22 @@ const ProjectDetail = () => {
                   </p>
                 </div>
               </Link>
+
+              {/* Mortgage Calculator - Pearl Card */}
+              {project.price_from && (
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl p-6 border-2 border-gold/40">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
+                      <Calculator className="w-5 h-5 text-gold" />
+                    </div>
+                    <div>
+                      <h3 className="text-black font-semibold">Mortgage Calculator</h3>
+                      <p className="text-zinc-500 text-sm">Estimate your monthly payments</p>
+                    </div>
+                  </div>
+                  <MortgageCalculator defaultPrice={project.price_from} compact={true} />
+                </div>
+              )}
 
               {/* Market Context - Pearl Card */}
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl border-2 border-gold/40">
