@@ -401,6 +401,32 @@ All colors MUST be HSL.
     color: hsl(var(--foreground));
   }
 
+/* Always-visible gold scrollbar for TOC/navigator containers */
+.jj-scrollbar-gold {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: hsl(42 45% 59% / 0.8) hsl(42 45% 59% / 0.15);
+}
+
+.jj-scrollbar-gold::-webkit-scrollbar {
+  width: 8px;
+}
+
+.jj-scrollbar-gold::-webkit-scrollbar-track {
+  background: hsl(42 45% 59% / 0.15);
+  border-radius: 4px;
+}
+
+.jj-scrollbar-gold::-webkit-scrollbar-thumb {
+  background: hsl(42 45% 59% / 0.7);
+  border-radius: 4px;
+  border: 1px solid hsl(42 45% 59% / 0.3);
+}
+
+.jj-scrollbar-gold::-webkit-scrollbar-thumb:hover {
+  background: hsl(42 45% 59% / 0.9);
+}
+
   /* Title styling: First word gold, rest black (Guides & Market Intelligence) */
   .jj-title-split span:first-child {
     @apply text-gold;

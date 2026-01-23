@@ -166,8 +166,8 @@ const AreaIntelligence = () => {
               >
                   <div className="jj-card-inner p-8">
                     <div className="flex items-center gap-3 mb-6">
-                      <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
-                        <Database className="w-6 h-6 text-gold" />
+                      <div className="jj-icon-box-active w-12 h-12 rounded-xl">
+                        <Database className="w-6 h-6" />
                       </div>
                       <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
                         <span className="text-gold">Official</span> Data Sources Used Per Area
@@ -216,8 +216,8 @@ const AreaIntelligence = () => {
               >
                   <div className="jj-card-inner p-8">
                     <div className="flex items-center gap-3 mb-6">
-                      <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
-                        <BarChart3 className="w-6 h-6 text-gold" />
+                      <div className="jj-icon-box-active w-12 h-12 rounded-xl">
+                        <BarChart3 className="w-6 h-6" />
                       </div>
                       <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
                         <span className="text-gold">How</span> an Area Is Evaluated
@@ -261,8 +261,8 @@ const AreaIntelligence = () => {
               >
                   <div className="jj-card-inner p-8">
                     <div className="flex items-center gap-3 mb-6">
-                      <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
-                        <Shield className="w-6 h-6 text-gold" />
+                      <div className="jj-icon-box-active w-12 h-12 rounded-xl">
+                        <Shield className="w-6 h-6" />
                       </div>
                       <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
                         <span className="text-gold">What</span> Area Intelligence Does Not Do
@@ -307,8 +307,8 @@ const AreaIntelligence = () => {
               >
                 <div className="jj-card-inner p-8">
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
-                      <Building2 className="w-6 h-6 text-gold" />
+                    <div className="jj-icon-box-active w-12 h-12 rounded-xl">
+                      <Building2 className="w-6 h-6" />
                     </div>
                     <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
                       <span className="text-gold">Why</span> Area-Level Analysis Matters
@@ -352,8 +352,8 @@ const AreaIntelligence = () => {
               >
                   <div className="jj-card-inner p-8">
                     <div className="flex items-center gap-3 mb-6">
-                      <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
-                        <FileText className="w-6 h-6 text-gold" />
+                      <div className="jj-icon-box-active w-12 h-12 rounded-xl">
+                        <FileText className="w-6 h-6" />
                       </div>
                       <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
                         <span className="text-gold">How</span> JBJ Global Real Estate Uses Area Intelligence

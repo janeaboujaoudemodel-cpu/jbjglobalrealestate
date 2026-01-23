@@ -488,8 +488,8 @@ const SellerGuide = () => {
                 {/* Agency Commission */}
                 <motion.div variants={fadeInUp} className="jj-box-active p-6 md:p-8 mb-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
-                      <Banknote className="w-6 h-6 text-gold" />
+                    <div className="jj-icon-box-active w-12 h-12 rounded-xl">
+                      <Banknote className="w-6 h-6" />
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-black">Agency Commission</h3>
@@ -511,8 +511,8 @@ const SellerGuide = () => {
                 {/* Government & Developer Fees */}
                 <motion.div variants={fadeInUp} className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
-                      <Landmark className="w-6 h-6 text-gold" />
+                    <div className="jj-icon-box-active w-12 h-12 rounded-xl">
+                      <Landmark className="w-6 h-6" />
                     </div>
                     <h3 className="text-xl font-bold text-black">Government & Developer Fees</h3>
                   </div>

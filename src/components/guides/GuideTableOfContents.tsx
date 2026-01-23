@@ -137,11 +137,7 @@ export const GuideTableOfContents = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gold/60 scrollbar-track-gold/10 hover:scrollbar-thumb-gold"
-        style={{
-          scrollbarWidth: 'thin',
-          scrollbarColor: 'rgba(200,167,102,0.6) rgba(200,167,102,0.1)'
-        }}
+        className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] jj-scrollbar-gold"
       >
         {/* Header with minimize button */}
         <div className="flex items-center justify-between p-4 border-b border-zinc-200 bg-gradient-to-r from-gold/5 to-transparent">

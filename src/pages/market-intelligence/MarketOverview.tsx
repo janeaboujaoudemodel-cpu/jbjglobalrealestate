@@ -182,8 +182,8 @@ const MarketOverview = () => {
           <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
             <div className="jj-card-inner p-8">
               <div className="flex items-start gap-4 mb-6">
-                <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center flex-shrink-0">
-                  <FileText className="w-6 h-6 text-gold" />
+                <div className="jj-icon-box-active w-12 h-12 rounded-xl flex-shrink-0">
+                  <FileText className="w-6 h-6" />
                 </div>
                 <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                   <span className="text-gold">About</span>
@@ -204,8 +204,8 @@ const MarketOverview = () => {
           <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
             <div className="jj-card-inner p-8">
               <div className="flex items-start gap-4 mb-6">
-                <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Landmark className="w-6 h-6 text-gold" />
+                <div className="jj-icon-box-active w-12 h-12 rounded-xl flex-shrink-0">
+                  <Landmark className="w-6 h-6" />
                 </div>
                 <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                   <span className="text-gold">Market</span>

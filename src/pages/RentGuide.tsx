@@ -424,8 +424,8 @@ const RentGuide = () => {
                 className="jj-card-inner rounded-2xl p-8 hover:border-gold hover:shadow-lg transition-all"
               >
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
-                    <support.icon className="w-6 h-6 text-gold" />
+                  <div className="jj-icon-box-active w-12 h-12 rounded-xl">
+                    <support.icon className="w-6 h-6" />
                   </div>
                   <h3 className="text-xl font-medium text-black">{support.title}</h3>
                 </div>

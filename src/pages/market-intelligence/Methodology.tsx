@@ -75,8 +75,8 @@ const Methodology = () => {
                 className="scroll-mt-32 py-12 jj-card-inner rounded-xl px-8"
               >
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
-                    <Shield className="w-5 h-5 text-gold" />
+                  <div className="jj-icon-box-active w-10 h-10 rounded-lg">
+                    <Shield className="w-5 h-5" />
                   </div>
                   <h2 className="text-2xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                     <span className="text-gold">Methodology</span>{" "}
@@ -104,8 +104,8 @@ const Methodology = () => {
                 className="scroll-mt-24 py-12 jj-card-inner rounded-xl px-8"
               >
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
-                    <FileCheck className="w-5 h-5 text-gold" />
+                  <div className="jj-icon-box-active w-10 h-10 rounded-lg">
+                    <FileCheck className="w-5 h-5" />
                   </div>
                   <h2 className="text-2xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                     <span className="text-gold">Data</span>{" "}
@@ -151,8 +151,8 @@ const Methodology = () => {
                 className="scroll-mt-24 py-12 jj-card-inner rounded-xl px-8"
               >
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
-                    <Database className="w-5 h-5 text-gold" />
+                  <div className="jj-icon-box-active w-10 h-10 rounded-lg">
+                    <Database className="w-5 h-5" />
                   </div>
                   <h2 className="text-2xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                     <span className="text-gold">Primary</span>{" "}
@@ -248,8 +248,8 @@ const Methodology = () => {
                 className="scroll-mt-24 py-12 jj-card-inner rounded-xl px-8"
               >
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
-                    <FileCheck className="w-5 h-5 text-gold" />
+                  <div className="jj-icon-box-active w-10 h-10 rounded-lg">
+                    <FileCheck className="w-5 h-5" />
                   </div>
                   <h2 className="text-2xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                     <span className="text-gold">Data</span>{" "}
@@ -342,8 +342,8 @@ const Methodology = () => {
                 className="scroll-mt-24 py-12 jj-card-inner rounded-xl px-8"
               >
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
-                    <Clock className="w-5 h-5 text-gold" />
+                  <div className="jj-icon-box-active w-10 h-10 rounded-lg">
+                    <Clock className="w-5 h-5" />
                   </div>
                   <h2 className="text-2xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                     <span className="text-gold">Update</span>{" "}
@@ -400,8 +400,8 @@ const Methodology = () => {
                 className="scroll-mt-24 py-12 jj-card-inner rounded-xl px-8"
               >
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
-                    <Scale className="w-5 h-5 text-gold" />
+                  <div className="jj-icon-box-active w-10 h-10 rounded-lg">
+                    <Scale className="w-5 h-5" />
                   </div>
                   <h2 className="text-2xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                     <span className="text-gold">Compliance</span>{" "}
