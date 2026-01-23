@@ -13,6 +13,7 @@ import AdminBypass from "@/components/AdminBypass";
 import MainLayoutWrapper from "@/components/MainLayoutWrapper";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
 import GlobalVisitorTracking from "@/components/GlobalVisitorTracking";
+import GlobalTranslator from "@/components/GlobalTranslator";
 import Index from "./pages/Index";
 import Properties from "./pages/Properties";
 import ProjectDetail from "./pages/ProjectDetail";
@@ -176,6 +177,7 @@ const App = () => (
             <PopupCoordinatorProvider>
             <ScrollToTopOnMount />
             <GlobalVisitorTracking />
+            <GlobalTranslator />
             {/* Auth route is always accessible for admin login */}
             <Routes>
               <Route path="/auth" element={<Auth />} />
