@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowUp, ArrowDown } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUp, ArrowDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-
+import { useLanguage } from "@/contexts/LanguageContext";
 function getRouteString(loc: { pathname: string; search: string; hash: string }) {
   return `${loc.pathname}${loc.search}${loc.hash}`;
 }
@@ -10,6 +10,7 @@ function getRouteString(loc: { pathname: string; search: string; hash: string })
 export default function PageNavigation() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { isRTL } = useLanguage();
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [showScrollBottom, setShowScrollBottom] = useState(true);
   const [stack, setStack] = useState<string[]>(() => {
@@ -81,7 +82,10 @@ export default function PageNavigation() {
   );
 
   return (
-    <div className="fixed bottom-6 left-6 z-[9999] flex flex-col gap-2">
+    <div className={cn(
+      "fixed bottom-6 z-[9999] flex flex-col gap-2",
+      isRTL ? "right-6" : "left-6"
+    )}>
       {/* Scroll to Top */}
       <button
         type="button"
@@ -104,7 +108,7 @@ export default function PageNavigation() {
           className={buttonBaseClass}
           aria-label="Go back"
         >
-          <ArrowLeft className="w-4 h-4 text-black" />
+          {isRTL ? <ArrowRight className="w-4 h-4 text-black" /> : <ArrowLeft className="w-4 h-4 text-black" />}
         </button>
       )}
 
