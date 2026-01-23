@@ -10,7 +10,7 @@ interface CollapsedChatButtonProps {
 }
 
 const CollapsedChatButton = ({ onToggle, onMinimize, showAttentionPulse = false }: CollapsedChatButtonProps) => {
-  const { isRTL } = useLanguage();
+  const { isRTL, t } = useLanguage();
   const isMobile = useIsMobile();
 
   const handleMinimize = (e: React.MouseEvent) => {
@@ -19,7 +19,7 @@ const CollapsedChatButton = ({ onToggle, onMinimize, showAttentionPulse = false 
   };
 
   return (
-    <div className={`fixed bottom-24 ${isRTL ? 'left-4' : 'right-4'} z-[9000]`}>
+    <div className={`fixed bottom-24 ${isRTL ? 'left-4' : 'right-4'} z-[10050]`}>
       {/* Main button - On mobile and desktop, show medium box with pulse on first daily load */}
       <div className="relative">
         {showAttentionPulse && (
@@ -41,10 +41,10 @@ const CollapsedChatButton = ({ onToggle, onMinimize, showAttentionPulse = false 
                 <SquareChatIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gold" size={20} />
               </div>
               <div className="flex flex-col items-start">
-                <span className="text-black text-sm font-bold">JBJ Support</span>
+                <span className="text-black text-sm font-bold">{t('chat.title') || 'JBJ Support'}</span>
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
-                  <span className="text-gold text-xs font-medium">Available 24/7</span>
+                  <span className="text-gold text-xs font-medium">{t('chat.subtitle') || 'Available 24/7'}</span>
                 </div>
               </div>
               {isRTL ? (
