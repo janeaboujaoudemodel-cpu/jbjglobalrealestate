@@ -12942,6 +12942,7 @@ export type Database = {
         Args: { _lead_id: string; _user_id: string }
         Returns: boolean
       }
+      can_access_salary_data: { Args: { _user_id: string }; Returns: boolean }
       check_chat_rate_limit: {
         Args: { p_session_id: string }
         Returns: boolean
@@ -12949,6 +12950,10 @@ export type Database = {
       check_contact_form_rate_limit: {
         Args: { p_email: string; p_ip_address: string }
         Returns: Json
+      }
+      check_hr_application_rate_limit: {
+        Args: { p_email: string }
+        Returns: boolean
       }
       check_idea_submission_rate_limit: {
         Args: { p_email: string; p_ip?: string }
@@ -13076,6 +13081,7 @@ export type Database = {
         Returns: boolean
       }
       is_hr_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_hr_admin_strict: { Args: { _user_id: string }; Returns: boolean }
       is_hr_manager: { Args: { _user_id: string }; Returns: boolean }
       is_hr_member: { Args: { _user_id: string }; Returns: boolean }
       is_listing_admin: { Args: { _user_id: string }; Returns: boolean }
