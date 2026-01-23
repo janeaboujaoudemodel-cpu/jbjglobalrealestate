@@ -456,7 +456,7 @@ Would you like to try a different approach?`,
   };
 
   return (
-    <div className="flex flex-col h-[500px] min-h-[400px] max-h-[600px] bg-white rounded-xl border border-zinc-200 overflow-hidden">
+    <div className="flex flex-col h-full bg-white overflow-hidden">
       {/* Header */}
       <div className="flex items-center gap-3 p-4 border-b border-zinc-200 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <Avatar className="w-10 h-10 border-2 border-gold/30">

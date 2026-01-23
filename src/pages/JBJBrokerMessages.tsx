@@ -23,7 +23,7 @@ import {
   User,
   Video,
 } from "lucide-react";
-import { JBJSidebar } from "@/components/jbj-broker/JBJSidebar";
+
 
 interface Lead {
   id: string;
@@ -215,18 +215,75 @@ export default function JBJBrokerMessages() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
-      <JBJSidebar brokerProfile={brokerProfile} activePage="messages" />
+    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] pt-24 lg:pt-28">
+      {/* Header */}
+      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <div className="px-4 py-4">
+          <div className="flex items-center justify-between gap-4 mb-4">
+            <div className="flex items-center gap-4">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => navigate("/jbj-broker-dashboard")}
+                className="text-black hover:text-gold hover:bg-gold/10"
+              >
+                <MessageSquare className="w-5 h-5" />
+              </Button>
+              <div>
+                <h1 className="text-black text-xl font-bold">Messages</h1>
+                <span className="text-zinc-600 text-sm">Communicate with your leads</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Button onClick={() => navigate("/jbj-broker-dashboard")} variant="secondary">
+                <User className="w-4 h-4 mr-2" />
+                My Leads
+              </Button>
+              <Button variant="secondary" onClick={async () => { await supabase.auth.signOut(); navigate("/auth"); }}>
+                <User className="w-4 h-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
+          </div>
 
-      {/* Main Content */}
-      <div className="flex-1 ml-64 flex">
-        {/* Conversations List */}
-        <div className="w-80 bg-white border-r flex flex-col">
-          <div className="p-4 border-b">
-            <h2 className="font-semibold text-gray-900 mb-3">Conversations</h2>
+          {/* Channel Tabs */}
+          <div className="flex items-center gap-2">
+            <Button
+              variant={activeChannel === "whatsapp" ? "primary" : "secondary"}
+              size="sm"
+              onClick={() => setActiveChannel("whatsapp")}
+            >
+              <MessageSquare className="h-4 w-4 mr-1" />
+              WhatsApp
+            </Button>
+            <Button
+              variant={activeChannel === "email" ? "primary" : "secondary"}
+              size="sm"
+              onClick={() => setActiveChannel("email")}
+            >
+              <Mail className="h-4 w-4 mr-1" />
+              Email
+            </Button>
+            <Button
+              variant={activeChannel === "call" ? "primary" : "secondary"}
+              size="sm"
+              onClick={() => setActiveChannel("call")}
+            >
+              <Phone className="h-4 w-4 mr-1" />
+              Call
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content - Full Width Chat */}
+      <main className="flex h-[calc(100vh-220px)]">
+        {/* Conversations List - Left Panel */}
+        <div className="w-80 bg-white border-r border-gold/20 flex flex-col">
+          <div className="p-4 border-b border-gold/20">
+            <h2 className="font-semibold text-black mb-3">Conversations</h2>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
               <Input
                 placeholder="Search..."
                 value={searchQuery}
@@ -241,19 +298,19 @@ export default function JBJBrokerMessages() {
               <div
                 key={lead.id}
                 onClick={() => setSelectedLead(lead)}
-                className={`p-4 border-b cursor-pointer transition-all hover:bg-gray-50 ${
+                className={`p-4 border-b border-gold/10 cursor-pointer transition-all hover:bg-gold/5 ${
                   selectedLead?.id === lead.id ? "bg-gold/10 border-l-4 border-l-gold" : ""
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <Avatar className="h-10 w-10">
-                    <AvatarFallback className="bg-gray-200 text-gray-600">
+                    <AvatarFallback className="bg-gold/20 text-gold">
                       {lead.name.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 truncate">{lead.name}</p>
-                    <p className="text-sm text-gray-500 truncate">
+                    <p className="font-medium text-black truncate">{lead.name}</p>
+                    <p className="text-sm text-zinc-500 truncate">
                       {lead.email || lead.phone || "No contact"}
                     </p>
                   </div>
@@ -264,7 +321,7 @@ export default function JBJBrokerMessages() {
                         ? "border-blue-500 text-blue-500"
                         : lead.status === "qualified"
                         ? "border-green-500 text-green-500"
-                        : "border-gray-500 text-gray-500"
+                        : "border-zinc-500 text-zinc-500"
                     }
                   >
                     {lead.status}
@@ -275,89 +332,74 @@ export default function JBJBrokerMessages() {
           </ScrollArea>
         </div>
 
-        {/* Chat Area */}
-        <div className="flex-1 flex flex-col">
+        {/* Chat Area - Full Width */}
+        <div className="flex-1 flex flex-col bg-white">
           {selectedLead ? (
             <>
               {/* Chat Header */}
-              <div className="bg-white border-b p-4 flex items-center justify-between">
+              <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 p-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <Avatar className="h-10 w-10">
+                  <Avatar className="h-10 w-10 border-2 border-gold/30">
                     <AvatarFallback className="bg-gold/20 text-gold">
                       {selectedLead.name.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <h3 className="font-semibold text-gray-900">{selectedLead.name}</h3>
-                    <p className="text-sm text-gray-500">
+                    <h3 className="font-semibold text-black">{selectedLead.name}</h3>
+                    <p className="text-sm text-zinc-600">
                       {selectedLead.phone || selectedLead.email}
                     </p>
                   </div>
                 </div>
-
-                <div className="flex gap-2">
-                  <Button
-                    variant={activeChannel === "whatsapp" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setActiveChannel("whatsapp")}
-                    className={activeChannel === "whatsapp" ? "bg-green-600 hover:bg-green-700" : ""}
-                  >
-                    <MessageSquare className="h-4 w-4 mr-1" />
-                    WhatsApp
-                  </Button>
-                  <Button
-                    variant={activeChannel === "email" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setActiveChannel("email")}
-                    className={activeChannel === "email" ? "bg-blue-600 hover:bg-blue-700" : ""}
-                  >
-                    <Mail className="h-4 w-4 mr-1" />
-                    Email
-                  </Button>
-                  <Button
-                    variant={activeChannel === "call" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setActiveChannel("call")}
-                    className={activeChannel === "call" ? "bg-purple-600 hover:bg-purple-700" : ""}
-                  >
-                    <Phone className="h-4 w-4 mr-1" />
-                    Call
-                  </Button>
-                </div>
               </div>
 
-              {/* Messages Area */}
-              <ScrollArea className="flex-1 p-4 bg-gray-100">
+              {/* Messages Area - Full Height */}
+              <ScrollArea className="flex-1 p-4 bg-gradient-to-br from-[#F5EBD7]/30 via-[#E8DCC8]/30 to-[#D4C4A8]/30">
                 <div className="space-y-4">
                   {messages.map((msg) => (
                     <div
                       key={msg.id}
-                      className={`flex ${
-                        msg.direction === "outbound" ? "justify-end" : "justify-start"
+                      className={`flex gap-3 group ${
+                        msg.direction === "outbound" ? "flex-row-reverse" : "flex-row"
                       }`}
                     >
-                      <div
-                        className={`max-w-[70%] p-3 rounded-lg ${
-                          msg.direction === "outbound"
-                            ? "bg-gold text-black"
-                            : "bg-white text-gray-900"
-                        }`}
-                      >
-                        <div className="flex items-center gap-2 mb-1">
-                          <Badge variant="outline" className="text-xs">
-                            {msg.channel}
-                          </Badge>
-                          <span className="text-xs opacity-70">
-                            {new Date(msg.created_at).toLocaleTimeString()}
-                          </span>
-                        </div>
-                        <p>{msg.content}</p>
-                        {msg.direction === "outbound" && (
-                          <div className="flex items-center justify-end gap-1 mt-1">
-                            <CheckCircle className="h-3 w-3" />
-                            <span className="text-xs">{msg.status}</span>
+                      <div className="flex flex-col max-w-[70%]">
+                        <div
+                          className={`p-3 rounded-lg select-text cursor-text ${
+                            msg.direction === "outbound"
+                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/30 shadow-md rounded-tr-sm"
+                              : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/20 shadow-sm rounded-tl-sm"
+                          }`}
+                        >
+                          <div className="flex items-center gap-2 mb-1">
+                            <Badge variant="outline" className="text-xs border-gold/30">
+                              {msg.channel}
+                            </Badge>
+                            <span className="text-xs text-black/60">
+                              {new Date(msg.created_at).toLocaleTimeString()}
+                            </span>
                           </div>
-                        )}
+                          <p className="select-text">{msg.content}</p>
+                          {msg.direction === "outbound" && (
+                            <div className="flex items-center justify-end gap-1 mt-1">
+                              <CheckCircle className="h-3 w-3 text-green-600" />
+                              <span className="text-xs text-black/60">{msg.status}</span>
+                            </div>
+                          )}
+                        </div>
+                        {/* Copy button */}
+                        <button
+                          onClick={async () => {
+                            await navigator.clipboard.writeText(msg.content);
+                            toast.success("Message copied");
+                          }}
+                          className={`flex items-center gap-1 mt-1 text-[10px] text-zinc-500 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
+                            msg.direction === "outbound" ? "self-end mr-1" : "self-start ml-1"
+                          }`}
+                        >
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                          <span>Copy</span>
+                        </button>
                       </div>
                     </div>
                   ))}
@@ -366,7 +408,7 @@ export default function JBJBrokerMessages() {
               </ScrollArea>
 
               {/* Message Input */}
-              <div className="bg-white border-t p-4">
+              <div className="bg-white border-t border-gold/20 p-4">
                 {filterWarning && (
                   <div className="flex items-center gap-2 text-red-600 text-sm mb-3 p-2 bg-red-50 rounded">
                     <AlertTriangle className="h-4 w-4" />
@@ -387,7 +429,8 @@ export default function JBJBrokerMessages() {
                   <Button
                     onClick={handleSendMessage}
                     disabled={sending || !newMessage.trim() || !!filterWarning}
-                    className="bg-gold hover:bg-gold-dark text-black self-end"
+                    variant="primary"
+                    className="self-end"
                   >
                     {sending ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
@@ -402,13 +445,13 @@ export default function JBJBrokerMessages() {
               </div>
             </>
           ) : (
-            <div className="flex-1 flex items-center justify-center text-center">
+            <div className="flex-1 flex items-center justify-center text-center bg-gradient-to-br from-[#F5EBD7]/30 via-[#E8DCC8]/30 to-[#D4C4A8]/30">
               <div>
-                <MessageSquare className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-600">
+                <MessageSquare className="h-16 w-16 text-gold/40 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-black">
                   Select a conversation
                 </h3>
-                <p className="text-gray-400">
+                <p className="text-zinc-500">
                   Choose a lead from the list to start messaging
                 </p>
               </div>
@@ -418,18 +461,18 @@ export default function JBJBrokerMessages() {
 
         {/* Lead Info Panel */}
         {selectedLead && (
-          <div className="w-72 bg-white border-l p-4">
-            <h3 className="font-semibold text-gray-900 mb-4">Lead Information</h3>
+          <div className="w-72 bg-white border-l border-gold/20 p-4">
+            <h3 className="font-semibold text-black mb-4">Lead Information</h3>
 
             <div className="space-y-4">
               <div className="text-center">
-                <Avatar className="h-20 w-20 mx-auto mb-3">
+                <Avatar className="h-20 w-20 mx-auto mb-3 border-2 border-gold/30">
                   <AvatarFallback className="bg-gold/20 text-gold text-2xl">
                     {selectedLead.name.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
-                <h4 className="font-medium text-gray-900">{selectedLead.name}</h4>
-                <Badge variant="outline" className="mt-1">
+                <h4 className="font-medium text-black">{selectedLead.name}</h4>
+                <Badge variant="outline" className="mt-1 border-gold/30">
                   {selectedLead.status}
                 </Badge>
               </div>
@@ -437,32 +480,32 @@ export default function JBJBrokerMessages() {
               <div className="space-y-3 text-sm">
                 {selectedLead.phone && (
                   <div className="flex items-center gap-2">
-                    <Phone className="h-4 w-4 text-gray-400" />
-                    <span>{selectedLead.phone}</span>
+                    <Phone className="h-4 w-4 text-gold" />
+                    <span className="text-black">{selectedLead.phone}</span>
                   </div>
                 )}
                 {selectedLead.email && (
                   <div className="flex items-center gap-2">
-                    <Mail className="h-4 w-4 text-gray-400" />
-                    <span className="truncate">{selectedLead.email}</span>
+                    <Mail className="h-4 w-4 text-gold" />
+                    <span className="text-black truncate">{selectedLead.email}</span>
                   </div>
                 )}
                 {selectedLead.last_contact && (
                   <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-gray-400" />
-                    <span>
+                    <Clock className="h-4 w-4 text-gold" />
+                    <span className="text-black">
                       Last: {new Date(selectedLead.last_contact).toLocaleDateString()}
                     </span>
                   </div>
                 )}
               </div>
 
-              <div className="pt-4 border-t space-y-2">
-                <Button className="w-full" variant="outline" size="sm">
+              <div className="pt-4 border-t border-gold/20 space-y-2">
+                <Button className="w-full" variant="secondary" size="sm">
                   <User className="h-4 w-4 mr-2" />
                   View Full Profile
                 </Button>
-                <Button className="w-full" variant="outline" size="sm">
+                <Button className="w-full" variant="secondary" size="sm">
                   <Video className="h-4 w-4 mr-2" />
                   Schedule Video Call
                 </Button>
@@ -470,7 +513,7 @@ export default function JBJBrokerMessages() {
             </div>
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 }
