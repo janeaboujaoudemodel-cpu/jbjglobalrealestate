@@ -175,9 +175,23 @@ const Developers = () => {
       />
       
       <div className="min-h-screen bg-premium-bg text-primary-foreground">
-        {/* Hero Section */}
-        <section className="relative py-16 md:py-20 overflow-hidden">
-          {/* Background elements */}
+        {/* Hero Section - Full-width Video */}
+        <section className="relative h-[70vh] min-h-[500px] flex items-center justify-center overflow-hidden">
+          {/* Video Background */}
+          <div className="absolute inset-0 bg-black">
+            <video
+              className="absolute inset-0 w-full h-full object-cover"
+              src={developersHeroVideo}
+              muted
+              playsInline
+              autoPlay
+              loop
+              preload="metadata"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
+          </div>
+          
+          {/* Floating gold accent orbs */}
           <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
           <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/15 rounded-full blur-[120px] pointer-events-none" />
 
@@ -189,41 +203,34 @@ const Developers = () => {
               className="text-center max-w-4xl mx-auto"
             >
               {/* Label */}
-              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-premium-card/60 backdrop-blur-md">
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-black/30 backdrop-blur-md">
                 <Building2 className="w-4 h-4 text-gold" />
                 <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
                   Developer-Direct Properties
                 </span>
               </div>
               
-              <h1 className="text-4xl md:text-6xl font-bold text-primary-foreground mb-6 tracking-[-0.02em]">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-[-0.02em]">
                 UAE's Premier Developers
               </h1>
               
-              <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+              <p className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
                 Explore off-plan and ready properties directly from UAE's most trusted developers. 
                 No secondary market — only developer-direct listings.
               </p>
             </motion.div>
           </div>
-
-          {/* Hero Video (under title) */}
-          <div className="container mx-auto px-4 relative z-10 mt-10 md:mt-12">
-            <div className="mx-auto max-w-5xl">
-              <div className="relative overflow-hidden rounded-2xl border border-gold/30 bg-premium-card">
-                <video
-                  className="h-full w-full object-cover"
-                  src={developersHeroVideo}
-                  muted
-                  playsInline
-                  autoPlay
-                  loop
-                  preload="metadata"
-                />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-premium-bg/70 via-premium-bg/10 to-transparent" />
-              </div>
-            </div>
-          </div>
+          
+          {/* Scroll indicator */}
+          <motion.div 
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1, duration: 0.6 }}
+          >
+            <span className="text-gold/60 text-xs tracking-widest uppercase">Explore</span>
+            <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
+          </motion.div>
         </section>
 
         {/* Filters */}
@@ -276,7 +283,6 @@ const Developers = () => {
         {/* Developer Grid */}
         <section className="py-12 md:py-16">
           <div className="jj-layer-2">
-            <div className="jj-card-inner">
               {/* Stats */}
               <div className="flex flex-wrap items-center gap-4 md:gap-6 mb-8 text-sm text-foreground/70">
                 <span>
@@ -325,7 +331,19 @@ const Developers = () => {
                       >
                         <Link to={`/developer/${developer.slug}`} className="group block jj-box-active">
                           <div className="flex items-start justify-between gap-4 mb-4">
-                            <div className="w-16 h-16 bg-champagne-light rounded-lg flex items-center justify-center overflow-hidden border border-gold/20">
+                            {/* Developer Logo with 3D gold border */}
+                            <div 
+                              className="w-16 h-16 rounded-lg flex items-center justify-center overflow-hidden"
+                              style={{
+                                background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+                                border: '2px solid hsl(42 45% 59%)',
+                                boxShadow: `
+                                  0 4px 12px rgba(200,167,102,0.3),
+                                  0 2px 6px rgba(0,0,0,0.12),
+                                  inset 0 1px 2px rgba(255,255,255,0.9)
+                                `,
+                              }}
+                            >
                               {developer.logo_url ? (
                                 <SafeImage
                                   src={developer.logo_url}
@@ -391,7 +409,6 @@ const Developers = () => {
                   })}
                 </div>
               )}
-            </div>
           </div>
         </section>
 
