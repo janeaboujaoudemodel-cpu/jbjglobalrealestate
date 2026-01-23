@@ -30,6 +30,19 @@ export function useEmployeeSalaries() {
 
       if (error) throw error;
       setSalaries(data || []);
+      
+      // Log access for security audit (fire and forget)
+      if (data && data.length > 0) {
+        void (async () => {
+          try {
+            await supabase.rpc('log_hr_access', {
+              _resource_type: 'employee_salaries',
+              _access_type: 'view',
+              _records_accessed: data.length,
+            });
+          } catch {}
+        })();
+      }
     } catch (error: any) {
       console.error('Error fetching salaries:', error);
     }
@@ -44,6 +57,18 @@ export function useEmployeeSalaries() {
 
       if (error) throw error;
       setCommissions(data || []);
+      // Log access for security audit (fire and forget)
+      if (data && data.length > 0) {
+        void (async () => {
+          try {
+            await supabase.rpc('log_hr_access', {
+              _resource_type: 'employee_commissions',
+              _access_type: 'view',
+              _records_accessed: data.length,
+            });
+          } catch {}
+        })();
+      }
     } catch (error: any) {
       console.error('Error fetching commissions:', error);
     }
@@ -58,6 +83,18 @@ export function useEmployeeSalaries() {
 
       if (error) throw error;
       setPayments(data || []);
+      // Log access for security audit (fire and forget)
+      if (data && data.length > 0) {
+        void (async () => {
+          try {
+            await supabase.rpc('log_hr_access', {
+              _resource_type: 'employee_payment_history',
+              _access_type: 'view',
+              _records_accessed: data.length,
+            });
+          } catch {}
+        })();
+      }
     } catch (error: any) {
       console.error('Error fetching payments:', error);
     }
@@ -72,6 +109,18 @@ export function useEmployeeSalaries() {
 
       if (error) throw error;
       setSummaries(data || []);
+      // Log access for security audit (fire and forget)
+      if (data && data.length > 0) {
+        void (async () => {
+          try {
+            await supabase.rpc('log_hr_access', {
+              _resource_type: 'employee_earnings_summary',
+              _access_type: 'view',
+              _records_accessed: data.length,
+            });
+          } catch {}
+        })();
+      }
     } catch (error: any) {
       console.error('Error fetching summaries:', error);
     }
