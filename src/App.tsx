@@ -163,6 +163,9 @@ import SecurityConsole from "./pages/SecurityConsole";
 import ITDepartment from "./pages/ITDepartment";
 import EmployeeManagementHub from "./pages/EmployeeManagementHub";
 
+// Hidden pages (not in navigation, noindex)
+import DigitalCard from "./pages/DigitalCard";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -181,6 +184,8 @@ const App = () => (
             {/* Auth route is always accessible for admin login */}
             <Routes>
               <Route path="/auth" element={<Auth />} />
+              {/* Hidden standalone pages - no header/footer */}
+              <Route path="/card" element={<DigitalCard />} />
               <Route element={<MainLayoutWrapper />}>
                 <Route path="/vapi-prompt" element={<VapiPrompt />} />
                 <Route path="/" element={<Index />} />
