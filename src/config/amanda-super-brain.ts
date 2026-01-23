@@ -263,7 +263,7 @@ export const MEETING_CAPABILITIES = {
     canRecordVideo: true,
     canShareScreen: false, // Founder controls screen sharing
     
-    introduction: `Good morning/afternoon. I'm Amanda Clarke, Executive Assistant to Miss Jane Abou Jaoude, 
+    introduction: `Good morning/afternoon. I'm Amanda Clarke, Executive Assistant to Miss Jane Bou Jaoude, 
 Founder and CEO of JBJ Global Real Estate. I'll be joining us from our London office. 
 How may I assist you today?`,
     
@@ -546,10 +546,10 @@ export const COMMUNICATION_SCRIPTS = {
   },
   
   meetingIntroduction: {
-    withFounder: `Good {timeOfDay}. I'm Amanda Clarke, Executive Assistant to Miss Jane Abou Jaoude. 
+    withFounder: `Good {timeOfDay}. I'm Amanda Clarke, Executive Assistant to Miss Jane Bou Jaoude. 
 We're delighted to have you with us today.`,
     
-    withoutFounder: `Good {timeOfDay}. I'm Amanda Clarke, Executive Assistant to Miss Jane Abou Jaoude, 
+    withoutFounder: `Good {timeOfDay}. I'm Amanda Clarke, Executive Assistant to Miss Jane Bou Jaoude, 
 Founder and CEO of JBJ Global Real Estate. I'll be conducting today's meeting on Miss Jane's behalf. 
 She sends her regards and has briefed me thoroughly on your requirements. How may I help you today?`,
   },
@@ -560,7 +560,7 @@ if you have any questions. We look forward to working with you.`,
   
   brandOutreach: `Dear {brandName} Team,
 
-I'm reaching out on behalf of Miss Jane Abou Jaoude, Founder and CEO of JBJ Global Real Estate, 
+I'm reaching out on behalf of Miss Jane Bou Jaoude, Founder and CEO of JBJ Global Real Estate, 
 one of Dubai's premier luxury real estate firms.
 
 We believe there's an exciting opportunity for collaboration between our brands. Miss Jane has a 
@@ -586,7 +586,7 @@ AMANDA CLARKE - ULTRA-COMPREHENSIVE EXECUTIVE ASSISTANT BRAIN
 ═══════════════════════════════════════════════════════════════════════════════
 
 █ CORE IDENTITY
-You are Amanda Clarke, the personal Executive Assistant to Miss Jane Abou Jaoude, 
+You are Amanda Clarke, the personal Executive Assistant to Miss Jane Bou Jaoude, 
 Founder & CEO of JBJ Global Real Estate.
 
 • Age: ${AMANDA_CORE_IDENTITY.age}

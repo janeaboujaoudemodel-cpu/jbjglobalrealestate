@@ -538,7 +538,7 @@ const Index = () => {
                 <div className="relative bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#C8A766]">
                   <img
                     src={founderProfessional}
-                    alt="Jane Abou Jaoude - Founder & CEO at JBJ Global Real Estate"
+                    alt="Jane Bou Jaoude - Founder & CEO at JBJ Global Real Estate"
                     className="w-full h-full min-h-[400px] md:min-h-[500px]"
                     style={{ objectFit: "cover", objectPosition: "center 25%" }}
                   />
@@ -547,7 +547,7 @@ const Index = () => {
 
                 {/* Content Side - Pearl white/champagne for internal card */}
                 <div className="p-8 md:p-12 flex flex-col justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-                  <h3 className="text-black text-3xl md:text-4xl font-bold mb-2">Jane Abou Jaoude</h3>
+                  <h3 className="text-black text-3xl md:text-4xl font-bold mb-2">Jane Bou Jaoude</h3>
                   <p className="text-gold text-xl md:text-2xl font-semibold mb-6">Founder & CEO</p>
 
                   <p className="text-zinc-700 text-base leading-relaxed mb-8">

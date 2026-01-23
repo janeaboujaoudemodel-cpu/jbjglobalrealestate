@@ -226,7 +226,7 @@ const About = () => {
                     <div className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto rounded-full overflow-hidden border-2 border-gold transition-all duration-300 group-hover:shadow-[0_0_30px_rgba(200,167,102,0.4),0_20px_50px_rgba(0,0,0,0.35)] group-hover:-translate-y-2">
                       <img 
                         src={founderProfessional}
-                        alt="Founder & CEO Jane Abou Jaoude of JBJ GLOBAL REAL ESTATE"
+                        alt="Founder & CEO Jane Bou Jaoude of JBJ GLOBAL REAL ESTATE"
                         className="w-full h-full transition-transform duration-300 group-hover:scale-110"
                         style={{ 
                           objectFit: 'cover',
@@ -271,7 +271,7 @@ const About = () => {
                     to="/founder" 
                     className="text-black text-xl md:text-2xl font-semibold hover:text-gold transition-colors"
                   >
-                    Jane Abou Jaoude
+                    Jane Bou Jaoude
                   </Link>
                   <span className="block mt-2">
                     <Link 
@@ -544,7 +544,7 @@ const About = () => {
               className="inline-block group"
             >
               <p className="text-black text-xl md:text-2xl font-medium mb-2 group-hover:text-gold transition-colors">
-                Founder & CEO Jane Abou Jaoude
+                Founder & CEO Jane Bou Jaoude
               </p>
             </Link>
             <p 

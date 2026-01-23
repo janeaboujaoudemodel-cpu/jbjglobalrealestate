@@ -333,7 +333,7 @@ export default function CRMLeadsTableV2({
 
 Best regards,
 
-JANE ABOU JAOUDE
+JANE BOU JAOUDE
 Founder & CEO
 JBJ Global Real Estate
 

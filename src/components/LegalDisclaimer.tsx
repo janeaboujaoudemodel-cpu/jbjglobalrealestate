@@ -45,7 +45,7 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
             <p>
               <strong className="text-white">Intellectual Property:</strong> This website, its design, AI-powered tools, 
               and all associated content are the exclusive intellectual property of 
-              <span className="text-gold"> Jane Abou Jaoude</span> and <span className="text-gold">JBJ Global Real Estate</span>.
+              <span className="text-gold"> Jane Bou Jaoude</span> and <span className="text-gold">JBJ Global Real Estate</span>.
             </p>
           </div>
 

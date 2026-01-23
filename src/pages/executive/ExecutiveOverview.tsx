@@ -327,7 +327,7 @@ const ExecutiveOverview = () => {
                   AI insights are descriptive only, not predictive
                 </p>
                 <p className="text-xs text-zinc-600 mt-1">
-                  All access logged and auditable • Jane Abou Jaoude Founder & CEO JBJ Global Real Estate
+                  All access logged and auditable • Jane Bou Jaoude Founder & CEO JBJ Global Real Estate
                 </p>
               </div>
             </>

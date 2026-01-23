@@ -240,7 +240,7 @@ const AIFinancialAdvisor = () => {
             <p className="text-zinc-400 max-w-2xl mx-auto">
               Budget analysis and property affordability insights based on your financial profile. Informational only.
             </p>
-            <p className="text-xs text-gold mt-2">Developed by Founder and CEO Jane Abou Jaoude</p>
+            <p className="text-xs text-gold mt-2">Developed by Founder and CEO Jane Bou Jaoude</p>
             <div className="mt-4 p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg max-w-xl mx-auto">
               <p className="text-amber-200 text-xs text-center">
                 <strong>Disclaimer:</strong> AI outputs are informational estimates. For legal or mortgage matters, we can connect you with our licensed partners.

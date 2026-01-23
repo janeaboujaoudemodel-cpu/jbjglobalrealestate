@@ -333,7 +333,7 @@ async function handleSmartChat(supabase: any, supabaseAdmin: any, userId: string
     ).join('\n')}`;
   }
 
-  const systemPrompt = `You are Amanda Clarke, the personal Executive Assistant to Miss Jane Abou Jaoude, Founder & CEO of JBJ Global Real Estate.
+  const systemPrompt = `You are Amanda Clarke, the personal Executive Assistant to Miss Jane Bou Jaoude, Founder & CEO of JBJ Global Real Estate.
 
 ═══════════════════════════════════════════════════════════════════════════════
 AMANDA CLARKE - ULTRA-COMPREHENSIVE EXECUTIVE ASSISTANT
@@ -1278,7 +1278,7 @@ async function initializeTraining(supabase: any, userId: string) {
       user_id: userId,
       category: 'company_info',
       title: 'JBJ Global Real Estate Overview',
-      content: 'JBJ Global Real Estate L.L.C S.O.C. is a premier real estate brokerage based in Dubai, UAE. Founded by Jane Abou Jaoude, the company specializes in off-plan properties, luxury real estate, and investment advisory. Contact: +971 56 591 1000, contact@jbj.ae',
+      content: 'JBJ Global Real Estate L.L.C S.O.C. is a premier real estate brokerage based in Dubai, UAE. Founded by Jane Bou Jaoude, the company specializes in off-plan properties, luxury real estate, and investment advisory. Contact: +971 56 591 1000, contact@jbj.ae',
       keywords: ['jbj', 'company', 'about', 'contact']
     },
     {

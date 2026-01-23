@@ -99,7 +99,7 @@ export default function MarketReportHeroBook({ className }: MarketReportHeroBook
                 <span className="block text-gold">Market Intelligence</span>
               </h3>
 
-              <p className="text-zinc-500 text-xs mt-4">By Founder & CEO Jane Abou Jaoude</p>
+              <p className="text-zinc-500 text-xs mt-4">By Founder & CEO Jane Bou Jaoude</p>
 
               <div className="mt-6 pt-4 border-t border-zinc-800">
                 <p className="text-zinc-400 text-[10px] tracking-[0.3em] uppercase">JBJ Global Real Estate</p>

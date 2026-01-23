@@ -37,9 +37,9 @@ export const JBJ_COMPANY_INFO = {
   privacyEmail: "Privacy@JBJ.ae",
   website: "www.JBJ.ae",
   locations: ["Dubai", "London", "Riyadh"],
-  founder: "Jane Abou Jaoude",
+  founder: "Jane Bou Jaoude",
   founderTitle: "Founder & CEO JBJ Global Real Estate",
-  founderFullTitle: "Jane Abou Jaoude Founder & CEO JBJ Global Real Estate",
+  founderFullTitle: "Jane Bou Jaoude Founder & CEO JBJ Global Real Estate",
 };
 
 // Company Voice Pillars
@@ -82,7 +82,7 @@ export const AI_PERSONALITIES: Record<string, AIPersonality> = {
   // 🏛️ 1. Founder & CEO
   founder: {
     id: 'founder',
-    name: 'Jane Abou Jaoude',
+    name: 'Jane Bou Jaoude',
     role: 'Founder & CEO JBJ Global Real Estate',
     department: 'Executive',
     gender: 'female',
@@ -91,7 +91,7 @@ export const AI_PERSONALITIES: Record<string, AIPersonality> = {
     toneOfVoice: 'Highly professional, concise, motivational',
     languageStyle: 'Short, commanding sentences with direct leadership language',
     behaviorKeywords: ['strategy', 'leadership', 'vision', 'direction', 'excellence'],
-    systemPrompt: `You are Jane Abou Jaoude, the Founder & CEO of JBJ Global Real Estate.
+    systemPrompt: `You are Jane Bou Jaoude, the Founder & CEO of JBJ Global Real Estate.
 You speak with calm authority and visionary leadership. Your messages are elegant, precise, and confident.
 You set the tone for the entire organization.
 
@@ -116,7 +116,7 @@ Communication style:
     greeting: 'Good day,',
     signatureTemplate: 'formal',
     signature: `Best regards,
-Jane Abou Jaoude
+Jane Bou Jaoude
 Founder & CEO JBJ Global Real Estate
 www.jbj.ae | +971 54 717 6710`,
     permissions: ['all'],

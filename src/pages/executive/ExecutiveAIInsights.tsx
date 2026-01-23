@@ -323,7 +323,7 @@ const ExecutiveAIInsights = () => {
               AI Strategic Insights • Supports judgment, does not replace it • All insights logged and explainable
             </p>
             <p className="text-xs text-zinc-600 mt-1">
-              Jane Abou jaoude, Founder & CEO • JBJ GLOBAL REAL ESTATE
+              Jane Bou Jaoude, Founder & CEO • JBJ GLOBAL REAL ESTATE
             </p>
           </div>
         </div>

@@ -6,7 +6,7 @@
  * DO NOT rewrite, summarize, paraphrase, or "improve" the wording.
  * 
  * RULES:
- * - NEVER use "our founder" — ALWAYS use "the founder, Jane Abou Jaoude"
+ * - NEVER use "our founder" — ALWAYS use "the founder, Jane Bou Jaoude"
  * - DO NOT summarize, rewrite, or dilute language
  * - DO NOT add guarantees or ROI claims
  * - Founder name must be clickable → /founder-and-leadership
@@ -109,7 +109,7 @@ export const FounderPhilosophySection = () => {
                 <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link> is a founder-led brokerage built on unwavering standards, discretion, and long-term vision.
               </p>
               <p className="text-zinc-600 text-sm leading-relaxed">
-                Founded by <Link to="/founder" className="text-gold hover:underline">Jane Abou Jaoude</Link>, our approach combines deep market expertise with personalized service, ensuring every client receives the attention and insight they deserve.
+                Founded by <Link to="/founder" className="text-gold hover:underline">Jane Bou Jaoude</Link>, our approach combines deep market expertise with personalized service, ensuring every client receives the attention and insight they deserve.
               </p>
             </div>
             
