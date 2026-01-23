@@ -75,7 +75,7 @@ import FitOut from "./pages/services/FitOut";
 import DesignBuild from "./pages/services/DesignBuild";
 import LawFirm from "./pages/services/LawFirm";
 import ReferralPartner from "./pages/ReferralPartner";
-import Install from "./pages/Install";
+// Install page removed - PWA disabled
 import CRM from "./pages/CRM";
 import CRMLeadDetail from "./pages/CRMLeadDetail";
 import Automations from "./pages/Automations";
@@ -281,7 +281,7 @@ const App = () => (
                 <Route path="/services/law-firm" element={<LawFirm />} />
                 <Route path="/referral-partner" element={<ReferralPartner />} />
                 <Route path="/referral" element={<Navigate to="/referral-onboarding" replace />} />
-                <Route path="/install" element={<Install />} />
+                {/* Install page removed - PWA disabled */}
                 <Route path="/crm" element={(
                   <RouteErrorBoundary routeName="CRM">
                     <CRM />
