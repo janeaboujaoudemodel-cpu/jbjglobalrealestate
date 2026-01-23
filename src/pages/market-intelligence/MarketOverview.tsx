@@ -25,7 +25,7 @@ const tocItems = [
   { id: "navigation", title: "Explore More" },
 ];
 
-// Premium Section Title Component
+// Premium Section Title Component - NO background highlight box on first word
 const SectionTitle = ({ title, centered = true }: { title: string; centered?: boolean }) => {
   const words = title.split(' ');
   const firstWord = words[0];
@@ -36,24 +36,7 @@ const SectionTitle = ({ title, centered = true }: { title: string; centered?: bo
       className={`text-3xl md:text-4xl font-bold mb-8 ${centered ? 'text-center' : ''}`}
       style={{ fontFamily: "Poppins, sans-serif" }}
     >
-      <span 
-        className="inline-block px-3 py-1 rounded-lg mr-2"
-        style={{ 
-          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
-          boxShadow: '0 4px 15px rgba(200,167,102,0.3), inset 0 2px 4px rgba(255,255,255,0.9)',
-        }}
-      >
-        <span 
-          style={{ 
-            background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
-          }}
-        >
-          {firstWord}
-        </span>
-      </span>
+      <span className="text-gold mr-2">{firstWord}</span>
       <span className="text-black font-bold">{restWords}</span>
     </h2>
   );
