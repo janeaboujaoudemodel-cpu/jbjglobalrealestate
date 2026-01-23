@@ -3,6 +3,7 @@ import { Input } from '@/components/ui/input';
 import { History, Plus, Clock, Search, X, MessageCircle, Loader2 } from 'lucide-react';
 import { ChatHistoryItem, SERVICES, getTimeAgo, AGENT } from './types';
 import { CONTACT_INFO } from '@/constants/stats';
+import { T } from '@/components/ui/T';
 
 interface ChatHistoryProps {
   userFirstName: string;
@@ -61,8 +62,8 @@ const ChatHistory = ({
         <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center">
           <History className="w-7 h-7 text-gold" />
         </div>
-        <h4 className="text-white text-lg font-semibold mb-1">Welcome back, {userFirstName}!</h4>
-        <p className="text-zinc-400 text-sm">Continue a conversation or start fresh</p>
+        <h4 className="text-white text-lg font-semibold mb-1"><T>{`Welcome back, ${userFirstName}!`}</T></h4>
+        <p className="text-zinc-400 text-sm"><T>Continue a conversation or start fresh</T></p>
       </div>
 
       {/* New Conversation Button */}
@@ -74,8 +75,8 @@ const ChatHistory = ({
           <Plus className="w-5 h-5 text-gold" />
         </div>
         <div>
-          <h5 className="text-white text-sm font-semibold">Start New Conversation</h5>
-          <p className="text-gold text-xs">Ask me anything about properties & services</p>
+          <h5 className="text-white text-sm font-semibold"><T>Start New Conversation</T></h5>
+          <p className="text-gold text-xs"><T>Ask me anything about properties & services</T></p>
         </div>
       </button>
 
@@ -90,8 +91,8 @@ const ChatHistory = ({
           <MessageCircle className="w-4 h-4 text-white" />
         </div>
         <div className="flex-1">
-          <h5 className="text-white text-sm font-medium">Chat on WhatsApp</h5>
-          <p className="text-green-400 text-xs">Direct access • Instant response</p>
+          <h5 className="text-white text-sm font-medium"><T>Chat on WhatsApp</T></h5>
+          <p className="text-green-400 text-xs"><T>Direct access • Instant response</T></p>
         </div>
       </a>
 
@@ -126,8 +127,8 @@ const ChatHistory = ({
         <div className="space-y-2">
           <p className="text-zinc-500 text-xs font-medium mb-2 flex items-center gap-1">
             <Clock className="w-3 h-3" />
-            Previous Conversations
-            {historySearch && ` (filtered)`}
+            <T>Previous Conversations</T>
+            {historySearch && <T>{` (filtered)`}</T>}
           </p>
           {filteredHistory.map((conv) => {
             const serviceName = SERVICES.find(s => s.id === conv.service_type)?.label || 'General';
@@ -164,10 +165,10 @@ const ChatHistory = ({
                           ? 'bg-blue-500/20 text-blue-400'
                           : 'bg-zinc-700 text-zinc-400'
                       }`}>
-                        {conv.status === 'submitted_to_team' ? 'With Team' : conv.status}
+                        {conv.status === 'submitted_to_team' ? <T>With Team</T> : <T>{conv.status}</T>}
                       </span>
                       <span className="text-zinc-600 text-[10px]">
-                        {conv.messages?.length || 0} messages
+                        {conv.messages?.length || 0} <T>messages</T>
                       </span>
                     </div>
                   </div>
@@ -176,7 +177,7 @@ const ChatHistory = ({
             );
           })}
           {historySearch && filteredHistory.length === 0 && (
-            <p className="text-zinc-500 text-sm text-center py-4">No conversations match "{historySearch}"</p>
+            <p className="text-zinc-500 text-sm text-center py-4"><T>{`No conversations match "${historySearch}"`}</T></p>
           )}
         </div>
       ) : (
@@ -184,8 +185,8 @@ const ChatHistory = ({
           <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-zinc-800 flex items-center justify-center">
             <MessageCircle className="w-6 h-6 text-zinc-600" />
           </div>
-          <p className="text-zinc-500 text-sm">No previous conversations</p>
-          <p className="text-zinc-600 text-xs mt-1">Start a new chat above!</p>
+          <p className="text-zinc-500 text-sm"><T>No previous conversations</T></p>
+          <p className="text-zinc-600 text-xs mt-1"><T>Start a new chat above!</T></p>
         </div>
       )}
     </div>

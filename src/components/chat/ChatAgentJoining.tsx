@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Check, Loader2 } from 'lucide-react';
+import { T } from '@/components/ui/T';
 
 interface Agent {
   name: string;
@@ -43,7 +44,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
           className="text-center mb-8"
         >
           <h3 className="text-gold text-lg font-semibold">JBJ GLOBAL REAL ESTATE</h3>
-          <p className="text-zinc-400 text-sm">Chat Support</p>
+          <p className="text-zinc-400 text-sm"><T>Chat Support</T></p>
         </motion.div>
 
         {/* Status Message */}
@@ -62,7 +63,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
                 exit={{ opacity: 0 }}
                 className="text-zinc-300 text-sm"
               >
-                Connecting you to one of our realty members...
+                <T>Connecting you to one of our realty members...</T>
               </motion.p>
             )}
             {stage === 'joined' && (
@@ -73,7 +74,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
                 exit={{ opacity: 0 }}
                 className="text-emerald-400 text-sm font-medium"
               >
-                {agent.name} has joined your chat
+                <T>{`${agent.name} has joined your chat`}</T>
               </motion.p>
             )}
             {stage === 'ready' && (
@@ -84,7 +85,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
                 exit={{ opacity: 0 }}
                 className="text-gold text-sm font-medium"
               >
-                Starting conversation...
+                <T>Starting conversation...</T>
               </motion.p>
             )}
           </AnimatePresence>
@@ -140,7 +141,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
             animate={{ opacity: 1, y: 0 }}
             className="mt-8 flex items-center gap-2"
           >
-            <span className="text-zinc-400 text-sm">{agent.name} is typing</span>
+            <span className="text-zinc-400 text-sm"><T>{`${agent.name} is typing`}</T></span>
             <div className="flex gap-1">
               <motion.span
                 animate={{ opacity: [0.4, 1, 0.4] }}
