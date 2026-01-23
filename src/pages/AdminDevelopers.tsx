@@ -38,6 +38,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import Footer from "@/components/Footer";
+import { ProvidentSyncButton } from "@/components/admin/ProvidentSyncButton";
 
 interface Developer {
   id: string;
@@ -348,6 +349,11 @@ const AdminDevelopers = () => {
               <p className="text-sm text-zinc-500">Primary Contacts</p>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Provident Sync */}
+        <div className="mb-8">
+          <ProvidentSyncButton />
         </div>
 
         {/* Tabs */}
