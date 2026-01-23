@@ -433,12 +433,20 @@ const Admin = () => {
                 Visitors
               </TabsTrigger>
               <TabsTrigger
-                value="leads"
+                value="hr-department"
                 className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
-                onClick={() => navigate("/admin/leads")}
+                onClick={() => navigate("/employee-management")}
               >
                 <Users className="w-4 h-4 mr-2" />
-                Leads & Chats
+                HR Department
+              </TabsTrigger>
+              <TabsTrigger
+                value="it-department"
+                className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+                onClick={() => navigate("/it-department")}
+              >
+                <Settings className="w-4 h-4 mr-2" />
+                IT Department
               </TabsTrigger>
             </TabsList>
           </div>

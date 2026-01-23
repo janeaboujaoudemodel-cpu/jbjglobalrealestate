@@ -198,10 +198,12 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-zinc-900 border-gold/30 text-white max-w-3xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black max-w-3xl max-h-[85vh] overflow-y-auto mt-8">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-gold flex items-center gap-3">
-            <UserCheck className="w-6 h-6" />
+          <DialogTitle className="text-2xl font-bold text-black flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-gold/20 border border-gold/30 flex items-center justify-center">
+              <UserCheck className="w-5 h-5 text-gold" />
+            </div>
             New Joiner Application
           </DialogTitle>
         </DialogHeader>
@@ -232,7 +234,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
           {/* Personal Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-zinc-300 flex items-center gap-2">
+              <Label className="text-black font-medium flex items-center gap-2">
                 <User className="w-4 h-4 text-gold" />
                 Full Name *
               </Label>
@@ -240,13 +242,13 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
                 value={formData.fullName}
                 onChange={(e) => setFormData(prev => ({ ...prev, fullName: e.target.value }))}
                 placeholder="Enter full name"
-                className="bg-zinc-800 border-gold/20 text-white"
+                className="bg-white border-2 border-gold/30 text-black placeholder:text-black/40 focus:border-gold"
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label className="text-zinc-300 flex items-center gap-2">
+              <Label className="text-black font-medium flex items-center gap-2">
                 <Mail className="w-4 h-4 text-gold" />
                 Email (Auto-generated if empty)
               </Label>
@@ -255,12 +257,12 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
                 value={formData.email}
                 onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                 placeholder="name@jbj.ae"
-                className="bg-zinc-800 border-gold/20 text-white"
+                className="bg-white border-2 border-gold/30 text-black placeholder:text-black/40 focus:border-gold"
               />
             </div>
 
             <div className="space-y-2">
-              <Label className="text-zinc-300 flex items-center gap-2">
+              <Label className="text-black font-medium flex items-center gap-2">
                 <Phone className="w-4 h-4 text-gold" />
                 Phone Number
               </Label>
@@ -269,12 +271,12 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
                 value={formData.phone}
                 onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                 placeholder="+971 XX XXX XXXX"
-                className="bg-zinc-800 border-gold/20 text-white"
+                className="bg-white border-2 border-gold/30 text-black placeholder:text-black/40 focus:border-gold"
               />
             </div>
 
             <div className="space-y-2">
-              <Label className="text-zinc-300 flex items-center gap-2">
+              <Label className="text-black font-medium flex items-center gap-2">
                 <Globe className="w-4 h-4 text-gold" />
                 Nationality *
               </Label>
@@ -282,12 +284,12 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
                 value={formData.nationality}
                 onValueChange={(value) => setFormData(prev => ({ ...prev, nationality: value }))}
               >
-                <SelectTrigger className="bg-zinc-800 border-gold/20 text-white">
-                  <SelectValue placeholder="Select nationality" />
+                <SelectTrigger className="bg-white border-2 border-gold/30 text-black">
+                  <SelectValue placeholder="Select nationality" className="text-black" />
                 </SelectTrigger>
-                <SelectContent className="bg-zinc-900 border-gold/30">
+                <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
                   {NATIONALITIES.map(nat => (
-                    <SelectItem key={nat} value={nat} className="text-white hover:bg-gold/20">
+                    <SelectItem key={nat} value={nat} className="text-black hover:bg-gold/20 focus:bg-gold/20">
                       {nat}
                     </SelectItem>
                   ))}
@@ -298,7 +300,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
 
           {/* Languages */}
           <div className="space-y-2">
-            <Label className="text-zinc-300 flex items-center gap-2">
+            <Label className="text-black font-medium flex items-center gap-2">
               <Languages className="w-4 h-4 text-gold" />
               Languages Spoken
             </Label>
@@ -310,10 +312,10 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
                   variant="outline"
                   size="sm"
                   onClick={() => handleLanguageToggle(lang)}
-                  className={`border-gold/30 ${
+                  className={`border-2 border-gold/30 ${
                     formData.languages.includes(lang)
-                      ? 'bg-gold text-black hover:bg-gold/90'
-                      : 'text-zinc-300 hover:bg-gold/10'
+                      ? 'bg-gold text-black hover:bg-gold/90 border-gold'
+                      : 'text-black hover:bg-gold/10 hover:border-gold'
                   }`}
                 >
                   {lang}
@@ -325,7 +327,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
           {/* Position Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-zinc-300 flex items-center gap-2">
+              <Label className="text-black font-medium flex items-center gap-2">
                 <Briefcase className="w-4 h-4 text-gold" />
                 Job Title *
               </Label>
@@ -333,13 +335,13 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
                 value={formData.jobTitle}
                 onChange={(e) => setFormData(prev => ({ ...prev, jobTitle: e.target.value }))}
                 placeholder="e.g., Property Consultant"
-                className="bg-zinc-800 border-gold/20 text-white"
+                className="bg-white border-2 border-gold/30 text-black placeholder:text-black/40 focus:border-gold"
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label className="text-zinc-300 flex items-center gap-2">
+              <Label className="text-black font-medium flex items-center gap-2">
                 <Building2 className="w-4 h-4 text-gold" />
                 Department *
               </Label>
@@ -347,12 +349,12 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
                 value={formData.department}
                 onValueChange={(value) => setFormData(prev => ({ ...prev, department: value, reportsTo: '' }))}
               >
-                <SelectTrigger className="bg-zinc-800 border-gold/20 text-white">
-                  <SelectValue placeholder="Select department" />
+                <SelectTrigger className="bg-white border-2 border-gold/30 text-black">
+                  <SelectValue placeholder="Select department" className="text-black" />
                 </SelectTrigger>
-                <SelectContent className="bg-zinc-900 border-gold/30">
+                <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
                   {DEPARTMENTS.map(dept => (
-                    <SelectItem key={dept} value={dept} className="text-white hover:bg-gold/20">
+                    <SelectItem key={dept} value={dept} className="text-black hover:bg-gold/20 focus:bg-gold/20">
                       {dept}
                     </SelectItem>
                   ))}
@@ -361,7 +363,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
             </div>
 
             <div className="space-y-2">
-              <Label className="text-zinc-300 flex items-center gap-2">
+              <Label className="text-black font-medium flex items-center gap-2">
                 <UserCheck className="w-4 h-4 text-gold" />
                 CRM Role
               </Label>
@@ -369,12 +371,12 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
                 value={formData.crmRole}
                 onValueChange={(value) => setFormData(prev => ({ ...prev, crmRole: value }))}
               >
-                <SelectTrigger className="bg-zinc-800 border-gold/20 text-white">
-                  <SelectValue placeholder="Select CRM role" />
+                <SelectTrigger className="bg-white border-2 border-gold/30 text-black">
+                  <SelectValue placeholder="Select CRM role" className="text-black" />
                 </SelectTrigger>
-                <SelectContent className="bg-zinc-900 border-gold/30">
+                <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
                   {CRM_ROLES.map(role => (
-                    <SelectItem key={role.value} value={role.value} className="text-white hover:bg-gold/20">
+                    <SelectItem key={role.value} value={role.value} className="text-black hover:bg-gold/20 focus:bg-gold/20">
                       {role.label}
                     </SelectItem>
                   ))}
@@ -383,7 +385,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
             </div>
 
             <div className="space-y-2">
-              <Label className="text-zinc-300 flex items-center gap-2">
+              <Label className="text-black font-medium flex items-center gap-2">
                 <User className="w-4 h-4 text-gold" />
                 Reports To
               </Label>
@@ -392,12 +394,12 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
                 onValueChange={(value) => setFormData(prev => ({ ...prev, reportsTo: value }))}
                 disabled={!formData.department}
               >
-                <SelectTrigger className="bg-zinc-800 border-gold/20 text-white">
-                  <SelectValue placeholder={formData.department ? "Select manager" : "Select department first"} />
+                <SelectTrigger className="bg-white border-2 border-gold/30 text-black disabled:opacity-60">
+                  <SelectValue placeholder={formData.department ? "Select manager" : "Select department first"} className="text-black" />
                 </SelectTrigger>
-                <SelectContent className="bg-zinc-900 border-gold/30">
+                <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
                   {potentialManagers.map(manager => (
-                    <SelectItem key={manager.id} value={manager.id} className="text-white hover:bg-gold/20">
+                    <SelectItem key={manager.id} value={manager.id} className="text-black hover:bg-gold/20 focus:bg-gold/20">
                       {manager.name} - {manager.role}
                     </SelectItem>
                   ))}
@@ -408,29 +410,29 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
 
           {/* Notes */}
           <div className="space-y-2">
-            <Label className="text-zinc-300">Additional Notes</Label>
+            <Label className="text-black font-medium">Additional Notes</Label>
             <Textarea
               value={formData.notes}
               onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
               placeholder="Any additional information about the new joiner..."
-              className="bg-zinc-800 border-gold/20 text-white min-h-[100px]"
+              className="bg-white border-2 border-gold/30 text-black placeholder:text-black/40 focus:border-gold min-h-[100px]"
             />
           </div>
 
           {/* Submit Buttons */}
-          <div className="flex justify-end gap-3 pt-4 border-t border-gold/20">
+          <div className="flex justify-end gap-3 pt-4 border-t border-gold/30">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
-              className="border-gold/30 text-gold hover:bg-gold/10"
+              className="border-2 border-gold/30 text-black hover:bg-gold/10 hover:border-gold"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={isSubmitting}
-              variant="dark"
+              className="bg-gold text-black hover:bg-gold/90"
             >
               {isSubmitting ? (
                 <>

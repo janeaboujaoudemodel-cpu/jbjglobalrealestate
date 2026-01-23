@@ -17,6 +17,7 @@ import { Mail, MessageSquare, PhoneCall, Trash2 } from "lucide-react";
 import { PIPELINE_STATUSES, STATUS_GROUPS } from "./LeadStatusBadge";
 import CRMLeadsBulkBar from "./CRMLeadsBulkBar";
 import LeadAssignModal from "./LeadAssignModal";
+import DeleteLeadDialog from "./DeleteLeadDialog";
 
 interface LeadSource {
   source_group: string;
@@ -71,6 +72,8 @@ export default function CRMLeadsTableV2({
   const [assignedNames, setAssignedNames] = useState<Record<string, string>>({});
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [assignLeadIds, setAssignLeadIds] = useState<string[]>([]);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
 
   // Group statuses by category for the dropdown
   const groupedStatuses = useMemo(() => {
@@ -351,11 +354,16 @@ ${signature}`);
     window.location.href = `mailto:${lead.email_lower}?subject=${subject}&body=${body}`;
   };
 
-  const handleDelete = async (leadId: string) => {
-    if (!confirm("Delete this lead? This cannot be undone.")) return;
+  const openDeleteDialog = (lead: Lead) => {
+    setLeadToDelete(lead);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDelete = async () => {
+    if (!leadToDelete) return;
 
     const { error } = await supabase.rpc("crm_hard_delete_leads", {
-      p_lead_ids: [leadId],
+      p_lead_ids: [leadToDelete.id],
     });
 
     if (error) {
@@ -363,7 +371,9 @@ ${signature}`);
       return;
     }
 
-    toast.success("Lead deleted");
+    toast.success("Lead moved to deleted");
+    setDeleteDialogOpen(false);
+    setLeadToDelete(null);
     await fetchLeads();
     onRefresh();
   };
@@ -633,7 +643,7 @@ ${signature}`);
                           size="icon"
                           variant="destructive"
                           className="h-9 w-9"
-                          onClick={() => handleDelete(lead.id)}
+                          onClick={() => openDeleteDialog(lead)}
                           title="Delete"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -661,6 +671,14 @@ ${signature}`);
           fetchLeads();
           onRefresh();
         }}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <DeleteLeadDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        leadName={leadToDelete?.full_name || "this lead"}
+        onConfirm={handleDelete}
       />
     </div>
   );
