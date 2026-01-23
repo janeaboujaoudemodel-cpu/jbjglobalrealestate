@@ -290,11 +290,11 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                       <AvatarImage src={selectedEmployeeData.avatar} />
                       <AvatarFallback>{selectedEmployeeData.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                     </Avatar>
-                    <div className="bg-muted rounded-lg p-3">
+                    <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/20 rounded-lg p-3">
                       <div className="flex gap-1 items-center h-5">
-                        <span className="h-2 w-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <span className="h-2 w-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <span className="h-2 w-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                        <span className="h-2 w-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <span className="h-2 w-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <span className="h-2 w-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                       </div>
                     </div>
                   </div>

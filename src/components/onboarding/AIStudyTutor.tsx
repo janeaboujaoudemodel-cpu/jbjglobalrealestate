@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Bot, Send, User, Loader2, Sparkles, BookOpen, X, Maximize2, Minimize2 } from 'lucide-react';
+import { Bot, Send, User, Loader2, Sparkles, BookOpen, X, Maximize2, Minimize2, Copy } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -163,31 +163,44 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`flex gap-3 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
+                className={`flex gap-3 group ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
               >
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                   message.role === 'user' 
-                    ? 'bg-purple-600' 
-                    : 'bg-gradient-to-br from-purple-500 to-fuchsia-500'
+                    ? 'bg-gold text-black' 
+                    : 'bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border border-gold/20'
                 }`}>
                   {message.role === 'user' ? (
-                    <User className="w-4 h-4 text-white" />
+                    <User className="w-4 h-4" />
                   ) : (
-                    <Bot className="w-4 h-4 text-white" />
+                    <Bot className="w-4 h-4 text-gold" />
                   )}
                 </div>
-                <div className={`max-w-[80%] ${message.role === 'user' ? 'text-right' : ''}`}>
-                  <div className={`rounded-2xl px-4 py-2.5 ${
+                <div className="flex flex-col max-w-[80%]">
+                  <div className={`rounded-2xl px-4 py-2.5 select-text cursor-text ${
                     message.role === 'user'
-                      ? 'bg-purple-600 text-white rounded-br-md'
-                      : 'bg-zinc-800 text-zinc-100 rounded-bl-md'
+                      ? 'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/30 shadow-md rounded-br-md'
+                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/20 shadow-sm rounded-bl-md'
                   }`}>
-                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                    <p className="text-sm whitespace-pre-wrap select-text">{message.content}</p>
                   </div>
+                  {/* Copy Button */}
+                  <button
+                    onClick={async () => {
+                      await navigator.clipboard.writeText(message.content);
+                      toast.success('Message copied');
+                    }}
+                    className={`flex items-center gap-1 mt-1 text-[10px] text-zinc-400 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
+                      message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
+                    }`}
+                  >
+                    <Copy className="w-3 h-3" />
+                    <span>Copy</span>
+                  </button>
                   {message.relatedModules && message.relatedModules.length > 0 && (
                     <div className="mt-2 flex flex-wrap gap-1">
                       {message.relatedModules.map((mod, i) => (
-                        <span key={i} className="text-xs bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <span key={i} className="text-xs bg-gold/20 text-gold px-2 py-0.5 rounded-full flex items-center gap-1">
                           <BookOpen className="w-3 h-3" />
                           {mod}
                         </span>
@@ -199,13 +212,13 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
             ))}
             {isLoading && (
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-fuchsia-500 flex items-center justify-center">
-                  <Bot className="w-4 h-4 text-white" />
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border border-gold/20 flex items-center justify-center">
+                  <Bot className="w-4 h-4 text-gold" />
                 </div>
-                <div className="bg-zinc-800 rounded-2xl rounded-bl-md px-4 py-3">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/20 rounded-2xl rounded-bl-md px-4 py-3">
                   <div className="flex items-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin text-purple-400" />
-                    <span className="text-zinc-400 text-sm">Thinking...</span>
+                    <Loader2 className="w-4 h-4 animate-spin text-gold" />
+                    <span className="text-black/60 text-sm">Thinking...</span>
                   </div>
                 </div>
               </div>

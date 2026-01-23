@@ -216,14 +216,14 @@ export default function HRAgentChat() {
                 animate={{ opacity: 1 }}
                 className="flex gap-3"
               >
-                <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
-                  <Bot className="w-4 h-4" />
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border border-gold/20 flex items-center justify-center">
+                  <Bot className="w-4 h-4 text-gold" />
                 </div>
-                <div className="bg-muted rounded-2xl rounded-tl-none px-4 py-3">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/20 rounded-2xl rounded-tl-none px-4 py-3">
                   <div className="flex gap-1">
-                    <span className="w-2 h-2 bg-primary/50 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-2 h-2 bg-primary/50 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-2 h-2 bg-primary/50 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                   </div>
                 </div>
               </motion.div>
