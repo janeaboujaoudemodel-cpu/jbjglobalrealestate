@@ -10169,12 +10169,14 @@ export type Database = {
           payment_plan: string | null
           price_from: number | null
           price_to: number | null
+          property_type_label: string | null
           service_charge: string | null
           size_max: number | null
           size_min: number | null
           slug: string
           source_url: string | null
           status: string | null
+          status_label: string | null
           updated_at: string
           views: string[] | null
         }
@@ -10202,12 +10204,14 @@ export type Database = {
           payment_plan?: string | null
           price_from?: number | null
           price_to?: number | null
+          property_type_label?: string | null
           service_charge?: string | null
           size_max?: number | null
           size_min?: number | null
           slug: string
           source_url?: string | null
           status?: string | null
+          status_label?: string | null
           updated_at?: string
           views?: string[] | null
         }
@@ -10235,12 +10239,14 @@ export type Database = {
           payment_plan?: string | null
           price_from?: number | null
           price_to?: number | null
+          property_type_label?: string | null
           service_charge?: string | null
           size_max?: number | null
           size_min?: number | null
           slug?: string
           source_url?: string | null
           status?: string | null
+          status_label?: string | null
           updated_at?: string
           views?: string[] | null
         }
@@ -11770,6 +11776,7 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
+          feature_image_url: string | null
           founded_year: number | null
           headquarters: string | null
           id: string
@@ -11785,6 +11792,7 @@ export type Database = {
         Insert: {
           created_at?: string
           description?: string | null
+          feature_image_url?: string | null
           founded_year?: number | null
           headquarters?: string | null
           id?: string
@@ -11800,6 +11808,7 @@ export type Database = {
         Update: {
           created_at?: string
           description?: string | null
+          feature_image_url?: string | null
           founded_year?: number | null
           headquarters?: string | null
           id?: string

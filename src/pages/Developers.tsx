@@ -329,79 +329,93 @@ const Developers = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, delay: index * 0.05 }}
                       >
-                        <Link to={`/developer/${developer.slug}`} className="group block jj-box-active">
-                          <div className="flex items-start justify-between gap-4 mb-4">
-                            {/* Developer Logo with 3D gold border */}
-                            <div 
-                              className="w-16 h-16 rounded-lg flex items-center justify-center overflow-hidden"
-                              style={{
-                                background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
-                                border: '2px solid hsl(42 45% 59%)',
-                                boxShadow: `
-                                  0 4px 12px rgba(200,167,102,0.3),
-                                  0 2px 6px rgba(0,0,0,0.12),
-                                  inset 0 1px 2px rgba(255,255,255,0.9)
-                                `,
-                              }}
-                            >
-                              {developer.logo_url ? (
+                        <Link to={`/developer/${developer.slug}`} className="group block">
+                          <div className="relative rounded-xl overflow-hidden bg-premium-card border border-gold/20 hover:border-gold/40 transition-all">
+                            {/* Feature Image Background - Provident Style */}
+                            <div className="relative h-48 overflow-hidden">
+                              {developer.feature_image_url ? (
                                 <SafeImage
-                                  src={developer.logo_url}
+                                  src={developer.feature_image_url}
                                   alt={developer.name}
-                                  className="w-full h-full object-contain p-2"
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                 />
                               ) : (
-                                <Building2 className="w-8 h-8 text-gold" />
+                                <div className="w-full h-full bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center">
+                                  <Building2 className="w-16 h-16 text-gold/30" />
+                                </div>
                               )}
-                            </div>
-
-                            <div
-                              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold ${tier.badgeClassName}`}
-                            >
-                              <TierIcon className="w-3.5 h-3.5 text-gold" />
-                              {tier.label}
-                            </div>
-                          </div>
-
-                          <h3 className="text-xl font-semibold text-foreground group-hover:text-gold transition-colors mb-1">
-                            {developer.name}
-                          </h3>
-
-                          {developer.headquarters && (
-                            <div className="flex items-center gap-1.5 text-sm text-foreground/70">
-                              <MapPin className="w-3.5 h-3.5 text-gold" />
-                              {developer.headquarters}
-                            </div>
-                          )}
-
-                          <div className="grid grid-cols-3 gap-4 mt-5">
-                            <div>
-                              <div className="text-xl font-bold text-gold">{projectCount}</div>
-                              <div className="text-xs text-foreground/70">Projects</div>
-                            </div>
-                            {developer.founded_year && (
-                              <div>
-                                <div className="text-xl font-bold text-foreground">{developer.founded_year}</div>
-                                <div className="text-xs text-foreground/70">Founded</div>
+                              
+                              {/* Gradient Overlay */}
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                              
+                              {/* Logo on the image - bottom left like Provident */}
+                              <div 
+                                className="absolute bottom-4 left-4 w-20 h-12 rounded-lg flex items-center justify-center overflow-hidden"
+                                style={{
+                                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+                                  border: '2px solid hsl(42 45% 59%)',
+                                  boxShadow: `
+                                    0 4px 12px rgba(200,167,102,0.3),
+                                    0 2px 6px rgba(0,0,0,0.12),
+                                    inset 0 1px 2px rgba(255,255,255,0.9)
+                                  `,
+                                }}
+                              >
+                                {developer.logo_url ? (
+                                  <SafeImage
+                                    src={developer.logo_url}
+                                    alt={developer.name}
+                                    className="w-full h-full object-contain p-1.5"
+                                  />
+                                ) : (
+                                  <Building2 className="w-6 h-6 text-gold" />
+                                )}
                               </div>
-                            )}
-                            {developer.completed_projects && (
-                              <div>
-                                <div className="text-xl font-bold text-foreground">{developer.completed_projects}</div>
-                                <div className="text-xs text-foreground/70">Completed</div>
+                              
+                              {/* Tier Badge - top right */}
+                              <div
+                                className={`absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold ${tier.badgeClassName}`}
+                              >
+                                <TierIcon className="w-3.5 h-3.5 text-gold" />
+                                {tier.label}
                               </div>
-                            )}
-                          </div>
+                            </div>
 
-                          {developer.description && (
-                            <p className="text-sm text-foreground/75 line-clamp-2 mt-4">
-                              {developer.description}
-                            </p>
-                          )}
+                            {/* Content Section */}
+                            <div className="p-5">
+                              <h3 className="text-xl font-semibold text-foreground group-hover:text-gold transition-colors mb-1">
+                                {developer.name}
+                              </h3>
 
-                          <div className="flex items-center justify-between pt-4 mt-4 border-t border-gold/20">
-                            <span className="text-sm text-gold font-medium">View Projects</span>
-                            <ArrowRight className="w-4 h-4 text-gold group-hover:translate-x-1 transition-transform" />
+                              {developer.headquarters && (
+                                <div className="flex items-center gap-1.5 text-sm text-foreground/70 mb-4">
+                                  <MapPin className="w-3.5 h-3.5 text-gold" />
+                                  {developer.headquarters}
+                                </div>
+                              )}
+
+                              {developer.description && (
+                                <p className="text-sm text-foreground/75 line-clamp-2 mb-4">
+                                  {developer.description}
+                                </p>
+                              )}
+
+                              <div className="flex items-center justify-between pt-4 border-t border-gold/20">
+                                <div className="flex items-center gap-4">
+                                  <div>
+                                    <div className="text-lg font-bold text-gold">{projectCount}</div>
+                                    <div className="text-xs text-foreground/70">Projects</div>
+                                  </div>
+                                  {developer.founded_year && (
+                                    <div>
+                                      <div className="text-lg font-bold text-foreground">{developer.founded_year}</div>
+                                      <div className="text-xs text-foreground/70">Founded</div>
+                                    </div>
+                                  )}
+                                </div>
+                                <ArrowRight className="w-5 h-5 text-gold group-hover:translate-x-1 transition-transform" />
+                              </div>
+                            </div>
                           </div>
                         </Link>
                       </motion.div>

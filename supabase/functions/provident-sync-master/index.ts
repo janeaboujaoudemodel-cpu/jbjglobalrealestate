@@ -18,6 +18,8 @@ interface ExtractedProject {
   handover_year: string;
   status: string;
   description: string;
+  property_type_label: string; // e.g. "Apartment, Sky-Villa", "Villa", "Townhouse"
+  status_label: string; // e.g. "Future Launch", "New Phase", "New Launch"
 }
 
 serve(async (req) => {
@@ -105,7 +107,7 @@ serve(async (req) => {
       console.log(`Page ${pageSlug || '1'}: ${markdown.length} chars, ${links.length} links`);
 
       // Use AI to extract project listings from this page
-      const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -141,7 +143,9 @@ Return a JSON array with EVERY project visible:
     "price_from": 294000,
     "handover_year": "2029",
     "status": "Under Construction OR Ready",
-    "description": "Brief description"
+    "description": "Brief description",
+    "property_type_label": "Apartment, Sky-Villa",
+    "status_label": "Future Launch"
   }
 ]
 
@@ -149,7 +153,9 @@ CRITICAL:
 - Extract EVERY project shown on the page
 - Include the developer name for each project
 - Get real cloudfront image URLs
-- Parse EUR prices to numbers (EUR 294K = 294000, EUR 1.51M = 1510000)`
+- Parse EUR prices to numbers (EUR 294K = 294000, EUR 1.51M = 1510000)
+- property_type_label: Extract exactly as shown (e.g., "Apartment, Sky-Villa", "Villa", "Apartment, Studio", "Apartment, Townhouse")
+- status_label: Extract if shown (e.g., "Future Launch", "New Phase", "New Launch", "Coming Soon") - leave empty if not shown`
             }
           ],
           temperature: 0.1,
@@ -273,6 +279,8 @@ CRITICAL:
               source_url: proj.url || undefined,
               is_offplan: status === "Under Construction",
               is_developer_direct: true,
+              property_type_label: proj.property_type_label || undefined,
+              status_label: proj.status_label || undefined,
               updated_at: new Date().toISOString(),
             })
             .eq("id", projectId);
@@ -303,6 +311,8 @@ CRITICAL:
               source_url: proj.url,
               is_offplan: status === "Under Construction",
               is_developer_direct: true,
+              property_type_label: proj.property_type_label || null,
+              status_label: proj.status_label || null,
             })
             .select("id")
             .single();
