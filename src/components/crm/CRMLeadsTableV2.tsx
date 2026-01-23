@@ -302,27 +302,29 @@ export default function CRMLeadsTableV2({
 
   const handleWhatsApp = async (lead: Lead) => {
     if (!lead.phone_e164) {
-      toast.error("No phone number");
+      toast.error("No phone number available for this lead");
       return;
     }
     const phone = lead.phone_e164.replace("+", "");
-    window.open(`https://wa.me/${phone}`, "_blank");
+    // Use direct location.href for reliable WhatsApp redirect
+    window.location.href = `https://wa.me/${phone}`;
   };
 
   const handleCall = (lead: Lead) => {
     if (!lead.phone_e164) {
-      toast.error("No phone number");
+      toast.error("No phone number available for this lead");
       return;
     }
-    window.open(`tel:${lead.phone_e164}`, "_blank");
+    // Use direct location.href for reliable phone redirect (shows native call options)
+    window.location.href = `tel:${lead.phone_e164}`;
   };
 
   const handleEmail = (lead: Lead) => {
     if (!lead.email_lower) {
-      toast.error("No email");
+      toast.error("No email available for this lead");
       return;
     }
-    // Open mailbox with signature
+    // Open mailbox with signature - use location.href for reliable redirect
     const subject = encodeURIComponent("Follow-up from JBJ Global Real Estate");
     const signature = `
 
@@ -345,7 +347,8 @@ Your Trusted Partner in UAE Property
 Thank you for your interest in JBJ Global Real Estate. I wanted to personally follow up regarding your property inquiry.
 
 ${signature}`);
-    window.open(`mailto:${lead.email_lower}?subject=${subject}&body=${body}`, "_blank");
+    // Use direct location.href for reliable mail client redirect
+    window.location.href = `mailto:${lead.email_lower}?subject=${subject}&body=${body}`;
   };
 
   const handleDelete = async (leadId: string) => {
@@ -382,12 +385,16 @@ ${signature}`);
   const selectedIds = useMemo(() => Array.from(selected), [selected]);
 
   const renderSource = (lead: Lead) => {
-    if (lead.lead_source_type === "website") return "website · Web Form";
+    // Manual leads should show "Manual Entry" not "website · Web Form"
+    if (lead.lead_source_type === "manual" || (!lead.lead_source_type && !lead.crm_lead_sources)) {
+      return "Manual Entry";
+    }
+    if (lead.lead_source_type === "website") return "Website · Web Form";
     const s = lead.crm_lead_sources;
     if (s?.source_group || s?.source_name) {
-      return `${s.source_group || "import"} · ${s.source_name || ""}`.trim();
+      return `${s.source_group || "Import"} · ${s.source_name || ""}`.trim();
     }
-    return lead.lead_source_type || "—";
+    return lead.lead_source_type || "Manual Entry";
   };
 
   return (

@@ -282,16 +282,18 @@ const CRMCommunicationPanel = () => {
   };
 
   return (
-    <Card className="border-zinc-200 bg-white">
+    <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
       <CardHeader className="pb-2">
-        <CardTitle className="text-zinc-900 font-bold text-base flex items-center justify-between">
+        <CardTitle className="text-black font-bold text-base flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <MessageSquare className="h-4 w-4 text-gold" />
+            <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+              <MessageSquare className="h-4 w-4 text-black" />
+            </div>
             Team Communication
           </div>
           <div className="flex items-center gap-2">
             <Link to="/video-meeting">
-              <Button variant="outline" size="sm" className="h-7 text-xs border-gold/30 text-gold hover:bg-gold/10">
+              <Button variant="secondary" size="sm" className="h-7 text-xs">
                 <Video className="h-3 w-3 mr-1" />
                 New Meeting
               </Button>
@@ -301,20 +303,20 @@ const CRMCommunicationPanel = () => {
       </CardHeader>
       <CardContent className="p-0">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="w-full bg-zinc-100 grid grid-cols-4 rounded-none border-b border-zinc-200">
-            <TabsTrigger value="chat" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold text-zinc-600 text-xs">
+          <TabsList className="w-full bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] grid grid-cols-4 rounded-none border-b border-gold/30">
+            <TabsTrigger value="chat" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black text-xs">
               <Hash className="h-3 w-3 mr-1" />
               Channels
             </TabsTrigger>
-            <TabsTrigger value="team" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold text-zinc-600 text-xs">
+            <TabsTrigger value="team" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black text-xs">
               <Users className="h-3 w-3 mr-1" />
               Team
             </TabsTrigger>
-            <TabsTrigger value="meetings" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold text-zinc-600 text-xs">
+            <TabsTrigger value="meetings" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black text-xs">
               <Video className="h-3 w-3 mr-1" />
               Meetings
             </TabsTrigger>
-            <TabsTrigger value="files" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold text-zinc-600 text-xs">
+            <TabsTrigger value="files" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black text-xs">
               <FileText className="h-3 w-3 mr-1" />
               Files
             </TabsTrigger>

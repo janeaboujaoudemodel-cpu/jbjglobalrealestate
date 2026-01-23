@@ -422,23 +422,21 @@ const CRM = () => {
           {/* Enhanced Dashboard with Charts */}
           <CRMEnhancedDashboard userId={user?.id || ""} isAdmin={isAdmin} />
 
-            {/* Smart Reminders, Automation & Communication - Compact layout */}
+            {/* Smart Reminders, Automation & Communication - New Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              {/* Left Column: Team Communication (stretched) */}
               <div className="lg:col-span-2 space-y-4">
                 {/* Activity Timeline */}
                 <ActivityTimeline userId={user?.id || ""} limit={8} />
                 
                 {/* Communication Panel - Chat, Video, Files */}
                 <CRMCommunicationPanel />
-              </div>
-              
-              {/* Right Column: Smart Automations (scrollable) */}
-              <div className="space-y-4">
-                {/* AI Insights - In-page card (no floating sidebar) */}
+                
+                {/* Embedded AI Insights */}
                 {showAIInsights && (
                   <Card className="overflow-hidden border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
                     <CardContent className="p-0">
-                      <div className="h-[520px]">
+                      <div className="h-[300px]">
                         <AIInsightsPanel
                           className="h-full"
                           insights={aiInsights}
@@ -450,10 +448,11 @@ const CRM = () => {
                     </CardContent>
                   </Card>
                 )}
-
+                
+                {/* Smart Reminders */}
                 <SmartReminders userId={user?.id || ""} limit={4} />
                 
-                {/* Smart Automations - Premium Champagne Card */}
+                {/* Smart Automations */}
                 <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.2)]">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-black font-bold text-base flex items-center gap-2">
@@ -461,7 +460,7 @@ const CRM = () => {
                         <Zap className="h-4 w-4 text-black" />
                       </div>
                       Smart Automations
-                      <Badge className="ml-auto text-xs bg-gold/10 text-gold border-gold/30">
+                      <Badge className="ml-auto text-xs bg-gold/10 text-black border-gold/30">
                         Active
                       </Badge>
                     </CardTitle>
@@ -472,57 +471,89 @@ const CRM = () => {
                     </div>
                   </CardContent>
                 </Card>
+              </div>
+              
+              {/* Right Column: Leads Update Section - stretched to fill right side */}
+              <div className="space-y-4">
+                {/* Leads Update Header Card */}
+                <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-black font-bold text-base flex items-center gap-2">
+                      <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+                        <Users className="h-4 w-4 text-black" />
+                      </div>
+                      Leads Update
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    {/* Quick Action Buttons - High contrast readable buttons */}
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button 
+                        onClick={() => setShowLeadModal(true)} 
+                        variant="primary" 
+                        className="w-full text-sm"
+                      >
+                        <Plus className="h-4 w-4 mr-1.5" />
+                        Add Lead
+                      </Button>
+                      <Button 
+                        variant="secondary" 
+                        onClick={() => setShowImportModal(true)}
+                        className="w-full text-sm"
+                      >
+                        <Upload className="h-4 w-4 mr-1.5" />
+                        Import
+                      </Button>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button 
+                        variant="secondary" 
+                        onClick={handleExportCSV}
+                        className="w-full text-sm"
+                      >
+                        <Download className="h-4 w-4 mr-1.5" />
+                        Export CSV
+                      </Button>
+                      {isAdmin && (
+                        <Button
+                          variant="secondary"
+                          onClick={() => setShowBulkAssignModal(true)}
+                          className="w-full text-sm"
+                        >
+                          <Shuffle className="h-4 w-4 mr-1.5" />
+                          Bulk Assign
+                        </Button>
+                      )}
+                    </div>
+                    {isAdmin && (
+                      <div className="pt-2 border-t border-gold/20">
+                        <DeleteImportButton userId={user?.id || ""} onSuccess={handleRefresh} isAdmin={isAdmin} />
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
                 
-                {/* Admin Tasks Panel removed from dashboard to avoid layout gaps */}
+                {/* VIP Export & Assistant */}
+                <div className="space-y-2">
+                  <Button
+                    variant="secondary"
+                    onClick={() => setShowAssistantPanel(true)}
+                    className="w-full text-black border-gold/30"
+                  >
+                    <Sparkles className="h-4 w-4 mr-2 text-gold" />
+                    Open Assistant
+                  </Button>
+                  {isAdmin && <VIPExportButton />}
+                </div>
               </div>
             </div>
-            
+
             {/* Divider */}
             <div className="border-t-2 border-gold/20" />
 
-            {/* Action Buttons - Premium Style */}
-            <div className="flex flex-wrap items-center gap-3">
-              <Button onClick={() => setShowLeadModal(true)} variant="primary">
-                <Plus className="h-4 w-4 mr-2" />
-                Add Lead
-              </Button>
-              <Button variant="secondary" onClick={() => setShowImportModal(true)}>
-                <Upload className="h-4 w-4 mr-2" />
-                Import
-              </Button>
-              <Button 
-                variant="secondary" 
-                onClick={handleExportCSV}
-              >
-                <Download className="h-4 w-4 mr-2" />
-                Export CSV
-              </Button>
-              {isAdmin && (
-                <Button
-                  variant="secondary"
-                  onClick={() => setShowBulkAssignModal(true)}
-                >
-                  <Shuffle className="h-4 w-4 mr-2" />
-                  Bulk Assign Leads
-                </Button>
-              )}
-              {isAdmin && (
-                <DeleteImportButton userId={user?.id || ""} onSuccess={handleRefresh} isAdmin={isAdmin} />
-              )}
-              <Button
-                variant="secondary"
-                onClick={() => setShowAssistantPanel(true)}
-                className="text-gold border-gold/30"
-              >
-                <Sparkles className="h-4 w-4 mr-2" />
-                Assistant
-              </Button>
-              {isAdmin && (
-                <VIPExportButton />
-              )}
-
-              {/* View Mode Toggle */}
-              <div className="ml-auto flex items-center bg-white/80 border-2 border-gold/30 rounded-lg p-1">
+            {/* View Mode Toggle - Compact */}
+            <div className="flex items-center justify-end gap-3">
+              <div className="flex items-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 rounded-lg p-1">
                 <button
                   onClick={() => setViewMode("table")}
                   className={`p-2 rounded transition-all ${viewMode === "table" ? "bg-gold text-black" : "text-black hover:bg-gold/10"}`}
