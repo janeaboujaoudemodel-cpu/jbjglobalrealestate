@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useListingAdmin } from "@/hooks/useListingAdmin";
 import { useProjects, useDevelopers, useCommunities } from "@/hooks/useProjects";
 import { supabase } from "@/integrations/supabase/client";
@@ -54,6 +55,7 @@ interface ProjectDocument {
 const ListingAdmin = () => {
   const navigate = useNavigate();
   const { user, signOut, isAdmin } = useAuth();
+  const { t } = useLanguage();
   const { isListingAdmin, adminData, isLoading: checkingAdmin } = useListingAdmin();
   const { data: projects, refetch: refetchProjects } = useProjects();
   const { data: developers } = useDevelopers();
@@ -121,13 +123,12 @@ const ListingAdmin = () => {
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <X className="w-8 h-8 text-red-500" />
             </div>
-            <h2 className="text-black text-xl font-semibold mb-2">Access Denied</h2>
+            <h2 className="text-black text-xl font-semibold mb-2">{t('listingAdmin.accessDenied')}</h2>
             <p className="text-zinc-600 mb-6">
-              You don't have permission to access the Listing Admin panel. 
-              Please contact your administrator to request access.
+              {t('listingAdmin.noPermission')}
             </p>
             <Button onClick={() => navigate("/")} variant="primary">
-              Go Home
+              {t('listingAdmin.goHome')}
             </Button>
           </CardContent>
         </Card>
@@ -457,9 +458,9 @@ const ListingAdmin = () => {
                 </div>
                 <div>
                   <h1 className="text-black text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-                    Listing Admin
+                    {t('listingAdmin.title')}
                   </h1>
-                  <span className="text-zinc-600 text-sm">Property Manager</span>
+                  <span className="text-zinc-600 text-sm">{t('listingAdmin.propertyManager')}</span>
                 </div>
               </div>
             </div>
@@ -469,21 +470,21 @@ const ListingAdmin = () => {
                 variant="secondary"
               >
                 <MessageCircle className="w-4 h-4 mr-2" />
-                Chat with Sarah
+                {t('listingAdmin.chatWithSarah')}
               </Button>
               <Button
                 onClick={() => navigate("/team")}
                 variant="secondary"
               >
                 <Users className="w-4 h-4 mr-2" />
-                Team
+                {t('listingAdmin.team')}
               </Button>
               <Button
                 variant="secondary"
                 onClick={handleSignOut}
               >
                 <LogOut className="w-4 h-4 mr-2" />
-                Sign Out
+                {t('listingAdmin.signOut')}
               </Button>
             </div>
           </div>
@@ -502,7 +503,7 @@ const ListingAdmin = () => {
                     <div className="w-6 h-6 rounded-full bg-black flex items-center justify-center">
                       <Building2 className="w-3 h-3 text-gold" />
                     </div>
-                    <span className="text-zinc-600 text-sm">Projects</span>
+                    <span className="text-zinc-600 text-sm">{t('listingAdmin.projects')}</span>
                   </div>
                   <p className="text-black text-2xl font-bold">{projects?.length || 0}</p>
                 </CardContent>
@@ -513,7 +514,7 @@ const ListingAdmin = () => {
                     <div className="w-6 h-6 rounded-full bg-black flex items-center justify-center">
                       <Crown className="w-3 h-3 text-gold" />
                     </div>
-                    <span className="text-zinc-600 text-sm">Premium</span>
+                    <span className="text-zinc-600 text-sm">{t('listingAdmin.premium')}</span>
                   </div>
                   <p className="text-black text-2xl font-bold">
                     {projects?.filter((p) => p.is_premium).length || 0}
@@ -528,7 +529,7 @@ const ListingAdmin = () => {
               className="w-full bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300"
             >
               <Plus className="w-4 h-4 mr-2 text-gold" />
-              Add New Project
+              {t('listingAdmin.addNewProject')}
             </Button>
 
             {/* Search Filters */}
@@ -552,7 +553,7 @@ const ListingAdmin = () => {
             <Card className="bg-white border-zinc-200">
               <CardHeader className="py-3 px-4 border-b border-zinc-200">
                 <CardTitle className="text-black text-sm font-medium">
-                  All Listed Projects ({filteredProjects?.length || 0})
+                  {t('listingAdmin.allListedProjects')} ({filteredProjects?.length || 0})
                 </CardTitle>
               </CardHeader>
               <ScrollArea className="h-[calc(100vh-520px)]">
@@ -588,7 +589,7 @@ const ListingAdmin = () => {
                   {filteredProjects?.length === 0 && (
                     <div className="text-center py-8 text-zinc-500">
                       <FolderOpen className="w-10 h-10 mx-auto mb-2 opacity-50" />
-                      <p className="text-sm">No projects found</p>
+                      <p className="text-sm">{t('listingAdmin.noProjectsFound')}</p>
                     </div>
                   )}
                 </div>
@@ -607,10 +608,10 @@ const ListingAdmin = () => {
               </div>
             ) : (isEditing || isCreating) ? (
               <Card className="bg-white border-zinc-200">
-                <CardHeader className="border-b border-zinc-200">
+              <CardHeader className="border-b border-zinc-200">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-black">
-                      {isCreating ? "Create New Project" : `Edit: ${selectedProject?.name}`}
+                      {isCreating ? t('listingAdmin.createNewProject') : `${t('listingAdmin.editProject')}: ${selectedProject?.name}`}
                     </CardTitle>
                     <div className="flex items-center gap-2">
                       {!isCreating && (
@@ -621,7 +622,7 @@ const ListingAdmin = () => {
                           className="text-zinc-600 hover:text-black"
                         >
                           <ExternalLink className="w-4 h-4 mr-1" />
-                          View
+                          {t('listingAdmin.view')}
                         </Button>
                       )}
                       <Button
@@ -643,21 +644,21 @@ const ListingAdmin = () => {
                   <Tabs defaultValue="details" className="space-y-6">
                     <TabsList className="bg-zinc-100 border border-zinc-200">
                       <TabsTrigger value="details" className="data-[state=active]:bg-black data-[state=active]:text-white">
-                        Details
+                        {t('listingAdmin.details')}
                       </TabsTrigger>
                       <TabsTrigger 
                         value="documents" 
                         className="data-[state=active]:bg-black data-[state=active]:text-white"
                         disabled={isCreating}
                       >
-                        Documents
+                        {t('listingAdmin.documents')}
                       </TabsTrigger>
                       <TabsTrigger 
                         value="images" 
                         className="data-[state=active]:bg-black data-[state=active]:text-white"
                         disabled={isCreating}
                       >
-                        Images
+                        {t('listingAdmin.images')}
                       </TabsTrigger>
                     </TabsList>
 
@@ -665,7 +666,7 @@ const ListingAdmin = () => {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* Name */}
                         <div className="md:col-span-2">
-                          <Label className="text-zinc-600">Project Name *</Label>
+                          <Label className="text-zinc-600">{t('listingAdmin.projectName')} *</Label>
                           <Input
                             value={formData.name}
                             onChange={(e) => {
@@ -682,7 +683,7 @@ const ListingAdmin = () => {
 
                         {/* Developer */}
                         <div>
-                          <Label className="text-zinc-600">Developer *</Label>
+                          <Label className="text-zinc-600">{t('listingAdmin.developer')} *</Label>
                           <Select
                             value={formData.developer_id}
                             onValueChange={(value) =>
@@ -690,7 +691,7 @@ const ListingAdmin = () => {
                             }
                           >
                             <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
-                              <SelectValue placeholder="Select Developer" />
+                              <SelectValue placeholder={t('listingAdmin.selectDeveloper')} />
                             </SelectTrigger>
                             <SelectContent>
                               {developers?.map((dev) => (
@@ -704,7 +705,7 @@ const ListingAdmin = () => {
 
                         {/* Community */}
                         <div>
-                          <Label className="text-zinc-600">Community</Label>
+                          <Label className="text-zinc-600">{t('listingAdmin.community')}</Label>
                           <Select
                             value={formData.community_id}
                             onValueChange={(value) =>
@@ -712,7 +713,7 @@ const ListingAdmin = () => {
                             }
                           >
                             <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
-                              <SelectValue placeholder="Select Community" />
+                              <SelectValue placeholder={t('listingAdmin.selectCommunity')} />
                             </SelectTrigger>
                             <SelectContent>
                               {communities?.map((comm) => (
@@ -726,7 +727,7 @@ const ListingAdmin = () => {
 
                         {/* Location */}
                         <div>
-                          <Label className="text-zinc-600">Location</Label>
+                          <Label className="text-zinc-600">{t('listingAdmin.location')}</Label>
                           <Input
                             value={formData.location}
                             onChange={(e) =>
@@ -739,7 +740,7 @@ const ListingAdmin = () => {
 
                         {/* Emirate */}
                         <div>
-                          <Label className="text-zinc-600">Emirate</Label>
+                          <Label className="text-zinc-600">{t('listingAdmin.emirate')}</Label>
                           <Select
                             value={formData.emirate}
                             onValueChange={(value) =>
@@ -761,7 +762,7 @@ const ListingAdmin = () => {
 
                         {/* Price Range */}
                         <div>
-                          <Label className="text-zinc-600">Price From (AED)</Label>
+                          <Label className="text-zinc-600">{t('listingAdmin.priceFrom')}</Label>
                           <Input
                             type="number"
                             value={formData.price_from}
@@ -774,7 +775,7 @@ const ListingAdmin = () => {
                         </div>
 
                         <div>
-                          <Label className="text-zinc-600">Price To (AED)</Label>
+                          <Label className="text-zinc-600">{t('listingAdmin.priceTo')}</Label>
                           <Input
                             type="number"
                             value={formData.price_to}
@@ -788,7 +789,7 @@ const ListingAdmin = () => {
 
                         {/* Bedrooms */}
                         <div>
-                          <Label className="text-zinc-600">Bedrooms Min</Label>
+                          <Label className="text-zinc-600">{t('listingAdmin.bedroomsMin')}</Label>
                           <Input
                             type="number"
                             value={formData.bedrooms_min}
@@ -801,7 +802,7 @@ const ListingAdmin = () => {
                         </div>
 
                         <div>
-                          <Label className="text-zinc-600">Bedrooms Max</Label>
+                          <Label className="text-zinc-600">{t('listingAdmin.bedroomsMax')}</Label>
                           <Input
                             type="number"
                             value={formData.bedrooms_max}
@@ -815,7 +816,7 @@ const ListingAdmin = () => {
 
                         {/* Handover & Service Charge */}
                         <div>
-                          <Label className="text-zinc-600">Handover Date</Label>
+                          <Label className="text-zinc-600">{t('listingAdmin.handoverDate')}</Label>
                           <Input
                             value={formData.handover_date}
                             onChange={(e) =>
@@ -827,7 +828,7 @@ const ListingAdmin = () => {
                         </div>
 
                         <div>
-                          <Label className="text-zinc-600">Service Charge</Label>
+                          <Label className="text-zinc-600">{t('listingAdmin.serviceCharge')}</Label>
                           <Input
                             value={formData.service_charge}
                             onChange={(e) =>
@@ -840,7 +841,7 @@ const ListingAdmin = () => {
 
                         {/* Payment Plan */}
                         <div className="md:col-span-2">
-                          <Label className="text-zinc-600">Payment Plan</Label>
+                          <Label className="text-zinc-600">{t('listingAdmin.paymentPlan')}</Label>
                           <Input
                             value={formData.payment_plan}
                             onChange={(e) =>
@@ -853,7 +854,7 @@ const ListingAdmin = () => {
 
                         {/* Description */}
                         <div className="md:col-span-2">
-                          <Label className="text-zinc-600">Description</Label>
+                          <Label className="text-zinc-600">{t('listingAdmin.description')}</Label>
                           <Textarea
                             value={formData.description}
                             onChange={(e) =>
@@ -869,10 +870,10 @@ const ListingAdmin = () => {
                           <div>
                             <Label className="text-black font-medium flex items-center gap-2">
                               <Crown className="w-4 h-4 text-gold" />
-                              Premium Listing
+                              {t('listingAdmin.premiumListing')}
                             </Label>
                             <p className="text-zinc-500 text-sm">
-                              Premium properties appear with special badge in search & listings
+                              {t('listingAdmin.premiumDesc')}
                             </p>
                           </div>
                           <Switch
@@ -893,7 +894,7 @@ const ListingAdmin = () => {
                             className="bg-red-100 text-red-600 hover:bg-red-200 border-red-200"
                           >
                             <Trash2 className="w-4 h-4 mr-2" />
-                            Delete Project
+                            {t('listingAdmin.deleteProject')}
                           </Button>
                         )}
                         <div className="flex gap-3 ml-auto">
@@ -906,14 +907,14 @@ const ListingAdmin = () => {
                             }}
                             className="border-zinc-300 text-zinc-600"
                           >
-                            Cancel
+                            {t('listingAdmin.cancel')}
                           </Button>
                           <Button
                             onClick={handleSaveProject}
                             disabled={isSaving}
                             className="bg-black text-white hover:bg-zinc-800"
                           >
-                            {isSaving ? "Saving..." : isCreating ? "Create Project" : "Save Changes"}
+                            {isSaving ? t('listingAdmin.saving') : isCreating ? t('listingAdmin.createNewProject') : t('listingAdmin.saveChanges')}
                           </Button>
                         </div>
                       </div>
@@ -926,11 +927,11 @@ const ListingAdmin = () => {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="brochure">Brochure</SelectItem>
-                            <SelectItem value="floorplan">Floor Plan</SelectItem>
-                            <SelectItem value="factsheet">Fact Sheet</SelectItem>
-                            <SelectItem value="payment_plan">Payment Plan</SelectItem>
-                            <SelectItem value="other">Other</SelectItem>
+                            <SelectItem value="brochure">{t('listingAdmin.brochure')}</SelectItem>
+                            <SelectItem value="floorplan">{t('listingAdmin.floorPlan')}</SelectItem>
+                            <SelectItem value="factsheet">{t('listingAdmin.factSheet')}</SelectItem>
+                            <SelectItem value="payment_plan">{t('listingAdmin.paymentPlan')}</SelectItem>
+                            <SelectItem value="other">{t('listingAdmin.other')}</SelectItem>
                           </SelectContent>
                         </Select>
                         <Button
@@ -939,7 +940,7 @@ const ListingAdmin = () => {
                           className="bg-black text-white hover:bg-zinc-800"
                         >
                           <Upload className="w-4 h-4 mr-2" />
-                          {isUploadingDocument ? "Uploading..." : "Upload Document"}
+                          {isUploadingDocument ? t('listingAdmin.uploading') : t('listingAdmin.uploadDocument')}
                         </Button>
                         <input
                           ref={fileInputRef}
@@ -954,7 +955,7 @@ const ListingAdmin = () => {
                         {projectDocuments.length === 0 ? (
                           <div className="text-center py-12 text-zinc-500">
                             <FolderOpen className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                            <p>No documents uploaded yet</p>
+                            <p>{t('listingAdmin.noDocuments')}</p>
                           </div>
                         ) : (
                           projectDocuments.map((doc) => (
@@ -1002,7 +1003,7 @@ const ListingAdmin = () => {
                           className="bg-black text-white hover:bg-zinc-800"
                         >
                           <Image className="w-4 h-4 mr-2" />
-                          Upload Images
+                          {t('listingAdmin.uploadImages')}
                         </Button>
                         <input
                           ref={imageInputRef}
@@ -1013,7 +1014,7 @@ const ListingAdmin = () => {
                           onChange={handleImageUpload}
                         />
                         <p className="text-zinc-500 text-sm mt-2">
-                          You can select multiple images at once
+                          {t('listingAdmin.selectMultiple')}
                         </p>
                       </div>
 
@@ -1030,7 +1031,7 @@ const ListingAdmin = () => {
                             />
                             {img.is_primary && (
                               <Badge className="absolute top-2 left-2 bg-gold text-black">
-                                Primary
+                                {t('listingAdmin.primary')}
                               </Badge>
                             )}
                           </div>
@@ -1038,7 +1039,7 @@ const ListingAdmin = () => {
                         {(!selectedProject?.images || selectedProject.images.length === 0) && (
                           <div className="col-span-full text-center py-12 text-zinc-500">
                             <Image className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                            <p>No images uploaded yet</p>
+                            <p>{t('listingAdmin.noImages')}</p>
                           </div>
                         )}
                       </div>
@@ -1053,10 +1054,10 @@ const ListingAdmin = () => {
                     <Building2 className="w-10 h-10 text-gold" />
                   </div>
                   <h2 className="text-black text-xl font-semibold mb-2">
-                    Select a Project to Edit
+                    {t('listingAdmin.selectProjectToEdit')}
                   </h2>
                   <p className="text-zinc-600 mb-6">
-                    Choose a project from the list on the left, or create a new one
+                    {t('listingAdmin.chooseFromList')}
                   </p>
                   <div className="flex justify-center gap-3">
                     <Button
@@ -1064,14 +1065,14 @@ const ListingAdmin = () => {
                       className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300"
                     >
                       <Plus className="w-4 h-4 mr-2 text-gold" />
-                      Create New Project
+                      {t('listingAdmin.createNewProject')}
                     </Button>
                     <Button
                       onClick={() => setShowChat(true)}
                       className="bg-black text-white hover:bg-zinc-800"
                     >
                       <MessageCircle className="w-4 h-4 mr-2" />
-                      Ask Sarah
+                      {t('listingAdmin.askSarah')}
                     </Button>
                   </div>
                 </CardContent>

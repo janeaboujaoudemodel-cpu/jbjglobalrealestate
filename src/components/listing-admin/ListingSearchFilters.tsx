@@ -14,6 +14,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Building2, FolderOpen, MapPin, Search, Filter, X } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ListingSearchFiltersProps {
   developers: Array<{ id: string; name: string }>;
@@ -49,6 +50,7 @@ const ListingSearchFilters = ({
   emirateValue,
   locationValue,
 }: ListingSearchFiltersProps) => {
+  const { t } = useLanguage();
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
 
   const hasActiveFilters =
@@ -79,17 +81,17 @@ const ListingSearchFilters = ({
               }`}
             >
               <Building2 className="w-4 h-4 mr-1.5 text-gold" />
-              Developer
+              {t('listingAdmin.developer')}
               {developerValue !== "all" && <span className="ml-1 text-gold">•</span>}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-64 p-3 bg-white border-zinc-200" align="start">
             <Select value={developerValue} onValueChange={(v) => { onDeveloperChange(v); setActiveFilter(null); }}>
               <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black">
-                <SelectValue placeholder="Select Developer" />
+                <SelectValue placeholder={t('listingAdmin.selectDeveloper')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Developers</SelectItem>
+                <SelectItem value="all">{t('listingAdmin.allDevelopers')}</SelectItem>
                 {developers?.map((dev) => (
                   <SelectItem key={dev.id} value={dev.id}>
                     {dev.name}
@@ -110,7 +112,7 @@ const ListingSearchFilters = ({
               }`}
             >
               <FolderOpen className="w-4 h-4 mr-1.5 text-gold" />
-              Project
+              {t('listingAdmin.project')}
               {searchValue && <span className="ml-1 text-gold">•</span>}
             </Button>
           </PopoverTrigger>
@@ -120,7 +122,7 @@ const ListingSearchFilters = ({
               <Input
                 value={searchValue}
                 onChange={(e) => onSearchChange(e.target.value)}
-                placeholder="Search projects..."
+                placeholder={t('listingAdmin.searchProjects')}
                 className="pl-10 bg-zinc-50 border-zinc-300 text-black"
                 autoFocus
               />
@@ -138,19 +140,19 @@ const ListingSearchFilters = ({
               }`}
             >
               <MapPin className="w-4 h-4 mr-1.5 text-gold" />
-              Emirate
+              {t('listingAdmin.emirate')}
               {emirateValue !== "all" && <span className="ml-1 text-gold">•</span>}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-64 p-3 bg-white border-zinc-200" align="start">
             <Select value={emirateValue} onValueChange={(v) => { onEmirateChange(v); setActiveFilter(null); }}>
               <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black">
-                <SelectValue placeholder="Select Emirate" />
+                <SelectValue placeholder={t('listingAdmin.emirate')} />
               </SelectTrigger>
               <SelectContent>
                 {EMIRATES.map((emirate) => (
                   <SelectItem key={emirate.value} value={emirate.value}>
-                    {emirate.label}
+                    {emirate.value === "all" ? t('listingAdmin.allEmirates') : emirate.label}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -168,7 +170,7 @@ const ListingSearchFilters = ({
               }`}
             >
               <Filter className="w-4 h-4 mr-1.5 text-gold" />
-              Area
+              {t('listingAdmin.area')}
               {locationValue && <span className="ml-1 text-gold">•</span>}
             </Button>
           </PopoverTrigger>
@@ -176,7 +178,7 @@ const ListingSearchFilters = ({
             <Input
               value={locationValue}
               onChange={(e) => onLocationChange(e.target.value)}
-              placeholder="Search by area/location..."
+              placeholder={t('listingAdmin.searchByArea')}
               className="bg-zinc-50 border-zinc-300 text-black"
               autoFocus
             />
@@ -191,7 +193,7 @@ const ListingSearchFilters = ({
             className="text-red-600 hover:text-red-700 hover:bg-red-50"
           >
             <X className="w-4 h-4 mr-1" />
-            Clear All
+            {t('listingAdmin.clearAll')}
           </Button>
         )}
       </div>
