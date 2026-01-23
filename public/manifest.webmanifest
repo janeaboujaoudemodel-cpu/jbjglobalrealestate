@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+  "name": "JBJ Global Real Estate",
+  "short_name": "JBJ",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "icons": []
+}
