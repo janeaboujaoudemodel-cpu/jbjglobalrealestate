@@ -519,7 +519,7 @@ const BuyerGuide = () => {
       {/* Divider */}
       {/* Agency Fees & Buyer Costs */}
       <section id="agency-fees" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <GuideSectionHeader icon={Wallet} title="Agency Fees & Buyer Costs" centered />
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -602,7 +602,7 @@ const BuyerGuide = () => {
 
       {/* Buyer Costs Overview */}
       <section id="buyer-costs" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <GuideSectionHeader icon={Calculator} title="Buyer Costs Overview" centered />
 
           <div className="mb-8">
@@ -653,7 +653,7 @@ const BuyerGuide = () => {
 
       {/* Mortgages & Financing */}
       <section id="mortgages" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <div className="jj-card-inner p-8 md:p-12">
             <GuideSectionHeader icon={Landmark} title="Mortgages & Financing" />
             <div className="grid md:grid-cols-2 gap-4">
@@ -670,7 +670,7 @@ const BuyerGuide = () => {
 
       {/* How JBJ Global Real Estate Supports Buyers */}
       <section id="jbj-support" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <GuideSectionHeader icon={HandshakeIcon} title="How JBJ Supports Buyers" centered />
 
           <div className="grid md:grid-cols-2 gap-4 mb-8">
@@ -695,7 +695,7 @@ const BuyerGuide = () => {
 
       {/* FAQs */}
       <section id="faqs" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <GuideSectionHeader icon={HelpCircle} title="Buyer Guide FAQs" centered />
 
           <div className="jj-card-inner rounded-2xl p-6 md:p-8">
@@ -764,7 +764,7 @@ const BuyerGuide = () => {
       {/* Legal Disclaimer - 3-Layer System */}
       <section className="py-8 bg-black">
         <div className="jj-layer-2">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-5xl mx-auto">
             <div className="jj-card-inner rounded-lg p-6">
               <h4 className="text-black font-semibold mb-3 flex items-center gap-2">
                 <Shield className="w-4 h-4 text-gold" />

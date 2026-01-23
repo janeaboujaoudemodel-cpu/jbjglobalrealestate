@@ -54,19 +54,27 @@ export const GuideTableOfContents = ({
         // Skip observer updates during programmatic scroll
         if (isScrollingRef.current) return;
         
+        // Find all currently intersecting sections
         const visibleEntries = entries.filter(entry => entry.isIntersecting);
         if (visibleEntries.length > 0) {
-          // Sort by top position to get the topmost visible section
+          // Get the section closest to the top of the viewport (but still visible)
           const sorted = visibleEntries.sort((a, b) => {
-            return a.boundingClientRect.top - b.boundingClientRect.top;
+            const aTop = a.boundingClientRect.top;
+            const bTop = b.boundingClientRect.top;
+            return aTop - bTop;
           });
-          const bestEntry = sorted.find(entry => entry.boundingClientRect.top >= -100) || sorted[0];
+          // Pick the first one that's at or below the header area
+          const bestEntry = sorted.find(entry => entry.boundingClientRect.top >= -50) || sorted[0];
           if (bestEntry) {
             setActiveId(bestEntry.target.id);
           }
         }
       },
-      { rootMargin: "-140px 0px -50% 0px", threshold: [0, 0.25, 0.5] }
+      { 
+        // Smaller top margin to detect sections earlier when scrolling down
+        rootMargin: "-80px 0px -60% 0px", 
+        threshold: [0, 0.1, 0.2, 0.3] 
+      }
     );
 
     items.forEach((item) => {
@@ -78,16 +86,17 @@ export const GuideTableOfContents = ({
   }, [items]);
 
   const scrollToSection = (id: string) => {
-    // Lock observer during scroll
+    // Lock observer during scroll and set active immediately
     isScrollingRef.current = true;
     setActiveId(id);
     
-    scrollToId(id, { extraOffset: 20 });
+    // Use a larger offset to ensure section header is clearly visible
+    scrollToId(id, { extraOffset: 40 });
 
-    // Re-enable observer after scroll animation completes
+    // Re-enable observer after scroll animation completes (longer delay for reliability)
     setTimeout(() => {
       isScrollingRef.current = false;
-    }, 900);
+    }, 1200);
   };
 
   const handleDismissTooltip = () => {

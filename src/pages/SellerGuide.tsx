@@ -502,9 +502,8 @@ const SellerGuide = () => {
           </div>
         </section>
 
-        {/* Selling Mortgaged Properties */}
         <section id="mortgaged-properties" className="py-16 jj-section-champagne scroll-mt-20">
-          <div className="max-w-4xl mx-auto px-4">
+          <div className="max-w-5xl mx-auto px-4">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -533,9 +532,8 @@ const SellerGuide = () => {
           </div>
         </section>
 
-        {/* Selling Off-Plan Properties (Resale) */}
         <section id="off-plan-resale" className="py-16 jj-section-champagne scroll-mt-20">
-          <div className="max-w-4xl mx-auto px-4">
+          <div className="max-w-5xl mx-auto px-4">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -564,9 +562,8 @@ const SellerGuide = () => {
           </div>
         </section>
 
-        {/* How JBJ Global Real Estate Supports Sellers */}
         <section id="jbj-support" className="py-16 jj-section-champagne scroll-mt-20">
-          <div className="max-w-4xl mx-auto px-4">
+          <div className="max-w-5xl mx-auto px-4">
             <GuideSectionHeader icon={Handshake} title="How JBJ Supports Sellers" />
 
             <div className="grid md:grid-cols-2 gap-4 mb-8">
@@ -589,9 +586,8 @@ const SellerGuide = () => {
           </div>
         </section>
 
-        {/* FAQ Section */}
         <section id="faqs" className="py-16 jj-section-champagne scroll-mt-20">
-          <div className="max-w-4xl mx-auto px-4">
+          <div className="max-w-5xl mx-auto px-4">
             <GuideSectionHeader icon={HelpCircle} title="Seller Guide FAQs" />
               
             <div className="jj-card-inner rounded-2xl p-6 md:p-8">
@@ -685,7 +681,7 @@ const SellerGuide = () => {
         {/* Compliance Disclaimer - 3-Layer System */}
         <section className="py-8 bg-black">
           <div className="jj-layer-2">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <div className="jj-card-inner rounded-lg p-6">
                 <h4 className="text-black font-semibold mb-3 flex items-center gap-2">
                   <Shield className="w-4 h-4 text-gold" />
