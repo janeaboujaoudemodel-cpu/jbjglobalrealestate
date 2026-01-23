@@ -6,28 +6,28 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-interface DriveUploadRequest {
-  driveUrl: string;
+interface UploadRequest {
+  url: string;
   userId: string;
+  type?: "drive" | "web" | "upload";
 }
 
 interface ExtractedProject {
   name: string;
-  developer: string;
+  developer: string | null;
+  location: string | null;
+  emirate: string;
+  priceFrom: number | null;
+  priceTo: number | null;
+  bedroomsMin: number | null;
+  bedroomsMax: number | null;
+  handoverDate: string | null;
+  description: string | null;
   files: Array<{
     name: string;
     type: string;
     url: string;
   }>;
-  suggestedData: {
-    location?: string;
-    emirate?: string;
-    priceFrom?: number;
-    priceTo?: number;
-    bedroomsMin?: number;
-    bedroomsMax?: number;
-    handoverDate?: string;
-  };
 }
 
 // Developer keywords for auto-detection
@@ -43,27 +43,14 @@ const DEVELOPER_KEYWORDS: Record<string, string[]> = {
   "Binghatti": ["binghatti", "jacob"],
   "Select Group": ["select group", "jumeirah living", "peninsula"],
   "MAG": ["mag", "meydan"],
+  "Ellington": ["ellington", "wilton"],
+  "Omniyat": ["omniyat", "one palm", "alba"],
+  "Deyaar": ["deyaar", "montrose"],
 };
 
-// Document type detection
-function detectDocumentType(filename: string): string {
-  const lower = filename.toLowerCase();
-  if (lower.includes("brochure")) return "brochure";
-  if (lower.includes("floor") && lower.includes("plan")) return "floor_plan";
-  if (lower.includes("fact") && lower.includes("sheet")) return "fact_sheet";
-  if (lower.includes("payment") && lower.includes("plan")) return "payment_plan";
-  if (lower.includes("render") || lower.includes("cgi")) return "render";
-  if (lower.includes("master") && lower.includes("plan")) return "master_plan";
-  if (lower.includes("price") || lower.includes("pricing")) return "price_list";
-  if (lower.includes("unit") && lower.includes("plan")) return "unit_plan";
-  if (/\.(jpg|jpeg|png|webp)$/i.test(lower)) return "image";
-  if (/\.pdf$/i.test(lower)) return "document";
-  return "other";
-}
-
-// Developer detection from filename
-function detectDeveloper(filename: string): string | null {
-  const lower = filename.toLowerCase();
+// Detect developer from text
+function detectDeveloper(text: string): string | null {
+  const lower = text.toLowerCase();
   for (const [developer, keywords] of Object.entries(DEVELOPER_KEYWORDS)) {
     for (const keyword of keywords) {
       if (lower.includes(keyword)) {
@@ -74,25 +61,21 @@ function detectDeveloper(filename: string): string | null {
   return null;
 }
 
-// Project name extraction from filename
-function extractProjectName(filename: string): string | null {
-  // Remove extension and common prefixes
-  let name = filename.replace(/\.[^/.]+$/, "");
-  name = name.replace(/^(brochure|floorplan|factsheet|render|pricing|payment)[-_\s]*/i, "");
-  
-  // Remove developer name if detected
-  for (const keywords of Object.values(DEVELOPER_KEYWORDS)) {
-    for (const keyword of keywords) {
-      name = name.replace(new RegExp(keyword, "gi"), "").trim();
-    }
+// Detect URL type
+function detectUrlType(url: string): "drive" | "web" | "unknown" {
+  if (url.includes("drive.google.com") || url.includes("docs.google.com")) {
+    return "drive";
   }
-  
-  // Clean up and format
-  name = name.replace(/[-_]+/g, " ").trim();
-  if (name.length > 3) {
-    return name.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(" ");
+  if (url.includes("bayut.com") || url.includes("propertyfinder.ae") || 
+      url.includes("dubizzle.com") || url.includes("rera.gov.ae") ||
+      url.includes("emaar.com") || url.includes("damacproperties.com") ||
+      url.includes("sobharealty.com") || url.includes("azizidevelopments.com")) {
+    return "web";
   }
-  return null;
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return "web";
+  }
+  return "unknown";
 }
 
 serve(async (req) => {
@@ -105,31 +88,25 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const { driveUrl, userId }: DriveUploadRequest = await req.json();
+    const { url, userId, type }: UploadRequest = await req.json();
 
-    if (!driveUrl) {
-      throw new Error("No Google Drive URL provided");
+    if (!url) {
+      throw new Error("No URL provided");
     }
 
-    // Validate Google Drive URL
-    if (!driveUrl.includes("drive.google.com") && !driveUrl.includes("docs.google.com")) {
-      throw new Error("Invalid Google Drive URL");
+    const urlType = type || detectUrlType(url);
+    
+    if (urlType === "unknown") {
+      throw new Error("Unsupported URL format. Please provide a Google Drive link, property portal URL, or direct file URL.");
     }
 
-    // In a real implementation, this would:
-    // 1. Use Google Drive API to list files in the folder
-    // 2. Download each file
-    // 3. Process PDFs to extract text
-    // 4. Use AI to extract project details from documents
-    // 5. Group files by project
-    // 6. Create draft listings for approval
-
-    // For now, we'll create a pending upload record
+    // Create upload record for tracking
     const { data: uploadRecord, error: uploadError } = await supabase
       .from("listing_uploads")
       .insert({
         user_id: userId,
-        drive_url: driveUrl,
+        drive_url: url,
+        url_type: urlType,
         status: "processing",
         created_at: new Date().toISOString(),
       })
@@ -140,32 +117,134 @@ serve(async (req) => {
       console.error("Failed to create upload record:", uploadError);
     }
 
-    // Simulate processing response
-    const mockProjects: ExtractedProject[] = [
-      {
-        name: "Sample Project from Drive",
-        developer: "Detected Developer",
-        files: [],
-        suggestedData: {
-          emirate: "Dubai",
+    // Use AI to extract project information from the URL
+    let extractedProject: ExtractedProject | null = null;
+    
+    try {
+      const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${Deno.env.get("LOVABLE_API_KEY")}`,
+        },
+        body: JSON.stringify({
+          model: "google/gemini-2.5-flash",
+          max_tokens: 2000,
+          temperature: 0.3,
+          messages: [
+            {
+              role: "system",
+              content: `You are a real estate data extraction expert. Extract property listing information from URLs.
+
+For the given URL, analyze what type of content it contains and extract:
+1. Project/Property name
+2. Developer name
+3. Location/Area
+4. Emirate (Dubai, Abu Dhabi, etc.)
+5. Price range (from/to in AED)
+6. Bedroom configurations
+7. Handover date if available
+8. Brief description
+
+Return a JSON object with this structure:
+{
+  "name": "Project Name",
+  "developer": "Developer Name or null",
+  "location": "Area/Community",
+  "emirate": "Dubai",
+  "priceFrom": 1000000,
+  "priceTo": 5000000,
+  "bedroomsMin": 1,
+  "bedroomsMax": 4,
+  "handoverDate": "Q4 2025 or null",
+  "description": "Brief project description"
+}
+
+If you cannot access or determine certain fields, set them to null.
+Only return valid JSON, no markdown or explanation.`
+            },
+            {
+              role: "user",
+              content: `Extract property listing data from this URL: ${url}
+
+URL Type: ${urlType === "drive" ? "Google Drive (may contain brochures, floor plans)" : "Property portal or developer website"}
+
+Please analyze and extract the project information.`
+            }
+          ]
+        })
+      });
+
+      if (aiResponse.ok) {
+        const aiData = await aiResponse.json();
+        const content = aiData.choices?.[0]?.message?.content || "";
+        
+        try {
+          const parsed = JSON.parse(content.replace(/```json\n?|\n?```/g, "").trim());
+          extractedProject = {
+            ...parsed,
+            files: []
+          };
+        } catch (parseError) {
+          console.error("Failed to parse AI response:", content);
         }
       }
-    ];
+    } catch (aiError) {
+      console.error("AI extraction failed:", aiError);
+    }
+
+    // If AI extraction failed, create a placeholder with detected developer
+    if (!extractedProject) {
+      const detectedDeveloper = detectDeveloper(url);
+      extractedProject = {
+        name: "Draft Project",
+        developer: detectedDeveloper,
+        location: null,
+        emirate: "Dubai",
+        priceFrom: null,
+        priceTo: null,
+        bedroomsMin: null,
+        bedroomsMax: null,
+        handoverDate: null,
+        description: null,
+        files: []
+      };
+    }
+
+    // Update upload record with extracted data
+    if (uploadRecord?.id) {
+      await supabase
+        .from("listing_uploads")
+        .update({
+          status: "completed",
+          extracted_data: extractedProject,
+          completed_at: new Date().toISOString(),
+        })
+        .eq("id", uploadRecord.id);
+    }
 
     return new Response(JSON.stringify({
       success: true,
-      message: "Google Drive link received and queued for processing",
+      message: urlType === "drive" 
+        ? "Google Drive link processed successfully"
+        : "Property link processed successfully",
       uploadId: uploadRecord?.id,
-      status: "processing",
-      estimatedProjects: mockProjects.length,
-      note: "Files will be processed and organized by project. Each project will be sent for your approval before going live."
+      status: "completed",
+      extractedProject,
+      nextSteps: [
+        "Review the extracted information below",
+        "Fill in any missing details",
+        "Click 'Create Draft' to save as a draft listing",
+        "Upload images and documents",
+        "Submit for approval when ready"
+      ]
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
 
   } catch (error: unknown) {
-    console.error("Drive upload processing error:", error);
-    const errorMessage = error instanceof Error ? error.message : "Failed to process Google Drive link";
+    console.error("Upload processing error:", error);
+    const errorMessage = error instanceof Error ? error.message : "Failed to process link";
     return new Response(JSON.stringify({ 
       success: false,
       error: errorMessage

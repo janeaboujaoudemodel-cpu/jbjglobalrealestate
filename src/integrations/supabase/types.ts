@@ -8459,36 +8459,45 @@ export type Database = {
       }
       listing_uploads: {
         Row: {
+          completed_at: string | null
           created_at: string
           drive_url: string
           error_message: string | null
+          extracted_data: Json | null
           extracted_projects: Json | null
           id: string
           processed_at: string | null
           status: string
           updated_at: string
+          url_type: string | null
           user_id: string
         }
         Insert: {
+          completed_at?: string | null
           created_at?: string
           drive_url: string
           error_message?: string | null
+          extracted_data?: Json | null
           extracted_projects?: Json | null
           id?: string
           processed_at?: string | null
           status?: string
           updated_at?: string
+          url_type?: string | null
           user_id: string
         }
         Update: {
+          completed_at?: string | null
           created_at?: string
           drive_url?: string
           error_message?: string | null
+          extracted_data?: Json | null
           extracted_projects?: Json | null
           id?: string
           processed_at?: string | null
           status?: string
           updated_at?: string
+          url_type?: string | null
           user_id?: string
         }
         Relationships: []
