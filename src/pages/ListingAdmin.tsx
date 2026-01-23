@@ -435,9 +435,9 @@ const ListingAdmin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black pt-24 lg:pt-28">
-      {/* Header */}
-      <header className="border-b border-zinc-800 bg-black/80 backdrop-blur-sm sticky top-[88px] lg:top-[104px] z-40">
+    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] pt-24 lg:pt-28">
+      {/* Header - Premium Champagne Style */}
+      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-[88px] lg:top-[104px] z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -445,37 +445,40 @@ const ListingAdmin = () => {
                 variant="ghost"
                 size="icon"
                 onClick={() => navigate("/")}
-                className="text-zinc-400 hover:text-white"
+                className="text-black hover:text-gold hover:bg-gold/10"
               >
                 <ArrowLeft className="w-5 h-5" />
               </Button>
               <div className="flex items-center gap-3">
-                <h1 className="text-white text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  Listing Admin
-                </h1>
-                <span className="text-zinc-500">•</span>
-                <span className="text-zinc-400 text-sm">Property Manager</span>
+                <div className="p-2 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+                  <Building2 className="w-5 h-5 text-black" />
+                </div>
+                <div>
+                  <h1 className="text-black text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    Listing Admin
+                  </h1>
+                  <span className="text-zinc-600 text-sm">Property Manager</span>
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <Button
                 onClick={() => setShowChat(!showChat)}
-                className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300"
+                variant="secondary"
               >
-                <MessageCircle className="w-4 h-4 mr-2 text-gold group-hover:text-white" />
+                <MessageCircle className="w-4 h-4 mr-2" />
                 Chat with Sarah
               </Button>
               <Button
                 onClick={() => navigate("/team")}
-                className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300"
+                variant="secondary"
               >
-                <Users className="w-4 h-4 mr-2 text-gold" />
+                <Users className="w-4 h-4 mr-2" />
                 Team
               </Button>
               <Button
-                variant="outline"
+                variant="secondary"
                 onClick={handleSignOut}
-                className="border-zinc-700 text-white hover:bg-zinc-800"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Sign Out
