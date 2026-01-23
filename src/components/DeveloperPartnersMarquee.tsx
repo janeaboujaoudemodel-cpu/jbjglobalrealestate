@@ -104,9 +104,7 @@ const DeveloperPartnersMarquee = () => {
           {/* Scrolling content */}
           <motion.div
             className="flex items-center gap-6 md:gap-10 py-4 px-4"
-            animate={{
-              x: [0, -distance],
-            }}
+            animate={isPaused ? { x: undefined } : { x: [0, -distance] }}
             transition={{
               x: {
                 duration: 50,
@@ -114,10 +112,6 @@ const DeveloperPartnersMarquee = () => {
                 ease: "linear",
               },
             }}
-            style={{
-              animationPlayState: isPaused ? "paused" : "running",
-            }}
-            {...(isPaused && { animate: undefined })}
           >
             {duplicatedDevelopers.map((developer, index) => {
               return (

@@ -121,11 +121,12 @@ export const en = {
   // Stats
   'home.stats.yearsInDubai': 'Years Experience',
   'home.stats.brokersTrainedBy': 'Brokers Trained',
-  'home.stats.clientSatisfaction': 'Client Satisfaction',
+  'home.stats.clientSatisfaction': 'Social Followers',
   'home.stats.teamMembers': 'Team Members',
-  'home.stats.trackRecord': 'Our Track Record',
+  'home.stats.trackRecord': 'Track Record',
   'home.stats.trusted': 'Serving',
   'home.stats.clients': 'UAE & International Clients',
+  'founder.experience': 'Founder experience',
   
   // Founder Section
   'founder.leadership': 'Leadership',

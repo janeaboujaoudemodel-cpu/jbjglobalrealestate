@@ -121,12 +121,17 @@ export const ar = {
   // Stats
   'home.stats.portfolio': 'قيمة المحفظة',
   'home.stats.years': 'سنوات الخبرة',
+  'home.stats.yearsInDubai': 'سنوات الخبرة',
+  'home.stats.brokersTrainedBy': 'وسطاء تم تدريبهم',
+  'home.stats.clientSatisfaction': 'متابعين على وسائل التواصل',
+  'home.stats.teamMembers': 'أعضاء الفريق',
   'home.stats.propertiesSold': 'العقارات المباعة',
   'home.stats.propertiesManaged': 'العقارات المُدارة',
   'home.stats.countries': 'دول نخدمها',
-  'home.stats.trackRecord': 'سجل إنجازاتنا',
+  'home.stats.trackRecord': 'سجل الإنجازات',
   'home.stats.trusted': 'خدمة',
   'home.stats.clients': 'عملاء الإمارات والعالم',
+  'founder.experience': 'خبرة المؤسسة',
   
   // Founder Section
   'founder.leadership': 'القيادة',

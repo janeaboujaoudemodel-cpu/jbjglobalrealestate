@@ -3,10 +3,37 @@
  * 
  * This component intercepts all text nodes in the React tree and translates them
  * automatically based on the current language setting. No manual wrapping required.
+ * 
+ * CRITICAL RULES:
+ * - Numbers in English (12, 4800, 1M) → Arabic numerals (١٢, ٤٨٠٠, ١م)
+ * - No value changes allowed - only translation of text
+ * - Instant language switching - no delays
  */
 
 import { useEffect, useCallback, useRef, useContext } from 'react';
 import { LanguageContext } from '@/contexts/LanguageContext';
+
+// Arabic-Indic numerals mapping
+const ARABIC_NUMERALS: Record<string, string> = {
+  '0': '٠', '1': '١', '2': '٢', '3': '٣', '4': '٤',
+  '5': '٥', '6': '٦', '7': '٧', '8': '٨', '9': '٩',
+};
+
+// Convert Western numerals to Arabic-Indic numerals
+const toArabicNumerals = (text: string): string => {
+  return text.replace(/[0-9]/g, (digit) => ARABIC_NUMERALS[digit] || digit);
+};
+
+// Convert abbreviations (M, K, B) to Arabic equivalents
+const localizeAbbreviations = (text: string, lang: string): string => {
+  if (lang !== 'ar') return text;
+  
+  // Convert number abbreviations
+  return text
+    .replace(/(\d+(?:\.\d+)?)\s*M\+?/gi, (_, num) => `${toArabicNumerals(num)}م+`)
+    .replace(/(\d+(?:\.\d+)?)\s*K\+?/gi, (_, num) => `${toArabicNumerals(num)}ألف+`)
+    .replace(/(\d+(?:\.\d+)?)\s*B\+?/gi, (_, num) => `${toArabicNumerals(num)}مليار+`);
+};
 
 // Text nodes that should NOT be translated
 const SKIP_SELECTORS = [
@@ -22,20 +49,16 @@ const SKIP_SELECTORS = [
   'select',
 ];
 
-// Skip patterns (English words that should remain English)
-const SKIP_PATTERNS = [
-  /^[\d\s.,!?@#$%^&*()_+=\-\[\]{}|\\:";'<>?,./`~]*$/, // Only numbers/symbols
+// Skip patterns (preserve structure but still localize numbers)
+const SKIP_TEXT_PATTERNS = [
   /^https?:\/\//, // URLs
   /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // Emails
-  /^\+?\d[\d\s\-()]+$/, // Phone numbers
-  /^AED\s*[\d,]+/, // Currency
-  /^[\d,]+\s*(sq\.?\s*ft|sqft|m²|sqm)/, // Measurements
 ];
 
-// Check if text should be skipped
+// Check if text should be completely skipped (no processing at all)
 const shouldSkipText = (text: string): boolean => {
-  if (!text || text.trim().length < 2) return true;
-  return SKIP_PATTERNS.some(pattern => pattern.test(text.trim()));
+  if (!text || text.trim().length < 1) return true;
+  return SKIP_TEXT_PATTERNS.some(pattern => pattern.test(text.trim()));
 };
 
 // Check if element should be skipped
@@ -71,12 +94,14 @@ export const GlobalTranslator = () => {
   // Safe defaults when context is not available
   const language = context?.language ?? 'en';
   const translateText = context?.translateText ?? ((text: string) => text);
+  const translationVersion = context?.translationVersion ?? 0;
   
   const originalTexts = useRef<WeakMap<Text, string>>(new WeakMap());
   const translatedNodes = useRef<Set<Text>>(new Set());
   const observerRef = useRef<MutationObserver | null>(null);
   const processingRef = useRef(false);
   const lastLanguageRef = useRef(language);
+  const lastVersionRef = useRef(translationVersion);
 
   // Translate a single text node
   const translateNode = useCallback((node: Text) => {
@@ -98,8 +123,17 @@ export const GlobalTranslator = () => {
       return;
     }
 
-    // Get translation
-    const translated = translateText(originalText);
+    // Get translation first
+    let translated = translateText(originalText);
+    
+    // Apply Arabic numeral conversion for Arabic
+    if (language === 'ar' && translated) {
+      // First handle abbreviations like "1M+" → "١م+"
+      translated = localizeAbbreviations(translated, language);
+      // Then convert remaining numerals
+      translated = toArabicNumerals(translated);
+    }
+    
     if (translated && translated !== node.textContent) {
       node.textContent = translated;
       translatedNodes.current.add(node);
@@ -148,8 +182,8 @@ export const GlobalTranslator = () => {
       }
 
       if (hasNewText) {
-        // Debounce processing
-        setTimeout(processAllNodes, 50);
+        // Immediate processing for faster response
+        setTimeout(processAllNodes, 10);
       }
     });
 
@@ -179,16 +213,27 @@ export const GlobalTranslator = () => {
       // Clear translated nodes tracking for fresh translation
       translatedNodes.current.clear();
       
-      // Process all nodes with new language
+      // Process all nodes with new language immediately
       processAllNodes();
     }
   }, [language, processAllNodes, context]);
 
-  // Re-process periodically to catch any missed content
+  // Re-process when translationVersion changes (async translations resolved)
   useEffect(() => {
     if (!context) return;
     
-    const interval = setInterval(processAllNodes, 2000);
+    if (lastVersionRef.current !== translationVersion) {
+      lastVersionRef.current = translationVersion;
+      // Immediately reprocess to apply newly resolved translations
+      processAllNodes();
+    }
+  }, [translationVersion, processAllNodes, context]);
+
+  // Re-process periodically to catch any missed content (less frequent)
+  useEffect(() => {
+    if (!context) return;
+    
+    const interval = setInterval(processAllNodes, 1500);
     return () => clearInterval(interval);
   }, [processAllNodes, context]);
 
