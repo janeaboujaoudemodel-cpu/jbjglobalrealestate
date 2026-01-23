@@ -24,7 +24,7 @@ function extractUrl(message: string): string | null {
 }
 
 // Detect URL type
-function detectUrlType(url: string): "drive" | "portal" | "developer" | "unknown" {
+function detectUrlType(url: string): "drive" | "portal" | "developer" | "government" | "unknown" {
   const lower = url.toLowerCase();
   if (lower.includes("drive.google.com") || lower.includes("docs.google.com")) {
     return "drive";
@@ -36,17 +36,70 @@ function detectUrlType(url: string): "drive" | "portal" | "developer" | "unknown
       lower.includes("azizi") || lower.includes("nakheel") || lower.includes("meraas")) {
     return "developer";
   }
+  if (lower.includes("dubairest") || lower.includes("rera.gov") || lower.includes("dubailand.gov") ||
+      lower.includes("alnair") || lower.includes("dld.gov")) {
+    return "government";
+  }
   return "unknown";
 }
 
-// Extract album/folder name from Google Drive URL path
-function extractAlbumName(url: string): string | null {
-  // Try to get folder name from URL structure
-  const folderMatch = url.match(/\/folders\/([^/?]+)/);
-  if (folderMatch) {
-    return decodeURIComponent(folderMatch[1]).replace(/[_-]/g, " ");
+// Check if URL is in authorized sources
+async function isAuthorizedSource(supabase: any, url: string): Promise<{ authorized: boolean; sourceName?: string }> {
+  try {
+    const urlDomain = new URL(url).hostname.replace('www.', '');
+    
+    // Google Drive is always authorized
+    if (urlDomain.includes('google.com')) {
+      return { authorized: true, sourceName: 'Google Drive' };
+    }
+
+    const { data: sources } = await supabase
+      .from('listing_admin_authorized_sources')
+      .select('source_name, source_url')
+      .eq('is_active', true);
+
+    if (sources) {
+      for (const source of sources) {
+        const sourceDomain = new URL(source.source_url).hostname.replace('www.', '');
+        if (urlDomain.includes(sourceDomain) || sourceDomain.includes(urlDomain)) {
+          return { authorized: true, sourceName: source.source_name };
+        }
+      }
+    }
+
+    return { authorized: false };
+  } catch {
+    return { authorized: false };
   }
-  return null;
+}
+
+// Scrape URL using Firecrawl
+async function scrapeUrl(url: string, firecrawlKey: string): Promise<{ success: boolean; content?: string; error?: string }> {
+  try {
+    const response = await fetch('https://api.firecrawl.dev/v1/scrape', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${firecrawlKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        url,
+        formats: ['markdown'],
+        onlyMainContent: true,
+        waitFor: 3000,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      return { success: false, error: data.error || 'Failed to scrape' };
+    }
+
+    return { success: true, content: data.data?.markdown || data.markdown || '' };
+  } catch (error) {
+    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+  }
 }
 
 serve(async (req) => {
@@ -56,6 +109,8 @@ serve(async (req) => {
 
   try {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    const FIRECRAWL_API_KEY = Deno.env.get("FIRECRAWL_API_KEY");
+    
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
@@ -76,18 +131,64 @@ serve(async (req) => {
     const urlType = extractedUrl ? detectUrlType(extractedUrl) : null;
     
     let urlContext = "";
+    let scrapedContent = "";
+    let authorizationWarning = "";
+
     if (extractedUrl) {
-      urlContext = `
+      // Check if Firecrawl is available
+      if (FIRECRAWL_API_KEY) {
+        // Check authorization
+        const authCheck = await isAuthorizedSource(supabase, extractedUrl);
+        
+        if (authCheck.authorized) {
+          console.log(`Scraping authorized source: ${authCheck.sourceName}`);
+          const scrapeResult = await scrapeUrl(extractedUrl, FIRECRAWL_API_KEY);
+          
+          if (scrapeResult.success && scrapeResult.content) {
+            scrapedContent = `
 
-## URL DETECTED IN MESSAGE
-The user has shared a link: ${extractedUrl}
-URL Type: ${urlType === "drive" ? "Google Drive" : urlType === "portal" ? "Property Portal (Bayut/PropertyFinder/Dubizzle)" : urlType === "developer" ? "Developer Website" : "Unknown"}
+## SCRAPED CONTENT FROM ${authCheck.sourceName?.toUpperCase() || 'AUTHORIZED SOURCE'}
+The following is the actual content extracted from the link. Use this to answer accurately:
 
-IMPORTANT: Acknowledge the link and explain:
-1. You will process this link to extract project information
-2. The extracted data will be used to pre-fill a draft listing
-3. The user can review and edit before publishing
-4. Ask if they want to proceed with extraction`;
+${scrapeResult.content.substring(0, 25000)}
+
+---
+END OF SCRAPED CONTENT
+`;
+          } else {
+            urlContext = `
+
+## URL DETECTED - SCRAPING FAILED
+URL: ${extractedUrl}
+Error: ${scrapeResult.error}
+Inform the user that you could not extract content from this link.`;
+          }
+        } else {
+          authorizationWarning = `
+
+## UNAUTHORIZED SOURCE DETECTED
+URL: ${extractedUrl}
+This URL is NOT in the authorized sources whitelist.
+
+IMPORTANT: Tell the user that this source is not authorized for scraping. They can add it to the whitelist in the Authorized Sources settings if they want you to extract data from it.
+
+Currently authorized sources:
+- Dubai REST (dubairest.gov.ae)
+- Al Nair (alnair.ae)
+- Dubai Land Department (dubailand.gov.ae)
+- RERA (rera.gov.ae)
+- Google Drive (always allowed)`;
+        }
+      } else {
+        urlContext = `
+
+## URL DETECTED - FIRECRAWL NOT CONNECTED
+URL: ${extractedUrl}
+URL Type: ${urlType}
+
+You cannot scrape this URL because Firecrawl is not connected. 
+Tell the user: "I can see you've shared a link, but web scraping is not yet enabled. Please connect Firecrawl in Settings → Connectors to allow me to read external websites."`;
+      }
     }
 
     const systemPrompt = `You are ${personaName}, the ${personaRole} at JBJ Global Real Estate in Dubai, UAE.
@@ -95,19 +196,29 @@ IMPORTANT: Acknowledge the link and explain:
 ## Your Role
 Expert at managing property listings for off-plan and secondary market properties. You help by:
 1. Creating new property listings with complete details matching Sunset Bay Grand style
-2. Processing links from Google Drive, property portals (Bayut, PropertyFinder), and developer websites
+2. Processing links from Google Drive, property portals, and developer websites
 3. Extracting project data automatically from URLs using Firecrawl
-4. Organizing projects by developer - NEVER mix albums/projects together
-5. Ensuring all listing data is accurate and properly organized
+4. Reading data from authorized government sources (Dubai REST, Al Nair, DLD, RERA)
+5. Organizing projects by developer - NEVER mix albums/projects together
+6. Matching RERA/DLD numbers with existing listings
+7. Keeping all listing data accurate and properly organized
 
-## CRITICAL RULES FOR LINK PROCESSING
-When a user shares a Google Drive link or any URL:
-1. READ the link using Firecrawl to extract ALL content
-2. Each album/folder represents ONE project - keep data SEPARATE
-3. Extract: Project Name, Developer, Location, Price Range, Bedrooms, Handover, Amenities
-4. Identify all images, brochures, floor plans, and videos from that specific album
-5. NEVER mix photos or data from different albums/projects
-6. Present the extracted data in the EXACT format shown below
+## WEB SCRAPING CAPABILITIES
+${FIRECRAWL_API_KEY ? `You CAN read and extract data from authorized websites:
+- Dubai REST (dubairest.gov.ae) - Official DLD portal
+- Al Nair (alnair.ae) - Real estate data platform  
+- Dubai Land Department (dubailand.gov.ae) - Official DLD site
+- RERA (rera.gov.ae) - Real Estate Regulatory Agency
+- Google Drive - Always allowed for media/documents
+
+When you receive scraped content, analyze it thoroughly and extract:
+- Project names and developers
+- RERA/DLD permit numbers
+- Pricing information
+- Location details
+- Handover dates
+- Amenities and features` : `Web scraping is NOT available. Firecrawl connector needs to be connected.`}
+${scrapedContent}${urlContext}${authorizationWarning}
 
 ## Response Format - BE CONCISE
 - Use short, direct sentences
@@ -120,9 +231,11 @@ When creating a listing, format it EXACTLY like this:
 
 ---
 
-**Project Name**: [Name from album/folder]
+**Project Name**: [Name from source]
 **Developer**: [Developer Name]
 **Location**: [Area], [Emirate]
+**RERA Number**: [If available]
+**DLD Permit**: [If available]
 
 **Price Range**: AED [from] - AED [to]
 **Bedrooms**: [configurations available]
@@ -130,13 +243,12 @@ When creating a listing, format it EXACTLY like this:
 **Status**: [Off-Plan / Under Construction / Ready]
 
 **Description**:
-[2-3 paragraph professional description highlighting key selling points, location benefits, and lifestyle appeal]
+[2-3 paragraph professional description]
 
 **Key Features**:
 - [Feature 1]
 - [Feature 2]
 - [Feature 3]
-- [Feature 4]
 
 **Amenities**:
 - [Amenity 1]
@@ -148,23 +260,8 @@ When creating a listing, format it EXACTLY like this:
 **Unit Types Available**:
 - Studio | [size] sqft | AED [price]
 - 1 Bedroom | [size] sqft | AED [price]
-- 2 Bedroom | [size] sqft | AED [price]
-
-**Media Extracted**:
-- Images: [count] photos
-- Brochure: [Yes/No]
-- Floor Plans: [count]
-- Video: [Yes/No]
 
 ---
-
-## Link Processing Response
-When a user shares a link, respond with:
-1. Confirm you received and are reading the link
-2. Extract and display ALL project information in the format above
-3. List all media files found (images, PDFs, videos)
-4. Ask if they want to save as draft or need modifications
-${urlContext}
 
 ## STRICT RULES
 - NEVER use emojis
@@ -172,14 +269,16 @@ ${urlContext}
 - Keep responses action-oriented
 - NEVER mix data between different albums/projects
 - Each album = One distinct project listing
+- Only scrape from AUTHORIZED sources
 - ${langInstruction}
 
 ## Permissions
-- Can READ and EXTRACT data from any link using Firecrawl
+- Can READ and EXTRACT data from authorized websites
 - Can GENERATE and CREATE draft listings
-- Can process URLs from Drive, portals, developer sites
+- Can process URLs from Drive, authorized portals
 - Can PUBLISH after founder approval
-- CANNOT delete listings`;
+- CANNOT delete listings
+- CANNOT scrape unauthorized sources`;
 
     const messages = [
       { role: "system", content: systemPrompt },
@@ -199,7 +298,7 @@ ${urlContext}
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
         messages,
-        max_tokens: 2000,
+        max_tokens: 2500,
         temperature: 0.3,
       }),
     });
@@ -238,18 +337,17 @@ ${urlContext}
                            assistantResponse.toLowerCase().includes("ready to create");
 
     const hasUrl = !!extractedUrl;
-    const processingUrl = hasUrl && (
-      assistantResponse.toLowerCase().includes("extract") ||
-      assistantResponse.toLowerCase().includes("process") ||
-      assistantResponse.toLowerCase().includes("received your link")
-    );
+    const hasScrapedData = scrapedContent.length > 0;
+    const isUnauthorized = authorizationWarning.length > 0;
 
     return new Response(JSON.stringify({
       response: assistantResponse.trim(),
-      action: suggestsListing ? "suggest_listing" : processingUrl ? "processing_url" : hasUrl ? "url_detected" : null,
+      action: suggestsListing ? "suggest_listing" : hasScrapedData ? "scraped_data" : isUnauthorized ? "unauthorized_source" : hasUrl ? "url_detected" : null,
       detectedUrl: extractedUrl,
       urlType: urlType,
       listingType: "off-plan",
+      scraped: hasScrapedData,
+      firecrawlEnabled: !!FIRECRAWL_API_KEY,
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
