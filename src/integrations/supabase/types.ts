@@ -8295,6 +8295,48 @@ export type Database = {
         }
         Relationships: []
       }
+      listing_admin_authorized_sources: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          last_scraped_at: string | null
+          scrape_frequency: string | null
+          source_name: string
+          source_type: string
+          source_url: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_scraped_at?: string | null
+          scrape_frequency?: string | null
+          source_name: string
+          source_type?: string
+          source_url: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_scraped_at?: string | null
+          scrape_frequency?: string | null
+          source_name?: string
+          source_type?: string
+          source_url?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       listing_admin_chat_sessions: {
         Row: {
           created_at: string
@@ -8321,6 +8363,50 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      listing_admin_scraped_data: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          extracted_projects: Json | null
+          id: string
+          processed_at: string | null
+          scraped_content: Json | null
+          source_id: string | null
+          source_url: string
+          status: string | null
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          extracted_projects?: Json | null
+          id?: string
+          processed_at?: string | null
+          scraped_content?: Json | null
+          source_id?: string | null
+          source_url: string
+          status?: string | null
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          extracted_projects?: Json | null
+          id?: string
+          processed_at?: string | null
+          scraped_content?: Json | null
+          source_id?: string | null
+          source_url?: string
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_admin_scraped_data_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "listing_admin_authorized_sources"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       listing_admins: {
         Row: {
