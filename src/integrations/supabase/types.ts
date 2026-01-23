@@ -10662,6 +10662,39 @@ export type Database = {
         }
         Relationships: []
       }
+      salary_access_logs: {
+        Row: {
+          access_type: string
+          accessed_at: string | null
+          employee_user_id: string | null
+          id: string
+          ip_address: string | null
+          salary_record_id: string | null
+          user_email: string | null
+          user_id: string | null
+        }
+        Insert: {
+          access_type: string
+          accessed_at?: string | null
+          employee_user_id?: string | null
+          id?: string
+          ip_address?: string | null
+          salary_record_id?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          access_type?: string
+          accessed_at?: string | null
+          employee_user_id?: string | null
+          id?: string
+          ip_address?: string | null
+          salary_record_id?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       scheduled_reports: {
         Row: {
           created_at: string
@@ -13140,6 +13173,17 @@ export type Database = {
           bank_account_number: string
           bank_iban: string
           bank_name: string
+        }[]
+      }
+      get_salary_with_logging: {
+        Args: { p_salary_id: string }
+        Returns: {
+          base_salary: number
+          currency: string
+          effective_date: string
+          id: string
+          notes: string
+          user_id: string
         }[]
       }
       get_subscription_payment_details: {
