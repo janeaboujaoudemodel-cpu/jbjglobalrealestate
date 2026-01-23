@@ -73,70 +73,70 @@ const GlobalHeader = () => {
 
   // Properties dropdown (execution-only)
   const propertiesLinks = [
-    { href: "/properties?transaction=buy", label: "Buy Properties", icon: Home },
-    { href: "/properties?transaction=rent", label: "Rent Properties", icon: Building2 },
-    { href: "/seller-listing", label: "List Your Property", icon: ClipboardCheck },
+    { href: "/properties?transaction=buy", label: t('header.buyProperties') || "Buy Properties", icon: Home },
+    { href: "/properties?transaction=rent", label: t('header.rentProperties') || "Rent Properties", icon: Building2 },
+    { href: "/seller-listing", label: t('header.listProperty') || "List Your Property", icon: ClipboardCheck },
   ];
 
   // Services dropdown - all redirect to main /services page
   const servicesLinks = [
-    { href: "/services", label: "Buying Advisory", icon: UserCircle },
-    { href: "/services", label: "Selling Advisory", icon: ClipboardCheck },
-    { href: "/services", label: "Rental Advisory", icon: Building2 },
-    { href: "/services", label: "Investment Advisory", icon: BarChart3 },
-    { href: "/partners", label: "Partner Introductions", icon: Users },
+    { href: "/services", label: t('header.buyingAdvisory') || "Buying Advisory", icon: UserCircle },
+    { href: "/services", label: t('header.sellingAdvisory') || "Selling Advisory", icon: ClipboardCheck },
+    { href: "/services", label: t('header.rentalAdvisory') || "Rental Advisory", icon: Building2 },
+    { href: "/services", label: t('header.investmentAdvisory') || "Investment Advisory", icon: BarChart3 },
+    { href: "/partners", label: t('header.partnerIntroductions') || "Partner Introductions", icon: Users },
   ];
 
   // Guides dropdown (education-only, client-facing)
   const guidesLinks = [
-    { href: "/buyer-guide", label: "Buyer Guide", icon: FileText },
-    { href: "/seller-guide", label: "Seller Guide", icon: FileText },
-    { href: "/landlord-guide", label: "Landlord Guide", icon: FileText },
-    { href: "/tenant-guide", label: "Tenant Guide", icon: FileText },
-    { href: "/areas", label: "Area Guides", icon: MapPin },
-    { href: "/investor-education", label: "Investor Education", icon: GraduationCap },
-    { href: "/faq", label: "General FAQ", icon: ClipboardCheck },
-    { href: "/investor-faq", label: "Investor FAQ", icon: ClipboardCheck },
-    { href: "/broker-faq", label: "Broker FAQ", icon: ClipboardCheck },
+    { href: "/buyer-guide", label: t('guides.buyer') || "Buyer Guide", icon: FileText },
+    { href: "/seller-guide", label: t('guides.seller') || "Seller Guide", icon: FileText },
+    { href: "/landlord-guide", label: t('guides.landlord') || "Landlord Guide", icon: FileText },
+    { href: "/tenant-guide", label: t('guides.tenant') || "Tenant Guide", icon: FileText },
+    { href: "/areas", label: t('areas.title') || "Area Guides", icon: MapPin },
+    { href: "/investor-education", label: t('header.investorEducation') || "Investor Education", icon: GraduationCap },
+    { href: "/faq", label: t('header.generalFaq') || "General FAQ", icon: ClipboardCheck },
+    { href: "/investor-faq", label: t('header.investorFaq') || "Investor FAQ", icon: ClipboardCheck },
+    { href: "/broker-faq", label: t('header.brokerFaq') || "Broker FAQ", icon: ClipboardCheck },
   ];
 
   // Market Intelligence dropdown (data-led, descriptive)
   const marketIntelLinks = [
-    { href: "/market-intelligence/overview", label: "Market Overview", icon: BarChart3 },
-    { href: "/market-intelligence/areas", label: "Area Intelligence", icon: MapPin },
-    { href: "/market-intelligence/reports", label: "Market Reports", icon: FileText },
-    { href: "/market-intelligence/methodology", label: "Methodology & Sources", icon: ClipboardCheck },
+    { href: "/market-intelligence/overview", label: t('intelligence.overview') || "Market Overview", icon: BarChart3 },
+    { href: "/market-intelligence/areas", label: t('intelligence.areas') || "Area Intelligence", icon: MapPin },
+    { href: "/market-intelligence/reports", label: t('intelligence.reports') || "Market Reports", icon: FileText },
+    { href: "/market-intelligence/methodology", label: t('intelligence.methodology') || "Methodology & Sources", icon: ClipboardCheck },
   ];
 
   // Investor Hub dropdown (tools + dashboard)
   const investorHubLinks = [
-    { href: "/my-account", label: "Investor Dashboard", icon: UserCircle },
-    { href: "/ai-hub", label: "Investor Tools", icon: Briefcase },
-    { href: "/favorites", label: "Portfolio Views", icon: Heart },
-    { href: "/market-intelligence/reports", label: "Reports Access", icon: FileText },
+    { href: "/my-account", label: t('header.investorDashboard') || "Investor Dashboard", icon: UserCircle },
+    { href: "/ai-hub", label: t('header.investorTools') || "Investor Tools", icon: Briefcase },
+    { href: "/favorites", label: t('header.portfolioViews') || "Portfolio Views", icon: Heart },
+    { href: "/market-intelligence/reports", label: t('header.reportsAccess') || "Reports Access", icon: FileText },
   ];
 
   // Broker Hub dropdown (internal)
   const brokerHubLinks = [
-    { href: "/broker-toolkit", label: "Broker Dashboard", icon: UserCircle },
-    { href: "/broker-toolkit#tools", label: "Broker Tools", icon: Briefcase },
-    { href: "/broker-education", label: "Broker Education", icon: GraduationCap },
-    { href: "/broker-toolkit#resources", label: "Broker Resources", icon: FolderOpen },
-    { href: "/broker-faq", label: "Broker FAQ", icon: ClipboardCheck },
+    { href: "/broker-toolkit", label: t('header.brokerDashboard') || "Broker Dashboard", icon: UserCircle },
+    { href: "/broker-toolkit#tools", label: t('header.brokerTools') || "Broker Tools", icon: Briefcase },
+    { href: "/broker-education", label: t('header.brokerEducation') || "Broker Education", icon: GraduationCap },
+    { href: "/broker-toolkit#resources", label: t('header.brokerResources') || "Broker Resources", icon: FolderOpen },
+    { href: "/broker-faq", label: t('header.brokerFaq') || "Broker FAQ", icon: ClipboardCheck },
   ];
 
   // About dropdown
   const aboutLinks = [
-    { href: "/about", label: "About JBJ", icon: Building2 },
-    { href: "/founder", label: "Founder & Leadership", icon: UserCircle },
-    { href: "/team", label: "Meet the Team", icon: Users },
-    { href: "/awards", label: "Awards & Recognition", icon: Award },
+    { href: "/about", label: t('about.title') || "About JBJ", icon: Building2 },
+    { href: "/founder", label: t('nav.founder') || "Founder & Leadership", icon: UserCircle },
+    { href: "/team", label: t('header.meetTeam') || "Meet the Team", icon: Users },
+    { href: "/awards", label: t('awards.title') || "Awards & Recognition", icon: Award },
   ];
 
   // More dropdown
   const moreLinks = [
-    { href: "/news", label: "News & Insights", icon: Newspaper },
-    { href: "/join", label: "Join Our Team", icon: UserPlus },
+    { href: "/news", label: t('nav.news') || "News & Insights", icon: Newspaper },
+    { href: "/join", label: t('nav.join') || "Join Our Team", icon: UserPlus },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -309,13 +309,13 @@ const GlobalHeader = () => {
                       }`}
                     >
                       <Home className="w-4 h-4" />
-                      Home
+                      {t('nav.home')}
                     </Link>
 
                     <div className="h-px bg-gold/20 my-2" />
                     
                     {/* 2. Properties */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Properties</p>
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">{t('nav.properties')}</p>
                     {propertiesLinks.map((link) => (
                       <Link
                         key={link.href}

@@ -109,9 +109,9 @@ const Index = () => {
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
             <span className="block whitespace-nowrap">
-              Buy<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
-              Sell<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
-              Rent<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+              {t('hero.buy')}<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+              {t('hero.sell')}<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+              {t('hero.rent')}<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
             </span>
             <span 
               className="block bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] bg-clip-text text-transparent mt-1"
@@ -120,7 +120,7 @@ const Index = () => {
                 textShadow: '0 1px 3px rgba(0, 0, 0, 0.2)',
               }}
             >
-              Delivered with Intelligence.
+              {t('hero.deliveredWith')}
             </span>
           </motion.h1>
           
@@ -129,7 +129,7 @@ const Index = () => {
             variants={fadeInUp}
             className="text-zinc-300 text-sm md:text-base lg:text-lg max-w-xl mx-auto leading-relaxed mb-2 md:mb-3"
           >
-            Luxury Licensed Real Estate Brokerage for buying, selling & renting in the UAE.
+            {t('hero.subtitle')}
           </motion.p>
 
           {/* Partner microline - Hidden on smallest screens */}
@@ -137,7 +137,7 @@ const Index = () => {
             variants={fadeInUp}
             className="hidden sm:block text-zinc-300/80 text-xs md:text-sm mb-6 md:mb-8 font-medium tracking-wide"
           >
-            Mortgage, Legal & Visa Services provided through licensed partners.
+            {t('hero.partnerNote')}
           </motion.p>
 
           {/* Hero CTA Buttons - Smaller on phone, current size on tablet/desktop */}
@@ -153,7 +153,7 @@ const Index = () => {
                   boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
                 }}
               >
-                <span className="text-white group-hover:text-black transition-colors">Explore</span>
+                <span className="text-white group-hover:text-black transition-colors">{t('hero.explore')}</span>
                 <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-5 md:h-5 text-gold group-hover:text-black transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                 {/* Hover fill overlay */}
                 <span className="absolute inset-0 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
@@ -167,7 +167,7 @@ const Index = () => {
                 boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
               }}
             >
-              <span className="text-white group-hover:text-black transition-colors">Book a Consultation</span>
+              <span className="text-white group-hover:text-black transition-colors">{t('hero.bookConsultation')}</span>
               <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-5 md:h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
               {/* Hover fill overlay */}
               <span className="absolute inset-0 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
@@ -188,7 +188,7 @@ const Index = () => {
               filter: 'drop-shadow(0 0 8px rgba(200,167,102,0.5)) drop-shadow(0 0 16px rgba(200,167,102,0.35))',
               textShadow: '0 1px 3px rgba(0, 0, 0, 0.2)',
             }}
-          >Discover</span>
+          >{t('hero.discover')}</span>
           <ChevronDown 
             className="w-5 h-5 animate-bounce" 
             style={{ 
@@ -246,13 +246,13 @@ const Index = () => {
                         textShadow: '0 2px 4px rgba(0,0,0,0.4)',
                       }}
                     >
-                      AI Home Finder
+                      {t('hero.aiFinder')}
                     </h2>
                     <ArrowUpRight className="w-7 h-7 text-purple-400 group-hover:text-purple-300 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
                   </div>
                   
                   <p className="text-white text-base md:text-lg">
-                    Take your free test and discover your perfect property match
+                    {t('hero.aiFinderDesc')}
                   </p>
                 </div>
               </div>
@@ -268,8 +268,7 @@ const Index = () => {
           <div className="text-center mb-10">
             <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-xs uppercase tracking-[0.2em] font-semibold shadow-md">
               <Users className="w-3 h-3 text-gold" />
-              <span className="text-black">Find Your</span>
-              <span className="text-gold">Starting Point</span>
+              <span className="text-black">{t('hero.findStartingPoint')}</span>
             </span>
           </div>
 
@@ -281,7 +280,7 @@ const Index = () => {
                   <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 transition-colors shadow-md">
                     <Heart className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">Buyers</h4>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">{t('hero.buyers')}</h4>
                 </div>
               </div>
             </Link>
@@ -291,7 +290,7 @@ const Index = () => {
                   <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 transition-colors shadow-md">
                     <Target className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">Sellers</h4>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">{t('hero.sellers')}</h4>
                 </div>
               </div>
             </Link>
@@ -301,7 +300,7 @@ const Index = () => {
                   <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 transition-colors shadow-md">
                     <Key className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">Rentals</h4>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">{t('hero.rentals')}</h4>
                 </div>
               </div>
             </Link>
@@ -311,7 +310,7 @@ const Index = () => {
                   <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 transition-colors shadow-md">
                     <Layers className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">Investors</h4>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">{t('hero.investors')}</h4>
                 </div>
               </div>
             </Link>
@@ -321,7 +320,7 @@ const Index = () => {
                   <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 transition-colors shadow-md">
                     <Users className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">Visitors</h4>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">{t('hero.visitors')}</h4>
                 </div>
               </div>
             </Link>
@@ -331,7 +330,7 @@ const Index = () => {
                   <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 transition-colors shadow-md">
                     <Award className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">Referral</h4>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">{t('hero.referral')}</h4>
                 </div>
               </div>
             </Link>
@@ -341,7 +340,7 @@ const Index = () => {
                   <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 transition-colors shadow-md">
                     <GraduationCap className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">Careers</h4>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">{t('hero.careers')}</h4>
                 </div>
               </div>
             </Link>
@@ -355,8 +354,8 @@ const Index = () => {
                   <div className="w-8 h-8 md:w-9 md:h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors shadow-md">
                     <Home className="w-4 h-4 md:w-4.5 md:h-4.5 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">Explore Properties</h4>
-                  <p className="text-gold group-hover:text-black text-[9px] md:text-[10px] transition-colors hidden md:block">Browse listings</p>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">{t('hero.exploreProperties')}</h4>
+                  <p className="text-gold group-hover:text-black text-[9px] md:text-[10px] transition-colors hidden md:block">{t('hero.browseListings')}</p>
                 </div>
               </div>
             </Link>
@@ -366,8 +365,8 @@ const Index = () => {
                   <div className="w-8 h-8 md:w-9 md:h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors shadow-md">
                     <Target className="w-4 h-4 md:w-4.5 md:h-4.5 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">List Your Property</h4>
-                  <p className="text-gold group-hover:text-black text-[9px] md:text-[10px] transition-colors hidden md:block">Sell or rent</p>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">{t('hero.listYourProperty')}</h4>
+                  <p className="text-gold group-hover:text-black text-[9px] md:text-[10px] transition-colors hidden md:block">{t('hero.sellOrRent')}</p>
                 </div>
               </div>
             </Link>
@@ -377,8 +376,8 @@ const Index = () => {
                   <div className="w-8 h-8 md:w-9 md:h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors shadow-md">
                     <FileText className="w-4 h-4 md:w-4.5 md:h-4.5 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">Market Report</h4>
-                  <p className="text-gold group-hover:text-black text-[9px] md:text-[10px] transition-colors hidden md:block">Latest insights</p>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">{t('hero.marketReport')}</h4>
+                  <p className="text-gold group-hover:text-black text-[9px] md:text-[10px] transition-colors hidden md:block">{t('hero.latestInsights')}</p>
                 </div>
               </div>
             </Link>
@@ -388,8 +387,8 @@ const Index = () => {
                   <div className="w-8 h-8 md:w-9 md:h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors shadow-md">
                     <Layers className="w-4 h-4 md:w-4.5 md:h-4.5 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">Investor Hub</h4>
-                  <p className="text-gold group-hover:text-black text-[9px] md:text-[10px] transition-colors hidden md:block">AI-powered tools</p>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">{t('hero.investorHub')}</h4>
+                  <p className="text-gold group-hover:text-black text-[9px] md:text-[10px] transition-colors hidden md:block">{t('hero.aiTools')}</p>
                 </div>
               </div>
             </Link>
@@ -399,8 +398,8 @@ const Index = () => {
                   <div className="w-8 h-8 md:w-9 md:h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors shadow-md">
                     <Scale className="w-4 h-4 md:w-4.5 md:h-4.5 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">Legal Partners</h4>
-                  <p className="text-gold group-hover:text-black text-[9px] md:text-[10px] transition-colors hidden md:block">Legal services</p>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">{t('hero.legalPartners')}</h4>
+                  <p className="text-gold group-hover:text-black text-[9px] md:text-[10px] transition-colors hidden md:block">{t('hero.legalServices')}</p>
                 </div>
               </div>
             </Link>
@@ -410,8 +409,8 @@ const Index = () => {
                   <div className="w-8 h-8 md:w-9 md:h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors shadow-md">
                     <Calculator className="w-4 h-4 md:w-4.5 md:h-4.5 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">Mortgage Partners</h4>
-                  <p className="text-gold group-hover:text-black text-[9px] md:text-[10px] transition-colors hidden md:block">Financing options</p>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">{t('hero.mortgagePartners')}</h4>
+                  <p className="text-gold group-hover:text-black text-[9px] md:text-[10px] transition-colors hidden md:block">{t('hero.financingOptions')}</p>
                 </div>
               </div>
             </Link>
@@ -421,8 +420,8 @@ const Index = () => {
                   <div className="w-8 h-8 md:w-9 md:h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors shadow-md">
                     <Wrench className="w-4 h-4 md:w-4.5 md:h-4.5 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">Design & Build</h4>
-                  <p className="text-gold group-hover:text-black text-[9px] md:text-[10px] transition-colors hidden md:block">Construction & fit-out</p>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">{t('hero.designBuild')}</h4>
+                  <p className="text-gold group-hover:text-black text-[9px] md:text-[10px] transition-colors hidden md:block">{t('hero.constructionFitout')}</p>
                 </div>
               </div>
             </Link>
