@@ -10,11 +10,27 @@ const isLovablePreview =
     window.location.hostname.includes("lovable.app"));
 
 async function prepareRuntime() {
-  // In dev/preview AND production: unregister all service workers to remove PWA capability
+  // In dev/preview AND production: remove all service workers to eliminate any PWA capability.
   try {
     if ("serviceWorker" in navigator) {
       const regs = await navigator.serviceWorker.getRegistrations();
-      await Promise.all(regs.map((r) => r.unregister()));
+
+      // If there is an old Workbox SW, override it once with a small “kill” SW.
+      // This helps in cases where the legacy SW is stubborn due to caching.
+      const killKey = "__lovable_force_sw_kill_done__";
+      if (regs.length > 0 && !sessionStorage.getItem(killKey)) {
+        sessionStorage.setItem(killKey, "1");
+        try {
+          await navigator.serviceWorker.register(`/sw-kill.js?v=${Date.now()}`, {
+            scope: "/",
+          });
+        } catch {
+          // ignore
+        }
+      }
+
+      const regs2 = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs2.map((r) => r.unregister()));
 
       // If a SW is controlling this page, force a single reload after unregistering.
       if (navigator.serviceWorker.controller) {
