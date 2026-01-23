@@ -9,7 +9,7 @@ import { SafeImage } from "@/components/SafeImage";
 import AIMarketAnalyzer from "@/components/AIMarketAnalyzer";
 
 interface ProjectCardProps {
-  project: Project;
+  project: Project & { is_sold_out?: boolean | null };
   showFavorite?: boolean;
   showBadgeButton?: boolean;
   currency?: 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR';
@@ -110,8 +110,12 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             alt={project.images?.[0]?.alt_text || project.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
-          {/* Premium Badge - Hidden by default, admin controls via is_premium flag in admin panel */}
-          {/* Badge currently disabled - will only show when admin explicitly marks as premium via listing */}
+          {/* Sold Out Badge */}
+          {project.is_sold_out && (
+            <div className="absolute top-3 right-3 z-10 bg-destructive text-destructive-foreground px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">
+              Sold Out
+            </div>
+          )}
         </div>
         
         {/* Content */}
