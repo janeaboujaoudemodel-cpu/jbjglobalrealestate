@@ -122,7 +122,7 @@ const ChatMessages = ({
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <div className="bg-zinc-800 p-4 rounded-2xl rounded-tl-sm flex items-center gap-1.5 border border-zinc-700">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-4 rounded-2xl rounded-tl-sm flex items-center gap-1.5 border border-gold/20 shadow-sm">
                   <motion.span
                     className="w-2.5 h-2.5 bg-gold rounded-full"
                     animate={{ y: [0, -8, 0] }}
@@ -139,7 +139,7 @@ const ChatMessages = ({
                     transition={{ duration: 0.6, repeat: Infinity, delay: 0.3 }}
                   />
                 </div>
-                <p className="text-gold/80 text-xs font-medium ml-1"><T>{`${agent.name} is typing...`}</T></p>
+                <p className="text-gold text-xs font-medium ml-1"><T>{`${agent.name} is typing...`}</T></p>
               </div>
             </motion.div>
           )}
