@@ -96,8 +96,8 @@ const DeveloperGrid = () => {
                 to={`/developer/${developer.slug}`}
                 className="inline-block group mb-6"
               >
-                {/* Developer Logo Tile - White background, uniform size */}
-                <div className="bg-white rounded-2xl p-6 md:p-8 inline-flex items-center justify-center min-w-[280px] md:min-w-[350px] h-24 md:h-32 shadow-xl group-hover:shadow-2xl transition-all duration-300 group-hover:scale-[1.02]">
+                {/* Developer Logo Tile - Light background for readability */}
+                <div className="bg-card rounded-2xl p-6 md:p-8 inline-flex items-center justify-center min-w-[280px] md:min-w-[350px] h-24 md:h-32 shadow-xl group-hover:shadow-2xl transition-all duration-300 group-hover:scale-[1.02] border border-gold/20">
                   {developer.logo_url ? (
                     <img 
                       src={developer.logo_url} 
@@ -106,7 +106,7 @@ const DeveloperGrid = () => {
                     />
                   ) : (
                     <h2
-                      className="text-zinc-900 font-bold text-2xl md:text-3xl text-center"
+                      className="text-foreground font-bold text-2xl md:text-3xl text-center"
                       style={{ fontFamily: "Poppins, sans-serif" }}
                     >
                       {developer.name}
@@ -166,11 +166,18 @@ const DeveloperGrid = () => {
                   className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:shadow-[0_12px_40px_rgba(200,167,102,0.35),0_8px_25px_rgba(0,0,0,0.15)] hover:-translate-y-2 transition-all duration-300"
                 >
                   <div className="aspect-[4/3] overflow-hidden relative">
-                    <img
-                      src={project.images?.[0]?.image_url || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"}
-                      alt={project.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
+                    {project.images?.[0]?.image_url ? (
+                      <img
+                        src={project.images[0].image_url}
+                        alt={project.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-gradient-to-b from-champagne-light/50 to-champagne/30">
+                        <Building2 className="w-8 h-8 text-gold" />
+                        <span className="text-xs text-foreground/60 font-medium">Media pending</span>
+                      </div>
+                    )}
                     
                     {/* Premium Badge */}
                     {project.is_premium && (

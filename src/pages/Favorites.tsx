@@ -261,11 +261,11 @@ const Favorites = () => {
             ? 'Top 2 — Silver'
             : 'Top 3 — Bronze'
           : null;
-        const img = p.images?.[0]?.image_url || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800";
+        const img = p.images?.[0]?.image_url || "";
         const url = `${window.location.origin}/project/${p.slug}`;
         return `
           <div class="card">
-            <img class="img" src="${img}" alt="${p.name}" />
+            ${img ? `<img class="img" src="${img}" alt="${p.name}" />` : `<div class="img" style="background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#666;">No image</div>`}
             <div class="content">
               <div class="title">${i + 1}. ${p.name}</div>
               <div class="meta">${p.developer?.name || 'Developer'} • ${p.location || 'UAE'}</div>

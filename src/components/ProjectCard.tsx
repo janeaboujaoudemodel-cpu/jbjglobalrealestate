@@ -8,6 +8,7 @@ import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { SafeImage } from "@/components/SafeImage";
 import AIMarketAnalyzer from "@/components/AIMarketAnalyzer";
 import { T } from "@/components/ui/T";
+import { VerifiedMedia } from "@/components/ui/verified-media";
 
 interface ProjectCardProps {
   project: Project & { is_sold_out?: boolean | null };
@@ -105,11 +106,11 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
       <Link to={`/project/${project.slug}`} className="flex-1">
         {/* Image */}
         <div className="aspect-[4/3] overflow-hidden relative">
-          <SafeImage
-            src={project.images?.[0]?.image_url || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"}
-            fallbackSrc="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"
+          <VerifiedMedia
+            src={project.images?.[0]?.image_url}
             alt={project.images?.[0]?.alt_text || project.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            placeholderLabel="Media pending verification"
           />
           {/* Sold Out Badge */}
           {project.is_sold_out && (
