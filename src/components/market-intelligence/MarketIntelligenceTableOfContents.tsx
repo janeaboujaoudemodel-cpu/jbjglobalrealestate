@@ -35,6 +35,7 @@ export const MarketIntelligenceTableOfContents = ({
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isMinimized, setIsMinimized] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
 
   useEffect(() => {
     const dismissed = localStorage.getItem(TOOLTIP_DISMISSED_KEY);
@@ -45,15 +46,29 @@ export const MarketIntelligenceTableOfContents = ({
   }, []);
 
   useEffect(() => {
+    // Only observe when not programmatically scrolling
+    if (isScrolling) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
+        // Find the entry that is most visible (highest intersection ratio)
+        const visibleEntries = entries.filter(entry => entry.isIntersecting);
+        if (visibleEntries.length > 0) {
+          // Sort by top position to get the topmost visible section
+          const sorted = visibleEntries.sort((a, b) => {
+            return a.boundingClientRect.top - b.boundingClientRect.top;
+          });
+          // Find the first one that's past the header offset
+          const bestEntry = sorted.find(entry => entry.boundingClientRect.top >= -100) || sorted[0];
+          if (bestEntry) {
+            setActiveId(bestEntry.target.id);
           }
-        });
+        }
       },
-      { rootMargin: "-100px 0px -50% 0px" }
+      { 
+        rootMargin: "-120px 0px -60% 0px",
+        threshold: [0, 0.1, 0.5, 1]
+      }
     );
 
     items.forEach((item) => {
@@ -62,16 +77,17 @@ export const MarketIntelligenceTableOfContents = ({
     });
 
     return () => observer.disconnect();
-  }, [items]);
+  }, [items, isScrolling]);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      // Set active immediately for better UX
+      // Disable observer during programmatic scroll
+      setIsScrolling(true);
       setActiveId(id);
       
-      // Use a larger offset to account for sticky headers
-      const offset = 150;
+      // Calculate offset accounting for fixed headers
+      const offset = 140;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.scrollY - offset;
       
@@ -79,6 +95,11 @@ export const MarketIntelligenceTableOfContents = ({
         top: offsetPosition,
         behavior: "smooth"
       });
+
+      // Re-enable observer after scroll completes
+      setTimeout(() => {
+        setIsScrolling(false);
+      }, 800);
     }
   };
 
