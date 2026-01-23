@@ -476,7 +476,7 @@ const TenantGuide = () => {
 
       {/* How JBJ Global Real Estate Supports Tenants */}
       <section id="jbj-support" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="max-w-4xl mx-auto px-4">
+        <div className="max-w-5xl mx-auto px-4">
           <GuideSectionHeader icon={Users} title="How JBJ Supports Tenants" />
 
           <div className="jj-card-inner p-8">

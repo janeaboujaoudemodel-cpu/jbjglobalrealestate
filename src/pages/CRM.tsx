@@ -422,21 +422,15 @@ const CRM = () => {
           {/* Enhanced Dashboard with Charts */}
           <CRMEnhancedDashboard userId={user?.id || ""} isAdmin={isAdmin} />
 
-            {/* Smart Reminders, Automation & Communication - New Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              {/* Left Column: Team Communication (stretched) */}
-              <div className="lg:col-span-2 space-y-4">
-                {/* Activity Timeline */}
-                <ActivityTimeline userId={user?.id || ""} limit={8} />
-                
-                {/* Communication Panel - Chat, Video, Files */}
-                <CRMCommunicationPanel />
-                
-                {/* Embedded AI Insights */}
+            {/* Main CRM Layout - Team Communication Full Width + Leads Update */}
+            <div className="space-y-6">
+              {/* Top Row: AI Insights, Smart Reminders, Smart Automations - All on one line */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* AI Insights Panel */}
                 {showAIInsights && (
                   <Card className="overflow-hidden border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
                     <CardContent className="p-0">
-                      <div className="h-[300px]">
+                      <div className="h-[280px]">
                         <AIInsightsPanel
                           className="h-full"
                           insights={aiInsights}
@@ -450,7 +444,7 @@ const CRM = () => {
                 )}
                 
                 {/* Smart Reminders */}
-                <SmartReminders userId={user?.id || ""} limit={4} />
+                <SmartReminders userId={user?.id || ""} limit={3} />
                 
                 {/* Smart Automations */}
                 <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.2)]">
@@ -466,86 +460,84 @@ const CRM = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="p-0">
-                    <div className="max-h-[350px] overflow-y-auto">
+                    <div className="max-h-[220px] overflow-y-auto">
                       <AutomationRules userId={user?.id || ""} isAdmin={isAdmin} />
                     </div>
                   </CardContent>
                 </Card>
               </div>
               
-              {/* Right Column: Leads Update Section - stretched to fill right side */}
-              <div className="space-y-4">
-                {/* Leads Update Header Card */}
-                <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-black font-bold text-base flex items-center gap-2">
-                      <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
-                        <Users className="h-4 w-4 text-black" />
-                      </div>
-                      Leads Update
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    {/* Quick Action Buttons - High contrast readable buttons */}
-                    <div className="grid grid-cols-2 gap-2">
-                      <Button 
-                        onClick={() => setShowLeadModal(true)} 
-                        variant="primary" 
-                        className="w-full text-sm"
-                      >
-                        <Plus className="h-4 w-4 mr-1.5" />
-                        Add Lead
-                      </Button>
-                      <Button 
-                        variant="secondary" 
-                        onClick={() => setShowImportModal(true)}
-                        className="w-full text-sm"
-                      >
-                        <Upload className="h-4 w-4 mr-1.5" />
-                        Import
-                      </Button>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <Button 
-                        variant="secondary" 
-                        onClick={handleExportCSV}
-                        className="w-full text-sm"
-                      >
-                        <Download className="h-4 w-4 mr-1.5" />
-                        Export CSV
-                      </Button>
-                      {isAdmin && (
-                        <Button
-                          variant="secondary"
-                          onClick={() => setShowBulkAssignModal(true)}
-                          className="w-full text-sm"
-                        >
-                          <Shuffle className="h-4 w-4 mr-1.5" />
-                          Bulk Assign
-                        </Button>
-                      )}
-                    </div>
-                    {isAdmin && (
-                      <div className="pt-2 border-t border-gold/20">
-                        <DeleteImportButton userId={user?.id || ""} onSuccess={handleRefresh} isAdmin={isAdmin} />
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-                
-                {/* VIP Export & Assistant */}
-                <div className="space-y-2">
-                  <Button
-                    variant="secondary"
-                    onClick={() => setShowAssistantPanel(true)}
-                    className="w-full text-black border-gold/30"
-                  >
-                    <Sparkles className="h-4 w-4 mr-2 text-gold" />
-                    Open Assistant
-                  </Button>
-                  {isAdmin && <VIPExportButton />}
-                </div>
+              {/* Team Communication - Full Width Edge-to-Edge */}
+              <div className="w-full">
+                <CRMCommunicationPanel />
               </div>
+              
+              {/* Activity Timeline - Full Width */}
+              <ActivityTimeline userId={user?.id || ""} limit={8} />
+              
+              {/* Leads Update Section with shortcuts */}
+              <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-black font-bold text-base flex items-center gap-2">
+                    <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+                      <Users className="h-4 w-4 text-black" />
+                    </div>
+                    Leads Update
+                    <span className="ml-auto text-sm font-normal text-zinc-500">Quick Actions</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {/* Quick Action Buttons - All on one row for easy access */}
+                  <div className="flex flex-wrap gap-2">
+                    <Button 
+                      onClick={() => setShowLeadModal(true)} 
+                      variant="primary" 
+                      className="text-sm"
+                    >
+                      <Plus className="h-4 w-4 mr-1.5" />
+                      Add Lead
+                    </Button>
+                    <Button 
+                      variant="secondary" 
+                      onClick={() => setShowImportModal(true)}
+                      className="text-sm"
+                    >
+                      <Upload className="h-4 w-4 mr-1.5" />
+                      Import
+                    </Button>
+                    <Button 
+                      variant="secondary" 
+                      onClick={handleExportCSV}
+                      className="text-sm"
+                    >
+                      <Download className="h-4 w-4 mr-1.5" />
+                      Export CSV
+                    </Button>
+                    {isAdmin && (
+                      <Button
+                        variant="secondary"
+                        onClick={() => setShowBulkAssignModal(true)}
+                        className="text-sm"
+                      >
+                        <Shuffle className="h-4 w-4 mr-1.5" />
+                        Bulk Assign
+                      </Button>
+                    )}
+                    <Button
+                      variant="secondary"
+                      onClick={() => setShowAssistantPanel(true)}
+                      className="text-sm"
+                    >
+                      <Sparkles className="h-4 w-4 mr-1.5 text-gold" />
+                      Assistant
+                    </Button>
+                    {isAdmin && <VIPExportButton />}
+                    {isAdmin && (
+                      <DeleteImportButton userId={user?.id || ""} onSuccess={handleRefresh} isAdmin={isAdmin} />
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
             </div>
 
             {/* Divider */}
