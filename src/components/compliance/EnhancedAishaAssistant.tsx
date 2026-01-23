@@ -158,7 +158,7 @@ _Audit completed at ${format(new Date(result.created_at), 'PPpp')}_`;
 
     // AI Integrity Check
     if (lowerCommand.includes('ai integrity') || lowerCommand.includes('integrity score')) {
-      const aiAgents = ['olivia_ai', 'hr_ai', 'broker_ai', 'admin_ai', 'finance_ai'];
+      const aiAgents = ['amanda_ai', 'hr_ai', 'broker_ai', 'admin_ai', 'finance_ai'];
       let response = '**🤖 AI Integrity Scores**\n\n';
       
       for (const agent of aiAgents) {

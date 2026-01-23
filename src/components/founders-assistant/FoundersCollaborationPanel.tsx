@@ -513,7 +513,7 @@ export default function FoundersCollaborationPanel() {
                     </div>
                     
                     <div className="flex items-center justify-between pt-2">
-                      <p className="text-xs text-gray-400">Reports to: <span className="text-gold">Olivia AI</span></p>
+                      <p className="text-xs text-gray-400">Reports to: <span className="text-gold">Amanda Clarke</span></p>
                       <div className="flex items-center gap-1 text-green-400 text-xs">
                         <CheckCircle2 className="h-3 w-3" /> Active
                       </div>

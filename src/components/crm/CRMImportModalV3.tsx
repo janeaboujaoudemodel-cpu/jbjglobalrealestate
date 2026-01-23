@@ -1345,6 +1345,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                         <th className="p-2 text-left text-muted-foreground">Name</th>
                         <th className="p-2 text-left text-muted-foreground">Phone</th>
                         <th className="p-2 text-left text-muted-foreground">Email</th>
+                        <th className="p-2 text-left text-muted-foreground">Notes</th>
                         <th className="p-2 text-left text-muted-foreground">Status</th>
                       </tr>
                     </thead>
@@ -1356,8 +1357,11 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                           <td className="p-2 text-muted-foreground font-mono text-[10px]">
                             {row.normalizedPhone || row.phone || '—'}
                           </td>
-                          <td className="p-2 text-muted-foreground truncate max-w-[120px]">
+                          <td className="p-2 text-muted-foreground truncate max-w-[100px]">
                             {row.normalizedEmail || row.email || '—'}
+                          </td>
+                          <td className="p-2 text-muted-foreground truncate max-w-[100px]" title={row.notes || ''}>
+                            {row.notes ? (row.notes.length > 20 ? row.notes.slice(0, 20) + '...' : row.notes) : '—'}
                           </td>
                           <td className="p-2">
                             {row.isFlagged ? (

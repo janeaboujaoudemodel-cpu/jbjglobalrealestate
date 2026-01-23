@@ -279,7 +279,7 @@ const SecurityDashboard: React.FC = () => {
                   <FileText className="h-5 w-5 text-gold" />
                   Daily Security Summary
                 </CardTitle>
-                <CardDescription>Automated report from Olivia AI</CardDescription>
+                <CardDescription>Automated report from Amanda Clarke</CardDescription>
               </CardHeader>
               <CardContent>
                 <pre className="whitespace-pre-wrap text-sm bg-muted/50 p-4 rounded-lg font-mono">

@@ -138,7 +138,6 @@ export default function ReportsManagementPanel() {
   const getDepartmentFromName = (name: string): string => {
     const deptMap: Record<string, string> = {
       'Amanda Clarke': 'Executive',
-      'Olivia Reynolds': 'Executive',
       'James Morgan': 'Sales',
       'Jessica': 'HR',
       'Catherine Brooks': 'Finance',
