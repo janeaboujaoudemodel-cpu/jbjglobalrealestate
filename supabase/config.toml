@@ -86,3 +86,27 @@ verify_jwt = false
 
 [functions.ai-market-analyzer]
 verify_jwt = false
+
+[functions.firecrawl-scrape]
+verify_jwt = false
+
+[functions.extract-listing-from-link]
+verify_jwt = false
+
+[functions.listing-admin-chat]
+verify_jwt = false
+
+[functions.process-drive-upload]
+verify_jwt = false
+
+[functions.voice-to-text]
+verify_jwt = false
+
+[functions.auto-translate]
+verify_jwt = false
+
+[functions.send-email-otp]
+verify_jwt = false
+
+[functions.verify-email-otp]
+verify_jwt = false
