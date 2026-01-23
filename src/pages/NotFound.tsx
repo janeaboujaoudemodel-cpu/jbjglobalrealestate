@@ -1,6 +1,6 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
-import { Home, ArrowLeft, ArrowUpRight, Briefcase, Phone, Sparkles, Mail, MessageCircle } from "lucide-react";
+import { Home, ArrowLeft, ArrowUpRight, Briefcase, Phone, Mail, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import jbjMonogramDark from "@/assets/jbj-monogram-dark-bg.png";
@@ -29,147 +29,108 @@ const NotFound = () => {
 
   return (
     <>
-    <div className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden">
-      {/* Decorative background elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-gold/3 rounded-full blur-2xl" />
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, hsl(45, 32%, 39%) 1px, transparent 0)', backgroundSize: '50px 50px' }} />
+      <div className="min-h-screen bg-black relative overflow-hidden flex items-center justify-center">
+        {/* Decorative background elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-gold/3 rounded-full blur-2xl" />
+        </div>
+
+        <div className="relative z-10 w-full">
+          {/* Active Layer wrapper (required for all 404s) */}
+          <div className="jj-layer-2 max-w-5xl mx-auto">
+            {/* Locked Champagne card holds EVERYTHING, including contact */}
+            <motion.div
+              className="jj-card-inner rounded-2xl text-center p-8 md:p-12"
+              initial="hidden"
+              animate="visible"
+              variants={staggerContainer}
+            >
+              {/* Logo */}
+              <motion.div variants={fadeInUp} className="mb-6">
+                <img
+                  src={jbjMonogramDark}
+                  alt="JBJ Global Real Estate"
+                  className="w-20 h-20 mx-auto object-contain"
+                />
+              </motion.div>
+
+              {/* 404 */}
+              <motion.h1
+                variants={fadeInUp}
+                className="text-7xl md:text-[140px] font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-gold via-gold-light to-gold leading-none"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                404
+              </motion.h1>
+
+              <motion.p
+                variants={fadeInUp}
+                className="text-2xl md:text-3xl text-black font-semibold mb-3"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                Page Not Found
+              </motion.p>
+
+              <motion.p
+                variants={fadeInUp}
+                className="text-black/70 text-base md:text-lg mb-8 max-w-md mx-auto leading-relaxed"
+              >
+                The page you are looking for does not exist or has been moved.
+              </motion.p>
+
+              {/* Navigation Buttons (Primary/Secondary only) */}
+              <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row flex-wrap gap-3 justify-center">
+                <Button variant="primary" asChild>
+                  <Link to="/">
+                    <Home className="w-4 h-4 mr-2" />
+                    Back to Home
+                    <ArrowUpRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
+                <Button variant="secondary" asChild>
+                  <Link to="/broker-toolkit">
+                    <Briefcase className="w-4 h-4 mr-2" />
+                    Broker Tools
+                  </Link>
+                </Button>
+                <Button variant="secondary" onClick={() => window.history.back()}>
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Go Back
+                </Button>
+              </motion.div>
+
+              {/* Contact Details (inside SAME card) */}
+              <motion.div variants={fadeInUp} className="mt-8 pt-6 border-t border-gold/20">
+                <p className="text-black/70 text-sm mb-4">Need assistance? Contact us directly:</p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <Button variant="secondary" asChild>
+                    <a href={getWhatsAppUrl()}>
+                      <MessageCircle className="w-4 h-4 mr-2" />
+                      WhatsApp
+                    </a>
+                  </Button>
+                  <Button variant="secondary" asChild>
+                    <a href={`tel:${CONTACT_INFO.phoneRaw}`}>
+                      <Phone className="w-4 h-4 mr-2" />
+                      Call
+                    </a>
+                  </Button>
+                  <Button variant="secondary" asChild>
+                    <a href={`mailto:${CONTACT_INFO.email}`}>
+                      <Mail className="w-4 h-4 mr-2" />
+                      Email
+                    </a>
+                  </Button>
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
         </div>
       </div>
-      
-      {/* Gold accent lines */}
-      <motion.div 
-        className="absolute left-0 top-1/3 w-48 md:w-80 h-px bg-gradient-to-r from-gold/40 to-transparent"
-        initial={{ x: -100, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 1, delay: 0.5 }}
-      />
-      <motion.div 
-        className="absolute right-0 bottom-1/3 w-48 md:w-80 h-px bg-gradient-to-l from-gold/40 to-transparent"
-        initial={{ x: 100, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 1, delay: 0.7 }}
-      />
-      
-      <motion.div 
-        className="relative z-10 text-center px-4 max-w-2xl mx-auto"
-        initial="hidden"
-        animate="visible"
-        variants={staggerContainer}
-      >
-        {/* Logo */}
-        <motion.div variants={fadeInUp} className="mb-8">
-          <img 
-            src={jbjMonogramDark} 
-            alt="JBJ Global Real Estate" 
-            className="w-20 h-20 mx-auto object-contain opacity-60"
-          />
-        </motion.div>
-        
-        {/* 404 Number with Gradient */}
-        <motion.h1 
-          variants={fadeInUp}
-          className="text-8xl md:text-[150px] font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-gold via-gold-light to-gold leading-none" 
-          style={{ fontFamily: "Poppins, sans-serif" }}
-        >
-          404
-        </motion.h1>
-        
-        {/* Title */}
-        <motion.p 
-          variants={fadeInUp}
-          className="text-2xl md:text-3xl text-white font-semibold mb-4"
-          style={{ fontFamily: "Poppins, sans-serif" }}
-        >
-          Page Not Found
-        </motion.p>
-        
-        {/* Description */}
-        <motion.p 
-          variants={fadeInUp}
-          className="text-zinc-400 text-base md:text-lg mb-10 max-w-md mx-auto leading-relaxed"
-        >
-          The page you're looking for doesn't exist or has been moved. Let us help you find your way.
-        </motion.p>
-        
-        {/* Navigation Buttons */}
-        <motion.div 
-          variants={fadeInUp}
-          className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center mb-12"
-        >
-          <Link to="/">
-            <Button variant="primary" className="px-8 py-5 text-sm w-full sm:w-auto">
-              <Home className="w-4 h-4 mr-2" />
-              Back to Home
-              <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
-            </Button>
-          </Link>
-          <Link to="/broker-toolkit">
-            <Button variant="secondary" className="px-8 py-5 text-sm w-full sm:w-auto">
-              <Briefcase className="w-4 h-4 mr-2" />
-              Broker Tools
-            </Button>
-          </Link>
-          <Link to="/contact">
-            <Button variant="primary" className="px-8 py-5 text-sm w-full sm:w-auto">
-              <Phone className="w-4 h-4 mr-2" />
-              Contact Support
-              <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
-            </Button>
-          </Link>
-        </motion.div>
-        
-        {/* Go Back Button */}
-        <motion.div variants={fadeInUp}>
-          <Button 
-            variant="secondary"
-            onClick={() => window.history.back()}
-            className="px-8 py-5 text-sm"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Go Back
-          </Button>
-        </motion.div>
-        
-        {/* Contact Info */}
-        <motion.div 
-          variants={fadeInUp}
-          className="mt-12 pt-8 border-t border-zinc-800"
-        >
-          <p className="text-zinc-600 text-sm mb-4">Need assistance? Contact us directly:</p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <a 
-              href={`tel:${CONTACT_INFO.phoneRaw}`}
-              className="inline-flex items-center gap-2 text-zinc-400 hover:text-gold transition-colors text-sm"
-            >
-              <Phone className="w-4 h-4" />
-              {CONTACT_INFO.phone}
-            </a>
-            <a 
-              href={`mailto:${CONTACT_INFO.email}`}
-              className="inline-flex items-center gap-2 text-zinc-400 hover:text-gold transition-colors text-sm"
-            >
-              <Mail className="w-4 h-4" />
-              {CONTACT_INFO.email}
-            </a>
-            <a 
-              href={getWhatsAppUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-zinc-400 hover:text-gold transition-colors text-sm"
-            >
-              <MessageCircle className="w-4 h-4 text-green-500" />
-              WhatsApp
-            </a>
-          </div>
-        </motion.div>
-      </motion.div>
-    </div>
     
-    {/* Footer Section */}
-    <Footer />
+      {/* Footer Section */}
+      <Footer />
     </>
   );
 };
