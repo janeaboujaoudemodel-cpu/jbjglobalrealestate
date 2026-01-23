@@ -273,13 +273,25 @@ const ProjectDetail = () => {
 
               {/* Project Location Map - Pearl Card */}
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-6 rounded-xl border-2 border-gold/40 shadow-sm">
-                <h2
-                  className="text-black font-semibold mb-4"
-                  style={{ fontFamily: "Poppins, sans-serif", fontSize: "24px" }}
-                >
-                  <span className="text-gold">Location</span> Map
-                </h2>
-                <div className="rounded-xl overflow-hidden border-2 border-gold/40 shadow-lg">
+                <div className="flex items-center justify-between mb-4">
+                  <h2
+                    className="text-black font-semibold"
+                    style={{ fontFamily: "Poppins, sans-serif", fontSize: "24px" }}
+                  >
+                    <span className="text-gold">Location</span> Map
+                  </h2>
+                  {/* View Larger Map link - outside iframe */}
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(project.name + (project.location ? ", " + project.location : "") + ", Dubai, UAE")}&basemap=satellite`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gold hover:text-gold-dark text-sm font-medium flex items-center gap-1 hover:underline"
+                  >
+                    <Map className="w-4 h-4" />
+                    View Larger Map
+                  </a>
+                </div>
+                <div className="rounded-xl overflow-hidden border-2 border-gold/40 shadow-lg relative">
                   <iframe
                     src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${encodeURIComponent(project.name + (project.location ? ", " + project.location : "") + ", Dubai, UAE")}&maptype=satellite`}
                     width="100%"
@@ -289,7 +301,7 @@ const ProjectDetail = () => {
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
                     title={`${project.name} Location Map`}
-                    className="w-full"
+                    className="w-full pointer-events-auto"
                   />
                 </div>
                 {/* Map zoom guide */}
@@ -332,8 +344,8 @@ const ProjectDetail = () => {
               </div>
             </div>
 
-            {/* Sidebar */}
-            <div className="space-y-6">
+            {/* Sidebar - Sticky positioning to fill available height */}
+            <div className="lg:sticky lg:top-8 space-y-6 self-start">
               {/* Quick Contact Buttons - 3D Premium Style */}
               <div className="grid grid-cols-2 gap-3">
                 {/* WhatsApp - Primary 3D Style */}
@@ -409,19 +421,10 @@ const ProjectDetail = () => {
                 </div>
               </Link>
 
-              {/* Mortgage Calculator - Pearl Card */}
+              {/* Mortgage Calculator - Pearl Card - Expanded */}
               {project.price_from && (
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl p-6 border-2 border-gold/40">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
-                      <Calculator className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <h3 className="text-black font-semibold">Mortgage Calculator</h3>
-                      <p className="text-zinc-500 text-sm">Estimate your monthly payments</p>
-                    </div>
-                  </div>
-                  <MortgageCalculator defaultPrice={project.price_from} compact={true} />
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl border-2 border-gold/40 overflow-hidden">
+                  <MortgageCalculator defaultPrice={project.price_from} />
                 </div>
               )}
 
