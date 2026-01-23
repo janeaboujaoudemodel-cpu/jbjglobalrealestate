@@ -26,7 +26,8 @@ export default defineConfig(({ mode }) => ({
         description: "Buy, sell, or rent luxury properties in Dubai with JBJ Global Real Estate. Founded by Jane Bou Jaoude. Expert brokerage services across UAE.",
         theme_color: "#0a0a0a",
         background_color: "#0a0a0a",
-        display: "standalone",
+        // Changed from "standalone" to "browser" to prevent PWA install prompts
+        display: "browser",
         orientation: "portrait-primary",
         scope: "/",
         start_url: "/",
@@ -46,27 +47,9 @@ export default defineConfig(({ mode }) => ({
             type: "image/png",
             purpose: "any",
           },
-          {
-            src: "/pwa-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "maskable",
-          },
         ],
-        shortcuts: [
-          {
-            name: "Browse Properties",
-            short_name: "Properties",
-            description: "View all available properties",
-            url: "/properties",
-          },
-          {
-            name: "Contact Us",
-            short_name: "Contact",
-            description: "Get in touch with JBJ",
-            url: "/contact",
-          },
-        ],
+        // Removed shortcuts to further reduce PWA installability signals
+        shortcuts: [],
       },
       workbox: {
         // Allow larger JS bundles to be precached (our main chunk can exceed 7MB)

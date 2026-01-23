@@ -45,6 +45,8 @@ import ListingSearchFilters from "@/components/listing-admin/ListingSearchFilter
 import ListingAdminChat from "@/components/listing-admin/ListingAdminChat";
 import { PendingUpdatesQueue } from "@/components/listing-admin/PendingUpdatesQueue";
 import { ExtractionJobsPanel } from "@/components/listing-admin/ExtractionJobsPanel";
+import SyncDashboard from "@/components/listing-admin/SyncDashboard";
+import { RefreshCw } from "lucide-react";
 
 interface ProjectDocument {
   id: string;
@@ -76,7 +78,7 @@ const ListingAdmin = () => {
   const [showChat, setShowChat] = useState(false);
   
   // View state - 'chat', 'projects', or 'editor'
-  const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor' | 'data-sources'>('chat');
+  const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor' | 'data-sources' | 'sync'>('chat');
 
   // Document upload state
   const [projectDocuments, setProjectDocuments] = useState<ProjectDocument[]>([]);
@@ -529,6 +531,14 @@ const ListingAdmin = () => {
                 Data Sources
               </Button>
               <Button
+                onClick={() => { setActiveView('sync'); setShowChat(false); setIsEditing(false); setIsCreating(false); }}
+                variant={activeView === 'sync' ? 'primary' : 'secondary'}
+                className={activeView === 'sync' ? '' : 'border-gold/30'}
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Sync Dashboard
+              </Button>
+              <Button
                 onClick={() => { handleCreateNew(); setActiveView('editor'); }}
                 variant="secondary"
                 className="border-gold/30"
@@ -569,6 +579,13 @@ const ListingAdmin = () => {
               <ExtractionJobsPanel />
               <PendingUpdatesQueue onRefresh={refetchProjects} />
             </div>
+          </div>
+        )}
+
+        {/* Sync Dashboard View */}
+        {activeView === 'sync' && (
+          <div className="container mx-auto px-4 py-6">
+            <SyncDashboard />
           </div>
         )}
 
