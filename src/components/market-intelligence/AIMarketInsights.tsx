@@ -25,18 +25,19 @@ interface InsightCard {
   category: 'trend' | 'demand' | 'supply' | 'opportunity';
 }
 
-// Split title helper
-const SplitTitle = ({ text }: { text: string }) => {
-  const words = text.split(' ');
-  const firstWord = words[0];
-  const restWords = words.slice(1).join(' ');
-  
-  return (
-    <span className="jj-title-split">
-      <span>{firstWord}</span>{restWords && <span> {restWords}</span>}
-    </span>
-  );
-};
+/* ============================================================
+ * ICON BOX STYLE - Active Champagne + Gold Border + Black Icon
+ * ============================================================ */
+const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
+  <div 
+    className={`w-10 h-10 rounded-lg flex items-center justify-center border-2 border-gold transition-all duration-300 hover:shadow-[0_8px_20px_rgba(200,167,102,0.4)] ${className}`}
+    style={{
+      background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
+    }}
+  >
+    <Icon className="w-5 h-5 text-black" />
+  </div>
+);
 
 // Pre-set educational insights (public authority content)
 const PRESET_INSIGHTS: InsightCard[] = [
@@ -142,8 +143,8 @@ export const AIMarketInsights = () => {
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
               AI-Powered Insights
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-              <SplitTitle text="Understanding the Market" />
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Understanding the Market
             </h2>
             <p className="text-black/70 max-w-2xl mx-auto">
               AI-generated explanations of market trends based on official government data. 
@@ -158,9 +159,7 @@ export const AIMarketInsights = () => {
                 <Card className="jj-card-inner hover:border-white transition-all h-full">
                   <CardHeader className="pb-3">
                     <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center shrink-0">
-                        <insight.icon className="w-5 h-5 text-gold" />
-                      </div>
+                      <IconBox icon={insight.icon} className="shrink-0" />
                       <div>
                         <CardTitle className="text-black text-lg mb-1">{insight.title}</CardTitle>
                         <p className="text-gold/80 text-sm italic">"{insight.question}"</p>
@@ -182,15 +181,13 @@ export const AIMarketInsights = () => {
             <Card className="jj-card-inner shadow-lg">
               <CardContent className="p-8">
                 <div className="flex flex-col md:flex-row items-start gap-6 mb-6">
-                  <div className="w-16 h-16 rounded-2xl bg-black flex items-center justify-center shrink-0">
-                    <Brain className="w-8 h-8 text-gold" />
-                  </div>
+                  <IconBox icon={Brain} className="w-16 h-16 shrink-0" />
                   <div className="flex-1">
                     <h3 className="text-black text-xl font-bold mb-2">
-                      <SplitTitle text="Generate Market Narrative" />
+                      Generate Market Narrative
                     </h3>
                     <p className="text-black/70 text-sm mb-4">
-                      Get an AI-generated analysis based on official government Open Data. 
+                      Get an AI-generated analysis based on official government Open Data.
                       Select a topic below to generate educational market insights.
                     </p>
                   </div>

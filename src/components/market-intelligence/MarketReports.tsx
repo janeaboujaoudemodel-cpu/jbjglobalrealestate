@@ -65,18 +65,19 @@ const REPORT_TYPES: MarketReportType[] = [
   },
 ];
 
-// Split title helper: first word gold, rest black
-const SplitTitle = ({ text }: { text: string }) => {
-  const words = text.split(' ');
-  const firstWord = words[0];
-  const restWords = words.slice(1).join(' ');
-  
-  return (
-    <span className="jj-title-split">
-      <span>{firstWord}</span>{restWords && <span> {restWords}</span>}
-    </span>
-  );
-};
+/* ============================================================
+ * ICON BOX STYLE - Active Champagne + Gold Border + Black Icon
+ * ============================================================ */
+const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
+  <div 
+    className={`w-12 h-12 rounded-xl flex items-center justify-center border-2 border-gold transition-all duration-300 hover:shadow-[0_8px_20px_rgba(200,167,102,0.4)] ${className}`}
+    style={{
+      background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
+    }}
+  >
+    <Icon className="w-6 h-6 text-black" />
+  </div>
+);
 
 export const MarketReports = () => {
   const [generatingId, setGeneratingId] = useState<string | null>(null);
@@ -132,8 +133,8 @@ export const MarketReports = () => {
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
               Market Reports
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-              <SplitTitle text="Downloadable Reports" />
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Downloadable Reports
             </h2>
             <p className="text-black/70 max-w-2xl mx-auto">
               Generate AI-powered market reports based on official Open Data. 
@@ -148,9 +149,7 @@ export const MarketReports = () => {
                 <Card className="jj-card-inner hover:border-white transition-all h-full flex flex-col">
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
-                      <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
-                        <report.icon className="w-6 h-6 text-gold" />
-                      </div>
+                      <IconBox icon={report.icon} />
                       <Badge variant="outline" className="bg-white/50 text-black border-black/20">
                         <Clock className="w-3 h-3 mr-1" />
                         {report.frequency}
@@ -210,9 +209,11 @@ export const MarketReports = () => {
             className="mt-10 p-6 jj-card-inner max-w-3xl mx-auto text-center"
             variants={fadeInUp}
           >
-            <FileText className="w-8 h-8 text-gold mx-auto mb-4" />
+            <div className="flex justify-center mb-4">
+              <IconBox icon={FileText} />
+            </div>
             <h4 className="text-black font-semibold mb-2">
-              <SplitTitle text="Report Disclaimer" />
+              Report Disclaimer
             </h4>
             <p className="text-black/70 text-sm leading-relaxed">
               All market reports are generated using AI analysis of publicly available government Open Data. 
