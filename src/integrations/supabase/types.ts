@@ -9335,6 +9335,36 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_history_access_logs: {
+        Row: {
+          access_type: string
+          accessed_at: string | null
+          id: string
+          ip_address: unknown
+          payment_record_id: string | null
+          user_email: string | null
+          user_id: string | null
+        }
+        Insert: {
+          access_type: string
+          accessed_at?: string | null
+          id?: string
+          ip_address?: unknown
+          payment_record_id?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          access_type?: string
+          accessed_at?: string | null
+          id?: string
+          ip_address?: unknown
+          payment_record_id?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       payout_audit_logs: {
         Row: {
           action_type: string
@@ -12725,6 +12755,57 @@ export type Database = {
           },
         ]
       }
+      employee_payment_history_safe: {
+        Row: {
+          amount: number | null
+          created_at: string | null
+          currency: string | null
+          description: string | null
+          employee_name: string | null
+          id: string | null
+          payment_date: string | null
+          payment_method: string | null
+          payment_type: string | null
+          period_end: string | null
+          period_start: string | null
+          reference_number: string | null
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          amount?: number | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          employee_name?: string | null
+          id?: string | null
+          payment_date?: string | null
+          payment_method?: never
+          payment_type?: string | null
+          period_end?: string | null
+          period_start?: string | null
+          reference_number?: never
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          employee_name?: string | null
+          id?: string | null
+          payment_date?: string | null
+          payment_method?: never
+          payment_type?: string | null
+          period_end?: string | null
+          period_start?: string | null
+          reference_number?: never
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       jbj_leads_secure: {
         Row: {
           assigned_broker_id: string | null
@@ -12942,6 +13023,7 @@ export type Database = {
         Args: { _lead_id: string; _user_id: string }
         Returns: boolean
       }
+      can_access_payment_vault: { Args: { _user_id: string }; Returns: boolean }
       can_access_salary_data: { Args: { _user_id: string }; Returns: boolean }
       check_chat_rate_limit: {
         Args: { p_session_id: string }
@@ -13032,6 +13114,13 @@ export type Database = {
           trial_ends_at: string
           updated_at: string
           user_id: string
+        }[]
+      }
+      get_full_payment_details: {
+        Args: { p_payment_id: string }
+        Returns: {
+          payment_method: string
+          reference_number: string
         }[]
       }
       get_hr_role: {
