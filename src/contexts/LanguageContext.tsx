@@ -75,16 +75,10 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     if (stored && SUPPORTED_LANGUAGES.some(l => l.code === stored)) {
       return stored;
     }
-    // Auto-detect on first visit
-    const autoDetected = localStorage.getItem(AUTO_DETECT_KEY);
-    if (!autoDetected) {
-      const detected = detectBrowserLanguage();
-      localStorage.setItem(AUTO_DETECT_KEY, 'true');
-      localStorage.setItem(LANGUAGE_KEY, detected);
-      localStorage.setItem(LANGUAGE_CHANGE_TIME_KEY, new Date().toISOString());
-      return detected;
-    }
-    return 'en';
+    // Default to Arabic for all users
+    localStorage.setItem(LANGUAGE_KEY, 'ar');
+    localStorage.setItem(LANGUAGE_CHANGE_TIME_KEY, new Date().toISOString());
+    return 'ar';
   });
 
   const setLanguage = useCallback((lang: Language) => {
