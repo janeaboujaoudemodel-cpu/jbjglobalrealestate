@@ -4,7 +4,7 @@
   "description": "Buy, sell, or rent luxury properties in Dubai with JBJ Global Real Estate. Founded by Jane Bou Jaoude. Expert brokerage services across UAE.",
   "start_url": "/",
   "id": "/",
-  "display": "standalone",
+  "display": "browser",
   "background_color": "#0a0a0a",
   "theme_color": "#0a0a0a",
   "orientation": "portrait-primary",
@@ -32,42 +32,13 @@
       "purpose": "any"
     },
     {
-      "src": "/pwa-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
       "src": "/apple-touch-icon.png",
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"
     }
   ],
-  "screenshots": [],
-  "shortcuts": [
-    {
-      "name": "Browse Properties",
-      "short_name": "Properties",
-      "description": "View all available properties",
-      "url": "/properties",
-      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Contact Us",
-      "short_name": "Contact",
-      "description": "Get in touch with JBJ",
-      "url": "/contact",
-      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Buyer Guide",
-      "short_name": "Buy",
-      "description": "How to buy property in Dubai",
-      "url": "/buyer-guide",
-      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
-    }
-  ],
+  "shortcuts": [],
   "related_applications": [],
   "prefer_related_applications": false
 }

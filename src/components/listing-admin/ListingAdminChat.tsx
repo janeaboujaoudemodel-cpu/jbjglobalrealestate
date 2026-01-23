@@ -44,7 +44,37 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
   const getWelcomeMessage = (): Message => ({
     id: "welcome",
     role: "assistant",
-    content: `Hello! I'm ${adminPersona?.name || "Sarah Mitchell"}, your Senior Listing Administrator. I can help you with:\n\n• **Off-Plan Listings** - New developer projects\n• **Secondary Market** - Resale properties\n• **Bulk Uploads** - Share a Google Drive link and I'll process all files\n• **Developer Relations** - Documentation and coordination\n\nWhat would you like to list today?`,
+    content: `Hello! I'm ${adminPersona?.name || "Sarah Mitchell"}, your Senior Listing Administrator.
+
+---
+
+**🔔 ASSIGNED TASK: Full Provident Estate Sync**
+
+I've been assigned to synchronize all **1,324 listings** from Provident Estate. Here's what I'll extract:
+
+• **Project Details** - Names, descriptions, locations
+• **High-Resolution Images** - All photos from each project  
+• **Developer Information** - Matched to our database
+• **Status Labels** - Future Launch, New Phase, Ready, etc.
+• **Handover Dates** - Displayed on project cards
+• **Payment Plans** - Developer financing options
+
+**To start the sync:**
+1. Click the **"Sync Dashboard"** tab above
+2. Review the 70-page extraction status
+3. Click **"Start Full Sync"** to begin
+
+I'll process each page sequentially, extracting ~19 listings per page. You can monitor progress, pause/resume, and retry failed pages.
+
+---
+
+**Other things I can help with:**
+• **Off-Plan Listings** - New developer projects
+• **Secondary Market** - Resale properties  
+• **Bulk Uploads** - Share a Google Drive link
+• **Developer Relations** - Documentation
+
+What would you like me to do?`,
     timestamp: new Date(),
   });
 

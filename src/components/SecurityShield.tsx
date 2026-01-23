@@ -19,7 +19,9 @@ const SecurityShield = () => {
   const isLikelyCrawler = useCallback(() => {
     try {
       const ua = navigator.userAgent || '';
-      return /Googlebot|bingbot|BingPreview|DuckDuckBot|Slurp|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|Pinterest|WhatsApp|Slackbot|TelegramBot/i.test(
+      // Comprehensive list of search engine bots, social media crawlers, and Google's rendering engine
+      // This ensures content is visible to crawlers for proper SEO indexing
+      return /Googlebot|Googlebot-Image|AdsBot-Google|Mediapartners-Google|Google-InspectionTool|Chrome-Lighthouse|bingbot|BingPreview|msnbot|DuckDuckBot|Slurp|Baiduspider|YandexBot|Applebot|facebookexternalhit|Facebot|Twitterbot|LinkedInBot|Pinterest|Pinterestbot|WhatsApp|Slackbot|TelegramBot|Discordbot|Embedly|Quora Link Preview|Showyoubot|Outbrain|rogerbot|SemrushBot|AhrefsBot|MJ12bot|DotBot|Archive\.org_bot|SEMrushBot|DataForSeoBot|serpstatbot/i.test(
         ua
       );
     } catch {
