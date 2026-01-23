@@ -19,12 +19,14 @@ import { toast } from 'sonner';
 import { allTeamMembers, TeamMember } from '@/config/team-members';
 import { useEmployeeChat } from '@/hooks/useEmployeeChat';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface EmployeeChatHubProps {
   className?: string;
 }
 
 const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
+  const { t } = useLanguage();
   const [selectedEmployee, setSelectedEmployee] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [messageInput, setMessageInput] = useState('');
@@ -268,7 +270,7 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                         <button
                           onClick={async () => {
                             await navigator.clipboard.writeText(msg.message);
-                            toast.success('Message copied');
+                            toast.success(t('chat.messageCopied') || 'Message copied');
                           }}
                           className={cn(
                             "flex items-center gap-1 mt-1 text-[10px] text-muted-foreground hover:text-gold transition-colors opacity-0 group-hover:opacity-100",
@@ -276,7 +278,7 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                           )}
                         >
                           <Copy className="w-3 h-3" />
-                          <span>Copy</span>
+                          <span>{t('chat.copy') || 'Copy'}</span>
                         </button>
                       </div>
                     </div>

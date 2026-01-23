@@ -994,4 +994,15 @@ export const en = {
   'comingSoon.joinCircleDesc': 'Fill the form to join our circle and be the first to access exclusive properties and market insights.',
   'comingSoon.joinNow': 'Join Now',
   'comingSoon.teamLogin': 'Team Login',
+  
+  // Global Chat Translations
+  'chat.copy': 'Copy',
+  'chat.copied': 'Copied',
+  'chat.messageCopied': 'Message copied',
+  'chat.typing': 'Typing...',
+  'chat.loading': 'Loading...',
+  'chat.send': 'Send',
+  'chat.typeMessage': 'Type a message...',
+  'chat.online': 'Online',
+  'chat.offline': 'Offline',
 };

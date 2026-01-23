@@ -6,6 +6,7 @@ import { Bot, Send, User, Loader2, Sparkles, BookOpen, X, Maximize2, Minimize2, 
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -19,6 +20,7 @@ interface AIStudyTutorProps {
 }
 
 export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
+  const { t } = useLanguage();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -188,14 +190,14 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
                   <button
                     onClick={async () => {
                       await navigator.clipboard.writeText(message.content);
-                      toast.success('Message copied');
+                      toast.success(t('chat.messageCopied') || 'Message copied');
                     }}
                     className={`flex items-center gap-1 mt-1 text-[10px] text-zinc-400 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
                       message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
                     }`}
                   >
                     <Copy className="w-3 h-3" />
-                    <span>Copy</span>
+                    <span>{t('chat.copy') || 'Copy'}</span>
                   </button>
                   {message.relatedModules && message.relatedModules.length > 0 && (
                     <div className="mt-2 flex flex-wrap gap-1">

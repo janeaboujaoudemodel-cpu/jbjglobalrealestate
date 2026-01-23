@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import { Message, SERVICES, getRandomAgent } from './types';
 import { CONTACT_INFO } from '@/constants/stats';
 import { T } from '@/components/ui/T';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface ChatMessagesProps {
   messages: Message[];
@@ -35,6 +36,7 @@ const ChatMessages = ({
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const agent = useMemo(() => getRandomAgent(), []);
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -96,14 +98,14 @@ const ChatMessages = ({
                 <button
                   onClick={async () => {
                     await navigator.clipboard.writeText(message.content);
-                    toast.success('Message copied');
+                    toast.success(t('chat.messageCopied') || 'Message copied');
                   }}
                   className={`flex items-center gap-1 mt-1 text-[10px] text-zinc-500 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
                     message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
                   }`}
                 >
                   <Copy className="w-3 h-3" />
-                  <span>Copy</span>
+                  <span>{t('chat.copy') || 'Copy'}</span>
                 </button>
               </div>
             </motion.div>
