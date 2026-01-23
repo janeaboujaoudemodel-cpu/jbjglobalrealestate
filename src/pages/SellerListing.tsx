@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import SellerAssistant from "@/components/seller/SellerAssistant";
+import Footer from "@/components/Footer";
 import {
   Dialog,
   DialogContent,
@@ -509,9 +510,9 @@ Requirements:
         description="Submit your property for sale with JBJ Global Real Estate. Our guided listing tool helps you provide all necessary details for a successful sale."
       />
       
-      <main className="min-h-screen bg-black pt-20 pb-16">
-        {/* White/Gold Champagne Hero Section */}
-        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <main className="min-h-screen bg-black pt-20 pb-0">
+        {/* Layer 2: Active Champagne Hero Section with proper gutters */}
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-t-2xl">
           <div className="container mx-auto px-4 py-12">
             <div className="max-w-4xl mx-auto text-center">
               <span className="inline-block px-4 py-1.5 rounded-full bg-black text-gold text-sm font-medium mb-4 border border-gold/30">
@@ -555,7 +556,9 @@ Requirements:
           </div>
         </div>
 
-        <div className="container mx-auto px-4 mt-8">
+        {/* Layer 2 continues for form content */}
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 pb-16 pt-8">
+          <div className="container mx-auto px-4">
           {/* Progress Steps - Using champagne active color */}
           <div className="max-w-4xl mx-auto mb-8">
             <div className="flex items-center justify-between overflow-x-auto pb-2 gap-2">
@@ -1467,6 +1470,7 @@ Requirements:
               )}
             </AnimatePresence>
           </div>
+          </div>
         </div>
       </main>
 
@@ -1520,6 +1524,9 @@ Requirements:
           </div>
         </DialogContent>
       </Dialog>
+      
+      {/* Footer */}
+      <Footer />
     </>
   );
 };

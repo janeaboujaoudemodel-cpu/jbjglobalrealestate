@@ -157,7 +157,8 @@ const MarketReportsPage = () => {
           />
         </div>
 
-        <div className="space-y-8">
+        {/* Layer 2 wrapper with gutters */}
+        <div className="mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 space-y-8">
 
               {/* Introduction Section */}
               <SectionWrapper id="introduction">
@@ -561,7 +562,7 @@ const MarketReportsPage = () => {
       <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
 
       {/* Market Intelligence Navigation */}
-      <section id="navigation" className="py-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] scroll-mt-24">
+      <section id="navigation" className="py-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] scroll-mt-24 mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl">
         <div className="container mx-auto px-4">
           <MarketIntelligenceNavigation current="/market-intelligence/reports" />
           

@@ -171,19 +171,28 @@ const BrokerFAQ = () => {
         backgroundImage="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=2000&q=80"
         actions={
           <>
-            <Button 
-              className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
+            {/* Hero Button: Transparent bg + white 3D border + white text + gold icon; champagne fill on hover */}
+            <button 
+              className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300 bg-transparent border-2 border-white/80 hover:bg-gradient-to-r hover:from-[#FDFBF7] hover:via-[#F5F0E6] hover:to-[#EDE4D3] hover:border-gold hover:text-black"
+              style={{
+                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 15px rgba(0,0,0,0.3)',
+              }}
               onClick={() => document.getElementById('faq-content')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              <Search className="w-4 h-4 mr-2 text-black" />
-              <span className="text-gold font-semibold">Browse FAQs</span>
-            </Button>
-            <Button asChild className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
-              <Link to="/contact">
-                <Phone className="w-4 h-4 mr-2 text-black" />
-                <span className="text-gold font-semibold">Ask Our Team</span>
-              </Link>
-            </Button>
+              <Search className="w-4 h-4 text-gold group-hover:text-gold" />
+              <span>Browse FAQs</span>
+            </button>
+            <Link to="/contact">
+              <button 
+                className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300 bg-transparent border-2 border-white/80 hover:bg-gradient-to-r hover:from-[#FDFBF7] hover:via-[#F5F0E6] hover:to-[#EDE4D3] hover:border-gold hover:text-black"
+                style={{
+                  boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 15px rgba(0,0,0,0.3)',
+                }}
+              >
+                <Phone className="w-4 h-4 text-gold group-hover:text-gold" />
+                <span>Ask Our Team</span>
+              </button>
+            </Link>
           </>
         }
       />

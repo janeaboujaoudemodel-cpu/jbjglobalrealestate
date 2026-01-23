@@ -19,18 +19,19 @@ const frequencyColors = {
   quarterly: 'bg-purple-100 text-purple-700 border-purple-300',
 };
 
-// Split title helper
-const SplitTitle = ({ text }: { text: string }) => {
-  const words = text.split(' ');
-  const firstWord = words[0];
-  const restWords = words.slice(1).join(' ');
-  
-  return (
-    <span className="jj-title-split">
-      <span>{firstWord}</span>{restWords && <span> {restWords}</span>}
-    </span>
-  );
-};
+/* ============================================================
+ * ICON BOX STYLE - Active Champagne + Gold Border + Black Icon
+ * ============================================================ */
+const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
+  <div 
+    className={`w-12 h-12 rounded-xl flex items-center justify-center border-2 border-gold transition-all duration-300 hover:shadow-[0_8px_20px_rgba(200,167,102,0.4)] ${className}`}
+    style={{
+      background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
+    }}
+  >
+    <Icon className="w-6 h-6 text-black" />
+  </div>
+);
 
 export const DataSourcesPanel = () => {
   return (
@@ -49,8 +50,8 @@ export const DataSourcesPanel = () => {
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
               Data Sources
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-              <SplitTitle text="Powered by Official Open Data" />
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Powered by Official Open Data
             </h2>
             <p className="text-black/70 max-w-2xl mx-auto">
               All Market Intelligence is derived exclusively from official government Open Data sources. 
@@ -65,9 +66,7 @@ export const DataSourcesPanel = () => {
                 <Card className="jj-card-inner hover:border-white transition-all h-full">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
-                      <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
-                        <Database className="w-6 h-6 text-gold" />
-                      </div>
+                      <IconBox icon={Database} />
                       <Badge className={`${frequencyColors[source.updateFrequency]} border`}>
                         <RefreshCw className="w-3 h-3 mr-1" />
                         {source.updateFrequency}

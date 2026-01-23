@@ -35,18 +35,19 @@ const TrendBadge = ({ trend }: { trend: 'bullish' | 'bearish' | 'neutral' }) => 
   );
 };
 
-// Split title helper
-const SplitTitle = ({ text }: { text: string }) => {
-  const words = text.split(' ');
-  const firstWord = words[0];
-  const restWords = words.slice(1).join(' ');
-  
-  return (
-    <span className="jj-title-split">
-      <span>{firstWord}</span>{restWords && <span> {restWords}</span>}
-    </span>
-  );
-};
+/* ============================================================
+ * ICON BOX STYLE - Active Champagne + Gold Border + Black Icon
+ * ============================================================ */
+const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
+  <div 
+    className={`w-10 h-10 rounded-lg flex items-center justify-center border-2 border-gold transition-all duration-300 hover:shadow-[0_8px_20px_rgba(200,167,102,0.4)] ${className}`}
+    style={{
+      background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
+    }}
+  >
+    <Icon className="w-5 h-5 text-black" />
+  </div>
+);
 
 const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
   const slugify = (text: string) => text.toLowerCase().replace(/\s+/g, '-');
@@ -58,9 +59,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           {/* Header */}
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
-                <MapPin className="w-5 h-5 text-gold" />
-              </div>
+              <IconBox icon={MapPin} />
               <div>
                 <h3 className="text-black font-semibold group-hover:text-gold transition-colors">
                   {area.area}
@@ -166,8 +165,8 @@ export const AreaIntelligenceGrid = () => {
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
               Area Intelligence
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-              <SplitTitle text="Market Snapshot by Location" />
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Market Snapshot by Location
             </h2>
             <p className="text-black/70 max-w-2xl mx-auto">
               Explore aggregated market data for Dubai's most sought-after communities. 

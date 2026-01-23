@@ -15,18 +15,19 @@ const fadeInUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
 };
 
-// Split title helper
-const SplitTitle = ({ text }: { text: string }) => {
-  const words = text.split(' ');
-  const firstWord = words[0];
-  const restWords = words.slice(1).join(' ');
-  
-  return (
-    <span className="jj-title-split">
-      <span>{firstWord}</span>{restWords && <span> {restWords}</span>}
-    </span>
-  );
-};
+/* ============================================================
+ * ICON BOX STYLE - Active Champagne + Gold Border + Black Icon
+ * ============================================================ */
+const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
+  <div 
+    className={`w-12 h-12 rounded-xl flex items-center justify-center border-2 border-gold transition-all duration-300 hover:shadow-[0_8px_20px_rgba(200,167,102,0.4)] ${className}`}
+    style={{
+      background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
+    }}
+  >
+    <Icon className="w-6 h-6 text-black" />
+  </div>
+);
 
 const StatCard = ({ 
   title, 
@@ -50,9 +51,7 @@ const StatCard = ({
       <Card className="jj-card-inner transition-all h-full">
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
-            <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
-              <Icon className="w-6 h-6 text-gold" />
-            </div>
+            <IconBox icon={Icon} />
             <div className={`flex items-center gap-1 text-sm ${isPositive ? 'text-emerald-600' : 'text-red-600'}`}>
               {isPositive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
               <span>{isPositive ? '+' : ''}{change}%</span>
@@ -87,8 +86,8 @@ export const MarketOverviewDashboard = () => {
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
               Market Overview
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-              <SplitTitle text="Dubai Real Estate Dashboard" />
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Dubai Real Estate Dashboard
             </h2>
             <p className="text-black/70 max-w-2xl mx-auto">
               High-level market metrics aggregated from official government Open Data sources.
@@ -132,9 +131,9 @@ export const MarketOverviewDashboard = () => {
             <motion.div variants={fadeInUp}>
               <Card className="jj-card-inner h-full">
                 <CardHeader>
-                  <CardTitle className="text-black flex items-center gap-2">
-                    <BarChart3 className="w-5 h-5 text-gold" />
-                    <SplitTitle text="Quarterly Transaction Trends" />
+                  <CardTitle className="text-black flex items-center gap-3">
+                    <IconBox icon={BarChart3} className="w-10 h-10" />
+                    <span>Quarterly Transaction Trends</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -168,9 +167,9 @@ export const MarketOverviewDashboard = () => {
             <motion.div variants={fadeInUp}>
               <Card className="jj-card-inner h-full">
                 <CardHeader>
-                  <CardTitle className="text-black flex items-center gap-2">
-                    <Building2 className="w-5 h-5 text-gold" />
-                    <SplitTitle text="Price by Property Type" />
+                  <CardTitle className="text-black flex items-center gap-3">
+                    <IconBox icon={Building2} className="w-10 h-10" />
+                    <span>Price by Property Type</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
