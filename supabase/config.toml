@@ -113,3 +113,9 @@ verify_jwt = false
 
 [functions.sarah-extract-projects]
 verify_jwt = false
+
+[functions.sarah-voice]
+verify_jwt = false
+
+[functions.sarah-search]
+verify_jwt = false
