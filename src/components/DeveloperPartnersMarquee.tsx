@@ -87,6 +87,7 @@ const DeveloperPartnersMarquee = () => {
   const { data: projects } = useProjects();
 
   const trackRef = useRef<HTMLDivElement | null>(null);
+  const loopRef = useRef<HTMLDivElement | null>(null);
   const [loopWidth, setLoopWidth] = useState(0);
 
   const inventoryByDeveloperId = useMemo(() => {
@@ -123,17 +124,14 @@ const DeveloperPartnersMarquee = () => {
     return (name: string) => DEVELOPER_NAME_AR[name] ?? name;
   }, [language]);
 
-  // Duplicate for seamless loop
-  const duplicatedDevelopers = [...partners, ...partners];
-
-  // Measure the real width so the marquee loops seamlessly without blank gaps.
+  // Measure the width of ONE loop (first list) for seamless looping.
+  // This prevents long blank gaps and hover-only “reappearing” behavior.
   useEffect(() => {
-    const el = trackRef.current;
+    const el = loopRef.current;
     if (!el) return;
 
     const measure = () => {
-      // With duplicated content, half the scrollWidth is one full loop.
-      const w = el.scrollWidth / 2;
+      const w = el.scrollWidth;
       if (Number.isFinite(w) && w > 0) setLoopWidth(w);
     };
 
@@ -147,7 +145,38 @@ const DeveloperPartnersMarquee = () => {
       ro.disconnect();
       window.removeEventListener("resize", measure);
     };
-  }, [partners.length, language]);
+  }, [language, partners.length]);
+
+  const renderPartner = (developer: (typeof partners)[number], index: number, listKey: "a" | "b") => {
+    const label = displayNameFor(developer.name);
+    const isLastInList = index === partners.length - 1;
+    const showSeparator = !(listKey === "b" && isLastInList);
+
+    return (
+      <div key={`${listKey}-${developer.slug}-${index}`} className="flex-shrink-0 flex items-center gap-4 group">
+        <Link
+          to={`/properties?developer=${encodeURIComponent(
+            developer.developerId ?? developer.slug
+          )}`}
+          data-no-translate
+          className="inline-flex items-center gap-1 px-4 py-2.5 bg-transparent border-2 border-gold/50 rounded-lg transition-all duration-300 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] group"
+          title={label}
+        >
+          {/* Keep the English styling; just swap the Arabic display label. */}
+          <span className="text-black group-hover:text-gold transition-colors font-semibold text-sm md:text-base whitespace-nowrap">
+            {label.split(" ")[0]}
+          </span>
+          {label.split(" ").slice(1).join(" ") && (
+            <span className="text-gold group-hover:text-black transition-colors font-semibold text-sm md:text-base whitespace-nowrap">
+              {label.split(" ").slice(1).join(" ")}
+            </span>
+          )}
+        </Link>
+
+        {showSeparator && <span className="w-2 h-2 rotate-45 flex-shrink-0 bg-gold" />}
+      </div>
+    );
+  };
 
   return (
     <section className="py-10 md:py-16 bg-black border-y border-zinc-800/50 overflow-hidden">
@@ -155,8 +184,17 @@ const DeveloperPartnersMarquee = () => {
       <div className="jj-layer-2">
         <div className="mb-8 md:mb-10">
           <h3 className="text-center text-xl md:text-2xl lg:text-3xl font-bold uppercase tracking-[0.15em]">
-            <span className="text-black">Partnering with UAE's </span>
-            <span className="text-gold">Premier Developers</span>
+            {language === "ar" ? (
+              <>
+                <span className="text-black">شراكة مع </span>
+                <span className="text-gold">أبرز مطوري العقارات في دولة الإمارات</span>
+              </>
+            ) : (
+              <>
+                <span className="text-black">Partnering with UAE's </span>
+                <span className="text-gold">Premier Developers</span>
+              </>
+            )}
           </h3>
         </div>
 
@@ -169,55 +207,30 @@ const DeveloperPartnersMarquee = () => {
           {/* Scrolling content */}
           <motion.div
             ref={trackRef}
-            className="flex items-center gap-6 md:gap-10 py-4 px-4"
+            className="flex items-center py-4 px-4"
             animate={
               loopWidth > 0
-                ? { x: isRTL ? [0, loopWidth] : [0, -loopWidth] }
+                ? { x: [0, -loopWidth] }
                 : { x: 0 }
             }
             transition={{
               x: {
                 // Keep speed consistent across screen sizes
-                duration: loopWidth > 0 ? Math.max(18, loopWidth / 90) : 0,
+                duration: loopWidth > 0 ? Math.max(22, loopWidth / 140) : 0,
                 repeat: Infinity,
                 ease: "linear",
               },
             }}
           >
-            {duplicatedDevelopers.map((developer, index) => {
-              const label = displayNameFor(developer.name);
-              return (
-                <div
-                  key={`${developer.slug}-${index}`}
-                  className="flex-shrink-0 flex items-center gap-4 group"
-                >
-                  {/* Developer Label - Transparent bg with gold border, 3D effect on hover */}
-                  <Link
-                    to={`/properties?developer=${encodeURIComponent(
-                      developer.developerId ?? developer.slug
-                    )}`}
-                    data-no-translate
-                    className="inline-flex items-center gap-1 px-4 py-2.5 bg-transparent border-2 border-gold/50 rounded-lg transition-all duration-300 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] group"
-                    title={label}
-                  >
-                    {/* Normal: First half black, second half gold. Hover: Invert */}
-                    <span className="text-black group-hover:text-gold transition-colors font-semibold text-sm md:text-base whitespace-nowrap">
-                      {label.split(" ")[0]}
-                    </span>
-                    {label.split(" ").slice(1).join(" ") && (
-                      <span className="text-gold group-hover:text-black transition-colors font-semibold text-sm md:text-base whitespace-nowrap">
-                        {label.split(" ").slice(1).join(" ")}
-                      </span>
-                    )}
-                  </Link>
+            {/* First loop */}
+            <div ref={loopRef} className="flex items-center gap-6 md:gap-10">
+              {partners.map((d, idx) => renderPartner(d, idx, "a"))}
+            </div>
 
-                  {/* Separator diamond */}
-                  {index < duplicatedDevelopers.length - 1 && (
-                    <span className="w-2 h-2 rotate-45 flex-shrink-0 bg-gold" />
-                  )}
-                </div>
-              );
-            })}
+            {/* Second loop (aria-hidden duplicate) */}
+            <div aria-hidden className="flex items-center gap-6 md:gap-10">
+              {partners.map((d, idx) => renderPartner(d, idx, "b"))}
+            </div>
           </motion.div>
         </div>
       </div>
