@@ -5929,6 +5929,95 @@ export type Database = {
         }
         Relationships: []
       }
+      external_data_sources: {
+        Row: {
+          auth_config: Json | null
+          auth_type: string | null
+          base_url: string
+          created_at: string | null
+          extraction_schedule: string | null
+          id: string
+          is_active: boolean | null
+          last_extraction_at: string | null
+          name: string
+          source_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          auth_config?: Json | null
+          auth_type?: string | null
+          base_url: string
+          created_at?: string | null
+          extraction_schedule?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_extraction_at?: string | null
+          name: string
+          source_type?: string
+          updated_at?: string | null
+        }
+        Update: {
+          auth_config?: Json | null
+          auth_type?: string | null
+          base_url?: string
+          created_at?: string | null
+          extraction_schedule?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_extraction_at?: string | null
+          name?: string
+          source_type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      extraction_job_logs: {
+        Row: {
+          completed_at: string | null
+          error_message: string | null
+          id: string
+          metadata: Json | null
+          records_found: number | null
+          records_matched: number | null
+          records_pending: number | null
+          source_id: string | null
+          started_at: string | null
+          status: string
+        }
+        Insert: {
+          completed_at?: string | null
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          records_found?: number | null
+          records_matched?: number | null
+          records_pending?: number | null
+          source_id?: string | null
+          started_at?: string | null
+          status?: string
+        }
+        Update: {
+          completed_at?: string | null
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          records_found?: number | null
+          records_matched?: number | null
+          records_pending?: number | null
+          source_id?: string | null
+          started_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "extraction_job_logs_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "external_data_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       faq_unanswered_questions: {
         Row: {
           answer_added: boolean
@@ -8542,6 +8631,78 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      listing_pending_updates: {
+        Row: {
+          change_type: string
+          confidence_score: number | null
+          created_at: string | null
+          current_value: string | null
+          field_name: string
+          id: string
+          job_id: string | null
+          listing_id: string | null
+          listing_table: string
+          match_method: string | null
+          proposed_value: string
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          source_id: string | null
+          status: string
+        }
+        Insert: {
+          change_type?: string
+          confidence_score?: number | null
+          created_at?: string | null
+          current_value?: string | null
+          field_name: string
+          id?: string
+          job_id?: string | null
+          listing_id?: string | null
+          listing_table?: string
+          match_method?: string | null
+          proposed_value: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source_id?: string | null
+          status?: string
+        }
+        Update: {
+          change_type?: string
+          confidence_score?: number | null
+          created_at?: string | null
+          current_value?: string | null
+          field_name?: string
+          id?: string
+          job_id?: string | null
+          listing_id?: string | null
+          listing_table?: string
+          match_method?: string | null
+          proposed_value?: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source_id?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_pending_updates_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "extraction_job_logs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "listing_pending_updates_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "external_data_sources"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       listing_uploads: {
         Row: {
