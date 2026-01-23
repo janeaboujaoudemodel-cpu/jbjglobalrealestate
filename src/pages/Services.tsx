@@ -11,6 +11,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CONTACT_INFO } from "@/constants/stats";
+import servicesHeroVideo from "@/assets/videos/services-hero.mp4";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -43,29 +44,22 @@ const coreServices = [
     icon: Home,
     title: "Buy Property",
     description: "Find your dream home or investment property with expert guidance through Dubai's dynamic real estate market.",
-    link: "/guides/buyers",
+    link: "/buyer-guide",
     features: ["Market Analysis", "Property Tours", "Negotiation Support", "Due Diligence"]
   },
   {
     icon: Key,
     title: "Sell Property",
     description: "Maximize your property's value with our comprehensive marketing and sales strategies.",
-    link: "/guides/sellers",
+    link: "/seller-guide",
     features: ["Property Valuation", "Marketing Strategy", "Buyer Screening", "Closing Support"]
   },
   {
     icon: Building2,
-    title: "Rent Property",
+    title: "Rent a Property",
     description: "Whether you're a landlord or tenant, we streamline the rental process for optimal results.",
-    link: "/guides/rentals",
+    link: "/rent-guide",
     features: ["Tenant Matching", "Lease Management", "Property Maintenance", "Rent Collection"]
-  },
-  {
-    icon: FileText,
-    title: "Property Management",
-    description: "Complete property management solutions to protect and grow your real estate investments.",
-    link: "/guides/property-management",
-    features: ["24/7 Support", "Maintenance Coordination", "Financial Reporting", "Tenant Relations"]
   }
 ];
 
@@ -81,7 +75,7 @@ const specializedServices = [
     icon: Landmark,
     title: "Mortgage Advisory",
     description: "Expert mortgage guidance to secure the best financing for your property.",
-    link: "/services/mortgage",
+    link: "/mortgage-calculator",
     badge: "Financial Services"
   },
   {
@@ -96,6 +90,13 @@ const specializedServices = [
     title: "Renovation Services",
     description: "Quality renovation and fit-out services to enhance your property's value.",
     link: "/services/fit-out",
+    badge: "Partner Network"
+  },
+  {
+    icon: FileText,
+    title: "Property Management",
+    description: "Complete property management solutions to protect and grow your real estate investments.",
+    link: "/services/property-management",
     badge: "Partner Network"
   }
 ];
@@ -160,9 +161,9 @@ const Services = () => {
         canonicalPath="/services"
       />
 
-      {/* Hero Section with Video */}
+      {/* Hero Section with Unique Video */}
       <section className="relative min-h-[60vh] flex items-center overflow-hidden">
-        {/* Background Video */}
+        {/* Background Video - Unique to Services page */}
         <video
           autoPlay
           loop
@@ -170,7 +171,7 @@ const Services = () => {
           playsInline
           className="absolute inset-0 w-full h-full object-cover opacity-30"
         >
-          <source src="/videos/hero-video.mp4" type="video/mp4" />
+          <source src={servicesHeroVideo} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 via-black/70 to-black" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/5 via-transparent to-transparent" />
@@ -240,14 +241,14 @@ const Services = () => {
               </p>
             </motion.div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {coreServices.map((service, index) => (
+            <div className="grid md:grid-cols-3 gap-6">
+              {coreServices.map((service) => (
                 <motion.div key={service.title} variants={fadeInUp}>
                   <Link to={service.link}>
-                    <Card className="jj-card-inner hover:border-white transition-all group h-full">
-                      <CardContent className="p-6">
-                        <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                          <service.icon className="w-6 h-6 text-gold" />
+                    <Card className="jj-card-inner hover:border-gold transition-all group h-full flex flex-col">
+                      <CardContent className="p-6 flex flex-col flex-1">
+                        <div className="jj-icon-box-active w-12 h-12 mb-4 group-hover:scale-110 transition-transform">
+                          <service.icon className="w-6 h-6" />
                         </div>
                         <h3 className="text-black font-semibold text-lg mb-2 group-hover:text-gold transition-colors">
                           {service.title}
@@ -255,15 +256,15 @@ const Services = () => {
                         <p className="text-black/70 text-sm mb-4">
                           {service.description}
                         </p>
-                        <ul className="space-y-2">
+                        <ul className="space-y-2 mb-4 flex-1">
                           {service.features.map((feature) => (
                             <li key={feature} className="flex items-center gap-2 text-xs text-black/60">
-                              <CheckCircle className="w-3 h-3 text-gold" />
+                              <CheckCircle className="w-3 h-3 text-gold flex-shrink-0" />
                               {feature}
                             </li>
                           ))}
                         </ul>
-                        <div className="mt-4 flex items-center gap-1 text-gold text-sm font-medium">
+                        <div className="flex items-center gap-1 text-gold text-sm font-medium mt-auto pt-4 border-t border-gold/20">
                           Learn More
                           <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </div>
@@ -277,7 +278,7 @@ const Services = () => {
         </div>
       </section>
 
-      {/* Specialized Services - 3-Layer System */}
+      {/* Specialized Solutions (Partner Services) - 3-Layer System */}
       <section className="py-16 bg-black">
         <div className="jj-layer-2">
           <motion.div
@@ -288,37 +289,37 @@ const Services = () => {
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
               <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
-                Extended Services
+                Partner Network
               </span>
               <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
                 <SplitTitle text="Specialized Solutions" />
               </h2>
               <p className="text-black/70 max-w-2xl mx-auto">
-                Comprehensive support services to complement your real estate needs.
+                Comprehensive support services through our trusted partner network.
               </p>
             </motion.div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {specializedServices.map((service, index) => (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {specializedServices.map((service) => (
                 <motion.div key={service.title} variants={fadeInUp}>
                   <Link to={service.link}>
-                    <Card className="jj-card-inner hover:border-white transition-all group h-full">
-                      <CardContent className="p-6">
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <service.icon className="w-6 h-6 text-gold" />
+                    <Card className="jj-card-inner hover:border-gold transition-all group h-full flex flex-col">
+                      <CardContent className="p-6 flex flex-col flex-1">
+                        <div className="flex items-start gap-4 mb-4">
+                          <div className="jj-icon-box-active w-12 h-12 flex-shrink-0 group-hover:scale-110 transition-transform">
+                            <service.icon className="w-6 h-6" />
                           </div>
-                          <span className="text-[10px] uppercase tracking-wider text-gold bg-black/10 px-2 py-1 rounded">
+                          <span className="text-[10px] uppercase tracking-wider text-gold bg-gold/10 border border-gold/30 px-2 py-1 rounded">
                             {service.badge}
                           </span>
                         </div>
                         <h3 className="text-black font-semibold text-lg mb-2 group-hover:text-gold transition-colors">
                           {service.title}
                         </h3>
-                        <p className="text-black/70 text-sm mb-4">
+                        <p className="text-black/70 text-sm mb-4 flex-1">
                           {service.description}
                         </p>
-                        <div className="flex items-center gap-1 text-gold text-sm font-medium">
+                        <div className="flex items-center gap-1 text-gold text-sm font-medium mt-auto pt-4 border-t border-gold/20">
                           Explore
                           <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </div>
@@ -354,13 +355,13 @@ const Services = () => {
             </motion.div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {aiTools.map((tool, index) => (
+              {aiTools.map((tool) => (
                 <motion.div key={tool.title} variants={fadeInUp}>
                   <Link to={tool.link}>
-                    <Card className="jj-card-inner hover:border-white transition-all group h-full">
-                      <CardContent className="p-6">
-                        <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                          <tool.icon className="w-6 h-6 text-gold" />
+                    <Card className="jj-card-inner hover:border-gold transition-all group h-full flex flex-col">
+                      <CardContent className="p-6 flex flex-col flex-1">
+                        <div className="jj-icon-box-active w-12 h-12 mb-4 group-hover:scale-110 transition-transform">
+                          <tool.icon className="w-6 h-6" />
                         </div>
                         <div className="flex items-center gap-2 mb-2">
                           <Sparkles className="w-4 h-4 text-gold" />
@@ -369,10 +370,10 @@ const Services = () => {
                         <h3 className="text-black font-semibold text-lg mb-2 group-hover:text-gold transition-colors">
                           {tool.title}
                         </h3>
-                        <p className="text-black/70 text-sm mb-4">
+                        <p className="text-black/70 text-sm mb-4 flex-1">
                           {tool.description}
                         </p>
-                        <div className="flex items-center gap-1 text-gold text-sm font-medium">
+                        <div className="flex items-center gap-1 text-gold text-sm font-medium mt-auto pt-4 border-t border-gold/20">
                           Try Now
                           <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </div>
@@ -384,7 +385,7 @@ const Services = () => {
             </div>
 
             <motion.div className="text-center mt-10" variants={fadeInUp}>
-              <Button variant="primary" asChild>
+              <Button variant="primary" size="lg" asChild>
                 <Link to="/ai-hub">
                   <Sparkles className="w-5 h-5 mr-2" />
                   <span className="text-black">Explore More</span><span className="text-gold"> AI Tools</span>
@@ -415,7 +416,7 @@ const Services = () => {
             </motion.div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {whyChooseUs.map((item, index) => (
+              {whyChooseUs.map((item) => (
                 <motion.div key={item.title} variants={fadeInUp}>
                   <Card className="jj-card-inner h-full">
                     <CardContent className="p-6 text-center">
@@ -452,10 +453,10 @@ const Services = () => {
                 <SplitTitle text="Ready to Get Started?" />
               </h2>
               <p className="text-black/70 mb-8 max-w-xl mx-auto">
-                Whether you're buying, selling, or renting, our team is here to provide 
-                personalized guidance every step of the way.
+                Connect with our team today and discover how we can help 
+                with your real estate goals.
               </p>
-              <div className="flex flex-wrap justify-center gap-4">
+              <div className="flex flex-wrap gap-4 justify-center">
                 <Button variant="primary" size="lg" asChild>
                   <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
                     <span className="text-black">Schedule</span><span className="text-gold"> Consultation</span>
@@ -463,9 +464,10 @@ const Services = () => {
                   </a>
                 </Button>
                 <Button variant="secondary" size="lg" asChild>
-                  <Link to="/contact">
-                    Contact Us
-                  </Link>
+                  <a href={`tel:${CONTACT_INFO.phoneRaw}`}>
+                    <span className="text-black">Contact</span><span className="text-gold"> Us</span>
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </a>
                 </Button>
               </div>
             </div>
