@@ -71,7 +71,7 @@ const CompanyCommunicationHub = () => {
     },
     {
       id: '2',
-      senderId: 'olivia-reynolds',
+      senderId: 'amanda-clarke',
       content: 'Good morning Jane! I\'ve prepared the agenda for today\'s executive meeting and sent calendar invites to all attendees.',
       timestamp: new Date(Date.now() - 3500000),
       channelId: 'general',

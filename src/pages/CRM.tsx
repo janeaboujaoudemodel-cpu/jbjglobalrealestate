@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { 
-  Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose, Crown, Flag, Sparkles, CheckSquare, Calendar, Search, Bell, Settings, Brain
+  Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose, Crown, Flag, CheckSquare, Calendar, Search, Bell, Settings, Brain
 } from "lucide-react";
 import CRMLeadsTableV2 from "@/components/crm/CRMLeadsTableV2";
 import CRMEnhancedDashboard from "@/components/crm/CRMEnhancedDashboard";
@@ -528,7 +528,7 @@ const CRM = () => {
                       onClick={() => setShowAssistantPanel(true)}
                       className="text-sm"
                     >
-                      <Sparkles className="h-4 w-4 mr-1.5 text-gold" />
+                      <Users className="h-4 w-4 mr-1.5" />
                       Assistant
                     </Button>
                     {isAdmin && <VIPExportButton />}

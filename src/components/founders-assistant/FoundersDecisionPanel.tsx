@@ -185,7 +185,7 @@ export function FoundersDecisionPanel() {
             <div className="relative flex-1">
               <Brain className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gold" />
               <Input
-                placeholder="Ask Olivia anything... (e.g., 'Who's my top broker?' or 'How can I improve revenue?')"
+                placeholder="Ask Amanda anything... (e.g., 'Who's my top broker?' or 'How can I improve revenue?')"
                 value={queryInput}
                 onChange={(e) => setQueryInput(e.target.value)}
                 className="pl-10 bg-zinc-50 border-zinc-200 text-black placeholder:text-zinc-400"
