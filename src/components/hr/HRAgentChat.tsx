@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Bot, User, Loader2, Calendar, FileText, CheckCircle, Sparkles } from 'lucide-react';
+import { Send, Bot, User, Loader2, Calendar, FileText, CheckCircle, Sparkles, Copy } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,7 +9,6 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { toast } from 'sonner';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -170,28 +170,41 @@ export default function HRAgentChat() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className={`flex gap-3 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
+                  className={`flex gap-3 group ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
                 >
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                     message.role === 'user' 
-                      ? 'bg-primary text-primary-foreground' 
-                      : 'bg-secondary text-secondary-foreground'
+                      ? 'bg-gold text-black' 
+                      : 'bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border border-gold/20'
                   }`}>
-                    {message.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
+                    {message.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4 text-gold" />}
                   </div>
-                  <div className={`max-w-[80%] rounded-2xl px-4 py-3 ${
-                    message.role === 'user'
-                      ? 'bg-primary text-primary-foreground rounded-tr-none'
-                      : 'bg-muted rounded-tl-none'
-                  }`}>
-                    <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap">
-                      {message.content}
-                    </div>
-                    <p className={`text-xs mt-1 ${
-                      message.role === 'user' ? 'text-primary-foreground/70' : 'text-muted-foreground'
+                  <div className="flex flex-col max-w-[80%]">
+                    <div className={`rounded-2xl px-4 py-3 select-text cursor-text ${
+                      message.role === 'user'
+                        ? 'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/30 shadow-md rounded-tr-none'
+                        : 'bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/20 shadow-sm rounded-tl-none'
                     }`}>
-                      {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </p>
+                      <div className="prose prose-sm max-w-none whitespace-pre-wrap text-black select-text">
+                        {message.content}
+                      </div>
+                      <p className="text-xs mt-1 text-black/60 select-none">
+                        {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </p>
+                    </div>
+                    {/* Copy Button */}
+                    <button
+                      onClick={async () => {
+                        await navigator.clipboard.writeText(message.content);
+                        toast.success('Message copied');
+                      }}
+                      className={`flex items-center gap-1 mt-1 text-[10px] text-muted-foreground hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
+                        message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
+                      }`}
+                    >
+                      <Copy className="w-3 h-3" />
+                      <span>Copy</span>
+                    </button>
                   </div>
                 </motion.div>
               ))}

@@ -2,7 +2,8 @@ import { useRef, useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { User, Send, MessageCircle, Shield } from 'lucide-react';
+import { User, Send, MessageCircle, Shield, Copy } from 'lucide-react';
+import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { Message, SERVICES, getRandomAgent } from './types';
 import { CONTACT_INFO } from '@/constants/stats';
@@ -63,7 +64,7 @@ const ChatMessages = ({
               key={message.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`flex gap-3 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
+              className={`flex gap-3 group ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
             >
               {message.role === 'user' ? (
                 <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 bg-gold text-black shadow-lg shadow-gold/20">
@@ -78,17 +79,32 @@ const ChatMessages = ({
                   />
                 </div>
               )}
-              <div
-                className={`max-w-[80%] p-3.5 rounded-2xl shadow-md ${
-                  message.role === 'user'
-                    ? 'bg-gold text-black rounded-tr-sm'
-                    : 'bg-zinc-800 text-white rounded-tl-sm border border-zinc-700'
-                }`}
-              >
-                <p className="text-sm leading-relaxed whitespace-pre-wrap font-medium">{message.content}</p>
-                <p className={`text-[10px] mt-1.5 ${message.role === 'user' ? 'text-black/60' : 'text-zinc-400'}`}>
-                  {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                </p>
+              <div className="flex flex-col max-w-[80%]">
+                <div
+                  className={`p-3.5 rounded-2xl shadow-md select-text cursor-text ${
+                    message.role === 'user'
+                      ? 'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/30 rounded-tr-sm'
+                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/20 rounded-tl-sm'
+                  }`}
+                >
+                  <p className="text-sm leading-relaxed whitespace-pre-wrap font-medium select-text">{message.content}</p>
+                  <p className="text-[10px] mt-1.5 text-black/60 select-none">
+                    {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </p>
+                </div>
+                {/* Copy Button */}
+                <button
+                  onClick={async () => {
+                    await navigator.clipboard.writeText(message.content);
+                    toast.success('Message copied');
+                  }}
+                  className={`flex items-center gap-1 mt-1 text-[10px] text-zinc-500 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
+                    message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
+                  }`}
+                >
+                  <Copy className="w-3 h-3" />
+                  <span>Copy</span>
+                </button>
               </div>
             </motion.div>
           ))}
