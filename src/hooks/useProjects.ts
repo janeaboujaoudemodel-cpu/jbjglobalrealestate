@@ -26,6 +26,8 @@ export interface Project {
   is_featured: boolean | null;
   is_premium: boolean | null;
   is_sold_out: boolean | null;
+  property_type_label: string | null; // e.g. "Apartment, Sky-Villa"
+  status_label: string | null; // e.g. "Future Launch", "New Phase"
   created_at: string;
   updated_at: string;
   developer: {
