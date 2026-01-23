@@ -74,6 +74,9 @@ const ListingAdmin = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showChat, setShowChat] = useState(false);
+  
+  // View state - 'chat', 'projects', or 'editor'
+  const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor' | 'data-sources'>('chat');
 
   // Document upload state
   const [projectDocuments, setProjectDocuments] = useState<ProjectDocument[]>([]);
@@ -445,8 +448,6 @@ const ListingAdmin = () => {
     // Pre-fill form data from AI response
   };
 
-  // View state - 'chat', 'projects', or 'editor'
-  const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor' | 'data-sources'>('chat');
 
   // When editing a project, switch to editor view
   const handleEditProjectWithView = async (project: any) => {
