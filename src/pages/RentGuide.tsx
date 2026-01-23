@@ -30,6 +30,7 @@ import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigatio
 import { GuideHero } from "@/components/guides/GuideHero";
 import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
 import { GuideSection } from "@/components/guides/GuideSection";
+import { GuideSectionHeader } from "@/components/guides/GuideSectionHeader";
 import { GuideCTA } from "@/components/guides/GuideCTA";
 import Footer from "@/components/Footer";
 
@@ -255,15 +256,7 @@ const RentGuide = () => {
       {/* How Renting Works in Dubai */}
       <section id="how-renting-works" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
         <div className="max-w-5xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-light text-black mb-6">
-              <span className="text-gold">How</span> Renting Works in Dubai
-            </h2>
-            <p className="text-lg text-zinc-600 leading-relaxed max-w-3xl mx-auto">
-              Dubai's rental market is well-regulated, offering protection for both tenants and landlords. 
-              Understanding the basics helps you navigate the process with confidence.
-            </p>
-          </div>
+          <GuideSectionHeader icon={Home} title="How Renting Works in Dubai" />
           
           <div className="grid md:grid-cols-3 gap-6">
             {[
@@ -298,14 +291,7 @@ const RentGuide = () => {
       {/* Rental Process Steps */}
       <section id="rental-process" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
         <div className="max-w-5xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
-              <span className="text-gold">The 6-Step</span> Rental Process
-            </h2>
-            <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-              From initial search to move-in day — here's what to expect when renting in Dubai.
-            </p>
-          </div>
+          <GuideSectionHeader icon={FileText} title="The 6-Step Rental Process" />
 
           <div className="space-y-6">
             {rentalProcess.map((step) => (
@@ -346,14 +332,7 @@ const RentGuide = () => {
       {/* Payment Structures */}
       <section id="payment-structures" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
         <div className="max-w-5xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
-              <span className="text-gold">Payment</span> Structures
-            </h2>
-            <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-              Dubai's rental market uses a cheque-based payment system. Understanding your options helps in negotiation.
-            </p>
-          </div>
+          <GuideSectionHeader icon={CreditCard} title="Payment Structures" />
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {paymentStructures.map((structure, index) => (
@@ -375,14 +354,7 @@ const RentGuide = () => {
       {/* Costs & Fees */}
       <section id="costs-fees" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
         <div className="max-w-5xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
-              <span className="text-gold">Rental</span> Costs & Fees
-            </h2>
-            <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-              Beyond the monthly rent, budget for these one-time and recurring costs.
-            </p>
-          </div>
+          <GuideSectionHeader icon={Banknote} title="Rental Costs & Fees" />
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {costs.map((cost, index) => (
@@ -408,14 +380,7 @@ const RentGuide = () => {
       {/* How JBJ Supports Tenants & Landlords */}
       <section id="jbj-support" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
         <div className="max-w-5xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
-              <span className="text-gold">How JBJ</span> GLOBAL REAL ESTATE Supports You
-            </h2>
-            <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-              Licensed for BUY, SELL & RENT, we provide professional brokerage services for both tenants and landlords.
-            </p>
-          </div>
+          <GuideSectionHeader icon={Users} title="How JBJ Supports You" />
 
           <div className="grid md:grid-cols-2 gap-6">
             {jbjSupport.map((support, index) => (

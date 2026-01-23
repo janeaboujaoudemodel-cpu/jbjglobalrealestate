@@ -28,6 +28,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
 import { GuideHero } from "@/components/guides/GuideHero";
 import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
+import { GuideSectionHeader } from "@/components/guides/GuideSectionHeader";
 import { GuideCTA } from "@/components/guides/GuideCTA";
 import Footer from "@/components/Footer";
 
@@ -243,14 +244,7 @@ const TenantGuide = () => {
       {/* Section 1: Understanding the Rental Market */}
       <section id="rental-market" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
         <div className="max-w-5xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
-              <span className="text-gold">Understanding</span> the Rental Market
-            </h2>
-            <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-              Dubai's rental market is regulated and transparent, with clear rules governing pricing, contracts, and tenant rights.
-            </p>
-          </div>
+          <GuideSectionHeader icon={Home} title="Understanding the Rental Market" />
 
           <div className="jj-box-active p-6 md:p-8">
             <p className="text-zinc-700 mb-6 font-medium">What to know:</p>
@@ -269,16 +263,9 @@ const TenantGuide = () => {
       {/* Section 2: Budgeting for Rent */}
       <section id="budgeting" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
         <div className="max-w-5xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
-              <span className="text-gold">Budgeting</span> for Rent
-            </h2>
-            <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-              Before searching, tenants should understand the full cost of renting.
-            </p>
-          </div>
+          <GuideSectionHeader icon={Banknote} title="Budgeting for Rent" />
 
-          <div className="jj-box-active p-6 md:p-8">
+          <div className="jj-card-inner p-6 md:p-8">
             <p className="text-zinc-700 mb-6 font-medium">Typical costs include:</p>
             <ul className="space-y-3 mb-6">
               {budgetCosts.map((item, index) => (
@@ -297,195 +284,141 @@ const TenantGuide = () => {
 
       {/* Section 3: Property Search & Viewings */}
       <section id="property-search" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
-                Section 3: <span className="text-gold">Property Search</span> & Viewings
-              </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-                Choosing the right property is about more than price.
-              </p>
-            </div>
+        <div className="max-w-5xl mx-auto px-4">
+          <GuideSectionHeader icon={Home} title="Property Search & Viewings" />
 
-            <div className="jj-box-active p-6 md:p-8">
-              <p className="text-zinc-700 mb-6 font-medium">Key considerations:</p>
-              <ul className="space-y-3 mb-6">
-                {searchConsiderations.map((item, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
-                JBJ arranges verified listings and guided viewings to avoid misinformation.
-              </p>
-            </div>
+          <div className="jj-card-inner p-6 md:p-8">
+            <p className="text-zinc-700 mb-6 font-medium">Key considerations:</p>
+            <ul className="space-y-3 mb-6">
+              {searchConsiderations.map((item, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700">{item}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
+              JBJ arranges verified listings and guided viewings to avoid misinformation.
+            </p>
           </div>
         </div>
       </section>
 
       {/* Section 4: Making an Offer */}
       <section id="making-offer" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
-                Section 4: <span className="text-gold">Making</span> an Offer
-              </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-                Once you select a property, an offer is submitted.
-              </p>
-            </div>
+        <div className="max-w-5xl mx-auto px-4">
+          <GuideSectionHeader icon={FileText} title="Making an Offer" />
 
-            <div className="jj-box-active p-6 md:p-8">
-              <p className="text-zinc-700 mb-6 font-medium">Offer typically includes:</p>
-              <ul className="space-y-3 mb-6">
-                {offerIncludes.map((item, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
-                Negotiation is common and handled formally.
-              </p>
-            </div>
+          <div className="jj-card-inner p-6 md:p-8">
+            <p className="text-zinc-700 mb-6 font-medium">Offer typically includes:</p>
+            <ul className="space-y-3 mb-6">
+              {offerIncludes.map((item, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700">{item}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
+              Negotiation is common and handled formally.
+            </p>
           </div>
         </div>
       </section>
 
       {/* Section 5: Documents Required */}
       <section id="documents" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
-                Section 5: <span className="text-gold">Documents Required</span> from Tenants
-              </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-                To proceed, tenants must provide:
-              </p>
-            </div>
+        <div className="max-w-5xl mx-auto px-4">
+          <GuideSectionHeader icon={FileText} title="Documents Required from Tenants" />
 
-            <div className="jj-box-active p-6 md:p-8">
-              <ul className="space-y-3 mb-6">
-                {documentsRequired.map((item, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <FileText className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
-                All information is used for contract and Ejari registration.
-              </p>
-            </div>
+          <div className="jj-card-inner p-6 md:p-8">
+            <ul className="space-y-3 mb-6">
+              {documentsRequired.map((item, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <FileText className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700">{item}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
+              All information is used for contract and Ejari registration.
+            </p>
           </div>
         </div>
       </section>
 
       {/* Section 6: Tenancy Contract & Ejari */}
       <section id="contract-ejari" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
-                Section 6: <span className="text-gold">Tenancy Contract</span> & Ejari
-              </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-                Tenancy contracts are legally binding and must be registered.
-              </p>
-            </div>
+        <div className="max-w-5xl mx-auto px-4">
+          <GuideSectionHeader icon={Shield} title="Tenancy Contract & Ejari" />
 
-            <div className="jj-box-active p-6 md:p-8">
-              <p className="text-zinc-700 mb-6 font-medium">Important points:</p>
-              <ul className="space-y-3 mb-6">
-                {contractPoints.map((item, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <Shield className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
-                Without Ejari, tenant protections are limited.
-              </p>
-            </div>
+          <div className="jj-card-inner p-6 md:p-8">
+            <p className="text-zinc-700 mb-6 font-medium">Important points:</p>
+            <ul className="space-y-3 mb-6">
+              {contractPoints.map((item, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <Shield className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700">{item}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
+              Without Ejari, tenant protections are limited.
+            </p>
           </div>
         </div>
       </section>
 
       {/* Section 7: Move-In & Handover */}
       <section id="move-in" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
-                Section 7: <span className="text-gold">Move-In</span> & Handover
-              </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-                Before moving in:
-              </p>
-            </div>
+        <div className="max-w-5xl mx-auto px-4">
+          <GuideSectionHeader icon={Key} title="Move-In & Handover" />
 
-            <div className="jj-box-active p-6 md:p-8">
-              <p className="text-zinc-700 mb-6 font-medium">Checklist:</p>
-              <ul className="space-y-3 mb-6">
-                {moveInChecklist.map((item, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <Key className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
-                Document the unit condition to avoid future disputes.
-              </p>
-            </div>
+          <div className="jj-card-inner p-6 md:p-8">
+            <p className="text-zinc-700 mb-6 font-medium">Checklist:</p>
+            <ul className="space-y-3 mb-6">
+              {moveInChecklist.map((item, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <Key className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700">{item}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
+              Document the unit condition to avoid future disputes.
+            </p>
           </div>
         </div>
       </section>
 
       {/* Section 8: Tenant Rights & Responsibilities */}
       <section id="rights-responsibilities" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
-                Section 8: <span className="text-gold">Tenant Rights</span> & Responsibilities
-              </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-                Dubai law protects both tenants and landlords.
-              </p>
+        <div className="max-w-5xl mx-auto px-4">
+          <GuideSectionHeader icon={Scale} title="Tenant Rights & Responsibilities" />
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="jj-card-inner p-6 md:p-8">
+              <p className="text-zinc-700 mb-6 font-medium">Tenant rights include:</p>
+              <ul className="space-y-3">
+                {tenantRights.map((item, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <Shield className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-700">{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="jj-box-active p-6 md:p-8">
-                <p className="text-zinc-700 mb-6 font-medium">Tenant rights include:</p>
-                <ul className="space-y-3">
-                  {tenantRights.map((item, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <Shield className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                      <span className="text-zinc-700">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="jj-box-active p-6 md:p-8">
-                <p className="text-zinc-700 mb-6 font-medium">Tenant responsibilities include:</p>
-                <ul className="space-y-3">
-                  {tenantResponsibilities.map((item, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                      <span className="text-zinc-700">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div className="jj-card-inner p-6 md:p-8">
+              <p className="text-zinc-700 mb-6 font-medium">Tenant responsibilities include:</p>
+              <ul className="space-y-3">
+                {tenantResponsibilities.map((item, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-700">{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
@@ -521,87 +454,63 @@ const TenantGuide = () => {
 
       {/* Section 10: Ending a Tenancy */}
       <section id="ending-tenancy" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
-                Section 10: <span className="text-gold">Ending</span> a Tenancy
-              </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-                Ending a lease requires proper notice.
-              </p>
-            </div>
+        <div className="max-w-5xl mx-auto px-4">
+          <GuideSectionHeader icon={Calendar} title="Ending a Tenancy" />
 
-            <div className="jj-box-active p-6 md:p-8">
-              <p className="text-zinc-700 mb-6 font-medium">Important points:</p>
-              <ul className="space-y-3 mb-6">
-                {endingTenancy.map((item, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <AlertTriangle className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
-                Early termination may involve penalties depending on contract terms.
-              </p>
-            </div>
+          <div className="jj-card-inner p-6 md:p-8">
+            <p className="text-zinc-700 mb-6 font-medium">Important points:</p>
+            <ul className="space-y-3 mb-6">
+              {endingTenancy.map((item, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <AlertTriangle className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700">{item}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
+              Early termination may involve penalties depending on contract terms.
+            </p>
           </div>
         </div>
       </section>
 
       {/* How JBJ Global Real Estate Supports Tenants */}
       <section id="jbj-support" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
-                How <span className="text-gold">JBJ Global Real Estate</span> Supports Tenants
-              </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-                JBJ operates as a licensed brokerage focused on clarity and compliance.
-              </p>
-            </div>
+        <div className="max-w-4xl mx-auto px-4">
+          <GuideSectionHeader icon={Users} title="How JBJ Supports Tenants" />
 
-            <div className="jj-box-active p-8">
-              <p className="text-zinc-700 mb-6 font-medium">Our role includes:</p>
-              <ul className="space-y-3 mb-6">
-                {jbjSupport.map((item, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
-                We do not charge tenants hidden fees or misleading costs.
-              </p>
-            </div>
+          <div className="jj-card-inner p-8">
+            <p className="text-zinc-700 mb-6 font-medium">Our role includes:</p>
+            <ul className="space-y-3 mb-6">
+              {jbjSupport.map((item, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700">{item}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
+              We do not charge tenants hidden fees or misleading costs.
+            </p>
           </div>
         </div>
       </section>
 
       {/* FAQ Section */}
       <section id="faq" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
-                <span className="text-gold">Tenant</span> FAQ
-              </h2>
-            </div>
+        <div className="max-w-5xl mx-auto px-4">
+          <GuideSectionHeader icon={HelpCircle} title="Tenant FAQ" />
 
-            <div className="space-y-4">
-              {tenantFAQs.map((faq, index) => (
-                <div
-                  key={index}
-                  className="jj-box-active p-6 hover:border-gold transition-colors"
-                >
-                  <h3 className="text-lg font-medium text-black mb-3">{faq.question}</h3>
-                  <p className="text-zinc-600">{faq.answer}</p>
-                </div>
-              ))}
-            </div>
+          <div className="space-y-4">
+            {tenantFAQs.map((faq, index) => (
+              <div
+                key={index}
+                className="jj-card-inner p-6 hover:border-gold transition-colors"
+              >
+                <h3 className="text-lg font-medium text-black mb-3">{faq.question}</h3>
+                <p className="text-zinc-600">{faq.answer}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

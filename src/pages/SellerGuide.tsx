@@ -45,6 +45,7 @@ import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constan
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
 import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
+import { GuideSectionHeader } from "@/components/guides/GuideSectionHeader";
 import Footer from "@/components/Footer";
 
 const fadeInUp = {
@@ -366,17 +367,8 @@ const SellerGuide = () => {
         {/* Who This Guide Is For */}
         <section id="who-is-this-for" className="py-16 jj-section-champagne scroll-mt-20">
           <div className="max-w-5xl mx-auto px-4">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={staggerContainer}
-              className="text-center mb-12"
-            >
-              <motion.h2 variants={fadeInUp} className="text-3xl font-bold text-black mb-4">
-                <span className="text-gold">Who</span> This Guide Is For
-              </motion.h2>
-            </motion.div>
+            <GuideSectionHeader icon={Users} title="Who This Guide Is For" />
+
             
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {whoIsThisFor.map((item, index) => (
@@ -402,17 +394,8 @@ const SellerGuide = () => {
         {/* Step-by-Step Selling Process */}
         <section id="selling-process" className="py-16 jj-section-champagne scroll-mt-20">
           <div className="max-w-5xl mx-auto px-4">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={staggerContainer}
-              className="text-center mb-12"
-            >
-              <motion.h2 variants={fadeInUp} className="text-3xl font-bold text-black mb-4">
-                <span className="text-gold">Step-by-Step</span> Selling Process
-              </motion.h2>
-            </motion.div>
+            <GuideSectionHeader icon={ClipboardCheck} title="Step-by-Step Selling Process" />
+
             
             <div className="space-y-6">
               {steps.map((step, index) => (
@@ -473,59 +456,48 @@ const SellerGuide = () => {
         <section id="costs" className="py-16 jj-section-champagne scroll-mt-20">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={staggerContainer}
-              >
-                <motion.div variants={fadeInUp} className="text-center mb-12">
-                  <h2 className="text-3xl font-bold text-black mb-4">
-                    Selling Costs & Fees (Important)
-                  </h2>
-                </motion.div>
+              <GuideSectionHeader icon={Calculator} title="Selling Costs & Fees" />
 
-                {/* Agency Commission */}
-                <motion.div variants={fadeInUp} className="jj-box-active p-6 md:p-8 mb-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="jj-icon-box-active w-12 h-12 rounded-xl">
-                      <Banknote className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-black">Agency Commission</h3>
-                      <p className="text-zinc-600">Standard market rate: {agencyCommission.rate}</p>
-                    </div>
+              {/* Agency Commission */}
+              <div className="jj-card-inner p-6 md:p-8 mb-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="jj-icon-box-active w-12 h-12 rounded-xl">
+                    <Banknote className="w-6 h-6" />
                   </div>
-                  <p className="text-zinc-700 mb-4">{agencyCommission.paidBy}</p>
-                  <p className="text-black font-semibold mb-3">This covers:</p>
-                  <ul className="grid md:grid-cols-2 gap-2">
-                    {agencyCommission.covers.map((item, index) => (
-                      <li key={index} className="flex items-start gap-2 text-zinc-700 text-sm">
-                        <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
+                  <div>
+                    <h3 className="text-xl font-bold text-black">Agency Commission</h3>
+                    <p className="text-zinc-600">Standard market rate: {agencyCommission.rate}</p>
+                  </div>
+                </div>
+                <p className="text-zinc-700 mb-4">{agencyCommission.paidBy}</p>
+                <p className="text-black font-semibold mb-3">This covers:</p>
+                <ul className="grid md:grid-cols-2 gap-2">
+                  {agencyCommission.covers.map((item, index) => (
+                    <li key={index} className="flex items-start gap-2 text-zinc-700 text-sm">
+                      <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-                {/* Government & Developer Fees */}
-                <motion.div variants={fadeInUp} className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="jj-icon-box-active w-12 h-12 rounded-xl">
-                      <Landmark className="w-6 h-6" />
+              {/* Government & Developer Fees */}
+              <div className="jj-card-inner p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="jj-icon-box-active w-12 h-12 rounded-xl">
+                    <Landmark className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-xl font-bold text-black">Government & Developer Fees</h3>
+                </div>
+                <div className="grid md:grid-cols-2 gap-4">
+                  {governmentFees.map((fee, index) => (
+                    <div key={index} className="jj-card-inner rounded-lg p-4">
+                      <p className="text-black font-medium">{fee.title}</p>
+                      <p className="text-zinc-600 text-sm">{fee.description}</p>
                     </div>
-                    <h3 className="text-xl font-bold text-black">Government & Developer Fees</h3>
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {governmentFees.map((fee, index) => (
-                      <div key={index} className="bg-black/5 rounded-lg p-4">
-                        <p className="text-black font-medium">{fee.title}</p>
-                        <p className="text-zinc-600 text-sm">{fee.description}</p>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              </motion.div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -595,75 +567,51 @@ const SellerGuide = () => {
         {/* How JBJ Global Real Estate Supports Sellers */}
         <section id="jbj-support" className="py-16 jj-section-champagne scroll-mt-20">
           <div className="max-w-4xl mx-auto px-4">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={staggerContainer}
-            >
-              <motion.div variants={fadeInUp} className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-black mb-4">
-                  <span className="text-gold">How JBJ</span> Global Real Estate Supports Sellers
-                </h2>
-              </motion.div>
+            <GuideSectionHeader icon={Handshake} title="How JBJ Supports Sellers" />
 
-              <motion.div variants={fadeInUp} className="grid md:grid-cols-2 gap-4 mb-8">
-                {jbjSupport.map((item, index) => (
-                  <div 
-                    key={index}
-                    className="jj-card-inner p-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
-                  >
-                    <h4 className="text-black font-semibold mb-2">{item.title}</h4>
-                    <p className="text-zinc-600 text-sm">{item.description}</p>
-                  </div>
-                ))}
-              </motion.div>
+            <div className="grid md:grid-cols-2 gap-4 mb-8">
+              {jbjSupport.map((item, index) => (
+                <div 
+                  key={index}
+                  className="jj-card-inner p-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
+                >
+                  <h4 className="text-black font-semibold mb-2">{item.title}</h4>
+                  <p className="text-zinc-600 text-sm">{item.description}</p>
+                </div>
+              ))}
+            </div>
 
-              <motion.div variants={fadeInUp} className="jj-card-inner rounded-xl p-6">
-                <p className="text-zinc-700 text-sm leading-relaxed">
-                  <span className="text-black font-semibold">JBJ Global Real Estate</span> is licensed for buying, selling, and renting property in Dubai. Legal and banking services are coordinated through licensed third-party partners where required.
-                </p>
-              </motion.div>
-            </motion.div>
+            <div className="jj-card-inner rounded-xl p-6">
+              <p className="text-zinc-700 text-sm leading-relaxed">
+                <span className="text-black font-semibold">JBJ Global Real Estate</span> is licensed for buying, selling, and renting property in Dubai. Legal and banking services are coordinated through licensed third-party partners where required.
+              </p>
+            </div>
           </div>
         </section>
 
         {/* FAQ Section */}
         <section id="faqs" className="py-16 jj-section-champagne scroll-mt-20">
           <div className="max-w-4xl mx-auto px-4">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={staggerContainer}
-            >
-              <motion.div variants={fadeInUp} className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-black mb-4">
-                  <span className="text-gold">Seller Guide</span> – FAQs
-                </h2>
-              </motion.div>
+            <GuideSectionHeader icon={HelpCircle} title="Seller Guide FAQs" />
               
-              <motion.div variants={fadeInUp}>
-                <div className="jj-card-inner rounded-2xl p-6 md:p-8">
-                  <Accordion type="single" collapsible className="w-full">
-                    {faqs.map((faq, index) => (
-                      <AccordionItem 
-                        key={index} 
-                        value={`faq-${index}`}
-                        className="border-b border-zinc-200 last:border-0"
-                      >
-                        <AccordionTrigger className="text-black text-left font-medium hover:text-gold hover:no-underline py-5">
-                          {faq.question}
-                        </AccordionTrigger>
-                        <AccordionContent className="text-zinc-600 pb-5">
-                          {faq.answer}
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
-                  </Accordion>
-                </div>
-              </motion.div>
-            </motion.div>
+            <div className="jj-card-inner rounded-2xl p-6 md:p-8">
+              <Accordion type="single" collapsible className="w-full">
+                {faqs.map((faq, index) => (
+                  <AccordionItem 
+                    key={index} 
+                    value={`faq-${index}`}
+                    className="border-b border-zinc-200 last:border-0"
+                  >
+                    <AccordionTrigger className="text-black text-left font-medium hover:text-gold hover:no-underline py-5">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-zinc-600 pb-5">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
           </div>
         </section>
 
