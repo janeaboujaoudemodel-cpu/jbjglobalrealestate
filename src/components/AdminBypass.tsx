@@ -8,8 +8,49 @@ interface AdminBypassProps {
 }
 
 // Public routes that bypass the Coming Soon gate (always accessible)
-// IMPORTANT: This list is intentionally kept empty to avoid exposing unfinished pages publicly.
-const PUBLIC_ROUTES: string[] = [];
+// NOTE: Do NOT include "/" unless matching logic treats it as an exact match.
+// These are the public-facing pages that should be reachable on the custom domain and indexable by search engines.
+const PUBLIC_ROUTES: string[] = [
+  "/",
+  "/properties",
+  "/project",
+  "/communities",
+  "/community",
+  "/developers",
+  "/developer",
+  "/areas",
+  "/area",
+  "/buyer-guide",
+  "/seller-guide",
+  "/rent-guide",
+  "/tenant-guide",
+  "/landlord-guide",
+  "/partners",
+  "/faq",
+  "/quiz",
+  "/quiz-results",
+  "/contact",
+  "/about",
+  "/services",
+  "/mortgage-calculator",
+  "/market-report",
+  "/market-intelligence",
+  "/terms",
+  "/privacy",
+  "/cookies",
+  "/trust-and-audit-center",
+  "/founder",
+  "/awards",
+  "/press-kit",
+  "/company-profile",
+  "/news",
+  "/install",
+];
+
+function matchesPublicRoute(pathname: string, route: string) {
+  if (route === "/") return pathname === "/";
+  return pathname === route || pathname.startsWith(`${route}/`);
+}
 
 /**
  * AdminBypass - Protects the entire site behind a Coming Soon page
@@ -22,8 +63,8 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
   const [isLoading, setIsLoading] = useState(true);
 
   // Check if current route is a public route
-  const isPublicRoute = PUBLIC_ROUTES.some(
-    (route) => location.pathname === route || location.pathname.startsWith(route)
+  const isPublicRoute = PUBLIC_ROUTES.some((route) =>
+    matchesPublicRoute(location.pathname, route)
   );
 
   // Admin routes require stricter admin verification
