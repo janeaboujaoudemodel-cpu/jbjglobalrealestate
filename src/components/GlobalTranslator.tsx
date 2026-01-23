@@ -24,6 +24,14 @@ const toArabicNumerals = (text: string): string => {
   return text.replace(/[0-9]/g, (digit) => ARABIC_NUMERALS[digit] || digit);
 };
 
+// Preserve leading/trailing whitespace from original to avoid “glued words”
+// when translations trim spaces (common when text is split across multiple spans).
+const preserveOuterWhitespace = (original: string, translated: string): string => {
+  const leading = (original.match(/^\s+/) ?? [""])[0];
+  const trailing = (original.match(/\s+$/) ?? [""])[0];
+  return `${leading}${translated.trim()}${trailing}`;
+};
+
 // Convert abbreviations (M, K, B) to Arabic equivalents
 const localizeAbbreviations = (text: string, lang: string): string => {
   if (lang !== 'ar') return text;
@@ -125,6 +133,11 @@ export const GlobalTranslator = () => {
 
     // Get translation first
     let translated = translateText(originalText);
+
+    // Preserve spacing from original (prevents words/titles being concatenated)
+    if (translated) {
+      translated = preserveOuterWhitespace(originalText, translated);
+    }
     
     // Apply Arabic numeral conversion for Arabic
     if (language === 'ar' && translated) {
