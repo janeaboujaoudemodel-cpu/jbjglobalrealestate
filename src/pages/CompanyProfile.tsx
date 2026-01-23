@@ -79,7 +79,7 @@ We serve UAE-based and international clients interested in UAE real estate, offe
   ],
   stats: {
     yearsInDubai: "5+",
-    brokersTrainedBy: "2,800+",
+    brokersTrainedBy: `${COMPANY_STATS.brokersTrainedBy.end.toLocaleString()}${COMPANY_STATS.brokersTrainedBy.suffix}`,
     socialFollowers: "1M+",
     teamManaged: "495+"
   }
@@ -383,7 +383,7 @@ const CompanyProfile = () => {
       // Stats grid - Verified figures only
       const statsData = [
         { label: "Industry Experience", value: "12+ Years" },
-        { label: "Brokers Trained By Founder", value: "2,800+" },
+        { label: "Brokers Trained By Founder", value: `${COMPANY_STATS.brokersTrainedBy.end.toLocaleString()}${COMPANY_STATS.brokersTrainedBy.suffix}` },
         { label: "Social Followers (All Platforms)", value: "1M+" },
         { label: "Team Members", value: "10+" },
       ];

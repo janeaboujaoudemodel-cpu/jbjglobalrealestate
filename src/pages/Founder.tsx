@@ -90,6 +90,8 @@ const GoldLine = ({ className = "" }: { className?: string }) => (
 
 const Founder = () => {
 
+  const brokersTrainedDisplay = `${COMPANY_STATS.brokersTrainedBy.end.toLocaleString()}${COMPANY_STATS.brokersTrainedBy.suffix}`;
+
   const philosophyItems = [
     {
       title: "Founder-Led",
@@ -357,7 +359,7 @@ const Founder = () => {
                     style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}>
                     <Users className="w-5 h-5 text-black" />
                   </div>
-                  <p className="text-gold text-xl font-bold">4,800+</p>
+                  <p className="text-gold text-xl font-bold">{brokersTrainedDisplay}</p>
                   <p className="text-black text-xs font-medium">Trained</p>
                   <p className="text-zinc-500 text-[10px]">Brokers Mentored</p>
                 </div>
@@ -451,7 +453,7 @@ const Founder = () => {
                     Brokerage Training & Development
                   </h3>
                   <p className="text-lg mb-4 text-black">
-                    From 2022–2024, Jane worked with a brokerage company to develop the business across divisions including marketing, projects, sales, objection handling, and training brokers and teams. She has trained 2,800+ brokers through her intensive programs.
+                    From 2022–2024, Jane worked with a brokerage company to develop the business across divisions including marketing, projects, sales, objection handling, and training brokers and teams. She has trained {brokersTrainedDisplay} brokers through her intensive programs.
                   </p>
                   <p className="text-lg mb-4 text-zinc-600">
                     In 2025–2026, she worked with Sobha Realty, supporting real estate growth through structured sales and client experience systems.
@@ -1045,7 +1047,7 @@ const Founder = () => {
                   <div className="w-12 h-12 mx-auto mb-4 bg-black rounded-xl flex items-center justify-center border border-gold/30">
                     <Award className="w-6 h-6 text-gold" />
                   </div>
-                  <p className="text-gold text-3xl md:text-4xl font-bold mb-1">2,800+</p>
+                  <p className="text-gold text-3xl md:text-4xl font-bold mb-1">{brokersTrainedDisplay}</p>
                   <p className="text-black text-sm md:text-base font-medium">Brokers Trained</p>
                 </motion.div>
                 
