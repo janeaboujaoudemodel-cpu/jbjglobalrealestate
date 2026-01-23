@@ -16,6 +16,17 @@ const SecurityShield = () => {
   const violationCountRef = useRef(0);
   const fingerprintRef = useRef<string>('');
 
+  const isLikelyCrawler = useCallback(() => {
+    try {
+      const ua = navigator.userAgent || '';
+      return /Googlebot|bingbot|BingPreview|DuckDuckBot|Slurp|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|Pinterest|WhatsApp|Slackbot|TelegramBot/i.test(
+        ua
+      );
+    } catch {
+      return false;
+    }
+  }, []);
+
   // Generate device fingerprint
   const getFingerprint = useCallback(() => {
     if (fingerprintRef.current) return fingerprintRef.current;
@@ -65,106 +76,14 @@ const SecurityShield = () => {
       // Silent fail
     }
     
-    // After 3 violations, show warning
-    if (violationCountRef.current >= 3) {
-      showSecurityWarning();
-    }
-  }, [getFingerprint]);
-
-  // Show security warning modal
-  const showSecurityWarning = useCallback(() => {
-    // Check if warning already exists
-    if (document.getElementById('jbj-security-warning')) return;
-    
-    const warning = document.createElement('div');
-    warning.id = 'jbj-security-warning';
-    warning.innerHTML = `
-      <div style="
-        position: fixed;
-        inset: 0;
-        z-index: 999999;
-        background: rgba(0,0,0,0.95);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-      ">
-        <div style="
-          max-width: 600px;
-          background: #1a1a1a;
-          border: 2px solid #dc2626;
-          border-radius: 12px;
-          padding: 32px;
-          text-align: center;
-          color: white;
-          font-family: system-ui, -apple-system, sans-serif;
-        ">
-          <div style="
-            width: 80px;
-            height: 80px;
-            background: rgba(220,38,38,0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 24px;
-          ">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-          </div>
-          
-          <h1 style="color: #dc2626; font-size: 24px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 8px;">
-            ⚠️ SECURITY NOTICE
-          </h1>
-          
-          <div style="text-align: left; font-size: 14px; line-height: 1.6; color: #d1d5db;">
-            <p style="margin-bottom: 12px;">
-              <strong>Unauthorized access, inspection, extraction, duplication, mirroring, or synchronization</strong> of this website's content, listings, data, design, UI, or code is <strong>strictly prohibited</strong>.
-            </p>
-            
-            <p style="margin-bottom: 12px;">
-              <strong>JBJ Global Real Estate</strong> is a licensed and registered entity in Dubai, UAE.
-            </p>
-            
-            <p style="margin-bottom: 12px;">
-              All content, data, listings, and digital assets are legally protected, tracked, and registered under applicable UAE commercial, cybercrime, and intellectual property laws.
-            </p>
-            
-            <p style="color: #f87171; margin-bottom: 16px;">
-              Any attempt to scrape, copy, reuse, or extract content is logged and may result in <strong>civil and criminal legal action</strong> under UAE law.
-            </p>
-            
-            <div style="background: #262626; border-radius: 8px; padding: 12px; border: 1px solid #404040;">
-              <p style="font-size: 12px; color: #9ca3af; display: flex; align-items: center; gap: 8px;">
-                🔒 Your IP address, device fingerprint, and activity have been recorded.
-              </p>
-              <p style="font-size: 11px; color: #6b7280; margin-top: 8px;">
-                Incident ID: ${getFingerprint().slice(0, 16)}...
-              </p>
-            </div>
-          </div>
-          
-          <button onclick="this.closest('#jbj-security-warning').remove(); window.location.reload();" style="
-            margin-top: 24px;
-            padding: 12px 24px;
-            background: #C8A766;
-            color: black;
-            font-weight: 600;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-          ">
-            I Understand - Reload Page
-          </button>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(warning);
+    // IMPORTANT: Never block/overlay the public site.
+    // We only log violations (best-effort) so visitors and crawlers can still access pages.
   }, [getFingerprint]);
 
   useEffect(() => {
+    // Never run protection logic for search/social crawlers.
+    if (isLikelyCrawler()) return;
+
     // ========== 1. DISABLE RIGHT-CLICK ==========
     const handleContextMenu = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -291,16 +210,15 @@ const SecurityShield = () => {
 
     // ========== 6. DETECT HEADLESS BROWSERS ==========
     const detectHeadless = () => {
-      const isHeadless = 
+      // Log only; do not block.
+      const isHeadless =
         /HeadlessChrome/.test(navigator.userAgent) ||
         navigator.webdriver === true ||
         !navigator.languages ||
-        navigator.languages.length === 0 ||
-        (navigator as any).plugins?.length === 0;
-      
+        navigator.languages.length === 0;
+
       if (isHeadless) {
         logViolation('headless_browser');
-        showSecurityWarning();
       }
     };
 
@@ -330,7 +248,6 @@ const SecurityShield = () => {
 
       if (automationIndicators.some(indicator => indicator !== undefined)) {
         logViolation('automation_detected');
-        showSecurityWarning();
       }
     };
 
@@ -390,7 +307,7 @@ const SecurityShield = () => {
     document.head.appendChild(style);
 
     // Cleanup
-    return () => {
+     return () => {
       document.removeEventListener('contextmenu', handleContextMenu);
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('selectstart', handleSelectStart);
@@ -403,7 +320,7 @@ const SecurityShield = () => {
         styleElement.remove();
       }
     };
-  }, [logViolation, showSecurityWarning]);
+   }, [isLikelyCrawler, logViolation]);
 
   return null;
 };
