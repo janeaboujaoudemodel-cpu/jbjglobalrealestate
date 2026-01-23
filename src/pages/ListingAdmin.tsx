@@ -39,9 +39,12 @@ import {
   MessageCircle,
   Users,
   Loader2,
+  Database,
 } from "lucide-react";
 import ListingSearchFilters from "@/components/listing-admin/ListingSearchFilters";
 import ListingAdminChat from "@/components/listing-admin/ListingAdminChat";
+import { PendingUpdatesQueue } from "@/components/listing-admin/PendingUpdatesQueue";
+import { ExtractionJobsPanel } from "@/components/listing-admin/ExtractionJobsPanel";
 
 interface ProjectDocument {
   id: string;
@@ -443,7 +446,7 @@ const ListingAdmin = () => {
   };
 
   // View state - 'chat', 'projects', or 'editor'
-  const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor'>('chat');
+  const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor' | 'data-sources'>('chat');
 
   // When editing a project, switch to editor view
   const handleEditProjectWithView = async (project: any) => {
@@ -517,6 +520,14 @@ const ListingAdmin = () => {
                 {t('listingAdmin.projects')} ({projects?.length || 0})
               </Button>
               <Button
+                onClick={() => { setActiveView('data-sources'); setShowChat(false); setIsEditing(false); setIsCreating(false); }}
+                variant={activeView === 'data-sources' ? 'primary' : 'secondary'}
+                className={activeView === 'data-sources' ? '' : 'border-gold/30'}
+              >
+                <Database className="w-4 h-4 mr-2" />
+                Data Sources
+              </Button>
+              <Button
                 onClick={() => { handleCreateNew(); setActiveView('editor'); }}
                 variant="secondary"
                 className="border-gold/30"
@@ -547,6 +558,16 @@ const ListingAdmin = () => {
               onBulkUpload={handleBulkUpload}
               onCreateListing={handleCreateListing}
             />
+          </div>
+        )}
+
+        {/* Data Sources View - Extraction & Approval Queue */}
+        {activeView === 'data-sources' && (
+          <div className="container mx-auto px-4 py-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <ExtractionJobsPanel />
+              <PendingUpdatesQueue onRefresh={refetchProjects} />
+            </div>
           </div>
         )}
 
