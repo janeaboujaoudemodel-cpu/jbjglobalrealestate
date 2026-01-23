@@ -11,10 +11,7 @@ interface BrokerOption {
   crm_role: string;
 }
 
-const tokenStyle = {
-  backgroundColor: "hsl(var(--background))",
-  color: "hsl(var(--foreground))",
-} as const;
+// Removed unused tokenStyle - now using inline className for proper styling
 
 interface CRMLeadsBulkBarProps {
   userId: string;
@@ -160,9 +157,9 @@ export default function CRMLeadsBulkBar({
 
   return (
     <div className="sticky top-0 z-40">
-      <div className="rounded-lg border border-border bg-card/95 backdrop-blur px-3 py-2 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+      <div className="rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_4px_20px_rgba(200,167,102,0.18)] px-4 py-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-3">
-          <span className="text-sm font-semibold text-foreground">
+          <span className="text-sm font-bold text-black">
             {count} selected
           </span>
           <Button
@@ -170,7 +167,7 @@ export default function CRMLeadsBulkBar({
             variant="ghost"
             size="sm"
             onClick={onClear}
-            className="h-8 px-2"
+            className="h-8 px-2 text-black hover:text-gold hover:bg-gold/10"
             disabled={busy}
           >
             <X className="h-4 w-4 mr-1" />
@@ -185,6 +182,7 @@ export default function CRMLeadsBulkBar({
             size="sm"
             onClick={handleDelete}
             disabled={busy}
+            className="font-semibold"
           >
             {busy ? (
               <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
@@ -199,16 +197,15 @@ export default function CRMLeadsBulkBar({
               <select
                 value={assigneeId}
                 onChange={(e) => setAssigneeId(e.target.value)}
-                className="h-9 rounded-md border border-border bg-background px-2 text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                style={tokenStyle}
+                className="h-9 rounded-lg border-2 border-gold/40 bg-white px-3 text-sm font-semibold text-black focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold"
                 disabled={busy}
               >
-                <option value="">Assign broker…</option>
+                <option value="" className="text-black">Assign broker…</option>
                 {brokers.map((b) => (
                   <option
                     key={b.user_id}
                     value={b.user_id}
-                    style={tokenStyle}
+                    className="text-black bg-white"
                   >
                     {b.display_name || b.user_id.slice(0, 8)}
                   </option>
@@ -217,7 +214,7 @@ export default function CRMLeadsBulkBar({
 
               <Button
                 type="button"
-                variant="outline"
+                variant="secondary"
                 size="sm"
                 onClick={handleAssign}
                 disabled={busy || !assigneeId}
@@ -232,13 +229,12 @@ export default function CRMLeadsBulkBar({
           <select
             value={nextStatus}
             onChange={(e) => setNextStatus(e.target.value)}
-            className="h-9 rounded-md border border-border bg-background px-2 text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-            style={tokenStyle}
+            className="h-9 rounded-lg border-2 border-gold/40 bg-white px-3 text-sm font-semibold text-black focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold"
             disabled={busy}
           >
-            <option value="">Change status…</option>
+            <option value="" className="text-black">Change status…</option>
             {statusOptions.map((s) => (
-              <option key={s.value} value={s.value} style={tokenStyle}>
+              <option key={s.value} value={s.value} className="text-black bg-white">
                 {s.label}
               </option>
             ))}
@@ -246,7 +242,7 @@ export default function CRMLeadsBulkBar({
 
           <Button
             type="button"
-            variant="outline"
+            variant="secondary"
             size="sm"
             onClick={handleChangeStatus}
             disabled={busy || !nextStatus}
