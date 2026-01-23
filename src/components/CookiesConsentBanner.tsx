@@ -121,13 +121,7 @@ const CookiesConsentBanner = () => {
                       </Link>
                     </p>
                   </div>
-                  <button
-                    onClick={handleRejectNonEssential}
-                    className="text-black/50 hover:text-black transition-colors p-1.5 rounded-lg hover:bg-black/5"
-                    aria-label="Close"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
+                  {/* Removed X button - users must make explicit choice */}
                 </div>
               </div>
             ) : (
@@ -135,12 +129,7 @@ const CookiesConsentBanner = () => {
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-black font-semibold text-lg">Cookie Preferences</h3>
-                  <button
-                    onClick={() => setShowPreferences(false)}
-                    className="text-black/50 hover:text-black transition-colors p-1.5 rounded-lg hover:bg-black/5"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
+                  {/* X button removed - use Cancel button instead */}
                 </div>
 
                 <div className="space-y-4 mb-6">

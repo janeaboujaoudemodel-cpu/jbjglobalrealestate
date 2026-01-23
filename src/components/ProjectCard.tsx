@@ -112,6 +112,28 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             className="object-cover group-hover:scale-105 transition-transform duration-500"
             placeholderLabel="Media pending verification"
           />
+          
+          {/* Status Label Badge - Top Left (e.g., "Future Launch", "New Phase") */}
+          {project.status_label && (
+            <div className="absolute top-3 left-14 z-10 bg-gradient-to-r from-gold to-[#E8D5A3] text-black px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg">
+              {project.status_label}
+            </div>
+          )}
+          
+          {/* Property Type Label - Top Center (e.g., "Apartment, Sky-Villa") */}
+          {project.property_type_label && (
+            <div className="absolute top-3 left-1/2 -translate-x-1/2 z-10 bg-black/70 backdrop-blur-sm text-white px-3 py-1 rounded-full text-[10px] font-medium tracking-wide shadow-lg">
+              {project.property_type_label}
+            </div>
+          )}
+          
+          {/* Handover Date - Bottom Right Corner */}
+          {project.handover_date && (
+            <div className="absolute bottom-3 right-3 z-10 bg-black/80 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow-lg border border-gold/30">
+              <span className="text-gold">⏱</span> {project.handover_date}
+            </div>
+          )}
+          
           {/* Sold Out Badge */}
           {project.is_sold_out && (
             <div className="absolute top-3 right-3 z-10 bg-destructive text-destructive-foreground px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">

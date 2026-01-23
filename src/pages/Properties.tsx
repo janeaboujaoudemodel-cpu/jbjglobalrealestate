@@ -942,6 +942,22 @@ const Properties = () => {
         <div className="container mx-auto px-3 sm:px-4">
           {/* OUTER LAYER - Active Champagne with thin black contour visible at edges */}
           <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5">
+            
+            {/* Header Section - Off-plan properties message */}
+            {appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus !== 'ready' && (
+              <div className="px-4 pt-4 pb-2">
+                <h2 className="text-2xl md:text-3xl font-bold text-black mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  Off-plan properties for sale in Dubai
+                </h2>
+                <p className="text-black/70 text-sm md:text-base flex items-start gap-2">
+                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full border border-gold/50 text-gold text-xs flex-shrink-0 mt-0.5">i</span>
+                  <span>
+                    Looking for off-plan properties for sale in Dubai? Contact <span className="font-semibold text-gold">JBJ Global Real Estate</span> in Dubai to find the right property for you.
+                  </span>
+                </p>
+              </div>
+            )}
+            
             {/* Results Count - Inside active layer */}
             <div className="mb-6 flex items-center justify-between px-4 pt-4">
               <p className="text-black/70">
