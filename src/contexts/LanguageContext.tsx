@@ -102,12 +102,30 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     return fallbackText || key;
   }, [language]);
 
-  // Direct text translation - returns text as-is (no async)
+  // Direct text translation - looks up in current language dictionary by value match
+  // This is used by <T> component and GlobalTranslator for dynamic content
   const translateText = useCallback((text: string): string => {
-    // For dynamic content, just return the text
-    // The dictionaries handle keyed translations
+    // If we're in English, just return the text
+    if (language === 'en') return text;
+    
+    const trimmedText = text.trim();
+    if (!trimmedText) return text;
+    
+    // Try to find this text as a VALUE in the English dictionary
+    // and return the corresponding value from the current language dictionary
+    const englishDict = translations.en;
+    const currentDict = translations[language];
+    
+    // First, check if the exact text exists as an English value
+    for (const [key, englishValue] of Object.entries(englishDict)) {
+      if (englishValue === trimmedText && currentDict[key]) {
+        return currentDict[key];
+      }
+    }
+    
+    // No match found, return original text (for numbers, proper nouns, etc.)
     return text;
-  }, []);
+  }, [language]);
 
   const isRTL = isRTLLanguage(language);
 

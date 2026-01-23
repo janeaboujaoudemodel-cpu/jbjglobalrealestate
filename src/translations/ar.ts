@@ -1,5 +1,11 @@
 // Arabic translations (العربية)
 export const ar = {
+  // LOCKED FOUNDER IDENTITY (DO NOT MODIFY)
+  'founder.name': 'جاين بو جودة',
+  'founder.title': 'ٱلْمُؤَسِّسَةُ وَٱلرَّئِيسَةُ ٱلتَّنْفِيذِيَّةُ',
+  'founder.titleShort': 'المؤسسة والرئيسة التنفيذية',
+  'founder.company': 'جي بي جي للعقارات العالمية',
+  
   // Navigation
   'nav.home': 'الرئيسية',
   'nav.founder': 'المؤسسة والقيادة',
@@ -141,7 +147,7 @@ export const ar = {
   'founder.years': 'سنوات',
   'founder.countries': 'دول',
   'founder.learnMore': 'اعرف المزيد عن المؤسسة',
-  'founder.title': 'المؤسسة والرئيسة التنفيذية لشركة جي بي جي العقارية',
+  'founder.pageTitle': 'المؤسسة والرئيسة التنفيذية لشركة جي بي جي العقارية',
   'founder.description1': 'جي بي جي للعقارات العالمية هي شركة وساطة عقارية تقودها المؤسسة، مبنية على معايير ثابتة والتقدير والرؤية طويلة المدى.',
   'founder.description2': 'جاين بو جودة المؤسسة والرئيسة التنفيذية لشركة جي بي جي العقارية تقود بفلسفة متجذرة في المسؤولية والتقدير، وتبني منظمات مصممة للاستمرار بدلاً من التوسع فقط.',
   'founder.vision': 'الرؤية',
@@ -600,13 +606,35 @@ export const ar = {
   'error.goHome': 'الذهاب إلى الصفحة الرئيسية',
   'error.tryAgain': 'حاول مرة أخرى',
   
-  // AI Chat Support
-  'chat.title': 'الدعم الذكي',
-  'chat.subtitle': 'متاح 24/7',
-  'chat.welcome': 'مرحباً! أنا مساعد جي بي جي العقاري الذكي. كيف يمكنني مساعدتك اليوم في العقارات في الإمارات؟',
+  // AI Chat Support - FULLY TRANSLATED
+  'chat.title': 'دعم جي بي جي',
+  'chat.subtitle': 'متاح ٢٤/٧',
+  'chat.available247': 'متاح ٢٤/٧',
+  'chat.welcome': 'مرحباً! أنا مساعد جي بي جي العقاري. كيف يمكنني مساعدتك اليوم في العقارات في الإمارات؟',
   'chat.placeholder': 'اكتب رسالتك...',
   'chat.error': 'عذراً، حدث خطأ. يرجى المحاولة مرة أخرى أو التواصل مع فريقنا مباشرة.',
   'chat.askMe': 'اسألني أي شيء!',
+  'chat.chatWithTeam': 'تحدث مع فريقنا',
+  'chat.quickAnswers': 'إجابات سريعة • متاح ٢٤/٧',
+  'chat.teamAssist': 'أحد أعضاء فريقنا سيساعدك',
+  'chat.talkDirectly': 'تحدث مباشرة مع فريقنا',
+  'chat.instantResponse': 'رد فوري • واتساب',
+  'chat.urgentMatters': 'للأمور العاجلة أو الاستشارات الشخصية',
+  'chat.tip': 'نصيحة:',
+  'chat.tipText': 'فريقنا يمكنه الإجابة على معظم الأسئلة فوراً. للمسائل المعقدة، سنوصلك بمختص!',
+  'chat.welcomeTitle': 'مرحباً بك في جي بي جي للعقارات العالمية',
+  'chat.welcomeSubtitle': 'شريكك العقاري المتميز في دبي',
+  'chat.openChat': 'افتح الدعم',
+  'chat.minimize': 'تصغير المحادثة',
+  'chat.howCanWeHelp': 'كيف يمكننا مساعدتك؟',
+  'chat.justNeedEmail': 'فقط نحتاج بريدك الإلكتروني',
+  'chat.letsGetToKnow': 'دعنا نتعرف عليك',
+  'chat.yourConversations': 'محادثاتك',
+  'chat.whatCanWeHelp': 'بماذا يمكننا مساعدتك؟',
+  'chat.connectingYou': 'جاري توصيلك...',
+  'chat.onlineHereToHelp': '🟢 متصل • جاهز للمساعدة',
+  'chat.howDidWeDo': 'كيف كان أداؤنا؟',
+  'chat.thankYou': 'شكراً لك!',
   
   // AI Tools
   'aiTools.calendar': 'التقويم والملاحظات الذكي',

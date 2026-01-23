@@ -1,5 +1,11 @@
 // English translations
 export const en = {
+  // LOCKED FOUNDER IDENTITY (DO NOT MODIFY)
+  'founder.name': 'Jane Bou Jaoude',
+  'founder.title': 'Founder & CEO',
+  'founder.titleShort': 'Founder & CEO',
+  'founder.company': 'JBJ Global Real Estate',
+  
   // Navigation
   'nav.home': 'Home',
   'nav.founder': 'Founder & Leadership',
@@ -136,7 +142,7 @@ export const en = {
   'founder.years': 'Years Experience',
   'founder.brokersTrainedBy': 'Brokers Trained',
   'founder.learnMore': 'Learn More About The Founder',
-  'founder.title': 'Founder & CEO JBJ Global Real Estate',
+  'founder.pageTitle': 'Founder & CEO JBJ Global Real Estate',
   'founder.description1': 'JBJ Global Real Estate is a founder-led real estate brokerage built on unwavering standards, discretion, and long-term vision.',
   'founder.description2': 'Jane Bou Jaoude Founder & CEO JBJ Global Real Estate leads with a philosophy rooted in accountability and discretion, building organizations designed to endure rather than simply expand.',
   'founder.vision': 'Vision',
@@ -598,12 +604,34 @@ export const en = {
   'error.tryAgain': 'Try Again',
   
   // AI Chat Support
-  'chat.title': 'AI Support',
-  'chat.subtitle': 'Online 24/7',
-  'chat.welcome': 'Hello! I\'m your JBJ Global Real Estate AI assistant. How can I help you today with real estate in Dubai?',
+  'chat.title': 'JBJ Support',
+  'chat.subtitle': 'Available 24/7',
+  'chat.available247': 'Available 24/7',
+  'chat.welcome': 'Hello! I\'m your JBJ Global Real Estate assistant. How can I help you today with real estate in the UAE?',
   'chat.placeholder': 'Type your message...',
   'chat.error': 'Sorry, I encountered an error. Please try again or contact our team directly.',
   'chat.askMe': 'Ask me anything!',
+  'chat.chatWithTeam': 'Chat with our team',
+  'chat.quickAnswers': 'Quick answers • Available 24/7',
+  'chat.teamAssist': 'One of our team members will assist you',
+  'chat.talkDirectly': 'Talk Directly with Our Team',
+  'chat.instantResponse': 'Instant response • WhatsApp',
+  'chat.urgentMatters': 'For urgent matters or personalized consultation',
+  'chat.tip': 'Tip:',
+  'chat.tipText': 'Our team can answer most questions right away. For complex matters, we\'ll connect you to a specialist!',
+  'chat.welcomeTitle': 'Welcome to JBJ Global Real Estate',
+  'chat.welcomeSubtitle': 'Your premium Real Estate partner in Dubai',
+  'chat.openChat': 'Open chat support',
+  'chat.minimize': 'Minimize chat',
+  'chat.howCanWeHelp': 'How can we help you?',
+  'chat.justNeedEmail': 'Just need your email',
+  'chat.letsGetToKnow': "Let's get to know you",
+  'chat.yourConversations': 'Your conversations',
+  'chat.whatCanWeHelp': 'What can we help with?',
+  'chat.connectingYou': 'Connecting you...',
+  'chat.onlineHereToHelp': '🟢 Online • Here to help',
+  'chat.howDidWeDo': 'How did we do?',
+  'chat.thankYou': 'Thank you!',
   
   // AI Tools
   'aiTools.calendar': 'AI Calendar & Notes',
