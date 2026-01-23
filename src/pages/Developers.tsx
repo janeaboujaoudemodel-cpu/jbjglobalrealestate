@@ -30,40 +30,64 @@ import { SEOHead } from "@/components/SEOHead";
 
 import developersHeroVideo from "@/assets/videos/dubai-landmarks-hero.mp4";
 
-// Developer tier badges based on rank
-const getTierInfo = (rank: number | null) => {
-  if (!rank)
-    return {
-      label: "Partner",
-      badgeClassName: "bg-premium-card border border-gold/20 text-primary-foreground",
-      icon: Building2,
-    };
-  if (rank === 1)
+// Elite developers (Master developers)
+const ELITE_DEVELOPERS = [
+  "emaar", "sobha", "meraas", "aldar", "nakheel", "omniyat"
+];
+
+// Premium developers
+const PREMIUM_DEVELOPERS = [
+  "ellington", "damac"
+];
+
+// Top Tier developers
+const TOP_TIER_DEVELOPERS = [
+  "binghatti", "majid-al-futtaim"
+];
+
+// Established developers
+const ESTABLISHED_DEVELOPERS = [
+  "danube", "azizi"
+];
+
+// Developer tier badges based on specific developer classification
+const getTierInfo = (slug: string | null) => {
+  const normalizedSlug = slug?.toLowerCase() || "";
+  
+  if (ELITE_DEVELOPERS.some(d => normalizedSlug.includes(d))) {
     return {
       label: "Elite",
       badgeClassName: "bg-premium-card border border-gold/50 text-gold",
       icon: Crown,
     };
-  if (rank <= 3)
+  }
+  
+  if (PREMIUM_DEVELOPERS.some(d => normalizedSlug.includes(d))) {
     return {
       label: "Premium",
       badgeClassName: "bg-premium-card border border-gold/35 text-primary-foreground",
       icon: Star,
     };
-  if (rank <= 6)
+  }
+  
+  if (TOP_TIER_DEVELOPERS.some(d => normalizedSlug.includes(d))) {
     return {
       label: "Top Tier",
       badgeClassName: "bg-premium-card border border-gold/30 text-primary-foreground",
       icon: TrendingUp,
     };
-  if (rank <= 10)
+  }
+  
+  if (ESTABLISHED_DEVELOPERS.some(d => normalizedSlug.includes(d))) {
     return {
       label: "Established",
       badgeClassName: "bg-premium-card border border-gold/25 text-primary-foreground",
       icon: Briefcase,
     };
+  }
+  
   return {
-    label: "Partner",
+    label: "Developer",
     badgeClassName: "bg-premium-card border border-gold/20 text-primary-foreground",
     icon: Building2,
   };
@@ -116,7 +140,7 @@ const Developers = () => {
     // Tier filter
     if (filterTier !== "all") {
       filtered = filtered.filter(d => {
-        const tier = getTierInfo(d.rank);
+        const tier = getTierInfo(d.slug);
         return tier.label.toLowerCase() === filterTier.toLowerCase();
       });
     }
@@ -288,7 +312,7 @@ const Developers = () => {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {filteredDevelopers.map((developer, index) => {
-                    const tier = getTierInfo(developer.rank);
+                    const tier = getTierInfo(developer.slug);
                     const TierIcon = tier.icon;
                     const projectCount = projectCounts[developer.id] || 0;
 
