@@ -12,7 +12,8 @@ import {
   Volume2,
   VolumeX,
   Phone,
-  Loader2
+  Loader2,
+  Copy
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -269,30 +270,47 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
                 key={message.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex gap-2 group ${message.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
               >
                 {message.role === 'assistant' && (
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-gold/60 flex items-center justify-center mr-2 flex-shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-gold/60 flex items-center justify-center flex-shrink-0">
                     <Sparkles className="w-4 h-4 text-black" />
                   </div>
                 )}
-                <div className={`max-w-[80%] ${
-                  message.role === 'user' 
-                    ? 'bg-gold text-black' 
-                    : 'bg-[#1A1A1A] text-gray-100 border border-gold/20'
-                } rounded-2xl px-4 py-3`}>
-                  {message.isTyping ? (
-                    <div className="flex gap-1 py-1">
-                      <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                      <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                      <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                    </div>
-                  ) : (
-                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
+                <div className="flex flex-col max-w-[80%]">
+                  <div className={`rounded-2xl px-4 py-3 select-text cursor-text ${
+                    message.role === 'user' 
+                      ? 'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/30 shadow-md rounded-tr-sm' 
+                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/20 shadow-sm rounded-tl-sm'
+                  }`}>
+                    {message.isTyping ? (
+                      <div className="flex gap-1 py-1">
+                        <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                      </div>
+                    ) : (
+                      <p className="text-sm leading-relaxed whitespace-pre-wrap select-text">{message.content}</p>
+                    )}
+                  </div>
+                  {/* Copy Button */}
+                  {!message.isTyping && message.content && (
+                    <button
+                      onClick={async () => {
+                        await navigator.clipboard.writeText(message.content);
+                        toast.success('Message copied');
+                      }}
+                      className={`flex items-center gap-1 mt-1 text-[10px] text-gray-500 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
+                        message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
+                      }`}
+                    >
+                      <Copy className="w-3 h-3" />
+                      <span>Copy</span>
+                    </button>
                   )}
                 </div>
                 {message.role === 'user' && (
-                  <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center ml-2 flex-shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0">
                     <User className="w-4 h-4 text-gray-300" />
                   </div>
                 )}

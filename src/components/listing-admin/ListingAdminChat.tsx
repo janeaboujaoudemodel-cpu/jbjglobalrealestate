@@ -20,6 +20,7 @@ import {
   CheckCircle,
   Clock,
   Trash2,
+  Copy,
 } from "lucide-react";
 
 interface Message {
@@ -487,7 +488,7 @@ Would you like to try a different approach?`,
           {messages.map((message) => (
             <div
               key={message.id}
-              className={`flex gap-3 ${message.role === "user" ? "flex-row-reverse" : ""}`}
+              className={`flex gap-3 group ${message.role === "user" ? "flex-row-reverse" : ""}`}
             >
               {message.role === "assistant" && (
                 <Avatar className="w-8 h-8 flex-shrink-0">
@@ -495,33 +496,48 @@ Would you like to try a different approach?`,
                   <AvatarFallback className="bg-gold/20 text-gold text-xs">SM</AvatarFallback>
                 </Avatar>
               )}
-              <div
-                className={`max-w-[80%] rounded-xl px-4 py-2.5 ${
-                  message.role === "user"
-                    ? "bg-black text-white"
-                    : message.type === "processing"
-                    ? "bg-amber-50 text-zinc-800 border border-amber-200"
-                    : message.type === "success"
-                    ? "bg-green-50 text-zinc-800 border border-green-200"
-                    : "bg-zinc-100 text-zinc-800"
-                }`}
-              >
-                {message.type === "processing" && (
-                  <div className="flex items-center gap-2 mb-2 text-amber-600">
-                    <Clock className="w-4 h-4" />
-                    <span className="text-xs font-medium">{t('listingAdminChat.processing') || 'Processing...'}</span>
-                  </div>
-                )}
-                {message.type === "success" && (
-                  <div className="flex items-center gap-2 mb-2 text-green-600">
-                    <CheckCircle className="w-4 h-4" />
-                    <span className="text-xs font-medium">{t('listingAdminChat.complete') || 'Complete'}</span>
-                  </div>
-                )}
-                <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</p>
-                <p className="text-[10px] mt-1 opacity-60">
-                  {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                </p>
+              <div className="flex flex-col max-w-[80%]">
+                <div
+                  className={`rounded-xl px-4 py-2.5 select-text cursor-text ${
+                    message.role === "user"
+                      ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/30 shadow-md rounded-tr-sm"
+                      : message.type === "processing"
+                      ? "bg-amber-50 text-black border border-amber-200 rounded-tl-sm"
+                      : message.type === "success"
+                      ? "bg-green-50 text-black border border-green-200 rounded-tl-sm"
+                      : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/20 shadow-sm rounded-tl-sm"
+                  }`}
+                >
+                  {message.type === "processing" && (
+                    <div className="flex items-center gap-2 mb-2 text-amber-600">
+                      <Clock className="w-4 h-4" />
+                      <span className="text-xs font-medium">{t('listingAdminChat.processing') || 'Processing...'}</span>
+                    </div>
+                  )}
+                  {message.type === "success" && (
+                    <div className="flex items-center gap-2 mb-2 text-green-600">
+                      <CheckCircle className="w-4 h-4" />
+                      <span className="text-xs font-medium">{t('listingAdminChat.complete') || 'Complete'}</span>
+                    </div>
+                  )}
+                  <p className="text-sm whitespace-pre-wrap leading-relaxed select-text">{message.content}</p>
+                  <p className="text-[10px] mt-1 opacity-60 select-none">
+                    {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                  </p>
+                </div>
+                {/* Copy Button */}
+                <button
+                  onClick={async () => {
+                    await navigator.clipboard.writeText(message.content);
+                    toast.success('Message copied');
+                  }}
+                  className={`flex items-center gap-1 mt-1 text-[10px] text-zinc-400 hover:text-zinc-700 transition-colors opacity-0 group-hover:opacity-100 ${
+                    message.role === "user" ? "self-end mr-1" : "self-start ml-1"
+                  }`}
+                >
+                  <Copy className="w-3 h-3" />
+                  <span>Copy</span>
+                </button>
               </div>
             </div>
           ))}
@@ -531,7 +547,7 @@ Would you like to try a different approach?`,
                 <AvatarImage src={adminPersona?.avatar} alt={adminPersona?.name} />
                 <AvatarFallback className="bg-gold/20 text-gold text-xs">SM</AvatarFallback>
               </Avatar>
-              <div className="bg-zinc-100 rounded-xl px-4 py-3 flex items-center gap-2">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl px-4 py-3 flex items-center gap-2 border border-gold/20">
                 <Loader2 className="w-4 h-4 animate-spin text-gold" />
                 <span className="text-sm text-zinc-600">{t('listingAdminChat.typing') || 'Typing...'}</span>
               </div>

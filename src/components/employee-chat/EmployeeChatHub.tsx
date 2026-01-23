@@ -12,8 +12,10 @@ import {
   Circle,
   Users,
   Building2,
-  Loader2
+  Loader2,
+  Copy
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { allTeamMembers, TeamMember } from '@/config/team-members';
 import { useEmployeeChat } from '@/hooks/useEmployeeChat';
 import { cn } from '@/lib/utils';
@@ -235,13 +237,13 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                     <div
                       key={msg.id}
                       className={cn(
-                        "flex gap-3",
+                        "flex gap-3 group",
                         isUser ? "flex-row-reverse" : "flex-row"
                       )}
                     >
                       <Avatar className="h-8 w-8 flex-shrink-0">
                         {isUser ? (
-                          <AvatarFallback className="bg-primary text-primary-foreground">You</AvatarFallback>
+                          <AvatarFallback className="bg-gold text-black">You</AvatarFallback>
                         ) : (
                           <>
                             <AvatarImage src={selectedEmployeeData.avatar} />
@@ -250,19 +252,32 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                         )}
                       </Avatar>
                       
-                      <div className={cn(
-                        "max-w-[70%] rounded-lg p-3",
-                        isUser 
-                          ? "bg-primary text-primary-foreground" 
-                          : "bg-muted text-foreground"
-                      )}>
-                        <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
-                        <p className={cn(
-                          "text-xs mt-1",
-                          isUser ? "text-primary-foreground/70" : "text-muted-foreground"
+                      <div className="flex flex-col max-w-[70%]">
+                        <div className={cn(
+                          "rounded-lg p-3 select-text cursor-text",
+                          isUser 
+                            ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/30 shadow-md rounded-tr-sm" 
+                            : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/20 shadow-sm rounded-tl-sm"
                         )}>
-                          {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </p>
+                          <p className="text-sm whitespace-pre-wrap select-text">{msg.message}</p>
+                          <p className="text-xs mt-1 text-black/60 select-none">
+                            {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </p>
+                        </div>
+                        {/* Copy Button */}
+                        <button
+                          onClick={async () => {
+                            await navigator.clipboard.writeText(msg.message);
+                            toast.success('Message copied');
+                          }}
+                          className={cn(
+                            "flex items-center gap-1 mt-1 text-[10px] text-muted-foreground hover:text-gold transition-colors opacity-0 group-hover:opacity-100",
+                            isUser ? "self-end mr-1" : "self-start ml-1"
+                          )}
+                        >
+                          <Copy className="w-3 h-3" />
+                          <span>Copy</span>
+                        </button>
                       </div>
                     </div>
                   );
