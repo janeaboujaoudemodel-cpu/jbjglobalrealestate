@@ -175,7 +175,7 @@ const GlobalHeader = () => {
   );
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[9999] h-16 lg:h-20">
+    <header className="fixed top-0 left-0 right-0 z-[9999] h-20 lg:h-24">
       {/* Solid black background - exactly fits header height, no overflow */}
       <div className="absolute inset-0 bg-black" />
       {/* Subtle premium divider (no heavy gold bar) */}
