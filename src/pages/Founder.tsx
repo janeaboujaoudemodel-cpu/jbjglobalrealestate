@@ -146,15 +146,15 @@ const Founder = () => {
       location: "Dubai, UAE"
     },
     {
-      year: "2025",
+      year: "Jan–Sep 2025",
       title: "Sobha Realty (Dubai)",
-      description: "Supported real estate growth through structured sales and client experience systems.",
+      description: "Supported real estate growth through structured sales and client experience systems for the full year.",
       location: "Dubai, UAE"
     },
     {
-      year: "2025",
+      year: "Sep 2025",
       title: "Founded JBJ Global Real Estate",
-      description: "Founded JBJ Global Real Estate as a Dubai-based real estate brokerage.",
+      description: "Founded JBJ Global Real Estate in September 2025 as a Dubai-based real estate brokerage.",
       location: "Dubai, UAE"
     },
   ];
@@ -337,7 +337,7 @@ const Founder = () => {
                   At 16, Jane launched Jane's Beauty (beauty services) and began selling products via importing and shipping from China. With 12+ years of industry experience in sales, customer experience, and business development, she relocated to Dubai in 2020 to pursue real estate.
                 </p>
                 <p className="text-base text-zinc-600">
-                  Her career includes working with DAMAC in 2021, leading quality and operations at Al-Ghazal Transportation Company (495+ team), and developing brokerage business divisions from 2022–2024. In 2025, she worked with Sobha Realty before founding JBJ Global Real Estate — a Dubai-based real estate brokerage for property sales and rentals.
+                  Her career includes working with DAMAC in 2021, leading quality and operations at Al-Ghazal Transportation Company (495+ team), and developing brokerage business divisions from 2022–2024. From January to September 2025, she worked with Sobha Realty before founding JBJ Global Real Estate in September 2025 — a Dubai-based real estate brokerage for property sales and rentals.
                 </p>
               </div>
               
@@ -357,7 +357,7 @@ const Founder = () => {
                     style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}>
                     <Users className="w-5 h-5 text-black" />
                   </div>
-                  <p className="text-gold text-xl font-bold">2,800+</p>
+                  <p className="text-gold text-xl font-bold">4,800+</p>
                   <p className="text-black text-xs font-medium">Trained</p>
                   <p className="text-zinc-500 text-[10px]">Brokers Mentored</p>
                 </div>

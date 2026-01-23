@@ -118,8 +118,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       <MarketingScripts />
       <CommandPaletteRoot />
       <GlobalHeader />
-      {/* Match content offset to exact fixed header height: h-16 mobile, h-20 desktop */}
-      <main className="pt-16 lg:pt-20">
+      {/* Match content offset to exact fixed header height: h-20 mobile, h-24 desktop */}
+      <main className="pt-20 lg:pt-24">
         {children}
       </main>
       {/* All popups rendered centrally - only when ready */}

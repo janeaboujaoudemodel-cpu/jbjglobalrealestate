@@ -443,8 +443,8 @@ const ListingAdmin = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] pt-24 lg:pt-28">
-      {/* Header - Premium Champagne Style */}
-      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-[88px] lg:top-[104px] z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+      {/* Header - Premium Champagne Style - sticky below global header (h-20 mobile, h-24 desktop) */}
+      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">

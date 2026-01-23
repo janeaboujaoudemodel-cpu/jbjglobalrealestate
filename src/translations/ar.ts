@@ -2,7 +2,7 @@
 export const ar = {
   // Navigation
   'nav.home': 'الرئيسية',
-  'nav.founder': 'المؤسس والقيادة',
+  'nav.founder': 'المؤسسة والقيادة',
   'nav.about': 'من نحن',
   'nav.properties': 'العقارات',
   'nav.services': 'الخدمات',
@@ -61,7 +61,7 @@ export const ar = {
   'hero.explore': 'استكشف',
   'hero.bookConsultation': 'احجز استشارة',
   'hero.discover': 'اكتشف',
-  'hero.aiFinder': 'مكتشف المنازل الذكي',
+  'hero.aiFinder': 'مكتشف العقارات بالذكاء الاصطناعي',
   'hero.aiFinderDesc': 'أجرِ اختبارك المجاني واكتشف عقارك المثالي',
   'hero.findStartingPoint': 'ابحث عن نقطة البداية',
   'hero.buyers': 'المشترون',
@@ -136,13 +136,13 @@ export const ar = {
   // Founder Section
   'founder.leadership': 'القيادة',
   'founder.meetThe': 'تعرف على',
-  'founder.founder': 'المؤسس',
+  'founder.founder': 'المؤسسة',
   'founder.services': 'الخدمات',
   'founder.years': 'سنوات',
   'founder.countries': 'دول',
-  'founder.learnMore': 'اعرف المزيد عن مؤسستنا',
-  'founder.title': 'المؤسس والرئيس التنفيذي لشركة جي بي جي العقارية',
-  'founder.description1': 'مجموعة جي جي القابضة هي مجموعة متعددة الأقسام تقودها المؤسس، مبنية على معايير ثابتة والتقدير والرؤية طويلة المدى.',
+  'founder.learnMore': 'اعرف المزيد عن المؤسسة',
+  'founder.title': 'المؤسسة والرئيسة التنفيذية لشركة جي بي جي العقارية',
+  'founder.description1': 'جي بي جي للعقارات العالمية هي شركة وساطة عقارية تقودها المؤسسة، مبنية على معايير ثابتة والتقدير والرؤية طويلة المدى.',
   'founder.description2': 'جين أبو جودة المؤسسة والرئيسة التنفيذية لشركة جي بي جي العقارية تقود بفلسفة متجذرة في المسؤولية والتقدير، وتبني منظمات مصممة للاستمرار بدلاً من التوسع فقط.',
   'founder.vision': 'الرؤية',
   'founder.mission': 'المهمة',
@@ -215,9 +215,9 @@ export const ar = {
   'report.poweredBy': 'جي بي جي للعقارات | دبي، الإمارات',
   
   // Mortgage
-  'mortgage.title': 'الاستشارات العقارية',
-  'mortgage.subtitle': 'إرشادات متخصصة لتمويل عقارك',
-  'mortgage.calculator': 'حاسبة التمويل العقاري',
+  'mortgage.title': 'حاسبة الرهن العقاري',
+  'mortgage.subtitle': 'احسب أقساطك الشهرية المتوقعة',
+  'mortgage.calculator': 'حاسبة الرهن العقاري',
   'mortgage.financial': 'التخطيط المالي',
   'mortgage.estimate': 'قدّر دفعاتك الشهرية وخطط لاستثمارك بدقة',
   'mortgage.propertyPrice': 'سعر العقار',
