@@ -1,9 +1,9 @@
 /**
  * Assistant Brain Updates - JBJ Global Real Estate
- * Rules and knowledge injected into Amanda Clarke and Olivia Reynolds brains
+ * Rules and knowledge injected into Amanda Clarke brain (Primary Executive Assistant)
  * 
  * IMPORTANT: Any rule mentioned by the Founder should be immediately added here
- * Both assistants must follow these rules precisely
+ * Amanda Clarke must follow these rules precisely
  */
 
 // ============================================
@@ -22,13 +22,14 @@ export const AMANDA_CLARKE = {
     'Coordinate company-wide announcements',
     'Manage group communication channels',
     'Schedule developer briefings with real employees',
-    'Coordinate with Olivia on operational matters',
+    'Coordinate all executive operations',
   ],
 };
 
-export const OLIVIA_REYNOLDS = {
-  id: 'olivia-reynolds',
-  name: 'Olivia Reynolds',
+// Sarah Parker is the secondary COO assistant (renamed from Olivia Reynolds)
+export const SARAH_PARKER = {
+  id: 'sarah-parker',
+  name: 'Sarah Parker',
   role: 'Executive Assistant to COO',
   department: 'Executive',
   reportsTo: 'richard-pemberton',
@@ -172,7 +173,7 @@ export const COVER_STORY_RULES = {
     hr: 'Must understand and explain cover story consistently',
     managers: 'Must explain to real employees when asked',
     admin: 'Must handle inquiries about remote team',
-    assistants: 'Amanda and Olivia fully trained on these rules',
+    assistants: 'Amanda Clarke fully trained on these rules',
   },
 };
 
@@ -318,9 +319,9 @@ export const FOUNDER_RECOGNITION_RULES = {
 // ============================================
 
 export const ASSISTANT_BRAIN_UPDATE = {
-  version: '3.0',
+  version: '3.1',
   lastUpdated: new Date().toISOString(),
-  assignedTo: ['amanda-clarke', 'olivia-reynolds'],
+  assignedTo: ['amanda-clarke', 'sarah-parker'],
   modules: {
     groupManagement: GROUP_MANAGEMENT_RULES,
     reportingFlow: REPORTING_FLOW_RULES,

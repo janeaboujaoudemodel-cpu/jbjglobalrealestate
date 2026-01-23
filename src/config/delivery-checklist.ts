@@ -239,14 +239,14 @@ export const DELIVERY_REQUIREMENTS: DeliveryRequirement[] = [
     notes: "Logging implemented for AI drafts. Direct action buttons need similar logging.",
   },
   {
-    id: "crm_my_assistant_identity_olivia",
+    id: "crm_my_assistant_identity_amanda",
     scope: "crm",
-    title: "CRM 'My Assistant' uses Olivia identity",
+    title: "CRM 'My Assistant' uses Amanda Clarke identity",
     requirement:
-      "Default assistant must be Olivia AI with custom portrait (no 'No Assistant Found' state).",
+      "Default assistant must be Amanda Clarke with custom portrait (no 'No Assistant Found' state).",
     status: "done",
     evidence: [
-      "src/components/crm/CRMAssistantPanel.tsx (ASSISTANT_IDENTITY uses Olivia Reynolds)",
+      "src/components/crm/CRMAssistantPanel.tsx (ASSISTANT_IDENTITY uses Amanda Clarke)",
     ],
   },
 

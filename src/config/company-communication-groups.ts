@@ -4,7 +4,7 @@
  * 
  * LOCKED_GLOBAL = TRUE
  * 
- * RULES (Taught to Amanda Clarke and Olivia Reynolds):
+ * RULES (Taught to Amanda Clarke):
  * 1. Founder (Jane Abou Jaoude) is member of ALL groups
  * 2. New joiners are AUTOMATICALLY added to eligible groups based on department
  * 3. News & Updates group for company announcements (all employees)
@@ -84,7 +84,7 @@ export interface CommunicationGroup {
 
 const FOUNDER_ID = 'jane-abou-jaoude';
 const FOUNDER_ASSISTANT_ID = 'amanda-clarke';
-const COO_ASSISTANT_ID = 'olivia-reynolds';
+const COO_ASSISTANT_ID = 'sarah-parker';
 
 // ============================================
 // COMPANY-WIDE GROUPS
@@ -423,7 +423,7 @@ export function getGroupsByPurpose(purpose: GroupPurpose): CommunicationGroup[] 
 }
 
 // ============================================
-// ASSISTANT BRAIN RULES (Amanda & Olivia)
+// ASSISTANT BRAIN RULES (Amanda Clarke)
 // ============================================
 
 export const ASSISTANT_GROUP_MANAGEMENT_RULES = {

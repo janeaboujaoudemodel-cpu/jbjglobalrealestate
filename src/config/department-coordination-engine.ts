@@ -2,7 +2,7 @@
  * Department Coordination Engine - JBJ Global Real Estate
  * AI Collaboration & Department Coordination Layer
  * 
- * Enables Olivia to coordinate, delegate, monitor, and synchronize
+ * Enables Amanda Clarke to coordinate, delegate, monitor, and synchronize
  * workflows between all departments.
  */
 
@@ -241,7 +241,7 @@ export const DEPARTMENT_SUB_AIS: Record<string, DepartmentSubAI> = {
     name: 'Jessica AI',
     department: 'hr',
     role: 'HR Automation Assistant',
-    reportsTo: 'olivia',
+    reportsTo: 'amanda_clarke',
     capabilities: [
       'CV screening and ranking',
       'Interview scheduling',
@@ -262,7 +262,7 @@ export const DEPARTMENT_SUB_AIS: Record<string, DepartmentSubAI> = {
     name: 'Maya AI',
     department: 'marketing',
     role: 'Marketing Automation Assistant',
-    reportsTo: 'olivia',
+    reportsTo: 'amanda_clarke',
     capabilities: [
       'Campaign planning',
       'Content scheduling',
@@ -283,7 +283,7 @@ export const DEPARTMENT_SUB_AIS: Record<string, DepartmentSubAI> = {
     name: 'David AI',
     department: 'admin',
     role: 'Admin Automation Assistant',
-    reportsTo: 'olivia',
+    reportsTo: 'amanda_clarke',
     capabilities: [
       'Property listing management',
       'Document upload and processing',
@@ -303,7 +303,7 @@ export const DEPARTMENT_SUB_AIS: Record<string, DepartmentSubAI> = {
     name: 'Layla AI',
     department: 'finance',
     role: 'Finance Automation Assistant',
-    reportsTo: 'olivia',
+    reportsTo: 'amanda_clarke',
     capabilities: [
       'Invoice processing',
       'Commission calculation',
@@ -323,7 +323,7 @@ export const DEPARTMENT_SUB_AIS: Record<string, DepartmentSubAI> = {
     name: 'Chris AI',
     department: 'it',
     role: 'IT Automation Assistant',
-    reportsTo: 'olivia',
+    reportsTo: 'amanda_clarke',
     capabilities: [
       'System monitoring',
       'Bug tracking',
@@ -343,7 +343,7 @@ export const DEPARTMENT_SUB_AIS: Record<string, DepartmentSubAI> = {
     name: 'Alex AI',
     department: 'sales',
     role: 'Sales Automation Assistant',
-    reportsTo: 'olivia',
+    reportsTo: 'amanda_clarke',
     capabilities: [
       'Lead nurturing',
       'Follow-up scheduling',
@@ -677,8 +677,8 @@ export function canAccessDepartmentData(
   targetDepartment: string,
   accessType: 'read' | 'write' | 'admin'
 ): boolean {
-  // Founder and Olivia have full access
-  if (userRole === 'founder' || userRole === 'olivia') {
+  // Founder and Amanda Clarke have full access
+  if (userRole === 'founder' || userRole === 'amanda_clarke') {
     return true;
   }
   
@@ -699,7 +699,7 @@ export function canAccessDepartmentData(
 }
 
 export function getVisibleDepartments(userRole: string): string[] {
-  if (userRole === 'founder' || userRole === 'olivia') {
+  if (userRole === 'founder' || userRole === 'amanda_clarke') {
     return Object.keys(DEPARTMENTS);
   }
   
