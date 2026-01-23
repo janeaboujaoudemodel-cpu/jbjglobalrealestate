@@ -342,7 +342,7 @@ const CRM = () => {
                 {showToolsSidebar ? <PanelLeftClose className="h-5 w-5" /> : <PanelLeftOpen className="h-5 w-5" />}
               </Button>
               <p className="text-base font-bold text-black">
-                {getRoleTitle()} — {isFounder ? "Jane Abou Jaoude" : (profile.display_name || "Team Member")}
+                {getRoleTitle()} — {isFounder ? "Jane Bou Jaoude" : (profile.display_name || "Team Member")}
               </p>
             </div>
             

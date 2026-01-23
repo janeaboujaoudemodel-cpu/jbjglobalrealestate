@@ -68,19 +68,19 @@ export const tr = {
   'founder.learnMore': 'Kurucumuz Hakkında Daha Fazla Bilgi',
   'founder.title': 'Kurucu ve CEO JBJ Global Real Estate',
   'founder.description1': 'JBJ Global Real Estate, sarsılmaz standartlar, gizlilik ve uzun vadeli vizyon üzerine kurulmuş, kurucu liderliğindeki bir gayrimenkul aracı kuruluşudur.',
-  'founder.description2': 'Jane Abou Jaoude Kurucu ve CEO JBJ Global Real Estate, hesap verebilirlik ve gizlilik üzerine kurulu bir felsefe ile liderlik eder, sadece genişlemek yerine dayanıklılık için tasarlanmış organizasyonlar kurar.',
+  'founder.description2': 'Jane Bou Jaoude Kurucu ve CEO JBJ Global Real Estate, hesap verebilirlik ve gizlilik üzerine kurulu bir felsefe ile liderlik eder, sadece genişlemek yerine dayanıklılık için tasarlanmış organizasyonlar kurar.',
   
   // Market Report
   'report.exclusive': 'Özel Ücretsiz İndirme',
   'report.title': 'JBJ Global Real Estate',
   'report.edition': 'En Son Baskı 2026',
-  'report.description': 'Jane Abou Jaoude tarafından yazılmış, hükümet destekli veriler ve yapılandırılmış çerçevelerle BAE gayrimenkul pazarını kapsayan özel bir eğitim kitabı.',
+  'report.description': 'Jane Bou Jaoude tarafından yazılmış, hükümet destekli veriler ve yapılandırılmış çerçevelerle BAE gayrimenkul pazarını kapsayan özel bir eğitim kitabı.',
   'report.download': 'Ücretsiz Kitabınızı Şimdi İndirin',
   'report.highlight1': 'Piyasa göstergeleri ve işlem analizi',
   'report.highlight2': 'Geliştirici karşılaştırma çerçevesi',
   'report.highlight3': 'Mülk durum tespiti kontrol listesi',
   'report.highlight4': 'Topluluk ROI sıralamaları',
-  'report.createdBy': 'Jane Abou Jaoude Kurucu ve CEO JBJ Global Real Estate tarafından oluşturuldu',
+  'report.createdBy': 'Jane Bou Jaoude Kurucu ve CEO JBJ Global Real Estate tarafından oluşturuldu',
   'report.exclusiveFor': 'JBJ Global Real Estate\'e Özel',
   'report.poweredBy': 'Gayrimenkul Aracı Kuruluşu | Dubai, BAE',
   

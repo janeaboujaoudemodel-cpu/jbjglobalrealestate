@@ -220,7 +220,7 @@ const Founder = () => {
               style={{ fontFamily: "Poppins, sans-serif" }}
               variants={fadeInUp}
             >
-              JANE ABOU
+              JANE BOU
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#D4B96A] to-gold">
                 JAOUDE
@@ -319,7 +319,7 @@ const Founder = () => {
                 className="text-black text-4xl md:text-5xl lg:text-7xl font-bold mb-8"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
-                Jane Abou
+                Jane Bou
                 <br />
                 <span className="text-gold">Jaoude</span>
               </h2>
@@ -749,7 +749,7 @@ const Founder = () => {
                 <SafeImage 
                   src={founderOffice} 
                   fallbackSrc={founderHero}
-                  alt="Jane Abou Jaoude - Executive" 
+                  alt="Jane Bou Jaoude - Executive" 
                   className="w-full h-full group-hover:scale-105 transition-transform duration-700"
                   style={{ objectFit: "cover", objectPosition: "center 15%" }}
                 />
@@ -769,7 +769,7 @@ const Founder = () => {
                 <SafeImage 
                   src={founderOffice} 
                   fallbackSrc={founderHero}
-                  alt="Jane Abou Jaoude - Executive Office" 
+                  alt="Jane Bou Jaoude - Executive Office" 
                   className="w-full h-full group-hover:scale-105 transition-transform duration-700"
                   style={{ objectFit: "cover", objectPosition: "center 15%" }}
                 />
@@ -789,7 +789,7 @@ const Founder = () => {
                 <SafeImage 
                   src={founderPremium} 
                   fallbackSrc={founderHero}
-                  alt="Jane Abou Jaoude - Premium Portrait" 
+                  alt="Jane Bou Jaoude - Premium Portrait" 
                   className="w-full h-full group-hover:scale-105 transition-transform duration-700"
                   style={{ objectFit: "cover", objectPosition: "center 15%" }}
                 />
@@ -809,7 +809,7 @@ const Founder = () => {
                 <SafeImage 
                   src={founderRedCarpet} 
                   fallbackSrc={founderHero}
-                  alt="Jane Abou Jaoude - Event" 
+                  alt="Jane Bou Jaoude - Event" 
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
@@ -828,7 +828,7 @@ const Founder = () => {
                 <SafeImage 
                   src={ceoBusinessPortrait} 
                   fallbackSrc={founderHero}
-                  alt="Jane Abou Jaoude - Executive" 
+                  alt="Jane Bou Jaoude - Executive" 
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
@@ -972,7 +972,7 @@ const Founder = () => {
               {/* Attribution */}
               <div className="flex flex-col items-center gap-1">
                 <p className="text-gold font-semibold text-base">
-                  Jane Abou Jaoude
+                  Jane Bou Jaoude
                 </p>
                 <p className="text-zinc-600 text-xs uppercase tracking-[0.15em]">
                   Founder & CEO
@@ -1250,14 +1250,14 @@ const Founder = () => {
                       <SafeImage 
                         src={founderProfessional} 
                         fallbackSrc={founderHero} 
-                        alt="Jane Abou Jaoude" 
+                        alt="Jane Bou Jaoude" 
                         className="w-full h-full"
                         style={{ objectFit: "cover", objectPosition: "center 15%" }}
                       />
                     </div>
                   </div>
                   <div className="text-center">
-                    <p className="text-gold text-xl md:text-2xl font-semibold tracking-wide mb-1" style={{ fontFamily: "Poppins, sans-serif" }}>Jane Abou Jaoude</p>
+                    <p className="text-gold text-xl md:text-2xl font-semibold tracking-wide mb-1" style={{ fontFamily: "Poppins, sans-serif" }}>Jane Bou Jaoude</p>
                     <p className="text-zinc-600 text-sm uppercase tracking-[0.2em] font-medium">Founder & CEO</p>
                     <p className="text-black text-sm font-semibold tracking-wide mt-2">JBJ GLOBAL REAL ESTATE</p>
                   </div>
@@ -1307,7 +1307,7 @@ const Founder = () => {
                   <SafeImage 
                     src={founderProfessional} 
                     fallbackSrc={founderHero}
-                    alt="Jane Abou Jaoude - Professional Portrait"
+                    alt="Jane Bou Jaoude - Professional Portrait"
                     className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
                   />
                 </div>
@@ -1322,7 +1322,7 @@ const Founder = () => {
                   <SafeImage 
                     src={founderRedCarpet} 
                     fallbackSrc={founderHero}
-                    alt="Jane Abou Jaoude - Red Carpet Event" 
+                    alt="Jane Bou Jaoude - Red Carpet Event" 
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                   />
                 </div>

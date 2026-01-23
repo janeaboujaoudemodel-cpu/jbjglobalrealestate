@@ -502,7 +502,7 @@ const Compare = () => {
               Get detailed insights, ROI projections, and expert recommendations.
             </p>
             <div className="text-center mb-12">
-              <p className="text-zinc-300 text-sm font-medium">Jane Abou Jaoude</p>
+              <p className="text-zinc-300 text-sm font-medium">Jane Bou Jaoude</p>
               <p className="text-gold text-xs mt-0.5">Founder & CEO</p>
               <p className="text-zinc-500 text-xs mt-0.5">JBJ Global Real Estate</p>
             </div>
@@ -656,7 +656,7 @@ const Compare = () => {
               Compare projects dynamically with AI-powered analysis including valuation, ROI, and market insights.
             </p>
             <div className="mt-2">
-              <p className="text-zinc-300 text-sm font-medium">Jane Abou Jaoude</p>
+              <p className="text-zinc-300 text-sm font-medium">Jane Bou Jaoude</p>
               <p className="text-gold text-xs mt-0.5">Founder & CEO</p>
               <p className="text-zinc-500 text-xs mt-0.5">JBJ Global Real Estate</p>
             </div>

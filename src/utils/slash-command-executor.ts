@@ -127,7 +127,7 @@ async function handleEmailCommand(args: string, userId: string): Promise<Command
   const { error } = await supabase.from('crm_ai_drafts').insert({
     draft_type: 'email',
     subject: subject,
-    content: `Dear ${recipient},\n\nI hope this email finds you well.\n\n[Your message here]\n\nBest regards,\nJane Abou Jaoude\nFounder & CEO JBJ Global Real Estate`,
+    content: `Dear ${recipient},\n\nI hope this email finds you well.\n\n[Your message here]\n\nBest regards,\nJane Bou Jaoude\nFounder & CEO JBJ Global Real Estate`,
     status: 'draft',
     lead_id: null,
   });

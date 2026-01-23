@@ -227,7 +227,7 @@ const PressKit = () => {
               </div>
               
               <p className="text-zinc-700 leading-relaxed">
-                <span className="text-gold font-semibold">Jane Abou Jaoude</span> is the Founder & CEO of JBJ GLOBAL REAL ESTATE, 
+                <span className="text-gold font-semibold">Jane Bou Jaoude (جاين بو جودة)</span> is the Founder & CEO of JBJ GLOBAL REAL ESTATE, 
                 a Dubai-based Real Estate brokerage. 
                 Born August 25, 1998, in Lebanon, she founded her first business—Jane's Beauty—at age 16 in 2015 while still studying. 
                 Fluent in French, English, Arabic, and Spanish, Jane relocated to Dubai in 2020. 
@@ -255,7 +255,7 @@ const PressKit = () => {
                   className="text-white text-3xl md:text-4xl font-bold"
                   style={{ fontFamily: "Poppins, sans-serif" }}
                 >
-                  Jane Abou Jaoude <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Headshots</span>
+                  Jane Bou Jaoude <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Headshots</span>
                 </h2>
               </div>
               <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-lg px-4 py-2 shadow-sm">

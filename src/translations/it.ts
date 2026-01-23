@@ -68,19 +68,19 @@ export const it = {
   'founder.learnMore': 'Scopri di Più sul Nostro Fondatore',
   'founder.title': 'Fondatrice e CEO JBJ Global Real Estate',
   'founder.description1': 'JBJ Global Real Estate è un\'agenzia immobiliare guidata dal fondatore, costruita su standard incrollabili, discrezione e visione a lungo termine.',
-  'founder.description2': 'Jane Abou Jaoude Fondatrice e CEO JBJ Global Real Estate guida con una filosofia radicata nella responsabilità e nella discrezione, costruendo organizzazioni progettate per durare piuttosto che semplicemente espandersi.',
+  'founder.description2': 'Jane Bou Jaoude Fondatrice e CEO JBJ Global Real Estate guida con una filosofia radicata nella responsabilità e nella discrezione, costruendo organizzazioni progettate per durare piuttosto che semplicemente espandersi.',
   
   // Market Report
   'report.exclusive': 'Download Esclusivo Gratuito',
   'report.title': 'JBJ Global Real Estate',
   'report.edition': 'Ultima Edizione 2026',
-  'report.description': 'Un libro educativo esclusivo scritto da Jane Abou Jaoude, che copre il mercato immobiliare degli EAU con dati governativi e framework strutturati.',
+  'report.description': 'Un libro educativo esclusivo scritto da Jane Bou Jaoude, che copre il mercato immobiliare degli EAU con dati governativi e framework strutturati.',
   'report.download': 'Scarica il Tuo Libro Gratuito Ora',
   'report.highlight1': 'Indicatori di mercato e analisi delle transazioni',
   'report.highlight2': 'Framework di confronto sviluppatori',
   'report.highlight3': 'Checklist di due diligence immobiliare',
   'report.highlight4': 'Classifiche ROI delle comunità',
-  'report.createdBy': 'Creato da Jane Abou Jaoude Fondatrice e CEO JBJ Global Real Estate',
+  'report.createdBy': 'Creato da Jane Bou Jaoude Fondatrice e CEO JBJ Global Real Estate',
   'report.exclusiveFor': 'Esclusivo per JBJ Global Real Estate',
   'report.poweredBy': 'Agenzia Immobiliare | Dubai, EAU',
   

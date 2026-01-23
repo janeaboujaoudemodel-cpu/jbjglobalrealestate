@@ -183,7 +183,7 @@ export const MEDIA_RULES = Object.freeze({
    * Spokesperson Rules
    */
   SPOKESPERSON_RULES: Object.freeze([
-    'Only JANE ABOU JAOUDÉ speaks officially',
+    'Only JANE BOU JAOUDE speaks officially',
     'No anonymous quotes',
     'No AI-generated quotes without review',
     'No junior staff commentary to media',
