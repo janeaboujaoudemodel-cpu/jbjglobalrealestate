@@ -24,6 +24,10 @@ export default defineConfig(({ mode }) => ({
     chunkSizeWarningLimit: 2000,
     rollupOptions: {
       output: {
+        // Use stable JS filenames to avoid blank-page failures caused by cached HTML
+        // pointing at old (deleted) hashed bundle names.
+        entryFileNames: "assets/app.js",
+        chunkFileNames: "assets/chunk-[name].js",
         // Manual chunk splitting to reduce memory pressure during build
         manualChunks: (id) => {
           // Separate team assets into their own chunk
