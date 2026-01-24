@@ -9744,6 +9744,51 @@ export type Database = {
         }
         Relationships: []
       }
+      partner_vault_access_logs: {
+        Row: {
+          access_type: string
+          accessed_at: string | null
+          id: string
+          ip_address: unknown
+          partner_id: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          access_type: string
+          accessed_at?: string | null
+          id?: string
+          ip_address?: unknown
+          partner_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          access_type?: string
+          accessed_at?: string | null
+          id?: string
+          ip_address?: unknown
+          partner_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_vault_access_logs_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "referral_partners"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "partner_vault_access_logs_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "referral_partners_safe"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payment_history_access_logs: {
         Row: {
           access_type: string
@@ -10775,8 +10820,10 @@ export type Database = {
       }
       referral_partner_bank_vault: {
         Row: {
+          bank_account_encrypted: string | null
           bank_account_number: string | null
           bank_iban: string | null
+          bank_iban_encrypted: string | null
           bank_name: string | null
           created_at: string | null
           created_by: string | null
@@ -10786,8 +10833,10 @@ export type Database = {
           updated_by: string | null
         }
         Insert: {
+          bank_account_encrypted?: string | null
           bank_account_number?: string | null
           bank_iban?: string | null
+          bank_iban_encrypted?: string | null
           bank_name?: string | null
           created_at?: string | null
           created_by?: string | null
@@ -10797,8 +10846,10 @@ export type Database = {
           updated_by?: string | null
         }
         Update: {
+          bank_account_encrypted?: string | null
           bank_account_number?: string | null
           bank_iban?: string | null
+          bank_iban_encrypted?: string | null
           bank_name?: string | null
           created_at?: string | null
           created_by?: string | null
@@ -13827,6 +13878,51 @@ export type Database = {
         }
         Relationships: []
       }
+      referral_partner_bank_vault_secure: {
+        Row: {
+          bank_account_masked: string | null
+          bank_iban_masked: string | null
+          bank_name: string | null
+          created_at: string | null
+          id: string | null
+          partner_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          bank_account_masked?: never
+          bank_iban_masked?: never
+          bank_name?: string | null
+          created_at?: string | null
+          id?: string | null
+          partner_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          bank_account_masked?: never
+          bank_iban_masked?: never
+          bank_name?: string | null
+          created_at?: string | null
+          id?: string | null
+          partner_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_partner_bank_vault_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: true
+            referencedRelation: "referral_partners"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_partner_bank_vault_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: true
+            referencedRelation: "referral_partners_safe"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       referral_partners_safe: {
         Row: {
           approved_at: string | null
@@ -13967,6 +14063,7 @@ export type Database = {
         Args: { _lead_id: string; _user_id: string }
         Returns: boolean
       }
+      can_access_partner_vault: { Args: never; Returns: boolean }
       can_access_payment_vault: { Args: { _user_id: string }; Returns: boolean }
       can_access_salary_data: { Args: { _user_id: string }; Returns: boolean }
       can_access_salary_vault: { Args: { _user_id: string }; Returns: boolean }
@@ -14038,6 +14135,10 @@ export type Database = {
       crm_hard_delete_leads: { Args: { p_lead_ids: string[] }; Returns: Json }
       decrypt_bank_field: {
         Args: { encrypted_data: string; salt_id: string }
+        Returns: string
+      }
+      decrypt_partner_bank_field: {
+        Args: { encrypted_data: string; fallback_plaintext?: string }
         Returns: string
       }
       encrypt_bank_field: {
