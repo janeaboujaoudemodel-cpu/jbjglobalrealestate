@@ -7,10 +7,14 @@ import { useEffect } from 'react';
  */
 export const GlobalSEO = () => {
   useEffect(() => {
-    // Remove boot loader once React has mounted
-    const bootLoader = document.getElementById('boot-loader');
-    if (bootLoader) {
-      bootLoader.classList.add('hidden');
+    // Hide boot fallback once React has mounted (backup - main.tsx also hides it)
+    try {
+      const bootFallback = document.getElementById('boot-fallback');
+      if (bootFallback) {
+        bootFallback.style.display = 'none';
+      }
+    } catch {
+      // Ignore
     }
 
     // Structured data schemas

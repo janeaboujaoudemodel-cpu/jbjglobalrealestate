@@ -33,10 +33,32 @@
       <div style="padding:2rem;text-align:center;background:#0a0a0a;color:#fff;min-height:100vh;">
         <h1>JBJ Global Real Estate | Dubai Property Experts</h1>
         <p>Please enable JavaScript to browse our luxury Dubai property listings.</p>
-        <p>Contact: +971 4 XXX XXXX | info@jbj.ae</p>
+        <p>Contact: +971 56 591 1000 | contact@jbj.ae</p>
       </div>
     </noscript>
+
+    <!-- Boot fallback: visible until React mounts, then hidden via JS -->
+    <div id="boot-fallback" style="min-height:100vh;background:#0a0a0a;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;font-family:Poppins,sans-serif;">
+      <div style="width:48px;height:48px;border:3px solid #d4af37;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;"></div>
+      <p style="color:#d4af37;font-size:14px;letter-spacing:0.1em;">Loading JBJ Global Real Estate...</p>
+      <style>@keyframes spin{to{transform:rotate(360deg);}}</style>
+    </div>
+
     <div id="root"></div>
+
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Fallback: if React doesn't mount within 8s, show error message -->
+    <script>
+      (function(){
+        var timeout = setTimeout(function(){
+          var fallback = document.getElementById('boot-fallback');
+          if(fallback && fallback.style.display !== 'none'){
+            fallback.innerHTML = '<div style="text-align:center;color:#fff;padding:2rem;"><h1 style="color:#d4af37;margin-bottom:1rem;">JBJ Global Real Estate</h1><p style="margin-bottom:1rem;">The page is taking longer than expected to load.</p><button onclick="location.reload()" style="background:#d4af37;color:#000;border:none;padding:0.75rem 1.5rem;border-radius:6px;cursor:pointer;font-weight:600;">Refresh Page</button><p style="margin-top:1.5rem;font-size:12px;color:#888;">Contact: +971 56 591 1000 | contact@jbj.ae</p></div>';
+          }
+        }, 8000);
+        window.__jbjBootTimeout = timeout;
+      })();
+    </script>
   </body>
 </html>
