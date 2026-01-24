@@ -1,14 +1,19 @@
 /**
- * Sarah Test Extraction - Robust Single Project Test
+ * Sarah Test Extraction - Complete 1:1 Mirror Extraction
  * 
- * Extracts project data with multiple fallback strategies:
- * 1. Firecrawl scrape (with proper timeout/waitFor)
- * 2. Gatsby page-data.json API
- * 3. Manual content parsing
+ * Extracts ALL project data from Provident Estate:
+ * - All high-resolution images (NO LIMITS)
+ * - All PDF documents (brochures, floor plans, payment plans)
+ * - All videos (YouTube, Vimeo, MP4)
+ * - Complete project metadata
+ * 
+ * Strategies:
+ * 1. Firecrawl with screenshot + full page scrape
+ * 2. Gatsby page-data.json API fallback
+ * 3. AI extraction for structured data
  */
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -42,6 +47,8 @@ interface ExtractionResult {
   totalApiCost: string;
   extraction_method?: string;
   duration_ms?: number;
+  message?: string;
+  error?: string;
 }
 
 // Extract project slug from various URL formats
@@ -50,7 +57,7 @@ function extractProjectSlug(url: string): string | null {
   return match ? match[1].replace(/\/$/, "") : null;
 }
 
-// Try fetching Gatsby page-data.json (most reliable for Provident)
+// Try fetching Gatsby page-data.json
 async function fetchGatsbyPageData(projectSlug: string): Promise<any | null> {
   try {
     const pageDataUrl = `https://providentestate.com/page-data/new-projects/${projectSlug}/page-data.json`;
@@ -66,6 +73,14 @@ async function fetchGatsbyPageData(projectSlug: string): Promise<any | null> {
     }
     
     const data = await res.json();
+    
+    // Check if it has actual data (not "No record found")
+    if (data?.result?.serverData?.data?.status === true && 
+        data?.result?.serverData?.data?.message === "No record found") {
+      console.log("[Sarah] Gatsby API returned 'No record found'");
+      return null;
+    }
+    
     console.log("[Sarah] Gatsby API success, data size:", JSON.stringify(data).length);
     return data;
   } catch (err) {
@@ -134,8 +149,13 @@ function parseGatsbyData(pageData: any): Partial<ExtractionResult["project"]> & 
 function parsePrice(val: any): number | null {
   if (!val) return null;
   if (typeof val === "number") return val;
-  const match = String(val).replace(/,/g, "").match(/(\d+)/);
-  return match ? parseInt(match[1]) : null;
+  const str = String(val).replace(/,/g, "");
+  // Handle "AED X.XM" or "X.XM" format
+  const mMatch = str.match(/([\d.]+)\s*[mM]/i);
+  if (mMatch) return Math.round(parseFloat(mMatch[1]) * 1000000);
+  // Handle "AED X,XXX,XXX" format
+  const match = str.match(/(\d[\d,]*)/);
+  return match ? parseInt(match[1].replace(/,/g, "")) : null;
 }
 
 function parseBedrooms(val: any): [number, number] | null {
@@ -146,6 +166,173 @@ function parseBedrooms(val: any): [number, number] | null {
   const min = parseInt(match[1]);
   const max = match[2] ? parseInt(match[2]) : min;
   return [min, max];
+}
+
+// Extract all image URLs from HTML content
+function extractImagesFromHtml(html: string): string[] {
+  const images: string[] = [];
+  const seen = new Set<string>();
+  
+  // Pattern 1: CloudFront URLs (Provident's CDN)
+  const cloudfrontPattern = /https?:\/\/[a-z0-9\-]+\.cloudfront\.net\/[^\s"'<>\)]+\.(?:jpg|jpeg|png|webp)/gi;
+  (html.match(cloudfrontPattern) || []).forEach(url => {
+    const clean = url.split('?')[0];
+    if (!seen.has(clean)) {
+      seen.add(clean);
+      images.push(url);
+    }
+  });
+  
+  // Pattern 2: WordPress uploads
+  const wpPattern = /https?:\/\/[^\s"'<>\)]+wp-content\/uploads[^\s"'<>\)]+\.(?:jpg|jpeg|png|webp)/gi;
+  (html.match(wpPattern) || []).forEach(url => {
+    const clean = url.split('?')[0];
+    if (!seen.has(clean)) {
+      seen.add(clean);
+      images.push(url);
+    }
+  });
+  
+  // Pattern 3: Any image URL with provident in the path
+  const providentPattern = /https?:\/\/[^\s"'<>\)]*provident[^\s"'<>\)]*\.(?:jpg|jpeg|png|webp)/gi;
+  (html.match(providentPattern) || []).forEach(url => {
+    const clean = url.split('?')[0];
+    if (!seen.has(clean)) {
+      seen.add(clean);
+      images.push(url);
+    }
+  });
+  
+  // Pattern 4: img src tags
+  const imgSrcPattern = /<img[^>]+(?:src|data-src|data-lazy-src)=["']([^"']+)["']/gi;
+  let match;
+  while ((match = imgSrcPattern.exec(html)) !== null) {
+    const url = match[1];
+    if (url && !url.startsWith('data:') && /\.(jpg|jpeg|png|webp)/i.test(url)) {
+      const clean = url.split('?')[0];
+      if (!seen.has(clean)) {
+        seen.add(clean);
+        images.push(url);
+      }
+    }
+  }
+  
+  // Pattern 5: background-image in CSS
+  const bgPattern = /background-image:\s*url\(['"]?([^'")\s]+)['"]?\)/gi;
+  while ((match = bgPattern.exec(html)) !== null) {
+    const url = match[1];
+    if (url && !url.startsWith('data:') && /\.(jpg|jpeg|png|webp)/i.test(url)) {
+      const clean = url.split('?')[0];
+      if (!seen.has(clean)) {
+        seen.add(clean);
+        images.push(url);
+      }
+    }
+  }
+  
+  // Filter out logos, icons, avatars
+  return images.filter(url => {
+    const lower = url.toLowerCase();
+    return !lower.includes('logo') && 
+           !lower.includes('icon') && 
+           !lower.includes('avatar') &&
+           !lower.includes('placeholder') &&
+           !lower.includes('spinner') &&
+           !lower.includes('loading') &&
+           !lower.includes('favicon');
+  }).map(url => {
+    // Upgrade to high-resolution
+    return url.replace(/\/x\/\d+x\d+\//, "/x/1200x800/");
+  });
+}
+
+// Extract all video URLs
+function extractVideosFromHtml(html: string): string[] {
+  const videos: string[] = [];
+  const seen = new Set<string>();
+  
+  // Direct video files
+  const videoPattern = /https?:\/\/[^\s"'<>\)]+\.(?:mp4|webm|mov)/gi;
+  (html.match(videoPattern) || []).forEach(url => {
+    if (!seen.has(url)) {
+      seen.add(url);
+      videos.push(url);
+    }
+  });
+  
+  // YouTube embeds
+  const youtubePattern = /https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/gi;
+  let match;
+  while ((match = youtubePattern.exec(html)) !== null) {
+    const ytUrl = `https://www.youtube.com/watch?v=${match[1]}`;
+    if (!seen.has(ytUrl)) {
+      seen.add(ytUrl);
+      videos.push(ytUrl);
+    }
+  }
+  
+  // Vimeo embeds
+  const vimeoPattern = /https?:\/\/(?:www\.)?vimeo\.com\/(\d+)/gi;
+  while ((match = vimeoPattern.exec(html)) !== null) {
+    const vUrl = `https://vimeo.com/${match[1]}`;
+    if (!seen.has(vUrl)) {
+      seen.add(vUrl);
+      videos.push(vUrl);
+    }
+  }
+  
+  return videos;
+}
+
+// Extract all PDF documents
+function extractPdfsFromHtml(html: string, links: string[]): { brochure: string | null; floorPlans: string[]; paymentPlan: string | null } {
+  const allPdfs: string[] = [];
+  const seen = new Set<string>();
+  
+  // From HTML
+  const pdfPattern = /https?:\/\/[^\s"'<>\)]+\.pdf(?:\?[^\s"'<>\)]*)?/gi;
+  (html.match(pdfPattern) || []).forEach(url => {
+    const clean = url.split('?')[0];
+    if (!seen.has(clean)) {
+      seen.add(clean);
+      allPdfs.push(url);
+    }
+  });
+  
+  // From links array
+  links.forEach((link: string) => {
+    if (/\.pdf(\?|$)/i.test(link)) {
+      const clean = link.split('?')[0];
+      if (!seen.has(clean)) {
+        seen.add(clean);
+        allPdfs.push(link);
+      }
+    }
+  });
+  
+  // Categorize PDFs
+  let brochure: string | null = null;
+  let paymentPlan: string | null = null;
+  const floorPlans: string[] = [];
+  
+  allPdfs.forEach(pdf => {
+    const lower = pdf.toLowerCase();
+    if (lower.includes('brochure')) {
+      brochure = brochure || pdf;
+    } else if (lower.includes('payment')) {
+      paymentPlan = paymentPlan || pdf;
+    } else if (lower.includes('floor') || lower.includes('plan')) {
+      floorPlans.push(pdf);
+    }
+  });
+  
+  // If no brochure found, use first uncategorized PDF
+  if (!brochure && allPdfs.length > 0) {
+    const remaining = allPdfs.filter(p => p !== paymentPlan && !floorPlans.includes(p));
+    if (remaining.length > 0) brochure = remaining[0];
+  }
+  
+  return { brochure, floorPlans, paymentPlan };
 }
 
 serve(async (req) => {
@@ -163,11 +350,14 @@ serve(async (req) => {
     return new Response(JSON.stringify({ 
       success: false, 
       error: "FIRECRAWL_API_KEY not configured",
-      validationErrors: ["Missing Firecrawl API key"],
+      images: [],
+      videos: [],
+      documents: { brochure: null, floorPlans: [], paymentPlan: null },
+      validationErrors: ["Missing Firecrawl API key - Please connect Firecrawl in Settings → Connectors"],
       apiCallsMade: 0,
       totalApiCost: "$0"
     }), {
-      status: 400,
+      status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
@@ -176,18 +366,21 @@ serve(async (req) => {
     const { testUrl } = await req.json().catch(() => ({}));
     const projectUrl = testUrl || "https://providentestate.com/new-projects/damac-sun-city/";
     
-    console.log("[Sarah] Starting extraction test:", projectUrl);
+    console.log("[Sarah] Starting COMPLETE extraction test:", projectUrl);
 
     // Validate URL
     if (!projectUrl.includes("providentestate.com")) {
       return new Response(JSON.stringify({
         success: false,
         error: "URL must be a Provident Estate page",
+        images: [],
+        videos: [],
+        documents: { brochure: null, floorPlans: [], paymentPlan: null },
         validationErrors: ["Invalid URL - only providentestate.com supported"],
         apiCallsMade: 0,
         totalApiCost: "$0"
       }), {
-        status: 400,
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -199,7 +392,7 @@ serve(async (req) => {
     if (projectSlug) {
       const gatsbyData = await fetchGatsbyPageData(projectSlug);
       
-      if (gatsbyData?.result?.data) {
+      if (gatsbyData?.result?.data?.wpProject || gatsbyData?.result?.data?.project) {
         console.log("[Sarah] Using Gatsby API data");
         const parsed = parseGatsbyData(gatsbyData);
         
@@ -244,8 +437,8 @@ serve(async (req) => {
       }
     }
 
-    // STRATEGY 2: Try Firecrawl scrape with safe parameters
-    console.log("[Sarah] Gatsby API unavailable, trying Firecrawl...");
+    // STRATEGY 2: Full Firecrawl scrape with rawHtml for complete image extraction
+    console.log("[Sarah] Gatsby API unavailable, using Firecrawl full scrape...");
     
     const scrapeRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
       method: "POST",
@@ -255,10 +448,17 @@ serve(async (req) => {
       },
       body: JSON.stringify({ 
         url: projectUrl, 
-        formats: ["markdown", "links"],
-        waitFor: 10000,  // 10s wait (safe: < 30s default timeout / 2)
-        timeout: 60000,  // 60s timeout
-        onlyMainContent: false
+        formats: ["markdown", "links", "rawHtml"],
+        waitFor: 15000,  // 15s wait for dynamic content
+        timeout: 90000,  // 90s timeout
+        onlyMainContent: false, // Get EVERYTHING including header/footer images
+        actions: [
+          { type: "wait", milliseconds: 3000 },
+          { type: "scroll", direction: "down", amount: 2000 },
+          { type: "wait", milliseconds: 2000 },
+          { type: "scroll", direction: "down", amount: 3000 },
+          { type: "wait", milliseconds: 2000 }
+        ]
       }),
     });
     apiCallsMade++;
@@ -267,12 +467,11 @@ serve(async (req) => {
       const errText = await scrapeRes.text();
       console.error("[Sarah] Firecrawl error:", scrapeRes.status, errText);
       
-      // Parse error for user-friendly message
       let errorDetail = "Unknown scraping error";
       try {
         const errJson = JSON.parse(errText);
         if (errJson.code === "SCRAPE_ALL_ENGINES_FAILED") {
-          errorDetail = "The website blocked the scraping attempt. This is a source limitation, not an app bug.";
+          errorDetail = "The website blocked the scraping attempt. Try again in a few minutes.";
         } else {
           errorDetail = errJson.error || errJson.message || errText.substring(0, 200);
         }
@@ -283,13 +482,16 @@ serve(async (req) => {
       return new Response(JSON.stringify({
         success: false,
         error: "Firecrawl scrape failed",
+        images: [],
+        videos: [],
+        documents: { brochure: null, floorPlans: [], paymentPlan: null },
         validationErrors: [errorDetail],
         apiCallsMade,
-        totalApiCost: `$${(apiCallsMade * 0.001).toFixed(4)}`,
+        totalApiCost: `$${(apiCallsMade * 0.002).toFixed(4)}`,
         extraction_method: "firecrawl-failed",
         duration_ms: Date.now() - startTime
       }), {
-        status: 200, // Return 200 so UI can display the error nicely
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -297,24 +499,20 @@ serve(async (req) => {
     const scrapeData = await scrapeRes.json();
     const markdown = scrapeData.data?.markdown || "";
     const links = scrapeData.data?.links || [];
+    const html = scrapeData.data?.rawHtml || "";
 
-    console.log("[Sarah] Firecrawl success:", markdown.length, "chars,", links.length, "links");
+    console.log("[Sarah] Firecrawl success:", markdown.length, "chars markdown,", links.length, "links,", html.length, "chars HTML");
 
-    // Extract images from links
-    const images = links.filter((link: string) => 
-      /\.(jpg|jpeg|png|webp)(\?|$)/i.test(link) &&
-      !link.includes("logo") &&
-      !link.includes("icon") &&
-      link.includes("cloudfront") // Provident uses CloudFront for images
-    );
+    // Extract ALL media from combined content
+    const combinedContent = markdown + "\n" + html + "\n" + links.join("\n");
+    const images = extractImagesFromHtml(combinedContent);
+    const videos = extractVideosFromHtml(combinedContent);
+    const documents = extractPdfsFromHtml(combinedContent, links);
 
-    // Extract PDFs
-    const pdfs = links.filter((link: string) => /\.pdf(\?|$)/i.test(link));
-    const brochure = pdfs.find((p: string) => /brochure/i.test(p)) || pdfs[0] || null;
-    const paymentPlan = pdfs.find((p: string) => /payment/i.test(p)) || null;
-    const floorPlans = pdfs.filter((p: string) => /floor|plan/i.test(p));
+    console.log("[Sarah] Extracted:", images.length, "images,", videos.length, "videos,", 
+                (documents.brochure ? 1 : 0) + documents.floorPlans.length + (documents.paymentPlan ? 1 : 0), "documents");
 
-    // Use AI to extract structured data if we have enough content
+    // Use AI to extract structured data
     let projectData = {
       name: projectSlug?.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase()) || "Unknown",
       developer: "Unknown",
@@ -329,7 +527,7 @@ serve(async (req) => {
       description: null as string | null
     };
 
-    if (markdown.length > 500 && lovableKey) {
+    if (markdown.length > 200 && lovableKey) {
       console.log("[Sarah] Using AI to extract structured data...");
       
       try {
@@ -342,11 +540,32 @@ serve(async (req) => {
           body: JSON.stringify({
             model: "google/gemini-2.5-flash",
             messages: [
-              { role: "system", content: "Extract real estate project data. Return ONLY valid JSON." },
-              { role: "user", content: `Extract from this content:\n\n${markdown.substring(0, 15000)}\n\nReturn JSON: {"name":"","developer":"","location":"","price_from":null,"bedrooms":"","handover":"","property_type":"","description":""}` }
+              { 
+                role: "system", 
+                content: `You are a real estate data extractor for Dubai/UAE properties. Extract accurate project details. Return ONLY valid JSON.` 
+              },
+              { 
+                role: "user", 
+                content: `Extract complete project details from this Provident Estate page:
+
+${markdown.substring(0, 25000)}
+
+Return JSON with these fields (use null for missing):
+{
+  "name": "Full project name",
+  "developer": "Developer company name",
+  "location": "Area/community in Dubai",
+  "price_from": 1500000,
+  "bedrooms": "1-4 BR or Studio, 1, 2 BR",
+  "handover": "Q2 2026 or Ready",
+  "property_type": "Apartment/Villa/Townhouse/Sky Villa",
+  "status_label": "Future Launch/New Phase/New Launch/Coming Soon or null",
+  "description": "2-3 paragraph project description"
+}` 
+              }
             ],
             temperature: 0.1,
-            max_tokens: 2000,
+            max_tokens: 3000,
           }),
         });
         apiCallsMade++;
@@ -354,50 +573,69 @@ serve(async (req) => {
         if (aiRes.ok) {
           const aiData = await aiRes.json();
           const content = aiData.choices?.[0]?.message?.content || "";
-          const jsonMatch = content.match(/\{[\s\S]*\}/);
+          
+          // Extract JSON from response
+          let jsonStr = content;
+          const codeBlockMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/);
+          if (codeBlockMatch) {
+            jsonStr = codeBlockMatch[1];
+          }
+          const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
+          
           if (jsonMatch) {
             const parsed = JSON.parse(jsonMatch[0]);
             projectData = {
-              ...projectData,
               name: parsed.name || projectData.name,
               developer: parsed.developer || projectData.developer,
               location: parsed.location || projectData.location,
+              status: parsed.status || projectData.status,
               price_from: parsePrice(parsed.price_from),
               bedrooms_min: parseBedrooms(parsed.bedrooms)?.[0] || null,
               bedrooms_max: parseBedrooms(parsed.bedrooms)?.[1] || null,
               handover_date: parsed.handover || null,
               property_type: parsed.property_type || null,
+              status_label: parsed.status_label || null,
               description: parsed.description || null
             };
+            console.log("[Sarah] AI extracted:", projectData.name, "by", projectData.developer);
           }
+        } else {
+          console.error("[Sarah] AI response error:", aiRes.status);
         }
       } catch (aiErr) {
         console.error("[Sarah] AI extraction failed:", aiErr);
       }
     }
 
+    // Build result
     const result: ExtractionResult = {
       success: true,
       project: projectData,
-      images: images.slice(0, 50), // Limit for response size
-      videos: [],
-      documents: { brochure, floorPlans, paymentPlan },
+      images: images,
+      videos: videos,
+      documents: documents,
       validationErrors: [],
       apiCallsMade,
       totalApiCost: `$${(apiCallsMade * 0.002).toFixed(4)}`,
-      extraction_method: "firecrawl",
+      extraction_method: "firecrawl-full",
       duration_ms: Date.now() - startTime
     };
 
     // Validate results
     if (images.length === 0) {
-      result.validationErrors.push("No images found - page may need different scraping approach");
+      result.validationErrors.push("No images found - try a different project URL");
+    }
+    if (images.length < 5) {
+      result.validationErrors.push(`Only ${images.length} images found - expected 10+`);
     }
     if (projectData.name === "Unknown") {
       result.validationErrors.push("Could not extract project name");
     }
+    if (projectData.developer === "Unknown") {
+      result.validationErrors.push("Could not extract developer name");
+    }
 
-    result.success = result.validationErrors.length === 0;
+    result.success = result.validationErrors.filter(e => e.includes("No images") || e.includes("project name")).length === 0;
 
     console.log("[Sarah] Complete:", projectData.name, "| Images:", result.images.length, "| Success:", result.success);
 
@@ -410,12 +648,15 @@ serve(async (req) => {
     return new Response(JSON.stringify({
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",
-      validationErrors: ["Unexpected error occurred"],
+      images: [],
+      videos: [],
+      documents: { brochure: null, floorPlans: [], paymentPlan: null },
+      validationErrors: ["Unexpected error: " + (error instanceof Error ? error.message : "Unknown")],
       apiCallsMade,
-      totalApiCost: `$${(apiCallsMade * 0.001).toFixed(4)}`,
+      totalApiCost: `$${(apiCallsMade * 0.002).toFixed(4)}`,
       duration_ms: Date.now() - startTime
     }), {
-      status: 500,
+      status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
