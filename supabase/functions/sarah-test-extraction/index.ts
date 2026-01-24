@@ -57,34 +57,85 @@ function extractProjectSlug(url: string): string | null {
   return match ? match[1].replace(/\/$/, "") : null;
 }
 
-// Try fetching Gatsby page-data.json
+// Try fetching Gatsby page-data.json with multiple fallback paths
 async function fetchGatsbyPageData(projectSlug: string): Promise<any | null> {
+  const paths = [
+    `https://providentestate.com/page-data/new-projects/${projectSlug}/page-data.json`,
+    `https://providentestate.com/page-data/off-plan/${projectSlug}/page-data.json`,
+    `https://providentestate.com/page-data/properties/${projectSlug}/page-data.json`,
+  ];
+  
+  for (const pageDataUrl of paths) {
+    try {
+      console.log("[Sarah] Trying Gatsby API:", pageDataUrl);
+      
+      const res = await fetch(pageDataUrl, {
+        headers: { 
+          "Accept": "application/json",
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+      });
+      
+      if (!res.ok) {
+        console.log("[Sarah] Gatsby API returned:", res.status);
+        continue;
+      }
+      
+      const data = await res.json();
+      
+      // Check if it has actual data (not "No record found")
+      if (data?.result?.serverData?.data?.status === true && 
+          data?.result?.serverData?.data?.message === "No record found") {
+        console.log("[Sarah] Gatsby API returned 'No record found'");
+        continue;
+      }
+      
+      // Check for valid project data
+      if (data?.result?.data?.wpProject || data?.result?.data?.project || data?.result?.pageContext?.project) {
+        console.log("[Sarah] Gatsby API success, data size:", JSON.stringify(data).length);
+        return data;
+      }
+    } catch (err) {
+      console.error("[Sarah] Gatsby API error:", err);
+    }
+  }
+  
+  return null;
+}
+
+// Direct HTML fetch as fallback (simpler, less likely to be blocked)
+async function fetchDirectHtml(url: string): Promise<{ html: string; links: string[] } | null> {
   try {
-    const pageDataUrl = `https://providentestate.com/page-data/new-projects/${projectSlug}/page-data.json`;
-    console.log("[Sarah] Trying Gatsby API:", pageDataUrl);
+    console.log("[Sarah] Trying direct fetch:", url);
     
-    const res = await fetch(pageDataUrl, {
-      headers: { "Accept": "application/json" }
+    const res = await fetch(url, {
+      headers: {
+        "Accept": "text/html,application/xhtml+xml",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Cache-Control": "no-cache",
+      }
     });
     
     if (!res.ok) {
-      console.log("[Sarah] Gatsby API returned:", res.status);
+      console.log("[Sarah] Direct fetch returned:", res.status);
       return null;
     }
     
-    const data = await res.json();
+    const html = await res.text();
     
-    // Check if it has actual data (not "No record found")
-    if (data?.result?.serverData?.data?.status === true && 
-        data?.result?.serverData?.data?.message === "No record found") {
-      console.log("[Sarah] Gatsby API returned 'No record found'");
-      return null;
+    // Extract links from HTML
+    const links: string[] = [];
+    const linkPattern = /href=["']([^"']+)["']/gi;
+    let match;
+    while ((match = linkPattern.exec(html)) !== null) {
+      links.push(match[1]);
     }
     
-    console.log("[Sarah] Gatsby API success, data size:", JSON.stringify(data).length);
-    return data;
+    console.log("[Sarah] Direct fetch success:", html.length, "chars,", links.length, "links");
+    return { html, links };
   } catch (err) {
-    console.error("[Sarah] Gatsby API error:", err);
+    console.error("[Sarah] Direct fetch error:", err);
     return null;
   }
 }
@@ -437,71 +488,80 @@ serve(async (req) => {
       }
     }
 
-    // STRATEGY 2: Full Firecrawl scrape with rawHtml for complete image extraction
-    console.log("[Sarah] Gatsby API unavailable, using Firecrawl full scrape...");
+    // STRATEGY 2: Try direct HTML fetch (simpler, less likely to be blocked)
+    console.log("[Sarah] Gatsby API unavailable, trying direct HTML fetch...");
     
-    const scrapeRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${firecrawlKey}`,
-      },
-      body: JSON.stringify({ 
-        url: projectUrl, 
-        formats: ["markdown", "links", "rawHtml"],
-        waitFor: 15000,  // 15s wait for dynamic content
-        timeout: 90000,  // 90s timeout
-        onlyMainContent: false, // Get EVERYTHING including header/footer images
-        actions: [
-          { type: "wait", milliseconds: 3000 },
-          { type: "scroll", direction: "down", amount: 2000 },
-          { type: "wait", milliseconds: 2000 },
-          { type: "scroll", direction: "down", amount: 3000 },
-          { type: "wait", milliseconds: 2000 }
-        ]
-      }),
-    });
-    apiCallsMade++;
-
-    if (!scrapeRes.ok) {
-      const errText = await scrapeRes.text();
-      console.error("[Sarah] Firecrawl error:", scrapeRes.status, errText);
+    const directResult = await fetchDirectHtml(projectUrl);
+    let html = "";
+    let links: string[] = [];
+    let markdown = "";
+    let firecrawlFailed = false;
+    
+    if (directResult) {
+      html = directResult.html;
+      links = directResult.links;
+      console.log("[Sarah] Using direct HTML fetch result");
+    } else {
+      // STRATEGY 3: Firecrawl as last resort
+      console.log("[Sarah] Direct fetch failed, trying Firecrawl...");
       
-      let errorDetail = "Unknown scraping error";
-      try {
-        const errJson = JSON.parse(errText);
-        if (errJson.code === "SCRAPE_ALL_ENGINES_FAILED") {
-          errorDetail = "The website blocked the scraping attempt. Try again in a few minutes.";
-        } else {
-          errorDetail = errJson.error || errJson.message || errText.substring(0, 200);
+      const scrapeRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${firecrawlKey}`,
+        },
+        body: JSON.stringify({ 
+          url: projectUrl, 
+          formats: ["markdown", "links", "rawHtml"],
+          waitFor: 10000,  // 10s wait for dynamic content
+          timeout: 60000,  // 60s timeout
+          onlyMainContent: false,
+          mobile: true,  // Try mobile version (sometimes less blocked)
+        }),
+      });
+      apiCallsMade++;
+
+      if (!scrapeRes.ok) {
+        const errText = await scrapeRes.text();
+        console.error("[Sarah] Firecrawl error:", scrapeRes.status, errText);
+        firecrawlFailed = true;
+        
+        let errorDetail = "The website is blocking automated access";
+        try {
+          const errJson = JSON.parse(errText);
+          if (errJson.code === "SCRAPE_ALL_ENGINES_FAILED") {
+            errorDetail = "Provident Estate is blocking automated access. Try: (1) Use a different project URL, (2) Wait a few minutes and retry, (3) The project page may have moved or been removed.";
+          } else {
+            errorDetail = errJson.error || errJson.message || errText.substring(0, 200);
+          }
+        } catch {
+          errorDetail = errText.substring(0, 200);
         }
-      } catch {
-        errorDetail = errText.substring(0, 200);
+
+        return new Response(JSON.stringify({
+          success: false,
+          error: "All extraction methods failed",
+          images: [],
+          videos: [],
+          documents: { brochure: null, floorPlans: [], paymentPlan: null },
+          validationErrors: [errorDetail, "Try alternative URLs like: https://providentestate.com/new-projects/sobha-seahaven/ or https://providentestate.com/new-projects/emaar-the-oasis/"],
+          apiCallsMade,
+          totalApiCost: `$${(apiCallsMade * 0.002).toFixed(4)}`,
+          extraction_method: "all-failed",
+          duration_ms: Date.now() - startTime
+        }), {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
       }
 
-      return new Response(JSON.stringify({
-        success: false,
-        error: "Firecrawl scrape failed",
-        images: [],
-        videos: [],
-        documents: { brochure: null, floorPlans: [], paymentPlan: null },
-        validationErrors: [errorDetail],
-        apiCallsMade,
-        totalApiCost: `$${(apiCallsMade * 0.002).toFixed(4)}`,
-        extraction_method: "firecrawl-failed",
-        duration_ms: Date.now() - startTime
-      }), {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      const scrapeData = await scrapeRes.json();
+      markdown = scrapeData.data?.markdown || "";
+      links = scrapeData.data?.links || [];
+      html = scrapeData.data?.rawHtml || "";
+      console.log("[Sarah] Firecrawl success:", markdown.length, "chars markdown,", links.length, "links");
     }
-
-    const scrapeData = await scrapeRes.json();
-    const markdown = scrapeData.data?.markdown || "";
-    const links = scrapeData.data?.links || [];
-    const html = scrapeData.data?.rawHtml || "";
-
-    console.log("[Sarah] Firecrawl success:", markdown.length, "chars markdown,", links.length, "links,", html.length, "chars HTML");
 
     // Extract ALL media from combined content
     const combinedContent = markdown + "\n" + html + "\n" + links.join("\n");
