@@ -815,7 +815,7 @@ const Footer = () => {
               
               {/* English Legal Line */}
               <p className="text-zinc-200 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 font-medium px-2 max-w-3xl mx-auto">
-                Licensed Real Estate Brokerage for Buy, Sell & Rent in Dubai (Mainland). Operated by <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link> L.L.C S.O.C. Owned & Led by Jane Bou Jaoude (جاين بو جودة) Founder & CEO <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link>.
+                Licensed Real Estate Brokerage for Buy, Sell & Rent in Dubai (Mainland). Operated by <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link> L.L.C S.O.C. Owned & Led by <Link to="/founder" className="text-gold hover:underline font-semibold">Jane Bou Jaoude (جاين بو جودة)</Link> Founder & CEO <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link>.
               </p>
               
               {/* Arabic Disclaimer */}
@@ -830,7 +830,7 @@ const Footer = () => {
               
               <p className="text-zinc-400 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-5 sm:mb-6 px-2 max-w-3xl mx-auto">
                 All content, design, and technology on this platform are the intellectual property of 
-                Jane Bou Jaoude (جاين بو جودة) Founder & CEO <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link>. Unauthorized reproduction is strictly prohibited.
+                <Link to="/founder" className="text-gold hover:underline font-semibold"> Jane Bou Jaoude (جاين بو جودة)</Link> Founder & CEO <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link>. Unauthorized reproduction is strictly prohibited.
               </p>
               
               {/* Premium badge row - ULTRA Luxury 3D styling */}
