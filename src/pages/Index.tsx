@@ -488,29 +488,27 @@ const Index = () => {
         </div>
       </section>
 
-      {/* FOUNDER SECTION - ULTRA PREMIUM BLACK & GOLD EDITORIAL */}
+      {/* FOUNDER SECTION - REFINED EDITORIAL WITH WARM CHAMPAGNE PALETTE */}
       <section className="relative py-16 md:py-32 bg-black overflow-hidden">
-        {/* Atmospheric Background Effects */}
+        {/* Atmospheric Background Effects - Subtle gold orbs */}
         <div className="absolute inset-0 pointer-events-none">
-          {/* Subtle gold gradient orb - top right */}
           <div 
-            className="absolute top-0 right-0 w-[600px] h-[600px] opacity-30"
+            className="absolute top-0 right-0 w-[600px] h-[600px] opacity-20"
             style={{
-              background: 'radial-gradient(circle at center, rgba(200,167,102,0.15) 0%, transparent 60%)',
+              background: 'radial-gradient(circle at center, rgba(200,167,102,0.12) 0%, transparent 60%)',
               transform: 'translate(30%, -30%)',
             }}
           />
-          {/* Subtle gold gradient orb - bottom left */}
           <div 
-            className="absolute bottom-0 left-0 w-[500px] h-[500px] opacity-20"
+            className="absolute bottom-0 left-0 w-[500px] h-[500px] opacity-15"
             style={{
-              background: 'radial-gradient(circle at center, rgba(200,167,102,0.12) 0%, transparent 60%)',
+              background: 'radial-gradient(circle at center, rgba(200,167,102,0.1) 0%, transparent 60%)',
               transform: 'translate(-30%, 30%)',
             }}
           />
           {/* Horizontal gold accent lines */}
-          <div className="absolute top-1/4 left-0 w-32 md:w-64 h-px bg-gradient-to-r from-gold/50 to-transparent" />
-          <div className="absolute bottom-1/4 right-0 w-32 md:w-64 h-px bg-gradient-to-l from-gold/50 to-transparent" />
+          <div className="absolute top-1/4 left-0 w-24 md:w-48 h-px bg-gradient-to-r from-gold/40 to-transparent" />
+          <div className="absolute bottom-1/4 right-0 w-24 md:w-48 h-px bg-gradient-to-l from-gold/40 to-transparent" />
         </div>
 
         <div className="container mx-auto px-4 md:px-6 relative z-10">
@@ -521,22 +519,22 @@ const Index = () => {
             variants={staggerContainer}
             className="max-w-7xl mx-auto"
           >
-            {/* Section Header - Minimal & Elegant */}
+            {/* Section Header - Elegant on Black */}
             <motion.div className="text-center mb-10 md:mb-16" variants={fadeInUp}>
-              {/* Leadership Badge - Ultra Premium */}
+              {/* Leadership Badge */}
               <div 
                 className="inline-flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 md:py-3 rounded-full mb-6 md:mb-8"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(200,167,102,0.15) 0%, rgba(200,167,102,0.05) 100%)',
-                  border: '1px solid rgba(200,167,102,0.4)',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)',
+                  background: 'linear-gradient(135deg, rgba(245,235,215,0.95) 0%, rgba(232,220,200,0.9) 100%)',
+                  border: '2px solid rgba(200,167,102,0.6)',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.3), 0 0 0 1px rgba(200,167,102,0.2)',
                 }}
               >
-                <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-gold animate-pulse" />
-                <span className="text-gold/90 font-medium text-[10px] md:text-xs uppercase tracking-[0.25em]">Leadership</span>
+                <User className="w-3 h-3 md:w-4 md:h-4 text-gold" />
+                <span className="text-zinc-800 font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Leadership</span>
               </div>
               
-              {/* Main Title - Editorial Typography */}
+              {/* Main Title */}
               <h2 className="text-white text-3xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4 md:mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Meet the{" "}
                 <span 
@@ -556,66 +554,66 @@ const Index = () => {
               </p>
             </motion.div>
 
-            {/* Main Editorial Card - Premium 3D */}
+            {/* Main Editorial Card - WARM CHAMPAGNE PALETTE */}
             <motion.div
               className="relative rounded-2xl md:rounded-[2rem] overflow-hidden"
               variants={fadeInUp}
               style={{
-                background: 'linear-gradient(165deg, rgba(18,18,20,1) 0%, rgba(12,12,14,1) 100%)',
-                boxShadow: '0 50px 100px -20px rgba(0,0,0,0.8), 0 0 0 1px rgba(200,167,102,0.2), 0 0 80px -20px rgba(200,167,102,0.15)',
+                background: 'linear-gradient(165deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)',
+                boxShadow: '0 50px 100px -20px rgba(0,0,0,0.5), 0 0 0 2px rgba(200,167,102,0.4), 0 0 80px -20px rgba(200,167,102,0.2)',
               }}
             >
               {/* Premium Top Border Accent */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+              <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-gold to-transparent" />
               
-              {/* Corner Accents */}
-              <div className="absolute top-0 left-0 w-16 md:w-24 h-16 md:h-24 border-l-2 border-t-2 border-gold/30 rounded-tl-2xl md:rounded-tl-[2rem]" />
-              <div className="absolute bottom-0 right-0 w-16 md:w-24 h-16 md:h-24 border-r-2 border-b-2 border-gold/30 rounded-br-2xl md:rounded-br-[2rem]" />
+              {/* Corner Accents - Gold on Champagne */}
+              <div className="absolute top-0 left-0 w-16 md:w-24 h-16 md:h-24 border-l-[3px] border-t-[3px] border-gold/50 rounded-tl-2xl md:rounded-tl-[2rem]" />
+              <div className="absolute bottom-0 right-0 w-16 md:w-24 h-16 md:h-24 border-r-[3px] border-b-[3px] border-gold/50 rounded-br-2xl md:rounded-br-[2rem]" />
 
               <div className="grid md:grid-cols-2 gap-0">
-                {/* Photo Side - Editorial Magazine Style */}
+                {/* Photo Side - Editorial Style */}
                 <div className="relative h-[350px] md:h-auto md:min-h-[600px] overflow-hidden">
-                  {/* Background gradient */}
-                  <div 
-                    className="absolute inset-0"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(200,167,102,0.1) 0%, transparent 50%, rgba(0,0,0,0.5) 100%)',
-                    }}
-                  />
                   <img
                     src={founderProfessional}
                     alt="Jane Bou Jaoude - Founder & CEO at JBJ Global Real Estate"
                     className="w-full h-full object-cover"
                     style={{ objectPosition: "center 15%" }}
                   />
-                  {/* Dramatic overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black/60 hidden md:block" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent md:from-black/40" />
+                  {/* Soft overlay for text readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#F5F0E6]/30 hidden md:block" />
                   
-                  {/* Floating Quote Badge */}
+                  {/* Floating Quote Badge - Warm Champagne Glass */}
                   <div 
-                    className="absolute bottom-4 left-4 right-4 md:bottom-8 md:left-8 md:right-auto md:max-w-[280px] p-4 md:p-5 rounded-xl md:rounded-2xl backdrop-blur-md"
+                    className="absolute bottom-4 left-4 right-4 md:bottom-8 md:left-8 md:right-auto md:max-w-[300px] p-4 md:p-6 rounded-xl md:rounded-2xl backdrop-blur-md"
                     style={{
-                      background: 'linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(20,20,20,0.8) 100%)',
-                      border: '1px solid rgba(200,167,102,0.3)',
-                      boxShadow: '0 20px 40px -10px rgba(0,0,0,0.5)',
+                      background: 'linear-gradient(135deg, rgba(253,251,247,0.95) 0%, rgba(245,240,230,0.9) 100%)',
+                      border: '2px solid rgba(200,167,102,0.5)',
+                      boxShadow: '0 20px 40px -10px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.8)',
                     }}
                   >
-                    <div className="text-gold text-xl md:text-2xl font-serif mb-2">"</div>
-                    <p className="text-white/90 text-xs md:text-sm italic leading-relaxed">
+                    <div 
+                      className="text-2xl md:text-3xl font-serif mb-2"
+                      style={{
+                        background: 'linear-gradient(135deg, #C8A766 0%, #D4AF37 100%)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                      }}
+                    >"</div>
+                    <p className="text-zinc-700 text-xs md:text-sm italic leading-relaxed">
                       Excellence isn't a destination—it's the standard we apply to every interaction.
                     </p>
                   </div>
                 </div>
 
-                {/* Content Side - Sophisticated Typography */}
-                <div className="p-6 md:p-12 lg:p-16 flex flex-col justify-center relative">
-                  {/* Subtle background pattern */}
+                {/* Content Side - Warm & Inviting */}
+                <div className="p-6 md:p-12 lg:p-16 flex flex-col justify-center relative bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                  {/* Subtle dot pattern */}
                   <div 
-                    className="absolute inset-0 opacity-5"
+                    className="absolute inset-0 opacity-[0.03]"
                     style={{
-                      backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(200,167,102,0.5) 1px, transparent 0)',
-                      backgroundSize: '40px 40px',
+                      backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(200,167,102,0.8) 1px, transparent 0)',
+                      backgroundSize: '32px 32px',
                     }}
                   />
                   
@@ -623,17 +621,17 @@ const Index = () => {
                     {/* Name & Title */}
                     <div className="mb-6 md:mb-8">
                       <h3 
-                        className="text-white text-2xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-3 tracking-tight"
+                        className="text-zinc-900 text-2xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-3 tracking-tight"
                         style={{ fontFamily: "Poppins, sans-serif" }}
                       >
                         Jane Bou Jaoude
                       </h3>
                       <div className="flex items-center gap-3">
-                        <div className="w-8 md:w-12 h-px bg-gradient-to-r from-gold to-transparent" />
+                        <div className="w-8 md:w-12 h-[2px] bg-gradient-to-r from-gold to-gold/30" />
                         <p 
-                          className="text-sm md:text-lg font-medium tracking-[0.1em] uppercase"
+                          className="text-sm md:text-lg font-semibold tracking-[0.1em] uppercase"
                           style={{
-                            background: 'linear-gradient(90deg, #C8A766 0%, #D4AF37 50%, #C8A766 100%)',
+                            background: 'linear-gradient(90deg, #B8860B 0%, #C8A766 50%, #D4AF37 100%)',
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent',
                           }}
@@ -644,12 +642,12 @@ const Index = () => {
                     </div>
 
                     {/* Description */}
-                    <p className="text-zinc-400 text-sm md:text-base lg:text-lg leading-relaxed mb-8 md:mb-10">
+                    <p className="text-zinc-600 text-sm md:text-base lg:text-lg leading-relaxed mb-8 md:mb-10">
                       With 12+ years of industry experience and a proven track record of training 4,800+ real estate professionals,
                       Jane leads JBJ Global Real Estate with a commitment to excellence, integrity, and client success.
                     </p>
 
-                    {/* Stats Row - Premium 3D Cards */}
+                    {/* Stats Row - Premium Champagne Cards with 3D Effect */}
                     <div className="grid grid-cols-3 gap-2 md:gap-4 mb-8 md:mb-10">
                       {[
                         { value: "12", suffix: "+", label: "Years Experience" },
@@ -658,51 +656,38 @@ const Index = () => {
                       ].map((stat, index) => (
                         <div 
                           key={index}
-                          className="group text-center p-3 md:p-5 rounded-xl md:rounded-2xl transition-all duration-300 hover:-translate-y-1"
+                          className="group text-center p-3 md:p-5 rounded-xl md:rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                           style={{
-                            background: 'linear-gradient(165deg, rgba(30,30,32,1) 0%, rgba(20,20,22,1) 100%)',
-                            border: '1px solid rgba(200,167,102,0.2)',
-                            boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03)',
+                            background: 'linear-gradient(165deg, #FFFFFF 0%, #F5EBD7 50%, #E8DCC8 100%)',
+                            border: '2px solid rgba(200,167,102,0.4)',
+                            boxShadow: '0 8px 24px -8px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.9), inset 0 -2px 4px rgba(200,167,102,0.1)',
                           }}
                         >
-                          <p className="text-white text-xl md:text-3xl lg:text-4xl font-bold">
+                          <p className="text-zinc-900 text-xl md:text-3xl lg:text-4xl font-bold">
                             {stat.value}
-                            <span 
-                              style={{
-                                background: 'linear-gradient(135deg, #D4AF37 0%, #C8A766 100%)',
-                                WebkitBackgroundClip: 'text',
-                                WebkitTextFillColor: 'transparent',
-                              }}
-                            >
-                              {stat.suffix}
-                            </span>
+                            <span className="text-gold">{stat.suffix}</span>
                           </p>
                           <p className="text-zinc-500 text-[8px] md:text-[10px] uppercase tracking-wider mt-1 md:mt-2">{stat.label}</p>
                         </div>
                       ))}
                     </div>
 
-                    {/* CTA Button - Premium Style */}
+                    {/* CTA Button - Gold Fill Style */}
                     <Link to="/founder" className="block">
                       <button 
-                        className="group relative w-full md:w-auto inline-flex items-center justify-center gap-2 md:gap-3 px-6 md:px-10 py-4 md:py-5 text-sm md:text-base font-bold rounded-xl md:rounded-2xl transition-all duration-300 overflow-hidden"
+                        className="group relative w-full md:w-auto inline-flex items-center justify-center gap-2 md:gap-3 px-6 md:px-10 py-4 md:py-5 text-sm md:text-base font-bold rounded-xl md:rounded-2xl transition-all duration-300 overflow-hidden hover:scale-[1.02] active:scale-[0.98]"
                         style={{
-                          background: 'linear-gradient(135deg, rgba(200,167,102,0.15) 0%, rgba(200,167,102,0.05) 100%)',
-                          border: '2px solid rgba(200,167,102,0.5)',
-                          boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)',
+                          background: 'linear-gradient(135deg, #C8A766 0%, #D4AF37 50%, #C8A766 100%)',
+                          border: '2px solid rgba(200,167,102,0.8)',
+                          boxShadow: '0 10px 30px -5px rgba(200,167,102,0.4), 0 4px 12px rgba(0,0,0,0.1), inset 0 2px 4px rgba(255,255,255,0.3)',
                         }}
                       >
-                        {/* Hover Fill */}
-                        <span 
-                          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                          style={{
-                            background: 'linear-gradient(135deg, #C8A766 0%, #D4AF37 100%)',
-                          }}
-                        />
+                        {/* Shine effect */}
+                        <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                         <span className="relative flex items-center gap-2 md:gap-3">
-                          <User className="w-4 h-4 md:w-5 md:h-5 text-gold group-hover:text-black transition-colors" />
-                          <span className="text-white group-hover:text-black transition-colors">Discover Her Story</span>
-                          <ArrowRight className="w-4 h-4 md:w-5 md:h-5 text-gold group-hover:text-black group-hover:translate-x-1 transition-all" />
+                          <User className="w-4 h-4 md:w-5 md:h-5 text-black" />
+                          <span className="text-black font-bold">Discover Her Story</span>
+                          <ArrowRight className="w-4 h-4 md:w-5 md:h-5 text-black group-hover:translate-x-1 transition-transform" />
                         </span>
                       </button>
                     </Link>
