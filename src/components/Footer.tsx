@@ -558,150 +558,164 @@ const Footer = () => {
         </div>
 
         {/* Premium Divider before Legal Zone */}
-        <div className="relative h-px mb-4 sm:mb-6 max-w-4xl mx-auto">
+        <div className="relative h-px mb-4 sm:mb-6 max-w-7xl mx-auto">
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
         </div>
 
-        {/* Legal Section - Premium 3D Card */}
+        {/* ZONE 3: Unified Legal + Google Review + Newsletter Block */}
         <div 
-          className="max-w-4xl mx-auto mb-4 sm:mb-6 p-3 sm:p-5 md:p-8 rounded-xl sm:rounded-2xl text-center relative"
+          className="w-full max-w-7xl mx-auto border border-gold/20 rounded-xl sm:rounded-2xl overflow-hidden relative mb-4 sm:mb-6"
           style={{
             background: 'linear-gradient(145deg, rgba(30,30,33,0.95) 0%, rgba(18,18,20,0.98) 100%)',
             boxShadow: `
-              0 15px 30px -12px rgba(0,0,0,0.7),
-              0 0 0 1px rgba(200,167,102,0.1),
+              0 20px 50px -15px rgba(0,0,0,0.7),
+              0 0 0 1px rgba(200,167,102,0.08),
               inset 0 1px 0 rgba(255,255,255,0.03)
             `,
           }}
         >
-          <div className="flex items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4 md:mb-5">
-            <div 
-              className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg sm:rounded-xl flex items-center justify-center"
-              style={{
-                background: 'linear-gradient(135deg, rgba(200,167,102,0.2) 0%, rgba(200,167,102,0.1) 100%)',
-                boxShadow: '0 4px 15px -3px rgba(200,167,102,0.3), inset 0 1px 0 rgba(255,255,255,0.1)',
-                border: '1px solid rgba(200,167,102,0.3)',
-              }}
-            >
-              <span className="text-gold text-sm sm:text-lg md:text-xl font-bold drop-shadow-[0_0_10px_rgba(200,167,102,0.5)]">©</span>
-            </div>
-            <h4 
-              className="font-bold text-sm sm:text-base md:text-lg"
-              style={{
-                background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
-              Legal Disclaimer
-            </h4>
-          </div>
-          
-          <p className="text-zinc-300 text-[10px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 md:mb-5 px-1">
-            <span className="text-white font-semibold">JBJ Global Real Estate</span> is a Dubai mainland Real Estate brokerage licensed to BUY, SELL & RENT properties across the UAE. 
-            For legal services, mortgage support, visa, and corporate services, we can connect you with independent licensed partners. 
-            Clients contract and transact directly with the partner under the partner's own terms.
-          </p>
-          
-          {/* English Legal Line */}
-          <p className="text-zinc-200 text-[10px] sm:text-[11px] md:text-xs leading-relaxed mb-3 sm:mb-4 font-medium px-1">
-            Licensed Real Estate Brokerage for Buy, Sell & Rent in Dubai (Mainland). Operated by <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link> L.L.C S.O.C. Owned & Led by Jane Bou Jaoude (جاين بو جودة) Founder & CEO <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link>.
-          </p>
-          
-          {/* Arabic Disclaimer */}
-          <p className="text-zinc-400 text-[10px] sm:text-[11px] md:text-xs leading-relaxed mb-3 sm:mb-4 px-1" dir="rtl">
-            جي بي جي العقارية العالمية هي وساطة عقارية مرخصة في دبي للبيع والشراء والإيجار. للخدمات القانونية والتمويل العقاري والتأشيرات، يمكننا ربطك بشركاء مستقلين ومرخصين. يكون التعاقد مباشرة بين العميل والشريك وفق شروط الشريك.
-          </p>
-          
-          {/* Arabic Legal Line */}
-          <p className="text-zinc-400 text-[10px] sm:text-[11px] md:text-xs leading-relaxed mb-3 sm:mb-4 px-1" dir="rtl">
-            وساطة عقارية مرخصة للبيع والشراء والإيجار في دبي (البر الرئيسي). يتم تشغيل الموقع من قبل JBJ Global Real Estate L.L.C S.O.C.
-          </p>
-          
-          <p className="text-zinc-400 text-[10px] sm:text-[11px] md:text-xs leading-relaxed mb-4 sm:mb-5 px-1">
-            All content, design, and technology on this platform are the intellectual property of 
-            Jane Bou Jaoude (جاين بو جودة) Founder & CEO <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link>. Unauthorized reproduction is strictly prohibited.
-          </p>
-          
-          {/* Premium badge row - Luxury 3D styling */}
-          <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4 text-[10px] sm:text-xs md:text-sm mt-2">
-            <div 
-              className="px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 rounded-lg sm:rounded-xl relative overflow-hidden group"
-              style={{
-                background: 'linear-gradient(145deg, rgba(39,39,42,0.9) 0%, rgba(24,24,27,0.95) 100%)',
-                boxShadow: '0 8px 25px -8px rgba(0,0,0,0.6), 0 0 0 1px rgba(200,167,102,0.25), inset 0 1px 0 rgba(255,255,255,0.08)',
-              }}
-            >
-              <span 
-                className="font-semibold tracking-wide relative z-10"
-                style={{
-                  background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 50%, #D4AF37 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  textShadow: '0 0 20px rgba(200,167,102,0.3)',
-                }}
-              >
-                Real Estate Brokerage
-              </span>
-            </div>
-            <div 
-              className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full hidden sm:block"
-              style={{
-                background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 100%)',
-                boxShadow: '0 0 10px rgba(200,167,102,0.5)',
-              }}
-            />
-            <div 
-              className="px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 rounded-lg sm:rounded-xl relative overflow-hidden group"
-              style={{
-                background: 'linear-gradient(145deg, rgba(39,39,42,0.9) 0%, rgba(24,24,27,0.95) 100%)',
-                boxShadow: '0 8px 25px -8px rgba(0,0,0,0.6), 0 0 0 1px rgba(200,167,102,0.25), inset 0 1px 0 rgba(255,255,255,0.08)',
-              }}
-            >
-              <span 
-                className="font-semibold tracking-wide relative z-10"
-                style={{
-                  background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 50%, #D4AF37 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  textShadow: '0 0 20px rgba(200,167,102,0.3)',
-                }}
-              >
-                All Rights Reserved
-              </span>
-            </div>
-            <div 
-              className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full hidden sm:block"
-              style={{
-                background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 100%)',
-                boxShadow: '0 0 10px rgba(200,167,102,0.5)',
-              }}
-            />
-            <div 
-              className="px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 rounded-lg sm:rounded-xl relative overflow-hidden group"
-              style={{
-                background: 'linear-gradient(145deg, rgba(39,39,42,0.9) 0%, rgba(24,24,27,0.95) 100%)',
-                boxShadow: '0 8px 25px -8px rgba(0,0,0,0.6), 0 0 0 1px rgba(200,167,102,0.25), inset 0 1px 0 rgba(255,255,255,0.08)',
-              }}
-            >
-              <span 
-                className="font-semibold tracking-wide relative z-10"
-                style={{
-                  background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 50%, #D4AF37 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  textShadow: '0 0 20px rgba(200,167,102,0.3)',
-                }}
-              >
-                © {currentYear}
-              </span>
-            </div>
-          </div>
-        </div>
+          {/* Subtle Gold Corner Accents (thinner/lighter than nav block for hierarchy) */}
+          <div className="absolute top-0 left-0 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 border-t border-l border-gold/30 rounded-tl-xl sm:rounded-tl-2xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 border-t border-r border-gold/30 rounded-tr-xl sm:rounded-tr-2xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 border-b border-l border-gold/30 rounded-bl-xl sm:rounded-bl-2xl pointer-events-none" />
+          <div className="absolute bottom-0 right-0 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 border-b border-r border-gold/30 rounded-br-xl sm:rounded-br-2xl pointer-events-none" />
 
-        {/* Google My Business Link */}
-        <div className="text-center pb-2 sm:pb-4">
-          <GoogleMyBusinessLink />
+          <div className="p-4 sm:p-6 md:p-8 lg:p-10">
+            {/* Legal Disclaimer Section */}
+            <div className="text-center mb-6 sm:mb-8">
+              <div className="flex items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4 md:mb-5">
+                <div 
+                  className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg sm:rounded-xl flex items-center justify-center"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(200,167,102,0.2) 0%, rgba(200,167,102,0.1) 100%)',
+                    boxShadow: '0 4px 15px -3px rgba(200,167,102,0.3), inset 0 1px 0 rgba(255,255,255,0.1)',
+                    border: '1px solid rgba(200,167,102,0.3)',
+                  }}
+                >
+                  <span className="text-gold text-sm sm:text-lg md:text-xl font-bold drop-shadow-[0_0_10px_rgba(200,167,102,0.5)]">©</span>
+                </div>
+                <h4 
+                  className="font-bold text-sm sm:text-base md:text-lg"
+                  style={{
+                    background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                  }}
+                >
+                  Legal Disclaimer
+                </h4>
+              </div>
+              
+              <p className="text-zinc-300 text-[10px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 md:mb-5 px-1 max-w-3xl mx-auto">
+                <span className="text-white font-semibold">JBJ Global Real Estate</span> is a Dubai mainland Real Estate brokerage licensed to BUY, SELL & RENT properties across the UAE. 
+                For legal services, mortgage support, visa, and corporate services, we can connect you with independent licensed partners. 
+                Clients contract and transact directly with the partner under the partner's own terms.
+              </p>
+              
+              {/* English Legal Line */}
+              <p className="text-zinc-200 text-[10px] sm:text-[11px] md:text-xs leading-relaxed mb-3 sm:mb-4 font-medium px-1 max-w-3xl mx-auto">
+                Licensed Real Estate Brokerage for Buy, Sell & Rent in Dubai (Mainland). Operated by <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link> L.L.C S.O.C. Owned & Led by Jane Bou Jaoude (جاين بو جودة) Founder & CEO <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link>.
+              </p>
+              
+              {/* Arabic Disclaimer */}
+              <p className="text-zinc-400 text-[10px] sm:text-[11px] md:text-xs leading-relaxed mb-3 sm:mb-4 px-1 max-w-3xl mx-auto" dir="rtl">
+                جي بي جي العقارية العالمية هي وساطة عقارية مرخصة في دبي للبيع والشراء والإيجار. للخدمات القانونية والتمويل العقاري والتأشيرات، يمكننا ربطك بشركاء مستقلين ومرخصين. يكون التعاقد مباشرة بين العميل والشريك وفق شروط الشريك.
+              </p>
+              
+              {/* Arabic Legal Line */}
+              <p className="text-zinc-400 text-[10px] sm:text-[11px] md:text-xs leading-relaxed mb-3 sm:mb-4 px-1 max-w-3xl mx-auto" dir="rtl">
+                وساطة عقارية مرخصة للبيع والشراء والإيجار في دبي (البر الرئيسي). يتم تشغيل الموقع من قبل JBJ Global Real Estate L.L.C S.O.C.
+              </p>
+              
+              <p className="text-zinc-400 text-[10px] sm:text-[11px] md:text-xs leading-relaxed mb-4 sm:mb-5 px-1 max-w-3xl mx-auto">
+                All content, design, and technology on this platform are the intellectual property of 
+                Jane Bou Jaoude (جاين بو جودة) Founder & CEO <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link>. Unauthorized reproduction is strictly prohibited.
+              </p>
+              
+              {/* Premium badge row - Luxury 3D styling */}
+              <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4 text-[10px] sm:text-xs md:text-sm">
+                <div 
+                  className="px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 rounded-lg sm:rounded-xl relative overflow-hidden group"
+                  style={{
+                    background: 'linear-gradient(145deg, rgba(39,39,42,0.9) 0%, rgba(24,24,27,0.95) 100%)',
+                    boxShadow: '0 8px 25px -8px rgba(0,0,0,0.6), 0 0 0 1px rgba(200,167,102,0.25), inset 0 1px 0 rgba(255,255,255,0.08)',
+                  }}
+                >
+                  <span 
+                    className="font-semibold tracking-wide relative z-10"
+                    style={{
+                      background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 50%, #D4AF37 100%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      textShadow: '0 0 20px rgba(200,167,102,0.3)',
+                    }}
+                  >
+                    Real Estate Brokerage
+                  </span>
+                </div>
+                <div 
+                  className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full hidden sm:block"
+                  style={{
+                    background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 100%)',
+                    boxShadow: '0 0 10px rgba(200,167,102,0.5)',
+                  }}
+                />
+                <div 
+                  className="px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 rounded-lg sm:rounded-xl relative overflow-hidden group"
+                  style={{
+                    background: 'linear-gradient(145deg, rgba(39,39,42,0.9) 0%, rgba(24,24,27,0.95) 100%)',
+                    boxShadow: '0 8px 25px -8px rgba(0,0,0,0.6), 0 0 0 1px rgba(200,167,102,0.25), inset 0 1px 0 rgba(255,255,255,0.08)',
+                  }}
+                >
+                  <span 
+                    className="font-semibold tracking-wide relative z-10"
+                    style={{
+                      background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 50%, #D4AF37 100%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      textShadow: '0 0 20px rgba(200,167,102,0.3)',
+                    }}
+                  >
+                    All Rights Reserved
+                  </span>
+                </div>
+                <div 
+                  className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full hidden sm:block"
+                  style={{
+                    background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 100%)',
+                    boxShadow: '0 0 10px rgba(200,167,102,0.5)',
+                  }}
+                />
+                <div 
+                  className="px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 rounded-lg sm:rounded-xl relative overflow-hidden group"
+                  style={{
+                    background: 'linear-gradient(145deg, rgba(39,39,42,0.9) 0%, rgba(24,24,27,0.95) 100%)',
+                    boxShadow: '0 8px 25px -8px rgba(0,0,0,0.6), 0 0 0 1px rgba(200,167,102,0.25), inset 0 1px 0 rgba(255,255,255,0.08)',
+                  }}
+                >
+                  <span 
+                    className="font-semibold tracking-wide relative z-10"
+                    style={{
+                      background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 50%, #D4AF37 100%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      textShadow: '0 0 20px rgba(200,167,102,0.3)',
+                    }}
+                  >
+                    © {currentYear}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Divider between Legal and Google Review */}
+            <div className="h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent mb-6 sm:mb-8 max-w-2xl mx-auto" />
+
+            {/* Google My Business Link */}
+            <div className="text-center">
+              <GoogleMyBusinessLink />
+            </div>
+          </div>
         </div>
       </div>
       
