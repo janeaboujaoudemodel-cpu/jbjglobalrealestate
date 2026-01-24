@@ -224,6 +224,8 @@ const App = () => (
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/services" element={<Services />} />
+                {/* Alias: older homepage CTA pointed to /mortgage */}
+                <Route path="/mortgage" element={<Navigate to="/mortgage-calculator" replace />} />
                 <Route path="/mortgage-calculator" element={<MortgageCalculator />} />
                 <Route path="/market-report" element={<MarketReport />} />
                 <Route path="/market-intelligence" element={<MarketIntelligence />} />
