@@ -160,30 +160,48 @@ const Footer = () => {
       {/* Full-width footer content */}
       <div className="relative w-full py-8 sm:py-12 md:py-16 lg:py-20 px-3 sm:px-4 md:px-6 lg:px-8">
         
-        {/* Logo + Company Name with 3D glow */}
-        <div className="text-center mb-8 sm:mb-10 md:mb-12 lg:mb-14">
-          <Link to="/" className="inline-block group">
+        {/* ULTRA PREMIUM Logo + Company Name Section */}
+        <div className="text-center mb-8 sm:mb-10 md:mb-12 lg:mb-14 relative">
+          {/* Background glow behind entire logo section */}
+          <div className="absolute inset-0 -top-10 bg-gradient-to-b from-gold/5 via-transparent to-transparent blur-3xl pointer-events-none" />
+          
+          <Link to="/" className="inline-block group relative">
             <div className="relative">
-              {/* Glow effect behind logo */}
-              <div className="absolute inset-0 bg-gold/20 blur-3xl rounded-full scale-150 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              {/* Multi-layer glow effect behind logo */}
+              <div className="absolute inset-0 bg-gold/30 blur-[60px] rounded-full scale-[2] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="absolute inset-0 bg-gold/20 blur-3xl rounded-full scale-150 opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
               <img 
                 src={jbjMonogramDark} 
                 alt="JBJ Global Real Estate" 
-                className="relative h-16 sm:h-20 md:h-28 lg:h-36 w-auto object-contain mx-auto mb-4 sm:mb-6 drop-shadow-[0_0_30px_rgba(200,167,102,0.3)] group-hover:drop-shadow-[0_0_40px_rgba(200,167,102,0.5)] transition-all duration-500"
+                className="relative h-20 sm:h-24 md:h-32 lg:h-40 w-auto object-contain mx-auto mb-4 sm:mb-6 drop-shadow-[0_0_40px_rgba(200,167,102,0.4)] group-hover:drop-shadow-[0_0_60px_rgba(200,167,102,0.6)] transition-all duration-500 group-hover:scale-105"
               />
             </div>
           </Link>
+          
+          {/* Company Name with enhanced styling */}
           <h2 
-            className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-light tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em] lg:tracking-[0.25em] mb-3 sm:mb-4 md:mb-6 px-1"
+            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light tracking-[0.12em] sm:tracking-[0.18em] md:tracking-[0.22em] lg:tracking-[0.28em] mb-2 sm:mb-3 md:mb-4 px-2 relative"
             style={{
-              background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 25%, #C8A766 50%, #E8D5A3 75%, #D4AF37 100%)',
+              background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 20%, #C8A766 40%, #F5E6C8 60%, #E8D5A3 80%, #D4AF37 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              textShadow: '0 2px 20px rgba(200,167,102,0.3)',
+              filter: 'drop-shadow(0 4px 25px rgba(200,167,102,0.4))',
             }}
           >
             JBJ GLOBAL REAL ESTATE
           </h2>
+          
+          {/* Decorative tagline */}
+          <p 
+            className="text-xs sm:text-sm md:text-base tracking-[0.2em] sm:tracking-[0.3em] uppercase font-medium"
+            style={{
+              background: 'linear-gradient(90deg, rgba(200,167,102,0.6) 0%, rgba(245,230,200,0.9) 50%, rgba(200,167,102,0.6) 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
+          >
+            Excellence in Real Estate
+          </p>
         </div>
 
         {/* ULTRA PREMIUM 3D Card - License + Newsletter + Social */}
@@ -344,28 +362,65 @@ const Footer = () => {
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-gradient-to-t from-gold/8 to-transparent blur-2xl pointer-events-none" />
         </div>
 
-        {/* Premium Divider */}
-        <div className="relative h-px mb-6 sm:mb-8 md:mb-10 lg:mb-14 max-w-7xl mx-auto">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-y-[1px]" />
+        {/* Premium Divider with glow */}
+        <div className="relative h-[2px] mb-6 sm:mb-8 md:mb-10 lg:mb-14 max-w-7xl mx-auto">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent blur-md" />
         </div>
 
-        {/* ZONE 2: Connected Navigation + Tools + Contact Block */}
+        {/* ZONE 2: ULTRA PREMIUM Navigation + Tools + Contact Block */}
         <div 
-          className="w-full mb-4 sm:mb-6 md:mb-10 lg:mb-14 max-w-7xl mx-auto border border-gold/30 rounded-xl sm:rounded-2xl overflow-hidden relative"
+          className="w-full mb-4 sm:mb-6 md:mb-10 lg:mb-14 max-w-7xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden relative"
           style={{
-            background: 'linear-gradient(145deg, rgba(39,39,42,0.85) 0%, rgba(24,24,27,0.9) 100%)',
-            boxShadow: '0 25px 60px -15px rgba(0,0,0,0.8), 0 0 0 1px rgba(200,167,102,0.1), inset 0 1px 0 rgba(255,255,255,0.05)',
+            background: 'linear-gradient(165deg, rgba(45,45,48,0.98) 0%, rgba(28,28,31,0.99) 40%, rgba(22,22,25,1) 100%)',
+            boxShadow: `
+              0 50px 100px -30px rgba(0,0,0,0.95),
+              0 30px 60px -20px rgba(0,0,0,0.8),
+              0 0 0 1px rgba(200,167,102,0.3),
+              0 0 120px -30px rgba(200,167,102,0.2),
+              0 0 60px -15px rgba(200,167,102,0.1),
+              inset 0 2px 0 rgba(255,255,255,0.1),
+              inset 0 -2px 0 rgba(0,0,0,0.5)
+            `,
           }}
         >
-          {/* Premium Gold Corner Accents */}
-          <div className="absolute top-0 left-0 w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 border-t-2 border-l-2 border-gold/50 rounded-tl-xl sm:rounded-tl-2xl pointer-events-none" />
-          <div className="absolute top-0 right-0 w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 border-t-2 border-r-2 border-gold/50 rounded-tr-xl sm:rounded-tr-2xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 border-b-2 border-l-2 border-gold/50 rounded-bl-xl sm:rounded-bl-2xl pointer-events-none" />
-          <div className="absolute bottom-0 right-0 w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 border-b-2 border-r-2 border-gold/50 rounded-br-xl sm:rounded-br-2xl pointer-events-none" />
+          {/* Outer Gold Border Ring */}
+          <div className="absolute inset-0 rounded-2xl sm:rounded-3xl border-2 border-gold/40 pointer-events-none" />
+          <div className="absolute inset-[3px] rounded-2xl sm:rounded-3xl border border-gold/20 pointer-events-none" />
+          
+          {/* Animated Shimmer Sweep */}
+          <div 
+            className="absolute inset-0 rounded-2xl sm:rounded-3xl pointer-events-none opacity-50"
+            style={{
+              background: 'linear-gradient(110deg, transparent 20%, rgba(200,167,102,0.06) 40%, rgba(245,230,200,0.12) 50%, rgba(200,167,102,0.06) 60%, transparent 80%)',
+              backgroundSize: '250% 100%',
+              animation: 'shimmer 8s ease-in-out infinite',
+            }}
+          />
+          
+          {/* Top Radial Glow */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-24 bg-gradient-to-b from-gold/8 to-transparent blur-2xl pointer-events-none" />
+          
+          {/* Premium Gold Corner Accents - BOLD with gradients */}
+          <div className="absolute top-0 left-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
+            <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-gold via-gold/80 to-transparent rounded-tl-2xl sm:rounded-tl-3xl" />
+            <div className="absolute top-0 left-0 h-full w-[3px] bg-gradient-to-b from-gold via-gold/80 to-transparent rounded-tl-2xl sm:rounded-tl-3xl" />
+          </div>
+          <div className="absolute top-0 right-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
+            <div className="absolute top-0 right-0 w-full h-[3px] bg-gradient-to-l from-gold via-gold/80 to-transparent rounded-tr-2xl sm:rounded-tr-3xl" />
+            <div className="absolute top-0 right-0 h-full w-[3px] bg-gradient-to-b from-gold via-gold/80 to-transparent rounded-tr-2xl sm:rounded-tr-3xl" />
+          </div>
+          <div className="absolute bottom-0 left-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
+            <div className="absolute bottom-0 left-0 w-full h-[3px] bg-gradient-to-r from-gold via-gold/80 to-transparent rounded-bl-2xl sm:rounded-bl-3xl" />
+            <div className="absolute bottom-0 left-0 h-full w-[3px] bg-gradient-to-t from-gold via-gold/80 to-transparent rounded-bl-2xl sm:rounded-bl-3xl" />
+          </div>
+          <div className="absolute bottom-0 right-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
+            <div className="absolute bottom-0 right-0 w-full h-[3px] bg-gradient-to-l from-gold via-gold/80 to-transparent rounded-br-2xl sm:rounded-br-3xl" />
+            <div className="absolute bottom-0 right-0 h-full w-[3px] bg-gradient-to-t from-gold via-gold/80 to-transparent rounded-br-2xl sm:rounded-br-3xl" />
+          </div>
           
           {/* Navigation Grid Section */}
-          <div className="grid grid-cols-2 lg:grid-cols-4">
+          <div className="relative grid grid-cols-2 lg:grid-cols-4">
             
             {/* Column 1: Properties + Services */}
             <div className="p-2 sm:p-3 md:p-5 border-r border-b lg:border-b-0 border-gold/10">
@@ -658,148 +713,197 @@ const Footer = () => {
         </div>
 
         {/* Premium Divider before Legal Zone */}
-        <div className="relative h-px mb-4 sm:mb-6 max-w-7xl mx-auto">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+        <div className="relative h-[2px] mb-4 sm:mb-6 max-w-7xl mx-auto">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent blur-md" />
         </div>
 
-        {/* ZONE 3: Unified Legal + Google Review + Newsletter Block */}
+        {/* ZONE 3: ULTRA PREMIUM Legal + Google Review Block */}
         <div 
-          className="w-full max-w-7xl mx-auto border border-gold/20 rounded-xl sm:rounded-2xl overflow-hidden relative mb-4 sm:mb-6"
+          className="w-full max-w-7xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden relative mb-4 sm:mb-6"
           style={{
-            background: 'linear-gradient(145deg, rgba(30,30,33,0.95) 0%, rgba(18,18,20,0.98) 100%)',
+            background: 'linear-gradient(165deg, rgba(45,45,48,0.98) 0%, rgba(28,28,31,0.99) 40%, rgba(22,22,25,1) 100%)',
             boxShadow: `
-              0 20px 50px -15px rgba(0,0,0,0.7),
-              0 0 0 1px rgba(200,167,102,0.08),
-              inset 0 1px 0 rgba(255,255,255,0.03)
+              0 50px 100px -30px rgba(0,0,0,0.95),
+              0 30px 60px -20px rgba(0,0,0,0.8),
+              0 0 0 1px rgba(200,167,102,0.3),
+              0 0 120px -30px rgba(200,167,102,0.2),
+              0 0 60px -15px rgba(200,167,102,0.1),
+              inset 0 2px 0 rgba(255,255,255,0.1),
+              inset 0 -2px 0 rgba(0,0,0,0.5)
             `,
           }}
         >
-          {/* Subtle Gold Corner Accents (thinner/lighter than nav block for hierarchy) */}
-          <div className="absolute top-0 left-0 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 border-t border-l border-gold/30 rounded-tl-xl sm:rounded-tl-2xl pointer-events-none" />
-          <div className="absolute top-0 right-0 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 border-t border-r border-gold/30 rounded-tr-xl sm:rounded-tr-2xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 border-b border-l border-gold/30 rounded-bl-xl sm:rounded-bl-2xl pointer-events-none" />
-          <div className="absolute bottom-0 right-0 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 border-b border-r border-gold/30 rounded-br-xl sm:rounded-br-2xl pointer-events-none" />
+          {/* Outer Gold Border Ring */}
+          <div className="absolute inset-0 rounded-2xl sm:rounded-3xl border-2 border-gold/40 pointer-events-none" />
+          <div className="absolute inset-[3px] rounded-2xl sm:rounded-3xl border border-gold/20 pointer-events-none" />
+          
+          {/* Animated Shimmer Sweep */}
+          <div 
+            className="absolute inset-0 rounded-2xl sm:rounded-3xl pointer-events-none opacity-50"
+            style={{
+              background: 'linear-gradient(110deg, transparent 20%, rgba(200,167,102,0.06) 40%, rgba(245,230,200,0.12) 50%, rgba(200,167,102,0.06) 60%, transparent 80%)',
+              backgroundSize: '250% 100%',
+              animation: 'shimmer 8s ease-in-out infinite',
+            }}
+          />
+          
+          {/* Top Radial Glow */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-20 bg-gradient-to-b from-gold/8 to-transparent blur-2xl pointer-events-none" />
+          
+          {/* Premium Gold Corner Accents - BOLD with gradients */}
+          <div className="absolute top-0 left-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
+            <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-gold via-gold/80 to-transparent rounded-tl-2xl sm:rounded-tl-3xl" />
+            <div className="absolute top-0 left-0 h-full w-[3px] bg-gradient-to-b from-gold via-gold/80 to-transparent rounded-tl-2xl sm:rounded-tl-3xl" />
+          </div>
+          <div className="absolute top-0 right-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
+            <div className="absolute top-0 right-0 w-full h-[3px] bg-gradient-to-l from-gold via-gold/80 to-transparent rounded-tr-2xl sm:rounded-tr-3xl" />
+            <div className="absolute top-0 right-0 h-full w-[3px] bg-gradient-to-b from-gold via-gold/80 to-transparent rounded-tr-2xl sm:rounded-tr-3xl" />
+          </div>
+          <div className="absolute bottom-0 left-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
+            <div className="absolute bottom-0 left-0 w-full h-[3px] bg-gradient-to-r from-gold via-gold/80 to-transparent rounded-bl-2xl sm:rounded-bl-3xl" />
+            <div className="absolute bottom-0 left-0 h-full w-[3px] bg-gradient-to-t from-gold via-gold/80 to-transparent rounded-bl-2xl sm:rounded-bl-3xl" />
+          </div>
+          <div className="absolute bottom-0 right-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
+            <div className="absolute bottom-0 right-0 w-full h-[3px] bg-gradient-to-l from-gold via-gold/80 to-transparent rounded-br-2xl sm:rounded-br-3xl" />
+            <div className="absolute bottom-0 right-0 h-full w-[3px] bg-gradient-to-t from-gold via-gold/80 to-transparent rounded-br-2xl sm:rounded-br-3xl" />
+          </div>
 
-          <div className="p-4 sm:p-6 md:p-8 lg:p-10">
+          <div className="relative p-5 sm:p-8 md:p-10 lg:p-12">
             {/* Legal Disclaimer Section */}
             <div className="text-center mb-6 sm:mb-8">
-              <div className="flex items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4 md:mb-5">
+              {/* Decorative Legal Emblem */}
+              <div className="flex justify-center mb-4 sm:mb-6">
                 <div 
-                  className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg sm:rounded-xl flex items-center justify-center"
+                  className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center relative"
                   style={{
-                    background: 'linear-gradient(135deg, rgba(200,167,102,0.2) 0%, rgba(200,167,102,0.1) 100%)',
-                    boxShadow: '0 4px 15px -3px rgba(200,167,102,0.3), inset 0 1px 0 rgba(255,255,255,0.1)',
-                    border: '1px solid rgba(200,167,102,0.3)',
+                    background: 'linear-gradient(145deg, rgba(200,167,102,0.2) 0%, rgba(200,167,102,0.08) 100%)',
+                    boxShadow: '0 8px 32px -8px rgba(200,167,102,0.4), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.2)',
+                    border: '1px solid rgba(200,167,102,0.4)',
                   }}
                 >
-                  <span className="text-gold text-sm sm:text-lg md:text-xl font-bold drop-shadow-[0_0_10px_rgba(200,167,102,0.5)]">©</span>
+                  <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
+                  <span 
+                    className="text-2xl sm:text-3xl md:text-4xl font-bold relative"
+                    style={{
+                      background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 40%, #D4AF37 60%, #C8A766 100%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      filter: 'drop-shadow(0 2px 4px rgba(200,167,102,0.5))',
+                    }}
+                  >©</span>
                 </div>
-                <h4 
-                  className="font-bold text-sm sm:text-base md:text-lg"
-                  style={{
-                    background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                  }}
-                >
-                  Legal Disclaimer
-                </h4>
               </div>
               
-              <p className="text-zinc-300 text-[10px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 md:mb-5 px-1 max-w-3xl mx-auto">
+              <h4 
+                className="font-bold text-base sm:text-lg md:text-xl uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-5"
+                style={{
+                  background: 'linear-gradient(135deg, #FFFFFF 0%, #F5E6C8 30%, #D4AF37 50%, #F5E6C8 70%, #FFFFFF 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  filter: 'drop-shadow(0 2px 10px rgba(200,167,102,0.4))',
+                }}
+              >
+                Legal Disclaimer
+              </h4>
+              
+              <p className="text-zinc-300 text-xs sm:text-sm md:text-base leading-relaxed mb-4 sm:mb-5 px-2 max-w-3xl mx-auto">
                 <span className="text-white font-semibold">JBJ Global Real Estate</span> is a Dubai mainland Real Estate brokerage licensed to BUY, SELL & RENT properties across the UAE. 
                 For legal services, mortgage support, visa, and corporate services, we can connect you with independent licensed partners. 
                 Clients contract and transact directly with the partner under the partner's own terms.
               </p>
               
               {/* English Legal Line */}
-              <p className="text-zinc-200 text-[10px] sm:text-[11px] md:text-xs leading-relaxed mb-3 sm:mb-4 font-medium px-1 max-w-3xl mx-auto">
+              <p className="text-zinc-200 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 font-medium px-2 max-w-3xl mx-auto">
                 Licensed Real Estate Brokerage for Buy, Sell & Rent in Dubai (Mainland). Operated by <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link> L.L.C S.O.C. Owned & Led by Jane Bou Jaoude (جاين بو جودة) Founder & CEO <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link>.
               </p>
               
               {/* Arabic Disclaimer */}
-              <p className="text-zinc-400 text-[10px] sm:text-[11px] md:text-xs leading-relaxed mb-3 sm:mb-4 px-1 max-w-3xl mx-auto" dir="rtl">
+              <p className="text-zinc-400 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 px-2 max-w-3xl mx-auto" dir="rtl">
                 جي بي جي العقارية العالمية هي وساطة عقارية مرخصة في دبي للبيع والشراء والإيجار. للخدمات القانونية والتمويل العقاري والتأشيرات، يمكننا ربطك بشركاء مستقلين ومرخصين. يكون التعاقد مباشرة بين العميل والشريك وفق شروط الشريك.
               </p>
               
               {/* Arabic Legal Line */}
-              <p className="text-zinc-400 text-[10px] sm:text-[11px] md:text-xs leading-relaxed mb-3 sm:mb-4 px-1 max-w-3xl mx-auto" dir="rtl">
+              <p className="text-zinc-400 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 px-2 max-w-3xl mx-auto" dir="rtl">
                 وساطة عقارية مرخصة للبيع والشراء والإيجار في دبي (البر الرئيسي). يتم تشغيل الموقع من قبل JBJ Global Real Estate L.L.C S.O.C.
               </p>
               
-              <p className="text-zinc-400 text-[10px] sm:text-[11px] md:text-xs leading-relaxed mb-4 sm:mb-5 px-1 max-w-3xl mx-auto">
+              <p className="text-zinc-400 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-5 sm:mb-6 px-2 max-w-3xl mx-auto">
                 All content, design, and technology on this platform are the intellectual property of 
                 Jane Bou Jaoude (جاين بو جودة) Founder & CEO <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link>. Unauthorized reproduction is strictly prohibited.
               </p>
               
-              {/* Premium badge row - Luxury 3D styling */}
-              <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4 text-[10px] sm:text-xs md:text-sm">
+              {/* Premium badge row - ULTRA Luxury 3D styling */}
+              <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-5 text-xs sm:text-sm md:text-base">
                 <div 
-                  className="px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 rounded-lg sm:rounded-xl relative overflow-hidden group"
+                  className="px-5 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-xl sm:rounded-2xl relative overflow-hidden group"
                   style={{
-                    background: 'linear-gradient(145deg, rgba(39,39,42,0.9) 0%, rgba(24,24,27,0.95) 100%)',
-                    boxShadow: '0 8px 25px -8px rgba(0,0,0,0.6), 0 0 0 1px rgba(200,167,102,0.25), inset 0 1px 0 rgba(255,255,255,0.08)',
+                    background: 'linear-gradient(145deg, rgba(45,45,48,0.95) 0%, rgba(28,28,31,0.98) 100%)',
+                    boxShadow: '0 12px 35px -10px rgba(0,0,0,0.7), 0 0 0 1px rgba(200,167,102,0.35), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.3)',
                   }}
                 >
+                  <div className="absolute inset-0 bg-gradient-to-b from-gold/5 to-transparent rounded-xl sm:rounded-2xl pointer-events-none" />
                   <span 
-                    className="font-semibold tracking-wide relative z-10"
+                    className="font-bold tracking-wider relative z-10"
                     style={{
-                      background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 50%, #D4AF37 100%)',
+                      background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
                       WebkitBackgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
-                      textShadow: '0 0 20px rgba(200,167,102,0.3)',
+                      filter: 'drop-shadow(0 0 15px rgba(200,167,102,0.4))',
                     }}
                   >
                     Real Estate Brokerage
                   </span>
                 </div>
                 <div 
-                  className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full hidden sm:block"
+                  className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full hidden sm:block"
                   style={{
                     background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 100%)',
-                    boxShadow: '0 0 10px rgba(200,167,102,0.5)',
+                    boxShadow: '0 0 15px rgba(200,167,102,0.6), 0 0 30px rgba(200,167,102,0.3)',
                   }}
                 />
                 <div 
-                  className="px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 rounded-lg sm:rounded-xl relative overflow-hidden group"
+                  className="px-5 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-xl sm:rounded-2xl relative overflow-hidden group"
                   style={{
-                    background: 'linear-gradient(145deg, rgba(39,39,42,0.9) 0%, rgba(24,24,27,0.95) 100%)',
-                    boxShadow: '0 8px 25px -8px rgba(0,0,0,0.6), 0 0 0 1px rgba(200,167,102,0.25), inset 0 1px 0 rgba(255,255,255,0.08)',
+                    background: 'linear-gradient(145deg, rgba(45,45,48,0.95) 0%, rgba(28,28,31,0.98) 100%)',
+                    boxShadow: '0 12px 35px -10px rgba(0,0,0,0.7), 0 0 0 1px rgba(200,167,102,0.35), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.3)',
                   }}
                 >
+                  <div className="absolute inset-0 bg-gradient-to-b from-gold/5 to-transparent rounded-xl sm:rounded-2xl pointer-events-none" />
                   <span 
-                    className="font-semibold tracking-wide relative z-10"
+                    className="font-bold tracking-wider relative z-10"
                     style={{
-                      background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 50%, #D4AF37 100%)',
+                      background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
                       WebkitBackgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
-                      textShadow: '0 0 20px rgba(200,167,102,0.3)',
+                      filter: 'drop-shadow(0 0 15px rgba(200,167,102,0.4))',
                     }}
                   >
                     All Rights Reserved
                   </span>
                 </div>
                 <div 
-                  className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full hidden sm:block"
+                  className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full hidden sm:block"
                   style={{
                     background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 100%)',
-                    boxShadow: '0 0 10px rgba(200,167,102,0.5)',
+                    boxShadow: '0 0 15px rgba(200,167,102,0.6), 0 0 30px rgba(200,167,102,0.3)',
                   }}
                 />
                 <div 
-                  className="px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 rounded-lg sm:rounded-xl relative overflow-hidden group"
+                  className="px-5 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-xl sm:rounded-2xl relative overflow-hidden group"
                   style={{
-                    background: 'linear-gradient(145deg, rgba(39,39,42,0.9) 0%, rgba(24,24,27,0.95) 100%)',
-                    boxShadow: '0 8px 25px -8px rgba(0,0,0,0.6), 0 0 0 1px rgba(200,167,102,0.25), inset 0 1px 0 rgba(255,255,255,0.08)',
+                    background: 'linear-gradient(145deg, rgba(45,45,48,0.95) 0%, rgba(28,28,31,0.98) 100%)',
+                    boxShadow: '0 12px 35px -10px rgba(0,0,0,0.7), 0 0 0 1px rgba(200,167,102,0.35), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.3)',
                   }}
                 >
+                  <div className="absolute inset-0 bg-gradient-to-b from-gold/5 to-transparent rounded-xl sm:rounded-2xl pointer-events-none" />
                   <span 
-                    className="font-semibold tracking-wide relative z-10"
+                    className="font-bold tracking-wider relative z-10"
                     style={{
-                      background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 50%, #D4AF37 100%)',
+                      background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
                       WebkitBackgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
-                      textShadow: '0 0 20px rgba(200,167,102,0.3)',
+                      filter: 'drop-shadow(0 0 15px rgba(200,167,102,0.4))',
                     }}
                   >
                     © {currentYear}
@@ -809,18 +913,25 @@ const Footer = () => {
             </div>
 
             {/* Divider between Legal and Google Review */}
-            <div className="h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent mb-6 sm:mb-8 max-w-2xl mx-auto" />
+            <div className="relative h-[2px] mb-6 sm:mb-8 max-w-lg mx-auto">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent blur-sm" />
+            </div>
 
             {/* Google My Business Link */}
             <div className="text-center">
               <GoogleMyBusinessLink />
             </div>
           </div>
+          
+          {/* Bottom Radial Glow */}
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2/3 h-20 bg-gradient-to-t from-gold/8 to-transparent blur-2xl pointer-events-none" />
         </div>
       </div>
       
-      {/* Bottom gold accent line */}
-      <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+      {/* Bottom gold accent line - Enhanced */}
+      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+      <div className="absolute bottom-[2px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent blur-sm" />
     </footer>
   );
 };
