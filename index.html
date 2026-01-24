@@ -55,22 +55,38 @@
       (function() {
         var loader = document.getElementById('boot-loader');
         var root = document.getElementById('root');
-        // Auto-hide loader after 8 seconds if React hasn't mounted
-        setTimeout(function() {
+        
+        function hideLoader() {
           if (loader && !loader.classList.contains('hidden')) {
             loader.classList.add('hidden');
           }
-        }, 8000);
-        // Observe when React mounts content
+        }
+        
+        // Auto-hide loader after 5 seconds max (faster fallback)
+        setTimeout(hideLoader, 5000);
+        
+        // Observe when React mounts content (including deep children)
         if (typeof MutationObserver !== 'undefined' && root) {
           var observer = new MutationObserver(function(mutations) {
-            if (root.children.length > 0 && loader) {
-              loader.classList.add('hidden');
+            // Check if root has any actual content (text or elements)
+            if (root.innerHTML.trim().length > 0) {
+              hideLoader();
               observer.disconnect();
             }
           });
-          observer.observe(root, { childList: true });
+          observer.observe(root, { childList: true, subtree: true, characterData: true });
         }
+        
+        // Additional fallback: check periodically if React has rendered
+        var checkInterval = setInterval(function() {
+          if (root && root.innerHTML.trim().length > 0) {
+            hideLoader();
+            clearInterval(checkInterval);
+          }
+        }, 100);
+        
+        // Clear interval after 5 seconds to prevent memory leak
+        setTimeout(function() { clearInterval(checkInterval); }, 5000);
       })();
     </script>
   </head>
