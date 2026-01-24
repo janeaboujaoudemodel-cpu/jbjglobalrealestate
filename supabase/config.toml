@@ -119,3 +119,9 @@ verify_jwt = false
 
 [functions.sarah-search]
 verify_jwt = false
+
+[functions.sarah-test-extraction]
+verify_jwt = false
+
+[functions.sync-provident-page]
+verify_jwt = false
