@@ -40,20 +40,51 @@
         font-family: 'Poppins', sans-serif;
         font-size: 1.125rem;
         z-index: 99999;
+        opacity: 1;
+        transition: opacity 0.3s ease-out;
       }
-      #boot-loader.hidden { display: none; }
+      #boot-loader.hidden { opacity: 0; pointer-events: none; }
+      /* Hide loader after 5 seconds max to prevent infinite loading */
+      @keyframes autoHide {
+        0%, 99% { opacity: 1; }
+        100% { opacity: 0; pointer-events: none; }
+      }
     </style>
+    <!-- Inline script to auto-hide loader and show fallback after timeout -->
+    <script>
+      (function() {
+        var loader = document.getElementById('boot-loader');
+        var root = document.getElementById('root');
+        // Auto-hide loader after 8 seconds if React hasn't mounted
+        setTimeout(function() {
+          if (loader && !loader.classList.contains('hidden')) {
+            loader.classList.add('hidden');
+          }
+        }, 8000);
+        // Observe when React mounts content
+        if (typeof MutationObserver !== 'undefined' && root) {
+          var observer = new MutationObserver(function(mutations) {
+            if (root.children.length > 0 && loader) {
+              loader.classList.add('hidden');
+              observer.disconnect();
+            }
+          });
+          observer.observe(root, { childList: true });
+        }
+      })();
+    </script>
   </head>
 
   <body>
     <!-- Boot loader: visible until React mounts -->
     <noscript>
       <div style="padding:2rem;text-align:center;background:#0a0a0a;color:#fff;min-height:100vh;">
-        <h1>JavaScript Required</h1>
-        <p>Please enable JavaScript to use JBJ Global Real Estate.</p>
+        <h1>JBJ Global Real Estate | Dubai Property Experts</h1>
+        <p>Please enable JavaScript to browse our luxury Dubai property listings.</p>
+        <p>Contact: +971 4 XXX XXXX | info@jbj.ae</p>
       </div>
     </noscript>
-    <div id="boot-loader">Loading JBJ Global Real Estate...</div>
+    <div id="boot-loader" aria-hidden="true">Loading JBJ Global Real Estate...</div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
