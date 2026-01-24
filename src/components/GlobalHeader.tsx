@@ -142,31 +142,42 @@ const GlobalHeader = () => {
 
   const isActive = (path: string) => location.pathname === path;
 
-  // Render dropdown menu helper
+  // Render dropdown menu helper - Premium styling
   const renderDropdown = (label: string, links: typeof propertiesLinks, isActiveCheck?: () => boolean) => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className={`flex items-center gap-0.5 px-0.5 xl:px-1 py-1 text-[9px] xl:text-[10px] font-semibold whitespace-nowrap transition-all rounded-full ${
-          isActiveCheck?.() ? 'text-gold bg-gold/10' : 'text-black hover:text-gold hover:bg-gold/10'
-        }`}>
+        <button 
+          className={`flex items-center gap-1 px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all rounded-full ${
+            isActiveCheck?.() ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
+          }`}
+          style={{ letterSpacing: '0.05em' }}
+        >
           {label}
-          <ChevronDown className="w-2 h-2 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+          <ChevronDown className="w-2.5 h-2.5 transition-transform duration-200 group-data-[state=open]:rotate-180" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         align="center" 
-        sideOffset={12}
-        className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 min-w-[240px] shadow-2xl shadow-black/30 py-4 rounded-xl overflow-hidden"
+        sideOffset={16}
+        className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border-2 border-gold/40 min-w-[260px] shadow-2xl py-5 rounded-2xl overflow-hidden"
+        style={{
+          boxShadow: '0 25px 60px -15px rgba(0,0,0,0.5), 0 0 0 1px rgba(200,167,102,0.3), 0 0 60px -20px rgba(200,167,102,0.3)',
+        }}
       >
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-        <div className="flex flex-col gap-1.5 px-2">
+        <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+        <div className="flex flex-col gap-2 px-3">
           {links.map((link) => (
-            <DropdownMenuItem key={link.href} asChild className="p-0 focus:bg-gold/10 rounded-lg">
-              <Link to={link.href} className="flex items-center gap-3 text-black hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
-                <div className="w-7 h-7 rounded-md bg-transparent border border-black group-hover:bg-black flex items-center justify-center transition-colors">
-                  <link.icon className="w-3.5 h-3.5 text-gold group-hover:text-gold transition-colors" />
+            <DropdownMenuItem key={link.href} asChild className="p-0 focus:bg-gold/10 rounded-xl">
+              <Link to={link.href} className="flex items-center gap-4 text-zinc-800 hover:text-gold hover:bg-gold/10 py-3 px-4 transition-all w-full group rounded-xl">
+                <div 
+                  className="w-9 h-9 rounded-lg bg-black/90 border border-gold/30 flex items-center justify-center transition-all group-hover:bg-black group-hover:border-gold/50"
+                  style={{
+                    boxShadow: '0 4px 12px -4px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)'
+                  }}
+                >
+                  <link.icon className="w-4 h-4 text-gold transition-colors" />
                 </div>
-                <span className="font-medium text-sm">{link.label}</span>
+                <span className="font-semibold text-sm">{link.label}</span>
               </Link>
             </DropdownMenuItem>
           ))}
@@ -176,33 +187,94 @@ const GlobalHeader = () => {
   );
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[9999] h-20 lg:h-24">
-      {/* Solid black background - exactly fits header height, no overflow */}
-      <div className="absolute inset-0 bg-black" />
-      {/* Subtle premium divider (no heavy gold bar) */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/35 to-transparent z-10" />
+    <header className="fixed top-0 left-0 right-0 z-[9999] h-24 lg:h-28">
+      {/* Ultra Premium Multi-Layer Background */}
+      <div 
+        className="absolute inset-0"
+        style={{
+          background: 'linear-gradient(180deg, rgba(0,0,0,0.98) 0%, rgba(8,8,8,0.99) 50%, rgba(0,0,0,1) 100%)',
+        }}
+      />
       
-      <div className="relative z-10 mx-auto w-full max-w-[1400px] px-3 sm:px-4 lg:px-8 xl:px-12 h-full">
+      {/* Subtle ambient gold glow at top */}
+      <div 
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-24 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse at center top, rgba(200,167,102,0.08) 0%, transparent 70%)',
+        }}
+      />
+      
+      {/* Premium Bottom Border - 3D Effect */}
+      <div className="absolute bottom-0 left-0 right-0 h-[3px] z-10">
+        {/* Base shadow layer */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black to-transparent" style={{ transform: 'translateY(2px)', filter: 'blur(4px)' }} />
+        {/* Main gold gradient line */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+        {/* Highlight on top */}
+        <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-gold/80 to-transparent" />
+      </div>
+      
+      {/* Inner shadow for depth */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          boxShadow: 'inset 0 -20px 40px -20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03)'
+        }}
+      />
+      
+      <div className="relative z-10 mx-auto w-full max-w-[1500px] px-4 sm:px-6 lg:px-10 xl:px-14 h-full">
         <div className="flex items-center justify-between h-full w-full">
-          {/* LEFT: Brand Logo - Monogram and company name on one line */}
+          {/* LEFT: Premium Brand Logo */}
           <Link 
             to="/" 
-            className="flex items-center gap-2 sm:gap-3 shrink-0 group transition-all duration-300"
+            className="flex items-center gap-3 sm:gap-4 shrink-0 group transition-all duration-300"
             style={{ fontFamily: "Poppins, sans-serif" }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
             <div className="relative shrink-0">
+              {/* Logo glow backdrop */}
+              <div 
+                className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                style={{
+                  background: 'radial-gradient(circle, rgba(200,167,102,0.3) 0%, transparent 70%)',
+                  transform: 'scale(1.5)',
+                  filter: 'blur(10px)'
+                }}
+              />
               <img 
                 src={jbjMonogramDarkBg} 
                 alt="JBJ" 
-                className="w-14 h-14 sm:w-14 sm:h-14 lg:w-10 lg:h-10 object-contain transition-transform duration-300 group-hover:scale-105"
+                className="w-16 h-16 sm:w-16 sm:h-16 lg:w-14 lg:h-14 object-contain transition-transform duration-300 group-hover:scale-110 relative z-10"
+                style={{
+                  filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5)) drop-shadow(0 0 20px rgba(200,167,102,0.15))'
+                }}
               />
-              {/* Subtle glow on hover */}
-              <div className="absolute inset-0 rounded-full bg-gold/0 group-hover:bg-gold/10 transition-colors duration-300 blur-xl" />
             </div>
-            <span className="text-white font-bold text-[15px] sm:text-base lg:text-xs tracking-[0.1em] uppercase whitespace-nowrap drop-shadow-sm leading-none">
-              JBJ Global Real Estate
-            </span>
+            {/* Premium Typography */}
+            <div className="flex flex-col">
+              <span 
+                className="font-bold text-base sm:text-lg lg:text-sm tracking-[0.15em] uppercase whitespace-nowrap leading-none"
+                style={{
+                  background: 'linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 30%, #C8A766 70%, #D4AF37 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  textShadow: '0 2px 10px rgba(200,167,102,0.3)',
+                  filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))'
+                }}
+              >
+                JBJ Global Real Estate
+              </span>
+              <span 
+                className="hidden lg:block text-[9px] tracking-[0.25em] uppercase mt-1"
+                style={{
+                  background: 'linear-gradient(90deg, #C8A766 0%, #D4AF37 50%, #C8A766 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >
+                Excellence in Real Estate
+              </span>
+            </div>
           </Link>
 
           {/* MOBILE RIGHT ICONS: Search, Language, Menu - visible on mobile only */}
@@ -513,18 +585,34 @@ const GlobalHeader = () => {
             </Sheet>
           </div>
 
-          {/* CENTER: Desktop Navigation - stretched with reduced right-side icon gap for more nav space */}
-          <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 ml-2 mr-1">
-            <div className="flex items-center gap-2.5 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] backdrop-blur-sm rounded-full px-6 py-1 border border-gold/40 shadow-lg">
+          {/* CENTER: Ultra Premium Desktop Navigation */}
+          <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 ml-4 mr-2">
+            <div 
+              className="flex items-center gap-3 xl:gap-4 rounded-full px-8 py-2.5 border-2 border-gold/40 relative overflow-hidden"
+              style={{
+                background: 'linear-gradient(135deg, rgba(245,235,215,0.98) 0%, rgba(232,220,200,0.95) 50%, rgba(212,196,168,0.98) 100%)',
+                boxShadow: '0 8px 32px -8px rgba(0,0,0,0.4), 0 0 0 1px rgba(200,167,102,0.2), inset 0 2px 0 rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.05), 0 0 40px -10px rgba(200,167,102,0.2)',
+              }}
+            >
+              {/* Shimmer effect */}
+              <div 
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%)',
+                  backgroundSize: '200% 100%',
+                  animation: 'shimmer 8s ease-in-out infinite',
+                }}
+              />
               
               {/* 1. Home - No dropdown */}
               <Link
                 to="/"
-                className={`px-1 xl:px-1.5 py-1 text-[9px] xl:text-[10px] font-semibold whitespace-nowrap transition-all relative group rounded-full ${
+                className={`px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all relative group rounded-full ${
                   isActive("/")
-                    ? "text-gold bg-gold/10"
-                    : "text-black hover:text-gold hover:bg-gold/10"
+                    ? "text-gold bg-gold/15"
+                    : "text-zinc-800 hover:text-gold hover:bg-gold/10"
                 }`}
+                style={{ letterSpacing: '0.05em' }}
               >
                 Home
               </Link>
@@ -563,11 +651,12 @@ const GlobalHeader = () => {
               {/* 9. Contact - No dropdown */}
               <Link
                 to="/contact"
-                className={`px-1 xl:px-1.5 py-1 text-[9px] xl:text-[10px] font-semibold whitespace-nowrap transition-all relative group rounded-full ${
+                className={`px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all relative group rounded-full ${
                   isActive("/contact")
-                    ? "text-gold bg-gold/10"
-                    : "text-black hover:text-gold hover:bg-gold/10"
+                    ? "text-gold bg-gold/15"
+                    : "text-zinc-800 hover:text-gold hover:bg-gold/10"
                 }`}
+                style={{ letterSpacing: '0.05em' }}
               >
                 Contact
               </Link>
@@ -579,35 +668,52 @@ const GlobalHeader = () => {
             </div>
           </nav>
 
-          {/* RIGHT: Actions - Desktop only - Icons grouped, same size, same spacing */}
-          {/* Right icons with reduced spacing - unified alignment */}
-          <div className="hidden lg:flex items-center gap-1 shrink-0">
-            {/* Search Icon - White on normal, gold on hover with 3D effect */}
-            <button
-              className="w-6 h-6 flex items-center justify-center transition-all duration-200 group"
-              onClick={() => setSearchOpen(true)}
-              aria-label="Search"
-              style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }}
+          {/* RIGHT: Premium Action Icons - Desktop only */}
+          <div className="hidden lg:flex items-center gap-2 shrink-0">
+            {/* Premium Icon Container */}
+            <div 
+              className="flex items-center gap-1 px-4 py-2 rounded-full border border-gold/30"
+              style={{
+                background: 'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(20,20,20,0.9) 100%)',
+                boxShadow: '0 4px 16px -4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05), 0 0 30px -10px rgba(200,167,102,0.15)'
+              }}
             >
-              <Search className="w-3.5 h-3.5 text-gold group-hover:text-white transition-colors duration-200" style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' }} />
-            </button>
+              {/* Search Icon */}
+              <button
+                className="w-8 h-8 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
+                onClick={() => setSearchOpen(true)}
+                aria-label="Search"
+              >
+                <Search 
+                  className="w-4 h-4 text-gold group-hover:text-white group-hover:scale-110 transition-all duration-300" 
+                  style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }} 
+                />
+              </button>
 
-            {/* Language Switcher */}
-            <LanguageSwitcher variant="icon-only" />
+              {/* Divider */}
+              <div className="w-px h-5 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
 
-            {/* Account Icon - White on normal, gold on hover with 3D effect */}
-            <div className="w-6 h-6 flex items-center justify-center">
-              {user ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <button 
-                      className="w-6 h-6 flex items-center justify-center transition-all duration-200 group"
-                      aria-label={t('nav.myAccount')}
-                      style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }}
-                    >
-                      <User className="w-3.5 h-3.5 text-gold group-hover:text-white transition-colors duration-200" style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' }} />
-                    </button>
-                  </DropdownMenuTrigger>
+              {/* Language Switcher */}
+              <LanguageSwitcher variant="icon-only" />
+
+              {/* Divider */}
+              <div className="w-px h-5 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+
+              {/* Account Icon */}
+              <div className="w-8 h-8 flex items-center justify-center">
+                {user ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button 
+                        className="w-8 h-8 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
+                        aria-label={t('nav.myAccount')}
+                      >
+                        <User 
+                          className="w-4 h-4 text-gold group-hover:text-white group-hover:scale-110 transition-all duration-300" 
+                          style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }} 
+                        />
+                      </button>
+                    </DropdownMenuTrigger>
                   <DropdownMenuContent 
                     align="end" 
                     sideOffset={12}
@@ -725,15 +831,18 @@ const GlobalHeader = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-              <Link to="/auth">
-                <button 
-                  className="w-6 h-6 flex items-center justify-center transition-all duration-200 group"
-                  style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }}
-                >
-                  <User className="w-3.5 h-3.5 text-gold group-hover:text-white transition-colors duration-200" style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' }} />
-                </button>
-              </Link>
+                <Link to="/auth">
+                  <button 
+                    className="w-8 h-8 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
+                  >
+                    <User 
+                      className="w-4 h-4 text-gold group-hover:text-white group-hover:scale-110 transition-all duration-300" 
+                      style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }} 
+                    />
+                  </button>
+                </Link>
               )}
+              </div>
             </div>
           </div>
         </div>
