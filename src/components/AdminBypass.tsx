@@ -7,45 +7,10 @@ interface AdminBypassProps {
   children: React.ReactNode;
 }
 
-// Public routes that bypass the Coming Soon gate (always accessible)
-// NOTE: Do NOT include "/" unless matching logic treats it as an exact match.
-// These are the public-facing pages that should be reachable on the custom domain and indexable by search engines.
-const PUBLIC_ROUTES: string[] = [
-  "/",
-  "/properties",
-  "/project",
-  "/communities",
-  "/community",
-  "/developers",
-  "/developer",
-  "/areas",
-  "/area",
-  "/buyer-guide",
-  "/seller-guide",
-  "/rent-guide",
-  "/tenant-guide",
-  "/landlord-guide",
-  "/partners",
-  "/faq",
-  "/quiz",
-  "/quiz-results",
-  "/contact",
-  "/about",
-  "/services",
-  "/mortgage-calculator",
-  "/market-report",
-  "/market-intelligence",
-  "/terms",
-  "/privacy",
-  "/cookies",
-  "/trust-and-audit-center",
-  "/founder",
-  "/awards",
-  "/press-kit",
-  "/company-profile",
-  "/news",
-  "/install",
-];
+// Public routes that bypass the Coming Soon gate (always accessible).
+// Per current launch mode: the entire site is gated (except /auth which is defined
+// outside of this wrapper in App routes).
+const PUBLIC_ROUTES: string[] = [];
 
 function matchesPublicRoute(pathname: string, route: string) {
   if (route === "/") return pathname === "/";
