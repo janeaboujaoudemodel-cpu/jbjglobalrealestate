@@ -2343,12 +2343,14 @@ export type Database = {
         Row: {
           created_at: string
           email: string
+          email_encrypted: string | null
           email_verified: boolean | null
           full_name: string
           id: string
           location: string | null
           nationality: string | null
           phone: string
+          phone_encrypted: string | null
           phone_verified: boolean | null
           preferred_language: string | null
           service_interest: string | null
@@ -2357,12 +2359,14 @@ export type Database = {
         Insert: {
           created_at?: string
           email: string
+          email_encrypted?: string | null
           email_verified?: boolean | null
           full_name: string
           id?: string
           location?: string | null
           nationality?: string | null
           phone: string
+          phone_encrypted?: string | null
           phone_verified?: boolean | null
           preferred_language?: string | null
           service_interest?: string | null
@@ -2371,12 +2375,14 @@ export type Database = {
         Update: {
           created_at?: string
           email?: string
+          email_encrypted?: string | null
           email_verified?: boolean | null
           full_name?: string
           id?: string
           location?: string | null
           nationality?: string | null
           phone?: string
+          phone_encrypted?: string | null
           phone_verified?: boolean | null
           preferred_language?: string | null
           service_interest?: string | null
@@ -13392,6 +13398,51 @@ export type Database = {
           trial_ends_at?: string | null
           updated_at?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      contact_gating_submissions_secure: {
+        Row: {
+          created_at: string | null
+          email_masked: string | null
+          email_verified: boolean | null
+          full_name: string | null
+          id: string | null
+          location: string | null
+          nationality: string | null
+          phone_masked: string | null
+          phone_verified: boolean | null
+          preferred_language: string | null
+          service_interest: string | null
+          session_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email_masked?: never
+          email_verified?: boolean | null
+          full_name?: string | null
+          id?: string | null
+          location?: string | null
+          nationality?: string | null
+          phone_masked?: never
+          phone_verified?: boolean | null
+          preferred_language?: string | null
+          service_interest?: string | null
+          session_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email_masked?: never
+          email_verified?: boolean | null
+          full_name?: string | null
+          id?: string | null
+          location?: string | null
+          nationality?: string | null
+          phone_masked?: never
+          phone_verified?: boolean | null
+          preferred_language?: string | null
+          service_interest?: string | null
+          session_id?: string | null
         }
         Relationships: []
       }
