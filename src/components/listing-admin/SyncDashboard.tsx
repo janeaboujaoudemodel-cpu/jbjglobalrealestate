@@ -4,6 +4,7 @@ import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   RefreshCw, 
@@ -17,9 +18,12 @@ import {
   Pause,
   Database,
   TrendingUp,
-  XCircle
+  XCircle,
+  FlaskConical,
+  Lock
 } from "lucide-react";
 import { toast } from "sonner";
+import { SarahTestPanel } from "./SarahTestPanel";
 
 interface SyncStats {
   page: number;
@@ -75,6 +79,8 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [estimatedTimeRemaining, setEstimatedTimeRemaining] = useState<string>("");
   const [currentJobId, setCurrentJobId] = useState<string | null>(null);
+  const [isTestApproved, setIsTestApproved] = useState(false);
+  const [activeTab, setActiveTab] = useState("test");
   
   const isPausedRef = useRef(false);
   const isSyncingRef = useRef(false);
@@ -452,90 +458,135 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   const inProgressCount = pageStatuses.filter(p => p.status === 'in_progress').length;
   const pendingCount = totalPages - successCount - failedCount - inProgressCount;
 
+  const handleTestApproved = () => {
+    setIsTestApproved(true);
+    setActiveTab("sync");
+    toast.success("Sarah is approved! You can now start the full extraction.");
+  };
+
   return (
     <div className="space-y-6">
-      {/* Overview Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <Card className="bg-white border-zinc-200 shadow-sm">
-          <CardContent className="p-4 text-center">
-            <Database className="w-6 h-6 text-blue-600 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-zinc-900">{projectCount ?? "..."}</div>
-            <div className="text-xs text-zinc-600">Total Projects</div>
-          </CardContent>
-        </Card>
+      {/* Tabs: Test vs Full Sync */}
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="test" className="flex items-center gap-2">
+            <FlaskConical className="w-4 h-4" />
+            Test Extraction
+          </TabsTrigger>
+          <TabsTrigger 
+            value="sync" 
+            className="flex items-center gap-2"
+            disabled={!isTestApproved && !currentJobId}
+          >
+            {!isTestApproved && !currentJobId && <Lock className="w-4 h-4" />}
+            <RefreshCw className="w-4 h-4" />
+            Full Sync
+          </TabsTrigger>
+        </TabsList>
         
-        <Card className="bg-white border-zinc-200 shadow-sm">
-          <CardContent className="p-4 text-center">
-            <TrendingUp className="w-6 h-6 text-emerald-600 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-emerald-600">{totalStats.created}</div>
-            <div className="text-xs text-zinc-600">New Listings</div>
-          </CardContent>
-        </Card>
+        <TabsContent value="test" className="mt-6">
+          <SarahTestPanel onTestPassed={handleTestApproved} />
+        </TabsContent>
         
-        <Card className="bg-white border-zinc-200 shadow-sm">
-          <CardContent className="p-4 text-center">
-            <RefreshCw className="w-6 h-6 text-amber-600 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-amber-600">{totalStats.updated}</div>
-            <div className="text-xs text-zinc-600">Updated</div>
-          </CardContent>
-        </Card>
-        
-        <Card className="bg-white border-zinc-200 shadow-sm">
-          <CardContent className="p-4 text-center">
-            <Image className="w-6 h-6 text-purple-600 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-purple-600">{totalStats.images}</div>
-            <div className="text-xs text-zinc-600">Images</div>
-          </CardContent>
-        </Card>
-        
-        <Card className="bg-white border-zinc-200 shadow-sm">
-          <CardContent className="p-4 text-center">
-            <FileText className="w-6 h-6 text-gold mx-auto mb-2" />
-            <div className="text-2xl font-bold text-zinc-900">{totalStats.extracted}</div>
-            <div className="text-xs text-zinc-600">Extracted</div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Control Panel */}
-      <Card className="bg-white border-zinc-200 shadow-sm">
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-lg text-zinc-900">
-            <RefreshCw className="w-5 h-5 text-gold" />
-            Provident Estate Sync Control
-            {isSyncing && !isPaused && (
-              <Badge variant="outline" className="ml-auto bg-blue-100 text-blue-700 border-blue-300">
-                <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-                In Progress
-              </Badge>
-            )}
-            {isPaused && (
-              <Badge variant="outline" className="ml-auto bg-amber-100 text-amber-700 border-amber-300">
-                <Pause className="w-3 h-3 mr-1" />
-                Paused at Page {currentPage}
-              </Badge>
-            )}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* Persistence info */}
-          {currentJobId && (
-            <div className="text-xs text-zinc-500 bg-zinc-50 p-2 rounded">
-              <strong>✓ Auto-save enabled:</strong> Progress is saved. You can close this page and return later.
-            </div>
+        <TabsContent value="sync" className="mt-6 space-y-6">
+          {/* Warning if not approved */}
+          {!isTestApproved && !currentJobId && (
+            <Card className="bg-amber-50 border-amber-300">
+              <CardContent className="py-4 flex items-center gap-3">
+                <Lock className="w-6 h-6 text-amber-600" />
+                <div>
+                  <h3 className="font-medium text-amber-800">Full Sync Locked</h3>
+                  <p className="text-sm text-amber-700">
+                    Run a test extraction first to validate Sarah's capabilities before starting the full sync.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           )}
           
-          {/* Action buttons */}
-          <div className="flex flex-wrap gap-2">
-            {!isSyncing && !isPaused ? (
-              <>
-                <Button
-                  onClick={startFullSync}
-                  className="bg-gold hover:bg-gold/90 text-black"
-                >
-                  <Play className="w-4 h-4 mr-2" />
-                  Start Full Sync (1,324 Listings)
-                </Button>
+          {/* Overview Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <Card className="bg-card border-border shadow-sm">
+              <CardContent className="p-4 text-center">
+                <Database className="w-6 h-6 text-primary mx-auto mb-2" />
+                <div className="text-2xl font-bold text-foreground">{projectCount ?? "..."}</div>
+                <div className="text-xs text-muted-foreground">Total Projects</div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-card border-border shadow-sm">
+              <CardContent className="p-4 text-center">
+                <TrendingUp className="w-6 h-6 text-emerald-600 mx-auto mb-2" />
+                <div className="text-2xl font-bold text-emerald-600">{totalStats.created}</div>
+                <div className="text-xs text-muted-foreground">New Listings</div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-card border-border shadow-sm">
+              <CardContent className="p-4 text-center">
+                <RefreshCw className="w-6 h-6 text-amber-600 mx-auto mb-2" />
+                <div className="text-2xl font-bold text-amber-600">{totalStats.updated}</div>
+                <div className="text-xs text-muted-foreground">Updated</div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-card border-border shadow-sm">
+              <CardContent className="p-4 text-center">
+                <Image className="w-6 h-6 text-purple-600 mx-auto mb-2" />
+                <div className="text-2xl font-bold text-purple-600">{totalStats.images}</div>
+                <div className="text-xs text-muted-foreground">Images</div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-card border-border shadow-sm">
+              <CardContent className="p-4 text-center">
+                <FileText className="w-6 h-6 text-gold mx-auto mb-2" />
+                <div className="text-2xl font-bold text-foreground">{totalStats.extracted}</div>
+                <div className="text-xs text-muted-foreground">Extracted</div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Control Panel */}
+          <Card className="bg-card border-border shadow-sm">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-lg text-foreground">
+                <RefreshCw className="w-5 h-5 text-gold" />
+                Provident Estate Sync Control
+                {isSyncing && !isPaused && (
+                  <Badge variant="outline" className="ml-auto bg-blue-100 text-blue-700 border-blue-300">
+                    <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                    In Progress
+                  </Badge>
+                )}
+                {isPaused && (
+                  <Badge variant="outline" className="ml-auto bg-amber-100 text-amber-700 border-amber-300">
+                    <Pause className="w-3 h-3 mr-1" />
+                    Paused at Page {currentPage}
+                  </Badge>
+                )}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Persistence info */}
+              {currentJobId && (
+                <div className="text-xs text-muted-foreground bg-muted p-2 rounded">
+                  <strong>✓ Auto-save enabled:</strong> Progress is saved. You can close this page and return later.
+                </div>
+              )}
+              
+              {/* Action buttons */}
+              <div className="flex flex-wrap gap-2">
+                {!isSyncing && !isPaused ? (
+                  <>
+                    <Button
+                      onClick={startFullSync}
+                      disabled={!isTestApproved && !currentJobId}
+                      className="bg-gold hover:bg-gold/90 text-black disabled:opacity-50"
+                    >
+                      <Play className="w-4 h-4 mr-2" />
+                      Start Full Sync (1,324 Listings)
+                    </Button>
                 
                 {failedCount > 0 && (
                   <Button
@@ -695,7 +746,9 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
             </div>
           </ScrollArea>
         </CardContent>
-      </Card>
+        </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

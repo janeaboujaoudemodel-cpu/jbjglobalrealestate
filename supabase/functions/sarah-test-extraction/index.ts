@@ -1,0 +1,445 @@
+/**
+ * Sarah Test Extraction - Single Project Test
+ * 
+ * This function tests extraction on ONE project to validate 100% success
+ * before approving Sarah for full extraction.
+ * 
+ * It extracts ALL data including:
+ * - Project details
+ * - HIGH QUALITY images (1200x800)
+ * - Brochure PDFs
+ * - Floor plan PDFs
+ * - Payment plan documents
+ * - Developer info
+ * - Status labels
+ * - Handover dates
+ */
+
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
+
+interface ExtractionResult {
+  success: boolean;
+  project?: {
+    name: string;
+    developer: string;
+    location: string;
+    status: string;
+    price_from: number | null;
+    bedrooms_min: number | null;
+    bedrooms_max: number | null;
+    handover_date: string | null;
+    property_type: string | null;
+    status_label: string | null;
+    description: string | null;
+  };
+  images: string[];
+  documents: {
+    brochure: string | null;
+    floorPlans: string[];
+    paymentPlan: string | null;
+  };
+  validationErrors: string[];
+  apiCallsMade: number;
+  totalApiCost: string;
+}
+
+serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  const startTime = Date.now();
+  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+  const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  const firecrawlKey = Deno.env.get("FIRECRAWL_API_KEY");
+  const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+
+  // Validation - fail fast if keys missing
+  if (!firecrawlKey) {
+    return new Response(JSON.stringify({ 
+      success: false, 
+      error: "FIRECRAWL_API_KEY not configured",
+      validationErrors: ["Missing Firecrawl API key - cannot scrape"]
+    }), {
+      status: 400,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  if (!lovableKey) {
+    return new Response(JSON.stringify({ 
+      success: false, 
+      error: "LOVABLE_API_KEY not configured",
+      validationErrors: ["Missing Lovable API key - cannot use AI"]
+    }), {
+      status: 400,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseServiceKey);
+  let apiCallsMade = 0;
+
+  try {
+    const { testUrl } = await req.json().catch(() => ({}));
+    
+    // Use a known good project URL for testing
+    const projectUrl = testUrl || "https://providentestate.com/new-projects/damac-sun-city/";
+    
+    console.log("[Test] Starting single project extraction:", projectUrl);
+
+    // Validate URL format
+    if (!projectUrl.includes("providentestate.com/new-projects/")) {
+      return new Response(JSON.stringify({
+        success: false,
+        error: "Invalid project URL",
+        validationErrors: ["URL must be a Provident Estate new project page"]
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Step 1: Scrape the project detail page
+    console.log("[Test] Step 1: Scraping project page...");
+    
+    const scrapeRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${firecrawlKey}`,
+      },
+      body: JSON.stringify({ 
+        url: projectUrl, 
+        formats: ["markdown", "links", "rawHtml"],
+        waitFor: 5000,
+        timeout: 60000
+      }),
+    });
+    apiCallsMade++;
+
+    if (!scrapeRes.ok) {
+      const errText = await scrapeRes.text();
+      console.error("[Test] Scrape failed:", scrapeRes.status, errText);
+      return new Response(JSON.stringify({
+        success: false,
+        error: "Firecrawl scrape failed",
+        validationErrors: [`Scrape error ${scrapeRes.status}: ${errText.substring(0, 200)}`],
+        apiCallsMade
+      }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const scrapeData = await scrapeRes.json();
+    const markdown = scrapeData.data?.markdown || "";
+    const links = scrapeData.data?.links || [];
+    const html = scrapeData.data?.rawHtml || "";
+
+    console.log("[Test] Scraped:", markdown.length, "chars,", links.length, "links");
+
+    if (markdown.length < 500) {
+      return new Response(JSON.stringify({
+        success: false,
+        error: "Insufficient content scraped",
+        validationErrors: ["Page content too short - may be blocked or invalid URL"],
+        apiCallsMade
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Step 2: Extract all image URLs (high resolution)
+    console.log("[Test] Step 2: Extracting images...");
+    
+    const imagePattern = /https:\/\/[a-z0-9]+\.cloudfront\.net\/[^\s"'<>]+\.(?:jpg|jpeg|png|webp)/gi;
+    let allImages = [...new Set([
+      ...(markdown.match(imagePattern) || []),
+      ...(html.match(imagePattern) || []),
+      ...links.filter((l: string) => l.includes("cloudfront.net") && /\.(jpg|jpeg|png|webp)/i.test(l))
+    ])];
+
+    // Convert to high-res versions
+    allImages = allImages
+      .map(url => url.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"))
+      .filter(url => 
+        !url.toLowerCase().includes("logo") && 
+        !url.toLowerCase().includes("icon") &&
+        !url.toLowerCase().includes("avatar")
+      )
+      .slice(0, 20); // Max 20 high-quality images
+
+    console.log("[Test] Found", allImages.length, "high-res images");
+
+    // Step 3: Extract PDF documents (brochures, floor plans, payment plans)
+    console.log("[Test] Step 3: Extracting documents...");
+    
+    const pdfPattern = /https:\/\/[^\s"'<>]+\.pdf/gi;
+    const allPdfs = [...new Set([
+      ...(markdown.match(pdfPattern) || []),
+      ...(html.match(pdfPattern) || []),
+      ...links.filter((l: string) => l.toLowerCase().endsWith(".pdf"))
+    ])];
+
+    // Categorize PDFs
+    let brochure: string | null = null;
+    let paymentPlan: string | null = null;
+    const floorPlans: string[] = [];
+
+    for (const pdf of allPdfs) {
+      const lower = pdf.toLowerCase();
+      if (lower.includes("brochure")) {
+        brochure = pdf;
+      } else if (lower.includes("payment") || lower.includes("plan")) {
+        if (lower.includes("floor")) {
+          floorPlans.push(pdf);
+        } else {
+          paymentPlan = pdf;
+        }
+      } else if (lower.includes("floor")) {
+        floorPlans.push(pdf);
+      } else if (!brochure) {
+        // First PDF is likely the brochure
+        brochure = pdf;
+      }
+    }
+
+    console.log("[Test] Documents found - Brochure:", !!brochure, "Payment:", !!paymentPlan, "Floor plans:", floorPlans.length);
+
+    // Step 4: Use AI to extract structured project data
+    console.log("[Test] Step 4: AI extraction...");
+    
+    const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${lovableKey}`,
+      },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-flash",
+        messages: [
+          { 
+            role: "system", 
+            content: "You are a precise real estate data extractor. Extract ONLY factual data from the content. Return valid JSON only." 
+          },
+          {
+            role: "user",
+            content: `Extract the project details from this property page:
+
+PAGE URL: ${projectUrl}
+
+CONTENT:
+${markdown.substring(0, 40000)}
+
+Return a JSON object with these EXACT fields:
+{
+  "name": "Full project name without developer prefix",
+  "developer_name": "Developer company name (e.g., DAMAC, Emaar, Sobha)",
+  "location": "Area/community name (e.g., Dubai South, Dubai Hills)",
+  "emirate": "Dubai",
+  "description": "Full project description (2-3 paragraphs)",
+  "bedrooms": "Bedroom configuration (e.g., Studio, 1-3 BR)",
+  "property_types": ["Array of property types like Apartment, Villa, Townhouse"],
+  "price_from_eur": 294000,
+  "handover_date": "Q2 2029 or Ready",
+  "status_label": "Future Launch|New Phase|New Launch|Coming Soon|null",
+  "amenities": ["Array of amenities"],
+  "payment_plan_summary": "e.g., 80/20 or 60/40 with details"
+}
+
+CRITICAL: Return ONLY the JSON object, no markdown formatting.`
+          }
+        ],
+        temperature: 0.1,
+        max_tokens: 4000,
+      }),
+    });
+    apiCallsMade++;
+
+    if (!aiRes.ok) {
+      const errText = await aiRes.text();
+      console.error("[Test] AI failed:", aiRes.status, errText);
+      
+      // Check for rate limit or payment errors
+      if (aiRes.status === 429) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: "Rate limited - please wait and try again",
+          validationErrors: ["AI rate limit exceeded"],
+          apiCallsMade
+        }), {
+          status: 429,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      
+      if (aiRes.status === 402) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: "AI credits exhausted",
+          validationErrors: ["No AI credits remaining - please add credits"],
+          apiCallsMade
+        }), {
+          status: 402,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      return new Response(JSON.stringify({
+        success: false,
+        error: "AI extraction failed",
+        validationErrors: [`AI error ${aiRes.status}: ${errText.substring(0, 200)}`],
+        apiCallsMade
+      }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const aiData = await aiRes.json();
+    const content = aiData.choices?.[0]?.message?.content || "";
+    
+    // Extract JSON from response
+    let jsonStr = content;
+    const codeBlockMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/);
+    if (codeBlockMatch) {
+      jsonStr = codeBlockMatch[1];
+    }
+    const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
+    
+    if (!jsonMatch) {
+      console.error("[Test] No JSON in AI response:", content.substring(0, 300));
+      return new Response(JSON.stringify({
+        success: false,
+        error: "AI returned invalid data",
+        validationErrors: ["Could not parse AI response as JSON"],
+        rawResponse: content.substring(0, 500),
+        apiCallsMade
+      }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    let projectData: any;
+    try {
+      projectData = JSON.parse(jsonMatch[0]);
+    } catch (parseErr) {
+      console.error("[Test] JSON parse error:", parseErr);
+      return new Response(JSON.stringify({
+        success: false,
+        error: "Failed to parse AI response",
+        validationErrors: ["JSON parsing failed"],
+        apiCallsMade
+      }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    console.log("[Test] AI extracted project:", projectData.name);
+
+    // Step 5: Validate extraction quality
+    console.log("[Test] Step 5: Validating extraction quality...");
+    
+    const validationErrors: string[] = [];
+    
+    if (!projectData.name || projectData.name.length < 3) {
+      validationErrors.push("Project name is missing or too short");
+    }
+    
+    if (!projectData.developer_name) {
+      validationErrors.push("Developer name is missing");
+    }
+    
+    if (!projectData.location) {
+      validationErrors.push("Location is missing");
+    }
+    
+    if (allImages.length < 3) {
+      validationErrors.push(`Only ${allImages.length} images found (minimum 3 required)`);
+    }
+    
+    if (!projectData.description || projectData.description.length < 100) {
+      validationErrors.push("Description is missing or too short");
+    }
+
+    // Convert EUR to AED
+    const priceAed = projectData.price_from_eur 
+      ? Math.round(projectData.price_from_eur * 4.0) 
+      : null;
+
+    // Parse bedrooms
+    const brMatches = projectData.bedrooms?.match(/(\d+)/g) || [];
+    const brMin = brMatches[0] ? parseInt(brMatches[0]) : null;
+    const brMax = brMatches.length > 1 ? parseInt(brMatches[brMatches.length - 1]) : brMin;
+
+    // Determine status
+    const yearMatch = projectData.handover_date?.match(/\d{4}/);
+    const year = yearMatch ? parseInt(yearMatch[0]) : new Date().getFullYear() + 2;
+    const isReady = projectData.handover_date?.toLowerCase().includes("ready") || year <= new Date().getFullYear();
+    const status = isReady ? "Ready" : "Under Construction";
+
+    const duration = Date.now() - startTime;
+    
+    // Build result
+    const result: ExtractionResult = {
+      success: validationErrors.length === 0,
+      project: {
+        name: projectData.name || "Unknown",
+        developer: projectData.developer_name || "Unknown",
+        location: projectData.location || "Dubai",
+        status,
+        price_from: priceAed,
+        bedrooms_min: brMin,
+        bedrooms_max: brMax,
+        handover_date: projectData.handover_date || null,
+        property_type: projectData.property_types?.[0] || null,
+        status_label: projectData.status_label || null,
+        description: projectData.description || null
+      },
+      images: allImages,
+      documents: {
+        brochure,
+        floorPlans,
+        paymentPlan
+      },
+      validationErrors,
+      apiCallsMade,
+      totalApiCost: `~$${(apiCallsMade * 0.001).toFixed(4)}`
+    };
+
+    console.log("[Test] Complete in", duration, "ms. Success:", result.success);
+    console.log("[Test] Validation errors:", validationErrors);
+
+    return new Response(JSON.stringify({
+      ...result,
+      duration_ms: duration,
+      message: result.success 
+        ? "✅ Extraction test PASSED! Sarah is ready for full extraction."
+        : "❌ Extraction test FAILED. Fix issues before proceeding."
+    }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+
+  } catch (error) {
+    console.error("[Test] Fatal error:", error);
+    return new Response(JSON.stringify({
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+      validationErrors: ["Unexpected error during extraction"],
+      apiCallsMade
+    }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+});
