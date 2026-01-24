@@ -75,20 +75,28 @@ serve(async (req) => {
       });
     }
 
-    // AI extraction
-    const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${lovableKey}`,
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: [
-          { role: "system", content: "Extract ALL projects from page. Return ONLY JSON array." },
-          {
-            role: "user",
-            content: `Extract ALL projects from page ${page}:
+    // AI extraction with retry logic
+    const MAX_RETRIES = 3;
+    let aiRes: Response | null = null;
+    let lastAiError: string = "Unknown AI error";
+    
+    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+      try {
+        console.log(`AI extraction attempt ${attempt}/${MAX_RETRIES} for page ${page}`);
+        
+        const aiRequest = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${lovableKey}`,
+          },
+          body: JSON.stringify({
+            model: "google/gemini-2.5-flash",
+            messages: [
+              { role: "system", content: "Extract ALL projects from page. Return ONLY JSON array." },
+              {
+                role: "user",
+                content: `Extract ALL projects from page ${page}:
 
 ${markdown.substring(0, 60000)}
 
@@ -115,15 +123,51 @@ RULES:
 - property_type_label: Apartment, Villa, Sky-Villa, Studio, Townhouse
 - status_label: Future Launch, New Phase, New Launch, Coming Soon, or empty
 - Parse EUR: EUR 294K = 294000, EUR 1.51M = 1510000`
-          }
-        ],
-        temperature: 0.1,
-        max_tokens: 20000,
-      }),
-    });
+              }
+            ],
+            temperature: 0.1,
+            max_tokens: 20000,
+          }),
+        });
 
-    if (!aiRes.ok) {
-      return new Response(JSON.stringify({ error: "AI failed" }), {
+        if (aiRequest.ok) {
+          aiRes = aiRequest;
+          break;
+        }
+
+        // Handle specific error codes
+        const status = aiRequest.status;
+        if (status === 429) {
+          lastAiError = "Rate limited - too many requests";
+          console.warn(`Rate limited on attempt ${attempt}, waiting before retry...`);
+          await new Promise(r => setTimeout(r, 3000 * attempt)); // Exponential backoff
+        } else if (status === 402) {
+          lastAiError = "Payment required - AI credits exhausted";
+          console.error("AI credits exhausted");
+          break; // Don't retry on payment issues
+        } else {
+          const errorText = await aiRequest.text().catch(() => "Unknown");
+          lastAiError = `AI error ${status}: ${errorText.substring(0, 100)}`;
+          console.warn(`AI request failed on attempt ${attempt}: ${status}`);
+          await new Promise(r => setTimeout(r, 2000 * attempt));
+        }
+      } catch (fetchError: any) {
+        lastAiError = `Network error: ${fetchError.message}`;
+        console.warn(`AI fetch error on attempt ${attempt}:`, fetchError.message);
+        if (attempt < MAX_RETRIES) {
+          await new Promise(r => setTimeout(r, 2000 * attempt));
+        }
+      }
+    }
+
+    if (!aiRes || !aiRes.ok) {
+      console.error(`AI failed after ${MAX_RETRIES} attempts: ${lastAiError}`);
+      return new Response(JSON.stringify({ 
+        error: "AI extraction failed", 
+        details: lastAiError,
+        page,
+        retries: MAX_RETRIES 
+      }), {
         status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }

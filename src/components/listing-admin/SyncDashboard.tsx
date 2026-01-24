@@ -278,63 +278,66 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   };
 
   const progress = totalPages > 0 ? (currentPage / totalPages) * 100 : 0;
-  const successPages = pageStatuses.filter(p => p.status === 'success').length;
-  const failedPages = pageStatuses.filter(p => p.status === 'failed').length;
-  const pendingPages = pageStatuses.filter(p => p.status === 'pending').length;
+  
+  // Use useMemo-style inline calculation to ensure accurate counts from current state
+  const successCount = pageStatuses.filter(p => p.status === 'success').length;
+  const failedCount = pageStatuses.filter(p => p.status === 'failed').length;
+  const inProgressCount = pageStatuses.filter(p => p.status === 'in_progress').length;
+  const pendingCount = totalPages - successCount - failedCount - inProgressCount;
 
   return (
     <div className="space-y-6">
       {/* Overview Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="bg-white border-zinc-200 shadow-sm">
           <CardContent className="p-4 text-center">
-            <Database className="w-6 h-6 text-blue-400 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-white">{projectCount ?? "..."}</div>
-            <div className="text-xs text-zinc-500">Total Projects</div>
+            <Database className="w-6 h-6 text-blue-600 mx-auto mb-2" />
+            <div className="text-2xl font-bold text-zinc-900">{projectCount ?? "..."}</div>
+            <div className="text-xs text-zinc-600">Total Projects</div>
           </CardContent>
         </Card>
         
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="bg-white border-zinc-200 shadow-sm">
           <CardContent className="p-4 text-center">
-            <TrendingUp className="w-6 h-6 text-emerald-400 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-emerald-400">{totalStats.created}</div>
-            <div className="text-xs text-zinc-500">New Listings</div>
+            <TrendingUp className="w-6 h-6 text-emerald-600 mx-auto mb-2" />
+            <div className="text-2xl font-bold text-emerald-600">{totalStats.created}</div>
+            <div className="text-xs text-zinc-600">New Listings</div>
           </CardContent>
         </Card>
         
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="bg-white border-zinc-200 shadow-sm">
           <CardContent className="p-4 text-center">
-            <RefreshCw className="w-6 h-6 text-amber-400 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-amber-400">{totalStats.updated}</div>
-            <div className="text-xs text-zinc-500">Updated</div>
+            <RefreshCw className="w-6 h-6 text-amber-600 mx-auto mb-2" />
+            <div className="text-2xl font-bold text-amber-600">{totalStats.updated}</div>
+            <div className="text-xs text-zinc-600">Updated</div>
           </CardContent>
         </Card>
         
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="bg-white border-zinc-200 shadow-sm">
           <CardContent className="p-4 text-center">
-            <Image className="w-6 h-6 text-purple-400 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-purple-400">{totalStats.images}</div>
-            <div className="text-xs text-zinc-500">Images</div>
+            <Image className="w-6 h-6 text-purple-600 mx-auto mb-2" />
+            <div className="text-2xl font-bold text-purple-600">{totalStats.images}</div>
+            <div className="text-xs text-zinc-600">Images</div>
           </CardContent>
         </Card>
         
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="bg-white border-zinc-200 shadow-sm">
           <CardContent className="p-4 text-center">
             <FileText className="w-6 h-6 text-gold mx-auto mb-2" />
-            <div className="text-2xl font-bold text-gold">{totalStats.extracted}</div>
-            <div className="text-xs text-zinc-500">Extracted</div>
+            <div className="text-2xl font-bold text-zinc-900">{totalStats.extracted}</div>
+            <div className="text-xs text-zinc-600">Extracted</div>
           </CardContent>
         </Card>
       </div>
 
       {/* Control Panel */}
-      <Card className="bg-zinc-900 border-zinc-800">
+      <Card className="bg-white border-zinc-200 shadow-sm">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-lg">
+          <CardTitle className="flex items-center gap-2 text-lg text-zinc-900">
             <RefreshCw className="w-5 h-5 text-gold" />
             Provident Estate Sync Control
             {isSyncing && (
-              <Badge variant="outline" className="ml-auto bg-blue-500/20 text-blue-400 border-blue-500/50">
+              <Badge variant="outline" className="ml-auto bg-blue-100 text-blue-700 border-blue-300">
                 <Loader2 className="w-3 h-3 mr-1 animate-spin" />
                 In Progress
               </Badge>
@@ -354,21 +357,21 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                   Start Full Sync (1,324 Listings)
                 </Button>
                 
-                {failedPages > 0 && (
+                {failedCount > 0 && (
                   <Button
                     onClick={retryFailed}
                     variant="outline"
-                    className="border-red-500/50 text-red-400 hover:bg-red-500/20"
+                    className="border-red-300 text-red-700 hover:bg-red-50"
                   >
                     <RefreshCw className="w-4 h-4 mr-2" />
-                    Retry {failedPages} Failed Pages
+                    Retry {failedCount} Failed Pages
                   </Button>
                 )}
                 
                 <Button
                   onClick={() => syncSinglePage(1)}
                   variant="outline"
-                  className="border-zinc-700 text-zinc-300 hover:text-white"
+                  className="border-zinc-300 text-zinc-700 hover:bg-zinc-50"
                 >
                   Test Page 1
                 </Button>
@@ -379,7 +382,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                   <Button
                     onClick={pauseSync}
                     variant="outline"
-                    className="border-amber-500/50 text-amber-400 hover:bg-amber-500/20"
+                    className="border-amber-300 text-amber-700 hover:bg-amber-50"
                   >
                     <Pause className="w-4 h-4 mr-2" />
                     Pause Sync
@@ -401,8 +404,8 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
           {(isSyncing || currentPage > 0) && (
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-zinc-400">Progress: Page {currentPage} of {totalPages}</span>
-                <span className="text-zinc-400">{Math.round(progress)}%</span>
+                <span className="text-zinc-600">Progress: Page {currentPage} of {totalPages}</span>
+                <span className="text-zinc-600">{Math.round(progress)}%</span>
               </div>
               <Progress value={progress} className="h-3" />
               {estimatedTimeRemaining && isSyncing && (
@@ -417,25 +420,25 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
           {/* Status summary */}
           <div className="flex gap-4 text-sm">
             <div className="flex items-center gap-1">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span className="text-emerald-400">{successPages} Success</span>
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span className="text-emerald-700 font-medium">{successCount} Success</span>
             </div>
             <div className="flex items-center gap-1">
-              <XCircle className="w-4 h-4 text-red-400" />
-              <span className="text-red-400">{failedPages} Failed</span>
+              <XCircle className="w-4 h-4 text-red-600" />
+              <span className="text-red-700 font-medium">{failedCount} Failed</span>
             </div>
             <div className="flex items-center gap-1">
-              <Clock className="w-4 h-4 text-zinc-400" />
-              <span className="text-zinc-400">{pendingPages} Pending</span>
+              <Clock className="w-4 h-4 text-zinc-500" />
+              <span className="text-zinc-600 font-medium">{pendingCount} Pending</span>
             </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Page Status Grid */}
-      <Card className="bg-zinc-900 border-zinc-800">
+      <Card className="bg-white border-zinc-200 shadow-sm">
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg">Page Status (70 Pages × ~19 listings each)</CardTitle>
+          <CardTitle className="text-lg text-zinc-900">Page Status (70 Pages × ~19 listings each)</CardTitle>
         </CardHeader>
         <CardContent>
           <ScrollArea className="h-[300px]">
@@ -447,11 +450,11 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                   disabled={isSyncing}
                   className={`
                     w-10 h-10 rounded-lg flex items-center justify-center text-sm font-medium
-                    transition-all hover:scale-105 disabled:hover:scale-100
-                    ${pageStatus.status === 'pending' ? 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700' : ''}
-                    ${pageStatus.status === 'in_progress' ? 'bg-blue-500/30 text-blue-400 animate-pulse' : ''}
-                    ${pageStatus.status === 'success' ? 'bg-emerald-500/30 text-emerald-400' : ''}
-                    ${pageStatus.status === 'failed' ? 'bg-red-500/30 text-red-400' : ''}
+                    transition-all hover:scale-105 disabled:hover:scale-100 border
+                    ${pageStatus.status === 'pending' ? 'bg-zinc-100 text-zinc-600 border-zinc-200 hover:bg-zinc-200' : ''}
+                    ${pageStatus.status === 'in_progress' ? 'bg-blue-100 text-blue-700 border-blue-300 animate-pulse' : ''}
+                    ${pageStatus.status === 'success' ? 'bg-emerald-100 text-emerald-700 border-emerald-300' : ''}
+                    ${pageStatus.status === 'failed' ? 'bg-red-100 text-red-700 border-red-300' : ''}
                   `}
                   title={`Page ${pageStatus.page}: ${pageStatus.status}${pageStatus.error ? ` - ${pageStatus.error}` : ''}${pageStatus.stats ? ` (${pageStatus.stats.created} new, ${pageStatus.stats.updated} updated)` : ''}`}
                 >
@@ -472,9 +475,9 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       </Card>
 
       {/* Recent Activity Log */}
-      <Card className="bg-zinc-900 border-zinc-800">
+      <Card className="bg-white border-zinc-200 shadow-sm">
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg">Recent Activity</CardTitle>
+          <CardTitle className="text-lg text-zinc-900">Recent Activity</CardTitle>
         </CardHeader>
         <CardContent>
           <ScrollArea className="h-[200px]">
@@ -487,25 +490,25 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                   <div 
                     key={`log-${pageStatus.page}`}
                     className={`
-                      flex items-center gap-3 p-2 rounded-lg text-sm
-                      ${pageStatus.status === 'success' ? 'bg-emerald-500/10' : 'bg-red-500/10'}
+                      flex items-center gap-3 p-2 rounded-lg text-sm border
+                      ${pageStatus.status === 'success' ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200'}
                     `}
                   >
                     {pageStatus.status === 'success' ? (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
                     ) : (
-                      <XCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
+                      <XCircle className="w-4 h-4 text-red-600 flex-shrink-0" />
                     )}
-                    <span className="text-white">Page {pageStatus.page}</span>
+                    <span className="text-zinc-900 font-medium">Page {pageStatus.page}</span>
                     {pageStatus.stats && (
-                      <span className="text-zinc-400">
+                      <span className="text-zinc-600">
                         +{pageStatus.stats.created} new, {pageStatus.stats.updated} updated, {pageStatus.stats.images} images
                       </span>
                     )}
                     {pageStatus.error && (
-                      <span className="text-red-400 text-xs truncate">{pageStatus.error}</span>
+                      <span className="text-red-600 text-xs truncate">{pageStatus.error}</span>
                     )}
-                    <span className="text-zinc-600 text-xs ml-auto">
+                    <span className="text-zinc-500 text-xs ml-auto">
                       {pageStatus.timestamp?.toLocaleTimeString()}
                     </span>
                   </div>
