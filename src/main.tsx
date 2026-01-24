@@ -2,12 +2,36 @@ import "./index.css";
 
 const BOOT_TIMEOUT_MS = 8000;
 
-const getBootFallbackEl = () => document.getElementById("boot-fallback");
+let __hasReactMounted = false;
+let __bootErrorShown = false;
+
+const ensureBootFallbackEl = () => {
+  let el = document.getElementById("boot-fallback") as HTMLDivElement | null;
+  if (el) return el;
+
+  try {
+    el = document.createElement("div");
+    el.id = "boot-fallback";
+    // Hidden by default; only shown when boot fails.
+    el.style.display = "none";
+    el.style.position = "fixed";
+    el.style.inset = "0";
+    el.style.zIndex = "2147483647";
+    el.style.background = "#0a0a0a";
+    el.style.alignItems = "center";
+    el.style.justifyContent = "center";
+    (document.body || document.documentElement).appendChild(el);
+    return el;
+  } catch {
+    return null;
+  }
+};
 
 // Hide the boot fallback once React has successfully mounted.
 const hideBootFallback = () => {
   try {
-    const fallback = getBootFallbackEl();
+    __hasReactMounted = true;
+    const fallback = ensureBootFallbackEl();
     if (fallback) fallback.style.display = "none";
     if ((window as any).__jbjBootTimeout) {
       clearTimeout((window as any).__jbjBootTimeout);
@@ -19,7 +43,11 @@ const hideBootFallback = () => {
 
 const showBootError = (details?: unknown) => {
   try {
-    const fallback = getBootFallbackEl();
+    if (__hasReactMounted) return;
+    if (__bootErrorShown) return;
+    __bootErrorShown = true;
+
+    const fallback = ensureBootFallbackEl();
     if (!fallback) return;
 
     const msg =
@@ -59,6 +87,32 @@ const showBootError = (details?: unknown) => {
     // ignore
   }
 };
+
+// If any boot-time error happens before React mounts, show a visible fallback instead of a blank page.
+window.addEventListener(
+  "error",
+  (event) => {
+    try {
+      // event.error can be undefined for some resource errors
+      showBootError((event as ErrorEvent).error ?? (event as ErrorEvent).message);
+    } catch {
+      // ignore
+    }
+  },
+  { passive: true }
+);
+
+window.addEventListener(
+  "unhandledrejection",
+  (event) => {
+    try {
+      showBootError((event as PromiseRejectionEvent).reason);
+    } catch {
+      // ignore
+    }
+  },
+  { passive: true }
+);
 
 // Best-effort: remove any legacy service worker + caches that could trap users on an old build.
 const tryClearLegacyCaching = async () => {
