@@ -540,8 +540,8 @@ const Index = () => {
                   <img
                     src={founderProfessional}
                     alt="Jane Bou Jaoude - Founder & CEO at JBJ Global Real Estate"
-                    className="w-full h-48 md:h-full md:min-h-[500px]"
-                    style={{ objectFit: "cover", objectPosition: "center 25%" }}
+                    className="w-full aspect-[3/4] md:aspect-auto md:h-full md:min-h-[500px]"
+                    style={{ objectFit: "cover", objectPosition: "center 15%" }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent to-zinc-900/40 md:block hidden pointer-events-none" />
                 </div>
