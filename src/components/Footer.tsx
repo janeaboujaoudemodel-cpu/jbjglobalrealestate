@@ -8,7 +8,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
-import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
+import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
 import {
   Collapsible,
   CollapsibleContent,
@@ -167,7 +167,7 @@ const Footer = () => {
               {/* Glow effect behind logo */}
               <div className="absolute inset-0 bg-gold/20 blur-3xl rounded-full scale-150 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <img 
-                src={jbjMonogramTransparent} 
+                src={jbjMonogramNobuffer} 
                 alt="JBJ Global Real Estate" 
                 className="relative h-16 sm:h-20 md:h-28 lg:h-36 w-auto object-contain mx-auto mb-4 sm:mb-6 drop-shadow-[0_0_30px_rgba(200,167,102,0.3)] group-hover:drop-shadow-[0_0_40px_rgba(200,167,102,0.5)] transition-all duration-500"
               />
