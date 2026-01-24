@@ -36,11 +36,35 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
   const isAdminRoute = location.pathname.startsWith("/admin");
 
   useEffect(() => {
+    let cancelled = false;
+    let safetyTimeout: number | undefined;
+
+    const clearSafetyTimeout = () => {
+      if (safetyTimeout) window.clearTimeout(safetyTimeout);
+      safetyTimeout = undefined;
+    };
+
+    const startSafetyTimeout = () => {
+      clearSafetyTimeout();
+      safetyTimeout = window.setTimeout(() => {
+        if (cancelled) return;
+        console.warn("[JBJ] Access check timed out; falling back to ComingSoon");
+        setHasAccess(false);
+        setIsLoading(false);
+      }, 3000);
+    };
+
     const checkAccess = async () => {
+      startSafetyTimeout();
+      if (!cancelled) setIsLoading(true);
+
       // Public routes are always accessible
       if (isPublicRoute) {
-        setHasAccess(true);
-        setIsLoading(false);
+        if (!cancelled) {
+          setHasAccess(true);
+          setIsLoading(false);
+        }
+        clearSafetyTimeout();
         return;
       }
 
@@ -49,8 +73,10 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
 
         // Not logged in - show Coming Soon page
         if (!session?.user) {
-          setHasAccess(false);
-          setIsLoading(false);
+          if (!cancelled) {
+            setHasAccess(false);
+            setIsLoading(false);
+          }
           return;
         }
 
@@ -83,17 +109,18 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
 
         // Admin routes require FULL access only (never broker-only)
         if (isAdminRoute) {
-          setHasAccess(hasFullAccess);
+          if (!cancelled) setHasAccess(hasFullAccess);
           return;
         }
 
         // Otherwise: allow full access, or broker access (internal users)
-        setHasAccess(hasFullAccess || hasBrokerAccess);
+        if (!cancelled) setHasAccess(hasFullAccess || hasBrokerAccess);
       } catch (error) {
         console.error("Error checking access:", error);
-        setHasAccess(false);
+        if (!cancelled) setHasAccess(false);
       } finally {
-        setIsLoading(false);
+        clearSafetyTimeout();
+        if (!cancelled) setIsLoading(false);
       }
     };
 
@@ -103,7 +130,11 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
       checkAccess();
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      cancelled = true;
+      clearSafetyTimeout();
+      subscription.unsubscribe();
+    };
   }, [location.pathname, isPublicRoute, isAdminRoute]);
 
   // PUBLIC routes bypass immediately - no loading state needed
@@ -113,11 +144,8 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
 
   // Show loading spinner ONLY for non-public routes while checking access
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
+    // If anything is slow (auth/network), never trap visitors on an infinite spinner.
+    return <ComingSoon />;
   }
 
   // No access - show Coming Soon page
