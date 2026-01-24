@@ -55,6 +55,27 @@
 
     <div id="root"></div>
 
+    <!-- Boot diagnostic overlay - catches errors before React mounts -->
+    <script>
+      (function() {
+        var overlay = null;
+        function showError(msg) {
+          if (overlay) return;
+          overlay = document.createElement('div');
+          overlay.style.cssText = 'position:fixed;inset:0;z-index:999999;background:#000;color:#fff;padding:2rem;font-family:monospace;overflow:auto;';
+          overlay.innerHTML = '<h1 style="color:#f00;margin:0 0 1rem;">Boot Error</h1><pre style="white-space:pre-wrap;word-break:break-word;">' + msg + '</pre><p style="margin-top:1rem;color:#888;">Check DevTools Console for details.</p>';
+          document.body.appendChild(overlay);
+        }
+        window.onerror = function(msg, src, line, col, err) {
+          showError('Error: ' + msg + '\nSource: ' + src + ':' + line + ':' + col + (err && err.stack ? '\n\nStack:\n' + err.stack : ''));
+        };
+        window.onunhandledrejection = function(e) {
+          var reason = e.reason || 'Unknown rejection';
+          showError('Unhandled Promise Rejection:\n' + (reason.stack || reason.message || reason));
+        };
+      })();
+    </script>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

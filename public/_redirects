@@ -1,3 +1,11 @@
-# Lovable Cloud / Netlify SPA fallback
-# All routes that don't match a real file serve index.html
-/*    /index.html   200
+# Static assets - never rewrite to index.html
+/assets/*  /assets/:splat  200
+/sw.js  /sw.js  200
+/sw-kill.js  /sw-kill.js  200
+/favicon.png  /favicon.png  200
+/apple-touch-icon.png  /apple-touch-icon.png  200
+/og-image.jpg  /og-image.jpg  200
+/manifest.webmanifest  /manifest.webmanifest  200
+
+# SPA fallback - must be LAST
+/*  /index.html  200

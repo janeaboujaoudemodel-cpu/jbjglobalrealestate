@@ -200,8 +200,7 @@ const SecurityShield = () => {
         if (!devtoolsOpen) {
           devtoolsOpen = true;
           logViolation('devtools_opened');
-          // Clear console to hide sensitive info
-          console.clear();
+          // NOTE: console.clear() removed to preserve error messages for debugging
           console.log('%c⚠️ JBJ SECURITY', 'color: #dc2626; font-size: 24px; font-weight: bold;');
           console.log('%cThis is a protected website. All access is logged.', 'color: #f87171; font-size: 14px;');
         }
