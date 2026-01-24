@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { SarahTestPanel } from "./SarahTestPanel";
+import { ProjectApprovalQueue } from "./ProjectApprovalQueue";
 
 interface SyncStats {
   page: number;
@@ -80,7 +81,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   const [estimatedTimeRemaining, setEstimatedTimeRemaining] = useState<string>("");
   const [currentJobId, setCurrentJobId] = useState<string | null>(null);
   const [isTestApproved, setIsTestApproved] = useState(false);
-  const [activeTab, setActiveTab] = useState("test");
+  const [activeTab, setActiveTab] = useState("approvals");
   
   const isPausedRef = useRef(false);
   const isSyncingRef = useRef(false);
@@ -468,7 +469,11 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     <div className="space-y-6">
       {/* Tabs: Test vs Full Sync */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="approvals" className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4" />
+            Approvals
+          </TabsTrigger>
           <TabsTrigger value="test" className="flex items-center gap-2">
             <FlaskConical className="w-4 h-4" />
             Test Extraction
@@ -483,6 +488,10 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
             Full Sync
           </TabsTrigger>
         </TabsList>
+
+        <TabsContent value="approvals" className="mt-6">
+          <ProjectApprovalQueue onRefresh={loadProjectCount} />
+        </TabsContent>
         
         <TabsContent value="test" className="mt-6">
           <SarahTestPanel onTestPassed={handleTestApproved} />

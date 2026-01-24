@@ -9818,6 +9818,162 @@ export type Database = {
         }
         Relationships: []
       }
+      pending_project_imports: {
+        Row: {
+          amenities: string[] | null
+          bedrooms_max: number | null
+          bedrooms_min: number | null
+          community_id: string | null
+          community_name: string | null
+          created_at: string
+          description: string | null
+          developer_id: string | null
+          developer_name: string | null
+          documents: Json | null
+          emirate: string | null
+          floors: number | null
+          handover_date: string | null
+          id: string
+          images: Json | null
+          is_new_project: boolean | null
+          job_id: string | null
+          location: string | null
+          match_confidence: number | null
+          matched_project_id: string | null
+          name: string
+          payment_plan: string | null
+          price_from: number | null
+          price_to: number | null
+          property_type_label: string | null
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          service_charge: string | null
+          size_max: number | null
+          size_min: number | null
+          slug: string | null
+          source_id: string | null
+          source_url: string | null
+          status: string | null
+          status_label: string | null
+          updated_at: string
+        }
+        Insert: {
+          amenities?: string[] | null
+          bedrooms_max?: number | null
+          bedrooms_min?: number | null
+          community_id?: string | null
+          community_name?: string | null
+          created_at?: string
+          description?: string | null
+          developer_id?: string | null
+          developer_name?: string | null
+          documents?: Json | null
+          emirate?: string | null
+          floors?: number | null
+          handover_date?: string | null
+          id?: string
+          images?: Json | null
+          is_new_project?: boolean | null
+          job_id?: string | null
+          location?: string | null
+          match_confidence?: number | null
+          matched_project_id?: string | null
+          name: string
+          payment_plan?: string | null
+          price_from?: number | null
+          price_to?: number | null
+          property_type_label?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          service_charge?: string | null
+          size_max?: number | null
+          size_min?: number | null
+          slug?: string | null
+          source_id?: string | null
+          source_url?: string | null
+          status?: string | null
+          status_label?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amenities?: string[] | null
+          bedrooms_max?: number | null
+          bedrooms_min?: number | null
+          community_id?: string | null
+          community_name?: string | null
+          created_at?: string
+          description?: string | null
+          developer_id?: string | null
+          developer_name?: string | null
+          documents?: Json | null
+          emirate?: string | null
+          floors?: number | null
+          handover_date?: string | null
+          id?: string
+          images?: Json | null
+          is_new_project?: boolean | null
+          job_id?: string | null
+          location?: string | null
+          match_confidence?: number | null
+          matched_project_id?: string | null
+          name?: string
+          payment_plan?: string | null
+          price_from?: number | null
+          price_to?: number | null
+          property_type_label?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          service_charge?: string | null
+          size_max?: number | null
+          size_min?: number | null
+          slug?: string | null
+          source_id?: string | null
+          source_url?: string | null
+          status?: string | null
+          status_label?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pending_project_imports_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pending_project_imports_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "uae_developers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pending_project_imports_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "uae_developers_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pending_project_imports_matched_project_id_fkey"
+            columns: ["matched_project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pending_project_imports_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "external_data_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       phone_verifications: {
         Row: {
           attempts: number | null
