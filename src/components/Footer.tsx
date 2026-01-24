@@ -250,14 +250,16 @@ const Footer = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-y-[1px]" />
         </div>
 
-        {/* Navigation Grid - Seamless Connected Layout */}
-        <div className="w-full mb-4 sm:mb-6 md:mb-10 lg:mb-14">
-          <div className="grid grid-cols-2 lg:grid-cols-4 max-w-7xl mx-auto border border-gold/20 rounded-xl sm:rounded-2xl overflow-hidden"
-            style={{
-              background: 'linear-gradient(145deg, rgba(39,39,42,0.7) 0%, rgba(24,24,27,0.8) 100%)',
-              boxShadow: '0 15px 35px -10px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.03)',
-            }}
-          >
+        {/* ZONE 2: Connected Navigation + Tools + Contact Block */}
+        <div 
+          className="w-full mb-4 sm:mb-6 md:mb-10 lg:mb-14 max-w-7xl mx-auto border border-gold/20 rounded-xl sm:rounded-2xl overflow-hidden"
+          style={{
+            background: 'linear-gradient(145deg, rgba(39,39,42,0.7) 0%, rgba(24,24,27,0.8) 100%)',
+            boxShadow: '0 20px 50px -15px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.03)',
+          }}
+        >
+          {/* Navigation Grid Section */}
+          <div className="grid grid-cols-2 lg:grid-cols-4">
             
             {/* Column 1: Properties + Services */}
             <div className="p-2 sm:p-3 md:p-5 border-r border-b lg:border-b-0 border-gold/10">
@@ -455,126 +457,101 @@ const Footer = () => {
               </ul>
             </div>
           </div>
-        </div>
 
-        {/* Premium Divider */}
-        <div className="relative h-px mb-4 sm:mb-6 md:mb-10 lg:mb-14 max-w-6xl mx-auto">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-        </div>
+          {/* Internal Divider */}
+          <div className="h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
 
+          {/* Professional Tools Section - Connected */}
+          <div className="p-3 sm:p-5 md:p-8 text-center">
+            <h4 
+              className="font-bold text-[10px] sm:text-sm md:text-base uppercase tracking-[0.08em] sm:tracking-[0.15em] md:tracking-[0.2em] mb-1 sm:mb-2"
+              style={{
+                background: 'linear-gradient(135deg, #FFFFFF 0%, #D4AF37 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              Professional Tools
+            </h4>
+            <p className="text-zinc-400 text-[9px] sm:text-xs md:text-sm mb-2 sm:mb-4 md:mb-6 italic">AI-Powered Assistants</p>
+            <div className="flex flex-wrap justify-center gap-1 sm:gap-2 md:gap-3">
+              {professionalTools.map((link) => (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className="text-zinc-300 hover:text-gold transition-all duration-300 text-[9px] sm:text-[11px] md:text-xs lg:text-sm px-1.5 sm:px-3 md:px-4 py-0.5 sm:py-1.5 md:py-2 rounded-md sm:rounded-lg hover:scale-105"
+                  style={{
+                    background: 'linear-gradient(145deg, rgba(50,50,55,0.8) 0%, rgba(30,30,35,0.9) 100%)',
+                    boxShadow: '0 4px 15px -3px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(200,167,102,0.2)',
+                  }}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
 
-        {/* Professional Tools Section - Premium 3D Card */}
-        <div 
-          className="w-full mb-4 sm:mb-6 md:mb-10 lg:mb-14 max-w-5xl mx-auto p-3 sm:p-5 md:p-8 rounded-xl sm:rounded-2xl relative"
-          style={{
-            background: 'linear-gradient(145deg, rgba(39,39,42,0.9) 0%, rgba(24,24,27,0.95) 100%)',
-            boxShadow: `
-              0 15px 35px -10px rgba(0,0,0,0.8),
-              0 0 0 1px rgba(200,167,102,0.15),
-              inset 0 1px 0 rgba(255,255,255,0.05)
-            `,
-          }}
-        >
-          <h4 
-            className="font-bold text-[10px] sm:text-sm md:text-base uppercase tracking-[0.08em] sm:tracking-[0.15em] md:tracking-[0.2em] mb-1 sm:mb-2 text-center"
-            style={{
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #D4AF37 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}
-          >
-            Professional Tools
-          </h4>
-          <p className="text-zinc-400 text-[9px] sm:text-xs md:text-sm mb-2 sm:mb-4 md:mb-6 italic text-center">AI-Powered Assistants</p>
-          <div className="flex flex-wrap justify-center gap-1 sm:gap-2 md:gap-3">
-            {professionalTools.map((link) => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className="text-zinc-300 hover:text-gold transition-all duration-300 text-[9px] sm:text-[11px] md:text-xs lg:text-sm px-1.5 sm:px-3 md:px-4 py-0.5 sm:py-1.5 md:py-2 rounded-md sm:rounded-lg hover:scale-105"
-                style={{
-                  background: 'linear-gradient(145deg, rgba(50,50,55,0.8) 0%, rgba(30,30,35,0.9) 100%)',
-                  boxShadow: '0 4px 15px -3px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(200,167,102,0.2)',
-                }}
+          {/* Internal Divider */}
+          <div className="h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+
+          {/* Contact Section - Connected */}
+          <div className="p-3 sm:p-5 md:p-8 text-center relative">
+            {/* Corner accents */}
+            <div className="absolute top-2 left-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 border-t-2 border-l-2 border-gold/30 rounded-tl-lg" />
+            <div className="absolute top-2 right-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 border-t-2 border-r-2 border-gold/30 rounded-tr-lg" />
+            <div className="absolute bottom-2 left-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 border-b-2 border-l-2 border-gold/30 rounded-bl-lg" />
+            <div className="absolute bottom-2 right-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 border-b-2 border-r-2 border-gold/30 rounded-br-lg" />
+            
+            <h4 
+              className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-3 sm:mb-4 md:mb-5"
+              style={{
+                background: 'linear-gradient(135deg, #FFFFFF 0%, #D4AF37 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              Get in Touch
+            </h4>
+            
+            {/* Location */}
+            <div className="flex items-center justify-center gap-1.5 sm:gap-2 md:gap-3 text-zinc-200 text-xs sm:text-sm md:text-base mb-3 sm:mb-4 md:mb-5 px-1">
+              <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-gold flex-shrink-0 drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
+              <span className="break-words text-center">{CONTACT_INFO.address}</span>
+            </div>
+            
+            {/* Phone, WhatsApp, Email - Stack on mobile */}
+            <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4 md:gap-5">
+              <a
+                href={getCallUrl()}
+                className="flex items-center justify-center gap-1.5 sm:gap-2 text-zinc-200 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base hover:scale-105 py-1"
               >
-                {link.label}
-              </Link>
-            ))}
+                <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-blue-400 flex-shrink-0" />
+                <span>{CONTACT_INFO.phone}</span>
+              </a>
+              <span className="text-gold/40 hidden sm:inline">|</span>
+              <a
+                href={getWhatsAppUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-1.5 sm:gap-2 text-zinc-200 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base hover:scale-105 py-1"
+              >
+                <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-green-400 flex-shrink-0" />
+                <span>WhatsApp Us</span>
+              </a>
+              <span className="text-gold/40 hidden sm:inline">|</span>
+              <a
+                href={getEmailUrl()}
+                className="flex items-center justify-center gap-1.5 sm:gap-2 text-zinc-200 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base hover:scale-105 py-1"
+              >
+                <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-gold flex-shrink-0 drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
+                <span className="break-all">{CONTACT_INFO.emailCapitalized}</span>
+              </a>
+            </div>
           </div>
         </div>
 
-        {/* Premium Divider */}
-        <div className="relative h-px mb-4 sm:mb-6 md:mb-10 lg:mb-12 max-w-4xl mx-auto">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-        </div>
-
-        {/* Contact Section - Premium 3D Card */}
-        <div 
-          className="w-full mb-4 sm:mb-6 md:mb-10 lg:mb-12 max-w-3xl mx-auto p-3 sm:p-5 md:p-8 rounded-xl sm:rounded-2xl text-center relative"
-          style={{
-            background: 'linear-gradient(145deg, rgba(39,39,42,0.9) 0%, rgba(24,24,27,0.95) 100%)',
-            boxShadow: `
-              0 15px 35px -10px rgba(0,0,0,0.8),
-              0 0 0 1px rgba(200,167,102,0.2),
-              inset 0 1px 0 rgba(255,255,255,0.05)
-            `,
-          }}
-        >
-          {/* Corner accents - smaller on mobile */}
-          <div className="absolute top-0 left-0 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 border-t-2 border-l-2 border-gold/50 rounded-tl-xl sm:rounded-tl-2xl" />
-          <div className="absolute top-0 right-0 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 border-t-2 border-r-2 border-gold/50 rounded-tr-xl sm:rounded-tr-2xl" />
-          <div className="absolute bottom-0 left-0 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 border-b-2 border-l-2 border-gold/50 rounded-bl-xl sm:rounded-bl-2xl" />
-          <div className="absolute bottom-0 right-0 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 border-b-2 border-r-2 border-gold/50 rounded-br-xl sm:rounded-br-2xl" />
-          
-          <h4 
-            className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-3 sm:mb-4 md:mb-5"
-            style={{
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #D4AF37 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}
-          >
-            Get in Touch
-          </h4>
-          
-          {/* Location */}
-          <div className="flex items-center justify-center gap-1.5 sm:gap-2 md:gap-3 text-zinc-200 text-xs sm:text-sm md:text-base mb-3 sm:mb-4 md:mb-5 px-1">
-            <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-gold flex-shrink-0 drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
-            <span className="break-words text-center">{CONTACT_INFO.address}</span>
-          </div>
-          
-          {/* Phone, WhatsApp, Email - Stack on mobile */}
-          <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4 md:gap-5">
-            <a
-              href={getCallUrl()}
-              className="flex items-center justify-center gap-1.5 sm:gap-2 text-zinc-200 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base hover:scale-105 py-1"
-            >
-              <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-blue-400 flex-shrink-0" />
-              <span>{CONTACT_INFO.phone}</span>
-            </a>
-            <span className="text-gold/40 hidden sm:inline">|</span>
-            <a
-              href={getWhatsAppUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-1.5 sm:gap-2 text-zinc-200 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base hover:scale-105 py-1"
-            >
-              <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-green-400 flex-shrink-0" />
-              <span>WhatsApp Us</span>
-            </a>
-            <span className="text-gold/40 hidden sm:inline">|</span>
-            <a
-              href={getEmailUrl()}
-              className="flex items-center justify-center gap-1.5 sm:gap-2 text-zinc-200 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base hover:scale-105 py-1"
-            >
-              <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-gold flex-shrink-0 drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
-              <span className="break-all">{CONTACT_INFO.emailCapitalized}</span>
-            </a>
-          </div>
-        </div>
-
-        {/* Premium Divider */}
+        {/* Premium Divider before Legal Zone */}
         <div className="relative h-px mb-4 sm:mb-6 max-w-4xl mx-auto">
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
         </div>
