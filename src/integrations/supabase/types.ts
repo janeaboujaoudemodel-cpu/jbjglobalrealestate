@@ -11614,6 +11614,116 @@ export type Database = {
         }
         Relationships: []
       }
+      sync_job_pages: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          id: string
+          job_id: string
+          page_number: number
+          processed_at: string | null
+          stats_created: number | null
+          stats_extracted: number | null
+          stats_images: number | null
+          stats_skipped: number | null
+          stats_updated: number | null
+          status: string
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          job_id: string
+          page_number: number
+          processed_at?: string | null
+          stats_created?: number | null
+          stats_extracted?: number | null
+          stats_images?: number | null
+          stats_skipped?: number | null
+          stats_updated?: number | null
+          status?: string
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          job_id?: string
+          page_number?: number
+          processed_at?: string | null
+          stats_created?: number | null
+          stats_extracted?: number | null
+          stats_images?: number | null
+          stats_skipped?: number | null
+          stats_updated?: number | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sync_job_pages_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "sync_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sync_jobs: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          created_by: string | null
+          current_page: number
+          id: string
+          job_type: string
+          paused_at: string | null
+          started_at: string | null
+          stats_created: number | null
+          stats_extracted: number | null
+          stats_images: number | null
+          stats_skipped: number | null
+          stats_updated: number | null
+          status: string
+          total_pages: number
+          updated_at: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          current_page?: number
+          id?: string
+          job_type?: string
+          paused_at?: string | null
+          started_at?: string | null
+          stats_created?: number | null
+          stats_extracted?: number | null
+          stats_images?: number | null
+          stats_skipped?: number | null
+          stats_updated?: number | null
+          status?: string
+          total_pages?: number
+          updated_at?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          current_page?: number
+          id?: string
+          job_type?: string
+          paused_at?: string | null
+          started_at?: string | null
+          stats_created?: number | null
+          stats_extracted?: number | null
+          stats_images?: number | null
+          stats_skipped?: number | null
+          stats_updated?: number | null
+          status?: string
+          total_pages?: number
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       team_members: {
         Row: {
           id: string
