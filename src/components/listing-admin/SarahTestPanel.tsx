@@ -52,14 +52,17 @@ interface SarahTestPanelProps {
   onTestPassed: () => void;
 }
 
-export function SarahTestPanel({ onTestPassed }: SarahTestPanelProps) {
-  const [testUrl, setTestUrl] = useState("https://providentestate.com/new-projects/damac-sun-city/");
+export const SarahTestPanel = ({ onTestPassed }: SarahTestPanelProps) => {
+  const [testUrl, setTestUrl] = useState("https://providentestate.com/new-projects/sobha-seahaven/");
   const [isLoading, setIsLoading] = useState(false);
   const [testResult, setTestResult] = useState<TestResult | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
 
-  const runTest = async () => {
+  const runTest = async (retrying = false) => {
     setIsLoading(true);
-    setTestResult(null);
+    if (!retrying) {
+      setTestResult(null);
+    }
 
     try {
       const { data, error } = await supabase.functions.invoke("sarah-test-extraction", {
@@ -84,8 +87,10 @@ export function SarahTestPanel({ onTestPassed }: SarahTestPanelProps) {
       
       if (data.success) {
         toast.success("✅ Test PASSED! Sarah is ready for full extraction.");
+        setRetryCount(0);
       } else {
         toast.error("❌ Test FAILED. Review errors below.");
+        setRetryCount(prev => prev + 1);
       }
     } catch (err: any) {
       toast.error("Test error: " + err.message);
@@ -98,10 +103,22 @@ export function SarahTestPanel({ onTestPassed }: SarahTestPanelProps) {
         totalApiCost: "$0",
         error: err.message
       });
+      setRetryCount(prev => prev + 1);
     } finally {
       setIsLoading(false);
     }
   };
+
+  const handleRetry = () => {
+    runTest(true);
+  };
+
+  const suggestedUrls = [
+    "https://providentestate.com/new-projects/sobha-seahaven/",
+    "https://providentestate.com/new-projects/emaar-the-oasis/",
+    "https://providentestate.com/new-projects/damac-lagoons/",
+    "https://providentestate.com/new-projects/sobha-hartland-ii/",
+  ];
 
   const formatPrice = (price: number | null) => {
     if (!price) return "N/A";
@@ -125,7 +142,7 @@ export function SarahTestPanel({ onTestPassed }: SarahTestPanelProps) {
             for full extraction if this test passes 100%.
           </p>
           
-          <div className="flex gap-2">
+          <div className="flex gap-2 mb-3">
             <Input
               value={testUrl}
               onChange={(e) => setTestUrl(e.target.value)}
@@ -133,7 +150,7 @@ export function SarahTestPanel({ onTestPassed }: SarahTestPanelProps) {
               className="flex-1 bg-white"
             />
             <Button
-              onClick={runTest}
+              onClick={() => runTest()}
               disabled={isLoading}
               className="bg-zinc-900 hover:bg-zinc-800 text-white"
             >
@@ -149,6 +166,23 @@ export function SarahTestPanel({ onTestPassed }: SarahTestPanelProps) {
                 </>
               )}
             </Button>
+          </div>
+          
+          {/* Suggested URLs */}
+          <div className="flex flex-wrap gap-1.5">
+            <span className="text-xs text-zinc-500">Quick test:</span>
+            {suggestedUrls.map((url, i) => {
+              const name = url.split('/').filter(Boolean).pop()?.replace(/-/g, ' ');
+              return (
+                <button
+                  key={i}
+                  onClick={() => setTestUrl(url)}
+                  className="text-xs px-2 py-0.5 rounded bg-zinc-200 hover:bg-zinc-300 text-zinc-700 capitalize"
+                >
+                  {name}
+                </button>
+              );
+            })}
           </div>
         </CardContent>
       </Card>
@@ -178,11 +212,28 @@ export function SarahTestPanel({ onTestPassed }: SarahTestPanelProps) {
                   </div>
                 </div>
                 
-                <div className="text-right text-sm">
-                  <div className="text-zinc-600">API Calls: {testResult.apiCallsMade}</div>
-                  <div className="text-zinc-600">Cost: {testResult.totalApiCost}</div>
-                  {testResult.duration_ms && (
-                    <div className="text-zinc-600">Time: {(testResult.duration_ms / 1000).toFixed(1)}s</div>
+                <div className="flex items-center gap-4">
+                  <div className="text-right text-sm">
+                    <div className="text-zinc-600">API Calls: {testResult.apiCallsMade}</div>
+                    <div className="text-zinc-600">Cost: {testResult.totalApiCost}</div>
+                    {testResult.duration_ms && (
+                      <div className="text-zinc-600">Time: {(testResult.duration_ms / 1000).toFixed(1)}s</div>
+                    )}
+                  </div>
+                  
+                  {!testResult.success && (
+                    <Button
+                      onClick={handleRetry}
+                      disabled={isLoading}
+                      variant="outline"
+                      className="border-red-400 text-red-700 hover:bg-red-100"
+                    >
+                      {isLoading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <>Retry Test</>
+                      )}
+                    </Button>
                   )}
                 </div>
               </div>
