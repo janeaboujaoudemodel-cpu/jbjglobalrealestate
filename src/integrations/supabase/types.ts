@@ -2306,6 +2306,39 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_gating_access_logs: {
+        Row: {
+          access_type: string
+          accessed_at: string
+          id: string
+          ip_address: unknown
+          submission_id: string | null
+          user_agent: string | null
+          user_email: string | null
+          user_id: string | null
+        }
+        Insert: {
+          access_type: string
+          accessed_at?: string
+          id?: string
+          ip_address?: unknown
+          submission_id?: string | null
+          user_agent?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          access_type?: string
+          accessed_at?: string
+          id?: string
+          ip_address?: unknown
+          submission_id?: string | null
+          user_agent?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       contact_gating_submissions: {
         Row: {
           created_at: string
@@ -14091,6 +14124,10 @@ export type Database = {
       is_team_member: {
         Args: { _team_id: string; _user_id: string }
         Returns: boolean
+      }
+      log_contact_gating_access: {
+        Args: { _access_type: string; _submission_id?: string }
+        Returns: undefined
       }
       log_hr_access: {
         Args: {
