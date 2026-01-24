@@ -141,7 +141,12 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
     return () => subscription.unsubscribe();
   }, [location.pathname, isPublicRoute, isAdminRoute]);
 
-  // Show loading spinner
+  // PUBLIC routes bypass immediately - no loading state needed
+  if (isPublicRoute) {
+    return <>{children}</>;
+  }
+
+  // Show loading spinner ONLY for non-public routes while checking access
   if (isLoading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
