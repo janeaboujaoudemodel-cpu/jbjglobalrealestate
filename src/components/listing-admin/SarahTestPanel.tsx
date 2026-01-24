@@ -111,15 +111,15 @@ export function SarahTestPanel({ onTestPassed }: SarahTestPanelProps) {
   return (
     <div className="space-y-6">
       {/* Test Header */}
-      <Card className="bg-gradient-to-r from-purple-50 to-indigo-50 border-purple-200">
+      <Card className="bg-zinc-50 border-zinc-200">
         <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 text-purple-800">
+          <CardTitle className="flex items-center gap-2 text-zinc-800">
             <FlaskConical className="w-5 h-5" />
             Sarah Extraction Test
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-purple-700 mb-4">
+          <p className="text-sm text-zinc-600 mb-4">
             Test Sarah's extraction on ONE project first. She will extract all data including
             high-quality images, brochures, floor plans, and payment plans. Only approve her
             for full extraction if this test passes 100%.
@@ -135,7 +135,7 @@ export function SarahTestPanel({ onTestPassed }: SarahTestPanelProps) {
             <Button
               onClick={runTest}
               disabled={isLoading}
-              className="bg-purple-600 hover:bg-purple-700"
+              className="bg-zinc-900 hover:bg-zinc-800 text-white"
             >
               {isLoading ? (
                 <>
@@ -216,7 +216,7 @@ export function SarahTestPanel({ onTestPassed }: SarahTestPanelProps) {
             <Card className="border-zinc-200">
               <CardHeader className="pb-2">
                 <CardTitle className="flex items-center gap-2 text-zinc-800 text-base">
-                  <Sparkles className="w-5 h-5 text-gold" />
+                  <Sparkles className="w-5 h-5 text-zinc-600" />
                   Extracted Project Data
                 </CardTitle>
               </CardHeader>
@@ -285,7 +285,7 @@ export function SarahTestPanel({ onTestPassed }: SarahTestPanelProps) {
             <Card className="border-zinc-200">
               <CardHeader className="pb-2">
                 <CardTitle className="flex items-center gap-2 text-zinc-800 text-base">
-                  <Image className="w-5 h-5 text-purple-600" />
+                  <Image className="w-5 h-5 text-zinc-600" />
                   Extracted Images ({testResult.images.length})
                 </CardTitle>
               </CardHeader>
@@ -303,7 +303,7 @@ export function SarahTestPanel({ onTestPassed }: SarahTestPanelProps) {
                         <img
                           src={url}
                           alt={`Project image ${i + 1}`}
-                          className="w-32 h-24 object-cover rounded-lg border border-zinc-200 hover:border-gold transition-colors"
+                          className="w-32 h-24 object-cover rounded-lg border border-zinc-200 hover:border-zinc-400 transition-colors"
                           onError={(e) => {
                             (e.target as HTMLImageElement).src = '/placeholder.svg';
                           }}
@@ -328,7 +328,7 @@ export function SarahTestPanel({ onTestPassed }: SarahTestPanelProps) {
           <Card className="border-zinc-200">
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2 text-zinc-800 text-base">
-                <FileText className="w-5 h-5 text-gold" />
+                <FileText className="w-5 h-5 text-zinc-600" />
                 Extracted Documents
               </CardTitle>
             </CardHeader>

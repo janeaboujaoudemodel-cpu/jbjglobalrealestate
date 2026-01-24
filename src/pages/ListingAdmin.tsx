@@ -119,8 +119,8 @@ const ListingAdmin = () => {
 
   if (checkingAdmin) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center pt-28">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
+      <div className="min-h-screen bg-zinc-100 flex items-center justify-center pt-28">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-zinc-900" />
       </div>
     );
   }
@@ -458,9 +458,9 @@ const ListingAdmin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] pt-24 lg:pt-28">
-      {/* Header - Premium Champagne Style - sticky below global header (h-20 mobile, h-24 desktop) */}
-      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+    <div className="min-h-screen bg-zinc-100 pt-24 lg:pt-28">
+      {/* Header - Clean neutral style */}
+      <header className="border-b border-zinc-200 bg-white sticky top-20 lg:top-24 z-40 shadow-sm">
         <div className="px-4 py-4">
           {/* Row 1: Title and actions */}
           <div className="flex items-center justify-between gap-4 mb-4">
@@ -469,19 +469,19 @@ const ListingAdmin = () => {
                 variant="ghost"
                 size="icon"
                 onClick={() => navigate("/")}
-                className="text-black hover:text-gold hover:bg-gold/10"
+                className="text-zinc-700 hover:text-zinc-900 hover:bg-zinc-100"
               >
                 <ArrowLeft className="w-5 h-5" />
               </Button>
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
-                  <Building2 className="w-5 h-5 text-black" />
+                <div className="p-2 rounded-lg bg-zinc-900">
+                  <Building2 className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-black text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <h1 className="text-zinc-900 text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                     {t('listingAdmin.title')}
                   </h1>
-                  <span className="text-zinc-600 text-sm">{t('listingAdmin.propertyManager')}</span>
+                  <span className="text-zinc-500 text-sm">{t('listingAdmin.propertyManager')}</span>
                 </div>
               </div>
             </div>
@@ -509,7 +509,6 @@ const ListingAdmin = () => {
               <Button
                 onClick={() => { setActiveView('chat'); setShowChat(true); }}
                 variant={activeView === 'chat' ? 'primary' : 'secondary'}
-                className={activeView === 'chat' ? '' : 'border-gold/30'}
               >
                 <MessageCircle className="w-4 h-4 mr-2" />
                 {t('listingAdmin.chatWithSarah')}
@@ -517,7 +516,6 @@ const ListingAdmin = () => {
               <Button
                 onClick={() => { setActiveView('projects'); setShowChat(false); setIsEditing(false); setIsCreating(false); }}
                 variant={activeView === 'projects' ? 'primary' : 'secondary'}
-                className={activeView === 'projects' ? '' : 'border-gold/30'}
               >
                 <FolderOpen className="w-4 h-4 mr-2" />
                 {t('listingAdmin.projects')} ({projects?.length || 0})
@@ -525,7 +523,6 @@ const ListingAdmin = () => {
               <Button
                 onClick={() => { setActiveView('data-sources'); setShowChat(false); setIsEditing(false); setIsCreating(false); }}
                 variant={activeView === 'data-sources' ? 'primary' : 'secondary'}
-                className={activeView === 'data-sources' ? '' : 'border-gold/30'}
               >
                 <Database className="w-4 h-4 mr-2" />
                 Data Sources
@@ -533,7 +530,6 @@ const ListingAdmin = () => {
               <Button
                 onClick={() => { setActiveView('sync'); setShowChat(false); setIsEditing(false); setIsCreating(false); }}
                 variant={activeView === 'sync' ? 'primary' : 'secondary'}
-                className={activeView === 'sync' ? '' : 'border-gold/30'}
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Sync Dashboard
@@ -541,7 +537,6 @@ const ListingAdmin = () => {
               <Button
                 onClick={() => { handleCreateNew(); setActiveView('editor'); }}
                 variant="secondary"
-                className="border-gold/30"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 {t('listingAdmin.addNewProject')}
