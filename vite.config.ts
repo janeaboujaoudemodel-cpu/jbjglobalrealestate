@@ -27,29 +27,10 @@ export default defineConfig(({ mode }) => ({
         // Use stable JS filenames to avoid blank-page failures caused by cached HTML
         // pointing at old (deleted) hashed bundle names.
         entryFileNames: "assets/app.js",
-        chunkFileNames: "assets/chunk-[name].js",
-        // Manual chunk splitting to reduce memory pressure during build
-        manualChunks: (id) => {
-          // Separate team assets into their own chunk
-          if (id.includes('assets/team')) {
-            return 'team-assets';
-          }
-          // Vendor chunk for node_modules
-          if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom')) {
-              return 'react-vendor';
-            }
-            if (id.includes('@radix-ui') || id.includes('@tanstack')) {
-              return 'ui-vendor';
-            }
-            if (id.includes('recharts') || id.includes('framer-motion')) {
-              return 'charts-vendor';
-            }
-            return 'vendor';
-          }
-        },
-        // Reduce asset file names to save memory
-        assetFileNames: 'assets/[hash][extname]',
+        chunkFileNames: "assets/[name]-[hash].js",
+        assetFileNames: "assets/[name]-[hash][extname]",
+        // NOTE: manualChunks removed - was causing React to load out of order
+        // resulting in "Cannot read properties of undefined (reading 'createContext')"
       },
     },
   },
