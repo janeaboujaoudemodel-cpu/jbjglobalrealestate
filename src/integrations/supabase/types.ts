@@ -13264,6 +13264,51 @@ export type Database = {
         }
         Relationships: []
       }
+      executive_communications_audit: {
+        Row: {
+          channel: string | null
+          confidence_score: number | null
+          contact_identifier_masked: string | null
+          contact_name_masked: string | null
+          created_at: string | null
+          direction: string | null
+          flag_status: string | null
+          handled_by: string | null
+          id: string | null
+          responded_at: string | null
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          channel?: string | null
+          confidence_score?: number | null
+          contact_identifier_masked?: never
+          contact_name_masked?: never
+          created_at?: string | null
+          direction?: string | null
+          flag_status?: never
+          handled_by?: string | null
+          id?: string | null
+          responded_at?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          channel?: string | null
+          confidence_score?: number | null
+          contact_identifier_masked?: never
+          contact_name_masked?: never
+          created_at?: string | null
+          direction?: string | null
+          flag_status?: never
+          handled_by?: string | null
+          id?: string | null
+          responded_at?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       jbj_leads_secure: {
         Row: {
           assigned_broker_id: string | null
