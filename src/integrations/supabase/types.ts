@@ -5036,6 +5036,13 @@ export type Database = {
             referencedRelation: "employee_salaries"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "employee_payment_history_related_salary_id_fkey"
+            columns: ["related_salary_id"]
+            isOneToOne: false
+            referencedRelation: "employee_salaries_secure"
+            referencedColumns: ["id"]
+          },
         ]
       }
       employee_performance_summary: {
@@ -5184,8 +5191,10 @@ export type Database = {
       }
       employee_salaries: {
         Row: {
+          bank_account_encrypted: string | null
           bank_account_number: string | null
           bank_iban: string | null
+          bank_iban_encrypted: string | null
           bank_name: string | null
           base_salary: number
           created_at: string | null
@@ -5202,8 +5211,10 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          bank_account_encrypted?: string | null
           bank_account_number?: string | null
           bank_iban?: string | null
+          bank_iban_encrypted?: string | null
           bank_name?: string | null
           base_salary?: number
           created_at?: string | null
@@ -5220,8 +5231,10 @@ export type Database = {
           user_id: string
         }
         Update: {
+          bank_account_encrypted?: string | null
           bank_account_number?: string | null
           bank_iban?: string | null
+          bank_iban_encrypted?: string | null
           bank_name?: string | null
           base_salary?: number
           created_at?: string | null
@@ -13557,6 +13570,63 @@ export type Database = {
         }
         Relationships: []
       }
+      employee_salaries_secure: {
+        Row: {
+          bank_account_masked: string | null
+          bank_iban_masked: string | null
+          bank_name: string | null
+          base_salary: number | null
+          created_at: string | null
+          created_by: string | null
+          currency: string | null
+          department: string | null
+          effective_date: string | null
+          employee_name: string | null
+          end_date: string | null
+          id: string | null
+          notes: string | null
+          salary_type: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          bank_account_masked?: never
+          bank_iban_masked?: never
+          bank_name?: string | null
+          base_salary?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          department?: string | null
+          effective_date?: string | null
+          employee_name?: string | null
+          end_date?: string | null
+          id?: string | null
+          notes?: string | null
+          salary_type?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          bank_account_masked?: never
+          bank_iban_masked?: never
+          bank_name?: string | null
+          base_salary?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          department?: string | null
+          effective_date?: string | null
+          employee_name?: string | null
+          end_date?: string | null
+          id?: string | null
+          notes?: string | null
+          salary_type?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       executive_communications_audit: {
         Row: {
           channel: string | null
@@ -13888,6 +13958,14 @@ export type Database = {
         Returns: Json
       }
       crm_hard_delete_leads: { Args: { p_lead_ids: string[] }; Returns: Json }
+      decrypt_bank_field: {
+        Args: { encrypted_data: string; salt_id: string }
+        Returns: string
+      }
+      encrypt_bank_field: {
+        Args: { plain_text: string; salt_id: string }
+        Returns: string
+      }
       generate_company_id: { Args: never; Returns: string }
       generate_referral_code: { Args: never; Returns: string }
       get_all_subscriptions_admin: {
@@ -13915,6 +13993,15 @@ export type Database = {
           trial_ends_at: string
           updated_at: string
           user_id: string
+        }[]
+      }
+      get_employee_full_bank_details: {
+        Args: { p_salary_id: string }
+        Returns: {
+          bank_account_number: string
+          bank_iban: string
+          bank_name: string
+          employee_name: string
         }[]
       }
       get_full_payment_details: {
