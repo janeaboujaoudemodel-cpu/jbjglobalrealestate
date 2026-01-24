@@ -12,6 +12,8 @@ import { ScrollToTopOnMount } from "@/components/ScrollToTop";
 import AdminBypass from "@/components/AdminBypass";
 import MainLayoutWrapper from "@/components/MainLayoutWrapper";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
+import AppErrorBoundary from "@/components/AppErrorBoundary";
+import GlobalSEO from "@/components/GlobalSEO";
 import GlobalVisitorTracking from "@/components/GlobalVisitorTracking";
 import GlobalTranslator from "@/components/GlobalTranslator";
 import Index from "./pages/Index";
@@ -170,18 +172,20 @@ import DigitalCard from "./pages/DigitalCard";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <LanguageProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <AuthProvider>
-            <ActiveLeadProvider>
-            <PopupCoordinatorProvider>
-            <ScrollToTopOnMount />
-            <GlobalVisitorTracking />
-            <GlobalTranslator />
+  <AppErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <LanguageProvider>
+          <GlobalSEO />
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AuthProvider>
+              <ActiveLeadProvider>
+                <PopupCoordinatorProvider>
+                  <ScrollToTopOnMount />
+                  <GlobalVisitorTracking />
+                  <GlobalTranslator />
             {/* Auth route is always accessible for admin login */}
             <Routes>
               <Route path="/auth" element={<Auth />} />
@@ -359,14 +363,15 @@ const App = () => (
                 
                 <Route path="*" element={<NotFound />} />
               </Route>
-            </Routes>
-            </PopupCoordinatorProvider>
-            </ActiveLeadProvider>
-          </AuthProvider>
-        </BrowserRouter>
-      </LanguageProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
+              </Routes>
+                </PopupCoordinatorProvider>
+              </ActiveLeadProvider>
+            </AuthProvider>
+          </BrowserRouter>
+        </LanguageProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </AppErrorBoundary>
 );
 
 export default App;
