@@ -186,66 +186,99 @@ const Footer = () => {
           </h2>
         </div>
 
-        {/* Premium 3D Card - License + Newsletter + Social */}
+        {/* Premium 3D Card - License + Newsletter + Social - FULL WIDTH with SHIMMER */}
         <div 
-          className="max-w-3xl mx-auto mb-8 sm:mb-10 md:mb-12 lg:mb-14 p-4 sm:p-6 md:p-8 lg:p-10 rounded-xl sm:rounded-2xl relative"
+          className="w-full max-w-7xl mx-auto mb-8 sm:mb-10 md:mb-12 lg:mb-14 p-4 sm:p-6 md:p-8 lg:p-10 rounded-xl sm:rounded-2xl relative overflow-hidden border border-gold/25"
           style={{
-            background: 'linear-gradient(145deg, rgba(39,39,42,0.9) 0%, rgba(24,24,27,0.95) 100%)',
+            background: 'linear-gradient(145deg, rgba(39,39,42,0.95) 0%, rgba(24,24,27,0.98) 50%, rgba(30,30,33,0.95) 100%)',
             boxShadow: `
-              0 15px 35px -10px rgba(0,0,0,0.8),
-              0 0 0 1px rgba(200,167,102,0.15),
-              inset 0 1px 0 rgba(255,255,255,0.05),
-              inset 0 -1px 0 rgba(0,0,0,0.3)
+              0 25px 60px -15px rgba(0,0,0,0.9),
+              0 15px 35px -10px rgba(0,0,0,0.7),
+              0 0 0 1px rgba(200,167,102,0.2),
+              0 0 80px -20px rgba(200,167,102,0.15),
+              inset 0 1px 0 rgba(255,255,255,0.08),
+              inset 0 -1px 0 rgba(0,0,0,0.4)
             `,
           }}
         >
-          {/* Corner accents - smaller on mobile */}
-          <div className="absolute top-0 left-0 w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 border-t-2 border-l-2 border-gold/40 rounded-tl-xl sm:rounded-tl-2xl" />
-          <div className="absolute top-0 right-0 w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 border-t-2 border-r-2 border-gold/40 rounded-tr-xl sm:rounded-tr-2xl" />
-          <div className="absolute bottom-0 left-0 w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 border-b-2 border-l-2 border-gold/40 rounded-bl-xl sm:rounded-bl-2xl" />
-          <div className="absolute bottom-0 right-0 w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 border-b-2 border-r-2 border-gold/40 rounded-br-xl sm:rounded-br-2xl" />
+          {/* Animated Shimmer Border Effect */}
+          <div 
+            className="absolute inset-0 rounded-xl sm:rounded-2xl pointer-events-none"
+            style={{
+              background: 'linear-gradient(90deg, transparent 0%, rgba(200,167,102,0.1) 25%, rgba(200,167,102,0.2) 50%, rgba(200,167,102,0.1) 75%, transparent 100%)',
+              backgroundSize: '200% 100%',
+              animation: 'shimmer 4s ease-in-out infinite',
+            }}
+          />
           
-          {/* Licensed Badge */}
-          <div className="flex items-center justify-center gap-1.5 sm:gap-2 md:gap-3 mb-3 sm:mb-4 md:mb-5 flex-wrap px-1">
-            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 md:w-2.5 md:h-2.5 bg-gold rounded-full animate-pulse shadow-[0_0_10px_rgba(200,167,102,0.5)]" />
+          {/* Premium Gold Corner Accents - Matching nav block style */}
+          <div className="absolute top-0 left-0 w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 border-t-2 border-l-2 border-gold/50 rounded-tl-xl sm:rounded-tl-2xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 border-t-2 border-r-2 border-gold/50 rounded-tr-xl sm:rounded-tr-2xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 border-b-2 border-l-2 border-gold/50 rounded-bl-xl sm:rounded-bl-2xl pointer-events-none" />
+          <div className="absolute bottom-0 right-0 w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 border-b-2 border-r-2 border-gold/50 rounded-br-xl sm:rounded-br-2xl pointer-events-none" />
+          
+          {/* Inner glow effect */}
+          <div className="absolute inset-0 bg-gradient-to-b from-gold/5 via-transparent to-gold/5 pointer-events-none rounded-xl sm:rounded-2xl" />
+          
+          {/* Licensed Badge - Enhanced */}
+          <div className="relative flex items-center justify-center gap-1.5 sm:gap-2 md:gap-3 mb-3 sm:mb-4 md:mb-5 flex-wrap px-1">
+            <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 bg-gradient-to-br from-gold to-gold/70 rounded-full animate-pulse shadow-[0_0_15px_rgba(200,167,102,0.6)]" />
             <p className="text-white font-medium text-xs sm:text-sm md:text-base lg:text-lg tracking-wide text-center leading-relaxed">
-              <span className="text-gold font-semibold">Licensed</span> · BUY · SELL · RENT · <span className="font-bold">REAL ESTATE</span> In The <span className="text-gold font-semibold">UAE</span>
+              <span 
+                className="font-bold"
+                style={{
+                  background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 50%, #D4AF37 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >Licensed</span> · BUY · SELL · RENT · <span className="font-bold">REAL ESTATE</span> In The <span 
+                className="font-bold"
+                style={{
+                  background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 50%, #D4AF37 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >UAE</span>
             </p>
-            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 md:w-2.5 md:h-2.5 bg-gold rounded-full animate-pulse shadow-[0_0_10px_rgba(200,167,102,0.5)]" />
+            <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 bg-gradient-to-br from-gold to-gold/70 rounded-full animate-pulse shadow-[0_0_15px_rgba(200,167,102,0.6)]" />
           </div>
-          <p className="text-zinc-400 text-[11px] sm:text-xs md:text-sm mb-4 sm:mb-6 md:mb-8 text-center px-1">
+          <p className="relative text-zinc-400 text-[11px] sm:text-xs md:text-sm mb-4 sm:mb-6 md:mb-8 text-center px-1">
             Mortgage, legal, visa, and corporate services are provided through licensed partners.
           </p>
 
-          {/* Premium Divider */}
-          <div className="h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent mb-4 sm:mb-6 md:mb-8" />
+          {/* Premium Divider with glow */}
+          <div className="relative h-px mb-4 sm:mb-6 md:mb-8 max-w-xl mx-auto">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/30 to-transparent blur-sm" />
+          </div>
 
-          {/* Stay in the Loop */}
+          {/* Stay in the Loop - Enhanced */}
           <h4 
-            className="font-semibold text-xs sm:text-sm md:text-base uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em] mb-2 sm:mb-3 text-center"
+            className="relative font-bold text-sm sm:text-base md:text-lg uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em] mb-2 sm:mb-3 text-center"
             style={{
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #D4AF37 100%)',
+              background: 'linear-gradient(135deg, #FFFFFF 0%, #D4AF37 50%, #F5E6C8 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
+              textShadow: '0 0 30px rgba(200,167,102,0.3)',
             }}
           >
             Stay in the Loop
           </h4>
-          <p className="text-zinc-400 text-[11px] sm:text-xs md:text-sm mb-4 sm:mb-5 md:mb-6 text-center px-1">
+          <p className="relative text-zinc-300 text-[11px] sm:text-xs md:text-sm mb-4 sm:mb-5 md:mb-6 text-center px-1">
             Be the first to access new listings, market updates, and personalized brokerage guidance.
           </p>
-          <div className="max-w-md mx-auto mb-4 sm:mb-6 md:mb-8 px-1">
+          <div className="relative max-w-md mx-auto mb-4 sm:mb-6 md:mb-8 px-1">
             <NewsletterBrevo variant="compact" source="footer" />
           </div>
 
           {/* Social Links */}
-          <div className="flex justify-center">
+          <div className="relative flex justify-center">
             <SocialLinks variant="glow" iconClassName="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
           </div>
         </div>
 
         {/* Premium Divider */}
-        <div className="relative h-px mb-6 sm:mb-8 md:mb-10 lg:mb-14 max-w-6xl mx-auto">
+        <div className="relative h-px mb-6 sm:mb-8 md:mb-10 lg:mb-14 max-w-7xl mx-auto">
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-y-[1px]" />
         </div>
