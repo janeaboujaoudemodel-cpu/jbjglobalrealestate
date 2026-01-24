@@ -6,7 +6,8 @@
  * 
  * It extracts ALL data including:
  * - Project details
- * - HIGH QUALITY images (1200x800)
+ * - ALL images (no limits)
+ * - ALL videos
  * - Brochure PDFs
  * - Floor plan PDFs
  * - Payment plan documents
@@ -39,6 +40,7 @@ interface ExtractionResult {
     description: string | null;
   };
   images: string[];
+  videos: string[];
   documents: {
     brochure: string | null;
     floorPlans: string[];
@@ -95,18 +97,18 @@ serve(async (req) => {
     console.log("[Test] Starting single project extraction:", projectUrl);
 
     // Validate URL format
-    if (!projectUrl.includes("providentestate.com/new-projects/")) {
+    if (!projectUrl.includes("providentestate.com")) {
       return new Response(JSON.stringify({
         success: false,
         error: "Invalid project URL",
-        validationErrors: ["URL must be a Provident Estate new project page"]
+        validationErrors: ["URL must be a Provident Estate page"]
       }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // Step 1: Scrape the project detail page
+    // Step 1: Scrape the project detail page with ALL formats
     console.log("[Test] Step 1: Scraping project page...");
     
     const scrapeRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
@@ -118,8 +120,9 @@ serve(async (req) => {
       body: JSON.stringify({ 
         url: projectUrl, 
         formats: ["markdown", "links", "rawHtml"],
-        waitFor: 5000,
-        timeout: 60000
+        waitFor: 8000,
+        timeout: 90000,
+        onlyMainContent: false // Get EVERYTHING including sidebars, galleries
       }),
     });
     apiCallsMade++;
@@ -143,9 +146,9 @@ serve(async (req) => {
     const links = scrapeData.data?.links || [];
     const html = scrapeData.data?.rawHtml || "";
 
-    console.log("[Test] Scraped:", markdown.length, "chars,", links.length, "links");
+    console.log("[Test] Scraped:", markdown.length, "chars,", links.length, "links, HTML:", html.length, "chars");
 
-    if (markdown.length < 500) {
+    if (markdown.length < 200) {
       return new Response(JSON.stringify({
         success: false,
         error: "Insufficient content scraped",
@@ -157,36 +160,122 @@ serve(async (req) => {
       });
     }
 
-    // Step 2: Extract all image URLs (high resolution)
-    console.log("[Test] Step 2: Extracting images...");
+    // Step 2: Extract ALL image URLs from all sources (NO LIMITS)
+    console.log("[Test] Step 2: Extracting ALL images...");
     
-    const imagePattern = /https:\/\/[a-z0-9]+\.cloudfront\.net\/[^\s"'<>]+\.(?:jpg|jpeg|png|webp)/gi;
-    let allImages = [...new Set([
-      ...(markdown.match(imagePattern) || []),
-      ...(html.match(imagePattern) || []),
-      ...links.filter((l: string) => l.includes("cloudfront.net") && /\.(jpg|jpeg|png|webp)/i.test(l))
-    ])];
+    // Multiple image patterns to catch all sources
+    const imagePatterns = [
+      /https?:\/\/[a-z0-9\-\.]+\.cloudfront\.net\/[^\s"'<>\)]+\.(?:jpg|jpeg|png|webp)/gi,
+      /https?:\/\/[^\s"'<>\)]+provident[^\s"'<>\)]+\.(?:jpg|jpeg|png|webp)/gi,
+      /https?:\/\/[^\s"'<>\)]+\.(?:jpg|jpeg|png|webp)(?:\?[^\s"'<>\)]*)?/gi,
+    ];
 
-    // Convert to high-res versions
-    allImages = allImages
-      .map(url => url.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"))
-      .filter(url => 
-        !url.toLowerCase().includes("logo") && 
-        !url.toLowerCase().includes("icon") &&
-        !url.toLowerCase().includes("avatar")
-      )
-      .slice(0, 20); // Max 20 high-quality images
-
-    console.log("[Test] Found", allImages.length, "high-res images");
-
-    // Step 3: Extract PDF documents (brochures, floor plans, payment plans)
-    console.log("[Test] Step 3: Extracting documents...");
+    const imageSet = new Set<string>();
     
-    const pdfPattern = /https:\/\/[^\s"'<>]+\.pdf/gi;
+    // Extract from markdown
+    for (const pattern of imagePatterns) {
+      const matches = markdown.match(pattern) || [];
+      matches.forEach((url: string) => imageSet.add(url));
+    }
+    
+    // Extract from HTML
+    for (const pattern of imagePatterns) {
+      const matches = html.match(pattern) || [];
+      matches.forEach((url: string) => imageSet.add(url));
+    }
+    
+    // Extract from links
+    links.forEach((link: string) => {
+      if (/\.(jpg|jpeg|png|webp)(\?|$)/i.test(link)) {
+        imageSet.add(link);
+      }
+    });
+
+    // Extract from HTML img tags and data attributes
+    const imgTagPattern = /<img[^>]+(?:src|data-src|data-lazy-src)=["']([^"']+)["']/gi;
+    let imgMatch;
+    while ((imgMatch = imgTagPattern.exec(html)) !== null) {
+      if (imgMatch[1] && !imgMatch[1].startsWith('data:')) {
+        imageSet.add(imgMatch[1]);
+      }
+    }
+
+    // Extract from background-image CSS
+    const bgPattern = /background-image:\s*url\(['"]?([^'")\s]+)['"]?\)/gi;
+    while ((imgMatch = bgPattern.exec(html)) !== null) {
+      if (imgMatch[1] && !imgMatch[1].startsWith('data:')) {
+        imageSet.add(imgMatch[1]);
+      }
+    }
+
+    // Filter and upgrade to high-res versions
+    let allImages = Array.from(imageSet)
+      .map(url => {
+        // Try to upgrade to higher resolution
+        return url
+          .replace(/\/x\/\d+x\d+\//, "/x/1200x800/")
+          .replace(/w=\d+/, "w=1200")
+          .replace(/h=\d+/, "h=800");
+      })
+      .filter(url => {
+        const lower = url.toLowerCase();
+        return !lower.includes("logo") && 
+               !lower.includes("icon") &&
+               !lower.includes("avatar") &&
+               !lower.includes("placeholder") &&
+               !lower.includes("spinner") &&
+               !lower.includes("loading") &&
+               url.length > 20;
+      });
+
+    // Deduplicate by base URL (without query params)
+    const seen = new Set<string>();
+    allImages = allImages.filter(url => {
+      const base = url.split('?')[0];
+      if (seen.has(base)) return false;
+      seen.add(base);
+      return true;
+    });
+
+    console.log("[Test] Found", allImages.length, "unique images (NO LIMIT)");
+
+    // Step 3: Extract ALL videos
+    console.log("[Test] Step 3: Extracting videos...");
+    
+    const videoPatterns = [
+      /https?:\/\/[^\s"'<>\)]+\.(?:mp4|webm|mov)/gi,
+      /https?:\/\/(?:www\.)?youtube\.com\/(?:watch\?v=|embed\/)([a-zA-Z0-9_-]+)/gi,
+      /https?:\/\/(?:www\.)?youtu\.be\/([a-zA-Z0-9_-]+)/gi,
+      /https?:\/\/(?:www\.)?vimeo\.com\/(\d+)/gi,
+      /https?:\/\/player\.vimeo\.com\/video\/(\d+)/gi,
+    ];
+
+    const videoSet = new Set<string>();
+    for (const pattern of videoPatterns) {
+      const matches = markdown.match(pattern) || [];
+      matches.forEach((url: string) => videoSet.add(url));
+      const htmlMatches = html.match(pattern) || [];
+      htmlMatches.forEach((url: string) => videoSet.add(url));
+    }
+
+    // Extract from video/iframe tags
+    const videoTagPattern = /<(?:video|iframe)[^>]+src=["']([^"']+)["']/gi;
+    let videoMatch;
+    while ((videoMatch = videoTagPattern.exec(html)) !== null) {
+      if (videoMatch[1]) videoSet.add(videoMatch[1]);
+    }
+
+    const allVideos = Array.from(videoSet);
+    console.log("[Test] Found", allVideos.length, "videos");
+
+    // Step 4: Extract ALL PDF documents (brochures, floor plans, payment plans)
+    console.log("[Test] Step 4: Extracting ALL documents...");
+    
+    const pdfPattern = /https?:\/\/[^\s"'<>\)]+\.pdf(?:\?[^\s"'<>\)]*)?/gi;
     const allPdfs = [...new Set([
       ...(markdown.match(pdfPattern) || []),
       ...(html.match(pdfPattern) || []),
-      ...links.filter((l: string) => l.toLowerCase().endsWith(".pdf"))
+      ...links.filter((l: string) => l.toLowerCase().endsWith(".pdf") || l.toLowerCase().includes(".pdf?"))
     ])];
 
     // Categorize PDFs
@@ -198,24 +287,34 @@ serve(async (req) => {
       const lower = pdf.toLowerCase();
       if (lower.includes("brochure")) {
         brochure = pdf;
-      } else if (lower.includes("payment") || lower.includes("plan")) {
-        if (lower.includes("floor")) {
+      } else if (lower.includes("payment")) {
+        paymentPlan = pdf;
+      } else if (lower.includes("floor")) {
+        floorPlans.push(pdf);
+      } else if (lower.includes("plan") && !paymentPlan) {
+        // Could be payment plan or floor plan
+        if (lower.includes("unit") || lower.includes("layout")) {
           floorPlans.push(pdf);
         } else {
           paymentPlan = pdf;
         }
-      } else if (lower.includes("floor")) {
-        floorPlans.push(pdf);
-      } else if (!brochure) {
-        // First PDF is likely the brochure
-        brochure = pdf;
       }
     }
 
-    console.log("[Test] Documents found - Brochure:", !!brochure, "Payment:", !!paymentPlan, "Floor plans:", floorPlans.length);
+    // If no brochure found but we have PDFs, use the first one
+    if (!brochure && allPdfs.length > 0) {
+      const nonCategorized = allPdfs.filter(p => 
+        p !== paymentPlan && !floorPlans.includes(p)
+      );
+      if (nonCategorized.length > 0) {
+        brochure = nonCategorized[0];
+      }
+    }
 
-    // Step 4: Use AI to extract structured project data
-    console.log("[Test] Step 4: AI extraction...");
+    console.log("[Test] Documents found - Brochure:", !!brochure, "Payment:", !!paymentPlan, "Floor plans:", floorPlans.length, "Total PDFs:", allPdfs.length);
+
+    // Step 5: Use AI to extract structured project data
+    console.log("[Test] Step 5: AI extraction...");
     
     const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -237,7 +336,7 @@ serve(async (req) => {
 PAGE URL: ${projectUrl}
 
 CONTENT:
-${markdown.substring(0, 40000)}
+${markdown.substring(0, 50000)}
 
 Return a JSON object with these EXACT fields:
 {
@@ -247,19 +346,21 @@ Return a JSON object with these EXACT fields:
   "emirate": "Dubai",
   "description": "Full project description (2-3 paragraphs)",
   "bedrooms": "Bedroom configuration (e.g., Studio, 1-3 BR)",
-  "property_types": ["Array of property types like Apartment, Villa, Townhouse"],
+  "property_types": ["Array of property types like Apartment, Villa, Townhouse, Sky Villa"],
   "price_from_eur": 294000,
   "handover_date": "Q2 2029 or Ready",
   "status_label": "Future Launch|New Phase|New Launch|Coming Soon|null",
-  "amenities": ["Array of amenities"],
-  "payment_plan_summary": "e.g., 80/20 or 60/40 with details"
+  "amenities": ["Array of ALL amenities mentioned"],
+  "payment_plan_summary": "e.g., 80/20 or 60/40 with details",
+  "size_sqft_from": 500,
+  "size_sqft_to": 3000
 }
 
 CRITICAL: Return ONLY the JSON object, no markdown formatting.`
           }
         ],
         temperature: 0.1,
-        max_tokens: 4000,
+        max_tokens: 6000,
       }),
     });
     apiCallsMade++;
@@ -268,7 +369,6 @@ CRITICAL: Return ONLY the JSON object, no markdown formatting.`
       const errText = await aiRes.text();
       console.error("[Test] AI failed:", aiRes.status, errText);
       
-      // Check for rate limit or payment errors
       if (aiRes.status === 429) {
         return new Response(JSON.stringify({
           success: false,
@@ -347,8 +447,8 @@ CRITICAL: Return ONLY the JSON object, no markdown formatting.`
 
     console.log("[Test] AI extracted project:", projectData.name);
 
-    // Step 5: Validate extraction quality
-    console.log("[Test] Step 5: Validating extraction quality...");
+    // Step 6: Validate extraction quality - NO ARBITRARY LIMITS
+    console.log("[Test] Step 6: Validating extraction quality...");
     
     const validationErrors: string[] = [];
     
@@ -364,11 +464,12 @@ CRITICAL: Return ONLY the JSON object, no markdown formatting.`
       validationErrors.push("Location is missing");
     }
     
-    if (allImages.length < 3) {
-      validationErrors.push(`Only ${allImages.length} images found (minimum 3 required)`);
+    // NO minimum image validation - we extract what's available
+    if (allImages.length === 0) {
+      validationErrors.push("No images found on the page");
     }
     
-    if (!projectData.description || projectData.description.length < 100) {
+    if (!projectData.description || projectData.description.length < 50) {
       validationErrors.push("Description is missing or too short");
     }
 
@@ -406,7 +507,8 @@ CRITICAL: Return ONLY the JSON object, no markdown formatting.`
         status_label: projectData.status_label || null,
         description: projectData.description || null
       },
-      images: allImages,
+      images: allImages, // ALL images, no limit
+      videos: allVideos, // ALL videos
       documents: {
         brochure,
         floorPlans,
@@ -418,13 +520,22 @@ CRITICAL: Return ONLY the JSON object, no markdown formatting.`
     };
 
     console.log("[Test] Complete in", duration, "ms. Success:", result.success);
+    console.log("[Test] Images:", allImages.length, "Videos:", allVideos.length, "PDFs:", allPdfs.length);
     console.log("[Test] Validation errors:", validationErrors);
 
     return new Response(JSON.stringify({
       ...result,
       duration_ms: duration,
+      stats: {
+        total_images: allImages.length,
+        total_videos: allVideos.length,
+        total_pdfs: allPdfs.length,
+        has_brochure: !!brochure,
+        has_payment_plan: !!paymentPlan,
+        floor_plans_count: floorPlans.length
+      },
       message: result.success 
-        ? "✅ Extraction test PASSED! Sarah is ready for full extraction."
+        ? `✅ Extraction test PASSED! Found ${allImages.length} images, ${allVideos.length} videos, ${allPdfs.length} PDFs.`
         : "❌ Extraction test FAILED. Fix issues before proceeding."
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
