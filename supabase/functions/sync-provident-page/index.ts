@@ -60,7 +60,7 @@ serve(async (req) => {
 
     console.log(`[Page ${page}] Scraping: ${url}`);
 
-    // Scrape with Firecrawl
+    // Scrape with Firecrawl - LONGER wait for JS rendering
     const scrapeRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
       method: "POST",
       headers: {
@@ -70,8 +70,16 @@ serve(async (req) => {
       body: JSON.stringify({ 
         url, 
         formats: ["markdown", "links", "rawHtml"],
-        waitFor: 3000,
-        timeout: 30000
+        waitFor: 15000, // Wait 15 seconds for Gatsby JS to render
+        timeout: 90000,
+        onlyMainContent: false,
+        actions: [
+          { type: "wait", milliseconds: 3000 },
+          { type: "scroll", direction: "down", amount: 1000 },
+          { type: "wait", milliseconds: 2000 },
+          { type: "scroll", direction: "down", amount: 2000 },
+          { type: "wait", milliseconds: 2000 },
+        ]
       }),
     });
 
@@ -88,7 +96,187 @@ serve(async (req) => {
     const links = scrapeData.data?.links || [];
     const html = scrapeData.data?.rawHtml || "";
 
-    console.log(`[Page ${page}] Scraped: ${markdown.length} chars markdown, ${links.length} links`);
+    console.log(`[Page ${page}] Scraped: ${markdown.length} chars markdown, ${links.length} links, ${html.length} chars HTML`);
+
+    // If content is too short, try Gatsby page-data
+    if (markdown.length < 500) {
+      console.log(`[Page ${page}] Trying Gatsby page-data fallback...`);
+      
+      try {
+        const pageDataUrl = page === 1 
+          ? "https://providentestate.com/page-data/new-projects/page-data.json"
+          : `https://providentestate.com/page-data/new-projects/page/${page}/page-data.json`;
+        
+        const pageDataRes = await fetch(pageDataUrl);
+        if (pageDataRes.ok) {
+          const pageData = await pageDataRes.json();
+          const projects = pageData?.result?.data?.allWpProject?.nodes || [];
+          
+          if (projects.length > 0) {
+            console.log(`[Page ${page}] Got ${projects.length} projects from page-data.json`);
+            
+            // Process projects from page-data
+            const stats = { extracted: projects.length, created: 0, updated: 0, skipped: 0, images: 0 };
+            
+            for (const p of projects) {
+              const projectName = p.title || p.projectDetails?.projectName;
+              const developerName = p.projectDetails?.developer?.title || p.projectDetails?.developerName;
+              
+              if (!projectName) {
+                stats.skipped++;
+                continue;
+              }
+
+              // Match developer
+              let dev: { id: string; name: string; slug: string } | undefined;
+              if (developerName) {
+                const norm = developerName.toLowerCase().replace(/[^a-z0-9]/g, "");
+                dev = devMap.get(norm);
+                
+                if (!dev) {
+                  for (const w of developerName.toLowerCase().split(/\s+/)) {
+                    if (w.length > 3 && devMap.has(w)) { 
+                      dev = devMap.get(w); 
+                      break; 
+                    }
+                  }
+                }
+              }
+
+              if (!dev) { 
+                console.warn(`[Page ${page}] No developer match for: ${developerName}`);
+                stats.skipped++; 
+                continue; 
+              }
+
+              // Create slug
+              const baseName = projectName.toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, "")
+                .replace(/\s+/g, "-")
+                .substring(0, 50);
+              const slug = `${baseName}-${dev.slug}`.substring(0, 80);
+              
+              // Get price and other details
+              const priceText = p.projectDetails?.price || p.projectDetails?.priceFrom;
+              let priceAed: number | null = null;
+              if (priceText) {
+                const priceMatch = priceText.match(/[\d,\.]+/);
+                if (priceMatch) {
+                  let val = parseFloat(priceMatch[0].replace(/,/g, ""));
+                  // Convert EUR to AED if needed
+                  if (priceText.toLowerCase().includes("eur")) {
+                    val = Math.round(val * 4.0);
+                  }
+                  // Handle K/M suffixes
+                  if (priceText.toLowerCase().includes("k")) val *= 1000;
+                  if (priceText.toLowerCase().includes("m")) val *= 1000000;
+                  priceAed = Math.round(val);
+                }
+              }
+              
+              const handover = p.projectDetails?.handover || p.projectDetails?.completionDate;
+              const location = p.projectDetails?.location || p.projectDetails?.area;
+              
+              // Get images
+              const images: string[] = [];
+              if (p.featuredImage?.node?.sourceUrl) {
+                images.push(p.featuredImage.node.sourceUrl);
+              }
+              if (p.projectDetails?.galleryImages) {
+                for (const img of p.projectDetails.galleryImages) {
+                  if (img?.sourceUrl) images.push(img.sourceUrl);
+                }
+              }
+              
+              // Upsert project
+              try {
+                const { data: existing } = await supabase
+                  .from("projects")
+                  .select("id")
+                  .eq("slug", slug)
+                  .maybeSingle();
+                  
+                let projectId: string;
+
+                if (existing) {
+                  await supabase.from("projects").update({
+                    location: location || undefined,
+                    price_from: priceAed || undefined,
+                    handover_date: handover || undefined,
+                    source_url: `https://providentestate.com/new-projects/${p.slug}/`,
+                    updated_at: new Date().toISOString(),
+                  }).eq("id", existing.id);
+                  
+                  projectId = existing.id;
+                  stats.updated++;
+                } else {
+                  const yearMatch = handover?.match(/\d{4}/);
+                  const year = yearMatch ? parseInt(yearMatch[0]) : new Date().getFullYear() + 2;
+                  const isReady = handover?.toLowerCase().includes("ready") || year <= new Date().getFullYear();
+                  const status = isReady ? "Ready" : "Under Construction";
+                  
+                  const { data: newProj, error: insertErr } = await supabase.from("projects").insert({
+                    name: projectName,
+                    slug,
+                    developer_id: dev.id,
+                    location,
+                    emirate: "Dubai",
+                    status,
+                    price_from: priceAed,
+                    handover_date: handover,
+                    source_url: `https://providentestate.com/new-projects/${p.slug}/`,
+                    is_offplan: status === "Under Construction",
+                    is_developer_direct: true,
+                  }).select("id").single();
+
+                  if (insertErr || !newProj) {
+                    console.error(`[Page ${page}] Insert failed for ${projectName}:`, insertErr);
+                    stats.skipped++;
+                    continue;
+                  }
+                  
+                  projectId = newProj.id;
+                  stats.created++;
+                }
+
+                // Handle images
+                if (images.length > 0) {
+                  await supabase.from("project_images").delete().eq("project_id", projectId);
+                  
+                  const imageRecords = images.slice(0, 20).map((url, i) => ({
+                    project_id: projectId,
+                    image_url: url.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"),
+                    alt_text: `${projectName} - Image ${i + 1}`,
+                    display_order: i,
+                  }));
+                  
+                  await supabase.from("project_images").insert(imageRecords);
+                  stats.images += imageRecords.length;
+                }
+              } catch (dbErr) {
+                console.error(`[Page ${page}] DB error for ${projectName}:`, dbErr);
+                stats.skipped++;
+              }
+            }
+
+            const duration = Date.now() - startTime;
+            console.log(`[Page ${page}] Complete via page-data in ${duration}ms: ${stats.created} created, ${stats.updated} updated, ${stats.images} images`);
+
+            return new Response(JSON.stringify({ 
+              success: true, 
+              page, 
+              stats,
+              extraction_method: "gatsby-page-data",
+              duration_ms: duration 
+            }), {
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
+          }
+        }
+      } catch (pdErr) {
+        console.error(`[Page ${page}] page-data fallback failed:`, pdErr);
+      }
+    }
 
     if (markdown.length < 300) {
       console.warn(`[Page ${page}] Insufficient content`);
@@ -99,11 +287,14 @@ serve(async (req) => {
 
     // Extract image URLs from HTML using regex (more reliable than markdown)
     const imagePattern = /https:\/\/[a-z0-9]+\.cloudfront\.net\/[^\s"'<>]+\.(?:jpg|jpeg|png|webp)/gi;
+    const wpImagePattern = /https?:\/\/[^\s"'<>]+wp-content[^\s"'<>]+\.(?:jpg|jpeg|png|webp)/gi;
     const allImageUrls = [...new Set([
       ...(markdown.match(imagePattern) || []),
       ...(html.match(imagePattern) || []),
-      ...links.filter((l: string) => l.includes("cloudfront.net") && /\.(jpg|jpeg|png|webp)/i.test(l))
-    ])];
+      ...(markdown.match(wpImagePattern) || []),
+      ...(html.match(wpImagePattern) || []),
+      ...links.filter((l: string) => /\.(jpg|jpeg|png|webp)/i.test(l))
+    ])].filter(url => !url.includes("logo") && !url.includes("icon"));
 
     console.log(`[Page ${page}] Found ${allImageUrls.length} total images`);
 
@@ -144,8 +335,8 @@ REQUIRED OUTPUT - JSON array of objects with these exact fields:
   "url": "Full project detail URL",
   "image_urls": ["array of cloudfront image URLs for THIS specific project"],
   "bedrooms": "bedroom configuration like 1, 2, 3 BR or Studio",
-  "price_text": "Original price text like EUR 294K",
-  "price_from": 294000,
+  "price_text": "Original price text like AED 1.5M",
+  "price_from": 1500000,
   "handover_display": "handover date like Q2 2029 or Ready",
   "property_type_label": "Apartment|Villa|Sky-Villa|Studio|Townhouse|Penthouse",
   "status_label": "Future Launch|New Phase|New Launch|Coming Soon|Sold Out or null"
@@ -154,7 +345,7 @@ REQUIRED OUTPUT - JSON array of objects with these exact fields:
 CRITICAL RULES:
 1. Extract ALL ~15-20 projects on this page
 2. Match image URLs to specific projects based on project names in the URL
-3. price_from must be a NUMBER (EUR 294K = 294000, EUR 1.51M = 1510000)
+3. price_from must be a NUMBER in AED
 4. Include 3-6 image URLs per project
 5. Return ONLY the JSON array, no explanation`
           }
@@ -245,8 +436,8 @@ CRITICAL RULES:
         .substring(0, 50);
       const slug = `${baseName}-${dev.slug}`.substring(0, 80);
       
-      // Convert EUR to AED (approximate rate)
-      const priceAed = p.price_from ? Math.round(p.price_from * 4.0) : null;
+      // Price should already be in AED from the prompt
+      const priceAed = p.price_from ? Math.round(p.price_from) : null;
       
       // Parse handover year for status
       const yearMatch = p.handover_display?.match(/\d{4}/);
@@ -324,7 +515,6 @@ CRITICAL RULES:
             .filter((u: string) => 
               u && 
               typeof u === 'string' && 
-              u.includes("cloudfront.net") && 
               !u.toLowerCase().includes("logo") &&
               !u.toLowerCase().includes("icon")
             )
@@ -333,7 +523,7 @@ CRITICAL RULES:
               return u.replace(/\/x\/\d+x\d+\//, "/x/1200x800/");
             })
             .filter((u: string, i: number, arr: string[]) => arr.indexOf(u) === i) // Unique
-            .slice(0, 10); // Max 10 images
+            .slice(0, 20); // Max 20 images
 
           if (validImages.length > 0) {
             // Delete existing images first
@@ -369,6 +559,7 @@ CRITICAL RULES:
       success: true, 
       page, 
       stats,
+      extraction_method: "firecrawl-ai",
       duration_ms: duration 
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
