@@ -78,6 +78,30 @@ const DEVELOPER_NAME_AR: Record<string, string> = {
   "RAK Properties": "رأس الخيمة العقارية",
 };
 
+// Real developer logo URLs extracted from Provident Estate
+const DEVELOPER_LOGOS: Record<string, string> = {
+  "Emaar": "https://providentestate.com/files/developers/logos/emaar-properties.png",
+  "Nakheel": "https://providentestate.com/files/developers/logos/nakheel.png", 
+  "DAMAC": "https://providentestate.com/files/developers/logos/damac.png",
+  "Sobha": "https://providentestate.com/files/developers/logos/sobha-realty.png",
+  "Meraas": "https://providentestate.com/files/developers/logos/meraas.png",
+  "Dubai Properties": "https://providentestate.com/files/developers/logos/dubai-properties.png",
+  "Ellington": "https://providentestate.com/files/developers/logos/ellington-properties.png",
+  "Binghatti": "https://providentestate.com/files/developers/logos/binghatti.png",
+  "Danube": "https://providentestate.com/files/developers/logos/danube.png",
+  "Azizi": "https://providentestate.com/files/developers/logos/azizi-developments.png",
+  "Majid Al Futtaim": "https://providentestate.com/files/developers/logos/majid-al-futtaim.png",
+  "Omniyat": "https://providentestate.com/files/developers/logos/omniyat.png",
+  "Aldar": "https://providentestate.com/files/developers/logos/aldar.png",
+  "Select Group": "https://providentestate.com/files/developers/logos/select-group.png",
+  "Deyaar": "https://providentestate.com/files/developers/logos/deyaar.png",
+  "Dubai Holding": "https://providentestate.com/files/developers/logos/dubai-holding.png",
+  "Samana": "https://providentestate.com/files/developers/logos/samana.png",
+  "Reportage": "https://providentestate.com/files/developers/logos/reportage-properties.png",
+  "Tiger": "https://providentestate.com/files/developers/logos/tiger-group.png",
+  "Imtiaz": "https://providentestate.com/files/developers/logos/imtiaz-developments.png",
+};
+
 const DeveloperPartnersMarquee = () => {
   const context = useContext(LanguageContext);
   const language = context?.language ?? "en";
@@ -151,38 +175,42 @@ const DeveloperPartnersMarquee = () => {
     const label = displayNameFor(developer.name);
     const isLastInList = index === partners.length - 1;
     const showSeparator = !(listKey === "b" && isLastInList);
+    const logoUrl = DEVELOPER_LOGOS[developer.name];
 
     return (
-      <div key={`${listKey}-${developer.slug}-${index}`} className="flex-shrink-0 flex items-center gap-4 group">
+      <div key={`${listKey}-${developer.slug}-${index}`} className="flex-shrink-0 flex items-center gap-6 group">
         <Link
           to={`/properties?developer=${encodeURIComponent(
             developer.developerId ?? developer.slug
           )}`}
           data-no-translate
-          className="inline-flex items-center gap-1 px-4 py-2.5 bg-transparent border-2 border-gold/50 rounded-lg transition-all duration-300 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] group"
+          className="inline-flex items-center justify-center h-16 md:h-20 px-6 bg-white/90 border-2 border-gold/30 rounded-xl transition-all duration-300 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5)] hover:-translate-y-1 shadow-[0_4px_15px_rgba(0,0,0,0.1)] group"
           title={label}
         >
-          {/* Keep the English styling; just swap the Arabic display label. */}
-          <span className="text-black group-hover:text-gold transition-colors font-semibold text-sm md:text-base whitespace-nowrap">
-            {label.split(" ")[0]}
-          </span>
-          {label.split(" ").slice(1).join(" ") && (
-            <span className="text-gold group-hover:text-black transition-colors font-semibold text-sm md:text-base whitespace-nowrap">
-              {label.split(" ").slice(1).join(" ")}
+          {logoUrl ? (
+            <img 
+              src={logoUrl} 
+              alt={label}
+              className="h-8 md:h-10 w-auto object-contain max-w-[120px] md:max-w-[150px] grayscale group-hover:grayscale-0 transition-all duration-300"
+              loading="lazy"
+            />
+          ) : (
+            <span className="text-black group-hover:text-gold transition-colors font-semibold text-sm md:text-base whitespace-nowrap">
+              {label}
             </span>
           )}
         </Link>
 
-        {showSeparator && <span className="w-2 h-2 rotate-45 flex-shrink-0 bg-gold" />}
+        {showSeparator && <span className="w-1.5 h-1.5 rotate-45 flex-shrink-0 bg-gold" />}
       </div>
     );
   };
 
   return (
-    <section className="py-10 md:py-16 bg-black border-y border-zinc-800/50 overflow-hidden">
-      {/* Champagne Layer - uses global locked gutter */}
-      <div className="jj-layer-2">
-        <div className="mb-8 md:mb-10">
+    <section className="py-10 md:py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border-y border-gold/30 overflow-hidden">
+      {/* EDGE-TO-EDGE - No jj-layer-2 wrapper */}
+      <div className="container mx-auto px-0">
+        <div className="mb-8 md:mb-10 px-4 md:px-8">
           <h3 className="text-center text-xl md:text-2xl lg:text-3xl font-bold uppercase tracking-[0.15em]">
             {language === "ar" ? (
               <>
@@ -198,11 +226,11 @@ const DeveloperPartnersMarquee = () => {
           </h3>
         </div>
 
-        {/* Marquee Container */}
+        {/* Marquee Container - Full width */}
         <div className="relative overflow-hidden">
           {/* Gradient fade edges - using champagne to blend */}
-          <div className="absolute left-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-r from-champagne to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-champagne to-transparent z-10 pointer-events-none" />
+          <div className="absolute left-0 top-0 bottom-0 w-12 md:w-20 bg-gradient-to-r from-champagne to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-12 md:w-20 bg-gradient-to-l from-champagne to-transparent z-10 pointer-events-none" />
 
           {/* Scrolling content */}
           <motion.div

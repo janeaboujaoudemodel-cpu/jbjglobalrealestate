@@ -511,20 +511,20 @@ const Index = () => {
             variants={staggerContainer}
             className="max-w-7xl mx-auto"
           >
-            {/* Main Editorial Card - WARM CHAMPAGNE PALETTE */}
+            {/* Main Editorial Card - WARM CHAMPAGNE PALETTE with PREMIUM GOLD BORDER */}
             <motion.div
-              className="relative rounded-2xl md:rounded-[2rem] overflow-hidden border-2 border-gold shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)]"
+              className="relative rounded-2xl md:rounded-[2rem] overflow-hidden border-[3px] border-gold shadow-[0_0_0_1px_rgba(200,167,102,0.3),0_0_60px_rgba(200,167,102,0.2),0_50px_100px_-20px_rgba(0,0,0,0.5)]"
               variants={fadeInUp}
               style={{
                 background: 'linear-gradient(165deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)',
               }}
             >
               {/* Premium Top Border Accent */}
-              <div className="absolute top-0 left-0 right-0 h-[3px] bg-gold" />
+              <div className="absolute top-0 left-0 right-0 h-[4px] bg-gold" />
               
-              {/* Corner Accents */}
-              <div className="absolute top-0 left-0 w-16 md:w-24 h-16 md:h-24 border-l-[3px] border-t-[3px] border-gold rounded-tl-2xl md:rounded-tl-[2rem]" />
-              <div className="absolute bottom-0 right-0 w-16 md:w-24 h-16 md:h-24 border-r-[3px] border-b-[3px] border-gold rounded-br-2xl md:rounded-br-[2rem]" />
+              {/* Corner Accents - Thicker for premium look */}
+              <div className="absolute top-0 left-0 w-20 md:w-28 h-20 md:h-28 border-l-[4px] border-t-[4px] border-gold rounded-tl-2xl md:rounded-tl-[2rem]" />
+              <div className="absolute bottom-0 right-0 w-20 md:w-28 h-20 md:h-28 border-r-[4px] border-b-[4px] border-gold rounded-br-2xl md:rounded-br-[2rem]" />
 
               {/* HEADER INSIDE CARD */}
               <div className="text-center pt-8 md:pt-12 pb-6 md:pb-8 px-4">
@@ -552,13 +552,11 @@ const Index = () => {
                     className="w-full h-full object-cover"
                     style={{ objectPosition: "center 15%" }}
                   />
-                  {/* Soft overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#F5F0E6]/30 hidden md:block" />
+                  {/* NO OVERLAYS - Photo stays clear and crisp */}
                   
-                  {/* Floating Quote Badge */}
+                  {/* Floating Quote Badge - Positioned at bottom edge to cover suit */}
                   <div 
-                    className="absolute bottom-4 left-4 right-4 md:bottom-8 md:left-8 md:right-auto md:max-w-[300px] p-4 md:p-6 rounded-xl md:rounded-2xl backdrop-blur-md bg-white/90 border-2 border-gold shadow-[0_20px_40px_-10px_rgba(0,0,0,0.4)]"
+                    className="absolute bottom-0 left-4 right-4 md:bottom-0 md:left-8 md:right-auto md:max-w-[300px] p-4 md:p-6 rounded-t-xl md:rounded-t-2xl backdrop-blur-md bg-white/95 border-2 border-b-0 border-gold shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.3)]"
                   >
                     <div className="text-gold text-2xl md:text-3xl font-serif mb-2">"</div>
                     <p className="text-zinc-700 text-xs md:text-sm italic leading-relaxed">
@@ -612,12 +610,12 @@ const Index = () => {
                       ))}
                     </div>
 
-                    {/* CTA Button - Gold Fill */}
+                    {/* CTA Button - Premium Active Gold Style */}
                     <Link to="/founder" className="block">
                       <button 
-                        className="group relative w-full md:w-auto inline-flex items-center justify-center gap-2 md:gap-3 px-6 md:px-10 py-4 md:py-5 text-sm md:text-base font-bold rounded-xl md:rounded-2xl transition-all duration-300 overflow-hidden hover:scale-[1.02] active:scale-[0.98] bg-gold border-2 border-gold hover:bg-gold-dark shadow-[0_10px_30px_-5px_hsl(var(--gold)/0.4),0_4px_12px_rgba(0,0,0,0.1)]"
+                        className="group relative w-full md:w-auto inline-flex items-center justify-center gap-2 md:gap-3 px-6 md:px-10 py-4 md:py-5 text-sm md:text-base font-bold rounded-xl md:rounded-2xl transition-all duration-300 overflow-hidden hover:scale-[1.02] active:scale-[0.98] bg-gold border-[3px] border-gold hover:border-gold-dark shadow-[0_0_0_1px_rgba(200,167,102,0.3),0_10px_30px_-5px_hsl(var(--gold)/0.5),0_0_40px_rgba(200,167,102,0.25),0_4px_12px_rgba(0,0,0,0.1)]"
                       >
-                        <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                        <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                         <span className="relative flex items-center gap-2 md:gap-3">
                           <User className="w-4 h-4 md:w-5 md:h-5 text-black" />
                           <span className="text-black font-bold">Discover Her Story</span>

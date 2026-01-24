@@ -121,23 +121,23 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
 
   return (
     <div className="bg-card border border-border rounded-2xl overflow-hidden shadow-lg">
-      {/* Header - Gold Premium Style */}
-      <div className="bg-gradient-to-r from-gold/20 via-gold/10 to-gold/20 border-b border-gold/30 p-6">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/30 to-gold/10 border border-gold/30 flex items-center justify-center">
-            <Calculator className="w-6 h-6 text-gold" />
+      {/* Header - Gold Premium Style - Compact for sidebar */}
+      <div className="bg-gradient-to-r from-gold/20 via-gold/10 to-gold/20 border-b border-gold/30 p-4 lg:p-6">
+        <div className="flex items-center gap-2 lg:gap-3">
+          <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-gold/30 to-gold/10 border border-gold/30 flex items-center justify-center flex-shrink-0">
+            <Calculator className="w-5 h-5 lg:w-6 lg:h-6 text-gold" />
           </div>
-          <div>
-            <h3 className="text-xl font-bold text-foreground" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <div className="min-w-0">
+            <h3 className="text-base lg:text-xl font-bold text-foreground truncate" style={{ fontFamily: "Poppins, sans-serif" }}>
               Mortgage Calculator
             </h3>
-            <p className="text-muted-foreground text-sm">Estimate your monthly payments</p>
+            <p className="text-muted-foreground text-xs lg:text-sm truncate">Estimate your monthly payments</p>
           </div>
         </div>
       </div>
 
-      <div className="p-6">
-        <div className="grid md:grid-cols-2 gap-8">
+      <div className="p-4 lg:p-6">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
           {/* Input Section */}
           <div className="space-y-6">
             {/* Property Price */}
@@ -251,36 +251,36 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
           </div>
 
           {/* Results Section */}
-          <div className="space-y-6">
-            {/* Monthly Payment - Featured Gold Style */}
-            <div className="bg-gradient-to-br from-gold/20 via-gold/10 to-transparent border border-gold/30 rounded-xl p-4 md:p-6 text-center">
-              <p className="text-muted-foreground text-sm mb-2">Estimated Monthly Payment</p>
+          <div className="space-y-4 lg:space-y-6">
+            {/* Monthly Payment - Featured Gold Style - Responsive sizing */}
+            <div className="bg-gradient-to-br from-gold/20 via-gold/10 to-transparent border border-gold/30 rounded-xl p-3 lg:p-6 text-center">
+              <p className="text-muted-foreground text-xs lg:text-sm mb-1 lg:mb-2">Estimated Monthly Payment</p>
               <p 
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gold break-words"
+                className="text-xl sm:text-2xl lg:text-4xl xl:text-5xl font-bold text-gold truncate"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 {formatCurrency(calculations.monthlyPayment)}
               </p>
-              <p className="text-muted-foreground text-xs mt-2">per month for {loanTermYears} years</p>
+              <p className="text-muted-foreground text-[10px] lg:text-xs mt-1 lg:mt-2">per month for {loanTermYears} years</p>
             </div>
 
-            {/* Breakdown Cards - Gold style */}
-            <div className="grid grid-cols-2 gap-2 sm:gap-4">
-              <div className="bg-muted/50 border border-border rounded-xl p-3 sm:p-4">
-                <p className="text-muted-foreground text-[10px] sm:text-xs mb-1 truncate">Loan Amount</p>
-                <p className="text-foreground font-bold text-sm sm:text-base md:text-lg truncate">{formatCurrency(calculations.loanAmount)}</p>
+            {/* Breakdown Cards - Responsive grid */}
+            <div className="grid grid-cols-2 gap-2 lg:gap-4">
+              <div className="bg-muted/50 border border-border rounded-xl p-2 lg:p-4 overflow-hidden">
+                <p className="text-muted-foreground text-[9px] lg:text-xs mb-0.5 lg:mb-1 truncate">Loan Amount</p>
+                <p className="text-foreground font-bold text-xs lg:text-base truncate">{formatCurrency(calculations.loanAmount)}</p>
               </div>
-              <div className="bg-muted/50 border border-border rounded-xl p-3 sm:p-4">
-                <p className="text-muted-foreground text-[10px] sm:text-xs mb-1 truncate">Down Payment</p>
-                <p className="text-foreground font-bold text-sm sm:text-base md:text-lg truncate">{formatCurrency(calculations.downPayment)}</p>
+              <div className="bg-muted/50 border border-border rounded-xl p-2 lg:p-4 overflow-hidden">
+                <p className="text-muted-foreground text-[9px] lg:text-xs mb-0.5 lg:mb-1 truncate">Down Payment</p>
+                <p className="text-foreground font-bold text-xs lg:text-base truncate">{formatCurrency(calculations.downPayment)}</p>
               </div>
-              <div className="bg-muted/50 border border-border rounded-xl p-3 sm:p-4">
-                <p className="text-muted-foreground text-[10px] sm:text-xs mb-1 truncate">Total Interest</p>
-                <p className="text-gold font-bold text-sm sm:text-base md:text-lg truncate">{formatCurrency(calculations.totalInterest)}</p>
+              <div className="bg-muted/50 border border-border rounded-xl p-2 lg:p-4 overflow-hidden">
+                <p className="text-muted-foreground text-[9px] lg:text-xs mb-0.5 lg:mb-1 truncate">Total Interest</p>
+                <p className="text-gold font-bold text-xs lg:text-base truncate">{formatCurrency(calculations.totalInterest)}</p>
               </div>
-              <div className="bg-muted/50 border border-border rounded-xl p-3 sm:p-4">
-                <p className="text-muted-foreground text-[10px] sm:text-xs mb-1 truncate">Total Payment</p>
-                <p className="text-foreground font-bold text-sm sm:text-base md:text-lg truncate">{formatCurrency(calculations.totalPayment)}</p>
+              <div className="bg-muted/50 border border-border rounded-xl p-2 lg:p-4 overflow-hidden">
+                <p className="text-muted-foreground text-[9px] lg:text-xs mb-0.5 lg:mb-1 truncate">Total Payment</p>
+                <p className="text-foreground font-bold text-xs lg:text-base truncate">{formatCurrency(calculations.totalPayment)}</p>
               </div>
             </div>
 
