@@ -11831,6 +11831,54 @@ export type Database = {
           },
         ]
       }
+      subscription_tiers: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          features: Json | null
+          id: string
+          is_popular: boolean | null
+          name: string
+          price_aed: number
+          price_usd: number
+          tool_access: Json | null
+          updated_at: string | null
+          yearly_price_aed: number
+          yearly_price_usd: number
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          features?: Json | null
+          id: string
+          is_popular?: boolean | null
+          name: string
+          price_aed?: number
+          price_usd?: number
+          tool_access?: Json | null
+          updated_at?: string | null
+          yearly_price_aed?: number
+          yearly_price_usd?: number
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          features?: Json | null
+          id?: string
+          is_popular?: boolean | null
+          name?: string
+          price_aed?: number
+          price_usd?: number
+          tool_access?: Json | null
+          updated_at?: string | null
+          yearly_price_aed?: number
+          yearly_price_usd?: number
+        }
+        Relationships: []
+      }
       support_tickets: {
         Row: {
           ai_analyzed_priority: string | null
@@ -12509,6 +12557,59 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      user_subscriptions: {
+        Row: {
+          billing_period: string
+          created_at: string | null
+          currency: string
+          expires_at: string
+          id: string
+          started_at: string | null
+          status: string
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          tier_id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          billing_period: string
+          created_at?: string | null
+          currency?: string
+          expires_at: string
+          id?: string
+          started_at?: string | null
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          tier_id: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          billing_period?: string
+          created_at?: string | null
+          currency?: string
+          expires_at?: string
+          id?: string
+          started_at?: string | null
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          tier_id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_subscriptions_tier_id_fkey"
+            columns: ["tier_id"]
+            isOneToOne: false
+            referencedRelation: "subscription_tiers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_uploads: {
         Row: {

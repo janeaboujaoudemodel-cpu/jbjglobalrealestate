@@ -162,6 +162,7 @@ import FormBuilder from "./pages/FormBuilder";
 // Admin & System Tools
 import CustomerHappiness from "./pages/CustomerHappiness";
 import Sitemap from "./pages/Sitemap";
+import Pricing from "./pages/Pricing";
 import SecurityConsole from "./pages/SecurityConsole";
 import ITDepartment from "./pages/ITDepartment";
 import EmployeeManagementHub from "./pages/EmployeeManagementHub";
@@ -356,6 +357,7 @@ const App = () => (
                 {/* Admin & System Tools */}
                 <Route path="/customer-happiness" element={<CustomerHappiness />} />
                 <Route path="/sitemap" element={<Sitemap />} />
+                <Route path="/pricing" element={<Pricing />} />
                 <Route path="/security-console" element={<SecurityConsole />} />
                 <Route path="/it-department" element={<EmployeeManagementHub />} />
                 <Route path="/employee-management" element={<EmployeeManagementHub />} />
