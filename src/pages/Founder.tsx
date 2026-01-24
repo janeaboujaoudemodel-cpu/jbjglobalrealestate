@@ -275,15 +275,13 @@ const Founder = () => {
             {/* Premium Single Photo - Left */}
             <motion.div className="lg:col-span-5 order-2 lg:order-1" variants={scaleIn}>
               <div className="relative">
-                {/* Gold frame accent */}
-                <div className="absolute -inset-4 bg-gradient-to-br from-gold/20 via-transparent to-gold/10 rounded-3xl" />
-                <div className="absolute -top-2 -left-2 w-20 h-20 border-l-2 border-t-2 border-gold/50 rounded-tl-3xl" />
-                <div className="absolute -bottom-2 -right-2 w-20 h-20 border-r-2 border-b-2 border-gold/50 rounded-br-3xl" />
+                {/* Premium Gold frame accent */}
+                <div className="absolute -inset-3 bg-gradient-to-br from-gold/15 via-transparent to-gold/10 rounded-3xl" />
+                <div className="absolute -top-1 -left-1 w-16 h-16 border-l-[3px] border-t-[3px] border-gold rounded-tl-3xl" />
+                <div className="absolute -bottom-1 -right-1 w-16 h-16 border-r-[3px] border-b-[3px] border-gold rounded-br-3xl" />
                 
-                {/* Main photo container */}
-                {/* GLOBAL IMAGE RULE - LOCKED (FINAL):
-                    object-fit: cover + center 15% = max zoom, crop from bottom */}
-                <div className="relative aspect-[3/4] rounded-3xl overflow-hidden border border-gold/20 shadow-2xl shadow-gold/10 bg-zinc-950">
+                {/* Main photo container - NO FADING, CLEAR IMAGE */}
+                <div className="relative aspect-[3/4] rounded-3xl overflow-hidden border-[3px] border-gold shadow-[0_0_60px_rgba(200,167,102,0.25)] bg-zinc-950">
                   <SafeImage 
                     src={founderPremium} 
                     fallbackSrc={founderProfessional}
@@ -291,18 +289,17 @@ const Founder = () => {
                     className="w-full h-full"
                     style={{ objectFit: "cover", objectPosition: "center 15%" }}
                   />
-                  {/* Subtle vignette */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                  {/* NO OVERLAY - Photo stays crisp and clear */}
                 </div>
                 
-                {/* Floating badge */}
+                {/* Floating badge - Contained within bounds */}
                 <motion.div 
-                  className="absolute -bottom-6 -right-6 bg-gradient-to-br from-gold to-[#C4A962] p-4 rounded-2xl shadow-xl shadow-gold/30"
+                  className="absolute -bottom-4 -right-4 bg-gradient-to-br from-gold to-[#C4A962] p-3 rounded-xl shadow-xl shadow-gold/30 overflow-hidden"
                   initial={{ scale: 0 }}
                   whileInView={{ scale: 1 }}
                   transition={{ delay: 0.5, type: "spring" }}
                 >
-                  <Award className="w-8 h-8 text-black" />
+                  <Award className="w-6 h-6 text-black" />
                 </motion.div>
               </div>
             </motion.div>
@@ -343,43 +340,39 @@ const Founder = () => {
                 </p>
               </div>
               
-              {/* Accolades row - All 4 as champagne stat cards with gold borders */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-                <div className="jj-card-inner border-2 border-gold rounded-xl p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
-                  <div className="w-10 h-10 mx-auto mb-3 rounded-xl flex items-center justify-center border-2 border-gold"
-                    style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}>
-                    <Globe className="w-5 h-5 text-black" />
+              {/* Accolades row - All 4 as champagne stat cards with gold borders - SYMMETRIC */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mt-6">
+                <div className="jj-card-inner border-2 border-gold rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1 overflow-hidden">
+                  <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-gold bg-gradient-to-br from-champagne-light to-champagne">
+                    <Globe className="w-4 h-4 md:w-5 md:h-5 text-black" />
                   </div>
-                  <p className="text-gold text-xl font-bold">4</p>
-                  <p className="text-black text-xs font-medium">Languages</p>
-                  <p className="text-zinc-500 text-[10px]">FR · EN · AR · ES</p>
+                  <p className="text-gold text-lg md:text-xl font-bold">4</p>
+                  <p className="text-black text-[10px] md:text-xs font-medium">Languages</p>
+                  <p className="text-zinc-500 text-[8px] md:text-[10px] truncate">FR · EN · AR · ES</p>
                 </div>
-                <div className="jj-card-inner border-2 border-gold rounded-xl p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
-                  <div className="w-10 h-10 mx-auto mb-3 rounded-xl flex items-center justify-center border-2 border-gold"
-                    style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}>
-                    <Users className="w-5 h-5 text-black" />
+                <div className="jj-card-inner border-2 border-gold rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1 overflow-hidden">
+                  <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-gold bg-gradient-to-br from-champagne-light to-champagne">
+                    <Users className="w-4 h-4 md:w-5 md:h-5 text-black" />
                   </div>
-                  <p className="text-gold text-xl font-bold">{brokersTrainedDisplay}</p>
-                  <p className="text-black text-xs font-medium">Trained</p>
-                  <p className="text-zinc-500 text-[10px]">Brokers Mentored</p>
+                  <p className="text-gold text-lg md:text-xl font-bold">{brokersTrainedDisplay}</p>
+                  <p className="text-black text-[10px] md:text-xs font-medium">Trained</p>
+                  <p className="text-zinc-500 text-[8px] md:text-[10px] truncate">Brokers Mentored</p>
                 </div>
-                <div className="jj-card-inner border-2 border-gold rounded-xl p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
-                  <div className="w-10 h-10 mx-auto mb-3 rounded-xl flex items-center justify-center border-2 border-gold"
-                    style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}>
-                    <TrendingUp className="w-5 h-5 text-black" />
+                <div className="jj-card-inner border-2 border-gold rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1 overflow-hidden">
+                  <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-gold bg-gradient-to-br from-champagne-light to-champagne">
+                    <TrendingUp className="w-4 h-4 md:w-5 md:h-5 text-black" />
                   </div>
-                  <p className="text-gold text-xl font-bold">495+</p>
-                  <p className="text-black text-xs font-medium">Managed</p>
-                  <p className="text-zinc-500 text-[10px]">Operations Team</p>
+                  <p className="text-gold text-lg md:text-xl font-bold">495+</p>
+                  <p className="text-black text-[10px] md:text-xs font-medium">Managed</p>
+                  <p className="text-zinc-500 text-[8px] md:text-[10px] truncate">Operations Team</p>
                 </div>
-                <div className="jj-card-inner border-2 border-gold rounded-xl p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
-                  <div className="w-10 h-10 mx-auto mb-3 rounded-xl flex items-center justify-center border-2 border-gold"
-                    style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}>
-                    <Award className="w-5 h-5 text-black" />
+                <div className="jj-card-inner border-2 border-gold rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1 overflow-hidden">
+                  <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-gold bg-gradient-to-br from-champagne-light to-champagne">
+                    <Award className="w-4 h-4 md:w-5 md:h-5 text-black" />
                   </div>
-                  <p className="text-gold text-xl font-bold">12+</p>
-                  <p className="text-black text-xs font-medium">Years</p>
-                  <p className="text-zinc-500 text-[10px]">Industry Experience</p>
+                  <p className="text-gold text-lg md:text-xl font-bold">12+</p>
+                  <p className="text-black text-[10px] md:text-xs font-medium">Years</p>
+                  <p className="text-zinc-500 text-[8px] md:text-[10px] truncate">Industry Experience</p>
                 </div>
               </div>
             </motion.div>
