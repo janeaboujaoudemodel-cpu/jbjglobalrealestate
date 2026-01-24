@@ -252,12 +252,18 @@ const Footer = () => {
 
         {/* ZONE 2: Connected Navigation + Tools + Contact Block */}
         <div 
-          className="w-full mb-4 sm:mb-6 md:mb-10 lg:mb-14 max-w-7xl mx-auto border border-gold/20 rounded-xl sm:rounded-2xl overflow-hidden"
+          className="w-full mb-4 sm:mb-6 md:mb-10 lg:mb-14 max-w-7xl mx-auto border border-gold/30 rounded-xl sm:rounded-2xl overflow-hidden relative"
           style={{
-            background: 'linear-gradient(145deg, rgba(39,39,42,0.7) 0%, rgba(24,24,27,0.8) 100%)',
-            boxShadow: '0 20px 50px -15px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.03)',
+            background: 'linear-gradient(145deg, rgba(39,39,42,0.85) 0%, rgba(24,24,27,0.9) 100%)',
+            boxShadow: '0 25px 60px -15px rgba(0,0,0,0.8), 0 0 0 1px rgba(200,167,102,0.1), inset 0 1px 0 rgba(255,255,255,0.05)',
           }}
         >
+          {/* Premium Gold Corner Accents */}
+          <div className="absolute top-0 left-0 w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 border-t-2 border-l-2 border-gold/50 rounded-tl-xl sm:rounded-tl-2xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 border-t-2 border-r-2 border-gold/50 rounded-tr-xl sm:rounded-tr-2xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 border-b-2 border-l-2 border-gold/50 rounded-bl-xl sm:rounded-bl-2xl pointer-events-none" />
+          <div className="absolute bottom-0 right-0 w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 border-b-2 border-r-2 border-gold/50 rounded-br-xl sm:rounded-br-2xl pointer-events-none" />
+          
           {/* Navigation Grid Section */}
           <div className="grid grid-cols-2 lg:grid-cols-4">
             
@@ -617,37 +623,79 @@ const Footer = () => {
             Jane Bou Jaoude (جاين بو جودة) Founder & CEO <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link>. Unauthorized reproduction is strictly prohibited.
           </p>
           
-          {/* Premium badge row - stack on mobile */}
-          <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-1.5 sm:gap-2 md:gap-3 text-[10px] sm:text-xs md:text-sm">
-            <span 
-              className="px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full"
+          {/* Premium badge row - Luxury 3D styling */}
+          <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4 text-[10px] sm:text-xs md:text-sm mt-2">
+            <div 
+              className="px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 rounded-lg sm:rounded-xl relative overflow-hidden group"
               style={{
-                background: 'linear-gradient(135deg, rgba(200,167,102,0.15) 0%, rgba(200,167,102,0.05) 100%)',
-                border: '1px solid rgba(200,167,102,0.3)',
+                background: 'linear-gradient(145deg, rgba(39,39,42,0.9) 0%, rgba(24,24,27,0.95) 100%)',
+                boxShadow: '0 8px 25px -8px rgba(0,0,0,0.6), 0 0 0 1px rgba(200,167,102,0.25), inset 0 1px 0 rgba(255,255,255,0.08)',
               }}
             >
-              <span className="text-gold font-medium">Real Estate Brokerage</span>
-            </span>
-            <span className="text-gold text-sm sm:text-lg hidden sm:inline">•</span>
-            <span 
-              className="px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full"
+              <span 
+                className="font-semibold tracking-wide relative z-10"
+                style={{
+                  background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 50%, #D4AF37 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  textShadow: '0 0 20px rgba(200,167,102,0.3)',
+                }}
+              >
+                Real Estate Brokerage
+              </span>
+            </div>
+            <div 
+              className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full hidden sm:block"
               style={{
-                background: 'linear-gradient(135deg, rgba(200,167,102,0.15) 0%, rgba(200,167,102,0.05) 100%)',
-                border: '1px solid rgba(200,167,102,0.3)',
+                background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 100%)',
+                boxShadow: '0 0 10px rgba(200,167,102,0.5)',
+              }}
+            />
+            <div 
+              className="px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 rounded-lg sm:rounded-xl relative overflow-hidden group"
+              style={{
+                background: 'linear-gradient(145deg, rgba(39,39,42,0.9) 0%, rgba(24,24,27,0.95) 100%)',
+                boxShadow: '0 8px 25px -8px rgba(0,0,0,0.6), 0 0 0 1px rgba(200,167,102,0.25), inset 0 1px 0 rgba(255,255,255,0.08)',
               }}
             >
-              <span className="text-gold font-medium">All Rights Reserved</span>
-            </span>
-            <span className="text-gold text-sm sm:text-lg hidden sm:inline">•</span>
-            <span 
-              className="px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full"
+              <span 
+                className="font-semibold tracking-wide relative z-10"
+                style={{
+                  background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 50%, #D4AF37 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  textShadow: '0 0 20px rgba(200,167,102,0.3)',
+                }}
+              >
+                All Rights Reserved
+              </span>
+            </div>
+            <div 
+              className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full hidden sm:block"
               style={{
-                background: 'linear-gradient(135deg, rgba(200,167,102,0.15) 0%, rgba(200,167,102,0.05) 100%)',
-                border: '1px solid rgba(200,167,102,0.3)',
+                background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 100%)',
+                boxShadow: '0 0 10px rgba(200,167,102,0.5)',
+              }}
+            />
+            <div 
+              className="px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 rounded-lg sm:rounded-xl relative overflow-hidden group"
+              style={{
+                background: 'linear-gradient(145deg, rgba(39,39,42,0.9) 0%, rgba(24,24,27,0.95) 100%)',
+                boxShadow: '0 8px 25px -8px rgba(0,0,0,0.6), 0 0 0 1px rgba(200,167,102,0.25), inset 0 1px 0 rgba(255,255,255,0.08)',
               }}
             >
-              <span className="text-gold font-medium">© {currentYear}</span>
-            </span>
+              <span 
+                className="font-semibold tracking-wide relative z-10"
+                style={{
+                  background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 50%, #D4AF37 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  textShadow: '0 0 20px rgba(200,167,102,0.3)',
+                }}
+              >
+                © {currentYear}
+              </span>
+            </div>
           </div>
         </div>
 
