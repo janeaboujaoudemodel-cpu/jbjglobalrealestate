@@ -203,8 +203,8 @@ const Index = () => {
       <DeveloperPartnersMarquee />
 
       {/* AI HOME FINDER - Premium CTA Section - Gold glow on normal, white on hover */}
-      <section className="py-10 md:py-14 bg-black">
-        <div className="container mx-auto px-4">
+      <section className="py-6 md:py-14 bg-black">
+        <div className="container mx-auto px-3 md:px-4">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -214,7 +214,7 @@ const Index = () => {
           >
             <Link to="/quiz" className="block group">
               <div 
-                className="relative bg-gradient-to-br from-purple-900/40 via-purple-800/30 to-purple-900/40 backdrop-blur-md rounded-2xl p-8 md:p-10 text-center transition-all duration-500 group-hover:translate-y-[-4px] group-hover:scale-[1.02]"
+                className="relative bg-gradient-to-br from-purple-900/40 via-purple-800/30 to-purple-900/40 backdrop-blur-md rounded-xl md:rounded-2xl p-5 md:p-10 text-center transition-all duration-500 group-hover:translate-y-[-4px] group-hover:scale-[1.02]"
                 style={{
                   border: '2px solid rgba(147,51,234,0.5)',
                   boxShadow: '0 0 12px rgba(255,255,255,0.2), 0 0 25px rgba(147,51,234,0.15), inset 0 1px 2px rgba(255,255,255,0.1)',
@@ -222,25 +222,25 @@ const Index = () => {
               >
                 {/* White border glow on normal load */}
                 <div 
-                  className="absolute inset-0 rounded-2xl pointer-events-none"
+                  className="absolute inset-0 rounded-xl md:rounded-2xl pointer-events-none"
                   style={{
                     boxShadow: '0 0 15px rgba(255,255,255,0.15), 0 0 8px rgba(255,255,255,0.1)',
                   }}
                 />
                 {/* 3D hover effect - coming out of screen */}
                 <div 
-                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none"
+                  className="absolute inset-0 rounded-xl md:rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none"
                   style={{
                     boxShadow: '0 12px 35px rgba(0,0,0,0.4), 0 0 25px rgba(255,255,255,0.3), 0 0 50px rgba(147,51,234,0.25), inset 0 -2px 5px rgba(0,0,0,0.2)',
                   }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-purple-600/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-purple-600/10 rounded-xl md:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 
                 <div className="relative z-10">
-                  <div className="flex items-center justify-center gap-3 mb-4">
-                    <Sparkles className="w-8 h-8 text-purple-400 group-hover:text-purple-300 transition-colors" />
+                  <div className="flex items-center justify-center gap-2 md:gap-3 mb-3 md:mb-4">
+                    <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-purple-400 group-hover:text-purple-300 transition-colors" />
                     <h2 
-                      className="text-white text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide" 
+                      className="text-white text-xl md:text-3xl lg:text-4xl font-bold tracking-wide" 
                       style={{ 
                         fontFamily: "Poppins, sans-serif",
                         textShadow: '0 2px 4px rgba(0,0,0,0.4)',
@@ -248,10 +248,10 @@ const Index = () => {
                     >
                       {t('hero.aiFinder')}
                     </h2>
-                    <ArrowUpRight className="w-7 h-7 text-purple-400 group-hover:text-purple-300 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
+                    <ArrowUpRight className="w-5 h-5 md:w-7 md:h-7 text-purple-400 group-hover:text-purple-300 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
                   </div>
                   
-                  <p className="text-white text-base md:text-lg">
+                  <p className="text-white text-sm md:text-base lg:text-lg">
                     {t('hero.aiFinderDesc')}
                   </p>
                 </div>
@@ -263,192 +263,193 @@ const Index = () => {
 
 
       {/* WHO IS THIS FOR - Clear Entry Points with Champagne Layer */}
-      <section className="py-16 md:py-20 bg-black">
+      <section className="py-8 md:py-20 bg-black">
         <div className="jj-layer-2">
-          <div className="text-center mb-10">
-            <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-xs uppercase tracking-[0.2em] font-semibold shadow-md">
-              <Users className="w-3 h-3 text-gold" />
+          <div className="text-center mb-6 md:mb-10">
+            <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-semibold shadow-md">
+              <Users className="w-2.5 h-2.5 md:w-3 md:h-3 text-gold" />
               <span className="text-black">{t('hero.findStartingPoint')}</span>
             </span>
           </div>
 
-          {/* Audience Entry Cards - 3D style with gold border, transparent bg, matching first line style */}
-          <div className="flex justify-center gap-2 md:gap-3 max-w-5xl mx-auto mb-10 flex-wrap md:flex-nowrap">
-            <Link to="/buyer-guide" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
-              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+          {/* Audience Entry Cards - Compact 4-col on mobile, 7-col on desktop */}
+          <div className="grid grid-cols-4 md:flex md:justify-center gap-1.5 md:gap-3 max-w-5xl mx-auto mb-6 md:mb-10">
+            <Link to="/buyer-guide" className="group">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-1.5 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
-                  <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 transition-colors shadow-md">
-                    <Heart className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
+                  <div className="w-6 h-6 md:w-8 md:h-8 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-md md:rounded-lg flex items-center justify-center mx-auto mb-0.5 md:mb-2 transition-colors">
+                    <Heart className="w-3 h-3 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">{t('hero.buyers')}</h4>
+                  <h4 className="text-black group-hover:text-gold text-[8px] md:text-xs font-semibold transition-colors leading-tight">{t('hero.buyers')}</h4>
                 </div>
               </div>
             </Link>
-            <Link to="/seller-guide" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
-              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+            <Link to="/seller-guide" className="group">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-1.5 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
-                  <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 transition-colors shadow-md">
-                    <Target className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
+                  <div className="w-6 h-6 md:w-8 md:h-8 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-md md:rounded-lg flex items-center justify-center mx-auto mb-0.5 md:mb-2 transition-colors">
+                    <Target className="w-3 h-3 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">{t('hero.sellers')}</h4>
+                  <h4 className="text-black group-hover:text-gold text-[8px] md:text-xs font-semibold transition-colors leading-tight">{t('hero.sellers')}</h4>
                 </div>
               </div>
             </Link>
-            <Link to="/rent-guide" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
-              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+            <Link to="/rent-guide" className="group">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-1.5 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
-                  <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 transition-colors shadow-md">
-                    <Key className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
+                  <div className="w-6 h-6 md:w-8 md:h-8 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-md md:rounded-lg flex items-center justify-center mx-auto mb-0.5 md:mb-2 transition-colors">
+                    <Key className="w-3 h-3 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">{t('hero.rentals')}</h4>
+                  <h4 className="text-black group-hover:text-gold text-[8px] md:text-xs font-semibold transition-colors leading-tight">{t('hero.rentals')}</h4>
                 </div>
               </div>
             </Link>
-            <Link to="/ai-hub" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
-              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+            <Link to="/ai-hub" className="group">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-1.5 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
-                  <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 transition-colors shadow-md">
-                    <Layers className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
+                  <div className="w-6 h-6 md:w-8 md:h-8 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-md md:rounded-lg flex items-center justify-center mx-auto mb-0.5 md:mb-2 transition-colors">
+                    <Layers className="w-3 h-3 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">{t('hero.investors')}</h4>
+                  <h4 className="text-black group-hover:text-gold text-[8px] md:text-xs font-semibold transition-colors leading-tight">{t('hero.investors')}</h4>
                 </div>
               </div>
             </Link>
-            <Link to="/quiz" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
-              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+            <Link to="/quiz" className="group">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-1.5 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
-                  <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 transition-colors shadow-md">
-                    <Users className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
+                  <div className="w-6 h-6 md:w-8 md:h-8 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-md md:rounded-lg flex items-center justify-center mx-auto mb-0.5 md:mb-2 transition-colors">
+                    <Users className="w-3 h-3 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">{t('hero.visitors')}</h4>
+                  <h4 className="text-black group-hover:text-gold text-[8px] md:text-xs font-semibold transition-colors leading-tight">{t('hero.visitors')}</h4>
                 </div>
               </div>
             </Link>
-            <Link to="/referral" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
-              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+            <Link to="/referral" className="group hidden md:block">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-lg p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
-                  <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 transition-colors shadow-md">
-                    <Award className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
+                  <div className="w-8 h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
+                    <Award className="w-4 h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">{t('hero.referral')}</h4>
+                  <h4 className="text-black group-hover:text-gold text-xs font-semibold transition-colors">{t('hero.referral')}</h4>
                 </div>
               </div>
             </Link>
-            <Link to="/join" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
-              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+            <Link to="/join" className="group hidden md:block">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-lg p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
-                  <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 transition-colors shadow-md">
-                    <GraduationCap className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
+                  <div className="w-8 h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
+                    <GraduationCap className="w-4 h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors">{t('hero.careers')}</h4>
+                  <h4 className="text-black group-hover:text-gold text-xs font-semibold transition-colors">{t('hero.careers')}</h4>
                 </div>
               </div>
             </Link>
           </div>
 
-          {/* Quick Actions + Partner Network - Second line matches first line style (active champagne) */}
-          <div className="flex justify-center gap-2 md:gap-3 max-w-6xl mx-auto mb-12 flex-wrap lg:flex-nowrap">
-            <Link to="/properties" className="group flex-1 min-w-[100px] max-w-[140px]">
-              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-xl p-3 md:p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+          {/* Quick Actions + Partner Network - Compact 4-col grid on mobile */}
+          <div className="grid grid-cols-4 lg:flex lg:justify-center gap-1.5 md:gap-3 max-w-6xl mx-auto mb-6 md:mb-12">
+            <Link to="/properties" className="group">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg md:rounded-xl p-2 md:p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
-                  <div className="w-8 h-8 md:w-9 md:h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors shadow-md">
-                    <Home className="w-4 h-4 md:w-4.5 md:h-4.5 text-black group-hover:text-gold transition-colors" />
+                  <div className="w-6 h-6 md:w-9 md:h-9 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-md md:rounded-lg flex items-center justify-center mx-auto mb-0.5 md:mb-2 transition-colors">
+                    <Home className="w-3 h-3 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">{t('hero.exploreProperties')}</h4>
+                  <h4 className="text-black group-hover:text-gold text-[7px] md:text-xs font-semibold mb-0 md:mb-0.5 transition-colors leading-tight">{t('hero.exploreProperties')}</h4>
                   <p className="text-gold group-hover:text-black text-[9px] md:text-[10px] transition-colors hidden md:block">{t('hero.browseListings')}</p>
                 </div>
               </div>
             </Link>
-            <Link to="/seller-listing" className="group flex-1 min-w-[100px] max-w-[140px]">
-              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-xl p-3 md:p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+            <Link to="/seller-listing" className="group">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg md:rounded-xl p-2 md:p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
-                  <div className="w-8 h-8 md:w-9 md:h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors shadow-md">
-                    <Target className="w-4 h-4 md:w-4.5 md:h-4.5 text-black group-hover:text-gold transition-colors" />
+                  <div className="w-6 h-6 md:w-9 md:h-9 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-md md:rounded-lg flex items-center justify-center mx-auto mb-0.5 md:mb-2 transition-colors">
+                    <Target className="w-3 h-3 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">{t('hero.listYourProperty')}</h4>
+                  <h4 className="text-black group-hover:text-gold text-[7px] md:text-xs font-semibold mb-0 md:mb-0.5 transition-colors leading-tight">{t('hero.listYourProperty')}</h4>
                   <p className="text-gold group-hover:text-black text-[9px] md:text-[10px] transition-colors hidden md:block">{t('hero.sellOrRent')}</p>
                 </div>
               </div>
             </Link>
-            <Link to="/market-report" className="group flex-1 min-w-[100px] max-w-[140px]">
-              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-xl p-3 md:p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+            <Link to="/market-report" className="group">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg md:rounded-xl p-2 md:p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
-                  <div className="w-8 h-8 md:w-9 md:h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors shadow-md">
-                    <FileText className="w-4 h-4 md:w-4.5 md:h-4.5 text-black group-hover:text-gold transition-colors" />
+                  <div className="w-6 h-6 md:w-9 md:h-9 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-md md:rounded-lg flex items-center justify-center mx-auto mb-0.5 md:mb-2 transition-colors">
+                    <FileText className="w-3 h-3 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">{t('hero.marketReport')}</h4>
+                  <h4 className="text-black group-hover:text-gold text-[7px] md:text-xs font-semibold mb-0 md:mb-0.5 transition-colors leading-tight">{t('hero.marketReport')}</h4>
                   <p className="text-gold group-hover:text-black text-[9px] md:text-[10px] transition-colors hidden md:block">{t('hero.latestInsights')}</p>
                 </div>
               </div>
             </Link>
-            <Link to="/ai-hub" className="group flex-1 min-w-[100px] max-w-[140px]">
-              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-xl p-3 md:p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+            <Link to="/ai-hub" className="group">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg md:rounded-xl p-2 md:p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
-                  <div className="w-8 h-8 md:w-9 md:h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors shadow-md">
-                    <Layers className="w-4 h-4 md:w-4.5 md:h-4.5 text-black group-hover:text-gold transition-colors" />
+                  <div className="w-6 h-6 md:w-9 md:h-9 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-md md:rounded-lg flex items-center justify-center mx-auto mb-0.5 md:mb-2 transition-colors">
+                    <Layers className="w-3 h-3 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">{t('hero.investorHub')}</h4>
+                  <h4 className="text-black group-hover:text-gold text-[7px] md:text-xs font-semibold mb-0 md:mb-0.5 transition-colors leading-tight">{t('hero.investorHub')}</h4>
                   <p className="text-gold group-hover:text-black text-[9px] md:text-[10px] transition-colors hidden md:block">{t('hero.aiTools')}</p>
                 </div>
               </div>
             </Link>
-            <Link to="/services/law-firm" className="group flex-1 min-w-[100px] max-w-[140px]">
-              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-xl p-3 md:p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+            {/* Hidden on mobile, visible on desktop */}
+            <Link to="/services/law-firm" className="group hidden lg:block">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-xl p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
-                  <div className="w-8 h-8 md:w-9 md:h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors shadow-md">
-                    <Scale className="w-4 h-4 md:w-4.5 md:h-4.5 text-black group-hover:text-gold transition-colors" />
+                  <div className="w-9 h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
+                    <Scale className="w-4 h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">{t('hero.legalPartners')}</h4>
-                  <p className="text-gold group-hover:text-black text-[9px] md:text-[10px] transition-colors hidden md:block">{t('hero.legalServices')}</p>
+                  <h4 className="text-black group-hover:text-gold text-xs font-semibold mb-0.5 transition-colors">{t('hero.legalPartners')}</h4>
+                  <p className="text-gold group-hover:text-black text-[10px] transition-colors">{t('hero.legalServices')}</p>
                 </div>
               </div>
             </Link>
-            <Link to="/mortgage-calculator" className="group flex-1 min-w-[100px] max-w-[140px]">
-              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-xl p-3 md:p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+            <Link to="/mortgage-calculator" className="group hidden lg:block">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-xl p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
-                  <div className="w-8 h-8 md:w-9 md:h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors shadow-md">
-                    <Calculator className="w-4 h-4 md:w-4.5 md:h-4.5 text-black group-hover:text-gold transition-colors" />
+                  <div className="w-9 h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
+                    <Calculator className="w-4 h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">{t('hero.mortgagePartners')}</h4>
-                  <p className="text-gold group-hover:text-black text-[9px] md:text-[10px] transition-colors hidden md:block">{t('hero.financingOptions')}</p>
+                  <h4 className="text-black group-hover:text-gold text-xs font-semibold mb-0.5 transition-colors">{t('hero.mortgagePartners')}</h4>
+                  <p className="text-gold group-hover:text-black text-[10px] transition-colors">{t('hero.financingOptions')}</p>
                 </div>
               </div>
             </Link>
-            <Link to="/services/design-build" className="group flex-1 min-w-[100px] max-w-[140px]">
-              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-xl p-3 md:p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+            <Link to="/services/design-build" className="group hidden lg:block">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-xl p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
-                  <div className="w-8 h-8 md:w-9 md:h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors shadow-md">
-                    <Wrench className="w-4 h-4 md:w-4.5 md:h-4.5 text-black group-hover:text-gold transition-colors" />
+                  <div className="w-9 h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
+                    <Wrench className="w-4 h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">{t('hero.designBuild')}</h4>
-                  <p className="text-gold group-hover:text-black text-[9px] md:text-[10px] transition-colors hidden md:block">{t('hero.constructionFitout')}</p>
+                  <h4 className="text-black group-hover:text-gold text-xs font-semibold mb-0.5 transition-colors">{t('hero.designBuild')}</h4>
+                  <p className="text-gold group-hover:text-black text-[10px] transition-colors">{t('hero.constructionFitout')}</p>
                 </div>
               </div>
             </Link>
           </div>
 
 
-          {/* Resources Grid - Active color fill with 3D hover effect */}
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {/* JBJ Broker Hub Card - 3D styling matching other cards */}
+          {/* Resources Grid - Compact on mobile */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 max-w-4xl mx-auto">
+            {/* JBJ Broker Hub Card - Compact on mobile */}
             <Link to="/broker-toolkit" className="group">
-              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 bg-transparent border-2 border-gold group-hover:border-black rounded-xl flex items-center justify-center shadow-lg shadow-gold/40 transition-all duration-300">
-                    <Briefcase className="w-6 h-6 text-black group-hover:text-gold transition-colors" />
+              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-xl md:rounded-2xl p-4 md:p-8 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300">
+                <div className="flex items-center gap-3 md:gap-4 mb-2 md:mb-4">
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-lg md:rounded-xl flex items-center justify-center shadow-md md:shadow-lg shadow-gold/40 transition-all duration-300">
+                    <Briefcase className="w-5 h-5 md:w-6 md:h-6 text-black group-hover:text-gold transition-colors" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold">
+                    <h3 className="text-base md:text-lg font-semibold">
                       <span className="text-gold group-hover:text-black transition-colors">JBJ</span>{" "}
                       <span className="text-black group-hover:text-gold transition-colors">Broker Hub</span>
                     </h3>
-                    <p className="text-zinc-600 group-hover:text-gold text-xs transition-colors">Professional Tools & Resources</p>
+                    <p className="text-zinc-600 group-hover:text-gold text-[10px] md:text-xs transition-colors">Professional Tools</p>
                   </div>
                 </div>
-                <p className="text-zinc-700 group-hover:text-zinc-600 text-sm mb-4 transition-colors">
-                  Access AI-powered broker tools, training modules, CRM, marketing resources, and everything you need to succeed.
+                <p className="text-zinc-700 group-hover:text-zinc-600 text-xs md:text-sm mb-2 md:mb-4 transition-colors line-clamp-2 md:line-clamp-none">
+                  Access AI-powered broker tools, training modules, CRM, marketing resources.
                 </p>
-                <span className="text-sm font-medium flex items-center gap-1 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.5))' }}>
+                <span className="text-xs md:text-sm font-medium flex items-center gap-1 transition-colors">
                   <span className="text-black font-bold group-hover:text-gold transition-colors">Access Broker Hub</span>
                   <svg className="w-3 h-3 text-gold" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
@@ -457,25 +458,25 @@ const Index = () => {
               </div>
             </Link>
 
-            {/* Investor Hub Card - 3D styling matching other cards */}
+            {/* Investor Hub Card - Compact on mobile */}
             <Link to="/ai-hub" className="group">
-              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 bg-transparent border-2 border-gold group-hover:border-black rounded-xl flex items-center justify-center shadow-lg shadow-gold/40 transition-all duration-300">
-                    <Layers className="w-6 h-6 text-black group-hover:text-gold transition-colors" />
+              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-xl md:rounded-2xl p-4 md:p-8 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300">
+                <div className="flex items-center gap-3 md:gap-4 mb-2 md:mb-4">
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-lg md:rounded-xl flex items-center justify-center shadow-md md:shadow-lg shadow-gold/40 transition-all duration-300">
+                    <Layers className="w-5 h-5 md:w-6 md:h-6 text-black group-hover:text-gold transition-colors" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold">
+                    <h3 className="text-base md:text-lg font-semibold">
                       <span className="text-gold group-hover:text-black transition-colors">JBJ</span>{" "}
                       <span className="text-black group-hover:text-gold transition-colors">Investor Hub</span>
                     </h3>
-                    <p className="text-zinc-600 group-hover:text-gold text-xs transition-colors">Free AI Tools for Investors</p>
+                    <p className="text-zinc-600 group-hover:text-gold text-[10px] md:text-xs transition-colors">Free AI Tools</p>
                   </div>
                 </div>
-                <p className="text-zinc-700 group-hover:text-zinc-600 text-sm mb-4 transition-colors">
-                  AI-powered property analysis, comparison, mortgage calculator, and productivity tools — all free for investors and homeowners.
+                <p className="text-zinc-700 group-hover:text-zinc-600 text-xs md:text-sm mb-2 md:mb-4 transition-colors line-clamp-2 md:line-clamp-none">
+                  AI-powered property analysis, comparison, mortgage calculator, and productivity tools.
                 </p>
-                <span className="text-sm font-medium flex items-center gap-1 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.5))' }}>
+                <span className="text-xs md:text-sm font-medium flex items-center gap-1 transition-colors">
                   <span className="text-black font-bold group-hover:text-gold transition-colors">Explore Investor Hub</span>
                   <svg className="w-3 h-3 text-gold" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
@@ -488,7 +489,7 @@ const Index = () => {
       </section>
 
       {/* FOUNDER SECTION - Meet The Leadership */}
-      <section className="py-20 md:py-28 bg-black">
+      <section className="py-10 md:py-28 bg-black">
         {/* Active Champagne Section Layer - using global jj-layer-2 */}
         <div className="jj-layer-2">
           <motion.div
@@ -499,10 +500,10 @@ const Index = () => {
             className="max-w-6xl mx-auto"
           >
             {/* Section Header - Leadership Label with Mixed Color Style */}
-            <motion.div className="text-center mb-12" variants={fadeInUp}>
+            <motion.div className="text-center mb-6 md:mb-12" variants={fadeInUp}>
               {/* Leadership Label - 3D Frame Style with Gold Border */}
               <div 
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-lg mb-4 shadow-md group cursor-default"
+                className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2.5 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold md:border-2 rounded-lg mb-3 md:mb-4 shadow-md group cursor-default"
                 style={{
                   boxShadow: `
                     0 4px 12px rgba(0,0,0,0.15),
@@ -511,11 +512,11 @@ const Index = () => {
                   `,
                 }}
               >
-                <User className="w-4 h-4 text-gold" />
-                <span className="text-gold font-semibold text-sm uppercase tracking-[0.2em]">Leadership</span>
+                <User className="w-3 h-3 md:w-4 md:h-4 text-gold" />
+                <span className="text-gold font-semibold text-xs md:text-sm uppercase tracking-[0.15em] md:tracking-[0.2em]">Leadership</span>
               </div>
               <h2
-                className="text-black text-4xl md:text-5xl lg:text-6xl font-bold mt-4 mb-4"
+                className="text-black text-2xl md:text-5xl lg:text-6xl font-bold mt-2 md:mt-4 mb-2 md:mb-4"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 Meet the{" "}
@@ -523,75 +524,71 @@ const Index = () => {
                   Founder
                 </span>
               </h2>
-              <p className="text-zinc-700 text-lg max-w-2xl mx-auto">
-                <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link> is a founder-led brokerage for buying, selling, and renting built on unwavering standards, discretion, and long-term vision.
+              <p className="text-zinc-700 text-sm md:text-lg max-w-2xl mx-auto px-2">
+                <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link> is a founder-led brokerage built on unwavering standards and long-term vision.
               </p>
             </motion.div>
 
             {/* Founder Card - Pearl card inside active champagne layer */}
             <motion.div
-              className="rounded-3xl overflow-hidden shadow-2xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]"
+              className="rounded-xl md:rounded-3xl overflow-hidden shadow-xl md:shadow-2xl border border-gold/40 md:border-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]"
               variants={fadeInUp}
             >
               <div className="grid md:grid-cols-2 gap-0">
-                {/* Photo Side - Bright Champagne/Gold gradient for contrast - Zoomed out to show full body */}
+                {/* Photo Side - Compact on mobile */}
                 <div className="relative bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#C8A766]">
                   <img
                     src={founderProfessional}
                     alt="Jane Bou Jaoude - Founder & CEO at JBJ Global Real Estate"
-                    className="w-full h-full min-h-[400px] md:min-h-[500px]"
+                    className="w-full h-48 md:h-full md:min-h-[500px]"
                     style={{ objectFit: "cover", objectPosition: "center 25%" }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent to-zinc-900/40 md:block hidden pointer-events-none" />
                 </div>
 
-                {/* Content Side - Pearl white/champagne for internal card */}
-                <div className="p-8 md:p-12 flex flex-col justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-                  <h3 className="text-black text-3xl md:text-4xl font-bold mb-2">Jane Bou Jaoude</h3>
-                  <p className="text-gold text-xl md:text-2xl font-semibold mb-6">Founder & CEO</p>
+                {/* Content Side - Compact on mobile */}
+                <div className="p-4 md:p-12 flex flex-col justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                  <h3 className="text-black text-xl md:text-4xl font-bold mb-1 md:mb-2">Jane Bou Jaoude</h3>
+                  <p className="text-gold text-base md:text-2xl font-semibold mb-3 md:mb-6">Founder & CEO</p>
 
-                  <p className="text-zinc-700 text-base leading-relaxed mb-8">
+                  <p className="text-zinc-700 text-xs md:text-base leading-relaxed mb-4 md:mb-8 line-clamp-3 md:line-clamp-none">
                     With 12+ years of industry experience and a proven track record of training 4,800+ brokers,
                     Jane leads JBJ Global Real Estate with a commitment to excellence, integrity, and client success.
                   </p>
 
-                  {/* Stats Row - Active color on normal, champagne on hover */}
-                  <div className="grid grid-cols-3 gap-4 mb-8">
-                    <div className="group text-center p-3 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-[#FDFBF7] hover:via-[#F5F0E6] hover:to-[#EDE4D3]" style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}>
-                      <p className="text-black group-hover:text-black text-2xl md:text-3xl font-bold transition-colors">12<span className="text-gold">+</span></p>
-                      <p className="text-zinc-700 group-hover:text-zinc-600 text-[10px] uppercase tracking-wider mt-1 transition-colors">Years Exp</p>
+                  {/* Stats Row - Compact on mobile */}
+                  <div className="grid grid-cols-3 gap-2 md:gap-4 mb-4 md:mb-8">
+                    <div className="group text-center p-2 md:p-3 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold md:border-2 rounded-lg md:rounded-xl transition-all duration-300">
+                      <p className="text-black text-lg md:text-3xl font-bold">12<span className="text-gold">+</span></p>
+                      <p className="text-zinc-700 text-[8px] md:text-[10px] uppercase tracking-wider mt-0.5 md:mt-1">Years Exp</p>
                     </div>
-                    <div className="group text-center p-3 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-[#FDFBF7] hover:via-[#F5F0E6] hover:to-[#EDE4D3]" style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}>
-                      <p className="text-black group-hover:text-black text-2xl md:text-3xl font-bold transition-colors">147<span className="text-gold">+</span></p>
-                      <p className="text-zinc-700 group-hover:text-zinc-600 text-[10px] uppercase tracking-wider mt-1 transition-colors">Team Members</p>
+                    <div className="group text-center p-2 md:p-3 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold md:border-2 rounded-lg md:rounded-xl transition-all duration-300">
+                      <p className="text-black text-lg md:text-3xl font-bold">147<span className="text-gold">+</span></p>
+                      <p className="text-zinc-700 text-[8px] md:text-[10px] uppercase tracking-wider mt-0.5 md:mt-1">Team</p>
                     </div>
-                    <div className="group text-center p-3 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-[#FDFBF7] hover:via-[#F5F0E6] hover:to-[#EDE4D3]" style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}>
-                      <p className="text-black group-hover:text-black text-2xl md:text-3xl font-bold transition-colors">4.8K<span className="text-gold">+</span></p>
-                      <p className="text-zinc-700 group-hover:text-zinc-600 text-[10px] uppercase tracking-wider mt-1 transition-colors">Brokers Trained</p>
+                    <div className="group text-center p-2 md:p-3 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold md:border-2 rounded-lg md:rounded-xl transition-all duration-300">
+                      <p className="text-black text-lg md:text-3xl font-bold">4.8K<span className="text-gold">+</span></p>
+                      <p className="text-zinc-700 text-[8px] md:text-[10px] uppercase tracking-wider mt-0.5 md:mt-1">Trained</p>
                     </div>
                   </div>
 
                   <Link to="/founder">
                     <button 
-                      className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group w-full md:w-auto"
+                      className="relative inline-flex items-center justify-center gap-1.5 md:gap-2 px-4 md:px-8 py-3 md:py-5 text-sm md:text-base font-bold rounded-lg md:rounded-xl transition-all duration-300 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/50 md:border-2 hover:scale-[1.02] transform active:scale-95 group w-full md:w-auto"
                       style={{
                         boxShadow: `
-                          0 10px 30px rgba(200,167,102,0.4),
-                          0 6px 15px rgba(0,0,0,0.2),
-                          inset 0 2px 4px rgba(255,255,255,0.9),
-                          inset 0 -2px 4px rgba(200,167,102,0.2),
-                          0 0 20px rgba(200,167,102,0.3)
+                          0 6px 20px rgba(200,167,102,0.3),
+                          0 4px 10px rgba(0,0,0,0.15),
+                          inset 0 2px 4px rgba(255,255,255,0.9)
                         `,
                       }}
                     >
-                      <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                      <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
-                      <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-                      <span className="relative flex items-center justify-center gap-2">
-                        <User className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
-                        <span className="text-black group-hover:text-gold transition-colors">Learn More About</span>
-                        <span className="text-gold group-hover:text-black transition-colors">The Founder</span>
-                        <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                      <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-lg md:rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                      <span className="relative flex items-center justify-center gap-1.5 md:gap-2">
+                        <User className="w-4 h-4 md:w-5 md:h-5 text-gold group-hover:text-black transition-colors" />
+                        <span className="text-black group-hover:text-gold transition-colors text-xs md:text-base">Learn More About</span>
+                        <span className="text-gold group-hover:text-black transition-colors text-xs md:text-base">The Founder</span>
+                        <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5 text-black group-hover:text-gold transition-colors" />
                       </span>
                     </button>
                   </Link>
@@ -608,27 +605,24 @@ const Index = () => {
       {/* SUPPORT TICKET moved to Contact page */}
 
       {/* AI COMPARISON & ANALYZER PREVIEW */}
-      <section className="py-16 md:py-20 bg-black">
-        {/* Active Champagne Section Layer - using global jj-layer-2 */}
+      <section className="py-8 md:py-20 bg-black">
         <div className="jj-layer-2">
           <AIComparisonWidget />
         </div>
       </section>
 
       {/* MARKET REPORT CTA - Active Champagne Layer */}
-      <section className="py-20 md:py-28 bg-black">
-        {/* Active Champagne Section Layer - using global jj-layer-2 */}
+      <section className="py-10 md:py-28 bg-black">
         <div className="jj-layer-2">
-          {/* Pearl Card Inside */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-3xl p-8 md:p-12 shadow-xl">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 md:border-2 rounded-xl md:rounded-3xl p-4 md:p-12 shadow-xl">
             <motion.div
-              className="text-center mb-10"
+              className="text-center mb-4 md:mb-10"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <span className="inline-block text-gold text-xs uppercase tracking-[0.3em] mb-4">Exclusive Publication</span>
-              <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <span className="inline-block text-gold text-[10px] md:text-xs uppercase tracking-[0.2em] md:tracking-[0.3em] mb-2 md:mb-4">Exclusive Publication</span>
+              <h2 className="text-black text-xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Free Market <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Intelligence Book</span>
               </h2>
             </motion.div>
@@ -637,8 +631,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* BLACK SEPARATOR SECTION */}
-      <section className="py-12 md:py-16 bg-gradient-to-b from-black via-zinc-950 to-black">
+      {/* BLACK SEPARATOR SECTION - Hidden on mobile */}
+      <section className="hidden md:block py-12 md:py-16 bg-gradient-to-b from-black via-zinc-950 to-black">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center gap-6">
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
@@ -648,15 +642,12 @@ const Index = () => {
         </div>
       </section>
 
-      {/* MORTGAGE CALCULATOR SECTION - Active Champagne Layer */}
-      <section className="py-20 md:py-28 bg-black">
-        {/* Active Champagne Section Layer - using global jj-layer-2 */}
+      {/* MORTGAGE CALCULATOR SECTION - Compact on mobile */}
+      <section className="py-10 md:py-28 bg-black">
         <div className="jj-layer-2">
-          {/* Pearl Card Inside */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-3xl p-8 md:p-12 shadow-xl relative overflow-hidden">
-            {/* Decorative glow elements */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 md:border-2 rounded-xl md:rounded-3xl p-4 md:p-12 shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 md:w-64 h-32 md:h-64 bg-gold/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-24 md:w-48 h-24 md:h-48 bg-gold/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
             
             <motion.div
               className="text-center mb-8 relative z-10"
