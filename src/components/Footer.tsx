@@ -250,18 +250,17 @@ const Footer = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-y-[1px]" />
         </div>
 
-        {/* Navigation Grid with 3D Cards - 2 cols on mobile for compact view */}
+        {/* Navigation Grid - Seamless Connected Layout */}
         <div className="w-full mb-4 sm:mb-6 md:mb-10 lg:mb-14">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-6 lg:gap-8 max-w-7xl mx-auto">
+          <div className="grid grid-cols-2 lg:grid-cols-4 max-w-7xl mx-auto border border-gold/20 rounded-xl sm:rounded-2xl overflow-hidden"
+            style={{
+              background: 'linear-gradient(145deg, rgba(39,39,42,0.7) 0%, rgba(24,24,27,0.8) 100%)',
+              boxShadow: '0 15px 35px -10px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.03)',
+            }}
+          >
             
             {/* Column 1: Properties + Services */}
-            <div 
-              className="p-2 sm:p-3 md:p-5 rounded-lg sm:rounded-xl"
-              style={{
-                background: 'linear-gradient(145deg, rgba(39,39,42,0.7) 0%, rgba(24,24,27,0.8) 100%)',
-                boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03)',
-              }}
-            >
+            <div className="p-2 sm:p-3 md:p-5 border-r border-b lg:border-b-0 border-gold/10">
               <h4 
                 className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
@@ -310,13 +309,7 @@ const Footer = () => {
             </div>
             
             {/* Column 2: Investor Hub + Broker Hub */}
-            <div 
-              className="p-2 sm:p-3 md:p-5 rounded-lg sm:rounded-xl"
-              style={{
-                background: 'linear-gradient(145deg, rgba(39,39,42,0.7) 0%, rgba(24,24,27,0.8) 100%)',
-                boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03)',
-              }}
-            >
+            <div className="p-2 sm:p-3 md:p-5 border-b lg:border-b-0 lg:border-r border-gold/10">
               <h4 
                 className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
@@ -365,13 +358,7 @@ const Footer = () => {
             </div>
 
             {/* Column 3: Guides + Market Intelligence */}
-            <div 
-              className="p-2 sm:p-3 md:p-5 rounded-lg sm:rounded-xl"
-              style={{
-                background: 'linear-gradient(145deg, rgba(39,39,42,0.7) 0%, rgba(24,24,27,0.8) 100%)',
-                boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03)',
-              }}
-            >
+            <div className="p-2 sm:p-3 md:p-5 border-r border-gold/10">
               <h4 
                 className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
@@ -420,13 +407,7 @@ const Footer = () => {
             </div>
 
             {/* Column 4: About + Careers */}
-            <div 
-              className="p-2 sm:p-3 md:p-5 rounded-lg sm:rounded-xl"
-              style={{
-                background: 'linear-gradient(145deg, rgba(39,39,42,0.7) 0%, rgba(24,24,27,0.8) 100%)',
-                boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03)',
-              }}
-            >
+            <div className="p-2 sm:p-3 md:p-5">
               <h4 
                 className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
