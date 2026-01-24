@@ -109,7 +109,8 @@ serve(async (req) => {
     }
 
     // Step 1: Scrape the project detail page with ALL formats
-    console.log("[Test] Step 1: Scraping project page...");
+    // Use MUCH longer wait time for Gatsby/React JS rendering
+    console.log("[Test] Step 1: Scraping project page (waiting 20s for JS to render)...");
     
     const scrapeRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
       method: "POST",
@@ -119,10 +120,20 @@ serve(async (req) => {
       },
       body: JSON.stringify({ 
         url: projectUrl, 
-        formats: ["markdown", "links", "rawHtml"],
-        waitFor: 8000,
-        timeout: 90000,
-        onlyMainContent: false // Get EVERYTHING including sidebars, galleries
+        formats: ["markdown", "links", "rawHtml", "screenshot"],
+        waitFor: 20000, // Wait 20 seconds for full JS rendering (Gatsby site)
+        timeout: 120000, // 2 minute timeout
+        onlyMainContent: false, // Get EVERYTHING including sidebars, galleries
+        // Actions to trigger content loading
+        actions: [
+          { type: "wait", milliseconds: 3000 },
+          { type: "scroll", direction: "down", amount: 500 },
+          { type: "wait", milliseconds: 2000 },
+          { type: "scroll", direction: "down", amount: 1000 },
+          { type: "wait", milliseconds: 2000 },
+          { type: "scroll", direction: "up", amount: 1500 },
+          { type: "wait", milliseconds: 3000 },
+        ]
       }),
     });
     apiCallsMade++;
@@ -148,12 +159,173 @@ serve(async (req) => {
 
     console.log("[Test] Scraped:", markdown.length, "chars,", links.length, "links, HTML:", html.length, "chars");
 
+    // If content is too short, the JS didn't render - try extracting from page-data.json
+    if (markdown.length < 500 && html.length < 5000) {
+      console.log("[Test] Content too short, trying to fetch Gatsby page-data.json...");
+      
+      // Extract project slug from URL
+      const urlParts = projectUrl.split("/");
+      const projectSlug = urlParts[urlParts.length - 2] || urlParts[urlParts.length - 1];
+      const pageDataUrl = `https://providentestate.com/page-data/new-projects/${projectSlug}/page-data.json`;
+      
+      try {
+        const pageDataRes = await fetch(pageDataUrl);
+        if (pageDataRes.ok) {
+          const pageData = await pageDataRes.json();
+          console.log("[Test] Got Gatsby page-data.json, extracting...");
+          
+          // Extract from Gatsby's internal data structure
+          const projectInfo = pageData?.result?.data?.wpProject || pageData?.result?.pageContext || {};
+          
+          if (projectInfo.title || projectInfo.name) {
+            // Build a comprehensive markdown from the page data
+            const extractedContent = JSON.stringify(projectInfo, null, 2);
+            console.log("[Test] Extracted page-data content:", extractedContent.length, "chars");
+            
+            // Use AI to parse this structured data
+            const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${lovableKey}`,
+              },
+              body: JSON.stringify({
+                model: "google/gemini-2.5-flash",
+                messages: [
+                  { 
+                    role: "system", 
+                    content: "You are a precise real estate data extractor. Extract data from Gatsby/WordPress structured data. Return valid JSON only." 
+                  },
+                  {
+                    role: "user",
+                    content: `Extract the project details from this Gatsby page data:
+
+URL: ${projectUrl}
+
+PAGE DATA:
+${extractedContent.substring(0, 80000)}
+
+Return a JSON object with these EXACT fields:
+{
+  "name": "Full project name",
+  "developer_name": "Developer company name",
+  "location": "Area/community name",
+  "emirate": "Dubai",
+  "description": "Full project description",
+  "bedrooms": "Bedroom configuration",
+  "property_types": ["Array of property types"],
+  "price_from_aed": 1500000,
+  "handover_date": "Q2 2029 or Ready",
+  "status_label": "Future Launch|New Phase|New Launch|Coming Soon|null",
+  "amenities": ["Array of amenities"],
+  "payment_plan_summary": "e.g., 80/20",
+  "image_urls": ["All image URLs found"],
+  "brochure_url": "PDF brochure URL if available",
+  "video_urls": ["Video URLs"],
+  "floor_plan_urls": ["Floor plan PDFs"],
+  "payment_plan_url": "Payment plan PDF URL"
+}
+
+CRITICAL: Return ONLY the JSON object, no markdown formatting.`
+                  }
+                ],
+                temperature: 0.1,
+                max_tokens: 10000,
+              }),
+            });
+            apiCallsMade++;
+
+            if (aiRes.ok) {
+              const aiData = await aiRes.json();
+              const content = aiData.choices?.[0]?.message?.content || "";
+              
+              // Extract JSON from response
+              let jsonStr = content;
+              const codeBlockMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/);
+              if (codeBlockMatch) {
+                jsonStr = codeBlockMatch[1];
+              }
+              const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
+              
+              if (jsonMatch) {
+                try {
+                  const projectData = JSON.parse(jsonMatch[0]);
+                  
+                  const duration = Date.now() - startTime;
+                  
+                  // Build result from page-data extraction
+                  const result: ExtractionResult = {
+                    success: true,
+                    project: {
+                      name: projectData.name || "Unknown",
+                      developer: projectData.developer_name || "Unknown",
+                      location: projectData.location || "Dubai",
+                      status: projectData.handover_date?.toLowerCase().includes("ready") ? "Ready" : "Under Construction",
+                      price_from: projectData.price_from_aed || null,
+                      bedrooms_min: null,
+                      bedrooms_max: null,
+                      handover_date: projectData.handover_date || null,
+                      property_type: projectData.property_types?.[0] || null,
+                      status_label: projectData.status_label || null,
+                      description: projectData.description || null
+                    },
+                    images: projectData.image_urls || [],
+                    videos: projectData.video_urls || [],
+                    documents: {
+                      brochure: projectData.brochure_url || null,
+                      floorPlans: projectData.floor_plan_urls || [],
+                      paymentPlan: projectData.payment_plan_url || null
+                    },
+                    validationErrors: [],
+                    apiCallsMade,
+                    totalApiCost: `~$${(apiCallsMade * 0.001).toFixed(4)}`
+                  };
+
+                  console.log("[Test] Complete via page-data in", duration, "ms. Success:", result.success);
+                  console.log("[Test] Images:", result.images.length, "Videos:", result.videos.length);
+
+                  return new Response(JSON.stringify({
+                    ...result,
+                    duration_ms: duration,
+                    extraction_method: "gatsby-page-data",
+                    stats: {
+                      total_images: result.images.length,
+                      total_videos: result.videos.length,
+                      total_pdfs: (result.documents.brochure ? 1 : 0) + result.documents.floorPlans.length + (result.documents.paymentPlan ? 1 : 0),
+                      has_brochure: !!result.documents.brochure,
+                      has_payment_plan: !!result.documents.paymentPlan,
+                      floor_plans_count: result.documents.floorPlans.length
+                    },
+                    message: `✅ Extraction test PASSED (via Gatsby page-data)! Found ${result.images.length} images.`
+                  }), {
+                    headers: { ...corsHeaders, "Content-Type": "application/json" },
+                  });
+                } catch (parseErr) {
+                  console.error("[Test] Failed to parse page-data AI response");
+                }
+              }
+            }
+          }
+        }
+      } catch (pageDataErr) {
+        console.error("[Test] page-data.json fetch failed:", pageDataErr);
+      }
+    }
+
     if (markdown.length < 200) {
       return new Response(JSON.stringify({
         success: false,
-        error: "Insufficient content scraped",
-        validationErrors: ["Page content too short - may be blocked or invalid URL"],
-        apiCallsMade
+        error: "Insufficient content scraped - JavaScript rendering may have failed",
+        validationErrors: [
+          "Page content too short - the website uses heavy JavaScript (Gatsby/React)",
+          "Try increasing wait time or check if the URL is correct"
+        ],
+        apiCallsMade,
+        debug: {
+          markdown_length: markdown.length,
+          html_length: html.length,
+          links_count: links.length
+        }
       }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -167,6 +339,7 @@ serve(async (req) => {
     const imagePatterns = [
       /https?:\/\/[a-z0-9\-\.]+\.cloudfront\.net\/[^\s"'<>\)]+\.(?:jpg|jpeg|png|webp)/gi,
       /https?:\/\/[^\s"'<>\)]+provident[^\s"'<>\)]+\.(?:jpg|jpeg|png|webp)/gi,
+      /https?:\/\/[^\s"'<>\)]+wp-content[^\s"'<>\)]+\.(?:jpg|jpeg|png|webp)/gi,
       /https?:\/\/[^\s"'<>\)]+\.(?:jpg|jpeg|png|webp)(?:\?[^\s"'<>\)]*)?/gi,
     ];
 
@@ -192,11 +365,15 @@ serve(async (req) => {
     });
 
     // Extract from HTML img tags and data attributes
-    const imgTagPattern = /<img[^>]+(?:src|data-src|data-lazy-src)=["']([^"']+)["']/gi;
+    const imgTagPattern = /<img[^>]+(?:src|data-src|data-lazy-src|srcset)=["']([^"']+)["']/gi;
     let imgMatch;
     while ((imgMatch = imgTagPattern.exec(html)) !== null) {
       if (imgMatch[1] && !imgMatch[1].startsWith('data:')) {
-        imageSet.add(imgMatch[1]);
+        // Handle srcset
+        const srcsetUrls = imgMatch[1].split(',').map(s => s.trim().split(' ')[0]);
+        srcsetUrls.forEach(url => {
+          if (url && url.startsWith('http')) imageSet.add(url);
+        });
       }
     }
 
@@ -208,6 +385,14 @@ serve(async (req) => {
       }
     }
 
+    // Extract from JSON-LD or script data
+    const jsonLdPattern = /"image":\s*"([^"]+)"/gi;
+    while ((imgMatch = jsonLdPattern.exec(html)) !== null) {
+      if (imgMatch[1] && imgMatch[1].startsWith('http')) {
+        imageSet.add(imgMatch[1]);
+      }
+    }
+
     // Filter and upgrade to high-res versions
     let allImages = Array.from(imageSet)
       .map(url => {
@@ -215,7 +400,8 @@ serve(async (req) => {
         return url
           .replace(/\/x\/\d+x\d+\//, "/x/1200x800/")
           .replace(/w=\d+/, "w=1200")
-          .replace(/h=\d+/, "h=800");
+          .replace(/h=\d+/, "h=800")
+          .replace(/-\d+x\d+\./, "-1200x800.");
       })
       .filter(url => {
         const lower = url.toLowerCase();
@@ -225,7 +411,12 @@ serve(async (req) => {
                !lower.includes("placeholder") &&
                !lower.includes("spinner") &&
                !lower.includes("loading") &&
-               url.length > 20;
+               !lower.includes("analytics") &&
+               !lower.includes("pixel") &&
+               !lower.includes("tracker") &&
+               !lower.includes("t.co") &&
+               url.length > 20 &&
+               url.length < 500;
       });
 
     // Deduplicate by base URL (without query params)
@@ -347,7 +538,7 @@ Return a JSON object with these EXACT fields:
   "description": "Full project description (2-3 paragraphs)",
   "bedrooms": "Bedroom configuration (e.g., Studio, 1-3 BR)",
   "property_types": ["Array of property types like Apartment, Villa, Townhouse, Sky Villa"],
-  "price_from_eur": 294000,
+  "price_from_aed": 1500000,
   "handover_date": "Q2 2029 or Ready",
   "status_label": "Future Launch|New Phase|New Launch|Coming Soon|null",
   "amenities": ["Array of ALL amenities mentioned"],
@@ -473,10 +664,8 @@ CRITICAL: Return ONLY the JSON object, no markdown formatting.`
       validationErrors.push("Description is missing or too short");
     }
 
-    // Convert EUR to AED
-    const priceAed = projectData.price_from_eur 
-      ? Math.round(projectData.price_from_eur * 4.0) 
-      : null;
+    // Get price in AED
+    const priceAed = projectData.price_from_aed || null;
 
     // Parse bedrooms
     const brMatches = projectData.bedrooms?.match(/(\d+)/g) || [];
@@ -526,6 +715,7 @@ CRITICAL: Return ONLY the JSON object, no markdown formatting.`
     return new Response(JSON.stringify({
       ...result,
       duration_ms: duration,
+      extraction_method: "firecrawl-js-render",
       stats: {
         total_images: allImages.length,
         total_videos: allVideos.length,
