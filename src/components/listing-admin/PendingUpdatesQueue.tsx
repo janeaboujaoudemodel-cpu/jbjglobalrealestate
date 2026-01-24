@@ -210,25 +210,25 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
   }
 
   return (
-    <Card>
+    <Card className="bg-white border-zinc-200 shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="flex items-center gap-2">
-          <Database className="h-5 w-5" />
+        <CardTitle className="flex items-center gap-2 text-zinc-900">
+          <Database className="h-5 w-5 text-gold" />
           Pending Updates Queue
           {updates.length > 0 && (
-            <Badge variant="secondary">{updates.length}</Badge>
+            <Badge variant="secondary" className="bg-amber-100 text-amber-800">{updates.length}</Badge>
           )}
         </CardTitle>
-        <Button variant="outline" size="sm" onClick={fetchPendingUpdates}>
+        <Button variant="outline" size="sm" onClick={fetchPendingUpdates} className="border-zinc-300">
           <RefreshCw className="h-4 w-4 mr-2" />
           Refresh
         </Button>
       </CardHeader>
       <CardContent>
         {updates.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
-            <Check className="h-12 w-12 mb-4 text-green-500" />
-            <p className="text-lg font-medium">All caught up!</p>
+          <div className="flex flex-col items-center justify-center py-8 text-zinc-500">
+            <Check className="h-12 w-12 mb-4 text-emerald-500" />
+            <p className="text-lg font-medium text-zinc-900">All caught up!</p>
             <p className="text-sm">No pending updates require your review</p>
           </div>
         ) : (
@@ -237,26 +237,26 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
               {updates.map((update) => (
                 <div
                   key={update.id}
-                  className="border rounded-lg p-4 bg-card hover:bg-accent/50 transition-colors"
+                  className="border border-zinc-200 rounded-lg p-4 bg-zinc-50 hover:bg-zinc-100 transition-colors"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="font-medium">
+                        <span className="font-medium text-zinc-900">
                           {formatFieldName(update.field_name)}
                         </span>
                         {getConfidenceBadge(update.confidence_score)}
                       </div>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-zinc-600">
                         Matched via: {update.match_method?.replace(/_/g, " ")}
                       </p>
                       {update.source?.name && (
-                        <p className="text-xs text-muted-foreground mt-1">
+                        <p className="text-xs text-zinc-500 mt-1">
                           Source: {update.source.name}
                         </p>
                       )}
                     </div>
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1 text-xs text-zinc-500">
                       <Clock className="h-3 w-3" />
                       {format(new Date(update.created_at), "MMM d, h:mm a")}
                     </div>
@@ -266,16 +266,16 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
 
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div>
-                      <p className="text-xs text-muted-foreground mb-1">Current Value</p>
-                      <div className="bg-muted rounded p-2 text-sm min-h-[40px]">
+                      <p className="text-xs text-zinc-500 mb-1">Current Value</p>
+                      <div className="bg-white border border-zinc-200 rounded p-2 text-sm min-h-[40px] text-zinc-900">
                         {update.current_value || (
-                          <span className="text-muted-foreground italic">Empty</span>
+                          <span className="text-zinc-400 italic">Empty</span>
                         )}
                       </div>
                     </div>
                     <div>
-                      <p className="text-xs text-muted-foreground mb-1">Proposed Value</p>
-                      <div className="bg-green-500/10 border border-green-500/30 rounded p-2 text-sm min-h-[40px]">
+                      <p className="text-xs text-zinc-500 mb-1">Proposed Value</p>
+                      <div className="bg-emerald-50 border border-emerald-200 rounded p-2 text-sm min-h-[40px] text-zinc-900">
                         {update.proposed_value}
                       </div>
                     </div>
@@ -287,6 +287,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                       size="sm"
                       onClick={() => handleReject(update)}
                       disabled={processingId === update.id}
+                      className="border-red-200 text-red-600 hover:bg-red-50"
                     >
                       <X className="h-4 w-4 mr-1" />
                       Reject
@@ -295,7 +296,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                       size="sm"
                       onClick={() => handleApprove(update)}
                       disabled={processingId === update.id}
-                      className="bg-green-600 hover:bg-green-700"
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white"
                     >
                       <Check className="h-4 w-4 mr-1" />
                       Approve
