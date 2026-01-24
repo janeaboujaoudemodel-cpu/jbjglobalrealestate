@@ -186,95 +186,162 @@ const Footer = () => {
           </h2>
         </div>
 
-        {/* Premium 3D Card - License + Newsletter + Social - FULL WIDTH with SHIMMER */}
+        {/* ULTRA PREMIUM 3D Card - License + Newsletter + Social */}
         <div 
-          className="w-full max-w-7xl mx-auto mb-8 sm:mb-10 md:mb-12 lg:mb-14 p-4 sm:p-6 md:p-8 lg:p-10 rounded-xl sm:rounded-2xl relative overflow-hidden border border-gold/25"
+          className="w-full max-w-7xl mx-auto mb-8 sm:mb-10 md:mb-12 lg:mb-14 rounded-2xl sm:rounded-3xl relative overflow-hidden"
           style={{
-            background: 'linear-gradient(145deg, rgba(39,39,42,0.95) 0%, rgba(24,24,27,0.98) 50%, rgba(30,30,33,0.95) 100%)',
+            background: 'linear-gradient(165deg, rgba(45,45,48,0.98) 0%, rgba(28,28,31,0.99) 40%, rgba(22,22,25,1) 100%)',
             boxShadow: `
-              0 25px 60px -15px rgba(0,0,0,0.9),
-              0 15px 35px -10px rgba(0,0,0,0.7),
-              0 0 0 1px rgba(200,167,102,0.2),
-              0 0 80px -20px rgba(200,167,102,0.15),
-              inset 0 1px 0 rgba(255,255,255,0.08),
-              inset 0 -1px 0 rgba(0,0,0,0.4)
+              0 50px 100px -30px rgba(0,0,0,0.95),
+              0 30px 60px -20px rgba(0,0,0,0.8),
+              0 0 0 1px rgba(200,167,102,0.3),
+              0 0 120px -30px rgba(200,167,102,0.2),
+              0 0 60px -15px rgba(200,167,102,0.1),
+              inset 0 2px 0 rgba(255,255,255,0.1),
+              inset 0 -2px 0 rgba(0,0,0,0.5)
             `,
           }}
         >
-          {/* Animated Shimmer Border Effect */}
+          {/* Outer Gold Border Ring */}
+          <div className="absolute inset-0 rounded-2xl sm:rounded-3xl border-2 border-gold/40 pointer-events-none" />
+          <div className="absolute inset-[3px] rounded-2xl sm:rounded-3xl border border-gold/20 pointer-events-none" />
+          
+          {/* Animated Shimmer Sweep */}
           <div 
-            className="absolute inset-0 rounded-xl sm:rounded-2xl pointer-events-none"
+            className="absolute inset-0 rounded-2xl sm:rounded-3xl pointer-events-none opacity-60"
             style={{
-              background: 'linear-gradient(90deg, transparent 0%, rgba(200,167,102,0.1) 25%, rgba(200,167,102,0.2) 50%, rgba(200,167,102,0.1) 75%, transparent 100%)',
-              backgroundSize: '200% 100%',
-              animation: 'shimmer 4s ease-in-out infinite',
+              background: 'linear-gradient(110deg, transparent 20%, rgba(200,167,102,0.08) 40%, rgba(245,230,200,0.15) 50%, rgba(200,167,102,0.08) 60%, transparent 80%)',
+              backgroundSize: '250% 100%',
+              animation: 'shimmer 6s ease-in-out infinite',
             }}
           />
           
-          {/* Premium Gold Corner Accents - Matching nav block style */}
-          <div className="absolute top-0 left-0 w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 border-t-2 border-l-2 border-gold/50 rounded-tl-xl sm:rounded-tl-2xl pointer-events-none" />
-          <div className="absolute top-0 right-0 w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 border-t-2 border-r-2 border-gold/50 rounded-tr-xl sm:rounded-tr-2xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 border-b-2 border-l-2 border-gold/50 rounded-bl-xl sm:rounded-bl-2xl pointer-events-none" />
-          <div className="absolute bottom-0 right-0 w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 border-b-2 border-r-2 border-gold/50 rounded-br-xl sm:rounded-br-2xl pointer-events-none" />
+          {/* Top Radial Glow */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-gradient-to-b from-gold/10 to-transparent blur-2xl pointer-events-none" />
           
-          {/* Inner glow effect */}
-          <div className="absolute inset-0 bg-gradient-to-b from-gold/5 via-transparent to-gold/5 pointer-events-none rounded-xl sm:rounded-2xl" />
+          {/* Premium Gold Corner Accents - BOLD */}
+          <div className="absolute top-0 left-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
+            <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-gold via-gold/80 to-transparent rounded-tl-2xl sm:rounded-tl-3xl" />
+            <div className="absolute top-0 left-0 h-full w-[3px] bg-gradient-to-b from-gold via-gold/80 to-transparent rounded-tl-2xl sm:rounded-tl-3xl" />
+          </div>
+          <div className="absolute top-0 right-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
+            <div className="absolute top-0 right-0 w-full h-[3px] bg-gradient-to-l from-gold via-gold/80 to-transparent rounded-tr-2xl sm:rounded-tr-3xl" />
+            <div className="absolute top-0 right-0 h-full w-[3px] bg-gradient-to-b from-gold via-gold/80 to-transparent rounded-tr-2xl sm:rounded-tr-3xl" />
+          </div>
+          <div className="absolute bottom-0 left-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
+            <div className="absolute bottom-0 left-0 w-full h-[3px] bg-gradient-to-r from-gold via-gold/80 to-transparent rounded-bl-2xl sm:rounded-bl-3xl" />
+            <div className="absolute bottom-0 left-0 h-full w-[3px] bg-gradient-to-t from-gold via-gold/80 to-transparent rounded-bl-2xl sm:rounded-bl-3xl" />
+          </div>
+          <div className="absolute bottom-0 right-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
+            <div className="absolute bottom-0 right-0 w-full h-[3px] bg-gradient-to-l from-gold via-gold/80 to-transparent rounded-br-2xl sm:rounded-br-3xl" />
+            <div className="absolute bottom-0 right-0 h-full w-[3px] bg-gradient-to-t from-gold via-gold/80 to-transparent rounded-br-2xl sm:rounded-br-3xl" />
+          </div>
           
-          {/* Licensed Badge - Enhanced */}
-          <div className="relative flex items-center justify-center gap-1.5 sm:gap-2 md:gap-3 mb-3 sm:mb-4 md:mb-5 flex-wrap px-1">
-            <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 bg-gradient-to-br from-gold to-gold/70 rounded-full animate-pulse shadow-[0_0_15px_rgba(200,167,102,0.6)]" />
-            <p className="text-white font-medium text-xs sm:text-sm md:text-base lg:text-lg tracking-wide text-center leading-relaxed">
-              <span 
-                className="font-bold"
+          {/* Inner Content Container with padding */}
+          <div className="relative p-5 sm:p-8 md:p-10 lg:p-12">
+            {/* Decorative Top Emblem */}
+            <div className="flex justify-center mb-4 sm:mb-6">
+              <div 
+                className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center relative"
                 style={{
-                  background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 50%, #D4AF37 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
+                  background: 'linear-gradient(145deg, rgba(200,167,102,0.2) 0%, rgba(200,167,102,0.08) 100%)',
+                  boxShadow: '0 8px 32px -8px rgba(200,167,102,0.4), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.2)',
+                  border: '1px solid rgba(200,167,102,0.4)',
                 }}
-              >Licensed</span> · BUY · SELL · RENT · <span className="font-bold">REAL ESTATE</span> In The <span 
-                className="font-bold"
-                style={{
-                  background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 50%, #D4AF37 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >UAE</span>
+              >
+                <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
+                <span 
+                  className="text-2xl sm:text-3xl md:text-4xl font-bold relative"
+                  style={{
+                    background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 40%, #D4AF37 60%, #C8A766 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    filter: 'drop-shadow(0 2px 4px rgba(200,167,102,0.5))',
+                  }}
+                >✦</span>
+              </div>
+            </div>
+            
+            {/* Licensed Badge - ULTRA Enhanced */}
+            <div className="relative flex items-center justify-center gap-2 sm:gap-3 md:gap-4 mb-3 sm:mb-4 md:mb-5 flex-wrap px-1">
+              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 bg-gradient-to-br from-gold via-gold/90 to-gold/60 rounded-full animate-pulse shadow-[0_0_20px_rgba(200,167,102,0.7),0_0_40px_rgba(200,167,102,0.3)]" />
+              <p className="text-white font-medium text-sm sm:text-base md:text-lg lg:text-xl tracking-wide text-center leading-relaxed">
+                <span 
+                  className="font-bold"
+                  style={{
+                    background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    filter: 'drop-shadow(0 0 10px rgba(200,167,102,0.5))',
+                  }}
+                >Licensed</span> 
+                <span className="text-gold/60 mx-1 sm:mx-2">✦</span> 
+                BUY 
+                <span className="text-gold/60 mx-1 sm:mx-2">✦</span> 
+                SELL 
+                <span className="text-gold/60 mx-1 sm:mx-2">✦</span> 
+                RENT 
+                <span className="text-gold/60 mx-1 sm:mx-2">✦</span> 
+                <span className="font-bold">REAL ESTATE</span> In The 
+                <span 
+                  className="font-bold ml-1"
+                  style={{
+                    background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    filter: 'drop-shadow(0 0 10px rgba(200,167,102,0.5))',
+                  }}
+                > UAE</span>
+              </p>
+              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 bg-gradient-to-br from-gold via-gold/90 to-gold/60 rounded-full animate-pulse shadow-[0_0_20px_rgba(200,167,102,0.7),0_0_40px_rgba(200,167,102,0.3)]" />
+            </div>
+            <p className="relative text-zinc-400 text-xs sm:text-sm md:text-base mb-6 sm:mb-8 md:mb-10 text-center px-2 max-w-2xl mx-auto">
+              Mortgage, legal, visa, and corporate services are provided through licensed partners.
             </p>
-            <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 bg-gradient-to-br from-gold to-gold/70 rounded-full animate-pulse shadow-[0_0_15px_rgba(200,167,102,0.6)]" />
-          </div>
-          <p className="relative text-zinc-400 text-[11px] sm:text-xs md:text-sm mb-4 sm:mb-6 md:mb-8 text-center px-1">
-            Mortgage, legal, visa, and corporate services are provided through licensed partners.
-          </p>
 
-          {/* Premium Divider with glow */}
-          <div className="relative h-px mb-4 sm:mb-6 md:mb-8 max-w-xl mx-auto">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/30 to-transparent blur-sm" />
-          </div>
+            {/* Premium Divider with intense glow */}
+            <div className="relative h-[2px] mb-6 sm:mb-8 md:mb-10 max-w-lg mx-auto">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/50 to-transparent blur-md" />
+              <div className="absolute -inset-1 bg-gradient-to-r from-transparent via-gold/20 to-transparent blur-xl" />
+            </div>
 
-          {/* Stay in the Loop - Enhanced */}
-          <h4 
-            className="relative font-bold text-sm sm:text-base md:text-lg uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em] mb-2 sm:mb-3 text-center"
-            style={{
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #D4AF37 50%, #F5E6C8 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              textShadow: '0 0 30px rgba(200,167,102,0.3)',
-            }}
-          >
-            Stay in the Loop
-          </h4>
-          <p className="relative text-zinc-300 text-[11px] sm:text-xs md:text-sm mb-4 sm:mb-5 md:mb-6 text-center px-1">
-            Be the first to access new listings, market updates, and personalized brokerage guidance.
-          </p>
-          <div className="relative max-w-md mx-auto mb-4 sm:mb-6 md:mb-8 px-1">
-            <NewsletterBrevo variant="compact" source="footer" />
-          </div>
+            {/* Stay in the Loop - ULTRA Enhanced */}
+            <h4 
+              className="relative font-bold text-base sm:text-lg md:text-xl lg:text-2xl uppercase tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.3em] mb-3 sm:mb-4 text-center"
+              style={{
+                background: 'linear-gradient(135deg, #FFFFFF 0%, #F5E6C8 30%, #D4AF37 50%, #F5E6C8 70%, #FFFFFF 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                filter: 'drop-shadow(0 2px 10px rgba(200,167,102,0.4))',
+              }}
+            >
+              Stay in the Loop
+            </h4>
+            <p className="relative text-zinc-300 text-xs sm:text-sm md:text-base mb-5 sm:mb-6 md:mb-8 text-center px-2 max-w-xl mx-auto">
+              Be the first to access new listings, market updates, and personalized brokerage guidance.
+            </p>
+            <div className="relative max-w-lg mx-auto mb-6 sm:mb-8 md:mb-10 px-2">
+              <NewsletterBrevo variant="compact" source="footer" />
+            </div>
 
-          {/* Social Links */}
-          <div className="relative flex justify-center">
-            <SocialLinks variant="glow" iconClassName="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+            {/* Social Links with enhanced container */}
+            <div className="relative flex justify-center">
+              <div 
+                className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl"
+                style={{
+                  background: 'linear-gradient(145deg, rgba(39,39,42,0.6) 0%, rgba(24,24,27,0.8) 100%)',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05), inset 0 -1px 0 rgba(0,0,0,0.2)',
+                  border: '1px solid rgba(200,167,102,0.15)',
+                }}
+              >
+                <SocialLinks variant="glow" iconClassName="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
+              </div>
+            </div>
           </div>
+          
+          {/* Bottom Radial Glow */}
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-gradient-to-t from-gold/8 to-transparent blur-2xl pointer-events-none" />
         </div>
 
         {/* Premium Divider */}
