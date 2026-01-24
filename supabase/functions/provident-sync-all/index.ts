@@ -48,6 +48,13 @@ interface ProjectListing {
   description: string;
 }
 
+/**
+ * APPROVAL QUEUE MODE:
+ * This function NO LONGER inserts directly into `projects` table.
+ * All extracted projects go to `pending_project_imports` with status='pending'.
+ * An admin must review and approve each project via the Listing Admin panel.
+ */
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -93,15 +100,15 @@ serve(async (req) => {
       });
     }
 
-    const results: Record<string, { projects: number; images: number; errors: string[] }> = {};
+    const results: Record<string, { queued: number; skipped: number; errors: string[] }> = {};
 
     for (const developer of developers) {
       const providentSlug = DEVELOPER_MAPPINGS[developer.slug] || developer.slug;
       const developerUrl = `https://providentestate.com/new-projects/developed-by-${providentSlug}/`;
       
-      console.log(`Syncing developer: ${developer.name} from ${developerUrl}`);
+      console.log(`[ApprovalQueue] Syncing developer: ${developer.name} from ${developerUrl}`);
       
-      results[developer.slug] = { projects: 0, images: 0, errors: [] };
+      results[developer.slug] = { queued: 0, skipped: 0, errors: [] };
 
       try {
         // Scrape the developer's projects page
@@ -206,119 +213,79 @@ IMPORTANT:
 
         console.log(`Found ${projects.length} projects for ${developer.name}`);
 
-        // Process each project
+        // Process each project - INSERT TO APPROVAL QUEUE, NOT PROJECTS
         for (const proj of projects.slice(0, limit)) {
           if (!proj.name || !proj.slug) continue;
 
-          // Convert EUR price to AED (approximate rate: 1 EUR = 4.0 AED)
-          const priceAed = proj.price_from ? Math.round(proj.price_from * 4.0) : null;
+          // Check if already in queue or exists
+          const { data: existingQueue } = await supabase
+            .from("pending_project_imports")
+            .select("id")
+            .eq("slug", proj.slug)
+            .eq("status", "pending")
+            .maybeSingle();
 
-          // Determine status based on handover
-          const currentYear = new Date().getFullYear();
-          const handoverYear = parseInt(proj.handover_year) || currentYear + 2;
-          const status = handoverYear <= currentYear ? "Ready" : "Under Construction";
-
-          // Parse bedrooms
-          const bedroomParts = proj.bedrooms?.match(/(\d+)/g) || [];
-          const bedroomsMin = bedroomParts.length > 0 ? parseInt(bedroomParts[0] || "1") : null;
-          const bedroomsMax = bedroomParts.length > 1 ? parseInt(bedroomParts[bedroomParts.length - 1] || "1") : bedroomsMin;
-
-          // Check if project exists
           const { data: existingProject } = await supabase
             .from("projects")
             .select("id")
             .eq("slug", proj.slug)
             .maybeSingle();
 
-          let projectId: string;
-
-          if (existingProject) {
-            // Update existing project
-            projectId = existingProject.id;
-            await supabase
-              .from("projects")
-              .update({
-                name: proj.name,
-                location: proj.location,
-                status,
-                price_from: priceAed,
-                bedrooms_min: bedroomsMin,
-                bedrooms_max: bedroomsMax,
-                handover_date: proj.handover_year ? `Q4 ${proj.handover_year}` : null,
-                description: proj.description,
-                source_url: proj.url,
-                is_offplan: status === "Under Construction",
-                is_developer_direct: true,
-                updated_at: new Date().toISOString(),
-              })
-              .eq("id", projectId);
-          } else {
-            // Create new project
-            const { data: newProject, error: insertError } = await supabase
-              .from("projects")
-              .insert({
-                name: proj.name,
-                slug: proj.slug,
-                developer_id: developer.id,
-                location: proj.location,
-                emirate: "Dubai",
-                status,
-                price_from: priceAed,
-                bedrooms_min: bedroomsMin,
-                bedrooms_max: bedroomsMax,
-                handover_date: proj.handover_year ? `Q4 ${proj.handover_year}` : null,
-                description: proj.description,
-                source_url: proj.url,
-                is_offplan: status === "Under Construction",
-                is_developer_direct: true,
-              })
-              .select("id")
-              .single();
-
-            if (insertError || !newProject) {
-              console.error(`Failed to insert project ${proj.name}:`, insertError);
-              continue;
-            }
-            projectId = newProject.id;
+          if (existingQueue || existingProject) {
+            results[developer.slug].skipped++;
+            continue;
           }
 
-          results[developer.slug].projects++;
+          // Convert EUR price to AED (approximate rate: 1 EUR = 4.0 AED)
+          const priceAed = proj.price_from ? Math.round(proj.price_from * 4.0) : null;
 
-          // Sync images - delete existing and insert new ones
-          if (proj.image_urls && proj.image_urls.length > 0) {
-            // Filter for valid cloudfront URLs and get higher resolution
-            const validImages = proj.image_urls
-              .filter((url: string) => 
-                url.includes("cloudfront.net") && 
-                !url.includes("logo") &&
-                !url.includes("icon")
-              )
-              .map((url: string) => {
-                // Upgrade to higher resolution if available
-                return url.replace(/\/x\/\d+x\d+\//, "/x/800x600/")
-                         .replace(/\/x\/\d+x\//, "/x/800x/");
-              })
-              .filter((url: string, index: number, arr: string[]) => arr.indexOf(url) === index) // Dedupe
-              .slice(0, 10);
+          // Parse bedrooms
+          const bedroomParts = proj.bedrooms?.match(/(\d+)/g) || [];
+          const bedroomsMin = bedroomParts.length > 0 ? parseInt(bedroomParts[0] || "1") : null;
+          const bedroomsMax = bedroomParts.length > 1 ? parseInt(bedroomParts[bedroomParts.length - 1] || "1") : bedroomsMin;
 
-            if (validImages.length > 0) {
-              // Delete existing images
-              await supabase
-                .from("project_images")
-                .delete()
-                .eq("project_id", projectId);
+          // Prepare images
+          const validImages = (proj.image_urls || [])
+            .filter((url: string) => 
+              url.includes("cloudfront.net") && 
+              !url.includes("logo") &&
+              !url.includes("icon")
+            )
+            .map((url: string) => url.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"))
+            .filter((url: string, index: number, arr: string[]) => arr.indexOf(url) === index)
+            .slice(0, 10);
 
-              // Insert new images
-              const imageRecords = validImages.map((url: string, index: number) => ({
-                project_id: projectId,
-                image_url: url,
-                alt_text: `${proj.name} - Image ${index + 1}`,
-                display_order: index,
-              }));
+          // INSERT TO APPROVAL QUEUE - NOT PROJECTS TABLE
+          const { error: queueErr } = await supabase
+            .from("pending_project_imports")
+            .insert({
+              name: proj.name,
+              slug: proj.slug,
+              developer_id: developer.id,
+              developer_name: developer.name,
+              location: proj.location || null,
+              emirate: "Dubai",
+              description: proj.description || null,
+              price_from: priceAed,
+              bedrooms_min: bedroomsMin,
+              bedrooms_max: bedroomsMax,
+              handover_date: proj.handover_year ? `Q4 ${proj.handover_year}` : null,
+              property_type_label: proj.property_type || null,
+              source_url: proj.url || null,
+              images: JSON.stringify(validImages.map((url: string, i: number) => ({
+                url,
+                alt_text: `${proj.name} - Image ${i + 1}`,
+                display_order: i
+              }))),
+              is_new_project: true,
+              status: "pending",
+            });
 
-              await supabase.from("project_images").insert(imageRecords);
-              results[developer.slug].images += validImages.length;
-            }
+          if (queueErr) {
+            console.error(`Queue insert failed for ${proj.name}:`, queueErr);
+            results[developer.slug].skipped++;
+          } else {
+            results[developer.slug].queued++;
           }
         }
       } catch (err) {
@@ -331,15 +298,16 @@ IMPORTANT:
     }
 
     // Summary stats
-    const totalProjects = Object.values(results).reduce((sum, r) => sum + r.projects, 0);
-    const totalImages = Object.values(results).reduce((sum, r) => sum + r.images, 0);
+    const totalQueued = Object.values(results).reduce((sum, r) => sum + r.queued, 0);
+    const totalSkipped = Object.values(results).reduce((sum, r) => sum + r.skipped, 0);
 
     return new Response(JSON.stringify({
       success: true,
+      mode: "approval_queue",
       summary: {
         developers_processed: developers.length,
-        total_projects_synced: totalProjects,
-        total_images_synced: totalImages,
+        total_projects_queued: totalQueued,
+        total_skipped: totalSkipped,
       },
       details: results,
     }), {
