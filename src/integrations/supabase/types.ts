@@ -842,6 +842,33 @@ export type Database = {
         }
         Relationships: []
       }
+      bank_vault_access_logs: {
+        Row: {
+          access_type: string
+          accessed_at: string | null
+          id: string
+          partner_id: string | null
+          user_email: string | null
+          user_id: string | null
+        }
+        Insert: {
+          access_type: string
+          accessed_at?: string | null
+          id?: string
+          partner_id?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          access_type?: string
+          accessed_at?: string | null
+          id?: string
+          partner_id?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       banking_access_audit: {
         Row: {
           access_type: string
