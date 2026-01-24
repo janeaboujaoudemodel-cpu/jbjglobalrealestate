@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
 interface AdminBypassProps {
@@ -12,8 +12,8 @@ interface AdminBypassProps {
  */
 const AdminBypass = ({ children }: AdminBypassProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [hasAccess, setHasAccess] = useState<boolean | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   const isAdminRoute = location.pathname.startsWith("/admin");
 
@@ -21,37 +21,38 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
     // Non-admin routes: render immediately, no access check needed
     if (!isAdminRoute) {
       setHasAccess(true);
-      setIsLoading(false);
       return;
     }
 
     let cancelled = false;
 
     const checkAdminAccess = async () => {
-      setIsLoading(true);
-
       try {
         const { data: { session } } = await supabase.auth.getSession();
 
         if (!session?.user) {
           if (!cancelled) {
             setHasAccess(false);
-            setIsLoading(false);
+            // No loaders/portals: just send to login.
+            navigate("/auth", { replace: true });
           }
           return;
         }
 
-        const { data: hasAdminRole } = await supabase
-          .rpc("has_role", { _user_id: session.user.id, _role: "admin" });
+        const userId = session.user.id;
 
-        const { data: hasOwnerRole } = await supabase
-          .rpc("has_role", { _user_id: session.user.id, _role: "owner" });
+        const [hasAdminRoleRes, hasOwnerRoleRes, isCrmAdminRes, hasListingAdminRoleRes] =
+          await Promise.all([
+            supabase.rpc("has_role", { _user_id: userId, _role: "admin" }),
+            supabase.rpc("has_role", { _user_id: userId, _role: "owner" }),
+            supabase.rpc("is_crm_admin", { _user_id: userId }),
+            supabase.rpc("has_role", { _user_id: userId, _role: "listing_admin" }),
+          ]);
 
-        const { data: isCrmAdmin } = await supabase
-          .rpc("is_crm_admin", { _user_id: session.user.id });
-
-        const { data: hasListingAdminRole } = await supabase
-          .rpc("has_role", { _user_id: session.user.id, _role: "listing_admin" });
+        const hasAdminRole = hasAdminRoleRes.data;
+        const hasOwnerRole = hasOwnerRoleRes.data;
+        const isCrmAdmin = isCrmAdminRes.data;
+        const hasListingAdminRole = hasListingAdminRoleRes.data;
 
         const hasFullAccess =
           Boolean(hasAdminRole) ||
@@ -59,12 +60,19 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
           Boolean(isCrmAdmin) ||
           Boolean(hasListingAdminRole);
 
-        if (!cancelled) setHasAccess(hasFullAccess);
+        if (!cancelled) {
+          setHasAccess(hasFullAccess);
+          if (!hasFullAccess) {
+            // No loader/portal: move them away immediately.
+            navigate("/", { replace: true });
+          }
+        }
       } catch (error) {
         console.error("Error checking admin access:", error);
-        if (!cancelled) setHasAccess(false);
-      } finally {
-        if (!cancelled) setIsLoading(false);
+        if (!cancelled) {
+          setHasAccess(false);
+          navigate("/", { replace: true });
+        }
       }
     };
 
@@ -78,27 +86,17 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
       cancelled = true;
       subscription.unsubscribe();
     };
-  }, [isAdminRoute]);
+  }, [isAdminRoute, navigate]);
 
   // Non-admin routes: always render
-  if (!isAdminRoute) {
-    return <>{children}</>;
-  }
+  if (!isAdminRoute) return <>{children}</>;
 
-  // Admin routes: show loading while checking
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="w-12 h-12 border-3 border-gold/20 border-t-gold rounded-full animate-spin" />
-      </div>
-    );
-  }
+  // Admin route: never show a loader/portal.
+  // While access is being verified, render the page (we'll redirect if needed).
+  if (hasAccess === null) return <>{children}</>;
 
-  // No admin access - redirect to home
-  if (!hasAccess) {
-    window.location.href = "/";
-    return null;
-  }
+  // If access is false, we already navigated away.
+  if (!hasAccess) return null;
 
   return <>{children}</>;
 };
