@@ -147,13 +147,13 @@ const GlobalHeader = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button 
-          className={`flex items-center gap-1 px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all rounded-full ${
+          className={`flex items-center gap-0.5 px-1.5 lg:px-2 xl:px-2.5 2xl:px-3 py-1 lg:py-1.5 text-[9px] lg:text-[10px] xl:text-[10px] 2xl:text-[11px] font-bold whitespace-nowrap transition-all rounded-full ${
             isActiveCheck?.() ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
           }`}
-          style={{ letterSpacing: '0.05em' }}
+          style={{ letterSpacing: '0.03em' }}
         >
           {label}
-          <ChevronDown className="w-2.5 h-2.5 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+          <ChevronDown className="w-2 h-2 lg:w-2.5 lg:h-2.5 transition-transform duration-200 group-data-[state=open]:rotate-180" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
@@ -586,9 +586,9 @@ const GlobalHeader = () => {
           </div>
 
           {/* CENTER: Ultra Premium Desktop Navigation */}
-          <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 ml-4 mr-2">
+          <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 mx-2 xl:mx-4">
             <div 
-              className="flex items-center gap-3 xl:gap-4 rounded-full px-8 py-2.5 border-2 border-gold/40 relative overflow-hidden"
+              className="flex items-center gap-0.5 lg:gap-1 xl:gap-1.5 2xl:gap-2 rounded-full px-3 lg:px-4 xl:px-6 2xl:px-8 py-2 border-2 border-gold/40 relative"
               style={{
                 background: 'linear-gradient(135deg, rgba(245,235,215,0.98) 0%, rgba(232,220,200,0.95) 50%, rgba(212,196,168,0.98) 100%)',
                 boxShadow: '0 8px 32px -8px rgba(0,0,0,0.4), 0 0 0 1px rgba(200,167,102,0.2), inset 0 2px 0 rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.05), 0 0 40px -10px rgba(200,167,102,0.2)',
@@ -607,12 +607,12 @@ const GlobalHeader = () => {
               {/* 1. Home - No dropdown */}
               <Link
                 to="/"
-                className={`px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all relative group rounded-full ${
+                className={`px-1.5 lg:px-2 xl:px-2.5 2xl:px-3 py-1 lg:py-1.5 text-[9px] lg:text-[10px] xl:text-[10px] 2xl:text-[11px] font-bold whitespace-nowrap transition-all relative group rounded-full ${
                   isActive("/")
                     ? "text-gold bg-gold/15"
                     : "text-zinc-800 hover:text-gold hover:bg-gold/10"
                 }`}
-                style={{ letterSpacing: '0.05em' }}
+                style={{ letterSpacing: '0.03em' }}
               >
                 Home
               </Link>
@@ -651,12 +651,12 @@ const GlobalHeader = () => {
               {/* 9. Contact - No dropdown */}
               <Link
                 to="/contact"
-                className={`px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all relative group rounded-full ${
+                className={`px-1.5 lg:px-2 xl:px-2.5 2xl:px-3 py-1 lg:py-1.5 text-[9px] lg:text-[10px] xl:text-[10px] 2xl:text-[11px] font-bold whitespace-nowrap transition-all relative group rounded-full ${
                   isActive("/contact")
                     ? "text-gold bg-gold/15"
                     : "text-zinc-800 hover:text-gold hover:bg-gold/10"
                 }`}
-                style={{ letterSpacing: '0.05em' }}
+                style={{ letterSpacing: '0.03em' }}
               >
                 Contact
               </Link>
