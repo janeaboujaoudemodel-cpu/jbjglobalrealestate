@@ -60,7 +60,9 @@ import { AIBrokersDashboard } from "@/components/admin/ai-brokers/AIBrokersDashb
 import MarketingSettingsDashboard from "@/components/admin/MarketingSettingsDashboard";
 import PWAAnalyticsDashboard from "@/components/admin/PWAAnalyticsDashboard";
 import VisitorInsightsDashboard from "@/components/admin/VisitorInsightsDashboard";
-import { ClipboardList, Users, Briefcase, Megaphone, Smartphone } from "lucide-react";
+import { AdminOverviewDashboard } from "@/components/admin/AdminOverviewDashboard";
+import { AdminAIAssistant } from "@/components/admin/AdminAIAssistant";
+import { ClipboardList, Users, Briefcase, Megaphone, Smartphone, LayoutDashboard, Bot } from "lucide-react";
 import { CommandPalette } from "@/components/ui/command-palette";
 import { FloatingActionBar } from "@/components/ui/floating-action-bar";
 
@@ -389,9 +391,17 @@ const Admin = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 pb-24">
-        <Tabs defaultValue="security" className="space-y-6">
+        <Tabs defaultValue="overview" className="space-y-6">
           <div className="w-full overflow-x-auto">
             <TabsList className="w-max min-w-full justify-start bg-white/80 border-2 border-gold/30 p-1">
+              <TabsTrigger value="overview" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+                <LayoutDashboard className="w-4 h-4 mr-2" />
+                Overview
+              </TabsTrigger>
+              <TabsTrigger value="ai-assistant" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+                <Bot className="w-4 h-4 mr-2" />
+                AI Assistant
+              </TabsTrigger>
               <TabsTrigger value="security" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
                 <Activity className="w-4 h-4 mr-2" />
                 Security
@@ -450,6 +460,19 @@ const Admin = () => {
               </TabsTrigger>
             </TabsList>
           </div>
+
+          <TabsContent value="overview" className="space-y-8">
+            <AdminOverviewDashboard />
+          </TabsContent>
+
+          <TabsContent value="ai-assistant" className="space-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <AdminAIAssistant />
+              <div className="space-y-6">
+                <AIBrokersDashboard />
+              </div>
+            </div>
+          </TabsContent>
 
           <TabsContent value="security" className="space-y-8">
             <SecurityDashboardSummary />
