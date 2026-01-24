@@ -13830,15 +13830,13 @@ export type Database = {
       referral_partners_safe: {
         Row: {
           approved_at: string | null
-          approved_by: string | null
           commission_rate: number | null
           created_at: string | null
-          email: string | null
-          full_name: string | null
+          email_masked: string | null
+          full_name_masked: string | null
           id: string | null
-          notes: string | null
           partner_type: string | null
-          phone_e164: string | null
+          phone_masked: string | null
           referral_code: string | null
           status: string | null
           total_conversions: number | null
@@ -13849,15 +13847,13 @@ export type Database = {
         }
         Insert: {
           approved_at?: string | null
-          approved_by?: string | null
           commission_rate?: number | null
           created_at?: string | null
-          email?: string | null
-          full_name?: string | null
+          email_masked?: never
+          full_name_masked?: never
           id?: string | null
-          notes?: string | null
           partner_type?: string | null
-          phone_e164?: string | null
+          phone_masked?: never
           referral_code?: string | null
           status?: string | null
           total_conversions?: number | null
@@ -13868,15 +13864,13 @@ export type Database = {
         }
         Update: {
           approved_at?: string | null
-          approved_by?: string | null
           commission_rate?: number | null
           created_at?: string | null
-          email?: string | null
-          full_name?: string | null
+          email_masked?: never
+          full_name_masked?: never
           id?: string | null
-          notes?: string | null
           partner_type?: string | null
-          phone_e164?: string | null
+          phone_masked?: never
           referral_code?: string | null
           status?: string | null
           total_conversions?: number | null
@@ -14112,6 +14106,18 @@ export type Database = {
           bank_account_number: string
           bank_iban: string
           bank_name: string
+        }[]
+      }
+      get_referral_partner_full_details: {
+        Args: { p_partner_id: string }
+        Returns: {
+          commission_rate: number
+          email: string
+          full_name: string
+          id: string
+          partner_type: string
+          phone_e164: string
+          status: string
         }[]
       }
       get_salary_with_logging: {
