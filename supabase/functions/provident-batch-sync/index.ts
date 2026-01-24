@@ -21,6 +21,13 @@ interface ScrapedProject {
   images: string[];
 }
 
+/**
+ * APPROVAL QUEUE MODE:
+ * This function NO LONGER inserts directly into `projects` table.
+ * All extracted projects go to `pending_project_imports` with status='pending'.
+ * An admin must review and approve each project via the Listing Admin panel.
+ */
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -71,7 +78,7 @@ serve(async (req) => {
       .replace(/[^a-z0-9-]/g, "");
     
     const developerUrl = `${PROVIDENT_BASE}/new-projects/developed-by-${providentSlug}/`;
-    console.log(`Scraping developer page: ${developerUrl}`);
+    console.log(`[ApprovalQueue] Scraping developer page: ${developerUrl}`);
 
     // Scrape the developer listing page
     const scrapeResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
@@ -182,10 +189,9 @@ Return JSON array of projects:
 
     console.log(`Extracted ${extractedProjects.length} projects via AI`);
 
-    // Process each project
-    let created = 0;
-    let updated = 0;
-    let imagesAdded = 0;
+    // Process each project - INSERT TO APPROVAL QUEUE, NOT PROJECTS
+    let queued = 0;
+    let skipped = 0;
 
     for (const proj of extractedProjects) {
       const projectSlug = proj.url
@@ -193,12 +199,24 @@ Return JSON array of projects:
         .replace(/\/$/, "")
         .toLowerCase();
 
-      // Check if project exists
-      const { data: existing } = await supabase
+      // Check if already in queue or exists
+      const { data: existingQueue } = await supabase
+        .from("pending_project_imports")
+        .select("id")
+        .eq("slug", projectSlug)
+        .eq("status", "pending")
+        .maybeSingle();
+
+      const { data: existingProject } = await supabase
         .from("projects")
         .select("id")
         .eq("slug", projectSlug)
         .maybeSingle();
+
+      if (existingQueue || existingProject) {
+        skipped++;
+        continue;
+      }
 
       // Parse price (convert EUR to AED: 1 EUR ≈ 4 AED)
       let priceFrom: number | null = null;
@@ -208,7 +226,6 @@ Return JSON array of projects:
           let price = parseFloat(priceMatch[1].replace(/,/g, ""));
           if (priceMatch[2]?.toUpperCase() === "K") price *= 1000;
           if (priceMatch[2]?.toUpperCase() === "M") price *= 1000000;
-          // Convert EUR to AED
           if (proj.price.includes("EUR")) {
             price *= 4;
           }
@@ -227,83 +244,52 @@ Return JSON array of projects:
         }
       }
 
-      // Determine status based on handover year
-      const handoverYear = parseInt(proj.handover?.match(/\d{4}/)?.[0] || "0");
-      const status = handoverYear <= 2024 ? "Ready" : "Under Construction";
+      // Prepare images
+      const validImages = (proj.images || [])
+        .filter((url: string) => url && typeof url === 'string' && !url.includes("logo"))
+        .map((url: string) => url.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"))
+        .slice(0, 15);
 
-      const projectData = {
-        name: proj.name,
-        slug: projectSlug,
-        developer_id: developer.id,
-        location: proj.location,
-        emirate: "Dubai",
-        status,
-        price_from: priceFrom,
-        bedrooms_min: bedroomsMin,
-        bedrooms_max: bedroomsMax,
-        handover_date: proj.handover || null,
-        description: proj.description,
-        is_offplan: status === "Under Construction",
-        is_developer_direct: true,
-        source_url: proj.url,
-        updated_at: new Date().toISOString(),
-      };
+      // INSERT TO APPROVAL QUEUE - NOT PROJECTS TABLE
+      const { error: queueErr } = await supabase
+        .from("pending_project_imports")
+        .insert({
+          name: proj.name,
+          slug: projectSlug,
+          developer_id: developer.id,
+          developer_name: developer.name,
+          location: proj.location || null,
+          emirate: "Dubai",
+          description: proj.description || null,
+          price_from: priceFrom,
+          bedrooms_min: bedroomsMin,
+          bedrooms_max: bedroomsMax,
+          handover_date: proj.handover || null,
+          property_type_label: proj.type || null,
+          source_url: proj.url || null,
+          images: JSON.stringify(validImages.map((url: string, i: number) => ({
+            url,
+            alt_text: `${proj.name} - Image ${i + 1}`,
+            display_order: i
+          }))),
+          is_new_project: true,
+          status: "pending",
+        });
 
-      let projectId: string;
-
-      if (existing) {
-        await supabase
-          .from("projects")
-          .update(projectData)
-          .eq("id", existing.id);
-        projectId = existing.id;
-        updated++;
+      if (queueErr) {
+        console.error(`Queue insert failed for ${proj.name}:`, queueErr);
+        skipped++;
       } else {
-        const { data: newProject } = await supabase
-          .from("projects")
-          .insert(projectData)
-          .select("id")
-          .single();
-        projectId = newProject?.id;
-        created++;
-      }
-
-      // Insert images if we have them and project exists
-      if (projectId && proj.images && proj.images.length > 0) {
-        // Delete old images for this project
-        await supabase
-          .from("project_images")
-          .delete()
-          .eq("project_id", projectId);
-
-        // Filter for valid cloudfront images
-        const validImages = proj.images.filter((url: string) => 
-          url.includes("d3h330vgpwpjr8.cloudfront.net") &&
-          /\.(jpg|jpeg|png|webp|gif)/i.test(url)
-        );
-
-        // Insert new images
-        if (validImages.length > 0) {
-          const imageRecords = validImages.slice(0, 15).map((url: string, index: number) => ({
-            project_id: projectId,
-            image_url: url,
-            alt_text: `${proj.name} - Image ${index + 1}`,
-            display_order: index,
-          }));
-
-          await supabase.from("project_images").insert(imageRecords);
-          imagesAdded += imageRecords.length;
-        }
+        queued++;
       }
     }
 
     return new Response(JSON.stringify({
       success: true,
+      mode: "approval_queue",
       developer: developer.name,
       projects_found: extractedProjects.length,
-      created,
-      updated,
-      images_added: imagesAdded,
+      stats: { queued, skipped },
       projects: extractedProjects.map(p => ({ name: p.name, images: p.images?.length || 0 })),
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

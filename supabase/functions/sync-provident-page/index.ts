@@ -6,6 +6,13 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+/**
+ * APPROVAL QUEUE MODE:
+ * This function NO LONGER inserts directly into `projects` table.
+ * All extracted projects go to `pending_project_imports` with status='pending'.
+ * An admin must review and approve each project via the Listing Admin panel.
+ */
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -29,7 +36,7 @@ serve(async (req) => {
 
   try {
     const { page = 1 } = await req.json().catch(() => ({}));
-    console.log(`[Page ${page}] Starting sync...`);
+    console.log(`[Page ${page}] Starting sync (APPROVAL QUEUE MODE)...`);
     
     // Get developers for matching
     const { data: developers, error: devError } = await supabase.from("developers").select("id, name, slug");
@@ -46,9 +53,7 @@ serve(async (req) => {
     // Build developer lookup with multiple matching strategies
     const devMap = new Map<string, { id: string; name: string; slug: string }>();
     for (const d of developers) {
-      // Full normalized name
       devMap.set(d.name.toLowerCase().replace(/[^a-z0-9]/g, ""), d);
-      // Individual words (for partial matching)
       const words = d.name.toLowerCase().split(/\s+/);
       for (const w of words) {
         if (w.length > 3) devMap.set(w, d);
@@ -60,7 +65,7 @@ serve(async (req) => {
 
     console.log(`[Page ${page}] Scraping: ${url}`);
 
-    // Scrape with Firecrawl - LONGER wait for JS rendering
+    // Scrape with Firecrawl
     const scrapeRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
       method: "POST",
       headers: {
@@ -70,7 +75,7 @@ serve(async (req) => {
       body: JSON.stringify({ 
         url, 
         formats: ["markdown", "links", "rawHtml"],
-        waitFor: 15000, // Wait 15 seconds for Gatsby JS to render
+        waitFor: 15000,
         timeout: 90000,
         onlyMainContent: false,
         actions: [
@@ -115,8 +120,7 @@ serve(async (req) => {
           if (projects.length > 0) {
             console.log(`[Page ${page}] Got ${projects.length} projects from page-data.json`);
             
-            // Process projects from page-data
-            const stats = { extracted: projects.length, created: 0, updated: 0, skipped: 0, images: 0 };
+            const stats = { extracted: projects.length, queued: 0, skipped: 0 };
             
             for (const p of projects) {
               const projectName = p.title || p.projectDetails?.projectName;
@@ -143,18 +147,12 @@ serve(async (req) => {
                 }
               }
 
-              if (!dev) { 
-                console.warn(`[Page ${page}] No developer match for: ${developerName}`);
-                stats.skipped++; 
-                continue; 
-              }
-
               // Create slug
               const baseName = projectName.toLowerCase()
                 .replace(/[^a-z0-9\s-]/g, "")
                 .replace(/\s+/g, "-")
                 .substring(0, 50);
-              const slug = `${baseName}-${dev.slug}`.substring(0, 80);
+              const slug = dev ? `${baseName}-${dev.slug}`.substring(0, 80) : baseName;
               
               // Get price and other details
               const priceText = p.projectDetails?.price || p.projectDetails?.priceFrom;
@@ -163,11 +161,9 @@ serve(async (req) => {
                 const priceMatch = priceText.match(/[\d,\.]+/);
                 if (priceMatch) {
                   let val = parseFloat(priceMatch[0].replace(/,/g, ""));
-                  // Convert EUR to AED if needed
                   if (priceText.toLowerCase().includes("eur")) {
                     val = Math.round(val * 4.0);
                   }
-                  // Handle K/M suffixes
                   if (priceText.toLowerCase().includes("k")) val *= 1000;
                   if (priceText.toLowerCase().includes("m")) val *= 1000000;
                   priceAed = Math.round(val);
@@ -188,70 +184,54 @@ serve(async (req) => {
                 }
               }
               
-              // Upsert project
-              try {
-                const { data: existing } = await supabase
-                  .from("projects")
-                  .select("id")
-                  .eq("slug", slug)
-                  .maybeSingle();
-                  
-                let projectId: string;
+              // Check if already in queue or exists in projects
+              const { data: existingQueue } = await supabase
+                .from("pending_project_imports")
+                .select("id")
+                .eq("slug", slug)
+                .eq("status", "pending")
+                .maybeSingle();
 
-                if (existing) {
-                  await supabase.from("projects").update({
-                    location: location || undefined,
-                    price_from: priceAed || undefined,
-                    handover_date: handover || undefined,
-                    source_url: `https://providentestate.com/new-projects/${p.slug}/`,
-                    updated_at: new Date().toISOString(),
-                  }).eq("id", existing.id);
-                  
-                  projectId = existing.id;
-                  stats.updated++;
-                } else {
-                  const yearMatch = handover?.match(/\d{4}/);
-                  const year = yearMatch ? parseInt(yearMatch[0]) : new Date().getFullYear() + 2;
-                  const isReady = handover?.toLowerCase().includes("ready") || year <= new Date().getFullYear();
-                  const status = isReady ? "Ready" : "Under Construction";
-                  
-                  const { data: newProj, error: insertErr } = await supabase.from("projects").insert({
+              const { data: existingProject } = await supabase
+                .from("projects")
+                .select("id")
+                .eq("slug", slug)
+                .maybeSingle();
+
+              if (existingQueue || existingProject) {
+                console.log(`[Page ${page}] Skipping ${projectName} - already exists`);
+                stats.skipped++;
+                continue;
+              }
+
+              // INSERT TO APPROVAL QUEUE - NOT PROJECTS TABLE
+              try {
+                const { error: queueErr } = await supabase
+                  .from("pending_project_imports")
+                  .insert({
                     name: projectName,
                     slug,
-                    developer_id: dev.id,
+                    developer_id: dev?.id || null,
+                    developer_name: developerName || null,
                     location,
                     emirate: "Dubai",
-                    status,
                     price_from: priceAed,
                     handover_date: handover,
                     source_url: `https://providentestate.com/new-projects/${p.slug}/`,
-                    is_offplan: status === "Under Construction",
-                    is_developer_direct: true,
-                  }).select("id").single();
+                    images: JSON.stringify(images.slice(0, 20).map((url, i) => ({
+                      url: url.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"),
+                      alt_text: `${projectName} - Image ${i + 1}`,
+                      display_order: i
+                    }))),
+                    is_new_project: true,
+                    status: "pending",
+                  });
 
-                  if (insertErr || !newProj) {
-                    console.error(`[Page ${page}] Insert failed for ${projectName}:`, insertErr);
-                    stats.skipped++;
-                    continue;
-                  }
-                  
-                  projectId = newProj.id;
-                  stats.created++;
-                }
-
-                // Handle images
-                if (images.length > 0) {
-                  await supabase.from("project_images").delete().eq("project_id", projectId);
-                  
-                  const imageRecords = images.slice(0, 20).map((url, i) => ({
-                    project_id: projectId,
-                    image_url: url.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"),
-                    alt_text: `${projectName} - Image ${i + 1}`,
-                    display_order: i,
-                  }));
-                  
-                  await supabase.from("project_images").insert(imageRecords);
-                  stats.images += imageRecords.length;
+                if (queueErr) {
+                  console.error(`[Page ${page}] Queue insert failed for ${projectName}:`, queueErr);
+                  stats.skipped++;
+                } else {
+                  stats.queued++;
                 }
               } catch (dbErr) {
                 console.error(`[Page ${page}] DB error for ${projectName}:`, dbErr);
@@ -260,12 +240,13 @@ serve(async (req) => {
             }
 
             const duration = Date.now() - startTime;
-            console.log(`[Page ${page}] Complete via page-data in ${duration}ms: ${stats.created} created, ${stats.updated} updated, ${stats.images} images`);
+            console.log(`[Page ${page}] Complete via page-data in ${duration}ms: ${stats.queued} queued for review`);
 
             return new Response(JSON.stringify({ 
               success: true, 
               page, 
               stats,
+              mode: "approval_queue",
               extraction_method: "gatsby-page-data",
               duration_ms: duration 
             }), {
@@ -285,7 +266,7 @@ serve(async (req) => {
       });
     }
 
-    // Extract image URLs from HTML using regex (more reliable than markdown)
+    // Extract image URLs from HTML using regex
     const imagePattern = /https:\/\/[a-z0-9]+\.cloudfront\.net\/[^\s"'<>]+\.(?:jpg|jpeg|png|webp)/gi;
     const wpImagePattern = /https?:\/\/[^\s"'<>]+wp-content[^\s"'<>]+\.(?:jpg|jpeg|png|webp)/gi;
     const allImageUrls = [...new Set([
@@ -298,7 +279,7 @@ serve(async (req) => {
 
     console.log(`[Page ${page}] Found ${allImageUrls.length} total images`);
 
-    // AI extraction with improved prompt
+    // AI extraction
     console.log(`[Page ${page}] Starting AI extraction...`);
     
     const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -371,7 +352,7 @@ CRITICAL RULES:
     const aiData = await aiRes.json();
     const content = aiData.choices?.[0]?.message?.content || "";
     
-    // Extract JSON from response (handle markdown code blocks)
+    // Extract JSON from response
     let jsonStr = content;
     const codeBlockMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/);
     if (codeBlockMatch) {
@@ -398,7 +379,7 @@ CRITICAL RULES:
 
     console.log(`[Page ${page}] AI extracted ${projects.length} projects`);
 
-    const stats = { extracted: projects.length, created: 0, updated: 0, skipped: 0, images: 0 };
+    const stats = { extracted: projects.length, queued: 0, skipped: 0 };
 
     for (const p of projects) {
       if (!p.name) { 
@@ -412,7 +393,6 @@ CRITICAL RULES:
         const norm = p.developer_name.toLowerCase().replace(/[^a-z0-9]/g, "");
         dev = devMap.get(norm);
         
-        // Try word-by-word matching
         if (!dev) {
           for (const w of p.developer_name.toLowerCase().split(/\s+/)) {
             if (w.length > 3 && devMap.has(w)) { 
@@ -423,128 +403,84 @@ CRITICAL RULES:
         }
       }
 
-      if (!dev) { 
-        console.warn(`[Page ${page}] No developer match for: ${p.developer_name}`);
-        stats.skipped++; 
-        continue; 
-      }
-
       // Create unique slug
       const baseName = p.name.toLowerCase()
         .replace(/[^a-z0-9\s-]/g, "")
         .replace(/\s+/g, "-")
         .substring(0, 50);
-      const slug = `${baseName}-${dev.slug}`.substring(0, 80);
+      const slug = dev ? `${baseName}-${dev.slug}`.substring(0, 80) : baseName;
       
-      // Price should already be in AED from the prompt
       const priceAed = p.price_from ? Math.round(p.price_from) : null;
-      
-      // Parse handover year for status
-      const yearMatch = p.handover_display?.match(/\d{4}/);
-      const year = yearMatch ? parseInt(yearMatch[0]) : new Date().getFullYear() + 2;
-      const isReady = p.handover_display?.toLowerCase().includes("ready") || year <= new Date().getFullYear();
-      const status = isReady ? "Ready" : "Under Construction";
       
       // Parse bedrooms
       const brMatches = p.bedrooms?.match(/(\d+)/g) || [];
       const brMin = brMatches[0] ? parseInt(brMatches[0]) : null;
       const brMax = brMatches.length > 1 ? parseInt(brMatches[brMatches.length - 1]) : brMin;
 
-      try {
-        // Check if project exists
-        const { data: existing } = await supabase
-          .from("projects")
-          .select("id")
-          .eq("slug", slug)
-          .maybeSingle();
-          
-        let projectId: string;
+      // Check if already in queue or exists
+      const { data: existingQueue } = await supabase
+        .from("pending_project_imports")
+        .select("id")
+        .eq("slug", slug)
+        .eq("status", "pending")
+        .maybeSingle();
 
-        if (existing) {
-          // Update existing project
-          await supabase.from("projects").update({
-            location: p.location || undefined,
-            status,
-            price_from: priceAed || undefined,
-            bedrooms_min: brMin || undefined,
-            bedrooms_max: brMax || undefined,
-            handover_date: p.handover_display || undefined,
-            source_url: p.url || undefined,
-            is_offplan: status === "Under Construction",
-            is_developer_direct: true,
-            property_type_label: p.property_type_label || undefined,
-            status_label: p.status_label || undefined,
-            updated_at: new Date().toISOString(),
-          }).eq("id", existing.id);
-          
-          projectId = existing.id;
-          stats.updated++;
-        } else {
-          // Create new project
-          const { data: newProj, error: insertErr } = await supabase.from("projects").insert({
+      const { data: existingProject } = await supabase
+        .from("projects")
+        .select("id")
+        .eq("slug", slug)
+        .maybeSingle();
+
+      if (existingQueue || existingProject) {
+        console.log(`[Page ${page}] Skipping ${p.name} - already exists`);
+        stats.skipped++;
+        continue;
+      }
+
+      try {
+        // Prepare images for queue
+        const validImages = (p.image_urls || [])
+          .filter((u: string) => 
+            u && 
+            typeof u === 'string' && 
+            !u.toLowerCase().includes("logo") &&
+            !u.toLowerCase().includes("icon")
+          )
+          .map((u: string) => u.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"))
+          .filter((u: string, i: number, arr: string[]) => arr.indexOf(u) === i)
+          .slice(0, 20);
+
+        // INSERT TO APPROVAL QUEUE - NOT PROJECTS TABLE
+        const { error: queueErr } = await supabase
+          .from("pending_project_imports")
+          .insert({
             name: p.name,
             slug,
-            developer_id: dev.id,
-            location: p.location,
+            developer_id: dev?.id || null,
+            developer_name: p.developer_name || null,
+            location: p.location || null,
             emirate: "Dubai",
-            status,
             price_from: priceAed,
             bedrooms_min: brMin,
             bedrooms_max: brMax,
-            handover_date: p.handover_display,
-            source_url: p.url,
-            is_offplan: status === "Under Construction",
-            is_developer_direct: true,
+            handover_date: p.handover_display || null,
+            source_url: p.url || null,
             property_type_label: p.property_type_label || null,
             status_label: p.status_label || null,
-          }).select("id").single();
+            images: JSON.stringify(validImages.map((url: string, i: number) => ({
+              url,
+              alt_text: `${p.name} - Image ${i + 1}`,
+              display_order: i
+            }))),
+            is_new_project: true,
+            status: "pending",
+          });
 
-          if (insertErr || !newProj) {
-            console.error(`[Page ${page}] Insert failed for ${p.name}:`, insertErr);
-            stats.skipped++;
-            continue;
-          }
-          
-          projectId = newProj.id;
-          stats.created++;
-        }
-
-        // Handle images - get high-res versions
-        if (p.image_urls?.length > 0) {
-          const validImages = p.image_urls
-            .filter((u: string) => 
-              u && 
-              typeof u === 'string' && 
-              !u.toLowerCase().includes("logo") &&
-              !u.toLowerCase().includes("icon")
-            )
-            .map((u: string) => {
-              // Convert to high-res version
-              return u.replace(/\/x\/\d+x\d+\//, "/x/1200x800/");
-            })
-            .filter((u: string, i: number, arr: string[]) => arr.indexOf(u) === i) // Unique
-            .slice(0, 20); // Max 20 images
-
-          if (validImages.length > 0) {
-            // Delete existing images first
-            await supabase.from("project_images").delete().eq("project_id", projectId);
-            
-            // Insert new images
-            const { error: imgErr } = await supabase.from("project_images").insert(
-              validImages.map((url: string, i: number) => ({
-                project_id: projectId,
-                image_url: url,
-                alt_text: `${p.name} - Image ${i + 1}`,
-                display_order: i,
-              }))
-            );
-            
-            if (imgErr) {
-              console.error(`[Page ${page}] Image insert failed for ${p.name}:`, imgErr);
-            } else {
-              stats.images += validImages.length;
-            }
-          }
+        if (queueErr) {
+          console.error(`[Page ${page}] Queue insert failed for ${p.name}:`, queueErr);
+          stats.skipped++;
+        } else {
+          stats.queued++;
         }
       } catch (dbErr) {
         console.error(`[Page ${page}] DB error for ${p.name}:`, dbErr);
@@ -553,12 +489,13 @@ CRITICAL RULES:
     }
 
     const duration = Date.now() - startTime;
-    console.log(`[Page ${page}] Complete in ${duration}ms: ${stats.created} created, ${stats.updated} updated, ${stats.images} images`);
+    console.log(`[Page ${page}] Complete in ${duration}ms: ${stats.queued} queued for admin review`);
 
     return new Response(JSON.stringify({ 
       success: true, 
       page, 
       stats,
+      mode: "approval_queue",
       extraction_method: "firecrawl-ai",
       duration_ms: duration 
     }), {

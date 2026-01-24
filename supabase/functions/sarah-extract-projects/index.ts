@@ -11,6 +11,12 @@ interface ExtractRequest {
   sourceType: 'dubai_rest' | 'al_nair' | 'dld' | 'rera' | 'google_drive' | 'other';
 }
 
+/**
+ * APPROVAL QUEUE MODE:
+ * This function extracts projects and inserts them into `pending_project_imports`
+ * with status='pending'. An admin must review and approve each project.
+ */
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -59,7 +65,7 @@ serve(async (req) => {
         url,
         formats: ['markdown', 'html'],
         onlyMainContent: true,
-        waitFor: 3000, // Wait for dynamic content
+        waitFor: 3000,
       }),
     });
 
@@ -163,28 +169,120 @@ serve(async (req) => {
 
     const extractedData = JSON.parse(toolCall.function.arguments);
 
-    // Step 3: Store scraped data for review
+    // Step 3: Store extracted data in APPROVAL QUEUE (not directly in projects)
     const { data: sourceData } = await supabase
       .from('listing_admin_authorized_sources')
       .select('id')
       .ilike('source_url', `%${new URL(url).hostname.replace('www.', '')}%`)
       .single();
 
+    // Also store in scraped_data for audit trail
     await supabase
       .from('listing_admin_scraped_data')
       .insert({
         source_id: sourceData?.id,
         source_url: url,
-        scraped_content: { raw: scrapedContent.substring(0, 50000) }, // Limit storage
+        scraped_content: { raw: scrapedContent.substring(0, 50000) },
         extracted_projects: extractedData,
         status: 'extracted'
       });
+
+    // Get developers for matching
+    const { data: developers } = await supabase
+      .from("developers")
+      .select("id, name, slug");
+
+    const devMap = new Map<string, { id: string; name: string; slug: string }>();
+    for (const d of developers || []) {
+      devMap.set(d.name.toLowerCase().replace(/[^a-z0-9]/g, ""), d);
+      for (const w of d.name.toLowerCase().split(/\s+/)) {
+        if (w.length > 3) devMap.set(w, d);
+      }
+    }
+
+    // Insert each extracted project into the approval queue
+    let queued = 0;
+    let skipped = 0;
+
+    for (const p of extractedData.projects || []) {
+      if (!p.project_name) {
+        skipped++;
+        continue;
+      }
+
+      // Match developer
+      let dev: { id: string; name: string; slug: string } | undefined;
+      if (p.developer_name) {
+        const norm = p.developer_name.toLowerCase().replace(/[^a-z0-9]/g, "");
+        dev = devMap.get(norm);
+        if (!dev) {
+          for (const w of p.developer_name.toLowerCase().split(/\s+/)) {
+            if (w.length > 3 && devMap.has(w)) {
+              dev = devMap.get(w);
+              break;
+            }
+          }
+        }
+      }
+
+      const slug = `${p.project_name.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").substring(0, 50)}${dev ? `-${dev.slug}` : ''}`.substring(0, 80);
+
+      // Check duplicates
+      const { data: existingQueue } = await supabase
+        .from("pending_project_imports")
+        .select("id")
+        .eq("slug", slug)
+        .eq("status", "pending")
+        .maybeSingle();
+
+      const { data: existingProject } = await supabase
+        .from("projects")
+        .select("id")
+        .eq("slug", slug)
+        .maybeSingle();
+
+      if (existingQueue || existingProject) {
+        skipped++;
+        continue;
+      }
+
+      // INSERT TO APPROVAL QUEUE - NOT PROJECTS TABLE
+      const { error: queueErr } = await supabase
+        .from("pending_project_imports")
+        .insert({
+          name: p.project_name,
+          slug,
+          developer_id: dev?.id || null,
+          developer_name: p.developer_name || null,
+          location: p.location || null,
+          emirate: p.emirate || "Dubai",
+          description: p.description || null,
+          price_from: p.price_from || null,
+          price_to: p.price_to || null,
+          bedrooms_min: p.bedrooms_min || null,
+          bedrooms_max: p.bedrooms_max || null,
+          handover_date: p.handover_date || null,
+          amenities: p.amenities || null,
+          source_url: url,
+          is_new_project: true,
+          status: "pending",
+        });
+
+      if (queueErr) {
+        console.error(`Queue insert failed for ${p.project_name}:`, queueErr);
+        skipped++;
+      } else {
+        queued++;
+      }
+    }
 
     return new Response(JSON.stringify({
       success: true,
       data: extractedData,
       sourceUrl: url,
-      sourceType
+      sourceType,
+      mode: "approval_queue",
+      stats: { queued, skipped, total: extractedData.total_found }
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
