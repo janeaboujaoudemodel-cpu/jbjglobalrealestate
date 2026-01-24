@@ -280,7 +280,7 @@ const Developers = () => {
           </div>
         </section>
 
-        {/* Developer Grid */}
+        {/* Developer Grid - Placeholder for extraction */}
         <section className="py-12 md:py-16">
           <div className="jj-layer-2">
               {/* Stats */}
@@ -300,140 +300,22 @@ const Developers = () => {
                     <Skeleton key={i} className="h-80 rounded-xl bg-champagne/50" />
                   ))}
                 </div>
-              ) : filteredDevelopers.length === 0 ? (
-                <div className="text-center py-20">
-                  <Building2 className="w-16 h-16 text-gold mx-auto mb-4" />
-                  <h3 className="text-xl text-foreground mb-2">No developers found</h3>
-                  <p className="text-foreground/70 mb-6">Try adjusting your search or filters</p>
-                  <Button
-                    variant="secondary"
-                    onClick={() => {
-                      setSearchTerm("");
-                      setFilterTier("all");
-                    }}
-                  >
-                    Clear Filters
-                  </Button>
-                </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {filteredDevelopers.map((developer, index) => {
-                    const tier = getTierInfo(developer.slug);
-                    const TierIcon = tier.icon;
-                    const projectCount = projectCounts[developer.id] || 0;
-
-                    return (
-                      <motion.div
-                        key={developer.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: index * 0.05 }}
-                      >
-                        <Link to={`/developer/${developer.slug}`} className="group block">
-                          <div className="relative rounded-xl overflow-hidden bg-premium-card border border-gold/20 hover:border-gold/40 transition-all">
-                            {/* Feature Image Background - Provident Style */}
-                            <div className="relative h-48 overflow-hidden">
-                              {developer.feature_image_url ? (
-                                <SafeImage
-                                  src={developer.feature_image_url}
-                                  alt={developer.name}
-                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                />
-                              ) : (
-                                <div className="w-full h-full bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center">
-                                  <Building2 className="w-16 h-16 text-gold/30" />
-                                </div>
-                              )}
-                              
-                              {/* Gradient Overlay */}
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                              
-                              {/* Logo on the image - bottom left like Provident */}
-                              <div 
-                                className="absolute bottom-4 left-4 w-20 h-12 rounded-lg flex items-center justify-center overflow-hidden"
-                                style={{
-                                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
-                                  border: '2px solid hsl(42 45% 59%)',
-                                  boxShadow: `
-                                    0 4px 12px rgba(200,167,102,0.3),
-                                    0 2px 6px rgba(0,0,0,0.12),
-                                    inset 0 1px 2px rgba(255,255,255,0.9)
-                                  `,
-                                }}
-                              >
-                                {developer.logo_url ? (
-                                  <SafeImage
-                                    src={developer.logo_url}
-                                    alt={developer.name}
-                                    className="w-full h-full object-contain p-1.5"
-                                  />
-                                ) : (
-                                  <Building2 className="w-6 h-6 text-gold" />
-                                )}
-                              </div>
-                              
-                              {/* Tier Badge - top right */}
-                              <div
-                                className={`absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold ${tier.badgeClassName}`}
-                              >
-                                <TierIcon className="w-3.5 h-3.5 text-gold" />
-                                {tier.label}
-                              </div>
-                            </div>
-
-                            {/* Content Section */}
-                            <div className="p-5">
-                              <h3 className="text-xl font-semibold text-foreground group-hover:text-gold transition-colors mb-1">
-                                {developer.name}
-                              </h3>
-
-                              {developer.headquarters && (
-                                <div className="flex items-center gap-1.5 text-sm text-foreground/70 mb-4">
-                                  <MapPin className="w-3.5 h-3.5 text-gold" />
-                                  {developer.headquarters}
-                                </div>
-                              )}
-
-                              {developer.description && (
-                                <p className="text-sm text-foreground/75 line-clamp-2 mb-4">
-                                  {developer.description}
-                                </p>
-                              )}
-
-                              <div className="flex items-center justify-between pt-4 border-t border-gold/20">
-                                <div className="flex items-center gap-4">
-                                  <div>
-                                    <div className="text-lg font-bold text-gold">{projectCount}</div>
-                                    <div className="text-xs text-foreground/70">Projects</div>
-                                  </div>
-                                  {developer.founded_year && (
-                                    <div>
-                                      <div className="text-lg font-bold text-foreground">{developer.founded_year}</div>
-                                      <div className="text-xs text-foreground/70">Founded</div>
-                                    </div>
-                                  )}
-                                </div>
-                                <ArrowRight className="w-5 h-5 text-gold group-hover:translate-x-1 transition-transform" />
-                              </div>
-                            </div>
-                          </div>
-                        </Link>
-                      </motion.div>
-                    );
-                  })}
+                <div className="text-center py-20 border border-dashed border-gold/30 rounded-xl bg-premium-card/50">
+                  <Building2 className="w-20 h-20 text-gold/40 mx-auto mb-6" />
+                  <h3 className="text-2xl font-semibold text-foreground mb-3">Developer Extraction in Progress</h3>
+                  <p className="text-foreground/70 max-w-lg mx-auto mb-6">
+                    We're re-extracting all developer listings with high-resolution images and complete data directly from source. 
+                    This ensures accurate, up-to-date information for all 1,324+ properties.
+                  </p>
+                  <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-gold/40 bg-black/30 backdrop-blur-md">
+                    <div className="w-2 h-2 bg-gold rounded-full animate-pulse" />
+                    <span className="text-gold font-semibold text-xs uppercase tracking-[0.15em]">
+                      Coming Soon
+                    </span>
+                  </div>
                 </div>
               )}
-          </div>
-        </section>
-
-        {/* Legal Notice */}
-        <section className="py-8 border-t border-gold/15">
-          <div className="container mx-auto px-4">
-            <p className="text-xs text-primary-foreground/50 text-center max-w-3xl mx-auto">
-              Content protected under UAE law. Unauthorized use is subject to legal action. 
-              All listings shown are developer-direct off-plan or ready properties only. 
-              No secondary market or resale listings are included.
-            </p>
           </div>
         </section>
 
