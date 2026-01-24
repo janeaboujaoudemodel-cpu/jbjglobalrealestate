@@ -30,32 +30,15 @@
 
   <body>
     <noscript>
-      <div style="padding:2rem;text-align:center;background:#0a0a0a;color:#fff;min-height:100vh;">
-        <h1>JBJ Global Real Estate | Dubai Property Experts</h1>
-        <p>We're launching soon. Please enable JavaScript for the full experience.</p>
-        <p>Contact: +971 56 591 1000 | contact@jbj.ae</p>
-        <p style="margin-top:1rem;">
-          <a href="/auth" style="display:inline-block;background:#d4af37;color:#000;padding:0.75rem 1.25rem;border-radius:8px;text-decoration:none;font-weight:600;">Team Login</a>
-        </p>
-      </div>
-    </noscript>
-
-    <!--
-      Boot fallback: minimal (NO spinner).
-      Hidden when React mounts via main.tsx.
-    -->
-    <div id="boot-fallback" style="min-height:100vh;background:#0a0a0a;display:flex;align-items:center;justify-content:center;padding:2rem;font-family:Poppins,sans-serif;">
-      <div style="max-width:760px;width:100%;text-align:center;">
-        <p style="color:#d4af37;font-size:12px;letter-spacing:0.24em;text-transform:uppercase;margin:0 0 0.75rem;">JBJ Global Real Estate</p>
-        <h1 style="color:#fff;font-size:28px;line-height:1.2;margin:0 0 0.75rem;">Dubai Property Brokerage</h1>
-        <p style="color:#d1d5db;font-size:14px;line-height:1.7;margin:0 0 1rem;">Loading the website…</p>
-        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-          <a href="/properties" style="display:inline-block;background:transparent;color:#d4af37;padding:0.85rem 1.2rem;border-radius:10px;text-decoration:none;font-weight:700;border:1px solid rgba(212,175,55,0.45);">Properties</a>
-          <a href="/developers" style="display:inline-block;background:transparent;color:#d4af37;padding:0.85rem 1.2rem;border-radius:10px;text-decoration:none;font-weight:700;border:1px solid rgba(212,175,55,0.45);">Developers</a>
-          <a href="/contact" style="display:inline-block;background:transparent;color:#d4af37;padding:0.85rem 1.2rem;border-radius:10px;text-decoration:none;font-weight:700;border:1px solid rgba(212,175,55,0.45);">Contact</a>
+      <div style="padding:2rem;text-align:center;min-height:100vh;display:flex;align-items:center;justify-content:center;">
+        <div style="max-width:720px;">
+          <h1 style="margin:0 0 0.75rem;">JBJ Global Real Estate</h1>
+          <p style="margin:0 0 0.75rem;">This website requires JavaScript to run.</p>
+          <p style="margin:0 0 1rem;">Contact: +971 56 591 1000 | contact@jbj.ae</p>
+          <a href="/auth" style="display:inline-block;padding:0.75rem 1.25rem;border-radius:8px;text-decoration:none;font-weight:600;border:1px solid currentColor;">Team Login</a>
         </div>
       </div>
-    </div>
+    </noscript>
 
     <!-- Kill any legacy service worker/caches that could trap visitors on an old build -->
     <script>
