@@ -684,7 +684,7 @@ const Index = () => {
               {/* Dual Buttons with 3D Premium Styling */}
               <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center">
                 {/* Primary 3D Button - Try Our AI Mortgage Calculator */}
-                <Link to="/mortgage">
+                <Link to="/mortgage-calculator">
                   <button 
                     className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden whitespace-nowrap"
                     style={{
