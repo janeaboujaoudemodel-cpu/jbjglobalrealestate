@@ -250,20 +250,20 @@ const Footer = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-y-[1px]" />
         </div>
 
-        {/* Navigation Grid with 3D Cards */}
-        <div className="w-full mb-6 sm:mb-8 md:mb-10 lg:mb-14">
-          <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8 max-w-7xl mx-auto">
+        {/* Navigation Grid with 3D Cards - 2 cols on mobile for compact view */}
+        <div className="w-full mb-4 sm:mb-6 md:mb-10 lg:mb-14">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-6 lg:gap-8 max-w-7xl mx-auto">
             
             {/* Column 1: Properties + Services */}
             <div 
-              className="p-3 sm:p-4 md:p-5 rounded-lg sm:rounded-xl"
+              className="p-2 sm:p-3 md:p-5 rounded-lg sm:rounded-xl"
               style={{
                 background: 'linear-gradient(145deg, rgba(39,39,42,0.7) 0%, rgba(24,24,27,0.8) 100%)',
                 boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03)',
               }}
             >
               <h4 
-                className="font-bold text-[11px] sm:text-xs md:text-sm uppercase tracking-[0.1em] sm:tracking-[0.15em] mb-2 sm:mb-3 md:mb-4 pb-1.5 sm:pb-2 border-b border-gold/30"
+                className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
                   WebkitBackgroundClip: 'text',
@@ -272,12 +272,12 @@ const Footer = () => {
               >
                 {t('footer.properties') || 'Properties'}
               </h4>
-              <ul className="space-y-1.5 sm:space-y-2 md:space-y-2.5 mb-4 sm:mb-5 md:mb-6">
+              <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 mb-3 sm:mb-4 md:mb-6">
                 {propertiesLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       to={link.href}
-                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[11px] sm:text-xs md:text-sm inline-block hover:translate-x-1 py-0.5"
+                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
                     >
                       {link.label}
                     </Link>
@@ -286,7 +286,7 @@ const Footer = () => {
               </ul>
               
               <h4 
-                className="font-bold text-[11px] sm:text-xs md:text-sm uppercase tracking-[0.1em] sm:tracking-[0.15em] mb-2 sm:mb-3 md:mb-4 pb-1.5 sm:pb-2 border-b border-gold/30"
+                className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
                   WebkitBackgroundClip: 'text',
@@ -295,12 +295,12 @@ const Footer = () => {
               >
                 {t('footer.servicesSection') || 'Services'}
               </h4>
-              <ul className="space-y-1.5 sm:space-y-2 md:space-y-2.5">
+              <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
                 {servicesLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       to={link.href}
-                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[11px] sm:text-xs md:text-sm inline-block hover:translate-x-1 py-0.5"
+                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
                     >
                       {link.label}
                     </Link>
@@ -311,14 +311,14 @@ const Footer = () => {
             
             {/* Column 2: Investor Hub + Broker Hub */}
             <div 
-              className="p-3 sm:p-4 md:p-5 rounded-lg sm:rounded-xl"
+              className="p-2 sm:p-3 md:p-5 rounded-lg sm:rounded-xl"
               style={{
                 background: 'linear-gradient(145deg, rgba(39,39,42,0.7) 0%, rgba(24,24,27,0.8) 100%)',
                 boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03)',
               }}
             >
               <h4 
-                className="font-bold text-[11px] sm:text-xs md:text-sm uppercase tracking-[0.1em] sm:tracking-[0.15em] mb-2 sm:mb-3 md:mb-4 pb-1.5 sm:pb-2 border-b border-gold/30"
+                className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
                   WebkitBackgroundClip: 'text',
@@ -327,12 +327,12 @@ const Footer = () => {
               >
                 {t('footer.investorHub') || 'Investor Hub'}
               </h4>
-              <ul className="space-y-1.5 sm:space-y-2 md:space-y-2.5 mb-4 sm:mb-5 md:mb-6">
+              <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 mb-3 sm:mb-4 md:mb-6">
                 {investorHubLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       to={link.href}
-                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[11px] sm:text-xs md:text-sm inline-block hover:translate-x-1 py-0.5"
+                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
                     >
                       {link.label}
                     </Link>
@@ -341,7 +341,7 @@ const Footer = () => {
               </ul>
               
               <h4 
-                className="font-bold text-[11px] sm:text-xs md:text-sm uppercase tracking-[0.1em] sm:tracking-[0.15em] mb-2 sm:mb-3 md:mb-4 pb-1.5 sm:pb-2 border-b border-gold/30"
+                className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
                   WebkitBackgroundClip: 'text',
@@ -350,12 +350,12 @@ const Footer = () => {
               >
                 {t('footer.brokerHub') || 'Broker Hub'}
               </h4>
-              <ul className="space-y-1.5 sm:space-y-2 md:space-y-2.5">
+              <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
                 {brokerHubLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       to={link.href}
-                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[11px] sm:text-xs md:text-sm inline-block hover:translate-x-1 py-0.5"
+                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
                     >
                       {link.label}
                     </Link>
@@ -366,14 +366,14 @@ const Footer = () => {
 
             {/* Column 3: Guides + Market Intelligence */}
             <div 
-              className="p-3 sm:p-4 md:p-5 rounded-lg sm:rounded-xl"
+              className="p-2 sm:p-3 md:p-5 rounded-lg sm:rounded-xl"
               style={{
                 background: 'linear-gradient(145deg, rgba(39,39,42,0.7) 0%, rgba(24,24,27,0.8) 100%)',
                 boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03)',
               }}
             >
               <h4 
-                className="font-bold text-[11px] sm:text-xs md:text-sm uppercase tracking-[0.1em] sm:tracking-[0.15em] mb-2 sm:mb-3 md:mb-4 pb-1.5 sm:pb-2 border-b border-gold/30"
+                className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
                   WebkitBackgroundClip: 'text',
@@ -382,12 +382,12 @@ const Footer = () => {
               >
                 {t('footer.guides') || 'Guides'}
               </h4>
-              <ul className="space-y-1.5 sm:space-y-2 md:space-y-2.5 mb-4 sm:mb-5 md:mb-6">
+              <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 mb-3 sm:mb-4 md:mb-6">
                 {guidesLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       to={link.href}
-                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[11px] sm:text-xs md:text-sm inline-block hover:translate-x-1 py-0.5"
+                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
                     >
                       {link.label}
                     </Link>
@@ -396,7 +396,7 @@ const Footer = () => {
               </ul>
               
               <h4 
-                className="font-bold text-[11px] sm:text-xs md:text-sm uppercase tracking-[0.1em] sm:tracking-[0.15em] mb-2 sm:mb-3 md:mb-4 pb-1.5 sm:pb-2 border-b border-gold/30"
+                className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
                   WebkitBackgroundClip: 'text',
@@ -405,12 +405,12 @@ const Footer = () => {
               >
                 Market Intel
               </h4>
-              <ul className="space-y-1.5 sm:space-y-2 md:space-y-2.5">
+              <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
                 {marketIntelLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       to={link.href}
-                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[11px] sm:text-xs md:text-sm inline-block hover:translate-x-1 py-0.5"
+                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
                     >
                       {link.label}
                     </Link>
@@ -421,14 +421,14 @@ const Footer = () => {
 
             {/* Column 4: About + Careers */}
             <div 
-              className="p-3 sm:p-4 md:p-5 rounded-lg sm:rounded-xl"
+              className="p-2 sm:p-3 md:p-5 rounded-lg sm:rounded-xl"
               style={{
                 background: 'linear-gradient(145deg, rgba(39,39,42,0.7) 0%, rgba(24,24,27,0.8) 100%)',
                 boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03)',
               }}
             >
               <h4 
-                className="font-bold text-[11px] sm:text-xs md:text-sm uppercase tracking-[0.1em] sm:tracking-[0.15em] mb-2 sm:mb-3 md:mb-4 pb-1.5 sm:pb-2 border-b border-gold/30"
+                className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
                   WebkitBackgroundClip: 'text',
@@ -437,12 +437,12 @@ const Footer = () => {
               >
                 About
               </h4>
-              <ul className="space-y-1.5 sm:space-y-2 md:space-y-2.5 mb-4 sm:mb-5 md:mb-6">
+              <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 mb-3 sm:mb-4 md:mb-6">
                 {aboutLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       to={link.href}
-                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[11px] sm:text-xs md:text-sm inline-block hover:translate-x-1 py-0.5"
+                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
                     >
                       {link.label}
                     </Link>
@@ -451,7 +451,7 @@ const Footer = () => {
               </ul>
               
               <h4 
-                className="font-bold text-[11px] sm:text-xs md:text-sm uppercase tracking-[0.1em] sm:tracking-[0.15em] mb-2 sm:mb-3 md:mb-4 pb-1.5 sm:pb-2 border-b border-gold/30"
+                className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
                   WebkitBackgroundClip: 'text',
@@ -460,12 +460,12 @@ const Footer = () => {
               >
                 Careers
               </h4>
-              <ul className="space-y-1.5 sm:space-y-2 md:space-y-2.5">
+              <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
                 {careerLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       to={link.href}
-                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[11px] sm:text-xs md:text-sm inline-block hover:translate-x-1 py-0.5"
+                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
                     >
                       {link.label}
                     </Link>
@@ -477,14 +477,14 @@ const Footer = () => {
         </div>
 
         {/* Premium Divider */}
-        <div className="relative h-px mb-6 sm:mb-8 md:mb-10 lg:mb-14 max-w-6xl mx-auto">
+        <div className="relative h-px mb-4 sm:mb-6 md:mb-10 lg:mb-14 max-w-6xl mx-auto">
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
         </div>
 
 
         {/* Professional Tools Section - Premium 3D Card */}
         <div 
-          className="w-full mb-6 sm:mb-8 md:mb-10 lg:mb-14 max-w-5xl mx-auto p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl relative"
+          className="w-full mb-4 sm:mb-6 md:mb-10 lg:mb-14 max-w-5xl mx-auto p-3 sm:p-5 md:p-8 rounded-xl sm:rounded-2xl relative"
           style={{
             background: 'linear-gradient(145deg, rgba(39,39,42,0.9) 0%, rgba(24,24,27,0.95) 100%)',
             boxShadow: `
@@ -495,7 +495,7 @@ const Footer = () => {
           }}
         >
           <h4 
-            className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em] mb-1.5 sm:mb-2 text-center"
+            className="font-bold text-[10px] sm:text-sm md:text-base uppercase tracking-[0.08em] sm:tracking-[0.15em] md:tracking-[0.2em] mb-1 sm:mb-2 text-center"
             style={{
               background: 'linear-gradient(135deg, #FFFFFF 0%, #D4AF37 100%)',
               WebkitBackgroundClip: 'text',
@@ -504,13 +504,13 @@ const Footer = () => {
           >
             Professional Tools
           </h4>
-          <p className="text-zinc-400 text-[10px] sm:text-xs md:text-sm mb-3 sm:mb-4 md:mb-6 italic text-center">AI-Powered Assistants</p>
-          <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 md:gap-3">
+          <p className="text-zinc-400 text-[9px] sm:text-xs md:text-sm mb-2 sm:mb-4 md:mb-6 italic text-center">AI-Powered Assistants</p>
+          <div className="flex flex-wrap justify-center gap-1 sm:gap-2 md:gap-3">
             {professionalTools.map((link) => (
               <Link
                 key={link.href}
                 to={link.href}
-                className="text-zinc-300 hover:text-gold transition-all duration-300 text-[10px] sm:text-[11px] md:text-xs lg:text-sm px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-md sm:rounded-lg hover:scale-105"
+                className="text-zinc-300 hover:text-gold transition-all duration-300 text-[9px] sm:text-[11px] md:text-xs lg:text-sm px-1.5 sm:px-3 md:px-4 py-0.5 sm:py-1.5 md:py-2 rounded-md sm:rounded-lg hover:scale-105"
                 style={{
                   background: 'linear-gradient(145deg, rgba(50,50,55,0.8) 0%, rgba(30,30,35,0.9) 100%)',
                   boxShadow: '0 4px 15px -3px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)',
@@ -524,13 +524,13 @@ const Footer = () => {
         </div>
 
         {/* Premium Divider */}
-        <div className="relative h-px mb-6 sm:mb-8 md:mb-10 lg:mb-12 max-w-4xl mx-auto">
+        <div className="relative h-px mb-4 sm:mb-6 md:mb-10 lg:mb-12 max-w-4xl mx-auto">
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
         </div>
 
         {/* Contact Section - Premium 3D Card */}
         <div 
-          className="w-full mb-6 sm:mb-8 md:mb-10 lg:mb-12 max-w-3xl mx-auto p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl text-center relative"
+          className="w-full mb-4 sm:mb-6 md:mb-10 lg:mb-12 max-w-3xl mx-auto p-3 sm:p-5 md:p-8 rounded-xl sm:rounded-2xl text-center relative"
           style={{
             background: 'linear-gradient(145deg, rgba(39,39,42,0.9) 0%, rgba(24,24,27,0.95) 100%)',
             boxShadow: `
@@ -594,13 +594,13 @@ const Footer = () => {
         </div>
 
         {/* Premium Divider */}
-        <div className="relative h-px mb-6 sm:mb-8 max-w-4xl mx-auto">
+        <div className="relative h-px mb-4 sm:mb-6 max-w-4xl mx-auto">
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
         </div>
 
         {/* Legal Section - Premium 3D Card */}
         <div 
-          className="max-w-4xl mx-auto mb-6 sm:mb-8 p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl text-center relative"
+          className="max-w-4xl mx-auto mb-4 sm:mb-6 p-3 sm:p-5 md:p-8 rounded-xl sm:rounded-2xl text-center relative"
           style={{
             background: 'linear-gradient(145deg, rgba(30,30,33,0.95) 0%, rgba(18,18,20,0.98) 100%)',
             boxShadow: `
