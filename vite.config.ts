@@ -17,20 +17,18 @@ export default defineConfig(({ mode }) => ({
   ].filter(Boolean),
   // Helps map runtime errors to real source files during QA.
   build: {
-    sourcemap: true,
-    // Disable gzip size reporting to speed up builds with many assets
+    // Disable source maps to reduce memory usage during build
+    sourcemap: false,
+    // Disable gzip size reporting to speed up builds
     reportCompressedSize: false,
-    // Increase chunk size warning limit for large asset bundles
+    // Increase chunk size warning limit
     chunkSizeWarningLimit: 2000,
     rollupOptions: {
       output: {
-        // Use stable JS filenames to avoid blank-page failures caused by cached HTML
-        // pointing at old (deleted) hashed bundle names.
+        // Stable entry filename
         entryFileNames: "assets/app.js",
         chunkFileNames: "assets/[name]-[hash].js",
         assetFileNames: "assets/[name]-[hash][extname]",
-        // NOTE: manualChunks removed - was causing React to load out of order
-        // resulting in "Cannot read properties of undefined (reading 'createContext')"
       },
     },
   },
