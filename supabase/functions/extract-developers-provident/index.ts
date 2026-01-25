@@ -16,13 +16,174 @@ interface ProvidentDeveloper {
   display_order: number;
 }
 
+const PROVIDENT_DEVELOPERS_URL = "https://providentestate.com/developers/";
+
+function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[&]/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function normalizeUrl(url: string): string {
+  const trimmed = url?.trim() ?? "";
+  if (!trimmed) return "";
+  if (trimmed.startsWith("//")) return `https:${trimmed}`;
+  if (trimmed.startsWith("/")) return `https://providentestate.com${trimmed}`;
+  return trimmed;
+}
+
+function decodeHtmlEntities(input: string): string {
+  return input
+    .replace(/&amp;nbsp;/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&#x27;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+}
+
 /**
- * PROVIDENT DEVELOPERS EXTRACTION v4
+ * Pick the best image URL from an <img> tag.
+ * We use srcset if available (picking the largest width descriptor),
+ * otherwise fall back to src.
  * 
- * • Fetches ALL developers from https://providentestate.com/developers/
- * • Uses srcset and upgrades images to max resolution (1600w).
- * • Clears existing pending rows (upsert‑style) before inserting to avoid duplicates.
- * • Preserves source ordering via display_order column.
+ * IMPORTANT: We do NOT upgrade URLs to larger sizes like /x/1600x1200/
+ * because those return AccessDenied from Provident's CDN.
+ */
+function pickBestImageFromImgTag(imgTag: string): string {
+  // Try srcset first
+  const srcsetMatch = imgTag.match(/srcset="([^"]+)"/);
+  if (srcsetMatch?.[1]) {
+    const parts = srcsetMatch[1].split(",").map((s) => s.trim()).filter(Boolean);
+    const candidates = parts.map((p) => {
+      const segments = p.split(/\s+/);
+      const url = segments[0] || "";
+      const descriptor = segments[1] || "";
+      const width = descriptor.endsWith("w") ? Number(descriptor.replace("w", "")) : 0;
+      return { url: normalizeUrl(url), width: Number.isFinite(width) ? width : 0 };
+    });
+
+    // Sort by width descending, pick the largest available
+    candidates.sort((a, b) => b.width - a.width);
+    const best = candidates[0];
+    if (best?.url) return best.url;
+  }
+
+  // Fallback to src
+  const srcMatch = imgTag.match(/src="([^"]+)"/);
+  return srcMatch?.[1] ? normalizeUrl(srcMatch[1]) : "";
+}
+
+/**
+ * Extract all developer cards from an HTML page.
+ * Uses a robust approach: find all <div class="developer-card"> starts
+ * and slice between them.
+ */
+function extractDeveloperCards(html: string, startingOrder: number): { developers: ProvidentDeveloper[]; displayOrder: number } {
+  const developers: ProvidentDeveloper[] = [];
+  let displayOrder = startingOrder;
+
+  // Find all card start positions
+  const startRegex = /<div\s+class="developer-card[^"]*">/gi;
+  const starts: number[] = [];
+  let m: RegExpExecArray | null;
+  while ((m = startRegex.exec(html)) !== null) {
+    starts.push(m.index);
+  }
+
+  console.log(`  Found ${starts.length} developer-card starts on this page`);
+
+  for (let i = 0; i < starts.length; i++) {
+    const start = starts[i];
+    const end = i + 1 < starts.length ? starts[i + 1] : html.length;
+    const cardHtml = html.slice(start, end);
+    displayOrder++;
+
+    // Feature image: look for img inside .img-section
+    let featureImage = "";
+    const featureBlockMatch = cardHtml.match(/<div\s+class="img-section"[^>]*>([\s\S]*?)<\/div>/i);
+    if (featureBlockMatch) {
+      const imgMatch = featureBlockMatch[1].match(/<img[^>]*>/i);
+      if (imgMatch) {
+        featureImage = pickBestImageFromImgTag(imgMatch[0]);
+      }
+    }
+
+    // Logo image: look for img inside .logo-section
+    let logo = "";
+    const logoBlockMatch = cardHtml.match(/<div\s+class="logo-section"[^>]*>([\s\S]*?)<\/div>/i);
+    if (logoBlockMatch) {
+      const imgMatch = logoBlockMatch[1].match(/<img[^>]*>/i);
+      if (imgMatch) {
+        logo = pickBestImageFromImgTag(imgMatch[0]);
+      }
+    }
+
+    // Name: inside <a class="name"><span>...</span></a>
+    const nameMatch = cardHtml.match(/<a\s+class="name"[^>]*>\s*<span>([^<]+)<\/span>/i);
+    const name = nameMatch ? decodeHtmlEntities(nameMatch[1]).trim() : "";
+
+    // Link: from href on .img-section-wrap or .name
+    const linkMatch = cardHtml.match(/<a\s+[^>]*class="(?:img-section-wrap|name)"[^>]*href="([^"]+)"/i);
+    const providentLink = linkMatch?.[1] ? normalizeUrl(linkMatch[1]) : "";
+
+    // Description: inside <p class="description">
+    const descMatch = cardHtml.match(/<p\s+class="description"[^>]*>([\s\S]*?)<\/p>/i);
+    let description = descMatch ? descMatch[1] : "";
+    description = decodeHtmlEntities(description)
+      .replace(/<[^>]+>/g, "")
+      .trim();
+
+    // Skip if no name or no images at all
+    if (!name) continue;
+    if (!featureImage && !logo) continue;
+
+    developers.push({
+      name,
+      slug: slugify(name),
+      description,
+      feature_image_url: featureImage,
+      logo_url: logo,
+      provident_link: providentLink,
+      display_order: displayOrder,
+    });
+
+    console.log(`  ✅ [${displayOrder}] ${name} | Logo: ${logo ? "✓" : "✗"} | Image: ${featureImage ? "✓" : "✗"}`);
+  }
+
+  return { developers, displayOrder };
+}
+
+/**
+ * Detect maximum page number from pagination links
+ */
+function extractMaxPage(html: string): number {
+  const pages: number[] = [];
+  
+  // Match ?page=N patterns
+  for (const match of html.matchAll(/developers\/?\?page=(\d+)/gi)) {
+    pages.push(Number(match[1]));
+  }
+  
+  // Match /page/N patterns
+  for (const match of html.matchAll(/developers\/?page\/(\d+)/gi)) {
+    pages.push(Number(match[1]));
+  }
+  
+  const validPages = pages.filter((n) => Number.isFinite(n) && n > 0);
+  return validPages.length > 0 ? Math.max(...validPages) : 1;
+}
+
+/**
+ * PROVIDENT DEVELOPERS EXTRACTION v5
+ * 
+ * • Fetches ALL developers from https://providentestate.com/developers/ (with pagination)
+ * • Uses srcset/src URLs directly (no broken "upgrades" to blocked resolutions)
+ * • Deduplicates by slug before insert
+ * • Clears ALL existing pending rows before inserting to avoid duplicates
+ * • Preserves source ordering via display_order column
  */
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -34,144 +195,83 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    console.log("🔄 Starting Provident Developers Extraction v4...");
+    console.log("🔄 Starting Provident Developers Extraction v5...");
 
-    // Fetch the developers page
-    const response = await fetch("https://providentestate.com/developers/", {
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-        "Accept-Language": "en-US,en;q=0.5",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch Provident developers page: ${response.status}`);
-    }
-
-    const html = await response.text();
-    console.log(`📄 Fetched HTML: ${html.length} characters`);
-
-    // Helper: upgrade image URL to highest resolution
-    const upgradeImageUrl = (url: string | null): string => {
-      if (!url) return "";
-      // Provident cloudfront pattern: /x/WIDTHxHEIGHT/ or /x/WIDTHx/
-      // Replace with large version
-      let upgraded = url.replace(/\/x\/\d+x\d*\//g, "/x/1600x1200/");
-      // fallback if pattern not matched
-      if (!upgraded.includes("/x/1600x")) {
-        upgraded = url.replace(/\/x\/\d+x\d*\//g, "/x/1200x800/");
-      }
-      return upgraded;
+    const requestHeaders = {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+      "Accept-Language": "en-US,en;q=0.5",
     };
 
-    // Extract developers using developer-card class
-    const extractedDevelopers: ProvidentDeveloper[] = [];
+    // 1) Fetch page 1
+    console.log(`📄 Fetching page 1: ${PROVIDENT_DEVELOPERS_URL}`);
+    const page1Res = await fetch(PROVIDENT_DEVELOPERS_URL, { headers: requestHeaders });
+    if (!page1Res.ok) {
+      throw new Error(`Failed to fetch Provident developers page 1: ${page1Res.status}`);
+    }
+    const page1Html = await page1Res.text();
+    console.log(`📄 Page 1 HTML: ${page1Html.length} characters`);
 
-    // Match each developer-card block
-    const cardPattern = /<div class="developer-card">([\s\S]*?)<\/div>\s*<\/div>\s*<\/div>/g;
-    let cardMatch;
-    let displayOrder = 0;
+    const maxPage = extractMaxPage(page1Html);
+    console.log(`📄 Detected max page: ${maxPage}`);
 
-    while ((cardMatch = cardPattern.exec(html)) !== null) {
-      const cardHtml = cardMatch[0];
-      displayOrder++;
+    // 2) Parse page 1
+    let allDevelopers: ProvidentDeveloper[] = [];
+    let { developers: page1Devs, displayOrder } = extractDeveloperCards(page1Html, 0);
+    allDevelopers = allDevelopers.concat(page1Devs);
+    console.log(`📄 Page 1: extracted ${page1Devs.length} developers`);
 
-      // Feature image (first img tag inside img-section)
-      // Try srcset for highest res, else fallback to src
-      let featureImage = "";
-      const featureImgMatch = cardHtml.match(/<div class="img-section">\s*<img[^>]*>/);
-      if (featureImgMatch) {
-        const imgTag = featureImgMatch[0];
-        const srcsetMatch = imgTag.match(/srcset="([^"]+)"/);
-        if (srcsetMatch) {
-          // srcset format: "url1 480w, url2 960w, url3 1600w"
-          const srcsetParts = srcsetMatch[1].split(",").map(s => s.trim());
-          // Pick the largest (last) or one with 1600w
-          const best = srcsetParts.find(p => p.includes("1600w")) || srcsetParts[srcsetParts.length - 1];
-          featureImage = best?.split(" ")[0] || "";
-        } else {
-          const srcMatch = imgTag.match(/src="([^"]+)"/);
-          featureImage = srcMatch ? srcMatch[1] : "";
+    // 3) Fetch and parse remaining pages (up to 50 max for safety)
+    if (maxPage > 1) {
+      for (let page = 2; page <= Math.min(maxPage, 50); page++) {
+        const pageUrl = `${PROVIDENT_DEVELOPERS_URL}?page=${page}`;
+        console.log(`📄 Fetching page ${page}: ${pageUrl}`);
+        
+        const res = await fetch(pageUrl, { headers: requestHeaders });
+        if (!res.ok) {
+          console.warn(`⚠️ Failed to fetch page ${page} (${res.status}) - stopping pagination`);
+          break;
         }
-      }
-      featureImage = upgradeImageUrl(featureImage);
-
-      // Logo image (inside logo-section)
-      let logo = "";
-      const logoMatch = cardHtml.match(/<div class="logo-section">\s*<img[^>]*>/);
-      if (logoMatch) {
-        const logoTag = logoMatch[0];
-        const logoSrcset = logoTag.match(/srcset="([^"]+)"/);
-        if (logoSrcset) {
-          const parts = logoSrcset[1].split(",").map(s => s.trim());
-          const best = parts.find(p => p.includes("1600w")) || parts[parts.length - 1];
-          logo = best?.split(" ")[0] || "";
-        } else {
-          const srcMatch = logoTag.match(/src="([^"]+)"/);
-          logo = srcMatch ? srcMatch[1] : "";
-        }
-      }
-      logo = upgradeImageUrl(logo);
-
-      // Name (inside a.name span)
-      const nameMatch = cardHtml.match(/<a class="name"[^>]*>\s*<span>([^<]+)<\/span>/);
-      const name = nameMatch ? nameMatch[1].trim() : "";
-
-      // Link
-      const linkMatch = cardHtml.match(/<a class="(?:img-section-wrap|name)"[^>]*href="([^"]+)"/);
-      const link = linkMatch ? linkMatch[1] : "";
-
-      // Description
-      const descMatch = cardHtml.match(/<p class="description">([^]*?)<\/p>/);
-      let description = descMatch ? descMatch[1] : "";
-      description = description
-        .replace(/&amp;nbsp;/g, " ")
-        .replace(/&nbsp;/g, " ")
-        .replace(/&amp;/g, "&")
-        .replace(/&#x27;/g, "'")
-        .replace(/&quot;/g, '"')
-        .replace(/<[^>]+>/g, "")
-        .trim();
-
-      if (name && (featureImage || logo)) {
-        const slug = name
-          .toLowerCase()
-          .replace(/[&]/g, "and")
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/^-|-$/g, "");
-
-        extractedDevelopers.push({
-          name,
-          slug,
-          description,
-          feature_image_url: featureImage,
-          logo_url: logo,
-          provident_link: link.startsWith("http") ? link : `https://providentestate.com${link}`,
-          display_order: displayOrder,
-        });
-
-        console.log(`✅ [${displayOrder}] ${name} | Logo: ${logo ? "✓" : "✗"} | Image: ${featureImage ? "✓" : "✗"}`);
+        
+        const html = await res.text();
+        const parsed = extractDeveloperCards(html, displayOrder);
+        displayOrder = parsed.displayOrder;
+        allDevelopers = allDevelopers.concat(parsed.developers);
+        console.log(`📄 Page ${page}: extracted ${parsed.developers.length} developers`);
       }
     }
 
-    console.log(`📊 Total extracted: ${extractedDevelopers.length} developers`);
+    // 4) Deduplicate by slug (prevents unique-constraint failures)
+    const bySlug = new Map<string, ProvidentDeveloper>();
+    for (const dev of allDevelopers) {
+      if (!dev.slug) continue;
+      if (!bySlug.has(dev.slug)) {
+        bySlug.set(dev.slug, dev);
+      }
+    }
+    const extractedDevelopers = Array.from(bySlug.values()).sort((a, b) => a.display_order - b.display_order);
 
-    if (extractedDevelopers.length === 0) {
-      throw new Error("NO DEVELOPERS EXTRACTED - aborting to prevent data loss");
+    console.log(`📊 Total extracted: ${extractedDevelopers.length} developers (deduped from ${allDevelopers.length})`);
+
+    // Safety check: if parsing regresses, don't wipe the queue
+    if (extractedDevelopers.length < 10) {
+      throw new Error(
+        `TOO FEW DEVELOPERS EXTRACTED (${extractedDevelopers.length}) - aborting to prevent data loss. Check if Provident changed their HTML structure.`
+      );
     }
 
-    // Clear ALL existing rows before insert (fresh full sync, avoid duplicate slug errors)
+    // 5) Clear ALL existing rows before insert (fresh full sync)
+    console.log("🗑️ Clearing all existing pending_developer_imports rows...");
     const { error: delErr } = await supabase
       .from("pending_developer_imports")
       .delete()
-      .neq("id", "00000000-0000-0000-0000-000000000000"); // delete all rows
+      .not("id", "is", null); // delete all rows
 
     if (delErr) {
       console.warn("Warning: could not clear rows:", delErr.message);
     }
 
-    // Insert fresh data
+    // 6) Insert fresh data
     const rows = extractedDevelopers.map((dev) => ({
       name: dev.name,
       slug: dev.slug,
@@ -184,6 +284,7 @@ serve(async (req) => {
       extracted_at: new Date().toISOString(),
     }));
 
+    console.log(`💾 Inserting ${rows.length} rows...`);
     const { error: insertError } = await supabase
       .from("pending_developer_imports")
       .insert(rows);
@@ -193,7 +294,7 @@ serve(async (req) => {
       throw new Error(`Failed to store pending imports: ${insertError.message}`);
     }
 
-    // Log extraction job
+    // 7) Log extraction job
     await supabase.from("extraction_job_logs").insert({
       source_id: null,
       job_type: "developer_extraction",
@@ -205,10 +306,13 @@ serve(async (req) => {
       records_pending: extractedDevelopers.length,
       metadata: {
         source: "provident_estate",
-        url: "https://providentestate.com/developers/",
-        version: "v4",
+        url: PROVIDENT_DEVELOPERS_URL,
+        version: "v5",
+        pages_fetched: maxPage,
       },
     });
+
+    console.log(`✅ Successfully extracted and stored ${extractedDevelopers.length} developers`);
 
     return new Response(
       JSON.stringify({
