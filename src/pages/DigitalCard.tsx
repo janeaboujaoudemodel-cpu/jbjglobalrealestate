@@ -204,12 +204,12 @@ const DigitalCard = () => {
                   style={{ background: GOLD.gradient }}
                 >
                   <div className="w-full h-full rounded-full overflow-hidden bg-black">
-                    {/* FIXED: objectPosition to show full head, not cropped */}
+                    {/* FIXED: objectPosition 20% to show full head/hairline without cropping */}
                     <img
                       src={janePhoto}
                       alt={`${CONTACT_INFO.name} - ${CONTACT_INFO.title}`}
                       className="w-full h-full object-cover"
-                      style={{ objectPosition: "center 35%" }}
+                      style={{ objectPosition: "center 20%" }}
                     />
                   </div>
                 </div>
