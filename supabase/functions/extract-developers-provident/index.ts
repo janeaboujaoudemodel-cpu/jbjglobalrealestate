@@ -17,7 +17,7 @@ interface ProvidentDeveloper {
 }
 
 const PROVIDENT_DEVELOPERS_URL = "https://providentestate.com/developers/";
-const OFFPLANS_SITEMAP_URL = "https://providentestate.com/offplans.xml";
+const PROVIDENT_PAGE_SIZE = 24; // Provident loads 24 developers per page
 
 function slugify(name: string): string {
   return name
@@ -136,29 +136,24 @@ function extractDeveloperCards(html: string): ProvidentDeveloper[] {
 }
 
 /**
- * Extract unique developer slugs from the offplans sitemap
+ * Fetch a specific page from Provident developers using their API
+ * Provident uses Gatsby/React with infinite scroll - we can access the paginated data
  */
-function extractDeveloperSlugsFromSitemap(sitemapContent: string): string[] {
-  const regex = /developed-by-([a-z0-9-]+)\//g;
-  const slugs = new Set<string>();
-  let match: RegExpExecArray | null;
+async function fetchDevelopersPage(
+  pageNumber: number,
+  firecrawlApiKey: string
+): Promise<ProvidentDeveloper[]> {
+  // Provident developers page uses pagination via scroll
+  // Page 1 = first 24, Page 2 = 25-48, etc.
+  // We use the skip parameter to get specific pages
+  const skip = (pageNumber - 1) * PROVIDENT_PAGE_SIZE;
   
-  while ((match = regex.exec(sitemapContent)) !== null) {
-    slugs.add(match[1]);
-  }
+  // Build URL with page parameter
+  const pageUrl = pageNumber === 1 
+    ? PROVIDENT_DEVELOPERS_URL 
+    : `${PROVIDENT_DEVELOPERS_URL}?page=${pageNumber}`;
   
-  return Array.from(slugs).sort();
-}
-
-/**
- * Fetch developer detail page and extract info
- */
-async function fetchDeveloperDetail(
-  slug: string, 
-  firecrawlApiKey: string,
-  displayOrder: number
-): Promise<ProvidentDeveloper | null> {
-  const url = `https://providentestate.com/new-projects/developed-by-${slug}/`;
+  console.log(`📄 Fetching page ${pageNumber} (skip=${skip}): ${pageUrl}`);
   
   try {
     const response = await fetch("https://api.firecrawl.dev/v1/scrape", {
@@ -168,97 +163,51 @@ async function fetchDeveloperDetail(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        url,
+        url: pageUrl,
         formats: ["html"],
         onlyMainContent: false,
-        waitFor: 3000,
-        timeout: 30000,
+        waitFor: 5000,
+        timeout: 60000,
       }),
     });
 
     if (!response.ok) {
-      console.warn(`Failed to fetch ${url}: ${response.status}`);
-      return null;
+      console.warn(`Page ${pageNumber} fetch failed: ${response.status}`);
+      return [];
     }
 
     const data = await response.json();
     const html = data?.data?.html || data?.html || "";
     
-    if (!html) {
-      console.warn(`No HTML for ${slug}`);
-      return null;
+    if (!html || html.length < 1000) {
+      console.log(`Page ${pageNumber}: No content or empty page`);
+      return [];
     }
 
-    // Extract developer info from the page
-    // Look for the developer header section
-    let name = deslugify(slug);
-    let description = "";
-    let logoUrl = "";
-    let featureImageUrl = "";
-
-    // Try to find the developer name in a h1 or title
-    const h1Match = html.match(/<h1[^>]*>([^<]+)<\/h1>/i);
-    if (h1Match) {
-      const extractedName = decodeHtmlEntities(h1Match[1]).trim();
-      // Only use if it looks like a developer name (not too long)
-      if (extractedName.length < 100 && !extractedName.toLowerCase().includes("project")) {
-        name = extractedName;
-      }
-    }
-
-    // Look for developer logo
-    const logoMatch = html.match(/<img[^>]*class="[^"]*developer[^"]*logo[^"]*"[^>]*>/i) ||
-                      html.match(/<img[^>]*alt="[^"]*logo[^"]*"[^>]*>/i) ||
-                      html.match(/<div[^>]*class="[^"]*logo[^"]*"[^>]*>\s*<img[^>]*>/i);
-    if (logoMatch) {
-      logoUrl = pickBestImageFromImgTag(logoMatch[0]);
-    }
-
-    // Look for feature/banner image
-    const bannerMatch = html.match(/<div[^>]*class="[^"]*banner[^"]*"[^>]*>[\s\S]*?<img[^>]*>/i) ||
-                        html.match(/<img[^>]*class="[^"]*banner[^"]*"[^>]*>/i);
-    if (bannerMatch) {
-      featureImageUrl = pickBestImageFromImgTag(bannerMatch[0]);
-    }
-
-    // Try to find og:image as fallback
-    if (!featureImageUrl) {
-      const ogMatch = html.match(/<meta[^>]*property="og:image"[^>]*content="([^"]+)"/i);
-      if (ogMatch) {
-        featureImageUrl = normalizeUrl(ogMatch[1]);
-      }
-    }
-
-    // Look for description
-    const descMatch = html.match(/<meta[^>]*name="description"[^>]*content="([^"]+)"/i);
-    if (descMatch) {
-      description = decodeHtmlEntities(descMatch[1]).trim();
-    }
-
-    return {
-      name,
-      slug,
-      description,
-      feature_image_url: featureImageUrl,
-      logo_url: logoUrl,
-      provident_link: url,
-      display_order: displayOrder,
-    };
+    const developers = extractDeveloperCards(html);
+    console.log(`✅ Page ${pageNumber}: Found ${developers.length} developers`);
+    
+    // Adjust display_order based on page number
+    return developers.map((dev, idx) => ({
+      ...dev,
+      display_order: skip + idx + 1,
+    }));
   } catch (error) {
-    console.warn(`Error fetching ${slug}:`, error);
-    return null;
+    console.warn(`Error fetching page ${pageNumber}:`, error);
+    return [];
   }
 }
 
 /**
- * PROVIDENT DEVELOPERS EXTRACTION v8 - SITEMAP + INDIVIDUAL PAGES
+ * PROVIDENT DEVELOPERS EXTRACTION v9 - MULTI-PAGE PAGINATION
  * 
  * Strategy:
- * 1. Fetch the initial /developers/ page to get the first 24 with full card data
- * 2. Fetch the sitemap to discover ALL developer slugs 
- * 3. For slugs not in initial 24, fetch individual developer pages
+ * 1. Fetch existing pending developers to know the current state
+ * 2. Check if we already have page 1 (24 developers) - if not, fetch it
+ * 3. Continue fetching subsequent pages until we get an empty page
+ * 4. Each page adds 24 developers
  * 
- * This bypasses the infinite scroll limitation.
+ * This allows incremental extraction across multiple runs.
  */
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -271,128 +220,106 @@ serve(async (req) => {
     const firecrawlApiKey = Deno.env.get("FIRECRAWL_API_KEY");
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    console.log("🔄 Starting Provident Developers Extraction v8 (Sitemap Strategy)...");
+    // Parse request body to check for specific page request
+    let requestedStartPage = 1;
+    let clearExisting = true;
+    
+    try {
+      const body = await req.json();
+      if (body?.startPage) requestedStartPage = body.startPage;
+      if (body?.clearExisting === false) clearExisting = false;
+    } catch {
+      // No body, use defaults
+    }
+
+    console.log(`🔄 Starting Provident Developers Extraction v9 (Multi-Page)...`);
+    console.log(`📊 Starting from page: ${requestedStartPage}, Clear existing: ${clearExisting}`);
 
     if (!firecrawlApiKey) {
       throw new Error("FIRECRAWL_API_KEY not configured");
     }
 
-    // Step 1: Get initial 24 developers from the main page (these have best quality data)
-    console.log(`📄 Step 1: Scraping main developers page: ${PROVIDENT_DEVELOPERS_URL}`);
+    // Check current state
+    const { data: existingPending, error: countError } = await supabase
+      .from("pending_developer_imports")
+      .select("slug")
+      .eq("status", "pending");
     
-    const mainPageResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${firecrawlApiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        url: PROVIDENT_DEVELOPERS_URL,
-        formats: ["html"],
-        onlyMainContent: false,
-        waitFor: 3000,
-        timeout: 60000,
-      }),
-    });
+    const existingSlugs = new Set((existingPending || []).map(d => d.slug));
+    console.log(`📊 Currently ${existingSlugs.size} pending developers in queue`);
 
-    if (!mainPageResponse.ok) {
-      const errorText = await mainPageResponse.text();
-      console.error("Firecrawl error on main page:", errorText);
-      throw new Error(`Firecrawl request failed: ${mainPageResponse.status}`);
+    // Calculate which page to start from based on existing data
+    let startPage = requestedStartPage;
+    if (requestedStartPage === 1 && existingSlugs.size >= 24) {
+      // If we already have page 1, calculate next page
+      startPage = Math.floor(existingSlugs.size / PROVIDENT_PAGE_SIZE) + 1;
+      console.log(`📊 Auto-calculated start page: ${startPage} (based on ${existingSlugs.size} existing)`);
     }
 
-    const mainPageData = await mainPageResponse.json();
-    const mainHtml = mainPageData?.data?.html || mainPageData?.html || "";
-    
-    console.log(`📄 Main page HTML: ${mainHtml.length} characters`);
-    
-    // Extract initial developers
-    const initialDevelopers = extractDeveloperCards(mainHtml);
-    const knownSlugs = new Set(initialDevelopers.map(d => d.slug));
-    
-    console.log(`✅ Step 1 complete: ${initialDevelopers.length} developers from main page`);
+    // Clear existing if requested (for fresh extraction)
+    if (clearExisting && startPage === 1) {
+      console.log("🗑️ Clearing all existing pending_developer_imports rows...");
+      const { error: delErr } = await supabase
+        .from("pending_developer_imports")
+        .delete()
+        .not("id", "is", null);
 
-    // Step 2: Fetch sitemap to discover ALL developer slugs
-    console.log(`📄 Step 2: Fetching sitemap: ${OFFPLANS_SITEMAP_URL}`);
-    
-    const sitemapResponse = await fetch(OFFPLANS_SITEMAP_URL);
-    if (!sitemapResponse.ok) {
-      console.warn("Could not fetch sitemap, using initial developers only");
-    } else {
-      const sitemapContent = await sitemapResponse.text();
-      const allSlugs = extractDeveloperSlugsFromSitemap(sitemapContent);
-      const newSlugs = allSlugs.filter(s => !knownSlugs.has(s));
+      if (delErr) {
+        console.warn("Warning: could not clear rows:", delErr.message);
+      }
+      existingSlugs.clear();
+    }
+
+    // Fetch pages starting from calculated start
+    const allDevelopers: ProvidentDeveloper[] = [];
+    const MAX_PAGES = 10; // Safety limit - Provident has ~7 pages
+    let currentPage = startPage;
+    let emptyPages = 0;
+
+    while (currentPage <= startPage + MAX_PAGES && emptyPages < 2) {
+      const pageDevelopers = await fetchDevelopersPage(currentPage, firecrawlApiKey);
       
-      console.log(`📊 Sitemap contains ${allSlugs.length} unique developer slugs`);
-      console.log(`📊 ${newSlugs.length} new developers to fetch`);
-      
-      // Step 3: Fetch details for new developers (limit to prevent timeout)
-      const MAX_ADDITIONAL = 200; // Safety limit
-      const slugsToFetch = newSlugs.slice(0, MAX_ADDITIONAL);
-      
-      console.log(`📄 Step 3: Fetching ${slugsToFetch.length} additional developer pages...`);
-      
-      // Fetch in batches to avoid rate limits
-      const BATCH_SIZE = 5;
-      let additionalCount = 0;
-      
-      for (let i = 0; i < slugsToFetch.length; i += BATCH_SIZE) {
-        const batch = slugsToFetch.slice(i, i + BATCH_SIZE);
-        const promises = batch.map((slug, idx) => 
-          fetchDeveloperDetail(slug, firecrawlApiKey, initialDevelopers.length + i + idx + 1)
-        );
+      if (pageDevelopers.length === 0) {
+        emptyPages++;
+        console.log(`📄 Page ${currentPage}: Empty (${emptyPages}/2 consecutive empty pages)`);
+      } else {
+        emptyPages = 0; // Reset counter
         
-        const results = await Promise.all(promises);
+        // Filter out already existing slugs
+        const newDevelopers = pageDevelopers.filter(d => !existingSlugs.has(d.slug));
         
-        for (const dev of results) {
-          if (dev) {
-            initialDevelopers.push(dev);
-            additionalCount++;
-            console.log(`  ✅ [${dev.display_order}] ${dev.name}`);
-          }
+        for (const dev of newDevelopers) {
+          existingSlugs.add(dev.slug);
+          allDevelopers.push(dev);
         }
         
-        // Small delay between batches
-        if (i + BATCH_SIZE < slugsToFetch.length) {
-          await new Promise(r => setTimeout(r, 500));
-        }
+        console.log(`✅ Page ${currentPage}: Added ${newDevelopers.length} new developers (${pageDevelopers.length - newDevelopers.length} duplicates skipped)`);
       }
       
-      console.log(`✅ Step 3 complete: Added ${additionalCount} additional developers`);
-    }
-
-    // Deduplicate by slug
-    const bySlug = new Map<string, ProvidentDeveloper>();
-    for (const dev of initialDevelopers) {
-      if (!dev.slug) continue;
-      if (!bySlug.has(dev.slug)) {
-        bySlug.set(dev.slug, dev);
+      currentPage++;
+      
+      // Small delay between pages to avoid rate limiting
+      if (currentPage <= startPage + MAX_PAGES) {
+        await new Promise(r => setTimeout(r, 1000));
       }
     }
-    const extractedDevelopers = Array.from(bySlug.values()).sort((a, b) => a.display_order - b.display_order);
 
-    console.log(`📊 Total extracted: ${extractedDevelopers.length} developers (deduped)`);
+    console.log(`📊 Total new developers extracted: ${allDevelopers.length}`);
 
-    // Safety check
-    if (extractedDevelopers.length < 10) {
-      throw new Error(
-        `TOO FEW DEVELOPERS EXTRACTED (${extractedDevelopers.length}) - aborting.`
+    if (allDevelopers.length === 0) {
+      return new Response(
+        JSON.stringify({
+          success: true,
+          message: "No new developers to add. All pages have been extracted.",
+          count: 0,
+          totalInQueue: existingSlugs.size,
+        }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Clear all existing rows
-    console.log("🗑️ Clearing all existing pending_developer_imports rows...");
-    const { error: delErr } = await supabase
-      .from("pending_developer_imports")
-      .delete()
-      .not("id", "is", null);
-
-    if (delErr) {
-      console.warn("Warning: could not clear rows:", delErr.message);
-    }
-
-    // Insert fresh data
-    const rows = extractedDevelopers.map((dev) => ({
+    // Insert new developers
+    const rows = allDevelopers.map((dev) => ({
       name: dev.name,
       slug: dev.slug,
       description: dev.description,
@@ -404,7 +331,7 @@ serve(async (req) => {
       extracted_at: new Date().toISOString(),
     }));
 
-    console.log(`💾 Inserting ${rows.length} rows...`);
+    console.log(`💾 Inserting ${rows.length} new rows...`);
     const { error: insertError } = await supabase
       .from("pending_developer_imports")
       .insert(rows);
@@ -421,24 +348,28 @@ serve(async (req) => {
       status: "completed",
       started_at: new Date().toISOString(),
       completed_at: new Date().toISOString(),
-      records_found: extractedDevelopers.length,
+      records_found: allDevelopers.length,
       records_matched: 0,
-      records_pending: extractedDevelopers.length,
+      records_pending: allDevelopers.length,
       metadata: {
         source: "provident_estate",
         url: PROVIDENT_DEVELOPERS_URL,
-        version: "v8-sitemap",
+        version: "v9-multi-page",
+        startPage,
+        pagesProcessed: currentPage - startPage,
       },
     });
 
-    console.log(`✅ Successfully extracted and stored ${extractedDevelopers.length} developers`);
+    console.log(`✅ Successfully extracted and stored ${allDevelopers.length} new developers`);
 
     return new Response(
       JSON.stringify({
         success: true,
-        message: `Successfully extracted ${extractedDevelopers.length} developers`,
-        count: extractedDevelopers.length,
-        developers: extractedDevelopers.map((d) => ({
+        message: `Successfully extracted ${allDevelopers.length} new developers from pages ${startPage}-${currentPage - 1}`,
+        count: allDevelopers.length,
+        totalInQueue: existingSlugs.size,
+        pagesProcessed: currentPage - startPage,
+        developers: allDevelopers.map((d) => ({
           name: d.name,
           order: d.display_order,
           logo: d.logo_url ? "✓" : "✗",
