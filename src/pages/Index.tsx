@@ -610,18 +610,17 @@ const Index = () => {
                       ))}
                     </div>
 
-                    {/* CTA Button - Premium Active Gold Style */}
+                    {/* CTA Button - Primary Style */}
                     <Link to="/founder" className="block">
-                      <button 
-                        className="group relative w-full md:w-auto inline-flex items-center justify-center gap-2 md:gap-3 px-6 md:px-10 py-4 md:py-5 text-sm md:text-base font-bold rounded-xl md:rounded-2xl transition-all duration-300 overflow-hidden hover:scale-[1.02] active:scale-[0.98] bg-gold border-[3px] border-gold hover:border-gold-dark shadow-[0_0_0_1px_rgba(200,167,102,0.3),0_10px_30px_-5px_hsl(var(--gold)/0.5),0_0_40px_rgba(200,167,102,0.25),0_4px_12px_rgba(0,0,0,0.1)]"
+                      <Button 
+                        variant="primary"
+                        size="lg"
+                        className="w-full md:w-auto group"
                       >
-                        <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                        <span className="relative flex items-center gap-2 md:gap-3">
-                          <User className="w-4 h-4 md:w-5 md:h-5 text-black" />
-                          <span className="text-black font-bold">Discover Her Story</span>
-                          <ArrowRight className="w-4 h-4 md:w-5 md:h-5 text-black group-hover:translate-x-1 transition-transform" />
-                        </span>
-                      </button>
+                        <User className="w-4 h-4 md:w-5 md:h-5" />
+                        <span>Learn More About the Founder</span>
+                        <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
+                      </Button>
                     </Link>
                   </div>
                 </div>
