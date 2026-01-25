@@ -126,11 +126,10 @@ function extractDeveloperCards(html: string): ProvidentDeveloper[] {
 }
 
 /**
- * PROVIDENT DEVELOPERS EXTRACTION v6 - FIRECRAWL
+ * PROVIDENT DEVELOPERS EXTRACTION v7 - FIRECRAWL WITH AUTO-SCROLL
  * 
- * Uses Firecrawl to render the full JavaScript page and capture ALL developers.
- * Provident's Gatsby site only loads 24 cards on initial HTML and uses
- * JavaScript to load the rest, so basic fetch() misses most developers.
+ * Uses Firecrawl with scroll actions to load ALL developers from infinite scroll.
+ * Provident's site loads 24 cards initially and requires scrolling to load more.
  */
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -143,14 +142,22 @@ serve(async (req) => {
     const firecrawlApiKey = Deno.env.get("FIRECRAWL_API_KEY");
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    console.log("🔄 Starting Provident Developers Extraction v6 (Firecrawl)...");
+    console.log("🔄 Starting Provident Developers Extraction v7 (Auto-Scroll)...");
 
     if (!firecrawlApiKey) {
       throw new Error("FIRECRAWL_API_KEY not configured");
     }
 
-    // Use Firecrawl to scrape with JavaScript rendering
-    console.log(`📄 Scraping with Firecrawl: ${PROVIDENT_DEVELOPERS_URL}`);
+    // Build scroll actions to trigger infinite scroll loading
+    // Each scroll loads ~24 more developers, need 7 scrolls for all ~168
+    const scrollActions = [];
+    for (let i = 0; i < 10; i++) {
+      scrollActions.push({ type: "scroll", direction: "down", amount: 2000 });
+      scrollActions.push({ type: "wait", milliseconds: 1500 });
+    }
+
+    console.log(`📄 Scraping with Firecrawl + ${scrollActions.length / 2} scrolls: ${PROVIDENT_DEVELOPERS_URL}`);
+    
     const firecrawlResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
       method: "POST",
       headers: {
@@ -161,7 +168,9 @@ serve(async (req) => {
         url: PROVIDENT_DEVELOPERS_URL,
         formats: ["html"],
         onlyMainContent: false,
-        waitFor: 5000, // Wait 5 seconds for JS to load all developers
+        waitFor: 3000,
+        timeout: 90000,
+        actions: scrollActions,
       }),
     });
 
