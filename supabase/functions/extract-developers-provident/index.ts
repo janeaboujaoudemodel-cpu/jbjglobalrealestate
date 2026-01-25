@@ -161,14 +161,14 @@ serve(async (req) => {
       throw new Error("NO DEVELOPERS EXTRACTED - aborting to prevent data loss");
     }
 
-    // Clear ALL existing pending rows before insert (fresh full sync)
+    // Clear ALL existing rows before insert (fresh full sync, avoid duplicate slug errors)
     const { error: delErr } = await supabase
       .from("pending_developer_imports")
       .delete()
-      .eq("status", "pending");
+      .neq("id", "00000000-0000-0000-0000-000000000000"); // delete all rows
 
     if (delErr) {
-      console.warn("Warning: could not clear pending rows:", delErr.message);
+      console.warn("Warning: could not clear rows:", delErr.message);
     }
 
     // Insert fresh data
