@@ -222,10 +222,52 @@ export const DeveloperApprovalQueue = () => {
     return desc.substring(0, maxLength).trim() + "...";
   };
 
+  const approveAll = async () => {
+    if (pendingDevelopers.length === 0) return;
+    for (const developer of pendingDevelopers) {
+      await approveDeveloper(developer);
+    }
+    toast.success(`Approved all ${pendingDevelopers.length} developers`);
+  };
+
+  const rejectAll = async () => {
+    if (pendingDevelopers.length === 0) return;
+    try {
+      await supabase
+        .from("pending_developer_imports")
+        .update({
+          status: "rejected",
+          reviewed_at: new Date().toISOString(),
+          reviewed_by: user?.id,
+        })
+        .eq("status", "pending");
+
+      toast.success(`Rejected all pending developers`);
+      fetchPendingDevelopers();
+    } catch (error) {
+      console.error("Bulk rejection error:", error);
+      toast.error("Failed to reject all");
+    }
+  };
+
+  const clearRejected = async () => {
+    try {
+      await supabase
+        .from("pending_developer_imports")
+        .delete()
+        .eq("status", "rejected");
+
+      toast.success("Cleared all rejected items");
+    } catch (error) {
+      console.error("Clear error:", error);
+      toast.error("Failed to clear rejected items");
+    }
+  };
+
   return (
     <Card className="bg-zinc-900 border-gold/30">
       <CardHeader className="border-b border-gold/20">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
             <Building2 className="w-5 h-5 text-gold" />
             <CardTitle className="text-white">Developer Approval Queue</CardTitle>
@@ -233,7 +275,7 @@ export const DeveloperApprovalQueue = () => {
               {pendingDevelopers.length} Pending
             </Badge>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <Button
               variant="outline"
               size="sm"
@@ -259,6 +301,37 @@ export const DeveloperApprovalQueue = () => {
             </Button>
           </div>
         </div>
+        
+        {/* Bulk Actions Row */}
+        {pendingDevelopers.length > 0 && (
+          <div className="flex items-center gap-2 mt-4 pt-4 border-t border-gold/10">
+            <Button
+              size="sm"
+              onClick={approveAll}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+            >
+              <Check className="w-4 h-4 mr-2" />
+              Approve All ({pendingDevelopers.length})
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={rejectAll}
+              className="border-red-500/50 text-red-400 hover:bg-red-500/10"
+            >
+              <X className="w-4 h-4 mr-2" />
+              Reject All
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={clearRejected}
+              className="text-zinc-400 hover:text-white"
+            >
+              Clear Rejected
+            </Button>
+          </div>
+        )}
       </CardHeader>
       <CardContent className="p-6">
         {isLoading ? (
@@ -272,7 +345,7 @@ export const DeveloperApprovalQueue = () => {
             <p className="text-sm mt-2">Click "Extract from Provident" to fetch new developers</p>
           </div>
         ) : (
-          /* Provident-style grid: 4 columns, squared cards */
+          /* Provident-style grid: 4 columns, squared cards with consistent alignment */
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {pendingDevelopers.map((developer) => {
               const isProcessing = processingIds.has(developer.id);
@@ -281,10 +354,10 @@ export const DeveloperApprovalQueue = () => {
               return (
                 <div
                   key={developer.id}
-                  className="group relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
+                  className="group relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col"
                 >
                   {/* Feature Image - Square aspect ratio */}
-                  <div className="relative aspect-square bg-zinc-100">
+                  <div className="relative aspect-square bg-zinc-100 flex-shrink-0">
                     {developer.feature_image_url ? (
                       <img
                         src={developer.feature_image_url}
@@ -307,34 +380,36 @@ export const DeveloperApprovalQueue = () => {
                     )}
                   </div>
 
-                  {/* Content area - matching Provident style */}
-                  <div className="p-4 bg-white">
-                    {/* Logo */}
-                    {developer.logo_url && (
-                      <div className="h-10 mb-3 flex items-center">
+                  {/* Content area - consistent height and alignment */}
+                  <div className="p-4 bg-white flex flex-col flex-grow">
+                    {/* Logo - fixed height container */}
+                    <div className="h-10 mb-3 flex items-center">
+                      {developer.logo_url ? (
                         <img
                           src={developer.logo_url}
                           alt={`${developer.name} logo`}
                           className="h-full w-auto object-contain max-w-[140px]"
                         />
-                      </div>
-                    )}
+                      ) : (
+                        <div className="h-full" />
+                      )}
+                    </div>
 
-                    {/* Name with arrow icon */}
-                    <div className="flex items-center gap-2 mb-2">
-                      <h3 className="text-zinc-900 font-semibold text-base leading-tight">
+                    {/* Name with arrow icon - fixed height */}
+                    <div className="flex items-center gap-2 mb-2 h-6">
+                      <h3 className="text-zinc-900 font-semibold text-base leading-tight truncate">
                         {developer.name}
                       </h3>
                       <ChevronUp className="w-4 h-4 text-zinc-400 rotate-45 flex-shrink-0" />
                     </div>
 
-                    {/* Truncated description */}
-                    <p className="text-zinc-600 text-sm leading-relaxed mb-4 min-h-[60px]">
-                      {truncateDescription(developer.description)}
+                    {/* Truncated description - fixed height */}
+                    <p className="text-zinc-600 text-sm leading-relaxed mb-4 h-[60px] line-clamp-3">
+                      {developer.description || "No description available"}
                     </p>
 
-                    {/* Action buttons row */}
-                    <div className="flex items-center gap-2 pt-3 border-t border-zinc-100">
+                    {/* Action buttons row - pushed to bottom */}
+                    <div className="flex items-center gap-2 pt-3 border-t border-zinc-100 mt-auto">
                       <Button
                         size="sm"
                         onClick={() => approveDeveloper(developer)}
