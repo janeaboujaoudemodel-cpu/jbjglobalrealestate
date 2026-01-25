@@ -57,11 +57,11 @@ const BusinessCardPrivacyNotice = ({ onAccept, onDecline }: BusinessCardPrivacyN
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950 flex items-center justify-center p-4">
-      <Card className="max-w-2xl w-full bg-zinc-900/80 border-2 border-blue-500/30">
+      <Card className="max-w-2xl w-full bg-zinc-900/80 border-2 border-teal-500/30">
         <CardHeader className="text-center pb-4">
           <div className="flex justify-center mb-4">
-            <div className="p-4 bg-blue-500/20 rounded-full border border-blue-500/40">
-              <Shield className="h-12 w-12 text-blue-400" />
+            <div className="p-4 bg-teal-500/20 rounded-full border border-teal-500/40">
+              <Shield className="h-12 w-12 text-teal-400" />
             </div>
           </div>
           <CardTitle className="text-2xl text-white">Privacy & Data Protection</CardTitle>
@@ -73,10 +73,10 @@ const BusinessCardPrivacyNotice = ({ onAccept, onDecline }: BusinessCardPrivacyN
         <CardContent className="space-y-6">
           <div className="grid gap-3">
             {privacyPoints.map((point, index) => (
-              <div key={index} className="flex gap-4 p-4 bg-zinc-800/50 border border-zinc-700/50 rounded-lg">
+              <div key={index} className="flex gap-4 p-4 bg-zinc-800/50 border border-teal-500/20 rounded-lg">
                 <div className="flex-shrink-0">
-                  <div className="p-2 bg-blue-500/20 rounded-full border border-blue-500/30">
-                    <point.icon className="h-5 w-5 text-blue-400" />
+                  <div className="p-2 bg-teal-500/20 rounded-full border border-teal-500/30">
+                    <point.icon className="h-5 w-5 text-teal-400" />
                   </div>
                 </div>
                 <div>
@@ -94,7 +94,7 @@ const BusinessCardPrivacyNotice = ({ onAccept, onDecline }: BusinessCardPrivacyN
               id="privacy-consent" 
               checked={agreed}
               onCheckedChange={(checked) => setAgreed(checked === true)}
-              className="border-blue-500/50 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
+              className="border-teal-500/50 data-[state=checked]:bg-teal-500 data-[state=checked]:border-teal-500"
             />
             <label 
               htmlFor="privacy-consent" 
@@ -115,7 +115,7 @@ const BusinessCardPrivacyNotice = ({ onAccept, onDecline }: BusinessCardPrivacyN
             Decline & Go Back
           </Button>
           <Button 
-            className="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 text-white"
+            className="w-full sm:w-auto bg-teal-500 hover:bg-teal-600 text-white"
             disabled={!agreed}
             onClick={onAccept}
           >
