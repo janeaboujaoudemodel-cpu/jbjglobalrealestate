@@ -17,6 +17,7 @@ interface ProvidentDeveloper {
 }
 
 const PROVIDENT_DEVELOPERS_URL = "https://providentestate.com/developers/";
+const OFFPLANS_SITEMAP_URL = "https://providentestate.com/offplans.xml";
 
 function slugify(name: string): string {
   return name
@@ -42,6 +43,15 @@ function decodeHtmlEntities(input: string): string {
     .replace(/&#x27;/g, "'")
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'");
+}
+
+function deslugify(slug: string): string {
+  return slug
+    .replace(/-/g, " ")
+    .replace(/\band\b/gi, "&")
+    .split(" ")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 }
 
 function pickBestImageFromImgTag(imgTag: string): string {
@@ -126,10 +136,129 @@ function extractDeveloperCards(html: string): ProvidentDeveloper[] {
 }
 
 /**
- * PROVIDENT DEVELOPERS EXTRACTION v7 - FIRECRAWL WITH AUTO-SCROLL
+ * Extract unique developer slugs from the offplans sitemap
+ */
+function extractDeveloperSlugsFromSitemap(sitemapContent: string): string[] {
+  const regex = /developed-by-([a-z0-9-]+)\//g;
+  const slugs = new Set<string>();
+  let match: RegExpExecArray | null;
+  
+  while ((match = regex.exec(sitemapContent)) !== null) {
+    slugs.add(match[1]);
+  }
+  
+  return Array.from(slugs).sort();
+}
+
+/**
+ * Fetch developer detail page and extract info
+ */
+async function fetchDeveloperDetail(
+  slug: string, 
+  firecrawlApiKey: string,
+  displayOrder: number
+): Promise<ProvidentDeveloper | null> {
+  const url = `https://providentestate.com/new-projects/developed-by-${slug}/`;
+  
+  try {
+    const response = await fetch("https://api.firecrawl.dev/v1/scrape", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${firecrawlApiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        url,
+        formats: ["html"],
+        onlyMainContent: false,
+        waitFor: 3000,
+        timeout: 30000,
+      }),
+    });
+
+    if (!response.ok) {
+      console.warn(`Failed to fetch ${url}: ${response.status}`);
+      return null;
+    }
+
+    const data = await response.json();
+    const html = data?.data?.html || data?.html || "";
+    
+    if (!html) {
+      console.warn(`No HTML for ${slug}`);
+      return null;
+    }
+
+    // Extract developer info from the page
+    // Look for the developer header section
+    let name = deslugify(slug);
+    let description = "";
+    let logoUrl = "";
+    let featureImageUrl = "";
+
+    // Try to find the developer name in a h1 or title
+    const h1Match = html.match(/<h1[^>]*>([^<]+)<\/h1>/i);
+    if (h1Match) {
+      const extractedName = decodeHtmlEntities(h1Match[1]).trim();
+      // Only use if it looks like a developer name (not too long)
+      if (extractedName.length < 100 && !extractedName.toLowerCase().includes("project")) {
+        name = extractedName;
+      }
+    }
+
+    // Look for developer logo
+    const logoMatch = html.match(/<img[^>]*class="[^"]*developer[^"]*logo[^"]*"[^>]*>/i) ||
+                      html.match(/<img[^>]*alt="[^"]*logo[^"]*"[^>]*>/i) ||
+                      html.match(/<div[^>]*class="[^"]*logo[^"]*"[^>]*>\s*<img[^>]*>/i);
+    if (logoMatch) {
+      logoUrl = pickBestImageFromImgTag(logoMatch[0]);
+    }
+
+    // Look for feature/banner image
+    const bannerMatch = html.match(/<div[^>]*class="[^"]*banner[^"]*"[^>]*>[\s\S]*?<img[^>]*>/i) ||
+                        html.match(/<img[^>]*class="[^"]*banner[^"]*"[^>]*>/i);
+    if (bannerMatch) {
+      featureImageUrl = pickBestImageFromImgTag(bannerMatch[0]);
+    }
+
+    // Try to find og:image as fallback
+    if (!featureImageUrl) {
+      const ogMatch = html.match(/<meta[^>]*property="og:image"[^>]*content="([^"]+)"/i);
+      if (ogMatch) {
+        featureImageUrl = normalizeUrl(ogMatch[1]);
+      }
+    }
+
+    // Look for description
+    const descMatch = html.match(/<meta[^>]*name="description"[^>]*content="([^"]+)"/i);
+    if (descMatch) {
+      description = decodeHtmlEntities(descMatch[1]).trim();
+    }
+
+    return {
+      name,
+      slug,
+      description,
+      feature_image_url: featureImageUrl,
+      logo_url: logoUrl,
+      provident_link: url,
+      display_order: displayOrder,
+    };
+  } catch (error) {
+    console.warn(`Error fetching ${slug}:`, error);
+    return null;
+  }
+}
+
+/**
+ * PROVIDENT DEVELOPERS EXTRACTION v8 - SITEMAP + INDIVIDUAL PAGES
  * 
- * Uses Firecrawl with scroll actions to load ALL developers from infinite scroll.
- * Provident's site loads 24 cards initially and requires scrolling to load more.
+ * Strategy:
+ * 1. Fetch the initial /developers/ page to get the first 24 with full card data
+ * 2. Fetch the sitemap to discover ALL developer slugs 
+ * 3. For slugs not in initial 24, fetch individual developer pages
+ * 
+ * This bypasses the infinite scroll limitation.
  */
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -142,23 +271,16 @@ serve(async (req) => {
     const firecrawlApiKey = Deno.env.get("FIRECRAWL_API_KEY");
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    console.log("🔄 Starting Provident Developers Extraction v7 (Auto-Scroll)...");
+    console.log("🔄 Starting Provident Developers Extraction v8 (Sitemap Strategy)...");
 
     if (!firecrawlApiKey) {
       throw new Error("FIRECRAWL_API_KEY not configured");
     }
 
-    // Build scroll actions to trigger infinite scroll loading
-    // Each scroll loads ~24 more developers, need 7 scrolls for all ~168
-    const scrollActions = [];
-    for (let i = 0; i < 10; i++) {
-      scrollActions.push({ type: "scroll", direction: "down", amount: 2000 });
-      scrollActions.push({ type: "wait", milliseconds: 1500 });
-    }
-
-    console.log(`📄 Scraping with Firecrawl + ${scrollActions.length / 2} scrolls: ${PROVIDENT_DEVELOPERS_URL}`);
+    // Step 1: Get initial 24 developers from the main page (these have best quality data)
+    console.log(`📄 Step 1: Scraping main developers page: ${PROVIDENT_DEVELOPERS_URL}`);
     
-    const firecrawlResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
+    const mainPageResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${firecrawlApiKey}`,
@@ -169,33 +291,79 @@ serve(async (req) => {
         formats: ["html"],
         onlyMainContent: false,
         waitFor: 3000,
-        timeout: 90000,
-        actions: scrollActions,
+        timeout: 60000,
       }),
     });
 
-    if (!firecrawlResponse.ok) {
-      const errorText = await firecrawlResponse.text();
-      console.error("Firecrawl error:", errorText);
-      throw new Error(`Firecrawl request failed: ${firecrawlResponse.status}`);
+    if (!mainPageResponse.ok) {
+      const errorText = await mainPageResponse.text();
+      console.error("Firecrawl error on main page:", errorText);
+      throw new Error(`Firecrawl request failed: ${mainPageResponse.status}`);
     }
 
-    const firecrawlData = await firecrawlResponse.json();
-    const html = firecrawlData?.data?.html || firecrawlData?.html || "";
+    const mainPageData = await mainPageResponse.json();
+    const mainHtml = mainPageData?.data?.html || mainPageData?.html || "";
     
-    if (!html) {
-      console.error("Firecrawl response:", JSON.stringify(firecrawlData).slice(0, 500));
-      throw new Error("No HTML returned from Firecrawl");
+    console.log(`📄 Main page HTML: ${mainHtml.length} characters`);
+    
+    // Extract initial developers
+    const initialDevelopers = extractDeveloperCards(mainHtml);
+    const knownSlugs = new Set(initialDevelopers.map(d => d.slug));
+    
+    console.log(`✅ Step 1 complete: ${initialDevelopers.length} developers from main page`);
+
+    // Step 2: Fetch sitemap to discover ALL developer slugs
+    console.log(`📄 Step 2: Fetching sitemap: ${OFFPLANS_SITEMAP_URL}`);
+    
+    const sitemapResponse = await fetch(OFFPLANS_SITEMAP_URL);
+    if (!sitemapResponse.ok) {
+      console.warn("Could not fetch sitemap, using initial developers only");
+    } else {
+      const sitemapContent = await sitemapResponse.text();
+      const allSlugs = extractDeveloperSlugsFromSitemap(sitemapContent);
+      const newSlugs = allSlugs.filter(s => !knownSlugs.has(s));
+      
+      console.log(`📊 Sitemap contains ${allSlugs.length} unique developer slugs`);
+      console.log(`📊 ${newSlugs.length} new developers to fetch`);
+      
+      // Step 3: Fetch details for new developers (limit to prevent timeout)
+      const MAX_ADDITIONAL = 200; // Safety limit
+      const slugsToFetch = newSlugs.slice(0, MAX_ADDITIONAL);
+      
+      console.log(`📄 Step 3: Fetching ${slugsToFetch.length} additional developer pages...`);
+      
+      // Fetch in batches to avoid rate limits
+      const BATCH_SIZE = 5;
+      let additionalCount = 0;
+      
+      for (let i = 0; i < slugsToFetch.length; i += BATCH_SIZE) {
+        const batch = slugsToFetch.slice(i, i + BATCH_SIZE);
+        const promises = batch.map((slug, idx) => 
+          fetchDeveloperDetail(slug, firecrawlApiKey, initialDevelopers.length + i + idx + 1)
+        );
+        
+        const results = await Promise.all(promises);
+        
+        for (const dev of results) {
+          if (dev) {
+            initialDevelopers.push(dev);
+            additionalCount++;
+            console.log(`  ✅ [${dev.display_order}] ${dev.name}`);
+          }
+        }
+        
+        // Small delay between batches
+        if (i + BATCH_SIZE < slugsToFetch.length) {
+          await new Promise(r => setTimeout(r, 500));
+        }
+      }
+      
+      console.log(`✅ Step 3 complete: Added ${additionalCount} additional developers`);
     }
-
-    console.log(`📄 Received HTML: ${html.length} characters`);
-
-    // Extract all developer cards
-    const allDevelopers = extractDeveloperCards(html);
 
     // Deduplicate by slug
     const bySlug = new Map<string, ProvidentDeveloper>();
-    for (const dev of allDevelopers) {
+    for (const dev of initialDevelopers) {
       if (!dev.slug) continue;
       if (!bySlug.has(dev.slug)) {
         bySlug.set(dev.slug, dev);
@@ -203,12 +371,12 @@ serve(async (req) => {
     }
     const extractedDevelopers = Array.from(bySlug.values()).sort((a, b) => a.display_order - b.display_order);
 
-    console.log(`📊 Total extracted: ${extractedDevelopers.length} developers (deduped from ${allDevelopers.length})`);
+    console.log(`📊 Total extracted: ${extractedDevelopers.length} developers (deduped)`);
 
     // Safety check
     if (extractedDevelopers.length < 10) {
       throw new Error(
-        `TOO FEW DEVELOPERS EXTRACTED (${extractedDevelopers.length}) - aborting. Check if Provident changed their HTML or if Firecrawl didn't wait long enough.`
+        `TOO FEW DEVELOPERS EXTRACTED (${extractedDevelopers.length}) - aborting.`
       );
     }
 
@@ -259,7 +427,7 @@ serve(async (req) => {
       metadata: {
         source: "provident_estate",
         url: PROVIDENT_DEVELOPERS_URL,
-        version: "v6-firecrawl",
+        version: "v8-sitemap",
       },
     });
 
