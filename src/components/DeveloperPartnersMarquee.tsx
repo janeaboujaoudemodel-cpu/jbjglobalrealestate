@@ -3,32 +3,32 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { LanguageContext } from "@/contexts/LanguageContext";
 
-// Featured developer partners - locally hosted logos
+// Featured developer partners - exact logos from Provident Estate homepage
 const FEATURED_DEVELOPERS = [
   { 
     name: "DAMAC", 
     slug: "damac",
-    logo: "/developers/logos/damac-logo.png"
+    logo: "/developers/logos/damac-logo.webp"
   },
   { 
     name: "EMAAR", 
     slug: "emaar",
-    logo: "/developers/logos/emaar-logo.png"
+    logo: "/developers/logos/emaar-logo.webp"
   },
   { 
     name: "MERAAS", 
     slug: "meraas",
-    logo: "/developers/logos/meraas-logo.png"
+    logo: "/developers/logos/meraas-logo.webp"
   },
   { 
     name: "SOBHA REALTY", 
     slug: "sobha",
-    logo: "/developers/logos/sobha-logo.png"
+    logo: "/developers/logos/sobha-logo.webp"
   },
   { 
     name: "NAKHEEL", 
     slug: "nakheel",
-    logo: "/developers/logos/nakheel-logo.png"
+    logo: "/developers/logos/nakheel-logo.webp"
   },
 ];
 
@@ -68,13 +68,13 @@ const DeveloperPartnersMarquee = () => {
         key={`${listKey}-${developer.slug}-${index}`}
         to={`/developers/${developer.slug}`}
         // Match Provident-style: each logo sits in a fixed slot so spacing is consistent
-        className="flex-shrink-0 w-[180px] md:w-[220px] lg:w-[260px] flex items-center justify-center transition-opacity duration-300 hover:opacity-60"
+        className="flex-shrink-0 w-[200px] md:w-[280px] lg:w-[320px] flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
         title={developer.name}
       >
         <img 
           src={developer.logo} 
           alt={developer.name}
-          className="h-9 md:h-10 lg:h-11 w-auto object-contain"
+          className="h-12 md:h-14 lg:h-16 w-auto max-w-[180px] md:max-w-[240px] lg:max-w-[280px] object-contain"
           loading="lazy"
           decoding="async"
         />
@@ -93,8 +93,8 @@ const DeveloperPartnersMarquee = () => {
           </p>
         </div>
 
-        {/* Marquee Container - TRUE edge-to-edge white strip */}
-        <div className="relative w-full overflow-hidden bg-white py-5 md:py-6">
+        {/* Marquee Container - TRUE edge-to-edge white strip with premium sizing */}
+        <div className="relative w-full overflow-hidden bg-white py-6 md:py-8">
           {/* Scrolling content */}
           <motion.div
             ref={trackRef}
