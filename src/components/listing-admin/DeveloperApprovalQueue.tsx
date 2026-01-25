@@ -74,7 +74,7 @@ export const DeveloperApprovalQueue = () => {
         .from("pending_developer_imports")
         .select("*")
         .eq("status", "pending")
-        .order("extracted_at", { ascending: true });
+        .order("created_at", { ascending: true });
 
       if (error) throw error;
       setPendingDevelopers((data as PendingDeveloper[]) || []);
@@ -276,7 +276,7 @@ export const DeveloperApprovalQueue = () => {
   };
 
   const handleCardClick = (slug: string) => {
-    navigate(`/developers/${slug}`);
+    navigate(`/developer/${slug}`);
   };
 
   const renderPageNumbers = () => {
