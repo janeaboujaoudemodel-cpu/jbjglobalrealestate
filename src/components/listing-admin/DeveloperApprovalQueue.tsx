@@ -3,19 +3,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { 
   Check, 
   X, 
   RefreshCw, 
   Download, 
-  ExternalLink,
+  ChevronUp,
   Building2,
   Loader2,
-  AlertCircle,
   CheckCircle2,
-  Merge
+  Pencil
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -47,7 +45,6 @@ export const DeveloperApprovalQueue = () => {
   const [existingDevelopers, setExistingDevelopers] = useState<ExistingDeveloper[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isExtracting, setIsExtracting] = useState(false);
-  const [selectedNotes, setSelectedNotes] = useState<Record<string, string>>({});
   const [processingIds, setProcessingIds] = useState<Set<string>>(new Set());
 
   const fetchPendingDevelopers = async () => {
@@ -112,86 +109,71 @@ export const DeveloperApprovalQueue = () => {
   const approveDeveloper = async (developer: PendingDeveloper) => {
     setProcessingIds(prev => new Set(prev).add(developer.id));
     try {
-      // Create new developer in main table
-      const { data: newDev, error: createError } = await supabase
-        .from("developers")
-        .insert({
-          name: developer.name,
-          slug: developer.slug,
-          description: developer.description,
-          logo_url: developer.logo_url,
-          feature_image_url: developer.feature_image_url,
-          headquarters: "Dubai, UAE",
-          rank: 20,
-        })
-        .select()
-        .single();
+      const existingMatch = findMatchingDeveloper(developer.slug);
+      
+      if (existingMatch) {
+        // Merge with existing
+        const updateData: Record<string, unknown> = {};
+        if (developer.description) updateData.description = developer.description;
+        if (developer.logo_url) updateData.logo_url = developer.logo_url;
+        if (developer.feature_image_url) updateData.feature_image_url = developer.feature_image_url;
 
-      if (createError) throw createError;
+        if (Object.keys(updateData).length > 0) {
+          const { error: updateError } = await supabase
+            .from("developers")
+            .update(updateData)
+            .eq("id", existingMatch.id);
 
-      // Update pending import status
-      await supabase
-        .from("pending_developer_imports")
-        .update({
-          status: "approved",
-          matched_developer_id: newDev.id,
-          reviewed_at: new Date().toISOString(),
-          reviewed_by: user?.id,
-          admin_notes: selectedNotes[developer.id] || null,
-        })
-        .eq("id", developer.id);
+          if (updateError) throw updateError;
+        }
 
-      toast.success(`Approved: ${developer.name}`);
+        await supabase
+          .from("pending_developer_imports")
+          .update({
+            status: "merged",
+            matched_developer_id: existingMatch.id,
+            reviewed_at: new Date().toISOString(),
+            reviewed_by: user?.id,
+          })
+          .eq("id", developer.id);
+
+        toast.success(`Merged: ${developer.name}`);
+      } else {
+        // Create new
+        const { data: newDev, error: createError } = await supabase
+          .from("developers")
+          .insert({
+            name: developer.name,
+            slug: developer.slug,
+            description: developer.description,
+            logo_url: developer.logo_url,
+            feature_image_url: developer.feature_image_url,
+            headquarters: "Dubai, UAE",
+            rank: 20,
+          })
+          .select()
+          .single();
+
+        if (createError) throw createError;
+
+        await supabase
+          .from("pending_developer_imports")
+          .update({
+            status: "approved",
+            matched_developer_id: newDev.id,
+            reviewed_at: new Date().toISOString(),
+            reviewed_by: user?.id,
+          })
+          .eq("id", developer.id);
+
+        toast.success(`Approved: ${developer.name}`);
+      }
+      
       fetchPendingDevelopers();
       fetchExistingDevelopers();
     } catch (error) {
       console.error("Approval error:", error);
       toast.error(`Failed to approve: ${error instanceof Error ? error.message : "Unknown error"}`);
-    } finally {
-      setProcessingIds(prev => {
-        const next = new Set(prev);
-        next.delete(developer.id);
-        return next;
-      });
-    }
-  };
-
-  const mergeDeveloper = async (developer: PendingDeveloper, existingId: string) => {
-    setProcessingIds(prev => new Set(prev).add(developer.id));
-    try {
-      // Update existing developer with new data
-      const updateData: Record<string, unknown> = {};
-      if (developer.description) updateData.description = developer.description;
-      if (developer.logo_url) updateData.logo_url = developer.logo_url;
-      if (developer.feature_image_url) updateData.feature_image_url = developer.feature_image_url;
-
-      if (Object.keys(updateData).length > 0) {
-        const { error: updateError } = await supabase
-          .from("developers")
-          .update(updateData)
-          .eq("id", existingId);
-
-        if (updateError) throw updateError;
-      }
-
-      // Update pending import status
-      await supabase
-        .from("pending_developer_imports")
-        .update({
-          status: "merged",
-          matched_developer_id: existingId,
-          reviewed_at: new Date().toISOString(),
-          reviewed_by: user?.id,
-          admin_notes: selectedNotes[developer.id] || "Merged with existing developer",
-        })
-        .eq("id", developer.id);
-
-      toast.success(`Merged: ${developer.name}`);
-      fetchPendingDevelopers();
-      fetchExistingDevelopers();
-    } catch (error) {
-      console.error("Merge error:", error);
-      toast.error(`Failed to merge: ${error instanceof Error ? error.message : "Unknown error"}`);
     } finally {
       setProcessingIds(prev => {
         const next = new Set(prev);
@@ -210,7 +192,6 @@ export const DeveloperApprovalQueue = () => {
           status: "rejected",
           reviewed_at: new Date().toISOString(),
           reviewed_by: user?.id,
-          admin_notes: selectedNotes[developer.id] || "Rejected by admin",
         })
         .eq("id", developer.id);
 
@@ -233,6 +214,12 @@ export const DeveloperApprovalQueue = () => {
       d.slug.toLowerCase() === slug.toLowerCase() ||
       d.name.toLowerCase().includes(slug.replace(/-/g, ' ').toLowerCase())
     );
+  };
+
+  const truncateDescription = (desc: string | null, maxLength: number = 120) => {
+    if (!desc) return "";
+    if (desc.length <= maxLength) return desc;
+    return desc.substring(0, maxLength).trim() + "...";
   };
 
   return (
@@ -273,7 +260,7 @@ export const DeveloperApprovalQueue = () => {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="p-4">
+      <CardContent className="p-6">
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-gold" />
@@ -285,117 +272,106 @@ export const DeveloperApprovalQueue = () => {
             <p className="text-sm mt-2">Click "Extract from Provident" to fetch new developers</p>
           </div>
         ) : (
-          <div className="grid gap-4">
+          /* Provident-style grid: 4 columns, squared cards */
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {pendingDevelopers.map((developer) => {
-              const existingMatch = findMatchingDeveloper(developer.slug);
               const isProcessing = processingIds.has(developer.id);
+              const existingMatch = findMatchingDeveloper(developer.slug);
 
               return (
                 <div
                   key={developer.id}
-                  className="bg-zinc-800 rounded-xl border border-zinc-700 overflow-hidden"
+                  className="group relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
                 >
-                  <div className="flex">
-                    {/* Image Preview */}
-                    <div className="w-48 h-36 flex-shrink-0 relative bg-zinc-900">
-                      {developer.feature_image_url ? (
+                  {/* Feature Image - Square aspect ratio */}
+                  <div className="relative aspect-square bg-zinc-100">
+                    {developer.feature_image_url ? (
+                      <img
+                        src={developer.feature_image_url}
+                        alt={developer.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-zinc-200 to-zinc-300">
+                        <Building2 className="w-16 h-16 text-zinc-400" />
+                      </div>
+                    )}
+                    
+                    {/* Existing match badge */}
+                    {existingMatch && (
+                      <div className="absolute top-2 left-2">
+                        <Badge className="bg-amber-500 text-white text-xs">
+                          Will Merge
+                        </Badge>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Content area - matching Provident style */}
+                  <div className="p-4 bg-white">
+                    {/* Logo */}
+                    {developer.logo_url && (
+                      <div className="h-10 mb-3 flex items-center">
                         <img
-                          src={developer.feature_image_url}
-                          alt={developer.name}
-                          className="w-full h-full object-cover"
+                          src={developer.logo_url}
+                          alt={`${developer.name} logo`}
+                          className="h-full w-auto object-contain max-w-[140px]"
                         />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-zinc-600">
-                          <Building2 className="w-8 h-8" />
-                        </div>
-                      )}
-                      {/* Logo overlay */}
-                      {developer.logo_url && (
-                        <div className="absolute bottom-2 right-2 bg-white/90 rounded-lg p-1">
-                          <img
-                            src={developer.logo_url}
-                            alt={`${developer.name} logo`}
-                            className="h-8 w-auto object-contain"
-                          />
-                        </div>
-                      )}
+                      </div>
+                    )}
+
+                    {/* Name with arrow icon */}
+                    <div className="flex items-center gap-2 mb-2">
+                      <h3 className="text-zinc-900 font-semibold text-base leading-tight">
+                        {developer.name}
+                      </h3>
+                      <ChevronUp className="w-4 h-4 text-zinc-400 rotate-45 flex-shrink-0" />
                     </div>
 
-                    {/* Content */}
-                    <div className="flex-1 p-4">
-                      <div className="flex items-start justify-between mb-2">
-                        <div>
-                          <h3 className="text-white font-semibold text-lg">{developer.name}</h3>
-                          <p className="text-zinc-500 text-sm">/{developer.slug}</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {existingMatch && (
-                            <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">
-                              <AlertCircle className="w-3 h-3 mr-1" />
-                              Match Found
-                            </Badge>
-                          )}
-                          {developer.provident_link && (
-                            <a
-                              href={developer.provident_link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-gold hover:text-gold/80"
-                            >
-                              <ExternalLink className="w-4 h-4" />
-                            </a>
-                          )}
-                        </div>
-                      </div>
+                    {/* Truncated description */}
+                    <p className="text-zinc-600 text-sm leading-relaxed mb-4 min-h-[60px]">
+                      {truncateDescription(developer.description)}
+                    </p>
 
-                      <p className="text-zinc-400 text-sm line-clamp-2 mb-3">
-                        {developer.description || "No description available"}
-                      </p>
-
-                      {/* Admin Notes */}
-                      <Textarea
-                        placeholder="Admin notes (optional)"
-                        value={selectedNotes[developer.id] || ""}
-                        onChange={(e) => setSelectedNotes(prev => ({ ...prev, [developer.id]: e.target.value }))}
-                        className="bg-zinc-900 border-zinc-700 text-white text-sm h-16 mb-3"
-                      />
-
-                      {/* Actions */}
-                      <div className="flex items-center gap-2">
-                        <Button
-                          size="sm"
-                          onClick={() => approveDeveloper(developer)}
-                          disabled={isProcessing}
-                          className="bg-green-600 hover:bg-green-700 text-white"
-                        >
-                          {isProcessing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4 mr-1" />}
-                          Approve
-                        </Button>
-                        
-                        {existingMatch && (
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => mergeDeveloper(developer, existingMatch.id)}
-                            disabled={isProcessing}
-                            className="border-yellow-500/50 text-yellow-400 hover:bg-yellow-500/10"
-                          >
-                            <Merge className="w-4 h-4 mr-1" />
-                            Merge with {existingMatch.name}
-                          </Button>
+                    {/* Action buttons row */}
+                    <div className="flex items-center gap-2 pt-3 border-t border-zinc-100">
+                      <Button
+                        size="sm"
+                        onClick={() => approveDeveloper(developer)}
+                        disabled={isProcessing}
+                        className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs h-8"
+                      >
+                        {isProcessing ? (
+                          <Loader2 className="w-3 h-3 animate-spin" />
+                        ) : (
+                          <>
+                            <Check className="w-3 h-3 mr-1" />
+                            {existingMatch ? "Merge" : "Approve"}
+                          </>
                         )}
-
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => rejectDeveloper(developer)}
-                          disabled={isProcessing}
-                          className="border-red-500/50 text-red-400 hover:bg-red-500/10"
-                        >
-                          <X className="w-4 h-4 mr-1" />
-                          Reject
-                        </Button>
-                      </div>
+                      </Button>
+                      
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => rejectDeveloper(developer)}
+                        disabled={isProcessing}
+                        className="flex-1 border-red-200 text-red-600 hover:bg-red-50 text-xs h-8"
+                      >
+                        <X className="w-3 h-3 mr-1" />
+                        Reject
+                      </Button>
+                      
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => window.open(developer.provident_link || '#', '_blank')}
+                        disabled={!developer.provident_link}
+                        className="w-8 h-8 p-0 text-zinc-500 hover:text-zinc-900"
+                        title="View Source"
+                      >
+                        <Pencil className="w-3 h-3" />
+                      </Button>
                     </div>
                   </div>
                 </div>
