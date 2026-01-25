@@ -503,17 +503,18 @@ const Index = () => {
           <div className="absolute bottom-1/4 right-0 w-24 md:w-48 h-px bg-gradient-to-l from-gold/40 to-transparent" />
         </div>
 
-        <div className="container mx-auto px-4 md:px-6 relative z-10">
+        {/* Full-bleed: remove container/max-w so the founder card goes edge-to-edge */}
+        <div className="w-full relative z-10">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerContainer}
-            className="max-w-7xl mx-auto"
+            className="w-full"
           >
             {/* Main Editorial Card - WARM CHAMPAGNE PALETTE with PREMIUM GOLD BORDER */}
             <motion.div
-              className="relative rounded-2xl md:rounded-[2rem] overflow-hidden border-[3px] border-gold shadow-[0_0_0_1px_rgba(200,167,102,0.3),0_0_60px_rgba(200,167,102,0.2),0_50px_100px_-20px_rgba(0,0,0,0.5)]"
+              className="relative w-full rounded-2xl md:rounded-[2rem] overflow-hidden border-[3px] border-gold shadow-[0_0_0_1px_rgba(200,167,102,0.3),0_0_60px_rgba(200,167,102,0.2),0_50px_100px_-20px_rgba(0,0,0,0.5)]"
               variants={fadeInUp}
               style={{
                 background: 'linear-gradient(165deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)',
