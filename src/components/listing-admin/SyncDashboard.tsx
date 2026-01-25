@@ -25,6 +25,7 @@ import {
 import { toast } from "sonner";
 import { SarahTestPanel } from "./SarahTestPanel";
 import { ProjectApprovalQueue } from "./ProjectApprovalQueue";
+import { DeveloperApprovalQueue } from "./DeveloperApprovalQueue";
 
 interface SyncStats {
   page: number;
@@ -469,10 +470,14 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     <div className="space-y-6">
       {/* Tabs: Test vs Full Sync */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="approvals" className="flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4" />
-            Approvals
+            Projects
+          </TabsTrigger>
+          <TabsTrigger value="developers" className="flex items-center gap-2">
+            <Database className="w-4 h-4" />
+            Developers
           </TabsTrigger>
           <TabsTrigger value="test" className="flex items-center gap-2">
             <FlaskConical className="w-4 h-4" />
@@ -491,6 +496,10 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
 
         <TabsContent value="approvals" className="mt-6">
           <ProjectApprovalQueue onRefresh={loadProjectCount} />
+        </TabsContent>
+
+        <TabsContent value="developers" className="mt-6">
+          <DeveloperApprovalQueue />
         </TabsContent>
         
         <TabsContent value="test" className="mt-6">
