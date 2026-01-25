@@ -309,10 +309,10 @@ serve(async (req) => {
       extracted_at: new Date().toISOString(),
     }));
 
-    console.log(`💾 Inserting ${rows.length} new rows...`);
+    console.log(`💾 Upserting ${rows.length} rows (insert new, update existing)...`);
     const { error: insertError } = await supabase
       .from("pending_developer_imports")
-      .insert(rows);
+      .upsert(rows, { onConflict: 'slug' });
 
     if (insertError) {
       console.error("Insert error:", insertError);
