@@ -16,17 +16,24 @@ interface ProvidentDeveloper {
 }
 
 /**
- * PROVIDENT DEVELOPERS EXTRACTION
+ * PROVIDENT DEVELOPERS EXTRACTION v2
  * 
  * Extracts ALL developers from https://providentestate.com/developers/
- * with exact matching of:
- * - Feature images (project photos)
- * - Logo images
- * - Names
- * - Descriptions
- * - Links
+ * Using precise HTML structure matching for developer-card elements
  * 
- * NO PARTIAL EXTRACTION - ALL OR NOTHING
+ * Structure per card:
+ * <div class="developer-card">
+ *   <a class="img-section-wrap" href="LINK">
+ *     <div class="img-section">
+ *       <img src="FEATURE_IMAGE" />
+ *       <div class="logo-section">
+ *         <img src="LOGO" />
+ *       </div>
+ *     </div>
+ *   </a>
+ *   <a class="name" href="LINK"><span>NAME</span></a>
+ *   <p class="description">DESCRIPTION</p>
+ * </div>
  */
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -38,7 +45,7 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    console.log("🔄 Starting Provident Developers Extraction...");
+    console.log("🔄 Starting Provident Developers Extraction v2...");
 
     // Fetch the developers page
     const response = await fetch("https://providentestate.com/developers/", {
@@ -56,85 +63,81 @@ serve(async (req) => {
     const html = await response.text();
     console.log(`📄 Fetched HTML: ${html.length} characters`);
 
-    // Extract developers using regex patterns matching the HTML structure
+    // Extract developers using precise developer-card matching
     const extractedDevelopers: ProvidentDeveloper[] = [];
 
-    // Pattern to match developer cards
-    // Structure: <div class="developer-card">...<img src="FEATURE_IMAGE">...<img src="LOGO">...<a class="name">NAME</a>...<p class="description">DESC</p>
+    // Split by developer-card to process each card individually
+    const cardPattern = /<div class="developer-card">([\s\S]*?)(?=<div class="developer-card">|<\/div>\s*<\/div>\s*<\/div>\s*<footer)/g;
     
-    const developerCardPattern = /<div class="developer-card">([\s\S]*?)<\/div>(?=\s*<div class="developer-card">|\s*<\/div>\s*<\/div>\s*<div class="category-section|$)/g;
-    
-    // More reliable: extract from the structured HTML
-    // Find all developer sections
-    const featureImagePattern = /<div class="img-section">\s*<img[^>]*src="([^"]+)"[^>]*alt="developer-([^"]+)-image/g;
-    const logoPattern = /<div class="logo-section">\s*<img[^>]*src="([^"]+)"/g;
-    const namePattern = /<a class="name"[^>]*href="([^"]+)"[^>]*>\s*<span>([^<]+)<\/span>/g;
-    const descPattern = /<p class="description">([^<]+(?:<[^>]+>[^<]*<\/[^>]+>)?[^<]*)<\/p>/g;
-
-    // Extract all feature images with developer names
-    const featureImages: Array<{url: string, name: string}> = [];
-    let match;
-    while ((match = featureImagePattern.exec(html)) !== null) {
-      featureImages.push({ url: match[1], name: match[2] });
-    }
-
-    // Extract all logos
-    const logos: string[] = [];
-    while ((match = logoPattern.exec(html)) !== null) {
-      logos.push(match[1]);
-    }
-
-    // Extract all names with links
-    const names: Array<{link: string, name: string}> = [];
-    while ((match = namePattern.exec(html)) !== null) {
-      names.push({ link: match[1], name: match[2].trim() });
-    }
-
-    // Extract all descriptions
-    const descriptions: string[] = [];
-    while ((match = descPattern.exec(html)) !== null) {
-      // Clean HTML entities and tags
-      let desc = match[1]
+    let cardMatch;
+    while ((cardMatch = cardPattern.exec(html)) !== null) {
+      const cardHtml = cardMatch[1];
+      
+      // Extract feature image - first img in img-section
+      const featureImgMatch = cardHtml.match(/<div class="img-section">\s*<img[^>]*src="([^"]+)"/);
+      const featureImage = featureImgMatch ? featureImgMatch[1] : "";
+      
+      // Extract logo - img inside logo-section
+      const logoMatch = cardHtml.match(/<div class="logo-section">\s*<img[^>]*src="([^"]+)"/);
+      const logo = logoMatch ? logoMatch[1] : "";
+      
+      // Extract name - span inside a.name
+      const nameMatch = cardHtml.match(/<a class="name"[^>]*>\s*<span>([^<]+)<\/span>/);
+      const name = nameMatch ? nameMatch[1].trim() : "";
+      
+      // Extract link - href from a.img-section-wrap or a.name
+      const linkMatch = cardHtml.match(/<a class="(?:img-section-wrap|name)"[^>]*href="([^"]+)"/);
+      const link = linkMatch ? linkMatch[1] : "";
+      
+      // Extract description - p.description content
+      const descMatch = cardHtml.match(/<p class="description">([^]*?)<\/p>/);
+      let description = descMatch ? descMatch[1] : "";
+      
+      // Clean description
+      description = description
         .replace(/&amp;nbsp;/g, ' ')
         .replace(/&nbsp;/g, ' ')
         .replace(/&amp;/g, '&')
+        .replace(/&#x27;/g, "'")
+        .replace(/&quot;/g, '"')
         .replace(/<[^>]+>/g, '')
         .trim();
-      descriptions.push(desc);
+      
+      if (name && (featureImage || logo)) {
+        const slug = name.toLowerCase()
+          .replace(/[&]/g, 'and')
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-|-$/g, '');
+
+        extractedDevelopers.push({
+          name,
+          slug,
+          description,
+          feature_image_url: featureImage,
+          logo_url: logo,
+          provident_link: link,
+        });
+        
+        console.log(`✅ Extracted: ${name} | Logo: ${logo ? '✓' : '✗'} | Image: ${featureImage ? '✓' : '✗'} | Desc: ${description.length} chars`);
+      }
     }
 
-    console.log(`📊 Found: ${featureImages.length} images, ${logos.length} logos, ${names.length} names, ${descriptions.length} descriptions`);
-
-    // Combine into developer objects
-    const minCount = Math.min(featureImages.length, logos.length, names.length, descriptions.length);
-    
-    for (let i = 0; i < minCount; i++) {
-      const name = names[i].name;
-      const slug = name.toLowerCase()
-        .replace(/[&]/g, 'and')
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '');
-
-      extractedDevelopers.push({
-        name: name,
-        slug: slug,
-        description: descriptions[i],
-        feature_image_url: featureImages[i].url,
-        logo_url: logos[i],
-        provident_link: names[i].link,
-      });
-    }
-
-    console.log(`✅ Extracted ${extractedDevelopers.length} developers`);
+    console.log(`📊 Total extracted: ${extractedDevelopers.length} developers`);
 
     if (extractedDevelopers.length === 0) {
       throw new Error("NO DEVELOPERS EXTRACTED - Aborting to prevent data loss");
     }
 
-    // Validate minimum expected count (Provident has ~20+ developers)
+    // Validate minimum expected count
     if (extractedDevelopers.length < 15) {
-      console.warn(`⚠️ Warning: Only ${extractedDevelopers.length} developers found. Expected 15+. Continuing with caution.`);
+      console.warn(`⚠️ Warning: Only ${extractedDevelopers.length} developers found. Expected 15+.`);
     }
+
+    // Clear old pending imports and insert fresh data
+    await supabase
+      .from("pending_developer_imports")
+      .delete()
+      .eq("status", "pending");
 
     // Store in pending_developer_imports table for admin approval
     const pendingImports = extractedDevelopers.map(dev => ({
@@ -149,13 +152,9 @@ serve(async (req) => {
       extracted_at: new Date().toISOString(),
     }));
 
-    // Upsert to avoid duplicates (based on slug)
     const { error: insertError } = await supabase
       .from("pending_developer_imports")
-      .upsert(pendingImports, {
-        onConflict: "slug",
-        ignoreDuplicates: false,
-      });
+      .insert(pendingImports);
 
     if (insertError) {
       console.error("Insert error:", insertError);
@@ -177,6 +176,7 @@ serve(async (req) => {
         metadata: {
           source: "provident_estate",
           url: "https://providentestate.com/developers/",
+          version: "v2",
         },
       });
 
@@ -187,8 +187,9 @@ serve(async (req) => {
         count: extractedDevelopers.length,
         developers: extractedDevelopers.map(d => ({
           name: d.name,
-          logo: d.logo_url,
-          image: d.feature_image_url,
+          logo: d.logo_url ? "✓" : "✗",
+          image: d.feature_image_url ? "✓" : "✗",
+          description: d.description ? `${d.description.substring(0, 50)}...` : "✗",
         })),
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
