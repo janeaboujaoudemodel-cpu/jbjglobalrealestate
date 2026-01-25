@@ -192,7 +192,7 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               {/* Hidden standalone pages - no header/footer */}
               <Route path="/card" element={<DigitalCard />} />
-              <Route element={<MainLayoutWrapper />}>
+              <Route element={<AdminBypass><MainLayoutWrapper /></AdminBypass>}>
                 <Route path="/vapi-prompt" element={<VapiPrompt />} />
                 <Route path="/" element={<Index />} />
                 <Route path="/properties" element={<Properties />} />

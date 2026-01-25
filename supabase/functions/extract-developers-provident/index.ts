@@ -239,24 +239,32 @@ serve(async (req) => {
       throw new Error("FIRECRAWL_API_KEY not configured");
     }
 
-    // Check current state
-    const { data: existingPending, error: countError } = await supabase
-      .from("pending_developer_imports")
-      .select("slug")
-      .eq("status", "pending");
-    
-    const existingSlugs = new Set((existingPending || []).map(d => d.slug));
-    console.log(`📊 Currently ${existingSlugs.size} pending developers in queue`);
+    // Check current state - look at BOTH pending queue AND main developers table
+    const [pendingRes, approvedRes] = await Promise.all([
+      supabase
+        .from("pending_developer_imports")
+        .select("slug")
+        .eq("status", "pending"),
+      supabase
+        .from("developers")
+        .select("slug")
+    ]);
 
-    // Calculate which page to start from based on existing data
+    const pendingSlugs = new Set((pendingRes.data || []).map(d => d.slug));
+    const approvedSlugs = new Set((approvedRes.data || []).map(d => d.slug));
+    const allExistingSlugs = new Set([...pendingSlugs, ...approvedSlugs]);
+    
+    console.log(`📊 Currently ${pendingSlugs.size} pending + ${approvedSlugs.size} approved = ${allExistingSlugs.size} total developers`);
+
+    // Calculate which page to start from based on TOTAL existing data (pending + approved)
     let startPage = requestedStartPage;
-    if (requestedStartPage === 1 && existingSlugs.size >= 24) {
+    if (requestedStartPage === 1 && allExistingSlugs.size >= 24) {
       // If we already have page 1, calculate next page
-      startPage = Math.floor(existingSlugs.size / PROVIDENT_PAGE_SIZE) + 1;
-      console.log(`📊 Auto-calculated start page: ${startPage} (based on ${existingSlugs.size} existing)`);
+      startPage = Math.floor(allExistingSlugs.size / PROVIDENT_PAGE_SIZE) + 1;
+      console.log(`📊 Auto-calculated start page: ${startPage} (based on ${allExistingSlugs.size} total existing)`);
     }
 
-    // Clear existing if requested (for fresh extraction)
+    // Clear existing PENDING if requested (for fresh extraction from page 1)
     if (clearExisting && startPage === 1) {
       console.log("🗑️ Clearing all existing pending_developer_imports rows...");
       const { error: delErr } = await supabase
@@ -267,7 +275,7 @@ serve(async (req) => {
       if (delErr) {
         console.warn("Warning: could not clear rows:", delErr.message);
       }
-      existingSlugs.clear();
+      pendingSlugs.clear();
     }
 
     // Fetch pages starting from calculated start
@@ -285,11 +293,11 @@ serve(async (req) => {
       } else {
         emptyPages = 0; // Reset counter
         
-        // Filter out already existing slugs
-        const newDevelopers = pageDevelopers.filter(d => !existingSlugs.has(d.slug));
+        // Filter out already existing slugs (from both pending AND approved)
+        const newDevelopers = pageDevelopers.filter(d => !allExistingSlugs.has(d.slug));
         
         for (const dev of newDevelopers) {
-          existingSlugs.add(dev.slug);
+          allExistingSlugs.add(dev.slug);
           allDevelopers.push(dev);
         }
         
@@ -312,7 +320,9 @@ serve(async (req) => {
           success: true,
           message: "No new developers to add. All pages have been extracted.",
           count: 0,
-          totalInQueue: existingSlugs.size,
+          totalInQueue: pendingSlugs.size,
+          totalApproved: approvedSlugs.size,
+          totalExtracted: allExistingSlugs.size,
         }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
@@ -367,7 +377,9 @@ serve(async (req) => {
         success: true,
         message: `Successfully extracted ${allDevelopers.length} new developers from pages ${startPage}-${currentPage - 1}`,
         count: allDevelopers.length,
-        totalInQueue: existingSlugs.size,
+        totalInQueue: pendingSlugs.size,
+        totalApproved: approvedSlugs.size,
+        totalExtracted: allExistingSlugs.size,
         pagesProcessed: currentPage - startPage,
         developers: allDevelopers.map((d) => ({
           name: d.name,
