@@ -233,39 +233,15 @@ serve(async (req) => {
     }
 
     console.log(`🔄 Starting Provident Developers Extraction v9 (Multi-Page)...`);
-    console.log(`📊 Starting from page: ${requestedStartPage}, Clear existing: ${clearExisting}`);
+    console.log(`🔄 FIXED EXTRACTION - Will extract ALL developers from pages 1-7`);
+    console.log(`📊 Starting from page: ${requestedStartPage}`);
 
     if (!firecrawlApiKey) {
       throw new Error("FIRECRAWL_API_KEY not configured");
     }
 
-    // Check current state - look at BOTH pending queue AND main developers table
-    const [pendingRes, approvedRes] = await Promise.all([
-      supabase
-        .from("pending_developer_imports")
-        .select("slug")
-        .eq("status", "pending"),
-      supabase
-        .from("developers")
-        .select("slug")
-    ]);
-
-    const pendingSlugs = new Set((pendingRes.data || []).map(d => d.slug));
-    const approvedSlugs = new Set((approvedRes.data || []).map(d => d.slug));
-    const allExistingSlugs = new Set([...pendingSlugs, ...approvedSlugs]);
-    
-    console.log(`📊 Currently ${pendingSlugs.size} pending + ${approvedSlugs.size} approved = ${allExistingSlugs.size} total developers`);
-
-    // Calculate which page to start from based on TOTAL existing data (pending + approved)
-    let startPage = requestedStartPage;
-    if (requestedStartPage === 1 && allExistingSlugs.size >= 24) {
-      // If we already have page 1, calculate next page
-      startPage = Math.floor(allExistingSlugs.size / PROVIDENT_PAGE_SIZE) + 1;
-      console.log(`📊 Auto-calculated start page: ${startPage} (based on ${allExistingSlugs.size} total existing)`);
-    }
-
-    // Clear existing PENDING if requested (for fresh extraction from page 1)
-    if (clearExisting && startPage === 1) {
+    // Clear existing PENDING queue if requested
+    if (clearExisting) {
       console.log("🗑️ Clearing all existing pending_developer_imports rows...");
       const { error: delErr } = await supabase
         .from("pending_developer_imports")
@@ -275,16 +251,17 @@ serve(async (req) => {
       if (delErr) {
         console.warn("Warning: could not clear rows:", delErr.message);
       }
-      pendingSlugs.clear();
     }
 
-    // Fetch pages starting from calculated start
+    // Fetch ALL pages - let database handle uniqueness via slug constraint
     const allDevelopers: ProvidentDeveloper[] = [];
-    const MAX_PAGES = 10; // Safety limit - Provident has ~7 pages
-    let currentPage = startPage;
+    const MAX_PAGES = 7; // Provident has 7 pages
+    let currentPage = requestedStartPage;
     let emptyPages = 0;
 
-    while (currentPage <= startPage + MAX_PAGES && emptyPages < 2) {
+    console.log(`📄 Extracting pages ${requestedStartPage} through ${MAX_PAGES}...`);
+
+    while (currentPage <= MAX_PAGES && emptyPages < 2) {
       const pageDevelopers = await fetchDevelopersPage(currentPage, firecrawlApiKey);
       
       if (pageDevelopers.length === 0) {
@@ -293,36 +270,27 @@ serve(async (req) => {
       } else {
         emptyPages = 0; // Reset counter
         
-        // Filter out already existing slugs (from both pending AND approved)
-        const newDevelopers = pageDevelopers.filter(d => !allExistingSlugs.has(d.slug));
-        
-        for (const dev of newDevelopers) {
-          allExistingSlugs.add(dev.slug);
-          allDevelopers.push(dev);
-        }
-        
-        console.log(`✅ Page ${currentPage}: Added ${newDevelopers.length} new developers (${pageDevelopers.length - newDevelopers.length} duplicates skipped)`);
+        // Add ALL developers - database will handle duplicates via unique constraint
+        allDevelopers.push(...pageDevelopers);
+        console.log(`✅ Page ${currentPage}: Extracted ${pageDevelopers.length} developers`);
       }
       
       currentPage++;
       
       // Small delay between pages to avoid rate limiting
-      if (currentPage <= startPage + MAX_PAGES) {
+      if (currentPage <= MAX_PAGES) {
         await new Promise(r => setTimeout(r, 1000));
       }
     }
 
-    console.log(`📊 Total new developers extracted: ${allDevelopers.length}`);
+    console.log(`📊 Total developers extracted: ${allDevelopers.length}`);
 
     if (allDevelopers.length === 0) {
       return new Response(
         JSON.stringify({
           success: true,
-          message: "No new developers to add. All pages have been extracted.",
+          message: "No developers found on specified pages.",
           count: 0,
-          totalInQueue: pendingSlugs.size,
-          totalApproved: approvedSlugs.size,
-          totalExtracted: allExistingSlugs.size,
         }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
@@ -364,9 +332,10 @@ serve(async (req) => {
       metadata: {
         source: "provident_estate",
         url: PROVIDENT_DEVELOPERS_URL,
-        version: "v9-multi-page",
-        startPage,
-        pagesProcessed: currentPage - startPage,
+        version: "v11-fixed",
+        startPage: requestedStartPage,
+        endPage: currentPage - 1,
+        pagesProcessed: currentPage - requestedStartPage,
       },
     });
 
@@ -375,12 +344,9 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({
         success: true,
-        message: `Successfully extracted ${allDevelopers.length} new developers from pages ${startPage}-${currentPage - 1}`,
+        message: `Successfully extracted ${allDevelopers.length} developers from pages ${requestedStartPage}-${currentPage - 1}`,
         count: allDevelopers.length,
-        totalInQueue: pendingSlugs.size,
-        totalApproved: approvedSlugs.size,
-        totalExtracted: allExistingSlugs.size,
-        pagesProcessed: currentPage - startPage,
+        pagesProcessed: currentPage - requestedStartPage,
         developers: allDevelopers.map((d) => ({
           name: d.name,
           order: d.display_order,
