@@ -4602,6 +4602,13 @@ export type Database = {
             referencedRelation: "leads"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "email_verifications_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads_secure"
+            referencedColumns: ["id"]
+          },
         ]
       }
       emergency_lockdowns: {
@@ -8516,14 +8523,17 @@ export type Database = {
           created_at: string
           current_location: string | null
           email: string
+          email_encrypted: string | null
           email_verified: boolean | null
           full_name: string | null
+          full_name_encrypted: string | null
           honeypot: string | null
           id: string
           language: string | null
           nationality: string | null
           page_source: string | null
           phone: string | null
+          phone_encrypted: string | null
           phone_verified: boolean | null
           source: string
           status: string | null
@@ -8537,14 +8547,17 @@ export type Database = {
           created_at?: string
           current_location?: string | null
           email: string
+          email_encrypted?: string | null
           email_verified?: boolean | null
           full_name?: string | null
+          full_name_encrypted?: string | null
           honeypot?: string | null
           id?: string
           language?: string | null
           nationality?: string | null
           page_source?: string | null
           phone?: string | null
+          phone_encrypted?: string | null
           phone_verified?: boolean | null
           source: string
           status?: string | null
@@ -8558,14 +8571,17 @@ export type Database = {
           created_at?: string
           current_location?: string | null
           email?: string
+          email_encrypted?: string | null
           email_verified?: boolean | null
           full_name?: string | null
+          full_name_encrypted?: string | null
           honeypot?: string | null
           id?: string
           language?: string | null
           nationality?: string | null
           page_source?: string | null
           phone?: string | null
+          phone_encrypted?: string | null
           phone_verified?: boolean | null
           source?: string
           status?: string | null
@@ -10168,6 +10184,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "phone_verifications_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads_secure"
             referencedColumns: ["id"]
           },
         ]
@@ -14057,6 +14080,69 @@ export type Database = {
           },
         ]
       }
+      leads_secure: {
+        Row: {
+          age_range: string | null
+          birthday: string | null
+          consent_accurate: boolean | null
+          consent_privacy: boolean | null
+          created_at: string | null
+          current_location: string | null
+          email: string | null
+          email_verified: boolean | null
+          full_name: string | null
+          id: string | null
+          language: string | null
+          nationality: string | null
+          page_source: string | null
+          phone: string | null
+          phone_verified: boolean | null
+          source: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          age_range?: string | null
+          birthday?: string | null
+          consent_accurate?: boolean | null
+          consent_privacy?: boolean | null
+          created_at?: string | null
+          current_location?: string | null
+          email?: never
+          email_verified?: boolean | null
+          full_name?: never
+          id?: string | null
+          language?: string | null
+          nationality?: string | null
+          page_source?: string | null
+          phone?: never
+          phone_verified?: boolean | null
+          source?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          age_range?: string | null
+          birthday?: string | null
+          consent_accurate?: boolean | null
+          consent_privacy?: boolean | null
+          created_at?: string | null
+          current_location?: string | null
+          email?: never
+          email_verified?: boolean | null
+          full_name?: never
+          id?: string | null
+          language?: string | null
+          nationality?: string | null
+          page_source?: string | null
+          phone?: never
+          phone_verified?: boolean | null
+          source?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       profiles_public: {
         Row: {
           created_at: string | null
@@ -14334,6 +14420,7 @@ export type Database = {
         Args: { encrypted_data: string; salt_id: string }
         Returns: string
       }
+      decrypt_lead_pii: { Args: { encrypted_data: string }; Returns: string }
       decrypt_partner_bank_field: {
         Args: { encrypted_data: string; fallback_plaintext?: string }
         Returns: string
