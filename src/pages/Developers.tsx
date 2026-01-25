@@ -280,40 +280,111 @@ const Developers = () => {
           </div>
         </section>
 
-        {/* Developer Grid - Placeholder for extraction */}
+        {/* Developer Grid */}
         <section className="py-12 md:py-16">
           <div className="jj-layer-2">
-              {/* Stats */}
-              <div className="flex flex-wrap items-center gap-4 md:gap-6 mb-8 text-sm text-foreground/70">
-                <span>
-                  <span className="text-gold font-semibold">{filteredDevelopers.length}</span> Developers
-                </span>
-                <span className="w-1 h-1 rounded-full bg-gold/40" />
-                <span>
-                  <span className="text-gold font-semibold">{projects?.length || 0}</span> Developer-Direct Projects
-                </span>
-              </div>
-
               {isLoading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {Array.from({ length: 9 }).map((_, i) => (
                     <Skeleton key={i} className="h-80 rounded-xl bg-champagne/50" />
                   ))}
                 </div>
-              ) : (
+              ) : filteredDevelopers.length === 0 ? (
                 <div className="text-center py-20 border border-dashed border-gold/30 rounded-xl bg-premium-card/50">
                   <Building2 className="w-20 h-20 text-gold/40 mx-auto mb-6" />
-                  <h3 className="text-2xl font-semibold text-foreground mb-3">Developer Extraction in Progress</h3>
-                  <p className="text-foreground/70 max-w-lg mx-auto mb-6">
-                    We're re-extracting all developer listings with high-resolution images and complete data directly from source. 
-                    This ensures accurate, up-to-date information for all 1,324+ properties.
+                  <h3 className="text-2xl font-semibold text-foreground mb-3">No Developers Found</h3>
+                  <p className="text-foreground/70 max-w-lg mx-auto">
+                    Try adjusting your search or filter criteria.
                   </p>
-                  <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-gold/40 bg-black/30 backdrop-blur-md">
-                    <div className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-                    <span className="text-gold font-semibold text-xs uppercase tracking-[0.15em]">
-                      Coming Soon
-                    </span>
-                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {filteredDevelopers.map((developer) => {
+                    const tierInfo = getTierInfo(developer.slug);
+                    const TierIcon = tierInfo.icon;
+                    const projectCount = projectCounts[developer.id] || 0;
+                    
+                    return (
+                      <Link
+                        key={developer.id}
+                        to={`/developer/${developer.slug}`}
+                        className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
+                      >
+                        {/* Feature Image */}
+                        <div className="aspect-[16/10] overflow-hidden relative">
+                          {developer.feature_image_url ? (
+                            <SafeImage
+                              src={developer.feature_image_url}
+                              alt={developer.name}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-champagne-light/50 to-champagne/30">
+                              <Building2 className="w-16 h-16 text-gold/40" />
+                            </div>
+                          )}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                          
+                          {/* Tier Badge */}
+                          <div className={`absolute top-3 right-3 px-3 py-1.5 rounded-full flex items-center gap-1.5 ${tierInfo.badgeClassName}`}>
+                            <TierIcon className="w-3.5 h-3.5" />
+                            <span className="text-xs font-semibold">{tierInfo.label}</span>
+                          </div>
+                          
+                          {/* Logo overlay at bottom */}
+                          {developer.logo_url && (
+                            <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-sm rounded-lg p-2 shadow-lg">
+                              <img 
+                                src={developer.logo_url} 
+                                alt={`${developer.name} logo`}
+                                className="h-8 w-auto max-w-[120px] object-contain"
+                              />
+                            </div>
+                          )}
+                        </div>
+                        
+                        {/* Content */}
+                        <div className="p-5">
+                          <h3 className="text-lg font-bold text-black mb-2 group-hover:text-gold transition-colors">
+                            {developer.name}
+                          </h3>
+                          
+                          {developer.description && (
+                            <p className="text-zinc-600 text-sm line-clamp-2 mb-3">
+                              {developer.description}
+                            </p>
+                          )}
+                          
+                          <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-500">
+                            {developer.founded_year && (
+                              <span className="flex items-center gap-1">
+                                <Calendar className="w-3.5 h-3.5 text-gold" />
+                                Est. {developer.founded_year}
+                              </span>
+                            )}
+                            {developer.headquarters && (
+                              <span className="flex items-center gap-1">
+                                <MapPin className="w-3.5 h-3.5 text-gold" />
+                                {developer.headquarters}
+                              </span>
+                            )}
+                            {projectCount > 0 && (
+                              <span className="flex items-center gap-1">
+                                <Building2 className="w-3.5 h-3.5 text-gold" />
+                                {projectCount} Projects
+                              </span>
+                            )}
+                          </div>
+                          
+                          {/* View button */}
+                          <div className="mt-4 flex items-center gap-2 text-gold font-semibold text-sm group-hover:gap-3 transition-all">
+                            <span>View Developer</span>
+                            <ArrowRight className="w-4 h-4" />
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })}
                 </div>
               )}
           </div>
