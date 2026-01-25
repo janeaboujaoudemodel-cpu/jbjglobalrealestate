@@ -6,69 +6,58 @@ import { LanguageContext } from "@/contexts/LanguageContext";
 // LOCKED: Featured developer partners - exact logos from Provident Estate homepage
 // Current developers: DAMAC, EMAAR, MERAAS, SOBHA REALTY, NAKHEEL (original 5)
 // Added: BINGHATTI, SELECT GROUP, ELLINGTON, MAJID AL FUTTAIM, DANUBE (extracted from Provident)
-// Scale values calibrated to make all logos visually uniform (Meraas = 1.0 reference)
 const FEATURED_DEVELOPERS = [
   // === ORIGINAL 5 (LOCKED) ===
   { 
     name: "DAMAC", 
     slug: "damac",
-    logo: "/developers/logos/damac-logo.webp",
-    scale: 0.85, // Reduced - was too large
+    logo: "/developers/logos/damac-logo.webp"
   },
   { 
     name: "EMAAR", 
     slug: "emaar",
-    logo: "/developers/logos/emaar-logo.webp",
-    scale: 0.85, // Reduced - was too large
+    logo: "/developers/logos/emaar-logo.webp"
   },
   { 
     name: "MERAAS", 
     slug: "meraas",
-    logo: "/developers/logos/meraas-logo.webp",
-    scale: 1.0, // Reference size - LOCKED
+    logo: "/developers/logos/meraas-logo.webp"
   },
   { 
     name: "SOBHA REALTY", 
     slug: "sobha",
-    logo: "/developers/logos/sobha-logo.webp",
-    scale: 1.0, // Good size
+    logo: "/developers/logos/sobha-logo.webp"
   },
   { 
     name: "NAKHEEL", 
     slug: "nakheel",
-    logo: "/developers/logos/nakheel-logo.webp",
-    scale: 1.0, // Good size
+    logo: "/developers/logos/nakheel-logo.webp"
   },
   // === EXTRACTED FROM PROVIDENT HOMEPAGE ===
   { 
     name: "BINGHATTI", 
     slug: "binghatti",
-    logo: "/developers/logos/binghatti-logo.webp",
-    scale: 1.0, // Good size
+    logo: "/developers/logos/binghatti-logo.webp"
   },
   { 
     name: "SELECT GROUP", 
     slug: "select-group",
-    logo: "/developers/logos/select-group-logo.webp",
-    scale: 1.0, // Good size
+    logo: "/developers/logos/select-group-logo.webp"
   },
   { 
     name: "ELLINGTON PROPERTIES", 
     slug: "ellington-properties",
-    logo: "/developers/logos/ellington-logo.webp",
-    scale: 1.15, // Increased - was too small
+    logo: "/developers/logos/ellington-logo.webp"
   },
   { 
     name: "MAJID AL FUTTAIM", 
     slug: "majid-al-futtaim",
-    logo: "/developers/logos/majid-al-futtaim-logo.webp",
-    scale: 0.85, // Reduced - was too large
+    logo: "/developers/logos/majid-al-futtaim-logo.webp"
   },
   { 
     name: "DANUBE PROPERTIES", 
     slug: "danube-properties",
-    logo: "/developers/logos/danube-logo.webp",
-    scale: 1.1, // Slightly increased
+    logo: "/developers/logos/danube-logo.webp"
   },
 ];
 
@@ -103,10 +92,30 @@ const DeveloperPartnersMarquee = () => {
   }, []);
 
   const renderPartner = (developer: typeof FEATURED_DEVELOPERS[number], index: number, listKey: "a" | "b") => {
-    // Base heights in rem for responsive scaling, adjusted by developer's scale value
-    // Base: 2rem (mobile), 2.5rem (tablet), 3rem (desktop)
-    const height = 2.5 * developer.scale; // Using tablet as base for cleaner scaling
-    
+    // IMPORTANT: Keep spacing locked (px-* on the Link). Only adjust logo size.
+    // We adjust size by changing responsive HEIGHT classes (layout-safe; no transform scaling).
+    const base = "w-auto max-w-[180px] md:max-w-[220px] lg:max-w-[260px] object-contain";
+
+    const sizeClass = (() => {
+      switch (developer.slug) {
+        // Slightly smaller (was visually larger than Meraas)
+        case "damac":
+        case "emaar":
+        case "majid-al-futtaim":
+          return `h-7 md:h-9 lg:h-11 ${base}`;
+
+        // Slightly bigger (was visually smaller)
+        case "ellington-properties":
+          return `h-9 md:h-11 lg:h-[52px] ${base}`;
+        case "danube-properties":
+          return `h-9 md:h-11 lg:h-12 ${base}`;
+
+        // Reference sizing (Meraas + most others)
+        default:
+          return `h-8 md:h-10 lg:h-12 ${base}`;
+      }
+    })();
+
     return (
       <Link
         key={`${listKey}-${developer.slug}-${index}`}
@@ -115,11 +124,10 @@ const DeveloperPartnersMarquee = () => {
         className="flex-shrink-0 px-6 md:px-8 lg:px-10 flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
         title={developer.name}
       >
-        <img 
-          src={developer.logo} 
+        <img
+          src={developer.logo}
           alt={developer.name}
-          className="w-auto object-contain"
-          style={{ height: `${height}rem` }}
+          className={sizeClass}
           loading="lazy"
           decoding="async"
         />
