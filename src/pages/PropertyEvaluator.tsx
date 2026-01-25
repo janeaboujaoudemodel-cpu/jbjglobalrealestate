@@ -365,8 +365,8 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
               {/* Basic Info */}
               <Card className="bg-zinc-900/50 border-zinc-800">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
-                    <Building className="w-5 h-5 text-gold" />
+                <CardTitle className="text-white flex items-center gap-2">
+                    <Building className="w-5 h-5 text-blue-400" />
                     Property Information
                   </CardTitle>
                   <CardDescription className="text-zinc-500">
@@ -377,7 +377,7 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1">
                       <Label className="text-zinc-400 flex items-center gap-1">
-                        Building Name <span className="text-gold">*</span>
+                        Building Name <span className="text-blue-400">*</span>
                         <HelpCircle className="w-3 h-3 text-zinc-600" />
                       </Label>
                       <Input
@@ -406,7 +406,7 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1">
                       <Label className="text-zinc-400 flex items-center gap-1">
-                        Community <span className="text-gold">*</span>
+                        Community <span className="text-blue-400">*</span>
                         <Search className="w-3 h-3 text-zinc-600" />
                       </Label>
                       <div className="relative">
@@ -426,7 +426,7 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
                                     updateProperty('community', c);
                                     setCommunitySearch('');
                                   }}
-                                  className="w-full text-left px-3 py-2 text-sm text-white hover:bg-gold/20 transition-colors"
+                                  className="w-full text-left px-3 py-2 text-sm text-white hover:bg-blue-500/20 transition-colors"
                                 >
                                   {c}
                                 </button>
@@ -437,7 +437,7 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
                           </div>
                         )}
                         {property.community && !communitySearch && (
-                          <Badge className="bg-gold/20 text-gold border-gold/40">
+                          <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/40">
                             {property.community}
                           </Badge>
                         )}
@@ -495,8 +495,8 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
                           }}
                           className={`px-3 py-1.5 text-xs rounded-full border transition-all ${
                             property.views.includes(view)
-                              ? 'bg-gold border-gold text-black font-medium'
-                              : 'border-zinc-700 text-zinc-400 hover:border-gold/50 hover:text-gold'
+                              ? 'bg-blue-500 border-blue-500 text-white font-medium'
+                              : 'border-zinc-700 text-zinc-400 hover:border-blue-500/50 hover:text-blue-400'
                           }`}
                         >
                           {view}
@@ -511,7 +511,7 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
               <Card className="bg-zinc-900/50 border-zinc-800">
                 <CardHeader>
                   <CardTitle className="text-white flex items-center gap-2">
-                    <MapPin className="w-5 h-5 text-gold" />
+                    <MapPin className="w-5 h-5 text-blue-400" />
                     Specifications
                   </CardTitle>
                   <CardDescription className="text-zinc-500">
@@ -710,7 +710,7 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
               <Card className="bg-zinc-900/50 border-zinc-800">
                 <CardHeader>
                   <CardTitle className="text-white flex items-center gap-2">
-                    <Package className="w-5 h-5 text-gold" />
+                    <Package className="w-5 h-5 text-blue-400" />
                     Property Condition
                   </CardTitle>
                   <CardDescription className="text-zinc-400">
@@ -733,16 +733,16 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
                     <label 
                       className={`relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all ${
                         property.hasModifications === 'stock' 
-                          ? 'border-gold bg-gold/10' 
+                          ? 'border-blue-500 bg-blue-500/10' 
                           : 'border-zinc-700 hover:border-zinc-600'
                       }`}
                     >
                       <RadioGroupItem value="stock" className="sr-only" />
                       <div className="flex items-center gap-3 mb-2">
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                          property.hasModifications === 'stock' ? 'bg-gold' : 'bg-zinc-800'
+                          property.hasModifications === 'stock' ? 'bg-blue-500' : 'bg-zinc-800'
                         }`}>
-                          <Package className={`w-5 h-5 ${property.hasModifications === 'stock' ? 'text-black' : 'text-zinc-400'}`} />
+                          <Package className={`w-5 h-5 ${property.hasModifications === 'stock' ? 'text-white' : 'text-zinc-400'}`} />
                         </div>
                         <div>
                           <p className="text-white font-semibold">Original Stock Condition</p>
@@ -754,23 +754,23 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
                         fit-outs, or modifications have been made.
                       </p>
                       {property.hasModifications === 'stock' && (
-                        <Badge className="absolute top-2 right-2 bg-gold text-black">Selected</Badge>
+                        <Badge className="absolute top-2 right-2 bg-blue-500 text-white">Selected</Badge>
                       )}
                     </label>
 
                     <label 
                       className={`relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all ${
                         property.hasModifications === 'modified' 
-                          ? 'border-gold bg-gold/10' 
+                          ? 'border-blue-500 bg-blue-500/10' 
                           : 'border-zinc-700 hover:border-zinc-600'
                       }`}
                     >
                       <RadioGroupItem value="modified" className="sr-only" />
                       <div className="flex items-center gap-3 mb-2">
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                          property.hasModifications === 'modified' ? 'bg-gold' : 'bg-zinc-800'
+                          property.hasModifications === 'modified' ? 'bg-blue-500' : 'bg-zinc-800'
                         }`}>
-                          <Wrench className={`w-5 h-5 ${property.hasModifications === 'modified' ? 'text-black' : 'text-zinc-400'}`} />
+                          <Wrench className={`w-5 h-5 ${property.hasModifications === 'modified' ? 'text-white' : 'text-zinc-400'}`} />
                         </div>
                         <div>
                           <p className="text-white font-semibold">Modified / Upgraded</p>
@@ -782,7 +782,7 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
                         any changes from the original handover condition.
                       </p>
                       {property.hasModifications === 'modified' && (
-                        <Badge className="absolute top-2 right-2 bg-gold text-black">Selected</Badge>
+                        <Badge className="absolute top-2 right-2 bg-blue-500 text-white">Selected</Badge>
                       )}
                     </label>
                   </RadioGroup>
@@ -818,8 +818,8 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
                 >
                   <Card className="bg-zinc-900/50 border-zinc-800">
                     <CardHeader>
-                      <CardTitle className="text-white flex items-center gap-2">
-                        <TrendingUp className="w-5 h-5 text-gold" />
+                    <CardTitle className="text-white flex items-center gap-2">
+                        <TrendingUp className="w-5 h-5 text-blue-400" />
                         Modification Details
                       </CardTitle>
                       <CardDescription className="text-zinc-400">
@@ -841,12 +841,12 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
                               onClick={() => updateProperty('modificationType', type.value)}
                               className={`p-3 rounded-lg border text-left transition-all ${
                                 property.modificationType === type.value
-                                  ? 'border-gold bg-gold/10'
+                                  ? 'border-blue-500 bg-blue-500/10'
                                   : 'border-zinc-700 hover:border-zinc-600'
                               }`}
                             >
                               <type.icon className={`w-5 h-5 mb-2 ${
-                                property.modificationType === type.value ? 'text-gold' : 'text-zinc-400'
+                                property.modificationType === type.value ? 'text-blue-400' : 'text-zinc-400'
                               }`} />
                               <p className={`text-sm font-medium ${
                                 property.modificationType === type.value ? 'text-white' : 'text-zinc-300'
@@ -957,57 +957,57 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
           <TabsContent value="owner">
             <Card className="bg-zinc-900/50 border-zinc-800 max-w-2xl mx-auto">
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <User className="w-5 h-5 text-gold" />
-                  Owner Information
-                </CardTitle>
-                <CardDescription className="text-zinc-400">
-                  Your details will be included in the property valuation report for professional sharing
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label className="text-zinc-400">Full Name <span className="text-gold">*</span></Label>
-                  <Input
-                    value={property.ownerName}
-                    onChange={(e) => updateProperty('ownerName', e.target.value)}
-                    placeholder="John Smith"
-                    className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
-                  />
-                </div>
-                <div>
-                  <Label className="text-zinc-400">Email <span className="text-gold">*</span></Label>
-                  <Input
-                    type="email"
-                    value={property.ownerEmail}
-                    onChange={(e) => updateProperty('ownerEmail', e.target.value)}
-                    placeholder="john@email.com"
-                    className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
-                  />
-                </div>
-                <div>
-                  <Label className="text-zinc-400">Phone <span className="text-gold">*</span></Label>
-                  <Input
-                    value={property.ownerPhone}
-                    onChange={(e) => updateProperty('ownerPhone', e.target.value)}
-                    placeholder="+971 50 123 4567"
-                    className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
-                  />
-                </div>
-                
-                <div className="p-4 bg-zinc-800/50 border border-zinc-700 rounded-lg mt-6">
-                  <div className="flex items-start gap-3">
-                    <Shield className="w-5 h-5 text-gold mt-0.5" />
-                    <div>
-                      <p className="text-white font-medium">Your Privacy is Protected</p>
-                      <p className="text-sm text-zinc-400 mt-1">
-                        Your contact details are only used in the valuation report you generate 
-                        and will not be shared with third parties.
-                      </p>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <User className="w-5 h-5 text-blue-400" />
+                    Owner Information
+                  </CardTitle>
+                  <CardDescription className="text-zinc-400">
+                    Your details will be included in the property valuation report for professional sharing
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label className="text-zinc-400">Full Name <span className="text-blue-400">*</span></Label>
+                    <Input
+                      value={property.ownerName}
+                      onChange={(e) => updateProperty('ownerName', e.target.value)}
+                      placeholder="John Smith"
+                      className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-zinc-400">Email <span className="text-blue-400">*</span></Label>
+                    <Input
+                      type="email"
+                      value={property.ownerEmail}
+                      onChange={(e) => updateProperty('ownerEmail', e.target.value)}
+                      placeholder="john@email.com"
+                      className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-zinc-400">Phone <span className="text-blue-400">*</span></Label>
+                    <Input
+                      value={property.ownerPhone}
+                      onChange={(e) => updateProperty('ownerPhone', e.target.value)}
+                      placeholder="+971 50 123 4567"
+                      className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
+                    />
+                  </div>
+                  
+                  <div className="p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg mt-6">
+                    <div className="flex items-start gap-3">
+                      <Shield className="w-5 h-5 text-blue-400 mt-0.5" />
+                      <div>
+                        <p className="text-white font-medium">Your Privacy is Protected</p>
+                        <p className="text-sm text-zinc-400 mt-1">
+                          Your contact details are only used in the valuation report you generate 
+                          and will not be shared with third parties.
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardContent>
+                </CardContent>
             </Card>
 
             <div className="flex justify-center gap-4 mt-8">
@@ -1064,8 +1064,8 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
                     </div>
                     
                     {property.hasModifications === 'modified' && evaluation.breakdown.renovationValue > 0 && (
-                      <div className="mt-4 p-3 bg-gold/10 rounded-lg inline-block">
-                        <p className="text-gold text-sm">
+                      <div className="mt-4 p-3 bg-blue-500/10 rounded-lg inline-block">
+                        <p className="text-blue-400 text-sm">
                           <Star className="w-4 h-4 inline mr-1" />
                           Modifications added <strong>AED {evaluation.breakdown.renovationValue.toLocaleString()}</strong> to your property value
                         </p>
@@ -1078,8 +1078,8 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
                 <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
                   <Card className="bg-zinc-900/50 border-zinc-800">
                     <CardHeader>
-                      <CardTitle className="text-white text-lg flex items-center gap-2">
-                        <TrendingUp className="w-5 h-5 text-gold" />
+                    <CardTitle className="text-white text-lg flex items-center gap-2">
+                        <TrendingUp className="w-5 h-5 text-blue-400" />
                         Value Breakdown
                       </CardTitle>
                     </CardHeader>
@@ -1103,7 +1103,7 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
                       {evaluation.breakdown.renovationValue > 0 && (
                         <div className="flex justify-between pt-2 border-t border-zinc-800">
                           <span className="text-zinc-400">Modification Value</span>
-                          <span className="text-gold font-medium">+AED {evaluation.breakdown.renovationValue.toLocaleString()}</span>
+                          <span className="text-blue-400 font-medium">+AED {evaluation.breakdown.renovationValue.toLocaleString()}</span>
                         </div>
                       )}
                     </CardContent>
@@ -1111,8 +1111,8 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
 
                   <Card className="bg-zinc-900/50 border-zinc-800">
                     <CardHeader>
-                      <CardTitle className="text-white text-lg flex items-center gap-2">
-                        <FileText className="w-5 h-5 text-gold" />
+                    <CardTitle className="text-white text-lg flex items-center gap-2">
+                        <FileText className="w-5 h-5 text-blue-400" />
                         Market Insights
                       </CardTitle>
                     </CardHeader>
@@ -1128,9 +1128,9 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
                 <Card className="bg-zinc-900/50 border-zinc-800 max-w-4xl mx-auto">
                   <CardHeader>
                     <CardTitle className="text-white text-lg flex items-center gap-2">
-                      <Building className="w-5 h-5 text-gold" />
-                      Comparable Transactions (DLD Data)
-                    </CardTitle>
+                        <Building className="w-5 h-5 text-blue-400" />
+                        Comparable Transactions (DLD Data)
+                      </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
@@ -1140,7 +1140,7 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
                             <p className="text-white font-medium">{t.building}</p>
                             <p className="text-zinc-500 text-sm">{t.size} sq ft • {t.date}</p>
                           </div>
-                          <p className="text-gold font-semibold">AED {t.price.toLocaleString()}</p>
+                          <p className="text-blue-400 font-semibold">AED {t.price.toLocaleString()}</p>
                         </div>
                       ))}
                     </div>
@@ -1151,14 +1151,14 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
                 <div className="flex justify-center gap-4">
                   <Button 
                     onClick={generatePDFReport} 
-                    className="bg-gold hover:bg-gold/90 text-black font-medium"
+                    className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-medium"
                   >
                     <Download className="w-4 h-4 mr-2" />
                     Download Report
                   </Button>
                   <Button 
                     variant="outline" 
-                    className="border-gold text-gold hover:bg-gold/10"
+                    className="border-blue-500 text-blue-400 hover:bg-blue-500/10"
                     onClick={() => {
                       const shareText = `Property Valuation: ${property.buildingName} - AED ${evaluation.estimatedValue.toLocaleString()}`;
                       const whatsappUrl = `https://wa.me/971565911000?text=${encodeURIComponent(shareText)}`;

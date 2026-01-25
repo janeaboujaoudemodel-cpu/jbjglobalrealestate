@@ -71,6 +71,10 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
     // AI Tools
     { id: 'ai-hub', title: 'AI Hub', subtitle: 'All AI tools in one place', icon: <Sparkles className="w-4 h-4" />, action: () => { navigate('/ai-hub'); onClose(); }, category: 'AI Tools', keywords: ['ai', 'tools', 'automation'] },
     { id: 'design-studio', title: 'Design Studio', subtitle: 'Create marketing materials', icon: <FileText className="w-4 h-4" />, action: () => { navigate('/jbj-design-studio'); onClose(); }, category: 'AI Tools', keywords: ['design', 'marketing', 'creative'] },
+    { id: 'business-card-scanner', title: 'Business Card Scanner', subtitle: 'AI-powered OCR scanning', icon: <ClipboardList className="w-4 h-4" />, action: () => { navigate('/business-card-scanner'); onClose(); }, category: 'AI Tools', keywords: ['business', 'card', 'scanner', 'ocr', 'contact', 'scan'] },
+    { id: 'property-evaluator', title: 'Property Evaluator', subtitle: 'AI property valuation', icon: <Building2 className="w-4 h-4" />, action: () => { navigate('/property-evaluator'); onClose(); }, category: 'AI Tools', keywords: ['property', 'evaluator', 'valuation', 'value', 'price'] },
+    { id: 'rental-index', title: 'Dubai Rental Index', subtitle: 'Official rental rates', icon: <TrendingUp className="w-4 h-4" />, action: () => { navigate('/dubai-rental-index'); onClose(); }, category: 'AI Tools', keywords: ['rental', 'index', 'dubai', 'rent', 'rera'] },
+    { id: 'mortgage-calculator', title: 'Mortgage Calculator', subtitle: 'Calculate monthly payments', icon: <FileText className="w-4 h-4" />, action: () => { navigate('/mortgage-calculator'); onClose(); }, category: 'AI Tools', keywords: ['mortgage', 'calculator', 'payment', 'loan', 'finance'] },
   ];
 
   // Filter commands based on search

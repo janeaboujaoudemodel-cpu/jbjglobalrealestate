@@ -341,14 +341,14 @@ const BusinessCardScanner = () => {
     <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-900/30 via-blue-800/20 to-blue-900/30 border-b border-blue-500/30 -mx-4 px-4 py-8 mb-8">
+        <div className="bg-gradient-to-r from-teal-900/30 via-teal-800/20 to-teal-900/30 border-b border-teal-500/30 -mx-4 px-4 py-8 mb-8">
           <div className="text-center">
-            <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-500/40 rounded-full px-4 py-1 mb-4">
-              <Sparkles className="w-4 h-4 text-blue-400" />
-              <span className="text-blue-400 text-sm font-medium">AI-Powered OCR</span>
+            <div className="inline-flex items-center gap-2 bg-teal-500/20 border border-teal-500/40 rounded-full px-4 py-1 mb-4">
+              <Sparkles className="w-4 h-4 text-teal-400" />
+              <span className="text-teal-400 text-sm font-medium">AI-Powered OCR</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-              AI Business Card <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Scanner</span>
+              AI Business Card <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400">Scanner</span>
             </h1>
             <p className="text-zinc-400 max-w-2xl mx-auto">
               Scan business cards with AI-powered OCR. Your data is encrypted end-to-end.
@@ -356,15 +356,15 @@ const BusinessCardScanner = () => {
             
             {/* Security Badges */}
             <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
-              <Badge className="gap-1 bg-blue-500/20 border-blue-500/40 text-blue-300">
+              <Badge className="gap-1 bg-teal-500/20 border-teal-500/40 text-teal-300">
                 <Lock className="h-3 w-3" />
                 End-to-End Encrypted
               </Badge>
-              <Badge className="gap-1 bg-blue-500/20 border-blue-500/40 text-blue-300">
+              <Badge className="gap-1 bg-teal-500/20 border-teal-500/40 text-teal-300">
                 <Shield className="h-3 w-3" />
                 GDPR Compliant
               </Badge>
-              <Badge className="gap-1 bg-blue-500/20 border-blue-500/40 text-blue-300">
+              <Badge className="gap-1 bg-teal-500/20 border-teal-500/40 text-teal-300">
                 <Eye className="h-3 w-3" />
                 Private Processing
               </Badge>
@@ -373,8 +373,8 @@ const BusinessCardScanner = () => {
         </div>
 
         {/* Privacy Alert */}
-        <Alert className="mb-6 border-blue-500/30 bg-blue-900/20">
-          <Info className="h-4 w-4 text-blue-400" />
+        <Alert className="mb-6 border-teal-500/30 bg-teal-900/20">
+          <Info className="h-4 w-4 text-teal-400" />
           <AlertDescription className="text-sm text-zinc-300">
             <strong className="text-white">Your privacy matters:</strong> All scanned data is encrypted with a key only you possess. 
             Data is processed in-memory and never stored on our servers.
@@ -383,10 +383,10 @@ const BusinessCardScanner = () => {
 
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Scanner Section */}
-          <Card className="bg-zinc-900/50 border-blue-500/30">
+          <Card className="bg-zinc-900/50 border-teal-500/30">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-white">
-                <Sparkles className="h-5 w-5 text-blue-400" />
+                <Sparkles className="h-5 w-5 text-teal-400" />
                 Scan Business Cards
               </CardTitle>
               <CardDescription className="text-zinc-400">
@@ -395,12 +395,12 @@ const BusinessCardScanner = () => {
             </CardHeader>
             <CardContent>
               <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "camera" | "upload")}>
-                <TabsList className="grid w-full grid-cols-2 mb-4 bg-zinc-800 border border-blue-500/30">
-                  <TabsTrigger value="camera" className="gap-2 data-[state=active]:bg-blue-500 data-[state=active]:text-white">
+                <TabsList className="grid w-full grid-cols-2 mb-4 bg-zinc-800 border border-teal-500/30">
+                  <TabsTrigger value="camera" className="gap-2 data-[state=active]:bg-teal-500 data-[state=active]:text-white">
                     <Camera className="h-4 w-4" />
                     Camera
                   </TabsTrigger>
-                  <TabsTrigger value="upload" className="gap-2 data-[state=active]:bg-blue-500 data-[state=active]:text-white">
+                  <TabsTrigger value="upload" className="gap-2 data-[state=active]:bg-teal-500 data-[state=active]:text-white">
                     <Upload className="h-4 w-4" />
                     Upload
                   </TabsTrigger>
@@ -428,15 +428,15 @@ const BusinessCardScanner = () => {
           </Card>
 
           {/* Results Section */}
-          <Card className="bg-zinc-900/50 border-blue-500/30">
+          <Card className="bg-zinc-900/50 border-teal-500/30">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="flex items-center gap-2 text-white">
-                    <CheckCircle2 className="h-5 w-5 text-blue-400" />
+                    <CheckCircle2 className="h-5 w-5 text-teal-400" />
                     Scanned Contacts
                     {scannedContacts.length > 0 && (
-                      <Badge className="bg-blue-500/20 text-blue-300">{scannedContacts.length}</Badge>
+                      <Badge className="bg-teal-500/20 text-teal-300">{scannedContacts.length}</Badge>
                     )}
                   </CardTitle>
                   <CardDescription className="text-zinc-400">
