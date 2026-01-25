@@ -296,8 +296,19 @@ serve(async (req) => {
       );
     }
 
+    // Deduplicate developers by slug before upserting
+    console.log(`🔍 Deduplicating ${allDevelopers.length} developers by slug...`);
+    const uniqueDevelopersMap = new Map<string, ProvidentDeveloper>();
+    for (const dev of allDevelopers) {
+      if (!uniqueDevelopersMap.has(dev.slug)) {
+        uniqueDevelopersMap.set(dev.slug, dev);
+      }
+    }
+    const uniqueDevelopers = Array.from(uniqueDevelopersMap.values());
+    console.log(`✅ After deduplication: ${uniqueDevelopers.length} unique developers`);
+
     // Insert new developers
-    const rows = allDevelopers.map((dev) => ({
+    const rows = uniqueDevelopers.map((dev) => ({
       name: dev.name,
       slug: dev.slug,
       description: dev.description,
@@ -326,7 +337,7 @@ serve(async (req) => {
       status: "completed",
       started_at: new Date().toISOString(),
       completed_at: new Date().toISOString(),
-      records_found: allDevelopers.length,
+      records_found: uniqueDevelopers.length,
       records_matched: 0,
       records_pending: allDevelopers.length,
       metadata: {
