@@ -67,14 +67,14 @@ const DeveloperPartnersMarquee = () => {
       <Link
         key={`${listKey}-${developer.slug}-${index}`}
         to={`/developers/${developer.slug}`}
-        // Match Provident-style: each logo sits in a fixed slot so spacing is consistent
-        className="flex-shrink-0 w-[200px] md:w-[280px] lg:w-[320px] flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
+        // Uniform fixed-width slots for consistent spacing
+        className="flex-shrink-0 w-[160px] md:w-[200px] lg:w-[240px] flex items-center justify-center transition-opacity duration-300 hover:opacity-70 px-4 md:px-6"
         title={developer.name}
       >
         <img 
           src={developer.logo} 
           alt={developer.name}
-          className="h-12 md:h-14 lg:h-16 w-auto max-w-[180px] md:max-w-[240px] lg:max-w-[280px] object-contain"
+          className="h-8 md:h-10 lg:h-12 w-auto max-w-[120px] md:max-w-[160px] lg:max-w-[200px] object-contain"
           loading="lazy"
           decoding="async"
         />
