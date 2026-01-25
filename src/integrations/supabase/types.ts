@@ -4348,6 +4348,7 @@ export type Database = {
           completed_projects: number | null
           created_at: string
           description: string | null
+          feature_image_url: string | null
           founded_year: number | null
           headquarters: string | null
           id: string
@@ -4363,6 +4364,7 @@ export type Database = {
           completed_projects?: number | null
           created_at?: string
           description?: string | null
+          feature_image_url?: string | null
           founded_year?: number | null
           headquarters?: string | null
           id?: string
@@ -4378,6 +4380,7 @@ export type Database = {
           completed_projects?: number | null
           created_at?: string
           description?: string | null
+          feature_image_url?: string | null
           founded_year?: number | null
           headquarters?: string | null
           id?: string
@@ -9984,6 +9987,71 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      pending_developer_imports: {
+        Row: {
+          admin_notes: string | null
+          created_at: string | null
+          description: string | null
+          extracted_at: string | null
+          feature_image_url: string | null
+          id: string
+          logo_url: string | null
+          matched_developer_id: string | null
+          name: string
+          provident_link: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          slug: string
+          source: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string | null
+          description?: string | null
+          extracted_at?: string | null
+          feature_image_url?: string | null
+          id?: string
+          logo_url?: string | null
+          matched_developer_id?: string | null
+          name: string
+          provident_link?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          slug: string
+          source?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string | null
+          description?: string | null
+          extracted_at?: string | null
+          feature_image_url?: string | null
+          id?: string
+          logo_url?: string | null
+          matched_developer_id?: string | null
+          name?: string
+          provident_link?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          slug?: string
+          source?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pending_developer_imports_matched_developer_id_fkey"
+            columns: ["matched_developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       pending_project_imports: {
         Row: {
