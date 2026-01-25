@@ -681,8 +681,8 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
                   </div>
                   
                   {property.propertyPhotos.length === 0 && (
-                    <div className="mt-4 p-3 bg-amber-900/20 border border-amber-500/30 rounded-lg">
-                      <p className="text-sm text-amber-300 flex items-center gap-2">
+                    <div className="mt-4 p-3 bg-blue-900/20 border border-blue-500/30 rounded-lg">
+                      <p className="text-sm text-blue-300 flex items-center gap-2">
                         <Info className="w-4 h-4" />
                         No photos uploaded - report will include building exterior images
                       </p>
@@ -695,7 +695,7 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
             <div className="flex justify-center mt-8">
               <Button 
                 onClick={() => setActiveTab('modifications')} 
-                className="bg-gold hover:bg-gold/90 text-black font-medium px-8"
+                className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-8"
               >
                 Next: Property Condition & Modifications
                 <ChevronRight className="w-4 h-4 ml-2" />
@@ -945,7 +945,7 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
               </Button>
               <Button 
                 onClick={() => setActiveTab('owner')} 
-                className="bg-gold hover:bg-gold/90 text-black font-medium px-8"
+                className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-8"
               >
                 Next: Owner Information
                 <ChevronRight className="w-4 h-4 ml-2" />
@@ -1017,7 +1017,7 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
               <Button
                 onClick={evaluateProperty}
                 disabled={isEvaluating}
-                className="bg-gradient-to-r from-gold to-amber-500 hover:from-gold/90 hover:to-amber-500/90 text-black font-medium px-8"
+                className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-medium px-8"
               >
                 {isEvaluating ? (
                   <>
@@ -1043,9 +1043,9 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
                 className="space-y-6"
               >
                 {/* Main Valuation Card */}
-                <Card className="bg-gradient-to-br from-amber-900/30 to-yellow-900/30 border-gold/30 max-w-3xl mx-auto">
+                <Card className="bg-gradient-to-br from-blue-900/30 to-cyan-900/30 border-blue-500/30 max-w-3xl mx-auto">
                   <CardContent className="pt-8 text-center">
-                    <p className="text-gold text-sm uppercase tracking-wider mb-2">Estimated Market Value</p>
+                    <p className="text-blue-400 text-sm uppercase tracking-wider mb-2">Estimated Market Value</p>
                     <h2 className="text-5xl font-bold text-white mb-2">
                       AED {evaluation.estimatedValue.toLocaleString()}
                     </h2>

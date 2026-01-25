@@ -338,68 +338,69 @@ const BusinessCardScanner = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-3 bg-primary/10 rounded-full">
-              <CreditCard className="h-8 w-8 text-primary" />
+        <div className="bg-gradient-to-r from-blue-900/30 via-blue-800/20 to-blue-900/30 border-b border-blue-500/30 -mx-4 px-4 py-8 mb-8">
+          <div className="text-center">
+            <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-500/40 rounded-full px-4 py-1 mb-4">
+              <Sparkles className="w-4 h-4 text-blue-400" />
+              <span className="text-blue-400 text-sm font-medium">AI-Powered OCR</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-              AI Business Card Scanner
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+              AI Business Card <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Scanner</span>
             </h1>
-          </div>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Scan business cards with AI-powered OCR. Your data is encrypted end-to-end and never stored on our servers.
-          </p>
-          
-          {/* Security Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
-            <Badge variant="outline" className="gap-1">
-              <Lock className="h-3 w-3" />
-              End-to-End Encrypted
-            </Badge>
-            <Badge variant="outline" className="gap-1">
-              <Shield className="h-3 w-3" />
-              GDPR Compliant
-            </Badge>
-            <Badge variant="outline" className="gap-1">
-              <Eye className="h-3 w-3" />
-              Private Processing
-            </Badge>
+            <p className="text-zinc-400 max-w-2xl mx-auto">
+              Scan business cards with AI-powered OCR. Your data is encrypted end-to-end.
+            </p>
+            
+            {/* Security Badges */}
+            <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
+              <Badge className="gap-1 bg-blue-500/20 border-blue-500/40 text-blue-300">
+                <Lock className="h-3 w-3" />
+                End-to-End Encrypted
+              </Badge>
+              <Badge className="gap-1 bg-blue-500/20 border-blue-500/40 text-blue-300">
+                <Shield className="h-3 w-3" />
+                GDPR Compliant
+              </Badge>
+              <Badge className="gap-1 bg-blue-500/20 border-blue-500/40 text-blue-300">
+                <Eye className="h-3 w-3" />
+                Private Processing
+              </Badge>
+            </div>
           </div>
         </div>
 
         {/* Privacy Alert */}
-        <Alert className="mb-6 border-primary/20 bg-primary/5">
-          <Info className="h-4 w-4" />
-          <AlertDescription className="text-sm">
-            <strong>Your privacy matters:</strong> All scanned data is encrypted with a key only you possess. 
-            Data is processed in-memory and never stored on our servers. You can delete all data at any time.
+        <Alert className="mb-6 border-blue-500/30 bg-blue-900/20">
+          <Info className="h-4 w-4 text-blue-400" />
+          <AlertDescription className="text-sm text-zinc-300">
+            <strong className="text-white">Your privacy matters:</strong> All scanned data is encrypted with a key only you possess. 
+            Data is processed in-memory and never stored on our servers.
           </AlertDescription>
         </Alert>
 
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Scanner Section */}
-          <Card className="border-border/50">
+          <Card className="bg-zinc-900/50 border-blue-500/30">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-primary" />
+              <CardTitle className="flex items-center gap-2 text-white">
+                <Sparkles className="h-5 w-5 text-blue-400" />
                 Scan Business Cards
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-zinc-400">
                 Use your camera or upload images to extract contact information
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "camera" | "upload")}>
-                <TabsList className="grid w-full grid-cols-2 mb-4">
-                  <TabsTrigger value="camera" className="gap-2">
+                <TabsList className="grid w-full grid-cols-2 mb-4 bg-zinc-800 border border-blue-500/30">
+                  <TabsTrigger value="camera" className="gap-2 data-[state=active]:bg-blue-500 data-[state=active]:text-white">
                     <Camera className="h-4 w-4" />
                     Camera
                   </TabsTrigger>
-                  <TabsTrigger value="upload" className="gap-2">
+                  <TabsTrigger value="upload" className="gap-2 data-[state=active]:bg-blue-500 data-[state=active]:text-white">
                     <Upload className="h-4 w-4" />
                     Upload
                   </TabsTrigger>
@@ -427,18 +428,18 @@ const BusinessCardScanner = () => {
           </Card>
 
           {/* Results Section */}
-          <Card className="border-border/50">
+          <Card className="bg-zinc-900/50 border-blue-500/30">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="flex items-center gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-green-500" />
+                  <CardTitle className="flex items-center gap-2 text-white">
+                    <CheckCircle2 className="h-5 w-5 text-blue-400" />
                     Scanned Contacts
                     {scannedContacts.length > 0 && (
-                      <Badge variant="secondary">{scannedContacts.length}</Badge>
+                      <Badge className="bg-blue-500/20 text-blue-300">{scannedContacts.length}</Badge>
                     )}
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-zinc-400">
                     Review and export your extracted contacts
                   </CardDescription>
                 </div>
@@ -446,6 +447,7 @@ const BusinessCardScanner = () => {
                   <Button 
                     variant="ghost" 
                     size="sm"
+                    className="text-zinc-400 hover:text-white"
                     onClick={() => setShowEncryptedData(!showEncryptedData)}
                   >
                     {showEncryptedData ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -470,25 +472,25 @@ const BusinessCardScanner = () => {
 
         {/* Actions Bar */}
         {scannedContacts.length > 0 && (
-          <Card className="mt-6 border-border/50">
+          <Card className="mt-6 bg-zinc-900/50 border-blue-500/30">
             <CardContent className="py-4">
               <div className="flex flex-wrap items-center justify-between gap-4">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Lock className="h-4 w-4" />
+                <div className="flex items-center gap-2 text-sm text-zinc-400">
+                  <Lock className="h-4 w-4 text-blue-400" />
                   <span>All data encrypted with your session key</span>
                 </div>
                 
                 <div className="flex flex-wrap items-center gap-2">
-                  <Button variant="outline" size="sm" onClick={handleExportCSV} className="gap-2">
+                  <Button variant="outline" size="sm" onClick={handleExportCSV} className="gap-2 border-zinc-600 text-zinc-300 hover:bg-zinc-800">
                     <Download className="h-4 w-4" />
                     Export CSV
                   </Button>
-                  <Button variant="outline" size="sm" onClick={handleExportExcel} className="gap-2">
+                  <Button variant="outline" size="sm" onClick={handleExportExcel} className="gap-2 border-zinc-600 text-zinc-300 hover:bg-zinc-800">
                     <FileSpreadsheet className="h-4 w-4" />
                     Export Excel
                   </Button>
                   {user && (
-                    <Button variant="default" size="sm" className="gap-2" onClick={handleImportToCRM}>
+                    <Button size="sm" className="gap-2 bg-blue-500 hover:bg-blue-600 text-white" onClick={handleImportToCRM}>
                       <UserPlus className="h-4 w-4" />
                       Import to CRM
                     </Button>
@@ -504,18 +506,18 @@ const BusinessCardScanner = () => {
         )}
 
         {/* Footer Privacy Notice */}
-        <div className="mt-8 text-center text-xs text-muted-foreground space-y-2">
+        <div className="mt-8 text-center text-xs text-zinc-500 space-y-2">
           <p>
-            <Lock className="h-3 w-3 inline mr-1" />
+            <Lock className="h-3 w-3 inline mr-1 text-blue-400" />
             Your scanned data is encrypted client-side and never transmitted to our servers unencrypted.
           </p>
           <p>
-            <Shield className="h-3 w-3 inline mr-1" />
+            <Shield className="h-3 w-3 inline mr-1 text-blue-400" />
             Platform analytics track only usage counts, never personal contact data.
           </p>
           <button 
             onClick={() => setShowPrivacyNotice(true)} 
-            className="text-primary hover:underline"
+            className="text-blue-400 hover:underline"
           >
             View Privacy Policy
           </button>
