@@ -67,13 +67,15 @@ const DeveloperPartnersMarquee = () => {
       <Link
         key={`${listKey}-${developer.slug}-${index}`}
         to={`/developers/${developer.slug}`}
-        className="flex-shrink-0 w-[180px] md:w-[220px] lg:w-[260px] flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
+        // Fixed slot width so spacing stays visually consistent across logos
+        className="flex-shrink-0 w-[170px] md:w-[210px] lg:w-[250px] flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
         title={developer.name}
       >
         <img 
           src={developer.logo} 
           alt={developer.name}
-          className="h-8 md:h-10 lg:h-12 w-auto max-w-[140px] md:max-w-[180px] lg:max-w-[220px] object-contain"
+          // Fixed logo box width => uniform perceived gap between logo edges
+          className="h-8 w-[140px] md:h-10 md:w-[170px] lg:h-12 lg:w-[200px] object-contain"
           loading="lazy"
           decoding="async"
         />
