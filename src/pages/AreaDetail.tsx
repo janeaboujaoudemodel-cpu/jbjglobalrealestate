@@ -8,7 +8,7 @@ import {
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
-import { getAreaBySlug, AREA_GUIDES } from "@/constants/areaGuides";
+import { getAreaBySlug, AREA_GUIDES, JBJ_GUIDANCE_STATEMENT, AREA_GUIDE_DATA_SOURCES } from "@/constants/areaGuides";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -432,6 +432,35 @@ const AreaDetail = () => {
           </div>
         </section>
       )}
+
+      {/* JBJ Guidance Statement */}
+      <section className="py-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto bg-white rounded-2xl p-8 border border-gold/30 shadow-lg">
+            <h3 className="text-gold text-lg font-bold mb-4">JBJ Guidance</h3>
+            <p className="text-zinc-700 text-sm leading-relaxed">
+              {JBJ_GUIDANCE_STATEMENT}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Data Sources */}
+      <section className="py-8 bg-black border-t border-zinc-900">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto">
+            <h4 className="text-gold text-xs uppercase tracking-wider mb-3">Data Sources</h4>
+            <ul className="flex flex-wrap gap-x-4 gap-y-1 text-zinc-500 text-xs">
+              {AREA_GUIDE_DATA_SOURCES.map((source, idx) => (
+                <li key={idx} className="flex items-center gap-1">
+                  <span className="w-1 h-1 bg-gold/50 rounded-full" />
+                  {source}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
 
       {/* Legal Disclaimer */}
       <section className="py-8 border-t border-zinc-900">

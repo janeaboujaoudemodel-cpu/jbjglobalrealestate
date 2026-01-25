@@ -1,15 +1,16 @@
-// Area Guides Data - Phase 1: Downtown Dubai, Dubai Marina, Business Bay
+// Area Guides Data - Institutional Content for Dubai/UAE Real Estate
+// All content follows government data-backed, neutral, professional tone
 
 export interface AreaGuide {
   slug: string;
   name: string;
   heroImage: string;
-  shortDescription: string;
-  overview: string;
-  lifestyle: string;
+  shortDescription: string; // Format: "[AREA] is a master-planned district..."
+  overview: string; // Area Profile & Community Overview
+  lifestyle: string; // Community atmosphere and lifestyle elements
   location: {
-    landmarks: string[];
-    connectivity: string[];
+    landmarks: string[]; // Geographic location and key landmarks
+    connectivity: string[]; // Distance to CBDs, airports, highways, transit
   };
   amenities: {
     dining: string;
@@ -17,8 +18,21 @@ export interface AreaGuide {
     leisure: string;
     wellness: string;
   };
-  propertyTypes: string[];
-  residents: string[];
+  propertyTypes: string[]; // Apartments, villas, townhouses, off-plan vs ready
+  residents: string[]; // Who this area is suitable for
+  // NEW: Institutional content sections (optional for backward compatibility)
+  priceRentalIndicators?: {
+    positioning: string; // General price positioning (entry-level/mid/premium)
+    rentalDemand: string; // Rental demand profile
+    shortTermSuitability?: string; // Short-term vs long-term rental
+  };
+  marketActivity?: {
+    buyerTrends: string; // Buyer activity trends
+    supplyDemand: string; // Supply vs demand dynamics
+    investorProfile: string; // Local/international investor interest
+  };
+  infrastructurePlans?: string[]; // Nearby infrastructure projects, alignment with Dubai Urban Plan
+  suitableFor?: string[]; // Bullet format: who this area suits
   seo: {
     title: string;
     description: string;
@@ -26,41 +40,53 @@ export interface AreaGuide {
   };
 }
 
+// Standardized JBJ Guidance Statement (same for all areas)
+export const JBJ_GUIDANCE_STATEMENT = "At JBJ Global Real Estate, we analyze areas using verified government data, registered transactions, and long-term market behavior. We do not promote locations based on incentives or commissions. Our role is to help clients understand how each area performs historically, how it functions today, and where it may stand within Dubai's broader urban development.";
+
+// Data Sources (static footer for all area guides)
+export const AREA_GUIDE_DATA_SOURCES = [
+  "Dubai Land Department (DLD)",
+  "Dubai REST App",
+  "RERA Rental Index",
+  "Dubai Statistics Center",
+  "UAE Government Open Data Portals"
+];
+
 export const AREA_GUIDES: AreaGuide[] = [
   {
     slug: "downtown-dubai",
     name: "Downtown Dubai",
     heroImage: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80",
-    shortDescription: "The iconic heart of Dubai, home to the world's tallest tower and vibrant urban living.",
-    overview: `Downtown Dubai stands as the city's most prestigious address, a masterfully planned urban district that seamlessly blends world-class architecture with cosmopolitan living. Centered around the iconic Burj Khalifa, this neighborhood offers an unparalleled lifestyle where luxury residences overlook the famous Dubai Fountain and the sprawling Dubai Mall.
+    shortDescription: "Downtown Dubai is a master-planned district in Dubai offering a mix of residential, commercial, and lifestyle developments. This guide provides an objective overview of the area's location, infrastructure, property types, pricing trends, rental performance, and long-term outlook based on official data sources and market activity.",
+    overview: `Downtown Dubai is a high-density urban district developed by Emaar Properties, featuring high-rise towers, commercial spaces, and cultural landmarks. The community is characterized by its mix of luxury residential apartments, hotel-branded residences, and office spaces centered around the Burj Khalifa and Dubai Mall.
 
-The district attracts discerning residents who appreciate being at the center of Dubai's cultural and social scene while enjoying the convenience of having world-class dining, entertainment, and retail at their doorstep.`,
-    lifestyle: "Urban sophistication meets cultural vibrancy in Downtown Dubai. Residents enjoy morning jogs along the Boulevard, leisurely afternoons exploring art galleries, and evenings watching the spectacular fountain shows. The area caters to professionals, families, and those who appreciate the energy of city living without compromising on elegance.",
+The area attracts professionals, families seeking urban convenience, and investors focused on the premium segment. Based on historical transaction and rental data published by official authorities, Downtown Dubai maintains its position as one of the most liquid and actively traded residential markets in Dubai.`,
+    lifestyle: "Downtown Dubai offers a walkable urban environment with retail, dining, and entertainment within the district. Residents have access to parks, promenades along the Dubai Fountain, and cultural venues such as Dubai Opera. Schools, healthcare, and green spaces are available within proximity, though the community is predominantly oriented toward professionals and smaller households.",
     location: {
       landmarks: [
+        "Located in central Dubai, adjacent to DIFC",
         "Burj Khalifa — World's tallest building",
-        "The Dubai Mall — Premier shopping destination",
+        "The Dubai Mall — Premier retail destination",
         "Dubai Opera — Cultural landmark",
-        "Souk Al Bahar — Traditional-style marketplace",
-        "Dubai Fountain — Iconic water show"
+        "Dubai Fountain — Public attraction"
       ],
       connectivity: [
-        "Direct access to Sheikh Zayed Road",
-        "Burj Khalifa / Dubai Mall Metro Station",
-        "15 minutes to Dubai International Airport",
+        "Direct access to Sheikh Zayed Road (E11)",
+        "Burj Khalifa / Dubai Mall Metro Station (Red Line)",
+        "15 minutes to Dubai International Airport (DXB)",
         "20 minutes to Palm Jumeirah",
-        "10 minutes to DIFC"
+        "10 minutes to DIFC business district"
       ]
     },
     amenities: {
-      dining: "From Michelin-starred restaurants to trendy cafés, Downtown offers over 200 dining venues including At.mosphere (world's highest restaurant), Zuma, and LPM.",
-      retail: "The Dubai Mall houses over 1,200 retail outlets, alongside the boutique shops of Souk Al Bahar and the Boulevard's designer stores.",
-      leisure: "Dubai Opera hosts world-class performances, while the area features an aquarium, ice rink, VR parks, and the stunning Burj Park.",
-      wellness: "Premium fitness centers, spa retreats, and jogging tracks along the Boulevard cater to health-conscious residents."
+      dining: "Over 200 dining venues within the district, including restaurants at The Dubai Mall, Souk Al Bahar, and along Mohammed Bin Rashid Boulevard.",
+      retail: "The Dubai Mall houses over 1,200 retail outlets. Additional boutique shopping available at Souk Al Bahar and Boulevard retail.",
+      leisure: "Dubai Opera, Burj Park, aquariums, and regular public events. The Dubai Fountain operates daily with evening shows.",
+      wellness: "Building-integrated gyms, dedicated fitness centers, and outdoor jogging tracks along the Boulevard."
     },
     propertyTypes: [
-      "Luxury high-rise apartments",
-      "Premium penthouses with Burj Khalifa views",
+      "High-rise apartments (studios to 4BR)",
+      "Penthouses with Burj Khalifa views",
       "Serviced residences in five-star hotels",
       "Branded residences (Address, Armani)"
     ],
@@ -68,61 +94,103 @@ The district attracts discerning residents who appreciate being at the center of
       "Business executives and entrepreneurs",
       "International professionals",
       "Families seeking premium urban living",
-      "Those who prioritize convenience and prestige"
+      "Investors focused on capital preservation"
+    ],
+    priceRentalIndicators: {
+      positioning: "Premium segment — positioned above city average for both sales and rentals. Entry prices are among the highest in Dubai due to location prestige and limited land availability.",
+      rentalDemand: "Strong demand from both long-term residents (professionals, families) and investors. High occupancy rates historically.",
+      shortTermSuitability: "Short-term rentals permitted in designated buildings; regulations and building rules vary. Strong tourism demand supports holiday rental market."
+    },
+    marketActivity: {
+      buyerTrends: "Steady to growing buyer activity. Transaction volumes remain consistent due to resale liquidity and investor confidence.",
+      supplyDemand: "Limited new supply due to land constraints. Demand consistently exceeds available inventory in prime buildings.",
+      investorProfile: "Mixed local and international investor base. Strong interest from European, Asian, and GCC buyers."
+    },
+    infrastructurePlans: [
+      "Downtown already benefits from complete infrastructure including metro connectivity",
+      "Ongoing enhancement of pedestrian areas and public spaces",
+      "Part of Dubai 2040 Urban Master Plan as a central urban hub"
+    ],
+    suitableFor: [
+      "Buyers seeking long-term residence in a premium urban location",
+      "Investors focused on capital preservation in established markets",
+      "Professionals requiring proximity to DIFC and business districts",
+      "Lifestyle-driven buyers prioritizing convenience and prestige"
     ],
     seo: {
-      title: "Downtown Dubai Area Guide",
-      description: "Explore Downtown Dubai — home to Burj Khalifa, Dubai Mall, and the city's most prestigious addresses. Discover lifestyle, amenities, and property options with JBJ Global Real Estate.",
-      keywords: "Downtown Dubai, Burj Khalifa area, Dubai Mall neighborhood, luxury apartments Downtown Dubai, property Downtown Dubai"
+      title: "Living & Investing in Downtown Dubai | JBJ Global Real Estate",
+      description: "Objective guide to Downtown Dubai covering location, infrastructure, property types, pricing trends, and rental performance based on official data sources.",
+      keywords: "Downtown Dubai area guide, Downtown Dubai property, Burj Khalifa area, Dubai Mall neighborhood, Downtown Dubai investment"
     }
   },
   {
     slug: "dubai-marina",
     name: "Dubai Marina",
     heroImage: "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1920&q=80",
-    shortDescription: "A stunning waterfront community with vibrant marina life and coastal sophistication.",
-    overview: `Dubai Marina is one of the world's largest man-made marinas, a breathtaking waterfront community that stretches along a 3-kilometer canal. This vibrant neighborhood combines the allure of coastal living with the excitement of urban convenience, featuring gleaming towers that frame a picturesque waterway filled with luxury yachts.
+    shortDescription: "Dubai Marina is a master-planned waterfront district offering residential towers along a 3-kilometer man-made canal. This guide provides an objective overview of the area's location, infrastructure, property types, pricing trends, rental performance, and long-term outlook based on official data sources and market activity.",
+    overview: `Dubai Marina is an established high-density waterfront community developed by multiple developers along a 3-kilometer man-made canal. The district features residential towers ranging from mid-rise to high-rise, with direct access to JBR Beach and extensive retail and dining along Marina Walk.
 
-The Marina Walk promenade comes alive day and night with cafés, restaurants, and boutiques, creating an atmosphere reminiscent of the world's finest waterfront destinations. Residents enjoy stunning views, sea breezes, and a lifestyle that celebrates the best of Dubai's coastal charm.`,
-    lifestyle: "Life in Dubai Marina revolves around the water. Morning yoga on the beach, afternoon coffee at Marina Walk, sunset strolls along JBR, and evening dining with marina views define the rhythm here. The community attracts those who seek an active, social lifestyle with the sea as their backdrop.",
+The community is characterized by its mix of apartment types from studios to penthouses, attracting professionals, couples, and investors focused on rental income. Based on historical transaction and rental data published by official authorities, Dubai Marina maintains high tenant demand and consistent transaction activity.`,
+    lifestyle: "Dubai Marina offers a waterfront lifestyle with beach access, marina promenades, and outdoor dining. Residents have access to fitness facilities, beach clubs, and public spaces. The area is predominantly oriented toward young professionals and couples, though family units are available in select buildings.",
     location: {
       landmarks: [
-        "Marina Walk — Waterfront promenade",
-        "JBR Beach — Popular public beach",
-        "Ain Dubai — World's largest observation wheel",
-        "Marina Mall — Community shopping center",
-        "Bluewaters Island — Entertainment destination"
+        "Located in New Dubai, adjacent to JBR and Palm Jumeirah",
+        "Marina Walk — 7km waterfront promenade",
+        "JBR Beach — Public beach access",
+        "Ain Dubai — Observation wheel at Bluewaters Island",
+        "Marina Mall — Community retail center"
       ],
       connectivity: [
-        "Dubai Marina Metro Station",
-        "DMCC Metro Station",
-        "25 minutes to Dubai International Airport",
-        "10 minutes to Palm Jumeirah",
-        "Direct access to Sheikh Zayed Road"
+        "Dubai Marina Metro Station (Red Line)",
+        "DMCC Metro Station (Red Line)",
+        "Dubai Tram connectivity",
+        "25 minutes to Dubai International Airport (DXB)",
+        "Direct access to Sheikh Zayed Road (E11)"
       ]
     },
     amenities: {
-      dining: "Over 300 restaurants and cafés line Marina Walk and JBR, from casual beachside venues to fine dining at Pier 7's seven-floor culinary tower.",
-      retail: "Marina Mall, JBR's The Walk, and boutique shops offer diverse shopping from everyday essentials to designer fashion.",
-      leisure: "Beach clubs, yacht charters, water sports, and Ain Dubai provide endless entertainment. The area hosts regular markets and outdoor events.",
-      wellness: "Beach fitness classes, premium gyms, spa retreats, and the Marina's jogging tracks support an active lifestyle."
+      dining: "Over 300 dining venues along Marina Walk and JBR, ranging from casual to fine dining establishments.",
+      retail: "Marina Mall and JBR The Walk provide daily essentials and boutique shopping. Mall of the Emirates nearby.",
+      leisure: "Beach access, yacht charters, water sports, and regular outdoor markets and community events.",
+      wellness: "Beach fitness classes, building-integrated gyms, and dedicated fitness centers throughout the community."
     },
     propertyTypes: [
-      "High-rise apartments with marina views",
-      "Beachfront residences at JBR",
-      "Luxury penthouses with private pools",
-      "Serviced apartments and hotel residences"
+      "High-rise apartments (studios to 4BR)",
+      "Penthouses with marina or sea views",
+      "Serviced apartments and hotel residences",
+      "Limited beachfront residences at JBR"
     ],
     residents: [
       "Young professionals and expats",
       "Couples seeking waterfront living",
-      "Fitness and beach enthusiasts",
-      "Those who value social, vibrant communities"
+      "Investors focused on rental income",
+      "Short-term rental operators (where permitted)"
+    ],
+    priceRentalIndicators: {
+      positioning: "Mid to premium segment — competitively positioned for waterfront living. Entry prices below Palm Jumeirah but above emerging communities.",
+      rentalDemand: "Strong rental demand from professionals and short-term visitors. High occupancy rates historically with consistent tenant turnover.",
+      shortTermSuitability: "Short-term rentals permitted in designated buildings. Strong tourism and business traveler demand supports holiday rental market."
+    },
+    marketActivity: {
+      buyerTrends: "Consistent buyer activity with strong resale liquidity. Popular with first-time buyers and investors.",
+      supplyDemand: "Established supply with limited new development. Demand remains stable due to location and lifestyle appeal.",
+      investorProfile: "Strong international investor presence, particularly from Europe, CIS, and Asia. High landlord participation."
+    },
+    infrastructurePlans: [
+      "Complete metro and tram connectivity already operational",
+      "Bluewaters Island and Ain Dubai completed, adding tourism draw",
+      "Part of Dubai 2040 Urban Master Plan as a key waterfront district"
+    ],
+    suitableFor: [
+      "Buyers seeking waterfront living with beach access",
+      "Investors focused on rental income in high-demand areas",
+      "Professionals prioritizing commute to Media City, Internet City, and JLT",
+      "Lifestyle-driven buyers seeking social, active communities"
     ],
     seo: {
-      title: "Dubai Marina Area Guide",
-      description: "Discover Dubai Marina — a stunning waterfront community with marina living, JBR beach access, and vibrant nightlife. Explore properties with JBJ Global Real Estate.",
-      keywords: "Dubai Marina, waterfront apartments Dubai, JBR properties, marina living Dubai, Dubai Marina real estate"
+      title: "Living & Investing in Dubai Marina | JBJ Global Real Estate",
+      description: "Objective guide to Dubai Marina covering location, infrastructure, property types, pricing trends, and rental performance based on official data sources.",
+      keywords: "Dubai Marina area guide, Dubai Marina property, waterfront apartments Dubai, JBR area, Dubai Marina investment"
     }
   },
   {
