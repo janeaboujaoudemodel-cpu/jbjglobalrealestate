@@ -136,16 +136,69 @@ function extractDeveloperCards(html: string): ProvidentDeveloper[] {
 }
 
 /**
- * Fetch ALL developers from Provident using scroll actions to trigger infinite scroll
- * Provident uses Gatsby/React with infinite scroll - we need to scroll to load more content
+ * Fetch ALL developers from Provident by directly accessing Gatsby's page-data.json
+ * Provident uses Gatsby which stores all data in JSON files - much faster than scraping HTML
  */
 async function fetchAllDevelopers(
   firecrawlApiKey: string
 ): Promise<ProvidentDeveloper[]> {
-  console.log(`📄 Fetching all developers with scroll actions: ${PROVIDENT_DEVELOPERS_URL}`);
+  console.log(`📄 Attempting to fetch Gatsby page data for: ${PROVIDENT_DEVELOPERS_URL}`);
   
   try {
-    // Use Firecrawl with scroll actions to load ALL developers
+    // Try Gatsby page-data.json first (common pattern for Gatsby sites)
+    const pageDataUrl = "https://providentestate.com/page-data/developers/page-data.json";
+    console.log(`📄 Trying Gatsby page-data: ${pageDataUrl}`);
+    
+    const pageDataResponse = await fetch(pageDataUrl);
+    
+    if (pageDataResponse.ok) {
+      const pageData = await pageDataResponse.json();
+      console.log(`✅ Found Gatsby page data`);
+      
+      // Extract developers from Gatsby data structure
+      // Gatsby typically stores data in result.data or result.pageContext
+      const developers: ProvidentDeveloper[] = [];
+      let displayOrder = 0;
+      
+      // Try to find developers array in the data structure
+      const findDevelopersArray = (obj: any): any[] => {
+        if (Array.isArray(obj)) return obj;
+        if (obj && typeof obj === 'object') {
+          for (const key of Object.keys(obj)) {
+            if (key.toLowerCase().includes('developer') && Array.isArray(obj[key])) {
+              return obj[key];
+            }
+            const found = findDevelopersArray(obj[key]);
+            if (found.length > 0) return found;
+          }
+        }
+        return [];
+      };
+      
+      const developersData = findDevelopersArray(pageData);
+      console.log(`📊 Found ${developersData.length} developers in Gatsby data`);
+      
+      for (const dev of developersData) {
+        displayOrder++;
+        developers.push({
+          name: dev.name || dev.title || '',
+          slug: slugify(dev.name || dev.title || dev.slug || ''),
+          description: dev.description || dev.excerpt || '',
+          feature_image_url: normalizeUrl(dev.featuredImage?.url || dev.image || dev.featured_image || ''),
+          logo_url: normalizeUrl(dev.logo?.url || dev.logoUrl || dev.logo_url || ''),
+          provident_link: normalizeUrl(dev.url || dev.link || `/developers/${dev.slug || ''}`),
+          display_order: displayOrder,
+        });
+      }
+      
+      if (developers.length > 0) {
+        console.log(`✅ Successfully extracted ${developers.length} developers from Gatsby data`);
+        return developers;
+      }
+    }
+    
+    // Fallback: Use Firecrawl to scrape with minimal actions
+    console.log(`📄 Gatsby JSON not found, falling back to HTML scraping with Firecrawl`);
     const response = await fetch("https://api.firecrawl.dev/v1/scrape", {
       method: "POST",
       headers: {
@@ -156,25 +209,8 @@ async function fetchAllDevelopers(
         url: PROVIDENT_DEVELOPERS_URL,
         formats: ["html"],
         onlyMainContent: false,
-        waitFor: 3000,
-        timeout: 120000, // 2 minute timeout for scrolling
-        actions: [
-          { type: "wait", milliseconds: 2000 },
-          { type: "scroll", direction: "down" },
-          { type: "wait", milliseconds: 2000 },
-          { type: "scroll", direction: "down" },
-          { type: "wait", milliseconds: 2000 },
-          { type: "scroll", direction: "down" },
-          { type: "wait", milliseconds: 2000 },
-          { type: "scroll", direction: "down" },
-          { type: "wait", milliseconds: 2000 },
-          { type: "scroll", direction: "down" },
-          { type: "wait", milliseconds: 2000 },
-          { type: "scroll", direction: "down" },
-          { type: "wait", milliseconds: 2000 },
-          { type: "scroll", direction: "down" },
-          { type: "wait", milliseconds: 2000 },
-        ],
+        waitFor: 5000,
+        timeout: 60000,
       }),
     });
 
@@ -192,7 +228,7 @@ async function fetchAllDevelopers(
     }
 
     const developers = extractDeveloperCards(html);
-    console.log(`✅ Total developers found after scrolling: ${developers.length}`);
+    console.log(`✅ Total developers found from HTML: ${developers.length}`);
     
     return developers;
   } catch (error) {
@@ -202,15 +238,14 @@ async function fetchAllDevelopers(
 }
 
 /**
- * PROVIDENT DEVELOPERS EXTRACTION v13 - SCROLL-BASED EXTRACTION
+ * PROVIDENT DEVELOPERS EXTRACTION v14 - GATSBY JSON EXTRACTION
  * 
  * Strategy:
- * 1. Use Firecrawl with scroll actions to trigger Gatsby's infinite scroll
- * 2. Load ALL developers in a single request by scrolling multiple times
- * 3. Extract all developer cards from the fully-loaded HTML
- * 4. Deduplicate by slug before saving
+ * 1. Try to fetch Gatsby's page-data.json directly (fast, gets all data at once)
+ * 2. If that fails, fall back to HTML scraping with Firecrawl
+ * 3. Deduplicate by slug before saving
  * 
- * This replaces the failed URL-based pagination approach.
+ * This bypasses the infinite scroll issue entirely.
  */
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -235,8 +270,8 @@ serve(async (req) => {
       // No body, use defaults
     }
 
-    console.log(`🔄 Starting Provident Developers Extraction v13 (Scroll-Based)...`);
-    console.log(`🔄 Using scroll actions to load ALL developers via infinite scroll`);
+    console.log(`🔄 Starting Provident Developers Extraction v14 (Gatsby JSON)...`);
+    console.log(`🔄 Attempting direct Gatsby data fetch for maximum speed`);
 
     if (!firecrawlApiKey) {
       throw new Error("FIRECRAWL_API_KEY not configured");
@@ -318,8 +353,8 @@ serve(async (req) => {
         metadata: {
           source: "provident_estate",
           url: PROVIDENT_DEVELOPERS_URL,
-          version: "v13-scroll-based",
-          extractionMethod: "firecrawl-scroll-actions",
+          version: "v14-gatsby-json",
+          extractionMethod: "gatsby-page-data-or-html-fallback",
         },
     });
 
