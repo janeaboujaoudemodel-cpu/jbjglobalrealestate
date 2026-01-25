@@ -203,7 +203,7 @@ const Index = () => {
       <DeveloperPartnersMarquee />
 
       {/* AI HOME FINDER - Premium CTA Section - Gold glow on normal, white on hover */}
-      <section className="py-6 md:py-14 bg-black">
+      <section className="pt-10 md:pt-16 pb-6 md:pb-14 bg-black">
         <div className="container mx-auto px-3 md:px-4">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -263,7 +263,7 @@ const Index = () => {
 
 
       {/* WHO IS THIS FOR - Clear Entry Points with Champagne Layer */}
-      <section className="py-8 md:py-20 bg-black">
+      <section className="pt-12 md:pt-24 pb-8 md:pb-20 bg-black">
         <div className="jj-layer-2">
           <div className="text-center mb-6 md:mb-10">
             <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-semibold shadow-md">
@@ -458,8 +458,8 @@ const Index = () => {
               </div>
             </Link>
 
-            {/* Investor Hub Card - Compact on mobile */}
-            <Link to="/ai-hub" className="group">
+            {/* Investor Hub Card - Compact on mobile - Extra bottom margin */}
+            <Link to="/ai-hub" className="group mb-4 md:mb-0">
               <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-xl md:rounded-2xl p-4 md:p-8 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300">
                 <div className="flex items-center gap-3 md:gap-4 mb-2 md:mb-4">
                   <div className="w-10 h-10 md:w-12 md:h-12 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-lg md:rounded-xl flex items-center justify-center shadow-md md:shadow-lg shadow-gold/40 transition-all duration-300">
@@ -529,13 +529,14 @@ const Index = () => {
                         className="w-full h-[350px] md:h-[400px] object-cover"
                         style={{ objectPosition: "center 15%" }}
                       />
-                      {/* Quote Badge */}
-                      <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5 backdrop-blur-md bg-white/95 border-t-2 border-gold rounded-b-2xl">
-                        <div className="text-gold text-xl font-serif mb-1">"</div>
-                        <p className="text-zinc-700 text-xs md:text-sm italic leading-relaxed">
-                          Excellence isn't a destination—it's the standard we apply to every interaction.
-                        </p>
-                      </div>
+                    </div>
+                    
+                    {/* Quote - Between Photo and Name */}
+                    <div className="mt-4 p-4 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-xl">
+                      <div className="text-gold text-xl font-serif mb-1">"</div>
+                      <p className="text-zinc-700 text-xs md:text-sm italic leading-relaxed">
+                        Excellence isn't a destination—it's the standard we apply to every interaction.
+                      </p>
                     </div>
                   </div>
 
@@ -543,7 +544,7 @@ const Index = () => {
                   <div>
                     {/* Name & Title */}
                     <div className="mb-5">
-                      <h3 
+                      <h3
                         className="text-black text-2xl md:text-3xl font-bold mb-2 tracking-tight"
                         style={{ fontFamily: "Poppins, sans-serif" }}
                       >

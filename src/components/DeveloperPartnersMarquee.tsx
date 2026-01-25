@@ -94,7 +94,8 @@ const DeveloperPartnersMarquee = () => {
   const renderPartner = (developer: typeof FEATURED_DEVELOPERS[number], index: number, listKey: "a" | "b") => {
     // IMPORTANT: Keep spacing locked (px-* on the Link). Only adjust logo size.
     // We adjust size by changing responsive HEIGHT classes (layout-safe; no transform scaling).
-    const base = "w-auto max-w-[180px] md:max-w-[220px] lg:max-w-[260px] object-contain";
+    // MOBILE: Smaller logos to fit ~4 in viewport; DESKTOP: Keep original larger sizes
+    const base = "w-auto max-w-[100px] md:max-w-[220px] lg:max-w-[260px] object-contain";
 
     const sizeClass = (() => {
       switch (developer.slug) {
@@ -102,17 +103,17 @@ const DeveloperPartnersMarquee = () => {
         case "damac":
         case "emaar":
         case "majid-al-futtaim":
-          return `h-7 md:h-9 lg:h-11 ${base}`;
+          return `h-5 md:h-9 lg:h-11 ${base}`;
 
         // Slightly bigger (was visually smaller)
         case "ellington-properties":
-          return `h-9 md:h-11 lg:h-[52px] ${base}`;
+          return `h-6 md:h-11 lg:h-[52px] ${base}`;
         case "danube-properties":
-          return `h-9 md:h-11 lg:h-12 ${base}`;
+          return `h-6 md:h-11 lg:h-12 ${base}`;
 
         // Reference sizing (Meraas + most others)
         default:
-          return `h-8 md:h-10 lg:h-12 ${base}`;
+          return `h-5 md:h-10 lg:h-12 ${base}`;
       }
     })();
 
@@ -120,8 +121,8 @@ const DeveloperPartnersMarquee = () => {
       <Link
         key={`${listKey}-${developer.slug}-${index}`}
         to={`/developers/${developer.slug}`}
-        // LOCKED: Tighter uniform spacing between logos - DO NOT CHANGE
-        className="flex-shrink-0 px-6 md:px-8 lg:px-10 flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
+        // Tighter spacing on mobile, normal on desktop
+        className="flex-shrink-0 px-4 md:px-8 lg:px-10 flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
         title={developer.name}
       >
         <img
