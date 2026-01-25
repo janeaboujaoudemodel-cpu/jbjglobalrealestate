@@ -264,17 +264,6 @@ export const DeveloperApprovalQueue = () => {
     }
   };
 
-  const clearRejected = async () => {
-    try {
-      await supabase.from("pending_developer_imports").delete().eq("status", "rejected");
-
-      toast.success("Cleared all rejected items");
-    } catch (error) {
-      console.error("Clear error:", error);
-      toast.error("Failed to clear rejected items");
-    }
-  };
-
   const handleCardClick = (slug: string) => {
     navigate(`/developer/${slug}`);
   };
@@ -350,9 +339,6 @@ export const DeveloperApprovalQueue = () => {
               <X className="w-4 h-4 mr-2" />
               Reject All
             </Button>
-            <Button size="sm" variant="ghost" onClick={clearRejected} className="text-zinc-400 hover:text-white">
-              Clear Rejected
-            </Button>
           </div>
         )}
       </CardHeader>
@@ -370,8 +356,8 @@ export const DeveloperApprovalQueue = () => {
           </div>
         ) : (
           <>
-            {/* Grid: 4 columns, mirroring Provident layout */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {/* Grid: 4 columns per row, matching Provident layout */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
               {paginatedDevelopers.map((developer) => {
                 const isProcessing = processingIds.has(developer.id);
                 const existingMatch = findMatchingDeveloper(developer.slug);
@@ -410,10 +396,10 @@ export const DeveloperApprovalQueue = () => {
                         )}
                       </div>
 
-                      {/* Merge badge */}
+                      {/* Update existing badge */}
                       {existingMatch && (
                         <div className="absolute top-2 left-2">
-                          <Badge className="bg-amber-500 text-white text-xs">Will Merge</Badge>
+                          <Badge className="bg-blue-500 text-white text-xs">Update Existing</Badge>
                         </div>
                       )}
                     </div>
@@ -449,7 +435,7 @@ export const DeveloperApprovalQueue = () => {
                           ) : (
                             <>
                               <Check className="w-3 h-3 mr-1" />
-                              {existingMatch ? "Merge" : "Approve"}
+                              Approve
                             </>
                           )}
                         </Button>
