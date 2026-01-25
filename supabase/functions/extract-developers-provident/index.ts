@@ -136,26 +136,16 @@ function extractDeveloperCards(html: string): ProvidentDeveloper[] {
 }
 
 /**
- * Fetch a specific page from Provident developers using their API
- * Provident uses Gatsby/React with infinite scroll - we can access the paginated data
+ * Fetch ALL developers from Provident using scroll actions to trigger infinite scroll
+ * Provident uses Gatsby/React with infinite scroll - we need to scroll to load more content
  */
-async function fetchDevelopersPage(
-  pageNumber: number,
+async function fetchAllDevelopers(
   firecrawlApiKey: string
 ): Promise<ProvidentDeveloper[]> {
-  // Provident developers page uses pagination via scroll
-  // Page 1 = first 24, Page 2 = 25-48, etc.
-  // We use the skip parameter to get specific pages
-  const skip = (pageNumber - 1) * PROVIDENT_PAGE_SIZE;
-  
-  // Build URL with page parameter
-  const pageUrl = pageNumber === 1 
-    ? PROVIDENT_DEVELOPERS_URL 
-    : `${PROVIDENT_DEVELOPERS_URL}?page=${pageNumber}`;
-  
-  console.log(`📄 Fetching page ${pageNumber} (skip=${skip}): ${pageUrl}`);
+  console.log(`📄 Fetching all developers with scroll actions: ${PROVIDENT_DEVELOPERS_URL}`);
   
   try {
+    // Use Firecrawl with scroll actions to load ALL developers
     const response = await fetch("https://api.firecrawl.dev/v1/scrape", {
       method: "POST",
       headers: {
@@ -163,16 +153,33 @@ async function fetchDevelopersPage(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        url: pageUrl,
+        url: PROVIDENT_DEVELOPERS_URL,
         formats: ["html"],
         onlyMainContent: false,
-        waitFor: 5000,
-        timeout: 60000,
+        waitFor: 3000,
+        timeout: 120000, // 2 minute timeout for scrolling
+        actions: [
+          { type: "wait", milliseconds: 2000 },
+          { type: "scroll", direction: "down" },
+          { type: "wait", milliseconds: 2000 },
+          { type: "scroll", direction: "down" },
+          { type: "wait", milliseconds: 2000 },
+          { type: "scroll", direction: "down" },
+          { type: "wait", milliseconds: 2000 },
+          { type: "scroll", direction: "down" },
+          { type: "wait", milliseconds: 2000 },
+          { type: "scroll", direction: "down" },
+          { type: "wait", milliseconds: 2000 },
+          { type: "scroll", direction: "down" },
+          { type: "wait", milliseconds: 2000 },
+          { type: "scroll", direction: "down" },
+          { type: "wait", milliseconds: 2000 },
+        ],
       }),
     });
 
     if (!response.ok) {
-      console.warn(`Page ${pageNumber} fetch failed: ${response.status}`);
+      console.warn(`Fetch failed: ${response.status}`);
       return [];
     }
 
@@ -180,34 +187,30 @@ async function fetchDevelopersPage(
     const html = data?.data?.html || data?.html || "";
     
     if (!html || html.length < 1000) {
-      console.log(`Page ${pageNumber}: No content or empty page`);
+      console.log(`No content returned`);
       return [];
     }
 
     const developers = extractDeveloperCards(html);
-    console.log(`✅ Page ${pageNumber}: Found ${developers.length} developers`);
+    console.log(`✅ Total developers found after scrolling: ${developers.length}`);
     
-    // Adjust display_order based on page number
-    return developers.map((dev, idx) => ({
-      ...dev,
-      display_order: skip + idx + 1,
-    }));
+    return developers;
   } catch (error) {
-    console.warn(`Error fetching page ${pageNumber}:`, error);
+    console.warn(`Error fetching developers:`, error);
     return [];
   }
 }
 
 /**
- * PROVIDENT DEVELOPERS EXTRACTION v9 - MULTI-PAGE PAGINATION
+ * PROVIDENT DEVELOPERS EXTRACTION v13 - SCROLL-BASED EXTRACTION
  * 
  * Strategy:
- * 1. Fetch existing pending developers to know the current state
- * 2. Check if we already have page 1 (24 developers) - if not, fetch it
- * 3. Continue fetching subsequent pages until we get an empty page
- * 4. Each page adds 24 developers
+ * 1. Use Firecrawl with scroll actions to trigger Gatsby's infinite scroll
+ * 2. Load ALL developers in a single request by scrolling multiple times
+ * 3. Extract all developer cards from the fully-loaded HTML
+ * 4. Deduplicate by slug before saving
  * 
- * This allows incremental extraction across multiple runs.
+ * This replaces the failed URL-based pagination approach.
  */
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -232,9 +235,8 @@ serve(async (req) => {
       // No body, use defaults
     }
 
-    console.log(`🔄 Starting Provident Developers Extraction v9 (Multi-Page)...`);
-    console.log(`🔄 FIXED EXTRACTION - Will extract ALL developers from pages 1-7`);
-    console.log(`📊 Starting from page: ${requestedStartPage}`);
+    console.log(`🔄 Starting Provident Developers Extraction v13 (Scroll-Based)...`);
+    console.log(`🔄 Using scroll actions to load ALL developers via infinite scroll`);
 
     if (!firecrawlApiKey) {
       throw new Error("FIRECRAWL_API_KEY not configured");
@@ -253,35 +255,8 @@ serve(async (req) => {
       }
     }
 
-    // Fetch ALL pages - let database handle uniqueness via slug constraint
-    const allDevelopers: ProvidentDeveloper[] = [];
-    const MAX_PAGES = 7; // Provident has 7 pages
-    let currentPage = requestedStartPage;
-    let emptyPages = 0;
-
-    console.log(`📄 Extracting pages ${requestedStartPage} through ${MAX_PAGES}...`);
-
-    while (currentPage <= MAX_PAGES && emptyPages < 2) {
-      const pageDevelopers = await fetchDevelopersPage(currentPage, firecrawlApiKey);
-      
-      if (pageDevelopers.length === 0) {
-        emptyPages++;
-        console.log(`📄 Page ${currentPage}: Empty (${emptyPages}/2 consecutive empty pages)`);
-      } else {
-        emptyPages = 0; // Reset counter
-        
-        // Add ALL developers - database will handle duplicates via unique constraint
-        allDevelopers.push(...pageDevelopers);
-        console.log(`✅ Page ${currentPage}: Extracted ${pageDevelopers.length} developers`);
-      }
-      
-      currentPage++;
-      
-      // Small delay between pages to avoid rate limiting
-      if (currentPage <= MAX_PAGES) {
-        await new Promise(r => setTimeout(r, 1000));
-      }
-    }
+    // Fetch ALL developers using scroll actions
+    const allDevelopers = await fetchAllDevelopers(firecrawlApiKey);
 
     console.log(`📊 Total developers extracted: ${allDevelopers.length}`);
 
@@ -340,14 +315,12 @@ serve(async (req) => {
       records_found: uniqueDevelopers.length,
       records_matched: 0,
       records_pending: allDevelopers.length,
-      metadata: {
-        source: "provident_estate",
-        url: PROVIDENT_DEVELOPERS_URL,
-        version: "v11-fixed",
-        startPage: requestedStartPage,
-        endPage: currentPage - 1,
-        pagesProcessed: currentPage - requestedStartPage,
-      },
+        metadata: {
+          source: "provident_estate",
+          url: PROVIDENT_DEVELOPERS_URL,
+          version: "v13-scroll-based",
+          extractionMethod: "firecrawl-scroll-actions",
+        },
     });
 
     console.log(`✅ Successfully extracted and stored ${allDevelopers.length} new developers`);
@@ -355,12 +328,11 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({
         success: true,
-        message: `Successfully extracted ${allDevelopers.length} developers from pages ${requestedStartPage}-${currentPage - 1}`,
-        count: allDevelopers.length,
-        pagesProcessed: currentPage - requestedStartPage,
-        developers: allDevelopers.map((d) => ({
+        message: `Successfully extracted ${uniqueDevelopers.length} unique developers using scroll actions`,
+        count: uniqueDevelopers.length,
+        extractionMethod: "scroll-based",
+        developers: uniqueDevelopers.map((d) => ({
           name: d.name,
-          order: d.display_order,
           logo: d.logo_url ? "✓" : "✗",
           image: d.feature_image_url ? "✓" : "✗",
         })),
