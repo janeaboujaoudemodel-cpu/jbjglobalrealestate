@@ -379,11 +379,11 @@ export const DeveloperApprovalQueue = () => {
                 return (
                   <div
                     key={developer.id}
-                    className="group relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer"
+                    className="group relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer h-full"
                     onClick={() => handleCardClick(developer.slug)}
                   >
-                    {/* Feature Image */}
-                    <div className="relative aspect-[4/3] bg-zinc-100 flex-shrink-0">
+                    {/* Feature Image - Fixed height */}
+                    <div className="relative h-[180px] bg-zinc-100 flex-shrink-0">
                       {developer.feature_image_url ? (
                         <img
                           src={developer.feature_image_url}
@@ -397,16 +397,18 @@ export const DeveloperApprovalQueue = () => {
                         </div>
                       )}
 
-                      {/* Logo overlay at bottom-left */}
-                      {developer.logo_url && (
-                        <div className="absolute bottom-3 left-3 bg-white/95 px-2 py-1 rounded shadow">
+                      {/* Logo overlay at bottom-left - Fixed height */}
+                      <div className="absolute bottom-3 left-3 bg-white/95 px-2 py-1 rounded shadow h-8 flex items-center">
+                        {developer.logo_url ? (
                           <img
                             src={developer.logo_url}
                             alt={`${developer.name} logo`}
-                            className="h-6 w-auto object-contain max-w-[100px]"
+                            className="h-5 w-auto object-contain max-w-[80px]"
                           />
-                        </div>
-                      )}
+                        ) : (
+                          <span className="text-xs text-zinc-400">No logo</span>
+                        )}
+                      </div>
 
                       {/* Merge badge */}
                       {existingMatch && (
@@ -416,18 +418,18 @@ export const DeveloperApprovalQueue = () => {
                       )}
                     </div>
 
-                    {/* Content */}
+                    {/* Content - Fixed heights */}
                     <div className="p-4 bg-white flex flex-col flex-grow">
-                      {/* Name + arrow */}
-                      <div className="flex items-center gap-2 mb-2 h-6">
-                        <h3 className="text-zinc-900 font-semibold text-base leading-tight truncate">
+                      {/* Name + arrow - Fixed height */}
+                      <div className="flex items-center gap-2 mb-2 h-7 min-h-[28px]">
+                        <h3 className="text-zinc-900 font-semibold text-sm leading-tight truncate flex-1 min-w-0">
                           {developer.name}
                         </h3>
                         <ChevronUp className="w-4 h-4 text-zinc-400 rotate-45 flex-shrink-0" />
                       </div>
 
-                      {/* Description */}
-                      <p className="text-zinc-600 text-sm leading-relaxed mb-4 h-[60px] line-clamp-3">
+                      {/* Description - Fixed height with line clamp */}
+                      <p className="text-zinc-600 text-xs leading-relaxed mb-4 h-[54px] min-h-[54px] line-clamp-3 overflow-hidden">
                         {developer.description || "No description available"}
                       </p>
 
