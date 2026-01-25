@@ -156,8 +156,8 @@ const RentalIndex = () => {
     <div className="min-h-screen bg-black">
       
       
-      {/* Hero Section */}
-      <section className="pt-32 pb-16 bg-gradient-to-b from-emerald-950/50 via-zinc-950 to-black">
+      {/* Hero Section - Emerald Green Theme */}
+      <section className="pt-32 pb-16 bg-gradient-to-b from-emerald-950/60 via-emerald-950/30 to-black">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -165,7 +165,7 @@ const RentalIndex = () => {
             variants={fadeInUp}
             className="text-center max-w-3xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/15 border border-emerald-500/40 rounded-full mb-6">
               <TrendingUp className="w-4 h-4 text-emerald-400" />
               <span className="text-emerald-400 text-xs font-semibold uppercase tracking-wider">AI Rental Index</span>
             </div>
@@ -181,14 +181,14 @@ const RentalIndex = () => {
               Get AI-powered rental estimates for any Dubai property. Understand current market rates, trends, and investment potential.
             </p>
             
-            <p className="text-zinc-500 text-sm">
+            <p className="text-emerald-400/70 text-sm">
               Powered by AI • Data-driven insights • Real-time market analysis
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Analysis Form */}
+      {/* Analysis Form - Emerald Green Theme */}
       <section className="py-12 bg-black">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
@@ -197,15 +197,15 @@ const RentalIndex = () => {
               whileInView="visible"
               viewport={{ once: true }}
               variants={fadeInUp}
-              className="bg-zinc-900/60 backdrop-blur-sm border border-zinc-800 rounded-3xl p-8 md:p-10"
+              className="bg-gradient-to-br from-emerald-950/40 via-zinc-900/60 to-emerald-950/20 backdrop-blur-sm border border-emerald-500/30 rounded-3xl p-8 md:p-10"
             >
               <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center">
-                  <Search className="w-6 h-6 text-gold" />
+                <div className="w-12 h-12 rounded-xl bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center">
+                  <Search className="w-6 h-6 text-emerald-400" />
                 </div>
                 <div>
                   <h2 className="text-white text-xl font-bold">Property Details</h2>
-                  <p className="text-zinc-500 text-sm">Enter property information for rental analysis</p>
+                  <p className="text-emerald-400/70 text-sm">Enter property information for rental analysis</p>
                 </div>
               </div>
 
@@ -213,16 +213,16 @@ const RentalIndex = () => {
                 {/* Community */}
                 <div>
                   <Label className="text-zinc-300 text-sm font-medium mb-2 block">
-                    <MapPin className="w-4 h-4 inline mr-1" />
-                    Community / Area *
+                    <MapPin className="w-4 h-4 inline mr-1 text-emerald-400" />
+                    Community / Area <span className="text-emerald-400">*</span>
                   </Label>
                   <Select value={community} onValueChange={setCommunity}>
-                    <SelectTrigger className="bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl">
+                    <SelectTrigger className="bg-zinc-900/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors">
                       <SelectValue placeholder="Select community" />
                     </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-zinc-700 max-h-64">
+                    <SelectContent className="bg-zinc-900 border-emerald-500/30 max-h-64">
                       {dubaiCommunities.map((c) => (
-                        <SelectItem key={c} value={c} className="text-white hover:bg-zinc-800">
+                        <SelectItem key={c} value={c} className="text-white hover:bg-emerald-500/20 focus:bg-emerald-500/20">
                           {c}
                         </SelectItem>
                       ))}
@@ -233,16 +233,16 @@ const RentalIndex = () => {
                 {/* Property Type */}
                 <div>
                   <Label className="text-zinc-300 text-sm font-medium mb-2 block">
-                    <Home className="w-4 h-4 inline mr-1" />
-                    Property Type *
+                    <Home className="w-4 h-4 inline mr-1 text-emerald-400" />
+                    Property Type <span className="text-emerald-400">*</span>
                   </Label>
                   <Select value={propertyType} onValueChange={setPropertyType}>
-                    <SelectTrigger className="bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl">
+                    <SelectTrigger className="bg-zinc-900/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors">
                       <SelectValue placeholder="Select type" />
                     </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-zinc-700">
+                    <SelectContent className="bg-zinc-900 border-emerald-500/30">
                       {propertyTypes.map((t) => (
-                        <SelectItem key={t.value} value={t.value} className="text-white hover:bg-zinc-800">
+                        <SelectItem key={t.value} value={t.value} className="text-white hover:bg-emerald-500/20 focus:bg-emerald-500/20">
                           {t.label}
                         </SelectItem>
                       ))}
@@ -253,7 +253,7 @@ const RentalIndex = () => {
                 {/* Size */}
                 <div>
                   <Label className="text-zinc-300 text-sm font-medium mb-2 block">
-                    <Building className="w-4 h-4 inline mr-1" />
+                    <Building className="w-4 h-4 inline mr-1 text-emerald-400" />
                     Size (sq.ft) - Optional
                   </Label>
                   <Input
@@ -261,7 +261,7 @@ const RentalIndex = () => {
                     value={size}
                     onChange={(e) => setSize(e.target.value)}
                     placeholder="e.g., 1200"
-                    className="bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl"
+                    className="bg-zinc-900/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors"
                   />
                 </div>
 
@@ -271,13 +271,13 @@ const RentalIndex = () => {
                     Furnished Status - Optional
                   </Label>
                   <Select value={furnished} onValueChange={setFurnished}>
-                    <SelectTrigger className="bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl">
+                    <SelectTrigger className="bg-zinc-900/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors">
                       <SelectValue placeholder="Select status" />
                     </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-zinc-700">
-                      <SelectItem value="unfurnished" className="text-white hover:bg-zinc-800">Unfurnished</SelectItem>
-                      <SelectItem value="furnished" className="text-white hover:bg-zinc-800">Furnished</SelectItem>
-                      <SelectItem value="semi-furnished" className="text-white hover:bg-zinc-800">Semi-Furnished</SelectItem>
+                    <SelectContent className="bg-zinc-900 border-emerald-500/30">
+                      <SelectItem value="unfurnished" className="text-white hover:bg-emerald-500/20 focus:bg-emerald-500/20">Unfurnished</SelectItem>
+                      <SelectItem value="furnished" className="text-white hover:bg-emerald-500/20 focus:bg-emerald-500/20">Furnished</SelectItem>
+                      <SelectItem value="semi-furnished" className="text-white hover:bg-emerald-500/20 focus:bg-emerald-500/20">Semi-Furnished</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -286,7 +286,7 @@ const RentalIndex = () => {
               <Button
                 onClick={handleAnalyze}
                 disabled={isLoading || !community || !propertyType}
-                className="w-full bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-black font-bold py-6 text-lg rounded-xl transition-all duration-300 disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-bold py-6 text-lg rounded-xl transition-all duration-300 disabled:opacity-50 border border-emerald-400/30"
               >
                 {isLoading ? (
                   <>
@@ -302,7 +302,7 @@ const RentalIndex = () => {
               </Button>
             </motion.div>
 
-            {/* Results Section */}
+            {/* Results Section - Emerald Green Theme */}
             {analysis && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -311,56 +311,56 @@ const RentalIndex = () => {
                 className="mt-8 space-y-6"
               >
                 {/* Main Result Card */}
-                <div className="bg-gradient-to-br from-gold/10 to-gold/5 border border-gold/30 rounded-3xl p-8 md:p-10">
+                <div className="bg-gradient-to-br from-emerald-500/15 to-emerald-600/10 border border-emerald-500/40 rounded-3xl p-8 md:p-10">
                   <div className="flex items-center gap-3 mb-6">
-                    <DollarSign className="w-8 h-8 text-gold" />
+                    <DollarSign className="w-8 h-8 text-emerald-400" />
                     <div>
                       <h3 className="text-white text-2xl font-bold">Estimated Annual Rent</h3>
-                      <p className="text-zinc-400 text-sm">{analysis.community} • {propertyTypes.find(t => t.value === analysis.propertyType)?.label}</p>
+                      <p className="text-emerald-400/70 text-sm">{analysis.community} • {propertyTypes.find(t => t.value === analysis.propertyType)?.label}</p>
                     </div>
                   </div>
 
                   <div className="grid md:grid-cols-3 gap-6 mb-8">
-                    <div className="bg-black/40 rounded-2xl p-6 text-center">
+                    <div className="bg-black/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
                       <p className="text-zinc-400 text-sm mb-2">Minimum</p>
-                      <p className="text-gold text-3xl font-bold">{formatCurrency(analysis.estimatedRentMin)}</p>
+                      <p className="text-emerald-400 text-3xl font-bold">{formatCurrency(analysis.estimatedRentMin)}</p>
                       <p className="text-zinc-500 text-xs mt-1">/year</p>
                     </div>
-                    <div className="bg-gold/20 border border-gold/40 rounded-2xl p-6 text-center">
-                      <p className="text-gold text-sm mb-2 font-medium">Average</p>
+                    <div className="bg-emerald-500/20 border border-emerald-400/50 rounded-2xl p-6 text-center">
+                      <p className="text-emerald-400 text-sm mb-2 font-medium">Average</p>
                       <p className="text-white text-4xl font-bold">{formatCurrency(analysis.averageRent)}</p>
                       <p className="text-zinc-400 text-xs mt-1">/year</p>
                     </div>
-                    <div className="bg-black/40 rounded-2xl p-6 text-center">
+                    <div className="bg-black/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
                       <p className="text-zinc-400 text-sm mb-2">Maximum</p>
-                      <p className="text-gold text-3xl font-bold">{formatCurrency(analysis.estimatedRentMax)}</p>
+                      <p className="text-emerald-400 text-3xl font-bold">{formatCurrency(analysis.estimatedRentMax)}</p>
                       <p className="text-zinc-500 text-xs mt-1">/year</p>
                     </div>
                   </div>
 
                   {/* Additional Metrics */}
                   <div className="grid md:grid-cols-3 gap-4 mb-6">
-                    <div className="bg-zinc-900/60 rounded-xl p-4">
-                      <p className="text-zinc-400 text-xs uppercase tracking-wider mb-1">Price per Sq.Ft</p>
+                    <div className="bg-zinc-900/60 border border-emerald-500/20 rounded-xl p-4">
+                      <p className="text-emerald-400/70 text-xs uppercase tracking-wider mb-1">Price per Sq.Ft</p>
                       <p className="text-white text-lg font-semibold">AED {analysis.pricePerSqft}</p>
                     </div>
-                    <div className="bg-zinc-900/60 rounded-xl p-4">
-                      <p className="text-zinc-400 text-xs uppercase tracking-wider mb-1">Yearly Increase</p>
-                      <p className="text-green-400 text-lg font-semibold">{analysis.yearlyIncrease}</p>
+                    <div className="bg-zinc-900/60 border border-emerald-500/20 rounded-xl p-4">
+                      <p className="text-emerald-400/70 text-xs uppercase tracking-wider mb-1">Yearly Increase</p>
+                      <p className="text-emerald-400 text-lg font-semibold">{analysis.yearlyIncrease}</p>
                     </div>
-                    <div className="bg-zinc-900/60 rounded-xl p-4">
-                      <p className="text-zinc-400 text-xs uppercase tracking-wider mb-1">Market Trend</p>
+                    <div className="bg-zinc-900/60 border border-emerald-500/20 rounded-xl p-4">
+                      <p className="text-emerald-400/70 text-xs uppercase tracking-wider mb-1">Market Trend</p>
                       <p className="text-white text-lg font-semibold">{analysis.marketTrend}</p>
                     </div>
                   </div>
 
                   {/* Demand Level */}
-                  <div className="bg-zinc-900/60 rounded-xl p-4 mb-6">
-                    <p className="text-zinc-400 text-xs uppercase tracking-wider mb-2">Demand Level</p>
+                  <div className="bg-zinc-900/60 border border-emerald-500/20 rounded-xl p-4 mb-6">
+                    <p className="text-emerald-400/70 text-xs uppercase tracking-wider mb-2">Demand Level</p>
                     <div className="flex items-center gap-2">
                       <div className={`h-2 flex-1 rounded-full ${
-                        analysis.demandLevel === 'Very High' ? 'bg-gradient-to-r from-green-500 to-green-400' :
-                        analysis.demandLevel === 'High' ? 'bg-gradient-to-r from-green-600 to-green-500' :
+                        analysis.demandLevel === 'Very High' ? 'bg-gradient-to-r from-emerald-500 to-green-400' :
+                        analysis.demandLevel === 'High' ? 'bg-gradient-to-r from-emerald-600 to-emerald-500' :
                         analysis.demandLevel === 'Moderate' ? 'bg-gradient-to-r from-yellow-500 to-yellow-400' :
                         'bg-gradient-to-r from-orange-500 to-orange-400'
                       }`} />
@@ -369,15 +369,15 @@ const RentalIndex = () => {
                   </div>
 
                   {/* AI Insights */}
-                  <div className="bg-zinc-900/60 rounded-xl p-6">
+                  <div className="bg-zinc-900/60 border border-emerald-500/20 rounded-xl p-6">
                     <div className="flex items-center gap-2 mb-4">
-                      <Sparkles className="w-5 h-5 text-purple-400" />
+                      <Sparkles className="w-5 h-5 text-emerald-400" />
                       <h4 className="text-white font-semibold">AI Market Insights</h4>
                     </div>
                     <ul className="space-y-3">
                       {analysis.insights.map((insight, i) => (
                         <li key={i} className="flex items-start gap-3">
-                          <CheckCircle className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                          <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                           <span className="text-zinc-300 text-sm">{insight}</span>
                         </li>
                       ))}
@@ -385,53 +385,43 @@ const RentalIndex = () => {
                   </div>
                 </div>
 
-                {/* Disclaimer */}
-                <div className="bg-amber-900/20 border border-amber-500/30 rounded-2xl p-6">
+                {/* Disclaimer - Neutral dark styling */}
+                <div className="bg-zinc-800/50 border border-zinc-700 rounded-2xl p-6">
                   <div className="flex items-start gap-3">
-                    <AlertCircle className="w-6 h-6 text-amber-400 flex-shrink-0" />
+                    <AlertCircle className="w-6 h-6 text-zinc-400 flex-shrink-0" />
                     <div>
-                      <h4 className="text-amber-400 font-semibold mb-2">Important Disclaimer</h4>
-                      <p className="text-amber-200/80 text-sm leading-relaxed">
+                      <h4 className="text-zinc-300 font-semibold mb-2">Important Disclaimer</h4>
+                      <p className="text-zinc-400 text-sm leading-relaxed">
                         {analysis.disclaimer}
                       </p>
-                      <p className="text-amber-200/60 text-xs mt-3">
+                      <p className="text-zinc-500 text-xs mt-3">
                         For more accurate and updated information, we recommend verifying with official government sources such as the Dubai Land Department (DLD), RERA, and DXB Interact. Rental values can vary based on specific building, view, condition, and market timing.
                       </p>
                     </div>
                   </div>
                 </div>
 
-                {/* CTA */}
-                <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 text-center">
+                {/* CTA - Emerald Theme */}
+                <div className="bg-zinc-900/60 border border-emerald-500/30 rounded-2xl p-6 text-center">
                   <p className="text-zinc-400 text-sm mb-4">
                     Need expert guidance on your rental investment?
                   </p>
                   <div className="flex flex-wrap justify-center gap-3">
                     <Link to="/properties">
                       <button 
-                        className="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
+                        className="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white border border-emerald-400/30"
                         style={{
-                          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
-                          boxShadow: `
-                            0 10px 30px rgba(200,167,102,0.4),
-                            0 6px 15px rgba(0,0,0,0.2),
-                            inset 0 2px 4px rgba(255,255,255,0.9),
-                            inset 0 -2px 4px rgba(200,167,102,0.2),
-                            0 0 20px rgba(200,167,102,0.3)
-                          `,
+                          boxShadow: '0 10px 30px rgba(16,185,129,0.3), 0 6px 15px rgba(0,0,0,0.2)',
                         }}
                       >
-                        <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                        <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                         <span className="relative flex items-center gap-2">
-                          <span className="text-gold">Browse</span>
-                          <span className="text-black">Properties</span>
-                          <ArrowUpRight className="w-4 h-4 text-black" />
+                          <span>Browse Properties</span>
+                          <ArrowUpRight className="w-4 h-4" />
                         </span>
                       </button>
                     </Link>
                     <Link to="/contact">
-                      <button className="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-white text-white hover:bg-white hover:text-black group">
+                      <button className="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/20 hover:border-emerald-400 group">
                         <FileText className="w-4 h-4" />
                         Consult an Expert
                       </button>
@@ -441,7 +431,7 @@ const RentalIndex = () => {
               </motion.div>
             )}
 
-            {/* Info Cards */}
+            {/* Info Cards - Emerald Green Theme */}
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -449,16 +439,16 @@ const RentalIndex = () => {
               variants={fadeInUp}
               className="mt-12 grid md:grid-cols-2 gap-6"
             >
-              <div className="bg-zinc-900/40 border border-zinc-800 rounded-2xl p-6">
-                <Info className="w-6 h-6 text-gold mb-4" />
+              <div className="bg-zinc-900/40 border border-emerald-500/30 rounded-2xl p-6">
+                <Info className="w-6 h-6 text-emerald-400 mb-4" />
                 <h3 className="text-white font-semibold mb-2">How It Works</h3>
                 <p className="text-zinc-400 text-sm leading-relaxed">
                   Our AI analyzes current rental trends, historical data, and market conditions to provide estimates. 
                   The tool considers location, property type, size, and amenities to calculate rental ranges.
                 </p>
               </div>
-              <div className="bg-zinc-900/40 border border-zinc-800 rounded-2xl p-6">
-                <TrendingUp className="w-6 h-6 text-gold mb-4" />
+              <div className="bg-zinc-900/40 border border-emerald-500/30 rounded-2xl p-6">
+                <TrendingUp className="w-6 h-6 text-emerald-400 mb-4" />
                 <h3 className="text-white font-semibold mb-2">Data Sources</h3>
                 <p className="text-zinc-400 text-sm leading-relaxed">
                   Estimates are based on aggregated market data. For official records, please refer to Dubai Land Department (DLD), 

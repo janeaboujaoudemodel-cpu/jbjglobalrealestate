@@ -50,6 +50,33 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_scanned_cards: {
+        Row: {
+          card_data: Json
+          id: string
+          original_card_id: string | null
+          scan_source: string | null
+          scanned_at: string
+          user_id: string
+        }
+        Insert: {
+          card_data: Json
+          id?: string
+          original_card_id?: string | null
+          scan_source?: string | null
+          scanned_at?: string
+          user_id: string
+        }
+        Update: {
+          card_data?: Json
+          id?: string
+          original_card_id?: string | null
+          scan_source?: string | null
+          scanned_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       admin_tasks: {
         Row: {
           category: string | null
@@ -12267,6 +12294,42 @@ export type Database = {
         }
         Relationships: []
       }
+      user_activity_log: {
+        Row: {
+          activity_data: Json | null
+          activity_type: string
+          created_at: string
+          device_info: string | null
+          id: string
+          page_path: string | null
+          session_id: string | null
+          tool_name: string | null
+          user_id: string | null
+        }
+        Insert: {
+          activity_data?: Json | null
+          activity_type: string
+          created_at?: string
+          device_info?: string | null
+          id?: string
+          page_path?: string | null
+          session_id?: string | null
+          tool_name?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          activity_data?: Json | null
+          activity_type?: string
+          created_at?: string
+          device_info?: string | null
+          id?: string
+          page_path?: string | null
+          session_id?: string | null
+          tool_name?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_behavior_tracking: {
         Row: {
           action_target: string | null
@@ -12366,6 +12429,39 @@ export type Database = {
           utm_campaign?: string | null
           utm_medium?: string | null
           utm_source?: string | null
+        }
+        Relationships: []
+      }
+      user_chat_logs: {
+        Row: {
+          chat_type: string | null
+          created_at: string
+          id: string
+          messages: Json[] | null
+          session_id: string | null
+          tool_name: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          chat_type?: string | null
+          created_at?: string
+          id?: string
+          messages?: Json[] | null
+          session_id?: string | null
+          tool_name?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          chat_type?: string | null
+          created_at?: string
+          id?: string
+          messages?: Json[] | null
+          session_id?: string | null
+          tool_name?: string | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
