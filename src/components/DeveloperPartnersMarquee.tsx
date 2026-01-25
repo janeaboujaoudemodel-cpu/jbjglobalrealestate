@@ -139,8 +139,8 @@ const DeveloperPartnersMarquee = () => {
     <section className="w-full bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] overflow-hidden">
       {/* Edge-to-edge container */}
       <div className="w-full">
-        {/* Title section - Active champagne background with black text */}
-        <div className="py-5 md:py-6 px-4">
+        {/* Title section - Active champagne background with black text - Extra bottom spacing */}
+        <div className="py-5 md:py-6 px-4 mb-2 md:mb-3">
           <p className="text-center text-black text-sm md:text-base font-light tracking-wide">
             {language === "ar" ? "شراكة مع المطورين الرائدين في دبي" : "Partners with Dubai's leading developers"}
           </p>
