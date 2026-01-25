@@ -25,9 +25,9 @@ const fadeInUp = {
 
 export const FounderPhilosophySection = () => {
   return (
-    <section className="py-20 md:py-28 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] relative overflow-hidden">
+    <section className="py-20 md:py-28 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] relative overflow-hidden px-[0.125rem] md:px-[0.5rem] lg:px-[1rem] xl:px-[1.5rem] 2xl:px-[2rem]">
       {/* Active Layer Container */}
-      <div className="jj-layer-2 relative z-10">
+      <div className="jj-layer-2 relative z-10 px-4 md:px-6 lg:px-8">
         <motion.div
           initial="hidden"
           whileInView="visible"
