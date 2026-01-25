@@ -25,13 +25,8 @@ const fadeInUp = {
 
 export const FounderPhilosophySection = () => {
   return (
-    <section className="py-20 md:py-28 bg-black relative overflow-hidden">
-      {/* Subtle radial glow */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gold/5 rounded-full blur-3xl" />
-      </div>
-      
-      {/* Active Layer Container - using global jj-layer-2 */}
+    <section className="py-20 md:py-28 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] relative overflow-hidden">
+      {/* Active Layer Container */}
       <div className="jj-layer-2 relative z-10">
         <motion.div
           initial="hidden"
@@ -44,10 +39,10 @@ export const FounderPhilosophySection = () => {
           }}
           className="grid md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto"
         >
-          {/* Left - Portrait with dark separation card on mobile */}
+          {/* Left - Portrait with gold champagne card on mobile */}
           <motion.div variants={fadeInUp} className="flex flex-col items-center">
-            {/* Dark card wrapper for mobile separation */}
-            <div className="bg-zinc-900/95 md:bg-transparent rounded-2xl p-4 md:p-0 border border-gold/20 md:border-0 shadow-xl md:shadow-none">
+            {/* Gold champagne card wrapper for mobile separation */}
+            <div className="bg-gradient-to-r from-[#EDE4D3] via-[#F5EBD7] to-[#EDE4D3] md:bg-transparent rounded-2xl p-4 md:p-0 border border-gold/30 md:border-0 shadow-xl md:shadow-none">
               <Link to="/founder" className="block relative group">
                 <div className="relative w-64 h-80 md:w-80 md:h-96 rounded-2xl overflow-hidden border-2 border-gold/30 shadow-2xl shadow-gold/20 group-hover:border-gold transition-all duration-300">
                   <img 
@@ -64,7 +59,7 @@ export const FounderPhilosophySection = () => {
                 <Link to="/founder" className="text-gold font-semibold text-lg hover:underline">
                   Jane Bou Jaoude
                 </Link>
-                <p className="text-zinc-400 text-sm">Founder &amp; CEO</p>
+                <p className="text-zinc-700 text-sm">Founder &amp; CEO</p>
               </div>
             </div>
             
@@ -98,13 +93,13 @@ export const FounderPhilosophySection = () => {
           <motion.div variants={fadeInUp} className="space-y-6">
             <div>
               <span className="inline-block text-gold text-xs uppercase tracking-[0.3em] mb-4">Philosophy</span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-              <span className="text-black">A Founder-Led</span> <span className="text-gold">Vision</span>
-            </h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <span className="text-black">A Founder-Led</span> <span className="text-gold">Vision</span>
+              </h2>
             </div>
             
-            {/* Card with CHAMPAGNE COLOR (Layer 3) */}
-            <div className="jj-card-inner rounded-2xl p-6 md:p-8">
+            {/* Card with Gold Champagne background - matching Developer Marquee logos area */}
+            <div className="bg-gradient-to-r from-[#EDE4D3] via-[#F5EBD7] to-[#EDE4D3] rounded-2xl p-6 md:p-8 border border-gold/30">
               <p className="text-zinc-800 text-base leading-relaxed mb-4">
                 <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link> is a founder-led brokerage built on unwavering standards, discretion, and long-term vision.
               </p>
@@ -113,7 +108,7 @@ export const FounderPhilosophySection = () => {
               </p>
             </div>
             
-            <p className="text-zinc-500 text-xs">
+            <p className="text-zinc-700 text-xs">
               Learn more about our <Link to="/about" className="text-gold hover:underline">company values</Link> and <Link to="/founder" className="text-gold hover:underline">leadership</Link>.
             </p>
           </motion.div>
