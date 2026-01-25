@@ -67,14 +67,19 @@ const DeveloperPartnersMarquee = () => {
       <Link
         key={`${listKey}-${developer.slug}-${index}`}
         to={`/developers/${developer.slug}`}
-        className="flex-shrink-0 flex items-center justify-center px-10 md:px-16 lg:px-20 transition-opacity duration-300 hover:opacity-60"
+        // Match Provident-style: each logo sits in a fixed slot so spacing is consistent
+        className="flex-shrink-0 w-[180px] md:w-[220px] lg:w-[260px] flex items-center justify-center transition-opacity duration-300 hover:opacity-60"
         title={developer.name}
       >
         <img 
           src={developer.logo} 
           alt={developer.name}
-          className="h-8 md:h-10 lg:h-12 w-auto object-contain"
+          className="h-9 md:h-10 lg:h-11 w-auto object-contain"
           loading="lazy"
+          decoding="async"
+          // Some CDNs block hotlinking based on referrer/origin; this increases compatibility.
+          referrerPolicy="no-referrer"
+          crossOrigin="anonymous"
         />
       </Link>
     );
