@@ -338,9 +338,9 @@ All colors MUST be HSL.
   }
 }
 
-/* Layer 2 wrapper with proper gutters */
+/* Layer 2 wrapper with proper gutters - stretched cards */
 .jj-layer-2 {
-  @apply mx-3 md:mx-4 lg:mx-6 rounded-2xl border border-gold/30 p-3 sm:p-4;
+  @apply mx-1 sm:mx-2 md:mx-3 lg:mx-4 rounded-2xl border border-gold/30 p-2 sm:p-3 md:p-4 lg:p-6;
   background: linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%);
   box-shadow: 0 0 40px rgba(200,167,102,0.18);
 }
