@@ -67,15 +67,15 @@ const DeveloperPartnersMarquee = () => {
       <Link
         key={`${listKey}-${developer.slug}-${index}`}
         to={`/developers/${developer.slug}`}
-        // Fixed slot width so spacing stays visually consistent across logos
-        className="flex-shrink-0 w-[170px] md:w-[210px] lg:w-[250px] flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
+        // Fixed edge-to-edge spacing: use consistent horizontal padding per logo
+        // so the *visual* gap between logo edges stays uniform across varying logo widths.
+        className="flex-shrink-0 px-10 md:px-12 lg:px-14 flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
         title={developer.name}
       >
         <img 
           src={developer.logo} 
           alt={developer.name}
-          // Fixed logo box width => uniform perceived gap between logo edges
-          className="h-8 w-[140px] md:h-10 md:w-[170px] lg:h-12 lg:w-[200px] object-contain"
+          className="h-8 md:h-10 lg:h-12 w-auto max-w-[180px] md:max-w-[220px] lg:max-w-[260px] object-contain"
           loading="lazy"
           decoding="async"
         />
