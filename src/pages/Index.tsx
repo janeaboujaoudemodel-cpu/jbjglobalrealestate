@@ -272,8 +272,8 @@ const Index = () => {
             </span>
           </div>
 
-          {/* Audience Entry Cards - Compact 4-col on mobile, 7-col on desktop */}
-          <div className="grid grid-cols-4 md:flex md:justify-center gap-1.5 md:gap-3 max-w-5xl mx-auto mb-6 md:mb-10">
+          {/* Audience Entry Cards - Full width stretch on mobile, 7-col on desktop */}
+          <div className="grid grid-cols-4 md:grid-cols-7 gap-1.5 md:gap-3 w-full mb-6 md:mb-10">
             <Link to="/buyer-guide" className="group">
               <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-1.5 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
@@ -324,8 +324,8 @@ const Index = () => {
                 </div>
               </div>
             </Link>
-            <Link to="/referral" className="group hidden md:block">
-              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-lg p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+            <Link to="/referral" className="group hidden md:flex">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-lg p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full w-full">
                 <div className="relative z-10">
                   <div className="w-8 h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
                     <Award className="w-4 h-4 text-black group-hover:text-gold transition-colors" />
@@ -334,8 +334,8 @@ const Index = () => {
                 </div>
               </div>
             </Link>
-            <Link to="/join" className="group hidden md:block">
-              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-lg p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+            <Link to="/join" className="group hidden md:flex">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-lg p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full w-full">
                 <div className="relative z-10">
                   <div className="w-8 h-8 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
                     <GraduationCap className="w-4 h-4 text-black group-hover:text-gold transition-colors" />
@@ -346,8 +346,8 @@ const Index = () => {
             </Link>
           </div>
 
-          {/* Quick Actions + Partner Network - Compact 4-col grid on mobile */}
-          <div className="grid grid-cols-4 lg:flex lg:justify-center gap-1.5 md:gap-3 max-w-6xl mx-auto mb-6 md:mb-12">
+          {/* Quick Actions + Partner Network - Full width stretch */}
+          <div className="grid grid-cols-4 lg:grid-cols-7 gap-1.5 md:gap-3 w-full mb-6 md:mb-12">
             <Link to="/properties" className="group">
               <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg md:rounded-xl p-2 md:p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
@@ -392,9 +392,9 @@ const Index = () => {
                 </div>
               </div>
             </Link>
-            {/* Hidden on mobile, visible on desktop */}
-            <Link to="/services/law-firm" className="group hidden lg:block">
-              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-xl p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+            {/* Hidden on mobile, visible on desktop - flex to fill width */}
+            <Link to="/services/law-firm" className="group hidden lg:flex">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-xl p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full w-full">
                 <div className="relative z-10">
                   <div className="w-9 h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
                     <Scale className="w-4 h-4 text-black group-hover:text-gold transition-colors" />
@@ -404,8 +404,8 @@ const Index = () => {
                 </div>
               </div>
             </Link>
-            <Link to="/mortgage-calculator" className="group hidden lg:block">
-              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-xl p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+            <Link to="/mortgage-calculator" className="group hidden lg:flex">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-xl p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full w-full">
                 <div className="relative z-10">
                   <div className="w-9 h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
                     <Calculator className="w-4 h-4 text-black group-hover:text-gold transition-colors" />
@@ -415,8 +415,8 @@ const Index = () => {
                 </div>
               </div>
             </Link>
-            <Link to="/services/design-build" className="group hidden lg:block">
-              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-xl p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+            <Link to="/services/design-build" className="group hidden lg:flex">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-xl p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full w-full">
                 <div className="relative z-10">
                   <div className="w-9 h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
                     <Wrench className="w-4 h-4 text-black group-hover:text-gold transition-colors" />

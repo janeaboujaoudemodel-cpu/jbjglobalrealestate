@@ -67,9 +67,8 @@ const DeveloperPartnersMarquee = () => {
       <Link
         key={`${listKey}-${developer.slug}-${index}`}
         to={`/developers/${developer.slug}`}
-        // Fixed edge-to-edge spacing: use consistent horizontal padding per logo
-        // so the *visual* gap between logo edges stays uniform across varying logo widths.
-        className="flex-shrink-0 px-10 md:px-12 lg:px-14 flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
+        // Tighter uniform spacing between logos
+        className="flex-shrink-0 px-6 md:px-8 lg:px-10 flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
         title={developer.name}
       >
         <img 
@@ -84,18 +83,18 @@ const DeveloperPartnersMarquee = () => {
   };
 
   return (
-    <section className="w-full bg-[#1a2e3b] overflow-hidden">
+    <section className="w-full bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] overflow-hidden">
       {/* Edge-to-edge container */}
       <div className="w-full">
-        {/* Title section */}
+        {/* Title section - Active champagne background with black text */}
         <div className="py-5 md:py-6 px-4">
-          <p className="text-center text-white/90 text-sm md:text-base font-light tracking-wide">
+          <p className="text-center text-black text-sm md:text-base font-light tracking-wide">
             {language === "ar" ? "شراكة مع المطورين الرائدين في دبي" : "Partners with Dubai's leading developers"}
           </p>
         </div>
 
-        {/* Marquee Container - TRUE edge-to-edge white strip with premium sizing */}
-        <div className="relative w-full overflow-hidden bg-white py-6 md:py-8">
+        {/* Marquee Container - Gold champagne background to match Best Idea Award */}
+        <div className="relative w-full overflow-hidden bg-gradient-to-r from-[#EDE4D3] via-[#F5EBD7] to-[#EDE4D3] py-6 md:py-8 border-t border-b border-gold/30">
           {/* Scrolling content */}
           <motion.div
             ref={trackRef}
