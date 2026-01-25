@@ -3,32 +3,32 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { LanguageContext } from "@/contexts/LanguageContext";
 
-// Featured developer partners - exact logos from Provident Estate homepage CDN
+// Featured developer partners - locally hosted logos
 const FEATURED_DEVELOPERS = [
   { 
     name: "DAMAC", 
     slug: "damac",
-    logo: "https://d3h330vgpwpjr8.cloudfront.net/x/296x/DAMAC_83e3dd90e5.webp"
+    logo: "/developers/logos/damac-logo.png"
   },
   { 
     name: "EMAAR", 
     slug: "emaar",
-    logo: "https://d3h330vgpwpjr8.cloudfront.net/x/296x/Emaar_60f60eef86.webp"
+    logo: "/developers/logos/emaar-logo.png"
   },
   { 
     name: "MERAAS", 
     slug: "meraas",
-    logo: "https://d3h330vgpwpjr8.cloudfront.net/x/296x/Meraas_bb11a41bd5.webp"
+    logo: "/developers/logos/meraas-logo.png"
   },
   { 
     name: "SOBHA REALTY", 
     slug: "sobha",
-    logo: "https://d3h330vgpwpjr8.cloudfront.net/x/296x/Sobha_Realty_d7a77ee6e9.webp"
+    logo: "/developers/logos/sobha-logo.png"
   },
   { 
     name: "NAKHEEL", 
     slug: "nakheel",
-    logo: "https://d3h330vgpwpjr8.cloudfront.net/x/296x/Nakheel_8bdb15ccc7.webp"
+    logo: "/developers/logos/nakheel-logo.png"
   },
 ];
 
@@ -77,9 +77,6 @@ const DeveloperPartnersMarquee = () => {
           className="h-9 md:h-10 lg:h-11 w-auto object-contain"
           loading="lazy"
           decoding="async"
-          // Some CDNs block hotlinking based on referrer/origin; this increases compatibility.
-          referrerPolicy="no-referrer"
-          crossOrigin="anonymous"
         />
       </Link>
     );
