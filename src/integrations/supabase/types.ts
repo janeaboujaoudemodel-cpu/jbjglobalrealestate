@@ -13927,8 +13927,8 @@ export type Database = {
       }
       employee_salaries_secure: {
         Row: {
-          bank_account_masked: string | null
-          bank_iban_masked: string | null
+          bank_account_number: string | null
+          bank_iban: string | null
           bank_name: string | null
           base_salary: number | null
           created_at: string | null
@@ -13945,8 +13945,8 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
-          bank_account_masked?: never
-          bank_iban_masked?: never
+          bank_account_number?: never
+          bank_iban?: never
           bank_name?: string | null
           base_salary?: number | null
           created_at?: string | null
@@ -13963,8 +13963,8 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
-          bank_account_masked?: never
-          bank_iban_masked?: never
+          bank_account_number?: never
+          bank_iban?: never
           bank_name?: string | null
           base_salary?: number | null
           created_at?: string | null
@@ -14423,6 +14423,10 @@ export type Database = {
       decrypt_lead_pii: { Args: { encrypted_data: string }; Returns: string }
       decrypt_partner_bank_field: {
         Args: { encrypted_data: string; fallback_plaintext?: string }
+        Returns: string
+      }
+      decrypt_salary_bank_data: {
+        Args: { encrypted_data: string }
         Returns: string
       }
       encrypt_bank_field: {
