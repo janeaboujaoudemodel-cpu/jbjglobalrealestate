@@ -530,7 +530,7 @@ const Index = () => {
                         style={{ objectPosition: "center 15%" }}
                       />
                       {/* Quote Badge */}
-                      <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5 backdrop-blur-md bg-white/95 border-t-2 border-gold">
+                      <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5 backdrop-blur-md bg-white/95 border-t-2 border-gold rounded-b-2xl">
                         <div className="text-gold text-xl font-serif mb-1">"</div>
                         <p className="text-zinc-700 text-xs md:text-sm italic leading-relaxed">
                           Excellence isn't a destination—it's the standard we apply to every interaction.
