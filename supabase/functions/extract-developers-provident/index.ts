@@ -13,27 +13,16 @@ interface ProvidentDeveloper {
   feature_image_url: string;
   logo_url: string;
   provident_link: string;
+  display_order: number;
 }
 
 /**
- * PROVIDENT DEVELOPERS EXTRACTION v2
+ * PROVIDENT DEVELOPERS EXTRACTION v4
  * 
- * Extracts ALL developers from https://providentestate.com/developers/
- * Using precise HTML structure matching for developer-card elements
- * 
- * Structure per card:
- * <div class="developer-card">
- *   <a class="img-section-wrap" href="LINK">
- *     <div class="img-section">
- *       <img src="FEATURE_IMAGE" />
- *       <div class="logo-section">
- *         <img src="LOGO" />
- *       </div>
- *     </div>
- *   </a>
- *   <a class="name" href="LINK"><span>NAME</span></a>
- *   <p class="description">DESCRIPTION</p>
- * </div>
+ * • Fetches ALL developers from https://providentestate.com/developers/
+ * • Uses srcset and upgrades images to max resolution (1600w).
+ * • Clears existing pending rows (upsert‑style) before inserting to avoid duplicates.
+ * • Preserves source ordering via display_order column.
  */
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -45,12 +34,12 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    console.log("🔄 Starting Provident Developers Extraction v2...");
+    console.log("🔄 Starting Provident Developers Extraction v4...");
 
     // Fetch the developers page
     const response = await fetch("https://providentestate.com/developers/", {
       headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
         "Accept-Language": "en-US,en;q=0.5",
       },
@@ -63,51 +52,94 @@ serve(async (req) => {
     const html = await response.text();
     console.log(`📄 Fetched HTML: ${html.length} characters`);
 
-    // Extract developers using precise developer-card matching
+    // Helper: upgrade image URL to highest resolution
+    const upgradeImageUrl = (url: string | null): string => {
+      if (!url) return "";
+      // Provident cloudfront pattern: /x/WIDTHxHEIGHT/ or /x/WIDTHx/
+      // Replace with large version
+      let upgraded = url.replace(/\/x\/\d+x\d*\//g, "/x/1600x1200/");
+      // fallback if pattern not matched
+      if (!upgraded.includes("/x/1600x")) {
+        upgraded = url.replace(/\/x\/\d+x\d*\//g, "/x/1200x800/");
+      }
+      return upgraded;
+    };
+
+    // Extract developers using developer-card class
     const extractedDevelopers: ProvidentDeveloper[] = [];
 
-    // Split by developer-card to process each card individually
-    const cardPattern = /<div class="developer-card">([\s\S]*?)(?=<div class="developer-card">|<\/div>\s*<\/div>\s*<\/div>\s*<footer)/g;
-    
+    // Match each developer-card block
+    const cardPattern = /<div class="developer-card">([\s\S]*?)<\/div>\s*<\/div>\s*<\/div>/g;
     let cardMatch;
+    let displayOrder = 0;
+
     while ((cardMatch = cardPattern.exec(html)) !== null) {
-      const cardHtml = cardMatch[1];
-      
-      // Extract feature image - first img in img-section
-      const featureImgMatch = cardHtml.match(/<div class="img-section">\s*<img[^>]*src="([^"]+)"/);
-      const featureImage = featureImgMatch ? featureImgMatch[1] : "";
-      
-      // Extract logo - img inside logo-section
-      const logoMatch = cardHtml.match(/<div class="logo-section">\s*<img[^>]*src="([^"]+)"/);
-      const logo = logoMatch ? logoMatch[1] : "";
-      
-      // Extract name - span inside a.name
+      const cardHtml = cardMatch[0];
+      displayOrder++;
+
+      // Feature image (first img tag inside img-section)
+      // Try srcset for highest res, else fallback to src
+      let featureImage = "";
+      const featureImgMatch = cardHtml.match(/<div class="img-section">\s*<img[^>]*>/);
+      if (featureImgMatch) {
+        const imgTag = featureImgMatch[0];
+        const srcsetMatch = imgTag.match(/srcset="([^"]+)"/);
+        if (srcsetMatch) {
+          // srcset format: "url1 480w, url2 960w, url3 1600w"
+          const srcsetParts = srcsetMatch[1].split(",").map(s => s.trim());
+          // Pick the largest (last) or one with 1600w
+          const best = srcsetParts.find(p => p.includes("1600w")) || srcsetParts[srcsetParts.length - 1];
+          featureImage = best?.split(" ")[0] || "";
+        } else {
+          const srcMatch = imgTag.match(/src="([^"]+)"/);
+          featureImage = srcMatch ? srcMatch[1] : "";
+        }
+      }
+      featureImage = upgradeImageUrl(featureImage);
+
+      // Logo image (inside logo-section)
+      let logo = "";
+      const logoMatch = cardHtml.match(/<div class="logo-section">\s*<img[^>]*>/);
+      if (logoMatch) {
+        const logoTag = logoMatch[0];
+        const logoSrcset = logoTag.match(/srcset="([^"]+)"/);
+        if (logoSrcset) {
+          const parts = logoSrcset[1].split(",").map(s => s.trim());
+          const best = parts.find(p => p.includes("1600w")) || parts[parts.length - 1];
+          logo = best?.split(" ")[0] || "";
+        } else {
+          const srcMatch = logoTag.match(/src="([^"]+)"/);
+          logo = srcMatch ? srcMatch[1] : "";
+        }
+      }
+      logo = upgradeImageUrl(logo);
+
+      // Name (inside a.name span)
       const nameMatch = cardHtml.match(/<a class="name"[^>]*>\s*<span>([^<]+)<\/span>/);
       const name = nameMatch ? nameMatch[1].trim() : "";
-      
-      // Extract link - href from a.img-section-wrap or a.name
+
+      // Link
       const linkMatch = cardHtml.match(/<a class="(?:img-section-wrap|name)"[^>]*href="([^"]+)"/);
       const link = linkMatch ? linkMatch[1] : "";
-      
-      // Extract description - p.description content
+
+      // Description
       const descMatch = cardHtml.match(/<p class="description">([^]*?)<\/p>/);
       let description = descMatch ? descMatch[1] : "";
-      
-      // Clean description
       description = description
-        .replace(/&amp;nbsp;/g, ' ')
-        .replace(/&nbsp;/g, ' ')
-        .replace(/&amp;/g, '&')
+        .replace(/&amp;nbsp;/g, " ")
+        .replace(/&nbsp;/g, " ")
+        .replace(/&amp;/g, "&")
         .replace(/&#x27;/g, "'")
         .replace(/&quot;/g, '"')
-        .replace(/<[^>]+>/g, '')
+        .replace(/<[^>]+>/g, "")
         .trim();
-      
+
       if (name && (featureImage || logo)) {
-        const slug = name.toLowerCase()
-          .replace(/[&]/g, 'and')
-          .replace(/[^a-z0-9]+/g, '-')
-          .replace(/^-|-$/g, '');
+        const slug = name
+          .toLowerCase()
+          .replace(/[&]/g, "and")
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-|-$/g, "");
 
         extractedDevelopers.push({
           name,
@@ -115,32 +147,32 @@ serve(async (req) => {
           description,
           feature_image_url: featureImage,
           logo_url: logo,
-          provident_link: link,
+          provident_link: link.startsWith("http") ? link : `https://providentestate.com${link}`,
+          display_order: displayOrder,
         });
-        
-        console.log(`✅ Extracted: ${name} | Logo: ${logo ? '✓' : '✗'} | Image: ${featureImage ? '✓' : '✗'} | Desc: ${description.length} chars`);
+
+        console.log(`✅ [${displayOrder}] ${name} | Logo: ${logo ? "✓" : "✗"} | Image: ${featureImage ? "✓" : "✗"}`);
       }
     }
 
     console.log(`📊 Total extracted: ${extractedDevelopers.length} developers`);
 
     if (extractedDevelopers.length === 0) {
-      throw new Error("NO DEVELOPERS EXTRACTED - Aborting to prevent data loss");
+      throw new Error("NO DEVELOPERS EXTRACTED - aborting to prevent data loss");
     }
 
-    // Validate minimum expected count
-    if (extractedDevelopers.length < 15) {
-      console.warn(`⚠️ Warning: Only ${extractedDevelopers.length} developers found. Expected 15+.`);
-    }
-
-    // Clear old pending imports and insert fresh data
-    await supabase
+    // Clear ALL existing pending rows before insert (fresh full sync)
+    const { error: delErr } = await supabase
       .from("pending_developer_imports")
       .delete()
       .eq("status", "pending");
 
-    // Store in pending_developer_imports table for admin approval
-    const pendingImports = extractedDevelopers.map(dev => ({
+    if (delErr) {
+      console.warn("Warning: could not clear pending rows:", delErr.message);
+    }
+
+    // Insert fresh data
+    const rows = extractedDevelopers.map((dev) => ({
       name: dev.name,
       slug: dev.slug,
       description: dev.description,
@@ -154,7 +186,7 @@ serve(async (req) => {
 
     const { error: insertError } = await supabase
       .from("pending_developer_imports")
-      .insert(pendingImports);
+      .insert(rows);
 
     if (insertError) {
       console.error("Insert error:", insertError);
@@ -162,52 +194,43 @@ serve(async (req) => {
     }
 
     // Log extraction job
-    await supabase
-      .from("extraction_job_logs")
-      .insert({
-        source_id: null,
-        job_type: "developer_extraction",
-        status: "completed",
-        started_at: new Date().toISOString(),
-        completed_at: new Date().toISOString(),
-        records_found: extractedDevelopers.length,
-        records_matched: 0,
-        records_pending: extractedDevelopers.length,
-        metadata: {
-          source: "provident_estate",
-          url: "https://providentestate.com/developers/",
-          version: "v2",
-        },
-      });
+    await supabase.from("extraction_job_logs").insert({
+      source_id: null,
+      job_type: "developer_extraction",
+      status: "completed",
+      started_at: new Date().toISOString(),
+      completed_at: new Date().toISOString(),
+      records_found: extractedDevelopers.length,
+      records_matched: 0,
+      records_pending: extractedDevelopers.length,
+      metadata: {
+        source: "provident_estate",
+        url: "https://providentestate.com/developers/",
+        version: "v4",
+      },
+    });
 
     return new Response(
       JSON.stringify({
         success: true,
         message: `Successfully extracted ${extractedDevelopers.length} developers`,
         count: extractedDevelopers.length,
-        developers: extractedDevelopers.map(d => ({
+        developers: extractedDevelopers.map((d) => ({
           name: d.name,
+          order: d.display_order,
           logo: d.logo_url ? "✓" : "✗",
           image: d.feature_image_url ? "✓" : "✗",
-          description: d.description ? `${d.description.substring(0, 50)}...` : "✗",
         })),
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
-
   } catch (error: unknown) {
     console.error("❌ Extraction error:", error);
     const message = error instanceof Error ? error.message : "Unknown error";
-    
+
     return new Response(
-      JSON.stringify({
-        success: false,
-        error: message,
-      }),
-      { 
-        status: 500, 
-        headers: { ...corsHeaders, "Content-Type": "application/json" } 
-      }
+      JSON.stringify({ success: false, error: message }),
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 });

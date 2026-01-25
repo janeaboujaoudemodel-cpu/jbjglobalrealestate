@@ -1,21 +1,32 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { 
-  Check, 
-  X, 
-  RefreshCw, 
-  Download, 
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import {
+  Check,
+  X,
+  RefreshCw,
+  Download,
   ChevronUp,
   Building2,
   Loader2,
   CheckCircle2,
-  Pencil
+  Pencil,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+
+const ITEMS_PER_PAGE = 30;
 
 interface PendingDeveloper {
   id: string;
@@ -41,11 +52,20 @@ interface ExistingDeveloper {
 
 export const DeveloperApprovalQueue = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [pendingDevelopers, setPendingDevelopers] = useState<PendingDeveloper[]>([]);
   const [existingDevelopers, setExistingDevelopers] = useState<ExistingDeveloper[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isExtracting, setIsExtracting] = useState(false);
   const [processingIds, setProcessingIds] = useState<Set<string>>(new Set());
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = Math.ceil(pendingDevelopers.length / ITEMS_PER_PAGE) || 1;
+
+  const paginatedDevelopers = pendingDevelopers.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   const fetchPendingDevelopers = async () => {
     setIsLoading(true);
@@ -54,10 +74,11 @@ export const DeveloperApprovalQueue = () => {
         .from("pending_developer_imports")
         .select("*")
         .eq("status", "pending")
-        .order("extracted_at", { ascending: false });
+        .order("extracted_at", { ascending: true });
 
       if (error) throw error;
       setPendingDevelopers((data as PendingDeveloper[]) || []);
+      setCurrentPage(1);
     } catch (error) {
       console.error("Error fetching pending developers:", error);
       toast.error("Failed to fetch pending developers");
@@ -89,9 +110,9 @@ export const DeveloperApprovalQueue = () => {
     setIsExtracting(true);
     try {
       const { data, error } = await supabase.functions.invoke("extract-developers-provident");
-      
+
       if (error) throw error;
-      
+
       if (data?.success) {
         toast.success(`Extracted ${data.count} developers from Provident`);
         fetchPendingDevelopers();
@@ -107,12 +128,11 @@ export const DeveloperApprovalQueue = () => {
   };
 
   const approveDeveloper = async (developer: PendingDeveloper) => {
-    setProcessingIds(prev => new Set(prev).add(developer.id));
+    setProcessingIds((prev) => new Set(prev).add(developer.id));
     try {
       const existingMatch = findMatchingDeveloper(developer.slug);
-      
+
       if (existingMatch) {
-        // Merge with existing
         const updateData: Record<string, unknown> = {};
         if (developer.description) updateData.description = developer.description;
         if (developer.logo_url) updateData.logo_url = developer.logo_url;
@@ -139,7 +159,6 @@ export const DeveloperApprovalQueue = () => {
 
         toast.success(`Merged: ${developer.name}`);
       } else {
-        // Create new
         const { data: newDev, error: createError } = await supabase
           .from("developers")
           .insert({
@@ -168,14 +187,14 @@ export const DeveloperApprovalQueue = () => {
 
         toast.success(`Approved: ${developer.name}`);
       }
-      
+
       fetchPendingDevelopers();
       fetchExistingDevelopers();
     } catch (error) {
       console.error("Approval error:", error);
       toast.error(`Failed to approve: ${error instanceof Error ? error.message : "Unknown error"}`);
     } finally {
-      setProcessingIds(prev => {
+      setProcessingIds((prev) => {
         const next = new Set(prev);
         next.delete(developer.id);
         return next;
@@ -184,7 +203,7 @@ export const DeveloperApprovalQueue = () => {
   };
 
   const rejectDeveloper = async (developer: PendingDeveloper) => {
-    setProcessingIds(prev => new Set(prev).add(developer.id));
+    setProcessingIds((prev) => new Set(prev).add(developer.id));
     try {
       await supabase
         .from("pending_developer_imports")
@@ -201,7 +220,7 @@ export const DeveloperApprovalQueue = () => {
       console.error("Rejection error:", error);
       toast.error(`Failed to reject: ${error instanceof Error ? error.message : "Unknown error"}`);
     } finally {
-      setProcessingIds(prev => {
+      setProcessingIds((prev) => {
         const next = new Set(prev);
         next.delete(developer.id);
         return next;
@@ -210,16 +229,11 @@ export const DeveloperApprovalQueue = () => {
   };
 
   const findMatchingDeveloper = (slug: string): ExistingDeveloper | undefined => {
-    return existingDevelopers.find(d => 
-      d.slug.toLowerCase() === slug.toLowerCase() ||
-      d.name.toLowerCase().includes(slug.replace(/-/g, ' ').toLowerCase())
+    return existingDevelopers.find(
+      (d) =>
+        d.slug.toLowerCase() === slug.toLowerCase() ||
+        d.name.toLowerCase().includes(slug.replace(/-/g, " ").toLowerCase())
     );
-  };
-
-  const truncateDescription = (desc: string | null, maxLength: number = 120) => {
-    if (!desc) return "";
-    if (desc.length <= maxLength) return desc;
-    return desc.substring(0, maxLength).trim() + "...";
   };
 
   const approveAll = async () => {
@@ -252,16 +266,38 @@ export const DeveloperApprovalQueue = () => {
 
   const clearRejected = async () => {
     try {
-      await supabase
-        .from("pending_developer_imports")
-        .delete()
-        .eq("status", "rejected");
+      await supabase.from("pending_developer_imports").delete().eq("status", "rejected");
 
       toast.success("Cleared all rejected items");
     } catch (error) {
       console.error("Clear error:", error);
       toast.error("Failed to clear rejected items");
     }
+  };
+
+  const handleCardClick = (slug: string) => {
+    navigate(`/developers/${slug}`);
+  };
+
+  const renderPageNumbers = () => {
+    const pages: React.ReactNode[] = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(
+        <PaginationItem key={i}>
+          <PaginationLink
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              setCurrentPage(i);
+            }}
+            isActive={i === currentPage}
+          >
+            {i}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    }
+    return pages;
   };
 
   return (
@@ -283,7 +319,7 @@ export const DeveloperApprovalQueue = () => {
               disabled={isLoading}
               className="border-gold/50 text-gold hover:bg-gold/10"
             >
-              <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
               Refresh
             </Button>
             <Button
@@ -292,24 +328,16 @@ export const DeveloperApprovalQueue = () => {
               disabled={isExtracting}
               className="bg-gold text-black hover:bg-gold/90"
             >
-              {isExtracting ? (
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              ) : (
-                <Download className="w-4 h-4 mr-2" />
-              )}
+              {isExtracting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Download className="w-4 h-4 mr-2" />}
               Extract from Provident
             </Button>
           </div>
         </div>
-        
+
         {/* Bulk Actions Row */}
         {pendingDevelopers.length > 0 && (
           <div className="flex items-center gap-2 mt-4 pt-4 border-t border-gold/10">
-            <Button
-              size="sm"
-              onClick={approveAll}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white"
-            >
+            <Button size="sm" onClick={approveAll} className="bg-emerald-600 hover:bg-emerald-700 text-white">
               <Check className="w-4 h-4 mr-2" />
               Approve All ({pendingDevelopers.length})
             </Button>
@@ -322,17 +350,13 @@ export const DeveloperApprovalQueue = () => {
               <X className="w-4 h-4 mr-2" />
               Reject All
             </Button>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={clearRejected}
-              className="text-zinc-400 hover:text-white"
-            >
+            <Button size="sm" variant="ghost" onClick={clearRejected} className="text-zinc-400 hover:text-white">
               Clear Rejected
             </Button>
           </div>
         )}
       </CardHeader>
+
       <CardContent className="p-6">
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
@@ -345,114 +369,148 @@ export const DeveloperApprovalQueue = () => {
             <p className="text-sm mt-2">Click "Extract from Provident" to fetch new developers</p>
           </div>
         ) : (
-          /* Provident-style grid: 4 columns, squared cards with consistent alignment */
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {pendingDevelopers.map((developer) => {
-              const isProcessing = processingIds.has(developer.id);
-              const existingMatch = findMatchingDeveloper(developer.slug);
+          <>
+            {/* Grid: 4 columns, mirroring Provident layout */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+              {paginatedDevelopers.map((developer) => {
+                const isProcessing = processingIds.has(developer.id);
+                const existingMatch = findMatchingDeveloper(developer.slug);
 
-              return (
-                <div
-                  key={developer.id}
-                  className="group relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col"
-                >
-                  {/* Feature Image - Square aspect ratio */}
-                  <div className="relative aspect-square bg-zinc-100 flex-shrink-0">
-                    {developer.feature_image_url ? (
-                      <img
-                        src={developer.feature_image_url}
-                        alt={developer.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-zinc-200 to-zinc-300">
-                        <Building2 className="w-16 h-16 text-zinc-400" />
-                      </div>
-                    )}
-                    
-                    {/* Existing match badge */}
-                    {existingMatch && (
-                      <div className="absolute top-2 left-2">
-                        <Badge className="bg-amber-500 text-white text-xs">
-                          Will Merge
-                        </Badge>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Content area - consistent height and alignment */}
-                  <div className="p-4 bg-white flex flex-col flex-grow">
-                    {/* Logo - fixed height container */}
-                    <div className="h-10 mb-3 flex items-center">
-                      {developer.logo_url ? (
+                return (
+                  <div
+                    key={developer.id}
+                    className="group relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer"
+                    onClick={() => handleCardClick(developer.slug)}
+                  >
+                    {/* Feature Image */}
+                    <div className="relative aspect-[4/3] bg-zinc-100 flex-shrink-0">
+                      {developer.feature_image_url ? (
                         <img
-                          src={developer.logo_url}
-                          alt={`${developer.name} logo`}
-                          className="h-full w-auto object-contain max-w-[140px]"
+                          src={developer.feature_image_url}
+                          alt={developer.name}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
                         />
                       ) : (
-                        <div className="h-full" />
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-zinc-200 to-zinc-300">
+                          <Building2 className="w-16 h-16 text-zinc-400" />
+                        </div>
+                      )}
+
+                      {/* Logo overlay at bottom-left */}
+                      {developer.logo_url && (
+                        <div className="absolute bottom-3 left-3 bg-white/95 px-2 py-1 rounded shadow">
+                          <img
+                            src={developer.logo_url}
+                            alt={`${developer.name} logo`}
+                            className="h-6 w-auto object-contain max-w-[100px]"
+                          />
+                        </div>
+                      )}
+
+                      {/* Merge badge */}
+                      {existingMatch && (
+                        <div className="absolute top-2 left-2">
+                          <Badge className="bg-amber-500 text-white text-xs">Will Merge</Badge>
+                        </div>
                       )}
                     </div>
 
-                    {/* Name with arrow icon - fixed height */}
-                    <div className="flex items-center gap-2 mb-2 h-6">
-                      <h3 className="text-zinc-900 font-semibold text-base leading-tight truncate">
-                        {developer.name}
-                      </h3>
-                      <ChevronUp className="w-4 h-4 text-zinc-400 rotate-45 flex-shrink-0" />
-                    </div>
+                    {/* Content */}
+                    <div className="p-4 bg-white flex flex-col flex-grow">
+                      {/* Name + arrow */}
+                      <div className="flex items-center gap-2 mb-2 h-6">
+                        <h3 className="text-zinc-900 font-semibold text-base leading-tight truncate">
+                          {developer.name}
+                        </h3>
+                        <ChevronUp className="w-4 h-4 text-zinc-400 rotate-45 flex-shrink-0" />
+                      </div>
 
-                    {/* Truncated description - fixed height */}
-                    <p className="text-zinc-600 text-sm leading-relaxed mb-4 h-[60px] line-clamp-3">
-                      {developer.description || "No description available"}
-                    </p>
+                      {/* Description */}
+                      <p className="text-zinc-600 text-sm leading-relaxed mb-4 h-[60px] line-clamp-3">
+                        {developer.description || "No description available"}
+                      </p>
 
-                    {/* Action buttons row - pushed to bottom */}
-                    <div className="flex items-center gap-2 pt-3 border-t border-zinc-100 mt-auto">
-                      <Button
-                        size="sm"
-                        onClick={() => approveDeveloper(developer)}
-                        disabled={isProcessing}
-                        className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs h-8"
+                      {/* Action buttons */}
+                      <div
+                        className="flex items-center gap-2 pt-3 border-t border-zinc-100 mt-auto"
+                        onClick={(e) => e.stopPropagation()}
                       >
-                        {isProcessing ? (
-                          <Loader2 className="w-3 h-3 animate-spin" />
-                        ) : (
-                          <>
-                            <Check className="w-3 h-3 mr-1" />
-                            {existingMatch ? "Merge" : "Approve"}
-                          </>
-                        )}
-                      </Button>
-                      
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => rejectDeveloper(developer)}
-                        disabled={isProcessing}
-                        className="flex-1 border-red-200 text-red-600 hover:bg-red-50 text-xs h-8"
-                      >
-                        <X className="w-3 h-3 mr-1" />
-                        Reject
-                      </Button>
-                      
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => window.open(developer.provident_link || '#', '_blank')}
-                        disabled={!developer.provident_link}
-                        className="w-8 h-8 p-0 text-zinc-500 hover:text-zinc-900"
-                        title="View Source"
-                      >
-                        <Pencil className="w-3 h-3" />
-                      </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => approveDeveloper(developer)}
+                          disabled={isProcessing}
+                          className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs h-8"
+                        >
+                          {isProcessing ? (
+                            <Loader2 className="w-3 h-3 animate-spin" />
+                          ) : (
+                            <>
+                              <Check className="w-3 h-3 mr-1" />
+                              {existingMatch ? "Merge" : "Approve"}
+                            </>
+                          )}
+                        </Button>
+
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => rejectDeveloper(developer)}
+                          disabled={isProcessing}
+                          className="flex-1 border-red-200 text-red-600 hover:bg-red-50 text-xs h-8"
+                        >
+                          <X className="w-3 h-3 mr-1" />
+                          Reject
+                        </Button>
+
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => window.open(developer.provident_link || "#", "_blank")}
+                          disabled={!developer.provident_link}
+                          className="w-8 h-8 p-0 text-zinc-500 hover:text-zinc-900"
+                          title="View Source"
+                        >
+                          <Pencil className="w-3 h-3" />
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="mt-8 flex justify-center">
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (currentPage > 1) setCurrentPage(currentPage - 1);
+                        }}
+                        className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                      />
+                    </PaginationItem>
+                    {renderPageNumbers()}
+                    <PaginationItem>
+                      <PaginationNext
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+                        }}
+                        className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              </div>
+            )}
+          </>
         )}
       </CardContent>
     </Card>
