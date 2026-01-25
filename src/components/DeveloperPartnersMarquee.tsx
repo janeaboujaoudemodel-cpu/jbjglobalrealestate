@@ -68,7 +68,7 @@ const DeveloperPartnersMarquee = () => {
         key={`${listKey}-${developer.slug}-${index}`}
         to={`/developers/${developer.slug}`}
         // Uniform fixed-width slots for consistent spacing
-        className="flex-shrink-0 w-[160px] md:w-[200px] lg:w-[240px] flex items-center justify-center transition-opacity duration-300 hover:opacity-70 px-4 md:px-6"
+        className="flex-shrink-0 w-[160px] md:w-[200px] lg:w-[240px] flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
         title={developer.name}
       >
         <img 
@@ -113,18 +113,18 @@ const DeveloperPartnersMarquee = () => {
             }}
           >
             {/* First loop */}
-            <div ref={loopRef} className="flex items-center">
+            <div ref={loopRef} className="flex items-center gap-8 md:gap-12 lg:gap-16">
               {FEATURED_DEVELOPERS.map((d, idx) => renderPartner(d, idx, "a"))}
             </div>
 
             {/* Duplicate loops for seamless infinite scroll */}
-            <div aria-hidden className="flex items-center">
+            <div aria-hidden className="flex items-center gap-8 md:gap-12 lg:gap-16">
               {FEATURED_DEVELOPERS.map((d, idx) => renderPartner(d, idx, "b"))}
             </div>
-            <div aria-hidden className="flex items-center">
+            <div aria-hidden className="flex items-center gap-8 md:gap-12 lg:gap-16">
               {FEATURED_DEVELOPERS.map((d, idx) => renderPartner(d, idx, "a"))}
             </div>
-            <div aria-hidden className="flex items-center">
+            <div aria-hidden className="flex items-center gap-8 md:gap-12 lg:gap-16">
               {FEATURED_DEVELOPERS.map((d, idx) => renderPartner(d, idx, "b"))}
             </div>
           </motion.div>
