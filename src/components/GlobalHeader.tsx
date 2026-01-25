@@ -277,24 +277,9 @@ const GlobalHeader = () => {
             </div>
           </Link>
 
-          {/* MOBILE RIGHT ICONS: Search, Language, Menu - visible on mobile only */}
+          {/* MOBILE RIGHT ICONS: Menu only - visible on mobile only */}
           <div className="flex items-center gap-1 ml-auto lg:hidden">
-            {/* Search Icon - smaller */}
-            <button
-              type="button"
-              className={`${mobileHeaderIconButtonClassName} group`}
-              aria-label="Open search"
-              onClick={() => setSearchOpen(true)}
-            >
-              <Search className="w-3 h-3 text-gold group-hover:text-gold-light transition-colors" />
-            </button>
-
-            {/* Language Switcher */}
-            <div className="shrink-0">
-              <LanguageSwitcher variant="compact" />
-            </div>
-
-            {/* Mobile Menu Trigger - smaller */}
+            {/* Mobile Menu Trigger */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <button
@@ -326,45 +311,48 @@ const GlobalHeader = () => {
                   </span>
                 </div>
 
-                {/* Quick Actions Row - much smaller */}
-                <div className="flex items-center justify-around px-2 py-0.5 border-b border-gold/20">
+                {/* Quick Actions Row */}
+                <div className="flex items-center justify-around px-2 py-2 border-b border-gold/20">
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="flex flex-col items-center gap-0 text-black hover:text-gold h-auto py-0.5 px-1"
+                    className="flex flex-col items-center gap-1 text-black hover:text-gold h-auto py-1.5 px-2"
                     onClick={() => {
                       setMobileMenuOpen(false);
                       setSearchOpen(true);
                     }}
                   >
-                    <Search className="w-2.5 h-2.5" />
-                    <span className="text-[6px]">Search</span>
+                    <Search className="w-4 h-4" />
+                    <span className="text-[8px]">Search</span>
                   </Button>
                   <Link
                     to="/favorites"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex flex-col items-center gap-0 text-black hover:text-gold py-0.5 px-1"
+                    className="flex flex-col items-center gap-1 text-black hover:text-gold py-1.5 px-2"
                   >
                     <div className="relative">
-                      <Heart className="w-2.5 h-2.5" />
+                      <Heart className="w-4 h-4" />
                       {totalCount > 0 && (
-                        <span className="absolute -top-0.5 -right-0.5 bg-gold text-black text-[5px] w-2 h-2 rounded-full flex items-center justify-center font-bold">
+                        <span className="absolute -top-1 -right-1 bg-gold text-black text-[6px] w-3 h-3 rounded-full flex items-center justify-center font-bold">
                           {totalCount}
                         </span>
                       )}
                     </div>
-                    <span className="text-[6px]">Favorites</span>
+                    <span className="text-[8px]">Favorites</span>
                   </Link>
                   <Link
                     to={user ? "/my-account" : "/auth"}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex flex-col items-center gap-0 text-black hover:text-gold py-0.5 px-1"
+                    className="flex flex-col items-center gap-1 text-black hover:text-gold py-1.5 px-2"
                   >
-                    <User className="w-2.5 h-2.5" />
-                    <span className="text-[6px]">{user ? "Account" : "Sign In"}</span>
+                    <User className="w-4 h-4" />
+                    <span className="text-[8px]">{user ? "Account" : "Sign In"}</span>
                   </Link>
-                  <div className="shrink-0 scale-75">
-                    <LanguageSwitcher variant="compact" />
+                  <div className="flex flex-col items-center gap-1 py-1.5 px-2">
+                    <div className="scale-125">
+                      <LanguageSwitcher variant="icon-only" />
+                    </div>
+                    <span className="text-[8px] text-black">Language</span>
                   </div>
                 </div>
 
