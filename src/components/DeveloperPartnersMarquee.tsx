@@ -6,58 +6,69 @@ import { LanguageContext } from "@/contexts/LanguageContext";
 // LOCKED: Featured developer partners - exact logos from Provident Estate homepage
 // Current developers: DAMAC, EMAAR, MERAAS, SOBHA REALTY, NAKHEEL (original 5)
 // Added: BINGHATTI, SELECT GROUP, ELLINGTON, MAJID AL FUTTAIM, DANUBE (extracted from Provident)
+// Scale values calibrated to make all logos visually uniform (Meraas = 1.0 reference)
 const FEATURED_DEVELOPERS = [
   // === ORIGINAL 5 (LOCKED) ===
   { 
     name: "DAMAC", 
     slug: "damac",
-    logo: "/developers/logos/damac-logo.webp"
+    logo: "/developers/logos/damac-logo.webp",
+    scale: 0.85, // Reduced - was too large
   },
   { 
     name: "EMAAR", 
     slug: "emaar",
-    logo: "/developers/logos/emaar-logo.webp"
+    logo: "/developers/logos/emaar-logo.webp",
+    scale: 0.85, // Reduced - was too large
   },
   { 
     name: "MERAAS", 
     slug: "meraas",
-    logo: "/developers/logos/meraas-logo.webp"
+    logo: "/developers/logos/meraas-logo.webp",
+    scale: 1.0, // Reference size - LOCKED
   },
   { 
     name: "SOBHA REALTY", 
     slug: "sobha",
-    logo: "/developers/logos/sobha-logo.webp"
+    logo: "/developers/logos/sobha-logo.webp",
+    scale: 1.0, // Good size
   },
   { 
     name: "NAKHEEL", 
     slug: "nakheel",
-    logo: "/developers/logos/nakheel-logo.webp"
+    logo: "/developers/logos/nakheel-logo.webp",
+    scale: 1.0, // Good size
   },
   // === EXTRACTED FROM PROVIDENT HOMEPAGE ===
   { 
     name: "BINGHATTI", 
     slug: "binghatti",
-    logo: "/developers/logos/binghatti-logo.webp"
+    logo: "/developers/logos/binghatti-logo.webp",
+    scale: 1.0, // Good size
   },
   { 
     name: "SELECT GROUP", 
     slug: "select-group",
-    logo: "/developers/logos/select-group-logo.webp"
+    logo: "/developers/logos/select-group-logo.webp",
+    scale: 1.0, // Good size
   },
   { 
     name: "ELLINGTON PROPERTIES", 
     slug: "ellington-properties",
-    logo: "/developers/logos/ellington-logo.webp"
+    logo: "/developers/logos/ellington-logo.webp",
+    scale: 1.15, // Increased - was too small
   },
   { 
     name: "MAJID AL FUTTAIM", 
     slug: "majid-al-futtaim",
-    logo: "/developers/logos/majid-al-futtaim-logo.webp"
+    logo: "/developers/logos/majid-al-futtaim-logo.webp",
+    scale: 0.85, // Reduced - was too large
   },
   { 
     name: "DANUBE PROPERTIES", 
     slug: "danube-properties",
-    logo: "/developers/logos/danube-logo.webp"
+    logo: "/developers/logos/danube-logo.webp",
+    scale: 1.1, // Slightly increased
   },
 ];
 
@@ -92,18 +103,23 @@ const DeveloperPartnersMarquee = () => {
   }, []);
 
   const renderPartner = (developer: typeof FEATURED_DEVELOPERS[number], index: number, listKey: "a" | "b") => {
+    // Base heights in rem for responsive scaling, adjusted by developer's scale value
+    // Base: 2rem (mobile), 2.5rem (tablet), 3rem (desktop)
+    const height = 2.5 * developer.scale; // Using tablet as base for cleaner scaling
+    
     return (
       <Link
         key={`${listKey}-${developer.slug}-${index}`}
         to={`/developers/${developer.slug}`}
-        // Tighter uniform spacing between logos
+        // LOCKED: Tighter uniform spacing between logos - DO NOT CHANGE
         className="flex-shrink-0 px-6 md:px-8 lg:px-10 flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
         title={developer.name}
       >
         <img 
           src={developer.logo} 
           alt={developer.name}
-          className="h-8 md:h-10 lg:h-12 w-auto max-w-[180px] md:max-w-[220px] lg:max-w-[260px] object-contain"
+          className="w-auto object-contain"
+          style={{ height: `${height}rem` }}
           loading="lazy"
           decoding="async"
         />
