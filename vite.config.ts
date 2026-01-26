@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => ({
     mode === "development" && componentTagger(),
     // PWA plugin completely disabled to prevent install prompts
   ].filter(Boolean),
-  // Helps map runtime errors to real source files during QA.
+  // Optimized build settings for large projects
   build: {
     // Disable source maps to reduce memory usage during build
     sourcemap: false,
