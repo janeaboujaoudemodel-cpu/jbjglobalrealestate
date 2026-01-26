@@ -12863,9 +12863,12 @@ export type Database = {
           ended_reason: string | null
           extracted_budget: string | null
           extracted_email: string | null
+          extracted_email_encrypted: string | null
           extracted_interest: string | null
           extracted_name: string | null
+          extracted_name_encrypted: string | null
           extracted_phone: string | null
+          extracted_phone_encrypted: string | null
           flag_reason: string | null
           id: string
           is_flagged: boolean | null
@@ -12873,10 +12876,12 @@ export type Database = {
           needs_review: boolean | null
           notes: string | null
           recording_url: string | null
+          retention_expires_at: string | null
           reviewed_at: string | null
           reviewed_by: string | null
           summary: string | null
           transcript: string | null
+          transcript_encrypted: string | null
           updated_at: string
         }
         Insert: {
@@ -12898,9 +12903,12 @@ export type Database = {
           ended_reason?: string | null
           extracted_budget?: string | null
           extracted_email?: string | null
+          extracted_email_encrypted?: string | null
           extracted_interest?: string | null
           extracted_name?: string | null
+          extracted_name_encrypted?: string | null
           extracted_phone?: string | null
+          extracted_phone_encrypted?: string | null
           flag_reason?: string | null
           id?: string
           is_flagged?: boolean | null
@@ -12908,10 +12916,12 @@ export type Database = {
           needs_review?: boolean | null
           notes?: string | null
           recording_url?: string | null
+          retention_expires_at?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
           summary?: string | null
           transcript?: string | null
+          transcript_encrypted?: string | null
           updated_at?: string
         }
         Update: {
@@ -12933,9 +12943,12 @@ export type Database = {
           ended_reason?: string | null
           extracted_budget?: string | null
           extracted_email?: string | null
+          extracted_email_encrypted?: string | null
           extracted_interest?: string | null
           extracted_name?: string | null
+          extracted_name_encrypted?: string | null
           extracted_phone?: string | null
+          extracted_phone_encrypted?: string | null
           flag_reason?: string | null
           id?: string
           is_flagged?: boolean | null
@@ -12943,10 +12956,12 @@ export type Database = {
           needs_review?: boolean | null
           notes?: string | null
           recording_url?: string | null
+          retention_expires_at?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
           summary?: string | null
           transcript?: string | null
+          transcript_encrypted?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -14477,6 +14492,7 @@ export type Database = {
         Returns: boolean
       }
       cleanup_device_tracking_data: { Args: never; Returns: number }
+      cleanup_expired_vapi_recordings: { Args: never; Returns: number }
       cleanup_expired_verifications: { Args: never; Returns: undefined }
       cleanup_rate_limit_records: { Args: never; Returns: number }
       crm_hard_delete_import: {
@@ -14508,6 +14524,18 @@ export type Database = {
       decrypt_salary_bank_data: {
         Args: { encrypted_data: string }
         Returns: string
+      }
+      decrypt_vapi_call_pii: {
+        Args: { p_call_id: string }
+        Returns: {
+          created_at: string
+          extracted_email: string
+          extracted_name: string
+          extracted_phone: string
+          id: string
+          recording_url: string
+          transcript: string
+        }[]
       }
       encrypt_bank_field: {
         Args: { plain_text: string; salt_id: string }
@@ -14713,6 +14741,10 @@ export type Database = {
       mask_email: { Args: { email: string }; Returns: string }
       mask_iban: { Args: { iban: string }; Returns: string }
       mask_phone: { Args: { phone: string }; Returns: string }
+      redact_sensitive_transcript: {
+        Args: { p_transcript: string }
+        Returns: string
+      }
       trigger_emergency_lockdown: {
         Args: {
           p_departments?: string[]
