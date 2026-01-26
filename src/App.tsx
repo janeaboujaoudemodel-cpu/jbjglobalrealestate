@@ -61,6 +61,7 @@ import CompanyProfile from "./pages/CompanyProfile";
 import News from "./pages/News";
 import BrokerToolkit from "./pages/BrokerToolkit";
 import BrokerDashboard from "./pages/BrokerDashboard";
+import BrokerResources from "./pages/BrokerResources";
 import AIHub from "./pages/AIHub";
 import InteriorDesignAI from "./pages/InteriorDesignAI";
 import PropertyEvaluator from "./pages/PropertyEvaluator";
@@ -266,6 +267,7 @@ const App = () => (
                 {/* Alias: historical Broker Toolkit dashboard URL */}
                 <Route path="/broker-toolkit/dashboard" element={<Navigate to="/broker-dashboard" replace />} />
                 <Route path="/broker-dashboard" element={<BrokerDashboard />} />
+                <Route path="/broker-resources" element={<BrokerResources />} />
                 <Route path="/broker/training" element={<BrokerTraining />} />
                 <Route path="/ai-broker-workspace" element={<AIBrokerWorkspace />} />
                 <Route path="/ai-hub" element={<AIHub />} />

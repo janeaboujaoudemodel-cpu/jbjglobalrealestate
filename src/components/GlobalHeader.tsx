@@ -165,7 +165,7 @@ const GlobalHeader = () => {
     { href: "/broker-toolkit", label: t('header.brokerDashboard') || "Broker Dashboard", icon: UserCircle },
     { href: "/broker-toolkit#tools", label: t('header.brokerTools') || "Broker Tools", icon: Briefcase },
     { href: "/broker-education", label: t('header.brokerEducation') || "Broker Education", icon: GraduationCap },
-    { href: "/broker-toolkit#resources", label: t('header.brokerResources') || "Broker Resources", icon: FolderOpen },
+    { href: "/broker-resources", label: t('header.brokerResources') || "Broker Resources", icon: FolderOpen },
     { href: "/broker-faq", label: t('header.brokerFaq') || "Broker FAQ", icon: ClipboardCheck },
   ];
 
