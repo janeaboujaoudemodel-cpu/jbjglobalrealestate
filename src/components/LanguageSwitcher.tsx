@@ -24,11 +24,13 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         {isIconOnly ? (
-          <button
-            className="flex items-center justify-center transition-all duration-200 group py-1"
+          <Button
+            variant="ghost"
+            size="sm"
+            className="flex items-center justify-center h-auto min-h-[32px] min-w-[60px] px-3 py-2 bg-transparent hover:bg-gold/10 border-0 rounded-lg transition-all duration-200 group cursor-pointer"
           >
-            <span className="text-[9px] text-black font-medium hover:text-gold transition-colors">Language</span>
-          </button>
+            <span className="text-[9px] text-black font-medium group-hover:text-gold transition-colors">Language</span>
+          </Button>
         ) : isCompact ? (
           <button
             type="button"
