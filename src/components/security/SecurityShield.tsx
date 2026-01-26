@@ -15,6 +15,19 @@ export function SecurityShield({ children }: { children: React.ReactNode }) {
   const [isBlocked, setIsBlocked] = useState(false);
   const [violation, setViolation] = useState<SecurityViolation | null>(null);
 
+  // Check if we're in development/preview mode (Lovable editor, localhost, or preview URLs)
+  const isDevMode = useCallback(() => {
+    const hostname = window.location.hostname;
+    return (
+      hostname === 'localhost' ||
+      hostname === '127.0.0.1' ||
+      hostname.includes('lovable.app') ||
+      hostname.includes('lovable.dev') ||
+      hostname.includes('preview') ||
+      import.meta.env.DEV
+    );
+  }, []);
+
   const getFingerprint = useCallback(() => {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -27,6 +40,12 @@ export function SecurityShield({ children }: { children: React.ReactNode }) {
   }, []);
 
   const logViolation = useCallback(async (type: string) => {
+    // Skip blocking in development/preview mode
+    if (isDevMode()) {
+      console.log('[JBJ Security] Skipping block in dev mode:', type);
+      return;
+    }
+
     const fingerprint = getFingerprint();
     const newViolation: SecurityViolation = {
       type,
@@ -36,9 +55,8 @@ export function SecurityShield({ children }: { children: React.ReactNode }) {
     setViolation(newViolation);
     setIsBlocked(true);
 
-    // Log to console for debugging (in production, send to server)
     console.warn('[JBJ Security] Violation detected:', type);
-  }, [getFingerprint]);
+  }, [getFingerprint, isDevMode]);
 
   useEffect(() => {
     // Disable right-click context menu
