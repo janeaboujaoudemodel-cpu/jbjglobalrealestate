@@ -159,13 +159,13 @@ const GlobalHeader = () => {
 
   const isActive = (path: string) => location.pathname === path;
 
-  // Render dropdown menu helper - Premium styling
+  // Render dropdown menu helper - Premium styling (no box, text on dark header)
   const renderDropdown = (label: string, links: typeof propertiesLinks, isActiveCheck?: () => boolean) => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button 
-          className={`flex items-center gap-0.5 px-2 xl:px-2.5 2xl:px-3 py-1.5 text-[10px] xl:text-[10px] 2xl:text-[11px] font-bold whitespace-nowrap transition-all rounded-full ${
-            isActiveCheck?.() ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
+          className={`flex items-center gap-0.5 px-2 xl:px-2.5 2xl:px-3 py-1.5 text-[10px] xl:text-[10px] 2xl:text-[11px] font-bold whitespace-nowrap transition-all ${
+            isActiveCheck?.() ? 'text-gold' : 'text-champagne-light hover:text-gold'
           }`}
           style={{ letterSpacing: '0.03em' }}
         >
@@ -570,96 +570,104 @@ const GlobalHeader = () => {
 
           {/* DESKTOP (non-touch): Keep desktop header even in narrow iframes/zoom */}
           {!isTouchLayout && (
-            <nav className="flex items-center justify-center flex-1 min-w-0 mx-2 2xl:mx-4 overflow-hidden">
-              {/* Scrollable wrapper prevents overlaps when the iframe is narrow */}
-              <div className="max-w-full overflow-x-auto scrollbar-hide flex justify-center">
-                <div 
-                  className="flex w-max items-center gap-0.5 xl:gap-1 2xl:gap-1.5 rounded-full px-4 xl:px-5 2xl:px-8 max-[1100px]:px-3 max-[900px]:px-2 py-2 border-2 border-gold/40 relative"
-                  style={{
-                    background: 'linear-gradient(135deg, rgba(245,235,215,0.98) 0%, rgba(232,220,200,0.95) 50%, rgba(212,196,168,0.98) 100%)',
-                    boxShadow: '0 8px 32px -8px rgba(0,0,0,0.4), 0 0 0 1px rgba(200,167,102,0.2), inset 0 2px 0 rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.05), 0 0 40px -10px rgba(200,167,102,0.2)',
-                  }}
-                >
+            <nav className="flex items-center justify-center flex-1 min-w-0 mx-2 2xl:mx-4">
+              {/* Use CSS scale to shrink uniformly in narrow viewports - no cropping */}
+              <div 
+                className="flex items-center gap-0.5 xl:gap-1 2xl:gap-1.5 px-3 xl:px-4 2xl:px-6 py-1.5 xl:py-2 origin-center"
+                style={{
+                  transform: 'scale(var(--nav-scale, 1))',
+                }}
+              >
               
               {/* 1. Home - No dropdown */}
                <Link
                 to="/"
-                className={`px-2 xl:px-2.5 2xl:px-3 py-1.5 text-[10px] xl:text-[10px] 2xl:text-[11px] font-bold whitespace-nowrap transition-all relative group rounded-full ${
+                className={`px-2 xl:px-2.5 2xl:px-3 py-1.5 text-[10px] xl:text-[10px] 2xl:text-[11px] font-bold whitespace-nowrap transition-all relative group ${
                   isActive("/")
-                    ? "text-gold bg-gold/15"
-                    : "text-zinc-800 hover:text-gold hover:bg-gold/10"
+                    ? "text-gold"
+                    : "text-champagne-light hover:text-gold"
                 }`}
                 style={{ letterSpacing: '0.03em' }}
               >
                 Home
               </Link>
 
+              {/* Separator */}
+              <span className="text-gold/40 text-[10px]">|</span>
+
               {/* 2. Properties Dropdown */}
               {renderDropdown("Properties", propertiesLinks, () => location.pathname === '/properties')}
 
+              <span className="text-gold/40 text-[10px]">|</span>
+
               {/* 3. Services Dropdown */}
               {renderDropdown("Services", servicesLinks, () => location.pathname.startsWith('/services'))}
+
+              <span className="text-gold/40 text-[10px]">|</span>
 
               {/* 4. Guides Dropdown */}
               {renderDropdown("Guides", guidesLinks, () => 
                 ['/buyer-guide', '/seller-guide', '/landlord-guide', '/tenant-guide', '/areas', '/faq', '/investor-education', '/investor-faq', '/broker-faq'].some(p => location.pathname.startsWith(p))
               )}
 
+              <span className="text-gold/40 text-[10px]">|</span>
+
               {/* 5. Market Intelligence Dropdown */}
               {renderDropdown("Market Intelligence", marketIntelLinks, () => 
                 location.pathname.startsWith('/market-intelligence') || location.pathname === '/market-report'
               )}
+
+              <span className="text-gold/40 text-[10px]">|</span>
 
               {/* 6. Investor Hub Dropdown */}
               {renderDropdown("Investor Hub", investorHubLinks, () => 
                 location.pathname.includes('ai-hub') || location.pathname === '/favorites'
               )}
 
+              <span className="text-gold/40 text-[10px]">|</span>
+
               {/* 7. Broker Hub Dropdown */}
               {renderDropdown("Broker Hub", brokerHubLinks, () => 
                 location.pathname.includes('broker-toolkit') || location.pathname.includes('broker-education')
               )}
+
+              <span className="text-gold/40 text-[10px]">|</span>
 
               {/* 8. About Dropdown */}
               {renderDropdown("About", aboutLinks, () => 
                 ['/about', '/founder', '/team', '/awards'].some(p => location.pathname.startsWith(p))
               )}
 
+              <span className="text-gold/40 text-[10px]">|</span>
+
               {/* 9. Contact - No dropdown */}
               <Link
                 to="/contact"
-                className={`px-2 xl:px-2.5 2xl:px-3 py-1.5 text-[10px] xl:text-[10px] 2xl:text-[11px] font-bold whitespace-nowrap transition-all relative group rounded-full ${
+                className={`px-2 xl:px-2.5 2xl:px-3 py-1.5 text-[10px] xl:text-[10px] 2xl:text-[11px] font-bold whitespace-nowrap transition-all relative group ${
                   isActive("/contact")
-                    ? "text-gold bg-gold/15"
-                    : "text-zinc-800 hover:text-gold hover:bg-gold/10"
+                    ? "text-gold"
+                    : "text-champagne-light hover:text-gold"
                 }`}
                 style={{ letterSpacing: '0.03em' }}
               >
                 Contact
               </Link>
 
+              <span className="text-gold/40 text-[10px]">|</span>
+
               {/* 10. More Dropdown */}
               {renderDropdown("More", moreLinks, () => 
                 ['/news', '/join'].some(p => location.pathname.startsWith(p))
               )}
-                </div>
               </div>
             </nav>
           )}
 
           {!isTouchLayout && (
-            <div className="flex items-center gap-2 shrink-0">
-              {/* Premium Icon Container */}
-              <div 
-                className="flex items-center gap-1 px-4 max-[1100px]:px-3 max-[900px]:px-2 py-2 rounded-full border border-gold/30"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(20,20,20,0.9) 100%)',
-                  boxShadow: '0 4px 16px -4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05), 0 0 30px -10px rgba(200,167,102,0.15)'
-                }}
-              >
-              {/* Search Icon */}
+            <div className="flex items-center gap-3 shrink-0">
+              {/* Search Icon - no box */}
               <button
-                className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
+                className="w-8 h-8 flex items-center justify-center transition-all duration-300 group"
                 onClick={() => setSearchOpen(true)}
                 aria-label="Search"
               >
@@ -669,14 +677,8 @@ const GlobalHeader = () => {
                 />
               </button>
 
-              {/* Divider */}
-              <div className="w-px h-5 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
-
-              {/* Language Switcher */}
+              {/* Language Switcher - no box */}
               <LanguageSwitcher variant="icon-only" />
-
-              {/* Divider */}
-              <div className="w-px h-5 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
 
               {/* Account Icon */}
               <div className="w-9 h-9 flex items-center justify-center">
@@ -845,10 +847,8 @@ const GlobalHeader = () => {
                     )}
                   </DropdownMenuContent>
                 </DropdownMenu>
-              
               </div>
             </div>
-          </div>
           )}
         </div>
       </div>
