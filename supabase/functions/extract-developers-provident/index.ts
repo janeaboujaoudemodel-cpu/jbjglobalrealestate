@@ -18,7 +18,7 @@ interface ProvidentDeveloper {
 
 const PROVIDENT_BASE_URL = "https://providentestate.com";
 
-// Complete list of UAE developers from Provident Estate
+// Complete list of UAE developers from Provident Estate (deduplicated)
 const KNOWN_DEVELOPERS = [
   "Emaar Properties", "Damac Properties", "Binghatti", "Sobha Realty", "Ellington Properties",
   "Azizi Developments", "Meraas", "Aldar Properties", "Imtiaz Developments", "Samana Developers",
@@ -35,7 +35,7 @@ const KNOWN_DEVELOPERS = [
   "Iman Developers", "First Group", "Aabar Properties", "Aqua Properties", "Sunrise Properties",
   "Skai Holdings", "Valor Real Estate", "Elysian Properties", "Peninsula", "Discovery Properties",
   "Oro24 Developments", "Aeon & Trisl", "Al Seef Development", "Taraf Holdings", "Mered",
-  "Amwaj Development", "ETA Star", "Schon Properties", "Skai Holdings", "Victoria Development",
+  "Amwaj Development", "ETA Star", "Schon Properties", "Victoria Development",
   "Alpha Developments", "De Grisogono", "Aristocrat Development", "Al Hamra", "Capital Bay",
   "Dar Aljawda", "Dubai Star Properties", "Elite Real Estate", "Farm Developers", "Globe Group",
   "Jade Properties", "KM Properties", "Lootah Development", "Marquise Square", "Noble Properties",
@@ -196,7 +196,17 @@ serve(async (req) => {
     // Clear and save
     await supabase.from("pending_developer_imports").delete().not("id", "is", null);
 
-    const rows = allDevelopers.map((dev) => ({
+    // Deduplicate by slug before inserting
+    const uniqueBySlug = new Map<string, typeof allDevelopers[0]>();
+    for (const dev of allDevelopers) {
+      if (!uniqueBySlug.has(dev.slug)) {
+        uniqueBySlug.set(dev.slug, dev);
+      }
+    }
+    const uniqueDevelopers = Array.from(uniqueBySlug.values());
+    console.log(`📊 After deduplication: ${uniqueDevelopers.length} unique developers`);
+
+    const rows = uniqueDevelopers.map((dev) => ({
       name: dev.name,
       slug: dev.slug,
       description: dev.description,
@@ -210,7 +220,7 @@ serve(async (req) => {
 
     const { error: insertError } = await supabase
       .from("pending_developer_imports")
-      .upsert(rows, { onConflict: 'slug' });
+      .insert(rows);
 
     if (insertError) throw new Error(`Failed to store: ${insertError.message}`);
 
