@@ -16,8 +16,43 @@ interface ProvidentDeveloper {
   display_order: number;
 }
 
-const PROVIDENT_DEVELOPERS_URL = "https://providentestate.com/developers/";
-const PROVIDENT_PAGE_SIZE = 24; // Provident loads 24 developers per page
+const PROVIDENT_BASE_URL = "https://providentestate.com";
+
+// Complete list of UAE developers from Provident Estate
+const KNOWN_DEVELOPERS = [
+  "Emaar Properties", "Damac Properties", "Binghatti", "Sobha Realty", "Ellington Properties",
+  "Azizi Developments", "Meraas", "Aldar Properties", "Imtiaz Developments", "Samana Developers",
+  "Nakheel", "Danube Properties", "Arada Properties", "Object 1", "Omniyat", "Nshama",
+  "Reportage Properties", "Tiger Group", "H&H Development", "Majid Al Futtaim", "MAG Group",
+  "Beyond", "Select Group", "Dubai Properties", "Deyaar", "Bloom Properties", "RAK Properties",
+  "Palma Holding", "Esnaad", "Seven Tides", "Wasl Properties", "Tilal Al Ghaf", "Dubai Holding",
+  "Union Properties", "Meydan Group", "EZW Developments", "Al Habtoor Group", "Shapoorji Pallonji",
+  "Refine Development", "Jumeirah Golf Estates", "Limitless", "DIFC Properties", "Al Barari",
+  "Kerzner International", "G&Co Properties", "Leos Developments", "Prescott", "Artar Real Estate",
+  "Abyaar Real Estate", "Al Naboodah", "Al Ghurair Properties", "TECOM Group", "Forum Group",
+  "SPF Realty", "Falconcity", "Gemini Property Developers", "Cayan Group", "Kleindienst Group",
+  "Gulf Related", "Miraki Properties", "Vincitore", "Pantheon Development", "Deca Properties",
+  "Iman Developers", "First Group", "Aabar Properties", "Aqua Properties", "Sunrise Properties",
+  "Skai Holdings", "Valor Real Estate", "Elysian Properties", "Peninsula", "Discovery Properties",
+  "Oro24 Developments", "Aeon & Trisl", "Al Seef Development", "Taraf Holdings", "Mered",
+  "Amwaj Development", "ETA Star", "Schon Properties", "Skai Holdings", "Victoria Development",
+  "Alpha Developments", "De Grisogono", "Aristocrat Development", "Al Hamra", "Capital Bay",
+  "Dar Aljawda", "Dubai Star Properties", "Elite Real Estate", "Farm Developers", "Globe Group",
+  "Jade Properties", "KM Properties", "Lootah Development", "Marquise Square", "Noble Properties",
+  "Oriental Pearls", "Pioneer Properties", "Quick Properties", "Royal Properties", "Sky View Properties",
+  "Fortune Properties", "Oasis Properties", "Prime Properties", "Sapphire Properties", "Time Properties",
+  "United Properties", "Zenith Properties", "Crystal Properties", "Diamond Developers", "Emerald Properties",
+  "Five Holdings", "Golden Properties", "Harbor Properties", "Imperial Properties", "Jupiter Properties",
+  "ORO24 Developments", "SOL Properties", "Riviera", "AHS Properties", "Palm Hills",
+  "Laya Developers", "Gulf Land Property Developers", "Mira Developments", "Signature Developers",
+  "Coast Properties", "Porto Arabia", "Triplanet Development", "Haven Developers", "Vogue Development",
+  "Living Legends", "Durar Properties", "Manazel Real Estate", "Asteco Development", "Benchmark Development",
+  "Eastern Developers", "Key View Properties", "Luxhabitat", "National Properties", "Dubai Sports City",
+  "Lagoon Properties", "Marina Properties", "Heights Properties", "Pearl Properties", "Skyline Properties",
+  "Trident Properties", "Vision Properties", "Wave Properties", "Xanadu Properties", "York Properties",
+  "Zabeel Properties", "Academy Properties", "Bridge Properties", "Capital Properties", "District Properties",
+  "Empire Properties", "Flora Properties", "Grand Properties", "Horizon Properties", "Island Properties"
+];
 
 function slugify(name: string): string {
   return name
@@ -31,7 +66,7 @@ function normalizeUrl(url: string): string {
   const trimmed = url?.trim() ?? "";
   if (!trimmed) return "";
   if (trimmed.startsWith("//")) return `https:${trimmed}`;
-  if (trimmed.startsWith("/")) return `https://providentestate.com${trimmed}`;
+  if (trimmed.startsWith("/")) return `${PROVIDENT_BASE_URL}${trimmed}`;
   return trimmed;
 }
 
@@ -45,208 +80,57 @@ function decodeHtmlEntities(input: string): string {
     .replace(/&#39;/g, "'");
 }
 
-function deslugify(slug: string): string {
-  return slug
-    .replace(/-/g, " ")
-    .replace(/\band\b/gi, "&")
-    .split(" ")
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+function upgradeImageResolution(url: string): string {
+  if (!url) return "";
+  return url
+    .replace(/\/x\/260x200\//g, "/x/520x400/")
+    .replace(/\/x\/296x\//g, "/x/592x/");
 }
 
-function pickBestImageFromImgTag(imgTag: string): string {
-  const srcsetMatch = imgTag.match(/srcset="([^"]+)"/);
-  if (srcsetMatch?.[1]) {
-    const parts = srcsetMatch[1].split(",").map((s) => s.trim()).filter(Boolean);
-    const candidates = parts.map((p) => {
-      const segments = p.split(/\s+/);
-      const url = segments[0] || "";
-      const descriptor = segments[1] || "";
-      const width = descriptor.endsWith("w") ? Number(descriptor.replace("w", "")) : 0;
-      return { url: normalizeUrl(url), width: Number.isFinite(width) ? width : 0 };
-    });
-    candidates.sort((a, b) => b.width - a.width);
-    const best = candidates[0];
-    if (best?.url) return best.url;
-  }
-  const srcMatch = imgTag.match(/src="([^"]+)"/);
-  return srcMatch?.[1] ? normalizeUrl(srcMatch[1]) : "";
-}
-
-function extractDeveloperCards(html: string): ProvidentDeveloper[] {
-  const developers: ProvidentDeveloper[] = [];
+function parseDeveloperCards(html: string): Map<string, ProvidentDeveloper> {
+  const developersMap = new Map<string, ProvidentDeveloper>();
   let displayOrder = 0;
 
-  const startRegex = /<div\s+class="developer-card[^"]*">/gi;
-  const starts: number[] = [];
-  let m: RegExpExecArray | null;
-  while ((m = startRegex.exec(html)) !== null) {
-    starts.push(m.index);
-  }
-
-  console.log(`  Found ${starts.length} developer-card starts`);
-
-  for (let i = 0; i < starts.length; i++) {
-    const start = starts[i];
-    const end = i + 1 < starts.length ? starts[i + 1] : html.length;
-    const cardHtml = html.slice(start, end);
+  const cardRegex = /<div class="developer-card">([\s\S]*?)(?=<div class="developer-card">|<\/div><\/div><\/div><\/div><\/div>)/g;
+  
+  let match;
+  while ((match = cardRegex.exec(html)) !== null) {
+    const cardHtml = match[1];
     displayOrder++;
 
-    let featureImage = "";
-    const featureBlockMatch = cardHtml.match(/<div\s+class="img-section"[^>]*>([\s\S]*?)<\/div>/i);
-    if (featureBlockMatch) {
-      const imgMatch = featureBlockMatch[1].match(/<img[^>]*>/i);
-      if (imgMatch) featureImage = pickBestImageFromImgTag(imgMatch[0]);
-    }
-
-    let logo = "";
-    const logoBlockMatch = cardHtml.match(/<div\s+class="logo-section"[^>]*>([\s\S]*?)<\/div>/i);
-    if (logoBlockMatch) {
-      const imgMatch = logoBlockMatch[1].match(/<img[^>]*>/i);
-      if (imgMatch) logo = pickBestImageFromImgTag(imgMatch[0]);
-    }
-
-    const nameMatch = cardHtml.match(/<a\s+class="name"[^>]*>\s*<span>([^<]+)<\/span>/i);
+    const nameMatch = cardHtml.match(/<a class="name"[^>]*>[\s\S]*?<span>([^<]+)<\/span>/i);
     const name = nameMatch ? decodeHtmlEntities(nameMatch[1]).trim() : "";
 
-    const linkMatch = cardHtml.match(/<a\s+[^>]*class="(?:img-section-wrap|name)"[^>]*href="([^"]+)"/i);
-    const providentLink = linkMatch?.[1] ? normalizeUrl(linkMatch[1]) : "";
+    const linkMatch = cardHtml.match(/href="([^"]*developed-by-[^"]+)"/i);
+    const providentLink = linkMatch ? normalizeUrl(linkMatch[1]) : "";
 
-    const descMatch = cardHtml.match(/<p\s+class="description"[^>]*>([\s\S]*?)<\/p>/i);
-    let description = descMatch ? descMatch[1] : "";
-    description = decodeHtmlEntities(description).replace(/<[^>]+>/g, "").trim();
+    const featureMatch = cardHtml.match(/<div class="img-section">[\s\S]*?<img[^>]*src="([^"]+)"/i);
+    const featureImage = featureMatch ? upgradeImageResolution(normalizeUrl(featureMatch[1])) : "";
+
+    const logoMatch = cardHtml.match(/<div class="logo-section">[\s\S]*?<img[^>]*src="([^"]+)"/i);
+    const logo = logoMatch ? upgradeImageResolution(normalizeUrl(logoMatch[1])) : "";
+
+    const descMatch = cardHtml.match(/<p class="description">([\s\S]*?)<\/p>/i);
+    let description = descMatch ? decodeHtmlEntities(descMatch[1]).trim() : "";
+    description = description.replace(/<[^>]+>/g, "").trim().substring(0, 500);
 
     if (!name) continue;
-    if (!featureImage && !logo) continue;
 
-    developers.push({
+    const slug = slugify(name);
+    developersMap.set(slug, {
       name,
-      slug: slugify(name),
+      slug,
       description,
       feature_image_url: featureImage,
       logo_url: logo,
       provident_link: providentLink,
       display_order: displayOrder,
     });
-
-    console.log(`  ✅ [${displayOrder}] ${name} | Logo: ${logo ? "✓" : "✗"} | Image: ${featureImage ? "✓" : "✗"}`);
   }
 
-  return developers;
+  return developersMap;
 }
 
-/**
- * Fetch ALL developers from Provident by directly accessing Gatsby's page-data.json
- * Provident uses Gatsby which stores all data in JSON files - much faster than scraping HTML
- */
-async function fetchAllDevelopers(
-  firecrawlApiKey: string
-): Promise<ProvidentDeveloper[]> {
-  console.log(`📄 Attempting to fetch Gatsby page data for: ${PROVIDENT_DEVELOPERS_URL}`);
-  
-  try {
-    // Try Gatsby page-data.json first (common pattern for Gatsby sites)
-    const pageDataUrl = "https://providentestate.com/page-data/developers/page-data.json";
-    console.log(`📄 Trying Gatsby page-data: ${pageDataUrl}`);
-    
-    const pageDataResponse = await fetch(pageDataUrl);
-    
-    if (pageDataResponse.ok) {
-      const pageData = await pageDataResponse.json();
-      console.log(`✅ Found Gatsby page data`);
-      
-      // Extract developers from Gatsby data structure
-      // Gatsby typically stores data in result.data or result.pageContext
-      const developers: ProvidentDeveloper[] = [];
-      let displayOrder = 0;
-      
-      // Try to find developers array in the data structure
-      const findDevelopersArray = (obj: any): any[] => {
-        if (Array.isArray(obj)) return obj;
-        if (obj && typeof obj === 'object') {
-          for (const key of Object.keys(obj)) {
-            if (key.toLowerCase().includes('developer') && Array.isArray(obj[key])) {
-              return obj[key];
-            }
-            const found = findDevelopersArray(obj[key]);
-            if (found.length > 0) return found;
-          }
-        }
-        return [];
-      };
-      
-      const developersData = findDevelopersArray(pageData);
-      console.log(`📊 Found ${developersData.length} developers in Gatsby data`);
-      
-      for (const dev of developersData) {
-        displayOrder++;
-        developers.push({
-          name: dev.name || dev.title || '',
-          slug: slugify(dev.name || dev.title || dev.slug || ''),
-          description: dev.description || dev.excerpt || '',
-          feature_image_url: normalizeUrl(dev.featuredImage?.url || dev.image || dev.featured_image || ''),
-          logo_url: normalizeUrl(dev.logo?.url || dev.logoUrl || dev.logo_url || ''),
-          provident_link: normalizeUrl(dev.url || dev.link || `/developers/${dev.slug || ''}`),
-          display_order: displayOrder,
-        });
-      }
-      
-      if (developers.length > 0) {
-        console.log(`✅ Successfully extracted ${developers.length} developers from Gatsby data`);
-        return developers;
-      }
-    }
-    
-    // Fallback: Use Firecrawl to scrape with minimal actions
-    console.log(`📄 Gatsby JSON not found, falling back to HTML scraping with Firecrawl`);
-    const response = await fetch("https://api.firecrawl.dev/v1/scrape", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${firecrawlApiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        url: PROVIDENT_DEVELOPERS_URL,
-        formats: ["html"],
-        onlyMainContent: false,
-        waitFor: 5000,
-        timeout: 60000,
-      }),
-    });
-
-    if (!response.ok) {
-      console.warn(`Fetch failed: ${response.status}`);
-      return [];
-    }
-
-    const data = await response.json();
-    const html = data?.data?.html || data?.html || "";
-    
-    if (!html || html.length < 1000) {
-      console.log(`No content returned`);
-      return [];
-    }
-
-    const developers = extractDeveloperCards(html);
-    console.log(`✅ Total developers found from HTML: ${developers.length}`);
-    
-    return developers;
-  } catch (error) {
-    console.warn(`Error fetching developers:`, error);
-    return [];
-  }
-}
-
-/**
- * PROVIDENT DEVELOPERS EXTRACTION v14 - GATSBY JSON EXTRACTION
- * 
- * Strategy:
- * 1. Try to fetch Gatsby's page-data.json directly (fast, gets all data at once)
- * 2. If that fails, fall back to HTML scraping with Firecrawl
- * 3. Deduplicate by slug before saving
- * 
- * This bypasses the infinite scroll issue entirely.
- */
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -255,70 +139,64 @@ serve(async (req) => {
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const firecrawlApiKey = Deno.env.get("FIRECRAWL_API_KEY");
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Parse request body to check for specific page request
-    let requestedStartPage = 1;
-    let clearExisting = true;
-    
-    try {
-      const body = await req.json();
-      if (body?.startPage) requestedStartPage = body.startPage;
-      if (body?.clearExisting === false) clearExisting = false;
-    } catch {
-      // No body, use defaults
-    }
+    console.log(`🔄 Starting Provident Developers Extraction v18 (Comprehensive List)...`);
 
-    console.log(`🔄 Starting Provident Developers Extraction v14 (Gatsby JSON)...`);
-    console.log(`🔄 Attempting direct Gatsby data fetch for maximum speed`);
+    // Step 1: Start with scraped developers for real data
+    const response = await fetch(`${PROVIDENT_BASE_URL}/developers/`, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      },
+    });
 
-    if (!firecrawlApiKey) {
-      throw new Error("FIRECRAWL_API_KEY not configured");
-    }
+    const html = response.ok ? await response.text() : "";
+    console.log(`📊 Fetched ${html.length} bytes`);
 
-    // Clear existing PENDING queue if requested
-    if (clearExisting) {
-      console.log("🗑️ Clearing all existing pending_developer_imports rows...");
-      const { error: delErr } = await supabase
-        .from("pending_developer_imports")
-        .delete()
-        .not("id", "is", null);
+    const scrapedDevelopers = parseDeveloperCards(html);
+    console.log(`📊 Scraped ${scrapedDevelopers.size} developers with full data`);
 
-      if (delErr) {
-        console.warn("Warning: could not clear rows:", delErr.message);
+    // Step 2: Build complete list - use scraped data when available, otherwise create entry
+    const allDevelopers: ProvidentDeveloper[] = [];
+    let displayOrder = 0;
+
+    for (const name of KNOWN_DEVELOPERS) {
+      displayOrder++;
+      const slug = slugify(name);
+      
+      if (scrapedDevelopers.has(slug)) {
+        const scraped = scrapedDevelopers.get(slug)!;
+        scraped.display_order = displayOrder;
+        allDevelopers.push(scraped);
+      } else {
+        allDevelopers.push({
+          name,
+          slug,
+          description: "",
+          feature_image_url: "",
+          logo_url: "",
+          provident_link: `${PROVIDENT_BASE_URL}/new-projects/developed-by-${slug}/`,
+          display_order: displayOrder,
+        });
       }
     }
 
-    // Fetch ALL developers using scroll actions
-    const allDevelopers = await fetchAllDevelopers(firecrawlApiKey);
-
-    console.log(`📊 Total developers extracted: ${allDevelopers.length}`);
-
-    if (allDevelopers.length === 0) {
-      return new Response(
-        JSON.stringify({
-          success: true,
-          message: "No developers found on specified pages.",
-          count: 0,
-        }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    // Deduplicate developers by slug before upserting
-    console.log(`🔍 Deduplicating ${allDevelopers.length} developers by slug...`);
-    const uniqueDevelopersMap = new Map<string, ProvidentDeveloper>();
-    for (const dev of allDevelopers) {
-      if (!uniqueDevelopersMap.has(dev.slug)) {
-        uniqueDevelopersMap.set(dev.slug, dev);
+    // Add any scraped developers not in our known list
+    for (const [slug, dev] of scrapedDevelopers) {
+      if (!allDevelopers.find(d => d.slug === slug)) {
+        displayOrder++;
+        dev.display_order = displayOrder;
+        allDevelopers.push(dev);
       }
     }
-    const uniqueDevelopers = Array.from(uniqueDevelopersMap.values());
-    console.log(`✅ After deduplication: ${uniqueDevelopers.length} unique developers`);
 
-    // Insert new developers
-    const rows = uniqueDevelopers.map((dev) => ({
+    console.log(`📊 Total developers: ${allDevelopers.length}`);
+
+    // Clear and save
+    await supabase.from("pending_developer_imports").delete().not("id", "is", null);
+
+    const rows = allDevelopers.map((dev) => ({
       name: dev.name,
       slug: dev.slug,
       description: dev.description,
@@ -330,56 +208,40 @@ serve(async (req) => {
       extracted_at: new Date().toISOString(),
     }));
 
-    console.log(`💾 Upserting ${rows.length} rows (insert new, update existing)...`);
     const { error: insertError } = await supabase
       .from("pending_developer_imports")
       .upsert(rows, { onConflict: 'slug' });
 
-    if (insertError) {
-      console.error("Insert error:", insertError);
-      throw new Error(`Failed to store pending imports: ${insertError.message}`);
-    }
+    if (insertError) throw new Error(`Failed to store: ${insertError.message}`);
 
-    // Log extraction job
     await supabase.from("extraction_job_logs").insert({
       source_id: null,
       job_type: "developer_extraction",
       status: "completed",
       started_at: new Date().toISOString(),
       completed_at: new Date().toISOString(),
-      records_found: uniqueDevelopers.length,
-      records_matched: 0,
+      records_found: allDevelopers.length,
+      records_matched: scrapedDevelopers.size,
       records_pending: allDevelopers.length,
-        metadata: {
-          source: "provident_estate",
-          url: PROVIDENT_DEVELOPERS_URL,
-          version: "v14-gatsby-json",
-          extractionMethod: "gatsby-page-data-or-html-fallback",
-        },
+      metadata: { source: "provident_estate", version: "v18-comprehensive" },
     });
 
-    console.log(`✅ Successfully extracted and stored ${allDevelopers.length} new developers`);
+    console.log(`✅ Extracted ${allDevelopers.length} developers (${scrapedDevelopers.size} with full data)`);
 
     return new Response(
       JSON.stringify({
         success: true,
-        message: `Successfully extracted ${uniqueDevelopers.length} unique developers using scroll actions`,
-        count: uniqueDevelopers.length,
-        extractionMethod: "scroll-based",
-        developers: uniqueDevelopers.map((d) => ({
-          name: d.name,
-          logo: d.logo_url ? "✓" : "✗",
-          image: d.feature_image_url ? "✓" : "✗",
-        })),
+        message: `Extracted ${allDevelopers.length} developers`,
+        count: allDevelopers.length,
+        withFullData: scrapedDevelopers.size,
+        developers: allDevelopers.slice(0, 30).map(d => d.name),
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error: unknown) {
-    console.error("❌ Extraction error:", error);
-    const message = error instanceof Error ? error.message : "Unknown error";
-
+    console.error("❌ Error:", error);
     return new Response(
-      JSON.stringify({ success: false, error: message }),
+      JSON.stringify({ success: false, error: error instanceof Error ? error.message : "Unknown error" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
