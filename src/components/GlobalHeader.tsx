@@ -26,6 +26,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BrandMonogram } from "@/components/BrandMonogram";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
@@ -59,7 +60,7 @@ const GlobalHeader = () => {
       if (!user?.id) return null;
       const { data, error } = await supabase
         .from('crm_users_profile')
-        .select('crm_role, is_active')
+        .select('crm_role, is_active, display_name, photo_url, job_title')
         .eq('user_id', user.id)
         .maybeSingle();
       if (error) return null;
@@ -70,6 +71,20 @@ const GlobalHeader = () => {
 
   const hasCRMAccess = crmProfile?.is_active && 
     ['owner_admin', 'broker_member', 'sales_director', 'admin', 'founder'].includes(crmProfile?.crm_role || '');
+
+  const authHref = `/auth?redirect=${encodeURIComponent(`${location.pathname}${location.search || ""}`)}`;
+  const userMeta = (user?.user_metadata ?? {}) as Record<string, unknown>;
+  const accountDisplayName =
+    (crmProfile as any)?.display_name ||
+    (typeof userMeta.full_name === "string" ? userMeta.full_name : null) ||
+    (typeof userMeta.name === "string" ? userMeta.name : null) ||
+    (user?.email ? user.email.split("@")[0] : null) ||
+    "My Account";
+  const accountPhotoUrl =
+    (crmProfile as any)?.photo_url ||
+    (typeof (userMeta as any).avatar_url === "string" ? (userMeta as any).avatar_url : null) ||
+    (typeof (userMeta as any).picture === "string" ? (userMeta as any).picture : null) ||
+    null;
 
   // Properties dropdown (execution-only)
   const propertiesLinks = [
@@ -275,8 +290,8 @@ const GlobalHeader = () => {
             </div>
           </Link>
 
-          {/* MOBILE/TABLET RIGHT ICONS: Menu only - visible below lg breakpoint */}
-          <div className="flex items-center gap-2 ml-auto lg:hidden shrink-0">
+          {/* MOBILE/TABLET RIGHT ICONS: Menu only - visible below xl breakpoint */}
+          <div className="flex items-center gap-2 ml-auto xl:hidden shrink-0">
             {/* Mobile Menu Trigger - Larger hamburger */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
@@ -322,22 +337,7 @@ const GlobalHeader = () => {
                     <span className="text-[9px] text-black font-medium">Search</span>
                   </button>
                   <Link
-                    to="/favorites"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex flex-col items-center gap-1.5 text-black hover:text-gold py-2 px-3 transition-colors"
-                  >
-                    <div className="relative">
-                      <Heart className="w-5 h-5 text-black" />
-                      {totalCount > 0 && (
-                        <span className="absolute -top-1.5 -right-1.5 bg-gold text-black text-[7px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
-                          {totalCount}
-                        </span>
-                      )}
-                    </div>
-                    <span className="text-[9px] text-black font-medium">Add to Favorite</span>
-                  </Link>
-                  <Link
-                    to={user ? "/my-account" : "/auth"}
+                    to={user ? "/my-account" : authHref}
                     onClick={() => setMobileMenuOpen(false)}
                     className="flex flex-col items-center gap-1.5 text-black hover:text-gold py-2 px-3 transition-colors"
                   >
@@ -564,125 +564,6 @@ const GlobalHeader = () => {
             </Sheet>
           </div>
 
-          {/* COMPACT DESKTOP NAV (lg to <xl): show menu without overlapping */}
-          <nav className="hidden lg:flex xl:hidden items-center justify-center flex-1 min-w-0 mx-2">
-            <div
-              className="flex items-center gap-1 rounded-full px-3 py-2 border border-gold/40 max-w-full overflow-x-auto"
-              style={{
-                background:
-                  "linear-gradient(135deg, rgba(245,235,215,0.98) 0%, rgba(232,220,200,0.95) 50%, rgba(212,196,168,0.98) 100%)",
-                boxShadow:
-                  "0 8px 24px -10px rgba(0,0,0,0.35), 0 0 0 1px rgba(200,167,102,0.15), inset 0 2px 0 rgba(255,255,255,0.35)",
-              }}
-            >
-              <Link
-                to="/"
-                className={`px-2 py-1.5 text-[9px] font-bold whitespace-nowrap transition-all relative group rounded-full shrink-0 ${
-                  isActive("/")
-                    ? "text-gold bg-gold/15"
-                    : "text-zinc-800 hover:text-gold hover:bg-gold/10"
-                }`}
-                style={{ letterSpacing: "0.02em" }}
-              >
-                Home
-              </Link>
-
-              {renderDropdown("Properties", propertiesLinks, () => location.pathname === "/properties")}
-              {renderDropdown("Services", servicesLinks, () => location.pathname.startsWith("/services"))}
-              {renderDropdown(
-                "Guides",
-                guidesLinks,
-                () =>
-                  [
-                    "/buyer-guide",
-                    "/seller-guide",
-                    "/landlord-guide",
-                    "/tenant-guide",
-                    "/areas",
-                    "/faq",
-                    "/investor-education",
-                    "/investor-faq",
-                    "/broker-faq",
-                  ].some((p) => location.pathname.startsWith(p))
-              )}
-              {renderDropdown(
-                "Market Intel",
-                marketIntelLinks,
-                () => location.pathname.startsWith("/market-intelligence") || location.pathname === "/market-report"
-              )}
-              {renderDropdown(
-                "Investor Hub",
-                investorHubLinks,
-                () => location.pathname.includes("ai-hub") || location.pathname === "/favorites"
-              )}
-              {renderDropdown(
-                "Broker Hub",
-                brokerHubLinks,
-                () => location.pathname.includes("broker-toolkit") || location.pathname.includes("broker-education")
-              )}
-              {renderDropdown("About", aboutLinks, () => ["/about", "/founder", "/team", "/awards"].some((p) => location.pathname.startsWith(p)))}
-
-              <Link
-                to="/contact"
-                className={`px-2 py-1.5 text-[9px] font-bold whitespace-nowrap transition-all relative group rounded-full shrink-0 ${
-                  isActive("/contact")
-                    ? "text-gold bg-gold/15"
-                    : "text-zinc-800 hover:text-gold hover:bg-gold/10"
-                }`}
-                style={{ letterSpacing: "0.02em" }}
-              >
-                Contact
-              </Link>
-
-              {renderDropdown("More", moreLinks, () => ["/news", "/join"].some((p) => location.pathname.startsWith(p)))}
-            </div>
-          </nav>
-
-          {/* COMPACT DESKTOP ACTION ICONS (lg to <xl) */}
-          <div className="hidden lg:flex xl:hidden items-center gap-1 shrink-0">
-            <button
-              className="w-8 h-8 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
-              onClick={() => setSearchOpen(true)}
-              aria-label="Search"
-            >
-              <Search
-                className="w-4 h-4 text-gold group-hover:text-white group-hover:scale-110 transition-all duration-300"
-                style={{ filter: "drop-shadow(0 0 6px rgba(200,167,102,0.4))" }}
-              />
-            </button>
-
-            <Link
-              to="/favorites"
-              className="w-8 h-8 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
-              aria-label="Favorites"
-            >
-              <div className="relative">
-                <Heart
-                  className="w-4 h-4 text-gold group-hover:text-white group-hover:scale-110 transition-all duration-300"
-                  style={{ filter: "drop-shadow(0 0 6px rgba(200,167,102,0.4))" }}
-                />
-                {totalCount > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 bg-gold text-black text-[7px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
-                    {totalCount}
-                  </span>
-                )}
-              </div>
-            </Link>
-
-            <LanguageSwitcher variant="icon-only" />
-
-            <Link
-              to={user ? "/my-account" : "/auth"}
-              className="w-8 h-8 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
-              aria-label={user ? "My Account" : "Sign In"}
-            >
-              <User
-                className="w-4 h-4 text-gold group-hover:text-white group-hover:scale-110 transition-all duration-300"
-                style={{ filter: "drop-shadow(0 0 6px rgba(200,167,102,0.4))" }}
-              />
-            </Link>
-          </div>
-
            {/* CENTER: Ultra Premium Desktop Navigation - Only visible on xl and above */}
            <nav className="hidden xl:flex items-center justify-center flex-1 min-w-0 mx-2 2xl:mx-4">
             <div 
@@ -790,51 +671,85 @@ const GlobalHeader = () => {
 
               {/* Account Icon */}
               <div className="w-8 h-8 flex items-center justify-center">
-                {user ? (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <button 
-                        className="w-8 h-8 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
-                        aria-label={t('nav.myAccount')}
-                      >
-                        <User 
-                          className="w-4 h-4 text-gold group-hover:text-white group-hover:scale-110 transition-all duration-300" 
-                          style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }} 
-                        />
-                      </button>
-                    </DropdownMenuTrigger>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button 
+                      className="w-8 h-8 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
+                      aria-label={user ? t('nav.myAccount') : t('nav.signIn')}
+                    >
+                      <User 
+                        className="w-4 h-4 text-gold group-hover:text-white group-hover:scale-110 transition-all duration-300" 
+                        style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }} 
+                      />
+                    </button>
+                  </DropdownMenuTrigger>
                   <DropdownMenuContent 
                     align="end" 
                     sideOffset={12}
-                    className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 min-w-[260px] shadow-2xl shadow-black/30 py-3 rounded-xl overflow-hidden"
+                    className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 min-w-[280px] shadow-2xl shadow-black/30 py-3 rounded-xl overflow-hidden"
                   >
-                    {/* Premium header matching nav dropdown style */}
                     <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-                    <div className="px-5 py-3 border-b border-gold/20 bg-gradient-to-r from-gold/5 to-transparent">
-                      <p className="text-gold font-semibold text-sm tracking-wide">{t('nav.myAccount')}</p>
-                      <p className="text-black text-xs mt-1 truncate">{user.email}</p>
-                    </div>
-                    
+
+                    {user ? (
+                      <div className="px-5 py-3 border-b border-gold/20 bg-gradient-to-r from-gold/5 to-transparent">
+                        <div className="flex items-center gap-3">
+                          <Avatar className="h-9 w-9 border border-gold/30">
+                            <AvatarImage src={accountPhotoUrl ?? ""} alt={`${accountDisplayName} profile photo`} />
+                            <AvatarFallback className="bg-black text-gold text-xs font-bold">
+                              {String(accountDisplayName).charAt(0).toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="min-w-0">
+                            <p className="text-black font-semibold text-sm truncate">{accountDisplayName}</p>
+                            <p className="text-black/70 text-xs truncate">{user.email}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="px-5 py-3 border-b border-gold/20 bg-gradient-to-r from-gold/5 to-transparent">
+                        <p className="text-gold font-semibold text-sm tracking-wide">{t('nav.myAccount')}</p>
+                        <p className="text-black text-xs mt-1">{t('nav.signIn')}</p>
+                      </div>
+                    )}
+
                     <div className="py-2 flex flex-col gap-1 px-2">
-                      <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
-                        <Link to="/my-account" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
-                          <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                            <UserCircle className="w-3.5 h-3.5 text-gold" />
-                          </div>
-                          <span className="font-medium text-sm">Profile</span>
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
-                        <Link to="/favorites" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
-                          <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                            <Heart className="w-3.5 h-3.5 text-gold" />
-                          </div>
-                          <span className="font-medium text-sm">{t('nav.favorites')}</span>
-                        </Link>
-                      </DropdownMenuItem>
+                      {user ? (
+                        <>
+                          <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
+                            <Link to="/my-account" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
+                              <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                                <UserCircle className="w-3.5 h-3.5 text-gold" />
+                              </div>
+                              <span className="font-medium text-sm">My Dashboard</span>
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
+                            <Link to="/favorites" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
+                              <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                                <Heart className="w-3.5 h-3.5 text-gold" />
+                              </div>
+                              <span className="font-medium text-sm">{t('nav.favorites')}</span>
+                              {totalCount > 0 && (
+                                <span className="ml-auto text-[11px] font-bold text-black bg-gold/20 border border-gold/30 rounded-full px-2 py-0.5">
+                                  {totalCount}
+                                </span>
+                              )}
+                            </Link>
+                          </DropdownMenuItem>
+                        </>
+                      ) : (
+                        <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
+                          <Link to={authHref} className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
+                            <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                              <User className="w-3.5 h-3.5 text-gold" />
+                            </div>
+                            <span className="font-medium text-sm">Sign In / Create Account</span>
+                          </Link>
+                        </DropdownMenuItem>
+                      )}
                       
                       {/* Admin/Founder shortcuts */}
-                      {(isAdmin || hasCRMAccess) && (
+                      {user && (isAdmin || hasCRMAccess) && (
                         <>
                           <DropdownMenuSeparator className="bg-gold/20 my-2 mx-2" />
                           <p className="px-3 py-1.5 text-[10px] uppercase tracking-wider text-gold font-medium">Admin Shortcuts</p>
@@ -883,7 +798,7 @@ const GlobalHeader = () => {
                       )}
                       
                       <div className="flex flex-col gap-1 px-2">
-                        {hasCRMAccess && (
+                        {user && hasCRMAccess && (
                           <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
                             <Link to="/crm" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
                               <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
@@ -893,7 +808,7 @@ const GlobalHeader = () => {
                             </Link>
                           </DropdownMenuItem>
                         )}
-                        {isAdmin && (
+                        {user && isAdmin && (
                           <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
                             <Link to="/admin" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
                               <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
@@ -906,31 +821,24 @@ const GlobalHeader = () => {
                       </div>
                     </div>
                     
-                    <DropdownMenuSeparator className="bg-gold/20 mx-2" />
-                    <div className="py-2 px-2">
-                      <DropdownMenuItem onClick={() => signOut()} className="p-0 cursor-pointer focus:bg-gold/10 rounded-lg">
-                        <div className="flex items-center gap-3 text-zinc-600 hover:text-black py-2.5 px-3 transition-all w-full group rounded-lg">
-                          <div className="w-7 h-7 rounded-md bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 flex items-center justify-center group-hover:border-gold transition-colors">
-                            <LogOut className="w-3.5 h-3.5 text-black" />
-                          </div>
-                          <span className="font-medium text-sm text-black">{t('nav.signOut')}</span>
+                    {user && (
+                      <>
+                        <DropdownMenuSeparator className="bg-gold/20 mx-2" />
+                        <div className="py-2 px-2">
+                          <DropdownMenuItem onClick={() => signOut()} className="p-0 cursor-pointer focus:bg-gold/10 rounded-lg">
+                            <div className="flex items-center gap-3 text-zinc-600 hover:text-black py-2.5 px-3 transition-all w-full group rounded-lg">
+                              <div className="w-7 h-7 rounded-md bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 flex items-center justify-center group-hover:border-gold transition-colors">
+                                <LogOut className="w-3.5 h-3.5 text-black" />
+                              </div>
+                              <span className="font-medium text-sm text-black">{t('nav.signOut')}</span>
+                            </div>
+                          </DropdownMenuItem>
                         </div>
-                      </DropdownMenuItem>
-                    </div>
+                      </>
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
-              ) : (
-                <Link to="/auth">
-                  <button 
-                    className="w-8 h-8 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
-                  >
-                    <User 
-                      className="w-4 h-4 text-gold group-hover:text-white group-hover:scale-110 transition-all duration-300" 
-                      style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }} 
-                    />
-                  </button>
-                </Link>
-              )}
+              
               </div>
             </div>
           </div>
