@@ -105,7 +105,6 @@
          feature_image_url: featureMatch ? normalizeUrl(featureMatch[1]) : "",
          logo_url: logoMatch ? normalizeUrl(logoMatch[1]) : "",
          provident_link: url,
-         display_order: i + 1,
        });
        
        await new Promise(r => setTimeout(r, 500));
