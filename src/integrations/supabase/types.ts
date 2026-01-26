@@ -14488,7 +14488,19 @@ export type Database = {
         Args: { encrypted_data: string; salt_id: string }
         Returns: string
       }
-      decrypt_lead_pii: { Args: { encrypted_data: string }; Returns: string }
+      decrypt_lead_pii:
+        | { Args: { encrypted_data: string }; Returns: string }
+        | {
+            Args: { p_lead_id: string }
+            Returns: {
+              created_at: string
+              email: string
+              full_name: string
+              id: string
+              phone: string
+              source: string
+            }[]
+          }
       decrypt_partner_bank_field: {
         Args: { encrypted_data: string; fallback_plaintext?: string }
         Returns: string
