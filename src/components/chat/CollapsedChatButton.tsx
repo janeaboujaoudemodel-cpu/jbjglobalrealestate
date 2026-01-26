@@ -53,8 +53,8 @@ const CollapsedChatButton = ({ onToggle, onMinimize, showAttentionPulse = false 
                 <ChevronLeft className="w-5 h-5 text-gold group-hover:-translate-x-1 transition-transform hidden sm:block" />
               )}
             </button>
-            {/* Mobile-only minimize button */}
-            {isMobile && onMinimize && (
+            {/* Minimize button - always visible on all devices */}
+            {onMinimize && (
               <button
                 onClick={handleMinimize}
                 aria-label={t('chat.minimize', 'Minimize chat')}
