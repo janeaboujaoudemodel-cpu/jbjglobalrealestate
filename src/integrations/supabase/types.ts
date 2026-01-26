@@ -8521,6 +8521,7 @@ export type Database = {
         Row: {
           age_range: string | null
           birthday: string | null
+          captcha_verified: boolean | null
           consent_accurate: boolean | null
           consent_privacy: boolean | null
           created_at: string
@@ -8532,6 +8533,7 @@ export type Database = {
           full_name_encrypted: string | null
           honeypot: string | null
           id: string
+          ip_hash: string | null
           language: string | null
           nationality: string | null
           page_source: string | null
@@ -8540,11 +8542,13 @@ export type Database = {
           phone_verified: boolean | null
           source: string
           status: string | null
+          submission_source: string | null
           updated_at: string
         }
         Insert: {
           age_range?: string | null
           birthday?: string | null
+          captcha_verified?: boolean | null
           consent_accurate?: boolean | null
           consent_privacy?: boolean | null
           created_at?: string
@@ -8556,6 +8560,7 @@ export type Database = {
           full_name_encrypted?: string | null
           honeypot?: string | null
           id?: string
+          ip_hash?: string | null
           language?: string | null
           nationality?: string | null
           page_source?: string | null
@@ -8564,11 +8569,13 @@ export type Database = {
           phone_verified?: boolean | null
           source: string
           status?: string | null
+          submission_source?: string | null
           updated_at?: string
         }
         Update: {
           age_range?: string | null
           birthday?: string | null
+          captcha_verified?: boolean | null
           consent_accurate?: boolean | null
           consent_privacy?: boolean | null
           created_at?: string
@@ -8580,6 +8587,7 @@ export type Database = {
           full_name_encrypted?: string | null
           honeypot?: string | null
           id?: string
+          ip_hash?: string | null
           language?: string | null
           nationality?: string | null
           page_source?: string | null
@@ -8588,6 +8596,7 @@ export type Database = {
           phone_verified?: boolean | null
           source?: string
           status?: string | null
+          submission_source?: string | null
           updated_at?: string
         }
         Relationships: []
