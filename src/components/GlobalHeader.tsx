@@ -12,7 +12,7 @@ import {
   GraduationCap, BarChart3, MapPin, Award, UserPlus, Globe
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,6 +42,74 @@ const GlobalHeader = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const { t } = useLanguage();
   const isTouchLayout = useIsTouchLayout();
+
+  // Desktop header must never crop/overlap. If it can't fit, switch to mobile header.
+  const headerViewportRef = useRef<HTMLElement | null>(null);
+  const headerContentRef = useRef<HTMLDivElement | null>(null);
+  const leftBlockRef = useRef<HTMLDivElement | null>(null);
+  const navBlockRef = useRef<HTMLElement | null>(null);
+  const rightBlockRef = useRef<HTMLDivElement | null>(null);
+  const desktopRequiredWidthRef = useRef<number>(0);
+  const [forceMobileByFit, setForceMobileByFit] = useState(false);
+
+  const shouldUseMobileHeader = isTouchLayout || forceMobileByFit;
+
+  useLayoutEffect(() => {
+    const getViewportWidth = () =>
+      headerViewportRef.current?.clientWidth ?? window.innerWidth;
+
+    const measureDesktopRequiredWidth = () => {
+      if (!headerContentRef.current || !leftBlockRef.current || !navBlockRef.current || !rightBlockRef.current) return;
+
+      const leftW = leftBlockRef.current.getBoundingClientRect().width;
+      const navW = navBlockRef.current.getBoundingClientRect().width;
+      const rightW = rightBlockRef.current.getBoundingClientRect().width;
+
+      const contentStyles = window.getComputedStyle(headerContentRef.current);
+      const padL = parseFloat(contentStyles.paddingLeft || '0');
+      const padR = parseFloat(contentStyles.paddingRight || '0');
+
+      const navStyles = window.getComputedStyle(navBlockRef.current);
+      const navML = parseFloat(navStyles.marginLeft || '0');
+      const navMR = parseFloat(navStyles.marginRight || '0');
+
+      const rightStyles = window.getComputedStyle(rightBlockRef.current);
+      const rightML = parseFloat(rightStyles.marginLeft || '0');
+      const rightMR = parseFloat(rightStyles.marginRight || '0');
+
+      // Sum intrinsic widths + spacing/margins + small safety buffer.
+      desktopRequiredWidthRef.current =
+        padL +
+        padR +
+        leftW +
+        navML +
+        navW +
+        navMR +
+        rightML +
+        rightW +
+        rightMR +
+        16;
+    };
+
+    const recompute = () => {
+      // Touch layout always uses mobile header.
+      if (isTouchLayout) {
+        setForceMobileByFit(false);
+        return;
+      }
+
+      // When desktop is rendered, keep the required width up-to-date.
+      if (!forceMobileByFit) measureDesktopRequiredWidth();
+
+      const required = desktopRequiredWidthRef.current || 1200; // fallback
+      const viewport = getViewportWidth();
+      setForceMobileByFit(viewport < required);
+    };
+
+    recompute();
+    window.addEventListener('resize', recompute);
+    return () => window.removeEventListener('resize', recompute);
+  }, [isTouchLayout, forceMobileByFit]);
 
   const mobileHeaderIconButtonClassName =
     "inline-flex h-7 w-7 items-center justify-center p-0 bg-transparent border-0 rounded-none appearance-none transition-colors duration-300 focus:outline-none focus-visible:outline-none focus-visible:ring-0";
@@ -204,7 +272,10 @@ const GlobalHeader = () => {
   );
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[9999] h-20 sm:h-24 lg:h-28 overflow-hidden">
+    <header
+      ref={headerViewportRef}
+      className="fixed top-0 left-0 right-0 z-[9999] h-20 sm:h-24 lg:h-28 overflow-visible"
+    >
       {/* Ultra Premium Multi-Layer Background */}
       <div 
         className="absolute inset-0"
@@ -237,71 +308,68 @@ const GlobalHeader = () => {
         }}
       />
       
-      {/* LOCKED HEADER CONTENT - scales uniformly, never overlaps */}
-      <div 
-        className="relative z-10 h-full flex items-center justify-between px-4 xl:px-8 2xl:px-12 origin-center"
-        style={{
-          /* Scale down uniformly when viewport shrinks - locked layout */
-          transform: 'scale(clamp(0.65, calc(0.5 + (100vw - 600px) / 1000), 1))',
-          transformOrigin: 'center center',
-          minWidth: 'max-content',
-        }}
+      {/* HEADER CONTENT (no cropping): desktop stays fixed; if it can't fit we switch to mobile */}
+      <div
+        ref={headerContentRef}
+        className="relative z-10 h-full flex items-center justify-between px-4 xl:px-8 2xl:px-12"
       >
         {/* LEFT: Premium Brand Logo - LOCKED */}
-        <Link 
-          to="/" 
-          className="flex items-center gap-3 xl:gap-4 shrink-0 group transition-all duration-300"
-          style={{ fontFamily: "Poppins, sans-serif" }}
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        >
-          <div className="relative shrink-0">
-            {/* Logo glow backdrop */}
-            <div 
-              className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-              style={{
-                background: 'radial-gradient(circle, rgba(200,167,102,0.3) 0%, transparent 70%)',
-                transform: 'scale(1.5)',
-                filter: 'blur(10px)'
-              }}
-            />
-            <img 
-              src={jbjMonogramDarkBg} 
-              alt="JBJ" 
-              className="w-12 h-12 md:w-14 md:h-14 xl:w-16 xl:h-16 object-contain relative z-10"
-              style={{
-                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5)) drop-shadow(0 0 20px rgba(200,167,102,0.15))'
-              }}
-            />
-          </div>
-          {/* Premium Typography - always visible on desktop */}
-          <div className="flex flex-col shrink-0">
-            <span 
-              className="font-bold text-sm xl:text-base tracking-[0.12em] uppercase whitespace-nowrap leading-none"
-              style={{
-                background: 'linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 30%, #C8A766 70%, #D4AF37 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                textShadow: '0 2px 10px rgba(200,167,102,0.3)',
-                filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))'
-              }}
-            >
-              JBJ Global Real Estate
-            </span>
-            <span 
-              className="text-[9px] tracking-[0.25em] uppercase mt-1"
-              style={{
-                background: 'linear-gradient(90deg, #C8A766 0%, #D4AF37 50%, #C8A766 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
-              Excellence in Real Estate
-            </span>
-          </div>
-        </Link>
+        <div ref={leftBlockRef} className="shrink-0">
+          <Link 
+            to="/" 
+            className="flex items-center gap-3 xl:gap-4 shrink-0 group transition-all duration-300"
+            style={{ fontFamily: "Poppins, sans-serif" }}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          >
+            <div className="relative shrink-0">
+              {/* Logo glow backdrop */}
+              <div 
+                className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                style={{
+                  background: 'radial-gradient(circle, rgba(200,167,102,0.3) 0%, transparent 70%)',
+                  transform: 'scale(1.5)',
+                  filter: 'blur(10px)'
+                }}
+              />
+              <img 
+                src={jbjMonogramDarkBg} 
+                alt="JBJ" 
+                className="w-12 h-12 md:w-14 md:h-14 xl:w-16 xl:h-16 object-contain relative z-10"
+                style={{
+                  filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5)) drop-shadow(0 0 20px rgba(200,167,102,0.15))'
+                }}
+              />
+            </div>
+            {/* Premium Typography - always visible on desktop */}
+            <div className="flex flex-col shrink-0">
+              <span 
+                className="font-bold text-sm xl:text-base tracking-[0.12em] uppercase whitespace-nowrap leading-none"
+                style={{
+                  background: 'linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 30%, #C8A766 70%, #D4AF37 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  textShadow: '0 2px 10px rgba(200,167,102,0.3)',
+                  filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))'
+                }}
+              >
+                JBJ Global Real Estate
+              </span>
+              <span 
+                className="text-[9px] tracking-[0.25em] uppercase mt-1"
+                style={{
+                  background: 'linear-gradient(90deg, #C8A766 0%, #D4AF37 50%, #C8A766 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >
+                Excellence in Real Estate
+              </span>
+            </div>
+          </Link>
+        </div>
 
-          {/* TOUCH DEVICES: Menu only (do NOT depend on viewport width) */}
-          {isTouchLayout && (
+          {/* MOBILE HEADER: touch devices OR when desktop can't fit */}
+          {shouldUseMobileHeader && (
             <div className="flex items-center gap-2 ml-auto shrink-0">
               {/* Mobile Menu Trigger - Larger hamburger */}
               <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -425,8 +493,8 @@ const GlobalHeader = () => {
 
                     <div className="h-px bg-gold/20 my-2" />
 
-                    {/* 5. Market Intelligence */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Market Intelligence</p>
+                    {/* 5. Market Intel */}
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Market Intel</p>
                     {marketIntelLinks.map((link) => (
                       <Link
                         key={link.href}
@@ -576,9 +644,9 @@ const GlobalHeader = () => {
             </div>
           )}
 
-          {/* DESKTOP (non-touch): LOCKED navigation pill - never overlaps */}
-          {!isTouchLayout && (
-            <nav className="shrink-0 mx-4 xl:mx-6">
+          {/* DESKTOP HEADER: only when it fully fits (never crop) */}
+          {!shouldUseMobileHeader && (
+            <nav ref={navBlockRef as any} className="shrink-0 mx-4 xl:mx-6">
               <div 
                 className="flex items-center gap-0.5 xl:gap-1 rounded-full px-4 xl:px-6 py-2 border-2 border-gold/40"
                 style={{
@@ -632,9 +700,10 @@ const GlobalHeader = () => {
             </nav>
           )}
 
-          {!isTouchLayout && (
+          {!shouldUseMobileHeader && (
             <div 
-              className="flex items-center gap-1 px-4 py-2 rounded-full border border-gold/30 shrink-0"
+              ref={rightBlockRef}
+              className="flex items-center gap-1 px-4 py-2 rounded-full border border-gold/30 shrink-0 mr-2"
               style={{
                 background: 'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(20,20,20,0.9) 100%)',
                 boxShadow: '0 4px 16px -4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05), 0 0 30px -10px rgba(200,167,102,0.15)'
