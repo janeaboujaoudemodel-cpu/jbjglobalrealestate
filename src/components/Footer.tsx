@@ -78,8 +78,8 @@ const Footer = () => {
 
   // Services
   const servicesLinks = [
-    { label: t('footer.buyerAdvisory') || "Buyer Advisory", href: "/services/buyer-advisory" },
-    { label: t('footer.sellerAdvisory') || "Seller Advisory", href: "/services/seller-advisory" },
+    { label: t('footer.buyerAdvisory') || "Buyer Advisory", href: "/services/buying-advisory" },
+    { label: t('footer.sellerAdvisory') || "Seller Advisory", href: "/services/selling-advisory" },
     { label: t('footer.leasingAdvisory') || "Leasing Advisory", href: "/services/leasing-advisory" },
     { label: t('footer.investmentAdvisory') || "Investment Advisory", href: "/services/investment-advisory" },
   ];

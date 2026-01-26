@@ -43,73 +43,31 @@ const GlobalHeader = () => {
   const { t } = useLanguage();
   const isTouchLayout = useIsTouchLayout();
 
-  // Desktop header must never crop/overlap. If it can't fit, switch to mobile header.
+  // Locked rule:
+  // - Desktop header (pill nav) must show on desktop-width screens.
+  // - Only when the screen is reduced (below lg) do we switch to the mobile header.
+  // - Touch/coarse-pointer devices always use the mobile header.
   const headerViewportRef = useRef<HTMLElement | null>(null);
   const headerContentRef = useRef<HTMLDivElement | null>(null);
-  const leftBlockRef = useRef<HTMLDivElement | null>(null);
-  const navBlockRef = useRef<HTMLElement | null>(null);
-  const rightBlockRef = useRef<HTMLDivElement | null>(null);
-  const desktopRequiredWidthRef = useRef<number>(0);
-  const [forceMobileByFit, setForceMobileByFit] = useState(false);
-
-  const shouldUseMobileHeader = isTouchLayout || forceMobileByFit;
+  const [isDesktopWidth, setIsDesktopWidth] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.innerWidth >= 1024;
+  });
 
   useLayoutEffect(() => {
     const getViewportWidth = () =>
       headerViewportRef.current?.clientWidth ?? window.innerWidth;
 
-    const measureDesktopRequiredWidth = () => {
-      if (!headerContentRef.current || !leftBlockRef.current || !navBlockRef.current || !rightBlockRef.current) return;
-
-      const leftW = leftBlockRef.current.getBoundingClientRect().width;
-      const navW = navBlockRef.current.getBoundingClientRect().width;
-      const rightW = rightBlockRef.current.getBoundingClientRect().width;
-
-      const contentStyles = window.getComputedStyle(headerContentRef.current);
-      const padL = parseFloat(contentStyles.paddingLeft || '0');
-      const padR = parseFloat(contentStyles.paddingRight || '0');
-
-      const navStyles = window.getComputedStyle(navBlockRef.current);
-      const navML = parseFloat(navStyles.marginLeft || '0');
-      const navMR = parseFloat(navStyles.marginRight || '0');
-
-      const rightStyles = window.getComputedStyle(rightBlockRef.current);
-      const rightML = parseFloat(rightStyles.marginLeft || '0');
-      const rightMR = parseFloat(rightStyles.marginRight || '0');
-
-      // Sum intrinsic widths + spacing/margins + small safety buffer.
-      desktopRequiredWidthRef.current =
-        padL +
-        padR +
-        leftW +
-        navML +
-        navW +
-        navMR +
-        rightML +
-        rightW +
-        rightMR +
-        16;
-    };
-
     const recompute = () => {
-      // Touch layout always uses mobile header.
-      if (isTouchLayout) {
-        setForceMobileByFit(false);
-        return;
-      }
-
-      // When desktop is rendered, keep the required width up-to-date.
-      if (!forceMobileByFit) measureDesktopRequiredWidth();
-
-      const required = desktopRequiredWidthRef.current || 1200; // fallback
-      const viewport = getViewportWidth();
-      setForceMobileByFit(viewport < required);
+      setIsDesktopWidth(getViewportWidth() >= 1024);
     };
 
     recompute();
-    window.addEventListener('resize', recompute);
-    return () => window.removeEventListener('resize', recompute);
-  }, [isTouchLayout, forceMobileByFit]);
+    window.addEventListener("resize", recompute);
+    return () => window.removeEventListener("resize", recompute);
+  }, []);
+
+  const shouldUseMobileHeader = isTouchLayout || !isDesktopWidth;
 
   const mobileHeaderIconButtonClassName =
     "inline-flex h-7 w-7 items-center justify-center p-0 bg-transparent border-0 rounded-none appearance-none transition-colors duration-300 focus:outline-none focus-visible:outline-none focus-visible:ring-0";
@@ -164,10 +122,10 @@ const GlobalHeader = () => {
     { href: "/seller-listing", label: t('header.listProperty') || "List Your Property", icon: ClipboardCheck },
   ];
 
-  // Services dropdown - all redirect to main /services page
+  // Services dropdown
   const servicesLinks = [
-    { href: "/services", label: t('header.buyingAdvisory') || "Buying Advisory", icon: UserCircle },
-    { href: "/services", label: t('header.sellingAdvisory') || "Selling Advisory", icon: ClipboardCheck },
+    { href: "/services/buying-advisory", label: t('header.buyingAdvisory') || "Buying Advisory", icon: UserCircle },
+    { href: "/services/selling-advisory", label: t('header.sellingAdvisory') || "Selling Advisory", icon: ClipboardCheck },
     { href: "/services", label: t('header.rentalAdvisory') || "Rental Advisory", icon: Building2 },
     { href: "/services", label: t('header.investmentAdvisory') || "Investment Advisory", icon: BarChart3 },
     { href: "/partners", label: t('header.partnerIntroductions') || "Partner Introductions", icon: Users },
@@ -314,7 +272,7 @@ const GlobalHeader = () => {
         className="relative z-10 h-full flex items-center justify-between px-4 xl:px-8 2xl:px-12"
       >
         {/* LEFT: Premium Brand Logo - LOCKED */}
-        <div ref={leftBlockRef} className="shrink-0">
+        <div className="shrink-0">
           <Link 
             to="/" 
             className="flex items-center gap-3 xl:gap-4 shrink-0 group transition-all duration-300"
@@ -644,66 +602,69 @@ const GlobalHeader = () => {
             </div>
           )}
 
-          {/* DESKTOP HEADER: only when it fully fits (never crop) */}
+          {/* DESKTOP HEADER (lg+): pill nav + right icons, never cropped */}
           {!shouldUseMobileHeader && (
-            <nav ref={navBlockRef as any} className="shrink-0 mx-4 xl:mx-6">
-              <div 
-                className="flex items-center gap-0.5 xl:gap-1 rounded-full px-4 xl:px-6 py-2 border-2 border-gold/40"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(245,235,215,0.98) 0%, rgba(232,220,200,0.95) 50%, rgba(212,196,168,0.98) 100%)',
-                  boxShadow: '0 8px 32px -8px rgba(0,0,0,0.4), 0 0 0 1px rgba(200,167,102,0.2), inset 0 2px 0 rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.05)',
-                }}
-              >
-                {/* Home */}
-                <Link
-                  to="/"
-                  className={`px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all rounded-full ${
-                    isActive("/") ? "text-gold bg-gold/15" : "text-zinc-800 hover:text-gold hover:bg-gold/10"
-                  }`}
-                  style={{ letterSpacing: '0.03em' }}
-                >
-                  Home
-                </Link>
+            <nav className="min-w-0 flex-1 mx-4 xl:mx-6" aria-label="Primary">
+              <div className="w-full overflow-x-auto">
+                <div className="w-fit mx-auto">
+                  <div 
+                    className="flex items-center gap-0.5 xl:gap-1 rounded-full px-4 xl:px-6 py-2 border-2 border-gold/40"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(245,235,215,0.98) 0%, rgba(232,220,200,0.95) 50%, rgba(212,196,168,0.98) 100%)',
+                      boxShadow: '0 8px 32px -8px rgba(0,0,0,0.4), 0 0 0 1px rgba(200,167,102,0.2), inset 0 2px 0 rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.05)',
+                    }}
+                  >
+                    {/* Home */}
+                    <Link
+                      to="/"
+                      className={`px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all rounded-full ${
+                        isActive("/") ? "text-gold bg-gold/15" : "text-zinc-800 hover:text-gold hover:bg-gold/10"
+                      }`}
+                      style={{ letterSpacing: '0.03em' }}
+                    >
+                      Home
+                    </Link>
 
-                {renderDropdown("Properties", propertiesLinks, () => location.pathname === '/properties')}
-                {renderDropdown("Services", servicesLinks, () => location.pathname.startsWith('/services'))}
-                {renderDropdown("Guides", guidesLinks, () => 
-                  ['/buyer-guide', '/seller-guide', '/landlord-guide', '/tenant-guide', '/areas', '/faq', '/investor-education', '/investor-faq', '/broker-faq'].some(p => location.pathname.startsWith(p))
-                )}
-                {renderDropdown("Market Intel", marketIntelLinks, () => 
-                  location.pathname.startsWith('/market-intelligence') || location.pathname === '/market-report'
-                )}
-                {renderDropdown("Investor Hub", investorHubLinks, () => 
-                  location.pathname.includes('ai-hub') || location.pathname === '/favorites'
-                )}
-                {renderDropdown("Broker Hub", brokerHubLinks, () => 
-                  location.pathname.includes('broker-toolkit') || location.pathname.includes('broker-education')
-                )}
-                {renderDropdown("About", aboutLinks, () => 
-                  ['/about', '/founder', '/team', '/awards'].some(p => location.pathname.startsWith(p))
-                )}
+                    {renderDropdown("Properties", propertiesLinks, () => location.pathname === '/properties')}
+                    {renderDropdown("Services", servicesLinks, () => location.pathname.startsWith('/services'))}
+                    {renderDropdown("Guides", guidesLinks, () => 
+                      ['/buyer-guide', '/seller-guide', '/landlord-guide', '/tenant-guide', '/areas', '/faq', '/investor-education', '/investor-faq', '/broker-faq'].some(p => location.pathname.startsWith(p))
+                    )}
+                    {renderDropdown("Market Intel", marketIntelLinks, () => 
+                      location.pathname.startsWith('/market-intelligence') || location.pathname === '/market-report'
+                    )}
+                    {renderDropdown("Investor Hub", investorHubLinks, () => 
+                      location.pathname.includes('ai-hub') || location.pathname === '/favorites'
+                    )}
+                    {renderDropdown("Broker Hub", brokerHubLinks, () => 
+                      location.pathname.includes('broker-toolkit') || location.pathname.includes('broker-education')
+                    )}
+                    {renderDropdown("About", aboutLinks, () => 
+                      ['/about', '/founder', '/team', '/awards'].some(p => location.pathname.startsWith(p))
+                    )}
 
-                <Link
-                  to="/contact"
-                  className={`px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all rounded-full ${
-                    isActive("/contact") ? "text-gold bg-gold/15" : "text-zinc-800 hover:text-gold hover:bg-gold/10"
-                  }`}
-                  style={{ letterSpacing: '0.03em' }}
-                >
-                  Contact
-                </Link>
+                    <Link
+                      to="/contact"
+                      className={`px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all rounded-full ${
+                        isActive("/contact") ? "text-gold bg-gold/15" : "text-zinc-800 hover:text-gold hover:bg-gold/10"
+                      }`}
+                      style={{ letterSpacing: '0.03em' }}
+                    >
+                      Contact
+                    </Link>
 
-                {renderDropdown("More", moreLinks, () => 
-                  ['/news', '/join'].some(p => location.pathname.startsWith(p))
-                )}
+                    {renderDropdown("More", moreLinks, () => 
+                      ['/news', '/join'].some(p => location.pathname.startsWith(p))
+                    )}
+                  </div>
+                </div>
               </div>
             </nav>
           )}
 
           {!shouldUseMobileHeader && (
             <div 
-              ref={rightBlockRef}
-              className="flex items-center gap-1 px-4 py-2 rounded-full border border-gold/30 shrink-0 mr-2"
+              className="flex items-center gap-1 px-4 py-2 rounded-full border border-gold/30 shrink-0 mr-3 xl:mr-4"
               style={{
                 background: 'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(20,20,20,0.9) 100%)',
                 boxShadow: '0 4px 16px -4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05), 0 0 30px -10px rgba(200,167,102,0.15)'
