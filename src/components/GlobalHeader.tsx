@@ -336,7 +336,7 @@ const GlobalHeader = () => {
                         </span>
                       )}
                     </div>
-                    <span className="text-[9px] text-black font-medium">Favorites</span>
+                    <span className="text-[9px] text-black font-medium">Add to Favorite</span>
                   </Link>
                   <Link
                     to={user ? "/my-account" : "/auth"}
@@ -344,12 +344,9 @@ const GlobalHeader = () => {
                     className="flex flex-col items-center gap-1.5 text-black hover:text-gold py-2 px-3 transition-colors"
                   >
                     <User className="w-5 h-5 text-black" />
-                    <span className="text-[9px] text-black font-medium">{user ? "Account" : "Sign In"}</span>
+                    <span className="text-[9px] text-black font-medium">{user ? "My Account" : "Sign In"}</span>
                   </Link>
-                  <div className="flex flex-col items-center gap-1 py-1 px-2">
-                    <Globe className="w-5 h-5 text-black pointer-events-none" />
-                    <LanguageSwitcher variant="icon-only" />
-                  </div>
+                  <LanguageSwitcher variant="icon-only" />
                 </div>
 
                 {/* Scrollable Navigation */}

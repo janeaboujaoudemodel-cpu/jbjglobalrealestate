@@ -27,9 +27,10 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
           <Button
             variant="ghost"
             size="sm"
-            className="flex items-center justify-center h-auto min-h-[32px] min-w-[60px] px-3 py-2 bg-transparent hover:bg-gold/10 border-0 rounded-lg transition-all duration-200 group cursor-pointer"
+            className="flex flex-col items-center justify-center gap-1.5 h-auto min-h-[48px] min-w-[60px] px-3 py-2 bg-transparent hover:bg-gold/10 border-0 rounded-lg transition-all duration-200 group cursor-pointer"
           >
-            <span className="text-[9px] text-black font-medium group-hover:text-gold transition-colors">Language</span>
+            <Globe className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+            <span className="text-[9px] text-black font-medium group-hover:text-gold transition-colors">Select Language</span>
           </Button>
         ) : isCompact ? (
           <button
