@@ -1542,11 +1542,13 @@ export type Database = {
       }
       broker_messages: {
         Row: {
+          access_count: number | null
           ai_confidence_score: number | null
           ai_intent_detected: string | null
           attachment_urls: string[] | null
           broker_id: string | null
           content: string
+          content_encrypted: string | null
           content_type: string | null
           conversation_id: string
           created_at: string | null
@@ -1555,16 +1557,20 @@ export type Database = {
           direction: string
           filter_reason: string | null
           id: string
+          last_accessed_at: string | null
+          last_accessed_by: string | null
           original_content: string | null
           read_at: string | null
           was_filtered: boolean | null
         }
         Insert: {
+          access_count?: number | null
           ai_confidence_score?: number | null
           ai_intent_detected?: string | null
           attachment_urls?: string[] | null
           broker_id?: string | null
           content: string
+          content_encrypted?: string | null
           content_type?: string | null
           conversation_id: string
           created_at?: string | null
@@ -1573,16 +1579,20 @@ export type Database = {
           direction: string
           filter_reason?: string | null
           id?: string
+          last_accessed_at?: string | null
+          last_accessed_by?: string | null
           original_content?: string | null
           read_at?: string | null
           was_filtered?: boolean | null
         }
         Update: {
+          access_count?: number | null
           ai_confidence_score?: number | null
           ai_intent_detected?: string | null
           attachment_urls?: string[] | null
           broker_id?: string | null
           content?: string
+          content_encrypted?: string | null
           content_type?: string | null
           conversation_id?: string
           created_at?: string | null
@@ -1591,6 +1601,8 @@ export type Database = {
           direction?: string
           filter_reason?: string | null
           id?: string
+          last_accessed_at?: string | null
+          last_accessed_by?: string | null
           original_content?: string | null
           read_at?: string | null
           was_filtered?: boolean | null
@@ -14586,6 +14598,13 @@ export type Database = {
           trial_ends_at: string
           updated_at: string
           user_id: string
+        }[]
+      }
+      get_broker_message_decrypted: {
+        Args: { p_message_id: string }
+        Returns: {
+          content: string
+          original_content: string
         }[]
       }
       get_employee_full_bank_details: {

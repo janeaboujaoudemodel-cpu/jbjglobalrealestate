@@ -9,7 +9,7 @@ import {
   Home, Heart, User, LogOut, Settings, Menu, 
   Phone, Building2, Newspaper, ClipboardCheck, FileText,
   Sparkles, Search, Users, BookOpen, ChevronDown, Briefcase, UserCircle, FolderOpen, Monitor,
-  GraduationCap, BarChart3, MapPin, Award, UserPlus
+  GraduationCap, BarChart3, MapPin, Award, UserPlus, Globe
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -250,10 +250,10 @@ const GlobalHeader = () => {
                 }}
               />
             </div>
-            {/* Premium Typography - hidden on tablet, visible on mobile and desktop */}
+            {/* Premium Typography - visible on mobile, tablet (md), and desktop (xl) */}
             <div className="flex flex-col min-w-0">
               <span 
-                className="font-bold text-sm sm:text-base md:hidden xl:block xl:text-sm tracking-[0.1em] sm:tracking-[0.15em] uppercase whitespace-nowrap leading-none truncate"
+                className="font-bold text-sm sm:text-base xl:text-sm tracking-[0.1em] sm:tracking-[0.15em] uppercase whitespace-nowrap leading-none truncate"
                 style={{
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 30%, #C8A766 70%, #D4AF37 100%)',
                   WebkitBackgroundClip: 'text',
@@ -278,81 +278,77 @@ const GlobalHeader = () => {
           </Link>
 
           {/* MOBILE/TABLET RIGHT ICONS: Menu only - visible below xl breakpoint */}
-          <div className="flex items-center gap-1 ml-auto xl:hidden shrink-0">
-            {/* Mobile Menu Trigger */}
+          <div className="flex items-center gap-2 ml-auto xl:hidden shrink-0">
+            {/* Mobile Menu Trigger - Larger hamburger */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <button
                   type="button"
-                  className={`${mobileHeaderIconButtonClassName} group`}
+                  className="inline-flex h-10 w-10 items-center justify-center bg-transparent border-0 rounded-none appearance-none transition-colors duration-300 focus:outline-none group"
                   aria-label="Open menu"
                 >
-                  <Menu className="w-3 h-3 text-gold group-hover:text-gold-light transition-colors" />
+                  <Menu className="w-6 h-6 text-gold group-hover:text-gold-light transition-colors" />
                 </button>
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] p-0 flex flex-col h-full pt-14"
+                className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] p-0 flex flex-col h-full pt-16"
               >
-                {/* Menu Header - larger monogram with transparent bg (black J letters), one-line company name */}
-                <div className="relative border-b border-gold/30 flex items-center gap-3 px-4 py-3 shrink-0">
+                {/* Menu Header - transparent monogram, proper spacing */}
+                <div className="relative border-b border-gold/30 flex items-center gap-4 px-5 py-4 shrink-0">
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-                  {/* Monogram - larger for mobile menu */}
+                  {/* Monogram - transparent background version */}
                   <img 
-                     src={jbjMonogramNobuffer}
+                    src={jbjMonogramTransparent}
                     alt="JBJ"
-                     className="w-24 h-24 shrink-0 object-contain scale-110"
+                    className="w-16 h-16 shrink-0 object-contain"
                   />
                   <span 
-                    className="text-black font-bold text-sm tracking-[0.06em] uppercase whitespace-nowrap leading-none"
+                    className="text-black font-bold text-sm tracking-[0.06em] uppercase leading-tight"
                     style={{ fontFamily: "Poppins, sans-serif" }}
                   >
                     JBJ Global Real Estate
                   </span>
                 </div>
 
-                {/* Quick Actions Row */}
-                <div className="flex items-center justify-around px-2 py-2 border-b border-gold/20">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="flex flex-col items-center gap-1 text-black hover:text-gold h-auto py-1.5 px-2"
+                {/* Quick Actions Row - All aligned, all black, no shadows */}
+                <div className="flex items-center justify-between px-4 py-3 border-b border-gold/20">
+                  <button
+                    className="flex flex-col items-center gap-1.5 text-black hover:text-gold py-2 px-3 transition-colors"
                     onClick={() => {
                       setMobileMenuOpen(false);
                       setSearchOpen(true);
                     }}
                   >
-                    <Search className="w-4 h-4" />
-                    <span className="text-[8px]">Search</span>
-                  </Button>
+                    <Search className="w-5 h-5 text-black" />
+                    <span className="text-[9px] text-black font-medium">Search</span>
+                  </button>
                   <Link
                     to="/favorites"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex flex-col items-center gap-1 text-black hover:text-gold py-1.5 px-2"
+                    className="flex flex-col items-center gap-1.5 text-black hover:text-gold py-2 px-3 transition-colors"
                   >
                     <div className="relative">
-                      <Heart className="w-4 h-4" />
+                      <Heart className="w-5 h-5 text-black" />
                       {totalCount > 0 && (
-                        <span className="absolute -top-1 -right-1 bg-gold text-black text-[6px] w-3 h-3 rounded-full flex items-center justify-center font-bold">
+                        <span className="absolute -top-1.5 -right-1.5 bg-gold text-black text-[7px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
                           {totalCount}
                         </span>
                       )}
                     </div>
-                    <span className="text-[8px]">Favorites</span>
+                    <span className="text-[9px] text-black font-medium">Favorites</span>
                   </Link>
                   <Link
                     to={user ? "/my-account" : "/auth"}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex flex-col items-center gap-1 text-black hover:text-gold py-1.5 px-2"
+                    className="flex flex-col items-center gap-1.5 text-black hover:text-gold py-2 px-3 transition-colors"
                   >
-                    <User className="w-4 h-4" />
-                    <span className="text-[8px]">{user ? "Account" : "Sign In"}</span>
+                    <User className="w-5 h-5 text-black" />
+                    <span className="text-[9px] text-black font-medium">{user ? "Account" : "Sign In"}</span>
                   </Link>
-                  <div className="flex flex-col items-center gap-1 py-1.5 px-2">
-                    <div className="scale-125">
-                      <LanguageSwitcher variant="icon-only" />
-                    </div>
-                    <span className="text-[8px] text-black">Language</span>
+                  <div className="flex flex-col items-center gap-1.5 py-2 px-3">
+                    <Globe className="w-5 h-5 text-black" />
+                    <LanguageSwitcher variant="icon-only" />
                   </div>
                 </div>
 
