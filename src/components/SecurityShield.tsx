@@ -16,6 +16,23 @@ const SecurityShield = () => {
   const violationCountRef = useRef(0);
   const fingerprintRef = useRef<string>('');
 
+  // In Lovable preview/dev environments, the iframe + resize behavior can trigger false positives.
+  // We still keep local protections (right-click / selection, etc.), but we avoid calling the backend
+  // security logger to prevent noisy 403s and blank-screen errors.
+  const isLovablePreviewOrDev = useCallback(() => {
+    try {
+      const host = window.location.hostname;
+      return (
+        import.meta.env.DEV ||
+        host === 'localhost' ||
+        host === '127.0.0.1' ||
+        host.endsWith('lovableproject.com')
+      );
+    } catch {
+      return false;
+    }
+  }, []);
+
   const isLikelyCrawler = useCallback(() => {
     try {
       const ua = navigator.userAgent || '';
@@ -63,24 +80,28 @@ const SecurityShield = () => {
     
     console.warn(`[JBJ Security] Violation #${violationCountRef.current}: ${type}`);
     
-    // Log to database via edge function (non-blocking)
-    try {
-      await supabase.functions.invoke('log-security-event', {
-        body: {
-          event_type: 'security_violation',
-          violation_type: type,
-          fingerprint,
-          user_agent: navigator.userAgent,
-          violation_count: violationCountRef.current
-        }
-      }).catch(() => {}); // Silent fail - don't block UI
-    } catch {
-      // Silent fail
+    // Log to backend via function (best-effort). Skip in Lovable preview/dev.
+    if (!isLovablePreviewOrDev()) {
+      try {
+        await supabase.functions
+          .invoke('log-security-event', {
+            body: {
+              event_type: 'security_violation',
+              violation_type: type,
+              fingerprint,
+              user_agent: navigator.userAgent,
+              violation_count: violationCountRef.current,
+            },
+          })
+          .catch(() => {}); // Silent fail - don't block UI
+      } catch {
+        // Silent fail
+      }
     }
     
     // IMPORTANT: Never block/overlay the public site.
     // We only log violations (best-effort) so visitors and crawlers can still access pages.
-  }, [getFingerprint]);
+  }, [getFingerprint, isLovablePreviewOrDev]);
 
   useEffect(() => {
     // Never run protection logic for search/social crawlers.
