@@ -12,7 +12,6 @@ interface AdminBypassProps {
 
 // Routes that are publicly accessible without any authentication
 const PUBLIC_ROUTES = [
-  "/",           // Coming Soon landing page - public
   "/auth",       // Authentication page - always accessible
   "/card",       // Digital business card - public
 ];
@@ -20,7 +19,6 @@ const PUBLIC_ROUTES = [
 // Check if path matches any public route
 const isPublicRoute = (pathname: string): boolean => {
   return PUBLIC_ROUTES.some(route => {
-    if (route === "/") return pathname === "/";
     return pathname === route || pathname.startsWith(route + "/");
   });
 };
@@ -71,32 +69,41 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
         const userId = session.user.id;
         setIsAuthenticated(true);
 
-        const [hasAdminRoleRes, hasOwnerRoleRes, isCrmAdminRes, hasListingAdminRoleRes, hasBrokerRoleRes] =
-          await Promise.all([
-            supabase.rpc("has_role", { _user_id: userId, _role: "admin" }),
-            supabase.rpc("has_role", { _user_id: userId, _role: "owner" }),
-            supabase.rpc("is_crm_admin", { _user_id: userId }),
-            supabase.rpc("has_role", { _user_id: userId, _role: "listing_admin" }),
-            supabase.rpc("has_role", { _user_id: userId, _role: "broker" }),
-          ]);
+        try {
+          const [hasAdminRoleRes, hasOwnerRoleRes, isCrmAdminRes, hasListingAdminRoleRes, hasBrokerRoleRes] =
+            await Promise.all([
+              supabase.rpc("has_role", { _user_id: userId, _role: "admin" }),
+              supabase.rpc("has_role", { _user_id: userId, _role: "owner" }),
+              supabase.rpc("is_crm_admin", { _user_id: userId }),
+              supabase.rpc("has_role", { _user_id: userId, _role: "listing_admin" }),
+              supabase.rpc("has_role", { _user_id: userId, _role: "broker" }),
+            ]);
 
-        const hasAdminRole = hasAdminRoleRes.data;
-        const hasOwnerRole = hasOwnerRoleRes.data;
-        const isCrmAdmin = isCrmAdminRes.data;
-        const hasListingAdminRole = hasListingAdminRoleRes.data;
-        const hasBrokerRole = hasBrokerRoleRes.data;
+          const hasAdminRole = hasAdminRoleRes.data === true;
+          const hasOwnerRole = hasOwnerRoleRes.data === true;
+          const isCrmAdmin = isCrmAdminRes.data === true;
+          const hasListingAdminRole = hasListingAdminRoleRes.data === true;
+          const hasBrokerRole = hasBrokerRoleRes.data === true;
 
-        // Any team member gets full access
-        const hasFullAccess =
-          Boolean(hasAdminRole) ||
-          Boolean(hasOwnerRole) ||
-          Boolean(isCrmAdmin) ||
-          Boolean(hasListingAdminRole) ||
-          Boolean(hasBrokerRole);
+          // Any team member gets full access
+          const hasFullAccess =
+            hasAdminRole ||
+            hasOwnerRole ||
+            isCrmAdmin ||
+            hasListingAdminRole ||
+            hasBrokerRole;
 
-        if (!cancelled) {
-          setHasAccess(hasFullAccess);
-          setIsChecking(false);
+          if (!cancelled) {
+            setHasAccess(hasFullAccess);
+            setIsChecking(false);
+          }
+        } catch (rpcError) {
+          console.error("RPC error checking roles:", rpcError);
+          // If RPC fails but user is authenticated, grant access (fail-open for team)
+          if (!cancelled) {
+            setHasAccess(true);
+            setIsChecking(false);
+          }
         }
       } catch (error) {
         console.error("Error checking access:", error);
