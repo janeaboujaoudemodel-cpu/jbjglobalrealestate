@@ -41,19 +41,38 @@
  
      // Step 1: MAP entire site for developer URLs
      console.log("🗺️ Mapping providentestate.com for developer pages...");
-     const mapRes = await fetch(`${FIRECRAWL_API_URL}/map`, {
-       method: "POST",
-       headers: { "Authorization": `Bearer ${firecrawlApiKey}`, "Content-Type": "application/json" },
-       body: JSON.stringify({ url: PROVIDENT_BASE_URL, search: "developed-by", limit: 5000 }),
-     });
+      // Step 1: MAP site without search filter, then filter in code
+      console.log("🗺️ Mapping providentestate.com...");
+      const mapRes = await fetch(`${FIRECRAWL_API_URL}/map`, {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${firecrawlApiKey}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          url: PROVIDENT_BASE_URL, 
+          limit: 5000,
+          includeSubdomains: false 
+        }),
+      });
  
-     if (!mapRes.ok) throw new Error(`Map failed: ${mapRes.status}`);
+      if (!mapRes.ok) {
+        const errorText = await mapRes.text();
+        console.error("Map API error:", errorText);
+        throw new Error(`Map failed: ${mapRes.status} - ${errorText}`);
+      }
+      
      const mapData = await mapRes.json();
-     const devUrls = [...new Set((mapData.data?.links || []).filter((u: string) => 
-       u.includes("/developed-by-") && !u.includes("?") && !u.includes("#")
+      console.log(`📊 Total URLs found: ${mapData.links?.length || 0}`);
+      
+      // Filter for developer URLs
+      const allLinks = mapData.links || [];
+      const devUrls = [...new Set(allLinks.filter((u: string) => 
+        (u.includes("/developed-by-") || u.includes("/developer/")) && 
+        !u.includes("?") && !u.includes("#")
      ))];
      
      console.log(`📊 Found ${devUrls.length} developer URLs`);
+      if (devUrls.length === 0) {
+        console.log("Sample URLs:", allLinks.slice(0, 10));
+      }
      if (devUrls.length === 0) throw new Error("No developer URLs found");
  
      // Step 2: Scrape each page
@@ -107,7 +126,7 @@
        source_id: null, job_type: "developer_extraction", status: "completed",
        started_at: new Date().toISOString(), completed_at: new Date().toISOString(),
        records_found: allDevs.length, records_matched: allDevs.filter(d => d.feature_image_url && d.logo_url).length,
-       records_pending: allDevs.length, metadata: { source: "provident_estate", version: "v24-map-strategy" },
+        records_pending: allDevs.length, metadata: { source: "provident_estate", version: "v25-map-no-search" },
      });
  
      return new Response(JSON.stringify({ success: true, message: `Extracted ${allDevs.length} developers`, count: allDevs.length }), 
