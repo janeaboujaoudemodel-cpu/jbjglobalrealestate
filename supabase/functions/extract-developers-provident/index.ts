@@ -19,6 +19,23 @@ interface ProvidentDeveloper {
 const PROVIDENT_BASE_URL = "https://providentestate.com";
 const FIRECRAWL_API_URL = "https://api.firecrawl.dev/v1";
 
+/**
+ * PROVIDENT PAGINATION LIMITATION:
+ * 
+ * Provident Estate uses infinite scroll WITHOUT URL changes.
+ * When you click "page 2", the URL stays the same (e.g., /developers/)
+ * and new content is loaded dynamically via JavaScript.
+ * 
+ * This means:
+ * - We can only extract the initial 24 developers visible on page load
+ * - URL-based pagination strategies don't work
+ * - Firecrawl scroll actions timeout before all ~160 developers load
+ * - Browser automation would be required to extract all pages
+ * 
+ * Current approach extracts 24 developers with complete images/logos
+ * from the first page, which is reliable and consistently working.
+ */
+
 function slugify(name: string): string {
   return name
     .toLowerCase()
