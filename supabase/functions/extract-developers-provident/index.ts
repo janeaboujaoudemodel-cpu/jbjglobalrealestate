@@ -118,7 +118,6 @@ serve(async (req) => {
     const firecrawlApiKey = Deno.env.get("FIRECRAWL_API_KEY");
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    console.log(`🔄 Starting Provident Developers Extraction v20 (Map + Scrape)...`);
     console.log(`🔄 Starting Provident Developers Extraction v21 (Enhanced Scroll)...`);
 
     if (!firecrawlApiKey) {
@@ -178,8 +177,14 @@ serve(async (req) => {
     // Step 3: Convert to array
     const allDevelopers = Array.from(scrapedDevelopers.values());
 
-    // Step 4: Save to database
+    // Step 4: Clear existing and save new to database
     console.log(`💾 Saving ${allDevelopers.length} developers to database...`);
+    
+    // Clear existing provident developers first
+    await supabase
+      .from("pending_developer_imports")
+      .delete()
+      .eq("source", "provident_estate");
 
     const rows = allDevelopers.map((dev) => ({
       name: dev.name,
@@ -193,11 +198,14 @@ serve(async (req) => {
       extracted_at: new Date().toISOString(),
     }));
 
-    const { error: insertError } = await supabase
+    const { error: upsertError } = await supabase
       .from("pending_developer_imports")
-      .insert(rows);
+      .upsert(rows, {
+        onConflict: "slug",
+        ignoreDuplicates: false,
+      });
 
-    if (insertError) throw new Error(`Failed to store: ${insertError.message}`);
+    if (upsertError) throw new Error(`Failed to store: ${upsertError.message}`);
 
     // Log the extraction job
     await supabase.from("extraction_job_logs").insert({
