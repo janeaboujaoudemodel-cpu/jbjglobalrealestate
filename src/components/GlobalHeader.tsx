@@ -277,8 +277,8 @@ const GlobalHeader = () => {
             </div>
           </Link>
 
-          {/* MOBILE/TABLET RIGHT ICONS: Menu only - visible below xl breakpoint */}
-          <div className="flex items-center gap-2 ml-auto xl:hidden shrink-0">
+           {/* MOBILE/TABLET RIGHT ICONS: Menu only - visible below lg breakpoint */}
+           <div className="flex items-center gap-2 ml-auto lg:hidden shrink-0">
             {/* Mobile Menu Trigger - Larger hamburger */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
@@ -566,8 +566,8 @@ const GlobalHeader = () => {
             </Sheet>
           </div>
 
-          {/* CENTER: Ultra Premium Desktop Navigation - Only visible on xl and above */}
-          <nav className="hidden xl:flex items-center justify-center flex-1 min-w-0 mx-2 2xl:mx-4">
+           {/* CENTER: Ultra Premium Desktop Navigation - Only visible on lg and above */}
+           <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 mx-2 2xl:mx-4">
             <div 
               className="flex items-center gap-0.5 xl:gap-1 2xl:gap-1.5 rounded-full px-4 xl:px-5 2xl:px-8 py-2 border-2 border-gold/40 relative"
               style={{
@@ -640,8 +640,8 @@ const GlobalHeader = () => {
             </div>
           </nav>
 
-          {/* RIGHT: Premium Action Icons - Only visible on xl and above */}
-          <div className="hidden xl:flex items-center gap-2 shrink-0">
+           {/* RIGHT: Premium Action Icons - Only visible on lg and above */}
+           <div className="hidden lg:flex items-center gap-2 shrink-0">
             {/* Premium Icon Container */}
             <div 
               className="flex items-center gap-1 px-4 py-2 rounded-full border border-gold/30"
