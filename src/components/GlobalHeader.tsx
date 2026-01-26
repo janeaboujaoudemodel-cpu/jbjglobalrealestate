@@ -126,7 +126,7 @@ const GlobalHeader = () => {
   const servicesLinks = [
     { href: "/services/buying-advisory", label: t('header.buyingAdvisory') || "Buying Advisory", icon: UserCircle },
     { href: "/services/selling-advisory", label: t('header.sellingAdvisory') || "Selling Advisory", icon: ClipboardCheck },
-    { href: "/services", label: t('header.rentalAdvisory') || "Rental Advisory", icon: Building2 },
+    { href: "/services/rental-advisory", label: t('header.rentalAdvisory') || "Rental Advisory", icon: Building2 },
     { href: "/services", label: t('header.investmentAdvisory') || "Investment Advisory", icon: BarChart3 },
     { href: "/partners", label: t('header.partnerIntroductions') || "Partner Introductions", icon: Users },
   ];
