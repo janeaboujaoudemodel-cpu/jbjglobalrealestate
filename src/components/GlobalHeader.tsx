@@ -202,7 +202,7 @@ const GlobalHeader = () => {
   );
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[9999] h-20 sm:h-24 xl:h-28">
+    <header className="fixed top-0 left-0 right-0 z-[9999] h-20 sm:h-24 lg:h-28">
       {/* Ultra Premium Multi-Layer Background */}
       <div 
         className="absolute inset-0"
@@ -257,7 +257,7 @@ const GlobalHeader = () => {
               <img 
                 src={jbjMonogramDarkBg} 
                 alt="JBJ" 
-                className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 xl:w-16 xl:h-16 object-contain transition-transform duration-300 group-hover:scale-110 relative z-10"
+                className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 xl:w-16 xl:h-16 object-contain relative z-10"
                 style={{
                   filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5)) drop-shadow(0 0 20px rgba(200,167,102,0.15))'
                 }}
@@ -290,8 +290,8 @@ const GlobalHeader = () => {
             </div>
           </Link>
 
-          {/* MOBILE/TABLET RIGHT ICONS: Menu only - visible below xl breakpoint */}
-          <div className="flex items-center gap-2 ml-auto xl:hidden shrink-0">
+          {/* MOBILE/TABLET RIGHT ICONS: Menu only - visible below lg breakpoint */}
+          <div className="flex items-center gap-2 ml-auto lg:hidden shrink-0">
             {/* Mobile Menu Trigger - Larger hamburger */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
@@ -564,8 +564,8 @@ const GlobalHeader = () => {
             </Sheet>
           </div>
 
-           {/* CENTER: Ultra Premium Desktop Navigation - Only visible on xl and above */}
-           <nav className="hidden xl:flex items-center justify-center flex-1 min-w-0 mx-2 2xl:mx-4">
+           {/* CENTER: Ultra Premium Desktop Navigation - Only visible on lg and above */}
+           <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 mx-2 2xl:mx-4">
             <div 
               className="flex items-center gap-0.5 xl:gap-1 2xl:gap-1.5 rounded-full px-4 xl:px-5 2xl:px-8 py-2 border-2 border-gold/40 relative"
               style={{
@@ -638,8 +638,8 @@ const GlobalHeader = () => {
             </div>
           </nav>
 
-           {/* RIGHT: Premium Action Icons - Only visible on xl and above */}
-           <div className="hidden xl:flex items-center gap-2 shrink-0">
+            {/* RIGHT: Premium Action Icons - Only visible on lg and above */}
+            <div className="hidden lg:flex items-center gap-2 shrink-0">
             {/* Premium Icon Container */}
             <div 
               className="flex items-center gap-1 px-4 py-2 rounded-full border border-gold/30"
@@ -650,12 +650,12 @@ const GlobalHeader = () => {
             >
               {/* Search Icon */}
               <button
-                className="w-8 h-8 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
+                className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
                 onClick={() => setSearchOpen(true)}
                 aria-label="Search"
               >
                 <Search 
-                  className="w-4 h-4 text-gold group-hover:text-white group-hover:scale-110 transition-all duration-300" 
+                  className="w-5 h-5 text-gold group-hover:text-white transition-colors duration-300" 
                   style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }} 
                 />
               </button>
@@ -670,15 +670,15 @@ const GlobalHeader = () => {
               <div className="w-px h-5 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
 
               {/* Account Icon */}
-              <div className="w-8 h-8 flex items-center justify-center">
+              <div className="w-9 h-9 flex items-center justify-center">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button 
-                      className="w-8 h-8 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
+                      className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
                       aria-label={user ? t('nav.myAccount') : t('nav.signIn')}
                     >
                       <User 
-                        className="w-4 h-4 text-gold group-hover:text-white group-hover:scale-110 transition-all duration-300" 
+                        className="w-5 h-5 text-gold group-hover:text-white transition-colors duration-300" 
                         style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }} 
                       />
                     </button>
