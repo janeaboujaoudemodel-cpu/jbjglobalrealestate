@@ -346,8 +346,8 @@ const GlobalHeader = () => {
                     <User className="w-5 h-5 text-black" />
                     <span className="text-[9px] text-black font-medium">{user ? "Account" : "Sign In"}</span>
                   </Link>
-                  <div className="flex flex-col items-center gap-1.5 py-2 px-3">
-                    <Globe className="w-5 h-5 text-black" />
+                  <div className="flex flex-col items-center gap-1 py-1 px-2">
+                    <Globe className="w-5 h-5 text-black pointer-events-none" />
                     <LanguageSwitcher variant="icon-only" />
                   </div>
                 </div>
