@@ -1,265 +1,120 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
-
-interface ProvidentDeveloper {
-  name: string;
-  slug: string;
-  description: string;
-  feature_image_url: string;
-  logo_url: string;
-  provident_link: string;
-  display_order: number;
-}
-
-const PROVIDENT_BASE_URL = "https://providentestate.com";
-const FIRECRAWL_API_URL = "https://api.firecrawl.dev/v1";
-
-/**
- * PROVIDENT PAGINATION LIMITATION:
- * 
- * Provident Estate uses infinite scroll WITHOUT URL changes.
- * When you click "page 2", the URL stays the same (e.g., /developers/)
- * and new content is loaded dynamically via JavaScript.
- * 
- * This means:
- * - We can only extract the initial 24 developers visible on page load
- * - URL-based pagination strategies don't work
- * - Firecrawl scroll actions timeout before all ~160 developers load
- * - Browser automation would be required to extract all pages
- * 
- * Current approach extracts 24 developers with complete images/logos
- * from the first page, which is reliable and consistently working.
- */
-
-function slugify(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[&]/g, "and")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-}
-
-function normalizeUrl(url: string): string {
-  const trimmed = url?.trim() ?? "";
-  if (!trimmed) return "";
-  if (trimmed.startsWith("//")) return `https:${trimmed}`;
-  if (trimmed.startsWith("/")) return `${PROVIDENT_BASE_URL}${trimmed}`;
-  return trimmed;
-}
-
-function decodeHtmlEntities(input: string): string {
-  return input
-    .replace(/&amp;nbsp;/g, " ")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&#x27;/g, "'")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'");
-}
-
-// Parse developer data from the listing page HTML
-function parseDeveloperCards(html: string): Map<string, ProvidentDeveloper> {
-  const developersMap = new Map<string, ProvidentDeveloper>();
-  let displayOrder = 0;
-
-  const cardRegex = /<div class="developer-card">([\s\S]*?)(?=<div class="developer-card">|<\/div><\/div><\/div><\/div><\/div>)/g;
-  
-  let match;
-  while ((match = cardRegex.exec(html)) !== null) {
-    const cardHtml = match[1];
-    displayOrder++;
-
-    const nameMatch = cardHtml.match(/<a class="name"[^>]*>[\s\S]*?<span>([^<]+)<\/span>/i);
-    const name = nameMatch ? decodeHtmlEntities(nameMatch[1]).trim() : "";
-
-    const linkMatch = cardHtml.match(/href="([^"]*developed-by-[^"]+)"/i);
-    const providentLink = linkMatch ? normalizeUrl(linkMatch[1]) : "";
-
-    const featureMatch = cardHtml.match(/<div class="img-section">[\s\S]*?<img[^>]*src="([^"]+)"/i);
-    const featureImage = featureMatch ? normalizeUrl(featureMatch[1]) : "";
-
-    const logoMatch = cardHtml.match(/<div class="logo-section">[\s\S]*?<img[^>]*src="([^"]+)"/i);
-    const logo = logoMatch ? normalizeUrl(logoMatch[1]) : "";
-
-    const descMatch = cardHtml.match(/<p class="description">([\s\S]*?)<\/p>/i);
-    let description = descMatch ? decodeHtmlEntities(descMatch[1]).trim() : "";
-    description = description.replace(/<[^>]+>/g, "").trim().substring(0, 500);
-
-    if (!name) continue;
-
-    const slug = slugify(name);
-    developersMap.set(slug, {
-      name,
-      slug,
-      description,
-      feature_image_url: featureImage,
-      logo_url: logo,
-      provident_link: providentLink,
-      display_order: displayOrder,
-    });
-  }
-
-  return developersMap;
-}
-
-serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
-
-  try {
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const firecrawlApiKey = Deno.env.get("FIRECRAWL_API_KEY");
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
-    console.log(`🔄 Starting Provident Developers Extraction v21 (Enhanced Scroll)...`);
-
-    if (!firecrawlApiKey) {
-      throw new Error("FIRECRAWL_API_KEY not configured");
-    }
-
-    // Step 1: Use Firecrawl with scroll actions to load ALL developers
-    console.log("📡 Scraping developers page with scroll actions...");
-    
-    const scrapeResponse = await fetch(`${FIRECRAWL_API_URL}/scrape`, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${firecrawlApiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        url: `${PROVIDENT_BASE_URL}/developers/`,
-        formats: ["html"],
-        onlyMainContent: false,
-        waitFor: 3000,
-        timeout: 180000,
-        actions: [
-          { type: "wait", milliseconds: 3000 },
-          { type: "scroll", direction: "down", amount: 1000 },
-          { type: "wait", milliseconds: 3000 },
-          { type: "scroll", direction: "down", amount: 1000 },
-          { type: "wait", milliseconds: 3000 },
-          { type: "scroll", direction: "down", amount: 1000 },
-          { type: "wait", milliseconds: 3000 },
-          { type: "scroll", direction: "down", amount: 1000 },
-          { type: "wait", milliseconds: 3000 },
-          { type: "scroll", direction: "down", amount: 1000 },
-          { type: "wait", milliseconds: 3000 },
-          { type: "scroll", direction: "down", amount: 1000 },
-          { type: "wait", milliseconds: 3000 },
-          { type: "scroll", direction: "down", amount: 1000 },
-          { type: "wait", milliseconds: 3000 },
-          { type: "scroll", direction: "down", amount: 1000 },
-          { type: "wait", milliseconds: 3000 },
-          { type: "scroll", direction: "down", amount: 1000 },
-          { type: "wait", milliseconds: 3000 },
-          { type: "scroll", direction: "down", amount: 1000 },
-          { type: "wait", milliseconds: 3000 },
-          { type: "scroll", direction: "down", amount: 1000 },
-          { type: "wait", milliseconds: 3000 },
-          { type: "scroll", direction: "down", amount: 1000 },
-          { type: "wait", milliseconds: 3000 },
-          { type: "scroll", direction: "down", amount: 1000 },
-          { type: "wait", milliseconds: 3000 },
-          { type: "scroll", direction: "down", amount: 1000 },
-          { type: "wait", milliseconds: 3000 },
-          { type: "scroll", direction: "down", amount: 1000 },
-          { type: "wait", milliseconds: 3000 },
-          { type: "scroll", direction: "down", amount: 1000 },
-          { type: "wait", milliseconds: 3000 },
-          { type: "scroll", direction: "down", amount: 1000 },
-          { type: "wait", milliseconds: 3000 },
-          { type: "scroll", direction: "down", amount: 1000 },
-          { type: "wait", milliseconds: 3000 },
-          { type: "scroll", direction: "down", amount: 1000 },
-          { type: "wait", milliseconds: 3000 },
-          { type: "scroll", direction: "down", amount: 1000 },
-        ],
-      }),
-    });
-
-    if (!scrapeResponse.ok) {
-      const errorText = await scrapeResponse.text();
-      console.error("Firecrawl scrape error:", errorText);
-      throw new Error(`Firecrawl scrape failed: ${scrapeResponse.status}`);
-    }
-
-    const scrapeData = await scrapeResponse.json();
-    const html = scrapeData.data?.html || scrapeData.html || "";
-    console.log(`📊 Scraped ${html.length} bytes with scroll actions`);
-
-    // Step 2: Parse ALL developers from scrolled page
-    const scrapedDevelopers = parseDeveloperCards(html);
-    console.log(`📊 Extracted ${scrapedDevelopers.size} developers with complete data`);
-
-    // Step 3: Convert to array
-    const allDevelopers = Array.from(scrapedDevelopers.values());
-
-    // Step 4: Clear existing and save new to database
-    console.log(`💾 Saving ${allDevelopers.length} developers to database...`);
-    
-    // Clear existing provident developers first
-    await supabase
-      .from("pending_developer_imports")
-      .delete()
-      .eq("source", "provident_estate");
-
-    const rows = allDevelopers.map((dev) => ({
-      name: dev.name,
-      slug: dev.slug,
-      description: dev.description,
-      feature_image_url: dev.feature_image_url,
-      logo_url: dev.logo_url,
-      provident_link: dev.provident_link,
-      source: "provident_estate",
-      status: "pending",
-      extracted_at: new Date().toISOString(),
-    }));
-
-    const { error: upsertError } = await supabase
-      .from("pending_developer_imports")
-      .upsert(rows, {
-        onConflict: "slug",
-        ignoreDuplicates: false,
-      });
-
-    if (upsertError) throw new Error(`Failed to store: ${upsertError.message}`);
-
-    // Log the extraction job
-    await supabase.from("extraction_job_logs").insert({
-      source_id: null,
-      job_type: "developer_extraction",
-      status: "completed",
-      started_at: new Date().toISOString(),
-      completed_at: new Date().toISOString(),
-      records_found: allDevelopers.length,
-      records_matched: allDevelopers.filter(d => d.feature_image_url && d.logo_url).length,
-      records_pending: allDevelopers.length,
-      metadata: { source: "provident_estate", version: "v22-deep-scroll" },
-    });
-
-    console.log(`✅ Successfully extracted ${allDevelopers.length} developers with complete media`);
-
-    return new Response(
-      JSON.stringify({
-        success: true,
-        message: `Extracted ${allDevelopers.length} developers`,
-        count: allDevelopers.length,
-        developers: allDevelopers.slice(0, 30).map(d => ({ name: d.name, hasImage: !!d.feature_image_url, hasLogo: !!d.logo_url })),
-      }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
-  } catch (error: unknown) {
-    console.error("❌ Error:", error);
-    return new Response(
-      JSON.stringify({ success: false, error: error instanceof Error ? error.message : "Unknown error" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
-  }
-});
+ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+ 
+ const corsHeaders = {
+   "Access-Control-Allow-Origin": "*",
+   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+ };
+ 
+ const PROVIDENT_BASE_URL = "https://providentestate.com";
+ const FIRECRAWL_API_URL = "https://api.firecrawl.dev/v1";
+ 
+ function slugify(name: string): string {
+   return name.toLowerCase().replace(/[&]/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+ }
+ 
+ function normalizeUrl(url: string): string {
+   const trimmed = url?.trim() ?? "";
+   if (!trimmed) return "";
+   if (trimmed.startsWith("//")) return `https:${trimmed}`;
+   if (trimmed.startsWith("/")) return `${PROVIDENT_BASE_URL}${trimmed}`;
+   return trimmed;
+ }
+ 
+ function decodeHtmlEntities(input: string): string {
+   return input.replace(/&amp;nbsp;/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&")
+     .replace(/&#x27;/g, "'").replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+ }
+ 
+ serve(async (req) => {
+   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+ 
+   try {
+     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+     const firecrawlApiKey = Deno.env.get("FIRECRAWL_API_KEY");
+     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+ 
+     console.log("🔄 Starting v24: MAP all developer pages, then scrape each");
+ 
+     if (!firecrawlApiKey) throw new Error("FIRECRAWL_API_KEY not configured");
+ 
+     // Step 1: MAP entire site for developer URLs
+     console.log("🗺️ Mapping providentestate.com for developer pages...");
+     const mapRes = await fetch(`${FIRECRAWL_API_URL}/map`, {
+       method: "POST",
+       headers: { "Authorization": `Bearer ${firecrawlApiKey}`, "Content-Type": "application/json" },
+       body: JSON.stringify({ url: PROVIDENT_BASE_URL, search: "developed-by", limit: 5000 }),
+     });
+ 
+     if (!mapRes.ok) throw new Error(`Map failed: ${mapRes.status}`);
+     const mapData = await mapRes.json();
+     const devUrls = [...new Set((mapData.data?.links || []).filter((u: string) => 
+       u.includes("/developed-by-") && !u.includes("?") && !u.includes("#")
+     ))];
+     
+     console.log(`📊 Found ${devUrls.length} developer URLs`);
+     if (devUrls.length === 0) throw new Error("No developer URLs found");
+ 
+     // Step 2: Scrape each page
+     const developers = new Map();
+     for (let i = 0; i < devUrls.length; i++) {
+       const url = devUrls[i];
+       console.log(`[${i + 1}/${devUrls.length}] ${url}`);
+       
+       const scrapeRes = await fetch(`${FIRECRAWL_API_URL}/scrape`, {
+         method: "POST",
+         headers: { "Authorization": `Bearer ${firecrawlApiKey}`, "Content-Type": "application/json" },
+         body: JSON.stringify({ url, formats: ["html"], onlyMainContent: false, waitFor: 2000 }),
+       });
+ 
+       if (!scrapeRes.ok) { console.error(`Failed: ${url}`); continue; }
+       const html = (await scrapeRes.json()).data?.html || "";
+       
+       const nameMatch = html.match(/<h1[^>]*>([^<]+)<\/h1>/i);
+       const name = nameMatch ? decodeHtmlEntities(nameMatch[1]).trim() : "";
+       if (!name || name.length < 3) continue;
+       
+       const slug = slugify(name);
+       const logoMatch = html.match(/<img[^>]*(?:class="[^"]*logo|src="[^"]*logo)[^>]*src="([^"]+)"/i);
+       const featureMatch = html.match(/<img[^>]*(?:class="[^"]*(?:banner|hero)|src="[^"]*banner)[^>]*src="([^"]+)"/i);
+       const descMatch = html.match(/<p[^>]*>([\s\S]{20,500}?)<\/p>/i);
+       
+       developers.set(slug, {
+         name, slug,
+         description: descMatch ? decodeHtmlEntities(descMatch[1]).replace(/<[^>]+>/g, "").trim().substring(0, 500) : "",
+         feature_image_url: featureMatch ? normalizeUrl(featureMatch[1]) : "",
+         logo_url: logoMatch ? normalizeUrl(logoMatch[1]) : "",
+         provident_link: url,
+         display_order: i + 1,
+       });
+       
+       await new Promise(r => setTimeout(r, 500));
+     }
+ 
+     const allDevs = Array.from(developers.values());
+     console.log(`✅ Extracted ${allDevs.length} developers`);
+ 
+     // Save to DB
+     await supabase.from("pending_developer_imports").delete().eq("source", "provident_estate");
+     const { error } = await supabase.from("pending_developer_imports").upsert(
+       allDevs.map(d => ({ ...d, source: "provident_estate", status: "pending", extracted_at: new Date().toISOString() })),
+       { onConflict: "slug" }
+     );
+     if (error) throw error;
+ 
+     await supabase.from("extraction_job_logs").insert({
+       source_id: null, job_type: "developer_extraction", status: "completed",
+       started_at: new Date().toISOString(), completed_at: new Date().toISOString(),
+       records_found: allDevs.length, records_matched: allDevs.filter(d => d.feature_image_url && d.logo_url).length,
+       records_pending: allDevs.length, metadata: { source: "provident_estate", version: "v24-map-strategy" },
+     });
+ 
+     return new Response(JSON.stringify({ success: true, message: `Extracted ${allDevs.length} developers`, count: allDevs.length }), 
+       { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+   } catch (error: unknown) {
+     console.error("❌", error);
+     return new Response(JSON.stringify({ success: false, error: error instanceof Error ? error.message : "Unknown error" }),
+       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+   }
+ });
