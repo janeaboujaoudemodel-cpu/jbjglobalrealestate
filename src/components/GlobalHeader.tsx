@@ -147,13 +147,13 @@ const GlobalHeader = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button 
-          className={`flex items-center gap-0.5 px-1.5 lg:px-2 xl:px-2.5 2xl:px-3 py-1 lg:py-1.5 text-[9px] lg:text-[10px] xl:text-[10px] 2xl:text-[11px] font-bold whitespace-nowrap transition-all rounded-full ${
+          className={`flex items-center gap-0.5 px-2 xl:px-2.5 2xl:px-3 py-1.5 text-[10px] xl:text-[10px] 2xl:text-[11px] font-bold whitespace-nowrap transition-all rounded-full ${
             isActiveCheck?.() ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
           }`}
           style={{ letterSpacing: '0.03em' }}
         >
           {label}
-          <ChevronDown className="w-2 h-2 lg:w-2.5 lg:h-2.5 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+          <ChevronDown className="w-2.5 h-2.5 transition-transform duration-200 group-data-[state=open]:rotate-180" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
@@ -187,7 +187,7 @@ const GlobalHeader = () => {
   );
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[9999] h-24 lg:h-28">
+    <header className="fixed top-0 left-0 right-0 z-[9999] h-20 sm:h-24 xl:h-28">
       {/* Ultra Premium Multi-Layer Background */}
       <div 
         className="absolute inset-0"
@@ -222,12 +222,12 @@ const GlobalHeader = () => {
         }}
       />
       
-      <div className="relative z-10 mx-auto w-full max-w-[1500px] px-4 sm:px-6 lg:px-10 xl:px-14 h-full">
-        <div className="flex items-center justify-between h-full w-full">
-          {/* LEFT: Premium Brand Logo */}
+      <div className="relative z-10 mx-auto w-full max-w-[1500px] px-3 sm:px-4 md:px-6 xl:px-10 2xl:px-14 h-full">
+        <div className="flex items-center justify-between h-full w-full gap-2 sm:gap-4">
+          {/* LEFT: Premium Brand Logo - scales responsively without overlapping */}
           <Link 
             to="/" 
-            className="flex items-center gap-3 sm:gap-4 shrink-0 group transition-all duration-300"
+            className="flex items-center gap-2 sm:gap-3 xl:gap-4 shrink-0 group transition-all duration-300 min-w-0"
             style={{ fontFamily: "Poppins, sans-serif" }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
@@ -244,16 +244,16 @@ const GlobalHeader = () => {
               <img 
                 src={jbjMonogramDarkBg} 
                 alt="JBJ" 
-                className="w-16 h-16 sm:w-16 sm:h-16 lg:w-14 lg:h-14 object-contain transition-transform duration-300 group-hover:scale-110 relative z-10"
+                className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 xl:w-16 xl:h-16 object-contain transition-transform duration-300 group-hover:scale-110 relative z-10"
                 style={{
                   filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5)) drop-shadow(0 0 20px rgba(200,167,102,0.15))'
                 }}
               />
             </div>
-            {/* Premium Typography */}
-            <div className="flex flex-col">
+            {/* Premium Typography - hidden on tablet, visible on mobile and desktop */}
+            <div className="flex flex-col min-w-0">
               <span 
-                className="font-bold text-base sm:text-lg lg:text-sm tracking-[0.15em] uppercase whitespace-nowrap leading-none"
+                className="font-bold text-sm sm:text-base md:hidden xl:block xl:text-sm tracking-[0.1em] sm:tracking-[0.15em] uppercase whitespace-nowrap leading-none truncate"
                 style={{
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 30%, #C8A766 70%, #D4AF37 100%)',
                   WebkitBackgroundClip: 'text',
@@ -265,7 +265,7 @@ const GlobalHeader = () => {
                 JBJ Global Real Estate
               </span>
               <span 
-                className="hidden lg:block text-[9px] tracking-[0.25em] uppercase mt-1"
+                className="hidden xl:block text-[9px] tracking-[0.25em] uppercase mt-1"
                 style={{
                   background: 'linear-gradient(90deg, #C8A766 0%, #D4AF37 50%, #C8A766 100%)',
                   WebkitBackgroundClip: 'text',
@@ -277,8 +277,8 @@ const GlobalHeader = () => {
             </div>
           </Link>
 
-          {/* MOBILE RIGHT ICONS: Menu only - visible on mobile only */}
-          <div className="flex items-center gap-1 ml-auto lg:hidden">
+          {/* MOBILE/TABLET RIGHT ICONS: Menu only - visible below xl breakpoint */}
+          <div className="flex items-center gap-1 ml-auto xl:hidden shrink-0">
             {/* Mobile Menu Trigger */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
@@ -573,10 +573,10 @@ const GlobalHeader = () => {
             </Sheet>
           </div>
 
-          {/* CENTER: Ultra Premium Desktop Navigation */}
-          <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 mx-2 xl:mx-4">
+          {/* CENTER: Ultra Premium Desktop Navigation - Only visible on xl and above */}
+          <nav className="hidden xl:flex items-center justify-center flex-1 min-w-0 mx-2 2xl:mx-4">
             <div 
-              className="flex items-center gap-0.5 lg:gap-1 xl:gap-1.5 2xl:gap-2 rounded-full px-3 lg:px-4 xl:px-6 2xl:px-8 py-2 border-2 border-gold/40 relative"
+              className="flex items-center gap-0.5 xl:gap-1 2xl:gap-1.5 rounded-full px-4 xl:px-5 2xl:px-8 py-2 border-2 border-gold/40 relative"
               style={{
                 background: 'linear-gradient(135deg, rgba(245,235,215,0.98) 0%, rgba(232,220,200,0.95) 50%, rgba(212,196,168,0.98) 100%)',
                 boxShadow: '0 8px 32px -8px rgba(0,0,0,0.4), 0 0 0 1px rgba(200,167,102,0.2), inset 0 2px 0 rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.05), 0 0 40px -10px rgba(200,167,102,0.2)',
@@ -586,7 +586,7 @@ const GlobalHeader = () => {
               {/* 1. Home - No dropdown */}
               <Link
                 to="/"
-                className={`px-1.5 lg:px-2 xl:px-2.5 2xl:px-3 py-1 lg:py-1.5 text-[9px] lg:text-[10px] xl:text-[10px] 2xl:text-[11px] font-bold whitespace-nowrap transition-all relative group rounded-full ${
+                className={`px-2 xl:px-2.5 2xl:px-3 py-1.5 text-[10px] xl:text-[10px] 2xl:text-[11px] font-bold whitespace-nowrap transition-all relative group rounded-full ${
                   isActive("/")
                     ? "text-gold bg-gold/15"
                     : "text-zinc-800 hover:text-gold hover:bg-gold/10"
@@ -630,7 +630,7 @@ const GlobalHeader = () => {
               {/* 9. Contact - No dropdown */}
               <Link
                 to="/contact"
-                className={`px-1.5 lg:px-2 xl:px-2.5 2xl:px-3 py-1 lg:py-1.5 text-[9px] lg:text-[10px] xl:text-[10px] 2xl:text-[11px] font-bold whitespace-nowrap transition-all relative group rounded-full ${
+                className={`px-2 xl:px-2.5 2xl:px-3 py-1.5 text-[10px] xl:text-[10px] 2xl:text-[11px] font-bold whitespace-nowrap transition-all relative group rounded-full ${
                   isActive("/contact")
                     ? "text-gold bg-gold/15"
                     : "text-zinc-800 hover:text-gold hover:bg-gold/10"
@@ -647,8 +647,8 @@ const GlobalHeader = () => {
             </div>
           </nav>
 
-          {/* RIGHT: Premium Action Icons - Desktop only */}
-          <div className="hidden lg:flex items-center gap-2 shrink-0">
+          {/* RIGHT: Premium Action Icons - Only visible on xl and above */}
+          <div className="hidden xl:flex items-center gap-2 shrink-0">
             {/* Premium Icon Container */}
             <div 
               className="flex items-center gap-1 px-4 py-2 rounded-full border border-gold/30"
