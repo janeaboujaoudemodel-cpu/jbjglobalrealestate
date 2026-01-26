@@ -10,7 +10,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface LanguageSwitcherProps {
-  variant?: 'default' | 'compact' | 'icon-only';
+  variant?: 'default' | 'compact' | 'icon-only' | 'mobile';
 }
 
 const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
@@ -19,19 +19,31 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
 
   const isCompact = variant === 'compact';
   const isIconOnly = variant === 'icon-only';
+  const isMobile = variant === 'mobile';
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        {isIconOnly ? (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="flex flex-col items-center justify-center gap-1.5 h-auto min-h-[48px] min-w-[60px] px-3 py-2 bg-transparent hover:bg-gold/10 border-0 rounded-lg transition-all duration-200 group cursor-pointer"
+        {isMobile ? (
+          <button
+            type="button"
+            className="flex flex-col items-center gap-1.5 text-black hover:text-gold py-2 px-3 transition-colors"
+            aria-label={t('header.language')}
           >
-            <Globe className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
-            <span className="text-[9px] text-black font-medium group-hover:text-gold transition-colors">Select Language</span>
-          </Button>
+            <Globe className="w-5 h-5 text-black pointer-events-none" />
+            <span className="text-[9px] text-black font-medium pointer-events-none">Select Language</span>
+          </button>
+        ) : isIconOnly ? (
+          <button
+            type="button"
+            className="w-8 h-8 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
+            aria-label={t('header.language')}
+          >
+            <Globe
+              className="w-4 h-4 text-gold group-hover:text-white group-hover:scale-110 transition-all duration-300"
+              style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }}
+            />
+          </button>
         ) : isCompact ? (
           <button
             type="button"
@@ -54,7 +66,7 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
       <DropdownMenuContent 
         align="end" 
         sideOffset={12}
-        className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 min-w-[200px] rounded-xl shadow-2xl shadow-black/20 p-0 overflow-hidden"
+        className="z-[9999] bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 min-w-[200px] rounded-xl shadow-2xl shadow-black/20 p-0 overflow-hidden"
       >
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
         <ScrollArea className="h-[320px]">
