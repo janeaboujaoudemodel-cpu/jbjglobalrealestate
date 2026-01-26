@@ -99,19 +99,19 @@ const DeveloperPartnersMarquee = () => {
 
     const sizeClass = (() => {
       switch (developer.slug) {
-        // Slightly smaller (was visually larger than Meraas)
+        // Smaller logos (user requested)
         case "damac":
         case "emaar":
         case "majid-al-futtaim":
-          return `h-5 md:h-9 lg:h-11 ${base}`;
+          return `h-4 md:h-7 lg:h-9 ${base}`;
 
-        // Slightly bigger (was visually smaller)
-        case "ellington-properties":
-          return `h-6 md:h-11 lg:h-[52px] ${base}`;
+        // Bigger logos (user requested)
         case "danube-properties":
-          return `h-6 md:h-11 lg:h-12 ${base}`;
+        case "nakheel":
+        case "meraas":
+          return `h-6 md:h-12 lg:h-14 ${base}`;
 
-        // Reference sizing (Meraas + most others)
+        // Standard sizing for all others
         default:
           return `h-5 md:h-10 lg:h-12 ${base}`;
       }
