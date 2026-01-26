@@ -12,6 +12,7 @@ interface AdminBypassProps {
 
 // Routes that are publicly accessible without any authentication
 const PUBLIC_ROUTES = [
+  "/",           // Coming Soon landing page - public
   "/auth",       // Authentication page - always accessible
   "/card",       // Digital business card - public
 ];
