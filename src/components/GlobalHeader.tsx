@@ -159,13 +159,13 @@ const GlobalHeader = () => {
 
   const isActive = (path: string) => location.pathname === path;
 
-  // Render dropdown menu helper - Premium styling (no box, text on dark header)
+  // Render dropdown menu helper - Premium styling with pill background
   const renderDropdown = (label: string, links: typeof propertiesLinks, isActiveCheck?: () => boolean) => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button 
-          className={`flex items-center gap-0.5 px-2 xl:px-2.5 2xl:px-3 py-1.5 text-[10px] xl:text-[10px] 2xl:text-[11px] font-bold whitespace-nowrap transition-all ${
-            isActiveCheck?.() ? 'text-gold' : 'text-champagne-light hover:text-gold'
+          className={`flex items-center gap-0.5 px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all rounded-full ${
+            isActiveCheck?.() ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
           }`}
           style={{ letterSpacing: '0.03em' }}
         >
@@ -204,7 +204,7 @@ const GlobalHeader = () => {
   );
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[9999] h-20 sm:h-24 lg:h-28">
+    <header className="fixed top-0 left-0 right-0 z-[9999] h-20 sm:h-24 lg:h-28 overflow-hidden">
       {/* Ultra Premium Multi-Layer Background */}
       <div 
         className="absolute inset-0"
@@ -237,60 +237,68 @@ const GlobalHeader = () => {
         }}
       />
       
-      <div className="relative z-10 mx-auto w-full max-w-[1500px] px-3 sm:px-4 md:px-6 xl:px-10 2xl:px-14 h-full">
-        <div className="flex items-center justify-between h-full w-full gap-2 sm:gap-4">
-          {/* LEFT: Premium Brand Logo - scales responsively without overlapping */}
-          <Link 
-            to="/" 
-            className="flex items-center gap-2 sm:gap-3 xl:gap-4 shrink-0 group transition-all duration-300 min-w-0"
-            style={{ fontFamily: "Poppins, sans-serif" }}
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          >
-            <div className="relative shrink-0">
-              {/* Logo glow backdrop */}
-              <div 
-                className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                style={{
-                  background: 'radial-gradient(circle, rgba(200,167,102,0.3) 0%, transparent 70%)',
-                  transform: 'scale(1.5)',
-                  filter: 'blur(10px)'
-                }}
-              />
-              <img 
-                src={jbjMonogramDarkBg} 
-                alt="JBJ" 
-                className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 xl:w-16 xl:h-16 object-contain relative z-10"
-                style={{
-                  filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5)) drop-shadow(0 0 20px rgba(200,167,102,0.15))'
-                }}
-              />
-            </div>
-            {/* Premium Typography - visible on mobile, tablet (md), and desktop (xl) */}
-            <div className="flex flex-col min-w-0">
-              <span 
-                className="font-bold text-sm sm:text-base xl:text-sm tracking-[0.1em] sm:tracking-[0.15em] uppercase whitespace-nowrap leading-none truncate"
-                style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 30%, #C8A766 70%, #D4AF37 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  textShadow: '0 2px 10px rgba(200,167,102,0.3)',
-                  filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))'
-                }}
-              >
-                JBJ Global Real Estate
-              </span>
-              <span 
-                className="hidden xl:block text-[9px] tracking-[0.25em] uppercase mt-1"
-                style={{
-                  background: 'linear-gradient(90deg, #C8A766 0%, #D4AF37 50%, #C8A766 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
-                Excellence in Real Estate
-              </span>
-            </div>
-          </Link>
+      {/* LOCKED HEADER CONTENT - scales uniformly, never overlaps */}
+      <div 
+        className="relative z-10 h-full flex items-center justify-between px-4 xl:px-8 2xl:px-12 origin-center"
+        style={{
+          /* Scale down uniformly when viewport shrinks - locked layout */
+          transform: 'scale(clamp(0.65, calc(0.5 + (100vw - 600px) / 1000), 1))',
+          transformOrigin: 'center center',
+          minWidth: 'max-content',
+        }}
+      >
+        {/* LEFT: Premium Brand Logo - LOCKED */}
+        <Link 
+          to="/" 
+          className="flex items-center gap-3 xl:gap-4 shrink-0 group transition-all duration-300"
+          style={{ fontFamily: "Poppins, sans-serif" }}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        >
+          <div className="relative shrink-0">
+            {/* Logo glow backdrop */}
+            <div 
+              className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+              style={{
+                background: 'radial-gradient(circle, rgba(200,167,102,0.3) 0%, transparent 70%)',
+                transform: 'scale(1.5)',
+                filter: 'blur(10px)'
+              }}
+            />
+            <img 
+              src={jbjMonogramDarkBg} 
+              alt="JBJ" 
+              className="w-12 h-12 md:w-14 md:h-14 xl:w-16 xl:h-16 object-contain relative z-10"
+              style={{
+                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5)) drop-shadow(0 0 20px rgba(200,167,102,0.15))'
+              }}
+            />
+          </div>
+          {/* Premium Typography - always visible on desktop */}
+          <div className="flex flex-col shrink-0">
+            <span 
+              className="font-bold text-sm xl:text-base tracking-[0.12em] uppercase whitespace-nowrap leading-none"
+              style={{
+                background: 'linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 30%, #C8A766 70%, #D4AF37 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                textShadow: '0 2px 10px rgba(200,167,102,0.3)',
+                filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))'
+              }}
+            >
+              JBJ Global Real Estate
+            </span>
+            <span 
+              className="text-[9px] tracking-[0.25em] uppercase mt-1"
+              style={{
+                background: 'linear-gradient(90deg, #C8A766 0%, #D4AF37 50%, #C8A766 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              Excellence in Real Estate
+            </span>
+          </div>
+        </Link>
 
           {/* TOUCH DEVICES: Menu only (do NOT depend on viewport width) */}
           {isTouchLayout && (
@@ -568,106 +576,73 @@ const GlobalHeader = () => {
             </div>
           )}
 
-          {/* DESKTOP (non-touch): Keep desktop header even in narrow iframes/zoom */}
+          {/* DESKTOP (non-touch): LOCKED navigation pill - never overlaps */}
           {!isTouchLayout && (
-            <nav className="flex items-center justify-center flex-1 min-w-0 mx-2 2xl:mx-4">
-              {/* Use CSS scale to shrink uniformly in narrow viewports - no cropping */}
+            <nav className="shrink-0 mx-4 xl:mx-6">
               <div 
-                className="flex items-center gap-0.5 xl:gap-1 2xl:gap-1.5 px-3 xl:px-4 2xl:px-6 py-1.5 xl:py-2 origin-center"
+                className="flex items-center gap-0.5 xl:gap-1 rounded-full px-4 xl:px-6 py-2 border-2 border-gold/40"
                 style={{
-                  transform: 'scale(var(--nav-scale, 1))',
+                  background: 'linear-gradient(135deg, rgba(245,235,215,0.98) 0%, rgba(232,220,200,0.95) 50%, rgba(212,196,168,0.98) 100%)',
+                  boxShadow: '0 8px 32px -8px rgba(0,0,0,0.4), 0 0 0 1px rgba(200,167,102,0.2), inset 0 2px 0 rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.05)',
                 }}
               >
-              
-              {/* 1. Home - No dropdown */}
-               <Link
-                to="/"
-                className={`px-2 xl:px-2.5 2xl:px-3 py-1.5 text-[10px] xl:text-[10px] 2xl:text-[11px] font-bold whitespace-nowrap transition-all relative group ${
-                  isActive("/")
-                    ? "text-gold"
-                    : "text-champagne-light hover:text-gold"
-                }`}
-                style={{ letterSpacing: '0.03em' }}
-              >
-                Home
-              </Link>
+                {/* Home */}
+                <Link
+                  to="/"
+                  className={`px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all rounded-full ${
+                    isActive("/") ? "text-gold bg-gold/15" : "text-zinc-800 hover:text-gold hover:bg-gold/10"
+                  }`}
+                  style={{ letterSpacing: '0.03em' }}
+                >
+                  Home
+                </Link>
 
-              {/* Separator */}
-              <span className="text-gold/40 text-[10px]">|</span>
+                {renderDropdown("Properties", propertiesLinks, () => location.pathname === '/properties')}
+                {renderDropdown("Services", servicesLinks, () => location.pathname.startsWith('/services'))}
+                {renderDropdown("Guides", guidesLinks, () => 
+                  ['/buyer-guide', '/seller-guide', '/landlord-guide', '/tenant-guide', '/areas', '/faq', '/investor-education', '/investor-faq', '/broker-faq'].some(p => location.pathname.startsWith(p))
+                )}
+                {renderDropdown("Market Intel", marketIntelLinks, () => 
+                  location.pathname.startsWith('/market-intelligence') || location.pathname === '/market-report'
+                )}
+                {renderDropdown("Investor Hub", investorHubLinks, () => 
+                  location.pathname.includes('ai-hub') || location.pathname === '/favorites'
+                )}
+                {renderDropdown("Broker Hub", brokerHubLinks, () => 
+                  location.pathname.includes('broker-toolkit') || location.pathname.includes('broker-education')
+                )}
+                {renderDropdown("About", aboutLinks, () => 
+                  ['/about', '/founder', '/team', '/awards'].some(p => location.pathname.startsWith(p))
+                )}
 
-              {/* 2. Properties Dropdown */}
-              {renderDropdown("Properties", propertiesLinks, () => location.pathname === '/properties')}
+                <Link
+                  to="/contact"
+                  className={`px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all rounded-full ${
+                    isActive("/contact") ? "text-gold bg-gold/15" : "text-zinc-800 hover:text-gold hover:bg-gold/10"
+                  }`}
+                  style={{ letterSpacing: '0.03em' }}
+                >
+                  Contact
+                </Link>
 
-              <span className="text-gold/40 text-[10px]">|</span>
-
-              {/* 3. Services Dropdown */}
-              {renderDropdown("Services", servicesLinks, () => location.pathname.startsWith('/services'))}
-
-              <span className="text-gold/40 text-[10px]">|</span>
-
-              {/* 4. Guides Dropdown */}
-              {renderDropdown("Guides", guidesLinks, () => 
-                ['/buyer-guide', '/seller-guide', '/landlord-guide', '/tenant-guide', '/areas', '/faq', '/investor-education', '/investor-faq', '/broker-faq'].some(p => location.pathname.startsWith(p))
-              )}
-
-              <span className="text-gold/40 text-[10px]">|</span>
-
-              {/* 5. Market Intelligence Dropdown */}
-              {renderDropdown("Market Intelligence", marketIntelLinks, () => 
-                location.pathname.startsWith('/market-intelligence') || location.pathname === '/market-report'
-              )}
-
-              <span className="text-gold/40 text-[10px]">|</span>
-
-              {/* 6. Investor Hub Dropdown */}
-              {renderDropdown("Investor Hub", investorHubLinks, () => 
-                location.pathname.includes('ai-hub') || location.pathname === '/favorites'
-              )}
-
-              <span className="text-gold/40 text-[10px]">|</span>
-
-              {/* 7. Broker Hub Dropdown */}
-              {renderDropdown("Broker Hub", brokerHubLinks, () => 
-                location.pathname.includes('broker-toolkit') || location.pathname.includes('broker-education')
-              )}
-
-              <span className="text-gold/40 text-[10px]">|</span>
-
-              {/* 8. About Dropdown */}
-              {renderDropdown("About", aboutLinks, () => 
-                ['/about', '/founder', '/team', '/awards'].some(p => location.pathname.startsWith(p))
-              )}
-
-              <span className="text-gold/40 text-[10px]">|</span>
-
-              {/* 9. Contact - No dropdown */}
-              <Link
-                to="/contact"
-                className={`px-2 xl:px-2.5 2xl:px-3 py-1.5 text-[10px] xl:text-[10px] 2xl:text-[11px] font-bold whitespace-nowrap transition-all relative group ${
-                  isActive("/contact")
-                    ? "text-gold"
-                    : "text-champagne-light hover:text-gold"
-                }`}
-                style={{ letterSpacing: '0.03em' }}
-              >
-                Contact
-              </Link>
-
-              <span className="text-gold/40 text-[10px]">|</span>
-
-              {/* 10. More Dropdown */}
-              {renderDropdown("More", moreLinks, () => 
-                ['/news', '/join'].some(p => location.pathname.startsWith(p))
-              )}
+                {renderDropdown("More", moreLinks, () => 
+                  ['/news', '/join'].some(p => location.pathname.startsWith(p))
+                )}
               </div>
             </nav>
           )}
 
           {!isTouchLayout && (
-            <div className="flex items-center gap-3 shrink-0">
-              {/* Search Icon - no box */}
+            <div 
+              className="flex items-center gap-1 px-4 py-2 rounded-full border border-gold/30 shrink-0"
+              style={{
+                background: 'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(20,20,20,0.9) 100%)',
+                boxShadow: '0 4px 16px -4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05), 0 0 30px -10px rgba(200,167,102,0.15)'
+              }}
+            >
+              {/* Search Icon */}
               <button
-                className="w-8 h-8 flex items-center justify-center transition-all duration-300 group"
+                className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
                 onClick={() => setSearchOpen(true)}
                 aria-label="Search"
               >
@@ -677,8 +652,14 @@ const GlobalHeader = () => {
                 />
               </button>
 
-              {/* Language Switcher - no box */}
+              {/* Divider */}
+              <div className="w-px h-5 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+
+              {/* Language Switcher */}
               <LanguageSwitcher variant="icon-only" />
+
+              {/* Divider */}
+              <div className="w-px h-5 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
 
               {/* Account Icon */}
               <div className="w-9 h-9 flex items-center justify-center">
@@ -850,7 +831,6 @@ const GlobalHeader = () => {
               </div>
             </div>
           )}
-        </div>
       </div>
 
       {/* Global Search Modal */}
