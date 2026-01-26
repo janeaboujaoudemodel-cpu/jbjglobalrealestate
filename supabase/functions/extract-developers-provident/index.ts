@@ -119,15 +119,16 @@ serve(async (req) => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     console.log(`🔄 Starting Provident Developers Extraction v20 (Map + Scrape)...`);
+    console.log(`🔄 Starting Provident Developers Extraction v21 (Enhanced Scroll)...`);
 
     if (!firecrawlApiKey) {
       throw new Error("FIRECRAWL_API_KEY not configured");
     }
 
-    // Step 1: Use Firecrawl MAP to discover all developer URLs
-    console.log("📡 Mapping all developer URLs...");
+    // Step 1: Use Firecrawl with scroll actions to load ALL developers
+    console.log("📡 Scraping developers page with scroll actions...");
     
-    const mapResponse = await fetch(`${FIRECRAWL_API_URL}/map`, {
+    const scrapeResponse = await fetch(`${FIRECRAWL_API_URL}/scrape`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${firecrawlApiKey}`,
@@ -135,92 +136,50 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         url: `${PROVIDENT_BASE_URL}/developers/`,
-        search: "developed-by",
-        limit: 500,
-        includeSubdomains: false,
+        formats: ["html"],
+        onlyMainContent: false,
+        waitFor: 3000,
+        timeout: 90000,
+        actions: [
+          { type: "wait", milliseconds: 3000 },
+          { type: "scroll", direction: "down", amount: 1000 },
+          { type: "wait", milliseconds: 3000 },
+          { type: "scroll", direction: "down", amount: 1000 },
+          { type: "wait", milliseconds: 3000 },
+          { type: "scroll", direction: "down", amount: 1000 },
+          { type: "wait", milliseconds: 3000 },
+          { type: "scroll", direction: "down", amount: 1000 },
+          { type: "wait", milliseconds: 3000 },
+          { type: "scroll", direction: "down", amount: 1000 },
+          { type: "wait", milliseconds: 3000 },
+          { type: "scroll", direction: "down", amount: 1000 },
+          { type: "wait", milliseconds: 3000 },
+          { type: "scroll", direction: "down", amount: 1000 },
+          { type: "wait", milliseconds: 3000 },
+          { type: "scroll", direction: "down", amount: 1000 },
+        ],
       }),
     });
 
-    if (!mapResponse.ok) {
-      const errorText = await mapResponse.text();
-      console.error("Firecrawl MAP error:", errorText);
-      throw new Error(`Firecrawl MAP failed: ${mapResponse.status}`);
+    if (!scrapeResponse.ok) {
+      const errorText = await scrapeResponse.text();
+      console.error("Firecrawl scrape error:", errorText);
+      throw new Error(`Firecrawl scrape failed: ${scrapeResponse.status}`);
     }
 
-    const mapData = await mapResponse.json();
-    const allUrls: string[] = mapData.links || [];
-    
-    // Filter to only developer URLs
-    const developerUrls = allUrls.filter((url: string) => 
-      url.includes("/new-projects/developed-by-") || 
-      url.includes("/developers/")
-    );
-    
-    console.log(`📊 Found ${developerUrls.length} developer-related URLs`);
+    const scrapeData = await scrapeResponse.json();
+    const html = scrapeData.data?.html || scrapeData.html || "";
+    console.log(`📊 Scraped ${html.length} bytes with scroll actions`);
 
-    // Step 2: Also fetch the main developers page directly for initial data
-    console.log("📡 Fetching main developers page...");
-    const response = await fetch(`${PROVIDENT_BASE_URL}/developers/`, {
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-        "Accept-Language": "en-US,en;q=0.5",
-      },
-    });
-
-    const html = response.ok ? await response.text() : "";
-    console.log(`📊 Fetched ${html.length} bytes from main page`);
-
-    // Step 3: Parse developers from main page
+    // Step 2: Parse ALL developers from scrolled page
     const scrapedDevelopers = parseDeveloperCards(html);
-    console.log(`📊 Scraped ${scrapedDevelopers.size} developers from main page`);
+    console.log(`📊 Extracted ${scrapedDevelopers.size} developers with complete data`);
 
-    // Step 4: Extract developer names from URLs and add to collection
-    const allDevelopers: ProvidentDeveloper[] = [];
-    const seenSlugs = new Set<string>();
-    let displayOrder = 0;
+    // Step 3: Convert to array
+    const allDevelopers = Array.from(scrapedDevelopers.values());
 
-    // First add all scraped developers with full data
-    for (const [slug, dev] of scrapedDevelopers) {
-      if (!seenSlugs.has(slug)) {
-        displayOrder++;
-        dev.display_order = displayOrder;
-        allDevelopers.push(dev);
-        seenSlugs.add(slug);
-      }
-    }
-
-    // Then extract developer names from discovered URLs
-    for (const url of developerUrls) {
-      const match = url.match(/developed-by-([^\/]+)/);
-      if (match) {
-        const slug = match[1].replace(/\/$/, "");
-        if (!seenSlugs.has(slug)) {
-          // Convert slug to name
-          const name = slug
-            .split("-")
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(" ");
-          
-          displayOrder++;
-          allDevelopers.push({
-            name,
-            slug,
-            description: "",
-            feature_image_url: "",
-            logo_url: "",
-            provident_link: url,
-            display_order: displayOrder,
-          });
-          seenSlugs.add(slug);
-        }
-      }
-    }
-
-    console.log(`📊 Total unique developers: ${allDevelopers.length}`);
-
-    // Step 5: Clear existing and save new
-    await supabase.from("pending_developer_imports").delete().not("id", "is", null);
+    // Step 4: Save to database
+    console.log(`💾 Saving ${allDevelopers.length} developers to database...`);
 
     const rows = allDevelopers.map((dev) => ({
       name: dev.name,
@@ -250,19 +209,16 @@ serve(async (req) => {
       records_found: allDevelopers.length,
       records_matched: allDevelopers.filter(d => d.feature_image_url && d.logo_url).length,
       records_pending: allDevelopers.length,
-      metadata: { source: "provident_estate", version: "v20-map-scrape" },
+      metadata: { source: "provident_estate", version: "v21-scroll-enhanced" },
     });
 
-    const withFullData = allDevelopers.filter(d => d.feature_image_url && d.logo_url).length;
-    console.log(`✅ Extracted ${allDevelopers.length} developers (${withFullData} with full data)`);
+    console.log(`✅ Successfully extracted ${allDevelopers.length} developers with complete media`);
 
     return new Response(
       JSON.stringify({
         success: true,
         message: `Extracted ${allDevelopers.length} developers`,
         count: allDevelopers.length,
-        withFullData,
-        developerUrls: developerUrls.length,
         developers: allDevelopers.slice(0, 30).map(d => ({ name: d.name, hasImage: !!d.feature_image_url, hasLogo: !!d.logo_url })),
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
