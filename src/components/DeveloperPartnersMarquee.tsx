@@ -99,25 +99,25 @@ const DeveloperPartnersMarquee = () => {
 
     const sizeClass = (() => {
       switch (developer.slug) {
-        // Smaller logos (DAMAC is bold → reduce more)
+        // Smallest logos (DAMAC is very bold → reduce more aggressively)
         case "damac":
-          return `h-3 md:h-6 lg:h-8 ${base}`;
+          return `h-[10px] md:h-5 lg:h-6 ${base}`;
         case "emaar":
-          return `h-4 md:h-7 lg:h-9 ${base}`;
+          return `h-3 md:h-6 lg:h-8 ${base}`;
         case "majid-al-futtaim":
-          return `h-4 md:h-7 lg:h-8 ${base}`;
+          return `h-3 md:h-6 lg:h-7 ${base}`;
 
-        // Bigger logos (was visually smaller)
+        // Bigger logos (Danube especially needs to be larger)
         case "danube-properties":
-          return `h-6 md:h-[52px] lg:h-[60px] ${base}`;
+          return `h-8 md:h-14 lg:h-16 ${base}`;
         case "nakheel":
         case "meraas":
-          return `h-6 md:h-12 lg:h-14 ${base}`;
+          return `h-7 md:h-13 lg:h-[60px] ${base}`;
 
-        // Slightly bigger (user requested)
+        // Slightly bigger (Ellington + Select Group)
         case "ellington-properties":
         case "select-group":
-          return `h-5 md:h-11 lg:h-[52px] ${base}`;
+          return `h-6 md:h-12 lg:h-14 ${base}`;
 
         // Standard sizing for all others
         default:
