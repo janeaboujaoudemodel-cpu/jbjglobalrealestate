@@ -1,170 +1,42 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
-  Briefcase,
   Building2,
-  Calendar,
-  Crown,
-  Filter,
-  MapPin,
-  Search,
-  Star,
-  TrendingUp,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useDevelopers, useProjects } from "@/hooks/useProjects";
-import { SafeImage } from "@/components/SafeImage";
+import { useProjects, useCommunities, useDevelopers } from "@/hooks/useProjects";
+import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
+import ProjectFilters, { type FilterState } from "@/components/ProjectFilters";
+import ProjectCard from "@/components/ProjectCard";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 
 import developersHeroVideo from "@/assets/videos/dubai-landmarks-hero.mp4";
 
-// Elite developers (Master developers)
-const ELITE_DEVELOPERS = [
-  "emaar", "sobha", "meraas", "aldar", "nakheel", "omniyat"
-];
-
-// Premium developers
-const PREMIUM_DEVELOPERS = [
-  "ellington", "damac"
-];
-
-// Top Tier developers
-const TOP_TIER_DEVELOPERS = [
-  "binghatti", "majid-al-futtaim"
-];
-
-// Established developers
-const ESTABLISHED_DEVELOPERS = [
-  "danube", "azizi"
-];
-
-// Developer tier badges based on specific developer classification
-const getTierInfo = (slug: string | null) => {
-  const normalizedSlug = slug?.toLowerCase() || "";
-  
-  if (ELITE_DEVELOPERS.some(d => normalizedSlug.includes(d))) {
-    return {
-      label: "Elite",
-      badgeClassName: "bg-premium-card border border-gold/50 text-gold",
-      icon: Crown,
-    };
-  }
-  
-  if (PREMIUM_DEVELOPERS.some(d => normalizedSlug.includes(d))) {
-    return {
-      label: "Premium",
-      badgeClassName: "bg-premium-card border border-gold/35 text-primary-foreground",
-      icon: Star,
-    };
-  }
-  
-  if (TOP_TIER_DEVELOPERS.some(d => normalizedSlug.includes(d))) {
-    return {
-      label: "Top Tier",
-      badgeClassName: "bg-premium-card border border-gold/30 text-primary-foreground",
-      icon: TrendingUp,
-    };
-  }
-  
-  if (ESTABLISHED_DEVELOPERS.some(d => normalizedSlug.includes(d))) {
-    return {
-      label: "Established",
-      badgeClassName: "bg-premium-card border border-gold/25 text-primary-foreground",
-      icon: Briefcase,
-    };
-  }
-  
-  return {
-    label: "Developer",
-    badgeClassName: "bg-premium-card border border-gold/20 text-primary-foreground",
-    icon: Building2,
-  };
-};
-
-// Format large numbers
-const formatNumber = (num: number | null) => {
-  if (!num) return null;
-  if (num >= 1000000000) return `${(num / 1000000000).toFixed(1)}B`;
-  if (num >= 1000000) return `${(num / 1000000).toFixed(0)}M`;
-  if (num >= 1000) return `${(num / 1000).toFixed(0)}K`;
-  return num.toString();
-};
-
 const Developers = () => {
-  const { data: developers, isLoading: loadingDevelopers } = useDevelopers();
-  const { data: projects, isLoading: loadingProjects } = useProjects();
+  const { data: projects, isLoading } = useProjects();
+  const { data: communities } = useCommunities();
+  const { data: developers } = useDevelopers();
   
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortBy, setSortBy] = useState<string>("rank");
-  const [filterTier, setFilterTier] = useState<string>("all");
+  const [filters, setFilters] = useState<FilterState>(defaultFilters);
+  const filteredProjects = useFilteredProjects(projects || [], filters);
 
-  // Count projects per developer (developer-direct only)
-  const projectCounts = useMemo(() => {
-    if (!projects) return {};
-    const counts: Record<string, number> = {};
-    projects.forEach(p => {
-      if (p.developer?.id) {
-        counts[p.developer.id] = (counts[p.developer.id] || 0) + 1;
+  // Group projects by developer
+  const projectsByDeveloper = filteredProjects.reduce<Record<string, typeof filteredProjects>>((acc, project) => {
+    if (project.developer?.id) {
+      if (!acc[project.developer.id]) {
+        acc[project.developer.id] = [];
       }
-    });
-    return counts;
-  }, [projects]);
+      acc[project.developer.id].push(project);
+    }
+    return acc;
+  }, {});
 
-  // Filter and sort developers
-  const filteredDevelopers = useMemo(() => {
-    if (!developers) return [];
-    
-    let filtered = [...developers];
-    
-    // Search filter
-    if (searchTerm) {
-      const term = searchTerm.toLowerCase();
-      filtered = filtered.filter(d => 
-        d.name.toLowerCase().includes(term) ||
-        d.headquarters?.toLowerCase().includes(term)
-      );
-    }
-    
-    // Tier filter
-    if (filterTier !== "all") {
-      filtered = filtered.filter(d => {
-        const tier = getTierInfo(d.slug);
-        return tier.label.toLowerCase() === filterTier.toLowerCase();
-      });
-    }
-    
-    // Sort
-    switch (sortBy) {
-      case "rank":
-        filtered.sort((a, b) => (a.rank ?? 999) - (b.rank ?? 999));
-        break;
-      case "name":
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case "projects":
-        filtered.sort((a, b) => (projectCounts[b.id] || 0) - (projectCounts[a.id] || 0));
-        break;
-      case "founded":
-        filtered.sort((a, b) => (a.founded_year ?? 0) - (b.founded_year ?? 0));
-        break;
-    }
-    
-    return filtered;
-  }, [developers, searchTerm, sortBy, filterTier, projectCounts]);
-
-  const isLoading = loadingDevelopers || loadingProjects;
+  // Get unique developers from filtered projects
+  const activeDevelopers = Object.keys(projectsByDeveloper)
+    .map(devId => developers?.find(d => d.id === devId))
+    .filter(Boolean);
 
   return (
     <>
@@ -233,160 +105,79 @@ const Developers = () => {
           </motion.div>
         </section>
 
-        {/* Filters */}
-        <section className="sticky top-16 lg:top-[72px] z-40 bg-premium-bg/95 backdrop-blur-md border-b border-gold/20 py-4">
+        {/* Project Filters */}
+        <section className="sticky top-16 lg:top-[72px] z-40 bg-premium-bg/95 backdrop-blur-md border-b border-gold/20 py-3">
           <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-              <div className="flex items-center gap-3 w-full md:w-auto">
-                <div className="relative flex-1 md:w-80">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search developers..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 bg-premium-card border-gold/20 text-primary-foreground placeholder:text-muted-foreground"
-                  />
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3 w-full md:w-auto">
-                <Select value={filterTier} onValueChange={setFilterTier}>
-                  <SelectTrigger className="w-[140px] bg-premium-card border-gold/20 text-primary-foreground">
-                    <Filter className="w-4 h-4 mr-2 text-muted-foreground" />
-                    <SelectValue placeholder="All Tiers" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-premium-card border-gold/20 text-primary-foreground">
-                    <SelectItem value="all">All Tiers</SelectItem>
-                    <SelectItem value="elite">Elite</SelectItem>
-                    <SelectItem value="premium">Premium</SelectItem>
-                    <SelectItem value="top tier">Top Tier</SelectItem>
-                    <SelectItem value="established">Established</SelectItem>
-                  </SelectContent>
-                </Select>
-                
-                <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-[150px] bg-premium-card border-gold/20 text-primary-foreground">
-                    <SelectValue placeholder="Sort by" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-premium-card border-gold/20 text-primary-foreground">
-                    <SelectItem value="rank">By Rank</SelectItem>
-                    <SelectItem value="name">By Name</SelectItem>
-                    <SelectItem value="projects">By Projects</SelectItem>
-                    <SelectItem value="founded">By Founded Year</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
+            <ProjectFilters
+              filters={filters}
+              onFiltersChange={setFilters}
+              communities={communities}
+              developers={developers}
+              showDeveloperFilter={true}
+              showCommunityFilter={true}
+            />
           </div>
         </section>
 
-        {/* Developer Grid */}
+        {/* Properties by Developer */}
         <section className="py-12 md:py-16">
           <div className="jj-layer-2">
-              {isLoading ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {Array.from({ length: 9 }).map((_, i) => (
-                    <Skeleton key={i} className="h-80 rounded-xl bg-champagne/50" />
-                  ))}
-                </div>
-              ) : filteredDevelopers.length === 0 ? (
-                <div className="text-center py-20 border border-dashed border-gold/30 rounded-xl bg-premium-card/50">
-                  <Building2 className="w-20 h-20 text-gold/40 mx-auto mb-6" />
-                  <h3 className="text-2xl font-semibold text-foreground mb-3">No Developers Found</h3>
-                  <p className="text-foreground/70 max-w-lg mx-auto">
-                    Try adjusting your search or filter criteria.
-                  </p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {filteredDevelopers.map((developer) => {
-                    const tierInfo = getTierInfo(developer.slug);
-                    const TierIcon = tierInfo.icon;
-                    const projectCount = projectCounts[developer.id] || 0;
-                    
-                    return (
-                      <Link
-                        key={developer.id}
-                        to={`/developer/${developer.slug}`}
-                        className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
-                      >
-                        {/* Feature Image */}
-                        <div className="aspect-[16/10] overflow-hidden relative">
-                          {developer.feature_image_url ? (
-                            <SafeImage
-                              src={developer.feature_image_url}
-                              alt={developer.name}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-champagne-light/50 to-champagne/30">
-                              <Building2 className="w-16 h-16 text-gold/40" />
-                            </div>
-                          )}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                          
-                          {/* Tier Badge */}
-                          <div className={`absolute top-3 right-3 px-3 py-1.5 rounded-full flex items-center gap-1.5 ${tierInfo.badgeClassName}`}>
-                            <TierIcon className="w-3.5 h-3.5" />
-                            <span className="text-xs font-semibold">{tierInfo.label}</span>
-                          </div>
-                          
-                          {/* Logo overlay at bottom */}
+            {isLoading ? (
+              <div className="text-center py-12">
+                <div className="animate-pulse text-muted-foreground">Loading properties...</div>
+              </div>
+            ) : filteredProjects.length === 0 ? (
+              <div className="text-center py-20 border border-dashed border-gold/30 rounded-xl bg-premium-card/50">
+                <Building2 className="w-20 h-20 text-gold/40 mx-auto mb-6" />
+                <h3 className="text-2xl font-semibold text-foreground mb-3">No Properties Found</h3>
+                <p className="text-foreground/70 max-w-lg mx-auto">
+                  Try adjusting your search or filter criteria.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-12">
+                {activeDevelopers.map((developer) => {
+                  if (!developer) return null;
+                  const devProjects = projectsByDeveloper[developer.id] || [];
+                  
+                  return (
+                    <div key={developer.id} className="space-y-6">
+                      {/* Developer Header */}
+                      <div className="flex items-center justify-between border-b border-gold/20 pb-4">
+                        <Link
+                          to={`/developer/${developer.slug}`}
+                          className="group flex items-center gap-4"
+                        >
                           {developer.logo_url && (
-                            <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-sm rounded-lg p-2 shadow-lg">
-                              <img 
-                                src={developer.logo_url} 
-                                alt={`${developer.name} logo`}
-                                className="h-8 w-auto max-w-[120px] object-contain"
-                              />
-                            </div>
+                            <img
+                              src={developer.logo_url}
+                              alt={developer.name}
+                              className="h-12 w-auto object-contain"
+                            />
                           )}
-                        </div>
-                        
-                        {/* Content */}
-                        <div className="p-5">
-                          <h3 className="text-lg font-bold text-black mb-2 group-hover:text-gold transition-colors">
-                            {developer.name}
-                          </h3>
-                          
-                          {developer.description && (
-                            <p className="text-zinc-600 text-sm line-clamp-2 mb-3">
-                              {developer.description}
+                          <div>
+                            <h2 className="text-2xl font-bold text-foreground group-hover:text-gold transition-colors">
+                              {developer.name}
+                            </h2>
+                            <p className="text-sm text-muted-foreground">
+                              {devProjects.length} {devProjects.length === 1 ? 'property' : 'properties'}
                             </p>
-                          )}
-                          
-                          <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-500">
-                            {developer.founded_year && (
-                              <span className="flex items-center gap-1">
-                                <Calendar className="w-3.5 h-3.5 text-gold" />
-                                Est. {developer.founded_year}
-                              </span>
-                            )}
-                            {developer.headquarters && (
-                              <span className="flex items-center gap-1">
-                                <MapPin className="w-3.5 h-3.5 text-gold" />
-                                {developer.headquarters}
-                              </span>
-                            )}
-                            {projectCount > 0 && (
-                              <span className="flex items-center gap-1">
-                                <Building2 className="w-3.5 h-3.5 text-gold" />
-                                {projectCount} Projects
-                              </span>
-                            )}
                           </div>
-                          
-                          {/* View button */}
-                          <div className="mt-4 flex items-center gap-2 text-gold font-semibold text-sm group-hover:gap-3 transition-all">
-                            <span>View Developer</span>
-                            <ArrowRight className="w-4 h-4" />
-                          </div>
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
-              )}
+                          <ArrowRight className="w-5 h-5 text-gold opacity-0 group-hover:opacity-100 transition-opacity ml-2" />
+                        </Link>
+                      </div>
+                      
+                      {/* Properties Grid */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {devProjects.map((project) => (
+                          <ProjectCard key={project.id} project={project} />
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </section>
 
