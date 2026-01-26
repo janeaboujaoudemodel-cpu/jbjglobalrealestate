@@ -275,8 +275,8 @@ const GlobalHeader = () => {
             </div>
           </Link>
 
-           {/* MOBILE/TABLET RIGHT ICONS: Menu only - visible below xl breakpoint */}
-           <div className="flex items-center gap-2 ml-auto xl:hidden shrink-0">
+          {/* MOBILE/TABLET RIGHT ICONS: Menu only - visible below lg breakpoint */}
+          <div className="flex items-center gap-2 ml-auto lg:hidden shrink-0">
             {/* Mobile Menu Trigger - Larger hamburger */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
@@ -562,6 +562,125 @@ const GlobalHeader = () => {
                 </ScrollArea>
               </SheetContent>
             </Sheet>
+          </div>
+
+          {/* COMPACT DESKTOP NAV (lg to <xl): show menu without overlapping */}
+          <nav className="hidden lg:flex xl:hidden items-center justify-center flex-1 min-w-0 mx-2">
+            <div
+              className="flex items-center gap-1 rounded-full px-3 py-2 border border-gold/40 max-w-full overflow-x-auto"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(245,235,215,0.98) 0%, rgba(232,220,200,0.95) 50%, rgba(212,196,168,0.98) 100%)",
+                boxShadow:
+                  "0 8px 24px -10px rgba(0,0,0,0.35), 0 0 0 1px rgba(200,167,102,0.15), inset 0 2px 0 rgba(255,255,255,0.35)",
+              }}
+            >
+              <Link
+                to="/"
+                className={`px-2 py-1.5 text-[9px] font-bold whitespace-nowrap transition-all relative group rounded-full shrink-0 ${
+                  isActive("/")
+                    ? "text-gold bg-gold/15"
+                    : "text-zinc-800 hover:text-gold hover:bg-gold/10"
+                }`}
+                style={{ letterSpacing: "0.02em" }}
+              >
+                Home
+              </Link>
+
+              {renderDropdown("Properties", propertiesLinks, () => location.pathname === "/properties")}
+              {renderDropdown("Services", servicesLinks, () => location.pathname.startsWith("/services"))}
+              {renderDropdown(
+                "Guides",
+                guidesLinks,
+                () =>
+                  [
+                    "/buyer-guide",
+                    "/seller-guide",
+                    "/landlord-guide",
+                    "/tenant-guide",
+                    "/areas",
+                    "/faq",
+                    "/investor-education",
+                    "/investor-faq",
+                    "/broker-faq",
+                  ].some((p) => location.pathname.startsWith(p))
+              )}
+              {renderDropdown(
+                "Market Intel",
+                marketIntelLinks,
+                () => location.pathname.startsWith("/market-intelligence") || location.pathname === "/market-report"
+              )}
+              {renderDropdown(
+                "Investor Hub",
+                investorHubLinks,
+                () => location.pathname.includes("ai-hub") || location.pathname === "/favorites"
+              )}
+              {renderDropdown(
+                "Broker Hub",
+                brokerHubLinks,
+                () => location.pathname.includes("broker-toolkit") || location.pathname.includes("broker-education")
+              )}
+              {renderDropdown("About", aboutLinks, () => ["/about", "/founder", "/team", "/awards"].some((p) => location.pathname.startsWith(p)))}
+
+              <Link
+                to="/contact"
+                className={`px-2 py-1.5 text-[9px] font-bold whitespace-nowrap transition-all relative group rounded-full shrink-0 ${
+                  isActive("/contact")
+                    ? "text-gold bg-gold/15"
+                    : "text-zinc-800 hover:text-gold hover:bg-gold/10"
+                }`}
+                style={{ letterSpacing: "0.02em" }}
+              >
+                Contact
+              </Link>
+
+              {renderDropdown("More", moreLinks, () => ["/news", "/join"].some((p) => location.pathname.startsWith(p)))}
+            </div>
+          </nav>
+
+          {/* COMPACT DESKTOP ACTION ICONS (lg to <xl) */}
+          <div className="hidden lg:flex xl:hidden items-center gap-1 shrink-0">
+            <button
+              className="w-8 h-8 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
+              onClick={() => setSearchOpen(true)}
+              aria-label="Search"
+            >
+              <Search
+                className="w-4 h-4 text-gold group-hover:text-white group-hover:scale-110 transition-all duration-300"
+                style={{ filter: "drop-shadow(0 0 6px rgba(200,167,102,0.4))" }}
+              />
+            </button>
+
+            <Link
+              to="/favorites"
+              className="w-8 h-8 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
+              aria-label="Favorites"
+            >
+              <div className="relative">
+                <Heart
+                  className="w-4 h-4 text-gold group-hover:text-white group-hover:scale-110 transition-all duration-300"
+                  style={{ filter: "drop-shadow(0 0 6px rgba(200,167,102,0.4))" }}
+                />
+                {totalCount > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-gold text-black text-[7px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                    {totalCount}
+                  </span>
+                )}
+              </div>
+            </Link>
+
+            <LanguageSwitcher variant="icon-only" />
+
+            <Link
+              to={user ? "/my-account" : "/auth"}
+              className="w-8 h-8 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
+              aria-label={user ? "My Account" : "Sign In"}
+            >
+              <User
+                className="w-4 h-4 text-gold group-hover:text-white group-hover:scale-110 transition-all duration-300"
+                style={{ filter: "drop-shadow(0 0 6px rgba(200,167,102,0.4))" }}
+              />
+            </Link>
           </div>
 
            {/* CENTER: Ultra Premium Desktop Navigation - Only visible on xl and above */}
