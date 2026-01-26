@@ -715,25 +715,22 @@ const GlobalHeader = () => {
                     <div className="py-2 flex flex-col gap-1 px-2">
                       {user ? (
                         <>
+                          {/* Profile */}
                           <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
-                            <Link to="/my-account" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
+                            <Link to="/broker-account" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
                               <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                                <UserCircle className="w-3.5 h-3.5 text-gold" />
+                                <User className="w-3.5 h-3.5 text-gold" />
                               </div>
-                              <span className="font-medium text-sm">My Dashboard</span>
+                              <span className="font-medium text-sm">Profile</span>
                             </Link>
                           </DropdownMenuItem>
+                          {/* Favorites */}
                           <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
                             <Link to="/favorites" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
                               <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
                                 <Heart className="w-3.5 h-3.5 text-gold" />
                               </div>
-                              <span className="font-medium text-sm">{t('nav.favorites')}</span>
-                              {totalCount > 0 && (
-                                <span className="ml-auto text-[11px] font-bold text-black bg-gold/20 border border-gold/30 rounded-full px-2 py-0.5">
-                                  {totalCount}
-                                </span>
-                              )}
+                              <span className="font-medium text-sm">Favorites</span>
                             </Link>
                           </DropdownMenuItem>
                         </>
@@ -753,7 +750,7 @@ const GlobalHeader = () => {
                         <>
                           <DropdownMenuSeparator className="bg-gold/20 my-2 mx-2" />
                           <p className="px-3 py-1.5 text-[10px] uppercase tracking-wider text-gold font-medium">Admin Shortcuts</p>
-                          <div className="flex flex-col gap-1 px-2">
+                          <div className="flex flex-col gap-1">
                             {/* My Assistant - Always show for admin/founder */}
                             <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
                               <Link to="/founder-assistant" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
@@ -793,32 +790,33 @@ const GlobalHeader = () => {
                                 <span className="font-medium text-sm">IT Department</span>
                               </Link>
                             </DropdownMenuItem>
+                            
+                            {/* CRM Dashboard */}
+                            {hasCRMAccess && (
+                              <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
+                                <Link to="/crm" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
+                                  <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                                    <Users className="w-3.5 h-3.5 text-gold" />
+                                  </div>
+                                  <span className="font-medium text-sm">{t('nav.crm') || 'CRM Dashboard'}</span>
+                                </Link>
+                              </DropdownMenuItem>
+                            )}
+                            
+                            {/* Admin Panel */}
+                            {isAdmin && (
+                              <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
+                                <Link to="/admin" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
+                                  <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                                    <Settings className="w-3.5 h-3.5 text-gold" />
+                                  </div>
+                                  <span className="font-medium text-sm">Admin Panel</span>
+                                </Link>
+                              </DropdownMenuItem>
+                            )}
                           </div>
                         </>
                       )}
-                      
-                      <div className="flex flex-col gap-1 px-2">
-                        {user && hasCRMAccess && (
-                          <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
-                            <Link to="/crm" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
-                              <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                                <Users className="w-3.5 h-3.5 text-gold" />
-                              </div>
-                              <span className="font-medium text-sm">{t('nav.crm') || 'CRM Dashboard'}</span>
-                            </Link>
-                          </DropdownMenuItem>
-                        )}
-                        {user && isAdmin && (
-                          <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
-                            <Link to="/admin" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
-                              <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                                <Settings className="w-3.5 h-3.5 text-gold" />
-                              </div>
-                              <span className="font-medium text-sm">{t('nav.admin')}</span>
-                            </Link>
-                          </DropdownMenuItem>
-                        )}
-                      </div>
                     </div>
                     
                     {user && (
