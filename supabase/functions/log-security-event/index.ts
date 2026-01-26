@@ -13,11 +13,21 @@ serve(async (req) => {
   }
 
   try {
+    // In Lovable preview/dev, resize + iframe behavior can trigger false positives.
+    // We NEVER hard-block preview requests; we only log best-effort.
+    const origin = req.headers.get('origin') ?? '';
+    const referer = req.headers.get('referer') ?? '';
+    const isLovablePreviewRequest =
+      origin.includes('lovableproject.com') ||
+      referer.includes('lovableproject.com') ||
+      origin.includes('localhost') ||
+      referer.includes('localhost');
+
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const body = await req.json();
+    const body = await req.json().catch(() => ({}));
     const { 
       event_type, 
       violation_type, 
@@ -30,19 +40,21 @@ serve(async (req) => {
     const forwarded = req.headers.get('x-forwarded-for');
     const ip = forwarded ? forwarded.split(',')[0].trim() : 'unknown';
 
-    // Check if this fingerprint is already blocked
-    const { data: existingBlock } = await supabase
-      .from('scraping_blocks')
-      .select('id')
-      .eq('fingerprint', fingerprint)
-      .gt('expires_at', new Date().toISOString())
-      .maybeSingle();
+    // Check if this fingerprint is already blocked (never enforce blocks in Lovable preview/dev)
+    if (!isLovablePreviewRequest && fingerprint) {
+      const { data: existingBlock } = await supabase
+        .from('scraping_blocks')
+        .select('id')
+        .eq('fingerprint', fingerprint)
+        .gt('expires_at', new Date().toISOString())
+        .maybeSingle();
 
-    if (existingBlock) {
-      return new Response(
-        JSON.stringify({ blocked: true, message: 'Access blocked' }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 403 }
-      );
+      if (existingBlock) {
+        return new Response(
+          JSON.stringify({ blocked: true, message: 'Access blocked' }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 403 }
+        );
+      }
     }
 
     // Log the security event
@@ -66,8 +78,8 @@ serve(async (req) => {
       console.error('Failed to log security event:', logError);
     }
 
-    // After 5 violations from same fingerprint, block it
-    if (violation_count >= 5) {
+    // After 5 violations from same fingerprint, block it (but NEVER block Lovable preview/dev)
+    if (!isLovablePreviewRequest && fingerprint && typeof violation_count === 'number' && violation_count >= 5) {
       await supabase
         .from('scraping_blocks')
         .insert({
