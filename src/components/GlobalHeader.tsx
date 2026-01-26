@@ -30,6 +30,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BrandMonogram } from "@/components/BrandMonogram";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
+import { useIsTouchLayout } from "@/hooks/use-touch-layout";
 import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
 import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
@@ -40,6 +41,7 @@ const GlobalHeader = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const { t } = useLanguage();
+  const isTouchLayout = useIsTouchLayout();
 
   const mobileHeaderIconButtonClassName =
     "inline-flex h-7 w-7 items-center justify-center p-0 bg-transparent border-0 rounded-none appearance-none transition-colors duration-300 focus:outline-none focus-visible:outline-none focus-visible:ring-0";
@@ -290,23 +292,24 @@ const GlobalHeader = () => {
             </div>
           </Link>
 
-          {/* MOBILE/TABLET RIGHT ICONS: Menu only - visible below lg breakpoint */}
-          <div className="flex items-center gap-2 ml-auto lg:hidden shrink-0">
-            {/* Mobile Menu Trigger - Larger hamburger */}
-            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-              <SheetTrigger asChild>
-                <button
-                  type="button"
-                  className="inline-flex h-10 w-10 items-center justify-center bg-transparent border-0 rounded-none appearance-none transition-colors duration-300 focus:outline-none group"
-                  aria-label="Open menu"
+          {/* TOUCH DEVICES: Menu only (do NOT depend on viewport width) */}
+          {isTouchLayout && (
+            <div className="flex items-center gap-2 ml-auto shrink-0">
+              {/* Mobile Menu Trigger - Larger hamburger */}
+              <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                <SheetTrigger asChild>
+                  <button
+                    type="button"
+                    className="inline-flex h-10 w-10 items-center justify-center bg-transparent border-0 rounded-none appearance-none transition-colors duration-300 focus:outline-none group"
+                    aria-label="Open menu"
+                  >
+                    <Menu className="w-6 h-6 text-gold group-hover:text-gold-light transition-colors" />
+                  </button>
+                </SheetTrigger>
+                <SheetContent
+                  side="right"
+                  className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] p-0 flex flex-col h-full pt-16"
                 >
-                  <Menu className="w-6 h-6 text-gold group-hover:text-gold-light transition-colors" />
-                </button>
-              </SheetTrigger>
-              <SheetContent
-                side="right"
-                className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] p-0 flex flex-col h-full pt-16"
-              >
                 {/* Menu Header - transparent monogram, proper spacing */}
                 <div className="relative border-b border-gold/30 flex items-center gap-4 px-5 py-4 shrink-0">
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
@@ -560,19 +563,23 @@ const GlobalHeader = () => {
                     )}
                   </nav>
                 </ScrollArea>
-              </SheetContent>
-            </Sheet>
-          </div>
+                </SheetContent>
+              </Sheet>
+            </div>
+          )}
 
-           {/* CENTER: Ultra Premium Desktop Navigation - Only visible on lg and above */}
-           <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 mx-2 2xl:mx-4">
-            <div 
-              className="flex items-center gap-0.5 xl:gap-1 2xl:gap-1.5 rounded-full px-4 xl:px-5 2xl:px-8 py-2 border-2 border-gold/40 relative"
-              style={{
-                background: 'linear-gradient(135deg, rgba(245,235,215,0.98) 0%, rgba(232,220,200,0.95) 50%, rgba(212,196,168,0.98) 100%)',
-                boxShadow: '0 8px 32px -8px rgba(0,0,0,0.4), 0 0 0 1px rgba(200,167,102,0.2), inset 0 2px 0 rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.05), 0 0 40px -10px rgba(200,167,102,0.2)',
-              }}
-            >
+          {/* DESKTOP (non-touch): Keep desktop header even in narrow iframes/zoom */}
+          {!isTouchLayout && (
+            <nav className="flex items-center justify-center flex-1 min-w-0 mx-2 2xl:mx-4 overflow-hidden">
+              {/* Scrollable wrapper prevents overlaps when the iframe is narrow */}
+              <div className="max-w-full overflow-x-auto scrollbar-hide flex justify-center">
+                <div 
+                  className="flex w-max items-center gap-0.5 xl:gap-1 2xl:gap-1.5 rounded-full px-4 xl:px-5 2xl:px-8 max-[1100px]:px-3 max-[900px]:px-2 py-2 border-2 border-gold/40 relative"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(245,235,215,0.98) 0%, rgba(232,220,200,0.95) 50%, rgba(212,196,168,0.98) 100%)',
+                    boxShadow: '0 8px 32px -8px rgba(0,0,0,0.4), 0 0 0 1px rgba(200,167,102,0.2), inset 0 2px 0 rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.05), 0 0 40px -10px rgba(200,167,102,0.2)',
+                  }}
+                >
               
               {/* 1. Home - No dropdown */}
                <Link
@@ -635,19 +642,21 @@ const GlobalHeader = () => {
               {renderDropdown("More", moreLinks, () => 
                 ['/news', '/join'].some(p => location.pathname.startsWith(p))
               )}
-            </div>
-          </nav>
+                </div>
+              </div>
+            </nav>
+          )}
 
-            {/* RIGHT: Premium Action Icons - Only visible on lg and above */}
-            <div className="hidden lg:flex items-center gap-2 shrink-0">
-            {/* Premium Icon Container */}
-            <div 
-              className="flex items-center gap-1 px-4 py-2 rounded-full border border-gold/30"
-              style={{
-                background: 'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(20,20,20,0.9) 100%)',
-                boxShadow: '0 4px 16px -4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05), 0 0 30px -10px rgba(200,167,102,0.15)'
-              }}
-            >
+          {!isTouchLayout && (
+            <div className="flex items-center gap-2 shrink-0">
+              {/* Premium Icon Container */}
+              <div 
+                className="flex items-center gap-1 px-4 max-[1100px]:px-3 max-[900px]:px-2 py-2 rounded-full border border-gold/30"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(20,20,20,0.9) 100%)',
+                  boxShadow: '0 4px 16px -4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05), 0 0 30px -10px rgba(200,167,102,0.15)'
+                }}
+              >
               {/* Search Icon */}
               <button
                 className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
@@ -840,6 +849,7 @@ const GlobalHeader = () => {
               </div>
             </div>
           </div>
+          )}
         </div>
       </div>
 
