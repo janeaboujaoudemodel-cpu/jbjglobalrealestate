@@ -75,10 +75,10 @@ const Index = () => {
           >
             <source src="/videos/hero-video.mp4" type="video/mp4" />
           </video>
-          {/* Video overlay gradient - above video */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/80 z-[2]" />
-          {/* Additional cinematic vignette */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/60 z-[2]" />
+          {/* Video overlay gradient - above video (lightened for better video visibility) */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60 z-[2]" />
+          {/* Additional cinematic vignette (lightened) */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40 z-[2]" />
         </div>
         
         {/* Animated gold accent lines */}
@@ -95,84 +95,86 @@ const Index = () => {
           transition={{ duration: 1.5, delay: 0.7 }}
         />
         
-        {/* Content - Compact for video visibility */}
+        {/* Content - Centered for video visibility */}
         <motion.div 
-          className="relative z-10 text-center px-4 max-w-3xl mx-auto"
+          className="relative z-10 w-full flex flex-col items-center justify-center text-center px-4"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
-          {/* H1 - 2-line layout: Buy Sell Rent on line 1, Delivered with Intelligence on line 2 */}
-          <motion.h1 
-            variants={fadeInUp} 
-            className="text-white text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-3 md:mb-5 px-2 sm:px-0"
-            style={{ fontFamily: "Poppins, sans-serif" }}
-          >
-            <span className="block whitespace-nowrap">
-              {t('hero.buy')}<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
-              {t('hero.sell')}<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
-              {t('hero.rent')}<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
-            </span>
-            <span 
-              className="block bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] bg-clip-text text-transparent mt-1"
-              style={{ 
-                filter: 'drop-shadow(0 0 12px rgba(200,167,102,0.5)) drop-shadow(0 0 20px rgba(200,167,102,0.35))',
-                textShadow: '0 1px 3px rgba(0, 0, 0, 0.2)',
-              }}
+          <div className="max-w-3xl mx-auto">
+            {/* H1 - 2-line layout: Buy Sell Rent on line 1, Delivered with Intelligence on line 2 */}
+            <motion.h1 
+              variants={fadeInUp} 
+              className="text-white text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-3 md:mb-5 px-2 sm:px-0"
+              style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              {t('hero.deliveredWith')}
-            </span>
-          </motion.h1>
+              <span className="block whitespace-nowrap">
+                {t('hero.buy')}<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+                {t('hero.sell')}<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+                {t('hero.rent')}<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+              </span>
+              <span 
+                className="block bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] bg-clip-text text-transparent mt-1"
+                style={{ 
+                  filter: 'drop-shadow(0 0 12px rgba(200,167,102,0.5)) drop-shadow(0 0 20px rgba(200,167,102,0.35))',
+                  textShadow: '0 1px 3px rgba(0, 0, 0, 0.2)',
+                }}
+              >
+                {t('hero.deliveredWith')}
+              </span>
+            </motion.h1>
           
-          {/* Subline - Compact */}
-          <motion.p 
-            variants={fadeInUp}
-            className="text-zinc-300 text-sm md:text-base lg:text-lg max-w-xl mx-auto leading-relaxed mb-2 md:mb-3"
-          >
-            {t('hero.subtitle')}
-          </motion.p>
+            {/* Subline - Compact */}
+            <motion.p 
+              variants={fadeInUp}
+              className="text-zinc-300 text-sm md:text-base lg:text-lg max-w-xl mx-auto leading-relaxed mb-2 md:mb-3"
+            >
+              {t('hero.subtitle')}
+            </motion.p>
 
-          {/* Partner microline - Hidden on smallest screens */}
-          <motion.p 
-            variants={fadeInUp}
-            className="hidden sm:block text-zinc-300/80 text-xs md:text-sm mb-6 md:mb-8 font-medium tracking-wide"
-          >
-            {t('hero.partnerNote')}
-          </motion.p>
+            {/* Partner microline - Hidden on smallest screens */}
+            <motion.p 
+              variants={fadeInUp}
+              className="hidden sm:block text-zinc-300/80 text-xs md:text-sm mb-6 md:mb-8 font-medium tracking-wide"
+            >
+              {t('hero.partnerNote')}
+            </motion.p>
 
-          {/* Hero CTA Buttons - Smaller on phone, current size on tablet/desktop */}
-          <motion.div 
-            variants={fadeInUp}
-            className="flex flex-row items-center justify-center gap-2 sm:gap-3 md:gap-4 mt-4 sm:mt-0"
-          >
-            <Link to="/properties">
+            {/* Hero CTA Buttons - Smaller on phone, current size on tablet/desktop */}
+            <motion.div 
+              variants={fadeInUp}
+              className="flex flex-row items-center justify-center gap-2 sm:gap-3 md:gap-4 mt-4 sm:mt-0"
+            >
+              <Link to="/properties">
+                <button 
+                  className="group relative inline-flex items-center justify-center gap-1 sm:gap-1.5 md:gap-2 px-3 sm:px-6 md:px-8 lg:px-10 py-2 sm:py-3 md:py-4 text-[10px] sm:text-sm md:text-base font-bold rounded-md sm:rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
+                  style={{
+                    border: '2px solid rgba(255,255,255,0.8)',
+                    boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
+                  }}
+                >
+                  <span className="text-white group-hover:text-black transition-colors">{t('hero.explore')}</span>
+                  <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-5 md:h-5 text-gold group-hover:text-black transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                  {/* Hover fill overlay */}
+                  <span className="absolute inset-0 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                </button>
+              </Link>
               <button 
+                onClick={() => setIsInquiryOpen(true)}
                 className="group relative inline-flex items-center justify-center gap-1 sm:gap-1.5 md:gap-2 px-3 sm:px-6 md:px-8 lg:px-10 py-2 sm:py-3 md:py-4 text-[10px] sm:text-sm md:text-base font-bold rounded-md sm:rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
                 style={{
                   border: '2px solid rgba(255,255,255,0.8)',
                   boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
                 }}
               >
-                <span className="text-white group-hover:text-black transition-colors">{t('hero.explore')}</span>
-                <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-5 md:h-5 text-gold group-hover:text-black transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                <span className="text-white group-hover:text-black transition-colors">{t('hero.bookConsultation')}</span>
+                <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-5 md:h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                 {/* Hover fill overlay */}
                 <span className="absolute inset-0 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
               </button>
-            </Link>
-            <button 
-              onClick={() => setIsInquiryOpen(true)}
-              className="group relative inline-flex items-center justify-center gap-1 sm:gap-1.5 md:gap-2 px-3 sm:px-6 md:px-8 lg:px-10 py-2 sm:py-3 md:py-4 text-[10px] sm:text-sm md:text-base font-bold rounded-md sm:rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
-              style={{
-                border: '2px solid rgba(255,255,255,0.8)',
-                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-              }}
-            >
-              <span className="text-white group-hover:text-black transition-colors">{t('hero.bookConsultation')}</span>
-              <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-5 md:h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-              {/* Hover fill overlay */}
-              <span className="absolute inset-0 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
-            </button>
-          </motion.div>
+            </motion.div>
+          </div>
         </motion.div>
         
         {/* Scroll indicator - Animated */}
