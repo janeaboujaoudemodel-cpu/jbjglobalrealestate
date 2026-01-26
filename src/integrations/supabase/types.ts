@@ -12854,6 +12854,7 @@ export type Database = {
       }
       vapi_call_logs: {
         Row: {
+          access_count: number | null
           ai_audited_at: string | null
           ai_follow_up_recommended: boolean | null
           ai_highlights: string[] | null
@@ -12881,6 +12882,8 @@ export type Database = {
           flag_reason: string | null
           id: string
           is_flagged: boolean | null
+          last_accessed_at: string | null
+          last_accessed_by: string | null
           lead_id: string | null
           needs_review: boolean | null
           notes: string | null
@@ -12894,6 +12897,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          access_count?: number | null
           ai_audited_at?: string | null
           ai_follow_up_recommended?: boolean | null
           ai_highlights?: string[] | null
@@ -12921,6 +12925,8 @@ export type Database = {
           flag_reason?: string | null
           id?: string
           is_flagged?: boolean | null
+          last_accessed_at?: string | null
+          last_accessed_by?: string | null
           lead_id?: string | null
           needs_review?: boolean | null
           notes?: string | null
@@ -12934,6 +12940,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          access_count?: number | null
           ai_audited_at?: string | null
           ai_follow_up_recommended?: boolean | null
           ai_highlights?: string[] | null
@@ -12961,6 +12968,8 @@ export type Database = {
           flag_reason?: string | null
           id?: string
           is_flagged?: boolean | null
+          last_accessed_at?: string | null
+          last_accessed_by?: string | null
           lead_id?: string | null
           needs_review?: boolean | null
           notes?: string | null
@@ -14645,6 +14654,15 @@ export type Database = {
           price_usd: number
         }[]
       }
+      get_vapi_call_decrypted_pii: {
+        Args: { p_call_log_id: string }
+        Returns: {
+          extracted_email: string
+          extracted_name: string
+          extracted_phone: string
+          transcript: string
+        }[]
+      }
       has_full_lead_pii_access: {
         Args: { _lead_id: string; _user_id: string }
         Returns: boolean
@@ -14750,6 +14768,7 @@ export type Database = {
       mask_email: { Args: { email: string }; Returns: string }
       mask_iban: { Args: { iban: string }; Returns: string }
       mask_phone: { Args: { phone: string }; Returns: string }
+      redact_expired_vapi_recordings: { Args: never; Returns: number }
       redact_sensitive_transcript: {
         Args: { p_transcript: string }
         Returns: string
