@@ -162,7 +162,7 @@ const GlobalHeader = () => {
 
   // Broker Hub dropdown (internal)
   const brokerHubLinks = [
-    { href: "/broker-dashboard-info", label: t('header.brokerDashboard') || "Broker Dashboard", icon: UserCircle },
+    { href: "/broker-dashboard", label: t('header.brokerDashboard') || "Broker Dashboard", icon: UserCircle },
     { href: "/broker-toolkit#tools", label: t('header.brokerTools') || "Broker Tools", icon: Briefcase },
     { href: "/broker-education", label: t('header.brokerEducation') || "Broker Education", icon: GraduationCap },
     { href: "/broker-resources", label: t('header.brokerResources') || "Broker Resources", icon: FolderOpen },
