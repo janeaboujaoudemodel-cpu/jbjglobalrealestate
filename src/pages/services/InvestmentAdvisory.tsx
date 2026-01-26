@@ -3,20 +3,19 @@ import { Link } from "react-router-dom";
 import { 
   TrendingUp, 
   Target,
-  MapPin,
+  BarChart3,
   Building2,
-  Calculator,
   Layers,
-  FileCheck,
+  LogOut,
+  Scale,
+  XCircle,
   Users,
   ArrowRight,
   CheckCircle2,
-  BarChart3,
   Shield,
   Globe,
   Briefcase,
-  User,
-  HelpCircle
+  User
 } from "lucide-react";
 import GlobalHeader from "@/components/GlobalHeader";
 import Footer from "@/components/Footer";
@@ -41,86 +40,97 @@ const InvestmentAdvisory = () => {
     {
       icon: Target,
       title: "Investment Strategy Definition",
-      description: "Every investor is different. We begin by structuring a clear investment thesis aligned with your risk profile, time horizon, and capital objectives.",
+      description: "We help investors define a clear investment strategy based on:",
       items: [
-        "Capital allocation planning",
-        "Risk tolerance & liquidity assessment",
-        "Short-term vs. long-term strategy definition",
-        "Income vs. appreciation prioritization"
-      ]
+        "Capital allocation goals",
+        "Time horizon (short, medium, long term)",
+        "Income vs capital appreciation focus",
+        "Risk tolerance and liquidity needs",
+        "Preferred asset class (residential, off-plan, ready, land)"
+      ],
+      footer: "Each strategy is structured before any property recommendations are made."
     },
     {
-      icon: MapPin,
-      title: "Market & Area Intelligence",
-      description: "Investment decisions are grounded in market fundamentals, not hype. We assess macro and micro indicators to identify areas with sustainable demand drivers.",
+      icon: BarChart3,
+      title: "Market & Asset Analysis",
+      description: "We provide objective analysis using:",
       items: [
-        "Area-level supply vs. demand analysis",
-        "Infrastructure & master plan assessment",
-        "Population, employment & absorption trends",
-        "Regulatory & zoning considerations"
-      ]
+        "Area-level market performance",
+        "Historical transaction trends",
+        "Rental yield benchmarks",
+        "Supply vs demand dynamics",
+        "Infrastructure and development pipelines"
+      ],
+      footer: "Advisory insights are supported by official UAE real estate data sources, ensuring accuracy and compliance."
     },
     {
       icon: Building2,
-      title: "Project & Asset Evaluation",
-      description: "We evaluate projects across financial, structural, and developer-specific dimensions to reduce downside risk.",
+      title: "Off-Plan vs Ready Property Advisory",
+      description: "We advise investors on when and why to consider:",
       items: [
-        "Price per square foot benchmarking",
-        "Comparable transaction analysis",
-        "Developer track record assessment",
-        "Construction timeline & delivery risk review"
-      ]
-    },
-    {
-      icon: Calculator,
-      title: "Return & Scenario Analysis",
-      description: "Projected returns are calculated conservatively, using historical data and current market conditions.",
-      items: [
-        "Expected rental yield modeling",
-        "Capital appreciation scenarios",
-        "Cash flow projections",
-        "Sensitivity analysis under different market conditions"
+        "Off-plan projects (pricing advantage, payment plans, growth potential)",
+        "Ready properties (immediate income, established demand, lower delivery risk)"
       ],
-      disclaimer: "Return projections are analytical estimates based on historical and current market data — not guarantees."
+      footer: "Each option is assessed based on market cycle positioning, developer profile, and investor objectives."
     },
     {
       icon: Layers,
-      title: "Portfolio Structuring",
-      description: "For investors with multiple assets, we advise on diversification, exposure management, and rebalancing.",
+      title: "Portfolio Structuring & Diversification",
+      description: "For investors building multiple-asset portfolios, we assist with:",
       items: [
-        "Asset mix optimization",
-        "Geographic diversification strategy",
-        "Off-plan vs. ready asset balance",
-        "Exit timing considerations"
-      ]
+        "Asset diversification across locations and property types",
+        "Risk balancing between off-plan and ready assets",
+        "Income-producing vs growth-oriented assets",
+        "Staggered entry and exit planning"
+      ],
+      footer: "This ensures exposure is spread intelligently, not concentrated by coincidence."
     },
     {
-      icon: FileCheck,
-      title: "Execution & Transaction Advisory",
-      description: "We support you through the transaction lifecycle, ensuring informed execution and regulatory compliance.",
+      icon: LogOut,
+      title: "Exit Strategy & Resale Planning",
+      description: "Every investment is evaluated with a clear exit perspective:",
       items: [
-        "Opportunity shortlisting",
-        "Negotiation strategy support",
-        "Transaction coordination with licensed parties",
-        "Transfer & registration guidance"
-      ]
+        "Expected holding period",
+        "Resale liquidity in the target area",
+        "Anticipated buyer demand at exit",
+        "Market absorption and competition"
+      ],
+      footer: "We advise investors on optimal exit timing and resale positioning based on market conditions."
+    },
+    {
+      icon: Scale,
+      title: "Regulatory & Compliance Guidance",
+      description: "Our advisory incorporates UAE real estate regulations, including:",
+      items: [
+        "Ownership structures and freehold zones",
+        "Transaction registration requirements",
+        "Transfer and documentation processes",
+        "Investor eligibility considerations"
+      ],
+      footer: "We ensure advisory guidance remains aligned with current regulatory frameworks."
     }
   ];
 
+  const doNotItems = [
+    "We do not sell financial products",
+    "We do not provide tax or legal opinions",
+    "We do not guarantee returns or performance",
+    "We do not offer speculative forecasts"
+  ];
+
   const targetAudience = [
-    { icon: User, label: "Individual investors" },
-    { icon: Briefcase, label: "Family offices" },
-    { icon: Globe, label: "Overseas buyers" },
-    { icon: Layers, label: "Portfolio investors" },
-    { icon: Users, label: "First-time real estate investors" }
+    { icon: User, label: "First-time property investors in the UAE" },
+    { icon: Globe, label: "International investors seeking market clarity" },
+    { icon: Layers, label: "Portfolio investors managing multiple assets" },
+    { icon: TrendingUp, label: "Long-term investors focused on capital preservation and growth" }
   ];
 
   const whyJBJ = [
-    "Licensed UAE brokerage",
-    "Market intelligence-led advisory",
-    "Conservative, data-backed modeling",
-    "No speculative positioning",
-    "Alignment with investor capital protection"
+    "Licensed UAE real estate brokerage",
+    "Market intelligence–driven advisory",
+    "Clear separation between advisory and transaction execution",
+    "Data-backed decision frameworks",
+    "Structured, professional investment process"
   ];
 
   return (
@@ -159,21 +169,28 @@ const InvestmentAdvisory = () => {
               className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-6 leading-tight"
               variants={fadeInUp}
             >
-              Investment Advisory <span className="text-gold">Services</span>
+              Strategic Real Estate <span className="text-gold">Investment Advisory</span> in the UAE
             </motion.h1>
             
             <motion.p 
-              className="text-2xl md:text-3xl font-light text-zinc-300 mb-4"
+              className="text-lg md:text-xl text-zinc-300 font-light leading-relaxed max-w-3xl mx-auto mb-6"
               variants={fadeInUp}
             >
-              Data-Driven Decisions. Strategic Capital Allocation.
+              JBJ Global Real Estate provides structured, data-driven investment advisory services for individuals, family offices, and institutional investors seeking clarity and confidence in the UAE real estate market.
             </motion.p>
             
             <motion.p 
-              className="text-lg md:text-xl text-zinc-400 font-light leading-relaxed max-w-3xl mx-auto mb-10"
+              className="text-base md:text-lg text-zinc-400 font-light leading-relaxed max-w-3xl mx-auto mb-6"
               variants={fadeInUp}
             >
-              Our Investment Advisory service is designed for investors seeking clarity, discipline, and long-term value creation in the UAE real estate market. We guide capital deployment using verified market data, regulatory insight, and scenario-based analysis — not speculation.
+              Our advisory service is designed to help investors make informed property investment decisions based on market fundamentals, transaction data, regulatory frameworks, and long-term risk considerations — not speculation or sales pressure.
+            </motion.p>
+            
+            <motion.p 
+              className="text-base md:text-lg text-zinc-400 font-light leading-relaxed max-w-3xl mx-auto mb-10"
+              variants={fadeInUp}
+            >
+              We guide investors through asset selection, market timing, portfolio construction, and exit planning, ensuring every decision aligns with their objectives, risk tolerance, and investment horizon.
             </motion.p>
             
             <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
@@ -192,7 +209,7 @@ const InvestmentAdvisory = () => {
                   variant="outline"
                   className="border-gold/50 text-gold hover:bg-gold/10 px-8 py-6 text-base"
                 >
-                  Explore Investment Opportunities
+                  View Investment Opportunities
                 </Button>
               </Link>
             </motion.div>
@@ -200,7 +217,7 @@ const InvestmentAdvisory = () => {
         </motion.div>
       </section>
 
-      {/* What Investment Advisory Covers */}
+      {/* What Our Investment Advisory Covers */}
       <section className="py-16 md:py-24 bg-gradient-to-b from-background to-muted/30">
         <div className="container mx-auto px-4">
           <motion.div
@@ -210,9 +227,16 @@ const InvestmentAdvisory = () => {
             variants={staggerContainer}
             className="max-w-6xl mx-auto"
           >
-            <GuideSectionHeader icon={TrendingUp} title="What Investment Advisory Covers" centered />
+            <GuideSectionHeader icon={TrendingUp} title="What Our Investment Advisory Covers" centered />
             
-            <div className="space-y-8 mt-12">
+            <motion.p 
+              variants={fadeInUp}
+              className="text-center text-muted-foreground max-w-2xl mx-auto mb-12"
+            >
+              Our advisory scope focuses on property investment guidance, not financial product sales.
+            </motion.p>
+            
+            <div className="space-y-8">
               {advisoryServices.map((service, index) => (
                 <motion.div
                   key={index}
@@ -226,8 +250,7 @@ const InvestmentAdvisory = () => {
                     <div className="flex-1">
                       <h3 className="text-xl md:text-2xl font-medium text-black mb-3">{service.title}</h3>
                       <p className="text-zinc-600 mb-4">{service.description}</p>
-                      <div className="bg-black/5 rounded-xl p-4">
-                        <p className="text-sm font-semibold text-zinc-700 mb-3">Includes:</p>
+                      <div className="bg-black/5 rounded-xl p-4 mb-4">
                         <ul className="space-y-2">
                           {service.items.map((item, idx) => (
                             <li key={idx} className="flex items-start gap-3">
@@ -237,9 +260,7 @@ const InvestmentAdvisory = () => {
                           ))}
                         </ul>
                       </div>
-                      {service.disclaimer && (
-                        <p className="text-xs text-zinc-500 mt-4 italic">{service.disclaimer}</p>
-                      )}
+                      <p className="text-sm text-zinc-600 italic">{service.footer}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -249,8 +270,50 @@ const InvestmentAdvisory = () => {
         </div>
       </section>
 
-      {/* Who This Service Is For */}
+      {/* What We Do Not Do */}
       <section className="py-16 md:py-24 bg-black">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="max-w-4xl mx-auto"
+          >
+            <GuideSectionHeader icon={XCircle} title="What We Do Not Do" centered />
+            
+            <motion.p 
+              variants={fadeInUp}
+              className="text-center text-zinc-400 max-w-2xl mx-auto mb-8"
+            >
+              To maintain transparency and compliance:
+            </motion.p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+              {doNotItems.map((item, index) => (
+                <motion.div
+                  key={index}
+                  variants={fadeInUp}
+                  className="flex items-center gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl"
+                >
+                  <XCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
+                  <span className="text-zinc-300">{item}</span>
+                </motion.div>
+              ))}
+            </div>
+            
+            <motion.p 
+              variants={fadeInUp}
+              className="text-center text-zinc-500 text-sm"
+            >
+              Where required, we introduce clients to licensed third-party professionals for legal, mortgage, or tax services.
+            </motion.p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Who This Service Is For */}
+      <section className="py-16 md:py-24 bg-gradient-to-b from-background to-muted/30">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -261,17 +324,24 @@ const InvestmentAdvisory = () => {
           >
             <GuideSectionHeader icon={Users} title="Who This Service Is For" centered />
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
+            <motion.p 
+              variants={fadeInUp}
+              className="text-center text-muted-foreground max-w-2xl mx-auto mb-12"
+            >
+              Our Investment Advisory is suitable for:
+            </motion.p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {targetAudience.map((item, index) => (
                 <motion.div
                   key={index}
                   variants={fadeInUp}
-                  className="flex items-center gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold/30 transition-all"
+                  className="flex items-center gap-4 p-5 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 rounded-xl hover:border-gold transition-all"
                 >
-                  <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 bg-black border border-gold rounded-lg flex items-center justify-center flex-shrink-0">
                     <item.icon className="w-5 h-5 text-gold" />
                   </div>
-                  <span className="text-zinc-200 font-medium">{item.label}</span>
+                  <span className="text-zinc-800 font-medium">{item.label}</span>
                 </motion.div>
               ))}
             </div>
@@ -279,42 +349,7 @@ const InvestmentAdvisory = () => {
         </div>
       </section>
 
-      {/* Investment Advisory vs. Brokerage */}
-      <section className="py-16 md:py-24 bg-gradient-to-b from-background to-muted/30">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="max-w-4xl mx-auto"
-          >
-            <GuideSectionHeader icon={HelpCircle} title="Investment Advisory vs. Brokerage" centered />
-            
-            <motion.div
-              variants={fadeInUp}
-              className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 rounded-2xl p-6 md:p-8 mt-12"
-            >
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-1" />
-                  <p className="text-zinc-700">
-                    <span className="font-semibold text-black">Investment Advisory</span> focuses on strategy, analysis, and decision support.
-                  </p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-1" />
-                  <p className="text-zinc-700">
-                    Transaction execution is handled under JBJ Global Real Estate's licensed brokerage activities or via licensed partners where applicable.
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Why JBJ Global Real Estate */}
+      {/* Why Investors Choose JBJ Global Real Estate */}
       <section className="py-16 md:py-24 bg-black">
         <div className="container mx-auto px-4">
           <motion.div
@@ -324,7 +359,7 @@ const InvestmentAdvisory = () => {
             variants={staggerContainer}
             className="max-w-4xl mx-auto"
           >
-            <GuideSectionHeader icon={Shield} title="Why JBJ Global Real Estate" centered />
+            <GuideSectionHeader icon={Shield} title="Why Investors Choose JBJ Global Real Estate" centered />
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-12">
               {whyJBJ.map((reason, index) => (
@@ -356,14 +391,14 @@ const InvestmentAdvisory = () => {
               variants={fadeInUp}
               className="text-3xl md:text-4xl font-light text-foreground mb-6"
             >
-              Begin Your <span className="text-gold">Investment Advisory</span> Journey
+              Start Your <span className="text-gold">Investment Advisory</span> Journey
             </motion.h2>
             
             <motion.p 
               variants={fadeInUp}
               className="text-lg text-muted-foreground mb-10"
             >
-              Whether deploying capital for income, growth, or diversification, our advisory ensures every decision is informed, structured, and defensible.
+              If you are considering investing in UAE real estate and want structured, informed guidance, our advisory team is ready to assist.
             </motion.p>
             
             <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
@@ -372,17 +407,17 @@ const InvestmentAdvisory = () => {
                   size="lg"
                   className="bg-gold hover:bg-gold/90 text-black font-semibold px-8 py-6 text-base"
                 >
-                  Speak to an Investment Advisor
+                  Request an Investment Advisory Consultation
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
-              <Link to="/market-intelligence">
+              <Link to="/properties">
                 <Button 
                   size="lg"
                   variant="outline"
                   className="border-gold/50 text-foreground hover:bg-gold/10 px-8 py-6 text-base"
                 >
-                  View Market Intelligence
+                  Explore Current Investment Opportunities
                 </Button>
               </Link>
             </motion.div>
