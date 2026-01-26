@@ -17,42 +17,7 @@ interface ProvidentDeveloper {
 }
 
 const PROVIDENT_BASE_URL = "https://providentestate.com";
-
-// Complete list of UAE developers from Provident Estate (deduplicated)
-const KNOWN_DEVELOPERS = [
-  "Emaar Properties", "Damac Properties", "Binghatti", "Sobha Realty", "Ellington Properties",
-  "Azizi Developments", "Meraas", "Aldar Properties", "Imtiaz Developments", "Samana Developers",
-  "Nakheel", "Danube Properties", "Arada Properties", "Object 1", "Omniyat", "Nshama",
-  "Reportage Properties", "Tiger Group", "H&H Development", "Majid Al Futtaim", "MAG Group",
-  "Beyond", "Select Group", "Dubai Properties", "Deyaar", "Bloom Properties", "RAK Properties",
-  "Palma Holding", "Esnaad", "Seven Tides", "Wasl Properties", "Tilal Al Ghaf", "Dubai Holding",
-  "Union Properties", "Meydan Group", "EZW Developments", "Al Habtoor Group", "Shapoorji Pallonji",
-  "Refine Development", "Jumeirah Golf Estates", "Limitless", "DIFC Properties", "Al Barari",
-  "Kerzner International", "G&Co Properties", "Leos Developments", "Prescott", "Artar Real Estate",
-  "Abyaar Real Estate", "Al Naboodah", "Al Ghurair Properties", "TECOM Group", "Forum Group",
-  "SPF Realty", "Falconcity", "Gemini Property Developers", "Cayan Group", "Kleindienst Group",
-  "Gulf Related", "Miraki Properties", "Vincitore", "Pantheon Development", "Deca Properties",
-  "Iman Developers", "First Group", "Aabar Properties", "Aqua Properties", "Sunrise Properties",
-  "Skai Holdings", "Valor Real Estate", "Elysian Properties", "Peninsula", "Discovery Properties",
-  "Oro24 Developments", "Aeon & Trisl", "Al Seef Development", "Taraf Holdings", "Mered",
-  "Amwaj Development", "ETA Star", "Schon Properties", "Victoria Development",
-  "Alpha Developments", "De Grisogono", "Aristocrat Development", "Al Hamra", "Capital Bay",
-  "Dar Aljawda", "Dubai Star Properties", "Elite Real Estate", "Farm Developers", "Globe Group",
-  "Jade Properties", "KM Properties", "Lootah Development", "Marquise Square", "Noble Properties",
-  "Oriental Pearls", "Pioneer Properties", "Quick Properties", "Royal Properties", "Sky View Properties",
-  "Fortune Properties", "Oasis Properties", "Prime Properties", "Sapphire Properties", "Time Properties",
-  "United Properties", "Zenith Properties", "Crystal Properties", "Diamond Developers", "Emerald Properties",
-  "Five Holdings", "Golden Properties", "Harbor Properties", "Imperial Properties", "Jupiter Properties",
-  "ORO24 Developments", "SOL Properties", "Riviera", "AHS Properties", "Palm Hills",
-  "Laya Developers", "Gulf Land Property Developers", "Mira Developments", "Signature Developers",
-  "Coast Properties", "Porto Arabia", "Triplanet Development", "Haven Developers", "Vogue Development",
-  "Living Legends", "Durar Properties", "Manazel Real Estate", "Asteco Development", "Benchmark Development",
-  "Eastern Developers", "Key View Properties", "Luxhabitat", "National Properties", "Dubai Sports City",
-  "Lagoon Properties", "Marina Properties", "Heights Properties", "Pearl Properties", "Skyline Properties",
-  "Trident Properties", "Vision Properties", "Wave Properties", "Xanadu Properties", "York Properties",
-  "Zabeel Properties", "Academy Properties", "Bridge Properties", "Capital Properties", "District Properties",
-  "Empire Properties", "Flora Properties", "Grand Properties", "Horizon Properties", "Island Properties"
-];
+const FIRECRAWL_API_URL = "https://api.firecrawl.dev/v1";
 
 function slugify(name: string): string {
   return name
@@ -80,13 +45,7 @@ function decodeHtmlEntities(input: string): string {
     .replace(/&#39;/g, "'");
 }
 
-function upgradeImageResolution(url: string): string {
-  if (!url) return "";
-  return url
-    .replace(/\/x\/260x200\//g, "/x/520x400/")
-    .replace(/\/x\/296x\//g, "/x/592x/");
-}
-
+// Parse developer data from the listing page HTML
 function parseDeveloperCards(html: string): Map<string, ProvidentDeveloper> {
   const developersMap = new Map<string, ProvidentDeveloper>();
   let displayOrder = 0;
@@ -105,10 +64,10 @@ function parseDeveloperCards(html: string): Map<string, ProvidentDeveloper> {
     const providentLink = linkMatch ? normalizeUrl(linkMatch[1]) : "";
 
     const featureMatch = cardHtml.match(/<div class="img-section">[\s\S]*?<img[^>]*src="([^"]+)"/i);
-    const featureImage = featureMatch ? upgradeImageResolution(normalizeUrl(featureMatch[1])) : "";
+    const featureImage = featureMatch ? normalizeUrl(featureMatch[1]) : "";
 
     const logoMatch = cardHtml.match(/<div class="logo-section">[\s\S]*?<img[^>]*src="([^"]+)"/i);
-    const logo = logoMatch ? upgradeImageResolution(normalizeUrl(logoMatch[1])) : "";
+    const logo = logoMatch ? normalizeUrl(logoMatch[1]) : "";
 
     const descMatch = cardHtml.match(/<p class="description">([\s\S]*?)<\/p>/i);
     let description = descMatch ? decodeHtmlEntities(descMatch[1]).trim() : "";
@@ -139,74 +98,114 @@ serve(async (req) => {
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const firecrawlApiKey = Deno.env.get("FIRECRAWL_API_KEY");
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    console.log(`🔄 Starting Provident Developers Extraction v18 (Comprehensive List)...`);
+    console.log(`🔄 Starting Provident Developers Extraction v20 (Map + Scrape)...`);
 
-    // Step 1: Start with scraped developers for real data
+    if (!firecrawlApiKey) {
+      throw new Error("FIRECRAWL_API_KEY not configured");
+    }
+
+    // Step 1: Use Firecrawl MAP to discover all developer URLs
+    console.log("📡 Mapping all developer URLs...");
+    
+    const mapResponse = await fetch(`${FIRECRAWL_API_URL}/map`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${firecrawlApiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        url: `${PROVIDENT_BASE_URL}/developers/`,
+        search: "developed-by",
+        limit: 500,
+        includeSubdomains: false,
+      }),
+    });
+
+    if (!mapResponse.ok) {
+      const errorText = await mapResponse.text();
+      console.error("Firecrawl MAP error:", errorText);
+      throw new Error(`Firecrawl MAP failed: ${mapResponse.status}`);
+    }
+
+    const mapData = await mapResponse.json();
+    const allUrls: string[] = mapData.links || [];
+    
+    // Filter to only developer URLs
+    const developerUrls = allUrls.filter((url: string) => 
+      url.includes("/new-projects/developed-by-") || 
+      url.includes("/developers/")
+    );
+    
+    console.log(`📊 Found ${developerUrls.length} developer-related URLs`);
+
+    // Step 2: Also fetch the main developers page directly for initial data
+    console.log("📡 Fetching main developers page...");
     const response = await fetch(`${PROVIDENT_BASE_URL}/developers/`, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.5",
       },
     });
 
     const html = response.ok ? await response.text() : "";
-    console.log(`📊 Fetched ${html.length} bytes`);
+    console.log(`📊 Fetched ${html.length} bytes from main page`);
 
+    // Step 3: Parse developers from main page
     const scrapedDevelopers = parseDeveloperCards(html);
-    console.log(`📊 Scraped ${scrapedDevelopers.size} developers with full data`);
+    console.log(`📊 Scraped ${scrapedDevelopers.size} developers from main page`);
 
-    // Step 2: Build complete list - use scraped data when available, otherwise create entry
+    // Step 4: Extract developer names from URLs and add to collection
     const allDevelopers: ProvidentDeveloper[] = [];
+    const seenSlugs = new Set<string>();
     let displayOrder = 0;
 
-    for (const name of KNOWN_DEVELOPERS) {
-      displayOrder++;
-      const slug = slugify(name);
-      
-      if (scrapedDevelopers.has(slug)) {
-        const scraped = scrapedDevelopers.get(slug)!;
-        scraped.display_order = displayOrder;
-        allDevelopers.push(scraped);
-      } else {
-        allDevelopers.push({
-          name,
-          slug,
-          description: "",
-          feature_image_url: "",
-          logo_url: "",
-          provident_link: `${PROVIDENT_BASE_URL}/new-projects/developed-by-${slug}/`,
-          display_order: displayOrder,
-        });
-      }
-    }
-
-    // Add any scraped developers not in our known list
+    // First add all scraped developers with full data
     for (const [slug, dev] of scrapedDevelopers) {
-      if (!allDevelopers.find(d => d.slug === slug)) {
+      if (!seenSlugs.has(slug)) {
         displayOrder++;
         dev.display_order = displayOrder;
         allDevelopers.push(dev);
+        seenSlugs.add(slug);
       }
     }
 
-    console.log(`📊 Total developers: ${allDevelopers.length}`);
+    // Then extract developer names from discovered URLs
+    for (const url of developerUrls) {
+      const match = url.match(/developed-by-([^\/]+)/);
+      if (match) {
+        const slug = match[1].replace(/\/$/, "");
+        if (!seenSlugs.has(slug)) {
+          // Convert slug to name
+          const name = slug
+            .split("-")
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
+          
+          displayOrder++;
+          allDevelopers.push({
+            name,
+            slug,
+            description: "",
+            feature_image_url: "",
+            logo_url: "",
+            provident_link: url,
+            display_order: displayOrder,
+          });
+          seenSlugs.add(slug);
+        }
+      }
+    }
 
-    // Clear and save
+    console.log(`📊 Total unique developers: ${allDevelopers.length}`);
+
+    // Step 5: Clear existing and save new
     await supabase.from("pending_developer_imports").delete().not("id", "is", null);
 
-    // Deduplicate by slug before inserting
-    const uniqueBySlug = new Map<string, typeof allDevelopers[0]>();
-    for (const dev of allDevelopers) {
-      if (!uniqueBySlug.has(dev.slug)) {
-        uniqueBySlug.set(dev.slug, dev);
-      }
-    }
-    const uniqueDevelopers = Array.from(uniqueBySlug.values());
-    console.log(`📊 After deduplication: ${uniqueDevelopers.length} unique developers`);
-
-    const rows = uniqueDevelopers.map((dev) => ({
+    const rows = allDevelopers.map((dev) => ({
       name: dev.name,
       slug: dev.slug,
       description: dev.description,
@@ -224,6 +223,7 @@ serve(async (req) => {
 
     if (insertError) throw new Error(`Failed to store: ${insertError.message}`);
 
+    // Log the extraction job
     await supabase.from("extraction_job_logs").insert({
       source_id: null,
       job_type: "developer_extraction",
@@ -231,20 +231,22 @@ serve(async (req) => {
       started_at: new Date().toISOString(),
       completed_at: new Date().toISOString(),
       records_found: allDevelopers.length,
-      records_matched: scrapedDevelopers.size,
+      records_matched: allDevelopers.filter(d => d.feature_image_url && d.logo_url).length,
       records_pending: allDevelopers.length,
-      metadata: { source: "provident_estate", version: "v18-comprehensive" },
+      metadata: { source: "provident_estate", version: "v20-map-scrape" },
     });
 
-    console.log(`✅ Extracted ${allDevelopers.length} developers (${scrapedDevelopers.size} with full data)`);
+    const withFullData = allDevelopers.filter(d => d.feature_image_url && d.logo_url).length;
+    console.log(`✅ Extracted ${allDevelopers.length} developers (${withFullData} with full data)`);
 
     return new Response(
       JSON.stringify({
         success: true,
         message: `Extracted ${allDevelopers.length} developers`,
         count: allDevelopers.length,
-        withFullData: scrapedDevelopers.size,
-        developers: allDevelopers.slice(0, 30).map(d => d.name),
+        withFullData,
+        developerUrls: developerUrls.length,
+        developers: allDevelopers.slice(0, 30).map(d => ({ name: d.name, hasImage: !!d.feature_image_url, hasLogo: !!d.logo_url })),
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
