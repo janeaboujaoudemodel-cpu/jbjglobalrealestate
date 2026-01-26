@@ -35,13 +35,10 @@
      const firecrawlApiKey = Deno.env.get("FIRECRAWL_API_KEY");
      const supabase = createClient(supabaseUrl, supabaseServiceKey);
  
-     console.log("🔄 Starting v24: MAP all developer pages, then scrape each");
+      console.log("🔄 Starting v26: Enhanced MAP debugging");
  
      if (!firecrawlApiKey) throw new Error("FIRECRAWL_API_KEY not configured");
  
-     // Step 1: MAP entire site for developer URLs
-     console.log("🗺️ Mapping providentestate.com for developer pages...");
-      // Step 1: MAP site without search filter, then filter in code
       console.log("🗺️ Mapping providentestate.com...");
       const mapRes = await fetch(`${FIRECRAWL_API_URL}/map`, {
         method: "POST",
@@ -60,18 +57,31 @@
       }
       
      const mapData = await mapRes.json();
-      console.log(`📊 Total URLs found: ${mapData.links?.length || 0}`);
+      const totalUrls = mapData.links?.length || 0;
+      console.log(`📊 Total URLs found: ${totalUrls}`);
       
       // Filter for developer URLs
       const allLinks = mapData.links || [];
+      
+      // Debug: Log first 30 URLs to see patterns
+      console.log("🔍 First 30 URLs from site:");
+      allLinks.slice(0, 30).forEach((url: string, i: number) => {
+        console.log(`  ${i + 1}. ${url}`);
+      });
+      
       const devUrls = [...new Set(allLinks.filter((u: string) => 
         (u.includes("/developed-by-") || u.includes("/developer/")) && 
         !u.includes("?") && !u.includes("#")
      ))];
      
      console.log(`📊 Found ${devUrls.length} developer URLs`);
+      console.log("🔍 Sample developer URLs found:");
+      devUrls.slice(0, 10).forEach((url, i) => {
+        console.log(`  ${i + 1}. ${url}`);
+      });
+      
       if (devUrls.length === 0) {
-        console.log("Sample URLs:", allLinks.slice(0, 10));
+        console.log("❌ No developer URLs matched the filter!");
       }
      if (devUrls.length === 0) throw new Error("No developer URLs found");
  
@@ -125,7 +135,7 @@
        source_id: null, job_type: "developer_extraction", status: "completed",
        started_at: new Date().toISOString(), completed_at: new Date().toISOString(),
        records_found: allDevs.length, records_matched: allDevs.filter(d => d.feature_image_url && d.logo_url).length,
-        records_pending: allDevs.length, metadata: { source: "provident_estate", version: "v25-map-no-search" },
+        records_pending: allDevs.length, metadata: { source: "provident_estate", version: "v26-debug-urls" },
      });
  
      return new Response(JSON.stringify({ success: true, message: `Extracted ${allDevs.length} developers`, count: allDevs.length }), 
