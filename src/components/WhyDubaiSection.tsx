@@ -51,7 +51,7 @@ const WhyDubaiSection = () => {
             {
               icon: Globe,
               title: "Golden Visa Program",
-              description: "Property investments of AED 2M+ qualify for 10-year residency visa for you and your family.",
+              description: "Property investments of AED 2M+ qualify investors to apply for long-term residency. Issuance is subject to government approval.",
             },
             {
               icon: Building,
