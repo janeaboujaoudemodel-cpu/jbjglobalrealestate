@@ -1697,6 +1697,7 @@ export type Database = {
           direction: string
           filter_reason: string | null
           id: string
+          is_encrypted: boolean | null
           last_accessed_at: string | null
           last_accessed_by: string | null
           original_content: string | null
@@ -1719,6 +1720,7 @@ export type Database = {
           direction: string
           filter_reason?: string | null
           id?: string
+          is_encrypted?: boolean | null
           last_accessed_at?: string | null
           last_accessed_by?: string | null
           original_content?: string | null
@@ -1741,6 +1743,7 @@ export type Database = {
           direction?: string
           filter_reason?: string | null
           id?: string
+          is_encrypted?: boolean | null
           last_accessed_at?: string | null
           last_accessed_by?: string | null
           original_content?: string | null
@@ -5265,6 +5268,13 @@ export type Database = {
             columns: ["related_salary_id"]
             isOneToOne: false
             referencedRelation: "employee_salaries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employee_payment_history_related_salary_id_fkey"
+            columns: ["related_salary_id"]
+            isOneToOne: false
+            referencedRelation: "employee_salaries_masked"
             referencedColumns: ["id"]
           },
           {
@@ -11373,6 +11383,13 @@ export type Database = {
             referencedRelation: "rental_listings"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "rental_listing_approvals_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "rental_listings_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       rental_listing_notifications: {
@@ -11415,6 +11432,13 @@ export type Database = {
             columns: ["listing_id"]
             isOneToOne: false
             referencedRelation: "rental_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rental_listing_notifications_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "rental_listings_public"
             referencedColumns: ["id"]
           },
         ]
@@ -11727,6 +11751,39 @@ export type Database = {
           id?: string
           ip_address?: string | null
           is_permanent?: boolean | null
+        }
+        Relationships: []
+      }
+      security_access_audit: {
+        Row: {
+          action_type: string
+          created_at: string
+          id: string
+          ip_address: unknown
+          resource_id: string | null
+          resource_type: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_type: string
+          created_at?: string
+          id?: string
+          ip_address?: unknown
+          resource_id?: string | null
+          resource_type: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          created_at?: string
+          id?: string
+          ip_address?: unknown
+          resource_id?: string | null
+          resource_type?: string
+          user_agent?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -13841,6 +13898,66 @@ export type Database = {
       }
     }
     Views: {
+      best_idea_submissions_safe: {
+        Row: {
+          actual_email: string | null
+          actual_name: string | null
+          actual_phone: string | null
+          admin_notes: string | null
+          created_at: string | null
+          draw_ticket_number: string | null
+          email: string | null
+          full_name: string | null
+          id: string | null
+          idea: string | null
+          is_anonymous: boolean | null
+          phone: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          actual_email?: never
+          actual_name?: never
+          actual_phone?: never
+          admin_notes?: string | null
+          created_at?: string | null
+          draw_ticket_number?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string | null
+          idea?: string | null
+          is_anonymous?: boolean | null
+          phone?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          actual_email?: never
+          actual_name?: never
+          actual_phone?: never
+          admin_notes?: string | null
+          created_at?: string | null
+          draw_ticket_number?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string | null
+          idea?: string | null
+          is_anonymous?: boolean | null
+          phone?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       broker_profiles_public: {
         Row: {
           bio: string | null
@@ -14181,6 +14298,63 @@ export type Database = {
         }
         Relationships: []
       }
+      employee_salaries_masked: {
+        Row: {
+          bank_account_masked: string | null
+          bank_iban_masked: string | null
+          bank_name: string | null
+          base_salary: number | null
+          created_at: string | null
+          created_by: string | null
+          currency: string | null
+          department: string | null
+          effective_date: string | null
+          employee_name: string | null
+          end_date: string | null
+          id: string | null
+          notes: string | null
+          salary_type: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          bank_account_masked?: never
+          bank_iban_masked?: never
+          bank_name?: string | null
+          base_salary?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          department?: string | null
+          effective_date?: string | null
+          employee_name?: string | null
+          end_date?: string | null
+          id?: string | null
+          notes?: string | null
+          salary_type?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          bank_account_masked?: never
+          bank_iban_masked?: never
+          bank_name?: string | null
+          base_salary?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          department?: string | null
+          effective_date?: string | null
+          employee_name?: string | null
+          end_date?: string | null
+          id?: string | null
+          notes?: string | null
+          salary_type?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       employee_salaries_secure: {
         Row: {
           bank_account_number: string | null
@@ -14399,6 +14573,57 @@ export type Database = {
         }
         Relationships: []
       }
+      partner_bank_vault_masked: {
+        Row: {
+          account_masked: string | null
+          bank_name: string | null
+          created_at: string | null
+          created_by: string | null
+          iban_masked: string | null
+          id: string | null
+          partner_id: string | null
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          account_masked?: never
+          bank_name?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          iban_masked?: never
+          id?: string | null
+          partner_id?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          account_masked?: never
+          bank_name?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          iban_masked?: never
+          id?: string | null
+          partner_id?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_partner_bank_vault_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: true
+            referencedRelation: "referral_partners"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_partner_bank_vault_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: true
+            referencedRelation: "referral_partners_safe"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles_public: {
         Row: {
           created_at: string | null
@@ -14516,6 +14741,72 @@ export type Database = {
         }
         Relationships: []
       }
+      rental_listings_public: {
+        Row: {
+          address: string | null
+          amenities: string[] | null
+          annual_rent: number | null
+          bathrooms: number | null
+          bedrooms: number | null
+          building_name: string | null
+          community: string | null
+          created_at: string | null
+          description: string | null
+          emirate: string | null
+          furnished: string | null
+          id: string | null
+          images: string[] | null
+          payment_terms: string | null
+          property_title: string | null
+          property_type: string | null
+          size_sqft: number | null
+          status: string | null
+          video_url: string | null
+        }
+        Insert: {
+          address?: string | null
+          amenities?: string[] | null
+          annual_rent?: number | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          building_name?: string | null
+          community?: string | null
+          created_at?: string | null
+          description?: string | null
+          emirate?: string | null
+          furnished?: string | null
+          id?: string | null
+          images?: string[] | null
+          payment_terms?: string | null
+          property_title?: string | null
+          property_type?: string | null
+          size_sqft?: number | null
+          status?: string | null
+          video_url?: string | null
+        }
+        Update: {
+          address?: string | null
+          amenities?: string[] | null
+          annual_rent?: number | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          building_name?: string | null
+          community?: string | null
+          created_at?: string | null
+          description?: string | null
+          emirate?: string | null
+          furnished?: string | null
+          id?: string | null
+          images?: string[] | null
+          payment_terms?: string | null
+          property_title?: string | null
+          property_type?: string | null
+          size_sqft?: number | null
+          status?: string | null
+          video_url?: string | null
+        }
+        Relationships: []
+      }
       uae_developers_public: {
         Row: {
           created_at: string | null
@@ -14614,6 +14905,10 @@ export type Database = {
         Args: { p_email: string; p_ip_address: string }
         Returns: Json
       }
+      check_contact_gating_rate_limit: {
+        Args: { p_email: string; p_ip_hash?: string }
+        Returns: boolean
+      }
       check_forms_submission_rate_limit: {
         Args: { p_email: string; p_ip?: string }
         Returns: boolean
@@ -14632,6 +14927,10 @@ export type Database = {
           p_max_submissions?: number
           p_window_hours?: number
         }
+        Returns: boolean
+      }
+      check_lead_rate_limit_strict: {
+        Args: { p_email: string; p_ip_hash?: string; p_phone?: string }
         Returns: boolean
       }
       check_lead_submission_rate: {
