@@ -212,8 +212,8 @@ END:VCARD`;
   const contactCards = [
     {
       icon: MapPin,
-      title: t('contact.location') || "Location",
-      value: t('contact.locationValue') || "Downtown Dubai, UAE",
+      title: "Location",
+      value: "Dubai, United Arab Emirates",
       action: null,
       iconColor: "text-gold",
       titleColor: "text-black",
@@ -222,8 +222,8 @@ END:VCARD`;
     },
     {
       icon: Phone,
-      title: t('contact.phone') || "Phone",
-      value: CONTACT_INFO.phone,
+      title: "Phone",
+      value: "+971-5659-11000",
       action: 'phone-actions',
       iconColor: "text-gold",
       titleColor: "text-black",
@@ -232,9 +232,9 @@ END:VCARD`;
     },
     {
       icon: Mail,
-      title: t('contact.email') || "Email",
-      value: CONTACT_INFO.email,
-      action: getEmailUrl(),
+      title: "Email",
+      value: "invest@jjglobalcapital.com",
+      action: "mailto:invest@jjglobalcapital.com",
       iconColor: "text-gold",
       titleColor: "text-black",
       valueColor: "text-gold hover:underline",
@@ -242,13 +242,13 @@ END:VCARD`;
     },
     {
       icon: Calendar,
-      title: t('contact.availability') || "Availability",
-      value: t('contact.bookOnline') || "Book Online Meeting",
-      action: 'meeting',
+      title: "Business Hours",
+      value: "Sun–Thu | 9AM–6PM UAE",
+      action: null,
       iconColor: "text-gold",
       titleColor: "text-black",
-      valueColor: "text-gold hover:underline",
-      clickable: true,
+      valueColor: "text-gold",
+      clickable: false,
     },
   ];
 
@@ -261,24 +261,24 @@ END:VCARD`;
         <div className="absolute inset-0">
           <img 
             src={contactHero} 
-            alt={t('contact.heroAlt') || 'Book a consultation'} 
+            alt="Contact JBJ Global Real Estate" 
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black" />
         </div>
         <div className="relative container mx-auto px-4">
-          <p className="text-gold text-sm uppercase tracking-[0.2em] mb-4">{t('contact.brokerage') || 'Real Estate Brokerage'}</p>
+          <p className="text-gold text-sm uppercase tracking-[0.2em] mb-4">Real Estate Brokerage</p>
           <h1 
             className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            {t('hero.bookConsultation')}
+            Contact JBJ Global Real Estate
           </h1>
-          <p className="text-zinc-300 text-lg md:text-xl max-w-3xl leading-relaxed mb-4">
-            {t('contact.heroDescription') || 'Brokerage support for buying, selling, and renting property in Dubai and the UAE. We also coordinate introductions to independent licensed partners for legal, mortgage, and concierge support.'}
+          <p className="text-white text-xl md:text-2xl font-medium max-w-3xl leading-relaxed mb-4">
+            Professional Support. Clear Communication. Trusted Guidance.
           </p>
-          <p className="text-zinc-400 text-sm max-w-2xl leading-relaxed border-l-2 border-gold/30 pl-4">
-            {t('contact.partnerDisclaimer') || 'Introductions and coordination only — partner services are delivered under the partner\'s own terms and licence.'}
+          <p className="text-zinc-300 text-base md:text-lg max-w-3xl leading-relaxed">
+            Whether you are an investor, property owner, broker, or partner, our team is here to support you with accurate information, structured guidance, and accountable follow-up. Choose the option below that best fits your request.
           </p>
         </div>
       </section>
@@ -358,10 +358,10 @@ END:VCARD`;
                     <Shield className="w-7 h-7 text-gold" />
                   </div>
                   <h2 className="text-2xl md:text-3xl font-bold text-black mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
-                    Consultation Request
+                    Request a Consultation
                   </h2>
                   <p className="text-zinc-600 text-sm">
-                    Complete the form below and our team will reach out to discuss your requirements.
+                    If you would like to speak with our team regarding buying, selling, renting, investment guidance, market intelligence, or partner introductions, request a consultation through this form. Consultations focus on real estate brokerage guidance and structured introductions within our licensed scope.
                   </p>
                 </div>
 
@@ -728,12 +728,16 @@ END:VCARD`;
       <SupportTicketBox />
 
       {/* Direct Contact CTAs - "Prefer to Reach Us Directly" - Cards ARE the 3rd layer (on active champagne) */}
+      {/* Direct Contact Section */}
       <section className="py-12 bg-black">
         {/* Thin black contour + Active Champagne Layer */}
         <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8">
-          <p className="text-center text-lg mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-center text-2xl md:text-3xl font-bold mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
             <span className="text-black">Prefer to Reach Us</span>{" "}
-            <span className="text-gold font-semibold">Directly?</span>
+            <span className="text-gold">Directly?</span>
+          </h2>
+          <p className="text-center text-zinc-600 text-sm mb-6 max-w-2xl mx-auto">
+            For general inquiries, consultations, or non-technical requests, you may contact us through the channels below.
           </p>
           {/* Cards are the 3rd layer - champagne pearl styling */}
           <div className="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
@@ -751,7 +755,7 @@ END:VCARD`;
                 <h3 className="text-black font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
                   WhatsApp
                 </h3>
-                <p className="text-gold text-sm">{CONTACT_INFO.phone}</p>
+                <p className="text-gold text-sm">+971-5659-11000</p>
               </div>
             </a>
 
@@ -767,7 +771,7 @@ END:VCARD`;
                 <h3 className="text-black font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
                   Call Us
                 </h3>
-                <p className="text-gold text-sm">{CONTACT_INFO.phone}</p>
+                <p className="text-gold text-sm">+971-5659-11000</p>
               </div>
             </a>
           </div>
@@ -790,20 +794,44 @@ END:VCARD`;
                 </h3>
               </div>
               
-              <p className="text-zinc-700 text-sm leading-relaxed mb-4">
-                JBJ Global Real Estate provides real estate brokerage support and coordination. 
-                We can introduce you to independent, licensed partners for legal services, mortgages, and concierge support. 
-                Partner services are delivered under the partner's own licence and terms, and the client contracts directly with the partner. 
-                We do not provide legal, mortgage, financial, or investment advice.
+              <p className="text-zinc-700 text-sm leading-relaxed">
+                JBJ Global Real Estate is a licensed real estate brokerage in Dubai for buying, selling, and renting properties. We do not provide legal, mortgage, or immigration services directly. Where required, we may introduce independent, licensed partners. Any engagement with partner services is contracted directly between the client and the partner under the partner's own licence and terms.
               </p>
-              
-              <div className="h-px w-full bg-gradient-to-r from-transparent via-gold/40 to-transparent my-4" />
-              
-              <p className="text-zinc-600 text-sm leading-relaxed" dir="rtl">
-                جي بي جي للعقارات تقدم خدمات وساطة عقارية ودعم تنسيقي. 
-                يمكننا ربطك بشركاء مستقلين ومرخصين للخدمات القانونية والتمويل العقاري. 
-                تُقدَّم خدمات الشركاء وفق ترخيصهم وشروطهم الخاصة، ويكون التعاقد مباشرة بين العميل والشريك. 
-                نحن لا نقدم استشارات قانونية أو تمويلية أو استثمارية.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Appointments Section - 3-Layer System */}
+      <section className="py-10 bg-black">
+        {/* Thin black contour + Active Champagne Layer */}
+        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
+          {/* Inner Pearl Layer */}
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
+            <div className="max-w-3xl mx-auto text-center">
+              <div className="w-10 h-10 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
+                <Calendar className="w-5 h-5 text-gold" />
+              </div>
+              <h3 className="text-black font-semibold text-lg mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                Appointments
+              </h3>
+              <p className="text-zinc-700 text-sm leading-relaxed">
+                If an in-person meeting is required, availability is confirmed by appointment only after initial contact or ticket submission.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Closing Statement - 3-Layer System */}
+      <section className="py-10 bg-black">
+        {/* Thin black contour + Active Champagne Layer */}
+        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
+          {/* Inner Pearl Layer */}
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
+            <div className="max-w-3xl mx-auto text-center">
+              <p className="text-zinc-700 text-base leading-relaxed">
+                At JBJ Global Real Estate, communication is handled with structure, discretion, and accountability. We look forward to assisting you.
               </p>
             </div>
           </div>
