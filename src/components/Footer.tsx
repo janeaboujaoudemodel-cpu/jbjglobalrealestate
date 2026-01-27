@@ -149,7 +149,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="relative overflow-x-hidden">
+    <footer id="site-footer" className="relative overflow-x-hidden">
       {/* Premium gradient background with depth */}
       <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-black to-zinc-950" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gold/5 via-transparent to-transparent" />
