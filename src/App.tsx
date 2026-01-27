@@ -123,6 +123,7 @@ import LandlordRentalPortal from "./pages/LandlordRentalPortal";
 import FAQ from "./pages/FAQ";
 import InvestorEducation from "./pages/InvestorEducation";
 import InvestorFAQ from "./pages/InvestorFAQ";
+import InvestorDashboard from "./pages/InvestorDashboard";
 import BrokerEducation from "./pages/BrokerEducation";
 import BrokerFAQ from "./pages/BrokerFAQ";
 import JBJAnalyticsDashboard from "./pages/JBJAnalyticsDashboard";
@@ -223,6 +224,7 @@ const App = () => (
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/investor-education" element={<InvestorEducation />} />
                 <Route path="/investor-faq" element={<InvestorFAQ />} />
+                <Route path="/investor-dashboard" element={<InvestorDashboard />} />
                 <Route path="/broker-education" element={<BrokerEducation />} />
                 <Route path="/broker-faq" element={<BrokerFAQ />} />
                 <Route path="/quiz" element={<Quiz />} />
