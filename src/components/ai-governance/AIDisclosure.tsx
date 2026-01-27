@@ -18,7 +18,7 @@ const AIDisclosure: React.FC<AIDisclosureProps> = ({
   mode = 'client',
   className
 }) => {
-  const disclosureText = "This assistant is an AI system used to support information and operational workflows. It does not replace licensed professionals.";
+  const disclosureText = "This assistant supports information and operational workflows within JBJ Global Real Estate. Final decisions and execution are confirmed through official documentation and processes.";
   
   const modeLabels = {
     public: 'Public Information Mode',

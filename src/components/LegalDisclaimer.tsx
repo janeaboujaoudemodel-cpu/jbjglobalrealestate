@@ -97,15 +97,15 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
           <div>
             <p className="text-gold text-sm font-semibold mb-1">AI Tool Disclaimer</p>
             <p className="text-zinc-400 text-xs leading-relaxed">
-              AI-generated analysis is for informational purposes only. Results are estimates based on 
-              available data and should be verified independently before making any decisions.
+              AI outputs support information and comparisons based on available data and inputs. 
+              They are not guarantees and do not replace official documents or registration records.
             </p>
           </div>
         </div>
         
         <div className="border-t border-zinc-800 pt-4">
           <p className="text-zinc-400 text-xs mb-3">
-            For legal or mortgage guidance, contact our team to connect you with our licensed partners.
+            For legal, mortgage, or visa guidance, contact our team to connect you with our licensed partners.
           </p>
           <div className="flex flex-wrap gap-3">
             <a 

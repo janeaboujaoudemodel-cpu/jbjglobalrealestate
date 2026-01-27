@@ -315,7 +315,7 @@ const Footer = () => {
               <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 bg-gradient-to-br from-gold via-gold/90 to-gold/60 rounded-full animate-pulse shadow-[0_0_20px_rgba(200,167,102,0.7),0_0_40px_rgba(200,167,102,0.3)]" />
             </div>
             <p className="relative text-zinc-400 text-xs sm:text-sm md:text-base mb-6 sm:mb-8 md:mb-10 text-center px-2 max-w-2xl mx-auto">
-              Mortgage, legal, visa, and corporate services are provided through licensed partners.
+              Mortgage, legal, visa, and corporate support is provided through independent licensed partners.
             </p>
 
             {/* Premium Divider with intense glow */}
@@ -809,19 +809,19 @@ const Footer = () => {
               </h4>
               
               <p className="text-zinc-300 text-xs sm:text-sm md:text-base leading-relaxed mb-4 sm:mb-5 px-2 max-w-3xl mx-auto">
-                <span className="text-white font-semibold">JBJ Global Real Estate</span> is a Dubai mainland Real Estate brokerage licensed to BUY, SELL & RENT properties across the UAE. 
-                For legal services, mortgage support, visa, and corporate services, we can connect you with independent licensed partners. 
-                Clients contract and transact directly with the partner under the partner's own terms.
+                <span className="text-white font-semibold">JBJ Global Real Estate</span> is a Dubai mainland real estate brokerage licensed for Buy, Sell, and Rent transactions across the UAE. 
+                For legal, mortgage, visa, and corporate support, we can introduce you to independent, licensed partners. 
+                Clients contract directly with partners under the partner's own terms and licence.
               </p>
               
               {/* English Legal Line */}
               <p className="text-zinc-200 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 font-medium px-2 max-w-3xl mx-auto">
-                Licensed Real Estate Brokerage for Buy, Sell & Rent in Dubai (Mainland). Operated by <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link> L.L.C S.O.C. Owned & Led by <Link to="/founder" className="text-gold hover:underline font-semibold">Jane Bou Jaoude (جاين بو جودة)</Link> Founder & CEO <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link>.
+                Licensed Real Estate Brokerage — Buy, Sell, Rent (Dubai Mainland). Operated by <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate L.L.C S.O.C.</Link> Owned & led by <Link to="/founder" className="text-gold hover:underline font-semibold">Jane Bou Jaoude (جاين بو جودة)</Link>, Founder & CEO.
               </p>
               
               {/* Arabic Disclaimer */}
               <p className="text-zinc-400 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 px-2 max-w-3xl mx-auto" dir="rtl">
-                جي بي جي العقارية العالمية هي وساطة عقارية مرخصة في دبي للبيع والشراء والإيجار. للخدمات القانونية والتمويل العقاري والتأشيرات، يمكننا ربطك بشركاء مستقلين ومرخصين. يكون التعاقد مباشرة بين العميل والشريك وفق شروط الشريك.
+                جي بي جي للعقارات هي وساطة عقارية مرخصة في دبي للبيع والشراء والإيجار. للخدمات القانونية أو التمويل العقاري أو التأشيرات أو الخدمات المؤسسية، يمكننا ربطك بشركاء مستقلين ومرخصين. يتم التعاقد مباشرة بين العميل والشريك وفق ترخيصه وشروطه الخاصة.
               </p>
               
               {/* Arabic Legal Line */}
@@ -830,8 +830,8 @@ const Footer = () => {
               </p>
               
               <p className="text-zinc-400 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-5 sm:mb-6 px-2 max-w-3xl mx-auto">
-                All content, design, and technology on this platform are the intellectual property of 
-                <Link to="/founder" className="text-gold hover:underline font-semibold"> Jane Bou Jaoude (جاين بو جودة)</Link> Founder & CEO <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link>. Unauthorized reproduction is strictly prohibited.
+                All website content, branding, designs, and software are protected intellectual property of 
+                <Link to="/founder" className="text-gold hover:underline font-semibold"> Jane Bou Jaoude (جاين بو جودة)</Link> and <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link>. Unauthorized copying, reuse, mirroring, or reproduction is prohibited.
               </p>
               
               {/* Premium badge row - ULTRA Luxury 3D styling */}
