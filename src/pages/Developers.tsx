@@ -1,42 +1,108 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import {
-  ArrowRight,
+  Search,
   Building2,
+  MapPin,
+  Crown,
+  Filter,
+  X,
 } from "lucide-react";
-import { useProjects, useCommunities, useDevelopers } from "@/hooks/useProjects";
-import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
-import ProjectFilters, { type FilterState } from "@/components/ProjectFilters";
-import ProjectCard from "@/components/ProjectCard";
+import { useDevelopers, useProjects } from "@/hooks/useProjects";
+import DeveloperCard from "@/components/DeveloperCard";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import developersHeroVideo from "@/assets/videos/dubai-landmarks-hero.mp4";
 
+// Developer tier classification for filtering
+const TIER_FILTERS = [
+  { value: "all", label: "All Tiers" },
+  { value: "elite", label: "Elite" },
+  { value: "premium", label: "Premium" },
+  { value: "top-tier", label: "Top Tier" },
+  { value: "established", label: "Established" },
+];
+
+const ELITE_DEVELOPERS = ["emaar", "nakheel", "damac", "sobha", "meraas", "aldar", "omniyat"];
+const PREMIUM_DEVELOPERS = ["ellington"];
+const TOP_TIER_DEVELOPERS = ["binghatti", "majid-al-futtaim", "majid al futtaim"];
+const ESTABLISHED_DEVELOPERS = ["danube", "azizi"];
+
+function getDeveloperTierKey(slug: string): string {
+  const normalizedSlug = slug.toLowerCase();
+  if (ELITE_DEVELOPERS.some(d => normalizedSlug.includes(d))) return "elite";
+  if (PREMIUM_DEVELOPERS.some(d => normalizedSlug.includes(d))) return "premium";
+  if (TOP_TIER_DEVELOPERS.some(d => normalizedSlug.includes(d))) return "top-tier";
+  if (ESTABLISHED_DEVELOPERS.some(d => normalizedSlug.includes(d))) return "established";
+  return "other";
+}
+
 const Developers = () => {
-  const { data: projects, isLoading } = useProjects();
-  const { data: communities } = useCommunities();
-  const { data: developers } = useDevelopers();
+  const { data: developers, isLoading } = useDevelopers();
+  const { data: projects } = useProjects();
   
-  const [filters, setFilters] = useState<FilterState>(defaultFilters);
-  const filteredProjects = useFilteredProjects(projects || [], filters);
+  // Filter states
+  const [searchQuery, setSearchQuery] = useState("");
+  const [tierFilter, setTierFilter] = useState("all");
 
-  // Group projects by developer
-  const projectsByDeveloper = filteredProjects.reduce<Record<string, typeof filteredProjects>>((acc, project) => {
-    if (project.developer?.id) {
-      if (!acc[project.developer.id]) {
-        acc[project.developer.id] = [];
+  // Count projects per developer
+  const projectCounts = useMemo(() => {
+    if (!projects) return {};
+    return projects.reduce<Record<string, number>>((acc, project) => {
+      if (project.developer?.id) {
+        acc[project.developer.id] = (acc[project.developer.id] || 0) + 1;
       }
-      acc[project.developer.id].push(project);
-    }
-    return acc;
-  }, {});
+      return acc;
+    }, {});
+  }, [projects]);
 
-  // Get unique developers from filtered projects
-  const activeDevelopers = Object.keys(projectsByDeveloper)
-    .map(devId => developers?.find(d => d.id === devId))
-    .filter(Boolean);
+  // Apply filters to developers
+  const filteredDevelopers = useMemo(() => {
+    if (!developers) return [];
+    
+    let filtered = [...developers];
+    
+    // Search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(dev => 
+        dev.name.toLowerCase().includes(query) ||
+        (dev.description?.toLowerCase().includes(query))
+      );
+    }
+    
+    // Tier filter
+    if (tierFilter !== "all") {
+      filtered = filtered.filter(dev => 
+        getDeveloperTierKey(dev.slug || "") === tierFilter
+      );
+    }
+    
+    // Sort by rank
+    filtered.sort((a, b) => (a.rank ?? 999) - (b.rank ?? 999));
+    
+    return filtered;
+  }, [developers, searchQuery, tierFilter]);
+
+  const activeFilterCount = [
+    searchQuery.trim(),
+    tierFilter !== "all",
+  ].filter(Boolean).length;
+
+  const clearFilters = () => {
+    setSearchQuery("");
+    setTierFilter("all");
+  };
 
   return (
     <>
@@ -46,7 +112,7 @@ const Developers = () => {
         keywords="UAE developers, Dubai developers, Emaar, Nakheel, DAMAC, off-plan properties, new developments"
       />
       
-      <div className="min-h-screen bg-premium-bg text-primary-foreground">
+      <div className="min-h-screen bg-[hsl(var(--premium-bg))]">
         {/* Hero Section - Full-width Video */}
         <section className="relative h-[70vh] min-h-[500px] flex items-center justify-center overflow-hidden">
           {/* Video Background */}
@@ -105,77 +171,101 @@ const Developers = () => {
           </motion.div>
         </section>
 
-        {/* Project Filters */}
-        <section className="sticky top-16 lg:top-[72px] z-40 bg-premium-bg/95 backdrop-blur-md border-b border-gold/20 py-3">
-          <div className="container mx-auto px-4">
-            <ProjectFilters
-              filters={filters}
-              onFiltersChange={setFilters}
-              communities={communities}
-              developers={developers}
-              showDeveloperFilter={true}
-              showCommunityFilter={true}
-            />
+        {/* Filters Section - Champagne Layer matching Properties page */}
+        <section className="sticky top-16 lg:top-[72px] z-40 bg-black py-4 border-b border-gold/30">
+          <div className="container mx-auto px-3 sm:px-4">
+            {/* Active Champagne Layer */}
+            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg">
+              
+              {/* Keyword Search - Full Width */}
+              <div className="relative w-full mb-4">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold" />
+                <Input
+                  placeholder="Search by developer name..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-base shadow-sm w-full"
+                />
+              </div>
+
+              {/* Filter Row */}
+              <div className="flex items-center gap-3 flex-wrap">
+                {/* Tier Filter */}
+                <Select value={tierFilter} onValueChange={setTierFilter}>
+                  <SelectTrigger className="w-full sm:w-[180px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+                    <Crown className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
+                    <span className="truncate text-left flex-1">
+                      {TIER_FILTERS.find(t => t.value === tierFilter)?.label || "All Tiers"}
+                    </span>
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border-gold/30 z-50">
+                    {TIER_FILTERS.map((tier) => (
+                      <SelectItem key={tier.value} value={tier.value}>
+                        {tier.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {/* Results Count */}
+                <div className="flex-1 text-black/70 text-sm">
+                  {filteredDevelopers.length} developer{filteredDevelopers.length !== 1 ? 's' : ''} found
+                </div>
+
+                {/* Clear Filters */}
+                {activeFilterCount > 0 && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={clearFilters}
+                    className="h-9 px-3 bg-white/80 border-gold/30 text-black hover:bg-white rounded-lg flex items-center gap-1.5"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                    Clear ({activeFilterCount})
+                  </Button>
+                )}
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* Properties by Developer */}
+        {/* Developer Cards Grid */}
         <section className="py-12 md:py-16">
           <div className="jj-layer-2">
             {isLoading ? (
-              <div className="text-center py-12">
-                <div className="animate-pulse text-muted-foreground">Loading properties...</div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {[...Array(8)].map((_, i) => (
+                  <div 
+                    key={i} 
+                    className="h-[280px] rounded-xl bg-champagne/50 animate-pulse"
+                    style={{ border: '2px solid hsl(42 45% 59% / 0.3)' }}
+                  />
+                ))}
               </div>
-            ) : filteredProjects.length === 0 ? (
+            ) : filteredDevelopers.length === 0 ? (
               <div className="text-center py-20 border border-dashed border-gold/30 rounded-xl bg-premium-card/50">
                 <Building2 className="w-20 h-20 text-gold/40 mx-auto mb-6" />
-                <h3 className="text-2xl font-semibold text-foreground mb-3">No Properties Found</h3>
-                <p className="text-foreground/70 max-w-lg mx-auto">
-                  Try adjusting your search or filter criteria.
+                <h3 className="text-2xl font-semibold text-foreground mb-3">No Developers Found</h3>
+                <p className="text-foreground/70 max-w-lg mx-auto mb-6">
+                  {activeFilterCount > 0 
+                    ? "Try adjusting your search or filter criteria."
+                    : "No developers available at the moment."}
                 </p>
+                {activeFilterCount > 0 && (
+                  <Button variant="secondary" onClick={clearFilters}>
+                    Clear Filters
+                  </Button>
+                )}
               </div>
             ) : (
-              <div className="space-y-12">
-                {activeDevelopers.map((developer) => {
-                  if (!developer) return null;
-                  const devProjects = projectsByDeveloper[developer.id] || [];
-                  
-                  return (
-                    <div key={developer.id} className="space-y-6">
-                      {/* Developer Header */}
-                      <div className="flex items-center justify-between border-b border-gold/20 pb-4">
-                        <Link
-                          to={`/developer/${developer.slug}`}
-                          className="group flex items-center gap-4"
-                        >
-                          {developer.logo_url && (
-                            <img
-                              src={developer.logo_url}
-                              alt={developer.name}
-                              className="h-12 w-auto object-contain"
-                            />
-                          )}
-                          <div>
-                            <h2 className="text-2xl font-bold text-foreground group-hover:text-gold transition-colors">
-                              {developer.name}
-                            </h2>
-                            <p className="text-sm text-muted-foreground">
-                              {devProjects.length} {devProjects.length === 1 ? 'property' : 'properties'}
-                            </p>
-                          </div>
-                          <ArrowRight className="w-5 h-5 text-gold opacity-0 group-hover:opacity-100 transition-opacity ml-2" />
-                        </Link>
-                      </div>
-                      
-                      {/* Properties Grid */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {devProjects.map((project) => (
-                          <ProjectCard key={project.id} project={project} />
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredDevelopers.map((developer) => (
+                  <DeveloperCard 
+                    key={developer.id} 
+                    developer={developer} 
+                    projectCount={projectCounts[developer.id] || 0}
+                  />
+                ))}
               </div>
             )}
           </div>

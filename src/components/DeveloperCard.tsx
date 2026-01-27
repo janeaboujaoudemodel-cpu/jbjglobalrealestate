@@ -1,0 +1,144 @@
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Building2, TrendingUp } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import type { Developer } from "@/hooks/useProjects";
+
+interface DeveloperCardProps {
+  developer: Developer;
+  projectCount?: number;
+}
+
+// Developer tier classification
+const TIER_CONFIG: Record<string, { label: string; color: string }> = {
+  ELITE: { label: "ELITE", color: "bg-gradient-to-r from-gold to-[#E8D5A3] text-black" },
+  PREMIUM: { label: "PREMIUM", color: "bg-gradient-to-r from-amber-500 to-amber-400 text-black" },
+  TOP_TIER: { label: "TOP TIER", color: "bg-gradient-to-r from-zinc-700 to-zinc-600 text-white" },
+  ESTABLISHED: { label: "ESTABLISHED", color: "bg-gradient-to-r from-slate-600 to-slate-500 text-white" },
+};
+
+const ELITE_DEVELOPERS = ["emaar", "nakheel", "damac", "sobha", "meraas", "aldar", "omniyat"];
+const PREMIUM_DEVELOPERS = ["ellington"];
+const TOP_TIER_DEVELOPERS = ["binghatti", "majid-al-futtaim", "majid al futtaim"];
+const ESTABLISHED_DEVELOPERS = ["danube", "azizi"];
+
+function getDeveloperTier(slug: string): { label: string; color: string } | null {
+  const normalizedSlug = slug.toLowerCase();
+  
+  if (ELITE_DEVELOPERS.some(d => normalizedSlug.includes(d))) return TIER_CONFIG.ELITE;
+  if (PREMIUM_DEVELOPERS.some(d => normalizedSlug.includes(d))) return TIER_CONFIG.PREMIUM;
+  if (TOP_TIER_DEVELOPERS.some(d => normalizedSlug.includes(d))) return TIER_CONFIG.TOP_TIER;
+  if (ESTABLISHED_DEVELOPERS.some(d => normalizedSlug.includes(d))) return TIER_CONFIG.ESTABLISHED;
+  
+  return null;
+}
+
+const DeveloperCard = ({ developer, projectCount = 0 }: DeveloperCardProps) => {
+  const tier = getDeveloperTier(developer.slug || "");
+  
+  return (
+    <Link to={`/developer/${developer.slug}`}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        whileHover={{ y: -4 }}
+        transition={{ duration: 0.3 }}
+        className="group relative h-[280px] rounded-xl overflow-hidden cursor-pointer"
+        style={{
+          border: '3px solid hsl(42 45% 59%)',
+          boxShadow: `
+            0 8px 32px rgba(200,167,102,0.25),
+            0 4px 16px rgba(0,0,0,0.15),
+            inset 0 1px 0 rgba(255,255,255,0.1)
+          `,
+        }}
+      >
+        {/* Feature Image Background */}
+        <div className="absolute inset-0">
+          {developer.feature_image_url ? (
+            <img
+              src={developer.feature_image_url}
+              alt={developer.name}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center">
+              <Building2 className="w-16 h-16 text-gold/30" />
+            </div>
+          )}
+          
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+        </div>
+
+        {/* Tier Badge - Top Right */}
+        {tier && (
+          <div className="absolute top-3 right-3 z-10">
+            <Badge className={`${tier.color} px-3 py-1 text-[10px] font-bold tracking-wider shadow-lg`}>
+              {tier.label}
+            </Badge>
+          </div>
+        )}
+
+        {/* Content - Bottom */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
+          {/* Logo Plate */}
+          <div 
+            className="w-full h-16 rounded-lg flex items-center justify-center mb-3 overflow-hidden"
+            style={{
+              background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+              border: '2px solid hsl(42 45% 59%)',
+              boxShadow: `
+                0 4px 12px rgba(200,167,102,0.3),
+                inset 0 1px 2px rgba(255,255,255,0.9),
+                inset 0 -1px 2px rgba(200,167,102,0.1)
+              `,
+            }}
+          >
+            {developer.logo_url ? (
+              <img
+                src={developer.logo_url}
+                alt={`${developer.name} logo`}
+                className="max-h-12 max-w-[80%] object-contain"
+                loading="lazy"
+              />
+            ) : (
+              <span className="text-foreground font-semibold text-sm">{developer.name}</span>
+            )}
+          </div>
+
+          {/* Developer Name */}
+          <h3 className="text-white font-bold text-lg mb-1 group-hover:text-gold transition-colors line-clamp-1">
+            {developer.name}
+          </h3>
+
+          {/* Description Preview */}
+          {developer.description && (
+            <p className="text-white/70 text-xs line-clamp-2 mb-2">
+              {developer.description}
+            </p>
+          )}
+
+          {/* Stats Row */}
+          <div className="flex items-center gap-3 text-white/80 text-xs">
+            {projectCount > 0 && (
+              <div className="flex items-center gap-1">
+                <Building2 className="w-3.5 h-3.5 text-gold" />
+                <span>{projectCount} Projects</span>
+              </div>
+            )}
+            {developer.completed_projects && (
+              <div className="flex items-center gap-1">
+                <TrendingUp className="w-3.5 h-3.5 text-gold" />
+                <span>{developer.completed_projects.toLocaleString()}+ Delivered</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </motion.div>
+    </Link>
+  );
+};
+
+export default DeveloperCard;
