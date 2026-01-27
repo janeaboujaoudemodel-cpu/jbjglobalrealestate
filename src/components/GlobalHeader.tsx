@@ -203,7 +203,7 @@ const GlobalHeader = () => {
       <DropdownMenuContent 
         align="center" 
         sideOffset={16}
-        className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border-2 border-gold/40 min-w-[260px] shadow-2xl py-5 rounded-2xl overflow-hidden"
+        className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border-2 border-gold/40 min-w-[260px] max-h-[70vh] overflow-y-auto shadow-2xl py-5 rounded-2xl"
         style={{
           boxShadow: '0 25px 60px -15px rgba(0,0,0,0.5), 0 0 0 1px rgba(200,167,102,0.3), 0 0 60px -20px rgba(200,167,102,0.3)',
         }}

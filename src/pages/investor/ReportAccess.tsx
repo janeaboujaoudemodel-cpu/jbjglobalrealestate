@@ -238,12 +238,28 @@ export default function ReportAccess() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    <div className="min-h-screen bg-black">
       <GlobalHeader />
 
-      {/* Hero Section */}
-      <section className="relative py-16 md:py-24 bg-gradient-to-br from-zinc-900 via-zinc-900 to-black">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
+      {/* Premium Video Hero Section */}
+      <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
+        {/* Video Background */}
+        <div className="absolute inset-0">
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+            preload="auto"
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            <source src="https://videos.pexels.com/video-files/3130182/3130182-uhd_2560_1440_30fps.mp4" type="video/mp4" />
+          </video>
+          {/* Overlay gradients */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40" />
+        </div>
+
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <motion.div
@@ -251,15 +267,15 @@ export default function ReportAccess() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <div className="inline-flex items-center gap-2 bg-gold/20 text-gold px-4 py-2 rounded-full text-sm font-medium mb-6">
+              <div className="inline-flex items-center gap-2 bg-gold/20 backdrop-blur-sm text-gold px-4 py-2 rounded-full text-sm font-medium mb-6 border border-gold/30">
                 <FileText className="w-4 h-4" />
                 Report Access
               </div>
-              <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
                 Centralized Access to{" "}
                 <span className="text-gold">Official Market & Asset Reports</span>
               </h1>
-              <p className="text-zinc-400 text-lg mb-8 max-w-2xl mx-auto">
+              <p className="text-zinc-300 text-lg mb-8 max-w-2xl mx-auto">
                 Report Access is your private library for all reports available to your account—organized, 
                 traceable, and source-backed.
               </p>
@@ -278,23 +294,24 @@ export default function ReportAccess() {
         </div>
       </section>
 
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-12">
-        {/* Back Link */}
-        <Link
-          to="/investor-dashboard"
-          className="inline-flex items-center gap-2 text-muted-foreground hover:text-gold transition-colors mb-8"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Dashboard
-        </Link>
+      {/* Main Content - Layer 2 Champagne Background */}
+      <section className="py-16">
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
+          {/* Back Link */}
+          <Link
+            to="/investor-dashboard"
+            className="inline-flex items-center gap-2 text-zinc-600 hover:text-gold transition-colors mb-8"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Dashboard
+          </Link>
 
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={staggerContainer}
-          className="space-y-12"
-        >
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+            className="space-y-12"
+          >
           {/* Section 1: Report Access Overview */}
           <motion.div variants={fadeInUp}>
             <Card className="border-2 border-gold/30 bg-gradient-to-br from-gold/5 to-transparent">
@@ -397,7 +414,8 @@ export default function ReportAccess() {
             <ReportAccessFAQ />
           </motion.div>
         </motion.div>
-      </div>
+        </div>
+      </section>
 
       <Footer />
     </div>
