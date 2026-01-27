@@ -125,6 +125,7 @@ import FAQ from "./pages/FAQ";
 import InvestorEducation from "./pages/InvestorEducation";
 import InvestorFAQ from "./pages/InvestorFAQ";
 import InvestorDashboard from "./pages/InvestorDashboard";
+import PortfolioViews from "./pages/investor/PortfolioViews";
 import OwnerDashboard from "./pages/OwnerDashboard";
 import BrokerPartnerDashboard from "./pages/BrokerPartnerDashboard";
 import Dashboard from "./pages/Dashboard";
@@ -232,6 +233,7 @@ const App = () => (
                 <Route path="/investor-faq" element={<InvestorFAQ />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/investor-dashboard" element={<InvestorDashboard />} />
+                <Route path="/investor-dashboard/portfolio" element={<PortfolioViews />} />
                 <Route path="/owner-dashboard" element={<OwnerDashboard />} />
                 <Route path="/broker-partner-dashboard" element={<BrokerPartnerDashboard />} />
                 <Route path="/broker-education" element={<BrokerEducation />} />
