@@ -16,11 +16,11 @@ interface ComplianceDisclaimerProps {
 const ComplianceDisclaimer = ({ variant = "compact", className = "", language = "en" }: ComplianceDisclaimerProps) => {
   const currentYear = new Date().getFullYear();
 
-  // Short English Disclaimer - Updated compliant wording (no "not licensed" language)
-  const shortDisclaimerEN = `JBJ Global Real Estate provides real estate brokerage support and coordination. For legal services and mortgages, we can introduce you to our independent, licensed partners. Partner services are delivered under the partner's own licence and terms, and the client contracts directly with the partner.`;
+  // Short English Disclaimer - Updated compliant wording
+  const shortDisclaimerEN = `JBJ Global Real Estate provides licensed brokerage support for buying, selling, and renting. For legal, mortgage, visa, and corporate support, we can introduce independent licensed partners. Clients contract directly with partners under their own licence and terms.`;
 
   // Short Arabic Disclaimer - Updated compliant wording
-  const shortDisclaimerAR = `جي بي جي للعقارات تقدم خدمات وساطة عقارية ودعم تنسيقي. للخدمات القانونية والتمويل العقاري، يمكننا ربطك بشركاء مستقلين ومرخصين. تُقدَّم خدمات الشركاء وفق ترخيصهم وشروطهم الخاصة، ويكون التعاقد مباشرة بين العميل والشريك.`;
+  const shortDisclaimerAR = `جي بي جي للعقارات تقدم خدمات وساطة مرخصة للبيع والشراء والإيجار. للخدمات القانونية أو التمويل العقاري أو التأشيرات أو الخدمات المؤسسية، يمكننا ربطك بشركاء مستقلين ومرخصين. يتم التعاقد مباشرة بين العميل والشريك وفق ترخيصه وشروطه.`;
 
   // Full Disclaimer Content
   const fullDisclaimerPoints = [
@@ -134,12 +134,12 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
           <Users className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
           <div>
             <p className="text-blue-200 text-sm font-medium mb-2">
-              {language === "ar" ? "دليل الشركاء" : "Partners Directory"}
+              {language === "ar" ? "دليل الشركاء" : "Partner Directory"}
             </p>
             <p className="text-blue-200/70 text-xs leading-relaxed mb-3">
               {language === "ar"
-                ? "نتعاون مع شبكة من المتخصصين المستقلين والمرخصين لتقديم خدمات شاملة. هؤلاء الشركاء يعملون بشكل مستقل عن جي بي جي جلوبال للعقارات ويتعاقدون مباشرة مع العملاء. نحن نسهل التقديمات فقط."
-                : "We collaborate with a network of independent, licensed professionals to provide comprehensive support. These partners operate independently of JBJ Global Real Estate and contract directly with clients. We facilitate introductions only."}
+                ? "نقدم لك متخصصين مستقلين ومرخصين لخدمات خارج نطاق الوساطة. يعمل الشركاء بشكل مستقل ويتعاقدون مباشرة مع العملاء. جي بي جي تسهل التقديمات فقط."
+                : "We introduce independent licensed professionals for services outside brokerage scope. Partners operate independently and contract directly with clients. JBJ facilitates introductions only."}
             </p>
             <div className="flex flex-wrap gap-2">
               {["Law Firms", "Mortgage Specialists", "Property Managers", "Conveyancers"].map((partner) => (

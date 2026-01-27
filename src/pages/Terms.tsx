@@ -30,10 +30,9 @@ const Terms = () => {
               <section>
                 <h2 className="text-gold text-xl font-semibold mb-4">1. Who We Are</h2>
                 <p>
-                  This website is operated by JBJ GLOBAL REAL ESTATE (the "Company", "we", "us", "our"). 
-                  We are a Dubai-based real estate brokerage and provide real estate brokerage support 
-                  for property sales and rentals, and (where applicable) holiday homes support subject 
-                  to relevant approvals and permits.
+                  This website is operated by JBJ Global Real Estate (the "Company", "we", "us", "our"). 
+                  We are a Dubai-based real estate brokerage providing brokerage support for property buying, 
+                  selling, and renting in the UAE.
                 </p>
               </section>
 
@@ -41,28 +40,25 @@ const Terms = () => {
                 <h2 className="text-gold text-xl font-semibold mb-4">2. Scope of Our Services</h2>
                 <p>We provide:</p>
                 <ul className="list-disc pl-6 mt-2 space-y-2">
-                  <li>Real estate brokerage support (property sales and rentals)</li>
+                  <li>Real estate brokerage support for property buying, selling, and renting</li>
                   <li>Property search and introductions to listings/projects</li>
-                  <li>Coordination support for viewings, documentation and transaction process (as applicable)</li>
-                  <li>Holiday homes support (short-term rental support) only where permitted and subject to relevant approvals/permits</li>
-                  <li>Tools and calculators (including AI-enabled tools) for informational use</li>
-                  <li>Introductions to independent licensed third parties (for example: law firms, banks/mortgage specialists, conveyancing providers, and licensed property management providers)</li>
+                  <li>Coordination support for viewings, documentation, and transaction process (as applicable)</li>
+                  <li>Introductions to independent licensed third parties where required (e.g., law firms, banks/mortgage specialists, conveyancing providers, and licensed property management providers)</li>
                 </ul>
               </section>
 
               <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">3. What We Do NOT Do (Important)</h2>
-                <p className="mb-4">We do NOT provide:</p>
+                <h2 className="text-gold text-xl font-semibold mb-4">3. What We Do NOT Do</h2>
+                <p className="mb-4">We do not provide:</p>
                 <ul className="list-disc pl-6 mt-2 space-y-2">
-                  <li><strong>Legal advice or legal services</strong></li>
-                  <li><strong>Mortgage advice, mortgage brokerage, or banking services</strong></li>
-                  <li><strong>Financial advice or any regulated financial service</strong></li>
-                  <li><strong>Third-party long-term property management services</strong> unless expressly stated and licensed for that activity</li>
+                  <li><strong>Legal services</strong></li>
+                  <li><strong>Banking services</strong></li>
+                  <li><strong>Mortgage brokerage</strong></li>
+                  <li><strong>Regulated financial services</strong></li>
                 </ul>
                 <p className="mt-4 text-zinc-400">
-                  If you need legal, mortgage, or other regulated services, we may introduce you to 
-                  independent licensed providers. Those providers offer services under their own licences/employers 
-                  and you contract directly with them.
+                  Where legal, mortgage, visa, or other regulated support is required, we may introduce independent licensed providers. 
+                  You contract directly with those providers under their own licence and terms.
                 </p>
               </section>
 
@@ -79,23 +75,19 @@ const Terms = () => {
               <section>
                 <h2 className="text-gold text-xl font-semibold mb-4">5. Tools, Calculators, and AI Features</h2>
                 <p className="mb-4">
-                  Our tools (including any AI-enabled features such as quizzes, comparisons, evaluators, 
-                  reports, and calculators) are provided for general informational purposes only.
+                  Tools and AI-enabled features are provided to support information and workflows. 
+                  Outputs may vary based on inputs and available data and should be verified against official documents 
+                  and transaction records during execution. These tools do not provide legal, banking, mortgage, or 
+                  regulated financial services.
                 </p>
-                <ul className="list-disc pl-6 mt-2 space-y-2">
-                  <li>Outputs are estimates and may be incomplete, outdated, or inaccurate.</li>
-                  <li>You should not rely on these tools as legal, mortgage, or financial advice.</li>
-                  <li>You remain responsible for verifying all information with qualified licensed professionals and/or official sources.</li>
-                </ul>
               </section>
 
               <section>
                 <h2 className="text-gold text-xl font-semibold mb-4">6. Property Information and Listings</h2>
                 <p>
-                  Property information, imagery, brochures, floor plans, prices, availability, and descriptions 
-                  may be provided by developers/owners or third parties and may change at any time. We do not 
-                  guarantee accuracy, completeness, or availability. Final terms are subject to official contracts 
-                  and approvals.
+                  Property imagery, brochures, floor plans, pricing, availability, and descriptions may be provided 
+                  by developers, owners, or third parties and can change. Final terms, availability, and documentation 
+                  are confirmed through official contracts, approvals, and registration.
                 </p>
               </section>
 
@@ -165,8 +157,8 @@ const Terms = () => {
               <section>
                 <h2 className="text-gold text-xl font-semibold mb-4">14. Governing Law</h2>
                 <p>
-                  These Terms are governed by the laws applicable in the United Arab Emirates. Any disputes 
-                  will be subject to the competent courts, as applicable.
+                  These Terms are governed by the laws of the United Arab Emirates. Disputes are subject to 
+                  the competent courts in Dubai, as applicable.
                 </p>
               </section>
 
@@ -176,14 +168,14 @@ const Terms = () => {
                   For questions about these Terms:
                 </p>
                 <p className="mt-4">
-                  <strong>JBJ GLOBAL REAL ESTATE</strong><br />
+                  <strong>JBJ Global Real Estate</strong><br />
                   Real Estate Brokerage<br />
                   Dubai, United Arab Emirates<br />
                   Email: <a href="mailto:Privacy@JBJ.ae" className="text-gold hover:underline">Privacy@JBJ.ae</a>
                 </p>
                 <p className="mt-6 text-zinc-500 text-sm">
-                  © {new Date().getFullYear()} JBJ GLOBAL REAL ESTATE. All Rights Reserved.<br />
-                  Developed and Created by Founder & CEO Jane Bou Jaoude
+                  © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.<br />
+                  Owned & led by Jane Bou Jaoude (جاين بو جودة), Founder & CEO.
                 </p>
               </section>
             </div>
