@@ -260,7 +260,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
           </div>
 
           <p className="text-center text-gray-400 text-xs mt-8">
-            © {new Date().getFullYear()} JBJ GLOBAL REAL ESTATE. All Rights Reserved.
+            © {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
           </p>
         </div>
       </div>
@@ -502,7 +502,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
         </div>
 
         <p className="text-center text-gray-400 text-xs mt-8">
-          © {new Date().getFullYear()} JBJ GLOBAL REAL ESTATE. All Rights Reserved.
+          © {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
         </p>
       </div>
     </div>

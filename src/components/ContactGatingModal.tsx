@@ -355,8 +355,8 @@ const ContactGatingModal = ({ isOpen, onClose, onComplete, triggerSource }: Cont
             </div>
 
             <p className="text-xs text-gray-500 mt-4">
-              By continuing, you agree to our Terms of Service and Privacy Policy. 
-              Your information is secure and will only be used to enhance your experience.
+              By continuing, you confirm you have reviewed our Terms of Service and Privacy Policy. 
+              Your information is handled confidentially and used solely to support your inquiry and experience.
             </p>
 
             <Button onClick={handleSubmitForm} className="w-full bg-gold hover:bg-gold-dark text-white">
