@@ -266,10 +266,15 @@ const GlobalHeader = () => {
         }}
       />
       
-      {/* HEADER CONTENT (no cropping): desktop stays fixed; if it can't fit we switch to mobile */}
+      {/* HEADER CONTENT: scales proportionally on desktop when viewport shrinks */}
       <div
         ref={headerContentRef}
         className="relative z-10 h-full flex items-center justify-between px-4 xl:px-8 2xl:px-12"
+        style={!shouldUseMobileHeader ? {
+          // Scale the entire header content proportionally when viewport shrinks
+          transform: 'scale(clamp(0.8, calc((100vw - 768px) / 512), 1))',
+          transformOrigin: 'center center',
+        } : undefined}
       >
         {/* LEFT: Premium Brand Logo - LOCKED */}
         <div className="shrink-0">
@@ -602,62 +607,61 @@ const GlobalHeader = () => {
             </div>
           )}
 
-          {/* DESKTOP HEADER (lg+): pill nav + right icons, never cropped */}
+          {/* DESKTOP HEADER (lg+): pill nav + right icons - no extra scaling needed since parent scales */}
           {!shouldUseMobileHeader && (
-            <nav className="min-w-0 flex-1 mx-4 xl:mx-6" aria-label="Primary">
-              <div className="w-full overflow-x-auto">
-                <div className="w-fit mx-auto">
-                  <div 
-                    className="flex items-center gap-0.5 xl:gap-1 rounded-full px-4 xl:px-6 py-2 border-2 border-gold/40"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(245,235,215,0.98) 0%, rgba(232,220,200,0.95) 50%, rgba(212,196,168,0.98) 100%)',
-                      boxShadow: '0 8px 32px -8px rgba(0,0,0,0.4), 0 0 0 1px rgba(200,167,102,0.2), inset 0 2px 0 rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.05)',
-                    }}
-                  >
-                    {/* Home */}
-                    <Link
-                      to="/"
-                      className={`px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all rounded-full ${
-                        isActive("/") ? "text-gold bg-gold/15" : "text-zinc-800 hover:text-gold hover:bg-gold/10"
-                      }`}
-                      style={{ letterSpacing: '0.03em' }}
-                    >
-                      Home
-                    </Link>
+            <nav 
+              className="flex-1 mx-2 xl:mx-4 flex justify-center" 
+              aria-label="Primary"
+            >
+              <div 
+                className="flex items-center gap-0.5 xl:gap-1 rounded-full px-4 xl:px-6 py-2 border-2 border-gold/40"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(245,235,215,0.98) 0%, rgba(232,220,200,0.95) 50%, rgba(212,196,168,0.98) 100%)',
+                  boxShadow: '0 8px 32px -8px rgba(0,0,0,0.4), 0 0 0 1px rgba(200,167,102,0.2), inset 0 2px 0 rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.05)',
+                }}
+              >
+                {/* Home */}
+                <Link
+                  to="/"
+                  className={`px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all rounded-full ${
+                    isActive("/") ? "text-gold bg-gold/15" : "text-zinc-800 hover:text-gold hover:bg-gold/10"
+                  }`}
+                  style={{ letterSpacing: '0.03em' }}
+                >
+                  Home
+                </Link>
 
-                    {renderDropdown("Properties", propertiesLinks, () => location.pathname === '/properties')}
-                    {renderDropdown("Services", servicesLinks, () => location.pathname.startsWith('/services'))}
-                    {renderDropdown("Guides", guidesLinks, () => 
-                      ['/buyer-guide', '/seller-guide', '/landlord-guide', '/tenant-guide', '/areas', '/faq', '/investor-education', '/investor-faq', '/broker-faq'].some(p => location.pathname.startsWith(p))
-                    )}
-                    {renderDropdown("Market Intel", marketIntelLinks, () => 
-                      location.pathname.startsWith('/market-intelligence') || location.pathname === '/market-report'
-                    )}
-                    {renderDropdown("Investor Hub", investorHubLinks, () => 
-                      location.pathname.includes('ai-hub') || location.pathname === '/favorites'
-                    )}
-                    {renderDropdown("Broker Hub", brokerHubLinks, () => 
-                      location.pathname.includes('broker-toolkit') || location.pathname.includes('broker-education')
-                    )}
-                    {renderDropdown("About", aboutLinks, () => 
-                      ['/about', '/founder', '/team', '/awards'].some(p => location.pathname.startsWith(p))
-                    )}
+                {renderDropdown("Properties", propertiesLinks, () => location.pathname === '/properties')}
+                {renderDropdown("Services", servicesLinks, () => location.pathname.startsWith('/services'))}
+                {renderDropdown("Guides", guidesLinks, () => 
+                  ['/buyer-guide', '/seller-guide', '/landlord-guide', '/tenant-guide', '/areas', '/faq', '/investor-education', '/investor-faq', '/broker-faq'].some(p => location.pathname.startsWith(p))
+                )}
+                {renderDropdown("Market Intel", marketIntelLinks, () => 
+                  location.pathname.startsWith('/market-intelligence') || location.pathname === '/market-report'
+                )}
+                {renderDropdown("Investor Hub", investorHubLinks, () => 
+                  location.pathname.includes('ai-hub') || location.pathname === '/favorites'
+                )}
+                {renderDropdown("Broker Hub", brokerHubLinks, () => 
+                  location.pathname.includes('broker-toolkit') || location.pathname.includes('broker-education')
+                )}
+                {renderDropdown("About", aboutLinks, () => 
+                  ['/about', '/founder', '/team', '/awards'].some(p => location.pathname.startsWith(p))
+                )}
 
-                    <Link
-                      to="/contact"
-                      className={`px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all rounded-full ${
-                        isActive("/contact") ? "text-gold bg-gold/15" : "text-zinc-800 hover:text-gold hover:bg-gold/10"
-                      }`}
-                      style={{ letterSpacing: '0.03em' }}
-                    >
-                      Contact
-                    </Link>
+                <Link
+                  to="/contact"
+                  className={`px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all rounded-full ${
+                    isActive("/contact") ? "text-gold bg-gold/15" : "text-zinc-800 hover:text-gold hover:bg-gold/10"
+                  }`}
+                  style={{ letterSpacing: '0.03em' }}
+                >
+                  Contact
+                </Link>
 
-                    {renderDropdown("More", moreLinks, () => 
-                      ['/news', '/join'].some(p => location.pathname.startsWith(p))
-                    )}
-                  </div>
-                </div>
+                {renderDropdown("More", moreLinks, () => 
+                  ['/news', '/join'].some(p => location.pathname.startsWith(p))
+                )}
               </div>
             </nav>
           )}

@@ -19,6 +19,7 @@ import GlobalHeader from "@/components/GlobalHeader";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { GuideSectionHeader } from "@/components/guides/GuideSectionHeader";
+import brokerResourcesHeroVideo from "@/assets/videos/broker-resources-hero.mp4";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -144,12 +145,26 @@ const BrokerResources = () => {
     <div className="min-h-screen bg-background">
       <GlobalHeader />
       
-      {/* Hero Section */}
-      <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-900 to-black" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
-        <div className="absolute top-20 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gold/3 rounded-full blur-3xl" />
+      {/* Hero Section with Video */}
+      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
+        {/* Background Video */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src={brokerResourcesHeroVideo} type="video/mp4" />
+        </video>
+        
+        {/* Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />
+        
+        {/* Ambient glow effects */}
+        <div className="absolute top-20 left-1/4 w-96 h-96 bg-gold/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gold/5 rounded-full blur-3xl pointer-events-none" />
         
         <motion.div 
           className="container mx-auto px-4 relative z-10"
