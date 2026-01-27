@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import brokerEducationHeroVideo from "@/assets/videos/broker-education-hero.mp4";
 import { 
   GraduationCap, 
   BookOpen, 
@@ -32,13 +33,13 @@ const staggerContainer = {
   }
 };
 
-const LEARNING_PATHS = [
-  { name: 'Foundations', books: [1, 2], color: 'bg-blue-500' },
-  { name: 'Buyer & Investor Advisory', books: [3, 4], color: 'bg-emerald-500' },
-  { name: 'Seller & Landlord Advisory', books: [5, 6], color: 'bg-amber-500' },
-  { name: 'Market Intelligence', books: [7, 8], color: 'bg-purple-500' },
-  { name: 'Advanced (Restricted)', books: [9], color: 'bg-red-500' },
-];
+const LEARNING_PATH_ORDER = [
+  "Foundations",
+  "Buyer & Investor Advisory",
+  "Seller & Landlord Advisory",
+  "Market Intelligence",
+  "Advanced (Restricted)",
+] as const;
 
 const BrokerEducation = () => {
   const { books, loading, progressMap } = useBrokerEducation();
@@ -57,20 +58,50 @@ const BrokerEducation = () => {
     setSelectedBook(null);
   };
 
-  // Group books by learning path
-  const groupedBooks = LEARNING_PATHS.map(path => ({
-    ...path,
-    bookData: books.filter(b => path.books.includes(b.book_number)),
-  }));
+  // Group books by learning path (do not rely on book_number mapping)
+  const groupedBooks = useMemo(() => {
+    const byPath = new Map<string, EducationBook[]>();
+    for (const b of books) {
+      const key = b.learning_path || "Other";
+      const existing = byPath.get(key) ?? [];
+      existing.push(b);
+      byPath.set(key, existing);
+    }
+
+    for (const [k, arr] of byPath.entries()) {
+      arr.sort((a, b) => {
+        const sa = a.sort_order ?? 0;
+        const sb = b.sort_order ?? 0;
+        if (sa !== sb) return sa - sb;
+        return (a.book_number ?? 0) - (b.book_number ?? 0);
+      });
+      byPath.set(k, arr);
+    }
+
+    const keys = Array.from(byPath.keys()).sort((a, b) => {
+      const ai = LEARNING_PATH_ORDER.indexOf(a as any);
+      const bi = LEARNING_PATH_ORDER.indexOf(b as any);
+      if (ai === -1 && bi === -1) return a.localeCompare(b);
+      if (ai === -1) return 1;
+      if (bi === -1) return -1;
+      return ai - bi;
+    });
+
+    return keys.map((name) => ({
+      name,
+      isRestricted: name.toLowerCase().includes("restricted"),
+      bookData: byPath.get(name) ?? [],
+    }));
+  }, [books]);
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-premium-bg">
       <SEOHead 
         title="Broker Education | Internal Training Library | JBJ GLOBAL REAL ESTATE"
         description="Internal professional training library for JBJ Global Real Estate brokers. 9 comprehensive books covering UAE real estate fundamentals, advisory skills, and market intelligence."
       />
 
-      {/* Hero Section - Video Background (matches approved pattern) */}
+      {/* Hero Section - Unique Video Background (page-specific) */}
       <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden">
         {/* Background Video */}
         <video
@@ -80,7 +111,7 @@ const BrokerEducation = () => {
           playsInline
           className="absolute inset-0 w-full h-full object-cover opacity-30"
         >
-          <source src="/videos/hero-video.mp4" type="video/mp4" />
+          <source src={brokerEducationHeroVideo} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black" />
         
@@ -91,7 +122,7 @@ const BrokerEducation = () => {
           variants={staggerContainer}
         >
           <div className="max-w-4xl mx-auto text-center">
-            {/* Badge - Glass style with gold border */}
+            {/* Badge - outside the title (approved pattern) */}
             <motion.div 
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6"
               style={{
@@ -101,6 +132,7 @@ const BrokerEducation = () => {
               }}
               variants={fadeInUp}
             >
+              <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
               <GraduationCap className="w-4 h-4 text-gold" />
               <span className="text-gold font-semibold text-xs uppercase tracking-widest">Broker Education</span>
             </motion.div>
@@ -195,7 +227,7 @@ const BrokerEducation = () => {
             <div className="text-center mb-12">
               <Badge className="bg-gold/20 text-gold border-gold/30 mb-4">
                 <BookOpen className="w-3 h-3 mr-1" />
-                9 Books • 5 Learning Paths
+                  {loading ? "Loading…" : `${books.length} Books • ${groupedBooks.length} Learning Paths`}
               </Badge>
               <h2 className="text-3xl md:text-4xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Education <span className="text-gold">Library</span>
@@ -211,7 +243,7 @@ const BrokerEducation = () => {
               </div>
             ) : (
               <div className="space-y-12">
-                {groupedBooks.map((path, pathIndex) => (
+                {groupedBooks.map((path) => (
                   <motion.div 
                     key={path.name}
                     variants={fadeInUp}
@@ -219,9 +251,12 @@ const BrokerEducation = () => {
                   >
                     {/* Learning Path Header */}
                     <div className="flex items-center gap-3 mb-6">
-                      <div className={`w-3 h-8 ${path.color} rounded-full`} />
+                      <div className="w-2.5 h-10 bg-gold/60 rounded-full" />
                       <div>
-                        <h3 className="text-xl font-semibold text-black">{path.name}</h3>
+                        <h3 className="text-xl font-semibold text-black flex items-center gap-2">
+                          {path.name}
+                          {path.isRestricted && <Lock className="w-4 h-4 text-gold" />}
+                        </h3>
                         <p className="text-black/50 text-sm">{path.bookData.length} Book{path.bookData.length > 1 ? 's' : ''}</p>
                       </div>
                     </div>
@@ -240,6 +275,12 @@ const BrokerEducation = () => {
                     </div>
                   </motion.div>
                 ))}
+
+                {!loading && books.length === 0 && (
+                  <div className="text-center py-10">
+                    <p className="text-black/70">No books are available yet.</p>
+                  </div>
+                )}
               </div>
             )}
           </motion.div>
