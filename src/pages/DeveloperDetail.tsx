@@ -218,12 +218,19 @@ const DeveloperDetail = () => {
           ) : (
             <div className="text-center py-16 jj-box-active">
               <Building2 className="w-12 h-12 text-gold mx-auto mb-4" />
-              <p className="text-foreground/75 mb-2">
+              <h3 className="text-foreground text-xl font-semibold mb-2">
                 {hasFiltersApplied
-                  ? "No projects match your filters"
+                  ? "No Projects Match Your Filters"
                   : selectedEmirate
-                    ? `No projects in ${selectedEmirate} yet`
-                    : "No projects available from this developer yet."}
+                    ? `No Projects in ${selectedEmirate} Yet`
+                    : "No Projects Available Yet"}
+              </h3>
+              <p className="text-foreground/70 mb-4 max-w-md mx-auto">
+                {hasFiltersApplied
+                  ? "Try adjusting your filters to see more results."
+                  : selectedEmirate
+                    ? `${developer.name} doesn't have any projects in ${selectedEmirate} at the moment.`
+                    : `${developer.name} projects are coming soon. Check back later for updates.`}
               </p>
               {(hasFiltersApplied || selectedEmirate) && (
                 <Button
@@ -235,7 +242,7 @@ const DeveloperDetail = () => {
                   }}
                   className="mt-2"
                 >
-                  Clear all filters
+                  Clear All Filters
                 </Button>
               )}
             </div>
