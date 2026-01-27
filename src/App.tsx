@@ -125,6 +125,9 @@ import FAQ from "./pages/FAQ";
 import InvestorEducation from "./pages/InvestorEducation";
 import InvestorFAQ from "./pages/InvestorFAQ";
 import InvestorDashboard from "./pages/InvestorDashboard";
+import OwnerDashboard from "./pages/OwnerDashboard";
+import BrokerPartnerDashboard from "./pages/BrokerPartnerDashboard";
+import Dashboard from "./pages/Dashboard";
 import BrokerEducation from "./pages/BrokerEducation";
 import BrokerFAQ from "./pages/BrokerFAQ";
 import JBJAnalyticsDashboard from "./pages/JBJAnalyticsDashboard";
@@ -226,7 +229,10 @@ const App = () => (
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/investor-education" element={<InvestorEducation />} />
                 <Route path="/investor-faq" element={<InvestorFAQ />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/investor-dashboard" element={<InvestorDashboard />} />
+                <Route path="/owner-dashboard" element={<OwnerDashboard />} />
+                <Route path="/broker-partner-dashboard" element={<BrokerPartnerDashboard />} />
                 <Route path="/broker-education" element={<BrokerEducation />} />
                 <Route path="/broker-faq" element={<BrokerFAQ />} />
                 <Route path="/quiz" element={<Quiz />} />
