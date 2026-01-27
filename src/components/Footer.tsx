@@ -105,6 +105,7 @@ const Footer = () => {
     { label: t('footer.landlordGuide') || "Landlord Guide", href: "/landlord-guide" },
     { label: t('footer.tenantGuide') || "Tenant Guide", href: "/tenant-guide" },
     { label: t('footer.areaGuides') || "Area Guides", href: "/areas" },
+    { label: t('footer.goldenVisaGuide') || "Golden Visa Guide", href: "/guides/golden-visa-uae" },
     { label: t('footer.generalFaqs') || "General FAQs", href: "/faq" },
   ];
 

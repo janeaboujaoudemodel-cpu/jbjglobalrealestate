@@ -116,7 +116,7 @@ import BusinessCardScanner from "./pages/BusinessCardScanner";
 import BuyerGuide from "./pages/BuyerGuide";
 import SellerGuide from "./pages/SellerGuide";
 import SellerListing from "./pages/SellerListing";
-import GoldenVisa from "./pages/GoldenVisa";
+import GoldenVisaGuide from "./pages/guides/GoldenVisaGuide";
 import RentGuide from "./pages/RentGuide";
 import TenantGuide from "./pages/TenantGuide";
 import LandlordGuide from "./pages/LandlordGuide";
@@ -216,7 +216,8 @@ const App = () => (
                 <Route path="/buyer-guide" element={<BuyerGuide />} />
                 <Route path="/seller-guide" element={<SellerGuide />} />
                 <Route path="/seller-listing" element={<SellerListing />} />
-                <Route path="/golden-visa" element={<GoldenVisa />} />
+                <Route path="/golden-visa" element={<Navigate to="/guides/golden-visa-uae" replace />} />
+                <Route path="/guides/golden-visa-uae" element={<GoldenVisaGuide />} />
                 <Route path="/rent-guide" element={<RentGuide />} />
                 <Route path="/tenant-guide" element={<TenantGuide />} />
                 <Route path="/landlord-guide" element={<LandlordGuide />} />

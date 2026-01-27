@@ -138,6 +138,7 @@ const GlobalHeader = () => {
     { href: "/landlord-guide", label: t('guides.landlord') || "Landlord Guide", icon: FileText },
     { href: "/tenant-guide", label: t('guides.tenant') || "Tenant Guide", icon: FileText },
     { href: "/areas", label: t('areas.title') || "Area Guides", icon: MapPin },
+    { href: "/guides/golden-visa-uae", label: t('guides.goldenVisa') || "Golden Visa Guide", icon: Globe },
     { href: "/investor-education", label: t('header.investorEducation') || "Investor Education", icon: GraduationCap },
     { href: "/faq", label: t('header.generalFaq') || "General FAQ", icon: ClipboardCheck },
     { href: "/investor-faq", label: t('header.investorFaq') || "Investor FAQ", icon: ClipboardCheck },
