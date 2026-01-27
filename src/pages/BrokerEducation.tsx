@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 import { useBrokerEducation, EducationBook } from "@/hooks/useBrokerEducation";
 import { BookCard, BookDetailModal } from "@/components/broker-education";
-import GlobalHeader from "@/components/GlobalHeader";
 import Footer from "@/components/Footer";
 
 const fadeInUp = {
@@ -70,15 +69,19 @@ const BrokerEducation = () => {
         title="Broker Education | Internal Training Library | JBJ GLOBAL REAL ESTATE"
         description="Internal professional training library for JBJ Global Real Estate brokers. 9 comprehensive books covering UAE real estate fundamentals, advisory skills, and market intelligence."
       />
-      
-      <GlobalHeader />
 
-      {/* Hero Section */}
-      <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-zinc-900 via-black to-black">
-        <div 
-          className="absolute inset-0 bg-cover bg-center opacity-20"
-          style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?auto=format&fit=crop&w=2000&q=80)' }}
-        />
+      {/* Hero Section - Video Background (matches approved pattern) */}
+      <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden">
+        {/* Background Video */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover opacity-30"
+        >
+          <source src="/videos/hero-video.mp4" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black" />
         
         <motion.div 
@@ -88,6 +91,7 @@ const BrokerEducation = () => {
           variants={staggerContainer}
         >
           <div className="max-w-4xl mx-auto text-center">
+            {/* Badge - Glass style with gold border */}
             <motion.div 
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6"
               style={{
@@ -102,14 +106,15 @@ const BrokerEducation = () => {
             </motion.div>
             
             <motion.h1 
-              className="text-4xl md:text-5xl font-light text-white mb-4 leading-tight"
+              className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight"
+              style={{ fontFamily: "Poppins, sans-serif" }}
               variants={fadeInUp}
             >
               Internal Training <span className="text-gold">Library</span>
             </motion.h1>
             
             <motion.p 
-              className="text-lg text-zinc-300 font-light max-w-2xl mx-auto mb-8"
+              className="text-lg text-white/80 font-light max-w-2xl mx-auto mb-8"
               variants={fadeInUp}
             >
               9 comprehensive books designed to align brokers with JBJ standards. 
@@ -117,42 +122,42 @@ const BrokerEducation = () => {
             </motion.p>
 
             <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
-              <button 
+              <Button 
+                variant="hero"
                 onClick={() => document.getElementById('library')?.scrollIntoView({ behavior: 'smooth' })}
-                className="group inline-flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-lg transition-all duration-300 bg-gold/10 border border-gold/30 hover:bg-gold/20 text-gold"
               >
-                <ArrowDown className="w-4 h-4" />
+                <ArrowDown className="w-4 h-4 mr-2" />
                 Explore Library
-              </button>
-              <Link to="/broker-dashboard">
-                <Button variant="secondary">
+              </Button>
+              <Button variant="hero" asChild>
+                <Link to="/broker-dashboard">
                   <Briefcase className="w-4 h-4 mr-2" />
                   Back to Dashboard
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </motion.div>
           </div>
         </motion.div>
       </section>
 
-      {/* Page Intro Section */}
+      {/* Page Intro Section - Layer 2 Active Champagne */}
       <section className="py-12 md:py-16">
-        <div className="container mx-auto px-4">
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
           >
-            <Card className="bg-gradient-to-br from-zinc-900/90 via-zinc-900/80 to-black border border-gold/20">
+            <Card className="jj-card-inner">
               <CardContent className="p-8">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Info className="w-6 h-6 text-gold" />
+                  <div className="jj-icon-box-active w-12 h-12 rounded-xl flex-shrink-0">
+                    <Info className="w-6 h-6" />
                   </div>
                   <div>
-                    <h2 className="text-xl font-semibold text-white mb-3">About This Program</h2>
-                    <ul className="space-y-2 text-zinc-300">
+                    <h2 className="text-xl font-semibold text-black mb-3">About This Program</h2>
+                    <ul className="space-y-2 text-black/70">
                       <li className="flex items-start gap-2">
                         <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
                         <span>Internal training program by JBJ Global Real Estate</span>
@@ -178,9 +183,9 @@ const BrokerEducation = () => {
         </div>
       </section>
 
-      {/* Education Library Section */}
+      {/* Education Library Section - Layer 2 Active Champagne */}
       <section id="library" className="py-12 md:py-16 scroll-mt-20">
-        <div className="container mx-auto px-4">
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -192,10 +197,10 @@ const BrokerEducation = () => {
                 <BookOpen className="w-3 h-3 mr-1" />
                 9 Books • 5 Learning Paths
               </Badge>
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Education <span className="text-gold">Library</span>
               </h2>
-              <p className="text-zinc-400 max-w-2xl mx-auto">
+              <p className="text-black/70 max-w-2xl mx-auto">
                 Structured learning paths covering every aspect of professional real estate brokerage in the UAE.
               </p>
             </div>
@@ -216,8 +221,8 @@ const BrokerEducation = () => {
                     <div className="flex items-center gap-3 mb-6">
                       <div className={`w-3 h-8 ${path.color} rounded-full`} />
                       <div>
-                        <h3 className="text-xl font-semibold text-white">{path.name}</h3>
-                        <p className="text-zinc-500 text-sm">{path.bookData.length} Book{path.bookData.length > 1 ? 's' : ''}</p>
+                        <h3 className="text-xl font-semibold text-black">{path.name}</h3>
+                        <p className="text-black/50 text-sm">{path.bookData.length} Book{path.bookData.length > 1 ? 's' : ''}</p>
                       </div>
                     </div>
 
@@ -241,26 +246,26 @@ const BrokerEducation = () => {
         </div>
       </section>
 
-      {/* Progress & Recognition Section */}
+      {/* Progress & Recognition Section - Layer 2 Active Champagne */}
       <section className="py-12 md:py-16">
-        <div className="container mx-auto px-4">
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
           >
-            <Card className="bg-gradient-to-br from-zinc-900/90 via-zinc-900/80 to-black border border-gold/20">
+            <Card className="jj-card-inner">
               <CardContent className="p-8">
                 <div className="grid md:grid-cols-2 gap-8">
                   <div>
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center">
-                        <GraduationCap className="w-5 h-5 text-gold" />
+                      <div className="jj-icon-box-active w-10 h-10 rounded-xl">
+                        <GraduationCap className="w-5 h-5" />
                       </div>
-                      <h3 className="text-xl font-semibold text-white">Progress & Recognition</h3>
+                      <h3 className="text-xl font-semibold text-black">Progress & Recognition</h3>
                     </div>
-                    <ul className="space-y-2 text-zinc-300 text-sm">
+                    <ul className="space-y-2 text-black/70 text-sm">
                       <li className="flex items-start gap-2">
                         <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
                         <span>Progress tracked internally within the platform</span>
@@ -282,12 +287,12 @@ const BrokerEducation = () => {
 
                   <div>
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center">
-                        <Shield className="w-5 h-5 text-gold" />
+                      <div className="jj-icon-box-active w-10 h-10 rounded-xl">
+                        <Shield className="w-5 h-5" />
                       </div>
-                      <h3 className="text-xl font-semibold text-white">Access Rules</h3>
+                      <h3 className="text-xl font-semibold text-black">Access Rules</h3>
                     </div>
-                    <ul className="space-y-2 text-zinc-300 text-sm">
+                    <ul className="space-y-2 text-black/70 text-sm">
                       <li className="flex items-start gap-2">
                         <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
                         <span>This program is proprietary to JBJ Global Real Estate</span>
@@ -313,9 +318,9 @@ const BrokerEducation = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA Section - Layer 2 Active Champagne */}
       <section className="py-16 md:py-24">
-        <div className="container mx-auto px-4">
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -323,25 +328,25 @@ const BrokerEducation = () => {
             variants={fadeInUp}
             className="max-w-3xl mx-auto text-center"
           >
-            <h2 className="text-3xl md:text-4xl font-light text-white mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-black mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
               Ready to <span className="text-gold">Get Started?</span>
             </h2>
-            <p className="text-lg text-zinc-400 mb-10">
+            <p className="text-lg text-black/70 mb-10">
               Begin your professional development journey with the JBJ broker education library.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Link to="/broker-dashboard">
-                <Button variant="primary" size="lg">
+              <Button variant="primary" size="lg" asChild>
+                <Link to="/broker-dashboard">
                   <Briefcase className="w-5 h-5 mr-2" />
                   Back to Dashboard
-                </Button>
-              </Link>
-              <Link to="/broker-toolkit">
-                <Button variant="secondary" size="lg">
+                </Link>
+              </Button>
+              <Button variant="secondary" size="lg" asChild>
+                <Link to="/broker-toolkit">
                   <ArrowRight className="w-5 h-5 mr-2" />
                   Broker Tools
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
           </motion.div>
         </div>
