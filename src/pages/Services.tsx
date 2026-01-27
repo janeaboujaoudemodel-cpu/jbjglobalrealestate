@@ -1,16 +1,13 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
-  Home, Building2, Key, FileText, Scale, Landmark, 
-  PenTool, Hammer, Briefcase, Users, Shield, Award,
-  ArrowRight, CheckCircle, Sparkles, Building, ChevronRight,
-  Brain, Ruler, Palette, Cpu
+  Briefcase, Users, Building2, TrendingUp, Key, Globe,
+  ArrowRight, CheckCircle, ChevronRight, MessageSquare, Phone
 } from "lucide-react";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { CONTACT_INFO } from "@/constants/stats";
 import servicesHeroVideo from "@/assets/videos/services-hero.mp4";
 
 const fadeInUp = {
@@ -26,144 +23,68 @@ const staggerContainer = {
   }
 };
 
-// Split title helper
-const SplitTitle = ({ text }: { text: string }) => {
-  const words = text.split(' ');
-  const firstWord = words[0];
-  const restWords = words.slice(1).join(' ');
-  
-  return (
-    <span className="jj-title-split">
-      <span>{firstWord}</span>{restWords && <span> {restWords}</span>}
-    </span>
-  );
-};
-
-const coreServices = [
+// Service cards data - exactly as specified
+const serviceCards = [
   {
-    icon: Home,
-    title: "Buy Property",
-    description: "Find your dream home or investment property with expert guidance through Dubai's dynamic real estate market.",
-    link: "/buyer-guide",
-    features: ["Market Analysis", "Property Tours", "Negotiation Support", "Due Diligence"]
+    icon: Briefcase,
+    title: "Buying Advisory",
+    description: "Professional buyer representation for off-plan and ready properties.",
+    link: "/services/buying-advisory"
   },
   {
     icon: Key,
-    title: "Sell Property",
-    description: "Maximize your property's value with our comprehensive marketing and sales strategies.",
-    link: "/seller-guide",
-    features: ["Property Valuation", "Marketing Strategy", "Buyer Screening", "Closing Support"]
+    title: "Selling Advisory",
+    description: "Strategic pricing, positioning, and execution for owners selling in the UAE.",
+    link: "/services/selling-advisory"
   },
   {
     icon: Building2,
-    title: "Rent a Property",
-    description: "Whether you're a landlord or tenant, we streamline the rental process for optimal results.",
-    link: "/rent-guide",
-    features: ["Tenant Matching", "Lease Management", "Property Maintenance", "Rent Collection"]
-  }
-];
-
-const specializedServices = [
-  {
-    icon: Scale,
-    title: "Legal Services",
-    description: "Comprehensive legal support for all your real estate transactions and disputes.",
-    link: "/services/legal",
-    badge: "Legal Division"
+    title: "Rental Advisory",
+    description: "Landlord-focused leasing support from pricing to tenant onboarding.",
+    link: "/services/rental-advisory"
   },
   {
-    icon: Landmark,
-    title: "Mortgage Advisory",
-    description: "Expert mortgage guidance to secure the best financing for your property.",
-    link: "/mortgage-calculator",
-    badge: "Financial Services"
-  },
-  {
-    icon: PenTool,
-    title: "Design & Build",
-    description: "Transform spaces with our architecture, interior design, and construction partners.",
-    link: "/services/design-build",
-    badge: "Partner Network"
-  },
-  {
-    icon: Hammer,
-    title: "Renovation Services",
-    description: "Quality renovation and fit-out services to enhance your property's value.",
-    link: "/services/fit-out",
-    badge: "Partner Network"
-  },
-  {
-    icon: FileText,
-    title: "Property Management",
-    description: "Complete property management solutions to protect and grow your real estate investments.",
-    link: "/services/property-management",
-    badge: "Partner Network"
-  }
-];
-
-const aiTools = [
-  {
-    icon: Brain,
-    title: "AI Interior Designer",
-    description: "Visualize your space with AI-powered interior design concepts.",
-    link: "/tools/interior-ai"
-  },
-  {
-    icon: Ruler,
-    title: "AI Property Measurement",
-    description: "Accurate property measurements using advanced AI technology.",
-    link: "/tools/property-measurement"
-  },
-  {
-    icon: Palette,
-    title: "AI Home Finder",
-    description: "Find your perfect property match with our intelligent recommendation system.",
-    link: "/quiz"
-  },
-  {
-    icon: Cpu,
-    title: "Market Intelligence",
-    description: "Data-driven insights powered by official government Open Data.",
-    link: "/market-intelligence"
-  }
-];
-
-const whyChooseUs = [
-  {
-    icon: Award,
-    title: "15+ Years Experience",
-    description: "Deep expertise in Dubai's real estate market"
+    icon: TrendingUp,
+    title: "Investment Advisory",
+    description: "Data-driven investment strategy and portfolio decision support.",
+    link: "/services/investment-advisory"
   },
   {
     icon: Users,
-    title: "Dedicated Team",
-    description: "Personalized service from licensed professionals"
+    title: "Partner Introductions",
+    description: "Introductions to licensed partners for legal, mortgage, and specialist support.",
+    link: "/partners"
   },
   {
-    icon: Shield,
-    title: "Trusted Partner",
-    description: "Transparent dealings with verified track record"
-  },
-  {
-    icon: Building,
-    title: "Premium Portfolio",
-    description: "Access to exclusive off-market properties"
+    icon: Globe,
+    title: "Golden Visa Guide",
+    description: "Long-term residency pathway through qualifying real estate investment.",
+    link: "/guides/golden-visa-uae"
   }
+];
+
+// How to choose the right service
+const serviceGuide = [
+  { need: "Buying a home or investment", service: "Buying Advisory" },
+  { need: "Selling an asset", service: "Selling Advisory" },
+  { need: "Renting out your property", service: "Rental Advisory" },
+  { need: "Building a portfolio", service: "Investment Advisory" },
+  { need: "Need legal/mortgage support", service: "Partner Introductions" }
 ];
 
 const Services = () => {
   return (
     <div className="min-h-screen bg-black">
       <SEOHead 
-        title="Real Estate Services Dubai | Buy, Sell, Rent | JBJ GLOBAL REAL ESTATE"
-        description="Comprehensive real estate services in Dubai. Property sales, rentals, management, legal support, mortgage advisory, and design services. Expert guidance for all your property needs."
-        keywords="Dubai real estate services, property management Dubai, buy property Dubai, sell property Dubai, rent Dubai, legal services real estate"
+        title="Explore Our Services | JBJ Global Real Estate"
+        description="JBJ Global Real Estate provides licensed brokerage advisory across Buy · Sell · Rent, supported by market intelligence and disciplined execution."
+        keywords="Dubai real estate services, buying advisory, selling advisory, rental advisory, investment advisory, partner introductions, golden visa"
         canonicalPath="/services"
       />
 
-      {/* Hero Section with Unique Video */}
+      {/* Hero Section with Video */}
       <section className="relative min-h-[60vh] flex items-center overflow-hidden">
-        {/* Background Video - Unique to Services page */}
+        {/* Background Video */}
         <video
           autoPlay
           loop
@@ -188,7 +109,7 @@ const Services = () => {
           >
             <Briefcase className="w-6 h-6 text-gold" />
             <span className="text-gold text-sm uppercase tracking-[0.3em]">
-              Full-Service Brokerage
+              Professional Advisory
             </span>
           </motion.div>
 
@@ -197,30 +118,39 @@ const Services = () => {
             style={{ fontFamily: "Poppins, sans-serif" }}
             variants={fadeInUp}
           >
-            Our Services
+            Explore Our Services
           </motion.h1>
 
           <motion.p 
-            className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto mb-8"
+            className="text-zinc-300 text-lg md:text-xl max-w-3xl mx-auto mb-8"
             variants={fadeInUp}
           >
-            Comprehensive real estate solutions tailored to your unique needs. 
-            From buying and selling to legal support and design services.
+            JBJ Global Real Estate provides licensed brokerage advisory across Buy · Sell · Rent, 
+            supported by market intelligence and disciplined execution. Choose the service that 
+            matches your objective, then proceed with a structured consultation.
           </motion.p>
 
-          <motion.div variants={fadeInUp}>
-            <Button variant="hero" size="lg" asChild>
-              <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                <Sparkles className="w-5 h-5 mr-2" />
-                <span>Get Started</span>
+          <motion.div 
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+            variants={fadeInUp}
+          >
+            <Button variant="primary" size="lg" asChild>
+              <Link to="/contact">
+                <MessageSquare className="w-5 h-5 mr-2" />
+                Speak with an Advisor
+              </Link>
+            </Button>
+            <Button variant="secondary" size="lg" asChild>
+              <Link to="/guides">
+                View Guides
                 <ArrowRight className="w-5 h-5 ml-2" />
-              </a>
+              </Link>
             </Button>
           </motion.div>
         </motion.div>
       </section>
 
-      {/* Core Services - 3-Layer System */}
+      {/* Service Cards Grid */}
       <section className="py-16 bg-black">
         <div className="jj-layer-2">
           <motion.div
@@ -231,18 +161,18 @@ const Services = () => {
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
               <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
-                Core Services
+                Advisory Services
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-                <SplitTitle text="Buy · Sell · Rent" />
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                Choose Your Path
               </h2>
               <p className="text-black/70 max-w-2xl mx-auto">
-                Expert guidance through every step of your real estate journey in Dubai.
+                Select the service that aligns with your real estate objectives.
               </p>
             </motion.div>
 
-            <div className="grid md:grid-cols-3 gap-6">
-              {coreServices.map((service) => (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {serviceCards.map((service) => (
                 <motion.div key={service.title} variants={fadeInUp}>
                   <Link to={service.link}>
                     <Card className="jj-card-inner hover:border-gold transition-all group h-full flex flex-col">
@@ -253,17 +183,9 @@ const Services = () => {
                         <h3 className="text-black font-semibold text-lg mb-2 group-hover:text-gold transition-colors">
                           {service.title}
                         </h3>
-                        <p className="text-black/70 text-sm mb-4">
+                        <p className="text-black/70 text-sm mb-4 flex-1">
                           {service.description}
                         </p>
-                        <ul className="space-y-2 mb-4 flex-1">
-                          {service.features.map((feature) => (
-                            <li key={feature} className="flex items-center gap-2 text-xs text-black/60">
-                              <CheckCircle className="w-3 h-3 text-gold flex-shrink-0" />
-                              {feature}
-                            </li>
-                          ))}
-                        </ul>
                         <div className="flex items-center gap-1 text-gold text-sm font-medium mt-auto pt-4 border-t border-gold/20">
                           Learn More
                           <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -278,7 +200,7 @@ const Services = () => {
         </div>
       </section>
 
-      {/* Specialized Solutions (Partner Services) - 3-Layer System */}
+      {/* How to Choose the Right Service */}
       <section className="py-16 bg-black">
         <div className="jj-layer-2">
           <motion.div
@@ -289,51 +211,39 @@ const Services = () => {
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
               <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
-                Partner Network
+                Quick Guide
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-                <SplitTitle text="Specialized Solutions" />
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                How to Choose the Right Service
               </h2>
-              <p className="text-black/70 max-w-2xl mx-auto">
-                Comprehensive support services through our trusted partner network.
-              </p>
             </motion.div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {specializedServices.map((service) => (
-                <motion.div key={service.title} variants={fadeInUp}>
-                  <Link to={service.link}>
-                    <Card className="jj-card-inner hover:border-gold transition-all group h-full flex flex-col">
-                      <CardContent className="p-6 flex flex-col flex-1">
-                        <div className="flex items-start gap-4 mb-4">
-                          <div className="jj-icon-box-active w-12 h-12 flex-shrink-0 group-hover:scale-110 transition-transform">
-                            <service.icon className="w-6 h-6" />
-                          </div>
-                          <span className="text-[10px] uppercase tracking-wider text-gold bg-gold/10 border border-gold/30 px-2 py-1 rounded">
-                            {service.badge}
-                          </span>
-                        </div>
-                        <h3 className="text-black font-semibold text-lg mb-2 group-hover:text-gold transition-colors">
-                          {service.title}
-                        </h3>
-                        <p className="text-black/70 text-sm mb-4 flex-1">
-                          {service.description}
-                        </p>
-                        <div className="flex items-center gap-1 text-gold text-sm font-medium mt-auto pt-4 border-t border-gold/20">
-                          Explore
-                          <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
+            <motion.div 
+              className="max-w-2xl mx-auto"
+              variants={fadeInUp}
+            >
+              <Card className="jj-card-inner">
+                <CardContent className="p-8">
+                  <ul className="space-y-4">
+                    {serviceGuide.map((item, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <CheckCircle className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                        <span className="text-black/80">
+                          <span className="font-medium text-black">{item.need}</span>
+                          {" → "}
+                          <span className="text-gold font-semibold">{item.service}</span>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* AI Tools Section - 3-Layer System */}
+      {/* Final CTA Section */}
       <section className="py-16 bg-black">
         <div className="jj-layer-2">
           <motion.div
@@ -341,136 +251,38 @@ const Services = () => {
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
+            className="text-center"
           >
-            <motion.div className="text-center mb-12" variants={fadeInUp}>
+            <motion.div variants={fadeInUp}>
               <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
-                Innovation
+                Get Started
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-                <SplitTitle text="AI-Powered Tools" />
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                Request a Consultation
               </h2>
-              <p className="text-black/70 max-w-2xl mx-auto">
-                Leverage cutting-edge technology for smarter real estate decisions.
+              <p className="text-black/70 max-w-2xl mx-auto mb-8">
+                If you want a structured recommendation, request a consultation and we will 
+                route you to the correct advisory path.
               </p>
             </motion.div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {aiTools.map((tool) => (
-                <motion.div key={tool.title} variants={fadeInUp}>
-                  <Link to={tool.link}>
-                    <Card className="jj-card-inner hover:border-gold transition-all group h-full flex flex-col">
-                      <CardContent className="p-6 flex flex-col flex-1">
-                        <div className="jj-icon-box-active w-12 h-12 mb-4 group-hover:scale-110 transition-transform">
-                          <tool.icon className="w-6 h-6" />
-                        </div>
-                        <div className="flex items-center gap-2 mb-2">
-                          <Sparkles className="w-4 h-4 text-gold" />
-                          <span className="text-[10px] uppercase tracking-wider text-gold">AI-Powered</span>
-                        </div>
-                        <h3 className="text-black font-semibold text-lg mb-2 group-hover:text-gold transition-colors">
-                          {tool.title}
-                        </h3>
-                        <p className="text-black/70 text-sm mb-4 flex-1">
-                          {tool.description}
-                        </p>
-                        <div className="flex items-center gap-1 text-gold text-sm font-medium mt-auto pt-4 border-t border-gold/20">
-                          Try Now
-                          <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-
-            <motion.div className="text-center mt-10" variants={fadeInUp}>
+            <motion.div 
+              className="flex flex-col sm:flex-row gap-4 justify-center"
+              variants={fadeInUp}
+            >
               <Button variant="primary" size="lg" asChild>
-                <Link to="/ai-hub">
-                  <Sparkles className="w-5 h-5 mr-2" />
-                  <span className="text-black">Explore More</span><span className="text-gold"> AI Tools</span>
-                  <ChevronRight className="w-4 h-4 ml-1" />
+                <Link to="/contact">
+                  <MessageSquare className="w-5 h-5 mr-2" />
+                  Request Consultation
+                </Link>
+              </Button>
+              <Button variant="secondary" size="lg" asChild>
+                <Link to="/contact">
+                  <Phone className="w-5 h-5 mr-2" />
+                  Contact Us
                 </Link>
               </Button>
             </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Why Choose Us - 3-Layer System */}
-      <section className="py-16 bg-black">
-        <div className="jj-layer-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
-            <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
-                Our Advantage
-              </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-                <SplitTitle text="Why Choose JBJ" />
-              </h2>
-            </motion.div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {whyChooseUs.map((item) => (
-                <motion.div key={item.title} variants={fadeInUp}>
-                  <Card className="jj-card-inner h-full">
-                    <CardContent className="p-6 text-center">
-                      <div className="w-16 h-16 rounded-full bg-black flex items-center justify-center mx-auto mb-4">
-                        <item.icon className="w-8 h-8 text-gold" />
-                      </div>
-                      <h3 className="text-black font-semibold text-lg mb-2">
-                        {item.title}
-                      </h3>
-                      <p className="text-black/70 text-sm">
-                        {item.description}
-                      </p>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* CTA Section - 3-Layer System */}
-      <section className="py-16 bg-black">
-        <div className="jj-layer-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            className="text-center"
-          >
-            <div className="jj-card-inner rounded-2xl p-8 md:p-12 max-w-3xl mx-auto">
-              <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-                <SplitTitle text="Ready to Get Started?" />
-              </h2>
-              <p className="text-black/70 mb-8 max-w-xl mx-auto">
-                Connect with our team today and discover how we can help 
-                with your real estate goals.
-              </p>
-              <div className="flex flex-wrap gap-4 justify-center">
-                <Button variant="primary" size="lg" asChild>
-                  <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                    <span className="text-black">Schedule</span><span className="text-gold"> Consultation</span>
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </a>
-                </Button>
-                <Button variant="secondary" size="lg" asChild>
-                  <a href={`tel:${CONTACT_INFO.phoneRaw}`}>
-                    <span className="text-black">Contact</span><span className="text-gold"> Us</span>
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </a>
-                </Button>
-              </div>
-            </div>
           </motion.div>
         </div>
       </section>
