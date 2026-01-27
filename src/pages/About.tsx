@@ -156,7 +156,7 @@ const About = () => {
               style={{ fontFamily: "Poppins, sans-serif" }}
               variants={fadeInUp}
             >
-              Built on Vision.<br className="hidden md:block" /> Driven by Results.
+              About JBJ Global Real Estate
             </motion.h1>
             <motion.p 
               className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto mb-10"
@@ -263,36 +263,20 @@ const About = () => {
                 </div>
               </motion.div>
 
-              {/* RIGHT: Founder Statement */}
+              {/* RIGHT: Who We Are */}
               <motion.div variants={fadeInUp} className="mt-8 md:mt-0">
-                <p className="text-sm font-medium tracking-wide mb-6">
-                  <span className="text-gold uppercase tracking-[0.15em]">Written by Founder & CEO,</span>{" "}
-                  <Link 
-                    to="/founder" 
-                    className="text-black text-xl md:text-2xl font-semibold hover:text-gold transition-colors"
-                  >
-                    Jane Bou Jaoude
-                  </Link>
-                  <span className="block mt-2">
-                    <Link 
-                      to="/about" 
-                      className="text-white bg-black px-3 py-1 rounded text-sm font-medium hover:text-gold transition-colors inline-block"
-                    >
-                      JBJ Global Real Estate
-                    </Link>
-                    <span className="block h-0.5 w-24 bg-gold mt-2" />
-                  </span>
-                </p>
+                <SectionLabel>Who We Are</SectionLabel>
+                <SectionHeadline>Licensed Real Estate Brokerage</SectionHeadline>
                 
                 <ContentText>
                   <p>
-                    I believe real estate decisions should never be driven by pressure, commissions, or promises that do not exist in reality.
+                    JBJ Global Real Estate is a Dubai-based, licensed real estate brokerage operating across the UAE.
                   </p>
                   <p>
-                    There is no such thing as guaranteed ROI. Real estate follows cycles, market forces, and external factors that cannot be controlled.
+                    We are authorized to BUY, SELL, and RENT residential and investment properties and provide structured brokerage support to end-users, investors, and professional partners.
                   </p>
                   <p>
-                    My responsibility as the founder is to protect people from decisions made with incomplete information or unrealistic expectations.
+                    Our role is not to sell aggressively — it is to protect decisions, structure transactions correctly, and operate within clear regulatory boundaries.
                   </p>
                 </ContentText>
               </motion.div>
@@ -311,34 +295,34 @@ const About = () => {
             <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
               {/* LEFT: Text Content */}
               <motion.div variants={fadeInUp}>
-                <SectionLabel>How We Operate</SectionLabel>
-                <SectionHeadline>Client Capital, Treated as Our Own</SectionHeadline>
+                <SectionLabel>Our Philosophy</SectionLabel>
+                <SectionHeadline>Real Estate is a Long-Term Decision</SectionHeadline>
                 <ContentText>
                   <p>
-                    At JBJ GLOBAL REAL ESTATE, we work with clients as if we are investing our own capital.
+                    Real estate is not a product. It is a long-term financial, legal, and lifestyle decision.
                   </p>
                   <p>
-                    We do not treat a client's portfolio as a transaction. We treat it as if it were our own.
+                    At JBJ Global Real Estate, we operate with three non-negotiable principles:
                   </p>
                 </ContentText>
                 
                 {/* Feature Cards - champagne style to match founder card */}
                 <div className="grid sm:grid-cols-2 gap-4 mt-8">
                   <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-lg p-5 shadow-sm">
-                    <Users className="w-6 h-6 text-gold mb-3" />
-                    <p className="text-black text-base font-semibold leading-snug">Client-First Advisory</p>
+                    <Target className="w-6 h-6 text-gold mb-3" />
+                    <p className="text-black text-base font-semibold leading-snug">Clarity over Persuasion</p>
+                  </div>
+                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-lg p-5 shadow-sm">
+                    <FileCheck className="w-6 h-6 text-gold mb-3" />
+                    <p className="text-black text-base font-semibold leading-snug">Process over Promises</p>
                   </div>
                   <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-lg p-5 shadow-sm">
                     <Shield className="w-6 h-6 text-gold mb-3" />
-                    <p className="text-black text-base font-semibold leading-snug">Capital Protection</p>
+                    <p className="text-black text-base font-semibold leading-snug">Compliance over Shortcuts</p>
                   </div>
                   <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-lg p-5 shadow-sm">
                     <TrendingUp className="w-6 h-6 text-gold mb-3" />
-                    <p className="text-black text-base font-semibold leading-snug">Long-Term Strategy</p>
-                  </div>
-                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-lg p-5 shadow-sm">
-                    <Target className="w-6 h-6 text-gold mb-3" />
-                    <p className="text-black text-base font-semibold leading-snug">Goal Alignment</p>
+                    <p className="text-black text-base font-semibold leading-snug">Data-Driven Guidance</p>
                   </div>
                 </div>
               </motion.div>
@@ -371,26 +355,26 @@ const About = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-10" variants={fadeInUp}>
-              <SectionLabel>Off-Plan Policy</SectionLabel>
-              <SectionHeadline className="max-w-2xl mx-auto">No Fees. No Pressure.</SectionHeadline>
+              <SectionLabel>What We Do</SectionLabel>
+              <SectionHeadline className="max-w-2xl mx-auto">Licensed Brokerage Services</SectionHeadline>
             </motion.div>
 
             {/* 3 Card Grid */}
             <div className="grid md:grid-cols-3 gap-6">
               <FeatureCard 
-                icon={FileCheck}
-                title="No Client Fees"
-                description="For off-plan properties, we do not charge clients any fees. We do not take money from clients to sell them a project."
+                icon={Building2}
+                title="Property Sales"
+                description="Off-plan and ready property sales, buyer and seller advisory, and market-driven investment guidance."
               />
               <FeatureCard 
-                icon={Shield}
-                title="No Pressure"
-                description="Our role is to protect, guide, and educate. It is not to push clients toward what benefits us or the company."
+                icon={Users}
+                title="Property Rentals"
+                description="Landlord and tenant advisory with structured leasing support and rental market guidance."
               />
               <FeatureCard 
                 icon={Heart}
-                title="Client Protection First"
-                description="We prioritize client interests above all else. Every recommendation is made with your financial wellbeing in mind."
+                title="Partner Introductions"
+                description="Structured introductions to independent, licensed partners (legal, mortgage, visa, and corporate services). Clients contract directly with partners."
               />
             </div>
           </motion.div>
@@ -442,17 +426,17 @@ const About = () => {
 
               {/* RIGHT: Text Content */}
               <motion.div variants={fadeInUp}>
-                <SectionLabel>Market Intelligence</SectionLabel>
+                <SectionLabel>Our Market Intelligence Approach</SectionLabel>
                 <SectionHeadline>Data, Not Opinion</SectionHeadline>
                 <ContentText>
                   <p>
-                    Developers promote their own projects. Sales agents sell what they are assigned. Our role is different.
+                    JBJ Global Real Estate operates one of the most structured real estate intelligence frameworks in the region.
                   </p>
                   <p>
-                    We analyze the entire market. This includes developers, projects, locations, pricing history, and future planning zones.
+                    Our insights are built using official UAE government open data, regulatory disclosures, registered transaction records, and aggregated historical market activity.
                   </p>
                   <p>
-                    Our analysis relies on official government data, public planning strategies, infrastructure roadmaps, and historical real estate cycles.
+                    All intelligence is descriptive, not predictive, and is provided for informational purposes only.
                   </p>
                 </ContentText>
               </motion.div>
@@ -460,7 +444,7 @@ const About = () => {
           </motion.div>
         </Section>
 
-        {/* SECTION 6: YOUR DECISION */}
+        {/* SECTION 6: WHAT WE DO NOT DO */}
         <Section>
           <motion.div
             initial="hidden"
@@ -469,22 +453,22 @@ const About = () => {
             variants={fadeInUp}
             className="text-center"
           >
-            <SectionLabel>Your Decision</SectionLabel>
+            <SectionLabel>What We Do Not Do</SectionLabel>
             <SectionHeadline className="max-w-3xl mx-auto">
-              Clarity, Confidence, Protection
+              Regulatory Clarity & Client Protection
             </SectionHeadline>
             <ContentText className="max-w-2xl mx-auto text-center">
               <p>
-                Clients always make the final decision.
+                We do not provide legal advice. We do not provide mortgage or financial advice. We do not guarantee returns or outcomes. We do not issue visas or government approvals.
               </p>
               <p>
-                Our role is to provide clarity, structure, and protection so decisions are made with confidence.
+                Our responsibility is coordination, transparency, and brokerage support — nothing more, nothing less.
               </p>
             </ContentText>
           </motion.div>
         </Section>
 
-        {/* SECTION 7: OUR STANDARDS - Card Grid */}
+        {/* SECTION 7: TECHNOLOGY WITH GOVERNANCE */}
         <Section>
           <motion.div
             initial="hidden"
@@ -493,38 +477,38 @@ const About = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-10" variants={fadeInUp}>
-              <SectionLabel>Our Standards</SectionLabel>
-              <SectionHeadline className="max-w-2xl mx-auto">Integrity in Every Transaction</SectionHeadline>
+              <SectionLabel>Technology with Governance</SectionLabel>
+              <SectionHeadline className="max-w-2xl mx-auto">AI-Enabled Tools with Oversight</SectionHeadline>
             </motion.div>
 
             {/* 4 Card Grid */}
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
               <FeatureCard 
-                icon={Scale}
-                title="Ethical Practice"
-                description="We do not sell based on personal relationships, commission levels, or convenience."
+                icon={BarChart3}
+                title="Market Comparisons"
+                description="AI-powered tools to support market comparisons and area analysis."
+              />
+              <FeatureCard 
+                icon={Building2}
+                title="Portfolio Views"
+                description="Structured portfolio views and report generation capabilities."
               />
               <FeatureCard 
                 icon={Shield}
-                title="Legal Compliance"
-                description="We respect the laws of the United Arab Emirates."
+                title="Reviewed & Logged"
+                description="All AI outputs are reviewed, logged, and governed for accuracy."
               />
               <FeatureCard 
-                icon={Heart}
-                title="Client Respect"
-                description="We respect the client. We respect the capital being invested."
-              />
-              <FeatureCard 
-                icon={TrendingUp}
-                title="Post-Handover Support"
-                description="We continue supporting clients through rental strategy, resale planning, and long-term asset positioning."
+                icon={Scale}
+                title="Support, Not Replace"
+                description="AI is designed to assist understanding — not to replace licensed professionals or official authorities."
               />
             </div>
 
           </motion.div>
         </Section>
 
-        {/* SECTION 8: SIGNATURE */}
+        {/* SECTION 8: OUR COMMITMENT */}
         <Section className="py-8 md:py-12 lg:py-16">
           <motion.div
             initial="hidden"
@@ -533,25 +517,18 @@ const About = () => {
             variants={fadeInUp}
             className="text-center max-w-2xl mx-auto"
           >
-            <p className="text-zinc-700 text-base md:text-lg mb-6 leading-relaxed">
-              Developers do not manage rentals or resales. This is where an independent, licensed brokerage adds real value.
-            </p>
-            
-            <div className="w-20 h-px bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-6" />
-            
-            <Link 
-              to="/founder" 
-              className="inline-block group"
-            >
-              <p className="text-black text-xl md:text-2xl font-medium mb-2 group-hover:text-gold transition-colors">
-                Founder & CEO Jane Bou Jaoude
+            <SectionLabel>Our Commitment</SectionLabel>
+            <SectionHeadline>Structure, Accountability, Confidence</SectionHeadline>
+            <ContentText className="mx-auto text-center">
+              <p>
+                We commit to operating within UAE licensing regulations, protecting client data and confidentiality, maintaining clear separation between brokerage and partner services, and delivering consistent standards across every transaction.
               </p>
-            </Link>
-            <p 
-              className="text-gold text-xs uppercase tracking-[0.18em] mb-4"
-            >
-              JBJ GLOBAL REAL ESTATE
-            </p>
+              <p>
+                JBJ Global Real Estate exists to bring structure, accountability, and confidence into real estate decision-making.
+              </p>
+            </ContentText>
+            
+            <div className="w-20 h-px bg-gradient-to-r from-transparent via-gold to-transparent mx-auto my-6" />
             
             {/* Initials */}
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-black border-2 border-gold">
@@ -589,13 +566,13 @@ const About = () => {
                     style={{ fontFamily: "Poppins, sans-serif" }}
                     variants={fadeInUp}
                   >
-                    Ready to Find Your Perfect Property?
+                    Not Sure Where to Start?
                   </motion.h2>
                   <motion.p 
                     className="text-zinc-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed"
                     variants={fadeInUp}
                   >
-                    Connect with our brokerage team for expert guidance on buying, selling, or renting in the UAE.
+                    Whether you are buying, renting, investing, or simply seeking clarity — our role is to guide you with precision, not pressure.
                   </motion.p>
 
                   {/* CTA Buttons */}
@@ -621,19 +598,19 @@ const About = () => {
                         <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                         <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                         <span className="relative flex items-center gap-1">
-                          <span className="text-black group-hover:text-gold transition-colors">Contact</span>
-                          <span className="text-gold group-hover:text-black transition-colors">Us</span>
+                          <span className="text-black group-hover:text-gold transition-colors">Speak with</span>
+                          <span className="text-gold group-hover:text-black transition-colors">Our Team</span>
                         </span>
                         <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-black group-hover:text-gold transition-colors relative z-10" />
                       </button>
                     </Link>
 
                     {/* Secondary Button - Browse Properties */}
-                    <Link to="/properties" className="w-full sm:w-auto">
+                    <Link to="/services" className="w-full sm:w-auto">
                       <button 
                         className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-5 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
                       >
-                        Browse Properties
+                        Explore Our Services
                         <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                       </button>
                     </Link>
