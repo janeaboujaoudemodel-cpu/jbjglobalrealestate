@@ -15109,7 +15109,14 @@ export type Database = {
         | "investor"
         | "existing_buyer"
         | "loyal_customer"
-      visitor_role: "broker" | "referral_partner" | "client" | "visitor"
+      visitor_role:
+        | "broker"
+        | "referral_partner"
+        | "client"
+        | "visitor"
+        | "investor"
+        | "owner"
+        | "broker_partner"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -15402,7 +15409,15 @@ export const Constants = {
         "existing_buyer",
         "loyal_customer",
       ],
-      visitor_role: ["broker", "referral_partner", "client", "visitor"],
+      visitor_role: [
+        "broker",
+        "referral_partner",
+        "client",
+        "visitor",
+        "investor",
+        "owner",
+        "broker_partner",
+      ],
     },
   },
 } as const
