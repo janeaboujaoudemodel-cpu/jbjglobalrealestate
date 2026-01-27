@@ -311,6 +311,7 @@ const App = () => (
                 <Route path="/services/selling-advisory" element={<SellingAdvisory />} />
                 <Route path="/services/rental-advisory" element={<RentalAdvisory />} />
                 <Route path="/services/investment-advisory" element={<InvestmentAdvisory />} />
+                <Route path="/services/partner-introductions" element={<Navigate to="/partners" replace />} />
                 <Route path="/referral-partner" element={<ReferralPartner />} />
                 <Route path="/referral" element={<Navigate to="/referral-onboarding" replace />} />
                 {/* Install page removed - PWA disabled */}
