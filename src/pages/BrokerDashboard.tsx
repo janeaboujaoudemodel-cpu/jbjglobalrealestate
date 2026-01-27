@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import { useBrokerProfile } from "@/hooks/useBrokerProfile";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Footer from "@/components/Footer";
 import GlobalHeader from "@/components/GlobalHeader";
 import {
@@ -14,12 +16,17 @@ import {
   FileText,
   TrendingUp,
   CheckSquare,
-  Wrench,
-  Search,
+  Bell,
+  Calendar,
   ArrowRight,
+  GraduationCap,
+  BarChart3,
+  Phone,
+  Mail,
+  Clock,
+  UserCircle,
   Briefcase,
   FolderOpen,
-  GraduationCap,
   HelpCircle,
 } from "lucide-react";
 import brokerDashboardHeroVideo from "@/assets/videos/broker-dashboard-hero.mp4";
@@ -39,16 +46,16 @@ const staggerContainer = {
 
 export default function BrokerDashboard() {
   const navigate = useNavigate();
-  const { user, loading } = useAuth();
-  const [activeTab, setActiveTab] = useState("overview");
+  const { user, loading: authLoading } = useAuth();
+  const { profile, loading: profileLoading, isInternalBroker, isExternalBroker } = useBrokerProfile();
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!authLoading && !user) {
       navigate("/auth?redirect=/broker-dashboard");
     }
-  }, [user, loading, navigate]);
+  }, [user, authLoading, navigate]);
 
-  if (loading) {
+  if (authLoading || profileLoading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="animate-spin w-8 h-8 border-2 border-gold border-t-transparent rounded-full" />
@@ -56,67 +63,103 @@ export default function BrokerDashboard() {
     );
   }
 
-  const brokerHubLinks = [
+  // Quick Actions - role-based
+  const quickActions = [
     { 
-      title: "Broker Tools", 
-      description: "Access property analysis, comparison tools, and client presentation generators",
-      icon: Wrench, 
-      href: "/broker-toolkit#tools",
-      color: "bg-blue-500"
+      title: "Open CRM", 
+      icon: Users, 
+      href: "/crm",
+      description: "Manage leads and clients",
+      internal: true,
+      external: true,
+    },
+    { 
+      title: "My Leads", 
+      icon: TrendingUp, 
+      href: "/crm?tab=leads",
+      description: "View assigned leads",
+      internal: true,
+      external: true,
+    },
+    { 
+      title: "My Listings", 
+      icon: Building2, 
+      href: "/listing-admin",
+      description: "Manage property listings",
+      internal: true,
+      external: true,
+    },
+    { 
+      title: "Market Reports", 
+      icon: BarChart3, 
+      href: "/market-intelligence",
+      description: "Access market data",
+      internal: true,
+      external: true,
+    },
+    { 
+      title: "Notes & Calendar", 
+      icon: Calendar, 
+      href: "/crm-notes",
+      description: "Tasks and reminders",
+      internal: true,
+      external: true,
     },
     { 
       title: "Broker Education", 
-      description: "Training modules, market knowledge, and professional development resources",
       icon: GraduationCap, 
       href: "/broker-education",
-      color: "bg-purple-500"
-    },
-    { 
-      title: "Broker Resources", 
-      description: "Regulatory references, transaction guides, templates, and market materials",
-      icon: FolderOpen, 
-      href: "/broker-resources",
-      color: "bg-emerald-500"
-    },
-    { 
-      title: "Broker FAQ", 
-      description: "Common questions about brokerage operations, compliance, and best practices",
-      icon: HelpCircle, 
-      href: "/broker-faq",
-      color: "bg-amber-500"
+      description: "Training library",
+      internal: true,
+      external: true,
     },
   ];
 
-  const dashboardSections = [
-    {
-      icon: Building2,
-      title: "Listings Management",
-      description: "View and manage your active property listings, track status, and monitor performance.",
-      features: ["Track listing status (draft, under review, approved, live)", "Monitor views and inquiries", "Submit new listings for approval"]
+  // Filter actions based on role
+  const filteredActions = quickActions.filter(action => 
+    isInternalBroker ? action.internal : action.external
+  );
+
+  // Performance metrics - shown differently for internal vs external
+  const performanceBlocks = isInternalBroker ? [
+    { label: "Total Leads", value: "—", icon: Users },
+    { label: "Active Deals", value: "—", icon: Briefcase },
+    { label: "Closed Deals", value: "—", icon: CheckSquare },
+    { label: "Listing Value", value: "—", icon: Building2 },
+    { label: "CRM Activity", value: "—", icon: Phone },
+    { label: "Last Login", value: new Date().toLocaleDateString(), icon: Clock },
+  ] : [
+    { label: "My Leads", value: "—", icon: Users },
+    { label: "My Listings", value: "—", icon: Building2 },
+    { label: "Active Deals", value: "—", icon: Briefcase },
+    { label: "Last Login", value: new Date().toLocaleDateString(), icon: Clock },
+  ];
+
+  // Broker Hub Links
+  const brokerHubLinks = [
+    { 
+      title: "Broker Tools", 
+      description: "Property analysis, comparison tools, and presentation generators",
+      icon: FolderOpen, 
+      href: "/broker-toolkit",
     },
-    {
-      icon: Users,
-      title: "Client & Lead Management",
-      description: "Access your client database, track interactions, and manage lead pipelines.",
-      features: ["Active buyers, sellers, landlords, and tenants", "Lead source tracking", "Interaction history and follow-ups"]
+    { 
+      title: "Broker Education", 
+      description: "Training modules and professional development",
+      icon: GraduationCap, 
+      href: "/broker-education",
     },
-    {
-      icon: FileText,
-      title: "Transaction Tracking",
-      description: "Monitor ongoing transactions from initial contact through to completion.",
-      features: ["Transaction stage tracking", "Pending approvals and documents", "Timeline milestones"]
+    { 
+      title: "Broker Resources", 
+      description: "Regulatory references, templates, and guides",
+      icon: FileText, 
+      href: "/broker-resources",
     },
-    {
-      icon: TrendingUp,
-      title: "Performance Insights",
-      description: "Review your performance metrics and track progress against goals.",
-      features: ["Active deals overview", "Closed transactions", "Monthly activity summaries"]
-    },
-    {
-      icon: CheckSquare,
-      title: "Tasks & Reminders",
-      description: "Manage your daily tasks, set reminders, and stay on top of deadlines.",
-      features: ["Create and manage tasks", "Set deadline reminders", "Receive notifications for updates"]
+    { 
+      title: "Broker FAQ", 
+      description: "Common questions and best practices",
+      icon: HelpCircle, 
+      href: "/broker-faq",
     },
   ];
 
@@ -125,7 +168,7 @@ export default function BrokerDashboard() {
       <GlobalHeader />
       
       {/* Hero Section with Video */}
-      <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden">
         <video 
           autoPlay 
           loop 
@@ -151,244 +194,210 @@ export default function BrokerDashboard() {
                 background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
                 backdropFilter: 'blur(20px)',
                 border: '1.5px solid rgba(200,167,102,0.6)',
-                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
               }}
               variants={fadeInUp}
             >
               <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-              <span className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Broker Dashboard</span>
+              <span className="text-gold font-semibold text-xs uppercase tracking-widest">Broker Dashboard</span>
             </motion.div>
             
             <motion.h1 
-              className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-6 leading-tight"
+              className="text-4xl md:text-5xl font-light text-white mb-4 leading-tight"
               variants={fadeInUp}
             >
               Your Professional <span className="text-gold">Control Center</span>
             </motion.h1>
             
             <motion.p 
-              className="text-lg md:text-xl text-zinc-300 font-light leading-relaxed max-w-3xl mx-auto mb-10"
+              className="text-lg text-zinc-300 font-light max-w-2xl mx-auto"
               variants={fadeInUp}
             >
-              The Broker Dashboard is the central workspace where brokers manage their activity, monitor performance, track clients, and access operational tools within the JBJ Global Real Estate platform.
+              Manage your brokerage activity, track performance, and access operational tools.
             </motion.p>
-
-            <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
-              <Link to="/broker-toolkit">
-                <Button 
-                  size="lg"
-                  className="bg-gold hover:bg-gold/90 text-black font-semibold px-8 py-6 text-base"
-                >
-                  Access Broker Tools
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </Link>
-              <Link to="/contact">
-                <Button 
-                  size="lg"
-                  variant="outline"
-                  className="border-gold/50 text-gold hover:bg-gold/10 px-8 py-6 text-base"
-                >
-                  Contact Broker Support
-                </Button>
-              </Link>
-            </motion.div>
           </div>
         </motion.div>
       </section>
 
-      {/* Main Dashboard Content */}
-      <div className="container mx-auto px-4 py-16">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
-          <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-1.5 shadow-sm flex-wrap h-auto">
-            <TabsTrigger value="overview" className="data-[state=active]:bg-gold data-[state=active]:text-black font-medium">
-              <LayoutDashboard className="w-4 h-4 mr-2" />
-              Overview
-            </TabsTrigger>
-            <TabsTrigger value="hub" className="data-[state=active]:bg-gold data-[state=active]:text-black font-medium">
-              <Briefcase className="w-4 h-4 mr-2" />
-              Broker Hub
-            </TabsTrigger>
-          </TabsList>
-
-          {/* Overview Tab */}
-          <TabsContent value="overview">
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={staggerContainer}
-              className="space-y-8"
-            >
-              {/* Dashboard Sections Description */}
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {dashboardSections.map((section, index) => (
-                  <motion.div key={index} variants={fadeInUp}>
-                    <Card className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 hover:border-gold transition-all">
-                      <CardHeader>
-                        <div className="flex items-center gap-3 mb-2">
-                          <div className="w-12 h-12 bg-black border border-gold rounded-xl flex items-center justify-center">
-                            <section.icon className="w-6 h-6 text-gold" />
-                          </div>
-                          <CardTitle className="text-lg text-foreground">{section.title}</CardTitle>
-                        </div>
-                        <p className="text-muted-foreground text-sm">{section.description}</p>
-                      </CardHeader>
-                      <CardContent>
-                        <ul className="space-y-2">
-                          {section.features.map((feature, idx) => (
-                            <li key={idx} className="flex items-start gap-2 text-sm text-muted-foreground">
-                              <span className="w-1.5 h-1.5 bg-gold rounded-full mt-1.5 flex-shrink-0" />
-                              {feature}
-                            </li>
-                          ))}
-                        </ul>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Role-Based Access Info */}
-              <Card className="bg-black border-2 border-gold/30">
-                <CardHeader>
-                  <CardTitle className="text-xl text-white">Role-Based Access</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-xl">
-                      <h4 className="text-gold font-semibold mb-3">JBJ Internal Brokers</h4>
-                      <ul className="space-y-2 text-zinc-300 text-sm">
-                        <li className="flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 bg-gold rounded-full" />
-                          Full CRM access
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 bg-gold rounded-full" />
-                          Internal reporting
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 bg-gold rounded-full" />
-                          Team performance insights
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 bg-gold rounded-full" />
-                          Management communication tools
-                        </li>
-                      </ul>
+      {/* Dashboard Content */}
+      <div className="container mx-auto px-4 py-12">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
+          className="space-y-10"
+        >
+          {/* SECTION 1: Dashboard Header - Profile */}
+          <motion.div variants={fadeInUp}>
+            <Card className="bg-gradient-to-br from-zinc-900/90 via-zinc-900/80 to-black border border-gold/20">
+              <CardContent className="p-8">
+                <div className="flex flex-col md:flex-row items-center gap-6">
+                  <Avatar className="w-24 h-24 border-2 border-gold/30">
+                    <AvatarImage src={profile?.photo_url || undefined} />
+                    <AvatarFallback className="bg-gold/20 text-gold text-2xl">
+                      {profile?.display_name?.charAt(0) || user?.email?.charAt(0)?.toUpperCase() || 'B'}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="text-center md:text-left">
+                    <h2 className="text-2xl font-semibold text-white mb-1">
+                      {profile?.display_name || user?.email || 'Broker'}
+                    </h2>
+                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">
+                      <Badge className="bg-gold/20 text-gold border-gold/30">
+                        {isInternalBroker ? 'JBJ Internal Broker' : 'JBJ Partner Broker'}
+                      </Badge>
+                      <Badge className={profile?.is_active ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' : 'bg-amber-500/20 text-amber-300 border-amber-500/30'}>
+                        {profile?.is_active ? 'Active' : 'Pending'}
+                      </Badge>
                     </div>
-                    <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-xl">
-                      <h4 className="text-gold font-semibold mb-3">Independent Brokers</h4>
-                      <ul className="space-y-2 text-zinc-300 text-sm">
-                        <li className="flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 bg-gold rounded-full" />
-                          Their own listings
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 bg-gold rounded-full" />
-                          Their own clients
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 bg-gold rounded-full" />
-                          Transaction tracking
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 bg-gold rounded-full" />
-                          Broker resources and tools
-                        </li>
-                      </ul>
-                    </div>
+                    {profile?.title && (
+                      <p className="text-zinc-400 text-sm">{profile.title}</p>
+                    )}
                   </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </TabsContent>
-
-          {/* Broker Hub Tab */}
-          <TabsContent value="hub">
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={staggerContainer}
-              className="space-y-8"
-            >
-              <div className="grid md:grid-cols-2 gap-6">
-                {brokerHubLinks.map((link, index) => (
-                  <motion.div key={index} variants={fadeInUp}>
-                    <Link to={link.href}>
-                      <Card className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 hover:border-gold hover:shadow-lg transition-all cursor-pointer group">
-                        <CardContent className="p-6">
-                          <div className="flex items-start gap-4">
-                            <div className={`w-14 h-14 ${link.color} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform`}>
-                              <link.icon className="w-7 h-7 text-white" />
-                            </div>
-                            <div className="flex-1">
-                              <h3 className="text-xl font-semibold text-foreground mb-2 group-hover:text-gold transition-colors">
-                                {link.title}
-                              </h3>
-                              <p className="text-muted-foreground text-sm">
-                                {link.description}
-                              </p>
-                            </div>
-                            <ArrowRight className="w-5 h-5 text-gold opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </Link>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          </TabsContent>
-        </Tabs>
-      </div>
-
-      {/* Final CTA Section */}
-      <section className="py-16 md:py-24 bg-black">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="max-w-3xl mx-auto text-center"
-          >
-            <motion.h2 
-              variants={fadeInUp}
-              className="text-3xl md:text-4xl font-light text-white mb-6"
-            >
-              Ready to <span className="text-gold">Get Started?</span>
-            </motion.h2>
-            
-            <motion.p 
-              variants={fadeInUp}
-              className="text-lg text-zinc-400 mb-10"
-            >
-              Access your broker tools and resources to manage your brokerage activities efficiently and professionally.
-            </motion.p>
-            
-            <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
-              <Link to="/broker-toolkit">
-                <Button 
-                  size="lg"
-                  className="bg-gold hover:bg-gold/90 text-black font-semibold px-8 py-6 text-base"
-                >
-                  Go to Broker Tools
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </Link>
-              <Link to="/contact">
-                <Button 
-                  size="lg"
-                  variant="outline"
-                  className="border-gold/50 text-white hover:bg-gold/10 px-8 py-6 text-base"
-                >
-                  Request Broker Support
-                </Button>
-              </Link>
-            </motion.div>
+                </div>
+              </CardContent>
+            </Card>
           </motion.div>
-        </div>
-      </section>
+
+          {/* SECTION 2: Quick Actions */}
+          <motion.div variants={fadeInUp}>
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <LayoutDashboard className="w-5 h-5 text-gold" />
+              Quick Actions
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {filteredActions.map((action, index) => (
+                <Link key={index} to={action.href}>
+                  <Card className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 hover:border-gold transition-all cursor-pointer group">
+                    <CardContent className="p-4 text-center">
+                      <div className="w-12 h-12 bg-black border border-gold/30 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/10 transition-colors">
+                        <action.icon className="w-6 h-6 text-gold" />
+                      </div>
+                      <h4 className="text-sm font-semibold text-foreground mb-1 group-hover:text-gold transition-colors">
+                        {action.title}
+                      </h4>
+                      <p className="text-xs text-muted-foreground line-clamp-2">
+                        {action.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* SECTION 3: Performance Overview */}
+          <motion.div variants={fadeInUp}>
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-gold" />
+              Performance Overview
+            </h3>
+            <div className={`grid grid-cols-2 ${isInternalBroker ? 'md:grid-cols-3 lg:grid-cols-6' : 'md:grid-cols-4'} gap-4`}>
+              {performanceBlocks.map((block, index) => (
+                <Card key={index} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
+                  <CardContent className="p-4 text-center">
+                    <block.icon className="w-6 h-6 text-gold mx-auto mb-2" />
+                    <p className="text-2xl font-bold text-foreground">{block.value}</p>
+                    <p className="text-xs text-muted-foreground">{block.label}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* SECTION 4: Tasks & Reminders */}
+          <motion.div variants={fadeInUp}>
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <CheckSquare className="w-5 h-5 text-gold" />
+              Tasks & Reminders
+            </h3>
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
+              <CardContent className="p-6">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                  <div className="text-center md:text-left">
+                    <p className="text-muted-foreground mb-2">
+                      Access your tasks, notes, and reminders from the Notes & Calendar system.
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Reminders can be delivered in-platform, via email, or WhatsApp (if enabled).
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <Link to="/crm-notes">
+                      <Button variant="secondary" size="sm">
+                        <FileText className="w-4 h-4 mr-2" />
+                        View Notes
+                      </Button>
+                    </Link>
+                    <Link to="/crm-reminders">
+                      <Button variant="secondary" size="sm">
+                        <Bell className="w-4 h-4 mr-2" />
+                        Reminders
+                      </Button>
+                    </Link>
+                    <Link to="/crm-calendar">
+                      <Button variant="secondary" size="sm">
+                        <Calendar className="w-4 h-4 mr-2" />
+                        Calendar
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* SECTION 5: Notifications */}
+          <motion.div variants={fadeInUp}>
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Bell className="w-5 h-5 text-gold" />
+              Notifications
+            </h3>
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
+              <CardContent className="p-6">
+                <div className="text-center py-8">
+                  <Bell className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
+                  <p className="text-muted-foreground">No new notifications</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Approval updates, listing status, and education progress will appear here.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* Broker Hub Links */}
+          <motion.div variants={fadeInUp}>
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Briefcase className="w-5 h-5 text-gold" />
+              Broker Hub
+            </h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {brokerHubLinks.map((link, index) => (
+                <Link key={index} to={link.href}>
+                  <Card className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 hover:border-gold transition-all cursor-pointer group">
+                    <CardContent className="p-5">
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 bg-black border border-gold/30 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-gold/10 transition-colors">
+                          <link.icon className="w-5 h-5 text-gold" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold text-foreground group-hover:text-gold transition-colors">
+                            {link.title}
+                          </h4>
+                          <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                            {link.description}
+                          </p>
+                        </div>
+                        <ArrowRight className="w-4 h-4 text-gold opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+        </motion.div>
+      </div>
 
       <Footer />
     </div>

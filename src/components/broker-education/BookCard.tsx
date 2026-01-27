@@ -1,0 +1,139 @@
+import { motion } from "framer-motion";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { BookOpen, Lock, CheckCircle, Clock, ArrowRight } from "lucide-react";
+import type { EducationBook, BookProgress } from "@/hooks/useBrokerEducation";
+
+interface BookCardProps {
+  book: EducationBook;
+  progress?: BookProgress;
+  onOpen: (book: EducationBook) => void;
+  index: number;
+}
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+};
+
+const LEARNING_PATH_COLORS: Record<string, string> = {
+  'Foundations': 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+  'Buyer & Investor Advisory': 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+  'Seller & Landlord Advisory': 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+  'Market Intelligence': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+  'Advanced (Restricted)': 'bg-red-500/20 text-red-300 border-red-500/30',
+};
+
+export function BookCard({ book, progress, onOpen, index }: BookCardProps) {
+  const pathColor = LEARNING_PATH_COLORS[book.learning_path] || 'bg-zinc-500/20 text-zinc-300 border-zinc-500/30';
+  
+  const getStatusBadge = () => {
+    if (!progress) return null;
+    
+    switch (progress.status) {
+      case 'completed':
+        return (
+          <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30">
+            <CheckCircle className="w-3 h-3 mr-1" />
+            Completed
+          </Badge>
+        );
+      case 'in_progress':
+        return (
+          <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/30">
+            <Clock className="w-3 h-3 mr-1" />
+            In Progress ({progress.completedModules}/{progress.totalModules})
+          </Badge>
+        );
+      default:
+        return (
+          <Badge className="bg-zinc-500/20 text-zinc-400 border-zinc-500/30">
+            Not Started
+          </Badge>
+        );
+    }
+  };
+
+  return (
+    <motion.div
+      variants={fadeInUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.1 }}
+    >
+      <Card className="h-full bg-gradient-to-br from-zinc-900/90 via-zinc-900/80 to-black border border-gold/20 hover:border-gold/40 transition-all group">
+        <CardContent className="p-6">
+          {/* Book Cover Mock */}
+          <div className="relative mb-4">
+            <div 
+              className="w-full aspect-[3/4] rounded-lg bg-gradient-to-br from-zinc-800 via-zinc-900 to-black border border-gold/30 flex items-center justify-center relative overflow-hidden"
+              style={{
+                boxShadow: '8px 8px 20px rgba(0,0,0,0.4), -2px -2px 10px rgba(200,167,102,0.1)',
+                transform: 'perspective(500px) rotateY(-5deg)',
+              }}
+            >
+              {/* Book spine effect */}
+              <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-gold/30 to-transparent" />
+              
+              {/* Book number */}
+              <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
+                <span className="text-gold text-sm font-bold">{book.book_number}</span>
+              </div>
+              
+              {/* Icon */}
+              <BookOpen className="w-12 h-12 text-gold/60" />
+              
+              {/* Restricted overlay */}
+              {book.is_restricted && (
+                <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                  <Lock className="w-8 h-8 text-red-400" />
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Learning Path Badge */}
+          <Badge className={`${pathColor} mb-2 text-xs`}>
+            {book.learning_path}
+          </Badge>
+
+          {/* Title */}
+          <h3 className="text-lg font-semibold text-white mb-2 line-clamp-2 group-hover:text-gold transition-colors">
+            {book.title}
+          </h3>
+
+          {/* Description */}
+          <p className="text-zinc-400 text-sm mb-4 line-clamp-2">
+            {book.description}
+          </p>
+
+          {/* Progress Badge */}
+          <div className="mb-4">
+            {getStatusBadge()}
+          </div>
+
+          {/* Open Button */}
+          <Button
+            onClick={() => onOpen(book)}
+            disabled={book.is_restricted}
+            className="w-full bg-gold/10 hover:bg-gold/20 text-gold border border-gold/30 hover:border-gold/50"
+          >
+            {book.is_restricted ? (
+              <>
+                <Lock className="w-4 h-4 mr-2" />
+                Restricted Access
+              </>
+            ) : (
+              <>
+                Open Book
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </>
+            )}
+          </Button>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+}

@@ -1468,6 +1468,146 @@ export type Database = {
           },
         ]
       }
+      broker_education_books: {
+        Row: {
+          book_number: number
+          cover_image_url: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          is_restricted: boolean | null
+          learning_objective: string | null
+          learning_path: string
+          sort_order: number | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          book_number: number
+          cover_image_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_restricted?: boolean | null
+          learning_objective?: string | null
+          learning_path: string
+          sort_order?: number | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          book_number?: number
+          cover_image_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_restricted?: boolean | null
+          learning_objective?: string | null
+          learning_path?: string
+          sort_order?: number | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      broker_education_modules: {
+        Row: {
+          book_id: string
+          content: string | null
+          created_at: string | null
+          description: string | null
+          estimated_minutes: number | null
+          id: string
+          module_number: number
+          sort_order: number | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          book_id: string
+          content?: string | null
+          created_at?: string | null
+          description?: string | null
+          estimated_minutes?: number | null
+          id?: string
+          module_number: number
+          sort_order?: number | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          book_id?: string
+          content?: string | null
+          created_at?: string | null
+          description?: string | null
+          estimated_minutes?: number | null
+          id?: string
+          module_number?: number
+          sort_order?: number | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_education_modules_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "broker_education_books"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      broker_education_progress: {
+        Row: {
+          book_id: string
+          completed_at: string | null
+          created_at: string | null
+          id: string
+          module_id: string | null
+          started_at: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          book_id: string
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          module_id?: string | null
+          started_at?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          book_id?: string
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          module_id?: string | null
+          started_at?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_education_progress_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "broker_education_books"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broker_education_progress_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "broker_education_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       broker_email_templates: {
         Row: {
           created_at: string | null
@@ -1774,6 +1914,7 @@ export type Database = {
       broker_profiles: {
         Row: {
           bio: string | null
+          broker_type: string | null
           created_at: string
           display_name: string
           email: string | null
@@ -1791,6 +1932,7 @@ export type Database = {
         }
         Insert: {
           bio?: string | null
+          broker_type?: string | null
           created_at?: string
           display_name: string
           email?: string | null
@@ -1808,6 +1950,7 @@ export type Database = {
         }
         Update: {
           bio?: string | null
+          broker_type?: string | null
           created_at?: string
           display_name?: string
           email?: string | null
