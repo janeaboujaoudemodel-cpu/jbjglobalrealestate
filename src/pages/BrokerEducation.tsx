@@ -1,492 +1,358 @@
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { FounderPhilosophySection } from "@/components/FounderPhilosophySection";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { 
-  CheckCircle2, 
-  FileText, 
-  Users,
-  ArrowDown,
-  Shield,
-  Building,
-  BarChart3,
-  Clock,
-  Phone,
+  GraduationCap, 
+  BookOpen, 
+  Shield, 
+  ArrowDown, 
+  ArrowRight,
+  Lock,
+  Info,
   Briefcase,
-  UserCheck,
-  MessageSquare,
-  Award,
-  Network,
-  TrendingUp,
-  Scale
 } from "lucide-react";
-import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
-import { GuideHero } from "@/components/guides/GuideHero";
-import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
+import { useBrokerEducation, EducationBook } from "@/hooks/useBrokerEducation";
+import { BookCard, BookDetailModal } from "@/components/broker-education";
+import GlobalHeader from "@/components/GlobalHeader";
 import Footer from "@/components/Footer";
 
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { 
+    opacity: 1,
+    transition: { staggerChildren: 0.1 }
+  }
+};
+
+const LEARNING_PATHS = [
+  { name: 'Foundations', books: [1, 2], color: 'bg-blue-500' },
+  { name: 'Buyer & Investor Advisory', books: [3, 4], color: 'bg-emerald-500' },
+  { name: 'Seller & Landlord Advisory', books: [5, 6], color: 'bg-amber-500' },
+  { name: 'Market Intelligence', books: [7, 8], color: 'bg-purple-500' },
+  { name: 'Advanced (Restricted)', books: [9], color: 'bg-red-500' },
+];
+
 const BrokerEducation = () => {
-  const ethicsCards = [
-    {
-      title: "Client Interest First",
-      icon: UserCheck,
-      description: "Property recommendations must align with client objectives, not commission structures."
-    },
-    {
-      title: "Transparency",
-      icon: Shield,
-      description: "Pricing, risks, timelines, and limitations must be clearly communicated."
-    },
-    {
-      title: "No Pressure Selling",
-      icon: MessageSquare,
-      description: "Clients must never be rushed into decisions or influenced by urgency tactics."
-    },
-    {
-      title: "Long-Term Trust",
-      icon: Award,
-      description: "Sustainable success is built through repeat clients and referrals — not volume chasing."
+  const { books, loading, progressMap } = useBrokerEducation();
+  const [selectedBook, setSelectedBook] = useState<EducationBook | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenBook = (book: EducationBook) => {
+    if (!book.is_restricted) {
+      setSelectedBook(book);
+      setIsModalOpen(true);
     }
-  ];
+  };
 
-  const regulatoryResponsibilities = [
-    "Using approved listing practices",
-    "Respecting RERA guidelines",
-    "Avoiding misleading financial or return-based claims",
-    "Ensuring documentation accuracy"
-  ];
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedBook(null);
+  };
 
-  const marketKnowledgeSources = [
-    "Transaction history",
-    "Rental index benchmarks",
-    "Supply and demand trends",
-    "Area-level performance indicators",
-    "Government planning announcements"
-  ];
-
-  const offPlanRepresentation = [
-    "Explain construction timelines realistically",
-    "Clarify payment schedules and risks",
-    "Avoid speculative appreciation claims"
-  ];
-
-  const readyRepresentation = [
-    "Provide realistic rental and resale expectations",
-    "Disclose service charges and operational costs",
-    "Ensure accurate valuation context"
-  ];
-
-  const careerCards = [
-    {
-      title: "Reputation",
-      icon: Award,
-      description: "Built through honesty, consistency, and reliability."
-    },
-    {
-      title: "Network",
-      icon: Network,
-      description: "Strong relationships with clients, developers, and industry professionals."
-    },
-    {
-      title: "Professional Growth",
-      icon: TrendingUp,
-      description: "Continuous learning and market awareness."
-    }
-  ];
-
-  const tocItems = [
-    { id: 'role', title: "Broker's Responsibility", icon: Briefcase },
-    { id: 'ethics', title: 'Ethics & Practice', icon: Scale },
-    { id: 'regulatory', title: 'Regulatory Awareness', icon: Shield },
-    { id: 'market-knowledge', title: 'Market Knowledge', icon: BarChart3 },
-    { id: 'representation', title: 'Property Representation', icon: Building },
-    { id: 'communication', title: 'Client Education', icon: MessageSquare },
-    { id: 'career', title: 'Career Positioning', icon: Award },
-  ];
+  // Group books by learning path
+  const groupedBooks = LEARNING_PATHS.map(path => ({
+    ...path,
+    bookData: books.filter(b => path.books.includes(b.book_number)),
+  }));
 
   return (
     <div className="min-h-screen bg-black">
       <SEOHead 
-        title="Broker Education | Professional Real Estate Training | JBJ GLOBAL REAL ESTATE"
-        description="A structured educational framework for real estate professionals operating in the UAE market. Focus on ethics, market responsibility, regulatory awareness, and long-term professional credibility."
+        title="Broker Education | Internal Training Library | JBJ GLOBAL REAL ESTATE"
+        description="Internal professional training library for JBJ Global Real Estate brokers. 9 comprehensive books covering UAE real estate fundamentals, advisory skills, and market intelligence."
       />
+      
+      <GlobalHeader />
 
-      {/* Premium Hero */}
-      <GuideHero
-        badge="Broker Education"
-        badgeIcon={Briefcase}
-        title={
-          <>
-            Professional{" "}
-            <span className="text-gold">Broker Education</span>
-          </>
-        }
-        description="A structured educational framework for real estate professionals operating in the UAE market. This guide focuses on ethics, market responsibility, regulatory awareness, and long-term professional credibility — not short-term transactions."
-        backgroundImage="https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?auto=format&fit=crop&w=2000&q=80"
-        actions={
-          <>
-            <button 
-              onClick={() => document.getElementById('role')?.scrollIntoView({ behavior: 'smooth' })}
-              className="group relative inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 text-sm md:text-base font-bold rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
-              style={{
-                border: '2px solid rgba(255,255,255,0.8)',
-                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-              }}
-            >
-              <ArrowDown className="w-4 h-4 text-gold group-hover:text-black transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-              <span className="text-white group-hover:text-black transition-colors">Read the Full Guide</span>
-              <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
-            </button>
-            <Link to="/broker-toolkit">
-              <button 
-                className="group relative inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 text-sm md:text-base font-bold rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
-                style={{
-                  border: '2px solid rgba(255,255,255,0.8)',
-                  boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-                }}
-              >
-                <Briefcase className="w-4 h-4 text-gold group-hover:text-black transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                <span className="text-white group-hover:text-black transition-colors">View Broker Tools</span>
-                <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
-              </button>
-            </Link>
-          </>
-        }
-      />
-
-      {/* Divider */}
-      <div className="h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-
-      {/* Sticky Table of Contents */}
-      <div className="hidden lg:block fixed right-8 top-1/4 z-[60] max-w-xs">
-        <GuideTableOfContents 
-          items={tocItems}
-          ctaAction={{
-            label: "Join Broker Hub",
-            href: "/broker-toolkit",
-            icon: Briefcase
-          }}
+      {/* Hero Section */}
+      <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-zinc-900 via-black to-black">
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-20"
+          style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?auto=format&fit=crop&w=2000&q=80)' }}
         />
-      </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black" />
+        
+        <motion.div 
+          className="container mx-auto px-4 relative z-10"
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
+        >
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.div 
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6"
+              style={{
+                background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
+                backdropFilter: 'blur(20px)',
+                border: '1.5px solid rgba(200,167,102,0.6)',
+              }}
+              variants={fadeInUp}
+            >
+              <GraduationCap className="w-4 h-4 text-gold" />
+              <span className="text-gold font-semibold text-xs uppercase tracking-widest">Broker Education</span>
+            </motion.div>
+            
+            <motion.h1 
+              className="text-4xl md:text-5xl font-light text-white mb-4 leading-tight"
+              variants={fadeInUp}
+            >
+              Internal Training <span className="text-gold">Library</span>
+            </motion.h1>
+            
+            <motion.p 
+              className="text-lg text-zinc-300 font-light max-w-2xl mx-auto mb-8"
+              variants={fadeInUp}
+            >
+              9 comprehensive books designed to align brokers with JBJ standards. 
+              Internal, proprietary, non-certifying — for the JBJ broker network only.
+            </motion.p>
 
-      {/* Section 1 - The Role of a Professional Broker - Layer 2 */}
-      <section id="role" className="py-16 md:py-24 scroll-mt-20">
-        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
-          <div className="max-w-4xl mx-auto">
-            {/* Layer 3 Card */}
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 md:p-12">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl flex items-center justify-center">
-                  <Briefcase className="w-6 h-6 text-black" />
-                </div>
-                <h2 className="text-3xl md:text-4xl font-semibold text-black">
-                  Understanding the Broker's Responsibility
-                </h2>
-              </div>
-              
-              <p className="text-lg text-zinc-700 leading-relaxed mb-6">
-                A professional real estate broker is not a product promoter. The broker's role is to 
-                represent information accurately, respect regulatory boundaries, and guide clients with integrity.
-              </p>
-              
-              <p className="text-zinc-600 leading-relaxed">
-                At JBJ Global Real Estate, brokerage is approached as a responsibility — not a sales race. 
-                Brokers are expected to act as market educators, protect client interests, and operate 
-                within the legal framework of the UAE at all times.
-              </p>
-            </div>
+            <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
+              <button 
+                onClick={() => document.getElementById('library')?.scrollIntoView({ behavior: 'smooth' })}
+                className="group inline-flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-lg transition-all duration-300 bg-gold/10 border border-gold/30 hover:bg-gold/20 text-gold"
+              >
+                <ArrowDown className="w-4 h-4" />
+                Explore Library
+              </button>
+              <Link to="/broker-dashboard">
+                <Button variant="secondary">
+                  <Briefcase className="w-4 h-4 mr-2" />
+                  Back to Dashboard
+                </Button>
+              </Link>
+            </motion.div>
           </div>
+        </motion.div>
+      </section>
+
+      {/* Page Intro Section */}
+      <section className="py-12 md:py-16">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+          >
+            <Card className="bg-gradient-to-br from-zinc-900/90 via-zinc-900/80 to-black border border-gold/20">
+              <CardContent className="p-8">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Info className="w-6 h-6 text-gold" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-semibold text-white mb-3">About This Program</h2>
+                    <ul className="space-y-2 text-zinc-300">
+                      <li className="flex items-start gap-2">
+                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span>Internal training program by JBJ Global Real Estate</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span>Designed to align brokers with JBJ professional standards</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span>No external certification rights — internal recognition only</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span>Content is proprietary and access can be modified or revoked</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
       </section>
 
-      {/* Section 2 - Ethics & Client-First Practice - Layer 2 */}
-      <section id="ethics" className="py-16 md:py-24 scroll-mt-20">
-        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
-          <div className="max-w-5xl mx-auto">
+      {/* Education Library Section */}
+      <section id="library" className="py-12 md:py-16 scroll-mt-20">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
-                Ethics Before Commission
+              <Badge className="bg-gold/20 text-gold border-gold/30 mb-4">
+                <BookOpen className="w-3 h-3 mr-1" />
+                9 Books • 5 Learning Paths
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
+                Education <span className="text-gold">Library</span>
               </h2>
+              <p className="text-zinc-400 max-w-2xl mx-auto">
+                Structured learning paths covering every aspect of professional real estate brokerage in the UAE.
+              </p>
             </div>
 
-            {/* Layer 3 Cards Grid */}
-            <div className="grid md:grid-cols-2 gap-6">
-              {ethicsCards.map((card, index) => (
-                <div 
-                  key={index}
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 hover:border-gold/50 hover:shadow-lg transition-all"
-                >
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <card.icon className="w-6 h-6 text-black" />
+            {loading ? (
+              <div className="flex items-center justify-center py-16">
+                <div className="animate-spin w-8 h-8 border-2 border-gold border-t-transparent rounded-full" />
+              </div>
+            ) : (
+              <div className="space-y-12">
+                {groupedBooks.map((path, pathIndex) => (
+                  <motion.div 
+                    key={path.name}
+                    variants={fadeInUp}
+                    className="space-y-4"
+                  >
+                    {/* Learning Path Header */}
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className={`w-3 h-8 ${path.color} rounded-full`} />
+                      <div>
+                        <h3 className="text-xl font-semibold text-white">{path.name}</h3>
+                        <p className="text-zinc-500 text-sm">{path.bookData.length} Book{path.bookData.length > 1 ? 's' : ''}</p>
+                      </div>
                     </div>
-                    <h3 className="text-xl font-semibold text-black">{card.title}</h3>
-                  </div>
-                  <p className="text-zinc-600 leading-relaxed">{card.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Section 3 - Regulatory Awareness - Layer 2 */}
-      <section id="regulatory" className="py-16 md:py-24 scroll-mt-20">
-        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
-          <div className="max-w-4xl mx-auto">
-            {/* Layer 3 Card */}
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 md:p-12">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl flex items-center justify-center">
-                  <Shield className="w-6 h-6 text-black" />
-                </div>
-                <h2 className="text-3xl md:text-4xl font-semibold text-black">
-                  Operating Within UAE Regulations
-                </h2>
-              </div>
-              
-              <p className="text-lg text-zinc-700 leading-relaxed mb-6">
-                Brokers must operate in full compliance with UAE real estate regulations. This includes 
-                respecting licensing scope, avoiding unauthorized advisory claims, and ensuring all 
-                transactions are properly registered.
-              </p>
-              
-              <p className="text-zinc-700 mb-4">Key responsibilities include:</p>
-              <ul className="space-y-3 mb-6">
-                {regulatoryResponsibilities.map((item, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
-                  </li>
+                    {/* Books Grid */}
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                      {path.bookData.map((book, bookIndex) => (
+                        <BookCard
+                          key={book.id}
+                          book={book}
+                          progress={progressMap[book.id]}
+                          onOpen={handleOpenBook}
+                          index={bookIndex}
+                        />
+                      ))}
+                    </div>
+                  </motion.div>
                 ))}
-              </ul>
-              
-              <div className="bg-white/60 border border-gold/20 rounded-xl p-5">
-                <p className="text-zinc-700 font-medium text-center">
-                  Professional credibility is non-negotiable.
-                </p>
               </div>
-            </div>
-          </div>
+            )}
+          </motion.div>
         </div>
       </section>
 
-      {/* Section 4 - Market Knowledge & Data Discipline - Layer 2 */}
-      <section id="market-knowledge" className="py-16 md:py-24 scroll-mt-20">
-        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
-          <div className="max-w-4xl mx-auto">
-            {/* Layer 3 Card */}
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 md:p-12">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl flex items-center justify-center">
-                  <BarChart3 className="w-6 h-6 text-black" />
-                </div>
-                <h2 className="text-3xl md:text-4xl font-semibold text-black">
-                  Data Over Opinions
-                </h2>
-              </div>
-              
-              <p className="text-lg text-zinc-700 leading-relaxed mb-6">
-                Professional brokers rely on verified data — not assumptions or social media narratives.
-              </p>
-              
-              <p className="text-zinc-700 mb-4">Market understanding should be built on:</p>
-              <ul className="space-y-3 mb-6">
-                {marketKnowledgeSources.map((item, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
-                  </li>
-                ))}
-              </ul>
-              
-              <p className="text-zinc-600 italic">
-                Opinions must always be supported by data.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Section 5 - Off-Plan & Ready Property Representation - Layer 2 */}
-      <section id="representation" className="py-16 md:py-24 scroll-mt-20">
-        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
-                Responsible Property Representation
-              </h2>
-            </div>
-
-            {/* Layer 3 Cards Grid */}
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Off-Plan */}
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 hover:border-gold/50 transition-all">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl flex items-center justify-center">
-                    <Clock className="w-6 h-6 text-black" />
+      {/* Progress & Recognition Section */}
+      <section className="py-12 md:py-16">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+          >
+            <Card className="bg-gradient-to-br from-zinc-900/90 via-zinc-900/80 to-black border border-gold/20">
+              <CardContent className="p-8">
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div>
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center">
+                        <GraduationCap className="w-5 h-5 text-gold" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-white">Progress & Recognition</h3>
+                    </div>
+                    <ul className="space-y-2 text-zinc-300 text-sm">
+                      <li className="flex items-start gap-2">
+                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span>Progress tracked internally within the platform</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span>Completion badges are for internal recognition only</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span>Certificates state: "Internal Recognition — JBJ Global Real Estate"</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span>No public sharing or external certification claims</span>
+                      </li>
+                    </ul>
                   </div>
-                  <h3 className="text-xl font-semibold text-black">Off-Plan Representation</h3>
-                </div>
-                <ul className="space-y-3">
-                  {offPlanRepresentation.map((point, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                      <span className="text-zinc-700 text-sm">{point}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
 
-              {/* Ready */}
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 hover:border-gold/50 transition-all">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl flex items-center justify-center">
-                    <Building className="w-6 h-6 text-black" />
+                  <div>
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center">
+                        <Shield className="w-5 h-5 text-gold" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-white">Access Rules</h3>
+                    </div>
+                    <ul className="space-y-2 text-zinc-300 text-sm">
+                      <li className="flex items-start gap-2">
+                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span>This program is proprietary to JBJ Global Real Estate</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span>All content is owned by JBJ Global Real Estate</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span>Access can be modified or revoked at any time</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span>Book 9 (Advanced) requires special access approval</span>
+                      </li>
+                    </ul>
                   </div>
-                  <h3 className="text-xl font-semibold text-black">Ready Property Representation</h3>
                 </div>
-                <ul className="space-y-3">
-                  {readyRepresentation.map((point, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                      <span className="text-zinc-700 text-sm">{point}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
       </section>
 
-      {/* Section 6 - Communication & Client Education - Layer 2 */}
-      <section id="communication" className="py-16 md:py-24 scroll-mt-20">
-        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
-          <div className="max-w-4xl mx-auto">
-            {/* Layer 3 Card */}
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 md:p-12">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl flex items-center justify-center">
-                  <MessageSquare className="w-6 h-6 text-black" />
-                </div>
-                <h2 className="text-3xl md:text-4xl font-semibold text-black">
-                  Educating, Not Convincing
-                </h2>
-              </div>
-              
-              <p className="text-lg text-zinc-700 leading-relaxed mb-6">
-                A broker's communication style reflects their professionalism. Clear explanations, 
-                balanced insights, and respectful dialogue build confidence.
-              </p>
-              
-              <div className="bg-white/60 border border-gold/20 rounded-xl p-5">
-                <p className="text-zinc-700 font-medium text-center">
-                  Clients should leave interactions feeling informed — not pressured.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Section 7 - Long-Term Career Positioning - Layer 2 */}
-      <section id="career" className="py-16 md:py-24 scroll-mt-20">
-        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
-                Building a Sustainable Brokerage Career
-              </h2>
-            </div>
-
-            {/* Layer 3 Cards Grid */}
-            <div className="grid md:grid-cols-3 gap-6">
-              {careerCards.map((card, index) => (
-                <div 
-                  key={index}
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 hover:border-gold/50 hover:shadow-lg transition-all text-center"
-                >
-                  <div className="w-14 h-14 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <card.icon className="w-7 h-7 text-black" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-black mb-3">{card.title}</h3>
-                  <p className="text-zinc-600 leading-relaxed text-sm">{card.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Founder-Led Philosophy */}
-      <FounderPhilosophySection />
-
-      {/* Final CTA - Layer 2 */}
-      <section className="py-20 md:py-28">
-        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center opacity-5 rounded-2xl" />
-          
-          <div className="container mx-auto px-4 relative z-10">
-            {/* Layer 3 Card */}
-            <div className="max-w-3xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 md:p-12 text-center">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-black mb-6">
-                Elevate Your Professional Practice
-              </h2>
-              <p className="text-lg text-zinc-600 mb-10 max-w-2xl mx-auto">
-                Access professional tools, training resources, and industry insights designed for 
-                serious real estate professionals.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button asChild variant="primary" className="px-8 py-4">
-                  <Link to="/broker-toolkit">
-                    <Briefcase className="w-5 h-5 mr-2" />
-                    Join Broker Hub
-                  </Link>
+      {/* CTA Section */}
+      <section className="py-16 md:py-24">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+            className="max-w-3xl mx-auto text-center"
+          >
+            <h2 className="text-3xl md:text-4xl font-light text-white mb-6">
+              Ready to <span className="text-gold">Get Started?</span>
+            </h2>
+            <p className="text-lg text-zinc-400 mb-10">
+              Begin your professional development journey with the JBJ broker education library.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link to="/broker-dashboard">
+                <Button variant="primary" size="lg">
+                  <Briefcase className="w-5 h-5 mr-2" />
+                  Back to Dashboard
                 </Button>
-                <Button asChild variant="primary" className="px-8 py-4">
-                  <Link to="/broker-toolkit">
-                    <FileText className="w-5 h-5 mr-2" />
-                    View Broker Tools
-                  </Link>
+              </Link>
+              <Link to="/broker-toolkit">
+                <Button variant="secondary" size="lg">
+                  <ArrowRight className="w-5 h-5 mr-2" />
+                  Broker Tools
                 </Button>
-              </div>
+              </Link>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Final Disclaimer - Layer 2 with Layer 3 */}
-      <section className="py-12">
-        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
-          <div className="max-w-3xl mx-auto">
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6">
-              <p className="text-zinc-600 text-sm text-center leading-relaxed">
-                This content is educational in nature. It does not replace regulatory requirements or 
-                professional licensing obligations. Brokers are responsible for ensuring compliance 
-                with all applicable laws and regulations.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Guide Navigation - Layer 2 */}
-      <section className="py-12">
-        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12 mb-8">
-          <div className="container mx-auto px-4">
-            <GuideNavigation 
-              current="/broker-education"
-              guides={[
-                ...GUIDE_LINKS,
-                { title: "Investor Education", path: "/investor-education", description: "Investment framework" },
-                { title: "Investor FAQ", path: "/investor-faq", description: "Investment questions" },
-                { title: "Broker Education", path: "/broker-education", description: "Professional training" },
-              ]}
-            />
-          </div>
-        </div>
-      </section>
+      {/* Book Detail Modal */}
+      <BookDetailModal
+        book={selectedBook}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
 
       <Footer />
     </div>
