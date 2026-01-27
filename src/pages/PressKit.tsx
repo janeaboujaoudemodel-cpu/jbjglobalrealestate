@@ -36,7 +36,7 @@ import founderSpeaking from "@/assets/founder-speaking.png";
 import founderYacht from "@/assets/founder-yacht.jpeg";
 
 // Hero video for press kit
-import heroVideo from "@/assets/dubai-hero-video.mp4";
+import heroVideo from "@/assets/videos/press-kit-hero.mp4";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },

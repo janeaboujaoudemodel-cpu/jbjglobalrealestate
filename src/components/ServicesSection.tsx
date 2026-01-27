@@ -1,7 +1,7 @@
 import { ChevronRight, Play, Volume2, VolumeX, Check, Sparkles } from "lucide-react";
 import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import dubaiHeroVideo from "@/assets/dubai-hero-video.mp4";
+import servicesHeroVideo from "@/assets/videos/services-hero.mp4";
 import { CONTACT_INFO } from "@/constants/stats";
 
 const INQUIRY_FORM_URL = "https://jbj.ae/contact";
@@ -259,7 +259,7 @@ const ServicesSection = () => {
           playsInline
           className="w-full h-full object-cover"
         >
-          <source src={dubaiHeroVideo} type="video/mp4" />
+          <source src={servicesHeroVideo} type="video/mp4" />
         </video>
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/80" />
