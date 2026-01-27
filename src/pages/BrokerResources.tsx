@@ -142,7 +142,7 @@ const BrokerResources = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-black">
       <GlobalHeader />
       
       {/* Hero Section with Video */}
@@ -209,70 +209,63 @@ const BrokerResources = () => {
             </motion.p>
             
             <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
-              <Link to="/broker-dashboard">
-                <Button 
-                  size="lg"
-                  className="bg-gold hover:bg-gold/90 text-black font-semibold px-8 py-6 text-base"
-                >
+              <Button asChild size="lg" variant="primary">
+                <Link to="/broker-dashboard">
                   Access Broker Resources
                   <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </Link>
-              <Link to="/contact">
-                <Button 
-                  size="lg"
-                  variant="outline"
-                  className="border-gold/50 text-gold hover:bg-gold/10 px-8 py-6 text-base"
-                >
-                  Contact Broker Support
-                </Button>
-              </Link>
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="secondary">
+                <Link to="/contact">Contact Broker Support</Link>
+              </Button>
             </motion.div>
           </div>
         </motion.div>
       </section>
 
       {/* Resource Sections */}
-      <section className="py-16 md:py-24 bg-gradient-to-b from-background to-muted/30">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="max-w-6xl mx-auto"
-          >
-            <div className="space-y-8">
-              {resourceSections.map((section, index) => (
-                <motion.div
-                  key={index}
-                  variants={fadeInUp}
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 rounded-2xl p-6 md:p-8 hover:border-gold transition-all duration-300"
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-black border border-gold rounded-xl flex items-center justify-center">
-                      <section.icon className="w-6 h-6 text-gold" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-xl md:text-2xl font-medium text-black mb-3">{section.title}</h3>
-                      <p className="text-zinc-600 mb-4">{section.description}</p>
-                      <div className="bg-black/5 rounded-xl p-4 mb-4">
-                        <ul className="space-y-2">
-                          {section.items.map((item, idx) => (
-                            <li key={idx} className="flex items-start gap-3">
-                              <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                              <span className="text-zinc-700 text-sm">{item}</span>
-                            </li>
-                          ))}
-                        </ul>
+      <section className="py-16 md:py-24 bg-black">
+        <div className="jj-layer-2">
+          <div className="w-full px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+              className="max-w-6xl mx-auto"
+            >
+              <div className="space-y-8">
+                {resourceSections.map((section, index) => (
+                  <motion.div
+                    key={index}
+                    variants={fadeInUp}
+                    className="jj-card-inner rounded-2xl p-6 md:p-8"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="flex-shrink-0 w-12 h-12 bg-black border border-gold rounded-xl flex items-center justify-center">
+                        <section.icon className="w-6 h-6 text-gold" />
                       </div>
-                      <p className="text-sm text-zinc-600 italic">{section.footer}</p>
+                      <div className="flex-1">
+                        <h3 className="text-xl md:text-2xl font-medium text-black mb-3">{section.title}</h3>
+                        <p className="text-zinc-600 mb-4">{section.description}</p>
+                        <div className="bg-black/5 rounded-xl p-4 mb-4">
+                          <ul className="space-y-2">
+                            {section.items.map((item, idx) => (
+                              <li key={idx} className="flex items-start gap-3">
+                                <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                                <span className="text-zinc-700 text-sm">{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <p className="text-sm text-zinc-600 italic">{section.footer}</p>
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -314,44 +307,46 @@ const BrokerResources = () => {
       </section>
 
       {/* Why These Resources Matter */}
-      <section className="py-16 md:py-24 bg-gradient-to-b from-background to-muted/30">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="max-w-4xl mx-auto"
-          >
-            <GuideSectionHeader icon={ShieldCheck} title="Why These Resources Matter" centered />
-            
-            <motion.p 
-              variants={fadeInUp}
-              className="text-center text-muted-foreground max-w-2xl mx-auto mb-8"
+      <section className="py-16 md:py-24 bg-black">
+        <div className="jj-layer-2">
+          <div className="w-full px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+              className="max-w-4xl mx-auto"
             >
-              Professional brokerage performance depends on:
-            </motion.p>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {whyMatters.map((reason, index) => (
-                <motion.div
-                  key={index}
-                  variants={fadeInUp}
-                  className="flex flex-col items-center justify-center p-6 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 rounded-xl text-center"
-                >
-                  <CheckCircle2 className="w-6 h-6 text-gold mb-3" />
-                  <span className="text-zinc-800 font-medium">{reason}</span>
-                </motion.div>
-              ))}
-            </div>
-            
-            <motion.p 
-              variants={fadeInUp}
-              className="text-center text-muted-foreground mt-8"
-            >
-              These resources are built to support those standards consistently.
-            </motion.p>
-          </motion.div>
+              <GuideSectionHeader icon={ShieldCheck} title="Why These Resources Matter" centered />
+              
+              <motion.p 
+                variants={fadeInUp}
+                className="text-center text-zinc-700 max-w-2xl mx-auto mb-8"
+              >
+                Professional brokerage performance depends on:
+              </motion.p>
+              
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {whyMatters.map((reason, index) => (
+                  <motion.div
+                    key={index}
+                    variants={fadeInUp}
+                    className="jj-card-inner rounded-xl p-6 text-center flex flex-col items-center justify-center"
+                  >
+                    <CheckCircle2 className="w-6 h-6 text-gold mb-3" />
+                    <span className="text-zinc-800 font-medium">{reason}</span>
+                  </motion.div>
+                ))}
+              </div>
+              
+              <motion.p 
+                variants={fadeInUp}
+                className="text-center text-zinc-700 mt-8"
+              >
+                These resources are built to support those standards consistently.
+              </motion.p>
+            </motion.div>
+          </div>
         </div>
       </section>
 
