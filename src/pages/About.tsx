@@ -159,17 +159,38 @@ const About = () => {
               About JBJ Global Real Estate
             </motion.h1>
             <motion.p 
-              className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto mb-10"
+              className="text-white text-xl md:text-2xl font-medium max-w-3xl mx-auto mb-4"
+              style={{ lineHeight: 1.6 }}
+              variants={fadeInUp}
+            >
+              A Licensed Brokerage Built on Structure, Clarity, and Accountability
+            </motion.p>
+            <motion.p 
+              className="text-zinc-300 text-base md:text-lg max-w-3xl mx-auto mb-10"
               style={{ lineHeight: 1.7 }}
               variants={fadeInUp}
             >
-              Licensed to BUY · SELL · RENT across the UAE.
+              JBJ Global Real Estate is a Dubai-based, mainland licensed real estate brokerage operating across the UAE. Our focus is clear: structured brokerage services for buying, selling, and renting property — supported by data, market intelligence, and disciplined execution. We operate with transparency, regulatory compliance, and long-term client trust at the core of everything we do.
             </motion.p>
             <motion.div 
               className="flex flex-wrap justify-center gap-4"
               variants={fadeInUp}
             >
               {/* Hero CTA Buttons - Transparent bg, white 3D border, white title, gold icon on normal; filled on hover */}
+              <Link to="/services" className="relative z-20">
+                <button 
+                  className="group inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent"
+                  style={{
+                    border: '2px solid rgba(255,255,255,0.8)',
+                    boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
+                  }}
+                >
+                  <span className="text-white group-hover:text-black transition-colors">Explore Our Services</span>
+                  <ArrowUpRight className="w-4 h-4 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                  {/* Hover fill overlay */}
+                  <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                </button>
+              </Link>
               <Link to="/contact" className="relative z-20">
                 <button 
                   className="group inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent"
@@ -178,21 +199,7 @@ const About = () => {
                     boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
                   }}
                 >
-                  <span className="text-white group-hover:text-black transition-colors">Contact Us</span>
-                  <ArrowUpRight className="w-4 h-4 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                  {/* Hover fill overlay */}
-                  <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
-                </button>
-              </Link>
-              <Link to="/properties" className="relative z-20">
-                <button 
-                  className="group inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent"
-                  style={{
-                    border: '2px solid rgba(255,255,255,0.8)',
-                    boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-                  }}
-                >
-                  <span className="text-white group-hover:text-black transition-colors">Browse Properties</span>
+                  <span className="text-white group-hover:text-black transition-colors">Contact Our Team</span>
                   <ArrowUpRight className="w-4 h-4 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                   {/* Hover fill overlay */}
                   <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
@@ -266,17 +273,14 @@ const About = () => {
               {/* RIGHT: Who We Are */}
               <motion.div variants={fadeInUp} className="mt-8 md:mt-0">
                 <SectionLabel>Who We Are</SectionLabel>
-                <SectionHeadline>Licensed Real Estate Brokerage</SectionHeadline>
+                <SectionHeadline>Who We Are</SectionHeadline>
                 
                 <ContentText>
                   <p>
-                    JBJ Global Real Estate is a Dubai-based, licensed real estate brokerage operating across the UAE.
+                    JBJ Global Real Estate L.L.C. S.O.C is a licensed real estate brokerage authorized to facilitate property transactions across the UAE. We support local and international clients through every stage of the real estate journey — from market understanding and opportunity evaluation to transaction coordination and completion.
                   </p>
                   <p>
-                    We are authorized to BUY, SELL, and RENT residential and investment properties and provide structured brokerage support to end-users, investors, and professional partners.
-                  </p>
-                  <p>
-                    Our role is not to sell aggressively — it is to protect decisions, structure transactions correctly, and operate within clear regulatory boundaries.
+                    Our role is brokerage and coordination. Where additional services are required, we introduce clients to independent, licensed partners operating under their own regulatory frameworks.
                   </p>
                 </ContentText>
               </motion.div>
@@ -295,34 +299,34 @@ const About = () => {
             <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
               {/* LEFT: Text Content */}
               <motion.div variants={fadeInUp}>
-                <SectionLabel>Our Philosophy</SectionLabel>
-                <SectionHeadline>Real Estate is a Long-Term Decision</SectionHeadline>
+                <SectionLabel>Our Approach</SectionLabel>
+                <SectionHeadline>Our Approach</SectionHeadline>
                 <ContentText>
                   <p>
-                    Real estate is not a product. It is a long-term financial, legal, and lifestyle decision.
+                    We believe real estate decisions must be informed, structured, and grounded in verified data — not sales pressure or assumptions.
                   </p>
                   <p>
-                    At JBJ Global Real Estate, we operate with three non-negotiable principles:
+                    Our approach combines market intelligence, clear process mapping, disciplined transaction management, and defined compliance boundaries. Every engagement is handled with clarity on scope, responsibility, and next steps.
                   </p>
                 </ContentText>
                 
                 {/* Feature Cards - champagne style to match founder card */}
                 <div className="grid sm:grid-cols-2 gap-4 mt-8">
                   <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-lg p-5 shadow-sm">
-                    <Target className="w-6 h-6 text-gold mb-3" />
-                    <p className="text-black text-base font-semibold leading-snug">Clarity over Persuasion</p>
+                    <BarChart3 className="w-6 h-6 text-gold mb-3" />
+                    <p className="text-black text-base font-semibold leading-snug">Market Intelligence from Official Data</p>
                   </div>
                   <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-lg p-5 shadow-sm">
                     <FileCheck className="w-6 h-6 text-gold mb-3" />
-                    <p className="text-black text-base font-semibold leading-snug">Process over Promises</p>
+                    <p className="text-black text-base font-semibold leading-snug">Clear Process Mapping</p>
+                  </div>
+                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-lg p-5 shadow-sm">
+                    <Target className="w-6 h-6 text-gold mb-3" />
+                    <p className="text-black text-base font-semibold leading-snug">Disciplined Transaction Management</p>
                   </div>
                   <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-lg p-5 shadow-sm">
                     <Shield className="w-6 h-6 text-gold mb-3" />
-                    <p className="text-black text-base font-semibold leading-snug">Compliance over Shortcuts</p>
-                  </div>
-                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-lg p-5 shadow-sm">
-                    <TrendingUp className="w-6 h-6 text-gold mb-3" />
-                    <p className="text-black text-base font-semibold leading-snug">Data-Driven Guidance</p>
+                    <p className="text-black text-base font-semibold leading-snug">Defined Compliance Boundaries</p>
                   </div>
                 </div>
               </motion.div>
@@ -356,25 +360,25 @@ const About = () => {
           >
             <motion.div className="text-center mb-10" variants={fadeInUp}>
               <SectionLabel>What We Do</SectionLabel>
-              <SectionHeadline className="max-w-2xl mx-auto">Licensed Brokerage Services</SectionHeadline>
+              <SectionHeadline className="max-w-2xl mx-auto">What We Do</SectionHeadline>
             </motion.div>
 
             {/* 3 Card Grid */}
             <div className="grid md:grid-cols-3 gap-6">
               <FeatureCard 
                 icon={Building2}
-                title="Property Sales"
-                description="Off-plan and ready property sales, buyer and seller advisory, and market-driven investment guidance."
+                title="Property Buying & Selling"
+                description="Off-plan and ready property buying, primary and secondary selling, with structured transaction support."
               />
               <FeatureCard 
                 icon={Users}
-                title="Property Rentals"
-                description="Landlord and tenant advisory with structured leasing support and rental market guidance."
+                title="Residential & Commercial Rentals"
+                description="Rental coordination for landlords and tenants across residential and commercial properties."
               />
               <FeatureCard 
                 icon={Heart}
-                title="Partner Introductions"
-                description="Structured introductions to independent, licensed partners (legal, mortgage, visa, and corporate services). Clients contract directly with partners."
+                title="Intelligence & Partner Introductions"
+                description="Market intelligence, area analysis, investment education, and introductions to licensed partners (legal, mortgage, visa). All services within our licensed scope."
               />
             </div>
           </motion.div>
@@ -426,17 +430,14 @@ const About = () => {
 
               {/* RIGHT: Text Content */}
               <motion.div variants={fadeInUp}>
-                <SectionLabel>Our Market Intelligence Approach</SectionLabel>
-                <SectionHeadline>Data, Not Opinion</SectionHeadline>
+                <SectionLabel>Market Intelligence & Data</SectionLabel>
+                <SectionHeadline>Data-Driven, Not Opinion-Driven</SectionHeadline>
                 <ContentText>
                   <p>
-                    JBJ Global Real Estate operates one of the most structured real estate intelligence frameworks in the region.
+                    Our market insights, reports, and tools are built using aggregated official data and verified market information. These insights are designed to support understanding, comparison, and clarity — not to predict outcomes or guarantee results.
                   </p>
                   <p>
-                    Our insights are built using official UAE government open data, regulatory disclosures, registered transaction records, and aggregated historical market activity.
-                  </p>
-                  <p>
-                    All intelligence is descriptive, not predictive, and is provided for informational purposes only.
+                    All data usage is transparent, referenced, and handled in accordance with applicable regulations.
                   </p>
                 </ContentText>
               </motion.div>
@@ -453,16 +454,16 @@ const About = () => {
             variants={fadeInUp}
             className="text-center"
           >
-            <SectionLabel>What We Do Not Do</SectionLabel>
+            <SectionLabel>Regulatory Boundaries</SectionLabel>
             <SectionHeadline className="max-w-3xl mx-auto">
-              Regulatory Clarity & Client Protection
+              Regulatory Boundaries
             </SectionHeadline>
             <ContentText className="max-w-2xl mx-auto text-center">
               <p>
-                We do not provide legal advice. We do not provide mortgage or financial advice. We do not guarantee returns or outcomes. We do not issue visas or government approvals.
+                To maintain compliance and protect our clients, it is important to be clear about what we do not provide directly.
               </p>
               <p>
-                Our responsibility is coordination, transparency, and brokerage support — nothing more, nothing less.
+                JBJ Global Real Estate does NOT provide: legal advice or legal services, mortgage or banking services, financial or investment advisory services, or immigration or visa issuance services. Where such services are required, clients are introduced to independent, licensed partners and contract directly with them.
               </p>
             </ContentText>
           </motion.div>
@@ -477,31 +478,31 @@ const About = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-10" variants={fadeInUp}>
-              <SectionLabel>Technology with Governance</SectionLabel>
-              <SectionHeadline className="max-w-2xl mx-auto">AI-Enabled Tools with Oversight</SectionHeadline>
+              <SectionLabel>Trust & Governance</SectionLabel>
+              <SectionHeadline className="max-w-2xl mx-auto">Trust, Governance, and Accountability</SectionHeadline>
             </motion.div>
 
             {/* 4 Card Grid */}
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
               <FeatureCard 
-                icon={BarChart3}
-                title="Market Comparisons"
-                description="AI-powered tools to support market comparisons and area analysis."
-              />
-              <FeatureCard 
-                icon={Building2}
-                title="Portfolio Views"
-                description="Structured portfolio views and report generation capabilities."
-              />
-              <FeatureCard 
                 icon={Shield}
-                title="Reviewed & Logged"
-                description="All AI outputs are reviewed, logged, and governed for accuracy."
+                title="AI Tools Monitored"
+                description="AI-assisted tools are monitored and logged for transparency and accuracy."
+              />
+              <FeatureCard 
+                icon={FileCheck}
+                title="Intelligence Reviewed"
+                description="Market intelligence is reviewed before publication to ensure quality."
               />
               <FeatureCard 
                 icon={Scale}
-                title="Support, Not Replace"
-                description="AI is designed to assist understanding — not to replace licensed professionals or official authorities."
+                title="Data Confidentiality"
+                description="Client data is handled with confidentiality and access controls."
+              />
+              <FeatureCard 
+                icon={Target}
+                title="Licensed Scope"
+                description="All activities remain within licensed scope. Trust is built through discipline — not promises."
               />
             </div>
 
@@ -518,20 +519,26 @@ const About = () => {
             className="text-center max-w-2xl mx-auto"
           >
             <SectionLabel>Our Commitment</SectionLabel>
-            <SectionHeadline>Structure, Accountability, Confidence</SectionHeadline>
+            <SectionHeadline>Our Commitment</SectionHeadline>
             <ContentText className="mx-auto text-center">
               <p>
-                We commit to operating within UAE licensing regulations, protecting client data and confidentiality, maintaining clear separation between brokerage and partner services, and delivering consistent standards across every transaction.
+                We are committed to: clear communication, accurate information, structured processes, and long-term client trust.
               </p>
               <p>
-                JBJ Global Real Estate exists to bring structure, accountability, and confidence into real estate decision-making.
+                Real estate is not about speed — it is about precision.
               </p>
             </ContentText>
             
             <div className="w-20 h-px bg-gradient-to-r from-transparent via-gold to-transparent mx-auto my-6" />
             
+            <ContentText className="mx-auto text-center text-sm">
+              <p>
+                JBJ Global Real Estate is a licensed real estate brokerage in Dubai (Mainland). For regulated services outside our scope, we facilitate introductions to independent licensed partners. All engagements are governed by UAE law and applicable regulations.
+              </p>
+            </ContentText>
+            
             {/* Initials */}
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-black border-2 border-gold">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-black border-2 border-gold mt-4">
               <span className="text-gold text-xl font-bold">JBJ</span>
             </div>
           </motion.div>
