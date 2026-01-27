@@ -20,6 +20,8 @@ serve(async (req) => {
     const isLovablePreviewRequest =
       origin.includes('lovableproject.com') ||
       referer.includes('lovableproject.com') ||
+      origin.includes('lovable.app') ||
+      referer.includes('lovable.app') ||
       origin.includes('localhost') ||
       referer.includes('localhost');
 
