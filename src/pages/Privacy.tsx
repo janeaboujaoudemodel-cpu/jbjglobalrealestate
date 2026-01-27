@@ -28,9 +28,9 @@ const Privacy = () => {
               <section>
                 <h2 className="text-gold text-xl font-semibold mb-4">1. Introduction</h2>
                 <p>
-                  JBJ Global Real Estate ("we," "our," or "us"), a Dubai-based real estate brokerage, 
-                  is committed to protecting your privacy. This Privacy Policy explains how we collect, 
-                  use, disclose, and safeguard your information when you visit our website or use our services.
+                  JBJ Global Real Estate is committed to protecting personal and transactional data. 
+                  This Privacy Policy explains how information is collected, used, stored, and protected 
+                  when you interact with our platform, services, and tools.
                 </p>
               </section>
 
@@ -69,8 +69,9 @@ const Privacy = () => {
                   <li><strong>Secure Storage:</strong> Personal data is stored on secure, access-controlled systems.</li>
                 </ul>
                 <p className="mt-4 text-zinc-400">
-                  While we strive to protect your information, no method of transmission over the Internet 
-                  or electronic storage is 100% secure. We cannot guarantee absolute security.
+                  We implement industry-standard technical and organizational safeguards to protect data. 
+                  While no digital system can guarantee absolute security, access controls, monitoring, 
+                  and protection mechanisms are applied to minimize risk and unauthorized access.
                 </p>
               </section>
 
@@ -84,17 +85,17 @@ const Privacy = () => {
 
               <section>
                 <h2 className="text-gold text-xl font-semibold mb-4">6. Sharing Your Information</h2>
-                <p>We may share your information with:</p>
-                <ul className="list-disc pl-6 mt-2 space-y-2">
-                  <li>Our partner service providers and affiliated services</li>
+                <p>
+                  We do not sell personal data. Information is shared only where required to deliver 
+                  brokerage services, comply with legal obligations, or introduce licensed partners 
+                  at the user's request, in accordance with applicable data protection laws.
+                </p>
+                <ul className="list-disc pl-6 mt-4 space-y-2">
+                  <li>Licensed partners for services you request (e.g., mortgage, legal, visa)</li>
                   <li>Real estate developers and partners for property inquiries</li>
                   <li>Service providers who assist in our operations</li>
                   <li>Legal authorities when required by law</li>
                 </ul>
-                <p className="mt-4 text-zinc-400">
-                  We do not sell your personal data to third parties. Any sharing is done in accordance 
-                  with applicable data protection laws.
-                </p>
               </section>
 
               <section>
@@ -112,13 +113,12 @@ const Privacy = () => {
               <section>
                 <h2 className="text-gold text-xl font-semibold mb-4">8. Confidentiality Commitment</h2>
                 <p>
-                  JBJ Global Real Estate is committed to maintaining the highest standards of data confidentiality. 
-                  Your personal information and property inquiries are treated with strict confidentiality and are:
+                  All client information and property inquiries are treated as confidential and are:
                 </p>
                 <ul className="list-disc pl-6 mt-2 space-y-2">
-                  <li>Never sold to third parties</li>
-                  <li>Protected from unauthorized access</li>
-                  <li>Accessible only to authorized personnel on a need-to-know basis</li>
+                  <li>Accessed only by authorized personnel</li>
+                  <li>Protected against unauthorized use</li>
+                  <li>Never sold or distributed for third-party marketing</li>
                 </ul>
               </section>
 
@@ -161,7 +161,7 @@ const Privacy = () => {
                   Data Protection: <a href="mailto:Privacy@JBJ.ae" className="text-gold hover:underline">Privacy@JBJ.ae</a>
                 </p>
                 <p className="mt-4 text-zinc-500 text-sm">
-                  © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.
+                  © {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
                 </p>
               </section>
             </div>

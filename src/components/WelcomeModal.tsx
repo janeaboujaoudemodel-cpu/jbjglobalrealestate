@@ -179,7 +179,7 @@ const WelcomeModal = () => {
 
             {/* Footer text with copyright */}
             <p className="text-center text-zinc-500 text-xs mt-8">
-              © 2026 JBJ Global Real Estate. All Rights Reserved.
+              © {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
             </p>
           </div>
         </DialogContent>
