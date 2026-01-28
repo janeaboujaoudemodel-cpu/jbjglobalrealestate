@@ -497,16 +497,16 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
 
   if (isLoading) {
     return (
-      <Card className="bg-gradient-to-br from-background via-background to-primary/5 border-2 border-primary/40">
+      <Card className="bg-card border-2 border-gold shadow-[0_4px_20px_rgba(200,167,102,0.25)]">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Building2 className="h-5 w-5 text-primary" />
+          <CardTitle className="flex items-center gap-2 text-gold">
+            <Building2 className="h-5 w-5 text-gold" />
             Project Approval Queue
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center py-12">
-            <RefreshCw className="h-8 w-8 animate-spin text-primary" />
+            <RefreshCw className="h-8 w-8 animate-spin text-gold" />
           </div>
         </CardContent>
       </Card>
@@ -515,13 +515,13 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
 
   return (
     <>
-      <Card className="bg-gradient-to-br from-background via-background to-primary/5 border-2 border-primary/40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+      <Card className="bg-card border-2 border-gold shadow-[0_4px_20px_rgba(200,167,102,0.25)]">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-foreground">
-            <Building2 className="h-5 w-5 text-primary" />
+          <CardTitle className="flex items-center gap-2 text-gold">
+            <Building2 className="h-5 w-5 text-gold" />
             Project Approval Queue
             {imports.length > 0 && (
-              <Badge className="bg-primary/20 text-primary border border-primary/30 ml-2">
+              <Badge className="bg-gold/20 text-gold border border-gold ml-2">
                 {imports.length} pending
               </Badge>
             )}
@@ -533,7 +533,7 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
                   size="sm"
                   onClick={approveAllShown}
                   disabled={isBulkProcessing || isLoading}
-                  className="bg-primary text-primary-foreground hover:bg-primary/90"
+                  className="bg-gold text-black hover:bg-gold/90"
                 >
                   <Check className="h-4 w-4 mr-2" />
                   Approve All ({imports.length})
@@ -550,7 +550,7 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
                 </Button>
               </>
             )}
-            <Button variant="outline" size="sm" onClick={fetchPendingImports} disabled={isBulkProcessing} className="border-primary/30 hover:border-primary hover:bg-primary/10">
+            <Button variant="outline" size="sm" onClick={fetchPendingImports} disabled={isBulkProcessing} className="border-gold text-gold hover:bg-gold/10">
               <RefreshCw className="h-4 w-4 mr-2" />
               Refresh
             </Button>
@@ -558,7 +558,7 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
         </CardHeader>
         <CardContent>
           {isBulkProcessing && bulkAction === "approve" && bulkTotal > 0 && (
-            <div className="mb-4 rounded-lg border-2 border-primary/30 bg-card p-3">
+            <div className="mb-4 rounded-lg border-2 border-gold bg-card p-3">
               <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
                 <span>Approving… {bulkDone}/{bulkTotal}</span>
                 <span>{Math.round((bulkDone / bulkTotal) * 100)}%</span>
@@ -568,12 +568,12 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
           )}
           {imports.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
-              <Check className="h-16 w-16 mb-4 text-primary" />
+              <Check className="h-16 w-16 mb-4 text-gold" />
               <p className="text-xl font-medium text-foreground">All caught up!</p>
               <p className="text-sm">No projects awaiting approval</p>
             </div>
           ) : (
-            <div className="p-4 rounded-xl border-2 border-primary/30 bg-gradient-to-br from-primary/5 via-transparent to-primary/10">
+            <div className="p-6 rounded-xl border-2 border-gold bg-gold/5 shadow-[inset_0_0_30px_rgba(200,167,102,0.1)]">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {imports.map((item) => (
                   <PendingImportCard

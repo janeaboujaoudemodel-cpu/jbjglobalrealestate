@@ -81,11 +81,11 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
 
   return (
     <Card
-      className="overflow-hidden cursor-pointer border-2 border-primary/60 bg-gradient-to-br from-background via-background to-primary/5 shadow-[0_4px_20px_rgba(200,167,102,0.15)] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:border-primary hover:scale-[1.02] hover:-translate-y-1"
+      className="overflow-hidden cursor-pointer border-2 border-gold bg-card shadow-[0_4px_20px_rgba(200,167,102,0.25)] transition-all duration-300 hover:shadow-[0_12px_40px_rgba(200,167,102,0.4)] hover:border-gold hover:scale-[1.02] hover:-translate-y-2"
       style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
       onClick={handleCardClick}
     >
-      {/* Image Preview (Provident-style arrows on-card) */}
+      {/* Image Preview */}
       <div className="relative h-56 bg-muted">
         {activeImage?.url ? (
           <img
@@ -102,22 +102,22 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
           </div>
         )}
 
-        {/* Navigation arrows - Premium gold filled style */}
+        {/* Navigation arrows - Gold filled style */}
         {hasMultipleImages && (
           <>
             <button
               onClick={handlePrev}
-              className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-gradient-to-br from-primary via-primary to-primary/80 border-2 border-primary-foreground/20 text-primary-foreground flex items-center justify-center shadow-[0_4px_15px_rgba(200,167,102,0.4)] hover:shadow-[0_6px_20px_rgba(200,167,102,0.6)] hover:scale-110 transition-all duration-200 z-10"
+              className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-gold border-2 border-gold text-black flex items-center justify-center shadow-[0_4px_15px_rgba(200,167,102,0.5)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.7)] hover:scale-110 transition-all duration-200 z-10"
               aria-label="Previous image"
             >
-              <ChevronLeft className="w-5 h-5 drop-shadow-sm" />
+              <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={handleNext}
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-gradient-to-br from-primary via-primary to-primary/80 border-2 border-primary-foreground/20 text-primary-foreground flex items-center justify-center shadow-[0_4px_15px_rgba(200,167,102,0.4)] hover:shadow-[0_6px_20px_rgba(200,167,102,0.6)] hover:scale-110 transition-all duration-200 z-10"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-gold border-2 border-gold text-black flex items-center justify-center shadow-[0_4px_15px_rgba(200,167,102,0.5)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.7)] hover:scale-110 transition-all duration-200 z-10"
               aria-label="Next image"
             >
-              <ChevronRight className="w-5 h-5 drop-shadow-sm" />
+              <ChevronRight className="w-5 h-5" />
             </button>
 
             {/* Image dots indicator (no photo icon / no count) */}
