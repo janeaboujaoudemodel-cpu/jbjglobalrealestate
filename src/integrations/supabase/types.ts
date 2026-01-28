@@ -8213,6 +8213,287 @@ export type Database = {
           },
         ]
       }
+      hunt_campaigns: {
+        Row: {
+          auto_follow_up: boolean | null
+          contacted_count: number | null
+          conversion_count: number | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          end_date: string | null
+          follow_up_days: number | null
+          follow_up_template: string | null
+          id: string
+          message_template: string | null
+          name: string
+          response_count: number | null
+          start_date: string | null
+          status: Database["public"]["Enums"]["hunt_campaign_status"] | null
+          target_criteria: Json | null
+          target_type: Database["public"]["Enums"]["hunt_target_type"]
+          total_prospects: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          auto_follow_up?: boolean | null
+          contacted_count?: number | null
+          conversion_count?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          end_date?: string | null
+          follow_up_days?: number | null
+          follow_up_template?: string | null
+          id?: string
+          message_template?: string | null
+          name: string
+          response_count?: number | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["hunt_campaign_status"] | null
+          target_criteria?: Json | null
+          target_type: Database["public"]["Enums"]["hunt_target_type"]
+          total_prospects?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          auto_follow_up?: boolean | null
+          contacted_count?: number | null
+          conversion_count?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          end_date?: string | null
+          follow_up_days?: number | null
+          follow_up_template?: string | null
+          id?: string
+          message_template?: string | null
+          name?: string
+          response_count?: number | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["hunt_campaign_status"] | null
+          target_criteria?: Json | null
+          target_type?: Database["public"]["Enums"]["hunt_target_type"]
+          total_prospects?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      hunt_outreach: {
+        Row: {
+          ai_generated: boolean | null
+          ai_personalization: string | null
+          campaign_id: string | null
+          channel: string | null
+          content: string
+          created_at: string | null
+          delivered_at: string | null
+          id: string
+          message_type: string | null
+          opened_at: string | null
+          prospect_id: string | null
+          responded_at: string | null
+          response_content: string | null
+          sent_at: string | null
+          sent_by: string | null
+          subject: string | null
+        }
+        Insert: {
+          ai_generated?: boolean | null
+          ai_personalization?: string | null
+          campaign_id?: string | null
+          channel?: string | null
+          content: string
+          created_at?: string | null
+          delivered_at?: string | null
+          id?: string
+          message_type?: string | null
+          opened_at?: string | null
+          prospect_id?: string | null
+          responded_at?: string | null
+          response_content?: string | null
+          sent_at?: string | null
+          sent_by?: string | null
+          subject?: string | null
+        }
+        Update: {
+          ai_generated?: boolean | null
+          ai_personalization?: string | null
+          campaign_id?: string | null
+          channel?: string | null
+          content?: string
+          created_at?: string | null
+          delivered_at?: string | null
+          id?: string
+          message_type?: string | null
+          opened_at?: string | null
+          prospect_id?: string | null
+          responded_at?: string | null
+          response_content?: string | null
+          sent_at?: string | null
+          sent_by?: string | null
+          subject?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hunt_outreach_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "hunt_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hunt_outreach_prospect_id_fkey"
+            columns: ["prospect_id"]
+            isOneToOne: false
+            referencedRelation: "hunt_prospects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hunt_prospects: {
+        Row: {
+          ai_analysis: string | null
+          ai_score: number | null
+          campaign_id: string | null
+          company: string | null
+          converted_at: string | null
+          created_at: string | null
+          email: string | null
+          experience_years: number | null
+          follow_up_date: string | null
+          full_name: string
+          id: string
+          investment_capacity: string | null
+          job_title: string | null
+          languages: string[] | null
+          last_contacted_at: string | null
+          last_response_at: string | null
+          linkedin_url: string | null
+          location: string | null
+          notes: string | null
+          phone: string | null
+          qualification_notes: string | null
+          source: string | null
+          specializations: string[] | null
+          status: Database["public"]["Enums"]["hunt_prospect_status"] | null
+          target_type: Database["public"]["Enums"]["hunt_target_type"]
+          updated_at: string | null
+        }
+        Insert: {
+          ai_analysis?: string | null
+          ai_score?: number | null
+          campaign_id?: string | null
+          company?: string | null
+          converted_at?: string | null
+          created_at?: string | null
+          email?: string | null
+          experience_years?: number | null
+          follow_up_date?: string | null
+          full_name: string
+          id?: string
+          investment_capacity?: string | null
+          job_title?: string | null
+          languages?: string[] | null
+          last_contacted_at?: string | null
+          last_response_at?: string | null
+          linkedin_url?: string | null
+          location?: string | null
+          notes?: string | null
+          phone?: string | null
+          qualification_notes?: string | null
+          source?: string | null
+          specializations?: string[] | null
+          status?: Database["public"]["Enums"]["hunt_prospect_status"] | null
+          target_type: Database["public"]["Enums"]["hunt_target_type"]
+          updated_at?: string | null
+        }
+        Update: {
+          ai_analysis?: string | null
+          ai_score?: number | null
+          campaign_id?: string | null
+          company?: string | null
+          converted_at?: string | null
+          created_at?: string | null
+          email?: string | null
+          experience_years?: number | null
+          follow_up_date?: string | null
+          full_name?: string
+          id?: string
+          investment_capacity?: string | null
+          job_title?: string | null
+          languages?: string[] | null
+          last_contacted_at?: string | null
+          last_response_at?: string | null
+          linkedin_url?: string | null
+          location?: string | null
+          notes?: string | null
+          phone?: string | null
+          qualification_notes?: string | null
+          source?: string | null
+          specializations?: string[] | null
+          status?: Database["public"]["Enums"]["hunt_prospect_status"] | null
+          target_type?: Database["public"]["Enums"]["hunt_target_type"]
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hunt_prospects_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "hunt_campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hunt_templates: {
+        Row: {
+          content: string
+          created_at: string | null
+          created_by: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          response_rate: number | null
+          subject: string | null
+          target_type: Database["public"]["Enums"]["hunt_target_type"]
+          template_type: string | null
+          updated_at: string | null
+          use_count: number | null
+          variables: string[] | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          response_rate?: number | null
+          subject?: string | null
+          target_type: Database["public"]["Enums"]["hunt_target_type"]
+          template_type?: string | null
+          updated_at?: string | null
+          use_count?: number | null
+          variables?: string[] | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          response_rate?: number | null
+          subject?: string | null
+          target_type?: Database["public"]["Enums"]["hunt_target_type"]
+          template_type?: string | null
+          updated_at?: string | null
+          use_count?: number | null
+          variables?: string[] | null
+        }
+        Relationships: []
+      }
       internal_chat_messages: {
         Row: {
           attachments: Json | null
@@ -15911,6 +16192,17 @@ export type Database = {
       hr_module_track: "company_knowledge" | "real_estate_basics"
       hr_question_type: "mcq" | "true_false" | "short_answer"
       hr_role: "broker_candidate" | "broker_member"
+      hunt_campaign_status: "draft" | "active" | "paused" | "completed"
+      hunt_prospect_status:
+        | "new"
+        | "contacted"
+        | "responded"
+        | "qualified"
+        | "negotiating"
+        | "converted"
+        | "rejected"
+        | "not_interested"
+      hunt_target_type: "investor" | "broker" | "employee"
       leave_status:
         | "pending"
         | "manager_approved"
@@ -16233,6 +16525,18 @@ export const Constants = {
       hr_module_track: ["company_knowledge", "real_estate_basics"],
       hr_question_type: ["mcq", "true_false", "short_answer"],
       hr_role: ["broker_candidate", "broker_member"],
+      hunt_campaign_status: ["draft", "active", "paused", "completed"],
+      hunt_prospect_status: [
+        "new",
+        "contacted",
+        "responded",
+        "qualified",
+        "negotiating",
+        "converted",
+        "rejected",
+        "not_interested",
+      ],
+      hunt_target_type: ["investor", "broker", "employee"],
       leave_status: [
         "pending",
         "manager_approved",
