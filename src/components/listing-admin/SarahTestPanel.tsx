@@ -7,7 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   FlaskConical, 
-  CheckCircle2, 
+  Check, 
   XCircle, 
   Loader2, 
   Image, 
@@ -17,6 +17,13 @@ import {
   Download,
   ExternalLink
 } from "lucide-react";
+
+// Filled check circle component for better visibility
+const FilledCheckCircle = ({ className }: { className?: string }) => (
+  <div className={`rounded-full bg-emerald-600 flex items-center justify-center ${className}`}>
+    <Check className="w-3 h-3 text-white" />
+  </div>
+);
 import { toast } from "sonner";
 
 interface TestResult {
@@ -209,7 +216,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync }: SarahTestPa
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   {testResult.success ? (
-                    <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+                    <FilledCheckCircle className="w-8 h-8" />
                   ) : (
                     <XCircle className="w-8 h-8 text-red-600" />
                   )}
@@ -414,7 +421,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync }: SarahTestPa
                 <div className={`p-4 rounded-lg border ${testResult.documents.brochure ? 'bg-emerald-50 border-emerald-200' : 'bg-zinc-50 border-zinc-200'}`}>
                   <div className="flex items-center gap-2 mb-2">
                     {testResult.documents.brochure ? (
-                      <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                      <FilledCheckCircle className="w-5 h-5" />
                     ) : (
                       <XCircle className="w-5 h-5 text-zinc-400" />
                     )}
@@ -436,7 +443,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync }: SarahTestPa
                 <div className={`p-4 rounded-lg border ${testResult.documents.paymentPlan ? 'bg-emerald-50 border-emerald-200' : 'bg-zinc-50 border-zinc-200'}`}>
                   <div className="flex items-center gap-2 mb-2">
                     {testResult.documents.paymentPlan ? (
-                      <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                      <FilledCheckCircle className="w-5 h-5" />
                     ) : (
                       <XCircle className="w-5 h-5 text-zinc-400" />
                     )}
@@ -458,7 +465,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync }: SarahTestPa
                 <div className={`p-4 rounded-lg border ${testResult.documents.floorPlans.length > 0 ? 'bg-emerald-50 border-emerald-200' : 'bg-zinc-50 border-zinc-200'}`}>
                   <div className="flex items-center gap-2 mb-2">
                     {testResult.documents.floorPlans.length > 0 ? (
-                      <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                      <FilledCheckCircle className="w-5 h-5" />
                     ) : (
                       <XCircle className="w-5 h-5 text-zinc-400" />
                     )}
