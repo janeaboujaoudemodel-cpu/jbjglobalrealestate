@@ -113,31 +113,34 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             placeholderLabel="Media pending verification"
           />
           
-          {/* Status Label Badge - Top Left (e.g., "Future Launch", "New Phase") */}
-          {project.status_label && (
-            <div className="absolute top-3 left-14 z-10 bg-gradient-to-r from-gold to-[#E8D5A3] text-black px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg">
-              {project.status_label}
-            </div>
-          )}
-          
-          {/* Property Type Label - Top Center (e.g., "Apartment, Sky-Villa") */}
+          {/* Provident-style Label Layout */}
+          {/* Top-Left: Property Type Label (e.g., "Apartment, Sky-Villa", "Villa") */}
           {project.property_type_label && (
-            <div className="absolute top-3 left-1/2 -translate-x-1/2 z-10 bg-black/70 backdrop-blur-sm text-white px-3 py-1 rounded-full text-[10px] font-medium tracking-wide shadow-lg">
+            <div className="absolute top-3 left-3 z-10 bg-black/80 backdrop-blur-sm text-white px-3 py-1 rounded text-xs font-medium shadow-lg">
               {project.property_type_label}
             </div>
           )}
           
-          {/* Handover Date - Bottom Right Corner */}
-          {project.handover_date && (
-            <div className="absolute bottom-3 right-3 z-10 bg-black/80 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow-lg border border-gold/30">
-              <span className="text-gold">⏱</span> {project.handover_date}
+          {/* Top-Right: Status Label (e.g., "Future Launch", "New Phase") */}
+          {project.status_label && (
+            <div className="absolute top-3 right-3 z-10 bg-white text-zinc-800 px-3 py-1 rounded text-xs font-medium shadow-lg border border-zinc-200">
+              {project.status_label}
             </div>
           )}
           
-          {/* Sold Out Badge */}
+          {/* Bottom-Right: Handover Year (e.g., "2028", "2030") */}
+          {project.handover_date && (
+            <div className="absolute bottom-3 right-3 z-10 bg-gold text-black px-3 py-1.5 rounded text-xs font-bold shadow-lg">
+              {project.handover_date}
+            </div>
+          )}
+          
+          {/* Sold Out Badge - overlays everything */}
           {project.is_sold_out && (
-            <div className="absolute top-3 right-3 z-10 bg-destructive text-destructive-foreground px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">
-              <T>Sold Out</T>
+            <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-20">
+              <span className="bg-destructive text-destructive-foreground px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wider">
+                <T>Sold Out</T>
+              </span>
             </div>
           )}
         </div>
