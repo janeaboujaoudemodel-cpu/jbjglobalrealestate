@@ -46,19 +46,9 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
   const activeImage = images[currentImageIndex] || images[0];
   const hasMultipleImages = images.length > 1;
 
-  const openSource = () => {
-    if (item.source_url) {
-      window.open(item.source_url, "_blank", "noopener,noreferrer");
-      return true;
-    }
-    return false;
-  };
-
+  // NEVER open Provident URL - always open internal review
   const handleCardClick = () => {
-    // In admin, clicking the card should open the project page (source) — not the photo modal.
-    if (!openSource()) {
-      onReview();
-    }
+    onReview();
   };
 
   const handlePrev = (e: MouseEvent) => {
@@ -102,22 +92,22 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
           </div>
         )}
 
-        {/* Navigation arrows - Gold filled style */}
+        {/* Navigation arrows - Elegant gold style */}
         {hasMultipleImages && (
           <>
             <button
               onClick={handlePrev}
-              className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-gold border-2 border-gold text-black flex items-center justify-center shadow-[0_4px_15px_rgba(200,167,102,0.5)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.7)] hover:scale-110 transition-all duration-200 z-10"
+              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-foreground/90 border border-gold/50 text-gold flex items-center justify-center shadow-md hover:bg-gold hover:text-foreground hover:border-gold transition-all duration-200 z-10"
               aria-label="Previous image"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={handleNext}
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-gold border-2 border-gold text-black flex items-center justify-center shadow-[0_4px_15px_rgba(200,167,102,0.5)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.7)] hover:scale-110 transition-all duration-200 z-10"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-foreground/90 border border-gold/50 text-gold flex items-center justify-center shadow-md hover:bg-gold hover:text-foreground hover:border-gold transition-all duration-200 z-10"
               aria-label="Next image"
             >
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight className="w-4 h-4" />
             </button>
 
             {/* Image dots indicator (no photo icon / no count) */}
@@ -197,11 +187,11 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
               {showMore && (
                 <button
                   type="button"
-                  className="text-primary hover:underline ml-1"
+                  className="text-gold font-medium hover:underline ml-1"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    if (!openSource()) onReview();
+                    onReview();
                   }}
                 >
                   ...more
