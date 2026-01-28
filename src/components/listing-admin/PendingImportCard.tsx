@@ -69,6 +69,15 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
   const truncatedDescription = item.description ? truncate(item.description, 120) : null;
   const showMore = !!item.description && item.description.length > 120;
 
+  const paymentPlanLabel = item.payment_plan?.trim() || null;
+  const emailSubject = encodeURIComponent(`Inquiry: ${item.name}`);
+  const emailBody = encodeURIComponent(
+    `Hello ${CONTACT_INFO.companyDescriptor},\n\nI'm interested in ${item.name}.\n\nProject link: ${item.source_url || ""}\n\nThanks,`
+  );
+  const mailtoHref = `mailto:${CONTACT_INFO.email}?subject=${emailSubject}&body=${emailBody}`;
+  const callHref = getCallUrl();
+  const whatsappHref = getWhatsAppUrl(`Hi, I'm interested in ${item.name}.`);
+
   return (
     <Card
       className="overflow-hidden cursor-pointer border-2 border-gold bg-card shadow-[0_4px_20px_rgba(200,167,102,0.25)] transition-all duration-300 hover:shadow-[0_12px_40px_rgba(200,167,102,0.4)] hover:border-gold hover:scale-[1.02] hover:-translate-y-2"
@@ -97,14 +106,14 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
           <>
             <button
               onClick={handlePrev}
-              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-foreground/90 border border-gold/50 text-gold flex items-center justify-center shadow-md hover:bg-gold hover:text-foreground hover:border-gold transition-all duration-200 z-10"
+              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-card border border-gold/60 text-gold flex items-center justify-center shadow-md hover:bg-gold hover:text-foreground hover:border-gold transition-all duration-200 z-10"
               aria-label="Previous image"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={handleNext}
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-foreground/90 border border-gold/50 text-gold flex items-center justify-center shadow-md hover:bg-gold hover:text-foreground hover:border-gold transition-all duration-200 z-10"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-card border border-gold/60 text-gold flex items-center justify-center shadow-md hover:bg-gold hover:text-foreground hover:border-gold transition-all duration-200 z-10"
               aria-label="Next image"
             >
               <ChevronRight className="w-4 h-4" />
@@ -139,9 +148,9 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
           </div>
         )}
 
-        {item.payment_plan && (
+        {paymentPlanLabel && (
           <div className="absolute bottom-2 left-2 rounded bg-secondary/90 text-secondary-foreground border border-border px-2.5 py-1 text-[11px] font-medium leading-none backdrop-blur">
-            {item.payment_plan}
+            {paymentPlanLabel}
           </div>
         )}
 
@@ -222,44 +231,50 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
                 size="icon"
                 className="h-10 w-10 rounded-full border border-border hover:border-primary hover:bg-primary/10 transition-all"
                 aria-label="Email"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  const subject = encodeURIComponent(`Inquiry: ${item.name}`);
-                  const body = encodeURIComponent(
-                    `Hello ${CONTACT_INFO.companyDescriptor},\n\nI'm interested in ${item.name}.\n\nProject link: ${item.source_url || ""}\n\nThanks,`
-                  );
-                  window.location.href = `mailto:${CONTACT_INFO.email}?subject=${subject}&body=${body}`;
-                }}
+                asChild
               >
-                <Mail className="h-4 w-4" />
+                <a
+                  href={mailtoHref}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  <Mail className="h-4 w-4" />
+                </a>
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
                 className="h-10 w-10 rounded-full border border-border hover:border-primary hover:bg-primary/10 transition-all"
                 aria-label="Call"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  window.location.href = getCallUrl();
-                }}
+                asChild
               >
-                <Phone className="h-4 w-4" />
+                <a
+                  href={callHref}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  <Phone className="h-4 w-4" />
+                </a>
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
                 className="h-10 w-10 rounded-full border border-border hover:border-primary hover:bg-primary/10 transition-all"
                 aria-label="WhatsApp"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  const url = getWhatsAppUrl(`Hi, I'm interested in ${item.name}.`);
-                  window.open(url, "_blank", "noopener,noreferrer");
-                }}
+                asChild
               >
-                <MessageCircle className="h-4 w-4" />
+                <a
+                  href={whatsappHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  <MessageCircle className="h-4 w-4" />
+                </a>
               </Button>
             </div>
             <Button
