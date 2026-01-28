@@ -538,20 +538,51 @@ CRITICAL EXTRACTION RULES:
     const aiData = await aiRes.json();
     const content = aiData.choices?.[0]?.message?.content || "";
     
-    // Parse JSON from response
+    // Parse JSON from response with robust error handling
     let jsonStr = content;
+    
+    // Strip markdown code blocks
     const codeBlockMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/);
     if (codeBlockMatch) {
-      jsonStr = codeBlockMatch[1];
+      jsonStr = codeBlockMatch[1].trim();
     }
+    
+    // Extract JSON object
     const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
     
     if (!jsonMatch) {
-      console.error(`No JSON in AI response for ${url}`);
+      console.error(`No JSON in AI response for ${url}. Raw content: ${content.substring(0, 200)}`);
       return null;
     }
 
-    const data = JSON.parse(jsonMatch[0]);
+    // Clean the JSON string to handle common issues
+    let cleanedJson = jsonMatch[0]
+      // Remove trailing commas before closing braces/brackets
+      .replace(/,\s*([\]}])/g, '$1')
+      // Remove any control characters
+      .replace(/[\x00-\x1F\x7F]/g, ' ')
+      // Fix unescaped newlines in strings (common AI issue)
+      .replace(/:\s*"([^"]*)\n([^"]*)"/g, ': "$1 $2"')
+      // Remove any BOM or zero-width characters
+      .replace(/[\uFEFF\u200B-\u200D\u2060]/g, '');
+
+    let data;
+    try {
+      data = JSON.parse(cleanedJson);
+    } catch (parseErr) {
+      // Try more aggressive cleanup
+      try {
+        // Remove everything after the last valid closing brace
+        const lastBrace = cleanedJson.lastIndexOf('}');
+        if (lastBrace > 0) {
+          cleanedJson = cleanedJson.substring(0, lastBrace + 1);
+        }
+        data = JSON.parse(cleanedJson);
+      } catch (retryErr) {
+        console.error(`JSON parse failed for ${url}. Error: ${parseErr}. Raw: ${jsonMatch[0].substring(0, 300)}`);
+        return null;
+      }
+    }
     
     return {
       name: data.name || "",
