@@ -138,7 +138,51 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
     fetchPendingImports();
   }, []);
 
-  const approveImportInDb = async (importData: PendingImport) => {
+  // Check for duplicates before approving
+  const checkForDuplicates = async (importData: PendingImport): Promise<{ isDuplicate: boolean; existingProject?: any }> => {
+    // Check by name similarity
+    const normalizedName = importData.name.toLowerCase().trim();
+    
+    const { data: existingProjects } = await supabase
+      .from("projects")
+      .select("id, name, slug, location, developer_id")
+      .or(`name.ilike.%${normalizedName}%,slug.ilike.%${importData.slug || normalizedName}%`);
+    
+    if (existingProjects && existingProjects.length > 0) {
+      // Check for exact or very similar match
+      const exactMatch = existingProjects.find(p => 
+        p.name.toLowerCase().trim() === normalizedName ||
+        (p.slug && importData.slug && p.slug === importData.slug)
+      );
+      
+      if (exactMatch) {
+        return { isDuplicate: true, existingProject: exactMatch };
+      }
+    }
+    
+    return { isDuplicate: false };
+  };
+
+  const approveImportInDb = async (importData: PendingImport, skipDuplicateCheck = false) => {
+    // Check for duplicates unless explicitly skipped
+    if (!skipDuplicateCheck) {
+      const { isDuplicate, existingProject } = await checkForDuplicates(importData);
+      
+      if (isDuplicate && existingProject) {
+        // Mark this import as having a duplicate and update matched_project_id
+        await supabase
+          .from("pending_project_imports")
+          .update({
+            matched_project_id: existingProject.id,
+            is_new_project: false,
+            match_confidence: 100
+          })
+          .eq("id", importData.id);
+        
+        throw new Error(`DUPLICATE: Project "${existingProject.name}" already exists. Use "Merge Updates" to update the existing project instead.`);
+      }
+    }
+
     // Create the project
     const projectData = {
       name: importData.name,
@@ -231,10 +275,10 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
     if (error) throw error;
   };
 
-  const handleApprove = async (importData: PendingImport) => {
+  const handleApprove = async (importData: PendingImport, forceCreate = false) => {
     setProcessingId(importData.id);
     try {
-      await approveImportInDb(importData);
+      await approveImportInDb(importData, forceCreate);
 
       toast({
         title: "Project Approved",
@@ -244,13 +288,25 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
       setSelectedImport(null);
       fetchPendingImports();
       onRefresh?.();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error approving import:", error);
-      toast({
-        title: "Error",
-        description: "Failed to approve project",
-        variant: "destructive",
-      });
+      
+      // Check if it's a duplicate error
+      if (error.message?.startsWith('DUPLICATE:')) {
+        toast({
+          title: "Duplicate Detected",
+          description: error.message.replace('DUPLICATE: ', ''),
+          variant: "destructive",
+        });
+        // Refresh to show the updated duplicate flag
+        fetchPendingImports();
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to approve project",
+          variant: "destructive",
+        });
+      }
     } finally {
       setProcessingId(null);
     }
@@ -579,7 +635,7 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
 
                      <div className="absolute bottom-2 right-2 flex flex-col items-end gap-1">
                        {item.handover_date && (
-                         <div className="rounded bg-primary text-primary-foreground px-2.5 py-1 text-[11px] font-bold leading-none shadow">
+                         <div className="rounded bg-orange-500 text-white px-2.5 py-1 text-[11px] font-bold leading-none shadow">
                            {item.handover_date}
                          </div>
                        )}
@@ -593,12 +649,12 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
                   </div>
 
                   <CardContent className="p-4">
-                    <h3 className="font-semibold text-zinc-900 mb-1 line-clamp-1">
+                    <h3 className="font-semibold text-zinc-600 mb-1 line-clamp-1">
                       {item.name}
                     </h3>
                     
                     {item.developer_name && (
-                      <p className="text-sm text-zinc-600 mb-2">
+                      <p className="text-sm text-gold mb-2">
                         by {item.developer_name}
                       </p>
                     )}

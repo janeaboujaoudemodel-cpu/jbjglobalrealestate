@@ -1,8 +1,9 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
 import ShortlistBadgeButton from "./ShortlistBadgeButton";
-import { FileText, Download, Phone, MessageCircle, Crown } from "lucide-react";
+import { FileText, Download, Phone, MessageCircle, Crown, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "./ui/button";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { SafeImage } from "@/components/SafeImage";
@@ -53,7 +54,34 @@ const convertSize = (sqft: number, unit: 'sqft' | 'sqm'): number => {
   return unit === 'sqm' ? Math.round(sqft * 0.0929) : sqft;
 };
 
+// Projects that should show status labels
+const PROJECTS_WITH_STATUS = [
+  'sobha sanctuary',
+  'mercedes-benz by binghatti',
+  'mercedes-benz places by binghatti'
+];
+
+const shouldShowStatus = (projectName: string): boolean => {
+  const normalized = projectName.toLowerCase().trim();
+  return PROJECTS_WITH_STATUS.some(p => normalized.includes(p) || p.includes(normalized));
+};
+
 const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, currency = 'AED', sizeUnit = 'sqft' }: ProjectCardProps) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const images = project.images || [];
+
+  const handlePrevImage = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCurrentImageIndex(prev => prev === 0 ? images.length - 1 : prev - 1);
+  };
+
+  const handleNextImage = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCurrentImageIndex(prev => prev === images.length - 1 ? 0 : prev + 1);
+  };
+
   const handleDownloadBrochure = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -104,14 +132,47 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
       )}
 
       <Link to={`/project/${project.slug}`} className="flex-1">
-        {/* Image */}
-        <div className="aspect-[4/3] overflow-hidden relative">
+        {/* Image with Carousel */}
+        <div className="aspect-[4/3] overflow-hidden relative group/image">
           <VerifiedMedia
-            src={project.images?.[0]?.image_url}
-            alt={project.images?.[0]?.alt_text || project.name}
+            src={images[currentImageIndex]?.image_url || images[0]?.image_url}
+            alt={images[currentImageIndex]?.alt_text || project.name}
             className="object-cover group-hover:scale-105 transition-transform duration-500"
             placeholderLabel="Media pending verification"
           />
+          
+          {/* Image Navigation Arrows */}
+          {images.length > 1 && (
+            <>
+              <button
+                onClick={handlePrevImage}
+                className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white opacity-0 group-hover/image:opacity-100 hover:bg-black/70 transition-all z-20"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                onClick={handleNextImage}
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white opacity-0 group-hover/image:opacity-100 hover:bg-black/70 transition-all z-20"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+              
+              {/* Image Dots Indicator */}
+              <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-1 z-20">
+                {images.slice(0, 5).map((_, idx) => (
+                  <span
+                    key={idx}
+                    className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                      idx === currentImageIndex ? 'bg-white' : 'bg-white/50'
+                    }`}
+                  />
+                ))}
+                {images.length > 5 && (
+                  <span className="text-white text-[10px] ml-1">+{images.length - 5}</span>
+                )}
+              </div>
+            </>
+          )}
           
           {/* Provident-style Label Layout */}
           {/* Top-Left: Property Type Label (e.g., "Apartment, Sky-Villa", "Villa") */}
@@ -121,16 +182,16 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </div>
           )}
           
-          {/* Top-Right: Status Label (e.g., "Future Launch", "New Phase") */}
-          {project.status_label && (
+          {/* Top-Right: Status Label - Only for specific projects */}
+          {project.status_label && shouldShowStatus(project.name) && (
             <div className="absolute top-3 right-3 z-10 bg-white text-zinc-800 px-3 py-1 rounded text-xs font-medium shadow-lg border border-zinc-200">
               {project.status_label}
             </div>
           )}
           
-          {/* Bottom-Right: Handover Year (e.g., "2028", "2030") */}
+          {/* Bottom-Right: Handover Year - ORANGE */}
           {project.handover_date && (
-            <div className="absolute bottom-3 right-3 z-10 bg-gold text-black px-3 py-1.5 rounded text-xs font-bold shadow-lg">
+            <div className="absolute bottom-3 right-3 z-10 bg-orange-500 text-white px-3 py-1.5 rounded text-xs font-bold shadow-lg">
               {project.handover_date}
             </div>
           )}
@@ -148,13 +209,13 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         {/* Content */}
         <div className="p-5">
           {/* Project Name */}
-          <h4 className="text-black text-lg font-semibold mb-2 line-clamp-1 group-hover:text-gold transition-colors">
+          <h4 className="text-zinc-600 text-lg font-semibold mb-2 line-clamp-1 group-hover:text-gold transition-colors">
             {project.name}
           </h4>
           
           {/* Location */}
           {project.location && (
-            <p className="text-zinc-600 text-sm mb-3 flex items-center gap-1.5">
+            <p className="text-zinc-500 text-sm mb-3 flex items-center gap-1.5">
               <svg className="w-4 h-4 flex-shrink-0 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -163,10 +224,17 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </p>
           )}
           
-          {/* Developer */}
+          {/* Developer - Clickable Link */}
           {project.developer && (
             <p className="text-zinc-500 text-sm mb-2">
-              <T>by</T> <span className="text-zinc-700">{project.developer.name}</span>
+              <T>by</T>{' '}
+              <Link 
+                to={`/developer/${project.developer.slug}`}
+                onClick={(e) => e.stopPropagation()}
+                className="text-gold hover:text-gold/80 hover:underline font-medium transition-colors"
+              >
+                {project.developer.name}
+              </Link>
             </p>
           )}
           
@@ -181,7 +249,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           
           {/* Size */}
           {project.size_min && (
-            <p className="text-zinc-600 text-sm mb-2">
+            <p className="text-zinc-500 text-sm mb-2">
               {convertSize(project.size_min, sizeUnit).toLocaleString()} {sizeUnit}
               {project.size_max && project.size_max !== project.size_min && 
                 ` - ${convertSize(project.size_max, sizeUnit).toLocaleString()} ${sizeUnit}`}
