@@ -81,7 +81,9 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   const [isSyncing, setIsSyncing] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
-  const [totalPages] = useState(70);
+  const [totalPages, setTotalPages] = useState(70);
+  const [detectedTotalPages, setDetectedTotalPages] = useState<number | null>(null);
+  const [isDetectingPages, setIsDetectingPages] = useState(false);
   const [pageStatuses, setPageStatuses] = useState<PageStatus[]>([]);
   const [totalStats, setTotalStats] = useState({ 
     created: 0, 
@@ -101,16 +103,58 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   const isPausedRef = useRef(false);
   const isSyncingRef = useRef(false);
 
-  // Initialize page statuses and load existing job
+  const refreshPageCount = useCallback(
+    async (opts?: { silent?: boolean }): Promise<number | null> => {
+      setIsDetectingPages(true);
+      try {
+        const { data, error } = await supabase.functions.invoke("provident-page-count", {
+          body: {},
+        });
+
+        if (error) throw error;
+
+        const pages = Number(data?.total_pages ?? 0);
+        if (!pages || pages < 1) throw new Error("Could not detect total pages");
+
+        setDetectedTotalPages(pages);
+
+        // Only overwrite the working total when there's no active job running.
+        if (!currentJobId && !isSyncingRef.current) {
+          setTotalPages(pages);
+        }
+
+        if (!opts?.silent) {
+          toast.success(`Updated page count: ${pages} pages detected`);
+        }
+
+        return pages;
+      } catch (e: any) {
+        if (!opts?.silent) toast.error(e?.message || "Failed to detect page count");
+        return null;
+      } finally {
+        setIsDetectingPages(false);
+      }
+    },
+    [currentJobId]
+  );
+
+  // Initialize page statuses when totalPages changes (but don't wipe while syncing).
   useEffect(() => {
+    if (isSyncingRef.current) return;
     const initialStatuses: PageStatus[] = Array.from({ length: totalPages }, (_, i) => ({
       page: i + 1,
-      status: 'pending'
+      status: "pending",
     }));
     setPageStatuses(initialStatuses);
-    loadProjectCount();
-    loadActiveJob();
   }, [totalPages]);
+
+  // On mount: load counts + detect current page count + resume any active job.
+  useEffect(() => {
+    loadProjectCount();
+    refreshPageCount({ silent: true });
+    loadActiveJob();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Subscribe to realtime updates on sync_jobs
   useEffect(() => {
@@ -166,6 +210,8 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
 
     if (jobs && jobs.length > 0) {
       const job = jobs[0] as SyncJob;
+      const jobTotalPages = job.total_pages || totalPages;
+      setTotalPages(jobTotalPages);
       setCurrentJobId(job.id);
       setCurrentPage(job.current_page);
       setTotalStats({
@@ -195,7 +241,14 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
         toast.info(`Resuming sync from page ${job.current_page}...`);
         
         // Continue the sync
-        continueSyncFromPage(job.id, job.current_page);
+        continueSyncFromPage(job.id, job.current_page, jobTotalPages);
+      }
+
+      // If source pages increased since this job started, inform the admin.
+      if (detectedTotalPages && detectedTotalPages > jobTotalPages) {
+        toast.info(
+          `Provident now has ${detectedTotalPages} pages. Your current job is ${jobTotalPages} pages. Start a new full sync later to capture the new pages.`
+        );
       }
     }
   };
@@ -294,11 +347,11 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     }
   };
 
-  const calculateTimeRemaining = useCallback((completedPages: number, elapsedMs: number) => {
+  const calculateTimeRemaining = useCallback((completedPages: number, elapsedMs: number, pagesTotal: number) => {
     if (completedPages === 0) return "Calculating...";
     
     const avgTimePerPage = elapsedMs / completedPages;
-    const remainingPages = totalPages - completedPages;
+    const remainingPages = pagesTotal - completedPages;
     const remainingMs = avgTimePerPage * remainingPages;
     
     const minutes = Math.floor(remainingMs / 60000);
@@ -311,15 +364,15 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     }
     
     return `~${minutes}m ${seconds}s remaining`;
-  }, [totalPages]);
+  }, []);
 
-  const continueSyncFromPage = async (jobId: string, startPage: number) => {
+  const continueSyncFromPage = async (jobId: string, startPage: number, pagesTotal: number) => {
     const syncStartTime = new Date();
     setStartTime(syncStartTime);
     
     let runningStats = { ...totalStats };
     
-    for (let page = startPage; page <= totalPages; page++) {
+    for (let page = startPage; page <= pagesTotal; page++) {
       // Check if paused using ref (immediate value)
       if (isPausedRef.current) {
         await supabase
@@ -351,10 +404,10 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       // Update time estimate
       const elapsed = Date.now() - syncStartTime.getTime();
       const pagesCompleted = page - startPage + 1;
-      setEstimatedTimeRemaining(calculateTimeRemaining(pagesCompleted, elapsed));
+      setEstimatedTimeRemaining(calculateTimeRemaining(pagesCompleted, elapsed, pagesTotal));
 
       // Small delay between pages to avoid rate limits
-      if (page < totalPages && !isPausedRef.current) {
+      if (page < pagesTotal && !isPausedRef.current) {
         await new Promise(r => setTimeout(r, 2000));
       }
     }
@@ -381,6 +434,10 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
 
   const startFullSync = async () => {
     if (isSyncing) return;
+
+    // Always refresh page count before starting a new job (keeps it in sync with the source website).
+    const detectedPages = await refreshPageCount({ silent: true });
+    const pagesForJob = detectedPages ?? totalPages;
     
     const confirmed = window.confirm(
       `This will sync all ~${TOTAL_LISTINGS_ESTIMATE} listings from Provident Estate.\n\n` +
@@ -391,7 +448,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       "• Status labels (Future Launch, New Phase, etc.)\n" +
       "• Handover dates and payment plans\n\n" +
       "This process takes approximately 45-60 minutes.\n" +
-      "You can close this page and Sarah will continue in the background.\n\n" +
+      "Progress is auto-saved; if you leave this page, you can return and resume.\n\n" +
       "Continue?"
     );
     
@@ -407,7 +464,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
         job_type: "provident_sync",
         status: "in_progress",
         current_page: 1,
-        total_pages: totalPages,
+        total_pages: pagesForJob,
         started_at: new Date().toISOString(),
         created_by: user?.id
       })
@@ -427,13 +484,14 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     isPausedRef.current = false;
     setCurrentPage(0);
     setTotalStats({ created: 0, updated: 0, skipped: 0, images: 0, extracted: 0 });
+    setTotalPages(pagesForJob);
     
     // Reset all statuses
     setPageStatuses(prev => prev.map(p => ({ ...p, status: 'pending' as const, stats: undefined, error: undefined })));
 
     toast.info("Sarah is starting the full extraction...");
 
-    await continueSyncFromPage(newJob.id, 1);
+    await continueSyncFromPage(newJob.id, 1, pagesForJob);
   };
 
   const pauseSync = async () => {
@@ -461,7 +519,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
 
     toast.info(`Resuming from page ${currentPage + 1}...`);
     
-    await continueSyncFromPage(currentJobId, currentPage + 1);
+    await continueSyncFromPage(currentJobId, currentPage + 1, totalPages);
   };
 
   const retryFailed = async () => {
@@ -509,7 +567,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   const successCount = pageStatuses.filter(p => p.status === 'success').length;
   const failedCount = pageStatuses.filter(p => p.status === 'failed').length;
   const inProgressCount = pageStatuses.filter(p => p.status === 'in_progress').length;
-  const pendingCount = totalPages - successCount - failedCount - inProgressCount;
+  const pendingCount = pageStatuses.filter(p => p.status === 'pending').length;
 
   const goToFullSync = () => setActiveTab("sync");
 
@@ -647,9 +705,27 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
               {/* Persistence info */}
               {currentJobId && (
                 <div className="text-xs text-muted-foreground bg-muted p-2 rounded">
-                  <strong>✓ Auto-save enabled:</strong> Progress is saved. You can close this page and return later.
+                  <strong>✓ Auto-save enabled:</strong> Progress is saved. If you leave this page, return and press Resume.
                 </div>
               )}
+
+              {/* Page count */}
+              <div className="flex items-center justify-between text-xs text-muted-foreground">
+                <span>
+                  Detected pages: <strong className="text-foreground">{detectedTotalPages ?? totalPages}</strong>
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={isDetectingPages || isSyncing}
+                  onClick={async () => {
+                    await refreshPageCount();
+                  }}
+                >
+                  <RefreshCw className={`w-3 h-3 mr-2 ${isDetectingPages ? 'animate-spin' : ''}`} />
+                  Refresh Pages
+                </Button>
+              </div>
               
               {/* Action buttons */}
               <div className="flex flex-wrap gap-2">
@@ -741,7 +817,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       {/* Page Status Grid */}
       <Card className="bg-white border-zinc-200 shadow-sm">
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg text-zinc-900">Page Status (70 Pages × ~19 listings each)</CardTitle>
+        <CardTitle className="text-lg text-zinc-900">Page Status ({totalPages} Pages × ~19 listings each)</CardTitle>
         </CardHeader>
         <CardContent>
           <ScrollArea className="h-[300px]">

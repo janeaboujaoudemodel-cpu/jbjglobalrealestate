@@ -99,6 +99,14 @@ All colors MUST be HSL.
     --ai-amber: 38 90% 55%;
     --ai-rose: 350 75% 55%;
     --ai-glow: 270 90% 70%;
+
+    /* Listing badges (Provident mirror) */
+    --handover: 24 95% 52%;
+    --handover-foreground: 0 0% 100%;
+
+    /* Image overlay controls (arrows / dots on photos) */
+    --overlay: 0 0% 100%;
+    --overlay-foreground: 222 47% 11%;
   }
 
   @media (min-width: 768px) {
@@ -161,6 +169,14 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 20%;
     --sidebar-ring: 45 32% 39%;
+
+    /* Listing badges (Provident mirror) */
+    --handover: 24 95% 52%;
+    --handover-foreground: 0 0% 100%;
+
+    /* Image overlay controls (arrows / dots on photos) */
+    --overlay: 0 0% 100%;
+    --overlay-foreground: 222 47% 11%;
   }
 }
 

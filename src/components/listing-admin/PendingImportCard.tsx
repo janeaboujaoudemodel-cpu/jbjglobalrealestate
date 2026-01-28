@@ -2,7 +2,8 @@ import { useMemo, useState, type MouseEvent } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ChevronLeft, ChevronRight, ExternalLink, MapPin } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink, MapPin, Mail, Phone, MessageCircle } from "lucide-react";
+import { CONTACT_INFO, getCallUrl, getWhatsAppUrl } from "@/constants/stats";
 
 type PendingImportCardImage = {
   url: string;
@@ -95,7 +96,7 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <span className="text-xs text-zinc-500">Media pending verification</span>
+            <span className="text-xs text-muted-foreground">Media pending verification</span>
           </div>
         )}
 
@@ -104,14 +105,14 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
           <>
             <button
               onClick={handlePrev}
-              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-background/95 hover:bg-background text-foreground flex items-center justify-center shadow-md transition-all z-10"
+              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-overlay/95 hover:bg-overlay text-overlay-foreground flex items-center justify-center shadow-md transition-all z-10"
               aria-label="Previous image"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={handleNext}
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-background/95 hover:bg-background text-foreground flex items-center justify-center shadow-md transition-all z-10"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-overlay/95 hover:bg-overlay text-overlay-foreground flex items-center justify-center shadow-md transition-all z-10"
               aria-label="Next image"
             >
               <ChevronRight className="w-4 h-4" />
@@ -123,7 +124,7 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
                 <span
                   key={idx}
                   className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                    idx === currentImageIndex ? "bg-white" : "bg-white/50"
+                    idx === currentImageIndex ? "bg-overlay" : "bg-overlay/50"
                   }`}
                 />
               ))}
@@ -158,7 +159,7 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
         )}
 
         {item.handover_date && (
-          <div className="absolute bottom-2 right-2 rounded bg-orange-500 text-white px-2.5 py-1 text-[11px] font-bold leading-none shadow">
+          <div className="absolute bottom-2 right-2 rounded bg-handover text-handover-foreground px-2.5 py-1 text-[11px] font-bold leading-none shadow">
             {item.handover_date}
           </div>
         )}
@@ -198,9 +199,64 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
           </p>
         )}
 
-        <div className="flex items-center justify-between">
-          <div className="text-sm">
-            {item.price_from && <span className="font-medium text-foreground">From {formatPrice(item.price_from)}</span>}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <div className="text-sm">
+              <span className="text-foreground">From </span>
+              {item.price_from ? (
+                <span className="font-medium text-foreground">{formatPrice(item.price_from)}</span>
+              ) : (
+                <span className="font-semibold text-handover">TBA</span>
+              )}
+            </div>
+
+            {/* Contact shortcuts (Email / Call / WhatsApp) */}
+            <div className="flex items-center gap-1">
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                aria-label="Email"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  const subject = encodeURIComponent(`Inquiry: ${item.name}`);
+                  const body = encodeURIComponent(
+                    `Hello ${CONTACT_INFO.companyDescriptor},\n\nI'm interested in ${item.name}.\n\nProject link: ${item.source_url || ""}\n\nThanks,`
+                  );
+                  window.location.href = `mailto:${CONTACT_INFO.email}?subject=${subject}&body=${body}`;
+                }}
+              >
+                <Mail className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                aria-label="Call"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  window.location.href = getCallUrl();
+                }}
+              >
+                <Phone className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                aria-label="WhatsApp"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  const url = getWhatsAppUrl(`Hi, I'm interested in ${item.name}.`);
+                  window.open(url, "_blank", "noopener,noreferrer");
+                }}
+              >
+                <MessageCircle className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
           <Button
             variant="outline"
