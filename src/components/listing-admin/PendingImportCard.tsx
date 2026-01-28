@@ -86,7 +86,7 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
       onClick={handleCardClick}
     >
       {/* Image Preview (Provident-style arrows on-card) */}
-      <div className="relative h-48 bg-muted">
+      <div className="relative h-56 bg-muted">
         {activeImage?.url ? (
           <img
             src={activeImage.url}
@@ -209,15 +209,63 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
           </p>
         )}
 
-        <div className="space-y-3">
+        <div className="space-y-4">
+          <div className="text-sm">
+            <span className="text-foreground">From </span>
+            {item.price_from ? (
+              <span className="font-medium text-foreground">{formatPrice(item.price_from)}</span>
+            ) : (
+              <span className="font-semibold text-handover">TBA</span>
+            )}
+          </div>
+
+          {/* Contact shortcuts + Review button on same row */}
           <div className="flex items-center justify-between">
-            <div className="text-sm">
-              <span className="text-foreground">From </span>
-              {item.price_from ? (
-                <span className="font-medium text-foreground">{formatPrice(item.price_from)}</span>
-              ) : (
-                <span className="font-semibold text-handover">TBA</span>
-              )}
+            <div className="flex items-center gap-3">
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-9 w-9"
+                aria-label="Email"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  const subject = encodeURIComponent(`Inquiry: ${item.name}`);
+                  const body = encodeURIComponent(
+                    `Hello ${CONTACT_INFO.companyDescriptor},\n\nI'm interested in ${item.name}.\n\nProject link: ${item.source_url || ""}\n\nThanks,`
+                  );
+                  window.location.href = `mailto:${CONTACT_INFO.email}?subject=${subject}&body=${body}`;
+                }}
+              >
+                <Mail className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-9 w-9"
+                aria-label="Call"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  window.location.href = getCallUrl();
+                }}
+              >
+                <Phone className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-9 w-9"
+                aria-label="WhatsApp"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  const url = getWhatsAppUrl(`Hi, I'm interested in ${item.name}.`);
+                  window.open(url, "_blank", "noopener,noreferrer");
+                }}
+              >
+                <MessageCircle className="h-4 w-4" />
+              </Button>
             </div>
             <Button
               variant="outline"
@@ -231,54 +279,6 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
             >
               <ExternalLink className="h-4 w-4" />
               Review
-            </Button>
-          </div>
-
-          {/* Contact shortcuts (Email / Call / WhatsApp) */}
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="icon"
-              className="h-8 w-8"
-              aria-label="Email"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const subject = encodeURIComponent(`Inquiry: ${item.name}`);
-                const body = encodeURIComponent(
-                  `Hello ${CONTACT_INFO.companyDescriptor},\n\nI'm interested in ${item.name}.\n\nProject link: ${item.source_url || ""}\n\nThanks,`
-                );
-                window.location.href = `mailto:${CONTACT_INFO.email}?subject=${subject}&body=${body}`;
-              }}
-            >
-              <Mail className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              className="h-8 w-8"
-              aria-label="Call"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                window.location.href = getCallUrl();
-              }}
-            >
-              <Phone className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              className="h-8 w-8"
-              aria-label="WhatsApp"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const url = getWhatsAppUrl(`Hi, I'm interested in ${item.name}.`);
-                window.open(url, "_blank", "noopener,noreferrer");
-              }}
-            >
-              <MessageCircle className="h-4 w-4" />
             </Button>
           </div>
         </div>
