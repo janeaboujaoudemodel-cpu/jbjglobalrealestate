@@ -107,17 +107,17 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
           <>
             <button
               onClick={handlePrev}
-              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-overlay/95 hover:bg-overlay text-overlay-foreground flex items-center justify-center shadow-md transition-all z-10"
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/90 backdrop-blur-sm border border-border/50 text-foreground flex items-center justify-center shadow-lg hover:bg-background hover:scale-105 transition-all duration-200 z-10"
               aria-label="Previous image"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={handleNext}
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-overlay/95 hover:bg-overlay text-overlay-foreground flex items-center justify-center shadow-md transition-all z-10"
+              className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/90 backdrop-blur-sm border border-border/50 text-foreground flex items-center justify-center shadow-lg hover:bg-background hover:scale-105 transition-all duration-200 z-10"
               aria-label="Next image"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-5 h-5" />
             </button>
 
             {/* Image dots indicator (no photo icon / no count) */}
