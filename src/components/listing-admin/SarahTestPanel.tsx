@@ -28,6 +28,9 @@ import { toast } from "sonner";
 
 interface TestResult {
   success: boolean;
+  queued?: boolean;
+  queued_import_id?: string | null;
+  queued_message?: string | null;
   project?: {
     name: string;
     developer: string;
@@ -60,9 +63,11 @@ interface SarahTestPanelProps {
   onRunPageOneTest?: () => void;
   /** Optional helper to switch UI to the Full Sync tab. */
   onGoToFullSync?: () => void;
+  /** Optional helper to switch UI to the Projects/Approvals tab after queuing. */
+  onGoToApprovals?: () => void;
 }
 
-export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync }: SarahTestPanelProps) => {
+export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprovals }: SarahTestPanelProps) => {
   const [testUrl, setTestUrl] = useState("https://providentestate.com/new-projects/sobha-seahaven/");
   const [isLoading, setIsLoading] = useState(false);
   const [testResult, setTestResult] = useState<TestResult | null>(null);
@@ -76,7 +81,8 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync }: SarahTestPa
 
     try {
       const { data, error } = await supabase.functions.invoke("sarah-test-extraction", {
-        body: { testUrl }
+        // This should behave like a REAL extraction: queue 1 listing for approval.
+        body: { testUrl, queue: true, force: true }
       });
 
       if (error) {
@@ -94,8 +100,13 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync }: SarahTestPa
       }
 
       setTestResult(data);
-      
-      toast.info("Test completed — please review the results below.");
+
+      if (data?.queued) {
+        toast.success("Queued for approval — review it in Projects.");
+        onGoToApprovals?.();
+      } else {
+        toast.info("Extraction completed — please review the results below.");
+      }
       if (data.success) setRetryCount(0);
       else setRetryCount(prev => prev + 1);
     } catch (err: any) {
@@ -143,8 +154,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync }: SarahTestPa
         </CardHeader>
         <CardContent>
           <p className="text-sm text-zinc-600 mb-4">
-            This is a single-URL diagnostic preview. It does not add anything to your approval queue.
-            To test the real pipeline that writes projects into the approval queue, use <strong>Test Page 1 Only</strong>.
+            Paste a single Provident project link. Sarah will extract the full listing (images + PDFs) and queue it for your approval.
           </p>
           
           <div className="flex flex-col md:flex-row gap-2 mb-3">
@@ -168,7 +178,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync }: SarahTestPa
                 ) : (
                   <>
                     <FlaskConical className="w-4 h-4 mr-2" />
-                    Run Test
+                    Run & Queue (1 listing)
                   </>
                 )}
               </Button>
