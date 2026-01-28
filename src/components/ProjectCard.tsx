@@ -27,8 +27,8 @@ const CURRENCY_RATES: Record<string, number> = {
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
   AED: 'AED',
-  USD: 'EUR',
-  EUR: 'EUR',
+  USD: '$',
+  EUR: '€',
   GBP: '£',
   INR: '₹',
 };
@@ -141,23 +141,23 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             <>
               <button
                 onClick={handlePrevImage}
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-zinc-700 flex items-center justify-center shadow-lg transition-all z-10"
+                className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/95 hover:bg-white text-zinc-700 flex items-center justify-center shadow-md transition-all z-10"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 onClick={handleNextImage}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-zinc-700 flex items-center justify-center shadow-lg transition-all z-10"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/95 hover:bg-white text-zinc-700 flex items-center justify-center shadow-md transition-all z-10"
               >
-                <ChevronRight className="w-5 h-5" />
+                <ChevronRight className="w-4 h-4" />
               </button>
               
-              {/* Image Dots Indicator - Bottom center */}
-              <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+              {/* Image Dots Indicator - Bottom center above handover */}
+              <div className="absolute bottom-14 left-1/2 -translate-x-1/2 flex gap-1 z-10">
                 {images.slice(0, 5).map((_, idx) => (
                   <span
                     key={idx}
-                    className={`w-2 h-2 rounded-full transition-colors ${
+                    className={`w-1.5 h-1.5 rounded-full transition-colors ${
                       idx === currentImageIndex ? 'bg-white' : 'bg-white/50'
                     }`}
                   />
@@ -168,21 +168,21 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           
           {/* Top-Left: Property Type Label (dark background) */}
           {project.property_type_label && (
-            <div className="absolute top-3 left-3 z-10 bg-zinc-800/90 text-white px-3 py-1.5 rounded text-sm font-medium">
+            <div className="absolute top-3 left-3 z-10 bg-zinc-800/90 text-white px-2 py-1 rounded text-xs font-medium">
               {project.property_type_label}
             </div>
           )}
           
-          {/* Top-Right: Status Label (white background, only show specific ones) */}
+          {/* Top-Right: Status Label (white background, only for specific projects) */}
           {statusLabel && (
-            <div className="absolute top-3 right-3 z-10 bg-white text-zinc-800 px-3 py-1.5 rounded text-sm font-medium border border-zinc-200 shadow-sm">
+            <div className="absolute top-3 right-3 z-10 bg-white text-zinc-800 px-2 py-1 rounded text-xs font-medium border border-zinc-200">
               {statusLabel}
             </div>
           )}
           
           {/* Bottom-Right: Handover Year - ORANGE */}
           {project.handover_date && (
-            <div className="absolute bottom-3 right-3 z-10 bg-orange-500 text-white px-3 py-1.5 rounded text-sm font-bold">
+            <div className="absolute bottom-3 right-3 z-10 bg-orange-500 text-white px-2.5 py-1 rounded text-xs font-bold">
               {project.handover_date}
             </div>
           )}
