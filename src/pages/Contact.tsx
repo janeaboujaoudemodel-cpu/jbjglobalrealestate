@@ -233,8 +233,8 @@ END:VCARD`;
     {
       icon: Mail,
       title: "Email",
-      value: "invest@jjglobalcapital.com",
-      action: "mailto:invest@jjglobalcapital.com",
+      value: CONTACT_INFO.email,
+      action: getEmailUrl(),
       iconColor: "text-gold",
       titleColor: "text-black",
       valueColor: "text-gold hover:underline",
