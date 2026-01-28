@@ -72,7 +72,7 @@ export function HuntingDashboard() {
             <Target className={`h-6 w-6 ${config.color}`} />
           </div>
           <div>
-            <h2 className="text-2xl font-bold">Hunting System</h2>
+            <h2 className="text-2xl font-bold text-foreground">Hunting System</h2>
             <p className="text-muted-foreground">AI-powered prospect discovery and outreach</p>
           </div>
         </div>
@@ -80,16 +80,16 @@ export function HuntingDashboard() {
 
       {/* Target Type Tabs */}
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as HuntTargetType)}>
-        <TabsList className="grid grid-cols-3 w-full max-w-md">
-          <TabsTrigger value="broker" className="flex items-center gap-2">
+        <TabsList className="grid grid-cols-3 w-full max-w-md bg-card border-2 border-gold/20">
+          <TabsTrigger value="broker" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-foreground">
             <Building2 className="h-4 w-4" />
             Brokers
           </TabsTrigger>
-          <TabsTrigger value="investor" className="flex items-center gap-2">
+          <TabsTrigger value="investor" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-foreground">
             <TrendingUp className="h-4 w-4" />
             Investors
           </TabsTrigger>
-          <TabsTrigger value="employee" className="flex items-center gap-2">
+          <TabsTrigger value="employee" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-foreground">
             <Briefcase className="h-4 w-4" />
             Employees
           </TabsTrigger>
@@ -97,52 +97,52 @@ export function HuntingDashboard() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-          <Card className="bg-card/50 backdrop-blur-sm">
+          <Card>
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Campaigns</p>
-                  <p className="text-2xl font-bold">{stats.totalCampaigns}</p>
+                  <p className="text-2xl font-bold text-foreground">{stats.totalCampaigns}</p>
                 </div>
-                <Badge variant="outline" className="text-green-500">
+                <Badge variant="outline" className="text-emerald-500 border-emerald-500/30">
                   {stats.activeCampaigns} active
                 </Badge>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-card/50 backdrop-blur-sm">
+          <Card>
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Prospects</p>
-                  <p className="text-2xl font-bold">{stats.totalProspects}</p>
+                  <p className="text-2xl font-bold text-foreground">{stats.totalProspects}</p>
                 </div>
                 <Users className="h-5 w-5 text-muted-foreground" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-card/50 backdrop-blur-sm">
+          <Card>
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Contacted</p>
-                  <p className="text-2xl font-bold">{stats.totalContacted}</p>
+                  <p className="text-2xl font-bold text-foreground">{stats.totalContacted}</p>
                 </div>
                 <MessageSquare className="h-5 w-5 text-muted-foreground" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-card/50 backdrop-blur-sm">
+          <Card>
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Conversions</p>
-                  <p className="text-2xl font-bold">{stats.totalConversions}</p>
+                  <p className="text-2xl font-bold text-foreground">{stats.totalConversions}</p>
                 </div>
-                <Badge variant="secondary">{stats.conversionRate}%</Badge>
+                <Badge variant="outline">{stats.conversionRate}%</Badge>
               </div>
             </CardContent>
           </Card>
@@ -182,9 +182,9 @@ function HuntingContent({ targetType, config }: HuntingContentProps) {
   return (
     <div className="space-y-4">
       {/* Sub-navigation */}
-      <div className="flex items-center gap-2 border-b pb-2">
+      <div className="flex items-center gap-2 border-b border-border pb-2">
         <Button 
-          variant={view === 'campaigns' ? 'default' : 'ghost'} 
+          variant={view === 'campaigns' ? 'primary' : 'secondary'} 
           size="sm"
           onClick={() => setView('campaigns')}
         >
@@ -192,7 +192,7 @@ function HuntingContent({ targetType, config }: HuntingContentProps) {
           Campaigns
         </Button>
         <Button 
-          variant={view === 'prospects' ? 'default' : 'ghost'} 
+          variant={view === 'prospects' ? 'primary' : 'secondary'} 
           size="sm"
           onClick={() => setView('prospects')}
         >
@@ -200,7 +200,7 @@ function HuntingContent({ targetType, config }: HuntingContentProps) {
           Prospects
         </Button>
         <Button 
-          variant={view === 'outreach' ? 'default' : 'ghost'} 
+          variant={view === 'outreach' ? 'primary' : 'secondary'} 
           size="sm"
           onClick={() => setView('outreach')}
         >

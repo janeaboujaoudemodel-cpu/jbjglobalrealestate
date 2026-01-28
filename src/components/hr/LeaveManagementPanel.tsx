@@ -34,7 +34,7 @@ const StatusBadge = ({ status }: { status: string }) => {
     hr_approved: { color: 'bg-purple-500/20 text-purple-600 border-purple-500/30', icon: CheckCircle, label: 'HR Approved' },
     owner_approved: { color: 'bg-emerald-500/20 text-emerald-600 border-emerald-500/30', icon: CheckCircle, label: 'Approved' },
     rejected: { color: 'bg-red-500/20 text-red-600 border-red-500/30', icon: XCircle, label: 'Rejected' },
-    cancelled: { color: 'bg-zinc-500/20 text-zinc-600 border-zinc-500/30', icon: XCircle, label: 'Cancelled' },
+    cancelled: { color: 'bg-muted text-muted-foreground border-border', icon: XCircle, label: 'Cancelled' },
   };
   const cfg = config[status] || config.pending;
   const Icon = cfg.icon;
@@ -121,12 +121,12 @@ export function LeaveManagementPanel() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-black">Leave Management</h2>
-          <p className="text-zinc-500 text-sm">Manage employee leave requests and approvals</p>
+          <h2 className="text-2xl font-bold text-foreground">Leave Management</h2>
+          <p className="text-muted-foreground text-sm">Manage employee leave requests and approvals</p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-gold hover:bg-gold/90 text-black">
+            <Button variant="primary">
               <Plus className="w-4 h-4 mr-2" />
               New Leave Request
             </Button>
@@ -203,12 +203,12 @@ export function LeaveManagementPanel() {
               </div>
 
               <div className="flex justify-end gap-3 pt-4">
-                <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                <Button variant="secondary" onClick={() => setIsDialogOpen(false)}>
                   Cancel
                 </Button>
                 <Button 
                   onClick={handleSubmit}
-                  className="bg-gold hover:bg-gold/90 text-black"
+                  variant="primary"
                   disabled={!formData.start_date || !formData.end_date}
                 >
                   Submit Request
@@ -221,22 +221,22 @@ export function LeaveManagementPanel() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-white border-zinc-200">
+        <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-zinc-500 text-xs">Pending Approvals</p>
+                <p className="text-muted-foreground text-xs">Pending Approvals</p>
                 <p className="text-2xl font-bold text-amber-600">{pendingApprovals.length}</p>
               </div>
               <Clock className="h-8 w-8 text-amber-500/50" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white border-zinc-200">
+        <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-zinc-500 text-xs">Approved This Month</p>
+                <p className="text-muted-foreground text-xs">Approved This Month</p>
                 <p className="text-2xl font-bold text-emerald-600">
                   {requests.filter(r => r.status === 'owner_approved').length}
                 </p>
@@ -245,11 +245,11 @@ export function LeaveManagementPanel() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white border-zinc-200">
+        <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-zinc-500 text-xs">Rejected</p>
+                <p className="text-muted-foreground text-xs">Rejected</p>
                 <p className="text-2xl font-bold text-red-600">
                   {requests.filter(r => r.status === 'rejected').length}
                 </p>
@@ -258,14 +258,14 @@ export function LeaveManagementPanel() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white border-zinc-200">
+        <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-zinc-500 text-xs">Total Requests</p>
-                <p className="text-2xl font-bold text-black">{requests.length}</p>
+                <p className="text-muted-foreground text-xs">Total Requests</p>
+                <p className="text-2xl font-bold text-foreground">{requests.length}</p>
               </div>
-              <FileText className="h-8 w-8 text-zinc-400" />
+              <FileText className="h-8 w-8 text-muted-foreground/50" />
             </div>
           </CardContent>
         </Card>
@@ -273,39 +273,39 @@ export function LeaveManagementPanel() {
 
       {/* Tabs */}
       <Tabs defaultValue="pending" className="space-y-4">
-        <TabsList className="bg-zinc-100 border border-zinc-200">
-          <TabsTrigger value="pending" className="data-[state=active]:bg-white">
+        <TabsList className="bg-card border-2 border-gold/20">
+          <TabsTrigger value="pending" className="data-[state=active]:bg-gold data-[state=active]:text-foreground">
             <Clock className="h-4 w-4 mr-2" />
             Pending Approvals ({pendingApprovals.length})
           </TabsTrigger>
-          <TabsTrigger value="all" className="data-[state=active]:bg-white">
+          <TabsTrigger value="all" className="data-[state=active]:bg-gold data-[state=active]:text-foreground">
             <FileText className="h-4 w-4 mr-2" />
             All Requests
           </TabsTrigger>
-          <TabsTrigger value="policies" className="data-[state=active]:bg-white">
+          <TabsTrigger value="policies" className="data-[state=active]:bg-gold data-[state=active]:text-foreground">
             <Calendar className="h-4 w-4 mr-2" />
             Leave Policies
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="pending">
-          <Card className="bg-white border-zinc-200">
+          <Card>
             <CardHeader>
-              <CardTitle className="text-black flex items-center gap-2">
+              <CardTitle className="text-foreground flex items-center gap-2">
                 <Clock className="h-5 w-5 text-amber-500" />
                 Pending Approval Queue
               </CardTitle>
             </CardHeader>
             <CardContent>
               {pendingApprovals.length === 0 ? (
-                <div className="text-center py-12 text-zinc-500">
+                <div className="text-center py-12 text-muted-foreground">
                   <CheckCircle className="h-12 w-12 mx-auto mb-4 text-emerald-400" />
                   <p>All caught up! No pending approvals.</p>
                 </div>
               ) : (
                 <Table>
                   <TableHeader>
-                    <TableRow className="border-zinc-200">
+                    <TableRow className="border-border">
                       <TableHead>Employee</TableHead>
                       <TableHead>Type</TableHead>
                       <TableHead>Dates</TableHead>
@@ -317,13 +317,13 @@ export function LeaveManagementPanel() {
                   </TableHeader>
                   <TableBody>
                     {pendingApprovals.map(request => (
-                      <TableRow key={request.id} className="border-zinc-100 hover:bg-zinc-50">
+                      <TableRow key={request.id} className="border-border hover:bg-muted/50">
                         <TableCell>
                           <div className="flex items-center gap-2">
-                            <User className="h-4 w-4 text-zinc-400" />
+                            <User className="h-4 w-4 text-muted-foreground" />
                             <div>
-                              <p className="font-medium text-black">{request.employee_name}</p>
-                              <p className="text-xs text-zinc-500">{request.department}</p>
+                              <p className="font-medium text-foreground">{request.employee_name}</p>
+                              <p className="text-xs text-muted-foreground">{request.department}</p>
                             </div>
                           </div>
                         </TableCell>
@@ -332,10 +332,10 @@ export function LeaveManagementPanel() {
                             {request.leave_type.replace('_', ' ')}
                           </Badge>
                         </TableCell>
-                        <TableCell className="text-zinc-600">
+                        <TableCell className="text-muted-foreground">
                           {format(new Date(request.start_date), 'MMM dd')} - {format(new Date(request.end_date), 'MMM dd, yyyy')}
                         </TableCell>
-                        <TableCell className="font-bold text-black">{request.total_days}</TableCell>
+                        <TableCell className="font-bold text-foreground">{request.total_days}</TableCell>
                         <TableCell>
                           <StageBadge stage={request.current_stage} />
                         </TableCell>
@@ -353,7 +353,7 @@ export function LeaveManagementPanel() {
                             </Button>
                             <Button 
                               size="sm" 
-                              variant="outline"
+                              variant="secondary"
                               className="text-red-600 border-red-200 hover:bg-red-50"
                               onClick={() => handleApproval(request, false)}
                             >
@@ -371,9 +371,9 @@ export function LeaveManagementPanel() {
         </TabsContent>
 
         <TabsContent value="all">
-          <Card className="bg-white border-zinc-200">
+          <Card>
             <CardHeader>
-              <CardTitle className="text-black flex items-center gap-2">
+              <CardTitle className="text-foreground flex items-center gap-2">
                 <FileText className="h-5 w-5 text-gold" />
                 All Leave Requests
               </CardTitle>
@@ -381,7 +381,7 @@ export function LeaveManagementPanel() {
             <CardContent>
               <Table>
                 <TableHeader>
-                  <TableRow className="border-zinc-200">
+                  <TableRow className="border-border">
                     <TableHead>Employee</TableHead>
                     <TableHead>Type</TableHead>
                     <TableHead>Dates</TableHead>
@@ -392,13 +392,13 @@ export function LeaveManagementPanel() {
                 </TableHeader>
                 <TableBody>
                   {requests.map(request => (
-                    <TableRow key={request.id} className="border-zinc-100 hover:bg-zinc-50">
+                    <TableRow key={request.id} className="border-border hover:bg-muted/50">
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          <User className="h-4 w-4 text-zinc-400" />
+                          <User className="h-4 w-4 text-muted-foreground" />
                           <div>
-                            <p className="font-medium text-black">{request.employee_name}</p>
-                            <p className="text-xs text-zinc-500">{request.department}</p>
+                            <p className="font-medium text-foreground">{request.employee_name}</p>
+                            <p className="text-xs text-muted-foreground">{request.department}</p>
                           </div>
                         </div>
                       </TableCell>
@@ -407,14 +407,14 @@ export function LeaveManagementPanel() {
                           {request.leave_type.replace('_', ' ')}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-zinc-600">
+                      <TableCell className="text-muted-foreground">
                         {format(new Date(request.start_date), 'MMM dd')} - {format(new Date(request.end_date), 'MMM dd')}
                       </TableCell>
-                      <TableCell className="font-bold text-black">{request.total_days}</TableCell>
+                      <TableCell className="font-bold text-foreground">{request.total_days}</TableCell>
                       <TableCell>
                         <StatusBadge status={request.status} />
                       </TableCell>
-                      <TableCell className="text-zinc-500 text-sm">
+                      <TableCell className="text-muted-foreground text-sm">
                         {format(new Date(request.created_at), 'MMM dd, yyyy')}
                       </TableCell>
                     </TableRow>
@@ -426,43 +426,34 @@ export function LeaveManagementPanel() {
         </TabsContent>
 
         <TabsContent value="policies">
-          <Card className="bg-white border-zinc-200">
+          <Card>
             <CardHeader>
-              <CardTitle className="text-black flex items-center gap-2">
+              <CardTitle className="text-foreground flex items-center gap-2">
                 <Calendar className="h-5 w-5 text-gold" />
                 Leave Policies (UAE Standard)
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {policies.map(policy => (
-                  <Card key={policy.id} className="border-zinc-200">
-                    <CardContent className="p-4">
-                      <h3 className="font-semibold text-black mb-2">{policy.policy_name}</h3>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-zinc-500">Days/Year:</span>
-                          <span className="font-bold text-black">{policy.days_per_year}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-zinc-500">Accrual Rate:</span>
-                          <span className="text-black">{policy.accrual_rate_per_month}/month</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-zinc-500">Carry Forward:</span>
-                          <span className="text-black">{policy.carry_forward_days} days</span>
-                        </div>
-                        {policy.requires_document && (
-                          <Badge className="bg-amber-100 text-amber-700 mt-2">
-                            <FileText className="h-3 w-3 mr-1" />
-                            Document Required
-                          </Badge>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-border">
+                    <TableHead>Leave Type</TableHead>
+                    <TableHead>Annual Entitlement</TableHead>
+                    <TableHead>Carryover</TableHead>
+                    <TableHead>Notice Required</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {LEAVE_TYPES.map(type => (
+                    <TableRow key={type.value} className="border-border hover:bg-muted/50">
+                      <TableCell className="font-medium text-foreground">{type.label}</TableCell>
+                      <TableCell>{type.days} days</TableCell>
+                      <TableCell>{type.value === 'annual' ? 'Up to 5 days' : 'No'}</TableCell>
+                      <TableCell>{type.value === 'emergency' ? 'Same day' : '7 days'}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </CardContent>
           </Card>
         </TabsContent>

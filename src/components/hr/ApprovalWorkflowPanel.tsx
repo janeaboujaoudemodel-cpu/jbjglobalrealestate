@@ -16,7 +16,7 @@ const REQUEST_TYPE_CONFIG: Record<string, { label: string; icon: React.ElementTy
   expense_claim: { label: 'Expense Claim', icon: DollarSign, color: 'bg-emerald-100 text-emerald-700' },
   document_request: { label: 'Document Request', icon: FileText, color: 'bg-purple-100 text-purple-700' },
   salary_advance: { label: 'Salary Advance', icon: DollarSign, color: 'bg-amber-100 text-amber-700' },
-  equipment_request: { label: 'Equipment', icon: Briefcase, color: 'bg-zinc-100 text-zinc-700' },
+  equipment_request: { label: 'Equipment', icon: Briefcase, color: 'bg-muted text-foreground' },
   training_request: { label: 'Training', icon: GraduationCap, color: 'bg-pink-100 text-pink-700' },
 };
 
@@ -39,7 +39,7 @@ const StageIndicator = ({ request }: { request: ApprovalRequest }) => {
                 ? 'bg-red-500 text-white'
                 : request.current_stage === stage.num
                 ? 'bg-amber-500 text-white'
-                : 'bg-zinc-200 text-zinc-500'
+                : 'bg-muted text-muted-foreground'
             }`}
           >
             {stage.status === 'approved' ? (
@@ -52,7 +52,7 @@ const StageIndicator = ({ request }: { request: ApprovalRequest }) => {
           </div>
           {idx < 2 && (
             <ArrowRight className={`h-4 w-4 mx-1 ${
-              stage.status === 'approved' ? 'text-emerald-500' : 'text-zinc-300'
+              stage.status === 'approved' ? 'text-emerald-500' : 'text-muted-foreground'
             }`} />
           )}
         </div>
@@ -96,40 +96,40 @@ export function ApprovalWorkflowPanel() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-black">Approval Workflow</h2>
-          <p className="text-zinc-500 text-sm">Multi-stage approval tracking: Manager → HR → Owner</p>
+          <h2 className="text-2xl font-bold text-foreground">Approval Workflow</h2>
+          <p className="text-muted-foreground text-sm">Multi-stage approval tracking: Manager → HR → Owner</p>
         </div>
       </div>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-white border-zinc-200">
+        <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-zinc-500 text-xs">Pending Your Approval</p>
+                <p className="text-muted-foreground text-xs">Pending Your Approval</p>
                 <p className="text-2xl font-bold text-amber-600">{pendingApprovals.length}</p>
               </div>
               <Clock className="h-8 w-8 text-amber-500/50" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white border-zinc-200">
+        <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-zinc-500 text-xs">Approved</p>
+                <p className="text-muted-foreground text-xs">Approved</p>
                 <p className="text-2xl font-bold text-emerald-600">{approvedRequests.length}</p>
               </div>
               <CheckCircle className="h-8 w-8 text-emerald-500/50" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white border-zinc-200">
+        <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-zinc-500 text-xs">Rejected</p>
+                <p className="text-muted-foreground text-xs">Rejected</p>
                 <p className="text-2xl font-bold text-red-600">{rejectedRequests.length}</p>
               </div>
               <XCircle className="h-8 w-8 text-red-500/50" />
@@ -140,39 +140,39 @@ export function ApprovalWorkflowPanel() {
 
       {/* Tabs */}
       <Tabs defaultValue="pending" className="space-y-4">
-        <TabsList className="bg-zinc-100 border border-zinc-200">
-          <TabsTrigger value="pending" className="data-[state=active]:bg-white">
+        <TabsList className="bg-card border-2 border-gold/20">
+          <TabsTrigger value="pending" className="data-[state=active]:bg-gold data-[state=active]:text-foreground">
             <Clock className="h-4 w-4 mr-2" />
             Pending ({pendingApprovals.length})
           </TabsTrigger>
-          <TabsTrigger value="approved" className="data-[state=active]:bg-white">
+          <TabsTrigger value="approved" className="data-[state=active]:bg-gold data-[state=active]:text-foreground">
             <CheckCircle className="h-4 w-4 mr-2" />
             Approved
           </TabsTrigger>
-          <TabsTrigger value="rejected" className="data-[state=active]:bg-white">
+          <TabsTrigger value="rejected" className="data-[state=active]:bg-gold data-[state=active]:text-foreground">
             <XCircle className="h-4 w-4 mr-2" />
             Rejected
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="pending">
-          <Card className="bg-white border-zinc-200">
+          <Card>
             <CardHeader>
-              <CardTitle className="text-black flex items-center gap-2">
+              <CardTitle className="text-foreground flex items-center gap-2">
                 <Clock className="h-5 w-5 text-amber-500" />
                 Pending Approvals
               </CardTitle>
             </CardHeader>
             <CardContent>
               {pendingApprovals.length === 0 ? (
-                <div className="text-center py-12 text-zinc-500">
+                <div className="text-center py-12 text-muted-foreground">
                   <CheckCircle className="h-12 w-12 mx-auto mb-4 text-emerald-400" />
                   <p>All caught up! No pending approvals.</p>
                 </div>
               ) : (
                 <Table>
                   <TableHeader>
-                    <TableRow className="border-zinc-200">
+                    <TableRow className="border-border">
                       <TableHead>Requester</TableHead>
                       <TableHead>Type</TableHead>
                       <TableHead>Request</TableHead>
@@ -188,13 +188,13 @@ export function ApprovalWorkflowPanel() {
                       const TypeIcon = typeConfig.icon;
                       
                       return (
-                        <TableRow key={request.id} className="border-zinc-100 hover:bg-zinc-50">
+                        <TableRow key={request.id} className="border-border hover:bg-muted/50">
                           <TableCell>
                             <div className="flex items-center gap-2">
-                              <User className="h-4 w-4 text-zinc-400" />
+                              <User className="h-4 w-4 text-muted-foreground" />
                               <div>
-                                <p className="font-medium text-black">{request.requester_name}</p>
-                                <p className="text-xs text-zinc-500">{request.department}</p>
+                                <p className="font-medium text-foreground">{request.requester_name}</p>
+                                <p className="text-xs text-muted-foreground">{request.department}</p>
                               </div>
                             </div>
                           </TableCell>
@@ -205,24 +205,24 @@ export function ApprovalWorkflowPanel() {
                             </Badge>
                           </TableCell>
                           <TableCell>
-                            <p className="font-medium text-black">{request.title}</p>
+                            <p className="font-medium text-foreground">{request.title}</p>
                             {request.description && (
-                              <p className="text-xs text-zinc-500 truncate max-w-[200px]">{request.description}</p>
+                              <p className="text-xs text-muted-foreground truncate max-w-[200px]">{request.description}</p>
                             )}
                           </TableCell>
                           <TableCell>
                             {request.amount ? (
-                              <span className="font-bold text-black">
+                              <span className="font-bold text-foreground">
                                 {request.currency} {request.amount.toLocaleString()}
                               </span>
                             ) : (
-                              <span className="text-zinc-400">-</span>
+                              <span className="text-muted-foreground">-</span>
                             )}
                           </TableCell>
                           <TableCell>
                             <StageIndicator request={request} />
                           </TableCell>
-                          <TableCell className="text-zinc-500 text-sm">
+                          <TableCell className="text-muted-foreground text-sm">
                             {format(new Date(request.created_at), 'MMM dd, yyyy')}
                           </TableCell>
                           <TableCell>
@@ -236,7 +236,7 @@ export function ApprovalWorkflowPanel() {
                               </Button>
                               <Button 
                                 size="sm" 
-                                variant="outline"
+                                variant="secondary"
                                 className="text-red-600 border-red-200 hover:bg-red-50"
                                 onClick={() => handleApproval(request, false)}
                               >
@@ -255,22 +255,22 @@ export function ApprovalWorkflowPanel() {
         </TabsContent>
 
         <TabsContent value="approved">
-          <Card className="bg-white border-zinc-200">
+          <Card>
             <CardHeader>
-              <CardTitle className="text-black flex items-center gap-2">
+              <CardTitle className="text-foreground flex items-center gap-2">
                 <CheckCircle className="h-5 w-5 text-emerald-500" />
                 Approved Requests
               </CardTitle>
             </CardHeader>
             <CardContent>
               {approvedRequests.length === 0 ? (
-                <div className="text-center py-12 text-zinc-500">
+                <div className="text-center py-12 text-muted-foreground">
                   <p>No approved requests yet.</p>
                 </div>
               ) : (
                 <Table>
                   <TableHeader>
-                    <TableRow className="border-zinc-200">
+                    <TableRow className="border-border">
                       <TableHead>Requester</TableHead>
                       <TableHead>Type</TableHead>
                       <TableHead>Request</TableHead>
@@ -284,11 +284,11 @@ export function ApprovalWorkflowPanel() {
                       const TypeIcon = typeConfig.icon;
                       
                       return (
-                        <TableRow key={request.id} className="border-zinc-100 hover:bg-zinc-50">
+                        <TableRow key={request.id} className="border-border hover:bg-muted/50">
                           <TableCell>
                             <div className="flex items-center gap-2">
-                              <User className="h-4 w-4 text-zinc-400" />
-                              <p className="font-medium text-black">{request.requester_name}</p>
+                              <User className="h-4 w-4 text-muted-foreground" />
+                              <p className="font-medium text-foreground">{request.requester_name}</p>
                             </div>
                           </TableCell>
                           <TableCell>
@@ -297,17 +297,17 @@ export function ApprovalWorkflowPanel() {
                               {typeConfig.label}
                             </Badge>
                           </TableCell>
-                          <TableCell className="text-black">{request.title}</TableCell>
+                          <TableCell className="text-foreground">{request.title}</TableCell>
                           <TableCell>
                             {request.amount ? (
-                              <span className="font-bold text-black">
+                              <span className="font-bold text-foreground">
                                 {request.currency} {request.amount.toLocaleString()}
                               </span>
                             ) : (
-                              <span className="text-zinc-400">-</span>
+                              <span className="text-muted-foreground">-</span>
                             )}
                           </TableCell>
-                          <TableCell className="text-zinc-500 text-sm">
+                          <TableCell className="text-muted-foreground text-sm">
                             {request.stage3_decision_at ? format(new Date(request.stage3_decision_at), 'MMM dd, yyyy') : '-'}
                           </TableCell>
                         </TableRow>
@@ -321,22 +321,22 @@ export function ApprovalWorkflowPanel() {
         </TabsContent>
 
         <TabsContent value="rejected">
-          <Card className="bg-white border-zinc-200">
+          <Card>
             <CardHeader>
-              <CardTitle className="text-black flex items-center gap-2">
+              <CardTitle className="text-foreground flex items-center gap-2">
                 <XCircle className="h-5 w-5 text-red-500" />
                 Rejected Requests
               </CardTitle>
             </CardHeader>
             <CardContent>
               {rejectedRequests.length === 0 ? (
-                <div className="text-center py-12 text-zinc-500">
+                <div className="text-center py-12 text-muted-foreground">
                   <p>No rejected requests.</p>
                 </div>
               ) : (
                 <Table>
                   <TableHeader>
-                    <TableRow className="border-zinc-200">
+                    <TableRow className="border-border">
                       <TableHead>Requester</TableHead>
                       <TableHead>Type</TableHead>
                       <TableHead>Request</TableHead>
@@ -349,11 +349,11 @@ export function ApprovalWorkflowPanel() {
                       const TypeIcon = typeConfig.icon;
                       
                       return (
-                        <TableRow key={request.id} className="border-zinc-100 hover:bg-zinc-50">
+                        <TableRow key={request.id} className="border-border hover:bg-muted/50">
                           <TableCell>
                             <div className="flex items-center gap-2">
-                              <User className="h-4 w-4 text-zinc-400" />
-                              <p className="font-medium text-black">{request.requester_name}</p>
+                              <User className="h-4 w-4 text-muted-foreground" />
+                              <p className="font-medium text-foreground">{request.requester_name}</p>
                             </div>
                           </TableCell>
                           <TableCell>
@@ -362,8 +362,8 @@ export function ApprovalWorkflowPanel() {
                               {typeConfig.label}
                             </Badge>
                           </TableCell>
-                          <TableCell className="text-black">{request.title}</TableCell>
-                          <TableCell className="text-zinc-500 text-sm">
+                          <TableCell className="text-foreground">{request.title}</TableCell>
+                          <TableCell className="text-muted-foreground text-sm">
                             {format(new Date(request.created_at), 'MMM dd, yyyy')}
                           </TableCell>
                         </TableRow>
