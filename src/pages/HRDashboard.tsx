@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Users, FileText, Activity, Linkedin, Building2, DollarSign, Briefcase, Wallet, Sparkles, TrendingUp, UserCheck, Brain } from "lucide-react";
+import { Users, FileText, Activity, Linkedin, Building2, DollarSign, Briefcase, Wallet, TrendingUp, UserCheck, Brain, Calendar, AlertTriangle, CheckSquare } from "lucide-react";
 import JobOfferManager from "@/components/hr/JobOfferManager";
 import { EmployeePerformanceDashboard } from "@/components/hr/EmployeePerformanceDashboard";
 import { LinkedInInsightsPanel } from "@/components/hr/LinkedInInsightsPanel";
 import { CompetitorTrackingPanel } from "@/components/hr/CompetitorTrackingPanel";
 import { SalaryBenchmarkPanel } from "@/components/hr/SalaryBenchmarkPanel";
 import { EmployeeSalaryCommissionPanel } from "@/components/employee-hub/EmployeeSalaryCommissionPanel";
+import { LeaveManagementPanel } from "@/components/hr/LeaveManagementPanel";
+import { WarningsPanel } from "@/components/hr/WarningsPanel";
+import { ApprovalWorkflowPanel } from "@/components/hr/ApprovalWorkflowPanel";
 import { 
   PremiumBackendLayout, 
   PremiumPageHeader, 
@@ -94,6 +97,27 @@ export default function HRDashboard() {
                 Performance
               </TabsTrigger>
               <TabsTrigger 
+                value="leave" 
+                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold/80 data-[state=active]:text-black data-[state=active]:shadow-sm"
+              >
+                <Calendar className="h-4 w-4" />
+                Leave
+              </TabsTrigger>
+              <TabsTrigger 
+                value="approvals" 
+                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold/80 data-[state=active]:text-black data-[state=active]:shadow-sm"
+              >
+                <CheckSquare className="h-4 w-4" />
+                Approvals
+              </TabsTrigger>
+              <TabsTrigger 
+                value="warnings" 
+                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold/80 data-[state=active]:text-black data-[state=active]:shadow-sm"
+              >
+                <AlertTriangle className="h-4 w-4" />
+                Warnings
+              </TabsTrigger>
+              <TabsTrigger 
                 value="job-offers" 
                 className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold/80 data-[state=active]:text-black data-[state=active]:shadow-sm"
               >
@@ -101,18 +125,25 @@ export default function HRDashboard() {
                 Job Offers
               </TabsTrigger>
               <TabsTrigger 
+                value="payroll" 
+                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold/80 data-[state=active]:text-black data-[state=active]:shadow-sm"
+              >
+                <Wallet className="h-4 w-4" />
+                Payroll
+              </TabsTrigger>
+              <TabsTrigger 
                 value="salary" 
                 className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold/80 data-[state=active]:text-black data-[state=active]:shadow-sm"
               >
                 <DollarSign className="h-4 w-4" />
-                Salary Benchmarks
+                Benchmarks
               </TabsTrigger>
               <TabsTrigger 
                 value="linkedin" 
                 className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold/80 data-[state=active]:text-black data-[state=active]:shadow-sm"
               >
                 <Linkedin className="h-4 w-4" />
-                LinkedIn Intel
+                LinkedIn
               </TabsTrigger>
               <TabsTrigger 
                 value="competitors" 
@@ -121,21 +152,30 @@ export default function HRDashboard() {
                 <Building2 className="h-4 w-4" />
                 Competitors
               </TabsTrigger>
-              <TabsTrigger 
-                value="payroll" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold/80 data-[state=active]:text-black data-[state=active]:shadow-sm"
-              >
-                <Wallet className="h-4 w-4" />
-                Salaries & Commissions
-              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="performance" className="mt-6">
               <EmployeePerformanceDashboard />
             </TabsContent>
 
+            <TabsContent value="leave" className="mt-6">
+              <LeaveManagementPanel />
+            </TabsContent>
+
+            <TabsContent value="approvals" className="mt-6">
+              <ApprovalWorkflowPanel />
+            </TabsContent>
+
+            <TabsContent value="warnings" className="mt-6">
+              <WarningsPanel />
+            </TabsContent>
+
             <TabsContent value="job-offers" className="mt-6">
               <JobOfferManager />
+            </TabsContent>
+
+            <TabsContent value="payroll" className="mt-6">
+              <EmployeeSalaryCommissionPanel />
             </TabsContent>
 
             <TabsContent value="salary" className="mt-6">
@@ -148,10 +188,6 @@ export default function HRDashboard() {
 
             <TabsContent value="competitors" className="mt-6">
               <CompetitorTrackingPanel />
-            </TabsContent>
-
-            <TabsContent value="payroll" className="mt-6">
-              <EmployeeSalaryCommissionPanel />
             </TabsContent>
           </Tabs>
         </PremiumContainer>

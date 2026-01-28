@@ -6731,6 +6731,111 @@ export type Database = {
         }
         Relationships: []
       }
+      hr_approval_requests: {
+        Row: {
+          amount: number | null
+          created_at: string | null
+          currency: string | null
+          current_stage: number | null
+          department: string | null
+          description: string | null
+          id: string
+          overall_status: string | null
+          reference_id: string | null
+          reference_table: string | null
+          request_type: Database["public"]["Enums"]["approval_type"]
+          requester_id: string
+          requester_name: string
+          stage1_approver_id: string | null
+          stage1_approver_name: string | null
+          stage1_decision_at: string | null
+          stage1_notes: string | null
+          stage1_status: string | null
+          stage2_approver_id: string | null
+          stage2_approver_name: string | null
+          stage2_decision_at: string | null
+          stage2_notes: string | null
+          stage2_status: string | null
+          stage3_approver_id: string | null
+          stage3_approver_name: string | null
+          stage3_decision_at: string | null
+          stage3_notes: string | null
+          stage3_status: string | null
+          stages: Json | null
+          title: string
+          total_stages: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          amount?: number | null
+          created_at?: string | null
+          currency?: string | null
+          current_stage?: number | null
+          department?: string | null
+          description?: string | null
+          id?: string
+          overall_status?: string | null
+          reference_id?: string | null
+          reference_table?: string | null
+          request_type: Database["public"]["Enums"]["approval_type"]
+          requester_id: string
+          requester_name: string
+          stage1_approver_id?: string | null
+          stage1_approver_name?: string | null
+          stage1_decision_at?: string | null
+          stage1_notes?: string | null
+          stage1_status?: string | null
+          stage2_approver_id?: string | null
+          stage2_approver_name?: string | null
+          stage2_decision_at?: string | null
+          stage2_notes?: string | null
+          stage2_status?: string | null
+          stage3_approver_id?: string | null
+          stage3_approver_name?: string | null
+          stage3_decision_at?: string | null
+          stage3_notes?: string | null
+          stage3_status?: string | null
+          stages?: Json | null
+          title: string
+          total_stages?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number | null
+          created_at?: string | null
+          currency?: string | null
+          current_stage?: number | null
+          department?: string | null
+          description?: string | null
+          id?: string
+          overall_status?: string | null
+          reference_id?: string | null
+          reference_table?: string | null
+          request_type?: Database["public"]["Enums"]["approval_type"]
+          requester_id?: string
+          requester_name?: string
+          stage1_approver_id?: string | null
+          stage1_approver_name?: string | null
+          stage1_decision_at?: string | null
+          stage1_notes?: string | null
+          stage1_status?: string | null
+          stage2_approver_id?: string | null
+          stage2_approver_name?: string | null
+          stage2_decision_at?: string | null
+          stage2_notes?: string | null
+          stage2_status?: string | null
+          stage3_approver_id?: string | null
+          stage3_approver_name?: string | null
+          stage3_decision_at?: string | null
+          stage3_notes?: string | null
+          stage3_status?: string | null
+          stages?: Json | null
+          title?: string
+          total_stages?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       hr_audit_logs: {
         Row: {
           action: string
@@ -6973,6 +7078,60 @@ export type Database = {
           website_url?: string | null
         }
         Relationships: []
+      }
+      hr_employee_onboarding: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          document_urls: string[] | null
+          employee_id: string | null
+          id: string
+          notes: string | null
+          status: string | null
+          task_id: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          document_urls?: string[] | null
+          employee_id?: string | null
+          id?: string
+          notes?: string | null
+          status?: string | null
+          task_id?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          document_urls?: string[] | null
+          employee_id?: string | null
+          id?: string
+          notes?: string | null
+          status?: string | null
+          task_id?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_employee_onboarding_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_employee_onboarding_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "hr_onboarding_tasks"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       hr_employees: {
         Row: {
@@ -7366,6 +7525,214 @@ export type Database = {
         }
         Relationships: []
       }
+      hr_leave_balance: {
+        Row: {
+          accrued_days: number | null
+          carried_forward: number | null
+          created_at: string | null
+          employee_id: string | null
+          entitled_days: number | null
+          id: string
+          leave_type: Database["public"]["Enums"]["leave_type"]
+          pending_days: number | null
+          remaining_days: number | null
+          taken_days: number | null
+          updated_at: string | null
+          user_id: string
+          year: number
+        }
+        Insert: {
+          accrued_days?: number | null
+          carried_forward?: number | null
+          created_at?: string | null
+          employee_id?: string | null
+          entitled_days?: number | null
+          id?: string
+          leave_type: Database["public"]["Enums"]["leave_type"]
+          pending_days?: number | null
+          remaining_days?: number | null
+          taken_days?: number | null
+          updated_at?: string | null
+          user_id: string
+          year?: number
+        }
+        Update: {
+          accrued_days?: number | null
+          carried_forward?: number | null
+          created_at?: string | null
+          employee_id?: string | null
+          entitled_days?: number | null
+          id?: string
+          leave_type?: Database["public"]["Enums"]["leave_type"]
+          pending_days?: number | null
+          remaining_days?: number | null
+          taken_days?: number | null
+          updated_at?: string | null
+          user_id?: string
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_leave_balance_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_leave_policy: {
+        Row: {
+          accrual_rate_per_month: number | null
+          carry_forward_days: number | null
+          created_at: string | null
+          days_per_year: number
+          id: string
+          is_active: boolean | null
+          leave_type: Database["public"]["Enums"]["leave_type"]
+          max_consecutive_days: number | null
+          min_service_days: number | null
+          policy_name: string
+          requires_document: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          accrual_rate_per_month?: number | null
+          carry_forward_days?: number | null
+          created_at?: string | null
+          days_per_year?: number
+          id?: string
+          is_active?: boolean | null
+          leave_type: Database["public"]["Enums"]["leave_type"]
+          max_consecutive_days?: number | null
+          min_service_days?: number | null
+          policy_name: string
+          requires_document?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          accrual_rate_per_month?: number | null
+          carry_forward_days?: number | null
+          created_at?: string | null
+          days_per_year?: number
+          id?: string
+          is_active?: boolean | null
+          leave_type?: Database["public"]["Enums"]["leave_type"]
+          max_consecutive_days?: number | null
+          min_service_days?: number | null
+          policy_name?: string
+          requires_document?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      hr_leave_requests: {
+        Row: {
+          created_at: string | null
+          current_stage: string | null
+          department: string | null
+          employee_id: string | null
+          employee_name: string
+          end_date: string
+          hr_decision: Database["public"]["Enums"]["leave_status"] | null
+          hr_decision_at: string | null
+          hr_id: string | null
+          hr_name: string | null
+          hr_notes: string | null
+          id: string
+          leave_type: Database["public"]["Enums"]["leave_type"]
+          manager_decision: Database["public"]["Enums"]["leave_status"] | null
+          manager_decision_at: string | null
+          manager_id: string | null
+          manager_name: string | null
+          manager_notes: string | null
+          owner_decision: Database["public"]["Enums"]["leave_status"] | null
+          owner_decision_at: string | null
+          owner_id: string | null
+          owner_name: string | null
+          owner_notes: string | null
+          reason: string | null
+          start_date: string
+          status: Database["public"]["Enums"]["leave_status"] | null
+          supporting_document_url: string | null
+          total_days: number
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          current_stage?: string | null
+          department?: string | null
+          employee_id?: string | null
+          employee_name: string
+          end_date: string
+          hr_decision?: Database["public"]["Enums"]["leave_status"] | null
+          hr_decision_at?: string | null
+          hr_id?: string | null
+          hr_name?: string | null
+          hr_notes?: string | null
+          id?: string
+          leave_type: Database["public"]["Enums"]["leave_type"]
+          manager_decision?: Database["public"]["Enums"]["leave_status"] | null
+          manager_decision_at?: string | null
+          manager_id?: string | null
+          manager_name?: string | null
+          manager_notes?: string | null
+          owner_decision?: Database["public"]["Enums"]["leave_status"] | null
+          owner_decision_at?: string | null
+          owner_id?: string | null
+          owner_name?: string | null
+          owner_notes?: string | null
+          reason?: string | null
+          start_date: string
+          status?: Database["public"]["Enums"]["leave_status"] | null
+          supporting_document_url?: string | null
+          total_days: number
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          current_stage?: string | null
+          department?: string | null
+          employee_id?: string | null
+          employee_name?: string
+          end_date?: string
+          hr_decision?: Database["public"]["Enums"]["leave_status"] | null
+          hr_decision_at?: string | null
+          hr_id?: string | null
+          hr_name?: string | null
+          hr_notes?: string | null
+          id?: string
+          leave_type?: Database["public"]["Enums"]["leave_type"]
+          manager_decision?: Database["public"]["Enums"]["leave_status"] | null
+          manager_decision_at?: string | null
+          manager_id?: string | null
+          manager_name?: string | null
+          manager_notes?: string | null
+          owner_decision?: Database["public"]["Enums"]["leave_status"] | null
+          owner_decision_at?: string | null
+          owner_id?: string | null
+          owner_name?: string | null
+          owner_notes?: string | null
+          reason?: string | null
+          start_date?: string
+          status?: Database["public"]["Enums"]["leave_status"] | null
+          supporting_document_url?: string | null
+          total_days?: number
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_leave_requests_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hr_linkedin_insights: {
         Row: {
           action_taken: string | null
@@ -7459,6 +7826,78 @@ export type Database = {
           track?: Database["public"]["Enums"]["hr_module_track"]
           updated_at?: string
           video_url?: string | null
+        }
+        Relationships: []
+      }
+      hr_notifications: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_read: boolean | null
+          message: string
+          notification_type: string
+          reference_id: string | null
+          reference_type: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message: string
+          notification_type: string
+          reference_id?: string | null
+          reference_type?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          notification_type?: string
+          reference_id?: string | null
+          reference_type?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      hr_onboarding_tasks: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          is_mandatory: boolean | null
+          order_index: number | null
+          required_documents: string[] | null
+          task_category: string | null
+          task_description: string | null
+          task_name: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_mandatory?: boolean | null
+          order_index?: number | null
+          required_documents?: string[] | null
+          task_category?: string | null
+          task_description?: string | null
+          task_name: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_mandatory?: boolean | null
+          order_index?: number | null
+          required_documents?: string[] | null
+          task_category?: string | null
+          task_description?: string | null
+          task_name?: string
         }
         Relationships: []
       }
@@ -7690,6 +8129,89 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      hr_warnings: {
+        Row: {
+          created_at: string | null
+          department: string | null
+          description: string
+          employee_id: string | null
+          employee_name: string
+          employee_response: string | null
+          employee_signature_url: string | null
+          employee_signed_at: string | null
+          id: string
+          incident_date: string | null
+          is_active: boolean | null
+          issued_at: string | null
+          issued_by_id: string | null
+          issued_by_name: string | null
+          requires_signature: boolean | null
+          status: string | null
+          subject: string
+          updated_at: string | null
+          user_id: string
+          warning_document_url: string | null
+          warning_number: number | null
+          warning_type: Database["public"]["Enums"]["warning_severity"]
+        }
+        Insert: {
+          created_at?: string | null
+          department?: string | null
+          description: string
+          employee_id?: string | null
+          employee_name: string
+          employee_response?: string | null
+          employee_signature_url?: string | null
+          employee_signed_at?: string | null
+          id?: string
+          incident_date?: string | null
+          is_active?: boolean | null
+          issued_at?: string | null
+          issued_by_id?: string | null
+          issued_by_name?: string | null
+          requires_signature?: boolean | null
+          status?: string | null
+          subject: string
+          updated_at?: string | null
+          user_id: string
+          warning_document_url?: string | null
+          warning_number?: number | null
+          warning_type: Database["public"]["Enums"]["warning_severity"]
+        }
+        Update: {
+          created_at?: string | null
+          department?: string | null
+          description?: string
+          employee_id?: string | null
+          employee_name?: string
+          employee_response?: string | null
+          employee_signature_url?: string | null
+          employee_signed_at?: string | null
+          id?: string
+          incident_date?: string | null
+          is_active?: boolean | null
+          issued_at?: string | null
+          issued_by_id?: string | null
+          issued_by_name?: string | null
+          requires_signature?: boolean | null
+          status?: string | null
+          subject?: string
+          updated_at?: string | null
+          user_id?: string
+          warning_document_url?: string | null
+          warning_number?: number | null
+          warning_type?: Database["public"]["Enums"]["warning_severity"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_warnings_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       internal_chat_messages: {
         Row: {
@@ -14888,6 +15410,18 @@ export type Database = {
         }
         Returns: number
       }
+      calculate_leave_eligibility: {
+        Args: {
+          p_leave_type: Database["public"]["Enums"]["leave_type"]
+          p_user_id: string
+        }
+        Returns: {
+          accrued_days: number
+          entitled_days: number
+          remaining_days: number
+          taken_days: number
+        }[]
+      }
       calculate_security_score: { Args: never; Returns: number }
       can_access_crm_lead: {
         Args: { _lead_id: string; _user_id: string }
@@ -15267,6 +15801,13 @@ export type Database = {
         | "broker"
         | "listing_admin"
         | "hr_admin"
+      approval_type:
+        | "leave_request"
+        | "expense_claim"
+        | "document_request"
+        | "salary_advance"
+        | "equipment_request"
+        | "training_request"
       audit_action_type:
         | "create"
         | "read"
@@ -15370,6 +15911,22 @@ export type Database = {
       hr_module_track: "company_knowledge" | "real_estate_basics"
       hr_question_type: "mcq" | "true_false" | "short_answer"
       hr_role: "broker_candidate" | "broker_member"
+      leave_status:
+        | "pending"
+        | "manager_approved"
+        | "hr_approved"
+        | "owner_approved"
+        | "rejected"
+        | "cancelled"
+      leave_type:
+        | "annual"
+        | "sick"
+        | "unpaid"
+        | "maternity"
+        | "paternity"
+        | "emergency"
+        | "bereavement"
+        | "public_holiday"
       market_trend: "rising" | "falling" | "stable" | "volatile"
       opportunity_status:
         | "new"
@@ -15416,6 +15973,7 @@ export type Database = {
         | "investor"
         | "owner"
         | "broker_partner"
+      warning_severity: "verbal" | "written" | "final" | "termination"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -15559,6 +16117,14 @@ export const Constants = {
         "listing_admin",
         "hr_admin",
       ],
+      approval_type: [
+        "leave_request",
+        "expense_claim",
+        "document_request",
+        "salary_advance",
+        "equipment_request",
+        "training_request",
+      ],
       audit_action_type: [
         "create",
         "read",
@@ -15667,6 +16233,24 @@ export const Constants = {
       hr_module_track: ["company_knowledge", "real_estate_basics"],
       hr_question_type: ["mcq", "true_false", "short_answer"],
       hr_role: ["broker_candidate", "broker_member"],
+      leave_status: [
+        "pending",
+        "manager_approved",
+        "hr_approved",
+        "owner_approved",
+        "rejected",
+        "cancelled",
+      ],
+      leave_type: [
+        "annual",
+        "sick",
+        "unpaid",
+        "maternity",
+        "paternity",
+        "emergency",
+        "bereavement",
+        "public_holiday",
+      ],
       market_trend: ["rising", "falling", "stable", "volatile"],
       opportunity_status: [
         "new",
@@ -15717,6 +16301,7 @@ export const Constants = {
         "owner",
         "broker_partner",
       ],
+      warning_severity: ["verbal", "written", "final", "termination"],
     },
   },
 } as const
