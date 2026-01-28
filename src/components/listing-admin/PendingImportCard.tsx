@@ -167,21 +167,26 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
         )}
       </div>
 
-      <CardContent className="p-4">
-        <h3 className="font-semibold text-muted-foreground mb-1 line-clamp-1">{item.name}</h3>
+      <CardContent className="p-5 flex flex-col min-h-[220px]">
+        {/* Title - fixed height */}
+        <h3 className="font-semibold text-foreground text-base mb-1 line-clamp-1 h-6">{item.name}</h3>
 
-        {item.developer_name && <p className="text-sm text-gold mb-2">by {item.developer_name}</p>}
+        {/* Developer - fixed height */}
+        <div className="h-5 mb-2">
+          {item.developer_name && <p className="text-sm text-gold truncate">by {item.developer_name}</p>}
+        </div>
 
-        <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
+        {/* Location & Bedrooms - fixed height */}
+        <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3 h-5">
           {item.location && (
-            <span className="flex items-center gap-1">
-              <MapPin className="h-3 w-3" />
-              {item.location}
+            <span className="flex items-center gap-1 truncate">
+              <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
+              <span className="truncate">{item.location}</span>
             </span>
           )}
           {(item.bedrooms_min || item.bedrooms_max) && (
-            <span className="flex items-center gap-1">
-              <Bed className="h-3 w-3" />
+            <span className="flex items-center gap-1 flex-shrink-0">
+              <Bed className="h-3.5 w-3.5" />
               {item.bedrooms_min === item.bedrooms_max
                 ? `${item.bedrooms_min} BR`
                 : `${item.bedrooms_min || "?"}-${item.bedrooms_max || "?"} BR`}
@@ -189,43 +194,48 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
           )}
         </div>
 
-        {/* Description preview on the card (outside) */}
-        {hasDescription && (
-          <p className="text-muted-foreground text-sm leading-relaxed mb-3">
-            {truncatedDescription}
-            {showMore && (
-              <button
-                type="button"
-                className="text-primary hover:underline ml-1"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  if (!openSource()) onReview();
-                }}
-              >
-                ...more
-              </button>
-            )}
-          </p>
-        )}
+        {/* Description - fixed height with line clamp */}
+        <div className="h-[60px] mb-3">
+          {hasDescription ? (
+            <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3">
+              {truncatedDescription}
+              {showMore && (
+                <button
+                  type="button"
+                  className="text-primary hover:underline ml-1"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (!openSource()) onReview();
+                  }}
+                >
+                  ...more
+                </button>
+              )}
+            </p>
+          ) : (
+            <p className="text-muted-foreground/50 text-sm italic">No description available</p>
+          )}
+        </div>
 
-        <div className="space-y-4">
-          <div className="text-sm">
-            <span className="text-foreground">From </span>
-            {item.price_from ? (
-              <span className="font-medium text-foreground">{formatPrice(item.price_from)}</span>
-            ) : (
-              <span className="font-semibold text-handover">TBA</span>
-            )}
-          </div>
+        {/* Price - consistent spacing */}
+        <div className="text-sm mb-4">
+          <span className="text-muted-foreground">From </span>
+          {item.price_from ? (
+            <span className="font-semibold text-foreground">{formatPrice(item.price_from)}</span>
+          ) : (
+            <span className="font-semibold text-handover">TBA</span>
+          )}
+        </div>
 
-          {/* Contact shortcuts + Review button on same row */}
+        {/* Premium action bar - pushed to bottom */}
+        <div className="mt-auto pt-3 border-t border-border">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <Button
-                variant="outline"
+                variant="ghost"
                 size="icon"
-                className="h-9 w-9"
+                className="h-10 w-10 rounded-full border border-border hover:border-primary hover:bg-primary/10 transition-all"
                 aria-label="Email"
                 onClick={(e) => {
                   e.preventDefault();
@@ -240,9 +250,9 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
                 <Mail className="h-4 w-4" />
               </Button>
               <Button
-                variant="outline"
+                variant="ghost"
                 size="icon"
-                className="h-9 w-9"
+                className="h-10 w-10 rounded-full border border-border hover:border-primary hover:bg-primary/10 transition-all"
                 aria-label="Call"
                 onClick={(e) => {
                   e.preventDefault();
@@ -253,9 +263,9 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
                 <Phone className="h-4 w-4" />
               </Button>
               <Button
-                variant="outline"
+                variant="ghost"
                 size="icon"
-                className="h-9 w-9"
+                className="h-10 w-10 rounded-full border border-border hover:border-primary hover:bg-primary/10 transition-all"
                 aria-label="WhatsApp"
                 onClick={(e) => {
                   e.preventDefault();
@@ -268,14 +278,14 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
               </Button>
             </div>
             <Button
-              variant="outline"
+              variant="default"
               size="sm"
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 onReview();
               }}
-              className="gap-2"
+              className="gap-2 px-4 font-medium"
             >
               <ExternalLink className="h-4 w-4" />
               Review
