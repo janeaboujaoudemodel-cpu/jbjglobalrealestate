@@ -18,7 +18,7 @@ interface SyncStats {
 export const ProvidentSyncButton = () => {
   const [isSyncing, setIsSyncing] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
-  const [totalPages] = useState(70);
+  const [totalPages] = useState(89);
   const [stats, setStats] = useState<SyncStats | null>(null);
   const [totalStats, setTotalStats] = useState({ created: 0, updated: 0, images: 0 });
   const [projectCount, setProjectCount] = useState<number | null>(null);
@@ -100,10 +100,11 @@ export const ProvidentSyncButton = () => {
     if (isSyncing) return;
     
     const confirmed = window.confirm(
-      "This will sync all 1,324 listings from Provident Estate.\n\n" +
+      "This will sync all 1,334 listings from Provident Estate.\n\n" +
       "This process will:\n" +
-      "• Extract projects from 70 pages\n" +
-      "• Take approximately 45-60 minutes\n" +
+      "• Extract projects from 89 pages\n" +
+      "• Take approximately 60-90 minutes\n" +
+      "• Mirror exact data without any modifications\n" +
       "• Add/update projects with images and labels\n\n" +
       "Continue?"
     );
@@ -193,7 +194,7 @@ export const ProvidentSyncButton = () => {
             ) : (
               <>
                 <RefreshCw className="w-4 h-4 mr-2" />
-                Sync All 1,324 Listings
+                Sync All 1,334 Listings
               </>
             )}
           </Button>
