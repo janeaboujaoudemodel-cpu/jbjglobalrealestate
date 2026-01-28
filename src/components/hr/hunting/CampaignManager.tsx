@@ -89,10 +89,10 @@ export function CampaignManager({ targetType }: CampaignManagerProps) {
 
   const getStatusColor = (status: CampaignStatus) => {
     switch (status) {
-      case 'active': return 'bg-green-500/10 text-green-500';
-      case 'paused': return 'bg-yellow-500/10 text-yellow-500';
-      case 'completed': return 'bg-blue-500/10 text-blue-500';
-      default: return 'bg-gray-500/10 text-gray-500';
+      case 'active': return 'bg-emerald-500/10 text-emerald-600 border-emerald-500/30';
+      case 'paused': return 'bg-amber-500/10 text-amber-600 border-amber-500/30';
+      case 'completed': return 'bg-blue-500/10 text-blue-600 border-blue-500/30';
+      default: return 'bg-muted text-muted-foreground';
     }
   };
 
@@ -106,10 +106,10 @@ export function CampaignManager({ targetType }: CampaignManagerProps) {
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">{targetLabel} Campaigns</h3>
+        <h3 className="text-lg font-semibold text-foreground">{targetLabel} Campaigns</h3>
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogTrigger asChild>
-            <Button>
+            <Button variant="primary">
               <Plus className="h-4 w-4 mr-2" />
               New Campaign
             </Button>
@@ -190,7 +190,7 @@ export function CampaignManager({ targetType }: CampaignManagerProps) {
                 </div>
               )}
 
-              <Button onClick={handleCreate} className="w-full" disabled={!newCampaign.name}>
+              <Button onClick={handleCreate} variant="primary" className="w-full" disabled={!newCampaign.name}>
                 Create Campaign
               </Button>
             </div>
@@ -201,17 +201,17 @@ export function CampaignManager({ targetType }: CampaignManagerProps) {
       {/* Campaigns List */}
       {loading ? (
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold" />
         </div>
       ) : filteredCampaigns.length === 0 ? (
-        <Card className="bg-card/50">
+        <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Target className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium mb-2">No Campaigns Yet</h3>
+            <h3 className="text-lg font-medium mb-2 text-foreground">No Campaigns Yet</h3>
             <p className="text-muted-foreground text-center mb-4">
               Create your first {targetLabel.toLowerCase()} hunting campaign to start finding prospects.
             </p>
-            <Button onClick={() => setIsCreateOpen(true)}>
+            <Button variant="primary" onClick={() => setIsCreateOpen(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Create Campaign
             </Button>
@@ -220,12 +220,12 @@ export function CampaignManager({ targetType }: CampaignManagerProps) {
       ) : (
         <div className="grid gap-4">
           {filteredCampaigns.map((campaign) => (
-            <Card key={campaign.id} className="bg-card/50 backdrop-blur-sm">
+            <Card key={campaign.id}>
               <CardContent className="pt-4">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <h4 className="font-semibold">{campaign.name}</h4>
+                      <h4 className="font-semibold text-foreground">{campaign.name}</h4>
                       <Badge className={getStatusColor(campaign.status)}>
                         {campaign.status}
                       </Badge>
@@ -238,16 +238,16 @@ export function CampaignManager({ targetType }: CampaignManagerProps) {
                     
                     {/* Stats */}
                     <div className="flex items-center gap-4 text-sm">
-                      <div className="flex items-center gap-1">
-                        <Users className="h-4 w-4 text-muted-foreground" />
+                      <div className="flex items-center gap-1 text-muted-foreground">
+                        <Users className="h-4 w-4" />
                         <span>{campaign.total_prospects} prospects</span>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <MessageSquare className="h-4 w-4 text-muted-foreground" />
+                      <div className="flex items-center gap-1 text-muted-foreground">
+                        <MessageSquare className="h-4 w-4" />
                         <span>{campaign.contacted_count} contacted</span>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <CheckCircle className="h-4 w-4 text-muted-foreground" />
+                      <div className="flex items-center gap-1 text-muted-foreground">
+                        <CheckCircle className="h-4 w-4" />
                         <span>{campaign.conversion_count} converted</span>
                       </div>
                     </div>
@@ -262,6 +262,7 @@ export function CampaignManager({ targetType }: CampaignManagerProps) {
                     {campaign.status === 'draft' && (
                       <Button 
                         size="sm" 
+                        variant="primary"
                         onClick={() => handleStatusChange(campaign, 'active')}
                       >
                         <Play className="h-4 w-4 mr-1" />
@@ -271,7 +272,7 @@ export function CampaignManager({ targetType }: CampaignManagerProps) {
                     {campaign.status === 'active' && (
                       <Button 
                         size="sm" 
-                        variant="outline"
+                        variant="secondary"
                         onClick={() => handleStatusChange(campaign, 'paused')}
                       >
                         <Pause className="h-4 w-4 mr-1" />
@@ -281,6 +282,7 @@ export function CampaignManager({ targetType }: CampaignManagerProps) {
                     {campaign.status === 'paused' && (
                       <Button 
                         size="sm"
+                        variant="primary"
                         onClick={() => handleStatusChange(campaign, 'active')}
                       >
                         <Play className="h-4 w-4 mr-1" />

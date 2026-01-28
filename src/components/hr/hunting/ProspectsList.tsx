@@ -118,14 +118,14 @@ export function ProspectsList({ targetType }: ProspectsListProps) {
 
   const getStatusBadge = (status: ProspectStatus) => {
     const config: Record<ProspectStatus, { color: string; label: string }> = {
-      new: { color: 'bg-gray-500/10 text-gray-500', label: 'New' },
-      contacted: { color: 'bg-blue-500/10 text-blue-500', label: 'Contacted' },
-      responded: { color: 'bg-cyan-500/10 text-cyan-500', label: 'Responded' },
-      qualified: { color: 'bg-purple-500/10 text-purple-500', label: 'Qualified' },
-      negotiating: { color: 'bg-yellow-500/10 text-yellow-500', label: 'Negotiating' },
-      converted: { color: 'bg-green-500/10 text-green-500', label: 'Converted' },
-      rejected: { color: 'bg-red-500/10 text-red-500', label: 'Rejected' },
-      not_interested: { color: 'bg-orange-500/10 text-orange-500', label: 'Not Interested' },
+      new: { color: 'bg-muted text-muted-foreground', label: 'New' },
+      contacted: { color: 'bg-blue-500/10 text-blue-600 border-blue-500/30', label: 'Contacted' },
+      responded: { color: 'bg-cyan-500/10 text-cyan-600 border-cyan-500/30', label: 'Responded' },
+      qualified: { color: 'bg-purple-500/10 text-purple-600 border-purple-500/30', label: 'Qualified' },
+      negotiating: { color: 'bg-amber-500/10 text-amber-600 border-amber-500/30', label: 'Negotiating' },
+      converted: { color: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/30', label: 'Converted' },
+      rejected: { color: 'bg-red-500/10 text-red-600 border-red-500/30', label: 'Rejected' },
+      not_interested: { color: 'bg-orange-500/10 text-orange-600 border-orange-500/30', label: 'Not Interested' },
     };
     return config[status];
   };
@@ -169,7 +169,7 @@ export function ProspectsList({ targetType }: ProspectsListProps) {
 
         <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
           <DialogTrigger asChild>
-            <Button>
+            <Button variant="primary">
               <Plus className="h-4 w-4 mr-2" />
               Add {targetLabels[targetType].singular}
             </Button>
@@ -255,7 +255,7 @@ export function ProspectsList({ targetType }: ProspectsListProps) {
                 />
               </div>
 
-              <Button onClick={handleAddProspect} disabled={!newProspect.full_name}>
+              <Button variant="primary" onClick={handleAddProspect} disabled={!newProspect.full_name}>
                 Add {targetLabels[targetType].singular}
               </Button>
             </div>
@@ -266,13 +266,13 @@ export function ProspectsList({ targetType }: ProspectsListProps) {
       {/* Prospects List */}
       {loading ? (
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold" />
         </div>
       ) : filteredProspects.length === 0 ? (
-        <Card className="bg-card/50">
+        <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Search className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium mb-2">No {targetLabels[targetType].plural} Found</h3>
+            <h3 className="text-lg font-medium mb-2 text-foreground">No {targetLabels[targetType].plural} Found</h3>
             <p className="text-muted-foreground text-center mb-4">
               {searchQuery || statusFilter !== 'all' 
                 ? 'Try adjusting your search or filters.'
@@ -285,18 +285,18 @@ export function ProspectsList({ targetType }: ProspectsListProps) {
           {filteredProspects.map((prospect) => {
             const statusConfig = getStatusBadge(prospect.status);
             return (
-              <Card key={prospect.id} className="bg-card/50 backdrop-blur-sm hover:bg-card/70 transition-colors">
+              <Card key={prospect.id} className="hover:shadow-md transition-shadow">
                 <CardContent className="py-3">
                   <div className="flex items-center gap-4">
                     <Avatar className="h-10 w-10">
-                      <AvatarFallback className="bg-primary/10 text-primary">
+                      <AvatarFallback className="bg-gold/10 text-gold">
                         {prospect.full_name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                       </AvatarFallback>
                     </Avatar>
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <h4 className="font-medium truncate">{prospect.full_name}</h4>
+                        <h4 className="font-medium truncate text-foreground">{prospect.full_name}</h4>
                         <Badge className={statusConfig.color}>{statusConfig.label}</Badge>
                         {prospect.ai_score && (
                           <Badge variant="outline" className="gap-1">
@@ -327,21 +327,21 @@ export function ProspectsList({ targetType }: ProspectsListProps) {
                     {/* Quick Actions */}
                     <div className="flex items-center gap-1">
                       {prospect.email && (
-                        <Button variant="ghost" size="icon" asChild>
+                        <Button variant="secondary" size="icon" asChild>
                           <a href={`mailto:${prospect.email}`}>
                             <Mail className="h-4 w-4" />
                           </a>
                         </Button>
                       )}
                       {prospect.phone && (
-                        <Button variant="ghost" size="icon" asChild>
+                        <Button variant="secondary" size="icon" asChild>
                           <a href={`tel:${prospect.phone}`}>
                             <Phone className="h-4 w-4" />
                           </a>
                         </Button>
                       )}
                       {prospect.linkedin_url && (
-                        <Button variant="ghost" size="icon" asChild>
+                        <Button variant="secondary" size="icon" asChild>
                           <a href={prospect.linkedin_url} target="_blank" rel="noopener noreferrer">
                             <Linkedin className="h-4 w-4" />
                           </a>
@@ -350,7 +350,7 @@ export function ProspectsList({ targetType }: ProspectsListProps) {
 
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
+                          <Button variant="secondary" size="icon">
                             <MoreVertical className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>

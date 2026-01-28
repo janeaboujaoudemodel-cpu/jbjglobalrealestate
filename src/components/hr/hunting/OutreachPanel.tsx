@@ -165,10 +165,10 @@ export function OutreachPanel({ targetType }: OutreachPanelProps) {
   };
 
   const getStatusIcon = (outreach: any) => {
-    if (outreach.responded_at) return <Reply className="h-4 w-4 text-green-500" />;
+    if (outreach.responded_at) return <Reply className="h-4 w-4 text-emerald-500" />;
     if (outreach.opened_at) return <Eye className="h-4 w-4 text-blue-500" />;
     if (outreach.delivered_at) return <CheckCircle className="h-4 w-4 text-cyan-500" />;
-    if (outreach.sent_at) return <Clock className="h-4 w-4 text-yellow-500" />;
+    if (outreach.sent_at) return <Clock className="h-4 w-4 text-amber-500" />;
     return <Clock className="h-4 w-4 text-muted-foreground" />;
   };
 
@@ -176,10 +176,10 @@ export function OutreachPanel({ targetType }: OutreachPanelProps) {
     <div className="space-y-6">
       {/* Compose Button */}
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Outreach Messages</h3>
+        <h3 className="text-lg font-semibold text-foreground">Outreach Messages</h3>
         <Dialog open={isComposeOpen} onOpenChange={setIsComposeOpen}>
           <DialogTrigger asChild>
-            <Button>
+            <Button variant="primary">
               <Send className="h-4 w-4 mr-2" />
               Compose Message
             </Button>
@@ -251,7 +251,7 @@ export function OutreachPanel({ targetType }: OutreachPanelProps) {
                 <div className="flex items-center justify-between">
                   <Label>Message</Label>
                   <Button 
-                    variant="outline" 
+                    variant="secondary" 
                     size="sm"
                     onClick={handleGenerateMessage}
                     disabled={isGenerating || !selectedProspect}
@@ -269,10 +269,10 @@ export function OutreachPanel({ targetType }: OutreachPanelProps) {
               </div>
 
               {selectedProspectData && (
-                <Card className="bg-muted/50">
+                <Card>
                   <CardContent className="py-3">
                     <div className="text-sm">
-                      <p className="font-medium">{selectedProspectData.full_name}</p>
+                      <p className="font-medium text-foreground">{selectedProspectData.full_name}</p>
                       <p className="text-muted-foreground">
                         {selectedProspectData.job_title} {selectedProspectData.company && `at ${selectedProspectData.company}`}
                       </p>
@@ -285,6 +285,7 @@ export function OutreachPanel({ targetType }: OutreachPanelProps) {
               )}
 
               <Button 
+                variant="primary"
                 onClick={handleSendMessage} 
                 className="w-full"
                 disabled={!selectedProspect || !message}
@@ -302,10 +303,10 @@ export function OutreachPanel({ targetType }: OutreachPanelProps) {
         <h4 className="font-medium text-muted-foreground">Recent Outreach</h4>
         
         {outreachHistory.length === 0 ? (
-          <Card className="bg-card/50">
+          <Card>
             <CardContent className="flex flex-col items-center justify-center py-12">
               <Send className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium mb-2">No Messages Yet</h3>
+              <h3 className="text-lg font-medium mb-2 text-foreground">No Messages Yet</h3>
               <p className="text-muted-foreground text-center">
                 Start reaching out to prospects to see your message history here.
               </p>
@@ -314,7 +315,7 @@ export function OutreachPanel({ targetType }: OutreachPanelProps) {
         ) : (
           <div className="space-y-2">
             {outreachHistory.map((outreach) => (
-              <Card key={outreach.id} className="bg-card/50 backdrop-blur-sm">
+              <Card key={outreach.id}>
                 <CardContent className="py-3">
                   <div className="flex items-start gap-3">
                     <div className="p-2 rounded-lg bg-muted">
@@ -322,7 +323,7 @@ export function OutreachPanel({ targetType }: OutreachPanelProps) {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="font-medium">
+                        <span className="font-medium text-foreground">
                           {outreach.prospect?.full_name || 'Unknown'}
                         </span>
                         {outreach.prospect?.company && (
