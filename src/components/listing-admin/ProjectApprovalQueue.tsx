@@ -10,11 +10,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useToast } from "@/hooks/use-toast";
 import { 
   Check, X, Clock, RefreshCw, Building2, MapPin, Calendar, 
-  DollarSign, Bed, Ruler, FileText, Image as ImageIcon,
+  DollarSign, Bed, Ruler, FileText,
   ChevronLeft, ChevronRight, Merge, Plus
 } from "lucide-react";
 import { format } from "date-fns";
 import type { Json } from "@/integrations/supabase/types";
+import { PendingImportCard } from "@/components/listing-admin/PendingImportCard";
 
 interface ImageData {
   url: string;
@@ -574,119 +575,15 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {imports.map((item) => (
-                <Card 
-                  key={item.id} 
-                  className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer border-zinc-200"
-                  onClick={() => {
+                <PendingImportCard
+                  key={item.id}
+                  item={item}
+                  formatPrice={formatPrice}
+                  onReview={() => {
                     setSelectedImport(item);
                     setCurrentImageIndex(0);
                   }}
-                >
-                  {/* Image Preview */}
-                  <div className="relative h-48 bg-zinc-100">
-                    {item.images.length > 0 ? (
-                      <img
-                        src={item.images[0].url}
-                        alt={item.name}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = '/placeholder.svg';
-                        }}
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <ImageIcon className="h-12 w-12 text-zinc-300" />
-                      </div>
-                    )}
-                    
-                     {/* Provident-style overlays */}
-                     <div className="absolute top-2 left-2 flex flex-col gap-1">
-                       {item.property_type_label && (
-                         <div className="rounded bg-foreground/80 text-background px-2.5 py-1 text-[11px] font-medium leading-none backdrop-blur">
-                           {item.property_type_label}
-                         </div>
-                       )}
-                       <div className="flex gap-2">
-                         {item.is_new_project ? (
-                           <Badge className="bg-primary text-primary-foreground">
-                             <Plus className="h-3 w-3 mr-1" />
-                             New
-                           </Badge>
-                         ) : (
-                           <Badge className="bg-secondary text-secondary-foreground">
-                             <Merge className="h-3 w-3 mr-1" />
-                             Update
-                           </Badge>
-                         )}
-                       </div>
-                     </div>
-
-                     {item.status_label && (
-                       <div className="absolute top-2 right-2 rounded bg-background/90 text-foreground border border-border px-2.5 py-1 text-[11px] font-medium leading-none backdrop-blur">
-                         {item.status_label}
-                       </div>
-                     )}
-
-                     {item.payment_plan && (
-                       <div className="absolute bottom-2 left-2 rounded bg-secondary/90 text-secondary-foreground border border-border px-2.5 py-1 text-[11px] font-medium leading-none backdrop-blur">
-                         {item.payment_plan}
-                       </div>
-                     )}
-
-                     <div className="absolute bottom-2 right-2 flex flex-col items-end gap-1">
-                       {item.handover_date && (
-                         <div className="rounded bg-orange-500 text-white px-2.5 py-1 text-[11px] font-bold leading-none shadow">
-                           {item.handover_date}
-                         </div>
-                       )}
-                       {item.images.length > 0 && (
-                         <div className="rounded bg-foreground/70 text-background text-[11px] px-2 py-1 flex items-center gap-1 backdrop-blur">
-                           <ImageIcon className="h-3 w-3" />
-                           {item.images.length}
-                         </div>
-                       )}
-                     </div>
-                  </div>
-
-                  <CardContent className="p-4">
-                    <h3 className="font-semibold text-zinc-600 mb-1 line-clamp-1">
-                      {item.name}
-                    </h3>
-                    
-                    {item.developer_name && (
-                      <p className="text-sm text-gold mb-2">
-                        by {item.developer_name}
-                      </p>
-                    )}
-
-                    <div className="flex items-center gap-4 text-sm text-zinc-500 mb-3">
-                      {item.location && (
-                        <span className="flex items-center gap-1">
-                          <MapPin className="h-3 w-3" />
-                          {item.location}
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <div className="text-sm">
-                        {item.price_from && (
-                          <span className="font-medium text-zinc-900">
-                            From {formatPrice(item.price_from)}
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex gap-1">
-                        {item.documents.length > 0 && (
-                          <Badge variant="outline" className="text-xs">
-                            <FileText className="h-3 w-3 mr-1" />
-                            {item.documents.length}
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                />
               ))}
             </div>
           )}
@@ -745,8 +642,15 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
                       >
                         <ChevronRight className="h-4 w-4" />
                       </Button>
-                      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-black/70 text-white text-sm px-3 py-1 rounded">
-                        {currentImageIndex + 1} / {selectedImport.images.length}
+                      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1 z-10">
+                        {selectedImport.images.slice(0, 5).map((_, idx) => (
+                          <span
+                            key={idx}
+                            className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                              idx === currentImageIndex ? 'bg-white' : 'bg-white/50'
+                            }`}
+                          />
+                        ))}
                       </div>
                     </>
                   )}
