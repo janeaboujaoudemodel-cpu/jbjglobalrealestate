@@ -23,10 +23,12 @@ interface ProjectData {
   bedrooms: string | null;
   price_from: number | null;
   price_text: string | null;
+  payment_plan: string | null;
   handover_display: string | null;
   property_type_label: string | null;
   status_label: string | null;
   description: string | null;
+  amenities: string[] | null;
 }
 
 serve(async (req) => {
@@ -308,10 +310,12 @@ serve(async (req) => {
           bedrooms_min: parseBedrooms(projectData.bedrooms)?.min || null,
           bedrooms_max: parseBedrooms(projectData.bedrooms)?.max || null,
           handover_date: projectData.handover_display || null,
+          payment_plan: projectData.payment_plan || null,
           source_url: projectUrl,
           property_type_label: projectData.property_type_label || null,
           status_label: projectData.status_label || null,
           description: projectData.description?.substring(0, 1000) || null,
+          amenities: projectData.amenities || null,
           images: imagesPayload,
           is_new_project: true,
           status: "pending",
@@ -504,29 +508,35 @@ ${imageUrls.slice(0, 20).join("\n")}
 
 Return a JSON object with these exact fields:
 {
-  "name": "Project name (e.g., Sobha Seahaven)",
+  "name": "EXACT project title from page (e.g., Maybach, Vista Ridge)",
   "developer_name": "Developer name from 'by [Developer]' text",
-  "location": "Specific area (e.g., Dubai Harbour, Dubai Marina, not just Dubai)",
-  "bedrooms": "Bedroom config like 1-3 BR or Studio",
+  "location": "Specific area (e.g., Meydan, Dubai Harbour, not just Dubai)",
+  "bedrooms": "Bedroom config like Studio, 1, 2 and 3-bedroom apartments OR 4-6 BR",
   "price_from": 1500000,
-  "price_text": "Original price like EUR 722K or AED 3.18M",
-  "handover_display": "Year or quarter like 2026 or Q2 2029",
-  "property_type_label": "Apartment|Villa|Townhouse|Penthouse|Sky-Villa",
-  "status_label": "Future Launch|New Phase|Coming Soon|Sold Out or null",
-  "description": "First 2-3 sentences of project description",
-  "image_urls": ["array of 3-8 unique project images from cloudfront"]
+  "price_text": "EXACT original price text like EUR 295K or AED 3.18M",
+  "payment_plan": "Payment plan like 70/30 or 60/40 or null if not shown",
+  "handover_display": "Year or quarter like 2028 or Q2 2029",
+  "property_type_label": "Apartment, Studio|Villa|Townhouse|Penthouse|Sky-Villa (from bedrooms description)",
+  "status_label": "Future Launch|New Phase|New Launch|Coming Soon|Sold Out or null (look for badge text)",
+  "description": "First 2-3 sentences of About the project section",
+  "amenities": ["array of amenities from Amenities section"],
+  "image_urls": ["array of 3-8 UNIQUE gallery images from cloudfront, no floor plans/brochures"]
 }
 
 CRITICAL EXTRACTION RULES:
-1. developer_name: Look for "by [Developer Name]" near the title
-2. location: Extract specific area (Dubai Harbour, Palm Jumeirah, etc.), NOT just "Dubai"
-3. price_from: Convert to AED number (EUR * 4.0, K = 1000, M = 1000000)
-4. image_urls: Only include 3-8 UNIQUE cloudfront images, NO duplicates
-5. property_type_label: From "Off-Plan [Type]" in title or description`
+1. name: Use the EXACT title from the page (e.g., "Maybach" not "Maybach Mercedes-Benz Places")
+2. developer_name: Look for "by [Developer Name]" near the title
+3. location: Extract specific area (Meydan, Palm Jumeirah, etc.), NOT just "Dubai"
+4. price_from: Convert to AED number (EUR * 4.0, K = 1000, M = 1000000)
+5. price_text: Keep the EXACT original text shown on page (e.g., "EUR 295K")
+6. payment_plan: Look for "Payment Plan" section, extract exactly like "70/30"
+7. property_type_label: Derive from bedrooms text (e.g., "studio, 1, 2 and 3-bedroom apartments" -> "Apartment, Studio")
+8. status_label: Look for badges like "Future Launch", "New Phase", "Coming Soon" 
+9. image_urls: Only include 3-8 UNIQUE cloudfront images from Gallery section, NO floor plans or brochure images`
           }
         ],
         temperature: 0.1,
-        max_tokens: 2000,
+        max_tokens: 2500,
       }),
     });
 
@@ -593,10 +603,12 @@ CRITICAL EXTRACTION RULES:
       bedrooms: data.bedrooms || null,
       price_from: data.price_from ? Math.round(data.price_from) : null,
       price_text: data.price_text || null,
+      payment_plan: data.payment_plan || null,
       handover_display: data.handover_display || null,
       property_type_label: data.property_type_label || null,
       status_label: data.status_label || null,
       description: data.description || null,
+      amenities: Array.isArray(data.amenities) ? data.amenities : null,
     };
     
   } catch (err) {
