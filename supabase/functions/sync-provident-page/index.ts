@@ -3,7 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 /**
@@ -51,7 +51,7 @@ serve(async (req) => {
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   try {
-    const { page = 1, testMode = false, testProject = null } = await req.json().catch(() => ({}));
+    const { page = 1, testMode = false, force = false, testProject = null } = await req.json().catch(() => ({}));
     console.log(`[Page ${page}] Starting IMPROVED sync v2...`);
     
     // Get developers for matching
@@ -158,12 +158,21 @@ serve(async (req) => {
     }
 
     // Step 2: Scrape each project detail page (limit to avoid timeout)
-    const maxProjects = testMode ? 3 : 10; // Process up to 10 per call
+    // In testMode we keep this VERY small to prevent timeouts from chained scrapes + AI.
+    const maxProjects = testMode ? 1 : 10; // Process up to 10 per call
     const projectsToProcess = projectUrls.slice(0, maxProjects);
     
     console.log(`[Page ${page}] Step 2: Scraping ${projectsToProcess.length} project detail pages...`);
     
-    const stats = { total: projectUrls.length, processed: 0, queued: 0, skipped: 0, errors: 0 };
+    const stats = {
+      total: projectUrls.length,
+      processed: 0,
+      queued: 0,
+      updated: 0,
+      skipped: 0,
+      errors: 0,
+      images: 0,
+    };
     
     for (const projectUrl of projectsToProcess) {
       try {
@@ -203,8 +212,8 @@ serve(async (req) => {
           .eq("slug", slug)
           .maybeSingle();
 
-        if (existingQueue || existingProject) {
-          console.log(`[Page ${page}] Skipping ${projectData.name} - already exists`);
+        if (existingProject) {
+          console.log(`[Page ${page}] Skipping ${projectData.name} - already exists in projects`);
           stats.skipped++;
           continue;
         }
@@ -215,7 +224,10 @@ serve(async (req) => {
             url.includes("cloudfront.net") && 
             !url.toLowerCase().includes("logo") &&
             !url.toLowerCase().includes("icon") &&
-            !url.toLowerCase().includes("banner")
+            !url.toLowerCase().includes("banner") &&
+            !url.toLowerCase().includes("brochure") &&
+            !url.toLowerCase().includes("floor") &&
+            !url.toLowerCase().includes("payment")
           )
           .slice(0, 8);
 
@@ -247,16 +259,42 @@ serve(async (req) => {
           insertPayload.developer_id = dev.id;
         }
 
-        const { error: queueErr } = await supabase
-          .from("pending_project_imports")
-          .insert(insertPayload);
+        // Insert/update approval queue
+        if (existingQueue?.id) {
+          if (force) {
+            const { error: updateErr } = await supabase
+              .from("pending_project_imports")
+              .update({
+                ...insertPayload,
+                updated_at: new Date().toISOString(),
+              })
+              .eq("id", existingQueue.id);
 
-        if (queueErr) {
-          console.error(`[Page ${page}] Insert failed for ${projectData.name}:`, queueErr);
-          stats.errors++;
+            if (updateErr) {
+              console.error(`[Page ${page}] Update failed for ${projectData.name}:`, updateErr);
+              stats.errors++;
+            } else {
+              console.log(`[Page ${page}] ↻ Updated queued item: ${projectData.name} (${uniqueImages.length} images, ${projectData.location})`);
+              stats.updated++;
+              stats.images += uniqueImages.length;
+            }
+          } else {
+            console.log(`[Page ${page}] Skipping ${projectData.name} - already queued`);
+            stats.skipped++;
+          }
         } else {
-          console.log(`[Page ${page}] ✓ Queued: ${projectData.name} (${uniqueImages.length} images, ${projectData.location})`);
-          stats.queued++;
+          const { error: queueErr } = await supabase
+            .from("pending_project_imports")
+            .insert(insertPayload);
+
+          if (queueErr) {
+            console.error(`[Page ${page}] Insert failed for ${projectData.name}:`, queueErr);
+            stats.errors++;
+          } else {
+            console.log(`[Page ${page}] ✓ Queued: ${projectData.name} (${uniqueImages.length} images, ${projectData.location})`);
+            stats.queued++;
+            stats.images += uniqueImages.length;
+          }
         }
 
         // Small delay between scrapes to avoid rate limits
@@ -271,10 +309,21 @@ serve(async (req) => {
     const duration = Date.now() - startTime;
     console.log(`[Page ${page}] Complete in ${duration}ms: ${stats.queued} queued, ${stats.skipped} skipped, ${stats.errors} errors`);
 
+    // Provide BOTH: UI-friendly stats + debug stats
+    const uiStats = {
+      page,
+      extracted: stats.processed,
+      created: stats.queued,
+      updated: stats.updated,
+      skipped: stats.skipped,
+      images: stats.images,
+    };
+
     return new Response(JSON.stringify({ 
       success: true, 
-      page, 
-      stats,
+      page,
+      stats: uiStats,
+      debug: stats,
       remaining_urls: projectUrls.slice(maxProjects).length,
       mode: "approval_queue",
       extraction_method: "detail-page-scraping-v2",

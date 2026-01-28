@@ -36,6 +36,11 @@ interface SyncStats {
   images: number;
 }
 
+type SyncPageOptions = {
+  testMode?: boolean;
+  force?: boolean;
+};
+
 interface PageStatus {
   page: number;
   status: 'pending' | 'in_progress' | 'success' | 'failed';
@@ -207,12 +212,12 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       .eq("id", jobId);
   };
 
-  const syncPage = async (page: number): Promise<SyncStats | null> => {
+  const syncPage = async (page: number, options?: SyncPageOptions): Promise<SyncStats | null> => {
     updatePageStatus(page, { status: 'in_progress' });
     
     try {
       const { data, error } = await supabase.functions.invoke("sync-provident-page", {
-        body: { page }
+        body: { page, ...(options || {}) }
       });
 
       if (error) {
@@ -437,15 +442,15 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     await loadProjectCount();
   };
 
-  const syncSinglePage = async (page: number) => {
+  const syncSinglePage = async (page: number, options?: SyncPageOptions) => {
     setIsSyncing(true);
     isSyncingRef.current = true;
     setCurrentPage(page);
     
-    const pageStats = await syncPage(page);
+    const pageStats = await syncPage(page, options);
     
     if (pageStats) {
-      toast.success(`Page ${page}: ${pageStats.created} created, ${pageStats.updated} updated, ${pageStats.images} images`);
+      toast.success(`Page ${page}: +${pageStats.created} new, ${pageStats.updated} updated, ${pageStats.skipped} skipped, ${pageStats.images} images`);
     }
     
     setIsSyncing(false);
@@ -486,7 +491,6 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
           <TabsTrigger 
             value="sync" 
             className="flex items-center gap-2"
-            disabled={!isTestApproved && !currentJobId}
           >
             {!isTestApproved && !currentJobId && <Lock className="w-4 h-4" />}
             <RefreshCw className="w-4 h-4" />
@@ -516,6 +520,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                   <h3 className="font-medium text-amber-800">Full Sync Locked</h3>
                   <p className="text-sm text-amber-700">
                     Run a test extraction first to validate Sarah's capabilities before starting the full sync.
+                    You can still run <strong>Test Page 1 Only</strong> below to verify the pipeline and refresh page-1 data.
                   </p>
                 </div>
               </CardContent>
@@ -618,11 +623,11 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                 )}
                 
                 <Button
-                  onClick={() => syncSinglePage(1)}
+                  onClick={() => syncSinglePage(1, { testMode: true, force: true })}
                   variant="outline"
                   className="border-zinc-300 text-zinc-700 hover:bg-zinc-50"
                 >
-                  Test Page 1
+                  Test Page 1 Only
                 </Button>
               </>
             ) : isPaused ? (
