@@ -70,6 +70,7 @@ interface SyncDashboardProps {
 }
 
 export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
+  const TOTAL_LISTINGS_ESTIMATE = 1332;
   const [isSyncing, setIsSyncing] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
@@ -217,27 +218,64 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     updatePageStatus(page, { status: 'in_progress' });
     
     try {
-      const { data, error } = await supabase.functions.invoke("sync-provident-page", {
-        body: { page, ...(options || {}) }
-      });
+      // Batch the page so we actually process ALL listings on the page.
+      // The backend returns remaining_urls + next_start_index so we can loop safely.
+      const batchSize = options?.testMode ? 1 : 3;
+      let startIndex = 0;
+      let remaining = 1;
+      let guard = 0;
 
-      if (error) {
-        console.error(`Page ${page} error:`, error);
-        updatePageStatus(page, { 
-          status: 'failed', 
-          error: error.message,
-          timestamp: new Date().toISOString()
+      const aggregated: SyncStats = {
+        page,
+        extracted: 0,
+        created: 0,
+        updated: 0,
+        skipped: 0,
+        images: 0,
+      };
+
+      while (remaining > 0 && guard < 999) {
+        guard++;
+
+        const { data, error } = await supabase.functions.invoke("sync-provident-page", {
+          body: { page, startIndex, batchSize, ...(options || {}) }
         });
-        return null;
+
+        if (error) throw error;
+
+        const stats = data?.stats;
+        if (stats) {
+          aggregated.extracted += stats.extracted || 0;
+          aggregated.created += stats.created || 0;
+          aggregated.updated += stats.updated || 0;
+          aggregated.skipped += stats.skipped || 0;
+          aggregated.images += stats.images || 0;
+        }
+
+        const nextStart = Number(data?.next_start_index ?? startIndex + batchSize);
+        remaining = Number(data?.remaining_urls ?? 0);
+
+        // Safety: if the backend didn't advance, stop to prevent infinite loops.
+        if (nextStart <= startIndex && remaining > 0) {
+          console.warn(`Page ${page}: batching stalled at startIndex=${startIndex}`);
+          break;
+        }
+
+        startIndex = nextStart;
+
+        // Light delay between batches to avoid rate limits.
+        if (remaining > 0) {
+          await new Promise((r) => setTimeout(r, 600));
+        }
       }
 
-      const stats = data?.stats || null;
-      updatePageStatus(page, { 
-        status: 'success', 
-        stats,
-        timestamp: new Date().toISOString()
+      updatePageStatus(page, {
+        status: 'success',
+        stats: aggregated,
+        timestamp: new Date().toISOString(),
       });
-      return stats;
+
+      return aggregated;
     } catch (err: any) {
       console.error(`Page ${page} failed:`, err);
       updatePageStatus(page, { 
@@ -338,7 +376,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     if (isSyncing) return;
     
     const confirmed = window.confirm(
-      "This will sync all 1,324 listings from Provident Estate.\n\n" +
+      `This will sync all ~${TOTAL_LISTINGS_ESTIMATE} listings from Provident Estate.\n\n` +
       "Sarah will extract:\n" +
       "• All project details and descriptions\n" +
       "• High-resolution images\n" +
@@ -470,7 +508,9 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
 
   const runTestPageOne = async () => {
     setActiveTab("sync");
-    await syncSinglePage(1, { testMode: true, force: true });
+    // Run the real pipeline (approval queue) and then jump to the Projects tab so you can review.
+    await syncSinglePage(1, { force: true });
+    setActiveTab("approvals");
   };
 
   return (
@@ -610,7 +650,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                       className="bg-gold hover:bg-gold/90 text-black disabled:opacity-50"
                     >
                       <Play className="w-4 h-4 mr-2" />
-                      Start Full Sync (1,324 Listings)
+                      Start Full Sync (~{TOTAL_LISTINGS_ESTIMATE} Listings)
                     </Button>
                 
                 {failedCount > 0 && (
@@ -625,7 +665,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                 )}
                 
                 <Button
-                  onClick={() => syncSinglePage(1, { testMode: true, force: true })}
+                  onClick={runTestPageOne}
                   variant="outline"
                   className="border-zinc-300 text-zinc-700 hover:bg-zinc-50"
                 >

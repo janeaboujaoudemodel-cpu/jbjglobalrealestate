@@ -40,6 +40,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
   const adminPersona = getListingAdmin();
   const { user } = useAuth();
   const { language, t } = useLanguage();
+  const TOTAL_LISTINGS_ESTIMATE = 1332;
   
   const getWelcomeMessage = (): Message => ({
     id: "welcome",
@@ -48,9 +49,9 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
 ---
 
-**🔔 ASSIGNED TASK: Full Provident Estate Sync**
+**🔔 TASK: Full Provident Estate Extraction → Admin Approval**
 
-I've been assigned to synchronize all **1,324 listings** from Provident Estate. Here's what I'll extract:
+You can extract all **~${TOTAL_LISTINGS_ESTIMATE} listings** from Provident Estate into the approval queue (nothing goes live until you approve). Here's what gets extracted:
 
 • **Project Details** - Names, descriptions, locations
 • **High-Resolution Images** - All photos from each project  
@@ -59,12 +60,12 @@ I've been assigned to synchronize all **1,324 listings** from Provident Estate. 
 • **Handover Dates** - Displayed on project cards
 • **Payment Plans** - Developer financing options
 
-**To start the sync:**
+**To start the extraction:**
 1. Click the **"Sync Dashboard"** tab above
 2. Review the 70-page extraction status
 3. Click **"Start Full Sync"** to begin
 
-I'll process each page sequentially, extracting ~19 listings per page. You can monitor progress, pause/resume, and retry failed pages.
+I'll process each page sequentially (about ~19 listings per page). You can monitor progress, pause/resume, and retry failed pages.
 
 ---
 

@@ -40,8 +40,8 @@ serve(async (req) => {
   const firecrawlKey = Deno.env.get("FIRECRAWL_API_KEY");
   const lovableKey = Deno.env.get("LOVABLE_API_KEY");
 
-  if (!firecrawlKey || !lovableKey) {
-    console.error("Missing API keys - FIRECRAWL:", !!firecrawlKey, "LOVABLE:", !!lovableKey);
+  if (!firecrawlKey) {
+    console.error("Missing API key: FIRECRAWL_API_KEY");
     return new Response(JSON.stringify({ error: "Missing API keys" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -51,7 +51,20 @@ serve(async (req) => {
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   try {
-    const { page = 1, testMode = false, force = false, testProject = null } = await req.json().catch(() => ({}));
+    const {
+      page = 1,
+      testMode = false,
+      force = false,
+      testProject = null,
+      linksOnly = false,
+      startIndex: rawStartIndex = 0,
+      batchSize: rawBatchSize = undefined,
+    } = await req.json().catch(() => ({}));
+
+    const startIndex = Math.max(0, Number(rawStartIndex) || 0);
+    // Keep batches small by default to avoid timeouts; UI can loop until remaining_urls === 0.
+    const batchSize = Math.max(1, Math.min(Number(rawBatchSize ?? (testMode ? 1 : 3)), 10));
+
     console.log(`[Page ${page}] Starting IMPROVED sync v2...`);
     
     // Get developers for matching
@@ -84,6 +97,14 @@ serve(async (req) => {
 
     // If testProject specified, scrape that specific project detail page
     if (testProject) {
+      if (!lovableKey) {
+        console.error("Missing API key: LOVABLE_API_KEY");
+        return new Response(JSON.stringify({ error: "Missing API keys" }), {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       console.log(`[Test] Scraping single project: ${testProject}`);
       const projectData = await scrapeProjectDetailPage(testProject, firecrawlKey, lovableKey);
       
@@ -157,12 +178,38 @@ serve(async (req) => {
       });
     }
 
-    // Step 2: Scrape each project detail page (limit to avoid timeout)
-    // In testMode we keep this VERY small to prevent timeouts from chained scrapes + AI.
-    const maxProjects = testMode ? 1 : 10; // Process up to 10 per call
-    const projectsToProcess = projectUrls.slice(0, maxProjects);
+    // Links-only mode: return URLs so the admin UI can show the full page list immediately.
+    if (linksOnly) {
+      return new Response(
+        JSON.stringify({
+          success: true,
+          page,
+          listing_url: listingUrl,
+          total_urls: projectUrls.length,
+          project_urls: projectUrls,
+          duration_ms: Date.now() - startTime,
+          mode: "links_only",
+        }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
+      );
+    }
+
+    if (!lovableKey) {
+      console.error("Missing API key: LOVABLE_API_KEY");
+      return new Response(JSON.stringify({ error: "Missing API keys" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Step 2: Scrape each project detail page in small batches.
+    // The UI can call repeatedly with startIndex/batchSize until remaining_urls === 0.
+    const batchEnd = Math.min(projectUrls.length, startIndex + batchSize);
+    const projectsToProcess = projectUrls.slice(startIndex, batchEnd);
     
-    console.log(`[Page ${page}] Step 2: Scraping ${projectsToProcess.length} project detail pages...`);
+    console.log(`[Page ${page}] Step 2: Scraping ${projectsToProcess.length} project detail pages (startIndex=${startIndex}, batchSize=${batchSize})...`);
     
     const stats = {
       total: projectUrls.length,
@@ -174,38 +221,42 @@ serve(async (req) => {
       images: 0,
     };
     
-    for (const projectUrl of projectsToProcess) {
+    const CONCURRENCY = testMode ? 1 : 2;
+
+    const processOne = async (projectUrl: string) => {
+      const result = {
+        processed: 0,
+        queued: 0,
+        updated: 0,
+        skipped: 0,
+        errors: 0,
+        images: 0,
+      };
+
       try {
         console.log(`[Page ${page}] Scraping: ${projectUrl}`);
-        
+
         const projectData = await scrapeProjectDetailPage(projectUrl, firecrawlKey, lovableKey);
-        
+
         if (!projectData || !projectData.name) {
           console.log(`[Page ${page}] No data extracted for ${projectUrl}`);
-          stats.errors++;
-          continue;
+          result.errors++;
+          return result;
         }
-        
-        stats.processed++;
-        
+
+        result.processed++;
+
         // Match developer
         const dev = matchDeveloper(projectData.developer_name, devMap);
-        
+
         // Create slug
         const baseName = projectData.name.toLowerCase()
           .replace(/[^a-z0-9\s-]/g, "")
           .replace(/\s+/g, "-")
           .substring(0, 50);
         const slug = dev ? `${baseName}-${dev.slug}`.substring(0, 80) : baseName;
-        
-        // Check if already exists
-        const { data: existingQueue } = await supabase
-          .from("pending_project_imports")
-          .select("id")
-          .eq("slug", slug)
-          .eq("status", "pending")
-          .maybeSingle();
 
+        // Check if already exists in projects
         const { data: existingProject } = await supabase
           .from("projects")
           .select("id")
@@ -214,14 +265,23 @@ serve(async (req) => {
 
         if (existingProject) {
           console.log(`[Page ${page}] Skipping ${projectData.name} - already exists in projects`);
-          stats.skipped++;
-          continue;
+          result.skipped++;
+          return result;
         }
+
+        // Check if already exists in queue (any status)
+        const { data: existingQueueAny } = await supabase
+          .from("pending_project_imports")
+          .select("id, status")
+          .eq("slug", slug)
+          .order("updated_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
 
         // Prepare unique images (max 8)
         const uniqueImages = [...new Set(projectData.image_urls)]
-          .filter(url => 
-            url.includes("cloudfront.net") && 
+          .filter(url =>
+            url.includes("cloudfront.net") &&
             !url.toLowerCase().includes("logo") &&
             !url.toLowerCase().includes("icon") &&
             !url.toLowerCase().includes("banner") &&
@@ -230,6 +290,12 @@ serve(async (req) => {
             !url.toLowerCase().includes("payment")
           )
           .slice(0, 8);
+
+        const imagesPayload = uniqueImages.map((url, i) => ({
+          url: url.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"),
+          alt_text: `${projectData.name} - Image ${i + 1}`,
+          display_order: i,
+        }));
 
         // Insert to approval queue
         const insertPayload: Record<string, any> = {
@@ -246,41 +312,43 @@ serve(async (req) => {
           property_type_label: projectData.property_type_label || null,
           status_label: projectData.status_label || null,
           description: projectData.description?.substring(0, 1000) || null,
-          images: JSON.stringify(uniqueImages.map((url, i) => ({
-            url: url.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"),
-            alt_text: `${projectData.name} - Image ${i + 1}`,
-            display_order: i
-          }))),
+          images: imagesPayload,
           is_new_project: true,
           status: "pending",
         };
-        
+
         if (dev?.id) {
           insertPayload.developer_id = dev.id;
         }
 
         // Insert/update approval queue
-        if (existingQueue?.id) {
+        if (existingQueueAny?.id) {
           if (force) {
             const { error: updateErr } = await supabase
               .from("pending_project_imports")
               .update({
                 ...insertPayload,
+                // Force should re-queue for review
+                status: "pending",
+                reviewed_at: null,
+                reviewed_by: null,
+                review_notes: null,
                 updated_at: new Date().toISOString(),
               })
-              .eq("id", existingQueue.id);
+              .eq("id", existingQueueAny.id);
 
             if (updateErr) {
               console.error(`[Page ${page}] Update failed for ${projectData.name}:`, updateErr);
-              stats.errors++;
+              result.errors++;
             } else {
               console.log(`[Page ${page}] ↻ Updated queued item: ${projectData.name} (${uniqueImages.length} images, ${projectData.location})`);
-              stats.updated++;
-              stats.images += uniqueImages.length;
+              result.updated++;
+              result.images += uniqueImages.length;
             }
           } else {
-            console.log(`[Page ${page}] Skipping ${projectData.name} - already queued`);
-            stats.skipped++;
+            // If it's already pending, it should remain visible in the queue; otherwise require force to re-queue.
+            console.log(`[Page ${page}] Skipping ${projectData.name} - already queued (status=${existingQueueAny.status})`);
+            result.skipped++;
           }
         } else {
           const { error: queueErr } = await supabase
@@ -289,25 +357,45 @@ serve(async (req) => {
 
           if (queueErr) {
             console.error(`[Page ${page}] Insert failed for ${projectData.name}:`, queueErr);
-            stats.errors++;
+            result.errors++;
           } else {
             console.log(`[Page ${page}] ✓ Queued: ${projectData.name} (${uniqueImages.length} images, ${projectData.location})`);
-            stats.queued++;
-            stats.images += uniqueImages.length;
+            result.queued++;
+            result.images += uniqueImages.length;
           }
         }
-
-        // Small delay between scrapes to avoid rate limits
-        await new Promise(r => setTimeout(r, 1500));
-        
       } catch (projErr) {
         console.error(`[Page ${page}] Error processing ${projectUrl}:`, projErr);
-        stats.errors++;
+        result.errors++;
+      }
+
+      return result;
+    };
+
+    for (let i = 0; i < projectsToProcess.length; i += CONCURRENCY) {
+      const chunk = projectsToProcess.slice(i, i + CONCURRENCY);
+      const results = await Promise.all(chunk.map(processOne));
+
+      for (const r of results) {
+        stats.processed += r.processed;
+        stats.queued += r.queued;
+        stats.updated += r.updated;
+        stats.skipped += r.skipped;
+        stats.errors += r.errors;
+        stats.images += r.images;
+      }
+
+      // Light throttle between concurrency batches
+      if (i + CONCURRENCY < projectsToProcess.length) {
+        await new Promise((r) => setTimeout(r, 600));
       }
     }
 
     const duration = Date.now() - startTime;
     console.log(`[Page ${page}] Complete in ${duration}ms: ${stats.queued} queued, ${stats.skipped} skipped, ${stats.errors} errors`);
+
+    const nextStartIndex = startIndex + projectsToProcess.length;
+    const remainingUrls = Math.max(0, projectUrls.length - nextStartIndex);
 
     // Provide BOTH: UI-friendly stats + debug stats
     const uiStats = {
@@ -324,7 +412,11 @@ serve(async (req) => {
       page,
       stats: uiStats,
       debug: stats,
-      remaining_urls: projectUrls.slice(maxProjects).length,
+      total_urls: projectUrls.length,
+      batch_start_index: startIndex,
+      batch_size: batchSize,
+      next_start_index: nextStartIndex,
+      remaining_urls: remainingUrls,
       mode: "approval_queue",
       extraction_method: "detail-page-scraping-v2",
       duration_ms: duration 
