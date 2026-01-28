@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -72,6 +73,10 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [selectedImport, setSelectedImport] = useState<PendingImport | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isBulkProcessing, setIsBulkProcessing] = useState(false);
+  const [bulkAction, setBulkAction] = useState<"approve" | "reject" | null>(null);
+  const [bulkDone, setBulkDone] = useState(0);
+  const [bulkTotal, setBulkTotal] = useState(0);
   const { toast } = useToast();
 
   const fetchPendingImports = async () => {
@@ -133,82 +138,103 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
     fetchPendingImports();
   }, []);
 
+  const approveImportInDb = async (importData: PendingImport) => {
+    // Create the project
+    const projectData = {
+      name: importData.name,
+      slug: importData.slug || importData.name.toLowerCase().replace(/\s+/g, '-'),
+      developer_id: importData.developer_id,
+      community_id: null,
+      location: importData.location,
+      emirate: importData.emirate,
+      description: importData.description,
+      price_from: importData.price_from,
+      price_to: importData.price_to,
+      bedrooms_min: importData.bedrooms_min,
+      bedrooms_max: importData.bedrooms_max,
+      size_min: importData.size_min,
+      size_max: importData.size_max,
+      handover_date: importData.handover_date,
+      payment_plan: importData.payment_plan,
+      property_type_label: importData.property_type_label,
+      status_label: importData.status_label,
+      source_url: importData.source_url,
+      is_offplan: true,
+      status: 'active'
+    };
+
+    const { data: newProject, error: projectError } = await supabase
+      .from("projects")
+      .insert(projectData)
+      .select()
+      .single();
+
+    if (projectError) throw projectError;
+
+    // Insert images
+    if (importData.images.length > 0 && newProject) {
+      const imageInserts = importData.images.map((img, index) => ({
+        project_id: newProject.id,
+        image_url: img.url,
+        alt_text: img.alt || importData.name,
+        display_order: index
+      }));
+
+      const { error: imgError } = await supabase
+        .from("project_images")
+        .insert(imageInserts);
+
+      if (imgError) console.error("Error inserting images:", imgError);
+    }
+
+    // Insert documents
+    if (importData.documents.length > 0 && newProject) {
+      const docInserts = importData.documents.map((doc, idx) => ({
+        project_id: newProject.id,
+        file_url: doc.url,
+        document_type: doc.type,
+        file_name: doc.name || `${doc.type}-${idx + 1}`,
+        display_order: idx
+      }));
+
+      const { error: docError } = await supabase
+        .from("project_documents")
+        .insert(docInserts);
+
+      if (docError) console.error("Error inserting documents:", docError);
+    }
+
+    // Mark import as approved
+    const { error: approveErr } = await supabase
+      .from("pending_project_imports")
+      .update({
+        status: "approved",
+        reviewed_at: new Date().toISOString()
+      })
+      .eq("id", importData.id);
+
+    if (approveErr) throw approveErr;
+
+    return newProject;
+  };
+
+  const rejectAllPendingInDb = async () => {
+    const { error } = await supabase
+      .from("pending_project_imports")
+      .update({
+        status: "rejected",
+        reviewed_at: new Date().toISOString(),
+        review_notes: "Rejected by admin (bulk action)"
+      })
+      .eq("status", "pending");
+
+    if (error) throw error;
+  };
+
   const handleApprove = async (importData: PendingImport) => {
     setProcessingId(importData.id);
     try {
-      // Create the project
-      const projectData = {
-        name: importData.name,
-        slug: importData.slug || importData.name.toLowerCase().replace(/\s+/g, '-'),
-        developer_id: importData.developer_id,
-        community_id: null,
-        location: importData.location,
-        emirate: importData.emirate,
-        description: importData.description,
-        price_from: importData.price_from,
-        price_to: importData.price_to,
-        bedrooms_min: importData.bedrooms_min,
-        bedrooms_max: importData.bedrooms_max,
-        size_min: importData.size_min,
-        size_max: importData.size_max,
-        handover_date: importData.handover_date,
-        payment_plan: importData.payment_plan,
-        property_type_label: importData.property_type_label,
-        status_label: importData.status_label,
-        source_url: importData.source_url,
-        is_offplan: true,
-        status: 'active'
-      };
-
-      const { data: newProject, error: projectError } = await supabase
-        .from("projects")
-        .insert(projectData)
-        .select()
-        .single();
-
-      if (projectError) throw projectError;
-
-      // Insert images
-      if (importData.images.length > 0 && newProject) {
-        const imageInserts = importData.images.map((img, index) => ({
-          project_id: newProject.id,
-          image_url: img.url,
-          alt_text: img.alt || importData.name,
-          display_order: index
-        }));
-
-        const { error: imgError } = await supabase
-          .from("project_images")
-          .insert(imageInserts);
-
-        if (imgError) console.error("Error inserting images:", imgError);
-      }
-
-      // Insert documents
-      if (importData.documents.length > 0 && newProject) {
-        const docInserts = importData.documents.map((doc, idx) => ({
-          project_id: newProject.id,
-          file_url: doc.url,
-          document_type: doc.type,
-          file_name: doc.name || `${doc.type}-${idx + 1}`,
-          display_order: idx
-        }));
-
-        const { error: docError } = await supabase
-          .from("project_documents")
-          .insert(docInserts);
-
-        if (docError) console.error("Error inserting documents:", docError);
-      }
-
-      // Mark import as approved
-      await supabase
-        .from("pending_project_imports")
-        .update({
-          status: "approved",
-          reviewed_at: new Date().toISOString()
-        })
-        .eq("id", importData.id);
+      await approveImportInDb(importData);
 
       toast({
         title: "Project Approved",
@@ -227,6 +253,74 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
       });
     } finally {
       setProcessingId(null);
+    }
+  };
+
+  const approveAllShown = async () => {
+    if (isBulkProcessing || imports.length === 0) return;
+    const confirmed = window.confirm(
+      `Approve ALL ${imports.length} projects currently shown in this queue?\n\n` +
+      `This will create ${imports.length} new projects and remove them from the pending queue.`
+    );
+    if (!confirmed) return;
+
+    const snapshot = [...imports];
+    setIsBulkProcessing(true);
+    setBulkAction("approve");
+    setBulkDone(0);
+    setBulkTotal(snapshot.length);
+
+    let ok = 0;
+    let failed = 0;
+
+    try {
+      for (const item of snapshot) {
+        try {
+          await approveImportInDb(item);
+          ok++;
+        } catch (e) {
+          failed++;
+          console.error("Bulk approve failed for", item.id, e);
+        } finally {
+          setBulkDone(ok + failed);
+        }
+      }
+
+      toast({
+        title: "Bulk approve finished",
+        description: failed > 0 ? `${ok} approved, ${failed} failed` : `${ok} approved`,
+      });
+    } finally {
+      setIsBulkProcessing(false);
+      setBulkAction(null);
+      await fetchPendingImports();
+      onRefresh?.();
+    }
+  };
+
+  const deleteAllPending = async () => {
+    if (isBulkProcessing) return;
+    const confirmed = window.confirm(
+      "Delete ALL pending imports?\n\n" +
+        "This will remove every pending project from the approval queue (it will mark them as rejected)."
+    );
+    if (!confirmed) return;
+
+    setIsBulkProcessing(true);
+    setBulkAction("reject");
+    setBulkDone(0);
+    setBulkTotal(0);
+
+    try {
+      await rejectAllPendingInDb();
+      toast({ title: "Queue cleared", description: "All pending imports were removed." });
+    } catch (e) {
+      console.error("Bulk reject failed", e);
+      toast({ title: "Error", description: "Failed to delete all pending imports", variant: "destructive" });
+    } finally {
+      setIsBulkProcessing(false);
+      setBulkAction(null);
+      await fetchPendingImports();
     }
   };
 
@@ -375,12 +469,46 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
               </Badge>
             )}
           </CardTitle>
-          <Button variant="outline" size="sm" onClick={fetchPendingImports}>
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
-          </Button>
+          <div className="flex items-center gap-2">
+            {imports.length > 0 && (
+              <>
+                <Button
+                  size="sm"
+                  onClick={approveAllShown}
+                  disabled={isBulkProcessing || isLoading}
+                  className="bg-primary text-primary-foreground hover:bg-primary/90"
+                >
+                  <Check className="h-4 w-4 mr-2" />
+                  Approve All ({imports.length})
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={deleteAllPending}
+                  disabled={isBulkProcessing || isLoading}
+                  className="border-destructive/40 text-destructive hover:bg-destructive/10"
+                >
+                  <X className="h-4 w-4 mr-2" />
+                  Delete All Pending
+                </Button>
+              </>
+            )}
+            <Button variant="outline" size="sm" onClick={fetchPendingImports} disabled={isBulkProcessing}>
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Refresh
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
+          {isBulkProcessing && bulkAction === "approve" && bulkTotal > 0 && (
+            <div className="mb-4 rounded-lg border border-border bg-card p-3">
+              <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
+                <span>Approving… {bulkDone}/{bulkTotal}</span>
+                <span>{Math.round((bulkDone / bulkTotal) * 100)}%</span>
+              </div>
+              <Progress value={(bulkDone / bulkTotal) * 100} className="h-2" />
+            </div>
+          )}
           {imports.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-zinc-500">
               <Check className="h-16 w-16 mb-4 text-emerald-500" />
@@ -415,31 +543,53 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
                       </div>
                     )}
                     
-                    {/* Badges */}
-                    <div className="absolute top-2 left-2 flex gap-2">
-                      {item.is_new_project ? (
-                        <Badge className="bg-emerald-500 text-white">
-                          <Plus className="h-3 w-3 mr-1" />
-                          New
-                        </Badge>
-                      ) : (
-                        <Badge className="bg-blue-500 text-white">
-                          <Merge className="h-3 w-3 mr-1" />
-                          Update
-                        </Badge>
-                      )}
-                      {item.status_label && (
-                        <Badge variant="secondary">{item.status_label}</Badge>
-                      )}
-                    </div>
-                    
-                    {/* Image count */}
-                    {item.images.length > 0 && (
-                      <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded flex items-center gap-1">
-                        <ImageIcon className="h-3 w-3" />
-                        {item.images.length}
-                      </div>
-                    )}
+                     {/* Provident-style overlays */}
+                     <div className="absolute top-2 left-2 flex flex-col gap-1">
+                       {item.property_type_label && (
+                         <div className="rounded bg-foreground/80 text-background px-2.5 py-1 text-[11px] font-medium leading-none backdrop-blur">
+                           {item.property_type_label}
+                         </div>
+                       )}
+                       <div className="flex gap-2">
+                         {item.is_new_project ? (
+                           <Badge className="bg-primary text-primary-foreground">
+                             <Plus className="h-3 w-3 mr-1" />
+                             New
+                           </Badge>
+                         ) : (
+                           <Badge className="bg-secondary text-secondary-foreground">
+                             <Merge className="h-3 w-3 mr-1" />
+                             Update
+                           </Badge>
+                         )}
+                       </div>
+                     </div>
+
+                     {item.status_label && (
+                       <div className="absolute top-2 right-2 rounded bg-background/90 text-foreground border border-border px-2.5 py-1 text-[11px] font-medium leading-none backdrop-blur">
+                         {item.status_label}
+                       </div>
+                     )}
+
+                     {item.payment_plan && (
+                       <div className="absolute bottom-2 left-2 rounded bg-secondary/90 text-secondary-foreground border border-border px-2.5 py-1 text-[11px] font-medium leading-none backdrop-blur">
+                         {item.payment_plan}
+                       </div>
+                     )}
+
+                     <div className="absolute bottom-2 right-2 flex flex-col items-end gap-1">
+                       {item.handover_date && (
+                         <div className="rounded bg-primary text-primary-foreground px-2.5 py-1 text-[11px] font-bold leading-none shadow">
+                           {item.handover_date}
+                         </div>
+                       )}
+                       {item.images.length > 0 && (
+                         <div className="rounded bg-foreground/70 text-background text-[11px] px-2 py-1 flex items-center gap-1 backdrop-blur">
+                           <ImageIcon className="h-3 w-3" />
+                           {item.images.length}
+                         </div>
+                       )}
+                     </div>
                   </div>
 
                   <CardContent className="p-4">
@@ -703,13 +853,8 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
               <Separator />
 
               {/* Actions */}
-              <div className="flex items-center justify-between">
-                <div className="text-sm text-zinc-500">
-                  <Clock className="h-4 w-4 inline mr-1" />
-                  Extracted {format(new Date(selectedImport.created_at), "MMM d, yyyy 'at' h:mm a")}
-                </div>
-                
-                <div className="flex items-center gap-2">
+               <div className="flex items-center justify-end">
+                 <div className="flex items-center gap-2">
                   <Button
                     variant="outline"
                     onClick={() => handleReject(selectedImport)}
