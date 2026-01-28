@@ -647,7 +647,7 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
                           <span
                             key={idx}
                             className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                              idx === currentImageIndex ? 'bg-white' : 'bg-white/50'
+                              idx === currentImageIndex ? 'bg-overlay' : 'bg-overlay/50'
                             }`}
                           />
                         ))}
