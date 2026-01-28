@@ -86,7 +86,8 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [estimatedTimeRemaining, setEstimatedTimeRemaining] = useState<string>("");
   const [currentJobId, setCurrentJobId] = useState<string | null>(null);
-  const [isTestApproved, setIsTestApproved] = useState(false);
+  // We keep this always enabled: the admin decides what to approve in the queue.
+  const [isTestApproved] = useState(true);
   const [activeTab, setActiveTab] = useState("approvals");
   
   const isPausedRef = useRef(false);
@@ -465,10 +466,11 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   const inProgressCount = pageStatuses.filter(p => p.status === 'in_progress').length;
   const pendingCount = totalPages - successCount - failedCount - inProgressCount;
 
-  const handleTestApproved = () => {
-    setIsTestApproved(true);
+  const goToFullSync = () => setActiveTab("sync");
+
+  const runTestPageOne = async () => {
     setActiveTab("sync");
-    toast.success("Sarah is approved! You can now start the full extraction.");
+    await syncSinglePage(1, { testMode: true, force: true });
   };
 
   return (
@@ -507,7 +509,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
         </TabsContent>
         
         <TabsContent value="test" className="mt-6">
-          <SarahTestPanel onTestPassed={handleTestApproved} />
+          <SarahTestPanel onGoToFullSync={goToFullSync} onRunPageOneTest={runTestPageOne} />
         </TabsContent>
         
         <TabsContent value="sync" className="mt-6 space-y-6">

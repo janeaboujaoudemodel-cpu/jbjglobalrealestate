@@ -49,10 +49,13 @@ interface TestResult {
 }
 
 interface SarahTestPanelProps {
-  onTestPassed: () => void;
+  /** Runs the real pipeline test (Page 1) and writes into the approval queue. */
+  onRunPageOneTest?: () => void;
+  /** Optional helper to switch UI to the Full Sync tab. */
+  onGoToFullSync?: () => void;
 }
 
-export const SarahTestPanel = ({ onTestPassed }: SarahTestPanelProps) => {
+export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync }: SarahTestPanelProps) => {
   const [testUrl, setTestUrl] = useState("https://providentestate.com/new-projects/sobha-seahaven/");
   const [isLoading, setIsLoading] = useState(false);
   const [testResult, setTestResult] = useState<TestResult | null>(null);
@@ -85,13 +88,9 @@ export const SarahTestPanel = ({ onTestPassed }: SarahTestPanelProps) => {
 
       setTestResult(data);
       
-      if (data.success) {
-        toast.success("✅ Test PASSED! Sarah is ready for full extraction.");
-        setRetryCount(0);
-      } else {
-        toast.error("❌ Test FAILED. Review errors below.");
-        setRetryCount(prev => prev + 1);
-      }
+      toast.info("Test completed — please review the results below.");
+      if (data.success) setRetryCount(0);
+      else setRetryCount(prev => prev + 1);
     } catch (err: any) {
       toast.error("Test error: " + err.message);
       setTestResult({
@@ -137,35 +136,49 @@ export const SarahTestPanel = ({ onTestPassed }: SarahTestPanelProps) => {
         </CardHeader>
         <CardContent>
           <p className="text-sm text-zinc-600 mb-4">
-            Test Sarah's extraction on ONE project first. She will extract all data including
-            high-quality images, brochures, floor plans, and payment plans. Only approve her
-            for full extraction if this test passes 100%.
+            This is a single-URL diagnostic preview. It does not add anything to your approval queue.
+            To test the real pipeline that writes projects into the approval queue, use <strong>Test Page 1 Only</strong>.
           </p>
           
-          <div className="flex gap-2 mb-3">
+          <div className="flex flex-col md:flex-row gap-2 mb-3">
             <Input
               value={testUrl}
               onChange={(e) => setTestUrl(e.target.value)}
               placeholder="Enter project URL to test..."
               className="flex-1 bg-white"
             />
-            <Button
-              onClick={() => runTest()}
-              disabled={isLoading}
-              className="bg-zinc-900 hover:bg-zinc-800 text-white"
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Testing...
-                </>
-              ) : (
-                <>
-                  <FlaskConical className="w-4 h-4 mr-2" />
-                  Run Test
-                </>
+            <div className="flex gap-2">
+              <Button
+                onClick={() => runTest()}
+                disabled={isLoading}
+                className="bg-zinc-900 hover:bg-zinc-800 text-white"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Testing...
+                  </>
+                ) : (
+                  <>
+                    <FlaskConical className="w-4 h-4 mr-2" />
+                    Run Test
+                  </>
+                )}
+              </Button>
+
+              {onRunPageOneTest && (
+                <Button
+                  onClick={() => {
+                    onGoToFullSync?.();
+                    onRunPageOneTest();
+                  }}
+                  disabled={isLoading}
+                  variant="outline"
+                >
+                  Test Page 1 Only
+                </Button>
               )}
-            </Button>
+            </div>
           </div>
           
           {/* Suggested URLs */}
@@ -202,12 +215,12 @@ export const SarahTestPanel = ({ onTestPassed }: SarahTestPanelProps) => {
                   )}
                   <div>
                     <h3 className={`font-bold text-lg ${testResult.success ? 'text-emerald-800' : 'text-red-800'}`}>
-                      {testResult.success ? "✅ Test PASSED" : "❌ Test FAILED"}
+                      {testResult.success ? "Extraction completed" : "Extraction needs review"}
                     </h3>
                     <p className={`text-sm ${testResult.success ? 'text-emerald-600' : 'text-red-600'}`}>
                       {testResult.success 
-                        ? "Sarah is ready for full extraction!"
-                        : "Fix the issues below before proceeding"}
+                        ? "Review the extracted fields and images below."
+                        : "Review issues below (missing/incorrect fields, image problems, etc.)."}
                     </p>
                   </div>
                 </div>
@@ -272,6 +285,19 @@ export const SarahTestPanel = ({ onTestPassed }: SarahTestPanelProps) => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
+                <div className="flex items-center justify-between text-sm mb-4">
+                  <span className="text-zinc-500">Provenance (source)</span>
+                  <a
+                    href={testUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-zinc-700 hover:underline"
+                  >
+                    Open source page
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                </div>
+
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   <div>
                     <div className="text-xs text-zinc-500 uppercase">Name</div>
@@ -459,25 +485,31 @@ export const SarahTestPanel = ({ onTestPassed }: SarahTestPanelProps) => {
             </CardContent>
           </Card>
 
-          {/* Approve Button */}
-          {testResult.success && (
-            <Card className="bg-gradient-to-r from-emerald-50 to-green-50 border-emerald-300">
-              <CardContent className="py-6 text-center">
-                <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-emerald-800 mb-2">
-                  Sarah Passed All Tests!
-                </h3>
-                <p className="text-emerald-700 mb-4">
-                  Extraction is working perfectly. You can now approve Sarah to extract all 1,324 listings.
-                </p>
-                <Button
-                  onClick={onTestPassed}
-                  size="lg"
-                  className="bg-emerald-600 hover:bg-emerald-700"
-                >
-                  <Sparkles className="w-5 h-5 mr-2" />
-                  Approve Sarah for Full Extraction
-                </Button>
+          {/* Next step helper */}
+          {(onRunPageOneTest || onGoToFullSync) && (
+            <Card className="border-zinc-200 bg-white">
+              <CardContent className="py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+                <div className="text-sm text-zinc-700">
+                  Next step: run <strong>Test Page 1 Only</strong> to write real extracted projects into the approval queue.
+                </div>
+                <div className="flex gap-2">
+                  {onGoToFullSync && (
+                    <Button onClick={onGoToFullSync} variant="outline">
+                      Open Full Sync
+                    </Button>
+                  )}
+                  {onRunPageOneTest && (
+                    <Button
+                      onClick={() => {
+                        onGoToFullSync?.();
+                        onRunPageOneTest();
+                      }}
+                      variant="outline"
+                    >
+                      Test Page 1 Only
+                    </Button>
+                  )}
+                </div>
               </CardContent>
             </Card>
           )}
