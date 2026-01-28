@@ -714,7 +714,13 @@ const SupportTicketBox = () => {
                   </Dialog>
 
                   <p className="text-sm text-zinc-500 mt-4">
-                    Email: <span className="text-gold font-medium">{CONTACT_INFO.supportEmail}</span>
+                    Email:{" "}
+                    <a
+                      href={`mailto:${CONTACT_INFO.supportEmail}`}
+                      className="text-gold font-medium hover:underline"
+                    >
+                      {CONTACT_INFO.supportEmail}
+                    </a>
                   </p>
                 </div>
               </div>
