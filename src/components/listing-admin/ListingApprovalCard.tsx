@@ -28,6 +28,7 @@ export interface ExtractedProject {
   price_text?: string;
   price_from?: number;
   handover_display?: string;
+  handover_date?: string;
   property_type_label?: string;
   status_label?: string;
 }
@@ -71,10 +72,13 @@ export function ListingApprovalCard({
     return `AED ${(price / 1000).toFixed(0)}K`;
   };
 
-  // Only show status label for specific projects or if it's not "New"
+  // Get handover display value
+  const handoverValue = project.handover_display || project.handover_date;
+  
+  // Only show status label for specific projects (Sobha Sanctuary, Mercedes-Benz) or non-"New" labels
   const shouldShowStatus = () => {
     const projectName = project.name?.toLowerCase() || '';
-    const isSpecialProject = ['sobha sanctuary', 'mercedes-benz'].some(p => projectName.includes(p));
+    const isSpecialProject = ['sobha sanctuary', 'mercedes-benz by binghatti', 'mercedes-benz places'].some(p => projectName.includes(p));
     if (isSpecialProject && project.status_label) return true;
     if (project.status_label && project.status_label.toLowerCase() !== 'new') return true;
     return false;
@@ -142,9 +146,9 @@ export function ListingApprovalCard({
           )}
           
           {/* Handover - Bottom Right (ORANGE) */}
-          {project.handover_display && (
-            <div className="absolute bottom-2 right-2 bg-orange-500 text-white px-2.5 py-1 rounded text-xs font-bold">
-              {project.handover_display}
+          {handoverValue && (
+            <div className="absolute bottom-2 right-2 bg-orange-500 text-white px-2 py-0.5 rounded text-xs font-bold">
+              {handoverValue}
             </div>
           )}
         </div>
