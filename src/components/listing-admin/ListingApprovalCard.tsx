@@ -71,11 +71,20 @@ export function ListingApprovalCard({
     return `AED ${(price / 1000).toFixed(0)}K`;
   };
 
+  // Only show status label for specific projects or if it's not "New"
+  const shouldShowStatus = () => {
+    const projectName = project.name?.toLowerCase() || '';
+    const isSpecialProject = ['sobha sanctuary', 'mercedes-benz'].some(p => projectName.includes(p));
+    if (isSpecialProject && project.status_label) return true;
+    if (project.status_label && project.status_label.toLowerCase() !== 'new') return true;
+    return false;
+  };
+
   return (
     <Card className="bg-white border-zinc-200 shadow-md overflow-hidden">
       {/* Image Gallery */}
       {images.length > 0 && (
-        <div className="relative h-48 bg-zinc-100 group">
+        <div className="relative h-48 bg-zinc-100">
           <img
             src={images[currentImageIndex]}
             alt={`${project.name} - Image ${currentImageIndex + 1}`}
@@ -85,24 +94,24 @@ export function ListingApprovalCard({
             }}
           />
           
-          {/* Image navigation */}
+          {/* Navigation arrows - Always visible */}
           {images.length > 1 && (
             <>
               <button
                 onClick={prevImage}
-                className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 hover:bg-black/70 transition-all"
+                className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-zinc-700 flex items-center justify-center shadow-lg transition-all z-10"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 onClick={nextImage}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 hover:bg-black/70 transition-all"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-zinc-700 flex items-center justify-center shadow-lg transition-all z-10"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
               
               {/* Image dots indicator */}
-              <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-1">
+              <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-1">
                 {images.slice(0, 5).map((_, idx) => (
                   <span
                     key={idx}
@@ -118,15 +127,15 @@ export function ListingApprovalCard({
             </>
           )}
           
-          {/* Property Type - Top Left */}
+          {/* Property Type - Top Left (dark) */}
           {project.property_type_label && (
-            <div className="absolute top-2 left-2 bg-black/80 backdrop-blur-sm text-white px-2.5 py-1 rounded text-xs font-medium">
+            <div className="absolute top-2 left-2 bg-zinc-800/90 text-white px-2.5 py-1 rounded text-xs font-medium">
               {project.property_type_label}
             </div>
           )}
           
-          {/* Status - Top Right */}
-          {project.status_label && (
+          {/* Status - Top Right (only show if valid) */}
+          {shouldShowStatus() && project.status_label && (
             <div className="absolute top-2 right-2 bg-white text-zinc-800 px-2.5 py-1 rounded text-xs font-medium border border-zinc-200">
               {project.status_label}
             </div>
@@ -136,14 +145,6 @@ export function ListingApprovalCard({
           {project.handover_display && (
             <div className="absolute bottom-2 right-2 bg-orange-500 text-white px-2.5 py-1 rounded text-xs font-bold">
               {project.handover_display}
-            </div>
-          )}
-          
-          {/* Image count badge */}
-          {images.length > 1 && (
-            <div className="absolute bottom-2 left-2 px-2 py-1 rounded bg-black/60 text-white text-xs flex items-center gap-1">
-              <ImageIcon className="w-3 h-3" />
-              {images.length}
             </div>
           )}
         </div>

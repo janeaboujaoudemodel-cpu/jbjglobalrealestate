@@ -3,12 +3,9 @@ import { Link } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
 import ShortlistBadgeButton from "./ShortlistBadgeButton";
-import { FileText, Download, Phone, MessageCircle, Crown, ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "./ui/button";
+import { ChevronLeft, ChevronRight, MapPin, Bed, Mail, Phone, MessageCircle } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { SafeImage } from "@/components/SafeImage";
-import AIMarketAnalyzer from "@/components/AIMarketAnalyzer";
-import { T } from "@/components/ui/T";
 import { VerifiedMedia } from "@/components/ui/verified-media";
 
 interface ProjectCardProps {
@@ -30,8 +27,8 @@ const CURRENCY_RATES: Record<string, number> = {
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
   AED: 'AED',
-  USD: '$',
-  EUR: '€',
+  USD: 'EUR',
+  EUR: 'EUR',
   GBP: '£',
   INR: '₹',
 };
@@ -41,32 +38,27 @@ const formatPriceWithCurrency = (price: number, currency: string = 'AED'): strin
   const converted = price * CURRENCY_RATES[currency];
   const symbol = CURRENCY_SYMBOLS[currency];
   if (converted >= 1000000) {
-    return `${symbol} ${(converted / 1000000).toFixed(1)}M`;
+    return `${symbol} ${(converted / 1000000).toFixed(2)}M`;
   }
   if (converted >= 1000) {
-    return `${symbol} ${(converted / 1000).toFixed(0)}K`;
+    return `${symbol} ${Math.round(converted / 1000)}K`;
   }
   return `${symbol} ${converted.toLocaleString()}`;
 };
 
-// Helper to convert size
-const convertSize = (sqft: number, unit: 'sqft' | 'sqm'): number => {
-  return unit === 'sqm' ? Math.round(sqft * 0.0929) : sqft;
-};
-
-// Projects that should show status labels
-const PROJECTS_WITH_STATUS = [
+// Projects that should show "New" status label (only these specific ones)
+const PROJECTS_WITH_NEW_STATUS = [
   'sobha sanctuary',
   'mercedes-benz by binghatti',
   'mercedes-benz places by binghatti'
 ];
 
-const shouldShowStatus = (projectName: string): boolean => {
+const shouldShowNewStatus = (projectName: string): boolean => {
   const normalized = projectName.toLowerCase().trim();
-  return PROJECTS_WITH_STATUS.some(p => normalized.includes(p) || p.includes(normalized));
+  return PROJECTS_WITH_NEW_STATUS.some(p => normalized.includes(p) || p.includes(normalized));
 };
 
-const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, currency = 'AED', sizeUnit = 'sqft' }: ProjectCardProps) => {
+const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, currency = 'EUR', sizeUnit = 'sqft' }: ProjectCardProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const images = project.images || [];
 
@@ -82,58 +74,61 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
     setCurrentImageIndex(prev => prev === images.length - 1 ? 0 : prev + 1);
   };
 
-  const handleDownloadBrochure = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const brochure = project.documents?.find(doc => doc.document_type === 'brochure');
-    if (brochure) {
-      window.open(brochure.file_url, '_blank');
-    } else {
-      window.location.href = `/project/${project.slug}`;
-    }
-  };
-
-  const handleDownloadAll = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (project.documents && project.documents.length > 0) {
-      project.documents.forEach(doc => {
-        window.open(doc.file_url, '_blank');
-      });
-    } else {
-      window.location.href = `/project/${project.slug}`;
-    }
-  };
-
   const whatsappMessage = `Hello JBJ Global Real Estate,\n\nI am interested in ${project.name} located in ${project.location || 'UAE'}.\n\nPlease provide more details about this property.\n\nThank you.`;
-
   const whatsappHref = getWhatsAppUrl(whatsappMessage);
   const callHref = getCallUrl();
 
-  const navigateExternal = (href: string) => {
-    // Avoid popup blockers / iframe restrictions by navigating directly.
-    window.location.href = href;
+  // Get formatted bedrooms text
+  const getBedroomsText = () => {
+    if (!project.bedrooms_min) return null;
+    if (project.bedrooms_min === project.bedrooms_max) {
+      return project.bedrooms_min.toString();
+    }
+    return `${project.bedrooms_min}, ${project.bedrooms_min + 1}${project.bedrooms_max && project.bedrooms_max > project.bedrooms_min + 1 ? `, ${project.bedrooms_max}` : ''}`;
   };
 
+  // Truncate description for card preview
+  const getTruncatedDescription = () => {
+    if (!project.description) return null;
+    const maxLength = 120;
+    if (project.description.length <= maxLength) return project.description;
+    return project.description.substring(0, maxLength).trim();
+  };
+
+  // Determine if we should show status label (from source data)
+  const getStatusLabel = () => {
+    // Only show "New" for specific projects
+    if (shouldShowNewStatus(project.name)) {
+      return "New";
+    }
+    // Show other status labels from source (Future Launch, New Phase, etc.)
+    if (project.status_label && project.status_label !== "New") {
+      return project.status_label;
+    }
+    return null;
+  };
+
+  const statusLabel = getStatusLabel();
+
   return (
-    <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:shadow-[0_12px_40px_rgba(200,167,102,0.35),0_8px_25px_rgba(0,0,0,0.15)] hover:-translate-y-2 transition-all duration-300 flex flex-col">
+    <div className="group relative overflow-hidden rounded-lg bg-white border border-zinc-200 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col">
       {/* Favorite Button */}
       {showFavorite && (
-        <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="absolute top-3 right-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
           <FavoriteButton projectId={project.id} size="sm" />
         </div>
       )}
 
-      {/* Badge Button - Always visible when enabled */}
+      {/* Badge Button */}
       {showBadgeButton && (
-        <div className="absolute top-3 left-3 z-10">
+        <div className="absolute top-3 left-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
           <ShortlistBadgeButton projectId={project.id} size="sm" showBadgeIndicator={true} />
         </div>
       )}
 
-      <Link to={`/project/${project.slug}`} className="flex-1">
-        {/* Image with Carousel */}
-        <div className="aspect-[4/3] overflow-hidden relative group/image">
+      <Link to={`/project/${project.slug}`} className="flex-1 flex flex-col">
+        {/* Image with Carousel - Provident Style */}
+        <div className="aspect-[4/3] overflow-hidden relative">
           <VerifiedMedia
             src={images[currentImageIndex]?.image_url || images[0]?.image_url}
             alt={images[currentImageIndex]?.alt_text || project.name}
@@ -141,242 +136,152 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             placeholderLabel="Media pending verification"
           />
           
-          {/* Image Navigation Arrows */}
+          {/* Navigation Arrows - Always Visible (Provident style) */}
           {images.length > 1 && (
             <>
               <button
                 onClick={handlePrevImage}
-                className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white opacity-0 group-hover/image:opacity-100 hover:bg-black/70 transition-all z-20"
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-zinc-700 flex items-center justify-center shadow-lg transition-all z-10"
               >
-                <ChevronLeft className="w-4 h-4" />
+                <ChevronLeft className="w-5 h-5" />
               </button>
               <button
                 onClick={handleNextImage}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white opacity-0 group-hover/image:opacity-100 hover:bg-black/70 transition-all z-20"
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-zinc-700 flex items-center justify-center shadow-lg transition-all z-10"
               >
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-5 h-5" />
               </button>
               
-              {/* Image Dots Indicator */}
-              <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-1 z-20">
+              {/* Image Dots Indicator - Bottom center */}
+              <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
                 {images.slice(0, 5).map((_, idx) => (
                   <span
                     key={idx}
-                    className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                    className={`w-2 h-2 rounded-full transition-colors ${
                       idx === currentImageIndex ? 'bg-white' : 'bg-white/50'
                     }`}
                   />
                 ))}
-                {images.length > 5 && (
-                  <span className="text-white text-[10px] ml-1">+{images.length - 5}</span>
-                )}
               </div>
             </>
           )}
           
-          {/* Provident-style Label Layout */}
-          {/* Top-Left: Property Type Label (e.g., "Apartment, Sky-Villa", "Villa") */}
+          {/* Top-Left: Property Type Label (dark background) */}
           {project.property_type_label && (
-            <div className="absolute top-3 left-3 z-10 bg-black/80 backdrop-blur-sm text-white px-3 py-1 rounded text-xs font-medium shadow-lg">
+            <div className="absolute top-3 left-3 z-10 bg-zinc-800/90 text-white px-3 py-1.5 rounded text-sm font-medium">
               {project.property_type_label}
             </div>
           )}
           
-          {/* Top-Right: Status Label - Only for specific projects */}
-          {project.status_label && shouldShowStatus(project.name) && (
-            <div className="absolute top-3 right-3 z-10 bg-white text-zinc-800 px-3 py-1 rounded text-xs font-medium shadow-lg border border-zinc-200">
-              {project.status_label}
+          {/* Top-Right: Status Label (white background, only show specific ones) */}
+          {statusLabel && (
+            <div className="absolute top-3 right-3 z-10 bg-white text-zinc-800 px-3 py-1.5 rounded text-sm font-medium border border-zinc-200 shadow-sm">
+              {statusLabel}
             </div>
           )}
           
           {/* Bottom-Right: Handover Year - ORANGE */}
           {project.handover_date && (
-            <div className="absolute bottom-3 right-3 z-10 bg-orange-500 text-white px-3 py-1.5 rounded text-xs font-bold shadow-lg">
+            <div className="absolute bottom-3 right-3 z-10 bg-orange-500 text-white px-3 py-1.5 rounded text-sm font-bold">
               {project.handover_date}
             </div>
           )}
           
-          {/* Sold Out Badge - overlays everything */}
+          {/* Sold Out Badge */}
           {project.is_sold_out && (
             <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-20">
-              <span className="bg-destructive text-destructive-foreground px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wider">
-                <T>Sold Out</T>
+              <span className="bg-red-600 text-white px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wider">
+                Sold Out
               </span>
             </div>
           )}
         </div>
         
-        {/* Content */}
-        <div className="p-5">
-          {/* Project Name */}
-          <h4 className="text-zinc-600 text-lg font-semibold mb-2 line-clamp-1 group-hover:text-gold transition-colors">
+        {/* Content - Provident Style */}
+        <div className="p-4 flex-1 flex flex-col">
+          {/* Project Name - Gray color */}
+          <h4 className="text-zinc-700 text-lg font-semibold mb-1 line-clamp-2 hover:text-primary transition-colors">
             {project.name}
           </h4>
-          
-          {/* Location */}
-          {project.location && (
-            <p className="text-zinc-500 text-sm mb-3 flex items-center gap-1.5">
-              <svg className="w-4 h-4 flex-shrink-0 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <span className="truncate">{project.location}</span>
-            </p>
-          )}
           
           {/* Developer - Clickable Link */}
           {project.developer && (
             <p className="text-zinc-500 text-sm mb-2">
-              <T>by</T>{' '}
+              by{' '}
               <Link 
                 to={`/developer/${project.developer.slug}`}
                 onClick={(e) => e.stopPropagation()}
-                className="text-gold hover:text-gold/80 hover:underline font-medium transition-colors"
+                className="text-primary hover:text-primary/80 hover:underline font-medium transition-colors"
               >
                 {project.developer.name}
               </Link>
             </p>
           )}
           
-          {/* Bedrooms */}
-          {project.bedrooms_min && (
-            <p className="text-zinc-500 text-sm mb-3">
-              {project.bedrooms_min === project.bedrooms_max
-                ? <><T>{`${project.bedrooms_min} Bedrooms`}</T></>
-                : <><T>{`${project.bedrooms_min}-${project.bedrooms_max} Bedrooms`}</T></>}
-            </p>
-          )}
-          
-          {/* Size */}
-          {project.size_min && (
-            <p className="text-zinc-500 text-sm mb-2">
-              {convertSize(project.size_min, sizeUnit).toLocaleString()} {sizeUnit}
-              {project.size_max && project.size_max !== project.size_min && 
-                ` - ${convertSize(project.size_max, sizeUnit).toLocaleString()} ${sizeUnit}`}
-            </p>
-          )}
-          
-          {/* Price */}
+          {/* Starting Price - Orange/Gold */}
           {project.price_from && (
-            <p className="text-gold font-semibold text-lg">
-              <T>From</T> {formatPriceWithCurrency(project.price_from, currency)}
+            <p className="text-sm mb-3">
+              <span className="text-zinc-600">Starting Price </span>
+              <span className="text-orange-500 font-semibold">
+                {formatPriceWithCurrency(project.price_from, currency)}
+              </span>
+            </p>
+          )}
+          
+          {/* Location with icon + Bedrooms with icon */}
+          <div className="flex items-center gap-4 text-zinc-500 text-sm mb-3">
+            {project.location && (
+              <div className="flex items-center gap-1.5">
+                <MapPin className="w-4 h-4 text-zinc-400" />
+                <span className="truncate max-w-[120px]">{project.location}</span>
+              </div>
+            )}
+            {getBedroomsText() && (
+              <div className="flex items-center gap-1.5">
+                <Bed className="w-4 h-4 text-zinc-400" />
+                <span>{getBedroomsText()}</span>
+              </div>
+            )}
+          </div>
+          
+          {/* Description with ...more link */}
+          {getTruncatedDescription() && (
+            <p className="text-zinc-600 text-sm leading-relaxed mb-4 flex-1">
+              {getTruncatedDescription()}
+              {project.description && project.description.length > 120 && (
+                <span className="text-primary hover:underline cursor-pointer ml-1">...more</span>
+              )}
             </p>
           )}
         </div>
       </Link>
 
-      {/* AI Market Analyzer - Compact version */}
-      <div className="px-4 pb-2">
-        <AIMarketAnalyzer
-          type="property"
-          name={project.name}
-          location={project.location || project.community?.name}
-          pricePerSqft={project.price_from && project.size_min ? Math.round(project.price_from / project.size_min) : undefined}
-          totalPrice={project.price_from}
-          size={project.size_min}
-          bedrooms={project.bedrooms_min}
-          developer={project.developer?.name}
-          variant="compact"
-        />
-      </div>
-
-      {/* Action Buttons - Fixed at bottom with 3D Premium Style */}
-      <div className="p-4 pt-0 mt-auto space-y-3">
-        {/* Download Buttons - 3D Premium Style */}
-        <div className="grid grid-cols-2 gap-2">
-          <button
-            onClick={handleDownloadBrochure}
-            className="relative h-9 px-3 rounded-lg text-xs font-semibold transition-all duration-300 group overflow-hidden"
-            style={{
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
-              boxShadow: `
-                0 4px 12px rgba(200,167,102,0.3),
-                0 2px 6px rgba(0,0,0,0.1),
-                inset 0 1px 2px rgba(255,255,255,0.9),
-                0 0 10px rgba(200,167,102,0.2)
-              `,
-            }}
-          >
-            <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-lg bg-gradient-to-b from-white/70 to-transparent pointer-events-none" />
-            <span className="relative flex items-center justify-center gap-1.5 text-gold">
-              <FileText className="w-3.5 h-3.5" />
-              <T>Brochure</T>
-            </span>
-          </button>
-          <button
-            onClick={handleDownloadAll}
-            className="relative h-9 px-3 rounded-lg text-xs font-semibold transition-all duration-300 group overflow-hidden"
-            style={{
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
-              boxShadow: `
-                0 4px 12px rgba(200,167,102,0.3),
-                0 2px 6px rgba(0,0,0,0.1),
-                inset 0 1px 2px rgba(255,255,255,0.9),
-                0 0 10px rgba(200,167,102,0.2)
-              `,
-            }}
-          >
-            <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-lg bg-gradient-to-b from-white/70 to-transparent pointer-events-none" />
-            <span className="relative flex items-center justify-center gap-1.5 text-gold">
-              <Download className="w-3.5 h-3.5" />
-              <T>Materials</T>
-            </span>
-          </button>
-        </div>
-
-        {/* Contact Buttons - 3D Premium Style */}
-        <div className="grid grid-cols-2 gap-2">
+      {/* CTA Buttons - Email, Call, WhatsApp (Provident style) */}
+      <div className="px-4 pb-4 pt-0">
+        <div className="grid grid-cols-3 gap-2 border-t border-zinc-100 pt-4">
           <a
-            href={whatsappHref}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              navigateExternal(whatsappHref);
-            }}
-            className="relative h-9 px-3 rounded-lg text-xs font-semibold transition-all duration-300 group overflow-hidden flex items-center justify-center"
-            style={{
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
-              boxShadow: `
-                0 4px 14px rgba(200,167,102,0.35),
-                0 3px 8px rgba(0,0,0,0.12),
-                inset 0 1px 3px rgba(255,255,255,0.9),
-                inset 0 -1px 3px rgba(200,167,102,0.15),
-                0 0 12px rgba(200,167,102,0.25)
-              `,
-            }}
+            href={`mailto:info@jbjglobalrealestate.com?subject=Inquiry: ${project.name}`}
+            onClick={(e) => e.stopPropagation()}
+            className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg border border-zinc-200 text-zinc-600 hover:border-primary hover:text-primary transition-colors text-sm font-medium"
           >
-            <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-lg bg-gradient-to-b from-white/75 to-transparent pointer-events-none" />
-            <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 25px rgba(200,167,102,0.5)' }} />
-            <span className="relative flex items-center gap-1.5">
-              <MessageCircle className="w-3.5 h-3.5 text-green-600" />
-              <span className="text-black"><T>WhatsApp</T></span>
-            </span>
+            <Mail className="w-4 h-4" />
+            <span>Email</span>
           </a>
           <a
             href={callHref}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              navigateExternal(callHref);
-            }}
-            className="relative h-9 px-3 rounded-lg text-xs font-semibold transition-all duration-300 group overflow-hidden flex items-center justify-center"
-            style={{
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
-              boxShadow: `
-                0 4px 14px rgba(200,167,102,0.35),
-                0 3px 8px rgba(0,0,0,0.12),
-                inset 0 1px 3px rgba(255,255,255,0.9),
-                inset 0 -1px 3px rgba(200,167,102,0.15),
-                0 0 12px rgba(200,167,102,0.25)
-              `,
-            }}
+            onClick={(e) => e.stopPropagation()}
+            className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg border border-zinc-200 text-zinc-600 hover:border-primary hover:text-primary transition-colors text-sm font-medium"
           >
-            <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-lg bg-gradient-to-b from-white/75 to-transparent pointer-events-none" />
-            <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 25px rgba(200,167,102,0.5)' }} />
-            <span className="relative flex items-center gap-1.5">
-              <Phone className="w-3.5 h-3.5 text-blue-600" />
-              <span className="text-black"><T>Call</T></span>
-            </span>
+            <Phone className="w-4 h-4" />
+            <span>Call</span>
+          </a>
+          <a
+            href={whatsappHref}
+            onClick={(e) => e.stopPropagation()}
+            className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg border border-zinc-200 text-zinc-600 hover:border-green-600 hover:text-green-600 transition-colors text-sm font-medium"
+          >
+            <MessageCircle className="w-4 h-4" />
+            <span>WhatsApp</span>
           </a>
         </div>
       </div>
