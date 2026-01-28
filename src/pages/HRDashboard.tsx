@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Users, FileText, Activity, Linkedin, Building2, DollarSign, Briefcase, Wallet, TrendingUp, UserCheck, Brain, Calendar, AlertTriangle, CheckSquare } from "lucide-react";
+import { Users, FileText, Activity, Linkedin, Building2, DollarSign, Briefcase, Wallet, TrendingUp, UserCheck, Brain, Calendar, AlertTriangle, CheckSquare, Target } from "lucide-react";
 import JobOfferManager from "@/components/hr/JobOfferManager";
 import { EmployeePerformanceDashboard } from "@/components/hr/EmployeePerformanceDashboard";
 import { LinkedInInsightsPanel } from "@/components/hr/LinkedInInsightsPanel";
@@ -10,6 +10,7 @@ import { EmployeeSalaryCommissionPanel } from "@/components/employee-hub/Employe
 import { LeaveManagementPanel } from "@/components/hr/LeaveManagementPanel";
 import { WarningsPanel } from "@/components/hr/WarningsPanel";
 import { ApprovalWorkflowPanel } from "@/components/hr/ApprovalWorkflowPanel";
+import { HuntingDashboard } from "@/components/hr/hunting/HuntingDashboard";
 import { 
   PremiumBackendLayout, 
   PremiumPageHeader, 
@@ -97,6 +98,13 @@ export default function HRDashboard() {
                 Performance
               </TabsTrigger>
               <TabsTrigger 
+                value="hunting" 
+                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold/80 data-[state=active]:text-black data-[state=active]:shadow-sm"
+              >
+                <Target className="h-4 w-4" />
+                Hunting
+              </TabsTrigger>
+              <TabsTrigger 
                 value="leave" 
                 className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold/80 data-[state=active]:text-black data-[state=active]:shadow-sm"
               >
@@ -156,6 +164,10 @@ export default function HRDashboard() {
 
             <TabsContent value="performance" className="mt-6">
               <EmployeePerformanceDashboard />
+            </TabsContent>
+
+            <TabsContent value="hunting" className="mt-6">
+              <HuntingDashboard />
             </TabsContent>
 
             <TabsContent value="leave" className="mt-6">
