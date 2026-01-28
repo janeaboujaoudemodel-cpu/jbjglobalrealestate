@@ -75,7 +75,7 @@ export function ListingApprovalCard({
     <Card className="bg-white border-zinc-200 shadow-md overflow-hidden">
       {/* Image Gallery */}
       {images.length > 0 && (
-        <div className="relative h-48 bg-zinc-100">
+        <div className="relative h-48 bg-zinc-100 group">
           <img
             src={images[currentImageIndex]}
             alt={`${project.name} - Image ${currentImageIndex + 1}`}
@@ -90,43 +90,67 @@ export function ListingApprovalCard({
             <>
               <button
                 onClick={prevImage}
-                className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+                className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 hover:bg-black/70 transition-all"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 onClick={nextImage}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 hover:bg-black/70 transition-all"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
               
-              {/* Image counter */}
-              <div className="absolute bottom-2 right-2 px-2 py-1 rounded-full bg-black/60 text-white text-xs flex items-center gap-1">
-                <ImageIcon className="w-3 h-3" />
-                {currentImageIndex + 1} / {images.length}
+              {/* Image dots indicator */}
+              <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-1">
+                {images.slice(0, 5).map((_, idx) => (
+                  <span
+                    key={idx}
+                    className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                      idx === currentImageIndex ? 'bg-white' : 'bg-white/50'
+                    }`}
+                  />
+                ))}
+                {images.length > 5 && (
+                  <span className="text-white text-[10px] ml-1">+{images.length - 5}</span>
+                )}
               </div>
             </>
           )}
           
-          {/* Status badges */}
-          <div className="absolute top-2 left-2 flex gap-2">
-            {project.status_label && (
-              <Badge className="bg-gold text-black font-medium">
-                {project.status_label}
-              </Badge>
-            )}
-            {project.property_type_label && (
-              <Badge variant="secondary" className="bg-white/90 text-zinc-800">
-                {project.property_type_label}
-              </Badge>
-            )}
-          </div>
+          {/* Property Type - Top Left */}
+          {project.property_type_label && (
+            <div className="absolute top-2 left-2 bg-black/80 backdrop-blur-sm text-white px-2.5 py-1 rounded text-xs font-medium">
+              {project.property_type_label}
+            </div>
+          )}
+          
+          {/* Status - Top Right */}
+          {project.status_label && (
+            <div className="absolute top-2 right-2 bg-white text-zinc-800 px-2.5 py-1 rounded text-xs font-medium border border-zinc-200">
+              {project.status_label}
+            </div>
+          )}
+          
+          {/* Handover - Bottom Right (ORANGE) */}
+          {project.handover_display && (
+            <div className="absolute bottom-2 right-2 bg-orange-500 text-white px-2.5 py-1 rounded text-xs font-bold">
+              {project.handover_display}
+            </div>
+          )}
+          
+          {/* Image count badge */}
+          {images.length > 1 && (
+            <div className="absolute bottom-2 left-2 px-2 py-1 rounded bg-black/60 text-white text-xs flex items-center gap-1">
+              <ImageIcon className="w-3 h-3" />
+              {images.length}
+            </div>
+          )}
         </div>
       )}
 
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg text-zinc-900 flex items-start justify-between gap-2">
+        <CardTitle className="text-lg text-zinc-600 flex items-start justify-between gap-2">
           <span className="line-clamp-2">{project.name || "Untitled Project"}</span>
           {sourceUrl && (
             <a
