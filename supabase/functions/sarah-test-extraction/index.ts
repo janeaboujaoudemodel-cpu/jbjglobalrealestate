@@ -14,10 +14,11 @@
  */
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 interface ExtractionResult {
@@ -49,6 +50,214 @@ interface ExtractionResult {
   duration_ms?: number;
   message?: string;
   error?: string;
+
+  // When queue=true, we also write the extracted listing into the approval queue.
+  queued?: boolean;
+  queued_import_id?: string | null;
+  queued_message?: string | null;
+}
+
+type DeveloperRow = { id: string; name: string | null; slug: string | null };
+
+function normalizeProvidentImageUrl(url: string): string {
+  const noQuery = url.split("?")[0];
+  // Provident uses /x/{WxH}/... variations; unify before dedupe.
+  return noQuery.replace(/\/x\/\d+x\d+\//, "/x/1200x800/");
+}
+
+function toSlugPart(val: string): string {
+  return val
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+function buildSlug(projectName: string, developerSlug?: string | null): string {
+  const base = toSlugPart(projectName).slice(0, 60);
+  const dev = developerSlug ? toSlugPart(developerSlug).slice(0, 18) : "";
+  const out = dev ? `${base}-${dev}` : base;
+  return out.slice(0, 80) || base || "unknown";
+}
+
+function buildDevMap(developers: DeveloperRow[]): Map<string, { id: string; name: string; slug: string }> {
+  const map = new Map<string, { id: string; name: string; slug: string }>();
+  for (const d of developers) {
+    if (!d.name || !d.slug) continue;
+    const norm = d.name.toLowerCase().replace(/[^a-z0-9]/g, "");
+    map.set(norm, { id: d.id, name: d.name, slug: d.slug });
+    for (const w of d.name.toLowerCase().split(/\s+/)) {
+      if (w.length > 3) map.set(w, { id: d.id, name: d.name, slug: d.slug });
+    }
+  }
+  return map;
+}
+
+function matchDeveloperName(
+  developerName: string | null | undefined,
+  devMap: Map<string, { id: string; name: string; slug: string }>
+): { id: string; name: string; slug: string } | null {
+  if (!developerName) return null;
+  const norm = developerName.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const direct = devMap.get(norm);
+  if (direct) return direct;
+  for (const w of developerName.toLowerCase().split(/\s+/)) {
+    if (w.length > 3 && devMap.has(w)) return devMap.get(w) || null;
+  }
+  return null;
+}
+
+function buildImagesPayload(urls: string[], projectName: string, max = 12) {
+  const seen = new Set<string>();
+  const out: Array<{ url: string; alt_text: string; display_order: number }> = [];
+  for (const raw of urls) {
+    if (!raw) continue;
+    const lower = raw.toLowerCase();
+    if (!lower.includes("cloudfront.net")) continue;
+    if (lower.includes("logo") || lower.includes("icon") || lower.includes("favicon")) continue;
+    const normalized = normalizeProvidentImageUrl(raw);
+    if (seen.has(normalized)) continue;
+    seen.add(normalized);
+    out.push({
+      url: normalized,
+      alt_text: `${projectName} - Image ${out.length + 1}`,
+      display_order: out.length,
+    });
+    if (out.length >= max) break;
+  }
+  return out;
+}
+
+function buildDocumentsPayload(docs: ExtractionResult["documents"]) {
+  const out: Array<{ url: string; type: string; name?: string }> = [];
+
+  if (docs?.brochure) {
+    out.push({ url: docs.brochure, type: "brochure", name: "Brochure" });
+  }
+  if (docs?.paymentPlan) {
+    out.push({ url: docs.paymentPlan, type: "payment_plan", name: "Payment Plan" });
+  }
+  (docs?.floorPlans || []).forEach((url, idx) => {
+    if (!url) return;
+    out.push({ url, type: "floor_plan", name: `Floor Plan ${idx + 1}` });
+  });
+
+  // Deduplicate by URL (strip query)
+  const seen = new Set<string>();
+  return out.filter((d) => {
+    const key = d.url.split("?")[0];
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+async function queueToApprovalQueue(params: {
+  supabaseUrl: string;
+  serviceKey: string;
+  projectUrl: string;
+  force: boolean;
+  result: ExtractionResult;
+}): Promise<{ queued: boolean; queued_import_id: string | null; queued_message: string | null }> {
+  const { supabaseUrl, serviceKey, projectUrl, force, result } = params;
+  const supabase = createClient(supabaseUrl, serviceKey);
+
+  const project = result.project;
+  if (!project?.name || project.name === "Unknown") {
+    return {
+      queued: false,
+      queued_import_id: null,
+      queued_message: "Cannot queue: missing project name",
+    };
+  }
+
+  const { data: devRows } = await supabase.from("uae_developers").select("id, name, slug");
+  const devMap = buildDevMap((devRows || []) as DeveloperRow[]);
+  const dev = matchDeveloperName(project.developer, devMap);
+
+  const slug = buildSlug(project.name, dev?.slug);
+  const imagesPayload = buildImagesPayload(result.images || [], project.name, 12);
+  const documentsPayload = buildDocumentsPayload(result.documents);
+
+  const insertPayload: Record<string, any> = {
+    name: project.name,
+    slug,
+    developer_name: project.developer || null,
+    location: project.location || null,
+    emirate: "Dubai",
+    description: project.description?.substring(0, 1500) || null,
+    price_from: project.price_from ?? null,
+    bedrooms_min: project.bedrooms_min ?? null,
+    bedrooms_max: project.bedrooms_max ?? null,
+    handover_date: project.handover_date ?? null,
+    property_type_label: project.property_type ?? null,
+    status_label: project.status_label ?? null,
+    images: imagesPayload,
+    documents: documentsPayload,
+    is_new_project: true,
+    status: "pending",
+    source_url: projectUrl,
+  };
+
+  if (dev?.id) insertPayload.developer_id = dev.id;
+
+  const { data: existing } = await supabase
+    .from("pending_project_imports")
+    .select("id, status")
+    .eq("slug", slug)
+    .order("updated_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (existing?.id) {
+    if (!force && existing.status !== "pending") {
+      return {
+        queued: false,
+        queued_import_id: existing.id,
+        queued_message: `Already queued (status=${existing.status}). Use force to re-queue.`,
+      };
+    }
+
+    const { error } = await supabase
+      .from("pending_project_imports")
+      .update({
+        ...insertPayload,
+        status: "pending",
+        reviewed_at: null,
+        reviewed_by: null,
+        review_notes: null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", existing.id);
+
+    if (error) {
+      return { queued: false, queued_import_id: null, queued_message: error.message };
+    }
+
+    return {
+      queued: true,
+      queued_import_id: existing.id,
+      queued_message: "Updated existing queued item",
+    };
+  }
+
+  const { data: inserted, error: insertErr } = await supabase
+    .from("pending_project_imports")
+    .insert(insertPayload)
+    .select("id")
+    .single();
+
+  if (insertErr) {
+    return { queued: false, queued_import_id: null, queued_message: insertErr.message };
+  }
+
+  return {
+    queued: true,
+    queued_import_id: inserted?.id || null,
+    queued_message: "Queued for approval",
+  };
 }
 
 // Extract project slug from various URL formats
@@ -227,30 +436,30 @@ function extractImagesFromHtml(html: string): string[] {
   // Pattern 1: CloudFront URLs (Provident's CDN)
   const cloudfrontPattern = /https?:\/\/[a-z0-9\-]+\.cloudfront\.net\/[^\s"'<>\)]+\.(?:jpg|jpeg|png|webp)/gi;
   (html.match(cloudfrontPattern) || []).forEach(url => {
-    const clean = url.split('?')[0];
-    if (!seen.has(clean)) {
-      seen.add(clean);
-      images.push(url);
+    const normalized = normalizeProvidentImageUrl(url);
+    if (!seen.has(normalized)) {
+      seen.add(normalized);
+      images.push(normalized);
     }
   });
   
   // Pattern 2: WordPress uploads
   const wpPattern = /https?:\/\/[^\s"'<>\)]+wp-content\/uploads[^\s"'<>\)]+\.(?:jpg|jpeg|png|webp)/gi;
   (html.match(wpPattern) || []).forEach(url => {
-    const clean = url.split('?')[0];
-    if (!seen.has(clean)) {
-      seen.add(clean);
-      images.push(url);
+    const normalized = normalizeProvidentImageUrl(url);
+    if (!seen.has(normalized)) {
+      seen.add(normalized);
+      images.push(normalized);
     }
   });
   
   // Pattern 3: Any image URL with provident in the path
   const providentPattern = /https?:\/\/[^\s"'<>\)]*provident[^\s"'<>\)]*\.(?:jpg|jpeg|png|webp)/gi;
   (html.match(providentPattern) || []).forEach(url => {
-    const clean = url.split('?')[0];
-    if (!seen.has(clean)) {
-      seen.add(clean);
-      images.push(url);
+    const normalized = normalizeProvidentImageUrl(url);
+    if (!seen.has(normalized)) {
+      seen.add(normalized);
+      images.push(normalized);
     }
   });
   
@@ -260,10 +469,10 @@ function extractImagesFromHtml(html: string): string[] {
   while ((match = imgSrcPattern.exec(html)) !== null) {
     const url = match[1];
     if (url && !url.startsWith('data:') && /\.(jpg|jpeg|png|webp)/i.test(url)) {
-      const clean = url.split('?')[0];
-      if (!seen.has(clean)) {
-        seen.add(clean);
-        images.push(url);
+      const normalized = normalizeProvidentImageUrl(url);
+      if (!seen.has(normalized)) {
+        seen.add(normalized);
+        images.push(normalized);
       }
     }
   }
@@ -273,10 +482,10 @@ function extractImagesFromHtml(html: string): string[] {
   while ((match = bgPattern.exec(html)) !== null) {
     const url = match[1];
     if (url && !url.startsWith('data:') && /\.(jpg|jpeg|png|webp)/i.test(url)) {
-      const clean = url.split('?')[0];
-      if (!seen.has(clean)) {
-        seen.add(clean);
-        images.push(url);
+      const normalized = normalizeProvidentImageUrl(url);
+      if (!seen.has(normalized)) {
+        seen.add(normalized);
+        images.push(normalized);
       }
     }
   }
@@ -291,9 +500,6 @@ function extractImagesFromHtml(html: string): string[] {
            !lower.includes('spinner') &&
            !lower.includes('loading') &&
            !lower.includes('favicon');
-  }).map(url => {
-    // Upgrade to high-resolution
-    return url.replace(/\/x\/\d+x\d+\//, "/x/1200x800/");
   });
 }
 
@@ -414,8 +620,44 @@ serve(async (req) => {
   }
 
   try {
-    const { testUrl } = await req.json().catch(() => ({}));
+    const { testUrl, queue = false, force = true } = await req.json().catch(() => ({}));
     const projectUrl = testUrl || "https://providentestate.com/new-projects/damac-sun-city/";
+
+    const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
+    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
+
+    const respond = async (result: ExtractionResult) => {
+      if (queue) {
+        if (!supabaseUrl || !serviceKey) {
+          return new Response(
+            JSON.stringify({
+              ...result,
+              queued: false,
+              queued_import_id: null,
+              queued_message: "Backend not configured for queue writes",
+            }),
+            { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+
+        const queued = await queueToApprovalQueue({
+          supabaseUrl,
+          serviceKey,
+          projectUrl,
+          force: !!force,
+          result,
+        });
+
+        return new Response(
+          JSON.stringify({ ...result, ...queued }),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      return new Response(JSON.stringify(result), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    };
     
     console.log("[Sarah] Starting COMPLETE extraction test:", projectUrl);
 
@@ -482,9 +724,7 @@ serve(async (req) => {
 
         console.log("[Sarah] Gatsby extraction complete:", projectInfo.name, "| Images:", result.images.length);
 
-        return new Response(JSON.stringify(result), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+        return await respond(result);
       }
     }
 
@@ -699,9 +939,7 @@ Return JSON with these fields (use null for missing):
 
     console.log("[Sarah] Complete:", projectData.name, "| Images:", result.images.length, "| Success:", result.success);
 
-    return new Response(JSON.stringify(result), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return await respond(result);
 
   } catch (error) {
     console.error("[Sarah] Fatal error:", error);

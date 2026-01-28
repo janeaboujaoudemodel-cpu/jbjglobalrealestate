@@ -556,7 +556,11 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
         </TabsContent>
         
         <TabsContent value="test" className="mt-6">
-          <SarahTestPanel onGoToFullSync={goToFullSync} onRunPageOneTest={runTestPageOne} />
+          <SarahTestPanel
+            onGoToFullSync={goToFullSync}
+            onRunPageOneTest={runTestPageOne}
+            onGoToApprovals={() => setActiveTab("approvals")}
+          />
         </TabsContent>
         
         <TabsContent value="sync" className="mt-6 space-y-6">
