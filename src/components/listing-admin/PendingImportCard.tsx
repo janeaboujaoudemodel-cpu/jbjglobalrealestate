@@ -2,7 +2,7 @@ import { useMemo, useState, type MouseEvent } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ChevronLeft, ChevronRight, ExternalLink, MapPin, Mail, Phone, MessageCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink, MapPin, Mail, Phone, MessageCircle, Bed } from "lucide-react";
 import { CONTACT_INFO, getCallUrl, getWhatsAppUrl } from "@/constants/stats";
 
 type PendingImportCardImage = {
@@ -25,6 +25,8 @@ type PendingImportCardItem = {
   documents: unknown[];
   is_new_project: boolean;
   source_url: string | null;
+  bedrooms_min: number | null;
+  bedrooms_max: number | null;
 };
 
 interface PendingImportCardProps {
@@ -175,6 +177,14 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
             <span className="flex items-center gap-1">
               <MapPin className="h-3 w-3" />
               {item.location}
+            </span>
+          )}
+          {(item.bedrooms_min || item.bedrooms_max) && (
+            <span className="flex items-center gap-1">
+              <Bed className="h-3 w-3" />
+              {item.bedrooms_min === item.bedrooms_max
+                ? `${item.bedrooms_min} BR`
+                : `${item.bedrooms_min || "?"}-${item.bedrooms_max || "?"} BR`}
             </span>
           )}
         </div>
