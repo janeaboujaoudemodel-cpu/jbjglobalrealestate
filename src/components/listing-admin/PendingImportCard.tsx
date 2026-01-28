@@ -1,7 +1,6 @@
 import { useMemo, useState, type MouseEvent } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, ChevronRight, ExternalLink, MapPin, Mail, Phone, MessageCircle, Bed } from "lucide-react";
 import { CONTACT_INFO, getCallUrl, getWhatsAppUrl } from "@/constants/stats";
 
@@ -82,7 +81,8 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
 
   return (
     <Card
-      className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer border-border"
+      className="overflow-hidden cursor-pointer border-2 border-primary/60 bg-gradient-to-br from-background via-background to-primary/5 shadow-[0_4px_20px_rgba(200,167,102,0.15)] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:border-primary hover:scale-[1.02] hover:-translate-y-1"
+      style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
       onClick={handleCardClick}
     >
       {/* Image Preview (Provident-style arrows on-card) */}
@@ -102,22 +102,22 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
           </div>
         )}
 
-        {/* Navigation arrows (always visible; fixed position) */}
+        {/* Navigation arrows - Premium gold filled style */}
         {hasMultipleImages && (
           <>
             <button
               onClick={handlePrev}
-              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-background/80 backdrop-blur-sm border border-primary/30 text-primary flex items-center justify-center shadow-md hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-200 z-10"
+              className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-gradient-to-br from-primary via-primary to-primary/80 border-2 border-primary-foreground/20 text-primary-foreground flex items-center justify-center shadow-[0_4px_15px_rgba(200,167,102,0.4)] hover:shadow-[0_6px_20px_rgba(200,167,102,0.6)] hover:scale-110 transition-all duration-200 z-10"
               aria-label="Previous image"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-5 h-5 drop-shadow-sm" />
             </button>
             <button
               onClick={handleNext}
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-background/80 backdrop-blur-sm border border-primary/30 text-primary flex items-center justify-center shadow-md hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-200 z-10"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-gradient-to-br from-primary via-primary to-primary/80 border-2 border-primary-foreground/20 text-primary-foreground flex items-center justify-center shadow-[0_4px_15px_rgba(200,167,102,0.4)] hover:shadow-[0_6px_20px_rgba(200,167,102,0.6)] hover:scale-110 transition-all duration-200 z-10"
               aria-label="Next image"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-5 h-5 drop-shadow-sm" />
             </button>
 
             {/* Image dots indicator (no photo icon / no count) */}
@@ -141,11 +141,6 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
               {item.property_type_label}
             </div>
           )}
-
-          {/* Admin-only indicator (avoid confusion with Provident 'New' status) */}
-          <div className="flex gap-2">
-            <Badge variant="secondary">{item.is_new_project ? "New Import" : "Update"}</Badge>
-          </div>
         </div>
 
         {item.status_label && (
