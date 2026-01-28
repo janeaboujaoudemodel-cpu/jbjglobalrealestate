@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   RefreshCw, 
-  CheckCircle2, 
+  Check, 
   AlertCircle, 
   Loader2, 
   Clock, 
@@ -22,6 +22,13 @@ import {
   FlaskConical,
   Lock
 } from "lucide-react";
+
+// Filled check circle component for better visibility
+const FilledCheckCircle = ({ className, size = "md" }: { className?: string; size?: "sm" | "md" }) => (
+  <div className={`rounded-full bg-emerald-600 flex items-center justify-center flex-shrink-0 ${size === "sm" ? "w-4 h-4" : "w-5 h-5"} ${className || ""}`}>
+    <Check className={`text-white ${size === "sm" ? "w-2.5 h-2.5" : "w-3 h-3"}`} />
+  </div>
+);
 import { toast } from "sonner";
 import { SarahTestPanel } from "./SarahTestPanel";
 import { ProjectApprovalQueue } from "./ProjectApprovalQueue";
@@ -519,7 +526,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="approvals" className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4" />
+            <FilledCheckCircle size="sm" />
             Projects
           </TabsTrigger>
           <TabsTrigger value="developers" className="flex items-center gap-2">
@@ -712,7 +719,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
           {/* Status summary */}
           <div className="flex gap-4 text-sm">
             <div className="flex items-center gap-1">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <FilledCheckCircle size="sm" />
               <span className="text-emerald-700 font-medium">{successCount} Success</span>
             </div>
             <div className="flex items-center gap-1">
@@ -753,7 +760,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                   {pageStatus.status === 'in_progress' ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : pageStatus.status === 'success' ? (
-                    <CheckCircle2 className="w-4 h-4" />
+                    <FilledCheckCircle size="sm" />
                   ) : pageStatus.status === 'failed' ? (
                     <XCircle className="w-4 h-4" />
                   ) : (
@@ -787,7 +794,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                     `}
                   >
                     {pageStatus.status === 'success' ? (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                      <FilledCheckCircle size="sm" />
                     ) : (
                       <XCircle className="w-4 h-4 text-red-600 flex-shrink-0" />
                     )}
