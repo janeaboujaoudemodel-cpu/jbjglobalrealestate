@@ -38,25 +38,25 @@ serve(async (req) => {
     const { page = 1 } = await req.json().catch(() => ({}));
     console.log(`[Page ${page}] Starting sync (APPROVAL QUEUE MODE)...`);
     
-    // Get developers for matching
-    const { data: developers, error: devError } = await supabase.from("developers").select("id, name, slug");
+    // Get developers for matching from uae_developers table
+    const { data: developers, error: devError } = await supabase.from("uae_developers").select("id, name, slug");
     
-    if (devError || !developers?.length) {
+    if (devError) {
       console.error("Developer fetch error:", devError);
-      return new Response(JSON.stringify({ error: "No developers found", details: devError?.message }), {
-        status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
     }
-
-    console.log(`[Page ${page}] Found ${developers.length} developers`);
+    
+    const devList = developers || [];
+    console.log(`[Page ${page}] Found ${devList.length} developers`);
 
     // Build developer lookup with multiple matching strategies
     const devMap = new Map<string, { id: string; name: string; slug: string }>();
-    for (const d of developers) {
-      devMap.set(d.name.toLowerCase().replace(/[^a-z0-9]/g, ""), d);
-      const words = d.name.toLowerCase().split(/\s+/);
-      for (const w of words) {
-        if (w.length > 3) devMap.set(w, d);
+    for (const d of devList) {
+      if (d.name) {
+        devMap.set(d.name.toLowerCase().replace(/[^a-z0-9]/g, ""), d);
+        const words = d.name.toLowerCase().split(/\s+/);
+        for (const w of words) {
+          if (w.length > 3) devMap.set(w, d);
+        }
       }
     }
 
@@ -206,26 +206,33 @@ serve(async (req) => {
 
               // INSERT TO APPROVAL QUEUE - NOT PROJECTS TABLE
               try {
+                // Build insert payload - exclude developer_id if null to avoid FK constraint
+                const insertPayload: Record<string, any> = {
+                  name: projectName,
+                  slug,
+                  developer_name: developerName || null,
+                  location,
+                  emirate: "Dubai",
+                  price_from: priceAed,
+                  handover_date: handover,
+                  source_url: `https://providentestate.com/new-projects/${p.slug}/`,
+                  images: JSON.stringify(images.slice(0, 20).map((url, i) => ({
+                    url: url.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"),
+                    alt_text: `${projectName} - Image ${i + 1}`,
+                    display_order: i
+                  }))),
+                  is_new_project: true,
+                  status: "pending",
+                };
+                
+                // Only include developer_id if we have a valid match
+                if (dev?.id) {
+                  insertPayload.developer_id = dev.id;
+                }
+
                 const { error: queueErr } = await supabase
                   .from("pending_project_imports")
-                  .insert({
-                    name: projectName,
-                    slug,
-                    developer_id: dev?.id || null,
-                    developer_name: developerName || null,
-                    location,
-                    emirate: "Dubai",
-                    price_from: priceAed,
-                    handover_date: handover,
-                    source_url: `https://providentestate.com/new-projects/${p.slug}/`,
-                    images: JSON.stringify(images.slice(0, 20).map((url, i) => ({
-                      url: url.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"),
-                      alt_text: `${projectName} - Image ${i + 1}`,
-                      display_order: i
-                    }))),
-                    is_new_project: true,
-                    status: "pending",
-                  });
+                  .insert(insertPayload);
 
                 if (queueErr) {
                   console.error(`[Page ${page}] Queue insert failed for ${projectName}:`, queueErr);
@@ -451,30 +458,37 @@ CRITICAL RULES:
           .slice(0, 20);
 
         // INSERT TO APPROVAL QUEUE - NOT PROJECTS TABLE
+        // Build insert payload - exclude developer_id if null to avoid FK constraint
+        const insertPayload: Record<string, any> = {
+          name: p.name,
+          slug,
+          developer_name: p.developer_name || null,
+          location: p.location || null,
+          emirate: "Dubai",
+          price_from: priceAed,
+          bedrooms_min: brMin,
+          bedrooms_max: brMax,
+          handover_date: p.handover_display || null,
+          source_url: p.url || null,
+          property_type_label: p.property_type_label || null,
+          status_label: p.status_label || null,
+          images: JSON.stringify(validImages.map((url: string, i: number) => ({
+            url,
+            alt_text: `${p.name} - Image ${i + 1}`,
+            display_order: i
+          }))),
+          is_new_project: true,
+          status: "pending",
+        };
+        
+        // Only include developer_id if we have a valid match
+        if (dev?.id) {
+          insertPayload.developer_id = dev.id;
+        }
+
         const { error: queueErr } = await supabase
           .from("pending_project_imports")
-          .insert({
-            name: p.name,
-            slug,
-            developer_id: dev?.id || null,
-            developer_name: p.developer_name || null,
-            location: p.location || null,
-            emirate: "Dubai",
-            price_from: priceAed,
-            bedrooms_min: brMin,
-            bedrooms_max: brMax,
-            handover_date: p.handover_display || null,
-            source_url: p.url || null,
-            property_type_label: p.property_type_label || null,
-            status_label: p.status_label || null,
-            images: JSON.stringify(validImages.map((url: string, i: number) => ({
-              url,
-              alt_text: `${p.name} - Image ${i + 1}`,
-              display_order: i
-            }))),
-            is_new_project: true,
-            status: "pending",
-          });
+          .insert(insertPayload);
 
         if (queueErr) {
           console.error(`[Page ${page}] Queue insert failed for ${p.name}:`, queueErr);
