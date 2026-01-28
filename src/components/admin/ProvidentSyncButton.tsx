@@ -35,17 +35,60 @@ export const ProvidentSyncButton = () => {
 
   const syncPage = async (page: number): Promise<SyncStats | null> => {
     try {
-      const { data, error } = await supabase.functions.invoke("sync-provident-page", {
-        body: { page }
-      });
+      // IMPORTANT: The backend processes listings in batches; loop until the page is fully processed.
+      const batchSize = 3;
+      let startIndex = 0;
+      let remaining = 1;
+      let guard = 0;
 
-      if (error) {
-        console.error(`Page ${page} error:`, error);
-        setErrors(prev => [...prev, `Page ${page}: ${error.message}`]);
-        return null;
+      const aggregated: SyncStats = {
+        page,
+        extracted: 0,
+        created: 0,
+        updated: 0,
+        skipped: 0,
+        images: 0,
+      };
+
+      while (remaining > 0 && guard < 999) {
+        guard++;
+
+        const { data, error } = await supabase.functions.invoke("sync-provident-page", {
+          body: { page, startIndex, batchSize }
+        });
+
+        if (error) {
+          console.error(`Page ${page} batch error:`, error);
+          setErrors(prev => [...prev, `Page ${page}: ${error.message}`]);
+          return null;
+        }
+
+        const stats = data?.stats;
+        if (stats) {
+          aggregated.extracted += stats.extracted || 0;
+          aggregated.created += stats.created || 0;
+          aggregated.updated += stats.updated || 0;
+          aggregated.skipped += stats.skipped || 0;
+          aggregated.images += stats.images || 0;
+        }
+
+        const nextStart = Number(data?.next_start_index ?? startIndex + batchSize);
+        remaining = Number(data?.remaining_urls ?? 0);
+
+        if (nextStart <= startIndex && remaining > 0) {
+          console.warn(`Page ${page}: batching stalled at startIndex=${startIndex}`);
+          break;
+        }
+
+        startIndex = nextStart;
+
+        // Small delay between batches to avoid rate limits
+        if (remaining > 0) {
+          await new Promise(r => setTimeout(r, 600));
+        }
       }
 
-      return data?.stats || null;
+      return aggregated;
     } catch (err) {
       console.error(`Page ${page} failed:`, err);
       setErrors(prev => [...prev, `Page ${page}: Network error`]);
@@ -73,6 +116,8 @@ export const ProvidentSyncButton = () => {
     setErrors([]);
     setTotalStats({ created: 0, updated: 0, images: 0 });
 
+     let runningTotals = { created: 0, updated: 0, images: 0 };
+
     toast.info("Starting Provident Estate sync...");
 
     for (let page = 1; page <= totalPages; page++) {
@@ -82,11 +127,12 @@ export const ProvidentSyncButton = () => {
       
       if (pageStats) {
         setStats(pageStats);
-        setTotalStats(prev => ({
-          created: prev.created + pageStats.created,
-          updated: prev.updated + pageStats.updated,
-          images: prev.images + pageStats.images
-        }));
+        runningTotals = {
+          created: runningTotals.created + pageStats.created,
+          updated: runningTotals.updated + pageStats.updated,
+          images: runningTotals.images + pageStats.images,
+        };
+        setTotalStats(runningTotals);
       }
 
       // Small delay between pages to avoid rate limits
@@ -97,7 +143,7 @@ export const ProvidentSyncButton = () => {
 
     setIsSyncing(false);
     await loadProjectCount();
-    toast.success(`Sync complete! Created: ${totalStats.created}, Updated: ${totalStats.updated}`);
+    toast.success(`Sync complete! Created: ${runningTotals.created}, Updated: ${runningTotals.updated}`);
   };
 
   const syncSinglePage = async (page: number) => {
