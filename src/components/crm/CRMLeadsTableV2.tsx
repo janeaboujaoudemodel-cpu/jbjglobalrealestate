@@ -333,9 +333,8 @@ export default function CRMLeadsTableV2({
 
 Best regards,
 
-JANE BOU JAOUDE
-Founder & CEO
 JBJ Global Real Estate
+Your Trusted Partner in UAE Property
 
 📞 +971 XX XXX XXXX
 ✉️ Contact@JBJ.ae
