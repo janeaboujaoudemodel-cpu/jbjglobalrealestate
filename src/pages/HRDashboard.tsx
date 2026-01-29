@@ -89,73 +89,73 @@ export default function HRDashboard() {
       <PremiumSection variant="white" className="py-8">
         <PremiumContainer>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="bg-white border-2 border-gold/20 p-1.5 h-auto flex-wrap rounded-xl shadow-sm">
+            <TabsList className="bg-gradient-to-r from-[#F5EBD7] to-[#E8DCC8] border-2 border-gold/30 p-1.5 h-auto flex-wrap rounded-xl shadow-sm">
               <TabsTrigger 
                 value="performance" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold/80 data-[state=active]:text-black data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg data-[state=active]:bg-gold data-[state=active]:text-black data-[state=active]:shadow-sm"
               >
                 <Activity className="h-4 w-4" />
                 Performance
               </TabsTrigger>
               <TabsTrigger 
                 value="hunting" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold/80 data-[state=active]:text-black data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg data-[state=active]:bg-gold data-[state=active]:text-black data-[state=active]:shadow-sm"
               >
                 <Target className="h-4 w-4" />
                 Hunting
               </TabsTrigger>
               <TabsTrigger 
                 value="leave" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold/80 data-[state=active]:text-black data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg data-[state=active]:bg-gold data-[state=active]:text-black data-[state=active]:shadow-sm"
               >
                 <Calendar className="h-4 w-4" />
                 Leave
               </TabsTrigger>
               <TabsTrigger 
                 value="approvals" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold/80 data-[state=active]:text-black data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg data-[state=active]:bg-gold data-[state=active]:text-black data-[state=active]:shadow-sm"
               >
                 <CheckSquare className="h-4 w-4" />
                 Approvals
               </TabsTrigger>
               <TabsTrigger 
                 value="warnings" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold/80 data-[state=active]:text-black data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg data-[state=active]:bg-gold data-[state=active]:text-black data-[state=active]:shadow-sm"
               >
                 <AlertTriangle className="h-4 w-4" />
                 Warnings
               </TabsTrigger>
               <TabsTrigger 
                 value="job-offers" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold/80 data-[state=active]:text-black data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg data-[state=active]:bg-gold data-[state=active]:text-black data-[state=active]:shadow-sm"
               >
                 <FileText className="h-4 w-4" />
                 Job Offers
               </TabsTrigger>
               <TabsTrigger 
                 value="payroll" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold/80 data-[state=active]:text-black data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg data-[state=active]:bg-gold data-[state=active]:text-black data-[state=active]:shadow-sm"
               >
                 <Wallet className="h-4 w-4" />
                 Payroll
               </TabsTrigger>
               <TabsTrigger 
                 value="salary" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold/80 data-[state=active]:text-black data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg data-[state=active]:bg-gold data-[state=active]:text-black data-[state=active]:shadow-sm"
               >
                 <DollarSign className="h-4 w-4" />
                 Benchmarks
               </TabsTrigger>
               <TabsTrigger 
                 value="linkedin" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold/80 data-[state=active]:text-black data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg data-[state=active]:bg-gold data-[state=active]:text-black data-[state=active]:shadow-sm"
               >
                 <Linkedin className="h-4 w-4" />
                 LinkedIn
               </TabsTrigger>
               <TabsTrigger 
                 value="competitors" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold/80 data-[state=active]:text-black data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg data-[state=active]:bg-gold data-[state=active]:text-black data-[state=active]:shadow-sm"
               >
                 <Building2 className="h-4 w-4" />
                 Competitors

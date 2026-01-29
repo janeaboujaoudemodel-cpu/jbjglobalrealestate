@@ -110,8 +110,8 @@ const JobOfferManager = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white">Job Offer Templates</h2>
-          <p className="text-zinc-400 text-sm mt-1">
+          <h2 className="text-2xl font-bold text-foreground">Job Offer Templates</h2>
+          <p className="text-muted-foreground text-sm mt-1">
             Manage job offer templates by department for quick applicant onboarding
           </p>
         </div>
@@ -120,31 +120,31 @@ const JobOfferManager = () => {
           if (!open) resetForm();
         }}>
           <DialogTrigger asChild>
-            <Button variant="dark">
+            <Button variant="primary">
               <Plus className="w-4 h-4 mr-2" />
               Add Job Offer
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-zinc-900 border-gold/30 max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="text-gold">
+              <DialogTitle className="text-foreground">
                 {editingOffer ? 'Edit Job Offer' : 'Create Job Offer Template'}
               </DialogTitle>
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-zinc-300">Department</Label>
+                  <Label>Department</Label>
                   <Select 
                     value={formData.department || selectedDepartment}
                     onValueChange={(value) => setFormData(prev => ({ ...prev, department: value }))}
                   >
-                    <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                    <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-zinc-800 border-zinc-700">
+                    <SelectContent>
                       {DEPARTMENTS.map(dept => (
-                        <SelectItem key={dept} value={dept} className="text-white hover:bg-gold/20">
+                        <SelectItem key={dept} value={dept}>
                           {dept}
                         </SelectItem>
                       ))}
@@ -152,77 +152,71 @@ const JobOfferManager = () => {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-zinc-300">Position Title</Label>
+                  <Label>Position Title</Label>
                   <Input 
                     value={formData.position_title}
                     onChange={(e) => setFormData(prev => ({ ...prev, position_title: e.target.value }))}
-                    className="bg-zinc-800 border-zinc-700 text-white"
                     placeholder="e.g., Senior Sales Agent"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label className="text-zinc-300">Description</Label>
+                <Label>Description</Label>
                 <Textarea 
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                  className="bg-zinc-800 border-zinc-700 text-white min-h-[100px]"
+                  className="min-h-[100px]"
                   placeholder="Job description and requirements..."
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-zinc-300">Salary Range (Min)</Label>
+                  <Label>Salary Range (Min)</Label>
                   <Input 
                     type="number"
                     value={formData.salary_range_min}
                     onChange={(e) => setFormData(prev => ({ ...prev, salary_range_min: e.target.value }))}
-                    className="bg-zinc-800 border-zinc-700 text-white"
                     placeholder="e.g., 5000"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-zinc-300">Salary Range (Max)</Label>
+                  <Label>Salary Range (Max)</Label>
                   <Input 
                     type="number"
                     value={formData.salary_range_max}
                     onChange={(e) => setFormData(prev => ({ ...prev, salary_range_max: e.target.value }))}
-                    className="bg-zinc-800 border-zinc-700 text-white"
                     placeholder="e.g., 15000"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label className="text-zinc-300">Commission Structure</Label>
+                <Label>Commission Structure</Label>
                 <Input 
                   value={formData.commission_structure}
                   onChange={(e) => setFormData(prev => ({ ...prev, commission_structure: e.target.value }))}
-                  className="bg-zinc-800 border-zinc-700 text-white"
                   placeholder="e.g., 30% of commission earned"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-zinc-300">Benefits (comma-separated)</Label>
+                <Label>Benefits (comma-separated)</Label>
                 <Input 
                   value={formData.benefits}
                   onChange={(e) => setFormData(prev => ({ ...prev, benefits: e.target.value }))}
-                  className="bg-zinc-800 border-zinc-700 text-white"
                   placeholder="e.g., Health Insurance, Visa Sponsorship, Training"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-zinc-300">Upload Job Offer Document (PDF/DOCX)</Label>
+                <Label>Upload Job Offer Document (PDF/DOCX)</Label>
                 <div className="flex items-center gap-3">
                   <Input 
                     type="file"
                     accept=".pdf,.docx,.doc"
                     onChange={(e) => setUploadingFile(e.target.files?.[0] || null)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
                   />
                   {(uploadingFile || editingOffer?.document_name) && (
                     <Badge variant="outline" className="border-gold/30 text-gold">
@@ -235,18 +229,17 @@ const JobOfferManager = () => {
 
               <div className="flex justify-end gap-3 pt-4">
                 <Button 
-                  variant="outline" 
+                  variant="secondary" 
                   onClick={() => {
                     setIsCreateDialogOpen(false);
                     resetForm();
                   }}
-                  className="border-zinc-700 text-zinc-300"
                 >
                   Cancel
                 </Button>
                 <Button 
                   onClick={handleSubmit}
-                  className="bg-gold hover:bg-gold/90 text-black"
+                  variant="primary"
                   disabled={!formData.position_title}
                 >
                   {editingOffer ? 'Update' : 'Create'} Job Offer
@@ -260,16 +253,16 @@ const JobOfferManager = () => {
       {/* Department Tabs */}
       <Tabs value={selectedDepartment} onValueChange={setSelectedDepartment}>
         <ScrollArea className="w-full">
-          <TabsList className="bg-zinc-900/50 border border-zinc-800 p-1 inline-flex w-max">
+          <TabsList className="bg-card border-2 border-gold/20 p-1 inline-flex w-max">
             {DEPARTMENTS.map(dept => (
               <TabsTrigger 
                 key={dept} 
                 value={dept}
-                className="data-[state=active]:bg-gold data-[state=active]:text-black text-zinc-400 text-xs px-3 py-1.5 whitespace-nowrap"
+                className="data-[state=active]:bg-gold data-[state=active]:text-foreground text-muted-foreground text-xs px-3 py-1.5 whitespace-nowrap"
               >
                 {dept}
                 {getOffersByDepartment(dept).length > 0 && (
-                  <span className="ml-1.5 text-[10px] bg-white/20 rounded-full px-1.5">
+                  <span className="ml-1.5 text-[10px] bg-gold/20 rounded-full px-1.5">
                     {getOffersByDepartment(dept).length}
                   </span>
                 )}
@@ -281,15 +274,17 @@ const JobOfferManager = () => {
         {DEPARTMENTS.map(dept => (
           <TabsContent key={dept} value={dept} className="mt-6">
             {isLoading ? (
-              <div className="text-center py-12 text-zinc-500">Loading...</div>
+              <div className="flex items-center justify-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold" />
+              </div>
             ) : getOffersByDepartment(dept).length === 0 ? (
-              <Card className="bg-zinc-900/50 border-zinc-800">
+              <Card>
                 <CardContent className="py-12 text-center">
-                  <Briefcase className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-zinc-400 mb-2">
+                  <Briefcase className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-foreground mb-2">
                     No job offers for {dept}
                   </h3>
-                  <p className="text-sm text-zinc-500 mb-4">
+                  <p className="text-sm text-muted-foreground mb-4">
                     Create your first job offer template for this department
                   </p>
                   <Button 
@@ -297,7 +292,7 @@ const JobOfferManager = () => {
                       setFormData(prev => ({ ...prev, department: dept }));
                       setIsCreateDialogOpen(true);
                     }}
-                    className="bg-gold/20 hover:bg-gold/30 text-gold border border-gold/30"
+                    variant="primary"
                   >
                     <Plus className="w-4 h-4 mr-2" />
                     Add Job Offer
@@ -307,26 +302,26 @@ const JobOfferManager = () => {
             ) : (
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {getOffersByDepartment(dept).map(offer => (
-                  <Card key={offer.id} className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-colors">
+                  <Card key={offer.id} className="hover:shadow-lg transition-shadow">
                     <CardHeader className="pb-3">
                       <div className="flex items-start justify-between">
                         <div>
-                          <CardTitle className="text-white text-lg">{offer.position_title}</CardTitle>
+                          <CardTitle className="text-foreground text-lg">{offer.position_title}</CardTitle>
                           <p className="text-gold text-sm mt-1">{offer.department}</p>
                         </div>
                         <div className="flex gap-1">
                           <Button 
                             size="icon" 
-                            variant="ghost" 
-                            className="h-8 w-8 text-zinc-400 hover:text-gold"
+                            variant="secondary" 
+                            className="h-8 w-8"
                             onClick={() => handleEdit(offer)}
                           >
                             <Edit2 className="w-4 h-4" />
                           </Button>
                           <Button 
                             size="icon" 
-                            variant="ghost" 
-                            className="h-8 w-8 text-zinc-400 hover:text-red-400"
+                            variant="secondary" 
+                            className="h-8 w-8 hover:text-red-500"
                             onClick={() => handleDelete(offer.id)}
                           >
                             <Trash2 className="w-4 h-4" />
@@ -336,20 +331,20 @@ const JobOfferManager = () => {
                     </CardHeader>
                     <CardContent className="space-y-3">
                       {offer.description && (
-                        <p className="text-zinc-400 text-sm line-clamp-2">{offer.description}</p>
+                        <p className="text-muted-foreground text-sm line-clamp-2">{offer.description}</p>
                       )}
                       
                       {(offer.salary_range_min || offer.salary_range_max) && (
                         <div className="flex items-center gap-2 text-sm">
-                          <DollarSign className="w-4 h-4 text-emerald-400" />
-                          <span className="text-zinc-300">
+                          <DollarSign className="w-4 h-4 text-emerald-500" />
+                          <span className="text-foreground">
                             AED {offer.salary_range_min?.toLocaleString() || '?'} - {offer.salary_range_max?.toLocaleString() || '?'}
                           </span>
                         </div>
                       )}
 
                       {offer.commission_structure && (
-                        <div className="text-sm text-zinc-400">
+                        <div className="text-sm text-muted-foreground">
                           <span className="text-gold">Commission:</span> {offer.commission_structure}
                         </div>
                       )}
@@ -357,13 +352,13 @@ const JobOfferManager = () => {
                       {offer.benefits && offer.benefits.length > 0 && (
                         <div className="flex flex-wrap gap-1">
                           {offer.benefits.slice(0, 3).map((benefit, i) => (
-                            <Badge key={i} variant="outline" className="text-xs border-zinc-700 text-zinc-400">
-                              <CheckCircle2 className="w-3 h-3 mr-1 text-emerald-400" />
+                            <Badge key={i} variant="outline" className="text-xs border-gold/30 text-foreground">
+                              <CheckCircle2 className="w-3 h-3 mr-1 text-emerald-500" />
                               {benefit}
                             </Badge>
                           ))}
                           {offer.benefits.length > 3 && (
-                            <Badge variant="outline" className="text-xs border-zinc-700 text-zinc-500">
+                            <Badge variant="outline" className="text-xs border-border text-muted-foreground">
                               +{offer.benefits.length - 3} more
                             </Badge>
                           )}

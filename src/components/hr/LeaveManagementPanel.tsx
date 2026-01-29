@@ -273,16 +273,16 @@ export function LeaveManagementPanel() {
 
       {/* Tabs */}
       <Tabs defaultValue="pending" className="space-y-4">
-        <TabsList className="bg-card border-2 border-gold/20">
-          <TabsTrigger value="pending" className="data-[state=active]:bg-gold data-[state=active]:text-foreground">
+        <TabsList className="bg-gradient-to-r from-[#F5EBD7] to-[#E8DCC8] border-2 border-gold/30">
+          <TabsTrigger value="pending" className="data-[state=active]:bg-gold data-[state=active]:text-black">
             <Clock className="h-4 w-4 mr-2" />
             Pending Approvals ({pendingApprovals.length})
           </TabsTrigger>
-          <TabsTrigger value="all" className="data-[state=active]:bg-gold data-[state=active]:text-foreground">
+          <TabsTrigger value="all" className="data-[state=active]:bg-gold data-[state=active]:text-black">
             <FileText className="h-4 w-4 mr-2" />
             All Requests
           </TabsTrigger>
-          <TabsTrigger value="policies" className="data-[state=active]:bg-gold data-[state=active]:text-foreground">
+          <TabsTrigger value="policies" className="data-[state=active]:bg-gold data-[state=active]:text-black">
             <Calendar className="h-4 w-4 mr-2" />
             Leave Policies
           </TabsTrigger>
