@@ -219,7 +219,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button 
-          className={`flex items-center gap-0.5 lg:gap-1 px-1.5 lg:px-2 xl:px-2.5 py-1 text-[11px] lg:text-xs xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
+          className={`flex items-center gap-0.5 lg:gap-1 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
             isFullyTransparent
               ? isActiveCheck?.() 
                 ? 'text-gold bg-transparent' 
@@ -307,7 +307,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       {/* HEADER CONTENT */}
       <div
         ref={headerContentRef}
-        className="relative z-10 h-full flex items-center justify-between px-3 lg:px-4 xl:px-6 2xl:px-10"
+        className="relative z-10 h-full flex items-center justify-between pl-3 lg:pl-4 xl:pl-6 2xl:pl-10 pr-3 lg:pr-4 xl:pr-4 2xl:pr-8"
       >
         {/* LEFT: Premium Brand Logo - LOCKED */}
         <div className="shrink-0">
@@ -723,7 +723,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
           {/* DESKTOP HEADER (lg+): nav items with dividers - transparent on hero, solid on scroll */}
           {!shouldUseMobileHeader && (
             <nav
-              className="flex-1 min-w-0 mx-1 lg:mx-2 xl:mx-4 flex justify-center"
+              className="flex-1 min-w-0 mx-0.5 lg:mx-1 xl:mx-2 flex justify-center"
               aria-label="Primary"
             >
               {/*
@@ -731,7 +731,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 `min-w-0` + `overflow-x-auto` prevents this pill from forcing the header to overflow.
               */}
               <div
-                className={`min-w-0 max-w-full flex items-center gap-0 lg:gap-0.5 rounded-full px-2 lg:px-3 xl:px-5 py-1.5 transition-all duration-300 overflow-x-auto ${
+                className={`min-w-0 max-w-full flex items-center gap-0 lg:gap-0.5 rounded-full px-1.5 lg:px-2 xl:px-3 py-1 transition-all duration-300 ${
                   isFullyTransparent
                     ? 'bg-transparent border-transparent'
                     : 'border-2 border-gold/40'
@@ -744,7 +744,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 {/* Home */}
                 <Link
                   to="/"
-                  className={`px-1.5 lg:px-2 xl:px-2.5 py-1 text-[11px] lg:text-xs xl:text-sm font-semibold whitespace-nowrap transition-all ${
+                  className={`px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all ${
                     isFullyTransparent
                       ? isActive("/") ? "text-gold" : "text-white hover:text-gold"
                       : isActive("/") ? "text-gold bg-gold/15 rounded-full" : "text-zinc-800 hover:text-gold hover:bg-gold/10 rounded-full"
@@ -786,7 +786,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                 <Link
                   to="/contact"
-                  className={`px-1.5 lg:px-2 xl:px-2.5 py-1 text-[11px] lg:text-xs xl:text-sm font-semibold whitespace-nowrap transition-all ${
+                  className={`px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all ${
                     isFullyTransparent
                       ? isActive("/contact") ? "text-gold" : "text-white hover:text-gold"
                       : isActive("/contact") ? "text-gold bg-gold/15 rounded-full" : "text-zinc-800 hover:text-gold hover:bg-gold/10 rounded-full"
@@ -806,7 +806,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
           {!shouldUseMobileHeader && (
             <div 
-              className={`flex items-center gap-1 px-4 py-2 rounded-full shrink-0 transition-all duration-300 ${
+              className={`flex items-center gap-0.5 px-3 py-2 rounded-full shrink-0 transition-all duration-300 ${
                 isFullyTransparent 
                   ? 'bg-transparent border-transparent' 
                   : 'border border-gold/30'
