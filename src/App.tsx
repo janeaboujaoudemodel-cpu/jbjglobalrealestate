@@ -142,6 +142,7 @@ import JBJBrokerReports from "./pages/JBJBrokerReports";
 import FoundersAssistant from "./pages/FoundersAssistant";
 import BrokerAdminAssistant from "./pages/BrokerAdminAssistant";
 import ListingAdmin from "./pages/ListingAdmin";
+import PendingImportPreview from "./pages/listing-admin/PendingImportPreview";
 import AdminTrainingGuide from "./pages/AdminTrainingGuide";
 import MeetTheTeam from "./pages/MeetTheTeam";
 import OurBrokers from "./pages/OurBrokers";
@@ -358,7 +359,8 @@ const App = () => (
                 <Route path="/jbj-broker-reports" element={<JBJBrokerReports />} />
                 <Route path="/founder-assistant" element={<FoundersAssistant />} />
                 <Route path="/broker-admin-assistant" element={<BrokerAdminAssistant />} />
-                <Route path="/listing-admin/*" element={<ListingAdmin />} />
+                <Route path="/listing-admin" element={<ListingAdmin />} />
+                <Route path="/listing-admin/preview/:id" element={<PendingImportPreview />} />
                 <Route path="/admin/training-guide" element={<AdminTrainingGuide />} />
                 <Route path="/team" element={<MeetTheTeam />} />
                 <Route path="/meet-the-team" element={<Navigate to="/team" replace />} />

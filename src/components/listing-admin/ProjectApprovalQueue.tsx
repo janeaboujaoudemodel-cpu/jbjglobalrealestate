@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -69,6 +70,7 @@ const parseJsonArray = <T,>(json: Json | null, defaultVal: T[] = []): T[] => {
 };
 
 export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
+  const navigate = useNavigate();
   const [imports, setImports] = useState<PendingImport[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
@@ -581,8 +583,8 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
                     item={item}
                     formatPrice={formatPrice}
                     onReview={() => {
-                      setSelectedImport(item);
-                      setCurrentImageIndex(0);
+                      // Navigate to the internal preview page instead of opening modal
+                      navigate(`/listing-admin/preview/${item.id}`);
                     }}
                   />
                 ))}
