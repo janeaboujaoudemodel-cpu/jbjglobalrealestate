@@ -2,6 +2,9 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import marketReportCover from "@/assets/ceo/jane-founder-premium-landscape.png";
+import luxuryVilla1 from "@/assets/luxury-villa-1.jpeg";
+import { FounderContent } from "@/components/FounderContent";
+import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 
 interface Book3DProps {
   size?: "sm" | "md" | "lg";
@@ -10,6 +13,10 @@ interface Book3DProps {
 
 const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
   const [hoverSide, setHoverSide] = useState<"left" | "right" | null>(null);
+  const { isFounderVisible } = useFounderVisibility();
+
+  // When founder visibility is disabled, never show founder portrait covers
+  const coverImage = isFounderVisible ? marketReportCover : luxuryVilla1;
   
   // Enhanced dimensions with EXTRA THICK spine to display full company name
   const dimensions = {
@@ -132,7 +139,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
           style={{
             left: spine,
             width: width,
-            backgroundImage: `linear-gradient(145deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.78) 60%, rgba(0,0,0,0.6) 100%), url(${marketReportCover})`,
+            backgroundImage: `linear-gradient(145deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.78) 60%, rgba(0,0,0,0.6) 100%), url(${coverImage})`,
             backgroundSize: "cover",
             backgroundPosition: "center 20%",
             backgroundRepeat: "no-repeat",
@@ -220,9 +227,11 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
             {/* Author footer */}
             <div className="mt-auto pt-3 md:pt-4 w-full">
               <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-zinc-700/50 to-transparent mb-2" />
-              <p className="text-zinc-500 text-[7px] md:text-[8px] uppercase tracking-[0.2em]">
-                By Founder & CEO Jane Bou Jaoude
-              </p>
+              <FounderContent fallback={null}>
+                <p className="text-zinc-500 text-[7px] md:text-[8px] uppercase tracking-[0.2em]">
+                  By Founder & CEO Jane Bou Jaoude
+                </p>
+              </FounderContent>
             </div>
           </div>
 

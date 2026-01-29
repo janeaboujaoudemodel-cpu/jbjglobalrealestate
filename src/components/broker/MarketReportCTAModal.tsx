@@ -12,6 +12,7 @@ import {
   CheckCircle2
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { FounderContent } from "@/components/FounderContent";
 
 interface MarketReportCTAModalProps {
   open: boolean;
@@ -163,9 +164,11 @@ export default function MarketReportCTAModal({
         </div>
 
         <div className="text-center mt-4">
-          <p className="text-zinc-300 text-xs font-medium">Jane Bou Jaoude</p>
-          <p className="text-gold text-xs mt-0.5">Founder & CEO</p>
-          <p className="text-zinc-500 text-xs mt-0.5">JBJ Global Real Estate</p>
+          <FounderContent fallback={null}>
+            <p className="text-zinc-300 text-xs font-medium">Jane Bou Jaoude</p>
+            <p className="text-gold text-xs mt-0.5">Founder & CEO</p>
+            <p className="text-zinc-500 text-xs mt-0.5">JBJ Global Real Estate</p>
+          </FounderContent>
         </div>
       </DialogContent>
     </Dialog>
