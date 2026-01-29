@@ -41,7 +41,7 @@ const Index = () => {
   const { isBroker, hasSelectedRole } = useUserRole();
 
   return (
-    <section className="relative w-full min-h-screen bg-black">
+    <section className="relative w-full min-h-screen bg-black -mt-24 xl:-mt-28">
       {/* SEO Meta Tags */}
       <SEOHead {...pagesSEO.home} />
       
