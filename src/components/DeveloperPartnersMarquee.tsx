@@ -100,27 +100,27 @@ const DeveloperPartnersMarquee = () => {
     // IMPORTANT: Keep spacing locked (px-* on the Link). Only adjust logo size.
     // We adjust size by changing responsive HEIGHT classes (layout-safe; no transform scaling).
     // MOBILE: Smaller logos to fit ~4 in viewport; DESKTOP: Keep original larger sizes
-    const base = "w-auto max-w-[120px] md:max-w-[200px] lg:max-w-[240px] object-contain";
+    // Fixed frame height ensures every logo sits on the same baseline (alignment).
+    const frameH = "h-10 md:h-14 lg:h-16";
 
-    const sizeClass = (() => {
-      switch (developer.slug) {
-        // Bigger logos - Danube & Dubai Properties to match DAMAC/Emaar prominence
-        case "danube-properties":
-        case "dubai-properties":
-          return `h-8 md:h-12 lg:h-14 ${base}`;
+    // Keep all logos the same HEIGHT; make specific ones feel bigger via max-width.
+    const maxW =
+      developer.slug === "danube-properties" || developer.slug === "dubai-properties"
+        ? "max-w-[160px] md:max-w-[240px] lg:max-w-[300px]"
+        : "max-w-[120px] md:max-w-[200px] lg:max-w-[240px]";
 
-        // Standard sizing for all others
-        default:
-          return `h-6 md:h-10 lg:h-12 ${base}`;
-      }
-    })();
+    // Dubai Properties needs a tiny visual lift due to whitespace inside the asset.
+    const nudgeY =
+      developer.slug === "dubai-properties" ? "-translate-y-0.5 md:-translate-y-1" : "";
+
+    const sizeClass = `h-full w-auto ${maxW} object-contain transform-gpu ${nudgeY}`;
 
     return (
       <Link
         key={`${listKey}-${developer.slug}-${index}`}
         to={`/developers/${developer.slug}`}
         // Tighter spacing on mobile, normal on desktop
-        className="flex-shrink-0 px-4 md:px-8 lg:px-10 flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
+        className={`flex-shrink-0 ${frameH} px-4 md:px-8 lg:px-10 flex items-center justify-center transition-opacity duration-300 hover:opacity-70`}
         title={developer.name}
       >
         <img
