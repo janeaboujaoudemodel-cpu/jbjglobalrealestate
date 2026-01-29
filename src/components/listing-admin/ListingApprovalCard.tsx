@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { SafeImage } from "@/components/SafeImage";
 import { 
   Check, 
   X, 
@@ -89,14 +90,11 @@ export function ListingApprovalCard({
       {/* Image Gallery */}
       {images.length > 0 && (
         <div className="relative h-48 bg-zinc-100">
-          <img
+          <SafeImage
             src={images[currentImageIndex]}
             alt={`${project.name} - Image ${currentImageIndex + 1}`}
             className="w-full h-full object-cover"
-            referrerPolicy="no-referrer"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = '/placeholder.svg';
-            }}
+            fallbackSrc="/placeholder.svg"
           />
           
           {/* Navigation arrows - Always visible with gold border */}

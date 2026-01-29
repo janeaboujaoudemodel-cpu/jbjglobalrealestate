@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { X, GripVertical, FileText, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SafeImage } from "@/components/SafeImage";
 import { cn } from "@/lib/utils";
 
 interface MediaItem {
@@ -140,15 +141,12 @@ const DraggableMediaGrid = ({ items, onReorder, onDelete, type }: DraggableMedia
           )}
 
           {type === "images" ? (
-            <img
+            <SafeImage
               src={item.url}
               alt={item.name || `Image ${index + 1}`}
               className="w-full h-full object-cover rounded-md"
-              referrerPolicy="no-referrer"
               draggable={false}
-              onError={(e) => {
-                (e.currentTarget as HTMLImageElement).src = "/placeholder.svg";
-              }}
+              fallbackSrc="/placeholder.svg"
             />
           ) : (
             <div className="flex items-center gap-3">
