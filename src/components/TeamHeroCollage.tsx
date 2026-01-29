@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { motion } from "framer-motion";
 import { allTeamMembers, TeamMember } from "@/config/team-members";
+import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 
 /**
  * Premium Animated Team Collage Component
@@ -77,6 +78,8 @@ const CollageItem: React.FC<CollageItemProps> = ({ member, index, size, delay })
 };
 
 const TeamHeroCollage: React.FC = () => {
+  const { isFounderVisible } = useFounderVisibility();
+
   // Select diverse team members for the collage (mix of departments and roles)
   const collageMembers = useMemo(() => {
     // Priority: Leadership first, then mix from different departments
@@ -90,8 +93,15 @@ const TeamHeroCollage: React.FC = () => {
     const software = allTeamMembers.filter(m => m.department === "Software Engineering").slice(0, 2);
     
     // Combine and limit to ~24 members for optimal display
-    return [...leadership, ...sales, ...marketing, ...creative, ...clientRelations, ...operations, ...hr, ...software].slice(0, 24);
-  }, []);
+    const combined = [...leadership, ...sales, ...marketing, ...creative, ...clientRelations, ...operations, ...hr, ...software].slice(0, 24);
+
+    // Hard block founder identity from any public collage when disabled
+    if (!isFounderVisible) {
+      return combined.filter((m) => m.id !== "jane-bou-jaoude");
+    }
+
+    return combined;
+  }, [isFounderVisible]);
 
   // Arrange members in rows with varying sizes for visual interest
   const rows = useMemo(() => {

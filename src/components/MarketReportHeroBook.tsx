@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import luxuryVilla1 from "@/assets/luxury-villa-1.jpeg";
+import { FounderContent } from "@/components/FounderContent";
 
 type MarketReportHeroBookProps = {
   className?: string;
@@ -99,7 +100,9 @@ export default function MarketReportHeroBook({ className }: MarketReportHeroBook
                 <span className="block text-gold">Market Intelligence</span>
               </h3>
 
-              <p className="text-zinc-500 text-xs mt-4">By Founder & CEO Jane Bou Jaoude</p>
+              <FounderContent fallback={null}>
+                <p className="text-zinc-500 text-xs mt-4">By Founder & CEO Jane Bou Jaoude</p>
+              </FounderContent>
 
               <div className="mt-6 pt-4 border-t border-zinc-800">
                 <p className="text-zinc-400 text-[10px] tracking-[0.3em] uppercase">JBJ Global Real Estate</p>

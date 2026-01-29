@@ -12,6 +12,7 @@ import {
   TeamMember,
   getTeamMemberById,
 } from "@/config/team-members";
+import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 import { useSalesHierarchy } from "@/hooks/useSalesHierarchy";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -172,12 +173,21 @@ const MeetTheTeam: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { isFounderVisible } = useFounderVisibility();
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
   const [detailMember, setDetailMember] = useState<TeamMember | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isInternalUser, setIsInternalUser] = useState(false);
   const salesHierarchy = useSalesHierarchy();
+
+  const isFounderMember = (member: TeamMember) =>
+    member.id === "jane-bou-jaoude" ||
+    member.name === "Jane Bou Jaoude" ||
+    /founder/i.test(member.role);
+
+  const filterFounder = (members: TeamMember[]) =>
+    isFounderVisible ? members : members.filter((m) => !isFounderMember(m));
 
   // Check if user is an internal employee (has hr_user_roles or admin/owner)
   useEffect(() => {
@@ -361,7 +371,7 @@ const MeetTheTeam: React.FC = () => {
         </section>
 
         {/* CEO Leadership Showcase */}
-        <CEOLeadershipShowcase />
+        {isFounderVisible ? <CEOLeadershipShowcase /> : null}
 
         {/* Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
@@ -409,8 +419,9 @@ const MeetTheTeam: React.FC = () => {
                       {/* Cards Grid - Inside Active Layer */}
                       <div className="space-y-10 mt-4">
                         {salesHierarchy.activeCategories.map((category) => {
-                          const categoryMembers =
-                            salesHierarchy.getMembersByCategory(category);
+                          const categoryMembers = filterFounder(
+                            salesHierarchy.getMembersByCategory(category)
+                          );
                           if (categoryMembers.length === 0) return null;
 
                             return (
@@ -447,7 +458,8 @@ const MeetTheTeam: React.FC = () => {
 
               const members =
                 teamByDepartment[deptName as keyof typeof teamByDepartment];
-              if (!members || members.length === 0) return null;
+              const visibleMembers = members ? filterFounder(members) : [];
+              if (!visibleMembers || visibleMembers.length === 0) return null;
 
               return (
                 <motion.div
@@ -473,7 +485,7 @@ const MeetTheTeam: React.FC = () => {
                           {deptName}
                         </h2>
                         <p className="text-zinc-600 text-sm">
-                          {members.length} member{members.length > 1 ? "s" : ""}
+                          {visibleMembers.length} member{visibleMembers.length > 1 ? "s" : ""}
                         </p>
                       </div>
                     </motion.div>
@@ -483,7 +495,7 @@ const MeetTheTeam: React.FC = () => {
 
                     {/* Cards Grid - Inside Active Layer */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 mt-4">
-                      {members.map((member) => (
+                      {visibleMembers.map((member) => (
                         <TeamMemberCard
                           key={member.id}
                           member={member}
