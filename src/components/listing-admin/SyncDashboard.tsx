@@ -59,7 +59,7 @@ interface PageStatus {
 interface SyncJob {
   id: string;
   job_type: string;
-  status: 'pending' | 'in_progress' | 'paused' | 'completed' | 'failed';
+  status: 'pending' | 'in_progress' | 'running' | 'paused' | 'completed' | 'failed';
   current_page: number;
   total_pages: number;
   stats_created: number;
@@ -194,11 +194,11 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   };
 
   const loadActiveJob = async () => {
-    // Find any running or paused job
+    // Find any running (in_progress) or paused job
     const { data: jobs, error } = await supabase
       .from("sync_jobs")
       .select("*")
-      .in("status", ["running", "paused"])
+      .in("status", ["in_progress", "running", "paused"])
       .eq("job_type", "provident_sync")
       .order("created_at", { ascending: false })
       .limit(1);
@@ -230,7 +230,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
           status: p.page <= job.current_page ? 'success' : 'pending'
         })));
         toast.info(`Found paused sync at page ${job.current_page}. Click Resume to continue.`);
-      } else if (job.status === "in_progress") {
+      } else if (job.status === "in_progress" || job.status === "running") {
         // Resume automatically
         setIsSyncing(true);
         isSyncingRef.current = true;
@@ -457,12 +457,12 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     // Get current user
     const { data: { user } } = await supabase.auth.getUser();
 
-    // Create a new sync job in the database
+    // Create a new sync job in the database (use in_progress for consistency)
     const { data: newJob, error } = await supabase
       .from("sync_jobs")
       .insert({
         job_type: "provident_sync",
-        status: "running",
+        status: "in_progress",
         current_page: 1,
         total_pages: pagesForJob,
         started_at: new Date().toISOString(),
