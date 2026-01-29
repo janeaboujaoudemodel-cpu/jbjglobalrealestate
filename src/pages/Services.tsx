@@ -161,36 +161,43 @@ const Services = () => {
           </motion.div>
 
           <motion.h1 
-            className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+            className="text-white text-2xl md:text-3xl lg:text-4xl font-bold mb-4"
             style={{ fontFamily: "Poppins, sans-serif" }}
             variants={fadeInUp}
           >
-            Real Estate Services, Structured for Clarity
+            Real Estate Services
           </motion.h1>
-
+          
+          {/* Premium Gold Tagline */}
           <motion.p 
-            className="text-zinc-300 text-lg md:text-xl mb-4"
+            className="text-lg md:text-xl lg:text-2xl uppercase tracking-[0.15em] font-semibold mb-6"
+            style={{ 
+              background: 'linear-gradient(135deg, #D4AF37 0%, #F5D77A 25%, #C8A766 50%, #F5D77A 75%, #D4AF37 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              filter: 'drop-shadow(0 2px 8px rgba(200,167,102,0.6))',
+            }}
             variants={fadeInUp}
           >
-            Licensed brokerage support across buying, selling, leasing, and investment — 
-            with clear scope, transparency, and expert coordination.
+            Structured for Clarity
           </motion.p>
 
           <motion.p 
-            className="text-zinc-400 text-base mb-10"
+            className="text-zinc-300 text-sm md:text-base max-w-lg mx-auto mb-8"
             variants={fadeInUp}
           >
-            Every service is delivered within our licensed brokerage framework or through 
-            independent, licensed partners where required.
+            Licensed brokerage support across buying, selling, leasing, and investment.
           </motion.p>
 
-          <motion.div variants={fadeInUp}>
-            <Button variant="primary" size="lg" asChild>
-              <a href="#services-grid">
-                Explore Our Services
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </a>
-            </Button>
+          <motion.div variants={fadeInUp} className="flex justify-center">
+            <a 
+              href="#services-grid"
+              className="group inline-flex items-center justify-center gap-1.5 px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 text-[11px] sm:text-xs md:text-sm font-semibold tracking-wide rounded-lg transition-all duration-300 bg-transparent border border-white/60 hover:border-gold/80"
+              style={{ boxShadow: '0 2px 10px rgba(0,0,0,0.3)' }}
+            >
+              <span className="text-white group-hover:text-gold transition-colors">Explore Services</span>
+              <ArrowRight className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-all" />
+            </a>
           </motion.div>
         </motion.div>
       </section>
