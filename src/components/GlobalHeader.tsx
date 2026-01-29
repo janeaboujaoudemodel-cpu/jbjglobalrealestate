@@ -87,6 +87,9 @@ const GlobalHeader = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, [isTransparentRoute]);
 
+  // When transparent (hero visible), use minimal styling - no fills on nav/icons
+  const isFullyTransparent = isTransparentRoute && !isSolid;
+
   const mobileHeaderIconButtonClassName =
     "inline-flex h-7 w-7 items-center justify-center p-0 bg-transparent border-0 rounded-none appearance-none transition-colors duration-300 focus:outline-none focus-visible:outline-none focus-visible:ring-0";
   
@@ -206,12 +209,19 @@ const GlobalHeader = () => {
   const isActive = (path: string) => location.pathname === path;
 
   // Render dropdown menu helper - Premium styling with pill background
+  // When fully transparent, remove pill backgrounds and use white/gold text
   const renderDropdown = (label: string, links: typeof propertiesLinks, isActiveCheck?: () => boolean) => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button 
           className={`flex items-center gap-0.5 px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all rounded-full ${
-            isActiveCheck?.() ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
+            isFullyTransparent
+              ? isActiveCheck?.() 
+                ? 'text-gold bg-transparent' 
+                : 'text-white/90 hover:text-gold bg-transparent'
+              : isActiveCheck?.() 
+                ? 'text-gold bg-gold/15' 
+                : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
           }`}
           style={{ letterSpacing: '0.03em' }}
         >
