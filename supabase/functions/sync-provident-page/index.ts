@@ -735,30 +735,60 @@ CRITICAL RULES - MIRROR EXACTLY:
     jsonStr = codeBlockMatch[1].trim();
   }
   
-  // Extract JSON object
-  const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
-  
-  if (!jsonMatch) {
-    throw new Error(`No JSON found in AI response`);
+  // Extract JSON object - find the first { and match to its closing }
+  const firstBrace = jsonStr.indexOf('{');
+  if (firstBrace === -1) {
+    throw new Error(`No JSON object found in AI response`);
   }
-
-  // Clean and parse JSON
-  let cleanedJson = jsonMatch[0]
-    .replace(/,\s*([\]}])/g, '$1')
-    .replace(/[\x00-\x1F\x7F]/g, ' ')
-    .replace(/:\s*"([^"]*)\n([^"]*)"/g, ': "$1 $2"')
-    .replace(/[\uFEFF\u200B-\u200D\u2060]/g, '');
+  
+  // Find matching closing brace by counting braces
+  let braceCount = 0;
+  let lastBrace = -1;
+  for (let i = firstBrace; i < jsonStr.length; i++) {
+    if (jsonStr[i] === '{') braceCount++;
+    if (jsonStr[i] === '}') {
+      braceCount--;
+      if (braceCount === 0) {
+        lastBrace = i;
+        break;
+      }
+    }
+  }
+  
+  if (lastBrace === -1) {
+    throw new Error(`Malformed JSON - unbalanced braces`);
+  }
+  
+  let cleanedJson = jsonStr.substring(firstBrace, lastBrace + 1);
+  
+  // Clean common JSON issues
+  cleanedJson = cleanedJson
+    .replace(/,\s*([\]}])/g, '$1')  // Trailing commas
+    .replace(/[\x00-\x1F\x7F]/g, ' ')  // Control characters
+    .replace(/:\s*"([^"]*)\n([^"]*)"/g, ': "$1 $2"')  // Newlines in strings
+    .replace(/[\uFEFF\u200B-\u200D\u2060]/g, '')  // Zero-width chars
+    .replace(/\\'/g, "'")  // Escaped single quotes
+    .replace(/\t/g, ' ');  // Tabs
 
   let data;
   try {
     data = JSON.parse(cleanedJson);
   } catch (parseErr) {
-    // Try more aggressive cleanup
-    const lastBrace = cleanedJson.lastIndexOf('}');
-    if (lastBrace > 0) {
-      cleanedJson = cleanedJson.substring(0, lastBrace + 1);
+    // Last resort - try to extract key fields manually
+    console.warn(`JSON parse failed, attempting manual extraction`);
+    const nameMatch = cleanedJson.match(/"name"\s*:\s*"([^"]+)"/);
+    const developerMatch = cleanedJson.match(/"developer_name"\s*:\s*"([^"]+)"/);
+    const locationMatch = cleanedJson.match(/"location"\s*:\s*"([^"]+)"/);
+    
+    if (!nameMatch) {
+      throw new Error(`Cannot extract name from malformed JSON: ${parseErr}`);
     }
-    data = JSON.parse(cleanedJson);
+    
+    data = {
+      name: nameMatch[1],
+      developer_name: developerMatch?.[1] || null,
+      location: locationMatch?.[1] || null,
+    };
   }
   
   return {

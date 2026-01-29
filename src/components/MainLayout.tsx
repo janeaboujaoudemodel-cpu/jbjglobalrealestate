@@ -112,14 +112,25 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   // Chat is always an overlay – no content pushing
   const effectiveCollapsed = isAdminRoute ? true : isChatCollapsed;
 
+  // Determine if page has a dark hero that can use transparent header
+  // These pages have full-screen dark heroes where content should sit behind header
+  const darkHeroPages = ['/', '/properties', '/quiz', '/about', '/team', '/founder', '/awards', '/join'];
+  const hasDarkHero = darkHeroPages.includes(location.pathname) || 
+                      location.pathname.startsWith('/developers/') ||
+                      location.pathname.startsWith('/project/') ||
+                      location.pathname.startsWith('/properties/');
+  
+  // Pages with bright backgrounds need content pushed below header
+  const needsHeaderSpacing = !hasDarkHero;
+
   return (
     <div className="min-h-screen bg-black">
       <SecurityShield />
       <MarketingScripts />
       <CommandPaletteRoot />
-      <GlobalHeader />
-      {/* Header is transparent on initial load; content should start behind it */}
-      <main className="pt-0">
+      <GlobalHeader forceSolid={needsHeaderSpacing} />
+      {/* Content spacing: dark hero pages sit behind header, bright pages pushed below */}
+      <main className={needsHeaderSpacing ? "pt-20 sm:pt-24 lg:pt-28" : "pt-0"}>
         {children}
       </main>
       {/* All popups rendered centrally - only when ready */}
