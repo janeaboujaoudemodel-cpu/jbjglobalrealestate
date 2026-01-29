@@ -243,7 +243,7 @@ const TenantGuide = () => {
 
       {/* Section 1: Understanding the Rental Market */}
       <section id="rental-market" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="jj-guide-content">
           <GuideSectionHeader icon={Home} title="Understanding the Rental Market" />
 
           <div className="jj-box-active p-6 md:p-8">

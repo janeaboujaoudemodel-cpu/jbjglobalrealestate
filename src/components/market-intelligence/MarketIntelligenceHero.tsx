@@ -74,7 +74,7 @@ export const MarketIntelligenceHero = ({
         animate="visible"
         variants={staggerContainer}
       >
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-4xl mx-auto text-center px-4">
           {/* Badge - Glass style with gold border, engraved look (matching Services page) */}
           <motion.button 
             className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 cursor-default"
@@ -87,7 +87,7 @@ export const MarketIntelligenceHero = ({
             variants={fadeInUp}
           >
             <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-            <span className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Market Intelligence</span>
+            <span className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">{badge}</span>
           </motion.button>
           
           {/* Title */}
@@ -107,9 +107,9 @@ export const MarketIntelligenceHero = ({
             {description}
           </motion.p>
           
-          {/* Actions - Hero CTA Buttons use transparent bg, white 3D border, white title, gold icon; filled on hover */}
+          {/* Actions - Hero CTA Buttons with consistent styling */}
           {actions && (
-            <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4 [&_button]:bg-transparent [&_button]:border-2 [&_button]:border-white/80 [&_button]:text-white [&_button:hover]:bg-gradient-to-r [&_button:hover]:from-white [&_button:hover]:via-[#FDFBF7] [&_button:hover]:to-[#F5F0E6] [&_button:hover]:text-black [&_button:hover]:border-gold [&_button_svg]:text-gold">
+            <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
               {actions}
             </motion.div>
           )}

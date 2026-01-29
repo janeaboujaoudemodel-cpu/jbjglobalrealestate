@@ -366,9 +366,8 @@ const SellerGuide = () => {
 
         {/* Who This Guide Is For */}
         <section id="who-is-this-for" className="py-16 jj-section-champagne scroll-mt-20">
-          <div className="max-w-5xl mx-auto px-4">
+          <div className="jj-guide-content">
             <GuideSectionHeader icon={Users} title="Who This Guide Is For" />
-
             
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {whoIsThisFor.map((item, index) => (
@@ -393,10 +392,8 @@ const SellerGuide = () => {
 
         {/* Step-by-Step Selling Process */}
         <section id="selling-process" className="py-16 jj-section-champagne scroll-mt-20">
-          <div className="max-w-5xl mx-auto px-4">
+          <div className="jj-guide-content">
             <GuideSectionHeader icon={ClipboardCheck} title="Step-by-Step Selling Process" />
-
-            
             <div className="space-y-6">
               {steps.map((step, index) => (
                 <motion.div 

@@ -233,7 +233,7 @@ const LandlordGuide = () => {
 
       {/* Section 1: Understanding the Rental Market */}
       <section id="rental-market" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="jj-guide-content">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
               <span className="text-gold">Understanding</span> the Rental Market
