@@ -103,129 +103,140 @@ export function ProjectInquiryForm({
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="max-w-xl mx-auto space-y-5">
         {/* Name */}
-        <div>
-          <Label htmlFor="name" className="text-foreground">Full Name *</Label>
+        <div className="space-y-2">
+          <Label htmlFor="name" className="text-foreground text-sm font-medium">Full Name *</Label>
           <Input
             id="name"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             placeholder="Your full name"
-            className="mt-1"
+            className="h-14 text-base px-5"
             required
           />
         </div>
 
         {/* Email */}
-        <div>
-          <Label htmlFor="email" className="text-foreground">Email *</Label>
+        <div className="space-y-2">
+          <Label htmlFor="email" className="text-foreground text-sm font-medium">Email *</Label>
           <Input
             id="email"
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             placeholder="your@email.com"
-            className="mt-1"
+            className="h-14 text-base px-5"
             required
           />
         </div>
 
         {/* Phone */}
-        <div>
-          <Label htmlFor="phone" className="text-foreground">Phone Number *</Label>
+        <div className="space-y-2">
+          <Label htmlFor="phone" className="text-foreground text-sm font-medium">Phone Number *</Label>
           <Input
             id="phone"
             type="tel"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             placeholder="+971 XX XXX XXXX"
-            className="mt-1"
+            className="h-14 text-base px-5"
             required
           />
         </div>
 
-        {/* Bedrooms (Optional) */}
-        <div>
-          <Label htmlFor="bedrooms" className="text-foreground">Number of Bedrooms</Label>
-          <Select
-            value={formData.bedrooms}
-            onValueChange={(value) => setFormData({ ...formData, bedrooms: value })}
-          >
-            <SelectTrigger className="mt-1">
-              <SelectValue placeholder="Select bedrooms" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="studio">Studio</SelectItem>
-              <SelectItem value="1">1 Bedroom</SelectItem>
-              <SelectItem value="2">2 Bedrooms</SelectItem>
-              <SelectItem value="3">3 Bedrooms</SelectItem>
-              <SelectItem value="4">4 Bedrooms</SelectItem>
-              <SelectItem value="5+">5+ Bedrooms</SelectItem>
-            </SelectContent>
-          </Select>
+        {/* Two Column Grid for Optional Fields */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {/* Bedrooms (Optional) */}
+          <div className="space-y-2">
+            <Label htmlFor="bedrooms" className="text-foreground text-sm font-medium">Bedrooms</Label>
+            <Select
+              value={formData.bedrooms}
+              onValueChange={(value) => setFormData({ ...formData, bedrooms: value })}
+            >
+              <SelectTrigger className="h-14 text-base px-5">
+                <SelectValue placeholder="Select bedrooms" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="studio">Studio</SelectItem>
+                <SelectItem value="1">1 Bedroom</SelectItem>
+                <SelectItem value="2">2 Bedrooms</SelectItem>
+                <SelectItem value="3">3 Bedrooms</SelectItem>
+                <SelectItem value="4">4 Bedrooms</SelectItem>
+                <SelectItem value="5+">5+ Bedrooms</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Size (Optional) */}
+          <div className="space-y-2">
+            <Label htmlFor="size" className="text-foreground text-sm font-medium">Size (sqft)</Label>
+            <Input
+              id="size"
+              type="number"
+              value={formData.size}
+              onChange={(e) => setFormData({ ...formData, size: e.target.value })}
+              placeholder="e.g., 1500"
+              className="h-14 text-base px-5"
+            />
+          </div>
         </div>
 
-        {/* Size (Optional) */}
-        <div>
-          <Label htmlFor="size" className="text-foreground">Preferred Size (sqft)</Label>
-          <Input
-            id="size"
-            type="number"
-            value={formData.size}
-            onChange={(e) => setFormData({ ...formData, size: e.target.value })}
-            placeholder="e.g., 1500"
-            className="mt-1"
-          />
-        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {/* Location (Optional) */}
+          <div className="space-y-2">
+            <Label htmlFor="location" className="text-foreground text-sm font-medium">Location</Label>
+            <Input
+              id="location"
+              value={formData.location}
+              onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+              placeholder="e.g., Downtown Dubai"
+              className="h-14 text-base px-5"
+            />
+          </div>
 
-        {/* Location (Optional) */}
-        <div>
-          <Label htmlFor="location" className="text-foreground">Preferred Location</Label>
-          <Input
-            id="location"
-            value={formData.location}
-            onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-            placeholder="e.g., Downtown Dubai"
-            className="mt-1"
-          />
-        </div>
-
-        {/* Preferred Developer (Optional) */}
-        <div>
-          <Label htmlFor="developer" className="text-foreground">Preferred Developer</Label>
-          <Input
-            id="developer"
-            value={formData.preferredDeveloper}
-            onChange={(e) => setFormData({ ...formData, preferredDeveloper: e.target.value })}
-            placeholder="e.g., Emaar, Damac"
-            className="mt-1"
-          />
+          {/* Preferred Developer (Optional) */}
+          <div className="space-y-2">
+            <Label htmlFor="developer" className="text-foreground text-sm font-medium">Developer</Label>
+            <Input
+              id="developer"
+              value={formData.preferredDeveloper}
+              onChange={(e) => setFormData({ ...formData, preferredDeveloper: e.target.value })}
+              placeholder="e.g., Emaar, Damac"
+              className="h-14 text-base px-5"
+            />
+          </div>
         </div>
 
         {/* Message (Optional) */}
-        <div>
-          <Label htmlFor="message" className="text-foreground">Additional Notes</Label>
+        <div className="space-y-2">
+          <Label htmlFor="message" className="text-foreground text-sm font-medium">Additional Notes</Label>
           <Textarea
             id="message"
             value={formData.message}
             onChange={(e) => setFormData({ ...formData, message: e.target.value })}
             placeholder="Any specific requirements or questions..."
-            className="mt-1"
-            rows={3}
+            className="min-h-[100px] text-base px-5 py-4"
+            rows={4}
           />
         </div>
 
-        {/* Submit Button */}
-        <Button type="submit" disabled={isSubmitting} variant="primary" className="w-full">
+        {/* Submit Button - Large Primary */}
+        <Button 
+          type="submit" 
+          disabled={isSubmitting} 
+          variant="primary" 
+          size="lg"
+          className="w-full h-16 text-lg font-semibold shadow-lg hover:shadow-xl transition-all"
+        >
           {isSubmitting ? (
             <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
               Submitting...
             </>
           ) : (
             <>
-              <Send className="w-4 h-4 mr-2" />
+              <Send className="w-5 h-5 mr-2" />
               Register Your Interest
             </>
           )}

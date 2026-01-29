@@ -617,42 +617,42 @@ export default function ProjectDetailLayout({
             </div>
           </div>
 
-          {/* CONTACT DETAILS - Separated Section */}
+          {/* CONTACT DETAILS - Separated Section with Gold Borders */}
           <div className="mb-8">
-            <div className="jj-card-inner p-6 md:p-8">
-              <h3 className="text-h3-sm font-medium text-foreground mb-6 text-center">Contact Us Directly</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="jj-card-inner p-6 md:p-10">
+              <h3 className="text-h3-sm font-medium text-foreground mb-8 text-center">Contact Us Directly</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-3xl mx-auto">
                 <a 
                   href={getWhatsAppUrl(whatsappMessage)} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex flex-col items-center gap-3 p-5 rounded-xl border border-gold/30 bg-card hover:border-gold/60 hover:bg-gold/5 transition-all group"
+                  className="flex flex-col items-center gap-4 p-6 rounded-2xl border-2 border-gold/50 bg-gradient-to-br from-card via-card to-gold/5 hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all group"
                 >
-                  <div className="w-12 h-12 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <MessageCircle className="w-6 h-6 text-green-500" />
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-green-500/20 to-green-500/5 border-2 border-green-500/40 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <MessageCircle className="w-7 h-7 text-green-500" />
                   </div>
-                  <span className="text-sm font-medium text-foreground">WhatsApp</span>
-                  <span className="text-xs text-muted-foreground">{CONTACT_INFO.phone}</span>
+                  <span className="text-base font-semibold text-foreground">WhatsApp</span>
+                  <span className="text-sm text-muted-foreground">{CONTACT_INFO.phone}</span>
                 </a>
                 <a 
                   href={getCallUrl()}
-                  className="flex flex-col items-center gap-3 p-5 rounded-xl border border-gold/30 bg-card hover:border-gold/60 hover:bg-gold/5 transition-all group"
+                  className="flex flex-col items-center gap-4 p-6 rounded-2xl border-2 border-gold/50 bg-gradient-to-br from-card via-card to-gold/5 hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all group"
                 >
-                  <div className="w-12 h-12 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Phone className="w-6 h-6 text-gold" />
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-gold/40 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Phone className="w-7 h-7 text-gold" />
                   </div>
-                  <span className="text-sm font-medium text-foreground">Call Us</span>
-                  <span className="text-xs text-muted-foreground">{CONTACT_INFO.phone}</span>
+                  <span className="text-base font-semibold text-foreground">Call Us</span>
+                  <span className="text-sm text-muted-foreground">{CONTACT_INFO.phone}</span>
                 </a>
                 <a 
                   href={getEmailUrl()}
-                  className="flex flex-col items-center gap-3 p-5 rounded-xl border border-gold/30 bg-card hover:border-gold/60 hover:bg-gold/5 transition-all group"
+                  className="flex flex-col items-center gap-4 p-6 rounded-2xl border-2 border-gold/50 bg-gradient-to-br from-card via-card to-gold/5 hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all group"
                 >
-                  <div className="w-12 h-12 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Mail className="w-6 h-6 text-blue-500" />
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500/20 to-blue-500/5 border-2 border-blue-500/40 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Mail className="w-7 h-7 text-blue-500" />
                   </div>
-                  <span className="text-sm font-medium text-foreground">Email</span>
-                  <span className="text-xs text-muted-foreground">{CONTACT_INFO.email}</span>
+                  <span className="text-base font-semibold text-foreground">Email</span>
+                  <span className="text-sm text-muted-foreground">{CONTACT_INFO.email}</span>
                 </a>
               </div>
             </div>
