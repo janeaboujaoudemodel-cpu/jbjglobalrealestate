@@ -336,7 +336,7 @@ const BuyerGuide = () => {
               <span className="text-white group-hover:text-black transition-colors">Read the Full Guide</span>
               <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
             </button>
-            <Link to="/properties">
+            <Link to="/properties?transaction=buy">
               <button 
                 className="group relative inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 text-sm md:text-base font-bold rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
                 style={{
@@ -370,14 +370,14 @@ const BuyerGuide = () => {
 
       {/* Introduction - Who This Guide Is For */}
       <section id="who-this-guide-for" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
+        <div className="jj-guide-content">
+          <div className="mb-12">
             <h2 className="text-3xl md:text-4xl font-light text-black mb-6">
               <span className="text-gold">Who</span> This Guide Is For
             </h2>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {audienceTypes.map((item, index) => (
               <div key={index} className="jj-box-active p-6 text-center hover:border-gold hover:shadow-lg transition-all">
                 <div className="jj-icon-box-active w-12 h-12 rounded-xl mx-auto mb-4">
@@ -393,8 +393,8 @@ const BuyerGuide = () => {
 
       {/* Step-by-Step Buying Process */}
       <section id="buying-process" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
-        <div className="max-w-6xl mx-auto">
-          <GuideSectionHeader icon={FileText} title="Step by Step Buying Process" centered />
+        <div className="jj-guide-content">
+          <GuideSectionHeader icon={FileText} title="Step by Step Buying Process" />
 
             <div className="space-y-6">
               {buyingSteps.map((step) => (
@@ -519,8 +519,8 @@ const BuyerGuide = () => {
       {/* Divider */}
       {/* Agency Fees & Buyer Costs */}
       <section id="agency-fees" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
-        <div className="max-w-6xl mx-auto">
-          <GuideSectionHeader icon={Wallet} title="Agency Fees & Buyer Costs" centered />
+        <div className="jj-guide-content">
+          <GuideSectionHeader icon={Wallet} title="Agency Fees & Buyer Costs" />
 
           <div className="grid md:grid-cols-2 gap-6">
             {/* Off-Plan Purchases */}

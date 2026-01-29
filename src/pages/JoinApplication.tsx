@@ -234,29 +234,40 @@ export default function JoinApplication() {
   }
 
   // If user already has an application, redirect to onboarding
+  // Redirect returning users directly to onboarding dashboard
   if (existingApplication) {
     return (
-      <div className="min-h-screen bg-black">
-        {/* Full-width champagne section */}
-        <section className="jj-section-champagne py-16 px-4">
-          <div className="max-w-lg mx-auto">
-            <Card className="jj-box-active">
-              <CardHeader className="text-center">
-                <CheckCircle className="h-16 w-16 text-emerald-600 mx-auto mb-4" />
-                <CardTitle className="text-2xl text-black">Application Already Submitted</CardTitle>
-                <CardDescription className="text-black/70">
-                  Your application is currently <span className="font-semibold text-gold">{existingApplication.status}</span>
+      <div className="min-h-screen bg-black flex flex-col">
+        {/* Full-screen champagne section */}
+        <section className="jj-section-champagne flex-1 flex items-center justify-center px-4">
+          <div className="w-full max-w-2xl mx-auto">
+            <Card className="jj-box-active p-8 md:p-12">
+              <CardHeader className="text-center pb-6">
+                <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border-2 border-emerald-500/40 flex items-center justify-center">
+                  <CheckCircle className="h-12 w-12 text-emerald-600" />
+                </div>
+                <CardTitle className="text-3xl md:text-4xl text-black mb-4">Welcome Back!</CardTitle>
+                <CardDescription className="text-lg text-black/70">
+                  Your application status: <span className="font-semibold text-gold capitalize">{existingApplication.status}</span>
                 </CardDescription>
               </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-black/60 mb-6">
-                  You can track your application status and access training materials (once approved) from your onboarding dashboard.
+              <CardContent className="text-center space-y-6">
+                <p className="text-black/60 text-lg leading-relaxed">
+                  Continue your journey with JBJ Global Real Estate. Access your onboarding dashboard to track progress, complete training modules, and unlock broker tools.
                 </p>
-                <Button variant="primary" asChild>
-                  <Link to="/onboarding">
-                    <span className="text-black">Go to</span><span className="text-gold"> Onboarding Dashboard</span>
+                <div className="pt-4">
+                  <Button variant="primary" size="lg" asChild className="px-8 py-6 text-lg">
+                    <Link to="/onboarding">
+                      <span className="text-black">Continue to</span>
+                      <span className="text-gold ml-1">Onboarding Dashboard</span>
+                    </Link>
+                  </Button>
+                </div>
+                <div className="pt-2">
+                  <Link to="/hr-agent" className="text-gold hover:underline text-sm">
+                    Need help? Chat with Jessica, our HR Assistant
                   </Link>
-                </Button>
+                </div>
               </CardContent>
             </Card>
           </div>

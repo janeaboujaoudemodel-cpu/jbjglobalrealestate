@@ -354,6 +354,17 @@ All colors MUST be HSL.
   }
 }
 
+/* Guide content container - stops before TOC navigator (288px + gap) */
+.jj-guide-content {
+  @apply max-w-6xl mx-auto px-4;
+}
+
+@media (min-width: 1024px) {
+  .jj-guide-content {
+    padding-right: 20rem; /* 320px to clear 288px TOC + gap */
+  }
+}
+
 /* Layer 2 wrapper with proper gutters - stretched cards */
 .jj-layer-2 {
   @apply mx-1 sm:mx-2 md:mx-3 lg:mx-4 rounded-2xl border border-gold/30 p-2 sm:p-3 md:p-4 lg:p-6;
