@@ -80,16 +80,16 @@ export function HuntingDashboard() {
 
       {/* Target Type Tabs */}
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as HuntTargetType)}>
-        <TabsList className="grid grid-cols-3 w-full max-w-md bg-card border-2 border-gold/20">
-          <TabsTrigger value="broker" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-foreground">
+        <TabsList className="grid grid-cols-3 w-full max-w-md bg-gradient-to-r from-[#F5EBD7] to-[#E8DCC8] border-2 border-gold/30">
+          <TabsTrigger value="broker" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-black">
             <Building2 className="h-4 w-4" />
             Brokers
           </TabsTrigger>
-          <TabsTrigger value="investor" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-foreground">
+          <TabsTrigger value="investor" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-black">
             <TrendingUp className="h-4 w-4" />
             Investors
           </TabsTrigger>
-          <TabsTrigger value="employee" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-foreground">
+          <TabsTrigger value="employee" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-black">
             <Briefcase className="h-4 w-4" />
             Employees
           </TabsTrigger>
