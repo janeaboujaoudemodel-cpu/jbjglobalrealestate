@@ -100,8 +100,20 @@ const DeveloperPartnersMarquee = () => {
     // IMPORTANT: Keep spacing locked (px-* on the Link). Only adjust logo size.
     // We adjust size by changing responsive HEIGHT classes (layout-safe; no transform scaling).
     // MOBILE: Smaller logos to fit ~4 in viewport; DESKTOP: Keep original larger sizes
-    // Unified sizing for all logos - same height for consistent alignment
-    const sizeClass = "h-6 md:h-10 lg:h-12 w-auto max-w-[120px] md:max-w-[200px] lg:max-w-[240px] object-contain";
+    const base = "w-auto max-w-[120px] md:max-w-[200px] lg:max-w-[240px] object-contain";
+
+    const sizeClass = (() => {
+      switch (developer.slug) {
+        // Bigger logos - Danube & Dubai Properties to match DAMAC/Emaar prominence
+        case "danube-properties":
+        case "dubai-properties":
+          return `h-8 md:h-12 lg:h-14 ${base}`;
+
+        // Standard sizing for all others
+        default:
+          return `h-6 md:h-10 lg:h-12 ${base}`;
+      }
+    })();
 
     return (
       <Link
