@@ -333,11 +333,14 @@ const GlobalHeader = () => {
                 }}
               />
             </div>
-            {/* Premium Typography - always visible on desktop */}
+            {/* Premium Typography - changes based on transparent state */}
             <div className="flex flex-col shrink-0">
               <span 
-                className="font-bold text-sm xl:text-base tracking-[0.12em] uppercase whitespace-nowrap leading-none"
-                style={{
+                className={`font-bold text-sm xl:text-base tracking-[0.12em] uppercase whitespace-nowrap leading-none transition-all duration-300`}
+                style={isFullyTransparent ? {
+                  color: '#000000',
+                  textShadow: '0 1px 3px rgba(255,255,255,0.3)'
+                } : {
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 30%, #C8A766 70%, #D4AF37 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
@@ -348,8 +351,10 @@ const GlobalHeader = () => {
                 JBJ Global Real Estate
               </span>
               <span 
-                className="text-[9px] tracking-[0.25em] uppercase mt-1"
-                style={{
+                className="text-[9px] tracking-[0.25em] uppercase mt-1 transition-all duration-300"
+                style={isFullyTransparent ? {
+                  color: '#000000',
+                } : {
                   background: 'linear-gradient(90deg, #C8A766 0%, #D4AF37 50%, #C8A766 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
@@ -711,57 +716,76 @@ const GlobalHeader = () => {
             </div>
           )}
 
-          {/* DESKTOP HEADER (lg+): pill nav + right icons - no extra scaling needed since parent scales */}
+          {/* DESKTOP HEADER (lg+): nav items with dividers - transparent on hero, solid on scroll */}
           {!shouldUseMobileHeader && (
             <nav 
               className="flex-1 mx-2 xl:mx-4 flex justify-center" 
               aria-label="Primary"
             >
               <div 
-                className="flex items-center gap-0.5 xl:gap-1 rounded-full px-4 xl:px-6 py-2 border-2 border-gold/40"
-                style={{
+                className={`flex items-center gap-0.5 xl:gap-1 rounded-full px-4 xl:px-6 py-2 transition-all duration-300 ${
+                  isFullyTransparent 
+                    ? 'bg-transparent border-transparent' 
+                    : 'border-2 border-gold/40'
+                }`}
+                style={!isFullyTransparent ? {
                   background: 'linear-gradient(135deg, rgba(245,235,215,0.98) 0%, rgba(232,220,200,0.95) 50%, rgba(212,196,168,0.98) 100%)',
                   boxShadow: '0 8px 32px -8px rgba(0,0,0,0.4), 0 0 0 1px rgba(200,167,102,0.2), inset 0 2px 0 rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.05)',
-                }}
+                } : {}}
               >
                 {/* Home */}
                 <Link
                   to="/"
-                  className={`px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all rounded-full ${
-                    isActive("/") ? "text-gold bg-gold/15" : "text-zinc-800 hover:text-gold hover:bg-gold/10"
+                  className={`px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all ${
+                    isFullyTransparent
+                      ? isActive("/") ? "text-gold" : "text-white/90 hover:text-gold"
+                      : isActive("/") ? "text-gold bg-gold/15 rounded-full" : "text-zinc-800 hover:text-gold hover:bg-gold/10 rounded-full"
                   }`}
                   style={{ letterSpacing: '0.03em' }}
                 >
                   Home
                 </Link>
 
+                {/* Divider */}
+                {isFullyTransparent && <span className="text-white/30 text-xs px-1">|</span>}
+
                 {renderDropdown("Properties", propertiesLinks, () => location.pathname === '/properties')}
+                {isFullyTransparent && <span className="text-white/30 text-xs px-1">|</span>}
                 {renderDropdown("Services", servicesLinks, () => location.pathname.startsWith('/services'))}
+                {isFullyTransparent && <span className="text-white/30 text-xs px-1">|</span>}
                 {renderDropdown("Guides", guidesLinks, () => 
                   ['/buyer-guide', '/seller-guide', '/landlord-guide', '/tenant-guide', '/areas', '/faq', '/investor-education', '/investor-faq', '/broker-faq'].some(p => location.pathname.startsWith(p))
                 )}
+                {isFullyTransparent && <span className="text-white/30 text-xs px-1">|</span>}
                 {renderDropdown("Market Intel", marketIntelLinks, () => 
                   location.pathname.startsWith('/market-intelligence') || location.pathname === '/market-report'
                 )}
+                {isFullyTransparent && <span className="text-white/30 text-xs px-1">|</span>}
                 {renderDropdown("Investor Hub", investorHubLinks, () => 
                   location.pathname.includes('ai-hub') || location.pathname === '/favorites'
                 )}
+                {isFullyTransparent && <span className="text-white/30 text-xs px-1">|</span>}
                 {renderDropdown("Broker Hub", brokerHubLinks, () => 
                   location.pathname.includes('broker-toolkit') || location.pathname.includes('broker-education')
                 )}
+                {isFullyTransparent && <span className="text-white/30 text-xs px-1">|</span>}
                 {renderDropdown("About", aboutLinks, () => 
                   ['/about', '/founder', '/team', '/awards'].some(p => location.pathname.startsWith(p))
                 )}
+                {isFullyTransparent && <span className="text-white/30 text-xs px-1">|</span>}
 
                 <Link
                   to="/contact"
-                  className={`px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all rounded-full ${
-                    isActive("/contact") ? "text-gold bg-gold/15" : "text-zinc-800 hover:text-gold hover:bg-gold/10"
+                  className={`px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all ${
+                    isFullyTransparent
+                      ? isActive("/contact") ? "text-gold" : "text-white/90 hover:text-gold"
+                      : isActive("/contact") ? "text-gold bg-gold/15 rounded-full" : "text-zinc-800 hover:text-gold hover:bg-gold/10 rounded-full"
                   }`}
                   style={{ letterSpacing: '0.03em' }}
                 >
                   Contact
                 </Link>
+                {isFullyTransparent && <span className="text-white/30 text-xs px-1">|</span>}
 
                 {renderDropdown("More", moreLinks, () => 
                   ['/news', '/join'].some(p => location.pathname.startsWith(p))
@@ -772,44 +796,52 @@ const GlobalHeader = () => {
 
           {!shouldUseMobileHeader && (
             <div 
-              className="flex items-center gap-1 px-4 py-2 rounded-full border border-gold/30 shrink-0 mr-3 xl:mr-4"
-              style={{
+              className={`flex items-center gap-1 px-4 py-2 rounded-full shrink-0 mr-3 xl:mr-4 transition-all duration-300 ${
+                isFullyTransparent 
+                  ? 'bg-transparent border-transparent' 
+                  : 'border border-gold/30'
+              }`}
+              style={!isFullyTransparent ? {
                 background: 'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(20,20,20,0.9) 100%)',
                 boxShadow: '0 4px 16px -4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05), 0 0 30px -10px rgba(200,167,102,0.15)'
-              }}
+              } : {}}
             >
               {/* Search Icon */}
               <button
-                className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
+                className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10"
                 onClick={() => setSearchOpen(true)}
                 aria-label="Search"
               >
                 <Search 
-                  className="w-5 h-5 text-gold group-hover:text-white transition-colors duration-300" 
-                  style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }} 
+                  className={`w-5 h-5 transition-colors duration-300 ${
+                    isFullyTransparent ? 'text-white group-hover:text-gold' : 'text-gold group-hover:text-white'
+                  }`}
+                  style={!isFullyTransparent ? { filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' } : {}} 
                 />
               </button>
 
               {/* Divider */}
-              <div className="w-px h-5 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/30' : 'via-gold/40'} to-transparent`} />
 
               {/* Language Switcher */}
               <LanguageSwitcher variant="icon-only" />
 
               {/* Divider */}
-              <div className="w-px h-5 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/30' : 'via-gold/40'} to-transparent`} />
 
               {/* Account Icon */}
               <div className="w-9 h-9 flex items-center justify-center">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button 
-                      className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
+                      className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10"
                       aria-label={user ? t('nav.myAccount') : t('nav.signIn')}
                     >
                       <User 
-                        className="w-5 h-5 text-gold group-hover:text-white transition-colors duration-300" 
-                        style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }} 
+                        className={`w-5 h-5 transition-colors duration-300 ${
+                          isFullyTransparent ? 'text-white group-hover:text-gold' : 'text-gold group-hover:text-white'
+                        }`}
+                        style={!isFullyTransparent ? { filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' } : {}} 
                       />
                     </button>
                   </DropdownMenuTrigger>

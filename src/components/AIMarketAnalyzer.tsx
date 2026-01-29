@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Brain, TrendingUp, TrendingDown, AlertTriangle, ChevronDown, ChevronUp, Sparkles, BarChart3, Target, Shield } from "lucide-react";
+import { Brain, TrendingUp, TrendingDown, AlertTriangle, Sparkles, BarChart3, Target, Shield, Send, Loader2, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -15,6 +16,11 @@ interface MarketInsight {
   riskFactors: string[];
   avgAreaPriceSqft: number;
   summary: string;
+}
+
+interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
 }
 
 interface AIMarketAnalyzerProps {
@@ -46,15 +52,23 @@ export const AIMarketAnalyzer = ({
 }: AIMarketAnalyzerProps) => {
   const [insights, setInsights] = useState<MarketInsight | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // Chat state
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [chatInput, setChatInput] = useState("");
+  const [isChatLoading, setIsChatLoading] = useState(false);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  // Auto-fetch analysis on mount
+  useEffect(() => {
+    if (variant === 'full' && !insights && !isLoading) {
+      fetchAnalysis();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [variant]);
 
   const fetchAnalysis = async () => {
-    if (insights) {
-      setIsExpanded(!isExpanded);
-      return;
-    }
-
     setIsLoading(true);
     setError(null);
 
@@ -78,7 +92,6 @@ export const AIMarketAnalyzer = ({
       if (data.error) throw new Error(data.error);
 
       setInsights(data);
-      setIsExpanded(true);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Analysis failed';
       setError(message);
@@ -87,6 +100,53 @@ export const AIMarketAnalyzer = ({
       setIsLoading(false);
     }
   };
+
+  const handleChatSubmit = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (!chatInput.trim() || isChatLoading) return;
+
+    const userMessage = chatInput.trim();
+    setChatInput("");
+    setChatMessages(prev => [...prev, { role: 'user', content: userMessage }]);
+    setIsChatLoading(true);
+
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke('ai-market-chat', {
+        body: {
+          question: userMessage,
+          context: {
+            propertyName: name,
+            location,
+            totalPrice,
+            pricePerSqft,
+            size,
+            bedrooms,
+            developer,
+            amenities,
+            handoverDate,
+            insights,
+          },
+        },
+      });
+
+      if (fnError) throw fnError;
+      if (data.error) throw new Error(data.error);
+
+      setChatMessages(prev => [...prev, { role: 'assistant', content: data.answer || data.response }]);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to get answer';
+      setChatMessages(prev => [...prev, { role: 'assistant', content: `Sorry, I couldn't process your question. ${message}` }]);
+    } finally {
+      setIsChatLoading(false);
+    }
+  };
+
+  // Scroll chat to bottom on new messages
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [chatMessages]);
 
   const getDemandColor = (score: number) => {
     if (score >= 8) return 'text-green-600';
@@ -109,10 +169,16 @@ export const AIMarketAnalyzer = ({
     return 'bg-orange-100 text-orange-800 border-orange-300';
   };
 
+  const quickQuestions = [
+    "Who are the other developers in this area?",
+    "What is the average price per sqft here?",
+    "What are the rental yields in this location?",
+    "What amenities are nearby?",
+  ];
+
   if (variant === 'compact') {
     return (
       <div className="border border-gold/30 rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] overflow-hidden">
-        {/* Compact Header - Always visible */}
         <button
           onClick={fetchAnalysis}
           disabled={isLoading}
@@ -133,66 +199,13 @@ export const AIMarketAnalyzer = ({
           {isLoading ? (
             <div className="w-5 h-5 border-2 border-gold border-t-transparent rounded-full animate-spin" />
           ) : insights ? (
-            <div className="flex items-center gap-2">
-              <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${getRatingColor(insights.investmentRating)}`}>
-                {insights.investmentRating}
-              </span>
-              {isExpanded ? (
-                <ChevronUp className="w-4 h-4 text-gold" />
-              ) : (
-                <ChevronDown className="w-4 h-4 text-gold" />
-              )}
-            </div>
+            <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${getRatingColor(insights.investmentRating)}`}>
+              {insights.investmentRating}
+            </span>
           ) : (
             <Sparkles className="w-4 h-4 text-gold group-hover:animate-pulse" />
           )}
         </button>
-
-        {/* Expanded Content */}
-        <AnimatePresence>
-          {isExpanded && insights && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="border-t border-gold/20"
-            >
-              <div className="p-4 space-y-3">
-                {/* Quick Stats Row */}
-                <div className="grid grid-cols-3 gap-2">
-                  <div className="text-center p-2 bg-white/50 rounded-lg border border-gold/20">
-                    <TrendingUp className={`w-4 h-4 mx-auto mb-1 ${getDemandColor(insights.supplyDemandScore)}`} />
-                    <p className="text-[10px] text-zinc-500">Demand</p>
-                    <p className="text-xs font-semibold text-black">{insights.supplyDemandScore}/10</p>
-                  </div>
-                  <div className="text-center p-2 bg-white/50 rounded-lg border border-gold/20">
-                    <BarChart3 className={`w-4 h-4 mx-auto mb-1 ${getPriceComparisonColor(insights.priceComparisonPercent)}`} />
-                    <p className="text-[10px] text-zinc-500">vs Market</p>
-                    <p className="text-xs font-semibold text-black">
-                      {insights.priceComparisonPercent > 0 ? '+' : ''}{insights.priceComparisonPercent}%
-                    </p>
-                  </div>
-                  <div className="text-center p-2 bg-white/50 rounded-lg border border-gold/20">
-                    <Target className="w-4 h-4 mx-auto mb-1 text-gold" />
-                    <p className="text-[10px] text-zinc-500">Avg/sqft</p>
-                    <p className="text-xs font-semibold text-black">
-                      {insights.avgAreaPriceSqft.toLocaleString()}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Summary */}
-                <p className="text-xs text-zinc-600 leading-relaxed">{insights.summary}</p>
-
-                {/* AI Disclosure */}
-                <p className="text-[9px] text-zinc-400 italic border-t border-gold/10 pt-2">
-                  AI-generated analysis. Not financial advice. Verify with licensed professionals.
-                </p>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         {error && (
           <div className="p-3 bg-red-50 border-t border-red-200">
@@ -203,47 +216,33 @@ export const AIMarketAnalyzer = ({
     );
   }
 
-  // Full variant for detail pages
+  // Full variant for detail pages - Auto-loads and includes chat
   return (
     <div className="border-2 border-gold/30 rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-lg overflow-hidden">
       {/* Header */}
       <div className="p-6 border-b border-gold/20 bg-gradient-to-r from-purple-900/10 to-purple-800/5">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center shadow-lg">
-              <Brain className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold text-black">AI Market Intelligence</h3>
-              <p className="text-sm text-zinc-500">Powered by advanced market analysis</p>
-            </div>
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center shadow-lg">
+            <Brain className="w-6 h-6 text-white" />
           </div>
-          
-          {!insights && (
-            <Button
-              onClick={fetchAnalysis}
-              disabled={isLoading}
-              variant="primary"
-              className="h-10 px-6"
-            >
-              {isLoading ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                  Analyzing...
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Analyze Now
-                </>
-              )}
-            </Button>
-          )}
+          <div>
+            <h3 className="text-lg font-bold text-black">AI Market Intelligence Analyzer</h3>
+            <p className="text-sm text-zinc-500">Powered by advanced market analysis</p>
+          </div>
         </div>
       </div>
 
-      {/* Content */}
-      {insights ? (
+      {/* Loading State */}
+      {isLoading && !insights && (
+        <div className="p-8 text-center">
+          <Loader2 className="w-12 h-12 mx-auto mb-4 text-purple-500 animate-spin" />
+          <h4 className="text-lg font-semibold text-black mb-2">Analyzing Market Data...</h4>
+          <p className="text-zinc-500 text-sm">Gathering insights for {name}</p>
+        </div>
+      )}
+
+      {/* Content - Always visible when insights loaded */}
+      {insights && (
         <div className="p-6 space-y-6">
           {/* Rating Banner */}
           <div className={`p-4 rounded-xl border-2 ${getRatingColor(insights.investmentRating)} bg-opacity-50`}>
@@ -330,6 +329,77 @@ export const AIMarketAnalyzer = ({
             </div>
           </div>
 
+          {/* AI Chat Assistant */}
+          <div className="border-t border-gold/20 pt-6">
+            <div className="flex items-center gap-2 mb-4">
+              <MessageCircle className="w-5 h-5 text-purple-600" />
+              <h4 className="font-semibold text-black">Ask AI Analyzer</h4>
+            </div>
+            
+            {/* Quick Questions */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {quickQuestions.map((q) => (
+                <button
+                  key={q}
+                  onClick={() => {
+                    setChatInput(q);
+                    handleChatSubmit();
+                  }}
+                  disabled={isChatLoading}
+                  className="text-xs px-3 py-1.5 rounded-full border border-gold/40 text-zinc-700 hover:border-gold hover:bg-gold/10 transition-colors"
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
+
+            {/* Chat Messages */}
+            {chatMessages.length > 0 && (
+              <div 
+                ref={chatContainerRef}
+                className="max-h-60 overflow-y-auto mb-4 space-y-3 p-4 bg-white/50 rounded-xl border border-gold/20"
+              >
+                {chatMessages.map((msg, idx) => (
+                  <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`max-w-[80%] p-3 rounded-xl text-sm ${
+                      msg.role === 'user' 
+                        ? 'bg-purple-600 text-white' 
+                        : 'bg-white border border-gold/20 text-zinc-700'
+                    }`}>
+                      {msg.content}
+                    </div>
+                  </div>
+                ))}
+                {isChatLoading && (
+                  <div className="flex justify-start">
+                    <div className="p-3 rounded-xl bg-white border border-gold/20">
+                      <Loader2 className="w-4 h-4 animate-spin text-purple-600" />
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Chat Input */}
+            <form onSubmit={handleChatSubmit} className="flex gap-2">
+              <Input
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                placeholder="Ask about this property, area, or market..."
+                disabled={isChatLoading}
+                className="flex-1"
+              />
+              <Button
+                type="submit"
+                variant="primary"
+                disabled={isChatLoading || !chatInput.trim()}
+                className="px-4"
+              >
+                {isChatLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+              </Button>
+            </form>
+          </div>
+
           {/* Disclaimer */}
           <div className="p-4 bg-zinc-100/50 rounded-xl border border-zinc-200">
             <div className="flex items-start gap-3">
@@ -344,23 +414,17 @@ export const AIMarketAnalyzer = ({
             </div>
           </div>
         </div>
-      ) : (
-        <div className="p-8 text-center">
-          <Brain className="w-16 h-16 mx-auto mb-4 text-purple-300" />
-          <h4 className="text-lg font-semibold text-black mb-2">Ready to Analyze</h4>
-          <p className="text-zinc-500 text-sm max-w-md mx-auto">
-            Get AI-powered market insights including supply/demand analysis, 
-            price comparisons, and investment considerations.
-          </p>
-        </div>
       )}
 
-      {error && (
+      {error && !insights && (
         <div className="p-4 bg-red-50 border-t border-red-200">
           <p className="text-sm text-red-600 flex items-center gap-2">
             <AlertTriangle className="w-4 h-4" />
             {error}
           </p>
+          <Button variant="secondary" size="sm" onClick={fetchAnalysis} className="mt-2">
+            Retry Analysis
+          </Button>
         </div>
       )}
     </div>
