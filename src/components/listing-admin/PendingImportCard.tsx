@@ -161,9 +161,9 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
         )}
       </div>
 
-      <CardContent className="p-5 flex flex-col min-h-[220px]">
-        {/* Title - fixed height */}
-        <h3 className="font-semibold text-foreground text-base mb-1 line-clamp-1 h-6">{item.name}</h3>
+      <CardContent className="p-5 flex flex-col min-h-[240px]">
+        {/* Title - 2 lines for full readability */}
+        <h3 className="font-semibold text-foreground text-base mb-1 line-clamp-2 min-h-[48px]">{item.name}</h3>
 
         {/* Developer - fixed height */}
         <div className="h-5 mb-2">
@@ -178,12 +178,12 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
               <span className="truncate">{item.location}</span>
             </span>
           )}
-          {(item.bedrooms_min || item.bedrooms_max) && (
+          {(item.bedrooms_min !== null || item.bedrooms_max !== null) && (
             <span className="flex items-center gap-1 flex-shrink-0">
               <Bed className="h-3.5 w-3.5" />
               {item.bedrooms_min === item.bedrooms_max
-                ? `${item.bedrooms_min} BR`
-                : `${item.bedrooms_min || "?"}-${item.bedrooms_max || "?"} BR`}
+                ? item.bedrooms_min === 0 ? "Studio" : `${item.bedrooms_min} BR`
+                : `${item.bedrooms_min === 0 ? "Studio" : item.bedrooms_min}-${item.bedrooms_max} BR`}
             </span>
           )}
         </div>
