@@ -214,19 +214,19 @@ const GlobalHeader = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button 
-          className={`flex items-center gap-0.5 px-2 xl:px-3 py-1.5 text-[10px] xl:text-[11px] font-bold whitespace-nowrap transition-all rounded-full ${
+          className={`flex items-center gap-1 px-3 xl:px-4 py-2 text-sm xl:text-base font-semibold whitespace-nowrap transition-all rounded-full ${
             isFullyTransparent
               ? isActiveCheck?.() 
                 ? 'text-gold bg-transparent' 
-                : 'text-white/90 hover:text-gold bg-transparent'
+                : 'text-black hover:text-gold bg-transparent'
               : isActiveCheck?.() 
                 ? 'text-gold bg-gold/15' 
                 : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
           }`}
-          style={{ letterSpacing: '0.03em' }}
+          style={{ letterSpacing: '0.02em' }}
         >
           {label}
-          <ChevronDown className="w-2.5 h-2.5 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+          <ChevronDown className="w-3 h-3 transition-transform duration-200 group-data-[state=open]:rotate-180" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 

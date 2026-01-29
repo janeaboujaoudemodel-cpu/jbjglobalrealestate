@@ -69,7 +69,7 @@ const formatPrice = (price: number) => {
 
 const MAPS_API_KEY = "AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8";
 
-// Sticky sub-nav tabs config
+// Sticky sub-nav tabs config - Brochure removed (now CTA only)
 const SUB_NAV_TABS = [
   { id: "details", label: "Details", icon: FileText },
   { id: "gallery", label: "Gallery", icon: ImageIcon },
@@ -77,7 +77,6 @@ const SUB_NAV_TABS = [
   { id: "amenities", label: "Amenities", icon: Building2 },
   { id: "location", label: "Location", icon: MapPin },
   { id: "payment", label: "Payment Plan", icon: CreditCard },
-  { id: "brochure", label: "Brochure", icon: Download },
   { id: "ai", label: "AI Analyzer", icon: Sparkles },
   { id: "mortgage", label: "Mortgage", icon: Calculator },
 ] as const;
@@ -156,7 +155,6 @@ export default function ProjectDetailLayout({
       amenities: amenitiesRef,
       location: locationRef,
       payment: paymentRef,
-      brochure: brochureRef,
       ai: aiRef,
       mortgage: mortgageRef,
     };
@@ -387,25 +385,25 @@ export default function ProjectDetailLayout({
       {/* MAIN CONTENT */}
       <section className="jj-section-champagne">
         <div className="container mx-auto px-4">
-          {/* Quick Stats Grid */}
+          {/* Quick Stats Grid - Premium gold border visible */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-            <div className="jj-card-inner p-4 text-center">
-              <p className="text-meta-xs text-muted-foreground">Starting Price</p>
-              <p className="mt-1 text-lg font-semibold text-foreground">
+            <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
+              <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Starting Price</p>
+              <p className="mt-2 text-xl font-bold text-gold">
                 {typeof project.price_from === "number" ? formatPrice(project.price_from) : "On request"}
               </p>
             </div>
-            <div className="jj-card-inner p-4 text-center">
-              <p className="text-meta-xs text-muted-foreground">Handover</p>
-              <p className="mt-1 text-lg font-semibold text-foreground">{project.handover_date || "TBA"}</p>
+            <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
+              <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Handover</p>
+              <p className="mt-2 text-xl font-bold text-foreground">{project.handover_date || "TBA"}</p>
             </div>
-            <div className="jj-card-inner p-4 text-center">
-              <p className="text-meta-xs text-muted-foreground">Payment Plan</p>
-              <p className="mt-1 text-lg font-semibold text-foreground">{project.payment_plan || "Available"}</p>
+            <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
+              <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Payment Plan</p>
+              <p className="mt-2 text-xl font-bold text-foreground">{project.payment_plan || "Available"}</p>
             </div>
-            <div className="jj-card-inner p-4 text-center">
-              <p className="text-meta-xs text-muted-foreground">Bedrooms</p>
-              <p className="mt-1 text-lg font-semibold text-foreground">{bedroomsText || "Varies"}</p>
+            <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
+              <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Bedrooms</p>
+              <p className="mt-2 text-xl font-bold text-foreground">{bedroomsText || "Varies"}</p>
             </div>
           </div>
 
@@ -427,8 +425,9 @@ export default function ProjectDetailLayout({
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-h3-sm font-medium text-foreground">Project Gallery</h3>
                     <Button
-                      variant="secondary"
+                      variant="primary"
                       size="sm"
+                      className="border-2 border-gold shadow-lg"
                       onClick={() => handleDocumentDownload("images", images[0]?.url)}
                     >
                       <Download className="w-4 h-4" />
@@ -468,7 +467,17 @@ export default function ProjectDetailLayout({
                   ))}
                 </div>
               ) : (
-                <p className="mt-3 text-body text-muted-foreground">Floor plans will be available upon request.</p>
+                <div className="mt-4 text-center py-8">
+                  <Layers className="w-12 h-12 mx-auto text-gold/50 mb-3" />
+                  <p className="text-body text-muted-foreground mb-4">Floor plans are being prepared for this project.</p>
+                  <Button 
+                    variant="primary" 
+                    size="sm"
+                    onClick={() => handleDocumentDownload("floor_plan")}
+                  >
+                    Request Floor Plans
+                  </Button>
+                </div>
               )}
             </div>
           </div>
@@ -486,7 +495,10 @@ export default function ProjectDetailLayout({
                   ))}
                 </div>
               ) : (
-                <p className="mt-3 text-body text-muted-foreground">Amenities will be available soon.</p>
+                <div className="mt-4 text-center py-8">
+                  <Building2 className="w-12 h-12 mx-auto text-gold/50 mb-3" />
+                  <p className="text-body text-muted-foreground">Amenities information will be available soon.</p>
+                </div>
               )}
             </div>
           </div>

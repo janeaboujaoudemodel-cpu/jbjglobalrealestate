@@ -175,18 +175,21 @@ const CarouselPrevious = React.forwardRef<HTMLButtonElement, React.ComponentProp
         variant={variant}
         size={size}
         className={cn(
-          "absolute h-8 w-8 rounded-full border-2 border-gold/40 shadow-lg hover:shadow-gold/40 hover:border-gold transition-all",
-          "bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]",
+          "absolute h-10 w-10 rounded-full border-2 border-gold shadow-lg hover:shadow-gold/60 hover:border-gold transition-all z-10",
+          "bg-white/95 hover:bg-white",
           orientation === "horizontal"
-            ? "-left-12 top-1/2 -translate-y-1/2"
+            ? "left-2 top-1/2 -translate-y-1/2"
             : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
           className,
         )}
         disabled={!canScrollPrev}
-        onClick={scrollPrev}
+        onClick={(e) => {
+          e.stopPropagation();
+          scrollPrev();
+        }}
         {...props}
       >
-        <ArrowLeft className="h-4 w-4 text-black" />
+        <ArrowLeft className="h-5 w-5 text-zinc-800" />
         <span className="sr-only">Previous slide</span>
       </Button>
     );
@@ -204,18 +207,21 @@ const CarouselNext = React.forwardRef<HTMLButtonElement, React.ComponentProps<ty
         variant={variant}
         size={size}
         className={cn(
-          "absolute h-8 w-8 rounded-full border-2 border-gold/40 shadow-lg hover:shadow-gold/40 hover:border-gold transition-all",
-          "bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]",
+          "absolute h-10 w-10 rounded-full border-2 border-gold shadow-lg hover:shadow-gold/60 hover:border-gold transition-all z-10",
+          "bg-white/95 hover:bg-white",
           orientation === "horizontal"
-            ? "-right-12 top-1/2 -translate-y-1/2"
+            ? "right-2 top-1/2 -translate-y-1/2"
             : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
           className,
         )}
         disabled={!canScrollNext}
-        onClick={scrollNext}
+        onClick={(e) => {
+          e.stopPropagation();
+          scrollNext();
+        }}
         {...props}
       >
-        <ArrowRight className="h-4 w-4 text-black" />
+        <ArrowRight className="h-5 w-5 text-zinc-800" />
         <span className="sr-only">Next slide</span>
       </Button>
     );

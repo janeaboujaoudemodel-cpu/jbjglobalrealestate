@@ -98,20 +98,20 @@ export function ListingApprovalCard({
             }}
           />
           
-          {/* Navigation arrows - Always visible */}
+          {/* Navigation arrows - Always visible with gold border */}
           {images.length > 1 && (
             <>
               <button
-                onClick={prevImage}
-                className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-zinc-700 flex items-center justify-center shadow-lg transition-all z-10"
+                onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border-2 border-gold hover:bg-gold/10 text-zinc-700 flex items-center justify-center shadow-lg transition-all z-10"
               >
-                <ChevronLeft className="w-4 h-4" />
+                <ChevronLeft className="w-5 h-5" />
               </button>
               <button
-                onClick={nextImage}
-                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-zinc-700 flex items-center justify-center shadow-lg transition-all z-10"
+                onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border-2 border-gold hover:bg-gold/10 text-zinc-700 flex items-center justify-center shadow-lg transition-all z-10"
               >
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-5 h-5" />
               </button>
               
               {/* Image dots indicator */}
