@@ -91,6 +91,7 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
             src={activeImage.url}
             alt={activeImage.alt || item.name}
             className="w-full h-full object-cover"
+            referrerPolicy="no-referrer"
             onError={(e) => {
               (e.target as HTMLImageElement).src = "/placeholder.svg";
             }}

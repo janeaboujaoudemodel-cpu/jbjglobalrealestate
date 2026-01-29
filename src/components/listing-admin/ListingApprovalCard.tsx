@@ -93,6 +93,7 @@ export function ListingApprovalCard({
             src={images[currentImageIndex]}
             alt={`${project.name} - Image ${currentImageIndex + 1}`}
             className="w-full h-full object-cover"
+            referrerPolicy="no-referrer"
             onError={(e) => {
               (e.target as HTMLImageElement).src = '/placeholder.svg';
             }}

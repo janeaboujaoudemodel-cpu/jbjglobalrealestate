@@ -37,6 +37,7 @@ export function SafeImage({ fallbackSrc, onError, ...props }: SafeImageProps) {
       src={resolvedSrc}
       loading={props.loading ?? "lazy"}
       decoding={props.decoding ?? "async"}
+      referrerPolicy="no-referrer"
       onError={(e) => {
         if (resolvedFallback && e.currentTarget.src !== resolvedFallback) {
           e.currentTarget.src = resolvedFallback;
