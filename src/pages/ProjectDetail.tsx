@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useProject } from "@/hooks/useProjects";
 import ImageCarousel from "@/components/ImageCarousel";
@@ -28,7 +28,8 @@ import {
   Layers,
   Map as MapIcon,
   Info,
-  Scale
+  Scale,
+  ChevronRight
 } from "lucide-react";
 import { getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 
@@ -36,7 +37,28 @@ const ProjectDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: project, isLoading } = useProject(slug || "");
   const [showReportModal, setShowReportModal] = useState(false);
+  const [heroImageIndex, setHeroImageIndex] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
   const inquiryRef = useRef<HTMLDivElement>(null);
+  
+  // Track scroll for header transparency
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 100);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Set CSS variable to control header transparency on this page
+  useEffect(() => {
+    document.documentElement.style.setProperty('--header-bg-opacity', isScrolled ? '1' : '0');
+    document.documentElement.classList.add('project-detail-page');
+    return () => {
+      document.documentElement.style.removeProperty('--header-bg-opacity');
+      document.documentElement.classList.remove('project-detail-page');
+    };
+  }, [isScrolled]);
   
   const scrollToInquiry = () => {
     inquiryRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -86,27 +108,63 @@ const ProjectDetail = () => {
     window.location.href = getCallUrl();
   };
 
+  const heroImages = project.images?.filter(img => img.image_url) || [];
+  const currentHeroImage = heroImages[heroImageIndex] || heroImages[0];
+
+  const goToPrevHero = () => {
+    setHeroImageIndex((prev) => (prev === 0 ? heroImages.length - 1 : prev - 1));
+  };
+
+  const goToNextHero = () => {
+    setHeroImageIndex((prev) => (prev === heroImages.length - 1 ? 0 : prev + 1));
+  };
+
   return (
     <>
-      {/* Hero Section with Project Image */}
-      <section className="relative w-full h-[60vh] min-h-[400px]">
-        {/* Background Image */}
+      {/* Full-Screen Hero Section - Transparent header on load */}
+      <section className="relative w-full h-screen min-h-[600px]">
+        {/* Background Image - Full viewport */}
         <div className="absolute inset-0">
-          {project.images?.[0]?.image_url ? (
+          {currentHeroImage?.image_url ? (
             <img 
-              src={project.images[0].image_url} 
+              src={currentHeroImage.image_url} 
               alt={project.name}
               className="w-full h-full object-cover"
             />
           ) : (
             <div className="w-full h-full bg-zinc-800" />
           )}
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+          {/* Gradient Overlay for readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/20" />
         </div>
 
-        {/* Hero Content */}
-        <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end pb-12">
+        {/* Hero Navigation Arrows - Premium Gold Style (same as listing cards) */}
+        {heroImages.length > 1 && (
+          <>
+            <button
+              onClick={goToPrevHero}
+              className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-card border-2 border-gold/60 text-gold flex items-center justify-center shadow-lg hover:bg-gold hover:text-black hover:border-gold transition-all duration-200"
+              aria-label="Previous image"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            <button
+              onClick={goToNextHero}
+              className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-card border-2 border-gold/60 text-gold flex items-center justify-center shadow-lg hover:bg-gold hover:text-black hover:border-gold transition-all duration-200"
+              aria-label="Next image"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+            
+            {/* Image Counter */}
+            <div className="absolute bottom-32 right-8 bg-black/50 px-4 py-2 rounded-full text-white text-sm z-20">
+              {heroImageIndex + 1} / {heroImages.length}
+            </div>
+          </>
+        )}
+
+        {/* Hero Content - Positioned at bottom */}
+        <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end pb-16 pt-32">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm mb-4 flex-wrap text-white/80">
             <Link to="/" className="hover:text-white transition-colors flex items-center gap-1">
@@ -130,18 +188,24 @@ const ProjectDetail = () => {
           {/* Title and CTA */}
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
-              <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">
+              <h1 className="text-4xl md:text-6xl font-bold text-white mb-3">
                 {project.name}
               </h1>
               {project.developer && (
-                <p className="text-lg text-white/80">
+                <p className="text-xl text-white/80">
                   by{' '}
                   <Link 
                     to={`/developer/${project.developer.slug}`}
-                    className="text-primary hover:underline font-medium"
+                    className="text-gold hover:underline font-medium"
                   >
                     {project.developer.name}
                   </Link>
+                </p>
+              )}
+              {project.location && (
+                <p className="text-white/70 mt-2 flex items-center gap-2">
+                  <MapPin className="w-4 h-4" />
+                  {project.location}
                 </p>
               )}
             </div>
@@ -150,7 +214,7 @@ const ProjectDetail = () => {
             <div className="flex items-center gap-3">
               {brochure && (
                 <a href={brochure.file_url} target="_blank" rel="noopener noreferrer">
-                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold">
+                  <Button className="bg-gold hover:bg-gold/90 text-black font-semibold">
                     <Download className="w-4 h-4 mr-2" />
                     Download Brochure
                   </Button>
@@ -201,7 +265,7 @@ const ProjectDetail = () => {
                       <Calendar className="w-5 h-5" />
                       <span className="text-sm font-medium text-zinc-600">Handover</span>
                     </div>
-                    <p className="text-xl font-bold text-black">{project.handover_date}</p>
+                    <p className="text-xl font-bold text-handover">{project.handover_date}</p>
                   </div>
                 )}
 
@@ -233,8 +297,8 @@ const ProjectDetail = () => {
                     </div>
                     <p className="text-lg font-semibold text-black">
                       {project.bedrooms_min === project.bedrooms_max
-                        ? `${project.bedrooms_min} BR`
-                        : `${project.bedrooms_min}-${project.bedrooms_max} BR`}
+                        ? project.bedrooms_min === 0 ? "Studio" : `${project.bedrooms_min} BR`
+                        : `${project.bedrooms_min === 0 ? "Studio" : project.bedrooms_min}-${project.bedrooms_max} BR`}
                     </p>
                   </div>
                 )}
@@ -280,6 +344,16 @@ const ProjectDetail = () => {
                   <Info className="w-3 h-3" />
                   Use two fingers to zoom on touch devices
                 </p>
+              </div>
+
+              {/* Inquiry Form - After Location */}
+              <div ref={inquiryRef}>
+                <ProjectInquiryForm 
+                  projectId={project.id}
+                  projectName={project.name}
+                  projectLocation={project.location}
+                  developerName={project.developer?.name}
+                />
               </div>
 
               {/* AI Market Analysis */}
@@ -329,16 +403,6 @@ const ProjectDetail = () => {
                 </div>
               </div>
 
-              {/* Inquiry Form */}
-              <div ref={inquiryRef}>
-                <ProjectInquiryForm 
-                  projectId={project.id}
-                  projectName={project.name}
-                  projectLocation={project.location}
-                  developerName={project.developer?.name}
-                />
-              </div>
-
               {/* Property Report */}
               <div className="bg-zinc-50 rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-4">
@@ -362,10 +426,10 @@ const ProjectDetail = () => {
                 <DocumentDownloads documents={project.documents || []} />
               </div>
 
-              {/* Mortgage Calculator */}
+              {/* Mortgage Calculator - Single Column Layout */}
               {project.price_from && (
                 <div className="bg-zinc-50 rounded-xl overflow-hidden">
-                  <MortgageCalculator defaultPrice={project.price_from} />
+                  <MortgageCalculator defaultPrice={project.price_from} compact={true} />
                 </div>
               )}
 

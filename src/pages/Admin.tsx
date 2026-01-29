@@ -443,12 +443,12 @@ const Admin = () => {
                 Visitors
               </TabsTrigger>
               <TabsTrigger
-                value="hr-department"
+                value="hr-hub"
                 className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
-                onClick={() => navigate("/employee-management")}
+                onClick={() => navigate("/hr-dashboard")}
               >
                 <Users className="w-4 h-4 mr-2" />
-                HR Department
+                HR Hub
               </TabsTrigger>
               <TabsTrigger
                 value="it-department"

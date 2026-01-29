@@ -287,10 +287,10 @@ export const AdminOverviewDashboard = () => {
         </Button>
       </div>
 
-      {/* System Health Panel */}
-      <Card className="bg-gradient-to-br from-zinc-900 to-zinc-800 border-zinc-700 shadow-xl">
+      {/* System Health Panel - Champagne theme */}
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 shadow-xl">
         <CardHeader className="pb-2">
-          <CardTitle className="text-white flex items-center gap-2">
+          <CardTitle className="text-black flex items-center gap-2">
             <Activity className="w-5 h-5 text-gold" />
             System Health
           </CardTitle>
@@ -307,12 +307,12 @@ export const AdminOverviewDashboard = () => {
                 key={service.name}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`p-4 rounded-xl ${getHealthBg(service.status)} border border-zinc-700`}
+                className={`p-4 rounded-xl bg-white border-2 border-gold/20 shadow-sm`}
               >
                 <div className="flex items-center gap-3">
                   <div className={getHealthColor(service.status)}>{service.icon}</div>
                   <div>
-                    <p className="text-white font-medium text-sm">{service.name}</p>
+                    <p className="text-black font-medium text-sm">{service.name}</p>
                     <div className="flex items-center gap-1.5">
                       <div className={`w-2 h-2 rounded-full ${
                         service.status === "healthy" ? "bg-emerald-500" :
@@ -386,7 +386,7 @@ export const AdminOverviewDashboard = () => {
                 { label: "CRM Dashboard", icon: <MessageSquare className="w-4 h-4" />, href: "/admin/crm" },
                 { label: "AI Brokers", icon: <Brain className="w-4 h-4" />, href: "/admin", tabValue: "ai-brokers" },
                 { label: "Security Logs", icon: <Shield className="w-4 h-4" />, href: "/admin", tabValue: "security" },
-                { label: "HR Department", icon: <Users className="w-4 h-4" />, href: "/employee-management" },
+                { label: "HR Hub", icon: <Users className="w-4 h-4" />, href: "/hr-dashboard" },
                 { label: "IT Department", icon: <Server className="w-4 h-4" />, href: "/it-department" },
               ].map((action) => (
                 <Button

@@ -221,8 +221,9 @@ export const NationalitySelect: React.FC<NationalitySelectProps> = ({
           )}
         </SelectValue>
       </SelectTrigger>
-      <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 max-h-[300px] overflow-y-auto z-[9999]">
-        <div className="sticky top-0 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20">
+      <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 max-h-[300px] z-[9999]">
+        {/* Fixed search header - NOT sticky */}
+        <div className="p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
             <Input
@@ -231,21 +232,25 @@ export const NationalitySelect: React.FC<NationalitySelectProps> = ({
               placeholder="Search nationality..."
               className="pl-9 bg-white/80 border-gold/30 text-black placeholder:text-black/40 h-9"
               onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => e.stopPropagation()}
             />
           </div>
         </div>
-        {filteredNationalities.map(nat => (
-          <SelectItem 
-            key={nat.name} 
-            value={nat.name}
-            className="text-black hover:bg-gold/20 focus:bg-gold/20"
-          >
-            <span className="flex items-center gap-2">
-              <span className="text-lg">{nat.flag}</span>
-              <span>{nat.name}</span>
-            </span>
-          </SelectItem>
-        ))}
+        {/* Scrollable options area */}
+        <div className="max-h-[200px] overflow-y-auto">
+          {filteredNationalities.map(nat => (
+            <SelectItem 
+              key={nat.name} 
+              value={nat.name}
+              className="text-black hover:bg-gold/20 focus:bg-gold/20"
+            >
+              <span className="flex items-center gap-2">
+                <span className="text-lg">{nat.flag}</span>
+                <span>{nat.name}</span>
+              </span>
+            </SelectItem>
+          ))}
+        </div>
       </SelectContent>
     </Select>
   );

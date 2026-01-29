@@ -330,67 +330,67 @@ export default function BrokerSubscriptionsDashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Security Notice */}
-      <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4 flex items-start gap-3">
-        <AlertTriangle className="w-5 h-5 text-amber-400 mt-0.5 shrink-0" />
+      {/* Security Notice - Champagne theme */}
+      <div className="bg-gradient-to-r from-amber-50 to-amber-100 border-2 border-amber-300 rounded-xl p-4 flex items-start gap-3">
+        <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
         <div>
-          <p className="text-amber-200 font-medium text-sm">Sensitive Data Access</p>
-          <p className="text-amber-300/70 text-xs mt-1">
+          <p className="text-amber-800 font-medium text-sm">Sensitive Data Access</p>
+          <p className="text-amber-700 text-xs mt-1">
             All access to broker subscription data is logged for security and compliance purposes.
             This includes viewing, exporting, and any modifications to records.
           </p>
         </div>
       </div>
 
-      {/* Stats Cards */}
+      {/* Stats Cards - Champagne theme */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-zinc-900 border-zinc-800 p-6">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-2">
             <Users className="w-5 h-5 text-gold" />
-            <span className="text-gray-400 text-sm">Total Subscriptions</span>
+            <span className="text-zinc-600 text-sm">Total Subscriptions</span>
           </div>
-          <p className="text-white text-3xl font-bold">{totalSubscriptions}</p>
+          <p className="text-black text-3xl font-bold">{totalSubscriptions}</p>
         </Card>
-        <Card className="bg-zinc-900 border-zinc-800 p-6">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-2">
-            <Shield className="w-5 h-5 text-green-400" />
-            <span className="text-gray-400 text-sm">Active</span>
+            <Shield className="w-5 h-5 text-green-600" />
+            <span className="text-zinc-600 text-sm">Active</span>
           </div>
-          <p className="text-white text-3xl font-bold">{activeSubscriptions}</p>
+          <p className="text-black text-3xl font-bold">{activeSubscriptions}</p>
         </Card>
-        <Card className="bg-zinc-900 border-zinc-800 p-6">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-2">
-            <Calendar className="w-5 h-5 text-blue-400" />
-            <span className="text-gray-400 text-sm">On Trial</span>
+            <Calendar className="w-5 h-5 text-blue-600" />
+            <span className="text-zinc-600 text-sm">On Trial</span>
           </div>
-          <p className="text-white text-3xl font-bold">{trialSubscriptions}</p>
+          <p className="text-black text-3xl font-bold">{trialSubscriptions}</p>
         </Card>
-        <Card className="bg-zinc-900 border-zinc-800 p-6">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-2">
             <CreditCard className="w-5 h-5 text-gold" />
-            <span className="text-gray-400 text-sm">Active Revenue</span>
+            <span className="text-zinc-600 text-sm">Active Revenue</span>
           </div>
-          <p className="text-white text-3xl font-bold">${totalRevenue.toLocaleString()}</p>
+          <p className="text-black text-3xl font-bold">${totalRevenue.toLocaleString()}</p>
         </Card>
       </div>
 
-      {/* Filters and Actions */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+      {/* Filters and Actions - Champagne theme */}
+      <div className="bg-white border-2 border-gold/30 rounded-xl p-4 shadow-lg">
         <div className="flex flex-wrap items-center gap-4">
           <div className="relative flex-1 min-w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
             <Input
               placeholder="Search by name, email, company, or RERA..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 bg-zinc-950 border-zinc-700 text-white placeholder:text-gray-500"
+              className="pl-9"
             />
           </div>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-36 bg-zinc-950 border-zinc-700 text-white">
+            <SelectTrigger className="w-36 bg-white border-2 border-gold/30 text-black">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
-            <SelectContent className="bg-zinc-900 border-zinc-700">
+            <SelectContent className="bg-white border-gold/30">
               <SelectItem value="all">All Statuses</SelectItem>
               <SelectItem value="active">Active</SelectItem>
               <SelectItem value="trial">Trial</SelectItem>
@@ -400,10 +400,10 @@ export default function BrokerSubscriptionsDashboard() {
             </SelectContent>
           </Select>
           <Select value={tierFilter} onValueChange={setTierFilter}>
-            <SelectTrigger className="w-36 bg-zinc-950 border-zinc-700 text-white">
+            <SelectTrigger className="w-36 bg-white border-2 border-gold/30 text-black">
               <SelectValue placeholder="Tier" />
             </SelectTrigger>
-            <SelectContent className="bg-zinc-900 border-zinc-700">
+            <SelectContent className="bg-white border-gold/30">
               <SelectItem value="all">All Tiers</SelectItem>
               <SelectItem value="starter">Starter</SelectItem>
               <SelectItem value="professional">Professional</SelectItem>
@@ -411,9 +411,8 @@ export default function BrokerSubscriptionsDashboard() {
             </SelectContent>
           </Select>
           <Button
-            variant="outline"
+            variant="secondary"
             onClick={fetchSubscriptions}
-            className="border-zinc-700 text-white hover:bg-zinc-800"
           >
             <RefreshCw className="w-4 h-4 mr-2" />
             Refresh
@@ -425,20 +424,20 @@ export default function BrokerSubscriptionsDashboard() {
         </div>
       </div>
 
-      {/* Table */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+      {/* Table - Champagne theme */}
+      <div className="bg-white border-2 border-gold/30 rounded-xl overflow-hidden shadow-lg">
         <ScrollArea className="h-[500px]">
           <Table>
-            <TableHeader className="bg-zinc-950 sticky top-0">
-              <TableRow>
-                <TableHead className="text-gray-400">Broker</TableHead>
-                <TableHead className="text-gray-400">Contact</TableHead>
-                <TableHead className="text-gray-400">Company</TableHead>
-                <TableHead className="text-gray-400">Tier</TableHead>
-                <TableHead className="text-gray-400">Status</TableHead>
-                <TableHead className="text-gray-400">Usage</TableHead>
-                <TableHead className="text-gray-400">Created</TableHead>
-                <TableHead className="text-gray-400 text-right">Actions</TableHead>
+            <TableHeader className="bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] sticky top-0">
+              <TableRow className="border-gold/20">
+                <TableHead className="text-black font-semibold">Broker</TableHead>
+                <TableHead className="text-black font-semibold">Contact</TableHead>
+                <TableHead className="text-black font-semibold">Company</TableHead>
+                <TableHead className="text-black font-semibold">Tier</TableHead>
+                <TableHead className="text-black font-semibold">Status</TableHead>
+                <TableHead className="text-black font-semibold">Usage</TableHead>
+                <TableHead className="text-black font-semibold">Created</TableHead>
+                <TableHead className="text-black font-semibold text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
