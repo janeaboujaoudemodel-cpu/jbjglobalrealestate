@@ -145,7 +145,7 @@ const Index = () => {
               <Link to="/guides/legal" className="text-gold/70 hover:text-gold transition-colors cursor-pointer">Legal</Link>
               <span className="mx-1.5 sm:mx-2 text-gold/40">·</span>
               <Link to="/guides/golden-visa" className="text-gold/70 hover:text-gold transition-colors cursor-pointer">Visa</Link>
-              <span className="text-zinc-500/60 normal-case tracking-normal ml-1.5 sm:ml-2">via partners</span>
+              <span className="text-white/70 normal-case tracking-normal ml-1.5 sm:ml-2">via partners</span>
             </motion.p>
 
             {/* Hero CTA Buttons - Classy, smaller, consistent */}

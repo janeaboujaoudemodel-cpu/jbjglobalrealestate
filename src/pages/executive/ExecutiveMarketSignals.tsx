@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import ExecutiveAccessGate from "@/components/executive/ExecutiveAccessGate";
 import SEOHead from "@/components/SEOHead";
+import { FounderContent } from "@/components/FounderContent";
 import { 
   Activity, 
   TrendingUp, 
@@ -254,9 +255,11 @@ const ExecutiveMarketSignals = () => {
             <p className="text-xs text-zinc-500">
               Market Signals Dashboard • Directional indicators for strategic planning • Not predictive
             </p>
-            <p className="text-xs text-zinc-600 mt-1">
-              Jane Bou Jaoude, Founder & CEO • JBJ GLOBAL REAL ESTATE
-            </p>
+            <FounderContent>
+              <p className="text-xs text-zinc-600 mt-1">
+                Jane Bou Jaoude, Founder & CEO • JBJ GLOBAL REAL ESTATE
+              </p>
+            </FounderContent>
           </div>
         </div>
       </div>

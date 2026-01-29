@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 import {
   Map,
   Home,
@@ -192,8 +193,17 @@ const sitemapSections: SitemapSection[] = [
   },
 ];
 
-const SitemapCard = ({ section }: { section: SitemapSection }) => {
+const SitemapCard = ({ section, hideFounderLinks }: { section: SitemapSection; hideFounderLinks?: boolean }) => {
   const Icon = section.icon;
+  
+  // Filter out founder-related links if visibility is disabled
+  const filteredLinks = hideFounderLinks 
+    ? section.links.filter(link => 
+        !link.href.includes('/founder') && 
+        !link.label.toLowerCase().includes('founder') &&
+        !link.description.toLowerCase().includes('jane bou jaoude')
+      )
+    : section.links;
   
   return (
     <motion.div variants={fadeInUp}>
@@ -211,7 +221,7 @@ const SitemapCard = ({ section }: { section: SitemapSection }) => {
         </CardHeader>
         <CardContent>
           <ul className="space-y-2">
-            {section.links.map((link) => (
+            {filteredLinks.map((link) => (
               <li key={link.href}>
                 <Link
                   to={link.href}
@@ -237,6 +247,8 @@ const SitemapCard = ({ section }: { section: SitemapSection }) => {
 };
 
 const Sitemap = () => {
+  const { isFounderVisible } = useFounderVisibility();
+  
   return (
     <>
       <SEOHead
@@ -378,7 +390,7 @@ const Sitemap = () => {
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
               {sitemapSections.map((section) => (
-                <SitemapCard key={section.title} section={section} />
+                <SitemapCard key={section.title} section={section} hideFounderLinks={!isFounderVisible} />
               ))}
             </motion.div>
           </div>

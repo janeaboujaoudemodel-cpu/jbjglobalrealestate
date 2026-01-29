@@ -1,9 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { ArrowUpRight, Building2, Users, Award, Globe, Shield, Scale, Briefcase, FileCheck, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import Footer from "@/components/Footer";
 import { SafeImage } from "@/components/SafeImage";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
+import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 
 // Import founder images
 import founderHero from "@/assets/founder-hero.png";
@@ -68,6 +69,22 @@ const executiveTeam = [
 ];
 
 const Founder = () => {
+  const { isFounderVisible, isLoading } = useFounderVisibility();
+
+  // Redirect to about page if founder visibility is disabled
+  if (!isLoading && !isFounderVisible) {
+    return <Navigate to="/about" replace />;
+  }
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-2 border-gold border-t-transparent rounded-full" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-black overflow-x-hidden">
       {/* SEO Meta Tags */}

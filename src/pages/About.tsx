@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { PortraitImage } from "@/components/ui/portrait-image";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { FounderContent } from "@/components/FounderContent";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import luxuryVilla1 from "@/assets/luxury-villa-1.jpeg";
@@ -210,83 +211,85 @@ const About = () => {
         </section>
 
         {/* SECTION 2: FOUNDER WRITTEN BLOCK - WHITE BACKGROUND */}
-        <Section light>
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
-            variants={staggerContainer}
-          >
-            <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-              {/* LEFT: Founder Image with Premium Champagne Card Background */}
-              <motion.div 
-                className="flex justify-center"
-                variants={fadeInUp}
-              >
-                <div className="relative">
-                  {/* Champagne background card for premium look */}
-                  <div className="absolute inset-0 -m-6 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl border border-gold/30 shadow-lg" />
-                  
-                  {/* Circular portrait - GLOBAL PORTRAIT RULE: object-position center 5%, lifted up, no cropping */}
-                  {/* KEEP gold border always, add 3D lift on hover */}
-                  <Link to="/founder" className="block group relative z-10">
-                    <div className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto rounded-full overflow-hidden border-2 border-gold transition-all duration-300 group-hover:shadow-[0_0_30px_rgba(200,167,102,0.4),0_20px_50px_rgba(0,0,0,0.35)] group-hover:-translate-y-2">
-                      <img 
-                        src={founderProfessional}
-                        alt="Founder & CEO Jane Bou Jaoude of JBJ GLOBAL REAL ESTATE"
-                        className="w-full h-full transition-transform duration-300 group-hover:scale-110"
-                        style={{ 
-                          objectFit: 'cover',
-                          objectPosition: 'center 5%',
-                          transform: 'scale(1.3)',
-                        }}
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </div>
-                    {/* Know More About the Founder - REVERSED: secondary on normal, primary on hover */}
-                    <button 
-                      className="group/btn mt-4 relative inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold rounded-xl transition-all duration-300 overflow-hidden w-full bg-transparent border-2 border-black hover:border-gold"
-                      style={{
-                        background: 'transparent',
-                      }}
-                    >
-                      {/* Hover overlay - 3D gold gradient */}
-                      <span 
-                        className="absolute inset-0 rounded-xl opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 pointer-events-none"
+        <FounderContent>
+          <Section light>
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              variants={staggerContainer}
+            >
+              <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+                {/* LEFT: Founder Image with Premium Champagne Card Background */}
+                <motion.div 
+                  className="flex justify-center"
+                  variants={fadeInUp}
+                >
+                  <div className="relative">
+                    {/* Champagne background card for premium look */}
+                    <div className="absolute inset-0 -m-6 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl border border-gold/30 shadow-lg" />
+                    
+                    {/* Circular portrait - GLOBAL PORTRAIT RULE: object-position center 5%, lifted up, no cropping */}
+                    {/* KEEP gold border always, add 3D lift on hover */}
+                    <Link to="/founder" className="block group relative z-10">
+                      <div className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto rounded-full overflow-hidden border-2 border-gold transition-all duration-300 group-hover:shadow-[0_0_30px_rgba(200,167,102,0.4),0_20px_50px_rgba(0,0,0,0.35)] group-hover:-translate-y-2">
+                        <img 
+                          src={founderProfessional}
+                          alt="Founder & CEO of JBJ GLOBAL REAL ESTATE"
+                          className="w-full h-full transition-transform duration-300 group-hover:scale-110"
+                          style={{ 
+                            objectFit: 'cover',
+                            objectPosition: 'center 5%',
+                            transform: 'scale(1.3)',
+                          }}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </div>
+                      {/* Know More About the Founder - REVERSED: secondary on normal, primary on hover */}
+                      <button 
+                        className="group/btn mt-4 relative inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold rounded-xl transition-all duration-300 overflow-hidden w-full bg-transparent border-2 border-black hover:border-gold"
                         style={{
-                          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
-                          boxShadow: '0 6px 20px rgba(200,167,102,0.3), 0 4px 10px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.9), inset 0 -2px 4px rgba(200,167,102,0.2)',
+                          background: 'transparent',
                         }}
-                      />
-                      <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/0 group-hover/btn:from-white/80 to-transparent pointer-events-none transition-all duration-300" />
-                      <span className="relative flex items-center justify-center gap-1">
-                        <span className="text-black group-hover/btn:text-gold transition-colors">Know More About the</span>
-                        <span className="text-gold group-hover/btn:text-black transition-colors">Founder</span>
-                        <span className="text-black group-hover/btn:text-gold transition-colors">↗</span>
-                      </span>
-                    </button>
-                  </Link>
-                </div>
-              </motion.div>
+                      >
+                        {/* Hover overlay - 3D gold gradient */}
+                        <span 
+                          className="absolute inset-0 rounded-xl opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 pointer-events-none"
+                          style={{
+                            background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                            boxShadow: '0 6px 20px rgba(200,167,102,0.3), 0 4px 10px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.9), inset 0 -2px 4px rgba(200,167,102,0.2)',
+                          }}
+                        />
+                        <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/0 group-hover/btn:from-white/80 to-transparent pointer-events-none transition-all duration-300" />
+                        <span className="relative flex items-center justify-center gap-1">
+                          <span className="text-black group-hover/btn:text-gold transition-colors">Know More About the</span>
+                          <span className="text-gold group-hover/btn:text-black transition-colors">Founder</span>
+                          <span className="text-black group-hover/btn:text-gold transition-colors">↗</span>
+                        </span>
+                      </button>
+                    </Link>
+                  </div>
+                </motion.div>
 
-              {/* RIGHT: Who We Are */}
-              <motion.div variants={fadeInUp} className="mt-8 md:mt-0">
-                <SectionLabel>Who We Are</SectionLabel>
-                <SectionHeadline>Who We Are</SectionHeadline>
-                
-                <ContentText>
-                  <p>
-                    JBJ Global Real Estate L.L.C. S.O.C is a licensed real estate brokerage authorized to facilitate property transactions across the UAE. We support local and international clients through every stage of the real estate journey — from market understanding and opportunity evaluation to transaction coordination and completion.
-                  </p>
-                  <p>
-                    Our role is brokerage and coordination. Where additional services are required, we introduce clients to independent, licensed partners operating under their own regulatory frameworks.
-                  </p>
-                </ContentText>
-              </motion.div>
-            </div>
-          </motion.div>
-        </Section>
+                {/* RIGHT: Who We Are */}
+                <motion.div variants={fadeInUp} className="mt-8 md:mt-0">
+                  <SectionLabel>Who We Are</SectionLabel>
+                  <SectionHeadline>Who We Are</SectionHeadline>
+                  
+                  <ContentText>
+                    <p>
+                      JBJ Global Real Estate L.L.C. S.O.C is a licensed real estate brokerage authorized to facilitate property transactions across the UAE. We support local and international clients through every stage of the real estate journey — from market understanding and opportunity evaluation to transaction coordination and completion.
+                    </p>
+                    <p>
+                      Our role is brokerage and coordination. Where additional services are required, we introduce clients to independent, licensed partners operating under their own regulatory frameworks.
+                    </p>
+                  </ContentText>
+                </motion.div>
+              </div>
+            </motion.div>
+          </Section>
+        </FounderContent>
 
         {/* SECTION 3: HOW WE OPERATE - BLACK BACKGROUND */}
         <Section>
