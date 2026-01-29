@@ -212,7 +212,7 @@ const GlobalHeader = () => {
             isFullyTransparent
               ? isActiveCheck?.() 
                 ? 'text-gold bg-transparent' 
-                : 'text-black hover:text-gold bg-transparent'
+                : 'text-white hover:text-gold bg-transparent'
               : isActiveCheck?.() 
                 ? 'text-gold bg-gold/15' 
                 : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
@@ -332,8 +332,8 @@ const GlobalHeader = () => {
               <span 
                 className={`font-bold text-sm xl:text-base tracking-[0.12em] uppercase whitespace-nowrap leading-none transition-all duration-300`}
                 style={isFullyTransparent ? {
-                  color: '#000000',
-                  textShadow: '0 1px 3px rgba(255,255,255,0.3)'
+                  color: '#FFFFFF',
+                  textShadow: '0 2px 8px rgba(0,0,0,0.5)'
                 } : {
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 30%, #C8A766 70%, #D4AF37 100%)',
                   WebkitBackgroundClip: 'text',
@@ -347,7 +347,8 @@ const GlobalHeader = () => {
               <span 
                 className="text-[9px] tracking-[0.25em] uppercase mt-1 transition-all duration-300"
                 style={isFullyTransparent ? {
-                  color: '#000000',
+                  color: '#FFFFFF',
+                  textShadow: '0 1px 4px rgba(0,0,0,0.5)'
                 } : {
                   background: 'linear-gradient(90deg, #C8A766 0%, #D4AF37 50%, #C8A766 100%)',
                   WebkitBackgroundClip: 'text',
@@ -732,7 +733,7 @@ const GlobalHeader = () => {
                   to="/"
                   className={`px-2 xl:px-3 py-1.5 text-xs xl:text-sm font-semibold whitespace-nowrap transition-all ${
                     isFullyTransparent
-                      ? isActive("/") ? "text-gold" : "text-black hover:text-gold"
+                      ? isActive("/") ? "text-gold" : "text-white hover:text-gold"
                       : isActive("/") ? "text-gold bg-gold/15 rounded-full" : "text-zinc-800 hover:text-gold hover:bg-gold/10 rounded-full"
                   }`}
                   style={{ letterSpacing: '0.02em' }}
@@ -741,45 +742,45 @@ const GlobalHeader = () => {
                 </Link>
 
                 {/* Divider */}
-                {isFullyTransparent && <span className="text-black/30 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
 
                 {renderDropdown("Properties", propertiesLinks, () => location.pathname === '/properties')}
-                {isFullyTransparent && <span className="text-black/30 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
                 {renderDropdown("Services", servicesLinks, () => location.pathname.startsWith('/services'))}
-                {isFullyTransparent && <span className="text-black/30 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
                 {renderDropdown("Guides", guidesLinks, () => 
                   ['/buyer-guide', '/seller-guide', '/landlord-guide', '/tenant-guide', '/areas', '/faq', '/investor-education', '/investor-faq', '/broker-faq'].some(p => location.pathname.startsWith(p))
                 )}
-                {isFullyTransparent && <span className="text-black/30 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
                 {renderDropdown("Market Intel", marketIntelLinks, () => 
                   location.pathname.startsWith('/market-intelligence') || location.pathname === '/market-report'
                 )}
-                {isFullyTransparent && <span className="text-black/30 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
                 {renderDropdown("Investor Hub", investorHubLinks, () => 
                   location.pathname.includes('ai-hub') || location.pathname === '/favorites'
                 )}
-                {isFullyTransparent && <span className="text-black/30 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
                 {renderDropdown("Broker Hub", brokerHubLinks, () => 
                   location.pathname.includes('broker-toolkit') || location.pathname.includes('broker-education')
                 )}
-                {isFullyTransparent && <span className="text-black/30 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
                 {renderDropdown("About", aboutLinks, () => 
                   ['/about', '/founder', '/team', '/awards'].some(p => location.pathname.startsWith(p))
                 )}
-                {isFullyTransparent && <span className="text-black/30 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
 
                 <Link
                   to="/contact"
                   className={`px-2 xl:px-3 py-1.5 text-xs xl:text-sm font-semibold whitespace-nowrap transition-all ${
                     isFullyTransparent
-                      ? isActive("/contact") ? "text-gold" : "text-black hover:text-gold"
+                      ? isActive("/contact") ? "text-gold" : "text-white hover:text-gold"
                       : isActive("/contact") ? "text-gold bg-gold/15 rounded-full" : "text-zinc-800 hover:text-gold hover:bg-gold/10 rounded-full"
                   }`}
                   style={{ letterSpacing: '0.02em' }}
                 >
                   Contact
                 </Link>
-                {isFullyTransparent && <span className="text-black/30 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
 
                 {renderDropdown("More", moreLinks, () => 
                   ['/news', '/join'].some(p => location.pathname.startsWith(p))
@@ -802,40 +803,40 @@ const GlobalHeader = () => {
             >
               {/* Search Icon */}
               <button
-                className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-black/10"
+                className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10"
                 onClick={() => setSearchOpen(true)}
                 aria-label="Search"
               >
                 <Search 
                   className={`w-5 h-5 transition-colors duration-300 ${
-                    isFullyTransparent ? 'text-black group-hover:text-gold' : 'text-gold group-hover:text-white'
+                    isFullyTransparent ? 'text-white group-hover:text-gold' : 'text-gold group-hover:text-white'
                   }`}
-                  style={!isFullyTransparent ? { filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' } : {}} 
+                  style={!isFullyTransparent ? { filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' } : { filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }} 
                 />
               </button>
 
               {/* Divider */}
-              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-black/30' : 'via-gold/40'} to-transparent`} />
+              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-gold/40'} to-transparent`} />
 
               {/* Language Switcher */}
               <LanguageSwitcher variant="icon-only" />
 
               {/* Divider */}
-              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-black/30' : 'via-gold/40'} to-transparent`} />
+              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-gold/40'} to-transparent`} />
 
               {/* Account Icon */}
               <div className="w-9 h-9 flex items-center justify-center">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button 
-                      className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-black/10"
+                      className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10"
                       aria-label={user ? t('nav.myAccount') : t('nav.signIn')}
                     >
                       <User 
                         className={`w-5 h-5 transition-colors duration-300 ${
-                          isFullyTransparent ? 'text-black group-hover:text-gold' : 'text-gold group-hover:text-white'
+                          isFullyTransparent ? 'text-white group-hover:text-gold' : 'text-gold group-hover:text-white'
                         }`}
-                        style={!isFullyTransparent ? { filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' } : {}}
+                        style={!isFullyTransparent ? { filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' } : { filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}
                       />
                     </button>
                   </DropdownMenuTrigger>
