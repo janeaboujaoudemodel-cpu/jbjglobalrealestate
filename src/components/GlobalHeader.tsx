@@ -13,7 +13,7 @@ import {
   GraduationCap, BarChart3, MapPin, Award, UserPlus, Globe
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -207,7 +207,7 @@ const GlobalHeader = () => {
 
   // Render dropdown menu helper - Premium styling with pill background
   // When fully transparent, remove pill backgrounds and use white/gold text
-  const renderDropdown = (label: string, links: typeof propertiesLinks, isActiveCheck?: () => boolean) => (
+  const renderDropdown = (label: React.ReactNode, links: typeof propertiesLinks, isActiveCheck?: () => boolean) => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button 
@@ -484,8 +484,8 @@ const GlobalHeader = () => {
 
                     <div className="h-px bg-gold/20 my-2" />
 
-                    {/* 5. Market Intel */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Market Intel</p>
+                    {/* 5. Market Intelligence */}
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Market Intelligence</p>
                     {marketIntelLinks.map((link) => (
                       <Link
                         key={link.href}
@@ -749,9 +749,14 @@ const GlobalHeader = () => {
                 {renderDropdown("Guides", guidesLinks, () => 
                   ['/buyer-guide', '/seller-guide', '/landlord-guide', '/tenant-guide', '/areas', '/faq', '/investor-education', '/investor-faq', '/broker-faq'].some(p => location.pathname.startsWith(p))
                 )}
-                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
-                {renderDropdown("Intel", marketIntelLinks, () => 
-                  location.pathname.startsWith('/market-intelligence') || location.pathname === '/market-report'
+                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1 self-stretch flex items-center">|</span>}
+                {renderDropdown(
+                  <span className="flex flex-col items-center leading-tight">
+                    <span>Market</span>
+                    <span className="text-[9px] lg:text-[10px]">Intelligence</span>
+                  </span>, 
+                  marketIntelLinks, 
+                  () => location.pathname.startsWith('/market-intelligence') || location.pathname === '/market-report'
                 )}
                 {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
                 {renderDropdown("Investor", investorHubLinks, () => 

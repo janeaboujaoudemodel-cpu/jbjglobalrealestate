@@ -59,6 +59,11 @@ const FEATURED_DEVELOPERS = [
     slug: "danube-properties",
     logo: "/developers/logos/danube-logo.webp"
   },
+  { 
+    name: "DUBAI PROPERTIES", 
+    slug: "dubai-properties",
+    logo: "/developers/logos/dubai-properties-logo.webp"
+  },
 ];
 
 const DeveloperPartnersMarquee = () => {
