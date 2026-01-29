@@ -100,8 +100,9 @@ export const SearchableSelectWithOther: React.FC<SearchableSelectWithOtherProps>
           {selectedOption?.label}
         </SelectValue>
       </SelectTrigger>
-      <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 max-h-[300px] overflow-y-auto z-[9999]">
-        <div className="sticky top-0 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20">
+      <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 max-h-[300px] z-[9999]">
+        {/* Fixed search header - NOT sticky, stays at top outside scroll area */}
+        <div className="p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
             <Input
@@ -110,32 +111,36 @@ export const SearchableSelectWithOther: React.FC<SearchableSelectWithOtherProps>
               placeholder="Search..."
               className="pl-9 bg-white/80 border-gold/30 text-black placeholder:text-black/40 h-9"
               onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => e.stopPropagation()}
             />
           </div>
         </div>
-        {filteredOptions.map(opt => (
-          <SelectItem 
-            key={opt.value} 
-            value={opt.value}
-            className="text-black hover:bg-gold/20 focus:bg-gold/20"
-          >
-            {opt.label}
-          </SelectItem>
-        ))}
-        {allowOther && (
-          <>
-            <div className="h-px bg-gold/20 my-1" />
+        {/* Scrollable options area */}
+        <div className="max-h-[200px] overflow-y-auto">
+          {filteredOptions.map(opt => (
             <SelectItem 
-              value="__other__"
-              className="text-gold hover:bg-gold/20 focus:bg-gold/20"
+              key={opt.value} 
+              value={opt.value}
+              className="text-black hover:bg-gold/20 focus:bg-gold/20"
             >
-              <span className="flex items-center gap-2">
-                <Plus className="w-4 h-4" />
-                Other (Type custom)
-              </span>
+              {opt.label}
             </SelectItem>
-          </>
-        )}
+          ))}
+          {allowOther && (
+            <>
+              <div className="h-px bg-gold/20 my-1" />
+              <SelectItem 
+                value="__other__"
+                className="text-gold hover:bg-gold/20 focus:bg-gold/20"
+              >
+                <span className="flex items-center gap-2">
+                  <Plus className="w-4 h-4" />
+                  Other (Type custom)
+                </span>
+              </SelectItem>
+            </>
+          )}
+        </div>
       </SelectContent>
     </Select>
   );

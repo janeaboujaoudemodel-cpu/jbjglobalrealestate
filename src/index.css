@@ -1571,3 +1571,21 @@ All colors MUST be HSL.
     @apply overflow-x-hidden max-w-full;
   }
 }
+
+/* Project Detail Page - Transparent Header on Load, Visible on Scroll */
+html.project-detail-page header {
+  background: transparent !important;
+  transition: background 0.3s ease-in-out;
+}
+
+html.project-detail-page header > div:first-child {
+  background: transparent !important;
+}
+
+html.project-detail-page[style*="--header-bg-opacity: 1"] header {
+  background: linear-gradient(180deg, rgba(0,0,0,0.98) 0%, rgba(8,8,8,0.99) 50%, rgba(0,0,0,1) 100%) !important;
+}
+
+html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-child {
+  background: linear-gradient(180deg, rgba(0,0,0,0.98) 0%, rgba(8,8,8,0.99) 50%, rgba(0,0,0,1) 100%) !important;
+}
