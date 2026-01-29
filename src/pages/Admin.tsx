@@ -53,6 +53,7 @@ import { SmartDocumentUploader } from "@/components/SmartDocumentUploader";
 import { RateLimitDashboard } from "@/components/admin/RateLimitDashboard";
 import { IPBlocklistDashboard } from "@/components/admin/IPBlocklistDashboard";
 import { SecurityDashboardSummary } from "@/components/admin/SecurityDashboardSummary";
+import { FounderVisibilityToggle } from "@/components/admin/FounderVisibilityToggle";
 import AuditLogDashboard from "@/components/admin/AuditLogDashboard";
 import BrokerSubscriptionsDashboard from "@/components/admin/BrokerSubscriptionsDashboard";
 import AIAnalyticsDashboard from "@/components/admin/AIAnalyticsDashboard";
@@ -475,7 +476,10 @@ const Admin = () => {
           </TabsContent>
 
           <TabsContent value="security" className="space-y-8">
-            <SecurityDashboardSummary />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <SecurityDashboardSummary />
+              <FounderVisibilityToggle />
+            </div>
           </TabsContent>
 
           <TabsContent value="audit-logs" className="space-y-8">
