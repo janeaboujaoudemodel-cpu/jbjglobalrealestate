@@ -8,6 +8,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
 import { PopupCoordinatorProvider } from "@/contexts/PopupCoordinatorContext";
+import { FounderVisibilityProvider } from "@/contexts/FounderVisibilityContext";
 import { ScrollToTopOnMount } from "@/components/ScrollToTop";
 import AdminBypass from "@/components/AdminBypass";
 import MainLayoutWrapper from "@/components/MainLayoutWrapper";
@@ -195,9 +196,10 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <AuthProvider>
-              <ActiveLeadProvider>
-                <PopupCoordinatorProvider>
-                  <ScrollToTopOnMount />
+              <FounderVisibilityProvider>
+                <ActiveLeadProvider>
+                  <PopupCoordinatorProvider>
+                    <ScrollToTopOnMount />
                   <GlobalVisitorTracking />
                   <GlobalTranslator />
             {/* Auth route is always accessible for admin login */}
@@ -396,8 +398,9 @@ const App = () => (
                 <Route path="*" element={<NotFound />} />
               </Route>
               </Routes>
-                </PopupCoordinatorProvider>
-              </ActiveLeadProvider>
+                  </PopupCoordinatorProvider>
+                </ActiveLeadProvider>
+              </FounderVisibilityProvider>
             </AuthProvider>
           </BrowserRouter>
         </LanguageProvider>

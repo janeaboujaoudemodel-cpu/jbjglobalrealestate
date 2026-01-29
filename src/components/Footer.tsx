@@ -18,6 +18,8 @@ import { SocialLinks } from "@/components/marketing/SocialLinks";
 import { NewsletterBrevo } from "@/components/marketing/NewsletterBrevo";
 import { GoogleMyBusinessLink } from "@/components/marketing/GoogleMyBusinessLink";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
+import { FounderContent } from "@/components/FounderContent";
 
 const DivisionAccordion = ({
   title,
@@ -66,6 +68,7 @@ const DivisionAccordion = ({
 
 const Footer = () => {
   const { t } = useLanguage();
+  const { isFounderVisible } = useFounderVisibility();
   const currentYear = new Date().getFullYear();
 
   // Properties
@@ -117,10 +120,10 @@ const Footer = () => {
     { label: t('footer.methodology') || "Methodology & Data Sources", href: "/market-intelligence/methodology" },
   ];
 
-  // About
+  // About - conditionally include Founder link
   const aboutLinks = [
     { label: t('footer.aboutJbj') || "About JBJ", href: "/about" },
-    { label: t('footer.founderLeadership') || "Founder & Leadership", href: "/founder" },
+    ...(isFounderVisible ? [{ label: t('footer.founderLeadership') || "Founder & Leadership", href: "/founder" }] : []),
     { label: t('footer.meetTheTeam') || "Meet the Team", href: "/team" },
     { label: t('footer.awardsRecognition') || "Awards & Recognition", href: "/awards" },
     { label: t('footer.newsInsights') || "News & Insights", href: "/news" },
@@ -816,7 +819,10 @@ const Footer = () => {
               
               {/* English Legal Line */}
               <p className="text-zinc-200 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 font-medium px-2 max-w-3xl mx-auto">
-                Licensed Real Estate Brokerage — Buy, Sell, Rent (Dubai Mainland). Operated by <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate L.L.C S.O.C.</Link> Owned & led by <Link to="/founder" className="text-gold hover:underline font-semibold">Jane Bou Jaoude (جاين بو جودة)</Link>, Founder & CEO.
+                Licensed Real Estate Brokerage — Buy, Sell, Rent (Dubai Mainland). Operated by <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate L.L.C S.O.C.</Link>
+                <FounderContent fallback={null}>
+                  {" "}Owned & led by <Link to="/founder" className="text-gold hover:underline font-semibold">Jane Bou Jaoude (جاين بو جودة)</Link>, Founder & CEO.
+                </FounderContent>
               </p>
               
               {/* Arabic Disclaimer */}
@@ -831,7 +837,9 @@ const Footer = () => {
               
               <p className="text-zinc-400 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-5 sm:mb-6 px-2 max-w-3xl mx-auto">
                 All website content, branding, designs, and software are protected intellectual property of 
-                <Link to="/founder" className="text-gold hover:underline font-semibold"> Jane Bou Jaoude (جاين بو جودة)</Link> and <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link>. Unauthorized copying, reuse, mirroring, or reproduction is prohibited.
+                <FounderContent fallback={<Link to="/about" className="text-gold hover:underline font-semibold"> JBJ Global Real Estate</Link>}>
+                  <Link to="/founder" className="text-gold hover:underline font-semibold"> Jane Bou Jaoude (جاين بو جودة)</Link> and <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link>
+                </FounderContent>. Unauthorized copying, reuse, mirroring, or reproduction is prohibited.
               </p>
               
               {/* Premium badge row - ULTRA Luxury 3D styling */}
