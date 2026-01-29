@@ -119,9 +119,13 @@ const DeveloperPartnersMarquee = () => {
         case "meraas":
           return `h-7 md:h-13 lg:h-[60px] ${base}`;
 
-        // Dubai Properties - aligned with Ellington/Select Group
+        // Sobha - slightly reduced
+        case "sobha":
+          return `h-4 md:h-8 lg:h-10 ${base}`;
+
+        // Dubai Properties - bigger, prominent
         case "dubai-properties":
-          return `h-6 md:h-12 lg:h-14 ${base}`;
+          return `h-7 md:h-14 lg:h-16 ${base}`;
 
         // Slightly bigger (Ellington + Select Group)
         case "ellington-properties":
