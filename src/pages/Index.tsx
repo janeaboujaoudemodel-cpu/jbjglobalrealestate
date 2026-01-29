@@ -130,15 +130,28 @@ const Index = () => {
             {/* Subline - Clean */}
             <motion.p 
               variants={fadeInUp}
-              className="text-zinc-300 text-[10px] md:text-xs lg:text-sm max-w-md mx-auto leading-relaxed mb-5 md:mb-6"
+              className="text-zinc-300 text-[10px] md:text-xs lg:text-sm max-w-md mx-auto leading-relaxed mb-4 md:mb-5"
             >
               {t('hero.subtitle')}
+            </motion.p>
+
+            {/* Partner Services - Clickable links before buttons */}
+            <motion.p
+              variants={fadeInUp}
+              className="text-[9px] sm:text-[10px] md:text-[11px] tracking-[0.12em] uppercase mb-5 md:mb-6"
+            >
+              <Link to="/mortgage-calculator" className="text-gold/70 hover:text-gold transition-colors cursor-pointer">Mortgage</Link>
+              <span className="mx-1.5 sm:mx-2 text-gold/40">·</span>
+              <Link to="/guides/legal" className="text-gold/70 hover:text-gold transition-colors cursor-pointer">Legal</Link>
+              <span className="mx-1.5 sm:mx-2 text-gold/40">·</span>
+              <Link to="/guides/golden-visa" className="text-gold/70 hover:text-gold transition-colors cursor-pointer">Visa</Link>
+              <span className="text-zinc-500/60 normal-case tracking-normal ml-1.5 sm:ml-2">via partners</span>
             </motion.p>
 
             {/* Hero CTA Buttons - Classy, smaller, consistent */}
             <motion.div 
               variants={fadeInUp}
-              className="flex flex-row items-center justify-center gap-3 sm:gap-4 mb-6"
+              className="flex flex-row items-center justify-center gap-3 sm:gap-4"
             >
               <Link to="/properties">
                 <button 
@@ -162,20 +175,6 @@ const Index = () => {
                 <ArrowUpRight className="w-3 h-3 text-gold group-hover:scale-110 transition-all" style={{ filter: 'drop-shadow(0 0 3px rgba(200,167,102,0.5))' }} />
               </button>
             </motion.div>
-
-            {/* Partner Services - Smaller, luxury styling */}
-            <motion.p
-              variants={fadeInUp}
-              className="text-zinc-400/80 text-[9px] sm:text-[10px] md:text-[11px] tracking-[0.15em] uppercase"
-            >
-              <span className="text-gold/70">Mortgage</span>
-              <span className="mx-2 text-gold/40">·</span>
-              <span className="text-gold/70">Legal</span>
-              <span className="mx-2 text-gold/40">·</span>
-              <span className="text-gold/70">Visa</span>
-              <span className="mx-3 text-zinc-500/60">—</span>
-              <span className="text-zinc-400/60 normal-case tracking-normal">via partner network</span>
-            </motion.p>
           </div>
         </motion.div>
         
