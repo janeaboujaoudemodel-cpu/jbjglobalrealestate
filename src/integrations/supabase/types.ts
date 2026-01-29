@@ -12973,6 +12973,36 @@ export type Database = {
           },
         ]
       }
+      site_settings: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          setting_key: string
+          setting_value: Json
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          setting_key: string
+          setting_value?: Json
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          setting_key?: string
+          setting_value?: Json
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       subscription_tiers: {
         Row: {
           created_at: string | null
@@ -15964,6 +15994,7 @@ export type Database = {
         Args: { p_fingerprint: string }
         Returns: boolean
       }
+      is_founder_visible: { Args: never; Returns: boolean }
       is_hr_admin: { Args: { _user_id: string }; Returns: boolean }
       is_hr_admin_strict: { Args: { _user_id: string }; Returns: boolean }
       is_hr_manager: { Args: { _user_id: string }; Returns: boolean }
@@ -16051,6 +16082,7 @@ export type Database = {
         Args: { p_transcript: string }
         Returns: string
       }
+      set_founder_visibility: { Args: { p_enabled: boolean }; Returns: boolean }
       trigger_emergency_lockdown: {
         Args: {
           p_departments?: string[]

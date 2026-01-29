@@ -3,6 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useFavorites, useShortlist } from "@/hooks/useFavorites";
 import { useGuestFavorites, useGuestShortlist } from "@/hooks/useGuestFavorites";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { 
@@ -115,6 +116,8 @@ const GlobalHeader = () => {
   const hasCRMAccess = crmProfile?.is_active && 
     ['owner_admin', 'broker_member', 'sales_director', 'admin', 'founder'].includes(crmProfile?.crm_role || '');
 
+  const { isFounderVisible } = useFounderVisibility();
+
   const authHref = `/auth?redirect=${encodeURIComponent(`${location.pathname}${location.search || ""}`)}`;
   const userMeta = (user?.user_metadata ?? {}) as Record<string, unknown>;
   const accountDisplayName =
@@ -186,10 +189,10 @@ const GlobalHeader = () => {
     { href: "/broker-faq", label: t('header.brokerFaq') || "Broker FAQ", icon: ClipboardCheck },
   ];
 
-  // About dropdown
+  // About dropdown - conditionally include Founder link
   const aboutLinks = [
     { href: "/about", label: t('about.title') || "About JBJ", icon: Building2 },
-    { href: "/founder", label: t('nav.founder') || "Founder & Leadership", icon: UserCircle },
+    ...(isFounderVisible ? [{ href: "/founder", label: t('nav.founder') || "Founder & Leadership", icon: UserCircle }] : []),
     { href: "/team", label: t('header.meetTeam') || "Meet the Team", icon: Users },
     { href: "/awards", label: t('awards.title') || "Awards & Recognition", icon: Award },
   ];
