@@ -480,7 +480,13 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
 
     if (error) {
       console.error("Error creating sync job:", error);
-      toast.error("Failed to start sync job");
+      // Show detailed error for debugging
+      const msg = error.message || error.details || "Unknown error";
+      if (msg.includes("row-level security") || error.code === "42501") {
+        toast.error("Permission denied: You must be logged in as an admin or listing admin to start a sync job.");
+      } else {
+        toast.error(`Failed to start sync job: ${msg}`);
+      }
       return;
     }
 
