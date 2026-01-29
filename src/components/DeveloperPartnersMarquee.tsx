@@ -100,43 +100,8 @@ const DeveloperPartnersMarquee = () => {
     // IMPORTANT: Keep spacing locked (px-* on the Link). Only adjust logo size.
     // We adjust size by changing responsive HEIGHT classes (layout-safe; no transform scaling).
     // MOBILE: Smaller logos to fit ~4 in viewport; DESKTOP: Keep original larger sizes
-    const base = "w-auto max-w-[100px] md:max-w-[220px] lg:max-w-[260px] object-contain";
-
-    const sizeClass = (() => {
-      switch (developer.slug) {
-        // Smallest logos (DAMAC is very bold → reduce more aggressively)
-        case "damac":
-          return `h-[10px] md:h-5 lg:h-6 ${base}`;
-        case "emaar":
-          return `h-3 md:h-6 lg:h-8 ${base}`;
-        case "majid-al-futtaim":
-          return `h-3 md:h-6 lg:h-7 ${base}`;
-
-        // Bigger logos (Danube especially needs to be larger)
-        case "danube-properties":
-          return `h-8 md:h-14 lg:h-16 ${base}`;
-        case "nakheel":
-        case "meraas":
-          return `h-7 md:h-13 lg:h-[60px] ${base}`;
-
-        // Sobha - slightly reduced
-        case "sobha":
-          return `h-4 md:h-8 lg:h-10 ${base}`;
-
-        // Dubai Properties - bigger, prominent
-        case "dubai-properties":
-          return `h-7 md:h-14 lg:h-16 ${base}`;
-
-        // Slightly bigger (Ellington + Select Group)
-        case "ellington-properties":
-        case "select-group":
-          return `h-6 md:h-12 lg:h-14 ${base}`;
-
-        // Standard sizing for all others
-        default:
-          return `h-5 md:h-10 lg:h-12 ${base}`;
-      }
-    })();
+    // Unified sizing for all logos - same height for consistent alignment
+    const sizeClass = "h-6 md:h-10 lg:h-12 w-auto max-w-[120px] md:max-w-[200px] lg:max-w-[240px] object-contain";
 
     return (
       <Link
