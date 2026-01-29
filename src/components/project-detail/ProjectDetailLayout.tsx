@@ -557,17 +557,22 @@ export default function ProjectDetailLayout({
               />
             </div>
 
-            {/* Payment Plan */}
+            {/* Payment Plan - Display extracted plan details */}
             <div ref={paymentRef} id="payment" className="jj-card-inner scroll-mt-40">
-              <h3 className="text-h3-sm font-medium text-foreground mb-4 flex items-center gap-2">
+              <h3 className="text-h3-sm font-medium text-foreground mb-6 flex items-center gap-2">
                 <FileText className="w-5 h-5 text-gold" />
                 Payment Plan
               </h3>
-              <p className="text-body text-muted-foreground mb-6">
-                {project.payment_plan || "Payment plan details available upon request."}
-              </p>
+              
+              {/* Payment Plan Summary */}
+              {project.payment_plan && (
+                <div className="mb-6 p-4 rounded-xl bg-gradient-to-br from-gold/10 to-gold/5 border border-gold/30">
+                  <p className="text-lg font-semibold text-foreground text-center">{project.payment_plan}</p>
+                </div>
+              )}
 
-              {paymentPlanDocs.length > 0 && (
+              {/* Payment Plan Documents */}
+              {paymentPlanDocs.length > 0 ? (
                 <div className="space-y-3">
                   {paymentPlanDocs.map((doc) => (
                     <button
@@ -583,13 +588,11 @@ export default function ProjectDetailLayout({
                     </button>
                   ))}
                 </div>
+              ) : (
+                <p className="text-body text-muted-foreground">
+                  Detailed payment plan documents available upon request.
+                </p>
               )}
-
-              <div className="mt-6 pt-6 border-t border-gold/20">
-                <Button variant="primary" className="w-full" onClick={scrollToInquiry}>
-                  Request Detailed Payment Plan
-                </Button>
-              </div>
             </div>
           </div>
 
