@@ -277,13 +277,16 @@ const GlobalHeader = () => {
         }}
       />
       
-      {/* Premium Bottom Border - 3D Effect */}
+      {/* Premium Bottom Border - 3D Effect when solid */}
       <div className="absolute bottom-0 left-0 right-0 h-[3px] z-10">
-        {/* Main gold gradient line */}
+        {/* Main gold gradient line - shown when solid */}
         <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-gold/60 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
-        {/* Highlight on top */}
+        {/* Highlight on top - shown when solid */}
         <div className={`absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-gold/80 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
       </div>
+      
+      {/* Thin white divider when transparent - separates header from hero */}
+      <div className={`absolute bottom-0 left-0 right-0 h-[1px] z-10 bg-gradient-to-r from-transparent via-white/30 to-transparent transition-opacity duration-300 ${isFullyTransparent ? "opacity-100" : "opacity-0"}`} />
       
       {/* Inner shadow for depth */}
       <div 
@@ -751,10 +754,7 @@ const GlobalHeader = () => {
                 )}
                 {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1 self-stretch flex items-center">|</span>}
                 {renderDropdown(
-                  <span className="flex flex-col items-center leading-tight">
-                    <span>Market</span>
-                    <span className="text-[9px] lg:text-[10px]">Intelligence</span>
-                  </span>, 
+                  "Market Intel", 
                   marketIntelLinks, 
                   () => location.pathname.startsWith('/market-intelligence') || location.pathname === '/market-report'
                 )}
