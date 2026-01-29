@@ -194,11 +194,11 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   };
 
   const loadActiveJob = async () => {
-    // Find any in_progress or paused job
+    // Find any running or paused job
     const { data: jobs, error } = await supabase
       .from("sync_jobs")
       .select("*")
-      .in("status", ["in_progress", "paused"])
+      .in("status", ["running", "paused"])
       .eq("job_type", "provident_sync")
       .order("created_at", { ascending: false })
       .limit(1);
@@ -462,7 +462,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       .from("sync_jobs")
       .insert({
         job_type: "provident_sync",
-        status: "in_progress",
+        status: "running",
         current_page: 1,
         total_pages: pagesForJob,
         started_at: new Date().toISOString(),
@@ -514,7 +514,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     // Update job status
     await supabase
       .from("sync_jobs")
-      .update({ status: "in_progress", paused_at: null })
+      .update({ status: "running", paused_at: null })
       .eq("id", currentJobId);
 
     toast.info(`Resuming from page ${currentPage + 1}...`);
