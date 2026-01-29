@@ -106,7 +106,6 @@ const DeveloperPartnersMarquee = () => {
       switch (developer.slug) {
         // Smallest logos (DAMAC is very bold → reduce more aggressively)
         case "damac":
-        case "dubai-properties":
           return `h-[10px] md:h-5 lg:h-6 ${base}`;
         case "emaar":
           return `h-3 md:h-6 lg:h-8 ${base}`;
