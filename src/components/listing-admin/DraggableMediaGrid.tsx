@@ -144,7 +144,11 @@ const DraggableMediaGrid = ({ items, onReorder, onDelete, type }: DraggableMedia
               src={item.url}
               alt={item.name || `Image ${index + 1}`}
               className="w-full h-full object-cover rounded-md"
+              referrerPolicy="no-referrer"
               draggable={false}
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = "/placeholder.svg";
+              }}
             />
           ) : (
             <div className="flex items-center gap-3">

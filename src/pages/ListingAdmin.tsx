@@ -1088,6 +1088,10 @@ const ListingAdmin = () => {
                             src={img.image_url}
                             alt="Project"
                             className="w-full h-full object-cover"
+                            referrerPolicy="no-referrer"
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).src = "/placeholder.svg";
+                            }}
                           />
                           {img.is_primary && (
                             <Badge className="absolute top-2 left-2 bg-gold text-black">
