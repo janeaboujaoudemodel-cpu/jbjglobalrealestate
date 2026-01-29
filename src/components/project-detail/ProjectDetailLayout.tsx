@@ -27,7 +27,7 @@ import MortgageCalculator from "@/components/MortgageCalculator";
 import ImageCarousel from "@/components/ImageCarousel";
 import ProjectInquiryForm from "@/components/project-detail/ProjectInquiryForm";
 import AIMarketAnalyzer from "@/components/AIMarketAnalyzer";
-import BrochureBook3D from "@/components/project-detail/BrochureBook3D";
+import PremiumBrochureCard from "@/components/project-detail/PremiumBrochureCard";
 import LeadCaptureModal from "@/components/project-detail/LeadCaptureModal";
 import Footer from "@/components/Footer";
 import { CONTACT_INFO, getCallUrl, getEmailUrl, getWhatsAppUrl } from "@/constants/stats";
@@ -544,18 +544,16 @@ export default function ProjectDetailLayout({
             </div>
           </div>
 
-          {/* BROCHURE 3D BOOK + PAYMENT PLAN */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-            {/* 3D Brochure Book */}
-            <div ref={brochureRef} id="brochure" className="jj-card-inner flex flex-col items-center justify-center py-8 scroll-mt-40">
-              <h3 className="text-h3-sm font-medium text-foreground mb-6 text-center">Project Brochure</h3>
-              <BrochureBook3D
+          {/* BROCHURE + PAYMENT PLAN */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            {/* Premium Brochure Card */}
+            <div ref={brochureRef} id="brochure" className="jj-card-inner flex flex-col items-center justify-center py-10 scroll-mt-40">
+              <h3 className="text-h3-sm font-medium text-foreground mb-8 text-center">Project Brochure</h3>
+              <PremiumBrochureCard
                 projectName={project.name}
-                developerName={project.developer?.name}
                 brochureUrl={brochurePrimary?.url}
                 onDownloadClick={() => handleDocumentDownload("brochure", brochurePrimary?.url)}
                 isLocked={!isLeadCaptured && !!brochurePrimary}
-                coverImageUrl={heroImageUrl}
               />
             </div>
 
@@ -595,8 +593,8 @@ export default function ProjectDetailLayout({
             </div>
           </div>
 
-          {/* MORTGAGE CALCULATOR - Full Width */}
-          <div ref={mortgageRef} className="mb-12 scroll-mt-32">
+          {/* MORTGAGE CALCULATOR - Full Width with more spacing */}
+          <div ref={mortgageRef} className="mb-20 scroll-mt-32">
             <div className="jj-card-inner p-0 overflow-hidden">
               <MortgageCalculator
                 defaultPrice={project.price_from ?? 2000000}
@@ -607,14 +605,57 @@ export default function ProjectDetailLayout({
             </div>
           </div>
 
-          {/* INQUIRY FORM - Full Width */}
-          <div ref={inquiryRef} className="scroll-mt-32">
-            <ProjectInquiryForm
-              projectId={project.id}
-              projectName={project.name}
-              projectLocation={project.location || undefined}
-              developerName={project.developer?.name}
-            />
+          {/* INQUIRY FORM - Full Width with premium styling */}
+          <div ref={inquiryRef} className="scroll-mt-32 mb-8">
+            <div className="jj-card-inner p-8 md:p-10 border-2 border-gold/40 bg-gradient-to-br from-champagne/50 via-champagne-light/30 to-champagne/50">
+              <ProjectInquiryForm
+                projectId={project.id}
+                projectName={project.name}
+                projectLocation={project.location || undefined}
+                developerName={project.developer?.name}
+              />
+            </div>
+          </div>
+
+          {/* CONTACT DETAILS - Separated Section */}
+          <div className="mb-8">
+            <div className="jj-card-inner p-6 md:p-8">
+              <h3 className="text-h3-sm font-medium text-foreground mb-6 text-center">Contact Us Directly</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <a 
+                  href={getWhatsAppUrl(whatsappMessage)} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center gap-3 p-5 rounded-xl border border-gold/30 bg-card hover:border-gold/60 hover:bg-gold/5 transition-all group"
+                >
+                  <div className="w-12 h-12 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <MessageCircle className="w-6 h-6 text-green-500" />
+                  </div>
+                  <span className="text-sm font-medium text-foreground">WhatsApp</span>
+                  <span className="text-xs text-muted-foreground">{CONTACT_INFO.phone}</span>
+                </a>
+                <a 
+                  href={getCallUrl()}
+                  className="flex flex-col items-center gap-3 p-5 rounded-xl border border-gold/30 bg-card hover:border-gold/60 hover:bg-gold/5 transition-all group"
+                >
+                  <div className="w-12 h-12 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Phone className="w-6 h-6 text-gold" />
+                  </div>
+                  <span className="text-sm font-medium text-foreground">Call Us</span>
+                  <span className="text-xs text-muted-foreground">{CONTACT_INFO.phone}</span>
+                </a>
+                <a 
+                  href={getEmailUrl()}
+                  className="flex flex-col items-center gap-3 p-5 rounded-xl border border-gold/30 bg-card hover:border-gold/60 hover:bg-gold/5 transition-all group"
+                >
+                  <div className="w-12 h-12 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Mail className="w-6 h-6 text-blue-500" />
+                  </div>
+                  <span className="text-sm font-medium text-foreground">Email</span>
+                  <span className="text-xs text-muted-foreground">{CONTACT_INFO.email}</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </section>

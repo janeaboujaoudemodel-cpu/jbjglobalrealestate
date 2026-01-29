@@ -4,10 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Mail, MessageCircle, Phone, Send, Loader2 } from "lucide-react";
+import { Send, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
 
 interface ProjectInquiryFormProps {
   projectId: string;
@@ -94,9 +93,15 @@ export function ProjectInquiryForm({
   const whatsappMessage = `Hi, I'm interested in ${projectName}${projectLocation ? ` at ${projectLocation}` : ''}. Please share more details.`;
 
   return (
-    <div className="jj-card-inner">
-      <h3 className="text-h3-sm font-medium text-foreground mb-2">Register your interest</h3>
-      <p className="text-muted-foreground text-sm mb-6">Our team will contact you shortly.</p>
+    <div>
+      <div className="text-center mb-8">
+        <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+          Register Your Interest
+        </h3>
+        <p className="text-muted-foreground text-base max-w-md mx-auto">
+          Get exclusive access to project details, pricing, and personalized consultation.
+        </p>
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Name */}
@@ -227,30 +232,6 @@ export function ProjectInquiryForm({
         </Button>
       </form>
 
-      {/* Alternative Contact Methods */}
-      <div className="mt-6 pt-6 border-t border-gold/20">
-        <p className="text-center text-muted-foreground text-sm mb-4">Or contact us directly</p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <a href={getWhatsAppUrl(whatsappMessage)} target="_blank" rel="noopener noreferrer">
-            <Button variant="secondary" className="w-full">
-              <MessageCircle className="w-4 h-4" />
-              WhatsApp
-            </Button>
-          </a>
-          <a href={getCallUrl()}>
-            <Button variant="secondary" className="w-full">
-              <Phone className="w-4 h-4" />
-              Call
-            </Button>
-          </a>
-          <a href={getEmailUrl()}>
-            <Button variant="secondary" className="w-full">
-              <Mail className="w-4 h-4" />
-              Email
-            </Button>
-          </a>
-        </div>
-      </div>
     </div>
   );
 }
