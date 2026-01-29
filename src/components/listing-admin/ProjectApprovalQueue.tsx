@@ -618,6 +618,7 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
                       src={selectedImport.images[currentImageIndex]?.url}
                       alt={selectedImport.name}
                       className="w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = '/placeholder.svg';
                       }}
@@ -677,6 +678,7 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
                           src={img.url}
                           alt=""
                           className="w-full h-full object-cover"
+                           referrerPolicy="no-referrer"
                           onError={(e) => {
                             (e.target as HTMLImageElement).src = '/placeholder.svg';
                           }}

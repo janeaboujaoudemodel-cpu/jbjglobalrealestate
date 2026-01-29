@@ -376,6 +376,11 @@ export const DeveloperApprovalQueue = () => {
                           alt={developer.name}
                           className="w-full h-full object-cover"
                           loading="lazy"
+                          referrerPolicy="no-referrer"
+                          onError={(e) => {
+                            // Prevent broken image icon in admin UI
+                            (e.currentTarget as HTMLImageElement).src = "/placeholder.svg";
+                          }}
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-zinc-200 to-zinc-300">
@@ -390,6 +395,10 @@ export const DeveloperApprovalQueue = () => {
                             src={developer.logo_url}
                             alt={`${developer.name} logo`}
                             className="h-5 w-auto object-contain max-w-[80px]"
+                            referrerPolicy="no-referrer"
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).src = "/placeholder.svg";
+                            }}
                           />
                         ) : (
                           <span className="text-xs text-zinc-400">No logo</span>
