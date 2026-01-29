@@ -12,7 +12,7 @@ import {
   GraduationCap, BarChart3, MapPin, Award, UserPlus, Globe
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -68,6 +68,24 @@ const GlobalHeader = () => {
   }, []);
 
   const shouldUseMobileHeader = isTouchLayout || !isDesktopWidth;
+
+  const isTransparentRoute =
+    location.pathname.startsWith("/project/") ||
+    location.pathname.startsWith("/listing-admin/preview/");
+
+  const [isSolid, setIsSolid] = useState(() => !isTransparentRoute);
+
+  useEffect(() => {
+    if (!isTransparentRoute) {
+      setIsSolid(true);
+      return;
+    }
+
+    const onScroll = () => setIsSolid(window.scrollY > 80);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [isTransparentRoute]);
 
   const mobileHeaderIconButtonClassName =
     "inline-flex h-7 w-7 items-center justify-center p-0 bg-transparent border-0 rounded-none appearance-none transition-colors duration-300 focus:outline-none focus-visible:outline-none focus-visible:ring-0";
@@ -238,31 +256,31 @@ const GlobalHeader = () => {
     >
       {/* Ultra Premium Multi-Layer Background */}
       <div 
-        className="absolute inset-0"
+        className={`absolute inset-0 transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`}
         style={{
-          background: 'linear-gradient(180deg, rgba(0,0,0,0.98) 0%, rgba(8,8,8,0.99) 50%, rgba(0,0,0,1) 100%)',
+          background: 'linear-gradient(180deg, hsl(var(--premium-bg) / 0.98) 0%, hsl(var(--premium-bg) / 0.99) 50%, hsl(var(--premium-bg) / 1) 100%)',
         }}
       />
       
       {/* Subtle ambient gold glow at top */}
       <div 
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-24 pointer-events-none"
+        className={`absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-24 pointer-events-none transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`}
         style={{
-          background: 'radial-gradient(ellipse at center top, rgba(200,167,102,0.08) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse at center top, hsl(var(--gold) / 0.08) 0%, transparent 70%)',
         }}
       />
       
       {/* Premium Bottom Border - 3D Effect */}
       <div className="absolute bottom-0 left-0 right-0 h-[3px] z-10">
         {/* Main gold gradient line */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+        <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-gold/60 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
         {/* Highlight on top */}
-        <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-gold/80 to-transparent" />
+        <div className={`absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-gold/80 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
       </div>
       
       {/* Inner shadow for depth */}
       <div 
-        className="absolute inset-0 pointer-events-none"
+        className={`absolute inset-0 pointer-events-none transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`}
         style={{
           boxShadow: 'inset 0 -20px 40px -20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03)'
         }}

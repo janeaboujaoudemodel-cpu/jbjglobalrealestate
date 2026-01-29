@@ -4,10 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MessageCircle, Phone, Send, Loader2 } from "lucide-react";
+import { Mail, MessageCircle, Phone, Send, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { getWhatsAppUrl, getCallUrl } from "@/constants/stats";
+import { getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
 
 interface ProjectInquiryFormProps {
   projectId: string;
@@ -94,62 +94,60 @@ export function ProjectInquiryForm({
   const whatsappMessage = `Hi, I'm interested in ${projectName}${projectLocation ? ` at ${projectLocation}` : ''}. Please share more details.`;
 
   return (
-    <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl p-6 border-2 border-gold/40">
-      <h3 className="text-xl font-semibold text-black mb-2">
-        The best deals are our expertise
-      </h3>
-      <p className="text-zinc-600 text-sm mb-6">Register now!</p>
+    <div className="jj-card-inner">
+      <h3 className="text-h3-sm font-medium text-foreground mb-2">Register your interest</h3>
+      <p className="text-muted-foreground text-sm mb-6">Our team will contact you shortly.</p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Name */}
         <div>
-          <Label htmlFor="name" className="text-zinc-700">Full Name *</Label>
+          <Label htmlFor="name" className="text-foreground">Full Name *</Label>
           <Input
             id="name"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             placeholder="Your full name"
-            className="mt-1 bg-white border-zinc-300"
+            className="mt-1"
             required
           />
         </div>
 
         {/* Email */}
         <div>
-          <Label htmlFor="email" className="text-zinc-700">Email *</Label>
+          <Label htmlFor="email" className="text-foreground">Email *</Label>
           <Input
             id="email"
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             placeholder="your@email.com"
-            className="mt-1 bg-white border-zinc-300"
+            className="mt-1"
             required
           />
         </div>
 
         {/* Phone */}
         <div>
-          <Label htmlFor="phone" className="text-zinc-700">Phone Number *</Label>
+          <Label htmlFor="phone" className="text-foreground">Phone Number *</Label>
           <Input
             id="phone"
             type="tel"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             placeholder="+971 XX XXX XXXX"
-            className="mt-1 bg-white border-zinc-300"
+            className="mt-1"
             required
           />
         </div>
 
         {/* Bedrooms (Optional) */}
         <div>
-          <Label htmlFor="bedrooms" className="text-zinc-700">Number of Bedrooms</Label>
+          <Label htmlFor="bedrooms" className="text-foreground">Number of Bedrooms</Label>
           <Select
             value={formData.bedrooms}
             onValueChange={(value) => setFormData({ ...formData, bedrooms: value })}
           >
-            <SelectTrigger className="mt-1 bg-white border-zinc-300">
+            <SelectTrigger className="mt-1">
               <SelectValue placeholder="Select bedrooms" />
             </SelectTrigger>
             <SelectContent>
@@ -165,60 +163,56 @@ export function ProjectInquiryForm({
 
         {/* Size (Optional) */}
         <div>
-          <Label htmlFor="size" className="text-zinc-700">Preferred Size (sqft)</Label>
+          <Label htmlFor="size" className="text-foreground">Preferred Size (sqft)</Label>
           <Input
             id="size"
             type="number"
             value={formData.size}
             onChange={(e) => setFormData({ ...formData, size: e.target.value })}
             placeholder="e.g., 1500"
-            className="mt-1 bg-white border-zinc-300"
+            className="mt-1"
           />
         </div>
 
         {/* Location (Optional) */}
         <div>
-          <Label htmlFor="location" className="text-zinc-700">Preferred Location</Label>
+          <Label htmlFor="location" className="text-foreground">Preferred Location</Label>
           <Input
             id="location"
             value={formData.location}
             onChange={(e) => setFormData({ ...formData, location: e.target.value })}
             placeholder="e.g., Downtown Dubai"
-            className="mt-1 bg-white border-zinc-300"
+            className="mt-1"
           />
         </div>
 
         {/* Preferred Developer (Optional) */}
         <div>
-          <Label htmlFor="developer" className="text-zinc-700">Preferred Developer</Label>
+          <Label htmlFor="developer" className="text-foreground">Preferred Developer</Label>
           <Input
             id="developer"
             value={formData.preferredDeveloper}
             onChange={(e) => setFormData({ ...formData, preferredDeveloper: e.target.value })}
             placeholder="e.g., Emaar, Damac"
-            className="mt-1 bg-white border-zinc-300"
+            className="mt-1"
           />
         </div>
 
         {/* Message (Optional) */}
         <div>
-          <Label htmlFor="message" className="text-zinc-700">Additional Notes</Label>
+          <Label htmlFor="message" className="text-foreground">Additional Notes</Label>
           <Textarea
             id="message"
             value={formData.message}
             onChange={(e) => setFormData({ ...formData, message: e.target.value })}
             placeholder="Any specific requirements or questions..."
-            className="mt-1 bg-white border-zinc-300"
+            className="mt-1"
             rows={3}
           />
         </div>
 
         {/* Submit Button */}
-        <Button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3"
-        >
+        <Button type="submit" disabled={isSubmitting} variant="primary" className="w-full">
           {isSubmitting ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -234,24 +228,26 @@ export function ProjectInquiryForm({
       </form>
 
       {/* Alternative Contact Methods */}
-      <div className="mt-6 pt-6 border-t border-zinc-200">
-        <p className="text-center text-zinc-500 text-sm mb-4">Or contact us directly</p>
-        <div className="grid grid-cols-2 gap-3">
-          <a
-            href={getWhatsAppUrl(whatsappMessage)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 py-3 px-4 rounded-lg bg-green-600 hover:bg-green-700 text-white font-medium transition-colors"
-          >
-            <MessageCircle className="w-5 h-5" />
-            Chat on WhatsApp
+      <div className="mt-6 pt-6 border-t border-gold/20">
+        <p className="text-center text-muted-foreground text-sm mb-4">Or contact us directly</p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <a href={getWhatsAppUrl(whatsappMessage)} target="_blank" rel="noopener noreferrer">
+            <Button variant="secondary" className="w-full">
+              <MessageCircle className="w-4 h-4" />
+              WhatsApp
+            </Button>
           </a>
-          <a
-            href={getCallUrl()}
-            className="flex items-center justify-center gap-2 py-3 px-4 rounded-lg bg-black hover:bg-zinc-800 text-white font-medium transition-colors"
-          >
-            <Phone className="w-5 h-5" />
-            Request Callback
+          <a href={getCallUrl()}>
+            <Button variant="secondary" className="w-full">
+              <Phone className="w-4 h-4" />
+              Call
+            </Button>
+          </a>
+          <a href={getEmailUrl()}>
+            <Button variant="secondary" className="w-full">
+              <Mail className="w-4 h-4" />
+              Email
+            </Button>
           </a>
         </div>
       </div>
