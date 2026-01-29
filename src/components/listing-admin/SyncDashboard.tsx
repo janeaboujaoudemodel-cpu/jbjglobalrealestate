@@ -59,7 +59,8 @@ interface PageStatus {
 interface SyncJob {
   id: string;
   job_type: string;
-  status: 'pending' | 'in_progress' | 'running' | 'paused' | 'completed' | 'failed';
+  // Must match DB constraint: pending | running | paused | completed | failed
+  status: 'pending' | 'running' | 'paused' | 'completed' | 'failed';
   current_page: number;
   total_pages: number;
   stats_created: number;
@@ -77,7 +78,8 @@ interface SyncDashboardProps {
 }
 
 export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
-  const TOTAL_LISTINGS_ESTIMATE = 1332;
+  // UI estimate only (the source website fluctuates)
+  const [listingsEstimate, setListingsEstimate] = useState<number>(1334);
   const [isSyncing, setIsSyncing] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
@@ -115,6 +117,11 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
 
         const pages = Number(data?.total_pages ?? 0);
         if (!pages || pages < 1) throw new Error("Could not detect total pages");
+
+        const estListings = Number(data?.estimated_listings ?? 0);
+        if (estListings && estListings > 1000 && estListings < 10000) {
+          setListingsEstimate(estListings);
+        }
 
         setDetectedTotalPages(pages);
 
@@ -198,7 +205,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     const { data: jobs, error } = await supabase
       .from("sync_jobs")
       .select("*")
-      .in("status", ["in_progress", "running", "paused"])
+      .in("status", ["running", "paused"])
       .eq("job_type", "provident_sync")
       .order("created_at", { ascending: false })
       .limit(1);
@@ -230,7 +237,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
           status: p.page <= job.current_page ? 'success' : 'pending'
         })));
         toast.info(`Found paused sync at page ${job.current_page}. Click Resume to continue.`);
-      } else if (job.status === "in_progress" || job.status === "running") {
+      } else if (job.status === "running") {
         // Resume automatically
         setIsSyncing(true);
         isSyncingRef.current = true;
@@ -440,7 +447,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     const pagesForJob = detectedPages ?? totalPages;
     
     const confirmed = window.confirm(
-      `This will sync all ~${TOTAL_LISTINGS_ESTIMATE} listings from Provident Estate.\n\n` +
+      `This will sync all ~${listingsEstimate.toLocaleString()} listings from Provident Estate.\n\n` +
       "Sarah will extract:\n" +
       "• All project details and descriptions\n" +
       "• High-resolution images\n" +
@@ -462,7 +469,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       .from("sync_jobs")
       .insert({
         job_type: "provident_sync",
-        status: "in_progress",
+        status: "running",
         current_page: 1,
         total_pages: pagesForJob,
         started_at: new Date().toISOString(),
@@ -737,7 +744,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                       className="bg-gold hover:bg-gold/90 text-black disabled:opacity-50"
                     >
                       <Play className="w-4 h-4 mr-2" />
-                      Start Full Sync (~{TOTAL_LISTINGS_ESTIMATE} Listings)
+                      Start Full Sync (~{listingsEstimate.toLocaleString()} Listings)
                     </Button>
                 
                 {failedCount > 0 && (
