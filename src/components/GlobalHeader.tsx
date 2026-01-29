@@ -561,26 +561,100 @@ const GlobalHeader = () => {
                           <p className="text-xs text-zinc-500 uppercase tracking-wider">Signed in as</p>
                           <p className="text-sm font-medium text-black truncate">{user.email}</p>
                         </div>
-                        {hasCRMAccess && (
-                          <Link
-                            to="/crm"
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="flex items-center gap-3 px-4 py-3 mt-2 text-gold hover:bg-gold/10 transition-colors rounded-lg"
-                          >
-                            <Users className="w-5 h-5" />
-                            {t('nav.crm') || 'CRM Dashboard'}
-                          </Link>
+                        
+                        {/* Admin Shortcuts - Same as desktop dropdown */}
+                        {(isAdmin || hasCRMAccess) && (
+                          <>
+                            <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Admin Shortcuts</p>
+                            
+                            {/* My Assistant */}
+                            <Link
+                              to="/founder-assistant"
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                            >
+                              <Sparkles className="w-4 h-4 text-gold" />
+                              My Assistant
+                            </Link>
+                            
+                            {/* Employee Hub */}
+                            <Link
+                              to="/employee-hub"
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                            >
+                              <Briefcase className="w-4 h-4 text-gold" />
+                              Employee Hub
+                            </Link>
+                            
+                            {/* HR Hub */}
+                            <Link
+                              to="/hr-dashboard"
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                            >
+                              <Users className="w-4 h-4 text-gold" />
+                              HR Hub
+                            </Link>
+                            
+                            {/* Listing Admin */}
+                            <Link
+                              to="/listing-admin"
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                            >
+                              <FolderOpen className="w-4 h-4 text-gold" />
+                              Listing Admin
+                            </Link>
+                            
+                            {/* IT Department */}
+                            <Link
+                              to="/it-department"
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                            >
+                              <Monitor className="w-4 h-4 text-gold" />
+                              IT Department
+                            </Link>
+                            
+                            {/* Employee Management */}
+                            <Link
+                              to="/employee-management"
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                            >
+                              <UserCircle className="w-4 h-4 text-gold" />
+                              Employee Management
+                            </Link>
+                            
+                            {/* CRM Dashboard */}
+                            {hasCRMAccess && (
+                              <Link
+                                to="/crm"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                              >
+                                <Users className="w-4 h-4 text-gold" />
+                                {t('nav.crm') || 'CRM Dashboard'}
+                              </Link>
+                            )}
+                            
+                            {/* Admin Panel */}
+                            {isAdmin && (
+                              <Link
+                                to="/admin"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                              >
+                                <Settings className="w-4 h-4 text-gold" />
+                                Admin Panel
+                              </Link>
+                            )}
+                            
+                            <div className="h-px bg-gold/20 my-2" />
+                          </>
                         )}
-                        {isAdmin && (
-                          <Link
-                            to="/admin"
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="flex items-center gap-3 px-4 py-3 text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
-                          >
-                            <Settings className="w-5 h-5" />
-                            {t('nav.admin')}
-                          </Link>
-                        )}
+                        
                         <button
                           onClick={() => {
                             signOut();
@@ -796,6 +870,16 @@ const GlobalHeader = () => {
                                   <Briefcase className="w-3.5 h-3.5 text-gold" />
                                 </div>
                                 <span className="font-medium text-sm">Employee Hub</span>
+                              </Link>
+                            </DropdownMenuItem>
+                            
+                            {/* HR Hub */}
+                            <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
+                              <Link to="/hr-dashboard" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
+                                <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                                  <Users className="w-3.5 h-3.5 text-gold" />
+                                </div>
+                                <span className="font-medium text-sm">HR Hub</span>
                               </Link>
                             </DropdownMenuItem>
                             

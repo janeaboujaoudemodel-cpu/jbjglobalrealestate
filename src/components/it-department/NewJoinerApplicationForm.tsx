@@ -10,55 +10,136 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { allTeamMembers } from '@/config/team-members';
+import { PhoneInputWithCountry } from '@/components/ui/phone-input-with-country';
+import { NationalitySelect } from '@/components/ui/nationality-select';
+import { LanguageMultiSelect } from '@/components/ui/language-multi-select';
+import { SearchableSelectWithOther } from '@/components/ui/searchable-select-with-other';
 
 // List of departments
 const DEPARTMENTS = [
-  'Leadership',
-  'Sales',
-  'After Sales',
-  'Marketing & Content',
-  'Client Relations',
-  'VIP Client Relations',
-  'Human Resources',
-  'Creative & Media',
-  'Finance',
-  'Operations',
-  'Software Engineering',
-  'Project Management',
-  'IT',
-  'Administration',
-  'Customer Happiness',
-  'Legal'
+  { value: 'Leadership', label: 'Leadership' },
+  { value: 'Sales', label: 'Sales' },
+  { value: 'After Sales', label: 'After Sales' },
+  { value: 'Marketing & Content', label: 'Marketing & Content' },
+  { value: 'Client Relations', label: 'Client Relations' },
+  { value: 'VIP Client Relations', label: 'VIP Client Relations' },
+  { value: 'Human Resources', label: 'Human Resources' },
+  { value: 'Creative & Media', label: 'Creative & Media' },
+  { value: 'Finance', label: 'Finance' },
+  { value: 'Operations', label: 'Operations' },
+  { value: 'Software Engineering', label: 'Software Engineering' },
+  { value: 'Project Management', label: 'Project Management' },
+  { value: 'IT', label: 'IT' },
+  { value: 'Administration', label: 'Administration' },
+  { value: 'Customer Happiness', label: 'Customer Happiness' },
+  { value: 'Legal', label: 'Legal' },
+  { value: 'Compliance', label: 'Compliance' },
+  { value: 'Research & Development', label: 'Research & Development' },
+  { value: 'Training', label: 'Training' },
+  { value: 'Quality Assurance', label: 'Quality Assurance' },
+  { value: 'Business Development', label: 'Business Development' },
+  { value: 'Partnerships', label: 'Partnerships' },
+  { value: 'Analytics', label: 'Analytics' },
+  { value: 'Design', label: 'Design' },
+  { value: 'Content', label: 'Content' },
+  { value: 'Social Media', label: 'Social Media' },
+  { value: 'PR & Communications', label: 'PR & Communications' },
+  { value: 'Procurement', label: 'Procurement' },
+  { value: 'Facilities', label: 'Facilities' },
+  { value: 'Security', label: 'Security' },
 ];
 
-// CRM Roles
+// CRM Roles - comprehensive list
 const CRM_ROLES = [
   { value: 'broker_member', label: 'Broker Member' },
+  { value: 'senior_broker', label: 'Senior Broker' },
+  { value: 'team_lead', label: 'Team Lead' },
+  { value: 'sales_manager', label: 'Sales Manager' },
   { value: 'sales_director', label: 'Sales Director' },
+  { value: 'department_head', label: 'Department Head' },
+  { value: 'division_manager', label: 'Division Manager' },
+  { value: 'associate', label: 'Associate' },
+  { value: 'coordinator', label: 'Coordinator' },
+  { value: 'specialist', label: 'Specialist' },
+  { value: 'analyst', label: 'Analyst' },
+  { value: 'consultant', label: 'Consultant' },
+  { value: 'executive', label: 'Executive' },
+  { value: 'officer', label: 'Officer' },
+  { value: 'assistant', label: 'Assistant' },
+  { value: 'intern', label: 'Intern' },
+  { value: 'trainee', label: 'Trainee' },
+  { value: 'supervisor', label: 'Supervisor' },
   { value: 'admin', label: 'Admin' },
+  { value: 'hr_manager', label: 'HR Manager' },
+  { value: 'hr_officer', label: 'HR Officer' },
+  { value: 'finance_manager', label: 'Finance Manager' },
+  { value: 'accountant', label: 'Accountant' },
+  { value: 'marketing_manager', label: 'Marketing Manager' },
+  { value: 'content_manager', label: 'Content Manager' },
+  { value: 'designer', label: 'Designer' },
+  { value: 'developer', label: 'Developer' },
+  { value: 'it_support', label: 'IT Support' },
+  { value: 'receptionist', label: 'Receptionist' },
+  { value: 'driver', label: 'Driver' },
   { value: 'owner_admin', label: 'Owner Admin' },
-  { value: 'founder', label: 'Founder' }
+  { value: 'founder', label: 'Founder' },
+  { value: 'ceo', label: 'CEO' },
+  { value: 'coo', label: 'COO' },
+  { value: 'cfo', label: 'CFO' },
+  { value: 'cto', label: 'CTO' },
+  { value: 'cmo', label: 'CMO' },
+  { value: 'vp', label: 'Vice President' },
+  { value: 'director', label: 'Director' },
+  { value: 'partner', label: 'Partner' },
+  { value: 'contractor', label: 'Contractor' },
+  { value: 'freelancer', label: 'Freelancer' },
 ];
 
-// Common nationalities
-const NATIONALITIES = [
-  'Emirati', 'British', 'American', 'Indian', 'Pakistani', 'Filipino',
-  'Egyptian', 'Lebanese', 'Syrian', 'Jordanian', 'Moroccan', 'Saudi',
-  'Chinese', 'Russian', 'French', 'German', 'Italian', 'Spanish',
-  'Brazilian', 'Australian', 'Canadian', 'South African', 'Nigerian',
-  'Kenyan', 'Other'
-];
-
-// Common languages
-const LANGUAGES = [
-  'English', 'Arabic', 'Hindi', 'Urdu', 'Tagalog', 'French',
-  'German', 'Spanish', 'Portuguese', 'Russian', 'Chinese (Mandarin)',
-  'Chinese (Cantonese)', 'Japanese', 'Korean', 'Italian', 'Dutch',
-  'Turkish', 'Persian', 'Bengali', 'Indonesian', 'Malay', 'Thai'
+// Common job titles
+const JOB_TITLES = [
+  { value: 'Property Consultant', label: 'Property Consultant' },
+  { value: 'Senior Property Consultant', label: 'Senior Property Consultant' },
+  { value: 'Real Estate Agent', label: 'Real Estate Agent' },
+  { value: 'Sales Executive', label: 'Sales Executive' },
+  { value: 'Sales Manager', label: 'Sales Manager' },
+  { value: 'Sales Director', label: 'Sales Director' },
+  { value: 'Business Development Manager', label: 'Business Development Manager' },
+  { value: 'Account Manager', label: 'Account Manager' },
+  { value: 'Client Relations Manager', label: 'Client Relations Manager' },
+  { value: 'Marketing Manager', label: 'Marketing Manager' },
+  { value: 'Marketing Coordinator', label: 'Marketing Coordinator' },
+  { value: 'Content Creator', label: 'Content Creator' },
+  { value: 'Social Media Manager', label: 'Social Media Manager' },
+  { value: 'Graphic Designer', label: 'Graphic Designer' },
+  { value: 'Video Editor', label: 'Video Editor' },
+  { value: 'Photographer', label: 'Photographer' },
+  { value: 'HR Manager', label: 'HR Manager' },
+  { value: 'HR Officer', label: 'HR Officer' },
+  { value: 'Recruiter', label: 'Recruiter' },
+  { value: 'Finance Manager', label: 'Finance Manager' },
+  { value: 'Accountant', label: 'Accountant' },
+  { value: 'Administrative Assistant', label: 'Administrative Assistant' },
+  { value: 'Office Manager', label: 'Office Manager' },
+  { value: 'Receptionist', label: 'Receptionist' },
+  { value: 'IT Manager', label: 'IT Manager' },
+  { value: 'IT Support Specialist', label: 'IT Support Specialist' },
+  { value: 'Software Developer', label: 'Software Developer' },
+  { value: 'Project Manager', label: 'Project Manager' },
+  { value: 'Operations Manager', label: 'Operations Manager' },
+  { value: 'Quality Assurance', label: 'Quality Assurance' },
+  { value: 'Training Manager', label: 'Training Manager' },
+  { value: 'Customer Service Representative', label: 'Customer Service Representative' },
+  { value: 'Legal Counsel', label: 'Legal Counsel' },
+  { value: 'Compliance Officer', label: 'Compliance Officer' },
+  { value: 'Executive Assistant', label: 'Executive Assistant' },
+  { value: 'Personal Assistant', label: 'Personal Assistant' },
+  { value: 'Driver', label: 'Driver' },
+  { value: 'Security Officer', label: 'Security Officer' },
+  { value: 'Intern', label: 'Intern' },
+  { value: 'Trainee', label: 'Trainee' },
 ];
 
 interface NewJoinerApplicationFormProps {
@@ -73,7 +154,6 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
   onSuccess
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   
   const [formData, setFormData] = useState({
@@ -99,15 +179,6 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
       setPhotoPreview(event.target?.result as string);
     };
     reader.readAsDataURL(file);
-  };
-
-  const handleLanguageToggle = (language: string) => {
-    setFormData(prev => ({
-      ...prev,
-      languages: prev.languages.includes(language)
-        ? prev.languages.filter(l => l !== language)
-        : [...prev.languages, language]
-    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -191,10 +262,12 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
   };
 
   // Get potential managers based on department
-  const potentialManagers = allTeamMembers.filter(m => 
-    m.department === formData.department && 
-    (m.hierarchyLevel || 5) <= 3
-  );
+  const potentialManagers = allTeamMembers
+    .filter(m => 
+      m.department === formData.department && 
+      (m.hierarchyLevel || 5) <= 3
+    )
+    .map(m => ({ value: m.id, label: `${m.name} - ${m.role}` }));
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -261,40 +334,28 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
               />
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 md:col-span-2">
               <Label className="text-black font-medium flex items-center gap-2">
                 <Phone className="w-4 h-4 text-gold" />
                 Phone Number
               </Label>
-              <Input
-                type="tel"
+              <PhoneInputWithCountry
                 value={formData.phone}
-                onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                placeholder="+971 XX XXX XXXX"
-                className="bg-white border-2 border-gold/30 text-black placeholder:text-black/40 focus:border-gold"
+                onChange={(value) => setFormData(prev => ({ ...prev, phone: value }))}
+                placeholder="XX XXX XXXX"
               />
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 md:col-span-2">
               <Label className="text-black font-medium flex items-center gap-2">
                 <Globe className="w-4 h-4 text-gold" />
                 Nationality *
               </Label>
-              <Select
+              <NationalitySelect
                 value={formData.nationality}
-                onValueChange={(value) => setFormData(prev => ({ ...prev, nationality: value }))}
-              >
-                <SelectTrigger className="bg-white border-2 border-gold/30 text-black">
-                  <SelectValue placeholder="Select nationality" className="text-black" />
-                </SelectTrigger>
-                <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
-                  {NATIONALITIES.map(nat => (
-                    <SelectItem key={nat} value={nat} className="text-black hover:bg-gold/20 focus:bg-gold/20">
-                      {nat}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                onChange={(value) => setFormData(prev => ({ ...prev, nationality: value }))}
+                allowOther={true}
+              />
             </div>
           </div>
 
@@ -304,24 +365,10 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
               <Languages className="w-4 h-4 text-gold" />
               Languages Spoken
             </Label>
-            <div className="flex flex-wrap gap-2">
-              {LANGUAGES.map(lang => (
-                <Button
-                  key={lang}
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleLanguageToggle(lang)}
-                  className={`border-2 border-gold/30 ${
-                    formData.languages.includes(lang)
-                      ? 'bg-gold text-black hover:bg-gold/90 border-gold'
-                      : 'text-black hover:bg-gold/10 hover:border-gold'
-                  }`}
-                >
-                  {lang}
-                </Button>
-              ))}
-            </div>
+            <LanguageMultiSelect
+              value={formData.languages}
+              onChange={(value) => setFormData(prev => ({ ...prev, languages: value }))}
+            />
           </div>
 
           {/* Position Details */}
@@ -331,12 +378,13 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
                 <Briefcase className="w-4 h-4 text-gold" />
                 Job Title *
               </Label>
-              <Input
+              <SearchableSelectWithOther
                 value={formData.jobTitle}
-                onChange={(e) => setFormData(prev => ({ ...prev, jobTitle: e.target.value }))}
-                placeholder="e.g., Property Consultant"
-                className="bg-white border-2 border-gold/30 text-black placeholder:text-black/40 focus:border-gold"
-                required
+                onChange={(value) => setFormData(prev => ({ ...prev, jobTitle: value }))}
+                options={JOB_TITLES}
+                placeholder="Select or type job title"
+                allowOther={true}
+                otherPlaceholder="Type custom job title..."
               />
             </div>
 
@@ -345,21 +393,14 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
                 <Building2 className="w-4 h-4 text-gold" />
                 Department *
               </Label>
-              <Select
+              <SearchableSelectWithOther
                 value={formData.department}
-                onValueChange={(value) => setFormData(prev => ({ ...prev, department: value, reportsTo: '' }))}
-              >
-                <SelectTrigger className="bg-white border-2 border-gold/30 text-black">
-                  <SelectValue placeholder="Select department" className="text-black" />
-                </SelectTrigger>
-                <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
-                  {DEPARTMENTS.map(dept => (
-                    <SelectItem key={dept} value={dept} className="text-black hover:bg-gold/20 focus:bg-gold/20">
-                      {dept}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                onChange={(value) => setFormData(prev => ({ ...prev, department: value, reportsTo: '' }))}
+                options={DEPARTMENTS}
+                placeholder="Select or type department"
+                allowOther={true}
+                otherPlaceholder="Type custom department..."
+              />
             </div>
 
             <div className="space-y-2">
@@ -367,21 +408,14 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
                 <UserCheck className="w-4 h-4 text-gold" />
                 CRM Role
               </Label>
-              <Select
+              <SearchableSelectWithOther
                 value={formData.crmRole}
-                onValueChange={(value) => setFormData(prev => ({ ...prev, crmRole: value }))}
-              >
-                <SelectTrigger className="bg-white border-2 border-gold/30 text-black">
-                  <SelectValue placeholder="Select CRM role" className="text-black" />
-                </SelectTrigger>
-                <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
-                  {CRM_ROLES.map(role => (
-                    <SelectItem key={role.value} value={role.value} className="text-black hover:bg-gold/20 focus:bg-gold/20">
-                      {role.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                onChange={(value) => setFormData(prev => ({ ...prev, crmRole: value }))}
+                options={CRM_ROLES}
+                placeholder="Select or type role"
+                allowOther={true}
+                otherPlaceholder="Type custom role..."
+              />
             </div>
 
             <div className="space-y-2">
@@ -389,22 +423,14 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
                 <User className="w-4 h-4 text-gold" />
                 Reports To
               </Label>
-              <Select
+              <SearchableSelectWithOther
                 value={formData.reportsTo}
-                onValueChange={(value) => setFormData(prev => ({ ...prev, reportsTo: value }))}
-                disabled={!formData.department}
-              >
-                <SelectTrigger className="bg-white border-2 border-gold/30 text-black disabled:opacity-60">
-                  <SelectValue placeholder={formData.department ? "Select manager" : "Select department first"} className="text-black" />
-                </SelectTrigger>
-                <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
-                  {potentialManagers.map(manager => (
-                    <SelectItem key={manager.id} value={manager.id} className="text-black hover:bg-gold/20 focus:bg-gold/20">
-                      {manager.name} - {manager.role}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                onChange={(value) => setFormData(prev => ({ ...prev, reportsTo: value }))}
+                options={potentialManagers}
+                placeholder={formData.department ? "Select manager" : "Select department first"}
+                allowOther={true}
+                otherPlaceholder="Type manager name..."
+              />
             </div>
           </div>
 
