@@ -103,8 +103,8 @@ export function WarningsPanel() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-foreground">Employee Warnings</h2>
-          <p className="text-muted-foreground text-sm">Issue and track employee disciplinary warnings</p>
+          <h2 className="text-2xl font-bold text-black">Employee Warnings</h2>
+          <p className="text-zinc-600 text-sm">Issue and track employee disciplinary warnings</p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
@@ -113,7 +113,7 @@ export function WarningsPanel() {
               Issue Warning
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-lg bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7] border-2 border-gold/30">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2 text-red-600">
                 <AlertTriangle className="h-5 w-5" />
@@ -123,31 +123,33 @@ export function WarningsPanel() {
             <div className="space-y-4 py-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Employee Name *</Label>
+                  <Label className="text-black">Employee Name *</Label>
                   <Input 
                     placeholder="Enter employee name"
                     value={formData.employee_name}
                     onChange={(e) => setFormData(prev => ({ ...prev, employee_name: e.target.value }))}
+                    className="border-gold/30 focus:border-gold"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Department</Label>
+                  <Label className="text-black">Department</Label>
                   <Input 
                     placeholder="Department"
                     value={formData.department}
                     onChange={(e) => setFormData(prev => ({ ...prev, department: e.target.value }))}
+                    className="border-gold/30 focus:border-gold"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Warning Type *</Label>
+                  <Label className="text-black">Warning Type *</Label>
                   <Select 
                     value={formData.warning_type} 
                     onValueChange={(v) => setFormData(prev => ({ ...prev, warning_type: v as typeof formData.warning_type }))}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="border-gold/30 focus:border-gold">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -160,29 +162,31 @@ export function WarningsPanel() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Incident Date</Label>
+                  <Label className="text-black">Incident Date</Label>
                   <Input 
                     type="date"
                     value={formData.incident_date}
                     onChange={(e) => setFormData(prev => ({ ...prev, incident_date: e.target.value }))}
+                    className="border-gold/30 focus:border-gold"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label>Subject *</Label>
+                <Label className="text-black">Subject *</Label>
                 <Input 
                   placeholder="Warning subject..."
                   value={formData.subject}
                   onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
+                  className="border-gold/30 focus:border-gold"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label>Description *</Label>
+                <Label className="text-black">Description *</Label>
                 <Textarea 
                   placeholder="Detailed description of the incident or behavior..."
-                  className="min-h-[120px]"
+                  className="min-h-[120px] border-gold/30 focus:border-gold"
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                 />
@@ -199,7 +203,7 @@ export function WarningsPanel() {
               </div>
 
               <div className="flex justify-end gap-3 pt-4">
-                <Button variant="secondary" onClick={() => setIsDialogOpen(false)}>
+                <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="border-gold/30 hover:bg-gold/10">
                   Cancel
                 </Button>
                 <Button 
@@ -215,35 +219,35 @@ export function WarningsPanel() {
         </Dialog>
       </div>
 
-      {/* Summary Cards */}
+      {/* Summary Cards - Premium Theme */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
+        <Card className="bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] border-2 border-gold/30 shadow-lg">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-muted-foreground text-xs">Pending Signature</p>
+                <p className="text-zinc-600 text-xs">Pending Signature</p>
                 <p className="text-2xl font-bold text-amber-600">{pendingWarnings.length}</p>
               </div>
               <Clock className="h-8 w-8 text-amber-500/50" />
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] border-2 border-gold/30 shadow-lg">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-muted-foreground text-xs">Acknowledged</p>
+                <p className="text-zinc-600 text-xs">Acknowledged</p>
                 <p className="text-2xl font-bold text-emerald-600">{acknowledgedWarnings.length}</p>
               </div>
               <CheckCircle className="h-8 w-8 text-emerald-500/50" />
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] border-2 border-gold/30 shadow-lg">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-muted-foreground text-xs">Verbal Warnings</p>
+                <p className="text-zinc-600 text-xs">Verbal Warnings</p>
                 <p className="text-2xl font-bold text-amber-600">
                   {warnings.filter(w => w.warning_type === 'verbal').length}
                 </p>
@@ -252,11 +256,11 @@ export function WarningsPanel() {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] border-2 border-gold/30 shadow-lg">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-muted-foreground text-xs">Written/Final</p>
+                <p className="text-zinc-600 text-xs">Written/Final</p>
                 <p className="text-2xl font-bold text-red-600">
                   {warnings.filter(w => w.warning_type === 'written' || w.warning_type === 'final').length}
                 </p>
@@ -267,42 +271,42 @@ export function WarningsPanel() {
         </Card>
       </div>
 
-      {/* Warnings Table */}
-      <Card>
+      {/* Warnings Table - Premium Theme */}
+      <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7] border-2 border-gold/30 shadow-lg">
         <CardHeader>
-          <CardTitle className="text-foreground flex items-center gap-2">
+          <CardTitle className="text-black flex items-center gap-2">
             <AlertTriangle className="h-5 w-5 text-red-500" />
             All Warnings
           </CardTitle>
         </CardHeader>
         <CardContent>
           {warnings.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground">
+            <div className="text-center py-12 text-zinc-500">
               <CheckCircle className="h-12 w-12 mx-auto mb-4 text-emerald-400" />
               <p>No warnings on record.</p>
             </div>
           ) : (
             <Table>
               <TableHeader>
-                <TableRow className="border-border">
-                  <TableHead>Employee</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Subject</TableHead>
-                  <TableHead>Incident Date</TableHead>
-                  <TableHead>Issued By</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Signed</TableHead>
+                <TableRow className="border-gold/20">
+                  <TableHead className="text-black">Employee</TableHead>
+                  <TableHead className="text-black">Type</TableHead>
+                  <TableHead className="text-black">Subject</TableHead>
+                  <TableHead className="text-black">Incident Date</TableHead>
+                  <TableHead className="text-black">Issued By</TableHead>
+                  <TableHead className="text-black">Status</TableHead>
+                  <TableHead className="text-black">Signed</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {warnings.map(warning => (
-                  <TableRow key={warning.id} className="border-border hover:bg-muted/50">
+                  <TableRow key={warning.id} className="border-gold/20 hover:bg-gold/5">
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <User className="h-4 w-4 text-muted-foreground" />
+                        <User className="h-4 w-4 text-zinc-500" />
                         <div>
-                          <p className="font-medium text-foreground">{warning.employee_name}</p>
-                          <p className="text-xs text-muted-foreground">{warning.department}</p>
+                          <p className="font-medium text-black">{warning.employee_name}</p>
+                          <p className="text-xs text-zinc-500">{warning.department}</p>
                         </div>
                       </div>
                     </TableCell>
@@ -310,12 +314,12 @@ export function WarningsPanel() {
                       <WarningTypeBadge type={warning.warning_type} />
                     </TableCell>
                     <TableCell className="max-w-[200px]">
-                      <p className="font-medium text-foreground truncate">{warning.subject}</p>
+                      <p className="font-medium text-black truncate">{warning.subject}</p>
                     </TableCell>
-                    <TableCell className="text-muted-foreground">
+                    <TableCell className="text-zinc-600">
                       {warning.incident_date ? format(new Date(warning.incident_date), 'MMM dd, yyyy') : '-'}
                     </TableCell>
-                    <TableCell className="text-muted-foreground">
+                    <TableCell className="text-zinc-600">
                       {warning.issued_by_name || 'System'}
                     </TableCell>
                     <TableCell>
@@ -330,7 +334,7 @@ export function WarningsPanel() {
                           </span>
                         </div>
                       ) : (
-                        <span className="text-muted-foreground text-sm">Pending</span>
+                        <span className="text-zinc-500 text-sm">Pending</span>
                       )}
                     </TableCell>
                   </TableRow>
