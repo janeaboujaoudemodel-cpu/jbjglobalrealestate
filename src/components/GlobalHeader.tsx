@@ -36,7 +36,11 @@ import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
 import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
 
-const GlobalHeader = () => {
+interface GlobalHeaderProps {
+  forceSolid?: boolean;
+}
+
+const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const { user, isAdmin, signOut } = useAuth();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -70,17 +74,21 @@ const GlobalHeader = () => {
 
   const shouldUseMobileHeader = isTouchLayout || !isDesktopWidth;
 
-  // Apply transparent header globally on all pages
-  const isTransparentRoute = true;
+  // Apply transparent header globally on all pages (unless forceSolid is true)
+  const isTransparentRoute = !forceSolid;
 
-  const [isSolid, setIsSolid] = useState(false);
+  const [isSolid, setIsSolid] = useState(forceSolid);
 
   useEffect(() => {
+    if (forceSolid) {
+      setIsSolid(true);
+      return;
+    }
     const onScroll = () => setIsSolid(window.scrollY > 80);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [forceSolid]);
 
   // When transparent (hero visible), use minimal styling - no fills on nav/icons
   const isFullyTransparent = isTransparentRoute && !isSolid;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Users, FileText, Activity, Linkedin, Building2, DollarSign, Briefcase, Wallet, TrendingUp, UserCheck, Brain, Calendar, AlertTriangle, CheckSquare, Target } from "lucide-react";
+import { Users, FileText, Activity, Linkedin, Building2, DollarSign, Briefcase, Wallet, TrendingUp, UserCheck, Brain, Calendar, AlertTriangle, CheckSquare, Target, Plus } from "lucide-react";
 import JobOfferManager from "@/components/hr/JobOfferManager";
 import { EmployeePerformanceDashboard } from "@/components/hr/EmployeePerformanceDashboard";
 import { LinkedInInsightsPanel } from "@/components/hr/LinkedInInsightsPanel";
@@ -11,6 +11,8 @@ import { LeaveManagementPanel } from "@/components/hr/LeaveManagementPanel";
 import { WarningsPanel } from "@/components/hr/WarningsPanel";
 import { ApprovalWorkflowPanel } from "@/components/hr/ApprovalWorkflowPanel";
 import { HuntingDashboard } from "@/components/hr/hunting/HuntingDashboard";
+import { OpenPositionsPanel } from "@/components/hr/OpenPositionsPanel";
+import { useHRStats } from "@/hooks/useHRStats";
 import { 
   PremiumBackendLayout, 
   PremiumPageHeader, 
@@ -24,6 +26,7 @@ import {
 
 export default function HRDashboard() {
   const [activeTab, setActiveTab] = useState("performance");
+  const { data: stats, isLoading: statsLoading } = useHRStats();
 
   return (
     <PremiumBackendLayout>
@@ -45,39 +48,38 @@ export default function HRDashboard() {
         }
       />
 
-      {/* Stats Section */}
+      {/* Stats Section - Real Data */}
       <PremiumSection variant="cream" className="py-6">
         <PremiumContainer>
           <PremiumGrid cols={4} gap="md">
             <PremiumStatCard
               title="Active Employees"
-              value="147"
+              value={statsLoading ? "..." : String(stats?.activeEmployees || 0)}
               subtitle="Team members"
               icon={Users}
-              trend="up"
-              trendValue="+12 this month"
+              trend={stats?.newHires ? "up" : undefined}
+              trendValue={stats?.newHires ? `+${stats.newHires} this month` : undefined}
               accentColor="gold"
             />
             <PremiumStatCard
               title="Open Positions"
-              value="8"
+              value={statsLoading ? "..." : String(stats?.openPositions || 0)}
               subtitle="Hiring now"
               icon={Briefcase}
               accentColor="blue"
             />
             <PremiumStatCard
-              title="Avg. Performance"
-              value="94%"
-              subtitle="Team score"
-              icon={TrendingUp}
-              trend="up"
-              trendValue="+3% vs last month"
+              title="New Hires"
+              value={statsLoading ? "..." : String(stats?.newHires || 0)}
+              subtitle="Last 30 days"
+              icon={UserCheck}
+              trend={stats?.newHires ? "up" : undefined}
               accentColor="green"
             />
             <PremiumStatCard
               title="AI Insights"
-              value="23"
-              subtitle="New recommendations"
+              value={statsLoading ? "..." : String(stats?.aiInsights || 0)}
+              subtitle="Pending prospects"
               icon={Brain}
               accentColor="purple"
             />
@@ -103,6 +105,13 @@ export default function HRDashboard() {
               >
                 <Target className="h-4 w-4" />
                 Hunting
+              </TabsTrigger>
+              <TabsTrigger 
+                value="positions" 
+                className="gap-2 rounded-lg data-[state=active]:bg-gold data-[state=active]:text-black data-[state=active]:shadow-sm"
+              >
+                <Plus className="h-4 w-4" />
+                Positions
               </TabsTrigger>
               <TabsTrigger 
                 value="leave" 
@@ -168,6 +177,10 @@ export default function HRDashboard() {
 
             <TabsContent value="hunting" className="mt-6">
               <HuntingDashboard />
+            </TabsContent>
+
+            <TabsContent value="positions" className="mt-6">
+              <OpenPositionsPanel />
             </TabsContent>
 
             <TabsContent value="leave" className="mt-6">

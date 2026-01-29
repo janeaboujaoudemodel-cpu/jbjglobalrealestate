@@ -211,8 +211,8 @@ const Index = () => {
       {/* DEVELOPER PARTNERS MARQUEE */}
       <DeveloperPartnersMarquee />
 
-      {/* AI HOME FINDER - Premium CTA Section - Gold glow on normal, white on hover */}
-      <section className="pt-10 md:pt-16 pb-6 md:pb-14 bg-black">
+      {/* AI HOME FINDER - Premium CTA Section - Centered with equal spacing */}
+      <section className="py-14 md:py-20 bg-black">
         <div className="container mx-auto px-3 md:px-4">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
