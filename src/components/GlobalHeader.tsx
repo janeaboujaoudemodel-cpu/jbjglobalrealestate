@@ -208,7 +208,7 @@ const GlobalHeader = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button 
-          className={`flex items-center gap-1 px-2 xl:px-3 py-1.5 text-xs xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
+          className={`flex items-center gap-0.5 lg:gap-1 px-1.5 lg:px-2 xl:px-2.5 py-1 text-[11px] lg:text-xs xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
             isFullyTransparent
               ? isActiveCheck?.() 
                 ? 'text-gold bg-transparent' 
@@ -217,7 +217,7 @@ const GlobalHeader = () => {
                 ? 'text-gold bg-gold/15' 
                 : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
           }`}
-          style={{ letterSpacing: '0.02em' }}
+          style={{ letterSpacing: '0.01em' }}
         >
           {label}
           <ChevronDown className="w-3 h-3 transition-transform duration-200 group-data-[state=open]:rotate-180" />
@@ -290,15 +290,10 @@ const GlobalHeader = () => {
         }}
       />
       
-      {/* HEADER CONTENT: scales proportionally on desktop when viewport shrinks */}
+      {/* HEADER CONTENT */}
       <div
         ref={headerContentRef}
-        className="relative z-10 h-full flex items-center justify-between px-4 xl:px-8 2xl:px-12"
-        style={!shouldUseMobileHeader ? {
-          // Scale the entire header content proportionally when viewport shrinks
-          transform: 'scale(clamp(0.8, calc((100vw - 768px) / 512), 1))',
-          transformOrigin: 'center center',
-        } : undefined}
+        className="relative z-10 h-full flex items-center justify-between px-3 lg:px-4 xl:px-6 2xl:px-10"
       >
         {/* LEFT: Premium Brand Logo - LOCKED */}
         <div className="shrink-0">
@@ -714,11 +709,11 @@ const GlobalHeader = () => {
           {/* DESKTOP HEADER (lg+): nav items with dividers - transparent on hero, solid on scroll */}
           {!shouldUseMobileHeader && (
             <nav 
-              className="flex-1 mx-2 xl:mx-4 flex justify-center" 
+              className="flex-1 mx-1 lg:mx-2 xl:mx-4 flex justify-center overflow-visible" 
               aria-label="Primary"
             >
               <div 
-                className={`flex items-center gap-0.5 xl:gap-1 rounded-full px-4 xl:px-6 py-2 transition-all duration-300 ${
+                className={`flex items-center gap-0 lg:gap-0.5 rounded-full px-2 lg:px-3 xl:px-5 py-1.5 transition-all duration-300 ${
                   isFullyTransparent 
                     ? 'bg-transparent border-transparent' 
                     : 'border-2 border-gold/40'
@@ -731,7 +726,7 @@ const GlobalHeader = () => {
                 {/* Home */}
                 <Link
                   to="/"
-                  className={`px-2 xl:px-3 py-1.5 text-xs xl:text-sm font-semibold whitespace-nowrap transition-all ${
+                  className={`px-1.5 lg:px-2 xl:px-2.5 py-1 text-[11px] lg:text-xs xl:text-sm font-semibold whitespace-nowrap transition-all ${
                     isFullyTransparent
                       ? isActive("/") ? "text-gold" : "text-white hover:text-gold"
                       : isActive("/") ? "text-gold bg-gold/15 rounded-full" : "text-zinc-800 hover:text-gold hover:bg-gold/10 rounded-full"
@@ -742,36 +737,36 @@ const GlobalHeader = () => {
                 </Link>
 
                 {/* Divider */}
-                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
 
                 {renderDropdown("Properties", propertiesLinks, () => location.pathname === '/properties')}
-                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
                 {renderDropdown("Services", servicesLinks, () => location.pathname.startsWith('/services'))}
-                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
                 {renderDropdown("Guides", guidesLinks, () => 
                   ['/buyer-guide', '/seller-guide', '/landlord-guide', '/tenant-guide', '/areas', '/faq', '/investor-education', '/investor-faq', '/broker-faq'].some(p => location.pathname.startsWith(p))
                 )}
-                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
-                {renderDropdown("Market Intel", marketIntelLinks, () => 
+                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
+                {renderDropdown("Intel", marketIntelLinks, () => 
                   location.pathname.startsWith('/market-intelligence') || location.pathname === '/market-report'
                 )}
-                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
-                {renderDropdown("Investor Hub", investorHubLinks, () => 
+                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
+                {renderDropdown("Investor", investorHubLinks, () => 
                   location.pathname.includes('ai-hub') || location.pathname === '/favorites'
                 )}
-                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
-                {renderDropdown("Broker Hub", brokerHubLinks, () => 
+                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
+                {renderDropdown("Broker", brokerHubLinks, () => 
                   location.pathname.includes('broker-toolkit') || location.pathname.includes('broker-education')
                 )}
-                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
                 {renderDropdown("About", aboutLinks, () => 
                   ['/about', '/founder', '/team', '/awards'].some(p => location.pathname.startsWith(p))
                 )}
-                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
 
                 <Link
                   to="/contact"
-                  className={`px-2 xl:px-3 py-1.5 text-xs xl:text-sm font-semibold whitespace-nowrap transition-all ${
+                  className={`px-1.5 lg:px-2 xl:px-2.5 py-1 text-[11px] lg:text-xs xl:text-sm font-semibold whitespace-nowrap transition-all ${
                     isFullyTransparent
                       ? isActive("/contact") ? "text-gold" : "text-white hover:text-gold"
                       : isActive("/contact") ? "text-gold bg-gold/15 rounded-full" : "text-zinc-800 hover:text-gold hover:bg-gold/10 rounded-full"
@@ -780,7 +775,7 @@ const GlobalHeader = () => {
                 >
                   Contact
                 </Link>
-                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
 
                 {renderDropdown("More", moreLinks, () => 
                   ['/news', '/join'].some(p => location.pathname.startsWith(p))
