@@ -802,7 +802,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
           {!shouldUseMobileHeader && (
             <div 
-              className={`flex items-center gap-1 px-4 py-2 rounded-full shrink-0 mr-4 lg:mr-6 xl:mr-8 transition-all duration-300 ${
+              className={`flex items-center gap-1 px-4 py-2 rounded-full shrink-0 transition-all duration-300 ${
                 isFullyTransparent 
                   ? 'bg-transparent border-transparent' 
                   : 'border border-gold/30'
