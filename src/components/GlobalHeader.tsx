@@ -722,14 +722,18 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
           {/* DESKTOP HEADER (lg+): nav items with dividers - transparent on hero, solid on scroll */}
           {!shouldUseMobileHeader && (
-            <nav 
-              className="flex-1 mx-1 lg:mx-2 xl:mx-4 flex justify-center overflow-visible" 
+            <nav
+              className="flex-1 min-w-0 mx-1 lg:mx-2 xl:mx-4 flex justify-center"
               aria-label="Primary"
             >
-              <div 
-                className={`flex items-center gap-0 lg:gap-0.5 rounded-full px-2 lg:px-3 xl:px-5 py-1.5 transition-all duration-300 ${
-                  isFullyTransparent 
-                    ? 'bg-transparent border-transparent' 
+              {/*
+                IMPORTANT: keep right-side utility icons inside header.
+                `min-w-0` + `overflow-x-auto` prevents this pill from forcing the header to overflow.
+              */}
+              <div
+                className={`min-w-0 max-w-full flex items-center gap-0 lg:gap-0.5 rounded-full px-2 lg:px-3 xl:px-5 py-1.5 transition-all duration-300 overflow-x-auto ${
+                  isFullyTransparent
+                    ? 'bg-transparent border-transparent'
                     : 'border-2 border-gold/40'
                 }`}
                 style={!isFullyTransparent ? {
