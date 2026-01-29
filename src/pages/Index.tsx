@@ -101,20 +101,20 @@ const Index = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-3xl mx-auto pt-16 md:pt-20">
             {/* H1 - 2-line layout: Buy Sell Rent on line 1, Delivered with Intelligence on line 2 */}
             <motion.h1 
               variants={fadeInUp} 
-              className="text-white text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-3 md:mb-5 px-2 sm:px-0"
+              className="text-white text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1] mb-3 md:mb-5 px-2 sm:px-0"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
               <span className="block whitespace-nowrap">
-                {t('hero.buy')}<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
-                {t('hero.sell')}<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
-                {t('hero.rent')}<span className="inline-block w-1.5 h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+                {t('hero.buy')}<span className="inline-block w-1 h-1 md:w-1.5 md:h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+                {t('hero.sell')}<span className="inline-block w-1 h-1 md:w-1.5 md:h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+                {t('hero.rent')}<span className="inline-block w-1 h-1 md:w-1.5 md:h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
               </span>
               <span 
-                className="block bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] bg-clip-text text-transparent mt-1"
+                className="block whitespace-nowrap text-lg sm:text-xl md:text-3xl lg:text-4xl bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] bg-clip-text text-transparent mt-1"
                 style={{ 
                   filter: 'drop-shadow(0 0 12px rgba(200,167,102,0.5)) drop-shadow(0 0 20px rgba(200,167,102,0.35))',
                   textShadow: '0 1px 3px rgba(0, 0, 0, 0.2)',
