@@ -15,6 +15,7 @@
 
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { FounderContent } from "@/components/FounderContent";
 import { ArrowUpRight, User } from "lucide-react";
 import founderPremium from "@/assets/founder-professional.jpeg";
 
@@ -25,81 +26,83 @@ const fadeInUp = {
 
 export const FounderPhilosophySection = () => {
   return (
-    <section className="w-full py-20 md:py-28 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] relative overflow-hidden">
-      {/* Active Layer Container */}
-      <div className="w-full relative z-10 px-4 md:px-8 lg:px-12">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          variants={{
-            visible: {
-              transition: { staggerChildren: 0.08 }
-            }
-          }}
-          className="grid md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto"
-        >
-          {/* Left - Portrait with gold champagne card on mobile */}
-          <motion.div variants={fadeInUp} className="flex flex-col items-center">
-            {/* Gold champagne card wrapper for mobile separation */}
-            <div className="bg-gradient-to-r from-[#EDE4D3] via-[#F5EBD7] to-[#EDE4D3] md:bg-transparent rounded-2xl p-4 md:p-0 border border-gold/30 md:border-0 shadow-xl md:shadow-none">
-              <Link to="/founder" className="block relative group">
-                <div className="relative w-64 h-80 md:w-80 md:h-96 rounded-2xl overflow-hidden border-2 border-gold/30 shadow-2xl shadow-gold/20 group-hover:border-gold transition-all duration-300">
-                  <img 
-                    src={founderPremium} 
-                    alt="Jane Bou Jaoude - Founder" 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                </div>
-              </Link>
-              
-              {/* Founder name label on mobile */}
-              <div className="text-center mt-4 md:hidden">
-                <Link to="/founder" className="text-gold font-semibold text-lg hover:underline">
-                  Jane Bou Jaoude
+    <FounderContent>
+      <section className="w-full py-20 md:py-28 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] relative overflow-hidden">
+        {/* Active Layer Container */}
+        <div className="w-full relative z-10 px-4 md:px-8 lg:px-12">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={{
+              visible: {
+                transition: { staggerChildren: 0.08 }
+              }
+            }}
+            className="grid md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto"
+          >
+            {/* Left - Portrait with gold champagne card on mobile */}
+            <motion.div variants={fadeInUp} className="flex flex-col items-center">
+              {/* Gold champagne card wrapper for mobile separation */}
+              <div className="bg-gradient-to-r from-[#EDE4D3] via-[#F5EBD7] to-[#EDE4D3] md:bg-transparent rounded-2xl p-4 md:p-0 border border-gold/30 md:border-0 shadow-xl md:shadow-none">
+                <Link to="/founder" className="block relative group">
+                  <div className="relative w-64 h-80 md:w-80 md:h-96 rounded-2xl overflow-hidden border-2 border-gold/30 shadow-2xl shadow-gold/20 group-hover:border-gold transition-all duration-300">
+                    <img 
+                      src={founderPremium} 
+                      alt="Jane Bou Jaoude - Founder" 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  </div>
                 </Link>
-                <p className="text-zinc-700 text-sm">Founder &amp; CEO</p>
+                
+                {/* Founder name label on mobile */}
+                <div className="text-center mt-4 md:hidden">
+                  <Link to="/founder" className="text-gold font-semibold text-lg hover:underline">
+                    Jane Bou Jaoude
+                  </Link>
+                  <p className="text-zinc-700 text-sm">Founder &amp; CEO</p>
+                </div>
               </div>
-            </div>
-            
-            {/* CTA Button - Blue style matching "By Leading Developer" */}
-            <button 
-              onClick={() => window.location.href = '/founder'}
-              className="relative inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-4 sm:py-5 mt-6 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden bg-[#1e3a5f] hover:bg-[#2a4a73] text-white shadow-lg hover:shadow-xl"
-            >
-              <User className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-              <span>Learn More About the Founder</span>
-              <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </button>
-          </motion.div>
+              
+              {/* CTA Button - Blue style matching "By Leading Developer" */}
+              <button 
+                onClick={() => window.location.href = '/founder'}
+                className="relative inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-4 sm:py-5 mt-6 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden bg-[#1e3a5f] hover:bg-[#2a4a73] text-white shadow-lg hover:shadow-xl"
+              >
+                <User className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                <span>Learn More About the Founder</span>
+                <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </button>
+            </motion.div>
 
-          {/* Right - Content */}
-          <motion.div variants={fadeInUp} className="space-y-6">
-            <div>
-              <span className="inline-block text-gold text-xs uppercase tracking-[0.3em] mb-4">Philosophy</span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-                <span className="text-black">A Founder-Led</span> <span className="text-gold">Vision</span>
-              </h2>
-            </div>
-            
-            {/* Card with Gold Champagne background - matching Developer Marquee logos area */}
-            <div className="bg-gradient-to-r from-[#EDE4D3] via-[#F5EBD7] to-[#EDE4D3] rounded-2xl p-6 md:p-8 border border-gold/30">
-              <p className="text-zinc-800 text-base leading-relaxed mb-4">
-                <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link> is a founder-led brokerage built on unwavering standards, discretion, and long-term vision.
+            {/* Right - Content */}
+            <motion.div variants={fadeInUp} className="space-y-6">
+              <div>
+                <span className="inline-block text-gold text-xs uppercase tracking-[0.3em] mb-4">Philosophy</span>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <span className="text-black">A Founder-Led</span> <span className="text-gold">Vision</span>
+                </h2>
+              </div>
+              
+              {/* Card with Gold Champagne background - matching Developer Marquee logos area */}
+              <div className="bg-gradient-to-r from-[#EDE4D3] via-[#F5EBD7] to-[#EDE4D3] rounded-2xl p-6 md:p-8 border border-gold/30">
+                <p className="text-zinc-800 text-base leading-relaxed mb-4">
+                  <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link> is a founder-led brokerage built on unwavering standards, discretion, and long-term vision.
+                </p>
+                <p className="text-zinc-600 text-sm leading-relaxed">
+                  Founded by <Link to="/founder" className="text-gold hover:underline">Jane Bou Jaoude</Link>, our approach combines deep market expertise with personalized service, ensuring every client receives the attention and insight they deserve.
+                </p>
+              </div>
+              
+              <p className="text-zinc-700 text-xs">
+                Learn more about our <Link to="/about" className="text-gold hover:underline">company values</Link> and <Link to="/founder" className="text-gold hover:underline">leadership</Link>.
               </p>
-              <p className="text-zinc-600 text-sm leading-relaxed">
-                Founded by <Link to="/founder" className="text-gold hover:underline">Jane Bou Jaoude</Link>, our approach combines deep market expertise with personalized service, ensuring every client receives the attention and insight they deserve.
-              </p>
-            </div>
-            
-            <p className="text-zinc-700 text-xs">
-              Learn more about our <Link to="/about" className="text-gold hover:underline">company values</Link> and <Link to="/founder" className="text-gold hover:underline">leadership</Link>.
-            </p>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      </div>
-    </section>
+        </div>
+      </section>
+    </FounderContent>
   );
 };
 
