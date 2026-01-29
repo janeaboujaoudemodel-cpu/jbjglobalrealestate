@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -161,10 +161,68 @@ const PendingImportPreview = () => {
     return `AED ${price.toLocaleString()}`;
   };
 
-  const handleApprove = async () => {
+  // Duplicate detection – mirrors ProjectApprovalQueue logic
+  const checkForDuplicates = useCallback(
+    async (
+      importData: PendingImport
+    ): Promise<{ isDuplicate: boolean; existingProject?: { id: string; name: string } }> => {
+      const normalizedName = importData.name.toLowerCase().trim();
+
+      const { data: existingProjects } = await supabase
+        .from("projects")
+        .select("id, name, slug")
+        .or(
+          `name.ilike.%${normalizedName}%,slug.ilike.%${importData.slug || normalizedName}%`
+        );
+
+      if (existingProjects && existingProjects.length > 0) {
+        const exactMatch = existingProjects.find(
+          (p) =>
+            p.name.toLowerCase().trim() === normalizedName ||
+            (p.slug && importData.slug && p.slug === importData.slug)
+        );
+        if (exactMatch) {
+          return { isDuplicate: true, existingProject: { id: exactMatch.id, name: exactMatch.name } };
+        }
+      }
+      return { isDuplicate: false };
+    },
+    []
+  );
+
+  const handleApprove = async (forceCreate = false) => {
     if (!pendingImport) return;
     setIsProcessing(true);
     try {
+      // Duplicate check unless forcing
+      if (!forceCreate) {
+        const { isDuplicate, existingProject } = await checkForDuplicates(pendingImport);
+        if (isDuplicate && existingProject) {
+          // Update import to mark as duplicate
+          await supabase
+            .from("pending_project_imports")
+            .update({
+              matched_project_id: existingProject.id,
+              is_new_project: false,
+              match_confidence: 100,
+            })
+            .eq("id", pendingImport.id);
+
+          // Update local state
+          setPendingImport((prev) =>
+            prev ? { ...prev, matched_project_id: existingProject.id, is_new_project: false } : prev
+          );
+
+          toast({
+            title: "Duplicate Detected",
+            description: `"${existingProject.name}" already exists. Use "Merge Updates" instead.`,
+            variant: "destructive",
+          });
+          setIsProcessing(false);
+          return;
+        }
+      }
+
       const projectData = {
         name: pendingImport.name,
         slug: pendingImport.slug || pendingImport.name.toLowerCase().replace(/\s+/g, "-"),
@@ -232,6 +290,72 @@ const PendingImportPreview = () => {
       toast({
         title: "Error",
         description: "Failed to approve project",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleMerge = async () => {
+    if (!pendingImport || !pendingImport.matched_project_id) return;
+    setIsProcessing(true);
+    try {
+      // Update existing project with new data
+      const updateData: Record<string, unknown> = {};
+      if (pendingImport.description) updateData.description = pendingImport.description;
+      if (pendingImport.price_from) updateData.price_from = pendingImport.price_from;
+      if (pendingImport.price_to) updateData.price_to = pendingImport.price_to;
+      if (pendingImport.handover_date) updateData.handover_date = pendingImport.handover_date;
+      if (pendingImport.payment_plan) updateData.payment_plan = pendingImport.payment_plan;
+      if (pendingImport.property_type_label) updateData.property_type_label = pendingImport.property_type_label;
+      if (pendingImport.status_label) updateData.status_label = pendingImport.status_label;
+
+      if (Object.keys(updateData).length > 0) {
+        await supabase
+          .from("projects")
+          .update(updateData)
+          .eq("id", pendingImport.matched_project_id);
+      }
+
+      // Add new images
+      if (pendingImport.images.length > 0) {
+        const { data: existingImages } = await supabase
+          .from("project_images")
+          .select("image_url")
+          .eq("project_id", pendingImport.matched_project_id);
+
+        const existingUrls = new Set(existingImages?.map((i) => i.image_url) || []);
+        const newImages = pendingImport.images.filter((img) => !existingUrls.has(img.url));
+
+        if (newImages.length > 0) {
+          const imageInserts = newImages.map((img, index) => ({
+            project_id: pendingImport.matched_project_id,
+            image_url: img.url,
+            alt_text: img.alt || pendingImport.name,
+            display_order: (existingImages?.length || 0) + index,
+          }));
+          await supabase.from("project_images").insert(imageInserts);
+        }
+      }
+
+      // Mark as merged
+      await supabase
+        .from("pending_project_imports")
+        .update({ status: "merged", reviewed_at: new Date().toISOString() })
+        .eq("id", pendingImport.id);
+
+      toast({
+        title: "Project Merged",
+        description: `Updates merged into existing "${pendingImport.name}"`,
+      });
+
+      navigate("/listing-admin");
+    } catch (error) {
+      console.error("Error merging import:", error);
+      toast({
+        title: "Error",
+        description: "Failed to merge project",
         variant: "destructive",
       });
     } finally {
@@ -425,6 +549,7 @@ const PendingImportPreview = () => {
             {!pendingImport.is_new_project && pendingImport.matched_project_id && (
               <Button
                 variant="outline"
+                onClick={handleMerge}
                 disabled={isProcessing}
                 className="border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white"
               >
@@ -434,7 +559,7 @@ const PendingImportPreview = () => {
             )}
 
             <Button
-              onClick={handleApprove}
+              onClick={() => handleApprove(false)}
               disabled={isProcessing}
               className="bg-emerald-600 hover:bg-emerald-700 text-white"
             >
@@ -608,12 +733,10 @@ const PendingImportPreview = () => {
                 </div>
               )}
 
-              {/* Mortgage Calculator */}
-              {pendingImport.price_from && (
-                <div className="bg-zinc-50 rounded-xl overflow-hidden">
-                  <MortgageCalculator defaultPrice={pendingImport.price_from} />
-                </div>
-              )}
+              {/* Mortgage Calculator - Always shown (defaults if no price) */}
+              <div className="bg-zinc-50 rounded-xl overflow-hidden">
+                <MortgageCalculator defaultPrice={pendingImport.price_from ?? undefined} compact />
+              </div>
             </div>
           </div>
         </div>

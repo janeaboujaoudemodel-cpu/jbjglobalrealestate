@@ -426,12 +426,10 @@ const ProjectDetail = () => {
                 <DocumentDownloads documents={project.documents || []} />
               </div>
 
-              {/* Mortgage Calculator - Single Column Layout */}
-              {project.price_from && (
-                <div className="bg-zinc-50 rounded-xl overflow-hidden">
-                  <MortgageCalculator defaultPrice={project.price_from} compact={true} />
-                </div>
-              )}
+              {/* Mortgage Calculator - Always shown, uses default price if missing */}
+              <div className="bg-zinc-50 rounded-xl overflow-hidden">
+                <MortgageCalculator defaultPrice={project.price_from ?? undefined} compact />
+              </div>
 
               {/* Compare Link */}
               <Link to={`/compare?project=${project.slug}`}>
