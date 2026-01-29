@@ -28,6 +28,7 @@ import EmployeeCenter from "@/components/crm/EmployeeCenter";
 import EmployeesHub from "@/components/crm/EmployeesHub";
 import CRMToolsSidebar from "@/components/crm/CRMToolsSidebar";
 import FlaggedLeadsView from "@/components/crm/FlaggedLeadsView";
+import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 import VIPExportButton from "@/components/crm/VIPExportButton";
 import CRMAssistantPanel from "@/components/crm/CRMAssistantPanel";
 import CRMCommunicationPanel from "@/components/crm/CRMCommunicationPanel";
@@ -280,13 +281,15 @@ const CRM = () => {
   const isAdmin = profile.crm_role === 'owner_admin' || profile.crm_role === 'founder' || profile.crm_role === 'admin';
   const isFounder = profile.crm_role === 'owner_admin' || profile.crm_role === 'founder';
 
+  const { isFounderVisible } = useFounderVisibility();
+
   // Get role label with proper display name
   const getRoleLabel = () => {
     const displayName = profile.display_name || 'Team Member';
     switch (profile.crm_role) {
       case 'founder':
       case 'owner_admin':
-        return `Founder & CEO — ${displayName}`;
+        return isFounderVisible ? `Founder & CEO — ${displayName}` : `CEO — Team Member`;
       case 'admin':
         return `Admin — ${displayName}`;
       case 'broker_member':
@@ -301,7 +304,7 @@ const CRM = () => {
     switch (profile.crm_role) {
       case 'founder':
       case 'owner_admin':
-        return 'Founder & CEO';
+        return isFounderVisible ? 'Founder & CEO' : 'CEO';
       case 'admin':
         return 'Admin';
       case 'broker_member':
@@ -309,6 +312,14 @@ const CRM = () => {
       default:
         return 'Team Member';
     }
+  };
+
+  // Get display name based on visibility
+  const getFounderDisplayName = () => {
+    if (isFounderVisible) {
+      return isFounder ? "Jane Bou Jaoude" : (profile.display_name || "Team Member");
+    }
+    return profile.display_name || "Team Member";
   };
 
   return (
@@ -342,7 +353,7 @@ const CRM = () => {
                 {showToolsSidebar ? <PanelLeftClose className="h-5 w-5" /> : <PanelLeftOpen className="h-5 w-5" />}
               </Button>
               <p className="text-base font-bold text-black">
-                {getRoleTitle()} — {isFounder ? "Jane Bou Jaoude" : (profile.display_name || "Team Member")}
+                {getRoleTitle()} — {getFounderDisplayName()}
               </p>
             </div>
             

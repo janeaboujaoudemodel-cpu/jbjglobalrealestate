@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import Footer from "@/components/Footer";
+import { FounderContent } from "@/components/FounderContent";
 
 
 
@@ -174,8 +175,10 @@ const Terms = () => {
                   Email: <a href="mailto:Privacy@JBJ.ae" className="text-gold hover:underline">Privacy@JBJ.ae</a>
                 </p>
                 <p className="mt-6 text-zinc-500 text-sm">
-                  © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.<br />
-                  Owned & led by Jane Bou Jaoude (جاين بو جودة), Founder & CEO.
+                  © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.
+                  <FounderContent>
+                    <><br />Owned & led by Jane Bou Jaoude (جاين بو جودة), Founder & CEO.</>
+                  </FounderContent>
                 </p>
               </section>
             </div>

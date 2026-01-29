@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import ExecutiveAccessGate from "@/components/executive/ExecutiveAccessGate";
 import SEOHead from "@/components/SEOHead";
+import { FounderContent } from "@/components/FounderContent";
 import { 
   Clock, 
   TrendingUp, 
@@ -261,9 +262,11 @@ const ExecutivePerformance = () => {
                 <p className="text-xs text-zinc-500">
                   Performance Snapshot • Trends and patterns, not individual broker rankings
                 </p>
-                <p className="text-xs text-zinc-600 mt-1">
-                  Jane Bou Jaoude, Founder & CEO • JBJ GLOBAL REAL ESTATE
-                </p>
+                <FounderContent>
+                  <p className="text-xs text-zinc-600 mt-1">
+                    Jane Bou Jaoude, Founder & CEO • JBJ GLOBAL REAL ESTATE
+                  </p>
+                </FounderContent>
               </div>
             </>
           )}

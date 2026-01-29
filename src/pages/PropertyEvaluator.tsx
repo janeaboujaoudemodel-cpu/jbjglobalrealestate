@@ -18,6 +18,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import Footer from "@/components/Footer";
+import { FounderContent } from "@/components/FounderContent";
 import LegalDisclaimer from "@/components/LegalDisclaimer";
 
 interface PropertyDetails {
@@ -333,11 +334,13 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
             <p className="text-zinc-400 max-w-2xl mx-auto">
               Get an AI-powered property valuation based on DLD transaction data, comparable sales, and market analysis.
             </p>
-            <div className="mt-3 text-center">
-              <p className="text-zinc-300 text-sm font-medium">Jane Bou Jaoude</p>
-              <p className="text-blue-400 text-xs mt-0.5">Founder & CEO</p>
-              <p className="text-zinc-500 text-xs mt-0.5">JBJ Global Real Estate</p>
-            </div>
+            <FounderContent>
+              <div className="mt-3 text-center">
+                <p className="text-zinc-300 text-sm font-medium">Jane Bou Jaoude</p>
+                <p className="text-blue-400 text-xs mt-0.5">Founder & CEO</p>
+                <p className="text-zinc-500 text-xs mt-0.5">JBJ Global Real Estate</p>
+              </div>
+            </FounderContent>
           </motion.div>
         </div>
       </div>

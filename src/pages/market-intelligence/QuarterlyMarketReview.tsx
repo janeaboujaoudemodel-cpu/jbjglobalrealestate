@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import SEOHead from "@/components/SEOHead";
 import Footer from "@/components/Footer";
+import { FounderContent } from "@/components/FounderContent";
 import { 
   ArrowLeft,
   Download,
@@ -394,7 +395,10 @@ const QuarterlyMarketReview = () => {
                 </div>
                 <div className="mt-4 pt-4 border-t border-gold/30">
                   <p className="text-xs text-zinc-500">
-                    JBJ GLOBAL REAL ESTATE • Jane Bou Jaoude, Founder & CEO
+                    JBJ GLOBAL REAL ESTATE
+                    <FounderContent>
+                      <> • Jane Bou Jaoude, Founder & CEO</>
+                    </FounderContent>
                   </p>
                 </div>
               </CardContent>
