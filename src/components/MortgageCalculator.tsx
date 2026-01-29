@@ -321,11 +321,14 @@ const MortgageCalculator = ({
               </div>
             </div>
 
-            {/* CTA - Gold gradient */}
+            {/* CTA - Premium Gold Button */}
             <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer" className="block">
-              <Button variant="dark" className="w-full h-12 text-base group">
+              <Button 
+                variant="primary" 
+                className="w-full h-14 text-base font-semibold group shadow-lg hover:shadow-xl transition-all"
+              >
                 Request Mortgage Partner Introduction
-                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </a>
 
