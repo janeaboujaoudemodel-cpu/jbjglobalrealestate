@@ -15931,8 +15931,10 @@ export type Database = {
         }[]
       }
       get_vapi_call_decrypted_pii: {
-        Args: { p_call_log_id: string }
+        Args: { p_call_id: string }
         Returns: {
+          caller_name: string
+          caller_phone: string
           extracted_email: string
           extracted_name: string
           extracted_phone: string
