@@ -105,7 +105,7 @@ const Index = () => {
             {/* H1 - Clean 2-line layout */}
             <motion.h1 
               variants={fadeInUp} 
-              className="text-white text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1] mb-4 md:mb-6 px-2 sm:px-0"
+              className="text-white text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1] mb-3 md:mb-4 px-2 sm:px-0"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
               <span className="block whitespace-nowrap">
@@ -113,15 +113,14 @@ const Index = () => {
                 {t('hero.sell')}<span className="inline-block w-1 h-1 md:w-1.5 md:h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
                 {t('hero.rent')}
               </span>
-              {/* Delivered with Intelligence - Premium Gold Style */}
+              {/* Delivered with Intelligence - Subtle elegant gold */}
               <span 
-                className="block whitespace-nowrap text-lg sm:text-xl md:text-3xl lg:text-4xl mt-2 uppercase tracking-[0.15em] font-semibold"
+                className="block whitespace-nowrap text-sm sm:text-base md:text-xl lg:text-2xl mt-1.5 uppercase tracking-[0.2em] font-medium"
                 style={{ 
-                  background: 'linear-gradient(135deg, #D4AF37 0%, #F5D77A 25%, #C8A766 50%, #F5D77A 75%, #D4AF37 100%)',
+                  background: 'linear-gradient(90deg, #C8A766 0%, #E8D4A8 50%, #C8A766 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
-                  backgroundSize: '200% 100%',
-                  filter: 'drop-shadow(0 2px 8px rgba(200,167,102,0.6)) drop-shadow(0 0 30px rgba(200,167,102,0.4))',
+                  filter: 'drop-shadow(0 1px 4px rgba(200,167,102,0.4))',
                 }}
               >
                 {t('hero.deliveredWith')}
@@ -131,7 +130,7 @@ const Index = () => {
             {/* Subline - Clean */}
             <motion.p 
               variants={fadeInUp}
-              className="text-zinc-200 text-xs md:text-sm lg:text-base max-w-lg mx-auto leading-relaxed mb-6 md:mb-8"
+              className="text-zinc-300 text-[10px] md:text-xs lg:text-sm max-w-md mx-auto leading-relaxed mb-5 md:mb-6"
             >
               {t('hero.subtitle')}
             </motion.p>
@@ -139,30 +138,44 @@ const Index = () => {
             {/* Hero CTA Buttons - Classy, smaller, consistent */}
             <motion.div 
               variants={fadeInUp}
-              className="flex flex-row items-center justify-center gap-3 sm:gap-4"
+              className="flex flex-row items-center justify-center gap-3 sm:gap-4 mb-6"
             >
               <Link to="/properties">
                 <button 
-                  className="group relative inline-flex items-center justify-center gap-1.5 px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 text-[11px] sm:text-xs md:text-sm font-semibold rounded-lg transition-all duration-300 bg-transparent border border-white/60 hover:border-gold/80"
+                  className="group relative inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4 md:px-5 py-1.5 sm:py-2 text-[10px] sm:text-[11px] md:text-xs font-medium rounded-md transition-all duration-300 bg-transparent border border-white/50 hover:border-gold/80"
                   style={{
-                    boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
                   }}
                 >
                   <span className="text-white group-hover:text-gold transition-colors tracking-wide">{t('hero.explore')}</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-all" style={{ filter: 'drop-shadow(0 0 4px rgba(200,167,102,0.6))' }} />
+                  <ArrowUpRight className="w-3 h-3 text-gold group-hover:scale-110 transition-all" style={{ filter: 'drop-shadow(0 0 3px rgba(200,167,102,0.5))' }} />
                 </button>
               </Link>
               <button 
                 onClick={() => setIsInquiryOpen(true)}
-                className="group relative inline-flex items-center justify-center gap-1.5 px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 text-[11px] sm:text-xs md:text-sm font-semibold rounded-lg transition-all duration-300 bg-transparent border border-white/60 hover:border-gold/80"
+                className="group relative inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4 md:px-5 py-1.5 sm:py-2 text-[10px] sm:text-[11px] md:text-xs font-medium rounded-md transition-all duration-300 bg-transparent border border-white/50 hover:border-gold/80"
                 style={{
-                  boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
                 }}
               >
                 <span className="text-white group-hover:text-gold transition-colors tracking-wide">{t('hero.bookConsultation')}</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-all" style={{ filter: 'drop-shadow(0 0 4px rgba(200,167,102,0.6))' }} />
+                <ArrowUpRight className="w-3 h-3 text-gold group-hover:scale-110 transition-all" style={{ filter: 'drop-shadow(0 0 3px rgba(200,167,102,0.5))' }} />
               </button>
             </motion.div>
+
+            {/* Partner Services - Smaller, luxury styling */}
+            <motion.p
+              variants={fadeInUp}
+              className="text-zinc-400/80 text-[9px] sm:text-[10px] md:text-[11px] tracking-[0.15em] uppercase"
+            >
+              <span className="text-gold/70">Mortgage</span>
+              <span className="mx-2 text-gold/40">·</span>
+              <span className="text-gold/70">Legal</span>
+              <span className="mx-2 text-gold/40">·</span>
+              <span className="text-gold/70">Visa</span>
+              <span className="mx-3 text-zinc-500/60">—</span>
+              <span className="text-zinc-400/60 normal-case tracking-normal">via partner network</span>
+            </motion.p>
           </div>
         </motion.div>
         
