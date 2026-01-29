@@ -6,7 +6,6 @@ import {
   Settings, CheckCircle, Clock, AlertCircle,
   Users, FileText, Search, Plus, RefreshCw, Bell, Brain, Home
 } from 'lucide-react';
-import GlobalHeader from '@/components/GlobalHeader';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -130,7 +129,6 @@ const ITDepartment: React.FC = () => {
   if (!isAuthorized) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-        <GlobalHeader />
         <div className="container mx-auto px-4 py-20 text-center">
           <div className="w-20 h-20 rounded-2xl bg-gold/10 flex items-center justify-center mx-auto mb-6">
             <Shield className="w-10 h-10 text-gold" />
@@ -153,8 +151,6 @@ const ITDepartment: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-      <GlobalHeader />
-      
       {/* Command Palette */}
       <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
       

@@ -13,7 +13,6 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import GlobalHeader from "@/components/GlobalHeader";
 import Footer from "@/components/Footer";
 import ComplianceDisclaimer from "@/components/ComplianceDisclaimer";
 
@@ -75,9 +74,7 @@ const PARTNER_SERVICES = [
 const Partners = () => {
   return (
     <div className="min-h-screen bg-black">
-      <GlobalHeader />
-      
-      <main className="pt-20">
+      <main className="pt-0">
         {/* Hero Section - 3-Layer System */}
         <section className="relative py-20 bg-black">
           <div className="jj-layer-2">

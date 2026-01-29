@@ -24,7 +24,7 @@ import { CalendlyEmbed } from "@/components/marketing/CalendlyEmbed";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { MeetingBookingModal } from "@/components/MeetingBookingModal";
 import SupportTicketBox from "@/components/SupportTicketBox";
-import contactHero from "@/assets/images/contact-hero.jpg";
+import contactHeroVideo from "@/assets/videos/services-hero.mp4";
 
 const consultationSchema = z.object({
   fullName: z.string().min(2, "Full name is required").max(100, "Name must be less than 100 characters"),
@@ -256,14 +256,19 @@ END:VCARD`;
     <>
       <SEOHead {...pagesSEO.contact} />
       <div className="min-h-screen bg-black">
-      {/* Hero Section with Image - Fixed padding to prevent cropping */}
+      {/* Hero Section with Video */}
       <section className="relative pt-28 pb-20 md:pt-36 md:pb-28">
         <div className="absolute inset-0">
-          <img 
-            src={contactHero} 
-            alt="Contact JBJ Global Real Estate" 
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
             className="w-full h-full object-cover"
-          />
+          >
+            <source src={contactHeroVideo} type="video/mp4" />
+          </video>
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black" />
         </div>
         <div className="relative container mx-auto px-4">

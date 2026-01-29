@@ -66,38 +66,38 @@ const ChatLeadForm = ({
         <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center">
           <UserCircle className="w-7 h-7 text-gold" />
         </div>
-        <h4 className="text-white text-lg font-semibold mb-1"><T>Quick intro!</T></h4>
-        <p className="text-zinc-400 text-sm"><T>So I can personalize your experience</T></p>
+        <h4 className="text-black text-lg font-semibold mb-1"><T>Quick intro!</T></h4>
+        <p className="text-zinc-600 text-sm"><T>So I can personalize your experience</T></p>
       </div>
 
       <div className="space-y-3">
         {/* Name Row */}
         <div className="grid grid-cols-2 gap-2">
           <div>
-            <Label className="text-zinc-300 text-xs mb-1 block"><T>First Name</T> *</Label>
+            <Label className="text-black text-xs mb-1 block"><T>First Name</T> *</Label>
             <Input
               value={userInfo.firstName}
               onChange={(e) => updateField('firstName', e.target.value)}
               placeholder="First"
-              className={`bg-white/10 border-gold/20 text-white placeholder:text-white/40 h-9 text-sm ${formErrors.firstName ? 'border-red-500' : ''}`}
+              className={`bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 h-9 text-sm focus:border-gold ${formErrors.firstName ? 'border-red-500' : ''}`}
             />
-            {formErrors.firstName && <p className="text-red-400 text-xs mt-0.5"><T>{formErrors.firstName}</T></p>}
+            {formErrors.firstName && <p className="text-red-500 text-xs mt-0.5"><T>{formErrors.firstName}</T></p>}
           </div>
           <div>
-            <Label className="text-zinc-300 text-xs mb-1 block"><T>Last Name</T> *</Label>
+            <Label className="text-black text-xs mb-1 block"><T>Last Name</T> *</Label>
             <Input
               value={userInfo.lastName}
               onChange={(e) => updateField('lastName', e.target.value)}
               placeholder="Last"
-              className={`bg-white/10 border-gold/20 text-white placeholder:text-white/40 h-9 text-sm ${formErrors.lastName ? 'border-red-500' : ''}`}
+              className={`bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 h-9 text-sm focus:border-gold ${formErrors.lastName ? 'border-red-500' : ''}`}
             />
-            {formErrors.lastName && <p className="text-red-400 text-xs mt-0.5"><T>{formErrors.lastName}</T></p>}
+            {formErrors.lastName && <p className="text-red-500 text-xs mt-0.5"><T>{formErrors.lastName}</T></p>}
           </div>
         </div>
 
         {/* Email */}
         <div>
-          <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
+          <Label className="text-black text-xs flex items-center gap-1 mb-1">
             <Mail className="w-3 h-3 text-gold" />
             <T>Email Address</T> *
           </Label>
@@ -106,14 +106,14 @@ const ChatLeadForm = ({
             value={userInfo.email}
             onChange={(e) => updateField('email', e.target.value)}
             placeholder="your@email.com"
-            className={`bg-white/10 border-gold/20 text-white placeholder:text-white/40 h-9 text-sm ${formErrors.email ? 'border-red-500' : ''}`}
+            className={`bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 h-9 text-sm focus:border-gold ${formErrors.email ? 'border-red-500' : ''}`}
           />
-          {formErrors.email && <p className="text-red-400 text-xs mt-0.5"><T>{formErrors.email}</T></p>}
+          {formErrors.email && <p className="text-red-500 text-xs mt-0.5"><T>{formErrors.email}</T></p>}
         </div>
 
         {/* Phone */}
         <div>
-          <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
+          <Label className="text-black text-xs flex items-center gap-1 mb-1">
             <PhoneIcon className="w-3 h-3 text-gold" />
             <T>Phone (with country code)</T> *
           </Label>
@@ -122,15 +122,15 @@ const ChatLeadForm = ({
             value={userInfo.phone}
             onChange={(e) => updateField('phone', e.target.value)}
             placeholder="+971 50 123 4567"
-            className={`bg-white/10 border-gold/20 text-white placeholder:text-white/40 h-9 text-sm ${formErrors.phone ? 'border-red-500' : ''}`}
+            className={`bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 h-9 text-sm focus:border-gold ${formErrors.phone ? 'border-red-500' : ''}`}
           />
-          {formErrors.phone && <p className="text-red-400 text-xs mt-0.5"><T>{formErrors.phone}</T></p>}
+          {formErrors.phone && <p className="text-red-500 text-xs mt-0.5"><T>{formErrors.phone}</T></p>}
         </div>
 
         {/* Nationality & Location Row */}
         <div className="grid grid-cols-2 gap-2">
           <div>
-            <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
+            <Label className="text-black text-xs flex items-center gap-1 mb-1">
               <Globe className="w-3 h-3 text-gold" />
               <T>Nationality</T> *
             </Label>
@@ -138,12 +138,12 @@ const ChatLeadForm = ({
               value={userInfo.nationality}
               onChange={(e) => updateField('nationality', e.target.value)}
               placeholder="e.g., British"
-              className={`bg-white/10 border-gold/20 text-white placeholder:text-white/40 h-9 text-sm ${formErrors.nationality ? 'border-red-500' : ''}`}
+              className={`bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 h-9 text-sm focus:border-gold ${formErrors.nationality ? 'border-red-500' : ''}`}
             />
-            {formErrors.nationality && <p className="text-red-400 text-xs mt-0.5"><T>{formErrors.nationality}</T></p>}
+            {formErrors.nationality && <p className="text-red-500 text-xs mt-0.5"><T>{formErrors.nationality}</T></p>}
           </div>
           <div>
-            <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
+            <Label className="text-black text-xs flex items-center gap-1 mb-1">
               <MapPin className="w-3 h-3 text-gold" />
               <T>Current Location</T> *
             </Label>
@@ -151,18 +151,18 @@ const ChatLeadForm = ({
               value={userInfo.currentLocation}
               onChange={(e) => updateField('currentLocation', e.target.value)}
               placeholder="City, Country"
-              className={`bg-white/10 border-gold/20 text-white placeholder:text-white/40 h-9 text-sm ${formErrors.currentLocation ? 'border-red-500' : ''}`}
+              className={`bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 h-9 text-sm focus:border-gold ${formErrors.currentLocation ? 'border-red-500' : ''}`}
             />
-            {formErrors.currentLocation && <p className="text-red-400 text-xs mt-0.5"><T>{formErrors.currentLocation}</T></p>}
+            {formErrors.currentLocation && <p className="text-red-500 text-xs mt-0.5"><T>{formErrors.currentLocation}</T></p>}
           </div>
         </div>
 
         {/* Language & Age Row */}
         <div className="grid grid-cols-2 gap-2">
           <div>
-            <Label className="text-zinc-300 text-xs mb-1 block"><T>Preferred Language</T></Label>
+            <Label className="text-black text-xs mb-1 block"><T>Preferred Language</T></Label>
             <Select value={userInfo.language} onValueChange={(v) => updateField('language', v)}>
-              <SelectTrigger className="bg-white/10 border-gold/20 text-white h-9 text-sm">
+              <SelectTrigger className="bg-white border-2 border-gold/40 text-black h-9 text-sm">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -173,12 +173,12 @@ const ChatLeadForm = ({
             </Select>
           </div>
           <div>
-            <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
+            <Label className="text-black text-xs flex items-center gap-1 mb-1">
               <Calendar className="w-3 h-3 text-gold" />
               <T>Age Range</T> *
             </Label>
             <Select value={userInfo.ageRange} onValueChange={(v) => updateField('ageRange', v)}>
-              <SelectTrigger className={`bg-white/10 border-gold/20 text-white h-9 text-sm ${formErrors.ageRange ? 'border-red-500' : ''}`}>
+              <SelectTrigger className={`bg-white border-2 border-gold/40 text-black h-9 text-sm ${formErrors.ageRange ? 'border-red-500' : ''}`}>
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
@@ -187,13 +187,13 @@ const ChatLeadForm = ({
                 ))}
               </SelectContent>
             </Select>
-            {formErrors.ageRange && <p className="text-red-400 text-xs mt-0.5"><T>{formErrors.ageRange}</T></p>}
+            {formErrors.ageRange && <p className="text-red-500 text-xs mt-0.5"><T>{formErrors.ageRange}</T></p>}
           </div>
         </div>
 
         {/* Birthday (Optional) */}
         <div>
-          <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
+          <Label className="text-black text-xs flex items-center gap-1 mb-1">
             <Calendar className="w-3 h-3 text-gold" />
             <T>Birthday (Optional)</T>
           </Label>
@@ -201,9 +201,9 @@ const ChatLeadForm = ({
             type="date"
             value={userInfo.birthday}
             onChange={(e) => updateField('birthday', e.target.value)}
-            className="bg-white/10 border-gold/20 text-white h-9 text-sm [color-scheme:dark]"
+            className="bg-white border-2 border-gold/40 text-black h-9 text-sm focus:border-gold"
           />
-          <p className="text-zinc-500 text-[10px] mt-0.5">🎁 <T>We'll send you exclusive birthday offers!</T></p>
+          <p className="text-zinc-600 text-[10px] mt-0.5">🎁 <T>We'll send you exclusive birthday offers!</T></p>
         </div>
 
         {/* Consent Checkboxes */}
@@ -215,11 +215,11 @@ const ChatLeadForm = ({
               onCheckedChange={(checked) => updateField('consentAccurate', checked === true)}
               className="border-gold/50 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
             />
-            <label htmlFor="consent-accurate" className="text-zinc-300 text-xs leading-tight cursor-pointer">
+            <label htmlFor="consent-accurate" className="text-black text-xs leading-tight cursor-pointer">
               <T>I confirm the information provided is accurate.</T> *
             </label>
           </div>
-          {formErrors.consentAccurate && <p className="text-red-400 text-xs ml-6"><T>{formErrors.consentAccurate}</T></p>}
+          {formErrors.consentAccurate && <p className="text-red-500 text-xs ml-6"><T>{formErrors.consentAccurate}</T></p>}
           
           <div className="flex items-start gap-2">
             <Checkbox
@@ -228,11 +228,11 @@ const ChatLeadForm = ({
               onCheckedChange={(checked) => updateField('consentPrivacy', checked === true)}
               className="border-gold/50 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
             />
-            <label htmlFor="consent-privacy" className="text-zinc-300 text-xs leading-tight cursor-pointer">
+            <label htmlFor="consent-privacy" className="text-black text-xs leading-tight cursor-pointer">
               <T>I agree to the</T> <Link to="/privacy" className="text-gold hover:underline"><T>Privacy Policy</T></Link> <T>and</T> <Link to="/terms" className="text-gold hover:underline"><T>Terms</T></Link>. *
             </label>
           </div>
-          {formErrors.consentPrivacy && <p className="text-red-400 text-xs ml-6"><T>{formErrors.consentPrivacy}</T></p>}
+          {formErrors.consentPrivacy && <p className="text-red-500 text-xs ml-6"><T>{formErrors.consentPrivacy}</T></p>}
         </div>
 
         <button

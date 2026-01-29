@@ -17,7 +17,6 @@ import {
   Layers,
   HelpCircle
 } from "lucide-react";
-import GlobalHeader from "@/components/GlobalHeader";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -119,8 +118,6 @@ const RentalAdvisory = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <GlobalHeader />
-      
       {/* Hero Section */}
       <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-900 to-black" />

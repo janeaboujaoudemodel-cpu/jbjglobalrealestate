@@ -15,7 +15,6 @@ import {
   Briefcase,
   Globe
 } from "lucide-react";
-import GlobalHeader from "@/components/GlobalHeader";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { GuideSectionHeader } from "@/components/guides/GuideSectionHeader";
@@ -143,8 +142,6 @@ const BrokerResources = () => {
 
   return (
     <div className="min-h-screen bg-black">
-      <GlobalHeader />
-      
       {/* Hero Section with Video */}
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
         {/* Background Video */}
