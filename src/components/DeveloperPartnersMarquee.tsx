@@ -117,6 +117,7 @@ const DeveloperPartnersMarquee = () => {
           return `h-8 md:h-14 lg:h-16 ${base}`;
         case "nakheel":
         case "meraas":
+        case "dubai-properties":
           return `h-7 md:h-13 lg:h-[60px] ${base}`;
 
         // Slightly bigger (Ellington + Select Group)
