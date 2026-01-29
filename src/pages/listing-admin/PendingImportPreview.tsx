@@ -1,37 +1,19 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useListingAdmin } from "@/hooks/useListingAdmin";
-import Footer from "@/components/Footer";
-import ImageCarousel from "@/components/ImageCarousel";
-import DocumentDownloads from "@/components/DocumentDownloads";
-import MortgageCalculator from "@/components/MortgageCalculator";
+import ProjectDetailLayout, { type ProjectDetailData } from "@/components/project-detail/ProjectDetailLayout";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import {
-  Home,
-  MapPin,
   Download,
-  MessageCircle,
-  Phone,
-  Bed,
-  Building2,
-  Calendar,
-  DollarSign,
-  Layers,
-  Map as MapIcon,
-  Info,
-  ChevronLeft,
   Check,
   X,
   Merge,
-  FileText,
   ArrowLeft,
 } from "lucide-react";
-import { getWhatsAppUrl, getCallUrl, CONTACT_INFO } from "@/constants/stats";
 import { useToast } from "@/hooks/use-toast";
 import type { Json } from "@/integrations/supabase/types";
 
@@ -87,7 +69,6 @@ const PendingImportPreview = () => {
   const [pendingImport, setPendingImport] = useState<PendingImport | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
-  const inquiryRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
   const hasAccess = isListingAdmin || isAdmin;
@@ -154,12 +135,39 @@ const PendingImportPreview = () => {
     fetchImport();
   }, [id, toast]);
 
-  const formatPrice = (price: number) => {
-    if (price >= 1000000) {
-      return `AED ${(price / 1000000).toFixed(2)}M`;
-    }
-    return `AED ${price.toLocaleString()}`;
-  };
+  const mapped = useMemo<ProjectDetailData | null>(() => {
+    if (!pendingImport) return null;
+    return {
+      id: pendingImport.matched_project_id || pendingImport.id,
+      name: pendingImport.name,
+      slug: pendingImport.slug,
+      description: pendingImport.description,
+      location: pendingImport.location,
+      developer: pendingImport.developer_name ? { name: pendingImport.developer_name } : null,
+      price_from: pendingImport.price_from,
+      price_to: pendingImport.price_to,
+      bedrooms_min: pendingImport.bedrooms_min,
+      bedrooms_max: pendingImport.bedrooms_max,
+      size_min: pendingImport.size_min,
+      size_max: pendingImport.size_max,
+      handover_date: pendingImport.handover_date,
+      payment_plan: pendingImport.payment_plan,
+      property_type_label: pendingImport.property_type_label,
+      status_label: pendingImport.status_label,
+      amenities: null,
+      images: (pendingImport.images || []).map((img, idx) => ({
+        id: `pending-img-${idx}`,
+        url: img.url,
+        alt: img.alt || pendingImport.name,
+      })),
+      documents: (pendingImport.documents || []).map((d, idx) => ({
+        id: `pending-doc-${idx}`,
+        type: d.type,
+        url: d.url,
+        name: d.name || d.type,
+      })),
+    };
+  }, [pendingImport]);
 
   // Duplicate detection – mirrors ProjectApprovalQueue logic
   const checkForDuplicates = useCallback(
@@ -433,317 +441,48 @@ const PendingImportPreview = () => {
     );
   }
 
-  const whatsappMessage = `Hi, I'm interested in ${pendingImport.name}${
-    pendingImport.location ? ` at ${pendingImport.location}` : ""
-  }. Please share more details.`;
-  const brochure = pendingImport.documents.find((d) => d.type === "brochure");
-
-  const handleWhatsApp = () => {
-    window.open(getWhatsAppUrl(whatsappMessage), "_blank");
-  };
-
-  const handleCall = () => {
-    window.location.href = getCallUrl();
-  };
-
-  const carouselImages =
-    pendingImport.images.length > 0
-      ? pendingImport.images.map((img, idx) => ({
-          id: `pending-img-${idx}`,
-          image_url: img.url,
-          alt_text: img.alt || pendingImport.name,
-        }))
-      : [];
-
-  const documentsList = pendingImport.documents.map((d, idx) => ({
-    id: `pending-doc-${idx}`,
-    file_url: d.url,
-    document_type: d.type,
-    file_name: d.name || d.type,
-  }));
+  if (!mapped) return null;
 
   return (
-    <>
-      {/* Hero Section */}
-      <section className="relative w-full h-[60vh] min-h-[400px]">
-        <div className="absolute inset-0">
-          {pendingImport.images[0]?.url ? (
-            <img
-              src={pendingImport.images[0].url}
-              alt={pendingImport.name}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full bg-zinc-800" />
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-        </div>
+    <ProjectDetailLayout
+      project={mapped}
+      adminBar={
+        <section className="bg-premium-bg border-b border-gold/20 py-4 sticky top-20 lg:top-24 z-40">
+          <div className="container mx-auto px-4 flex items-center justify-between flex-wrap gap-4">
+            <Button variant="secondary" onClick={() => navigate("/listing-admin")}>
+              <ArrowLeft className="w-4 h-4" />
+              Back to Queue
+            </Button>
 
-        <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end pb-12">
-          <div className="flex items-center gap-2 text-sm mb-4 flex-wrap text-white/80">
-            <Link to="/" className="hover:text-white transition-colors flex items-center gap-1">
-              <Home className="w-4 h-4" />
-              Home
-            </Link>
-            <span>/</span>
-            <Link to="/listing-admin" className="hover:text-white transition-colors">
-              Listing Admin
-            </Link>
-            <span>/</span>
-            <span className="text-white">{pendingImport.name}</span>
-          </div>
-
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <Badge className="bg-amber-500 text-black font-semibold">PENDING REVIEW</Badge>
-                {pendingImport.is_new_project ? (
-                  <Badge className="bg-emerald-500 text-white">New Project</Badge>
-                ) : (
-                  <Badge className="bg-blue-500 text-white">Update Existing</Badge>
-                )}
-              </div>
-              <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">{pendingImport.name}</h1>
-              {pendingImport.developer_name && (
-                <p className="text-lg text-white/80">by {pendingImport.developer_name}</p>
-              )}
+            <div className="flex items-center gap-3 flex-wrap">
+              <Badge className="border border-gold/40 bg-card text-foreground">PENDING REVIEW</Badge>
+              <Badge className="border border-gold/40 bg-card text-foreground">
+                {pendingImport.is_new_project ? "New Project" : "Update Existing"}
+              </Badge>
             </div>
 
             <div className="flex items-center gap-3">
-              {brochure && (
-                <a href={brochure.url} target="_blank" rel="noopener noreferrer">
-                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold">
-                    <Download className="w-4 h-4 mr-2" />
-                    Download Brochure
-                  </Button>
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Admin Action Bar */}
-      <section className="bg-zinc-900 border-b border-zinc-800 py-4 sticky top-20 lg:top-24 z-40">
-        <div className="container mx-auto px-4 flex items-center justify-between flex-wrap gap-4">
-          <Button
-            variant="ghost"
-            onClick={() => navigate("/listing-admin")}
-            className="text-white hover:text-primary"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Queue
-          </Button>
-
-          <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              onClick={handleReject}
-              disabled={isProcessing}
-              className="border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
-            >
-              <X className="h-4 w-4 mr-2" />
-              Reject
-            </Button>
-
-            {!pendingImport.is_new_project && pendingImport.matched_project_id && (
-              <Button
-                variant="outline"
-                onClick={handleMerge}
-                disabled={isProcessing}
-                className="border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white"
-              >
-                <Merge className="h-4 w-4 mr-2" />
-                Merge Updates
+              <Button variant="secondary" onClick={handleReject} disabled={isProcessing}>
+                <X className="h-4 w-4" />
+                Reject
               </Button>
-            )}
 
-            <Button
-              onClick={() => handleApprove(false)}
-              disabled={isProcessing}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white"
-            >
-              <Check className="h-4 w-4 mr-2" />
-              {pendingImport.is_new_project ? "Approve & Create" : "Approve as New"}
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Main Content */}
-      <section className="bg-white py-8">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left Column */}
-            <div className="lg:col-span-2 space-y-8">
-              {/* Image Carousel */}
-              {carouselImages.length > 0 && (
-                <div className="bg-zinc-50 rounded-xl p-4">
-                  <ImageCarousel images={carouselImages} projectName={pendingImport.name} />
-                </div>
+              {!pendingImport.is_new_project && pendingImport.matched_project_id && (
+                <Button variant="secondary" onClick={handleMerge} disabled={isProcessing}>
+                  <Merge className="h-4 w-4" />
+                  Merge Updates
+                </Button>
               )}
 
-              {/* Key Details Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {pendingImport.price_from && (
-                  <div className="bg-zinc-50 p-4 rounded-lg">
-                    <div className="flex items-center gap-2 text-primary mb-2">
-                      <DollarSign className="w-5 h-5" />
-                      <span className="text-sm font-medium text-zinc-600">Starting Price</span>
-                    </div>
-                    <p className="text-xl font-bold text-black">
-                      {formatPrice(pendingImport.price_from)}
-                    </p>
-                  </div>
-                )}
-
-                {pendingImport.handover_date && (
-                  <div className="bg-zinc-50 p-4 rounded-lg">
-                    <div className="flex items-center gap-2 text-primary mb-2">
-                      <Calendar className="w-5 h-5" />
-                      <span className="text-sm font-medium text-zinc-600">Handover</span>
-                    </div>
-                    <p className="text-xl font-bold text-black">{pendingImport.handover_date}</p>
-                  </div>
-                )}
-
-                {pendingImport.payment_plan && (
-                  <div className="bg-zinc-50 p-4 rounded-lg">
-                    <div className="flex items-center gap-2 text-primary mb-2">
-                      <Layers className="w-5 h-5" />
-                      <span className="text-sm font-medium text-zinc-600">Payment Plan</span>
-                    </div>
-                    <p className="text-xl font-bold text-black">{pendingImport.payment_plan}</p>
-                  </div>
-                )}
-
-                {pendingImport.location && (
-                  <div className="bg-zinc-50 p-4 rounded-lg">
-                    <div className="flex items-center gap-2 text-primary mb-2">
-                      <MapPin className="w-5 h-5" />
-                      <span className="text-sm font-medium text-zinc-600">Location</span>
-                    </div>
-                    <p className="text-lg font-semibold text-black">{pendingImport.location}</p>
-                  </div>
-                )}
-
-                {pendingImport.bedrooms_min && (
-                  <div className="bg-zinc-50 p-4 rounded-lg">
-                    <div className="flex items-center gap-2 text-primary mb-2">
-                      <Bed className="w-5 h-5" />
-                      <span className="text-sm font-medium text-zinc-600">Bedrooms</span>
-                    </div>
-                    <p className="text-lg font-semibold text-black">
-                      {pendingImport.bedrooms_min === pendingImport.bedrooms_max
-                        ? `${pendingImport.bedrooms_min} BR`
-                        : `${pendingImport.bedrooms_min}-${pendingImport.bedrooms_max} BR`}
-                    </p>
-                  </div>
-                )}
-
-                {pendingImport.property_type_label && (
-                  <div className="bg-zinc-50 p-4 rounded-lg">
-                    <div className="flex items-center gap-2 text-primary mb-2">
-                      <Building2 className="w-5 h-5" />
-                      <span className="text-sm font-medium text-zinc-600">Property Type</span>
-                    </div>
-                    <p className="text-lg font-semibold text-black">
-                      {pendingImport.property_type_label}
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              {/* Description */}
-              {pendingImport.description && (
-                <div className="bg-zinc-50 rounded-xl p-6">
-                  <h3 className="text-xl font-semibold text-black mb-4">About This Project</h3>
-                  <p className="text-zinc-700 whitespace-pre-line">{pendingImport.description}</p>
-                </div>
-              )}
-
-              {/* Location Map */}
-              <div className="bg-zinc-50 rounded-xl p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-semibold text-black">Location</h3>
-                  <a
-                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                      pendingImport.name +
-                        (pendingImport.location ? ", " + pendingImport.location : "") +
-                        ", Dubai, UAE"
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary hover:underline text-sm font-medium flex items-center gap-1"
-                  >
-                    <MapIcon className="w-4 h-4" />
-                    View Larger Map
-                  </a>
-                </div>
-                <div className="rounded-lg overflow-hidden">
-                  <iframe
-                    src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${encodeURIComponent(
-                      pendingImport.name +
-                        (pendingImport.location ? ", " + pendingImport.location : "") +
-                        ", Dubai, UAE"
-                    )}&maptype=satellite`}
-                    width="100%"
-                    height="350"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title={`${pendingImport.name} Location Map`}
-                  />
-                </div>
-                <p className="text-zinc-500 text-xs mt-2 flex items-center gap-1">
-                  <Info className="w-3 h-3" />
-                  Use two fingers to zoom on touch devices
-                </p>
-              </div>
-            </div>
-
-            {/* Right Column - Sidebar */}
-            <div className="space-y-6">
-              {/* Quick Contact */}
-              <div className="bg-zinc-50 rounded-xl p-6">
-                <h3 className="text-lg font-semibold text-black mb-4">Get in Touch</h3>
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    onClick={handleWhatsApp}
-                    className="flex items-center justify-center gap-2 py-3 px-4 rounded-lg bg-green-600 hover:bg-green-700 text-white font-medium transition-colors"
-                  >
-                    <MessageCircle className="w-5 h-5" />
-                    WhatsApp
-                  </button>
-                  <button
-                    onClick={handleCall}
-                    className="flex items-center justify-center gap-2 py-3 px-4 rounded-lg bg-black hover:bg-zinc-800 text-white font-medium transition-colors"
-                  >
-                    <Phone className="w-5 h-5" />
-                    Call
-                  </button>
-                </div>
-              </div>
-
-              {/* Documents */}
-              {documentsList.length > 0 && (
-                <div className="bg-zinc-50 rounded-xl">
-                  <DocumentDownloads documents={documentsList} />
-                </div>
-              )}
-
-              {/* Mortgage Calculator - Always shown (defaults if no price) */}
-              <div className="bg-zinc-50 rounded-xl overflow-hidden">
-                <MortgageCalculator defaultPrice={pendingImport.price_from ?? undefined} compact />
-              </div>
+              <Button variant="primary" onClick={() => handleApprove(false)} disabled={isProcessing}>
+                <Check className="h-4 w-4" />
+                {pendingImport.is_new_project ? "Approve & Create" : "Approve as New"}
+              </Button>
             </div>
           </div>
-        </div>
-      </section>
-
-      <Footer />
-    </>
+        </section>
+      }
+    />
   );
 };
 

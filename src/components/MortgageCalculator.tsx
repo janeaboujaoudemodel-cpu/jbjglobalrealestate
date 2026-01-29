@@ -1,6 +1,5 @@
-import { useState, useMemo } from "react";
-import { Link } from "react-router-dom";
-import { Calculator, TrendingUp, Calendar, Percent, DollarSign, ArrowRight, ArrowUpRight, Info } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Calculator, TrendingUp, Calendar, Percent, DollarSign, ArrowRight, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,14 +11,27 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-const INQUIRY_FORM_URL = "https://jbj.ae/contact";
+import MortgageAIAssistant from "@/components/mortgage/MortgageAIAssistant";
+import { CONTACT_INFO } from "@/constants/stats";
+
+const INQUIRY_FORM_URL = CONTACT_INFO.inquiryFormUrl;
 
 interface MortgageCalculatorProps {
   defaultPrice?: number;
   compact?: boolean;
+  showAssistant?: boolean;
+  context?: {
+    projectName?: string;
+    location?: string;
+  };
 }
 
-const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: MortgageCalculatorProps) => {
+const MortgageCalculator = ({
+  defaultPrice = 2000000,
+  compact = false,
+  showAssistant = false,
+  context,
+}: MortgageCalculatorProps) => {
   const [propertyPrice, setPropertyPrice] = useState(defaultPrice);
   const [downPaymentPercent, setDownPaymentPercent] = useState(20);
   const [interestRate, setInterestRate] = useState(4.5);
@@ -111,8 +123,8 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
         </div>
 
         <div className="mt-6 text-center">
-          <p className="text-zinc-500 text-xs">
-            *Estimates based on AED 2M property, 20% down, 4.5% rate, 25 years
+          <p className="text-muted-foreground text-xs">
+            *Estimates based on {formatCurrency(propertyPrice)}, {downPaymentPercent}% down, {interestRate}% rate, {loanTermYears} years
           </p>
         </div>
       </div>
@@ -322,6 +334,26 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
             </p>
           </div>
         </div>
+
+        {showAssistant && (
+          <div className="mt-6">
+            <MortgageAIAssistant
+              context={{
+                propertyPrice,
+                downPaymentPercent,
+                interestRate,
+                loanTermYears,
+                downPayment: calculations.downPayment,
+                loanAmount: calculations.loanAmount,
+                monthlyPayment: calculations.monthlyPayment,
+                totalInterest: calculations.totalInterest,
+                totalPayment: calculations.totalPayment,
+                projectName: context?.projectName,
+                location: context?.location,
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
