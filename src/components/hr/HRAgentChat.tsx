@@ -21,7 +21,7 @@ const stageBadges: Record<string, { label: string; color: string; icon: React.Re
   greeting: { label: 'Welcome', color: 'bg-blue-500', icon: <Sparkles className="w-3 h-3" /> },
   cv_collection: { label: 'CV Collection', color: 'bg-amber-500', icon: <FileText className="w-3 h-3" /> },
   qualification: { label: 'Qualification', color: 'bg-purple-500', icon: <CheckCircle className="w-3 h-3" /> },
-  interview: { label: 'Interview', color: 'bg-primary', icon: <Bot className="w-3 h-3" /> },
+  interview: { label: 'Interview', color: 'bg-gold', icon: <Bot className="w-3 h-3" /> },
   assessment: { label: 'Assessment', color: 'bg-emerald-500', icon: <CheckCircle className="w-3 h-3" /> },
   completed: { label: 'Completed', color: 'bg-green-600', icon: <CheckCircle className="w-3 h-3" /> }
 };
@@ -131,11 +131,11 @@ export default function HRAgentChat() {
 
   if (initializing) {
     return (
-      <Card className="w-full max-w-2xl mx-auto">
+      <Card className="w-full max-w-2xl mx-auto bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7] border-2 border-gold/30">
         <CardContent className="flex items-center justify-center py-20">
           <div className="text-center space-y-4">
-            <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto" />
-            <p className="text-muted-foreground">Connecting to Jessica...</p>
+            <Loader2 className="w-12 h-12 animate-spin text-gold mx-auto" />
+            <p className="text-zinc-600">Connecting to Jessica...</p>
           </div>
         </CardContent>
       </Card>
@@ -143,16 +143,16 @@ export default function HRAgentChat() {
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto shadow-xl border-primary/20">
-      <CardHeader className="border-b bg-gradient-to-r from-primary/10 to-primary/5">
+    <Card className="w-full max-w-2xl mx-auto shadow-xl bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7] border-2 border-gold/30">
+      <CardHeader className="border-b border-gold/20 bg-gradient-to-r from-gold/10 to-gold/5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-              <Bot className="w-6 h-6 text-primary" />
+            <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
+              <Bot className="w-6 h-6 text-gold" />
             </div>
             <div>
-              <CardTitle className="text-lg">Jessica</CardTitle>
-              <p className="text-sm text-muted-foreground">Available 24/7 to support you</p>
+              <CardTitle className="text-lg text-black">Jessica</CardTitle>
+              <p className="text-sm text-zinc-600">Available 24/7 to support you</p>
             </div>
           </div>
           <Badge className={`${currentStageBadge.color} text-white flex items-center gap-1`}>
@@ -200,7 +200,7 @@ export default function HRAgentChat() {
                         await navigator.clipboard.writeText(message.content);
                         toast.success(t('chat.messageCopied') || 'Message copied');
                       }}
-                      className={`flex items-center gap-1 mt-1 text-[10px] text-muted-foreground hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
+                      className={`flex items-center gap-1 mt-1 text-[10px] text-zinc-500 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
                         message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
                       }`}
                     >
@@ -234,7 +234,7 @@ export default function HRAgentChat() {
         </ScrollArea>
 
         {stage !== 'completed' && (
-          <div className="border-t p-4">
+          <div className="border-t border-gold/20 p-4">
             <div className="flex gap-2">
               <Input
                 value={input}
@@ -242,25 +242,26 @@ export default function HRAgentChat() {
                 onKeyPress={handleKeyPress}
                 placeholder="Type your message..."
                 disabled={loading}
-                className="flex-1"
+                className="flex-1 border-gold/30 focus:border-gold"
               />
               <Button 
                 onClick={sendMessage} 
                 disabled={!input.trim() || loading}
                 size="icon"
+                className="bg-gold text-black hover:bg-gold/90"
               >
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               </Button>
             </div>
-            <p className="text-xs text-muted-foreground mt-2 text-center">
+            <p className="text-xs text-zinc-500 mt-2 text-center">
               Press Enter to send • AI-powered interview assistant
             </p>
           </div>
         )}
 
         {stage === 'completed' && (
-          <div className="border-t p-4 bg-green-50 dark:bg-green-950/20">
-            <div className="flex items-center justify-center gap-2 text-green-600 dark:text-green-400">
+          <div className="border-t border-gold/20 p-4 bg-emerald-50">
+            <div className="flex items-center justify-center gap-2 text-emerald-600">
               <CheckCircle className="w-5 h-5" />
               <span className="font-medium">Interview Complete - Assessment Generated</span>
             </div>

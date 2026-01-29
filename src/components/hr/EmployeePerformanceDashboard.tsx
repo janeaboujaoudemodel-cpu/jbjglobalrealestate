@@ -9,64 +9,72 @@ export function EmployeePerformanceDashboard() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] border-2 border-gold/30 shadow-lg">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Total Hours Today</p>
-                <p className="text-2xl font-bold">0h 0m</p>
+                <p className="text-sm text-zinc-600">Total Hours Today</p>
+                <p className="text-2xl font-bold text-black">0h 0m</p>
               </div>
-              <Clock className="h-8 w-8 text-blue-500/50" />
+              <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                <Clock className="h-6 w-6 text-blue-600" />
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 border-emerald-500/20">
+        <Card className="bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] border-2 border-gold/30 shadow-lg">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Calls Made</p>
-                <p className="text-2xl font-bold">0</p>
+                <p className="text-sm text-zinc-600">Calls Made</p>
+                <p className="text-2xl font-bold text-black">0</p>
               </div>
-              <Phone className="h-8 w-8 text-emerald-500/50" />
+              <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">
+                <Phone className="h-6 w-6 text-emerald-600" />
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] border-2 border-gold/30 shadow-lg">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Messages Sent</p>
-                <p className="text-2xl font-bold">0</p>
+                <p className="text-sm text-zinc-600">Messages Sent</p>
+                <p className="text-2xl font-bold text-black">0</p>
               </div>
-              <MessageSquare className="h-8 w-8 text-purple-500/50" />
+              <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                <MessageSquare className="h-6 w-6 text-purple-600" />
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-amber-500/10 to-amber-600/5 border-amber-500/20">
+        <Card className="bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] border-2 border-gold/30 shadow-lg">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Leads Contacted</p>
-                <p className="text-2xl font-bold">0</p>
+                <p className="text-sm text-zinc-600">Leads Contacted</p>
+                <p className="text-2xl font-bold text-black">0</p>
               </div>
-              <TrendingUp className="h-8 w-8 text-amber-500/50" />
+              <div className="w-12 h-12 rounded-xl bg-gold/20 flex items-center justify-center">
+                <TrendingUp className="h-6 w-6 text-gold" />
+              </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="bg-card/50 backdrop-blur-sm border-primary/10">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7] border-2 border-gold/30 shadow-lg">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Activity className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 text-black">
+            <Activity className="h-5 w-5 text-gold" />
             Employee Performance Today
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground text-center py-8">
+          <p className="text-zinc-600 text-center py-8">
             Please approve the database migration to enable performance tracking
           </p>
         </CardContent>
