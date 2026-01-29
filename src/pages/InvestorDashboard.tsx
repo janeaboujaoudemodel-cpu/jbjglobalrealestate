@@ -23,7 +23,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Footer from "@/components/Footer";
-import GlobalHeader from "@/components/GlobalHeader";
 import {
   LayoutDashboard,
   Building2,
@@ -268,8 +267,6 @@ export default function InvestorDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-      <GlobalHeader />
-
       {/* Dashboard Content */}
       <div className="container mx-auto px-4 py-8">
         <motion.div

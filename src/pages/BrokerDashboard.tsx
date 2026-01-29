@@ -8,7 +8,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Footer from "@/components/Footer";
-import GlobalHeader from "@/components/GlobalHeader";
 import {
   LayoutDashboard,
   Building2,
@@ -165,8 +164,6 @@ export default function BrokerDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      <GlobalHeader />
-      
       {/* Hero Section with Video */}
       <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden">
         <video 

@@ -16,7 +16,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import GlobalHeader from "@/components/GlobalHeader";
 import Footer from "@/components/Footer";
 import ComplianceDisclaimer from "@/components/ComplianceDisclaimer";
 import { useState } from "react";
@@ -83,9 +82,7 @@ const PartnerLegal = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <GlobalHeader />
-      
-      <main className="pt-20">
+      <main className="pt-0">
         {/* Hero Section */}
         <section className="relative py-16 bg-gradient-to-b from-muted/50 to-background">
           <div className="container mx-auto px-4">

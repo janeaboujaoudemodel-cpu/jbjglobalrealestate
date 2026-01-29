@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import GlobalHeader from "@/components/GlobalHeader";
 import Footer from "@/components/Footer";
 import { Briefcase, Download, MessageCircle, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -209,8 +208,6 @@ export default function PortfolioViews() {
 
   return (
     <div className="min-h-screen bg-black">
-      <GlobalHeader />
-
       {/* Premium Video Hero Section */}
       <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
         {/* Video Background */}

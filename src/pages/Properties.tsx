@@ -1260,6 +1260,54 @@ const Properties = () => {
         </div>
       </section>
 
+      {/* Direct Contact Section - Prefer to Reach Us Directly */}
+      <section className="py-12 bg-black">
+        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8">
+          <h2 className="text-center text-2xl md:text-3xl font-bold mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <span className="text-black">Prefer to Reach Us</span>{" "}
+            <span className="text-gold">Directly?</span>
+          </h2>
+          <p className="text-center text-zinc-600 text-sm mb-6 max-w-2xl mx-auto">
+            For general inquiries, consultations, or non-technical requests, you may contact us through the channels below.
+          </p>
+          <div className="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+            {/* WhatsApp CTA */}
+            <a 
+              href={getWhatsAppUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
+            >
+              <div className="w-12 h-12 bg-green-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-green-500/30">
+                <MessageCircle className="w-6 h-6 text-green-600" />
+              </div>
+              <div>
+                <h3 className="text-black font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  WhatsApp
+                </h3>
+                <p className="text-gold text-sm">{CONTACT_INFO.phone}</p>
+              </div>
+            </a>
+
+            {/* Call CTA */}
+            <a 
+              href={`tel:${CONTACT_INFO.phoneRaw}`}
+              className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
+            >
+              <div className="w-12 h-12 bg-blue-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-blue-500/30">
+                <Phone className="w-6 h-6 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="text-black font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  Call Us
+                </h3>
+                <p className="text-gold text-sm">{CONTACT_INFO.phone}</p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
       <Footer />
       
       {/* Active Lead Banner for CRM linking */}
