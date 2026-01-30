@@ -130,7 +130,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       <CommandPaletteRoot />
       <GlobalHeader forceSolid={needsHeaderSpacing} />
       {/* Content spacing: dark hero pages sit behind header, bright pages pushed below */}
-      <main className={needsHeaderSpacing ? "pt-20 sm:pt-24 lg:pt-28" : "pt-0"}>
+      <main className={needsHeaderSpacing ? "pt-24 sm:pt-28 lg:pt-32" : "pt-0"}>
         {children}
       </main>
       {/* All popups rendered centrally - only when ready */}
