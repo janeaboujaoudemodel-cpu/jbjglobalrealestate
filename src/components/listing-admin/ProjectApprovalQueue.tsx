@@ -541,6 +541,11 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
             )}
           </CardTitle>
           <div className="flex items-center gap-2">
+            {jobId && !showAll && (
+              <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">
+                Filtered by sync job
+              </Badge>
+            )}
             {jobId && (
               <Button
                 variant="outline"
@@ -548,7 +553,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                 onClick={() => setShowAll((v) => !v)}
                 className="border-gold text-gold hover:bg-gold/10"
               >
-                {showAll ? "Show this sync" : "Show all"}
+                {showAll ? "Show this sync only" : "Show all pending"}
               </Button>
             )}
             {imports.length > 0 && (
