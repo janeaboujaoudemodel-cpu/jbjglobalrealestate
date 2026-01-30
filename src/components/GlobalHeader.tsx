@@ -271,11 +271,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       ref={headerViewportRef}
       className="fixed top-0 left-0 right-0 z-[9999] h-24 sm:h-28 lg:h-32 overflow-visible"
     >
-      {/* Ultra Premium Multi-Layer Background */}
+      {/* Ultra Premium Multi-Layer Background - Pure Black on scroll (same as footer) */}
       <div 
         className={`absolute inset-0 transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`}
         style={{
-          background: 'linear-gradient(180deg, hsl(var(--premium-bg) / 0.98) 0%, hsl(var(--premium-bg) / 0.99) 50%, hsl(var(--premium-bg) / 1) 100%)',
+          background: 'linear-gradient(180deg, hsl(0 0% 0% / 0.98) 0%, hsl(0 0% 0% / 0.99) 50%, hsl(0 0% 0% / 1) 100%)',
         }}
       />
       
