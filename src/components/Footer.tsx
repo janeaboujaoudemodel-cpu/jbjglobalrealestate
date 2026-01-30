@@ -167,17 +167,17 @@ const Footer = () => {
         {/* ULTRA PREMIUM Logo + Company Name Section */}
         <div className="text-center mb-8 sm:mb-10 md:mb-12 lg:mb-14 relative">
           {/* Background glow behind entire logo section */}
-          <div className="absolute inset-0 -top-10 bg-gradient-to-b from-gold/5 via-transparent to-transparent blur-3xl pointer-events-none" />
+          <div className="absolute inset-0 -top-10 bg-gradient-to-b from-gold/3 via-transparent to-transparent blur-2xl pointer-events-none" />
           
           <Link to="/" className="inline-block group relative">
             <div className="relative">
               {/* Multi-layer glow effect behind logo */}
-              <div className="absolute inset-0 bg-gold/30 blur-[60px] rounded-full scale-[2] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              <div className="absolute inset-0 bg-gold/20 blur-3xl rounded-full scale-150 opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
+              <div className="absolute inset-0 bg-gold/14 blur-[50px] rounded-full scale-[1.6] opacity-35 group-hover:opacity-50 transition-opacity duration-700" />
+              <div className="absolute inset-0 bg-gold/10 blur-3xl rounded-full scale-[1.25] opacity-25 group-hover:opacity-40 transition-opacity duration-500" />
               <img 
                 src={jbjMonogramLightTransparent} 
                 alt="JBJ Global Real Estate" 
-                className="relative h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto mb-4 sm:mb-6 drop-shadow-[0_0_40px_rgba(200,167,102,0.4)] group-hover:drop-shadow-[0_0_60px_rgba(200,167,102,0.6)] transition-all duration-500 group-hover:scale-105"
+                className="relative h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto mb-4 sm:mb-6 drop-shadow-[0_0_18px_rgba(200,167,102,0.28)] group-hover:drop-shadow-[0_0_28px_rgba(200,167,102,0.38)] transition-all duration-500"
               />
             </div>
           </Link>
@@ -189,7 +189,7 @@ const Footer = () => {
               background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 20%, #C8A766 40%, #F5E6C8 60%, #E8D5A3 80%, #D4AF37 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              filter: 'drop-shadow(0 4px 25px rgba(200,167,102,0.4))',
+              filter: 'drop-shadow(0 3px 14px rgba(200,167,102,0.25))',
             }}
           >
             JBJ GLOBAL REAL ESTATE
@@ -438,18 +438,20 @@ const Footer = () => {
               >
                 {t('footer.properties') || 'Properties'}
               </h4>
-              <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 mb-3 sm:mb-4 md:mb-6">
-                {propertiesLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      to={link.href}
-                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              <div className="min-h-[92px] sm:min-h-[112px] md:min-h-[150px] mb-3 sm:mb-4 md:mb-6">
+                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
+                  {propertiesLinks.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        to={link.href}
+                        className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
               
               <h4 
                 className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
@@ -487,18 +489,20 @@ const Footer = () => {
               >
                 {t('footer.investorHub') || 'Investor Hub'}
               </h4>
-              <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 mb-3 sm:mb-4 md:mb-6">
-                {investorHubLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      to={link.href}
-                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              <div className="min-h-[92px] sm:min-h-[112px] md:min-h-[150px] mb-3 sm:mb-4 md:mb-6">
+                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
+                  {investorHubLinks.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        to={link.href}
+                        className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
               
               <h4 
                 className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
@@ -536,18 +540,20 @@ const Footer = () => {
               >
                 {t('footer.guides') || 'Guides'}
               </h4>
-              <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 mb-3 sm:mb-4 md:mb-6">
-                {guidesLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      to={link.href}
-                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              <div className="min-h-[168px] sm:min-h-[204px] md:min-h-[270px] mb-3 sm:mb-4 md:mb-6">
+                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
+                  {guidesLinks.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        to={link.href}
+                        className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
               
               <h4 
                 className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
@@ -585,18 +591,20 @@ const Footer = () => {
               >
                 About
               </h4>
-              <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 mb-3 sm:mb-4 md:mb-6">
-                {aboutLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      to={link.href}
-                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              <div className="min-h-[168px] sm:min-h-[204px] md:min-h-[270px] mb-3 sm:mb-4 md:mb-6">
+                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
+                  {aboutLinks.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        to={link.href}
+                        className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
               
               <h4 
                 className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
@@ -644,7 +652,7 @@ const Footer = () => {
                 <Link
                   key={link.href}
                   to={link.href}
-                  className="text-zinc-300 hover:text-gold transition-all duration-300 text-[9px] sm:text-[11px] md:text-xs lg:text-sm px-1.5 sm:px-3 md:px-4 py-0.5 sm:py-1.5 md:py-2 rounded-md sm:rounded-lg hover:scale-105"
+                  className="text-zinc-300 hover:text-gold transition-all duration-300 text-[9px] sm:text-[11px] md:text-xs lg:text-sm px-1.5 sm:px-3 md:px-4 py-0.5 sm:py-1.5 md:py-2 rounded-md sm:rounded-lg"
                   style={{
                     background: 'linear-gradient(145deg, rgba(50,50,55,0.8) 0%, rgba(30,30,35,0.9) 100%)',
                     boxShadow: '0 4px 15px -3px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)',
@@ -689,9 +697,9 @@ const Footer = () => {
             <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4 md:gap-5">
               <a
                 href={getCallUrl()}
-                className="flex items-center justify-center gap-1.5 sm:gap-2 text-zinc-200 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base hover:scale-105 py-1"
+                className="flex items-center justify-center gap-1.5 sm:gap-2 text-zinc-200 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base py-1"
               >
-                <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-blue-400 flex-shrink-0" />
+                <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-gold flex-shrink-0 drop-shadow-[0_0_8px_rgba(200,167,102,0.35)]" />
                 <span>{CONTACT_INFO.phone}</span>
               </a>
               <span className="text-gold/40 hidden sm:inline">|</span>
@@ -699,15 +707,15 @@ const Footer = () => {
                 href={getWhatsAppUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-1.5 sm:gap-2 text-zinc-200 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base hover:scale-105 py-1"
+                className="flex items-center justify-center gap-1.5 sm:gap-2 text-zinc-200 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base py-1"
               >
-                <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-green-400 flex-shrink-0" />
+                <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-gold flex-shrink-0 drop-shadow-[0_0_8px_rgba(200,167,102,0.35)]" />
                 <span>WhatsApp Us</span>
               </a>
               <span className="text-gold/40 hidden sm:inline">|</span>
               <a
                 href={getEmailUrl()}
-                className="flex items-center justify-center gap-1.5 sm:gap-2 text-zinc-200 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base hover:scale-105 py-1"
+                className="flex items-center justify-center gap-1.5 sm:gap-2 text-zinc-200 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base py-1"
               >
                 <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-gold flex-shrink-0 drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
                 <span className="break-all">{CONTACT_INFO.emailCapitalized}</span>
