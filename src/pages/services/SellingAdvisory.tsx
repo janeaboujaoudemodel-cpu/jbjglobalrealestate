@@ -207,7 +207,7 @@ const SellingAdvisory = () => {
       />
 
       {/* HERO SECTION */}
-      <section className="relative min-h-[70vh] flex items-center justify-center bg-black overflow-hidden">
+      <section className="relative min-h-screen h-screen flex items-center justify-center bg-black overflow-hidden">
         {/* Background gradient */}
         <div
           className="absolute inset-0"

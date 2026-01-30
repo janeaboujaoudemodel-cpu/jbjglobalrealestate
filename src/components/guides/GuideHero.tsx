@@ -37,7 +37,7 @@ export const GuideHero = ({
   actions 
 }: GuideHeroProps) => {
   return (
-    <section className="relative min-h-[55vh] flex items-center overflow-hidden mb-12">
+    <section className="relative min-h-screen h-screen flex items-center overflow-hidden">
       {/* Video or Image Background */}
       <div className="absolute inset-0 z-0">
         {videoSrc ? (

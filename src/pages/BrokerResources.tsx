@@ -143,7 +143,7 @@ const BrokerResources = () => {
   return (
     <div className="min-h-screen bg-black">
       {/* Hero Section with Video */}
-      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen h-screen flex items-center justify-center overflow-hidden">
         {/* Background Video */}
         <video
           autoPlay

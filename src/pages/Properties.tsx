@@ -325,7 +325,7 @@ const Properties = () => {
       
       
       {/* Hero Section - Cinematic Video */}
-      <section className="relative h-[70vh] min-h-[500px] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen h-screen flex items-center justify-center overflow-hidden">
         {/* Video Background with poster for instant display */}
         <div className="absolute inset-0 bg-black">
           {/* Poster/fallback image that shows immediately */}
