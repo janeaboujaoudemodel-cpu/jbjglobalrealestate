@@ -95,9 +95,11 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     extracted: 0 
   });
   const [projectCount, setProjectCount] = useState<number | null>(null);
+  const [pendingQueueCount, setPendingQueueCount] = useState<number | null>(null);
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [estimatedTimeRemaining, setEstimatedTimeRemaining] = useState<string>("");
   const [currentJobId, setCurrentJobId] = useState<string | null>(null);
+  const [viewingJobId, setViewingJobId] = useState<string | null>(null);
   // We keep this always enabled: the admin decides what to approve in the queue.
   const [isTestApproved] = useState(true);
   const [activeTab, setActiveTab] = useState("approvals");
@@ -196,8 +198,12 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   }, [currentJobId]);
 
   const loadProjectCount = async () => {
-    const { count } = await supabase.from("projects").select("*", { count: "exact", head: true });
-    setProjectCount(count);
+    const [projectsRes, pendingRes] = await Promise.all([
+      supabase.from("projects").select("*", { count: "exact", head: true }),
+      supabase.from("pending_project_imports").select("*", { count: "exact", head: true }).eq("status", "pending")
+    ]);
+    setProjectCount(projectsRes.count);
+    setPendingQueueCount(pendingRes.count);
   };
 
   const loadActiveJob = async () => {
@@ -281,8 +287,11 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       .eq("id", jobId);
   };
 
-  const syncPage = async (page: number, options?: SyncPageOptions): Promise<SyncStats | null> => {
+  const syncPage = async (page: number, options?: SyncPageOptions, jobIdOverride?: string): Promise<SyncStats | null> => {
     updatePageStatus(page, { status: 'in_progress' });
+    
+    // Use the provided jobId or current active job
+    const jobIdToUse = jobIdOverride || currentJobId;
     
     try {
       // Batch the page so we actually process ALL listings on the page.
@@ -305,7 +314,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
         guard++;
 
         const { data, error } = await supabase.functions.invoke("sync-provident-page", {
-          body: { page, startIndex, batchSize, ...(options || {}) }
+          body: { page, startIndex, batchSize, jobId: jobIdToUse, ...(options || {}) }
         });
 
         if (error) throw error;
@@ -392,7 +401,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       
       setCurrentPage(page);
       
-      const pageStats = await syncPage(page);
+      const pageStats = await syncPage(page, undefined, jobId);
       
       if (pageStats) {
         runningStats = {
@@ -619,7 +628,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
         </TabsList>
 
         <TabsContent value="approvals" className="mt-6">
-          <ProjectApprovalQueue onRefresh={loadProjectCount} />
+          <ProjectApprovalQueue onRefresh={loadProjectCount} jobId={viewingJobId} />
         </TabsContent>
 
         <TabsContent value="developers" className="mt-6">
@@ -657,7 +666,10 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
               <CardContent className="p-4 text-center">
                 <Database className="w-6 h-6 text-primary mx-auto mb-2" />
                 <div className="text-2xl font-bold text-foreground">{projectCount ?? "..."}</div>
-                <div className="text-xs text-muted-foreground">Total Projects</div>
+                <div className="text-xs text-muted-foreground">Approved Projects</div>
+                {pendingQueueCount !== null && pendingQueueCount > 0 && (
+                  <div className="text-xs text-amber-600 mt-1">+{pendingQueueCount} pending</div>
+                )}
               </CardContent>
             </Card>
             
@@ -665,7 +677,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
               <CardContent className="p-4 text-center">
                 <TrendingUp className="w-6 h-6 text-emerald-600 mx-auto mb-2" />
                 <div className="text-2xl font-bold text-emerald-600">{totalStats.created}</div>
-                <div className="text-xs text-muted-foreground">New Listings</div>
+                <div className="text-xs text-muted-foreground">New to Queue</div>
               </CardContent>
             </Card>
             
@@ -673,7 +685,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
               <CardContent className="p-4 text-center">
                 <RefreshCw className="w-6 h-6 text-amber-600 mx-auto mb-2" />
                 <div className="text-2xl font-bold text-amber-600">{totalStats.updated}</div>
-                <div className="text-xs text-muted-foreground">Updated</div>
+                <div className="text-xs text-muted-foreground">Queue Updated</div>
               </CardContent>
             </Card>
             
@@ -687,9 +699,9 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
             
             <Card className="bg-card border-border shadow-sm">
               <CardContent className="p-4 text-center">
-                <FileText className="w-6 h-6 text-gold mx-auto mb-2" />
-                <div className="text-2xl font-bold text-foreground">{totalStats.extracted}</div>
-                <div className="text-xs text-muted-foreground">Extracted</div>
+                <Check className="w-6 h-6 text-blue-600 mx-auto mb-2" />
+                <div className="text-2xl font-bold text-blue-600">{totalStats.extracted}</div>
+                <div className="text-xs text-muted-foreground">Processed</div>
               </CardContent>
             </Card>
           </div>
@@ -870,6 +882,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       <Card className="bg-white border-zinc-200 shadow-sm">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg text-zinc-900">Recent Activity</CardTitle>
+          <p className="text-xs text-muted-foreground">Click an entry to view extracted listings in the Projects tab</p>
         </CardHeader>
         <CardContent>
           <ScrollArea className="h-[200px]">
@@ -879,11 +892,18 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                 .sort((a, b) => (new Date(b.timestamp || 0).getTime()) - (new Date(a.timestamp || 0).getTime()))
                 .slice(0, 20)
                 .map((pageStatus) => (
-                  <div 
+                  <button
                     key={`log-${pageStatus.page}`}
+                    onClick={() => {
+                      // Switch to approvals tab and filter by current job
+                      if (currentJobId) {
+                        setViewingJobId(currentJobId);
+                      }
+                      setActiveTab("approvals");
+                    }}
                     className={`
-                      flex items-center gap-3 p-2 rounded-lg text-sm border
-                      ${pageStatus.status === 'success' ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200'}
+                      w-full flex items-center gap-3 p-2 rounded-lg text-sm border cursor-pointer transition-all hover:scale-[1.01]
+                      ${pageStatus.status === 'success' ? 'bg-emerald-50 border-emerald-200 hover:border-emerald-400' : 'bg-red-50 border-red-200 hover:border-red-400'}
                     `}
                   >
                     {pageStatus.status === 'success' ? (
@@ -903,7 +923,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                     <span className="text-zinc-500 text-xs ml-auto">
                       {pageStatus.timestamp ? new Date(pageStatus.timestamp).toLocaleTimeString() : ''}
                     </span>
-                  </div>
+                  </button>
                 ))}
               {pageStatuses.filter(p => p.status !== 'pending').length === 0 && (
                 <p className="text-zinc-500 text-center py-8">No activity yet. Start a sync to see progress.</p>
