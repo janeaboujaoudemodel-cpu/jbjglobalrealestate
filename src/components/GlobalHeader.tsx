@@ -331,7 +331,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <img 
                 src={isFullyTransparent ? jbjMonogramLightTransparent : jbjMonogramDarkBg} 
                 alt="JBJ" 
-                className="w-14 h-14 md:w-16 md:h-16 xl:w-20 xl:h-20 object-contain relative z-10"
+                className="w-16 h-16 md:w-20 md:h-20 xl:w-24 xl:h-24 object-contain relative z-10"
                 style={{
                   filter: isFullyTransparent 
                     ? 'drop-shadow(0 4px 12px rgba(0,0,0,0.6))' 
