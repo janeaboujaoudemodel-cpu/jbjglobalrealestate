@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight, MapPin, Bed, Mail, Phone, MessageCircle } fr
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { SafeImage } from "@/components/SafeImage";
 import { VerifiedMedia } from "@/components/ui/verified-media";
+import { Button } from "@/components/ui/button";
 
 interface ProjectCardProps {
   project: Project & { is_sold_out?: boolean | null };
@@ -111,7 +112,14 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   const statusLabel = getStatusLabel();
 
   return (
-    <div className="group relative overflow-hidden rounded-lg bg-white border border-zinc-200 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col">
+    <div
+      className={
+        "group relative overflow-hidden rounded-lg border-2 border-gold/40 transition-all duration-300 flex flex-col " +
+        "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
+        "shadow-[0_0_18px_hsl(var(--gold)/0.14),0_18px_55px_hsl(0_0%_0%/0.16)] hover:border-gold/70 " +
+        "hover:shadow-[0_0_26px_hsl(var(--gold)/0.18),0_26px_75px_hsl(0_0%_0%/0.20)]"
+      }
+    >
       {/* Favorite Button */}
       {showFavorite && (
         <div className="absolute top-3 right-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -141,13 +149,25 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             <>
               <button
                 onClick={handlePrevImage}
-                className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/95 hover:bg-white text-zinc-700 flex items-center justify-center shadow-md transition-all z-10"
+                className={
+                  "absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full z-10 flex items-center justify-center transition-all " +
+                  "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
+                  "border border-gold/70 text-gold " +
+                  "shadow-[0_10px_24px_hsl(0_0%_0%/0.20),inset_0_1px_0_hsl(0_0%_100%/0.55)] " +
+                  "hover:bg-gold hover:text-black hover:border-gold"
+                }
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 onClick={handleNextImage}
-                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/95 hover:bg-white text-zinc-700 flex items-center justify-center shadow-md transition-all z-10"
+                className={
+                  "absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full z-10 flex items-center justify-center transition-all " +
+                  "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
+                  "border border-gold/70 text-gold " +
+                  "shadow-[0_10px_24px_hsl(0_0%_0%/0.20),inset_0_1px_0_hsl(0_0%_100%/0.55)] " +
+                  "hover:bg-gold hover:text-black hover:border-gold"
+                }
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -158,7 +178,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                   <span
                     key={idx}
                     className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                      idx === currentImageIndex ? 'bg-white' : 'bg-white/50'
+                      idx === currentImageIndex
+                        ? 'bg-gold shadow-[0_0_10px_hsl(var(--gold)/0.55)]'
+                        : 'bg-gold/35'
                     }`}
                   />
                 ))}
@@ -168,29 +190,29 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           
           {/* Top-Left: Property Type Label (dark background) */}
           {project.property_type_label && (
-            <div className="absolute top-3 left-3 z-10 bg-zinc-800/90 text-white px-2 py-1 rounded text-xs font-medium">
+            <div className="absolute top-3 left-3 z-10 bg-premium-bg/90 text-gold px-2 py-1 rounded text-xs font-semibold border border-gold/30">
               {project.property_type_label}
             </div>
           )}
           
           {/* Top-Right: Status Label (white background, only for specific projects) */}
           {statusLabel && (
-            <div className="absolute top-3 right-3 z-10 bg-white text-zinc-800 px-2 py-1 rounded text-xs font-medium border border-zinc-200">
+            <div className="absolute top-3 right-3 z-10 px-2 py-1 rounded text-xs font-semibold border border-gold/30 bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] text-foreground">
               {statusLabel}
             </div>
           )}
           
           {/* Bottom-Right: Handover Year - ORANGE */}
           {project.handover_date && (
-            <div className="absolute bottom-3 right-3 z-10 bg-orange-500 text-white px-2.5 py-1 rounded text-xs font-bold">
+            <div className="absolute bottom-3 right-3 z-10 bg-handover text-handover-foreground px-2.5 py-1 rounded text-xs font-bold shadow-[0_10px_25px_hsl(0_0%_0%/0.25)]">
               {project.handover_date}
             </div>
           )}
           
           {/* Sold Out Badge */}
           {project.is_sold_out && (
-            <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-20">
-              <span className="bg-red-600 text-white px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wider">
+            <div className="absolute inset-0 bg-premium-bg/65 flex items-center justify-center z-20">
+              <span className="bg-destructive text-destructive-foreground px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wider">
                 Sold Out
               </span>
             </div>
@@ -200,18 +222,21 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         {/* Content - Provident Style */}
         <div className="p-4 flex-1 flex flex-col">
           {/* Project Name - Gray color */}
-          <h4 className="text-zinc-700 text-lg font-semibold mb-1 line-clamp-2 hover:text-primary transition-colors">
+          <h4 className="text-foreground text-lg font-semibold mb-1 line-clamp-2 hover:text-gold transition-colors">
             {project.name}
           </h4>
           
           {/* Developer - Clickable Link */}
           {project.developer && (
-            <p className="text-zinc-500 text-sm mb-2">
+            <p className="text-muted-foreground text-sm mb-2">
               by{' '}
               <Link 
                 to={`/developer/${project.developer.slug}`}
                 onClick={(e) => e.stopPropagation()}
-                className="text-primary hover:text-primary/80 hover:underline font-medium transition-colors"
+                className={
+                  "font-semibold transition-all hover:underline " +
+                  "bg-gradient-to-r from-gold via-handover to-gold bg-clip-text text-transparent"
+                }
               >
                 {project.developer.name}
               </Link>
@@ -221,24 +246,24 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Starting Price - Orange/Gold */}
           {project.price_from && (
             <p className="text-sm mb-3">
-              <span className="text-zinc-600">Starting Price </span>
-              <span className="text-orange-500 font-semibold">
+              <span className="text-muted-foreground">Starting Price </span>
+              <span className="text-handover font-semibold">
                 {formatPriceWithCurrency(project.price_from, currency)}
               </span>
             </p>
           )}
           
           {/* Location with icon + Bedrooms with icon */}
-          <div className="flex items-center gap-4 text-zinc-500 text-sm mb-3">
+          <div className="flex items-center gap-4 text-muted-foreground text-sm mb-3">
             {project.location && (
               <div className="flex items-center gap-1.5">
-                <MapPin className="w-4 h-4 text-zinc-400" />
+                <MapPin className="w-4 h-4 text-gold/70" />
                 <span className="truncate max-w-[120px]">{project.location}</span>
               </div>
             )}
             {getBedroomsText() && (
               <div className="flex items-center gap-1.5">
-                <Bed className="w-4 h-4 text-zinc-400" />
+                <Bed className="w-4 h-4 text-gold/70" />
                 <span>{getBedroomsText()}</span>
               </div>
             )}
@@ -246,10 +271,10 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           
           {/* Description with ...more link */}
           {getTruncatedDescription() && (
-            <p className="text-zinc-600 text-sm leading-relaxed mb-4 flex-1">
+            <p className="text-muted-foreground text-sm leading-relaxed mb-4 flex-1">
               {getTruncatedDescription()}
               {project.description && project.description.length > 120 && (
-                <span className="text-primary hover:underline cursor-pointer ml-1">...more</span>
+                <span className="text-handover hover:underline cursor-pointer ml-1 font-semibold">...more</span>
               )}
             </p>
           )}
@@ -258,31 +283,29 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
       {/* CTA Buttons - Email, Call, WhatsApp (Provident style) */}
       <div className="px-4 pb-4 pt-0">
-        <div className="grid grid-cols-3 gap-2 border-t border-zinc-100 pt-4">
-          <a
-            href={`mailto:info@jbjglobalrealestate.com?subject=Inquiry: ${project.name}`}
-            onClick={(e) => e.stopPropagation()}
-            className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg border border-zinc-200 text-zinc-600 hover:border-primary hover:text-primary transition-colors text-sm font-medium"
-          >
-            <Mail className="w-4 h-4" />
-            <span>Email</span>
-          </a>
-          <a
-            href={callHref}
-            onClick={(e) => e.stopPropagation()}
-            className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg border border-zinc-200 text-zinc-600 hover:border-primary hover:text-primary transition-colors text-sm font-medium"
-          >
-            <Phone className="w-4 h-4" />
-            <span>Call</span>
-          </a>
-          <a
-            href={whatsappHref}
-            onClick={(e) => e.stopPropagation()}
-            className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg border border-zinc-200 text-zinc-600 hover:border-green-600 hover:text-green-600 transition-colors text-sm font-medium"
-          >
-            <MessageCircle className="w-4 h-4" />
-            <span>WhatsApp</span>
-          </a>
+        <div className="grid grid-cols-3 gap-2 border-t border-gold/20 pt-4">
+          <Button asChild variant="secondary" size="sm" className="w-full">
+            <a
+              href={`mailto:info@jbjglobalrealestate.com?subject=Inquiry: ${project.name}`}
+              onClick={(e) => e.stopPropagation()}
+              aria-label={`Email about ${project.name}`}
+            >
+              <Mail className="w-4 h-4" />
+              <span>Email</span>
+            </a>
+          </Button>
+          <Button asChild variant="secondary" size="sm" className="w-full">
+            <a href={callHref} onClick={(e) => e.stopPropagation()} aria-label={`Call about ${project.name}`}>
+              <Phone className="w-4 h-4" />
+              <span>Call</span>
+            </a>
+          </Button>
+          <Button asChild variant="secondary" size="sm" className="w-full">
+            <a href={whatsappHref} onClick={(e) => e.stopPropagation()} aria-label={`WhatsApp about ${project.name}`}>
+              <MessageCircle className="w-4 h-4" />
+              <span>WhatsApp</span>
+            </a>
+          </Button>
         </div>
       </div>
     </div>
