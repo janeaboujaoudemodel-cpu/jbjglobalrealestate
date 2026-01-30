@@ -18,7 +18,7 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
           <img
             src={jbjMonogramLightBg}
             alt="JBJ Global Real Estate"
-            className="h-28 w-auto mx-auto object-contain"
+            className="h-40 w-auto mx-auto object-contain"
           />
         </div>
       </div>
