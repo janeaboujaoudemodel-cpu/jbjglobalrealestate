@@ -164,39 +164,67 @@ const Footer = () => {
       {/* Full-width footer content */}
       <div className="relative w-full py-8 sm:py-12 md:py-16 lg:py-20 px-3 sm:px-4 md:px-6 lg:px-8">
         
-        {/* ULTRA PREMIUM Logo + Company Name Section */}
-        <div className="text-center mb-8 sm:mb-10 md:mb-12 lg:mb-14 relative">
-          {/* Background glow behind entire logo section */}
-          <div className="absolute inset-0 -top-10 bg-gradient-to-b from-gold/3 via-transparent to-transparent blur-2xl pointer-events-none" />
+        {/* ULTRA PREMIUM Logo + Company Name Section - 3D Deep Black */}
+        <div className="text-center mb-8 sm:mb-10 md:mb-12 lg:mb-14 relative py-8 sm:py-10 md:py-12">
+          {/* Deep black background overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-zinc-950 to-black pointer-events-none" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.3)_0%,rgba(0,0,0,0.9)_70%)] pointer-events-none" />
           
           <Link to="/" className="inline-block group relative">
-            <img 
-              src={jbjMonogramLightTransparent} 
-              alt="JBJ Global Real Estate" 
-              className="h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto mb-4 sm:mb-6"
-            />
+            {/* 3D Logo with multi-layer shadow depth */}
+            <div className="relative transform-gpu transition-all duration-700 group-hover:scale-[1.03] group-hover:-translate-y-1">
+              {/* Deep shadow layer 3 - furthest */}
+              <img 
+                src={jbjMonogramLightTransparent} 
+                alt="" 
+                aria-hidden="true"
+                className="absolute h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto opacity-[0.08] blur-[3px] translate-y-4 translate-x-2 pointer-events-none"
+              />
+              {/* Shadow layer 2 */}
+              <img 
+                src={jbjMonogramLightTransparent} 
+                alt="" 
+                aria-hidden="true"
+                className="absolute h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto opacity-[0.12] blur-[2px] translate-y-2 translate-x-1 pointer-events-none"
+              />
+              {/* Shadow layer 1 - closest */}
+              <img 
+                src={jbjMonogramLightTransparent} 
+                alt="" 
+                aria-hidden="true"
+                className="absolute h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto opacity-[0.15] blur-[1px] translate-y-1 translate-x-0.5 pointer-events-none"
+              />
+              {/* Main logo with subtle lift */}
+              <img 
+                src={jbjMonogramLightTransparent} 
+                alt="JBJ Global Real Estate" 
+                className="relative h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto mb-4 sm:mb-6 drop-shadow-[0_6px_12px_rgba(0,0,0,0.8)] transition-all duration-500 group-hover:drop-shadow-[0_12px_24px_rgba(0,0,0,0.9)]"
+              />
+            </div>
           </Link>
           
-          {/* Company Name with enhanced styling */}
+          {/* Company Name with 3D Text Effect */}
           <h2 
-            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light tracking-[0.12em] sm:tracking-[0.18em] md:tracking-[0.22em] lg:tracking-[0.28em] mb-2 sm:mb-3 md:mb-4 px-2 relative"
+            className="relative text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light tracking-[0.12em] sm:tracking-[0.18em] md:tracking-[0.22em] lg:tracking-[0.28em] mb-2 sm:mb-3 md:mb-4 px-2 transition-all duration-500 hover:scale-[1.01]"
             style={{
               background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 20%, #C8A766 40%, #F5E6C8 60%, #E8D5A3 80%, #D4AF37 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              filter: 'drop-shadow(0 3px 14px rgba(200,167,102,0.25))',
+              textShadow: '0 4px 8px rgba(0,0,0,0.8), 0 8px 16px rgba(0,0,0,0.6), 0 2px 2px rgba(0,0,0,0.9)',
+              filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.7))',
             }}
           >
             JBJ GLOBAL REAL ESTATE
           </h2>
           
-          {/* Decorative tagline */}
+          {/* Tagline with 3D depth */}
           <p 
-            className="text-xs sm:text-sm md:text-base tracking-[0.2em] sm:tracking-[0.3em] uppercase font-medium"
+            className="relative text-xs sm:text-sm md:text-base tracking-[0.2em] sm:tracking-[0.3em] uppercase font-medium transition-all duration-500"
             style={{
-              background: 'linear-gradient(90deg, rgba(200,167,102,0.6) 0%, rgba(245,230,200,0.9) 50%, rgba(200,167,102,0.6) 100%)',
+              background: 'linear-gradient(90deg, rgba(200,167,102,0.7) 0%, rgba(245,230,200,0.95) 50%, rgba(200,167,102,0.7) 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
+              textShadow: '0 3px 6px rgba(0,0,0,0.7), 0 1px 2px rgba(0,0,0,0.9)',
             }}
           >
             Excellence in Real Estate
