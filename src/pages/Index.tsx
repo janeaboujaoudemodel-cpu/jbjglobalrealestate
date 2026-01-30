@@ -215,7 +215,7 @@ const Index = () => {
       <DeveloperPartnersMarquee />
 
       {/* AI HOME FINDER - Premium CTA Section - Centered with equal spacing */}
-      <section className="py-14 md:py-20 bg-black">
+      <section className="py-20 md:py-28 bg-black">
         <div className="container mx-auto px-3 md:px-4">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -270,15 +270,6 @@ const Index = () => {
               </div>
             </Link>
           </motion.div>
-        </div>
-      </section>
-
-      {/* EXPLORE OUR SERVICES - Slideshow Card */}
-      <section className="py-14 md:py-20 bg-black">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <ExploreServicesCard />
-          </div>
         </div>
       </section>
 
@@ -510,7 +501,27 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ADDITIONAL SERVICES GRID - Under Find Your Starting Point */}
+      {/* EXPLORE OUR SERVICES - Slideshow Card with Active Champagne Layer */}
+      <section className="py-14 md:py-24 bg-black">
+        <div className="jj-layer-2">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-8 md:mb-12"
+          >
+            <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-semibold shadow-md mb-4">
+              <Sparkles className="w-2.5 h-2.5 md:w-3 md:h-3 text-gold" />
+              <span className="text-black">Our Services</span>
+            </span>
+          </motion.div>
+          <div className="max-w-5xl mx-auto">
+            <ExploreServicesCard />
+          </div>
+        </div>
+      </section>
+
+      {/* ADDITIONAL SERVICES GRID - Under Explore Services */}
       <section className="py-14 md:py-20 bg-black">
         <div className="container mx-auto px-4">
           <motion.div
