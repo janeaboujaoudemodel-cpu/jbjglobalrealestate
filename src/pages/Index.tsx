@@ -11,6 +11,9 @@ import BrokerOnboardingBanner from "@/components/BrokerOnboardingBanner";
 import InquiryFormModal from "@/components/InquiryFormModal";
 import BestIdeaAward from "@/components/BestIdeaAward";
 import SupportTicketBox from "@/components/SupportTicketBox";
+import ExploreServicesCard from "@/components/home/ExploreServicesCard";
+import AdditionalServicesGrid from "@/components/home/AdditionalServicesGrid";
+import JBJPodcastSection from "@/components/home/JBJPodcastSection";
 
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -48,8 +51,8 @@ const Index = () => {
       
       {/* Broker Onboarding Banner - Only for brokers */}
       {isBroker && <BrokerOnboardingBanner />}
-      {/* HERO SECTION - LUXURY CINEMATIC VIDEO */}
-      <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* HERO SECTION - LUXURY CINEMATIC VIDEO - MUST BE 100vh */}
+      <div className="relative h-screen min-h-screen flex items-center justify-center overflow-hidden">
         {/* Video Background - Luxury Dubai Drone Footage */}
         <div className="absolute inset-0">
           {/* Fallback image - always visible as base layer */}
@@ -270,6 +273,37 @@ const Index = () => {
         </div>
       </section>
 
+      {/* EXPLORE OUR SERVICES - Slideshow Card */}
+      <section className="py-14 md:py-20 bg-black">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <ExploreServicesCard />
+          </div>
+        </div>
+      </section>
+
+      {/* ADDITIONAL SERVICES GRID */}
+      <section className="py-14 md:py-20 bg-black">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-10"
+          >
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+              More <span className="text-gold">Services</span>
+            </h2>
+            <p className="text-zinc-400 max-w-xl mx-auto">
+              Additional tools and services to support your real estate journey
+            </p>
+          </motion.div>
+          <AdditionalServicesGrid />
+        </div>
+      </section>
+
+      {/* JBJ PODCAST SECTION */}
+      <JBJPodcastSection />
 
       {/* WHO IS THIS FOR - Clear Entry Points with Champagne Layer */}
       <section className="pt-12 md:pt-24 pb-8 md:pb-20 bg-black">
