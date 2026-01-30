@@ -683,7 +683,9 @@ const Index = () => {
       </section>
 
       {/* Support Ticket Section */}
-      <SupportTicketBox />
+      <div className="pb-10 md:pb-16">
+        <SupportTicketBox />
+      </div>
 
 
       {/* Footer */}
