@@ -5,96 +5,21 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 
-const SCRIPT_EXCERPTS = [
+const VOICE_SAMPLES = [
   {
-    episode: 1,
-    title: "Why Dubai Became the Capital of Global Investors",
-    lines: [
-      "Dubai didn't grow by accident. It was designed for global capital, clarity, and speed.",
-      "What truly differentiates Dubai is regulatory clarity combined with execution speed.",
-      "From an investor's perspective, Dubai removes friction that exists in most global cities."
-    ]
+    id: 1,
+    title: "Sample 1 — Natural Conversation",
+    instruction: "Speak naturally for 1-2 minutes. Introduce yourself, share your thoughts on any topic, or describe your day. Use your own words."
   },
   {
-    episode: 2,
-    title: "Buying Property Smartly in a Global Market",
-    lines: [
-      "Buying property today isn't about price alone, it's about timing, structure, and intent.",
-      "Most buyers lose money by ignoring market cycles and liquidity.",
-      "Smart investors plan five moves ahead, not one."
-    ]
+    id: 2,
+    title: "Sample 2 — Professional Tone",
+    instruction: "Speak in a professional, confident tone. Read from your own script or speak freely about business, real estate, or investment topics."
   },
   {
-    episode: 3,
-    title: "The Truth About Off-Plan vs Ready Properties",
-    lines: [
-      "Off-plan works when risk is understood, not ignored.",
-      "Liquidity is the conversation most people avoid.",
-      "Different strategies exist for different investor profiles."
-    ]
-  },
-  {
-    episode: 4,
-    title: "How High-Net-Worth Investors Protect Capital",
-    lines: [
-      "Wealth is built by opportunity but preserved by structure.",
-      "Asset allocation quietly determines outcomes.",
-      "Risk is managed, not eliminated."
-    ]
-  },
-  {
-    episode: 5,
-    title: "Golden Visa Strategy Through Real Estate",
-    lines: [
-      "A Golden Visa isn't a lifestyle benefit, it's a strategic tool.",
-      "Residency directly affects financial leverage.",
-      "Mobility has become a modern form of currency."
-    ]
-  },
-  {
-    episode: 6,
-    title: "The Psychology of Successful Investors",
-    lines: [
-      "Emotions are the most expensive mistake in investing.",
-      "Discipline always beats intelligence.",
-      "Long-term thinking separates winners from noise."
-    ]
-  },
-  {
-    episode: 7,
-    title: "Why Secondary Market Deals Matter",
-    lines: [
-      "The best opportunities are rarely advertised.",
-      "Information asymmetry creates real advantage.",
-      "Timing the exit matters as much as the entry."
-    ]
-  },
-  {
-    episode: 8,
-    title: "Luxury Real Estate vs Mass Market Returns",
-    lines: [
-      "Luxury behaves differently during market shifts.",
-      "Scarcity protects long-term value.",
-      "End-users buy emotionally, investors buy structurally."
-    ]
-  },
-  {
-    episode: 9,
-    title: "Mistakes First-Time Investors Always Make",
-    lines: [
-      "Everyone pays tuition in the market.",
-      "Ignoring fundamentals is the biggest error.",
-      "Chasing trends is rarely sustainable."
-    ]
-  },
-  {
-    episode: 10,
-    title: "Building a Global Property Portfolio",
-    lines: [
-      "One country is never enough for real diversification.",
-      "Geographic spread reduces exposure.",
-      "Currency plays a larger role than most realize."
-    ]
+    id: 3,
+    title: "Sample 3 — Expressive Range",
+    instruction: "Show vocal variety — enthusiasm, calmness, emphasis. This helps capture your full voice range for better cloning quality."
   }
 ];
 
@@ -103,13 +28,13 @@ interface Recording {
   blob: Blob;
   url: string;
   duration: number;
-  episodeIndex: number;
+  sampleIndex: number;
 }
 
 const VoiceRecorder = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordings, setRecordings] = useState<Recording[]>([]);
-  const [currentEpisode, setCurrentEpisode] = useState(0);
+  const [currentSample, setCurrentSample] = useState(0);
   const [recordingTime, setRecordingTime] = useState(0);
   const [playingId, setPlayingId] = useState<string | null>(null);
   
@@ -154,7 +79,7 @@ const VoiceRecorder = () => {
           blob,
           url,
           duration,
-          episodeIndex: currentEpisode
+          sampleIndex: currentSample
         };
         
         setRecordings(prev => [...prev, newRecording]);
@@ -175,7 +100,7 @@ const VoiceRecorder = () => {
       console.error("Failed to start recording:", error);
       toast.error("Could not access microphone. Please allow microphone access.");
     }
-  }, [currentEpisode]);
+  }, [currentSample]);
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && isRecording) {
@@ -231,7 +156,7 @@ const VoiceRecorder = () => {
     for (const recording of recordings) {
       const a = document.createElement('a');
       a.href = recording.url;
-      a.download = `jane-voice-sample-ep${recording.episodeIndex + 1}-${recording.id}.webm`;
+      a.download = `jane-voice-sample-${recording.sampleIndex + 1}-${recording.id}.webm`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -241,7 +166,7 @@ const VoiceRecorder = () => {
   };
 
   const totalDuration = getTotalDuration();
-  const progressPercent = Math.min((totalDuration / 180) * 100, 100); // Target: 3 minutes
+  const progressPercent = Math.min((totalDuration / 180) * 100, 100);
 
   return (
     <Card className="bg-zinc-900 border-zinc-800">
@@ -251,7 +176,7 @@ const VoiceRecorder = () => {
           Voice Cloning Recorder
         </CardTitle>
         <CardDescription className="text-zinc-400">
-          Record yourself reading podcast scripts for ElevenLabs voice cloning. 
+          Record your voice for ElevenLabs voice cloning. Use your own script or speak freely.
           Target: 3+ minutes of clear speech.
         </CardDescription>
       </CardHeader>
@@ -273,30 +198,31 @@ const VoiceRecorder = () => {
           )}
         </div>
 
-        {/* Script to read */}
+        {/* Sample selector */}
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <span className="text-sm text-zinc-400">Currently reading:</span>
+            <span className="text-sm text-zinc-400">Voice Sample Type:</span>
             <select
-              value={currentEpisode}
-              onChange={(e) => setCurrentEpisode(Number(e.target.value))}
+              value={currentSample}
+              onChange={(e) => setCurrentSample(Number(e.target.value))}
               className="bg-zinc-800 border border-zinc-700 rounded px-2 py-1 text-sm text-white"
             >
-              {SCRIPT_EXCERPTS.map((ep, i) => (
-                <option key={i} value={i}>Episode {ep.episode}: {ep.title}</option>
+              {VOICE_SAMPLES.map((sample, i) => (
+                <option key={i} value={i}>{sample.title}</option>
               ))}
             </select>
           </div>
           
           <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4 space-y-3">
             <h4 className="text-gold font-medium text-sm">
-              Episode {SCRIPT_EXCERPTS[currentEpisode].episode} Script
+              {VOICE_SAMPLES[currentSample].title}
             </h4>
-            {SCRIPT_EXCERPTS[currentEpisode].lines.map((line, i) => (
-              <p key={i} className="text-white text-lg leading-relaxed">
-                "{line}"
-              </p>
-            ))}
+            <p className="text-white text-lg leading-relaxed">
+              {VOICE_SAMPLES[currentSample].instruction}
+            </p>
+            <p className="text-zinc-500 text-sm italic">
+              This recording will be used exclusively for voice cloning. Speak in your natural voice.
+            </p>
           </div>
         </div>
 
@@ -353,7 +279,7 @@ const VoiceRecorder = () => {
                     </Button>
                     <div>
                       <p className="text-white text-sm">
-                        Episode {recording.episodeIndex + 1} Sample
+                        {VOICE_SAMPLES[recording.sampleIndex]?.title || `Sample ${recording.sampleIndex + 1}`}
                       </p>
                       <p className="text-zinc-500 text-xs">
                         {formatTime(recording.duration)}
@@ -392,7 +318,7 @@ const VoiceRecorder = () => {
             <li>Record in a quiet room with minimal echo</li>
             <li>Speak naturally at your normal pace</li>
             <li>Keep consistent distance from microphone</li>
-            <li>Read all 3 episodes for variety</li>
+            <li>Use your own script — this is for voice cloning only</li>
             <li>Aim for 3+ minutes total for best voice cloning results</li>
           </ul>
         </div>
