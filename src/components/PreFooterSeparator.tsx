@@ -43,13 +43,13 @@ export const PreFooterSeparator = ({
   }
 
   return (
-    <section className="bg-black py-10 sm:py-14 md:py-16 lg:py-20">
+    <section className="py-10 sm:py-14 md:py-16 lg:py-20">
       <div className="container mx-auto px-3 sm:px-4 md:px-6">
         <div className="max-w-[1200px] mx-auto">
-          {/* OUTER CARD (Active Champagne) - Thin black contour visible at edges */}
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8">
-            {/* INNER CARD (Pearl) - Smaller for balance */}
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center">
+          {/* OUTER CARD (Active Champagne) - Matching other page sections */}
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 lg:p-12">
+            {/* INNER CARD (Pearl) */}
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10 lg:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center">
               {badgeText && (
                 <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F5F0E6] to-gold/20 border border-gold/50 rounded-full text-black text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20">
                   <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gold" />
