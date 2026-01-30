@@ -300,52 +300,54 @@ All colors MUST be HSL.
    * Uses 100dvh for mobile browser chrome support with 100vh fallback.
    * ============================================================ */
   .jj-hero-fullscreen {
-    /* Hero must fill entire viewport INCLUDING the space behind the fixed header */
-    /* Height includes the header overlap, so hero bottom aligns with viewport bottom */
-    height: calc(100vh + 6rem) !important;
-    min-height: calc(100vh + 6rem) !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-    /* Pull content up behind the header */
-    margin-top: -6rem;
-    /* Add padding so content doesn't hide behind header */
-    padding-top: 6rem;
+    /* Hero must fill exactly 1 viewport on load (100vh/100dvh).
+       IMPORTANT: Do NOT use negative margins here — they can make scrollY non-zero
+       at the visual “top”, which forces the header into its solid (black) state. */
+    height: 100vh;
+    min-height: 100vh;
+    box-sizing: border-box;
+
+    /* Reserve space so hero CONTENT never collides with the fixed header,
+       without affecting scroll position. Use symmetric padding so vertical
+       centering stays visually centered. */
+    padding-top: calc(6rem + env(safe-area-inset-top));
+    padding-bottom: calc(6rem + env(safe-area-inset-bottom));
   }
 
   @media (min-width: 640px) {
     .jj-hero-fullscreen {
-      height: calc(100vh + 7rem) !important;
-      min-height: calc(100vh + 7rem) !important;
-      margin-top: -7rem;
-      padding-top: 7rem;
+      height: 100vh;
+      min-height: 100vh;
+      padding-top: calc(7rem + env(safe-area-inset-top));
+      padding-bottom: calc(7rem + env(safe-area-inset-bottom));
     }
   }
 
   @media (min-width: 1024px) {
     .jj-hero-fullscreen {
-      height: calc(100vh + 8rem) !important;
-      min-height: calc(100vh + 8rem) !important;
-      margin-top: -8rem;
-      padding-top: 8rem;
+      height: 100vh;
+      min-height: 100vh;
+      padding-top: calc(8rem + env(safe-area-inset-top));
+      padding-bottom: calc(8rem + env(safe-area-inset-bottom));
     }
   }
 
   /* Modern browsers with dvh support */
   @supports (height: 100dvh) {
     .jj-hero-fullscreen {
-      height: calc(100dvh + 6rem) !important;
-      min-height: calc(100dvh + 6rem) !important;
+      height: 100dvh;
+      min-height: 100dvh;
     }
     @media (min-width: 640px) {
       .jj-hero-fullscreen {
-        height: calc(100dvh + 7rem) !important;
-        min-height: calc(100dvh + 7rem) !important;
+        height: 100dvh;
+        min-height: 100dvh;
       }
     }
     @media (min-width: 1024px) {
       .jj-hero-fullscreen {
-        height: calc(100dvh + 8rem) !important;
-        min-height: calc(100dvh + 8rem) !important;
+        height: 100dvh;
+        min-height: 100dvh;
       }
     }
   }
