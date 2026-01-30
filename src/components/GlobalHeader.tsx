@@ -152,7 +152,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
   // Services dropdown
   const servicesLinks = [
-    { href: "/services", label: t('header.allServices') || "Explore All Services", icon: Briefcase },
+    { href: "/services", label: "Explore Our Services", icon: Briefcase },
     { href: "/services/buying-advisory", label: t('header.buyingAdvisory') || "Buying Advisory", icon: UserCircle },
     { href: "/services/selling-advisory", label: t('header.sellingAdvisory') || "Selling Advisory", icon: ClipboardCheck },
     { href: "/services/rental-advisory", label: t('header.rentalAdvisory') || "Rental Advisory", icon: Building2 },
