@@ -43,7 +43,7 @@ const AreaDetail = () => {
       />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen h-screen flex items-end overflow-hidden">
+      <section className="jj-hero-fullscreen relative flex items-end overflow-hidden">
         <div className="absolute inset-0">
           <img 
             src={area.heroImage} 

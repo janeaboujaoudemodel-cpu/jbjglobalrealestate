@@ -95,7 +95,7 @@ const Architecture = () => {
       />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen h-screen flex items-center overflow-hidden">
+      <section className="jj-hero-fullscreen relative flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <img 
             src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&q=80" 

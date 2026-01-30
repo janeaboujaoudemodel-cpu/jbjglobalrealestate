@@ -239,7 +239,7 @@ export default function ReportAccess() {
   return (
     <div className="min-h-screen bg-black">
       {/* Premium Video Hero Section */}
-      <section className="relative min-h-screen h-screen flex items-center justify-center overflow-hidden">
+      <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         {/* Video Background */}
         <div className="absolute inset-0">
           <video 

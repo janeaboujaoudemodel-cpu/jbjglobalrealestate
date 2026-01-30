@@ -111,7 +111,7 @@ const MarketIntelligence = () => {
       />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen h-screen flex items-center overflow-hidden">
+      <section className="jj-hero-fullscreen relative flex items-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 via-black to-black" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/5 via-transparent to-transparent" />
         

@@ -35,7 +35,7 @@ export const FAQHero = ({
   actions 
 }: FAQHeroProps) => {
   return (
-    <section className="relative min-h-screen h-screen flex items-center overflow-hidden">
+    <section className="jj-hero-fullscreen relative flex items-center overflow-hidden">
       {/* Video Background */}
       {videoUrl && (
         <div className="absolute inset-0 overflow-hidden">
