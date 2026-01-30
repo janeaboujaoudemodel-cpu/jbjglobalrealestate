@@ -12,7 +12,7 @@ import InquiryFormModal from "@/components/InquiryFormModal";
 import BestIdeaAward from "@/components/BestIdeaAward";
 import SupportTicketBox from "@/components/SupportTicketBox";
 import ExploreServicesCard from "@/components/home/ExploreServicesCard";
-import AdditionalServicesGrid from "@/components/home/AdditionalServicesGrid";
+
 import JBJPodcastSection from "@/components/home/JBJPodcastSection";
 
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
@@ -214,8 +214,8 @@ const Index = () => {
       {/* DEVELOPER PARTNERS MARQUEE */}
       <DeveloperPartnersMarquee />
 
-      {/* AI HOME FINDER - Premium CTA Section - Centered with equal spacing */}
-      <section className="py-20 md:py-28 bg-black">
+      {/* AI HOME FINDER - Premium CTA Section - Exact center between Developers and Find Your Starting Point */}
+      <section className="py-16 md:py-24 bg-black">
         <div className="container mx-auto px-3 md:px-4">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -273,10 +273,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Additional Services moved below Find Your Starting Point */}
-
       {/* WHO IS THIS FOR - Clear Entry Points with Champagne Layer */}
-      <section className="pt-12 md:pt-24 pb-8 md:pb-20 bg-black">
+      <section className="pt-12 md:pt-20 pb-8 md:pb-16 bg-black">
         <div className="jj-layer-2">
           <div className="text-center mb-6 md:mb-10">
             <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-semibold shadow-md">
@@ -521,28 +519,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ADDITIONAL SERVICES GRID - Under Explore Services */}
-      <section className="py-14 md:py-20 bg-black">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-10"
-          >
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
-              More <span className="text-gold">Services</span>
-            </h2>
-            <p className="text-zinc-400 max-w-xl mx-auto">
-              Additional tools and services to support your real estate journey
-            </p>
-          </motion.div>
-          <div className="max-w-5xl mx-auto">
-            <AdditionalServicesGrid />
-          </div>
-        </div>
-      </section>
-
+      {/* Gold Divider */}
       <section className="py-8 md:py-12 bg-black">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center gap-6">

@@ -12,7 +12,12 @@ import {
   MessageCircle,
   ArrowRight,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Scale,
+  Coins,
+  Users,
+  Handshake,
+  Wrench
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -36,11 +41,12 @@ interface ServiceSlide {
   available: boolean;
 }
 
+// All services combined into one slideshow - removed "More Services" separation
 const services: ServiceSlide[] = [
   {
     id: "buy",
     title: "Buy Property",
-    description: "Discover premium properties in Dubai's most sought-after locations",
+    description: "Discover premium properties in Dubai's most sought-after locations with expert guidance",
     icon: Home,
     href: "/properties?transaction=buy",
     bgImage: buyPropertyBg,
@@ -49,7 +55,7 @@ const services: ServiceSlide[] = [
   {
     id: "sell",
     title: "Sell Your Property",
-    description: "Maximize your property's value with our expert selling services",
+    description: "Maximize your property's value with our expert selling services and market insights",
     icon: Tag,
     href: "/seller-listing",
     bgImage: sellPropertyBg,
@@ -58,7 +64,7 @@ const services: ServiceSlide[] = [
   {
     id: "rent",
     title: "Rent a Property",
-    description: "Find your perfect rental home in Dubai's best neighborhoods",
+    description: "Find your perfect rental home in Dubai's best neighborhoods with personalized support",
     icon: Key,
     href: "/properties?transaction=rent",
     bgImage: rentPropertyBg,
@@ -67,7 +73,7 @@ const services: ServiceSlide[] = [
   {
     id: "list-rent",
     title: "List Your Property for Rent",
-    description: "Connect with qualified tenants through our extensive network",
+    description: "Connect with qualified tenants through our extensive network and premium marketing",
     icon: Building2,
     href: "/landlord-listing",
     bgImage: listRentalBg,
@@ -76,7 +82,7 @@ const services: ServiceSlide[] = [
   {
     id: "golden-visa",
     title: "Get Your Golden Visa",
-    description: "Secure UAE residency through strategic real estate investment",
+    description: "Secure UAE residency through strategic real estate investment with expert assistance",
     icon: Globe,
     href: "/guides/golden-visa-uae",
     bgImage: goldenVisaBg,
@@ -85,7 +91,7 @@ const services: ServiceSlide[] = [
   {
     id: "mortgage",
     title: "Mortgage Inquiries",
-    description: "Calculate payments and connect with top mortgage providers",
+    description: "Calculate payments and connect with top mortgage providers for the best rates",
     icon: Calculator,
     href: "/mortgage-calculator",
     bgImage: mortgageBg,
@@ -94,7 +100,7 @@ const services: ServiceSlide[] = [
   {
     id: "passport",
     title: "Buy Passport & Schengen Visa",
-    description: "Explore citizenship and visa programs through our partners",
+    description: "Explore citizenship and visa programs through our trusted partner network",
     icon: Plane,
     href: "/services/citizenship",
     bgImage: passportVisaBg,
@@ -103,11 +109,48 @@ const services: ServiceSlide[] = [
   {
     id: "inquiries",
     title: "General Inquiries",
-    description: "Get answers to all your real estate questions",
+    description: "Get answers to all your real estate questions from our expert team",
     icon: MessageCircle,
     href: "/contact",
     bgImage: generalInquiriesBg,
     available: true
+  },
+  // Additional services merged into main slideshow
+  {
+    id: "compare",
+    title: "Compare Your Property",
+    description: "Side-by-side analysis of multiple properties with AI-powered insights",
+    icon: Scale,
+    href: "/compare",
+    bgImage: buyPropertyBg,
+    available: true
+  },
+  {
+    id: "evaluation",
+    title: "Get Property Evaluation",
+    description: "AI-powered property valuation tool for accurate market assessments",
+    icon: Calculator,
+    href: "/property-evaluator",
+    bgImage: sellPropertyBg,
+    available: true
+  },
+  {
+    id: "partner",
+    title: "Partner Introduction",
+    description: "Connect with our network of trusted legal, financial, and service partners",
+    icon: Handshake,
+    href: "/partners",
+    bgImage: generalInquiriesBg,
+    available: true
+  },
+  {
+    id: "facility",
+    title: "Facility Management",
+    description: "Property maintenance and management services for property owners",
+    icon: Wrench,
+    href: "/services/facility-management",
+    bgImage: rentPropertyBg,
+    available: false
   }
 ];
 
@@ -150,7 +193,7 @@ const ExploreServicesCard = () => {
         <p className="text-sm md:text-base text-zinc-600 mt-1">Premium real estate solutions tailored to your needs</p>
       </div>
 
-      {/* Slideshow Content - Larger height with image background */}
+      {/* Slideshow Content - Large height with image background */}
       <div 
         className="relative h-80 md:h-[420px] lg:h-[480px]"
         onMouseEnter={() => setIsAutoPlaying(false)}
@@ -176,15 +219,24 @@ const ExploreServicesCard = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
             </div>
 
-            {/* Content on top of image */}
+            {/* Content on top of image - NO ICON BOX */}
             <div className="relative z-10 p-6 md:p-10">
-              <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl md:rounded-2xl bg-black/80 border-2 border-gold/60 flex items-center justify-center mb-4 md:mb-6 shadow-lg backdrop-blur-sm">
-                <currentService.icon className="w-8 h-8 md:w-10 md:h-10 text-gold" />
-              </div>
-              <h4 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-2 md:mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              {/* Premium Title with gradient */}
+              <h4 
+                className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4" 
+                style={{ 
+                  fontFamily: "Poppins, sans-serif",
+                  background: 'linear-gradient(135deg, #FFFFFF 0%, #F5EBD7 50%, #C8A766 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                }}
+              >
                 {currentService.title}
               </h4>
-              <p className="text-zinc-200 text-sm md:text-lg max-w-lg mb-4 md:mb-6">
+              
+              {/* Premium description */}
+              <p className="text-zinc-200 text-sm md:text-lg max-w-lg mb-5 md:mb-6 leading-relaxed">
                 {currentService.description}
               </p>
 
@@ -192,16 +244,19 @@ const ExploreServicesCard = () => {
                 {currentService.available ? (
                   <Link to={currentService.href}>
                     <Button 
-                      className="bg-gold hover:bg-gold-dark text-black font-semibold gap-2 group px-6 py-3 text-sm md:text-base"
+                      className="bg-gradient-to-r from-gold via-gold to-gold-dark hover:from-gold-dark hover:to-gold text-black font-bold gap-2 group px-8 py-4 text-sm md:text-base rounded-lg shadow-[0_4px_20px_rgba(200,167,102,0.5)] hover:shadow-[0_6px_30px_rgba(200,167,102,0.7)] transition-all duration-300"
+                      style={{
+                        border: '1px solid rgba(255,255,255,0.2)',
+                      }}
                     >
-                      Explore
+                      <span className="tracking-wide">Explore Now</span>
                       <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
                     </Button>
                   </Link>
                 ) : (
                   <Button 
                     disabled
-                    className="bg-zinc-500 text-white cursor-not-allowed gap-2 px-6 py-3"
+                    className="bg-zinc-600/80 text-zinc-300 cursor-not-allowed gap-2 px-8 py-4 rounded-lg"
                   >
                     Coming Soon
                   </Button>
@@ -211,13 +266,13 @@ const ExploreServicesCard = () => {
                 <div className="flex items-center gap-3">
                   <button
                     onClick={goToPrevious}
-                    className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/10 hover:bg-white/30 backdrop-blur-sm flex items-center justify-center transition-all border border-white/20"
+                    className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/10 hover:bg-gold/30 backdrop-blur-sm flex items-center justify-center transition-all border border-white/20 hover:border-gold/50"
                   >
                     <ChevronLeft className="w-6 h-6 md:w-7 md:h-7 text-white" />
                   </button>
                   <button
                     onClick={goToNext}
-                    className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/10 hover:bg-white/30 backdrop-blur-sm flex items-center justify-center transition-all border border-white/20"
+                    className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/10 hover:bg-gold/30 backdrop-blur-sm flex items-center justify-center transition-all border border-white/20 hover:border-gold/50"
                   >
                     <ChevronRight className="w-6 h-6 md:w-7 md:h-7 text-white" />
                   </button>
@@ -228,16 +283,16 @@ const ExploreServicesCard = () => {
         </AnimatePresence>
       </div>
 
-      {/* Dots Navigation */}
-      <div className="flex items-center justify-center gap-2 md:gap-3 py-5 md:py-6 border-t border-gold/30 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+      {/* Dots Navigation - Simple gold dots, no elongation/merging */}
+      <div className="flex items-center justify-center gap-2 md:gap-2.5 py-5 md:py-6 border-t border-gold/30 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
         {services.map((service, index) => (
           <button
             key={service.id}
             onClick={() => goToSlide(index)}
-            className={`h-2.5 md:h-3 rounded-full transition-all duration-300 ${
+            className={`w-2.5 h-2.5 md:w-3 md:h-3 rounded-full transition-all duration-300 ${
               index === currentIndex 
-                ? "bg-gold w-8 md:w-10" 
-                : "bg-black/30 hover:bg-black/50 w-2.5 md:w-3"
+                ? "bg-gold shadow-[0_0_8px_rgba(200,167,102,0.8)]" 
+                : "bg-black/20 hover:bg-black/40"
             }`}
             aria-label={`Go to ${service.title}`}
           />

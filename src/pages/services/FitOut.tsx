@@ -98,7 +98,7 @@ const FitOut = () => {
       />
 
       {/* Hero Section - Bright Video Background */}
-      <section className="relative min-h-[60vh] flex items-center overflow-hidden">
+      <section className="relative min-h-screen h-screen flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <video
             autoPlay
