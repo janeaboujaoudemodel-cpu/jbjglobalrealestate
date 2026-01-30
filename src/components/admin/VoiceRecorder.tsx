@@ -32,6 +32,69 @@ const SCRIPT_EXCERPTS = [
       "Liquidity is the conversation most people avoid.",
       "Different strategies exist for different investor profiles."
     ]
+  },
+  {
+    episode: 4,
+    title: "How High-Net-Worth Investors Protect Capital",
+    lines: [
+      "Wealth is built by opportunity but preserved by structure.",
+      "Asset allocation quietly determines outcomes.",
+      "Risk is managed, not eliminated."
+    ]
+  },
+  {
+    episode: 5,
+    title: "Golden Visa Strategy Through Real Estate",
+    lines: [
+      "A Golden Visa isn't a lifestyle benefit, it's a strategic tool.",
+      "Residency directly affects financial leverage.",
+      "Mobility has become a modern form of currency."
+    ]
+  },
+  {
+    episode: 6,
+    title: "The Psychology of Successful Investors",
+    lines: [
+      "Emotions are the most expensive mistake in investing.",
+      "Discipline always beats intelligence.",
+      "Long-term thinking separates winners from noise."
+    ]
+  },
+  {
+    episode: 7,
+    title: "Why Secondary Market Deals Matter",
+    lines: [
+      "The best opportunities are rarely advertised.",
+      "Information asymmetry creates real advantage.",
+      "Timing the exit matters as much as the entry."
+    ]
+  },
+  {
+    episode: 8,
+    title: "Luxury Real Estate vs Mass Market Returns",
+    lines: [
+      "Luxury behaves differently during market shifts.",
+      "Scarcity protects long-term value.",
+      "End-users buy emotionally, investors buy structurally."
+    ]
+  },
+  {
+    episode: 9,
+    title: "Mistakes First-Time Investors Always Make",
+    lines: [
+      "Everyone pays tuition in the market.",
+      "Ignoring fundamentals is the biggest error.",
+      "Chasing trends is rarely sustainable."
+    ]
+  },
+  {
+    episode: 10,
+    title: "Building a Global Property Portfolio",
+    lines: [
+      "One country is never enough for real diversification.",
+      "Geographic spread reduces exposure.",
+      "Currency plays a larger role than most realize."
+    ]
   }
 ];
 
