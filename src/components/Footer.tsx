@@ -235,19 +235,20 @@ const Footer = () => {
           <div 
             className="w-full max-w-7xl mx-auto mb-8 sm:mb-10 md:mb-12 lg:mb-14 rounded-2xl sm:rounded-3xl relative overflow-hidden"
             style={{
-              background: 'linear-gradient(165deg, rgba(38,38,42,0.98) 0%, rgba(28,28,32,0.99) 40%, rgba(24,24,28,1) 100%)',
+              background: 'linear-gradient(165deg, rgba(12,12,14,0.99) 0%, rgba(8,8,10,1) 40%, rgba(4,4,6,1) 100%)',
               boxShadow: `
-                0 50px 100px -30px rgba(0,0,0,0.95),
-                0 30px 60px -20px rgba(0,0,0,0.8),
-                0 0 0 1px rgba(200,167,102,0.3),
-                inset 0 2px 0 rgba(255,255,255,0.08),
-                inset 0 -2px 0 rgba(0,0,0,0.5)
+                0 50px 100px -30px rgba(0,0,0,0.98),
+                0 30px 60px -20px rgba(0,0,0,0.9),
+                0 0 0 2px rgba(200,167,102,0.5),
+                0 0 40px rgba(200,167,102,0.15),
+                inset 0 1px 0 rgba(200,167,102,0.15),
+                inset 0 -1px 0 rgba(0,0,0,0.8)
               `,
             }}
           >
             {/* Outer Gold Border Ring */}
-            <div className="absolute inset-0 rounded-2xl sm:rounded-3xl border-2 border-gold/40 pointer-events-none" />
-            <div className="absolute inset-[3px] rounded-2xl sm:rounded-3xl border border-gold/20 pointer-events-none" />
+            <div className="absolute inset-0 rounded-2xl sm:rounded-3xl border-2 border-gold/50 pointer-events-none" />
+            <div className="absolute inset-[3px] rounded-2xl sm:rounded-3xl border border-gold/25 pointer-events-none" />
             
             {/* Animated Shimmer Sweep */}
             <div 
@@ -370,9 +371,9 @@ const Footer = () => {
               <div 
                 className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl"
                 style={{
-                  background: 'linear-gradient(145deg, rgba(39,39,42,0.6) 0%, rgba(24,24,27,0.8) 100%)',
-                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05), inset 0 -1px 0 rgba(0,0,0,0.2)',
-                  border: '1px solid rgba(200,167,102,0.15)',
+                  background: 'linear-gradient(145deg, rgba(12,12,14,0.95) 0%, rgba(6,6,8,1) 100%)',
+                  boxShadow: 'inset 0 1px 0 rgba(200,167,102,0.1), inset 0 -1px 0 rgba(0,0,0,0.4)',
+                  border: '1px solid rgba(200,167,102,0.3)',
                 }}
               >
                 <SocialLinks variant="glow" iconClassName="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
@@ -398,19 +399,20 @@ const Footer = () => {
           <div 
             className="w-full max-w-7xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden relative"
             style={{
-              background: 'linear-gradient(165deg, rgba(38,38,42,0.98) 0%, rgba(28,28,32,0.99) 40%, rgba(24,24,28,1) 100%)',
+              background: 'linear-gradient(165deg, rgba(12,12,14,0.99) 0%, rgba(8,8,10,1) 40%, rgba(4,4,6,1) 100%)',
               boxShadow: `
-                0 50px 100px -30px rgba(0,0,0,0.95),
-                0 30px 60px -20px rgba(0,0,0,0.8),
-                0 0 0 1px rgba(200,167,102,0.3),
-                inset 0 2px 0 rgba(255,255,255,0.08),
-                inset 0 -2px 0 rgba(0,0,0,0.5)
+                0 50px 100px -30px rgba(0,0,0,0.98),
+                0 30px 60px -20px rgba(0,0,0,0.9),
+                0 0 0 2px rgba(200,167,102,0.5),
+                0 0 40px rgba(200,167,102,0.15),
+                inset 0 1px 0 rgba(200,167,102,0.15),
+                inset 0 -1px 0 rgba(0,0,0,0.8)
               `,
             }}
           >
-            {/* Outer Gold Border Ring */}
-            <div className="absolute inset-0 rounded-2xl sm:rounded-3xl border-2 border-gold/40 pointer-events-none" />
-            <div className="absolute inset-[3px] rounded-2xl sm:rounded-3xl border border-gold/20 pointer-events-none" />
+            {/* Outer Gold Border Ring - Enhanced */}
+            <div className="absolute inset-0 rounded-2xl sm:rounded-3xl border-2 border-gold/50 pointer-events-none" />
+            <div className="absolute inset-[3px] rounded-2xl sm:rounded-3xl border border-gold/25 pointer-events-none" />
             
             {/* Animated Shimmer Sweep */}
             <div 
@@ -755,19 +757,20 @@ const Footer = () => {
           <div 
             className="w-full max-w-7xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden relative"
             style={{
-              background: 'linear-gradient(165deg, rgba(38,38,42,0.98) 0%, rgba(28,28,32,0.99) 40%, rgba(24,24,28,1) 100%)',
+              background: 'linear-gradient(165deg, rgba(12,12,14,0.99) 0%, rgba(8,8,10,1) 40%, rgba(4,4,6,1) 100%)',
               boxShadow: `
-                0 50px 100px -30px rgba(0,0,0,0.95),
-                0 30px 60px -20px rgba(0,0,0,0.8),
-                0 0 0 1px rgba(200,167,102,0.3),
-                inset 0 2px 0 rgba(255,255,255,0.08),
-                inset 0 -2px 0 rgba(0,0,0,0.5)
+                0 50px 100px -30px rgba(0,0,0,0.98),
+                0 30px 60px -20px rgba(0,0,0,0.9),
+                0 0 0 2px rgba(200,167,102,0.5),
+                0 0 40px rgba(200,167,102,0.15),
+                inset 0 1px 0 rgba(200,167,102,0.15),
+                inset 0 -1px 0 rgba(0,0,0,0.8)
               `,
             }}
           >
-          {/* Outer Gold Border Ring */}
-          <div className="absolute inset-0 rounded-2xl sm:rounded-3xl border-2 border-gold/40 pointer-events-none" />
-          <div className="absolute inset-[3px] rounded-2xl sm:rounded-3xl border border-gold/20 pointer-events-none" />
+          {/* Outer Gold Border Ring - Enhanced */}
+          <div className="absolute inset-0 rounded-2xl sm:rounded-3xl border-2 border-gold/50 pointer-events-none" />
+          <div className="absolute inset-[3px] rounded-2xl sm:rounded-3xl border border-gold/25 pointer-events-none" />
           
           {/* Animated Shimmer Sweep */}
           <div 
