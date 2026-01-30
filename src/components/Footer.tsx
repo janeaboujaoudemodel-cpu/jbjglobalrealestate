@@ -170,16 +170,11 @@ const Footer = () => {
           <div className="absolute inset-0 -top-10 bg-gradient-to-b from-gold/3 via-transparent to-transparent blur-2xl pointer-events-none" />
           
           <Link to="/" className="inline-block group relative">
-            <div className="relative">
-              {/* Multi-layer glow effect behind logo */}
-              <div className="absolute inset-0 bg-gold/14 blur-[50px] rounded-full scale-[1.6] opacity-35 group-hover:opacity-50 transition-opacity duration-700" />
-              <div className="absolute inset-0 bg-gold/10 blur-3xl rounded-full scale-[1.25] opacity-25 group-hover:opacity-40 transition-opacity duration-500" />
-              <img 
-                src={jbjMonogramLightTransparent} 
-                alt="JBJ Global Real Estate" 
-                className="relative h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto mb-4 sm:mb-6 drop-shadow-[0_0_18px_rgba(200,167,102,0.28)] group-hover:drop-shadow-[0_0_28px_rgba(200,167,102,0.38)] transition-all duration-500"
-              />
-            </div>
+            <img 
+              src={jbjMonogramLightTransparent} 
+              alt="JBJ Global Real Estate" 
+              className="h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto mb-4 sm:mb-6"
+            />
           </Link>
           
           {/* Company Name with enhanced styling */}
