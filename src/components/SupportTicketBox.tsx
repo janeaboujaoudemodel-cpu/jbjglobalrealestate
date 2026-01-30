@@ -260,9 +260,9 @@ const SupportTicketBox = () => {
   };
 
   return (
-    <section className="py-16 md:py-20 bg-black">
-      {/* Active Champagne Section Layer with proper gutter */}
-      <div className="jj-layer-2 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-10">
+    <section className="py-10 md:py-16">
+      {/* Two-layer system only: Active Champagne (jj-layer-2) + Pearl card */}
+      <div className="jj-layer-2">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -727,7 +727,7 @@ const SupportTicketBox = () => {
             </div>
           </div>
         </motion.div>
-        </div>
+      </div>
     </section>
   );
 };

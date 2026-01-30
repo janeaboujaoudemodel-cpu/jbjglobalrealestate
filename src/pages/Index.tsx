@@ -683,13 +683,7 @@ const Index = () => {
       </section>
 
       {/* Support Ticket Section */}
-      <section className="py-10 md:py-16 bg-black">
-        <div className="jj-layer-2">
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 md:border-2 rounded-xl md:rounded-3xl p-4 md:p-12 shadow-xl">
-            <SupportTicketBox />
-          </div>
-        </div>
-      </section>
+      <SupportTicketBox />
 
 
       {/* Footer */}
