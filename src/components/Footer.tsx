@@ -168,9 +168,8 @@ const Footer = () => {
       {/* Full-width footer content */}
       <div className="relative w-full py-8 sm:py-12 md:py-16 lg:py-20 px-3 sm:px-4 md:px-6 lg:px-8 bg-black">
         
-        {/* ULTRA PREMIUM Logo + Company Name Section - Pure Black - symmetric spacing */}
-        {/* Same spacing above (divider→logo) and below (tagline→card): py-6 sm:py-8 */}
-        <div className="text-center mb-6 sm:mb-8 relative pt-6 sm:pt-8 pb-6 sm:pb-8 bg-black">
+        {/* ULTRA PREMIUM Logo + Company Name Section - Pure Black - centered between divider and Stay in the Loop */}
+        <div className="flex flex-col items-center justify-center text-center mb-8 sm:mb-10 relative py-8 sm:py-10 md:py-12 bg-black">
           {/* Pure black background */}
           <div className="absolute inset-0 bg-black pointer-events-none" />
           
