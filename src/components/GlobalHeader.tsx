@@ -35,6 +35,7 @@ import { useIsTouchLayout } from "@/hooks/use-touch-layout";
 import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
 import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
+import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 
 interface GlobalHeaderProps {
   forceSolid?: boolean;
@@ -328,11 +329,13 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 }}
               />
               <img 
-                src={jbjMonogramDarkBg} 
+                src={isFullyTransparent ? jbjMonogramLightTransparent : jbjMonogramDarkBg} 
                 alt="JBJ" 
                 className="w-12 h-12 md:w-14 md:h-14 xl:w-16 xl:h-16 object-contain relative z-10"
                 style={{
-                  filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5)) drop-shadow(0 0 20px rgba(200,167,102,0.15))'
+                  filter: isFullyTransparent 
+                    ? 'drop-shadow(0 4px 12px rgba(0,0,0,0.6))' 
+                    : 'drop-shadow(0 4px 8px rgba(0,0,0,0.5)) drop-shadow(0 0 20px rgba(200,167,102,0.15))'
                 }}
               />
             </div>
