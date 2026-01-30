@@ -52,7 +52,7 @@ const Index = () => {
       {/* Broker Onboarding Banner - Only for brokers */}
       {isBroker && <BrokerOnboardingBanner />}
       {/* HERO SECTION - LUXURY CINEMATIC VIDEO - MUST BE 100vh */}
-      <div className="relative h-screen min-h-screen flex items-center justify-center overflow-hidden">
+      <div className="relative min-h-screen h-screen flex items-center justify-center overflow-hidden" style={{ height: '100vh', minHeight: '100vh' }}>
         {/* Video Background - Luxury Dubai Drone Footage */}
         <div className="absolute inset-0">
           {/* Fallback image - always visible as base layer */}
