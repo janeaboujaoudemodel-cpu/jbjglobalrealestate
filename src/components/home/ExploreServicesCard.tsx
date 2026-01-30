@@ -16,13 +16,23 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+// Import service background images
+import buyPropertyBg from "@/assets/services/buy-property-bg.jpg";
+import sellPropertyBg from "@/assets/services/sell-property-bg.jpg";
+import rentPropertyBg from "@/assets/services/rent-property-bg.jpg";
+import listRentalBg from "@/assets/services/list-rental-bg.jpg";
+import goldenVisaBg from "@/assets/services/golden-visa-bg.jpg";
+import mortgageBg from "@/assets/services/mortgage-bg.jpg";
+import passportVisaBg from "@/assets/services/passport-visa-bg.jpg";
+import generalInquiriesBg from "@/assets/services/general-inquiries-bg.jpg";
+
 interface ServiceSlide {
   id: string;
   title: string;
   description: string;
   icon: React.ElementType;
   href: string;
-  gradient: string;
+  bgImage: string;
   available: boolean;
 }
 
@@ -33,7 +43,7 @@ const services: ServiceSlide[] = [
     description: "Discover premium properties in Dubai's most sought-after locations",
     icon: Home,
     href: "/properties?transaction=buy",
-    gradient: "from-emerald-500/20 to-emerald-600/10",
+    bgImage: buyPropertyBg,
     available: true
   },
   {
@@ -42,7 +52,7 @@ const services: ServiceSlide[] = [
     description: "Maximize your property's value with our expert selling services",
     icon: Tag,
     href: "/seller-listing",
-    gradient: "from-blue-500/20 to-blue-600/10",
+    bgImage: sellPropertyBg,
     available: true
   },
   {
@@ -51,7 +61,7 @@ const services: ServiceSlide[] = [
     description: "Find your perfect rental home in Dubai's best neighborhoods",
     icon: Key,
     href: "/properties?transaction=rent",
-    gradient: "from-purple-500/20 to-purple-600/10",
+    bgImage: rentPropertyBg,
     available: true
   },
   {
@@ -60,7 +70,7 @@ const services: ServiceSlide[] = [
     description: "Connect with qualified tenants through our extensive network",
     icon: Building2,
     href: "/landlord-listing",
-    gradient: "from-orange-500/20 to-orange-600/10",
+    bgImage: listRentalBg,
     available: true
   },
   {
@@ -69,7 +79,7 @@ const services: ServiceSlide[] = [
     description: "Secure UAE residency through strategic real estate investment",
     icon: Globe,
     href: "/guides/golden-visa-uae",
-    gradient: "from-gold/20 to-gold/10",
+    bgImage: goldenVisaBg,
     available: true
   },
   {
@@ -78,7 +88,7 @@ const services: ServiceSlide[] = [
     description: "Calculate payments and connect with top mortgage providers",
     icon: Calculator,
     href: "/mortgage-calculator",
-    gradient: "from-cyan-500/20 to-cyan-600/10",
+    bgImage: mortgageBg,
     available: true
   },
   {
@@ -87,8 +97,8 @@ const services: ServiceSlide[] = [
     description: "Explore citizenship and visa programs through our partners",
     icon: Plane,
     href: "/services/citizenship",
-    gradient: "from-rose-500/20 to-rose-600/10",
-    available: false // Page doesn't exist yet
+    bgImage: passportVisaBg,
+    available: false
   },
   {
     id: "inquiries",
@@ -96,7 +106,7 @@ const services: ServiceSlide[] = [
     description: "Get answers to all your real estate questions",
     icon: MessageCircle,
     href: "/contact",
-    gradient: "from-indigo-500/20 to-indigo-600/10",
+    bgImage: generalInquiriesBg,
     available: true
   }
 ];
@@ -131,18 +141,18 @@ const ExploreServicesCard = () => {
   const currentService = services[currentIndex];
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)]">
+    <div className="relative overflow-hidden rounded-2xl md:rounded-3xl border-2 border-gold/50 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_12px_40px_rgba(200,167,102,0.45),0_6px_20px_rgba(0,0,0,0.2)]">
       {/* Header */}
-      <div className="px-6 py-4 border-b border-gold/20">
-        <h3 className="text-xl md:text-2xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+      <div className="px-6 md:px-8 py-5 md:py-6 border-b border-gold/30 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+        <h3 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
           Explore Our Services
         </h3>
-        <p className="text-sm text-zinc-600 mt-1">Premium real estate solutions tailored to your needs</p>
+        <p className="text-sm md:text-base text-zinc-600 mt-1">Premium real estate solutions tailored to your needs</p>
       </div>
 
-      {/* Slideshow Content */}
+      {/* Slideshow Content - Larger height with image background */}
       <div 
-        className="relative h-64 md:h-72"
+        className="relative h-80 md:h-[420px] lg:h-[480px]"
         onMouseEnter={() => setIsAutoPlaying(false)}
         onMouseLeave={() => setIsAutoPlaying(true)}
       >
@@ -153,53 +163,65 @@ const ExploreServicesCard = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -50 }}
             transition={{ duration: 0.4 }}
-            className={`absolute inset-0 p-6 md:p-8 flex flex-col justify-between bg-gradient-to-br ${currentService.gradient}`}
+            className="absolute inset-0 flex flex-col justify-end"
           >
-            <div>
-              <div className="w-14 h-14 rounded-xl bg-black/90 border border-gold/40 flex items-center justify-center mb-4 shadow-lg">
-                <currentService.icon className="w-7 h-7 text-gold" />
-              </div>
-              <h4 className="text-2xl md:text-3xl font-bold text-black mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
-                {currentService.title}
-              </h4>
-              <p className="text-zinc-700 text-sm md:text-base max-w-md">
-                {currentService.description}
-              </p>
+            {/* Background Image */}
+            <div className="absolute inset-0">
+              <img 
+                src={currentService.bgImage} 
+                alt={currentService.title}
+                className="w-full h-full object-cover"
+              />
+              {/* Gradient Overlay for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
             </div>
 
-            <div className="flex items-center justify-between">
-              {currentService.available ? (
-                <Link to={currentService.href}>
-                  <Button 
-                    className="bg-black text-white hover:bg-zinc-800 gap-2 group"
-                  >
-                    Explore
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
-              ) : (
-                <Button 
-                  disabled
-                  className="bg-zinc-400 text-white cursor-not-allowed gap-2"
-                >
-                  Coming Soon
-                </Button>
-              )}
+            {/* Content on top of image */}
+            <div className="relative z-10 p-6 md:p-10">
+              <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl md:rounded-2xl bg-black/80 border-2 border-gold/60 flex items-center justify-center mb-4 md:mb-6 shadow-lg backdrop-blur-sm">
+                <currentService.icon className="w-8 h-8 md:w-10 md:h-10 text-gold" />
+              </div>
+              <h4 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-2 md:mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                {currentService.title}
+              </h4>
+              <p className="text-zinc-200 text-sm md:text-lg max-w-lg mb-4 md:mb-6">
+                {currentService.description}
+              </p>
 
-              {/* Navigation Arrows */}
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={goToPrevious}
-                  className="w-10 h-10 rounded-full bg-black/10 hover:bg-black/20 flex items-center justify-center transition-colors"
-                >
-                  <ChevronLeft className="w-5 h-5 text-black" />
-                </button>
-                <button
-                  onClick={goToNext}
-                  className="w-10 h-10 rounded-full bg-black/10 hover:bg-black/20 flex items-center justify-center transition-colors"
-                >
-                  <ChevronRight className="w-5 h-5 text-black" />
-                </button>
+              <div className="flex items-center justify-between">
+                {currentService.available ? (
+                  <Link to={currentService.href}>
+                    <Button 
+                      className="bg-gold hover:bg-gold-dark text-black font-semibold gap-2 group px-6 py-3 text-sm md:text-base"
+                    >
+                      Explore
+                      <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  </Link>
+                ) : (
+                  <Button 
+                    disabled
+                    className="bg-zinc-500 text-white cursor-not-allowed gap-2 px-6 py-3"
+                  >
+                    Coming Soon
+                  </Button>
+                )}
+
+                {/* Navigation Arrows */}
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={goToPrevious}
+                    className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/10 hover:bg-white/30 backdrop-blur-sm flex items-center justify-center transition-all border border-white/20"
+                  >
+                    <ChevronLeft className="w-6 h-6 md:w-7 md:h-7 text-white" />
+                  </button>
+                  <button
+                    onClick={goToNext}
+                    className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/10 hover:bg-white/30 backdrop-blur-sm flex items-center justify-center transition-all border border-white/20"
+                  >
+                    <ChevronRight className="w-6 h-6 md:w-7 md:h-7 text-white" />
+                  </button>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -207,15 +229,15 @@ const ExploreServicesCard = () => {
       </div>
 
       {/* Dots Navigation */}
-      <div className="flex items-center justify-center gap-2 py-4 border-t border-gold/20 bg-black/5">
+      <div className="flex items-center justify-center gap-2 md:gap-3 py-5 md:py-6 border-t border-gold/30 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
         {services.map((service, index) => (
           <button
             key={service.id}
             onClick={() => goToSlide(index)}
-            className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+            className={`h-2.5 md:h-3 rounded-full transition-all duration-300 ${
               index === currentIndex 
-                ? "bg-gold w-6" 
-                : "bg-black/20 hover:bg-black/40"
+                ? "bg-gold w-8 md:w-10" 
+                : "bg-black/30 hover:bg-black/50 w-2.5 md:w-3"
             }`}
             aria-label={`Go to ${service.title}`}
           />
