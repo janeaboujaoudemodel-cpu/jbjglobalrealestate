@@ -282,27 +282,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ADDITIONAL SERVICES GRID */}
-      <section className="py-14 md:py-20 bg-black">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-10"
-          >
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
-              More <span className="text-gold">Services</span>
-            </h2>
-            <p className="text-zinc-400 max-w-xl mx-auto">
-              Additional tools and services to support your real estate journey
-            </p>
-          </motion.div>
-          <div className="max-w-5xl mx-auto">
-            <AdditionalServicesGrid />
-          </div>
-        </div>
-      </section>
+      {/* Additional Services moved below Find Your Starting Point */}
 
       {/* WHO IS THIS FOR - Clear Entry Points with Champagne Layer */}
       <section className="pt-12 md:pt-24 pb-8 md:pb-20 bg-black">
@@ -530,7 +510,28 @@ const Index = () => {
         </div>
       </section>
 
-      {/* DIVIDER BETWEEN SECTIONS */}
+      {/* ADDITIONAL SERVICES GRID - Under Find Your Starting Point */}
+      <section className="py-14 md:py-20 bg-black">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-10"
+          >
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+              More <span className="text-gold">Services</span>
+            </h2>
+            <p className="text-zinc-400 max-w-xl mx-auto">
+              Additional tools and services to support your real estate journey
+            </p>
+          </motion.div>
+          <div className="max-w-5xl mx-auto">
+            <AdditionalServicesGrid />
+          </div>
+        </div>
+      </section>
+
       <section className="py-8 md:py-12 bg-black">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center gap-6">
