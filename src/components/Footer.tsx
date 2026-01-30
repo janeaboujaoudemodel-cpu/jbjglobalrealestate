@@ -177,7 +177,7 @@ const Footer = () => {
               <img 
                 src={jbjMonogramLightTransparent} 
                 alt="JBJ Global Real Estate" 
-                className="relative h-28 sm:h-36 md:h-44 lg:h-52 w-auto object-contain mx-auto mb-4 sm:mb-6 drop-shadow-[0_0_40px_rgba(200,167,102,0.4)] group-hover:drop-shadow-[0_0_60px_rgba(200,167,102,0.6)] transition-all duration-500 group-hover:scale-105"
+                className="relative h-36 sm:h-44 md:h-56 lg:h-64 w-auto object-contain mx-auto mb-4 sm:mb-6 drop-shadow-[0_0_40px_rgba(200,167,102,0.4)] group-hover:drop-shadow-[0_0_60px_rgba(200,167,102,0.6)] transition-all duration-500 group-hover:scale-105"
               />
             </div>
           </Link>
