@@ -18,7 +18,7 @@ import JBJPodcastSection from "@/components/home/JBJPodcastSection";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserRole } from "@/hooks/useUserRole";
-import { Sparkles, ArrowUpRight, ArrowRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award, PenTool, Users, Table2, Video, Home, Key } from "lucide-react";
+import { Sparkles, ArrowUpRight, ArrowRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award, PenTool, Users, Table2, Video, Home, Key, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
@@ -298,12 +298,11 @@ const Index = () => {
               Additional tools and services to support your real estate journey
             </p>
           </motion.div>
-          <AdditionalServicesGrid />
+          <div className="max-w-5xl mx-auto">
+            <AdditionalServicesGrid />
+          </div>
         </div>
       </section>
-
-      {/* JBJ PODCAST SECTION */}
-      <JBJPodcastSection />
 
       {/* WHO IS THIS FOR - Clear Entry Points with Champagne Layer */}
       <section className="pt-12 md:pt-24 pb-8 md:pb-20 bg-black">
@@ -531,15 +530,32 @@ const Index = () => {
         </div>
       </section>
 
-      {/* BEST IDEA AWARD */}
-      <BestIdeaAward />
-
-      {/* SUPPORT TICKET moved to Contact page */}
+      {/* DIVIDER BETWEEN SECTIONS */}
+      <section className="py-8 md:py-12 bg-black">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-center gap-6">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+            <Sparkles className="w-5 h-5 text-gold/50" />
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+          </div>
+        </div>
+      </section>
 
       {/* AI COMPARISON & ANALYZER PREVIEW */}
       <section className="py-8 md:py-20 bg-black">
         <div className="jj-layer-2">
           <AIComparisonWidget />
+        </div>
+      </section>
+
+      {/* DIVIDER */}
+      <section className="py-8 md:py-12 bg-black">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-center gap-6">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+            <Sparkles className="w-5 h-5 text-gold/50" />
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+          </div>
         </div>
       </section>
 
@@ -563,8 +579,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* BLACK SEPARATOR SECTION - Hidden on mobile */}
-      <section className="hidden md:block py-12 md:py-16 bg-gradient-to-b from-black via-zinc-950 to-black">
+      {/* DIVIDER */}
+      <section className="py-8 md:py-12 bg-black">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center gap-6">
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
@@ -646,6 +662,84 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* WHY DUBAI SECTION - With Video Background */}
+      <section className="relative py-20 md:py-32 overflow-hidden">
+        {/* Video Background */}
+        <div className="absolute inset-0">
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            <source src="/videos/team-hero-dubai-skyline.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/80" />
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-4xl mx-auto text-center"
+          >
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-gold/20 border border-gold/40 rounded-full text-xs uppercase tracking-[0.2em] font-semibold text-gold mb-6">
+              <Globe className="w-4 h-4" />
+              Global Investment Hub
+            </span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Why Dubai Became the Capital of <span className="text-gold">Global Investors</span>
+            </h2>
+            <p className="text-lg md:text-xl text-zinc-300 mb-8 max-w-2xl mx-auto">
+              Strategic location, zero income tax, world-class infrastructure, and a government committed to innovation make Dubai the premier destination for global capital.
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
+              <div className="bg-black/40 backdrop-blur-sm border border-gold/30 rounded-xl p-4">
+                <div className="text-2xl md:text-3xl font-bold text-gold mb-1">0%</div>
+                <div className="text-xs text-zinc-400 uppercase tracking-wider">Income Tax</div>
+              </div>
+              <div className="bg-black/40 backdrop-blur-sm border border-gold/30 rounded-xl p-4">
+                <div className="text-2xl md:text-3xl font-bold text-gold mb-1">10Y</div>
+                <div className="text-xs text-zinc-400 uppercase tracking-wider">Golden Visa</div>
+              </div>
+              <div className="bg-black/40 backdrop-blur-sm border border-gold/30 rounded-xl p-4">
+                <div className="text-2xl md:text-3xl font-bold text-gold mb-1">#1</div>
+                <div className="text-xs text-zinc-400 uppercase tracking-wider">Safety Rank</div>
+              </div>
+              <div className="bg-black/40 backdrop-blur-sm border border-gold/30 rounded-xl p-4">
+                <div className="text-2xl md:text-3xl font-bold text-gold mb-1">200+</div>
+                <div className="text-xs text-zinc-400 uppercase tracking-wider">Nationalities</div>
+              </div>
+            </div>
+            <Link to="/guides/investment">
+              <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base">
+                Explore Investment Opportunities
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* JBJ PODCAST SECTION */}
+      <JBJPodcastSection />
+
+      {/* DIVIDER */}
+      <section className="py-8 md:py-12 bg-black">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-center gap-6">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+            <Sparkles className="w-5 h-5 text-gold/50" />
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+          </div>
+        </div>
+      </section>
+
+      {/* BEST IDEA AWARD */}
+      <BestIdeaAward />
 
       {/* Stats Counter Section */}
       <StatsCounter />
