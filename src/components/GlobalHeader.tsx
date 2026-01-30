@@ -36,6 +36,7 @@ import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
 import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
 import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
+import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
 
 interface GlobalHeaderProps {
   forceSolid?: boolean;
@@ -329,7 +330,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 }}
               />
               <img 
-                src={isFullyTransparent ? jbjMonogramLightTransparent : jbjMonogramDarkBg} 
+                src={isFullyTransparent ? jbjMonogramLightTransparent : jbjMonogramLightBg} 
                 alt="JBJ" 
                 className={`w-24 h-24 md:w-28 md:h-28 xl:w-32 xl:h-32 object-contain relative z-10 transition-transform duration-300 ${
                   isFullyTransparent
@@ -339,7 +340,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 style={{
                   filter: isFullyTransparent 
                     ? 'drop-shadow(0 4px 12px rgba(0,0,0,0.6))' 
-                    : 'drop-shadow(0 4px 8px rgba(0,0,0,0.5)) drop-shadow(0 0 20px rgba(200,167,102,0.15))'
+                    : 'drop-shadow(0 2px 6px rgba(0,0,0,0.2))'
                 }}
               />
             </div>
