@@ -330,7 +330,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 }}
               />
               <img 
-                src={isFullyTransparent ? jbjMonogramLightTransparent : jbjMonogramLightBg} 
+                src={jbjMonogramLightTransparent}
                 alt="JBJ" 
                 className={`w-24 h-24 md:w-28 md:h-28 xl:w-32 xl:h-32 object-contain relative z-10 transition-transform duration-300 ${
                   isFullyTransparent
