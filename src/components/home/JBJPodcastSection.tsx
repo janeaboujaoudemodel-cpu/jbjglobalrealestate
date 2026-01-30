@@ -272,12 +272,20 @@ const languages = [
   { code: "ur", name: "Urdu", flag: "🇵🇰" }
 ];
 
+const PLAYBACK_SPEEDS = [
+  { value: 0.5, label: "0.5x" },
+  { value: 1, label: "1x" },
+  { value: 1.5, label: "1.5x" },
+  { value: 2, label: "2x" },
+];
+
 const JBJPodcastSection = () => {
   const [selectedEpisode, setSelectedEpisode] = useState(episodes[0]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [volume, setVolume] = useState([75]);
   const [progress, setProgress] = useState(0);
+  const [playbackSpeed, setPlaybackSpeed] = useState(1);
 
   // Note: Audio generation and playback will be implemented via ElevenLabs
   // This is the UI shell - audio files need to be generated separately
@@ -301,6 +309,12 @@ const JBJPodcastSection = () => {
       setSelectedEpisode(episodes[currentIndex + 1]);
       setProgress(0);
     }
+  };
+
+  const cyclePlaybackSpeed = () => {
+    const currentIndex = PLAYBACK_SPEEDS.findIndex(s => s.value === playbackSpeed);
+    const nextIndex = (currentIndex + 1) % PLAYBACK_SPEEDS.length;
+    setPlaybackSpeed(PLAYBACK_SPEEDS[nextIndex].value);
   };
 
   return (
@@ -450,6 +464,14 @@ const JBJPodcastSection = () => {
                         </SelectContent>
                       </Select>
                     </div>
+
+                    {/* Speed Control */}
+                    <button
+                      onClick={cyclePlaybackSpeed}
+                      className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded-lg text-sm font-medium text-gold transition-colors"
+                    >
+                      {playbackSpeed}x
+                    </button>
 
                     {/* Volume */}
                     <div className="hidden md:flex items-center gap-2 w-32">
