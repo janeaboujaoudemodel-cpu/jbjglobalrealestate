@@ -170,6 +170,7 @@ serve(async (req) => {
   try {
     const {
       page = 1,
+      jobId = null,
       testMode = false,
       force = false,
       testProject = null,
@@ -178,6 +179,8 @@ serve(async (req) => {
       batchSize: rawBatchSize = undefined,
       validateOnly = false,
     } = await req.json().catch(() => ({}));
+
+    const normalizedJobId = typeof jobId === "string" && jobId.length > 10 ? jobId : null;
 
     const startIndex = Math.max(0, Number(rawStartIndex) || 0);
     const batchSize = Math.max(1, Math.min(Number(rawBatchSize ?? (testMode ? 1 : 3)), 10));
@@ -451,6 +454,11 @@ serve(async (req) => {
           is_new_project: !existingQueueAny,
           status: "pending",
         };
+
+        // Link the import to the current sync job (enables filtering + auditability)
+        if (normalizedJobId) {
+          insertPayload.job_id = normalizedJobId;
+        }
 
         if (dev?.id) {
           insertPayload.developer_id = dev.id;

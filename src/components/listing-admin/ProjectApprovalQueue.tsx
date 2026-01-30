@@ -61,6 +61,7 @@ interface PendingImport {
 
 interface ProjectApprovalQueueProps {
   onRefresh?: () => void;
+  jobId?: string | null;
 }
 
 const parseJsonArray = <T,>(json: Json | null, defaultVal: T[] = []): T[] => {
@@ -69,10 +70,11 @@ const parseJsonArray = <T,>(json: Json | null, defaultVal: T[] = []): T[] => {
   return defaultVal;
 };
 
-export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
+export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueProps) {
   const navigate = useNavigate();
   const [imports, setImports] = useState<PendingImport[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showAll, setShowAll] = useState(!jobId);
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [selectedImport, setSelectedImport] = useState<PendingImport | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -82,15 +84,25 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
   const [bulkTotal, setBulkTotal] = useState(0);
   const { toast } = useToast();
 
+  useEffect(() => {
+    setShowAll(!jobId);
+  }, [jobId]);
+
   const fetchPendingImports = async () => {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from("pending_project_imports")
         .select("*")
         .eq("status", "pending")
         .order("created_at", { ascending: false })
         .limit(50);
+
+      if (jobId && !showAll) {
+        query = query.eq("job_id", jobId);
+      }
+
+      const { data, error } = await query;
 
       if (error) throw error;
       
@@ -139,7 +151,7 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
 
   useEffect(() => {
     fetchPendingImports();
-  }, []);
+  }, [jobId, showAll]);
 
   // Check for duplicates before approving
   const checkForDuplicates = async (importData: PendingImport): Promise<{ isDuplicate: boolean; existingProject?: any }> => {
@@ -529,6 +541,16 @@ export function ProjectApprovalQueue({ onRefresh }: ProjectApprovalQueueProps) {
             )}
           </CardTitle>
           <div className="flex items-center gap-2">
+            {jobId && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowAll((v) => !v)}
+                className="border-gold text-gold hover:bg-gold/10"
+              >
+                {showAll ? "Show this sync" : "Show all"}
+              </Button>
+            )}
             {imports.length > 0 && (
               <>
                 <Button
