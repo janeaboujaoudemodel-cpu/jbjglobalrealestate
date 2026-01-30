@@ -63,7 +63,8 @@ import PWAAnalyticsDashboard from "@/components/admin/PWAAnalyticsDashboard";
 import VisitorInsightsDashboard from "@/components/admin/VisitorInsightsDashboard";
 import { AdminOverviewDashboard } from "@/components/admin/AdminOverviewDashboard";
 import { AdminAIAssistant } from "@/components/admin/AdminAIAssistant";
-import { ClipboardList, Users, Briefcase, Megaphone, Smartphone, LayoutDashboard, Bot } from "lucide-react";
+import { ClipboardList, Users, Briefcase, Megaphone, Smartphone, LayoutDashboard, Bot, Mic } from "lucide-react";
+import VoiceRecorder from "@/components/admin/VoiceRecorder";
 import { CommandPalette } from "@/components/ui/command-palette";
 import { FloatingActionBar } from "@/components/ui/floating-action-bar";
 
@@ -459,6 +460,10 @@ const Admin = () => {
                 <Settings className="w-4 h-4 mr-2" />
                 IT Department
               </TabsTrigger>
+              <TabsTrigger value="podcast-studio" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+                <Mic className="w-4 h-4 mr-2" />
+                Podcast Studio
+              </TabsTrigger>
             </TabsList>
           </div>
 
@@ -504,6 +509,12 @@ const Admin = () => {
 
           <TabsContent value="visitor-insights" className="space-y-8">
             <VisitorInsightsDashboard />
+          </TabsContent>
+
+          <TabsContent value="podcast-studio" className="space-y-8">
+            <div className="max-w-3xl mx-auto">
+              <VoiceRecorder />
+            </div>
           </TabsContent>
 
           <TabsContent value="properties" className="space-y-8">
