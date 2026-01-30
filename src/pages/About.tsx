@@ -119,7 +119,7 @@ const About = () => {
       <div className="min-h-screen bg-black">
         
         {/* SECTION 1: HERO */}
-        <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden">
+        <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0">
             <img 
               src={luxuryVillaHero} 

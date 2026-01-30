@@ -274,9 +274,9 @@ const MeetTheTeam: React.FC = () => {
         canonicalPath="/team"
       />
 
-      <div className="min-h-screen bg-black">
-        {/* Hero Section with Premium Animated Team Collage */}
-        <section className="relative min-h-[85vh] overflow-hidden">
+        <div className="min-h-screen bg-black">
+          {/* Hero Section with Premium Animated Team Collage */}
+          <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
           {/* Background Video */}
           <div className="absolute inset-0 z-0">
             <video

@@ -165,7 +165,7 @@ export default function BrokerDashboard() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section with Video */}
-      <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden">
+      <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         <video 
           autoPlay 
           loop 
