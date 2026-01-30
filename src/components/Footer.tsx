@@ -81,6 +81,7 @@ const Footer = () => {
 
   // Services
   const servicesLinks = [
+    { label: "Explore All Services", href: "/services" },
     { label: t('footer.buyerAdvisory') || "Buyer Advisory", href: "/services/buying-advisory" },
     { label: t('footer.sellerAdvisory') || "Seller Advisory", href: "/services/selling-advisory" },
     { label: t('footer.leasingAdvisory') || "Leasing Advisory", href: "/services/leasing-advisory" },
@@ -108,7 +109,7 @@ const Footer = () => {
     { label: t('footer.landlordGuide') || "Landlord Guide", href: "/landlord-guide" },
     { label: t('footer.tenantGuide') || "Tenant Guide", href: "/tenant-guide" },
     { label: t('footer.areaGuides') || "Area Guides", href: "/areas" },
-    { label: t('footer.goldenVisaGuide') || "Golden Visa Guide", href: "/guides/golden-visa-uae" },
+    { label: "Golden Visa Guide", href: "/guides/golden-visa-uae" },
     { label: t('footer.generalFaqs') || "General FAQs", href: "/faq" },
   ];
 
@@ -120,14 +121,13 @@ const Footer = () => {
     { label: t('footer.methodology') || "Methodology & Data Sources", href: "/market-intelligence/methodology" },
   ];
 
-  // About - conditionally include Founder link
+  // About - conditionally include Founder link (Careers removed - has dedicated section)
   const aboutLinks = [
     { label: t('footer.aboutJbj') || "About JBJ", href: "/about" },
     ...(isFounderVisible ? [{ label: t('footer.founderLeadership') || "Founder & Leadership", href: "/founder" }] : []),
     { label: t('footer.meetTheTeam') || "Meet the Team", href: "/team" },
     { label: t('footer.awardsRecognition') || "Awards & Recognition", href: "/awards" },
     { label: t('footer.newsInsights') || "News & Insights", href: "/news" },
-    { label: t('footer.careers') || "Careers", href: "/join" },
   ];
 
   // Professional Tools
@@ -147,7 +147,7 @@ const Footer = () => {
   // Career Links
   const careerLinks = [
     { href: "/join", label: t('footer.applyJoin') || "Apply to Join Our Team" },
-    { href: "/hr-agent", label: t('footer.contactHr') || "Contact Our HR · Jessica" },
+    { href: "/hr-agent", label: "Connect with Our HR" },
     { href: "/onboarding", label: t('footer.trainingPortal') || "Training Portal" },
   ];
 
@@ -168,8 +168,8 @@ const Footer = () => {
       {/* Full-width footer content */}
       <div className="relative w-full py-8 sm:py-12 md:py-16 lg:py-20 px-3 sm:px-4 md:px-6 lg:px-8 bg-black">
         
-        {/* ULTRA PREMIUM Logo + Company Name Section - Pure Black */}
-        <div className="text-center mb-8 sm:mb-10 md:mb-12 lg:mb-14 relative py-8 sm:py-10 md:py-12 bg-black">
+        {/* ULTRA PREMIUM Logo + Company Name Section - Pure Black - balanced spacing */}
+        <div className="text-center mb-10 sm:mb-12 md:mb-14 lg:mb-16 relative pt-10 sm:pt-12 md:pt-14 pb-8 sm:pb-10 md:pb-12 bg-black">
           {/* Pure black background */}
           <div className="absolute inset-0 bg-black pointer-events-none" />
           
