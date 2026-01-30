@@ -331,7 +331,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <img 
                 src={isFullyTransparent ? jbjMonogramLightTransparent : jbjMonogramDarkBg} 
                 alt="JBJ" 
-                className="w-24 h-24 md:w-28 md:h-28 xl:w-32 xl:h-32 object-contain relative z-10"
+                className={`w-24 h-24 md:w-28 md:h-28 xl:w-32 xl:h-32 object-contain relative z-10 transition-transform duration-300 ${
+                  isFullyTransparent
+                    ? "scale-[1.25] md:scale-[1.3] xl:scale-[1.35]"
+                    : "scale-100"
+                }`}
                 style={{
                   filter: isFullyTransparent 
                     ? 'drop-shadow(0 4px 12px rgba(0,0,0,0.6))' 
