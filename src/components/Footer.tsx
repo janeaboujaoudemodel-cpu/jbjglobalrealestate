@@ -156,9 +156,9 @@ const Footer = () => {
       {/* Pure black background - no gradients */}
       <div className="absolute inset-0 bg-black" />
       
-      {/* Premium Gold Divider at top - 3D layered effect with spacing */}
-      <div className="relative pt-8 sm:pt-10 md:pt-12">
-        <div className="absolute top-4 sm:top-5 md:top-6 left-1/2 -translate-x-1/2 w-full max-w-4xl px-8">
+      {/* Premium Gold Divider at top - 3D layered effect with symmetric spacing */}
+      <div className="relative pt-8 sm:pt-10 md:pt-12 pb-10 sm:pb-12 md:pb-14">
+        <div className="w-full max-w-4xl mx-auto px-8">
           <div className="h-[3px] bg-gradient-to-r from-transparent via-gold to-transparent" />
           <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent mt-[1px]" />
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent mt-[1px]" />
@@ -166,10 +166,10 @@ const Footer = () => {
       </div>
       
       {/* Full-width footer content */}
-      <div className="relative w-full py-8 sm:py-12 md:py-16 lg:py-20 px-3 sm:px-4 md:px-6 lg:px-8 bg-black">
+      <div className="relative w-full pt-0 pb-8 sm:pb-12 md:pb-16 lg:pb-20 px-3 sm:px-4 md:px-6 lg:px-8 bg-black">
         
-        {/* ULTRA PREMIUM Logo + Company Name Section - Pure Black - centered between divider and Stay in the Loop */}
-        <div className="flex flex-col items-center justify-center text-center mb-8 sm:mb-10 relative py-8 sm:py-10 md:py-12 bg-black">
+        {/* ULTRA PREMIUM Logo + Company Name Section - centered + balanced spacing */}
+        <div className="flex flex-col items-center justify-center text-center w-full max-w-7xl mx-auto relative bg-black">
           {/* Pure black background */}
           <div className="absolute inset-0 bg-black pointer-events-none" />
           
@@ -235,7 +235,7 @@ const Footer = () => {
         </div>
 
         {/* ULTRA PREMIUM 3D Card - License + Newsletter + Social - on pure black background */}
-        <div className="relative bg-black py-4">
+        <div className="relative bg-black pt-10 sm:pt-12 md:pt-14 pb-4">
           <div 
             className="w-full max-w-7xl mx-auto mb-8 sm:mb-10 md:mb-12 lg:mb-14 rounded-2xl sm:rounded-3xl relative overflow-hidden"
             style={{
