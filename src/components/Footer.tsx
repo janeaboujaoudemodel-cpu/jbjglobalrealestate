@@ -156,10 +156,14 @@ const Footer = () => {
       {/* Pure black background - no gradients */}
       <div className="absolute inset-0 bg-black" />
       
-      {/* Premium Gold Divider - 3D layered effect */}
-      <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-      <div className="absolute top-[3px] left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
-      <div className="absolute top-[5px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+      {/* Premium Gold Divider at top - 3D layered effect with spacing */}
+      <div className="relative pt-8 sm:pt-10 md:pt-12">
+        <div className="absolute top-4 sm:top-5 md:top-6 left-1/2 -translate-x-1/2 w-full max-w-4xl px-8">
+          <div className="h-[3px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+          <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent mt-[1px]" />
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent mt-[1px]" />
+        </div>
+      </div>
       
       {/* Full-width footer content */}
       <div className="relative w-full py-8 sm:py-12 md:py-16 lg:py-20 px-3 sm:px-4 md:px-6 lg:px-8 bg-black">
