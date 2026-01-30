@@ -294,6 +294,63 @@ All colors MUST be HSL.
    * ============================================================ */
 
   /* ============================================================
+   * GLOBAL FULL-SCREEN HERO SYSTEM (LOCKED)
+   * Every hero section MUST occupy exactly 100% of viewport height
+   * on ALL devices (desktop, tablet, mobile - portrait & landscape).
+   * Uses 100dvh for mobile browser chrome support with 100vh fallback.
+   * ============================================================ */
+  .jj-hero-fullscreen {
+    /* Hero must fill entire viewport INCLUDING the space behind the fixed header */
+    /* Height includes the header overlap, so hero bottom aligns with viewport bottom */
+    height: calc(100vh + 6rem) !important;
+    min-height: calc(100vh + 6rem) !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    /* Pull content up behind the header */
+    margin-top: -6rem;
+    /* Add padding so content doesn't hide behind header */
+    padding-top: 6rem;
+  }
+
+  @media (min-width: 640px) {
+    .jj-hero-fullscreen {
+      height: calc(100vh + 7rem) !important;
+      min-height: calc(100vh + 7rem) !important;
+      margin-top: -7rem;
+      padding-top: 7rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .jj-hero-fullscreen {
+      height: calc(100vh + 8rem) !important;
+      min-height: calc(100vh + 8rem) !important;
+      margin-top: -8rem;
+      padding-top: 8rem;
+    }
+  }
+
+  /* Modern browsers with dvh support */
+  @supports (height: 100dvh) {
+    .jj-hero-fullscreen {
+      height: calc(100dvh + 6rem) !important;
+      min-height: calc(100dvh + 6rem) !important;
+    }
+    @media (min-width: 640px) {
+      .jj-hero-fullscreen {
+        height: calc(100dvh + 7rem) !important;
+        min-height: calc(100dvh + 7rem) !important;
+      }
+    }
+    @media (min-width: 1024px) {
+      .jj-hero-fullscreen {
+        height: calc(100dvh + 8rem) !important;
+        min-height: calc(100dvh + 8rem) !important;
+      }
+    }
+  }
+
+  /* ============================================================
    * GLOBAL 3-LAYER UI SYSTEM (LOCKED) - v2.0
    * 
    * LAYER 1 (Page): Black background (bg-black)

@@ -204,7 +204,7 @@ const BuyingAdvisory = () => {
       />
 
       {/* HERO SECTION */}
-      <section className="relative min-h-screen h-screen flex items-center justify-center bg-black overflow-hidden">
+      <section className="jj-hero-fullscreen relative flex items-center justify-center bg-black overflow-hidden">
         {/* Background gradient */}
         <div
           className="absolute inset-0"

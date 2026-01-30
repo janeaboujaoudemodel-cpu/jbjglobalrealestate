@@ -45,14 +45,14 @@ const Index = () => {
   const { isBroker, hasSelectedRole } = useUserRole();
 
   return (
-    <section className="relative w-full min-h-screen bg-black -mt-24 xl:-mt-28">
+    <section className="relative w-full min-h-screen bg-black">
       {/* SEO Meta Tags */}
       <SEOHead {...pagesSEO.home} />
       
       {/* Broker Onboarding Banner - Only for brokers */}
       {isBroker && <BrokerOnboardingBanner />}
       {/* HERO SECTION - LUXURY CINEMATIC VIDEO - MUST BE 100vh */}
-      <div className="relative min-h-screen h-screen flex items-center justify-center overflow-hidden" style={{ height: '100vh', minHeight: '100vh' }}>
+      <div className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         {/* Video Background - Luxury Dubai Drone Footage */}
         <div className="absolute inset-0">
           {/* Fallback image - always visible as base layer */}

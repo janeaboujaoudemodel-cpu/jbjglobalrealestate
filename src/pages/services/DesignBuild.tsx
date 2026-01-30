@@ -84,7 +84,7 @@ const DesignBuild = () => {
   return (
     <section className="relative w-full min-h-screen bg-black">
       {/* Hero Section - Premium Video Background */}
-      <div className="relative min-h-screen h-screen flex items-center justify-center overflow-hidden">
+      <div className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <video 
             autoPlay 

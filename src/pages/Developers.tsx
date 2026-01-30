@@ -114,7 +114,7 @@ const Developers = () => {
       
       <div className="min-h-screen bg-[hsl(var(--premium-bg))]">
         {/* Hero Section - Full-width Video */}
-        <section className="relative min-h-screen h-screen flex items-center justify-center overflow-hidden">
+        <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
           {/* Video Background */}
           <div className="absolute inset-0 bg-black">
             <video
