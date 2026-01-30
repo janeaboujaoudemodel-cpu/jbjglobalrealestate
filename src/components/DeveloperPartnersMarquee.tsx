@@ -101,11 +101,17 @@ const DeveloperPartnersMarquee = () => {
     // We adjust size by changing responsive HEIGHT classes (layout-safe; no transform scaling).
     // MOBILE: Smaller logos to fit ~4 in viewport; DESKTOP: Keep original larger sizes
     // Fixed frame height ensures every logo sits on the same baseline (alignment).
-    const frameH = "h-10 md:h-14 lg:h-16";
+    // Dubai Properties gets a taller frame for extra prominence
+    const frameH = developer.slug === "dubai-properties" 
+      ? "h-14 md:h-20 lg:h-24" 
+      : "h-10 md:h-14 lg:h-16";
 
     // Keep all logos the same HEIGHT; make specific ones feel bigger via max-width.
+    // Dubai Properties gets significantly more width for visibility
     const maxW =
-      developer.slug === "danube-properties" || developer.slug === "dubai-properties"
+      developer.slug === "dubai-properties"
+        ? "max-w-[200px] md:max-w-[320px] lg:max-w-[400px]"
+        : developer.slug === "danube-properties"
         ? "max-w-[160px] md:max-w-[240px] lg:max-w-[300px]"
         : "max-w-[120px] md:max-w-[200px] lg:max-w-[240px]";
 
