@@ -268,7 +268,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   return (
     <header
       ref={headerViewportRef}
-      className="fixed top-0 left-0 right-0 z-[9999] h-20 sm:h-24 lg:h-28 overflow-visible"
+      className="fixed top-0 left-0 right-0 z-[9999] h-24 sm:h-28 lg:h-32 overflow-visible"
     >
       {/* Ultra Premium Multi-Layer Background */}
       <div 
@@ -331,7 +331,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <img 
                 src={isFullyTransparent ? jbjMonogramLightTransparent : jbjMonogramDarkBg} 
                 alt="JBJ" 
-                className="w-16 h-16 md:w-20 md:h-20 xl:w-24 xl:h-24 object-contain relative z-10"
+                className="w-24 h-24 md:w-28 md:h-28 xl:w-32 xl:h-32 object-contain relative z-10"
                 style={{
                   filter: isFullyTransparent 
                     ? 'drop-shadow(0 4px 12px rgba(0,0,0,0.6))' 
