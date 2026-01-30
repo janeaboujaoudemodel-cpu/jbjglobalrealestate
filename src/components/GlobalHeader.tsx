@@ -79,15 +79,35 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   // Apply transparent header globally on all pages (unless forceSolid is true)
   const isTransparentRoute = !forceSolid;
 
-  const [isSolid, setIsSolid] = useState(forceSolid);
+  // CRITICAL: Initialize to false (transparent) on first load, NOT based on scroll position
+  // This ensures the transparent header is visible immediately on page load
+  const [isSolid, setIsSolid] = useState(() => {
+    // Only force solid if explicitly requested
+    if (forceSolid) return true;
+    // Default to transparent on initial render
+    return false;
+  });
 
   useEffect(() => {
     if (forceSolid) {
       setIsSolid(true);
       return;
     }
-    const onScroll = () => setIsSolid(window.scrollY > 80);
-    onScroll();
+    
+    // Scroll handler - only trigger solid after scrolling past threshold
+    const onScroll = () => {
+      const shouldBeSolid = window.scrollY > 80;
+      setIsSolid(shouldBeSolid);
+    };
+    
+    // Check initial scroll position after a brief delay to ensure proper hydration
+    // This handles cases where user refreshes mid-page
+    requestAnimationFrame(() => {
+      if (window.scrollY > 80) {
+        setIsSolid(true);
+      }
+    });
+    
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [forceSolid]);
