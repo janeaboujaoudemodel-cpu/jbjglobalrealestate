@@ -30,6 +30,10 @@ interface ProjectData {
   status_label: string | null;
   description: string | null;
   amenities: string[] | null;
+  // Document fields
+  brochure_url?: string | null;
+  payment_plan_url?: string | null;
+  floor_plan_urls?: string[];
 }
 
 // Retry configuration
@@ -434,6 +438,23 @@ serve(async (req) => {
           display_order: i,
         }));
 
+        // Prepare documents payload
+        const documentsPayload: Array<{ url: string; type: string; name?: string }> = [];
+        if ((sanitized as ProjectData & { brochure_url?: string | null }).brochure_url) {
+          documentsPayload.push({ url: (sanitized as ProjectData & { brochure_url?: string | null }).brochure_url!, type: "brochure", name: `${sanitized.name} Brochure.pdf` });
+        }
+        if ((sanitized as ProjectData & { payment_plan_url?: string | null }).payment_plan_url) {
+          documentsPayload.push({ url: (sanitized as ProjectData & { payment_plan_url?: string | null }).payment_plan_url!, type: "payment_plan", name: `${sanitized.name} Payment Plan.pdf` });
+        }
+        for (const fp of (sanitized as ProjectData & { floor_plan_urls?: string[] }).floor_plan_urls || []) {
+          documentsPayload.push({ url: fp, type: "floor_plan", name: `${sanitized.name} Floor Plan.pdf` });
+        }
+
+        // Determine if extraction is incomplete
+        const hasMinimalData = Boolean(sanitized.description && sanitized.developer_name && sanitized.developer_name.toLowerCase() !== "unknown" && imagesPayload.length >= 1);
+        const hasDocuments = documentsPayload.length > 0;
+        const extractionIncomplete = !hasMinimalData || !hasDocuments;
+
         // Insert to approval queue
         const insertPayload: Record<string, unknown> = {
           name: sanitized.name,
@@ -452,8 +473,10 @@ serve(async (req) => {
           description: sanitized.description || null,
           amenities: sanitized.amenities || null,
           images: imagesPayload,
+          documents: documentsPayload,
           is_new_project: !existingQueueAny,
           status: "pending",
+          review_notes: extractionIncomplete ? "INCOMPLETE: Re-scrape recommended" : null,
         };
 
         // Link the import to the current sync job (enables filtering + auditability)
@@ -639,6 +662,7 @@ async function scrapeProjectDetailPage(
   firecrawlKey: string, 
   lovableKey: string
 ): Promise<ProjectData | null> {
+  // Request rawHtml in addition to markdown/links for deeper extraction
   const scrapeRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
     method: "POST",
     headers: {
@@ -647,9 +671,9 @@ async function scrapeProjectDetailPage(
     },
     body: JSON.stringify({ 
       url, 
-      formats: ["markdown", "links"],
-      waitFor: 6000,
-      timeout: 45000,
+      formats: ["markdown", "links", "rawHtml"],
+      waitFor: 8000,
+      timeout: 60000,
       onlyMainContent: false,
     }),
   });
@@ -662,16 +686,52 @@ async function scrapeProjectDetailPage(
   const scrapeData = await scrapeRes.json();
   const markdown = scrapeData.data?.markdown || "";
   const links = scrapeData.data?.links || [];
+  const html = scrapeData.data?.rawHtml || "";
 
-  if (markdown.length < 200) {
+  if (markdown.length < 200 && html.length < 500) {
     throw new Error(`Insufficient content: ${markdown.length} chars`);
   }
 
-  // Extract images from links
-  const imageUrls = links.filter((l: string) => 
-    l.includes("cloudfront.net") && 
-    /\.(jpg|jpeg|png|webp)/i.test(l)
-  );
+  // === Extract images from links AND rawHtml ===
+  const imageSet = new Set<string>();
+  for (const l of links) {
+    if (l.includes("cloudfront.net") && /\.(jpg|jpeg|png|webp)/i.test(l)) {
+      imageSet.add(l);
+    }
+  }
+  // Grab from img tags
+  const imgTagRx = /<img[^>]+(?:src|data-src|data-lazy-src)=["']([^"']+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = imgTagRx.exec(html)) !== null) {
+    if (m[1] && m[1].includes("cloudfront.net") && /\.(jpg|jpeg|png|webp)/i.test(m[1])) {
+      imageSet.add(m[1]);
+    }
+  }
+  // Grab from background-image css
+  const bgRx = /background-image:\s*url\(['"]?([^'")\s]+cloudfront\.net[^'")\s]+)['"]?\)/gi;
+  while ((m = bgRx.exec(html)) !== null) {
+    if (m[1]) imageSet.add(m[1]);
+  }
+  const imageUrls = Array.from(imageSet)
+    .filter((u) => !/(logo|icon|avatar|placeholder|spinner)/i.test(u))
+    .map((u) => u.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"));
+
+  // === Extract PDF documents ===
+  const pdfRx = /https?:\/\/[^\s"'<>\)]+\.pdf(?:\?[^\s"'<>\)]*)?/gi;
+  const pdfLinks = [...new Set([...(markdown.match(pdfRx) || []), ...(html.match(pdfRx) || [])])];
+  let brochureUrl: string | null = null;
+  let paymentPlanUrl: string | null = null;
+  const floorPlanUrls: string[] = [];
+  for (const p of pdfLinks) {
+    const lower = p.toLowerCase();
+    if (!brochureUrl && lower.includes("brochure")) brochureUrl = p;
+    else if (!paymentPlanUrl && lower.includes("payment")) paymentPlanUrl = p;
+    else if (lower.includes("floor")) floorPlanUrls.push(p);
+  }
+  if (!brochureUrl && pdfLinks.length > 0) {
+    const leftover = pdfLinks.filter((p) => p !== paymentPlanUrl && !floorPlanUrls.includes(p));
+    if (leftover.length > 0) brochureUrl = leftover[0];
+  }
 
   // AI extraction with detailed prompt
   const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -696,6 +756,11 @@ ${markdown.substring(0, 28000)}
 
 IMAGES FOUND:
 ${imageUrls.slice(0, 25).join("\n")}
+
+DOCUMENTS FOUND:
+brochure: ${brochureUrl || "none"}
+payment_plan: ${paymentPlanUrl || "none"}
+floor_plans: ${floorPlanUrls.join(", ") || "none"}
 
 Return a JSON object with these EXACT fields:
 {
@@ -722,7 +787,7 @@ CRITICAL RULES - MIRROR EXACTLY:
 5. Return valid JSON only - no markdown code blocks`
         }
       ],
-      temperature: 0.05, // Very low for accuracy
+      temperature: 0.05,
       max_tokens: 3000,
     }),
   });
@@ -734,88 +799,66 @@ CRITICAL RULES - MIRROR EXACTLY:
 
   const aiData = await aiRes.json();
   const content = aiData.choices?.[0]?.message?.content || "";
-  
+
   // Robust JSON parsing
   let jsonStr = content;
-  
-  // Strip markdown code blocks
   const codeBlockMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/);
-  if (codeBlockMatch) {
-    jsonStr = codeBlockMatch[1].trim();
-  }
-  
-  // Extract JSON object - find the first { and match to its closing }
+  if (codeBlockMatch) jsonStr = codeBlockMatch[1].trim();
   const firstBrace = jsonStr.indexOf('{');
-  if (firstBrace === -1) {
-    throw new Error(`No JSON object found in AI response`);
-  }
-  
-  // Find matching closing brace by counting braces
-  let braceCount = 0;
-  let lastBrace = -1;
+  if (firstBrace === -1) throw new Error(`No JSON object found in AI response`);
+  let braceCount = 0, lastBrace = -1;
   for (let i = firstBrace; i < jsonStr.length; i++) {
     if (jsonStr[i] === '{') braceCount++;
-    if (jsonStr[i] === '}') {
-      braceCount--;
-      if (braceCount === 0) {
-        lastBrace = i;
-        break;
-      }
-    }
+    if (jsonStr[i] === '}') { braceCount--; if (braceCount === 0) { lastBrace = i; break; } }
   }
-  
-  if (lastBrace === -1) {
-    throw new Error(`Malformed JSON - unbalanced braces`);
-  }
-  
-  let cleanedJson = jsonStr.substring(firstBrace, lastBrace + 1);
-  
-  // Clean common JSON issues
-  cleanedJson = cleanedJson
-    .replace(/,\s*([\]}])/g, '$1')  // Trailing commas
-    .replace(/[\x00-\x1F\x7F]/g, ' ')  // Control characters
-    .replace(/:\s*"([^"]*)\n([^"]*)"/g, ': "$1 $2"')  // Newlines in strings
-    .replace(/[\uFEFF\u200B-\u200D\u2060]/g, '')  // Zero-width chars
-    .replace(/\\'/g, "'")  // Escaped single quotes
-    .replace(/\t/g, ' ');  // Tabs
+  if (lastBrace === -1) throw new Error(`Malformed JSON - unbalanced braces`);
+  let cleanedJson = jsonStr.substring(firstBrace, lastBrace + 1)
+    .replace(/,\s*([\]}])/g, '$1')
+    .replace(/[\x00-\x1F\x7F]/g, ' ')
+    .replace(/:\s*"([^"]*)\n([^"]*)"/g, ': "$1 $2"')
+    .replace(/[\uFEFF\u200B-\u200D\u2060]/g, '')
+    .replace(/\\'/g, "'")
+    .replace(/\t/g, ' ');
 
-  let data;
+  let data: Record<string, unknown>;
   try {
     data = JSON.parse(cleanedJson);
   } catch (parseErr) {
-    // Last resort - try to extract key fields manually
     console.warn(`JSON parse failed, attempting manual extraction`);
     const nameMatch = cleanedJson.match(/"name"\s*:\s*"([^"]+)"/);
     const developerMatch = cleanedJson.match(/"developer_name"\s*:\s*"([^"]+)"/);
     const locationMatch = cleanedJson.match(/"location"\s*:\s*"([^"]+)"/);
-    
-    if (!nameMatch) {
-      throw new Error(`Cannot extract name from malformed JSON: ${parseErr}`);
-    }
-    
+    if (!nameMatch) throw new Error(`Cannot extract name from malformed JSON: ${parseErr}`);
     data = {
       name: nameMatch[1],
       developer_name: developerMatch?.[1] || null,
       location: locationMatch?.[1] || null,
     };
   }
-  
+
+  const aiImageUrls = Array.isArray(data.image_urls) ? (data.image_urls as string[]) : [];
+  const combinedImages = [...new Set([...aiImageUrls, ...imageUrls])].slice(0, 12);
+
   return {
-    name: data.name || "",
-    developer_name: data.developer_name || null,
-    location: data.location || null,
+    name: (data.name as string) || "",
+    developer_name: (data.developer_name as string) || null,
+    location: (data.location as string) || null,
     url,
-    image_urls: Array.isArray(data.image_urls) ? data.image_urls : imageUrls.slice(0, 8),
-    bedrooms: data.bedrooms || null,
-    price_from: data.price_from ? Math.round(data.price_from) : null,
-    price_text: data.price_text || null,
-    payment_plan: data.payment_plan || null,
-    handover_display: data.handover_display || null,
-    property_type_label: data.property_type_label || null,
-    status_label: data.status_label || null,
-    description: data.description || null,
-    amenities: Array.isArray(data.amenities) ? data.amenities : null,
-  };
+    image_urls: combinedImages,
+    bedrooms: (data.bedrooms as string) || null,
+    price_from: data.price_from ? Math.round(data.price_from as number) : null,
+    price_text: (data.price_text as string) || null,
+    payment_plan: (data.payment_plan as string) || null,
+    handover_display: (data.handover_display as string) || null,
+    property_type_label: (data.property_type_label as string) || null,
+    status_label: (data.status_label as string) || null,
+    description: (data.description as string) || null,
+    amenities: Array.isArray(data.amenities) ? (data.amenities as string[]) : null,
+    // Extra document fields for later insertion
+    brochure_url: brochureUrl,
+    payment_plan_url: paymentPlanUrl,
+    floor_plan_urls: floorPlanUrls,
+  } as ProjectData & { brochure_url?: string | null; payment_plan_url?: string | null; floor_plan_urls?: string[] };
 }
 
 /**
