@@ -15,6 +15,7 @@ import ExploreServicesCard from "@/components/home/ExploreServicesCard";
 import WhyDubaiCapitalSection from "@/components/home/WhyDubaiCapitalSection";
 
 import JBJPodcastSection from "@/components/home/JBJPodcastSection";
+import { SectionDivider } from "@/components/ui/section-divider";
 
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -532,15 +533,7 @@ const Index = () => {
       </section>
 
       {/* DIVIDER */}
-      <section className="py-8 md:py-12 bg-black">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center gap-6">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-            <Sparkles className="w-5 h-5 text-gold/50" />
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-          </div>
-        </div>
-      </section>
+      <SectionDivider />
 
       {/* MARKET REPORT CTA - Active Champagne Layer */}
       <section className="py-10 md:py-28 bg-black">
@@ -647,42 +640,18 @@ const Index = () => {
       </section>
 
       {/* DIVIDER - Before Why Dubai */}
-      <section className="py-8 md:py-12 bg-black">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center gap-6">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-            <Sparkles className="w-5 h-5 text-gold/50" />
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-          </div>
-        </div>
-      </section>
+      <SectionDivider />
 
       <WhyDubaiCapitalSection />
 
       {/* DIVIDER - Between Why Dubai and JBJ Podcast */}
-      <section className="py-8 md:py-12 bg-black">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center gap-6">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-            <Sparkles className="w-5 h-5 text-gold/50" />
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-          </div>
-        </div>
-      </section>
+      <SectionDivider />
 
       {/* JBJ PODCAST SECTION */}
       <JBJPodcastSection />
 
       {/* DIVIDER - Centered between Podcast and Best Idea Award */}
-      <section className="py-8 md:py-12 bg-black">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center gap-6">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-            <Sparkles className="w-5 h-5 text-gold/50" />
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-          </div>
-        </div>
-      </section>
+      <SectionDivider />
 
       {/* BEST IDEA AWARD */}
       <BestIdeaAward />

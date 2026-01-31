@@ -55,6 +55,8 @@ const JBJPodcastSection = () => {
   const [duration, setDuration] = useState(() => parseDurationToSeconds(podcastEpisodes[0].duration));
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [playbackNote, setPlaybackNote] = useState<string | null>(null);
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { toast } = useToast();
@@ -71,9 +73,10 @@ const JBJPodcastSection = () => {
     }
 
     setIsLoading(true);
-    
-    try {
-      // Generate full podcast audio (testMode: false for full episode)
+    setErrorMessage(null);
+    setPlaybackNote(null);
+
+    const requestAudioBlob = async (opts: { segments: unknown; testMode: boolean }) => {
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-podcast-tts`,
         {
@@ -83,28 +86,30 @@ const JBJPodcastSection = () => {
             apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
             Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
-          body: JSON.stringify({ 
-            segments: selectedEpisode.segments,
+          body: JSON.stringify({
+            segments: opts.segments,
             language: selectedLanguage,
-            testMode: false // Full episode generation
+            testMode: opts.testMode,
           }),
-        }
+        },
       );
 
-      // Check if response is JSON (error) or binary audio (success)
       const contentType = response.headers.get("content-type") || "";
-      
       if (contentType.includes("application/json")) {
-        const data = await response.json();
-        throw new Error(data.error || "Failed to generate audio");
+        const data = await response.json().catch(() => ({} as any));
+        throw new Error((data as any)?.error || (data as any)?.message || "Failed to generate audio");
       }
 
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`);
       }
 
-      // Get streamed audio as blob
-      const audioBlob = await response.blob();
+      return await response.blob();
+    };
+    
+    try {
+      // Full episode attempt first
+      const audioBlob = await requestAudioBlob({ segments: selectedEpisode.segments, testMode: false });
       const audioBlobUrl = URL.createObjectURL(audioBlob);
       setAudioUrl(audioBlobUrl);
       
@@ -123,9 +128,48 @@ const JBJPodcastSection = () => {
 
     } catch (error) {
       console.error("Error generating podcast:", error);
+
+      const message = error instanceof Error ? error.message : "Could not generate podcast audio.";
+      const isQuotaError = /quota|credit/i.test(message);
+
+      // If voice credits are depleted, fallback to a short preview so the UI isn't stuck.
+      if (isQuotaError && selectedEpisode.segments) {
+        try {
+          setPlaybackNote("Preview mode: full episode generation is temporarily unavailable.");
+
+          const segmentsAny = selectedEpisode.segments as any;
+          const previewSegments = Array.isArray(segmentsAny) ? segmentsAny.slice(0, 1) : segmentsAny;
+
+          const previewBlob = await requestAudioBlob({ segments: previewSegments, testMode: true });
+          const previewUrl = URL.createObjectURL(previewBlob);
+          setAudioUrl(previewUrl);
+
+          if (audioRef.current) {
+            audioRef.current.src = previewUrl;
+            audioRef.current.playbackRate = playbackSpeed;
+            await audioRef.current.play();
+            setIsPlaying(true);
+          }
+
+          toast({
+            title: "Preview Playing",
+            description: "Full episodes require additional voice credits.",
+          });
+
+          return;
+        } catch (previewErr) {
+          console.error("Preview fallback failed:", previewErr);
+        }
+      }
+
+      setErrorMessage(
+        isQuotaError
+          ? "Audio generation is temporarily unavailable due to depleted voice credits. Please update your voice API key/credits to enable full episodes."
+          : message,
+      );
       toast({
         title: "Generation Failed",
-        description: error instanceof Error ? error.message : "Could not generate podcast audio.",
+        description: message,
         variant: "destructive",
       });
     } finally {
@@ -143,6 +187,8 @@ const JBJPodcastSection = () => {
       await audioRef.current.play();
       setIsPlaying(true);
     } else {
+      setErrorMessage(null);
+      setPlaybackNote(null);
       await generatePodcastAudio();
     }
   };
@@ -156,6 +202,8 @@ const JBJPodcastSection = () => {
       setDuration(parseDurationToSeconds(podcastEpisodes[currentIndex - 1].duration));
       setAudioUrl(null);
       setIsPlaying(false);
+      setErrorMessage(null);
+      setPlaybackNote(null);
     }
   };
 
@@ -168,6 +216,8 @@ const JBJPodcastSection = () => {
       setDuration(parseDurationToSeconds(podcastEpisodes[currentIndex + 1].duration));
       setAudioUrl(null);
       setIsPlaying(false);
+      setErrorMessage(null);
+      setPlaybackNote(null);
     }
   };
 
@@ -359,6 +409,16 @@ const JBJPodcastSection = () => {
                 <p className="text-sm text-gold mt-1">
                   <T>Featuring</T>: {selectedEpisode.characters.join(" • ")}
                 </p>
+
+                {playbackNote ? (
+                  <p className="mt-2 text-xs text-black/70">{playbackNote}</p>
+                ) : null}
+
+                {errorMessage ? (
+                  <div className="mt-3 jj-card-inner rounded-lg border border-gold/30 px-4 py-3">
+                    <p className="text-sm text-black/80 leading-relaxed">{errorMessage}</p>
+                  </div>
+                ) : null}
               </div>
 
               {/* Audio Controls Bar - Pearl/Champagne card */}
@@ -489,6 +549,8 @@ const JBJPodcastSection = () => {
                           setDuration(parseDurationToSeconds(episode.duration));
                           setAudioUrl(null);
                           setIsPlaying(false);
+                          setErrorMessage(null);
+                          setPlaybackNote(null);
                         }}
                         className={`w-full p-3 rounded-xl text-left transition-all mb-1 ${
                           selectedEpisode.id === episode.id

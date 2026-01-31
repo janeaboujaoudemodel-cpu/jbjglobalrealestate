@@ -102,7 +102,7 @@ export default function WhyDubaiCapitalSection() {
               ))}
             </div>
 
-            <div className="mt-5">
+            <div className="mt-7 md:mt-9">
               <Button asChild variant="primary" size="lg">
                 <Link to="/guides/investment">
                   <T>Explore Investment Opportunities</T>
