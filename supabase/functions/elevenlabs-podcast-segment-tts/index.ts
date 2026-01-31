@@ -105,6 +105,8 @@ serve(async (req) => {
       episode_id?: number;
       segment_index?: number;
       language?: string;
+      /** If true, ONLY serve cached audio; never generate new audio (protects credits). */
+      require_cache?: boolean;
     };
 
     const speaker = body.speaker;
@@ -113,6 +115,11 @@ serve(async (req) => {
     const episodeId = asInt(body.episode_id, 0);
     const segmentIndex = asInt(body.segment_index, -1);
     const language = asText(body.language) || "en";
+    const requireCache = Boolean(body.require_cache);
+
+    if (requireCache && !(episodeId > 0 && segmentIndex >= 0)) {
+      throw { status: 400, message: "episode_id and segment_index required for cached playback" } satisfies HttpError;
+    }
 
     if (!speaker || !(speaker in VOICES)) {
       throw { status: 400, message: "Missing or invalid speaker" } satisfies HttpError;
@@ -165,6 +172,16 @@ serve(async (req) => {
             },
           });
         }
+
+        // If cache-only mode is enabled, never fall back to generation.
+        if (requireCache) {
+          throw { status: 409, message: "Cached audio missing from storage" } satisfies HttpError;
+        }
+      }
+
+      // Cache-only mode: if not found in cache, do NOT generate.
+      if (requireCache) {
+        throw { status: 409, message: "Audio not cached yet" } satisfies HttpError;
       }
     }
 
