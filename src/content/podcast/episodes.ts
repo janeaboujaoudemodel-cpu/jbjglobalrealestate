@@ -34,7 +34,6 @@ export const podcastLanguages = [
   { code: "ru", name: "Russian", flag: "🇷🇺" },
   { code: "zh", name: "Chinese", flag: "🇨🇳" },
   { code: "fa", name: "Persian", flag: "🇮🇷" },
-  { code: "ur", name: "Urdu", flag: "🇵🇰" },
 ] as const;
 
 export const podcastEpisodes: PodcastEpisode[] = [
@@ -42,7 +41,8 @@ export const podcastEpisodes: PodcastEpisode[] = [
     id: 1,
     title: "Why Dubai Became the Capital of Global Investors",
     characters: ["Jane", "Alex", "Lina"],
-    duration: "10:00",
+    // Duration is computed from the generated audio at runtime (avoid hardcoded/fake durations).
+    duration: "Auto",
     thumbnail: ep1,
     segments: episode1Segments,
   },

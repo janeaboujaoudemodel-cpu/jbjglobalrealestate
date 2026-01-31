@@ -54,6 +54,8 @@ const JBJPodcastSection = () => {
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [playbackNote, setPlaybackNote] = useState<string | null>(null);
+  const [isScrubbing, setIsScrubbing] = useState(false);
+  const [scrubProgress, setScrubProgress] = useState(0);
   
   const { toast } = useToast();
   const { language, setLanguage } = useLanguage();
@@ -121,8 +123,16 @@ const JBJPodcastSection = () => {
   };
 
   const handleProgressChange = (value: number[]) => {
-    const newProgress = value[0];
+    setIsScrubbing(true);
+    setScrubProgress(value[0] ?? 0);
+  };
+
+  const handleProgressCommit = (value: number[]) => {
+    const newProgress = value[0] ?? 0;
     const d = playback.duration || parseDurationToSeconds(selectedEpisode.duration);
+    setIsScrubbing(false);
+    setScrubProgress(newProgress);
+    if (!d) return;
     void playback.seek((newProgress / 100) * d);
   };
 
@@ -138,6 +148,11 @@ const JBJPodcastSection = () => {
       setErrorMessage(playback.error);
     }
   }, [playback.error, playback.status]);
+
+  const effectiveDuration = playback.duration || parseDurationToSeconds(selectedEpisode.duration);
+  const displayTimeSeconds = isScrubbing && effectiveDuration
+    ? (Math.max(0, Math.min(100, scrubProgress)) / 100) * effectiveDuration
+    : playback.currentTime;
 
   return (
     <section className="relative py-20 md:py-28 overflow-hidden jj-layer-2">
@@ -265,29 +280,19 @@ const JBJPodcastSection = () => {
                 {/* Progress Bar - 0 on LEFT, duration on RIGHT */}
                 <div className="mb-4">
                   <PodcastSlider
-                      value={[playback.progress]}
+                    value={[isScrubbing ? scrubProgress : playback.progress]}
                     max={100}
                     step={0.1}
                     onValueChange={handleProgressChange}
+                    onValueCommit={handleProgressCommit}
                     className="w-full [direction:ltr]"
                   />
                   <div className="flex justify-between text-xs text-black/60 mt-1">
-                      <span>{formatTime(playback.currentTime)}</span>
+                      <span>{formatTime(displayTimeSeconds)}</span>
                       <span>
                         {playback.duration > 0 ? formatTime(playback.duration) : selectedEpisode.duration}
                       </span>
                   </div>
-                    {playback.status === "loading" && playback.loadingStep ? (
-                      <p className="mt-2 text-xs text-black/60" data-no-translate>
-                        Loading audio {playback.loadingStep.current}/{playback.loadingStep.total}…
-                      </p>
-                    ) : null}
-
-                    {playback.status !== "loading" && playback.billing && playback.billing.cachedSegments === playback.billing.totalSegments ? (
-                      <p className="mt-2 text-xs text-black/60" data-no-translate>
-                        Cached audio (0 credits)
-                      </p>
-                    ) : null}
                 </div>
 
                 {/* Controls Row */}
