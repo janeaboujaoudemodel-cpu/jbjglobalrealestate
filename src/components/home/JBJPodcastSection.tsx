@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
 import { 
   Play, 
   Pause, 
@@ -9,7 +9,8 @@ import {
   Globe,
   Mic,
   Radio,
-  Lock
+  Lock,
+  Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { 
@@ -21,141 +22,54 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useToast } from "@/hooks/use-toast";
 
 import episode1Thumbnail from "@/assets/podcast-episode-1-thumbnail.jpg";
 
-// Episode 1 full script
-const episode1FullScript = `INTRO (≈1 minute)
-
-Jane:
-Dubai didn't grow by accident.
-It wasn't luck, and it wasn't coincidence.
-Dubai was designed — deliberately, strategically, and with long-term vision.
-
-When people look at Dubai today, they see the skyline, the lifestyle, the architecture. What they don't immediately see is the system behind it — the structure, the clarity, and the intent.
-
-Welcome to The JBJ Perspective. I'm Jane, and today we're unpacking why Dubai has become the capital of global investors — not just financially, but strategically.
-
-Alex, let's start simple. Why Dubai?
-
-SECTION 1 — WHY INVESTORS TRUST DUBAI (≈2 minutes)
-
-Alex:
-Dubai positioned itself early as a global platform, not just a city.
-From a regulatory standpoint, it removed friction before most markets even acknowledged it.
-
-Clear ownership laws, tax efficiency, fast decision-making, and leadership alignment — these are fundamentals investors look for globally.
-
-Jane:
-Exactly. Investors don't fear volatility — they fear uncertainty.
-And Dubai offers certainty: clear rules, respected timelines, and consistent direction.
-
-Lina, from an investor's point of view, what matters most?
-
-Lina:
-Certainty and accessibility.
-Dubai doesn't ask where you come from — it asks what you bring. Capital, ideas, experience.
-
-That mindset alone makes investors feel welcomed rather than restricted.
-
-SECTION 2 — REAL ESTATE AS A STRATEGIC ASSET (≈2.5 minutes)
-
-Jane:
-Let's talk real estate, because here it's not just about buying property.
-
-In Dubai, real estate is a strategy. It's about anchoring presence, residency, mobility, and long-term positioning.
-
-Alex:
-That's a critical distinction.
-In many countries, property is isolated. In Dubai, it's integrated.
-
-Property connects directly to visas, lifestyle, business setup, and wealth planning.
-
-Lina:
-And that's why smart capital comes here.
-Investors aren't buying square meters — they're buying optionality.
-
-Jane:
-Exactly. One asset serving multiple purposes attracts sophisticated investors.
-
-SECTION 3 — SPEED, STRUCTURE & EXECUTION (≈2 minutes)
-
-Jane:
-Another defining factor is execution speed — but controlled speed.
-
-Dubai builds infrastructure before demand peaks.
-Policies are adjusted ahead of pressure.
-Growth is managed, not chased.
-
-Alex:
-Most global cities react. Dubai anticipates.
-That proactive approach creates confidence.
-
-Lina:
-Safety doesn't mean being conservative — it means being prepared.
-Dubai creates options, and options reduce risk.
-
-SECTION 4 — INVESTOR PSYCHOLOGY (≈1.5 minutes)
-
-Jane:
-There's also a psychological aspect investors often underestimate.
-
-Capital is emotional. Investors must not be.
-
-Dubai removes emotional noise by offering structure, transparency, and choice. When people feel secure, they make better decisions.
-
-Alex:
-And better decisions compound over time.
-
-Lina:
-That's why long-term thinkers thrive here.
-This city is built for decades, not quarters.
-
-SECTION 5 — WHY NOW (≈1 minute)
-
-Jane:
-So why is Dubai attracting even more global capital today?
-
-Because the world is fragmenting.
-Mobility is shrinking.
-Regulation is tightening.
-
-Dubai is doing the opposite.
-
-Alex:
-It's positioning itself as neutral, stable, and globally connected.
-
-Lina:
-For investors, that's no longer a luxury — it's a necessity.
-
-CLOSING (≈1 minute)
-
-Jane:
-Dubai became the capital of global investors because it understands one fundamental truth:
-
-Vision without execution is useless.
-Execution without structure is dangerous.
-
-Here, vision meets structure.
-Ambition meets clarity.
-And long-term thinking is the standard, not the exception.
-
-This is what we'll explore throughout The JBJ Perspective —
-Not just where to invest, but how to think, how to structure, and how to position yourself intelligently in a global market that never stops evolving.
-
-Thank you for listening.
-This is just the beginning.`;
+// Episode 1 full script segments for TTS generation
+const episode1Segments = [
+  // INTRO
+  { speaker: "jane" as const, text: "Dubai didn't grow by accident. It wasn't luck, and it wasn't coincidence. Dubai was designed — deliberately, strategically, and with long-term vision." },
+  { speaker: "jane" as const, text: "When people look at Dubai today, they see the skyline, the lifestyle, the architecture. What they don't immediately see is the system behind it — the structure, the clarity, and the intent." },
+  { speaker: "jane" as const, text: "Welcome to The JBJ Perspective. I'm Jane, and today we're unpacking why Dubai has become the capital of global investors — not just financially, but strategically. Alex, let's start simple. Why Dubai?" },
+  
+  // SECTION 1
+  { speaker: "alex" as const, text: "Dubai positioned itself early as a global platform, not just a city. From a regulatory standpoint, it removed friction before most markets even acknowledged it. Clear ownership laws, tax efficiency, fast decision-making, and leadership alignment — these are fundamentals investors look for globally." },
+  { speaker: "jane" as const, text: "Exactly. Investors don't fear volatility — they fear uncertainty. And Dubai offers certainty: clear rules, respected timelines, and consistent direction. Lina, from an investor's point of view, what matters most?" },
+  { speaker: "lina" as const, text: "Certainty and accessibility. Dubai doesn't ask where you come from — it asks what you bring. Capital, ideas, experience. That mindset alone makes investors feel welcomed rather than restricted." },
+  
+  // SECTION 2
+  { speaker: "jane" as const, text: "Let's talk real estate, because here it's not just about buying property. In Dubai, real estate is a strategy. It's about anchoring presence, residency, mobility, and long-term positioning." },
+  { speaker: "alex" as const, text: "That's a critical distinction. In many countries, property is isolated. In Dubai, it's integrated. Property connects directly to visas, lifestyle, business setup, and wealth planning." },
+  { speaker: "lina" as const, text: "And that's why smart capital comes here. Investors aren't buying square meters — they're buying optionality." },
+  { speaker: "jane" as const, text: "Exactly. One asset serving multiple purposes attracts sophisticated investors." },
+  
+  // SECTION 3
+  { speaker: "jane" as const, text: "Another defining factor is execution speed — but controlled speed. Dubai builds infrastructure before demand peaks. Policies are adjusted ahead of pressure. Growth is managed, not chased." },
+  { speaker: "alex" as const, text: "Most global cities react. Dubai anticipates. That proactive approach creates confidence." },
+  { speaker: "lina" as const, text: "Safety doesn't mean being conservative — it means being prepared. Dubai creates options, and options reduce risk." },
+  
+  // SECTION 4
+  { speaker: "jane" as const, text: "There's also a psychological aspect investors often underestimate. Capital is emotional. Investors must not be. Dubai removes emotional noise by offering structure, transparency, and choice. When people feel secure, they make better decisions." },
+  { speaker: "alex" as const, text: "And better decisions compound over time." },
+  { speaker: "lina" as const, text: "That's why long-term thinkers thrive here. This city is built for decades, not quarters." },
+  
+  // SECTION 5
+  { speaker: "jane" as const, text: "So why is Dubai attracting even more global capital today? Because the world is fragmenting. Mobility is shrinking. Regulation is tightening. Dubai is doing the opposite." },
+  { speaker: "alex" as const, text: "It's positioning itself as neutral, stable, and globally connected." },
+  { speaker: "lina" as const, text: "For investors, that's no longer a luxury — it's a necessity." },
+  
+  // CLOSING
+  { speaker: "jane" as const, text: "Dubai became the capital of global investors because it understands one fundamental truth: Vision without execution is useless. Execution without structure is dangerous. Here, vision meets structure. Ambition meets clarity. And long-term thinking is the standard, not the exception." },
+  { speaker: "jane" as const, text: "This is what we'll explore throughout The JBJ Perspective — Not just where to invest, but how to think, how to structure, and how to position yourself intelligently in a global market that never stops evolving. Thank you for listening. This is just the beginning." },
+];
 
 interface Episode {
   id: number;
   title: string;
   characters: string[];
-  script: {
-    speaker: string;
-    text: string;
-  }[];
   duration: string;
-  thumbnail?: string;
+  segments?: typeof episode1Segments;
 }
 
 const episodes: Episode[] = [
@@ -163,222 +77,28 @@ const episodes: Episode[] = [
     id: 1,
     title: "Why Dubai Became the Capital of Global Investors",
     characters: ["Jane", "Alex", "Lina"],
-    script: [
-      { speaker: "Jane", text: "Dubai didn't grow by accident. It was designed for global capital, clarity, and speed." },
-      { speaker: "Alex", text: "What truly differentiates Dubai is regulatory clarity combined with execution speed." },
-      { speaker: "Lina", text: "From an investor's perspective, Dubai removes friction that exists in most global cities." }
-    ],
-    duration: "10:00"
+    duration: "10:00",
+    segments: episode1Segments,
   },
-  {
-    id: 2,
-    title: "Buying Property Smartly in a Global Market",
-    characters: ["Jane", "Alex", "Lina"],
-    script: [
-      { speaker: "Jane", text: "Buying property today isn't about price alone, it's about timing, structure, and intent." },
-      { speaker: "Alex", text: "Most buyers lose money by ignoring market cycles and liquidity." },
-      { speaker: "Lina", text: "Smart investors plan five moves ahead, not one." }
-    ],
-    duration: "14:20"
-  },
-  {
-    id: 3,
-    title: "The Truth About Off-Plan vs Ready Properties",
-    characters: ["Jane", "Alex", "Lina"],
-    script: [
-      { speaker: "Jane", text: "Off-plan works when risk is understood, not ignored." },
-      { speaker: "Alex", text: "Liquidity is the conversation most people avoid." },
-      { speaker: "Lina", text: "Different strategies exist for different investor profiles." }
-    ],
-    duration: "11:30"
-  },
-  {
-    id: 4,
-    title: "How High-Net-Worth Investors Protect Capital",
-    characters: ["Jane", "Alex", "Lina"],
-    script: [
-      { speaker: "Jane", text: "Wealth is built by opportunity but preserved by structure." },
-      { speaker: "Alex", text: "Asset allocation quietly determines outcomes." },
-      { speaker: "Lina", text: "Risk is managed, not eliminated." }
-    ],
-    duration: "13:15"
-  },
-  {
-    id: 5,
-    title: "Golden Visa Strategy Through Real Estate",
-    characters: ["Jane", "Alex", "Lina"],
-    script: [
-      { speaker: "Jane", text: "A Golden Visa isn't a lifestyle benefit, it's a strategic tool." },
-      { speaker: "Alex", text: "Residency directly affects financial leverage." },
-      { speaker: "Lina", text: "Mobility has become a modern form of currency." }
-    ],
-    duration: "10:50"
-  },
-  {
-    id: 6,
-    title: "The Psychology of Successful Investors",
-    characters: ["Jane", "Alex", "Lina"],
-    script: [
-      { speaker: "Jane", text: "Emotions are the most expensive mistake in investing." },
-      { speaker: "Alex", text: "Discipline always beats intelligence." },
-      { speaker: "Lina", text: "Long-term thinking separates winners from noise." }
-    ],
-    duration: "12:00"
-  },
-  {
-    id: 7,
-    title: "Why Secondary Market Deals Matter",
-    characters: ["Jane", "Alex", "Lina"],
-    script: [
-      { speaker: "Jane", text: "The best opportunities are rarely advertised." },
-      { speaker: "Alex", text: "Information asymmetry creates real advantage." },
-      { speaker: "Lina", text: "Timing the exit matters as much as the entry." }
-    ],
-    duration: "11:45"
-  },
-  {
-    id: 8,
-    title: "Luxury Real Estate vs Mass Market Returns",
-    characters: ["Jane", "Alex", "Lina"],
-    script: [
-      { speaker: "Jane", text: "Luxury behaves differently during market shifts." },
-      { speaker: "Alex", text: "Scarcity protects long-term value." },
-      { speaker: "Lina", text: "End-users buy emotionally, investors buy structurally." }
-    ],
-    duration: "13:30"
-  },
-  {
-    id: 9,
-    title: "Mistakes First-Time Investors Always Make",
-    characters: ["Jane", "Alex", "Lina"],
-    script: [
-      { speaker: "Jane", text: "Everyone pays tuition in the market." },
-      { speaker: "Alex", text: "Ignoring fundamentals is the biggest error." },
-      { speaker: "Lina", text: "Chasing trends is rarely sustainable." }
-    ],
-    duration: "14:10"
-  },
-  {
-    id: 10,
-    title: "Building a Global Property Portfolio",
-    characters: ["Jane", "Alex", "Lina"],
-    script: [
-      { speaker: "Jane", text: "One country is never enough for real diversification." },
-      { speaker: "Alex", text: "Geographic spread reduces exposure." },
-      { speaker: "Lina", text: "Currency plays a larger role than most realize." }
-    ],
-    duration: "15:00"
-  },
-  {
-    id: 11,
-    title: "How Developers Really Price Projects",
-    characters: ["Jane", "Alex", "Lina"],
-    script: [
-      { speaker: "Jane", text: "Pricing is driven by positioning, not cost alone." },
-      { speaker: "Alex", text: "Developers price perception as much as product." },
-      { speaker: "Lina", text: "Understanding launch strategy reveals true value." }
-    ],
-    duration: "12:20"
-  },
-  {
-    id: 12,
-    title: "Rental Yield vs Capital Appreciation",
-    characters: ["Jane", "Alex", "Lina"],
-    script: [
-      { speaker: "Jane", text: "Yield feeds today, appreciation builds tomorrow." },
-      { speaker: "Alex", text: "Balance is the key metric." },
-      { speaker: "Lina", text: "Different phases demand different priorities." }
-    ],
-    duration: "11:00"
-  },
-  {
-    id: 13,
-    title: "Investor Onboarding: What Professionals Look For",
-    characters: ["Jane", "Alex", "Lina"],
-    script: [
-      { speaker: "Jane", text: "Professional investors assess people before numbers." },
-      { speaker: "Alex", text: "Process signals seriousness." },
-      { speaker: "Lina", text: "Clarity builds confidence." }
-    ],
-    duration: "10:30"
-  },
-  {
-    id: 14,
-    title: "Real Estate as a Wealth Transfer Tool",
-    characters: ["Jane", "Alex", "Lina"],
-    script: [
-      { speaker: "Jane", text: "Property quietly transfers wealth across generations." },
-      { speaker: "Alex", text: "Structure determines continuity." },
-      { speaker: "Lina", text: "Planning today avoids conflict tomorrow." }
-    ],
-    duration: "13:45"
-  },
-  {
-    id: 15,
-    title: "Exit Strategies Nobody Explains",
-    characters: ["Jane", "Alex", "Lina"],
-    script: [
-      { speaker: "Jane", text: "The exit should be planned before the entry." },
-      { speaker: "Alex", text: "Liquidity defines freedom." },
-      { speaker: "Lina", text: "Optionality is power." }
-    ],
-    duration: "12:30"
-  },
-  {
-    id: 16,
-    title: "Legal Structures Every Investor Should Know",
-    characters: ["Jane", "Alex", "Lina"],
-    script: [
-      { speaker: "Jane", text: "Ownership structure shapes outcomes." },
-      { speaker: "Alex", text: "Compliance protects longevity." },
-      { speaker: "Lina", text: "Legal clarity reduces hidden risk." }
-    ],
-    duration: "14:00"
-  },
-  {
-    id: 17,
-    title: "The Future of Global Real Estate",
-    characters: ["Jane", "Alex", "Lina"],
-    script: [
-      { speaker: "Jane", text: "Real estate is becoming borderless." },
-      { speaker: "Alex", text: "Technology is reshaping access." },
-      { speaker: "Lina", text: "Capital will follow stability." }
-    ],
-    duration: "11:15"
-  },
-  {
-    id: 18,
-    title: "Building Trust in High-Value Transactions",
-    characters: ["Jane", "Alex", "Lina"],
-    script: [
-      { speaker: "Jane", text: "Trust is the real currency of premium deals." },
-      { speaker: "Alex", text: "Reputation compounds over time." },
-      { speaker: "Lina", text: "Consistency creates confidence." }
-    ],
-    duration: "10:45"
-  },
-  {
-    id: 19,
-    title: "Why Most Investors Fail to Scale",
-    characters: ["Jane", "Alex", "Lina"],
-    script: [
-      { speaker: "Jane", text: "Scaling requires systems, not luck." },
-      { speaker: "Alex", text: "Repetition builds leverage." },
-      { speaker: "Lina", text: "Discipline sustains growth." }
-    ],
-    duration: "12:50"
-  },
-  {
-    id: 20,
-    title: "The JBJ Investment Philosophy",
-    characters: ["Jane", "Alex", "Lina"],
-    script: [
-      { speaker: "Jane", text: "Our philosophy is built on clarity, structure, and long-term vision." },
-      { speaker: "Alex", text: "Strategy beats speculation." },
-      { speaker: "Lina", text: "Smart capital always seeks alignment." }
-    ],
-    duration: "15:30"
-  }
+  { id: 2, title: "Buying Property Smartly in a Global Market", characters: ["Jane", "Alex", "Lina"], duration: "14:20" },
+  { id: 3, title: "The Truth About Off-Plan vs Ready Properties", characters: ["Jane", "Alex", "Lina"], duration: "11:30" },
+  { id: 4, title: "How High-Net-Worth Investors Protect Capital", characters: ["Jane", "Alex", "Lina"], duration: "13:15" },
+  { id: 5, title: "Golden Visa Strategy Through Real Estate", characters: ["Jane", "Alex", "Lina"], duration: "10:50" },
+  { id: 6, title: "The Psychology of Successful Investors", characters: ["Jane", "Alex", "Lina"], duration: "12:00" },
+  { id: 7, title: "Why Secondary Market Deals Matter", characters: ["Jane", "Alex", "Lina"], duration: "11:45" },
+  { id: 8, title: "Luxury Real Estate vs Mass Market Returns", characters: ["Jane", "Alex", "Lina"], duration: "13:30" },
+  { id: 9, title: "Mistakes First-Time Investors Always Make", characters: ["Jane", "Alex", "Lina"], duration: "14:10" },
+  { id: 10, title: "Building a Global Property Portfolio", characters: ["Jane", "Alex", "Lina"], duration: "15:00" },
+  { id: 11, title: "How Developers Really Price Projects", characters: ["Jane", "Alex", "Lina"], duration: "12:20" },
+  { id: 12, title: "Rental Yield vs Capital Appreciation", characters: ["Jane", "Alex", "Lina"], duration: "11:00" },
+  { id: 13, title: "Investor Onboarding: What Professionals Look For", characters: ["Jane", "Alex", "Lina"], duration: "10:30" },
+  { id: 14, title: "Real Estate as a Wealth Transfer Tool", characters: ["Jane", "Alex", "Lina"], duration: "13:45" },
+  { id: 15, title: "Exit Strategies Nobody Explains", characters: ["Jane", "Alex", "Lina"], duration: "12:30" },
+  { id: 16, title: "Legal Structures Every Investor Should Know", characters: ["Jane", "Alex", "Lina"], duration: "14:00" },
+  { id: 17, title: "The Future of Global Real Estate", characters: ["Jane", "Alex", "Lina"], duration: "11:15" },
+  { id: 18, title: "Building Trust in High-Value Transactions", characters: ["Jane", "Alex", "Lina"], duration: "10:45" },
+  { id: 19, title: "Why Most Investors Fail to Scale", characters: ["Jane", "Alex", "Lina"], duration: "12:50" },
+  { id: 20, title: "The JBJ Investment Philosophy", characters: ["Jane", "Alex", "Lina"], duration: "15:30" },
 ];
 
 const languages = [
@@ -405,13 +125,95 @@ const PLAYBACK_SPEEDS = [
 const JBJPodcastSection = () => {
   const [selectedEpisode, setSelectedEpisode] = useState(episodes[0]);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [volume, setVolume] = useState([75]);
   const [progress, setProgress] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { toast } = useToast();
 
-  const handlePlayPause = () => {
-    setIsPlaying(!isPlaying);
+  // Generate podcast audio
+  const generatePodcastAudio = async () => {
+    if (!selectedEpisode.segments) {
+      toast({
+        title: "Coming Soon",
+        description: "This episode is not yet available.",
+        variant: "default",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-podcast-tts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({ 
+            segments: selectedEpisode.segments,
+            language: selectedLanguage 
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.error || "Failed to generate audio");
+      }
+
+      // Create audio URL from base64
+      const audioDataUrl = `data:audio/mpeg;base64,${data.audioContent}`;
+      setAudioUrl(audioDataUrl);
+      
+      // Play the audio
+      if (audioRef.current) {
+        audioRef.current.src = audioDataUrl;
+        audioRef.current.playbackRate = playbackSpeed;
+        await audioRef.current.play();
+        setIsPlaying(true);
+      }
+
+      toast({
+        title: "Podcast Ready",
+        description: "Episode generated with Jane's voice.",
+      });
+
+    } catch (error) {
+      console.error("Error generating podcast:", error);
+      toast({
+        title: "Generation Failed",
+        description: error instanceof Error ? error.message : "Could not generate podcast audio.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePlayPause = async () => {
+    if (!audioRef.current) return;
+
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else if (audioUrl) {
+      await audioRef.current.play();
+      setIsPlaying(true);
+    } else {
+      await generatePodcastAudio();
+    }
   };
 
   const handlePrevious = () => {
@@ -419,6 +221,9 @@ const JBJPodcastSection = () => {
     if (currentIndex > 0) {
       setSelectedEpisode(episodes[currentIndex - 1]);
       setProgress(0);
+      setCurrentTime(0);
+      setAudioUrl(null);
+      setIsPlaying(false);
     }
   };
 
@@ -427,23 +232,86 @@ const JBJPodcastSection = () => {
     if (currentIndex < episodes.length - 1) {
       setSelectedEpisode(episodes[currentIndex + 1]);
       setProgress(0);
+      setCurrentTime(0);
+      setAudioUrl(null);
+      setIsPlaying(false);
     }
   };
 
   const cyclePlaybackSpeed = () => {
     const currentIndex = PLAYBACK_SPEEDS.findIndex(s => s.value === playbackSpeed);
     const nextIndex = (currentIndex + 1) % PLAYBACK_SPEEDS.length;
-    setPlaybackSpeed(PLAYBACK_SPEEDS[nextIndex].value);
+    const newSpeed = PLAYBACK_SPEEDS[nextIndex].value;
+    setPlaybackSpeed(newSpeed);
+    if (audioRef.current) {
+      audioRef.current.playbackRate = newSpeed;
+    }
   };
+
+  const handleVolumeChange = (value: number[]) => {
+    setVolume(value);
+    if (audioRef.current) {
+      audioRef.current.volume = value[0] / 100;
+    }
+  };
+
+  const handleProgressChange = (value: number[]) => {
+    const newProgress = value[0];
+    setProgress(newProgress);
+    if (audioRef.current && duration > 0) {
+      audioRef.current.currentTime = (newProgress / 100) * duration;
+    }
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // Audio event handlers
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handleTimeUpdate = () => {
+      setCurrentTime(audio.currentTime);
+      if (audio.duration > 0) {
+        setProgress((audio.currentTime / audio.duration) * 100);
+      }
+    };
+
+    const handleLoadedMetadata = () => {
+      setDuration(audio.duration);
+    };
+
+    const handleEnded = () => {
+      setIsPlaying(false);
+      setProgress(0);
+      setCurrentTime(0);
+    };
+
+    audio.addEventListener('timeupdate', handleTimeUpdate);
+    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+    audio.addEventListener('ended', handleEnded);
+
+    return () => {
+      audio.removeEventListener('timeupdate', handleTimeUpdate);
+      audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      audio.removeEventListener('ended', handleEnded);
+    };
+  }, []);
 
   return (
     <section className="relative py-20 md:py-28 overflow-hidden">
+      {/* Hidden audio element */}
+      <audio ref={audioRef} preload="none" />
+
       {/* Premium Background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-black to-zinc-900" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,hsl(var(--gold)/0.08),transparent_50%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,hsl(var(--gold)/0.05),transparent_50%)]" />
-        {/* Subtle grid pattern */}
         <div 
           className="absolute inset-0 opacity-[0.03]"
           style={{
@@ -492,16 +360,16 @@ const JBJPodcastSection = () => {
                   boxShadow: '0 30px 80px -20px rgba(0,0,0,0.8), 0 0 0 1px rgba(200,167,102,0.25), inset 0 1px 0 rgba(200,167,102,0.1)'
                 }}
               >
-                {/* Episode Thumbnail */}
+                {/* Episode Thumbnail - Clean, no text overlay */}
                 <div className="relative aspect-video">
                   <img 
                     src={episode1Thumbnail}
-                    alt={`Episode ${selectedEpisode.id}: ${selectedEpisode.title}`}
+                    alt="JBJ Podcast"
                     className="w-full h-full object-cover"
                   />
                   
                   {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                   
                   {/* Episode Badge - Top Left */}
                   <div className="absolute top-4 left-4">
@@ -514,46 +382,49 @@ const JBJPodcastSection = () => {
                   {/* Center Play Button */}
                   <button
                     onClick={handlePlayPause}
+                    disabled={isLoading}
                     className="absolute inset-0 flex items-center justify-center group"
                   >
                     <div 
-                      className="w-24 h-24 rounded-full bg-gold/95 flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-all duration-300"
+                      className="w-24 h-24 rounded-full bg-gold/95 flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-all duration-300 disabled:opacity-50"
                       style={{ boxShadow: '0 0 60px rgba(200,167,102,0.4)' }}
                     >
-                      {isPlaying ? (
+                      {isLoading ? (
+                        <Loader2 className="w-10 h-10 text-black animate-spin" />
+                      ) : isPlaying ? (
                         <Pause className="w-10 h-10 text-black" />
                       ) : (
                         <Play className="w-10 h-10 text-black ml-1" />
                       )}
                     </div>
                   </button>
-
-                  {/* Episode Title - Bottom */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 leading-tight">
-                      {selectedEpisode.title}
-                    </h3>
-                    <p className="text-sm text-gold/80">
-                      Featuring: {selectedEpisode.characters.join(" • ")}
-                    </p>
-                  </div>
                 </div>
+              </div>
+
+              {/* Episode Title - Outside the frame */}
+              <div className="mt-4 mb-2">
+                <h3 className="text-xl md:text-2xl font-bold text-white leading-tight">
+                  {selectedEpisode.title}
+                </h3>
+                <p className="text-sm text-gold/80 mt-1">
+                  Featuring: {selectedEpisode.characters.join(" • ")}
+                </p>
               </div>
 
               {/* Audio Controls Bar */}
               <div className="mt-4 bg-zinc-900/90 backdrop-blur-sm rounded-xl border border-gold/20 p-4">
-                {/* Progress Bar */}
+                {/* Progress Bar - LEFT to RIGHT */}
                 <div className="mb-4">
                   <Slider
                     value={[progress]}
                     max={100}
-                    step={1}
-                    onValueChange={(value) => setProgress(value[0])}
+                    step={0.1}
+                    onValueChange={handleProgressChange}
                     className="w-full"
                   />
                   <div className="flex justify-between text-xs text-zinc-500 mt-1">
-                    <span>0:00</span>
-                    <span>{selectedEpisode.duration}</span>
+                    <span>{formatTime(currentTime)}</span>
+                    <span>{duration > 0 ? formatTime(duration) : selectedEpisode.duration}</span>
                   </div>
                 </div>
 
@@ -568,9 +439,12 @@ const JBJPodcastSection = () => {
                     </button>
                     <button
                       onClick={handlePlayPause}
-                      className="w-14 h-14 rounded-full bg-gold hover:bg-gold-light flex items-center justify-center transition-colors shadow-lg"
+                      disabled={isLoading}
+                      className="w-14 h-14 rounded-full bg-gold hover:bg-gold-light flex items-center justify-center transition-colors shadow-lg disabled:opacity-50"
                     >
-                      {isPlaying ? (
+                      {isLoading ? (
+                        <Loader2 className="w-6 h-6 text-black animate-spin" />
+                      ) : isPlaying ? (
                         <Pause className="w-6 h-6 text-black" />
                       ) : (
                         <Play className="w-6 h-6 text-black ml-0.5" />
@@ -592,23 +466,23 @@ const JBJPodcastSection = () => {
                     {playbackSpeed}x
                   </button>
 
-                  {/* Language Selector */}
+                  {/* Language Selector - BLACK TEXT */}
                   <div className="flex items-center gap-2">
                     <Globe className="w-4 h-4 text-zinc-400" />
                     <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
                       <SelectTrigger className="w-36 bg-zinc-800 border-zinc-700 text-white text-sm">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent className="bg-zinc-900 border-zinc-700">
+                      <SelectContent className="bg-pearl border-gold/30">
                         {languages.map((lang) => (
                           <SelectItem 
                             key={lang.code} 
                             value={lang.code}
-                            className="text-white hover:bg-zinc-800"
+                            className="text-black hover:bg-gold/20 focus:bg-gold/20 focus:text-black"
                           >
                             <span className="flex items-center gap-2">
                               <span>{lang.flag}</span>
-                              <span>{lang.name}</span>
+                              <span className="text-black">{lang.name}</span>
                             </span>
                           </SelectItem>
                         ))}
@@ -623,7 +497,7 @@ const JBJPodcastSection = () => {
                       value={volume}
                       max={100}
                       step={1}
-                      onValueChange={setVolume}
+                      onValueChange={handleVolumeChange}
                       className="w-20"
                     />
                   </div>
@@ -652,6 +526,9 @@ const JBJPodcastSection = () => {
                         onClick={() => {
                           setSelectedEpisode(episode);
                           setProgress(0);
+                          setCurrentTime(0);
+                          setAudioUrl(null);
+                          setIsPlaying(false);
                         }}
                         className={`w-full p-3 rounded-xl text-left transition-all mb-1 ${
                           selectedEpisode.id === episode.id
