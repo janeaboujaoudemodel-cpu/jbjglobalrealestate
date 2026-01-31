@@ -300,53 +300,48 @@ All colors MUST be HSL.
    * Uses 100dvh for mobile browser chrome support with 100vh fallback.
    * ============================================================ */
   .jj-hero-fullscreen {
-    /* Hero must fill exactly 1 viewport on load (100vh/100dvh).
-       IMPORTANT: Do NOT use negative margins here — they can make scrollY non-zero
-       at the visual “top”, which forces the header into its solid (black) state. */
-    height: 100vh;
+    /* IMPORTANT:
+       - Avoid negative margins (they can make scrollY non-zero at “top” and flip the header solid)
+       - Use MIN-height, not fixed height, so if hero content is taller it expands instead of
+         overflowing into the next section (the overlap bug you’re seeing globally).
+    */
     min-height: 100vh;
     box-sizing: border-box;
 
-    /* Reserve space so hero CONTENT never collides with the fixed header,
-       without affecting scroll position. Use symmetric padding so vertical
-       centering stays visually centered. */
+    /* Reserve space so hero content never collides with the fixed header.
+       Keep bottom padding minimal to avoid shrinking the usable hero area. */
     padding-top: calc(6rem + env(safe-area-inset-top));
-    padding-bottom: calc(6rem + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
   @media (min-width: 640px) {
     .jj-hero-fullscreen {
-      height: 100vh;
       min-height: 100vh;
       padding-top: calc(7rem + env(safe-area-inset-top));
-      padding-bottom: calc(7rem + env(safe-area-inset-bottom));
+      padding-bottom: env(safe-area-inset-bottom);
     }
   }
 
   @media (min-width: 1024px) {
     .jj-hero-fullscreen {
-      height: 100vh;
       min-height: 100vh;
       padding-top: calc(8rem + env(safe-area-inset-top));
-      padding-bottom: calc(8rem + env(safe-area-inset-bottom));
+      padding-bottom: env(safe-area-inset-bottom);
     }
   }
 
   /* Modern browsers with dvh support */
   @supports (height: 100dvh) {
     .jj-hero-fullscreen {
-      height: 100dvh;
       min-height: 100dvh;
     }
     @media (min-width: 640px) {
       .jj-hero-fullscreen {
-        height: 100dvh;
         min-height: 100dvh;
       }
     }
     @media (min-width: 1024px) {
       .jj-hero-fullscreen {
-        height: 100dvh;
         min-height: 100dvh;
       }
     }
