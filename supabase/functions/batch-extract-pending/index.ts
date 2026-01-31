@@ -64,8 +64,10 @@ function extractImagesFromHtml(html: string, links: string[]): string[] {
   while ((m = bgRx.exec(html)) !== null) {
     if (m[1]) imageSet.add(m[1]);
   }
+  // CRITICAL: Filter out brochure, payment plan, floor plan, and document images
+  const excludePatterns = /(logo|icon|avatar|placeholder|spinner|favicon|brochure|payment[-_]?plan|floor[-_]?plan|master[-_]?plan|pdf|document)/i;
   return Array.from(imageSet)
-    .filter((u) => !/(logo|icon|avatar|placeholder|spinner|favicon)/i.test(u))
+    .filter((u) => !excludePatterns.test(u))
     .map((u) => u.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"))
     .slice(0, 15);
 }
@@ -122,41 +124,79 @@ function extractTextFromMarkdown(markdown: string): {
   statusLabel: string | null;
 } {
   const cleanMd = stripMarkdownLinks(markdown);
+  
+  // CRITICAL: Extract FULL project name exactly as displayed on source
   const titleMatch = cleanMd.match(/^#\s+(.+)/m);
   let name = titleMatch?.[1]?.trim() || null;
   if (name) {
-    name = name.replace(/\s+by\s+.*$/i, "").trim();
+    // Keep the full name but remove developer suffix after "by"
+    name = name.replace(/\s+by\s+[A-Z].*$/i, "").trim();
     name = sanitizeText(name);
   }
+  
+  // Extract developer from markdown link or plain text
   const devLinkMatch = markdown.match(/\[by\s+([^\]]+)\]/i);
   let developerName = devLinkMatch?.[1]?.trim() || null;
   if (!developerName) {
     const devMatch = cleanMd.match(/by\s+([A-Z][A-Za-z\s&]+?)(?:\s*\n|\s*in\s)/i);
     developerName = devMatch?.[1]?.trim() || null;
   }
+  
+  // Location extraction - keep full location name
   const locMatch = cleanMd.match(/(?:at|in)\s+([A-Z][A-Za-z\s,\-]+?)(?:\s*\||$|\n)/i);
   const location = locMatch?.[1]?.trim() || null;
+  
+  // Bedroom extraction
   const bedMatch = cleanMd.match(/((?:Studio|[\d,&\s\-]+)\s*(?:BR|Bedrooms?|Bedroom))/i);
   const bedrooms = bedMatch?.[1]?.trim() || null;
-  const priceMatch = cleanMd.match(/(EUR|AED|USD)\s*([\d,.]+)\s*(K|M)?/i);
+  
+  // CRITICAL: Extract EXACT price from source - look for AED price specifically
   let priceFrom: number | null = null;
-  if (priceMatch) {
-    let val = parseFloat(priceMatch[2].replace(/,/g, ""));
-    if (priceMatch[3]?.toUpperCase() === "K") val *= 1000;
-    if (priceMatch[3]?.toUpperCase() === "M") val *= 1000000;
-    if (priceMatch[1].toUpperCase() === "EUR") val *= 4.0;
-    if (priceMatch[1].toUpperCase() === "USD") val *= 3.67;
-    priceFrom = Math.round(val);
+  // First try to find "From AED X" or "Starting from AED X" pattern
+  const aedFromMatch = cleanMd.match(/(?:from|starting\s+from)\s*AED\s*([\d,]+)/i);
+  if (aedFromMatch) {
+    priceFrom = parseInt(aedFromMatch[1].replace(/,/g, ""));
+  } else {
+    // Try "AED X" format
+    const aedMatch = cleanMd.match(/AED\s*([\d,]+)\s*(K|M)?/i);
+    if (aedMatch) {
+      let val = parseFloat(aedMatch[1].replace(/,/g, ""));
+      if (aedMatch[2]?.toUpperCase() === "K") val *= 1000;
+      if (aedMatch[2]?.toUpperCase() === "M") val *= 1000000;
+      priceFrom = Math.round(val);
+    } else {
+      // Try EUR/USD with conversion
+      const priceMatch = cleanMd.match(/(EUR|USD)\s*([\d,.]+)\s*(K|M)?/i);
+      if (priceMatch) {
+        let val = parseFloat(priceMatch[2].replace(/,/g, ""));
+        if (priceMatch[3]?.toUpperCase() === "K") val *= 1000;
+        if (priceMatch[3]?.toUpperCase() === "M") val *= 1000000;
+        if (priceMatch[1].toUpperCase() === "EUR") val *= 4.0;
+        if (priceMatch[1].toUpperCase() === "USD") val *= 3.67;
+        priceFrom = Math.round(val);
+      }
+    }
   }
+  
+  // Handover date extraction
   const handoverMatch = cleanMd.match(/(?:Handover|Completion)[:\s]*(Q[1-4]?\s*\d{4}|\d{4}|Ready)/i);
   const handover = handoverMatch?.[1]?.trim() || null;
+  
+  // Payment plan extraction
   const ppMatch = cleanMd.match(/(\d{2}\/\d{2})/);
   const paymentPlan = ppMatch?.[1] || null;
+  
+  // Description extraction
   const description = extractDescriptionFromMarkdown(markdown);
+  
+  // Property type extraction
   const typeMatch = cleanMd.match(/(Apartment|Villa|Townhouse|Penthouse|Sky[- ]?Villa|Studio)/i);
   const propertyType = typeMatch?.[1] || null;
+  
+  // Status label extraction
   const statusMatch = cleanMd.match(/(Future Launch|New Phase|New Launch|Coming Soon|Sold Out)/i);
   const statusLabel = statusMatch?.[1] || null;
+  
   return { name, developerName, location, bedrooms, priceFrom, handover, paymentPlan, description, propertyType, statusLabel };
 }
 

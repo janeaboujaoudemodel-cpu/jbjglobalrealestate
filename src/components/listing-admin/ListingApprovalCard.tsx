@@ -52,7 +52,9 @@ export function ListingApprovalCard({
   isProcessing 
 }: ListingApprovalCardProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const images = project.image_urls?.filter(url => url && !url.includes('logo')) || [];
+  // CRITICAL: Filter out brochure/document images from gallery
+  const excludePattern = /(brochure|payment[-_]?plan|floor[-_]?plan|master[-_]?plan|pdf|document|General_Brochure|logo)/i;
+  const images = project.image_urls?.filter(url => url && !excludePattern.test(url)) || [];
 
   const nextImage = () => {
     if (images.length > 0) {

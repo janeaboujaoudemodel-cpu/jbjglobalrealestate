@@ -41,7 +41,7 @@ serve(async (req) => {
       body: JSON.stringify({
         url: "https://providentestate.com/new-projects/",
         search: "new-projects",
-        // Firecrawl MAP can return up to ~5000 URLs. Using 2000 was truncating the inventory.
+        // Firecrawl MAP can return up to ~5000 URLs. Need full inventory of 1335+
         limit: 5000,
         ignoreSitemap: false,
         includeSubdomains: false,
@@ -89,17 +89,29 @@ serve(async (req) => {
       });
     }
 
-    // Get existing slugs to identify new vs existing
-    const { data: existingImports } = await supabase
+    // If freshStart, clear pending queue first (keep approved ones)
+    if (freshStart) {
+      console.log("[Discover] Fresh start - clearing ALL pending queue...");
+      const { error: deleteErr } = await supabase
+        .from("pending_project_imports")
+        .delete()
+        .eq("status", "pending");
+      
+      if (deleteErr) console.error("[Discover] Delete error:", deleteErr);
+    }
+
+    // Get existing slugs from approved projects only (so we don't skip them)
+    const { data: existingApproved } = await supabase
       .from("pending_project_imports")
-      .select("slug");
+      .select("slug")
+      .eq("status", "approved");
     
     const { data: existingProjects } = await supabase
       .from("projects")
       .select("slug");
 
     const existingSlugs = new Set([
-      ...(existingImports || []).map(i => i.slug),
+      ...(existingApproved || []).map(i => i.slug),
       ...(existingProjects || []).map(p => p.slug),
     ]);
 
@@ -114,19 +126,6 @@ serve(async (req) => {
       } else {
         existingUrls.push(url);
       }
-    }
-
-    console.log(`[Discover] New: ${newUrls.length}, Existing: ${existingUrls.length}`);
-
-    // If freshStart, clear pending queue first
-    if (freshStart) {
-      console.log("[Discover] Fresh start - clearing pending queue...");
-      const { error: deleteErr } = await supabase
-        .from("pending_project_imports")
-        .delete()
-        .neq("status", "approved");
-      
-      if (deleteErr) console.error("[Discover] Delete error:", deleteErr);
     }
 
     // Insert placeholders for new URLs (will be scraped later)
