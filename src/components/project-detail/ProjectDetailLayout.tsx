@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  ChevronLeft,
-  ChevronRight,
   Download,
   FileText,
   Home,
@@ -32,6 +30,7 @@ import LeadCaptureModal from "@/components/project-detail/LeadCaptureModal";
 import Footer from "@/components/Footer";
 import { CONTACT_INFO, getCallUrl, getEmailUrl, getWhatsAppUrl } from "@/constants/stats";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
+import { SafeImage } from "@/components/SafeImage";
 
 export type ProjectDetailData = {
   id: string;
@@ -88,7 +87,6 @@ export default function ProjectDetailLayout({
   showFooter = true,
 }: ProjectDetailLayoutProps) {
   const [activeTab, setActiveTab] = useState("details");
-  const [heroIndex, setHeroIndex] = useState(0);
   const [leadCaptureOpen, setLeadCaptureOpen] = useState(false);
   const [captureDocType, setCaptureDocType] = useState<"brochure" | "floor_plan" | "payment_plan" | "images">("brochure");
   const [captureDocUrl, setCaptureDocUrl] = useState<string | undefined>();
@@ -119,7 +117,7 @@ export default function ProjectDetailLayout({
   }, []);
 
   const images = useMemo(() => project.images?.filter((i) => i.url) || [], [project.images]);
-  const currentHero = images[heroIndex] || images[0];
+  const heroImage = images[0];
 
   const brochureDocs = useMemo(
     () => project.documents.filter((d) => d.type === "brochure"),
@@ -135,9 +133,6 @@ export default function ProjectDetailLayout({
   );
 
   const whatsappMessage = `Hi, I'm interested in ${project.name}${project.location ? ` at ${project.location}` : ""}. Please share more details.`;
-
-  const goPrev = () => setHeroIndex((p) => (p === 0 ? images.length - 1 : p - 1));
-  const goNext = () => setHeroIndex((p) => (p === images.length - 1 ? 0 : p + 1));
 
   const scrollToRef = (ref: React.RefObject<HTMLDivElement>) => {
     ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -195,8 +190,16 @@ export default function ProjectDetailLayout({
       {/* HERO SECTION - Full Screen */}
       <section className="relative w-full h-screen min-h-[700px] -mt-24 xl:-mt-28">
         <div className="absolute inset-0">
-          {currentHero?.url ? (
-            <img src={currentHero.url} alt={project.name} className="w-full h-full object-cover" />
+          {heroImage?.url ? (
+            <SafeImage
+              src={heroImage.url}
+              alt={heroImage.alt || project.name}
+              className="w-full h-full object-cover"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+              fallbackSrc="/placeholder.svg"
+            />
           ) : (
             <div className="w-full h-full bg-premium-bg" />
           )}
@@ -204,41 +207,6 @@ export default function ProjectDetailLayout({
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40" />
         </div>
-
-        {/* Hero navigation arrows */}
-        {images.length > 1 && (
-          <>
-            <button
-              type="button"
-              onClick={goPrev}
-              className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center hover:bg-white/20 hover:border-white/40 transition-all"
-              aria-label="Previous image"
-            >
-              <ChevronLeft className="w-7 h-7" />
-            </button>
-            <button
-              type="button"
-              onClick={goNext}
-              className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center hover:bg-white/20 hover:border-white/40 transition-all"
-              aria-label="Next image"
-            >
-              <ChevronRight className="w-7 h-7" />
-            </button>
-            
-            {/* Image dots */}
-            <div className="absolute bottom-32 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-              {images.slice(0, 8).map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setHeroIndex(idx)}
-                  className={`w-2.5 h-2.5 rounded-full transition-all ${
-                    idx === heroIndex ? "bg-gold w-8" : "bg-white/50 hover:bg-white/80"
-                  }`}
-                />
-              ))}
-            </div>
-          </>
-        )}
 
         {/* Hero content - Bottom aligned */}
         <div className="relative z-20 container mx-auto px-4 md:px-8 h-full flex flex-col justify-end pb-8">
