@@ -6,6 +6,7 @@ import {
   SkipBack, 
   SkipForward, 
   Volume2,
+  VolumeX,
   Globe,
   Mic,
   Radio,
@@ -23,6 +24,7 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
+import { T } from "@/components/ui/T";
 
 import episode1Thumbnail from "@/assets/podcast-episode-1-thumbnail.jpg";
 
@@ -128,6 +130,8 @@ const JBJPodcastSection = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [volume, setVolume] = useState([75]);
+  const [isMuted, setIsMuted] = useState(false);
+  const [previousVolume, setPreviousVolume] = useState(75);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -252,8 +256,33 @@ const JBJPodcastSection = () => {
 
   const handleVolumeChange = (value: number[]) => {
     setVolume(value);
+    if (value[0] > 0) {
+      setIsMuted(false);
+      setPreviousVolume(value[0]);
+    }
     if (audioRef.current) {
       audioRef.current.volume = value[0] / 100;
+      audioRef.current.muted = value[0] === 0;
+    }
+  };
+
+  const toggleMute = () => {
+    if (isMuted) {
+      // Unmute - restore previous volume
+      setVolume([previousVolume]);
+      setIsMuted(false);
+      if (audioRef.current) {
+        audioRef.current.volume = previousVolume / 100;
+        audioRef.current.muted = false;
+      }
+    } else {
+      // Mute - save current volume and set to 0
+      setPreviousVolume(volume[0]);
+      setVolume([0]);
+      setIsMuted(true);
+      if (audioRef.current) {
+        audioRef.current.muted = true;
+      }
     }
   };
 
@@ -334,13 +363,13 @@ const JBJPodcastSection = () => {
         >
           <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gold/20 to-gold/10 border border-gold/40 rounded-full text-xs uppercase tracking-[0.2em] font-semibold text-gold mb-4">
             <Radio className="w-4 h-4" />
-            Exclusive Content
+            <T>Exclusive Content</T>
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-            The JBJ <span className="text-gold">Perspective</span>
+            <T>The JBJ</T> <span className="text-gold"><T>Perspective</T></span>
           </h2>
           <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto">
-            Real Estate, Power & Global Opportunity
+            <T>Real Estate, Power & Global Opportunity</T>
           </p>
         </motion.div>
 
@@ -355,14 +384,9 @@ const JBJPodcastSection = () => {
               viewport={{ once: true }}
               className="lg:col-span-2"
             >
-              {/* Premium Frame Container */}
-              <div 
-                className="relative rounded-2xl overflow-hidden"
-                style={{
-                  boxShadow: '0 30px 80px -20px rgba(0,0,0,0.8), 0 0 0 1px rgba(200,167,102,0.25), inset 0 1px 0 rgba(200,167,102,0.1)'
-                }}
-              >
-                {/* Episode Thumbnail - Clean, no text overlay */}
+              {/* Premium Frame Container - FULL PHOTO, NO GOLD LINE FRAMING */}
+              <div className="relative rounded-xl overflow-hidden">
+                {/* Episode Thumbnail - Full frame, no border */}
                 <div className="relative aspect-video">
                   <img 
                     src={episode1Thumbnail}
@@ -370,14 +394,14 @@ const JBJPodcastSection = () => {
                     className="w-full h-full object-cover"
                   />
                   
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                  {/* Subtle Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                   
                   {/* Episode Badge - Top Left */}
-                  <div className="absolute top-4 left-4">
-                    <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-gold text-black rounded-full text-xs font-bold uppercase tracking-wider">
+                  <div className="absolute top-3 left-3">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gold text-black rounded-full text-xs font-bold uppercase tracking-wider">
                       <Mic className="w-3 h-3" />
-                      Episode {selectedEpisode.id}
+                      <T>Episode</T> {selectedEpisode.id}
                     </span>
                   </div>
 
@@ -388,15 +412,15 @@ const JBJPodcastSection = () => {
                     className="absolute inset-0 flex items-center justify-center group"
                   >
                     <div 
-                      className="w-24 h-24 rounded-full bg-gold/95 flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-all duration-300 disabled:opacity-50"
-                      style={{ boxShadow: '0 0 60px rgba(200,167,102,0.4)' }}
+                      className="w-20 h-20 rounded-full bg-gold/90 flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-all duration-300 disabled:opacity-50"
+                      style={{ boxShadow: '0 0 40px rgba(200,167,102,0.4)' }}
                     >
                       {isLoading ? (
-                        <Loader2 className="w-10 h-10 text-black animate-spin" />
+                        <Loader2 className="w-8 h-8 text-black animate-spin" />
                       ) : isPlaying ? (
-                        <Pause className="w-10 h-10 text-black" />
+                        <Pause className="w-8 h-8 text-black" />
                       ) : (
-                        <Play className="w-10 h-10 text-black ml-1" />
+                        <Play className="w-8 h-8 text-black ml-1" />
                       )}
                     </div>
                   </button>
@@ -406,16 +430,16 @@ const JBJPodcastSection = () => {
               {/* Episode Title - Outside the frame */}
               <div className="mt-4 mb-2">
                 <h3 className="text-xl md:text-2xl font-bold text-white leading-tight">
-                  {selectedEpisode.title}
+                  <T>{selectedEpisode.title}</T>
                 </h3>
                 <p className="text-sm text-gold/80 mt-1">
-                  Featuring: {selectedEpisode.characters.join(" • ")}
+                  <T>Featuring</T>: {selectedEpisode.characters.join(" • ")}
                 </p>
               </div>
 
               {/* Audio Controls Bar */}
               <div className="mt-4 bg-zinc-900/90 backdrop-blur-sm rounded-xl border border-gold/20 p-4">
-                {/* Progress Bar - LEFT to RIGHT */}
+                {/* Progress Bar - 0 on LEFT, duration on RIGHT */}
                 <div className="mb-4">
                   <Slider
                     value={[progress]}
@@ -423,6 +447,7 @@ const JBJPodcastSection = () => {
                     step={0.1}
                     onValueChange={handleProgressChange}
                     className="w-full"
+                    dir="ltr"
                   />
                   <div className="flex justify-between text-xs text-zinc-500 mt-1">
                     <span>{formatTime(currentTime)}</span>
@@ -492,9 +517,19 @@ const JBJPodcastSection = () => {
                     </Select>
                   </div>
 
-                  {/* Volume Control */}
+                  {/* Volume Control with Mute Toggle */}
                   <div className="flex items-center gap-2">
-                    <Volume2 className="w-4 h-4 text-zinc-400" />
+                    <button
+                      onClick={toggleMute}
+                      className="w-8 h-8 rounded-full bg-zinc-800 hover:bg-zinc-700 flex items-center justify-center transition-colors"
+                      title={isMuted ? "Unmute" : "Mute"}
+                    >
+                      {isMuted || volume[0] === 0 ? (
+                        <VolumeX className="w-4 h-4 text-zinc-400" />
+                      ) : (
+                        <Volume2 className="w-4 h-4 text-zinc-400" />
+                      )}
+                    </button>
                     <Slider
                       value={volume}
                       max={100}
@@ -516,8 +551,8 @@ const JBJPodcastSection = () => {
             >
               <div className="bg-zinc-900/60 backdrop-blur-sm rounded-2xl border border-gold/20 overflow-hidden h-full">
                 <div className="p-4 border-b border-gold/20">
-                  <h3 className="text-lg font-semibold text-white">All Episodes</h3>
-                  <p className="text-sm text-zinc-400">20 episodes available</p>
+                  <h3 className="text-lg font-semibold text-white"><T>All Episodes</T></h3>
+                  <p className="text-sm text-zinc-400"><T>20 episodes available</T></p>
                 </div>
 
                 <ScrollArea className="h-[400px] lg:h-[480px]">
@@ -552,7 +587,7 @@ const JBJPodcastSection = () => {
                             <p className={`text-sm font-medium truncate ${
                               selectedEpisode.id === episode.id ? "text-gold" : "text-white"
                             }`}>
-                              {episode.title}
+                              <T>{episode.title}</T>
                             </p>
                             <p className="text-xs text-zinc-500 mt-0.5">
                               {episode.duration}
