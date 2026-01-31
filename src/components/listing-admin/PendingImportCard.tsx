@@ -2,6 +2,7 @@ import { useMemo, useState, type MouseEvent } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { SafeImage } from "@/components/SafeImage";
 import { ChevronLeft, ChevronRight, ExternalLink, MapPin, Mail, Phone, MessageCircle, Bed, AlertTriangle, RefreshCw } from "lucide-react";
 import { CONTACT_INFO, getCallUrl, getWhatsAppUrl } from "@/constants/stats";
 import { supabase } from "@/integrations/supabase/client";
@@ -119,29 +120,28 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired }: P
 
   return (
     <Card
-      className={`overflow-hidden cursor-pointer border-2 ${isIncomplete ? "border-amber-500" : "border-gold"} bg-card shadow-[0_4px_20px_rgba(200,167,102,0.25)] transition-all duration-300 hover:shadow-[0_12px_40px_rgba(200,167,102,0.4)] hover:scale-[1.02] hover:-translate-y-2`}
+      className={`relative h-full overflow-hidden cursor-pointer border-2 ${isIncomplete ? "border-amber-500" : "border-gold"} bg-card shadow-[0_4px_20px_rgba(200,167,102,0.25)] transition-all duration-300 hover:shadow-[0_12px_40px_rgba(200,167,102,0.4)] hover:scale-[1.02] hover:-translate-y-2`}
       style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
       onClick={handleCardClick}
     >
-      {/* Incomplete badge */}
+      {/* Incomplete badge (overlay so it doesn't change card height/alignment) */}
       {isIncomplete && (
-        <div className="bg-amber-500 text-white text-xs font-bold px-3 py-1 flex items-center gap-1 justify-center">
-          <AlertTriangle className="w-3 h-3" />
-          Incomplete Extraction
+        <div className="absolute top-3 left-3 z-20 pointer-events-none">
+          <div className="inline-flex items-center gap-1 rounded bg-amber-500 text-white text-xs font-bold px-2.5 py-1 shadow">
+            <AlertTriangle className="w-3 h-3" />
+            Incomplete
+          </div>
         </div>
       )}
 
       {/* Image Preview */}
       <div className="relative h-56 bg-muted">
         {activeImage?.url ? (
-          <img
+          <SafeImage
             src={activeImage.url}
             alt={activeImage.alt || item.name}
             className="w-full h-full object-cover"
-            referrerPolicy="no-referrer"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = "/placeholder.svg";
-            }}
+            fallbackSrc="/placeholder.svg"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
@@ -153,6 +153,7 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired }: P
         {hasMultipleImages && (
           <>
             <button
+              type="button"
               onClick={handlePrev}
               className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-card border border-gold/60 text-gold flex items-center justify-center shadow-md hover:bg-gold hover:text-foreground hover:border-gold transition-all duration-200 z-10"
               aria-label="Previous image"
@@ -160,6 +161,7 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired }: P
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
+              type="button"
               onClick={handleNext}
               className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-card border border-gold/60 text-gold flex items-center justify-center shadow-md hover:bg-gold hover:text-foreground hover:border-gold transition-all duration-200 z-10"
               aria-label="Next image"
