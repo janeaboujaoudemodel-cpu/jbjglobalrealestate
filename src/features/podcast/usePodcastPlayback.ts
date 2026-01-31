@@ -186,10 +186,11 @@ export function usePodcastPlayback(params: {
 
   const canPlay = Boolean(params.segments?.length);
 
-  const stopInternal = useCallback(() => {
+  const stopInternal = useCallback((includeMusic = false) => {
     sourcesRef.current.forEach((s) => {
       try {
         s.stop();
+        s.disconnect();
       } catch {
         // ignore
       }
@@ -199,6 +200,11 @@ export function usePodcastPlayback(params: {
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
+    }
+
+    // Stop background music when explicitly requested
+    if (includeMusic && musicRef.current) {
+      musicRef.current.stopBackground();
     }
   }, []);
 
@@ -572,10 +578,9 @@ export function usePodcastPlayback(params: {
   }, [startAt]);
 
   const pause = useCallback(() => {
-    // Snapshot current time and stop sources.
+    // Snapshot current time and stop sources + music.
     pausedAtRef.current = currentTime;
-    stopInternal();
-    musicRef.current?.stopBackground();
+    stopInternal(true);
     setStatus("paused");
   }, [currentTime, stopInternal]);
 

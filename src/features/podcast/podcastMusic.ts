@@ -81,10 +81,19 @@ export function createPodcastMusicController(ctx: AudioContext, masterGain: Gain
     if (bgSource) {
       try {
         bgSource.stop();
+        bgSource.disconnect();
       } catch {
         // ignore
       }
       bgSource = null;
+    }
+    if (bgGain) {
+      try {
+        bgGain.disconnect();
+      } catch {
+        // ignore
+      }
+      bgGain = null;
     }
   };
 
