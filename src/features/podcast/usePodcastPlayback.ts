@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { PodcastSegment, PodcastSpeaker } from "@/content/podcast/types";
 import { buildCaptionCues, findCaptionCueAtTime, type CaptionCue } from "@/features/podcast/podcastCaptions";
 import { translatePodcastSegments } from "@/features/podcast/podcastTranslate";
+import { createPodcastMusicController, type PodcastMusicController } from "@/features/podcast/podcastMusic";
 
 type BillingInfo = {
   /** Total characters billed by the TTS provider during this prepare cycle. */
@@ -153,6 +154,7 @@ export function usePodcastPlayback(params: {
   const sourcesRef = useRef<AudioBufferSourceNode[]>([]);
   const rafRef = useRef<number | null>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const musicRef = useRef<PodcastMusicController | null>(null);
 
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
@@ -230,6 +232,8 @@ export function usePodcastPlayback(params: {
       audioCtxRef.current = new AudioContext();
       gainRef.current = audioCtxRef.current.createGain();
       gainRef.current.connect(audioCtxRef.current.destination);
+      // Initialize music controller
+      musicRef.current = createPodcastMusicController(audioCtxRef.current, gainRef.current);
     }
     return audioCtxRef.current;
   }, []);
@@ -530,9 +534,11 @@ export function usePodcastPlayback(params: {
         sources.push(source);
       }
 
-      // When the last source ends, mark as finished (only if still the active playback).
+      // When the last source ends, mark as finished (only if still the active playback) and play outro.
       sources[sources.length - 1]?.addEventListener("ended", () => {
         if (playTokenRef.current !== playToken) return;
+        musicRef.current?.stopBackground();
+        musicRef.current?.playOutro().catch(() => undefined);
         setStatus((s) => (s === "playing" ? "paused" : s));
       });
 
@@ -542,6 +548,9 @@ export function usePodcastPlayback(params: {
       updateCaptionForTime(offsetSeconds);
       setStatus("playing");
       rafRef.current = requestAnimationFrame(computeCurrentTime);
+
+      // Start background music (fire and forget, low volume)
+      musicRef.current?.startBackground();
     },
     [applyVolume, computeCurrentTime, ensureAudioContext, params.playbackRate, prepare, stopInternal, updateCaptionForTime],
   );
@@ -555,6 +564,7 @@ export function usePodcastPlayback(params: {
     // Snapshot current time and stop sources.
     pausedAtRef.current = currentTime;
     stopInternal();
+    musicRef.current?.stopBackground();
     setStatus("paused");
   }, [currentTime, stopInternal]);
 
@@ -578,6 +588,13 @@ export function usePodcastPlayback(params: {
 
     const prepared = preparedRef.current ?? (await prepare());
     if (!prepared) return;
+
+    // If starting from the beginning, play intro first
+    const isFromStart = pausedAtRef.current <= 0.5;
+    if (isFromStart) {
+      await musicRef.current?.playIntro().catch(() => undefined);
+    }
+
     await startAt(pausedAtRef.current);
   }, [canPlay, ensureAudioContext, pause, prepare, startAt, status]);
 
@@ -621,6 +638,7 @@ export function usePodcastPlayback(params: {
     setError(null);
     setStatus("idle");
     stopInternal();
+    musicRef.current?.stopBackground();
     abortRef.current?.abort();
   }, [params.episodeId, params.language, stopInternal]);
 

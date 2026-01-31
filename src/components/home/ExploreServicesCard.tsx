@@ -175,9 +175,10 @@ const ExploreServicesCard = () => {
 
   useEffect(() => {
     if (!isAutoPlaying) return;
+    // Faster auto-advance (3 seconds)
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % services.length);
-    }, 5000);
+    }, 3000);
     return () => clearInterval(interval);
   }, [isAutoPlaying]);
 
@@ -220,7 +221,7 @@ const ExploreServicesCard = () => {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -50 }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.25 }}
             className="absolute inset-0 flex flex-col justify-end"
           >
             {/* Background Image */}
