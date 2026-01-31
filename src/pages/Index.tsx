@@ -202,65 +202,72 @@ const Index = () => {
 
       {/* AI HOME FINDER - Premium CTA Section - Exact center between Developers and Find Your Starting Point */}
       <section className="py-16 md:py-24 bg-black">
-        <div className="container mx-auto px-3 md:px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="max-w-2xl mx-auto"
-          >
-            <Link to="/quiz" className="block group">
-              <div 
-                className="relative bg-gradient-to-br from-purple-900/40 via-purple-800/30 to-purple-900/40 backdrop-blur-md rounded-xl md:rounded-2xl p-5 md:p-10 text-center transition-all duration-500 group-hover:translate-y-[-4px] group-hover:scale-[1.02]"
-                style={{
-                  border: '2px solid rgba(147,51,234,0.5)',
-                  boxShadow: '0 0 12px rgba(255,255,255,0.2), 0 0 25px rgba(147,51,234,0.15), inset 0 1px 2px rgba(255,255,255,0.1)',
-                }}
-              >
-                {/* White border glow on normal load */}
-                <div 
-                  className="absolute inset-0 rounded-xl md:rounded-2xl pointer-events-none"
+        {/* Use the same global gutters as the rest of the homepage sections */}
+        <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4">
+          {/* 3-column layout on desktop guarantees true mathematical centering */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_minmax(0,42rem)_1fr] items-center">
+            <div className="hidden lg:block" aria-hidden />
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="w-full max-w-2xl mx-auto lg:mx-0"
+            >
+              <Link to="/quiz" className="block group">
+                <div
+                  className="relative bg-gradient-to-br from-purple-900/40 via-purple-800/30 to-purple-900/40 backdrop-blur-md rounded-xl md:rounded-2xl p-5 md:p-10 text-center transition-all duration-500 group-hover:translate-y-[-4px] group-hover:scale-[1.02]"
                   style={{
-                    boxShadow: '0 0 15px rgba(255,255,255,0.15), 0 0 8px rgba(255,255,255,0.1)',
+                    border: '2px solid rgba(147,51,234,0.5)',
+                    boxShadow: '0 0 12px rgba(255,255,255,0.2), 0 0 25px rgba(147,51,234,0.15), inset 0 1px 2px rgba(255,255,255,0.1)',
                   }}
-                />
-                {/* 3D hover effect - coming out of screen */}
-                <div 
-                  className="absolute inset-0 rounded-xl md:rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none"
-                  style={{
-                    boxShadow: '0 12px 35px rgba(0,0,0,0.4), 0 0 25px rgba(255,255,255,0.3), 0 0 50px rgba(147,51,234,0.25), inset 0 -2px 5px rgba(0,0,0,0.2)',
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-purple-600/10 rounded-xl md:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                
-                <div className="relative z-10">
-                  <div className="flex items-center justify-center gap-2 md:gap-3 mb-3 md:mb-4">
-                    <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-purple-400 group-hover:text-purple-300 transition-colors" />
-                    <h2 
-                      className="text-white text-xl md:text-3xl lg:text-4xl font-bold tracking-wide" 
-                      style={{ 
-                        fontFamily: "Poppins, sans-serif",
-                        textShadow: '0 2px 4px rgba(0,0,0,0.4)',
-                      }}
-                    >
-                      {t('hero.aiFinder')}
-                    </h2>
-                    <ArrowUpRight className="w-5 h-5 md:w-7 md:h-7 text-purple-400 group-hover:text-purple-300 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
+                >
+                  {/* White border glow on normal load */}
+                  <div
+                    className="absolute inset-0 rounded-xl md:rounded-2xl pointer-events-none"
+                    style={{
+                      boxShadow: '0 0 15px rgba(255,255,255,0.15), 0 0 8px rgba(255,255,255,0.1)',
+                    }}
+                  />
+                  {/* 3D hover effect - coming out of screen */}
+                  <div
+                    className="absolute inset-0 rounded-xl md:rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none"
+                    style={{
+                      boxShadow: '0 12px 35px rgba(0,0,0,0.4), 0 0 25px rgba(255,255,255,0.3), 0 0 50px rgba(147,51,234,0.25), inset 0 -2px 5px rgba(0,0,0,0.2)',
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-purple-600/10 rounded-xl md:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                  <div className="relative z-10">
+                    <div className="flex items-center justify-center gap-2 md:gap-3 mb-3 md:mb-4">
+                      <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-purple-400 group-hover:text-purple-300 transition-colors" />
+                      <h2
+                        className="text-white text-xl md:text-3xl lg:text-4xl font-bold tracking-wide"
+                        style={{
+                          fontFamily: "Poppins, sans-serif",
+                          textShadow: '0 2px 4px rgba(0,0,0,0.4)',
+                        }}
+                      >
+                        {t('hero.aiFinder')}
+                      </h2>
+                      <ArrowUpRight className="w-5 h-5 md:w-7 md:h-7 text-purple-400 group-hover:text-purple-300 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
+                    </div>
+
+                    <p className="text-white text-sm md:text-base lg:text-lg">
+                      {t('hero.aiFinderDesc')}
+                    </p>
                   </div>
-                  
-                  <p className="text-white text-sm md:text-base lg:text-lg">
-                    {t('hero.aiFinderDesc')}
-                  </p>
                 </div>
-              </div>
-            </Link>
-          </motion.div>
+              </Link>
+            </motion.div>
+            <div className="hidden lg:block" aria-hidden />
+          </div>
         </div>
       </section>
 
       {/* WHO IS THIS FOR - Clear Entry Points with Champagne Layer */}
-      <section className="pt-12 md:pt-20 pb-8 md:pb-16 bg-black">
+      {/* Keep spacing symmetric with the AI Home Finder section above */}
+      <section className="pt-0 pb-8 md:pb-16 bg-black">
         <div className="jj-layer-2">
           <div className="text-center mb-6 md:mb-10">
             <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-semibold shadow-md">
