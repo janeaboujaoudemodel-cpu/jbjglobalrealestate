@@ -41,6 +41,21 @@ interface ServiceSlide {
   available: boolean;
 }
 
+const CTA_LABELS: Record<string, string> = {
+  buy: "Explore Now",
+  sell: "List Now",
+  rent: "Browse Now",
+  "list-rent": "List Now",
+  "golden-visa": "Read Guide",
+  mortgage: "Calculate Now",
+  passport: "Request Introduction",
+  inquiries: "Contact Us",
+  compare: "Compare Now",
+  evaluation: "Evaluate Now",
+  partner: "Meet Partners",
+  facility: "Coming Soon",
+};
+
 // All services combined into one slideshow - removed "More Services" separation
 const services: ServiceSlide[] = [
   {
@@ -99,12 +114,12 @@ const services: ServiceSlide[] = [
   },
   {
     id: "passport",
-    title: "Buy Passport & Schengen Visa",
-    description: "Explore citizenship and visa programs through our trusted partner network",
+    title: "Passport & Schengen Visa",
+    description: "Request introduction via independent licensed partners",
     icon: Plane,
     href: "/services/citizenship",
     bgImage: passportVisaBg,
-    available: false
+    available: true
   },
   {
     id: "inquiries",
@@ -243,22 +258,14 @@ const ExploreServicesCard = () => {
               <div className="flex items-center justify-between">
                 {currentService.available ? (
                   <Link to={currentService.href}>
-                    <Button 
-                      className="bg-gradient-to-r from-gold via-gold to-gold-dark hover:from-gold-dark hover:to-gold text-black font-bold gap-2 group px-8 py-4 text-sm md:text-base rounded-lg shadow-[0_4px_20px_rgba(200,167,102,0.5)] hover:shadow-[0_6px_30px_rgba(200,167,102,0.7)] transition-all duration-300"
-                      style={{
-                        border: '1px solid rgba(255,255,255,0.2)',
-                      }}
-                    >
-                      <span className="tracking-wide">Explore Now</span>
+                    <Button variant="primary" size="lg" className="gap-2 px-8 py-4 rounded-lg group">
+                      <span className="tracking-wide">{CTA_LABELS[currentService.id] ?? "Explore Now"}</span>
                       <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
                     </Button>
                   </Link>
                 ) : (
-                  <Button 
-                    disabled
-                    className="bg-zinc-600/80 text-zinc-300 cursor-not-allowed gap-2 px-8 py-4 rounded-lg"
-                  >
-                    Coming Soon
+                  <Button variant="primary" size="lg" disabled className="gap-2 px-8 py-4 rounded-lg">
+                    {CTA_LABELS[currentService.id] ?? "Coming Soon"}
                   </Button>
                 )}
 
@@ -266,15 +273,15 @@ const ExploreServicesCard = () => {
                 <div className="flex items-center gap-3">
                   <button
                     onClick={goToPrevious}
-                    className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/10 hover:bg-gold/30 backdrop-blur-sm flex items-center justify-center transition-all border border-white/20 hover:border-gold/50"
+                    className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-pearl/70 hover:bg-pearl backdrop-blur-sm flex items-center justify-center transition-all border border-gold/40 hover:border-gold"
                   >
-                    <ChevronLeft className="w-6 h-6 md:w-7 md:h-7 text-white" />
+                    <ChevronLeft className="w-6 h-6 md:w-7 md:h-7 text-gold" />
                   </button>
                   <button
                     onClick={goToNext}
-                    className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/10 hover:bg-gold/30 backdrop-blur-sm flex items-center justify-center transition-all border border-white/20 hover:border-gold/50"
+                    className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-pearl/70 hover:bg-pearl backdrop-blur-sm flex items-center justify-center transition-all border border-gold/40 hover:border-gold"
                   >
-                    <ChevronRight className="w-6 h-6 md:w-7 md:h-7 text-white" />
+                    <ChevronRight className="w-6 h-6 md:w-7 md:h-7 text-gold" />
                   </button>
                 </div>
               </div>
