@@ -79,9 +79,11 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   const [selectedImport, setSelectedImport] = useState<PendingImport | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isBulkProcessing, setIsBulkProcessing] = useState(false);
-  const [bulkAction, setBulkAction] = useState<"approve" | "reject" | null>(null);
+  const [bulkAction, setBulkAction] = useState<"approve" | "reject" | "repair" | null>(null);
   const [bulkDone, setBulkDone] = useState(0);
   const [bulkTotal, setBulkTotal] = useState(0);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [incompleteCount, setIncompleteCount] = useState(0);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -93,10 +95,10 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
     try {
       let query = supabase
         .from("pending_project_imports")
-        .select("*")
+        .select("*, review_notes")
         .eq("status", "pending")
         .order("created_at", { ascending: false })
-        .limit(50);
+        .limit(200);
 
       if (jobId && !showAll) {
         query = query.eq("job_id", jobId);
@@ -136,7 +138,17 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
         created_at: item.created_at
       }));
       
+      // Count incomplete
+      const incomplete = parsed.filter(p => 
+        p.images.length === 0 || 
+        p.documents.length === 0 || 
+        !p.description || 
+        p.developer_name?.toLowerCase() === 'unknown'
+      ).length;
+      setIncompleteCount(incomplete);
+      
       setImports(parsed);
+      setSelectedIds(new Set());
     } catch (error) {
       console.error("Error fetching pending imports:", error);
       toast({
@@ -369,29 +381,107 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
     }
   };
 
-  const deleteAllPending = async () => {
-    if (isBulkProcessing) return;
-    const confirmed = window.confirm(
-      "Delete ALL pending imports?\n\n" +
-        "This will remove every pending project from the approval queue (it will mark them as rejected)."
-    );
+  const deleteSelectedPending = async () => {
+    if (selectedIds.size === 0) {
+      toast({ title: "No items selected", description: "Select items to delete using the checkboxes." });
+      return;
+    }
+    const confirmed = window.confirm(`Delete ${selectedIds.size} selected items from the queue?`);
     if (!confirmed) return;
 
     setIsBulkProcessing(true);
     setBulkAction("reject");
     setBulkDone(0);
-    setBulkTotal(0);
+    setBulkTotal(selectedIds.size);
 
-    try {
-      await rejectAllPendingInDb();
-      toast({ title: "Queue cleared", description: "All pending imports were removed." });
-    } catch (e) {
-      console.error("Bulk reject failed", e);
-      toast({ title: "Error", description: "Failed to delete all pending imports", variant: "destructive" });
-    } finally {
-      setIsBulkProcessing(false);
-      setBulkAction(null);
-      await fetchPendingImports();
+    let done = 0;
+    for (const id of selectedIds) {
+      try {
+        await supabase
+          .from("pending_project_imports")
+          .update({
+            status: "rejected",
+            reviewed_at: new Date().toISOString(),
+            review_notes: "Deleted by admin (selected)"
+          })
+          .eq("id", id);
+        done++;
+      } catch (e) {
+        console.error("Failed to delete", id, e);
+      }
+      setBulkDone(done);
+    }
+
+    toast({ title: "Deletion complete", description: `${done} items removed from queue.` });
+    setIsBulkProcessing(false);
+    setBulkAction(null);
+    await fetchPendingImports();
+  };
+
+  const repairAllIncomplete = async () => {
+    const incomplete = imports.filter(p => 
+      p.images.length === 0 || 
+      p.documents.length === 0 || 
+      !p.description || 
+      p.developer_name?.toLowerCase() === 'unknown'
+    );
+    
+    if (incomplete.length === 0) {
+      toast({ title: "No incomplete items", description: "All items have complete data." });
+      return;
+    }
+    
+    const confirmed = window.confirm(`Repair ${incomplete.length} incomplete items?\n\nThis will re-scrape each item from the source to fetch missing data.`);
+    if (!confirmed) return;
+
+    setIsBulkProcessing(true);
+    setBulkAction("repair");
+    setBulkDone(0);
+    setBulkTotal(incomplete.length);
+
+    let ok = 0;
+    let failed = 0;
+    for (const item of incomplete) {
+      try {
+        const { error } = await supabase.functions.invoke("repair-project-extraction", {
+          body: { pendingImportId: item.id }
+        });
+        if (error) throw error;
+        ok++;
+      } catch (e) {
+        failed++;
+        console.error("Repair failed for", item.id, e);
+      }
+      setBulkDone(ok + failed);
+    }
+
+    toast({ 
+      title: "Repair complete", 
+      description: failed > 0 ? `${ok} repaired, ${failed} failed` : `${ok} items repaired successfully` 
+    });
+    setIsBulkProcessing(false);
+    setBulkAction(null);
+    await fetchPendingImports();
+    onRefresh?.();
+  };
+
+  const toggleSelection = (id: string) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
+
+  const selectAll = () => {
+    if (selectedIds.size === imports.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(imports.map(i => i.id)));
     }
   };
 
@@ -560,6 +650,14 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
               <>
                 <Button
                   size="sm"
+                  variant="outline"
+                  onClick={selectAll}
+                  className="border-zinc-300 text-zinc-700"
+                >
+                  {selectedIds.size === imports.length ? "Deselect All" : "Select All"}
+                </Button>
+                <Button
+                  size="sm"
                   onClick={approveAllShown}
                   disabled={isBulkProcessing || isLoading}
                   className="bg-gold text-black hover:bg-gold/90"
@@ -567,16 +665,30 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                   <Check className="h-4 w-4 mr-2" />
                   Approve All ({imports.length})
                 </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={deleteAllPending}
-                  disabled={isBulkProcessing || isLoading}
-                  className="border-destructive/40 text-destructive hover:bg-destructive/10"
-                >
-                  <X className="h-4 w-4 mr-2" />
-                  Delete All Pending
-                </Button>
+                {incompleteCount > 0 && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={repairAllIncomplete}
+                    disabled={isBulkProcessing || isLoading}
+                    className="border-amber-400 text-amber-700 hover:bg-amber-50"
+                  >
+                    <RefreshCw className="h-4 w-4 mr-2" />
+                    Repair {incompleteCount} Incomplete
+                  </Button>
+                )}
+                {selectedIds.size > 0 && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={deleteSelectedPending}
+                    disabled={isBulkProcessing || isLoading}
+                    className="border-destructive/40 text-destructive hover:bg-destructive/10"
+                  >
+                    <X className="h-4 w-4 mr-2" />
+                    Delete Selected ({selectedIds.size})
+                  </Button>
+                )}
               </>
             )}
             <Button variant="outline" size="sm" onClick={fetchPendingImports} disabled={isBulkProcessing} className="border-gold text-gold hover:bg-gold/10">
@@ -586,10 +698,32 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           </div>
         </CardHeader>
         <CardContent>
-          {isBulkProcessing && bulkAction === "approve" && bulkTotal > 0 && (
+          {/* Stats summary */}
+          {imports.length > 0 && (
+            <div className="flex items-center gap-4 mb-4 text-sm">
+              <div className="flex items-center gap-1">
+                <span className="text-muted-foreground">Total:</span>
+                <span className="font-medium text-foreground">{imports.length}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-muted-foreground">Complete:</span>
+                <span className="font-medium text-emerald-600">{imports.length - incompleteCount}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-muted-foreground">Incomplete:</span>
+                <span className="font-medium text-amber-600">{incompleteCount}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-muted-foreground">Selected:</span>
+                <span className="font-medium text-blue-600">{selectedIds.size}</span>
+              </div>
+            </div>
+          )}
+
+          {isBulkProcessing && (bulkAction === "approve" || bulkAction === "reject" || bulkAction === "repair") && bulkTotal > 0 && (
             <div className="mb-4 rounded-lg border-2 border-gold bg-card p-3">
               <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
-                <span>Approving… {bulkDone}/{bulkTotal}</span>
+                <span>{bulkAction === "approve" ? "Approving" : bulkAction === "repair" ? "Repairing" : "Deleting"}… {bulkDone}/{bulkTotal}</span>
                 <span>{Math.round((bulkDone / bulkTotal) * 100)}%</span>
               </div>
               <Progress value={(bulkDone / bulkTotal) * 100} className="h-2" />
@@ -605,15 +739,28 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
             <div className="p-6 rounded-xl border-2 border-gold bg-gold/5 shadow-[inset_0_0_30px_rgba(200,167,102,0.1)]">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {imports.map((item) => (
-                  <PendingImportCard
-                    key={item.id}
-                    item={item}
-                    formatPrice={formatPrice}
-                    onReview={() => {
-                      // Navigate to the internal preview page instead of opening modal
-                      navigate(`/listing-admin/preview/${item.id}`);
-                    }}
-                  />
+                  <div key={item.id} className="relative">
+                    {/* Selection checkbox */}
+                    <div className="absolute top-2 left-2 z-20">
+                      <input
+                        type="checkbox"
+                        checked={selectedIds.has(item.id)}
+                        onChange={() => toggleSelection(item.id)}
+                        onClick={(e) => e.stopPropagation()}
+                        className="w-5 h-5 rounded border-2 border-gold accent-gold cursor-pointer"
+                      />
+                    </div>
+                    <PendingImportCard
+                      item={{
+                        ...item,
+                        review_notes: !item.description || item.images.length === 0 || item.documents.length === 0 || item.developer_name?.toLowerCase() === 'unknown' ? 'INCOMPLETE' : null
+                      }}
+                      formatPrice={formatPrice}
+                      onReview={() => {
+                        navigate(`/listing-admin/preview/${item.id}`);
+                      }}
+                    />
+                  </div>
                 ))}
               </div>
             </div>
