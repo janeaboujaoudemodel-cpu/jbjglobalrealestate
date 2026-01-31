@@ -24,9 +24,10 @@ serve(async (req) => {
   }
 
   try {
-    const { segments, language = "en" } = await req.json() as { 
+    const { segments, language = "en", testMode = false } = await req.json() as { 
       segments: PodcastSegment[];
       language?: string;
+      testMode?: boolean;
     };
 
     const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
@@ -39,13 +40,19 @@ serve(async (req) => {
       throw new Error("Jane's voice ID not configured");
     }
 
-    console.log(`Generating podcast audio for ${segments.length} segments in ${language}`);
+    // In test mode, only process first segment with shorter text
+    const segmentsToProcess = testMode ? [{
+      speaker: "jane" as const,
+      text: "Welcome to The JBJ Perspective. I'm Jane, and today we're exploring why Dubai became the capital of global investors."
+    }] : segments;
+
+    console.log(`Generating podcast audio for ${segmentsToProcess.length} segments in ${language}${testMode ? ' (TEST MODE)' : ''}`);
 
     // Generate audio for each segment
     const audioChunks: ArrayBuffer[] = [];
     
-    for (let i = 0; i < segments.length; i++) {
-      const segment = segments[i];
+    for (let i = 0; i < segmentsToProcess.length; i++) {
+      const segment = segmentsToProcess[i];
       const voiceId = VOICES[segment.speaker];
       
       if (!voiceId) {
@@ -53,7 +60,7 @@ serve(async (req) => {
         continue;
       }
 
-      console.log(`Generating segment ${i + 1}/${segments.length} for ${segment.speaker}`);
+      console.log(`Generating segment ${i + 1}/${segmentsToProcess.length} for ${segment.speaker}`);
 
       // Build request with stitching context
       const requestBody: Record<string, unknown> = {
@@ -68,12 +75,14 @@ serve(async (req) => {
         },
       };
 
-      // Add context for stitching
-      if (i > 0) {
-        requestBody.previous_text = segments[i - 1].text.slice(-200);
-      }
-      if (i < segments.length - 1) {
-        requestBody.next_text = segments[i + 1].text.slice(0, 200);
+      // Add context for stitching (only in full mode)
+      if (!testMode) {
+        if (i > 0) {
+          requestBody.previous_text = segmentsToProcess[i - 1].text.slice(-200);
+        }
+        if (i < segmentsToProcess.length - 1) {
+          requestBody.next_text = segmentsToProcess[i + 1].text.slice(0, 200);
+        }
       }
 
       const response = await fetch(
@@ -98,7 +107,7 @@ serve(async (req) => {
       audioChunks.push(audioBuffer);
       
       // Small delay to avoid rate limiting
-      if (i < segments.length - 1) {
+      if (i < segmentsToProcess.length - 1) {
         await new Promise(resolve => setTimeout(resolve, 100));
       }
     }
