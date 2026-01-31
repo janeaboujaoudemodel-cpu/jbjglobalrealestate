@@ -54,6 +54,7 @@ import type { FilterState } from "@/components/ProjectFilters";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
+import { OffPlanInquiryCTA } from "@/components/OffPlanInquiryCTA";
 
 // Currency conversion rates
 const CURRENCY_RATES: Record<string, number> = {
@@ -1259,6 +1260,9 @@ const Properties = () => {
           </div>
         </div>
       </section>
+
+      {/* Off-Plan Investment CTA */}
+      <OffPlanInquiryCTA />
 
       {/* Direct Contact Section - Prefer to Reach Us Directly */}
       <section className="py-12 bg-black">

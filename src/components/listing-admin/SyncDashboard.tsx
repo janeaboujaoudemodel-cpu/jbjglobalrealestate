@@ -79,12 +79,13 @@ interface SyncDashboardProps {
 
 export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   // UI estimate only (the source website fluctuates)
-  const [listingsEstimate, setListingsEstimate] = useState<number>(1334);
+  const [listingsEstimate, setListingsEstimate] = useState<number>(1335);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [isClearingPending, setIsClearingPending] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(70);
-  const [detectedTotalPages, setDetectedTotalPages] = useState<number | null>(null);
+  const [totalPages, setTotalPages] = useState(89);
+  const [detectedTotalPages, setDetectedTotalPages] = useState<number | null>(89);
   const [isDetectingPages, setIsDetectingPages] = useState(false);
   const [pageStatuses, setPageStatuses] = useState<PageStatus[]>([]);
   const [totalStats, setTotalStats] = useState({ 
@@ -382,6 +383,46 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     return `~${minutes}m ${seconds}s remaining`;
   }, []);
 
+  // Clear pending queue (mark as rejected) and start fresh
+  const clearPendingAndStartFresh = async () => {
+    if (isSyncing || isClearingPending) return;
+
+    const confirmed = window.confirm(
+      "This will:\n" +
+      "1. Mark ALL pending imports as rejected (clearing the queue)\n" +
+      "2. Start a new full sync from page 1\n\n" +
+      "Your already-approved projects will NOT be affected.\n\n" +
+      "Continue?"
+    );
+    if (!confirmed) return;
+
+    setIsClearingPending(true);
+
+    // 1. Clear pending queue
+    const { error: clearError } = await supabase
+      .from("pending_project_imports")
+      .update({
+        status: "rejected",
+        reviewed_at: new Date().toISOString(),
+        review_notes: "Cleared by admin (fresh restart)"
+      })
+      .eq("status", "pending");
+
+    if (clearError) {
+      console.error("Failed to clear pending queue:", clearError);
+      toast.error("Failed to clear pending queue");
+      setIsClearingPending(false);
+      return;
+    }
+
+    toast.success("Pending queue cleared");
+    await loadProjectCount();
+    setIsClearingPending(false);
+
+    // 2. Start a new sync from page 1
+    await startFullSync();
+  };
+
   const continueSyncFromPage = async (jobId: string, startPage: number, pagesTotal: number) => {
     const syncStartTime = new Date();
     setStartTime(syncStartTime);
@@ -456,13 +497,14 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     const pagesForJob = detectedPages ?? totalPages;
     
     const confirmed = window.confirm(
-      `This will sync all ~${listingsEstimate.toLocaleString()} listings from Provident Estate.\n\n` +
+      `This will sync all ~${listingsEstimate.toLocaleString()} listings from Provident Estate (${pagesForJob} pages).\n\n` +
       "Sarah will extract:\n" +
       "• All project details and descriptions\n" +
       "• High-resolution images\n" +
       "• Developer information\n" +
       "• Status labels (Future Launch, New Phase, etc.)\n" +
-      "• Handover dates and payment plans\n\n" +
+      "• Handover dates and payment plans\n" +
+      "• Documents (brochures, floor plans, payment plans)\n\n" +
       "This process takes approximately 45-60 minutes.\n" +
       "Progress is auto-saved; if you leave this page, you can return and resume.\n\n" +
       "Continue?"
@@ -473,7 +515,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     // Get current user
     const { data: { user } } = await supabase.auth.getUser();
 
-    // Create a new sync job in the database (use in_progress for consistency)
+    // Create a new sync job in the database
     const { data: newJob, error } = await supabase
       .from("sync_jobs")
       .insert({
@@ -489,7 +531,6 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
 
     if (error) {
       console.error("Error creating sync job:", error);
-      // Show detailed error for debugging
       const msg = error.message || error.details || "Unknown error";
       if (msg.includes("row-level security") || error.code === "42501") {
         toast.error("Permission denied: You must be logged in as an admin or listing admin to start a sync job.");
@@ -763,6 +804,16 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                     >
                       <Play className="w-4 h-4 mr-2" />
                       Start Full Sync (~{listingsEstimate.toLocaleString()} Listings)
+                    </Button>
+                    
+                    <Button
+                      onClick={clearPendingAndStartFresh}
+                      disabled={isClearingPending}
+                      variant="outline"
+                      className="border-red-300 text-red-700 hover:bg-red-50"
+                    >
+                      <RefreshCw className={`w-4 h-4 mr-2 ${isClearingPending ? 'animate-spin' : ''}`} />
+                      Clear Queue & Start Fresh
                     </Button>
                 
                 {failedCount > 0 && (
