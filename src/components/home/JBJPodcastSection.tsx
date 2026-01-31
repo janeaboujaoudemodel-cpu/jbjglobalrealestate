@@ -91,19 +91,26 @@ const JBJPodcastSection = () => {
         }
       );
 
-      const data = await response.json();
-
-      if (!data.success) {
+      // Check if response is JSON (error) or binary audio (success)
+      const contentType = response.headers.get("content-type") || "";
+      
+      if (contentType.includes("application/json")) {
+        const data = await response.json();
         throw new Error(data.error || "Failed to generate audio");
       }
 
-      // Create audio URL from base64
-      const audioDataUrl = `data:audio/mpeg;base64,${data.audioContent}`;
-      setAudioUrl(audioDataUrl);
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+
+      // Get streamed audio as blob
+      const audioBlob = await response.blob();
+      const audioBlobUrl = URL.createObjectURL(audioBlob);
+      setAudioUrl(audioBlobUrl);
       
       // Play the audio
       if (audioRef.current) {
-        audioRef.current.src = audioDataUrl;
+        audioRef.current.src = audioBlobUrl;
         audioRef.current.playbackRate = playbackSpeed;
         await audioRef.current.play();
         setIsPlaying(true);
