@@ -497,11 +497,11 @@ const JBJPodcastSection = () => {
                         }`}
                       >
                         <div className="flex items-start gap-3">
-                          <div className="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0">
+                          <div className="w-16 h-12 rounded-lg overflow-hidden flex-shrink-0">
                             <SafeImage
                               src={episode.thumbnail}
                               alt={episode.title}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover object-center"
                               fallbackSrc="/placeholder.svg"
                             />
                           </div>
