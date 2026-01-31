@@ -22,7 +22,130 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-// Episode data with scripts (as provided)
+import episode1Thumbnail from "@/assets/podcast-episode-1-thumbnail.jpg";
+
+// Episode 1 full script
+const episode1FullScript = `INTRO (≈1 minute)
+
+Jane:
+Dubai didn't grow by accident.
+It wasn't luck, and it wasn't coincidence.
+Dubai was designed — deliberately, strategically, and with long-term vision.
+
+When people look at Dubai today, they see the skyline, the lifestyle, the architecture. What they don't immediately see is the system behind it — the structure, the clarity, and the intent.
+
+Welcome to The JBJ Perspective. I'm Jane, and today we're unpacking why Dubai has become the capital of global investors — not just financially, but strategically.
+
+Alex, let's start simple. Why Dubai?
+
+SECTION 1 — WHY INVESTORS TRUST DUBAI (≈2 minutes)
+
+Alex:
+Dubai positioned itself early as a global platform, not just a city.
+From a regulatory standpoint, it removed friction before most markets even acknowledged it.
+
+Clear ownership laws, tax efficiency, fast decision-making, and leadership alignment — these are fundamentals investors look for globally.
+
+Jane:
+Exactly. Investors don't fear volatility — they fear uncertainty.
+And Dubai offers certainty: clear rules, respected timelines, and consistent direction.
+
+Lina, from an investor's point of view, what matters most?
+
+Lina:
+Certainty and accessibility.
+Dubai doesn't ask where you come from — it asks what you bring. Capital, ideas, experience.
+
+That mindset alone makes investors feel welcomed rather than restricted.
+
+SECTION 2 — REAL ESTATE AS A STRATEGIC ASSET (≈2.5 minutes)
+
+Jane:
+Let's talk real estate, because here it's not just about buying property.
+
+In Dubai, real estate is a strategy. It's about anchoring presence, residency, mobility, and long-term positioning.
+
+Alex:
+That's a critical distinction.
+In many countries, property is isolated. In Dubai, it's integrated.
+
+Property connects directly to visas, lifestyle, business setup, and wealth planning.
+
+Lina:
+And that's why smart capital comes here.
+Investors aren't buying square meters — they're buying optionality.
+
+Jane:
+Exactly. One asset serving multiple purposes attracts sophisticated investors.
+
+SECTION 3 — SPEED, STRUCTURE & EXECUTION (≈2 minutes)
+
+Jane:
+Another defining factor is execution speed — but controlled speed.
+
+Dubai builds infrastructure before demand peaks.
+Policies are adjusted ahead of pressure.
+Growth is managed, not chased.
+
+Alex:
+Most global cities react. Dubai anticipates.
+That proactive approach creates confidence.
+
+Lina:
+Safety doesn't mean being conservative — it means being prepared.
+Dubai creates options, and options reduce risk.
+
+SECTION 4 — INVESTOR PSYCHOLOGY (≈1.5 minutes)
+
+Jane:
+There's also a psychological aspect investors often underestimate.
+
+Capital is emotional. Investors must not be.
+
+Dubai removes emotional noise by offering structure, transparency, and choice. When people feel secure, they make better decisions.
+
+Alex:
+And better decisions compound over time.
+
+Lina:
+That's why long-term thinkers thrive here.
+This city is built for decades, not quarters.
+
+SECTION 5 — WHY NOW (≈1 minute)
+
+Jane:
+So why is Dubai attracting even more global capital today?
+
+Because the world is fragmenting.
+Mobility is shrinking.
+Regulation is tightening.
+
+Dubai is doing the opposite.
+
+Alex:
+It's positioning itself as neutral, stable, and globally connected.
+
+Lina:
+For investors, that's no longer a luxury — it's a necessity.
+
+CLOSING (≈1 minute)
+
+Jane:
+Dubai became the capital of global investors because it understands one fundamental truth:
+
+Vision without execution is useless.
+Execution without structure is dangerous.
+
+Here, vision meets structure.
+Ambition meets clarity.
+And long-term thinking is the standard, not the exception.
+
+This is what we'll explore throughout The JBJ Perspective —
+Not just where to invest, but how to think, how to structure, and how to position yourself intelligently in a global market that never stops evolving.
+
+Thank you for listening.
+This is just the beginning.`;
+
 interface Episode {
   id: number;
   title: string;
@@ -45,7 +168,7 @@ const episodes: Episode[] = [
       { speaker: "Alex", text: "What truly differentiates Dubai is regulatory clarity combined with execution speed." },
       { speaker: "Lina", text: "From an investor's perspective, Dubai removes friction that exists in most global cities." }
     ],
-    duration: "12:45"
+    duration: "10:00"
   },
   {
     id: 2,
@@ -287,12 +410,8 @@ const JBJPodcastSection = () => {
   const [progress, setProgress] = useState(0);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
 
-  // Note: Audio generation and playback will be implemented via ElevenLabs
-  // This is the UI shell - audio files need to be generated separately
-
   const handlePlayPause = () => {
     setIsPlaying(!isPlaying);
-    // TODO: Implement actual audio playback when audio files are generated
   };
 
   const handlePrevious = () => {
@@ -318,86 +437,111 @@ const JBJPodcastSection = () => {
   };
 
   return (
-    <section className="py-16 md:py-24 bg-black">
-      <div className="container mx-auto px-4">
+    <section className="relative py-20 md:py-28 overflow-hidden">
+      {/* Premium Background */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-black to-zinc-900" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,hsl(var(--gold)/0.08),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,hsl(var(--gold)/0.05),transparent_50%)]" />
+        {/* Subtle grid pattern */}
+        <div 
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `linear-gradient(hsl(var(--gold)) 1px, transparent 1px),
+                              linear-gradient(90deg, hsl(var(--gold)) 1px, transparent 1px)`,
+            backgroundSize: '60px 60px'
+          }}
+        />
+      </div>
+
+      <div className="relative z-10 container mx-auto px-4">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-14"
         >
           <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gold/20 to-gold/10 border border-gold/40 rounded-full text-xs uppercase tracking-[0.2em] font-semibold text-gold mb-4">
             <Radio className="w-4 h-4" />
             Exclusive Content
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-            JBJ <span className="text-gold">Podcast</span>
+            The JBJ <span className="text-gold">Perspective</span>
           </h2>
-          <p className="text-xl md:text-2xl text-zinc-400 max-w-2xl mx-auto">
-            The JBJ Perspective: Real Estate, Power & Global Opportunity
+          <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto">
+            Real Estate, Power & Global Opportunity
           </p>
         </motion.div>
 
         {/* Main Player Container */}
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Video/Visual Player */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            {/* Episode Thumbnail Frame with Player */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               className="lg:col-span-2"
             >
+              {/* Premium Frame Container */}
               <div 
-                className="relative rounded-2xl overflow-hidden aspect-video bg-zinc-900"
+                className="relative rounded-2xl overflow-hidden"
                 style={{
-                  boxShadow: '0 25px 60px -15px rgba(0,0,0,0.7), 0 0 0 1px rgba(200,167,102,0.3)'
+                  boxShadow: '0 30px 80px -20px rgba(0,0,0,0.8), 0 0 0 1px rgba(200,167,102,0.25), inset 0 1px 0 rgba(200,167,102,0.1)'
                 }}
               >
-                {/* Background Video/Image */}
-                <video
-                  className="absolute inset-0 w-full h-full object-cover"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                >
-                  <source src="/videos/dubai-skyline-podcast.mp4" type="video/mp4" />
-                </video>
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-
-                {/* Episode Info Overlay */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-                  <span className="inline-flex items-center gap-2 px-3 py-1 bg-gold/20 border border-gold/40 rounded-full text-xs text-gold mb-3">
-                    <Mic className="w-3 h-3" />
-                    Episode {selectedEpisode.id}
-                  </span>
-                  <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
-                    {selectedEpisode.title}
-                  </h3>
-                  <p className="text-sm text-zinc-400">
-                    Featuring: {selectedEpisode.characters.join(", ")}
-                  </p>
-                </div>
-
-                {/* Play Button Overlay */}
-                <button
-                  onClick={handlePlayPause}
-                  className="absolute inset-0 flex items-center justify-center group"
-                >
-                  <div className="w-20 h-20 rounded-full bg-gold/90 flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-transform">
-                    {isPlaying ? (
-                      <Pause className="w-8 h-8 text-black" />
-                    ) : (
-                      <Play className="w-8 h-8 text-black ml-1" />
-                    )}
+                {/* Episode Thumbnail */}
+                <div className="relative aspect-video">
+                  <img 
+                    src={episode1Thumbnail}
+                    alt={`Episode ${selectedEpisode.id}: ${selectedEpisode.title}`}
+                    className="w-full h-full object-cover"
+                  />
+                  
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                  
+                  {/* Episode Badge - Top Left */}
+                  <div className="absolute top-4 left-4">
+                    <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-gold text-black rounded-full text-xs font-bold uppercase tracking-wider">
+                      <Mic className="w-3 h-3" />
+                      Episode {selectedEpisode.id}
+                    </span>
                   </div>
-                </button>
+
+                  {/* Center Play Button */}
+                  <button
+                    onClick={handlePlayPause}
+                    className="absolute inset-0 flex items-center justify-center group"
+                  >
+                    <div 
+                      className="w-24 h-24 rounded-full bg-gold/95 flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-all duration-300"
+                      style={{ boxShadow: '0 0 60px rgba(200,167,102,0.4)' }}
+                    >
+                      {isPlaying ? (
+                        <Pause className="w-10 h-10 text-black" />
+                      ) : (
+                        <Play className="w-10 h-10 text-black ml-1" />
+                      )}
+                    </div>
+                  </button>
+
+                  {/* Episode Title - Bottom */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 leading-tight">
+                      {selectedEpisode.title}
+                    </h3>
+                    <p className="text-sm text-gold/80">
+                      Featuring: {selectedEpisode.characters.join(" • ")}
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              {/* Audio Controls */}
-              <div className="mt-4 bg-zinc-900/80 backdrop-blur-sm rounded-xl border border-gold/20 p-4">
+              {/* Audio Controls Bar */}
+              <div className="mt-4 bg-zinc-900/90 backdrop-blur-sm rounded-xl border border-gold/20 p-4">
                 {/* Progress Bar */}
                 <div className="mb-4">
                   <Slider
@@ -414,7 +558,7 @@ const JBJPodcastSection = () => {
                 </div>
 
                 {/* Controls Row */}
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between flex-wrap gap-4">
                   <div className="flex items-center gap-3">
                     <button
                       onClick={handlePrevious}
@@ -440,50 +584,48 @@ const JBJPodcastSection = () => {
                     </button>
                   </div>
 
+                  {/* Playback Speed */}
+                  <button
+                    onClick={cyclePlaybackSpeed}
+                    className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded-lg text-sm font-medium text-white transition-colors"
+                  >
+                    {playbackSpeed}x
+                  </button>
+
                   {/* Language Selector */}
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
-                      <Globe className="w-4 h-4 text-zinc-400" />
-                      <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
-                        <SelectTrigger className="w-36 bg-zinc-800 border-zinc-700 text-white text-sm">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent className="bg-zinc-900 border-zinc-700">
-                          {languages.map((lang) => (
-                            <SelectItem 
-                              key={lang.code} 
-                              value={lang.code}
-                              className="text-white hover:bg-zinc-800"
-                            >
-                              <span className="flex items-center gap-2">
-                                <span>{lang.flag}</span>
-                                <span>{lang.name}</span>
-                              </span>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
+                  <div className="flex items-center gap-2">
+                    <Globe className="w-4 h-4 text-zinc-400" />
+                    <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+                      <SelectTrigger className="w-36 bg-zinc-800 border-zinc-700 text-white text-sm">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-zinc-900 border-zinc-700">
+                        {languages.map((lang) => (
+                          <SelectItem 
+                            key={lang.code} 
+                            value={lang.code}
+                            className="text-white hover:bg-zinc-800"
+                          >
+                            <span className="flex items-center gap-2">
+                              <span>{lang.flag}</span>
+                              <span>{lang.name}</span>
+                            </span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-                    {/* Speed Control */}
-                    <button
-                      onClick={cyclePlaybackSpeed}
-                      className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded-lg text-sm font-medium text-gold transition-colors"
-                    >
-                      {playbackSpeed}x
-                    </button>
-
-                    {/* Volume */}
-                    <div className="hidden md:flex items-center gap-2 w-32">
-                      <Volume2 className="w-4 h-4 text-zinc-400" />
-                      <Slider
-                        value={volume}
-                        max={100}
-                        step={1}
-                        onValueChange={setVolume}
-                        className="w-full"
-                      />
-                    </div>
+                  {/* Volume Control */}
+                  <div className="flex items-center gap-2">
+                    <Volume2 className="w-4 h-4 text-zinc-400" />
+                    <Slider
+                      value={volume}
+                      max={100}
+                      step={1}
+                      onValueChange={setVolume}
+                      className="w-20"
+                    />
                   </div>
                 </div>
               </div>
@@ -496,42 +638,46 @@ const JBJPodcastSection = () => {
               viewport={{ once: true }}
               className="lg:col-span-1"
             >
-              <div className="bg-zinc-900/80 backdrop-blur-sm rounded-2xl border border-gold/20 overflow-hidden h-full">
+              <div className="bg-zinc-900/60 backdrop-blur-sm rounded-2xl border border-gold/20 overflow-hidden h-full">
                 <div className="p-4 border-b border-gold/20">
-                  <h4 className="text-lg font-bold text-white">All Episodes</h4>
-                  <p className="text-xs text-zinc-500">{episodes.length} episodes available</p>
+                  <h3 className="text-lg font-semibold text-white">All Episodes</h3>
+                  <p className="text-sm text-zinc-400">20 episodes available</p>
                 </div>
-                <ScrollArea className="h-[400px] lg:h-[calc(100%-60px)]">
+
+                <ScrollArea className="h-[400px] lg:h-[480px]">
                   <div className="p-2">
-                    {episodes.map((episode) => (
+                    {episodes.map((episode, index) => (
                       <button
                         key={episode.id}
                         onClick={() => {
                           setSelectedEpisode(episode);
                           setProgress(0);
-                          setIsPlaying(false);
                         }}
-                        className={`w-full text-left p-3 rounded-lg mb-1 transition-all ${
+                        className={`w-full p-3 rounded-xl text-left transition-all mb-1 ${
                           selectedEpisode.id === episode.id
                             ? "bg-gold/20 border border-gold/40"
                             : "bg-zinc-800/50 hover:bg-zinc-800 border border-transparent"
                         }`}
                       >
                         <div className="flex items-start gap-3">
-                          <span className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold shrink-0 ${
-                            selectedEpisode.id === episode.id
-                              ? "bg-gold text-black"
-                              : "bg-zinc-700 text-white"
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                            selectedEpisode.id === episode.id ? "bg-gold text-black" : "bg-zinc-700 text-zinc-300"
                           }`}>
-                            {episode.id}
-                          </span>
-                          <div className="min-w-0">
-                            <h5 className={`text-sm font-medium truncate ${
+                            {index === 0 ? (
+                              <Play className="w-4 h-4" />
+                            ) : (
+                              <Lock className="w-3 h-3" />
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className={`text-sm font-medium truncate ${
                               selectedEpisode.id === episode.id ? "text-gold" : "text-white"
                             }`}>
                               {episode.title}
-                            </h5>
-                            <p className="text-xs text-zinc-500 mt-0.5">{episode.duration}</p>
+                            </p>
+                            <p className="text-xs text-zinc-500 mt-0.5">
+                              {episode.duration}
+                            </p>
                           </div>
                         </div>
                       </button>
@@ -541,48 +687,6 @@ const JBJPodcastSection = () => {
               </div>
             </motion.div>
           </div>
-
-          {/* Script Preview */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mt-8"
-          >
-            <div className="bg-zinc-900/60 backdrop-blur-sm rounded-2xl border border-gold/20 p-6">
-              <h4 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                <Mic className="w-5 h-5 text-gold" />
-                Episode Script Preview
-              </h4>
-              <div className="space-y-4">
-                {selectedEpisode.script.map((line, index) => (
-                  <div key={index} className="flex gap-4">
-                    <span className={`shrink-0 w-16 text-sm font-semibold ${
-                      line.speaker === "Jane" ? "text-gold" :
-                      line.speaker === "Alex" ? "text-blue-400" :
-                      "text-purple-400"
-                    }`}>
-                      {line.speaker}:
-                    </span>
-                    <p className="text-zinc-300 text-sm italic">"{line.text}"</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Admin Notice */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="mt-6 text-center"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900/60 border border-zinc-700 rounded-full text-xs text-zinc-400">
-              <Lock className="w-3 h-3" />
-              Audio download available for admin only
-            </div>
-          </motion.div>
         </div>
       </div>
     </section>
