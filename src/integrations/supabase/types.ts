@@ -11197,14 +11197,7 @@ export type Database = {
             foreignKeyName: "pending_project_imports_developer_id_fkey"
             columns: ["developer_id"]
             isOneToOne: false
-            referencedRelation: "uae_developers"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "pending_project_imports_developer_id_fkey"
-            columns: ["developer_id"]
-            isOneToOne: false
-            referencedRelation: "uae_developers_public"
+            referencedRelation: "developers"
             referencedColumns: ["id"]
           },
           {
