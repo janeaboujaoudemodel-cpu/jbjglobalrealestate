@@ -283,6 +283,7 @@ serve(async (req) => {
             l.includes("/new-projects/") && 
             !l.includes("page/") &&
             !l.includes("developed-by-") &&
+            !l.match(/\/new-projects\/in-[a-z\-]+$/) && // Exclude location filter pages
             l !== "https://providentestate.com/new-projects/" &&
             l !== listingUrl
           )
