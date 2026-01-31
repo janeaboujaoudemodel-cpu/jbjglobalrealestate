@@ -514,16 +514,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Gold Divider */}
-      <section className="py-8 md:py-12 bg-black">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center gap-6">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-            <Sparkles className="w-5 h-5 text-gold/50" />
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-          </div>
-        </div>
-      </section>
+      {/* DIVIDER */}
+      <SectionDivider />
 
       {/* AI COMPARISON & ANALYZER PREVIEW */}
       <section className="py-8 md:py-20 bg-black">
@@ -556,15 +548,7 @@ const Index = () => {
       </section>
 
       {/* DIVIDER */}
-      <section className="py-8 md:py-12 bg-black">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center gap-6">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-            <Sparkles className="w-5 h-5 text-gold/50" />
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-          </div>
-        </div>
-      </section>
+      <SectionDivider />
 
       {/* MORTGAGE CALCULATOR SECTION - Compact on mobile */}
       <section className="py-10 md:py-28 bg-black">
