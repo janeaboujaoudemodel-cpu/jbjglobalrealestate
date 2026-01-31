@@ -18,16 +18,27 @@ interface PodcastSegment {
   text: string;
 }
 
+type HttpError = {
+  status: number;
+  message: string;
+};
+
+const clampInt = (value: unknown, min: number, max: number, fallback: number) => {
+  const n = typeof value === "number" ? Math.floor(value) : fallback;
+  return Math.max(min, Math.min(max, n));
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { segments, language = "en", testMode = false } = await req.json() as { 
+    const { segments, language = "en", testMode = false, testMaxChars } = await req.json() as { 
       segments: PodcastSegment[];
       language?: string;
       testMode?: boolean;
+      testMaxChars?: number;
     };
 
     const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
@@ -40,11 +51,15 @@ serve(async (req) => {
       throw new Error("Jane's voice ID not configured");
     }
 
-    // In test mode, only process first segment with shorter text
-    const segmentsToProcess = testMode ? [{
-      speaker: "jane" as const,
-      text: "Welcome to The JBJ Perspective. I'm Jane, and today we're exploring why Dubai became the capital of global investors."
-    }] : segments;
+    // In test mode, keep the request *very* small to avoid burning credits (or failing on low-quota API keys).
+    // You can override via `testMaxChars` in the request body.
+    const effectiveTestMaxChars = clampInt(testMaxChars, 1, 200, 4);
+    const testTextCandidate = (segments?.[0]?.text ?? "Hi.").trim();
+    const testText = (testTextCandidate.length ? testTextCandidate : "Hi.").slice(0, effectiveTestMaxChars);
+
+    const segmentsToProcess = testMode
+      ? [{ speaker: "jane" as const, text: testText }]
+      : segments;
 
     console.log(`Generating podcast audio for ${segmentsToProcess.length} segments in ${language}${testMode ? ' (TEST MODE)' : ''}`);
 
@@ -100,7 +115,31 @@ serve(async (req) => {
       if (!response.ok) {
         const errorText = await response.text();
         console.error(`ElevenLabs API error for segment ${i}:`, errorText);
-        throw new Error(`Failed to generate audio for segment ${i}: ${errorText}`);
+
+        // Try to return a more useful status code (instead of a generic 500)
+        let status = 502;
+        let message = `Failed to generate audio for segment ${i}: ${errorText}`;
+
+        try {
+          const parsed = JSON.parse(errorText);
+          const apiStatus = parsed?.detail?.status;
+          const apiMessage = parsed?.detail?.message;
+
+          if (apiStatus === "quota_exceeded") {
+            status = 402;
+            message = apiMessage || message;
+          } else if (response.status === 401 || response.status === 403) {
+            status = 401;
+            message = apiMessage || "ElevenLabs authentication failed";
+          } else if (response.status >= 400 && response.status < 500) {
+            status = 400;
+            message = apiMessage || message;
+          }
+        } catch {
+          // Keep defaults
+        }
+
+        throw { status, message } satisfies HttpError;
       }
 
       const audioBuffer = await response.arrayBuffer();
@@ -140,7 +179,16 @@ serve(async (req) => {
     );
 
   } catch (err) {
-    const errorMessage = err instanceof Error ? err.message : "Unknown error";
+    const status =
+      typeof (err as HttpError | undefined)?.status === "number"
+        ? (err as HttpError).status
+        : 500;
+    const errorMessage =
+      typeof (err as HttpError | undefined)?.message === "string"
+        ? (err as HttpError).message
+        : err instanceof Error
+          ? err.message
+          : "Unknown error";
     console.error("Podcast TTS error:", errorMessage);
     return new Response(
       JSON.stringify({ 
@@ -148,7 +196,7 @@ serve(async (req) => {
         error: errorMessage 
       }),
       {
-        status: 500,
+        status,
         headers: {
           ...corsHeaders,
           "Content-Type": "application/json",
