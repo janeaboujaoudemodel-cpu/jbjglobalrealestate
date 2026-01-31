@@ -19,20 +19,12 @@ type PreparedAudio = {
 
 type Status = "idle" | "loading" | "ready" | "playing" | "paused" | "error";
 
-// In-memory caches (session-scoped):
-// - Audio cache prevents re-decoding/re-downloading in the same session.
-// - Captions cache prevents re-translating in the same session.
+// In-memory cache (session-scoped): prevents re-decoding/re-downloading in the same session.
 const audioCache = new Map<string, PreparedAudio>();
-const captionsCache = new Map<string, PodcastSegment[]>();
 
-const buildAudioCacheKey = (episodeId: number, segments: PodcastSegment[]) => {
+const buildAudioCacheKey = (episodeId: number, audioLanguage: string, segments: PodcastSegment[]) => {
   const textSig = segments.map((s) => `${s.speaker}:${s.text}`).join("\n");
-  return `${episodeId}:${hashString(textSig)}`;
-};
-
-const buildCaptionsCacheKey = (episodeId: number, captionsLanguage: string, segments: PodcastSegment[]) => {
-  const textSig = segments.map((s) => `${s.speaker}:${s.text}`).join("\n");
-  return `${episodeId}:${captionsLanguage}:${hashString(textSig)}`;
+  return `${episodeId}:${audioLanguage}:${hashString(textSig)}`;
 };
 
 function hashString(input: string) {
@@ -63,34 +55,7 @@ function findSegmentIndexAtTime(prepared: PreparedAudio, tSeconds: number) {
   return Math.max(0, Math.min(starts.length - 1, lo - 1));
 }
 
-async function translateSegments(segments: PodcastSegment[], targetLang: string, signal?: AbortSignal) {
-  if (!targetLang || targetLang === "en") return segments;
-
-  const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/auto-translate`, {
-    method: "POST",
-    signal,
-    headers: {
-      "Content-Type": "application/json",
-      apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-    },
-    body: JSON.stringify({
-      texts: segments.map((s) => s.text),
-      targetLang,
-    }),
-  });
-
-  const data = (await res.json().catch(() => null)) as null | { translations?: string[]; error?: string };
-  if (!res.ok) {
-    // Fallback to English text if translation fails.
-    return segments;
-  }
-
-  const translations = Array.isArray(data?.translations) ? data!.translations! : null;
-  if (!translations || translations.length !== segments.length) return segments;
-
-  return segments.map((s, i) => ({ ...s, text: translations[i] || s.text }));
-}
+// translateSegments is no longer used because captions are delivered via the per-language audio.
 
 async function fetchTtsSegmentAudio(params: {
   speaker: PodcastSegment["speaker"];
@@ -239,9 +204,10 @@ export function usePodcastPlayback(params: {
     const abort = new AbortController();
     abortRef.current = abort;
 
-    // If we've already prepared this episode+script in this session, do NOT show any
-    // "generating" state; it's already cached locally.
-    const audioKey = buildAudioCacheKey(params.episodeId, params.segments);
+    // Decide audio language – for now, per-language audio is generated once and cached,
+    // so we key on the UI language. English is the default fallback.
+    const audioLang = params.language || "en";
+    const audioKey = buildAudioCacheKey(params.episodeId, audioLang, params.segments);
     const cachedAudio = audioCache.get(audioKey);
 
     if (cachedAudio) {
@@ -259,26 +225,8 @@ export function usePodcastPlayback(params: {
       setError(null);
       setStatus("ready");
 
-      // Translate captions in background (UI-only, no credit impact).
-      if (params.language && params.language !== "en") {
-        const captionsKey = buildCaptionsCacheKey(params.episodeId, params.language, params.segments);
-        const cachedCaptions = captionsCache.get(captionsKey);
-
-        if (cachedCaptions) {
-          captionsRef.current = cachedCaptions;
-          setCaption(cachedCaptions[0]?.text || "");
-        } else {
-          translateSegments(params.segments, params.language, abort.signal)
-            .then((translated) => {
-              captionsCache.set(captionsKey, translated);
-              captionsRef.current = translated;
-              setCaption(translated[0]?.text || "");
-            })
-            .catch(() => {
-              // keep English
-            });
-        }
-      }
+      // Captions: use the same language as the audio (already translated when TTS generated).
+      // If captions are separate from audio language in future, add translateSegments here.
 
       return cachedAudio;
     }
@@ -295,13 +243,12 @@ export function usePodcastPlayback(params: {
         await ctx.resume().catch(() => undefined);
       }
 
-      // 1) Prepare audio (always from the original English script)
+      // 1) Fetch audio – try the requested language first (cache-only). If it's not
+      //    cached yet, fall back to English (also cache-only). Generating new audio
+      //    is NOT allowed from the client to protect credits.
       let preparedAudio: PreparedAudio;
 
-      if (cachedAudio) {
-        preparedAudio = cachedAudio;
-      } else {
-        // IMPORTANT: load/decode in parallel so Play starts quickly.
+      const fetchSegmentsForLanguage = async (lang: string) => {
         let completed = 0;
         const results = await Promise.all(
           params.segments.map(async (seg, i) => {
@@ -310,17 +257,12 @@ export function usePodcastPlayback(params: {
               text: seg.text,
               episodeId: params.episodeId,
               segmentIndex: i,
-              // Keep audio generation language stable to avoid consuming credits when users only switch UI language.
-              audioLanguage: "en",
-              // IMPORTANT: we NEVER generate new audio from the client. If a segment isn't cached,
-              // playback should fail rather than consuming credits.
+              audioLanguage: lang,
               requireCache: true,
               signal: abort.signal,
             });
 
-            // decodeAudioData may detach the buffer; pass a copy.
             const decoded = await ctx.decodeAudioData(res.buffer.slice(0));
-
             completed += 1;
             setLoadingStep({ current: completed, total: params.segments.length });
 
@@ -332,36 +274,48 @@ export function usePodcastPlayback(params: {
             };
           }),
         );
+        return results;
+      };
 
-        const ordered = results
-          .slice()
-          .sort((a, b) => a.index - b.index);
-
-        const buffers: AudioBuffer[] = ordered.map((r) => r.decoded);
-        const billedCharacters = ordered.reduce((sum, r) => sum + (r.charactersBilled || 0), 0);
-        const cachedSegments = ordered.filter((r) => r.wasCached).length;
-
-        const segmentStartTimes: number[] = [];
-        let t = 0;
-        for (const b of buffers) {
-          segmentStartTimes.push(t);
-          t += b.duration;
+      let results: Awaited<ReturnType<typeof fetchSegmentsForLanguage>>;
+      try {
+        results = await fetchSegmentsForLanguage(audioLang);
+      } catch (err) {
+        // If the requested language audio isn't cached, fall back to English.
+        if (audioLang !== "en") {
+          console.info(`Audio not cached for ${audioLang}, falling back to English`);
+          results = await fetchSegmentsForLanguage("en");
+        } else {
+          throw err;
         }
-
-        preparedAudio = {
-          segments: params.segments,
-          segmentStartTimes,
-          duration: t,
-          buffers,
-          billing: {
-            billedCharacters,
-            cachedSegments,
-            totalSegments: params.segments.length,
-          },
-        };
-
-        audioCache.set(audioKey, preparedAudio);
       }
+
+      const ordered = results.slice().sort((a, b) => a.index - b.index);
+
+      const buffers: AudioBuffer[] = ordered.map((r) => r.decoded);
+      const billedCharacters = ordered.reduce((sum, r) => sum + (r.charactersBilled || 0), 0);
+      const cachedSegmentsCount = ordered.filter((r) => r.wasCached).length;
+
+      const segmentStartTimes: number[] = [];
+      let t = 0;
+      for (const b of buffers) {
+        segmentStartTimes.push(t);
+        t += b.duration;
+      }
+
+      preparedAudio = {
+        segments: params.segments,
+        segmentStartTimes,
+        duration: t,
+        buffers,
+        billing: {
+          billedCharacters,
+          cachedSegments: cachedSegmentsCount,
+          totalSegments: params.segments.length,
+        },
+      };
+
+      audioCache.set(audioKey, preparedAudio);
 
       // Ensure billing exists even for cache hits.
       if (!preparedAudio.billing) {
@@ -388,26 +342,7 @@ export function usePodcastPlayback(params: {
       segmentIndexRef.current = 0;
       setStatus("ready");
 
-      // Translate captions in background (UI-only, no credit impact).
-      if (params.language && params.language !== "en") {
-        const captionsKey = buildCaptionsCacheKey(params.episodeId, params.language, params.segments);
-        const cachedCaptions = captionsCache.get(captionsKey);
-
-        if (cachedCaptions) {
-          captionsRef.current = cachedCaptions;
-          setCaption(cachedCaptions[0]?.text || "");
-        } else {
-          translateSegments(params.segments, params.language, abort.signal)
-            .then((translated) => {
-              captionsCache.set(captionsKey, translated);
-              captionsRef.current = translated;
-              setCaption(translated[0]?.text || "");
-            })
-            .catch(() => {
-              // keep English
-            });
-        }
-      }
+      // Captions are now implicitly in the audio's language, so we skip extra translation.
       return preparedAudio;
     } catch (e) {
       if ((e as any)?.name === "AbortError") return null;
@@ -555,7 +490,7 @@ export function usePodcastPlayback(params: {
     [startAt, status, updateCaptionForTime],
   );
 
-  // Reset when episode/language changes.
+  // Reset when episode OR language changes (so we re-fetch the correct cached audio).
   useEffect(() => {
     pausedAtRef.current = 0;
     playbackRef.current = null;
@@ -572,34 +507,9 @@ export function usePodcastPlayback(params: {
     setStatus("idle");
     stopInternal();
     abortRef.current?.abort();
-  }, [params.episodeId, stopInternal]);
+  }, [params.episodeId, params.language, stopInternal]);
 
-  // Update captions when UI language changes (no audio regeneration).
-  useEffect(() => {
-    if (!params.segments?.length) return;
-    if (!preparedRef.current) return;
-
-    const captionsKey = buildCaptionsCacheKey(params.episodeId, params.language, params.segments);
-    const cached = captionsCache.get(captionsKey);
-    if (cached) {
-      captionsRef.current = cached;
-      setCaption(cached[segmentIndex]?.text || "");
-      return;
-    }
-
-    const abort = new AbortController();
-    translateSegments(params.segments, params.language, abort.signal)
-      .then((translated) => {
-        captionsCache.set(captionsKey, translated);
-        captionsRef.current = translated;
-        setCaption(translated[segmentIndex]?.text || "");
-      })
-      .catch(() => {
-        // keep previous captions
-      });
-
-    return () => abort.abort();
-  }, [params.episodeId, params.language, params.segments, segmentIndex]);
+  // Captions are now tied to audio language – no separate translation effect needed.
 
   // If playbackRate changes mid-playback, restart from current time for accurate clocking.
   useEffect(() => {
