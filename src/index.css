@@ -302,10 +302,13 @@ All colors MUST be HSL.
   .jj-hero-fullscreen {
     /* IMPORTANT:
        - Avoid negative margins (they can make scrollY non-zero at “top” and flip the header solid)
-       - Use MIN-height, not fixed height, so if hero content is taller it expands instead of
-         overflowing into the next section (the overlap bug you’re seeing globally).
+       - Keep an explicit height so children using h-full / 100% can correctly fill the hero.
+         (Using only min-height breaks % heights on some pages and causes “compressed” heroes.)
+       - Hide any overflow so nothing visually bleeds into the next section.
     */
+    height: 100vh;
     min-height: 100vh;
+    overflow: hidden;
     box-sizing: border-box;
 
     /* Reserve space so hero content never collides with the fixed header.
@@ -316,6 +319,7 @@ All colors MUST be HSL.
 
   @media (min-width: 640px) {
     .jj-hero-fullscreen {
+      height: 100vh;
       min-height: 100vh;
       padding-top: calc(7rem + env(safe-area-inset-top));
       padding-bottom: env(safe-area-inset-bottom);
@@ -324,6 +328,7 @@ All colors MUST be HSL.
 
   @media (min-width: 1024px) {
     .jj-hero-fullscreen {
+      height: 100vh;
       min-height: 100vh;
       padding-top: calc(8rem + env(safe-area-inset-top));
       padding-bottom: env(safe-area-inset-bottom);
@@ -333,15 +338,18 @@ All colors MUST be HSL.
   /* Modern browsers with dvh support */
   @supports (height: 100dvh) {
     .jj-hero-fullscreen {
+      height: 100dvh;
       min-height: 100dvh;
     }
     @media (min-width: 640px) {
       .jj-hero-fullscreen {
+        height: 100dvh;
         min-height: 100dvh;
       }
     }
     @media (min-width: 1024px) {
       .jj-hero-fullscreen {
+        height: 100dvh;
         min-height: 100dvh;
       }
     }
