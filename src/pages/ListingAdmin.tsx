@@ -46,7 +46,7 @@ import ListingAdminChat from "@/components/listing-admin/ListingAdminChat";
 import { PendingUpdatesQueue } from "@/components/listing-admin/PendingUpdatesQueue";
 import { ExtractionJobsPanel } from "@/components/listing-admin/ExtractionJobsPanel";
 import SyncDashboard from "@/components/listing-admin/SyncDashboard";
-import { OffPlanInquiryCTA } from "@/components/OffPlanInquiryCTA";
+// OffPlanInquiryCTA removed from admin per user request
 import { RefreshCw } from "lucide-react";
 
 interface ProjectDocument {
@@ -582,7 +582,6 @@ const ListingAdmin = () => {
         {activeView === 'sync' && (
           <div className="container mx-auto px-4 py-6 space-y-6">
             <SyncDashboard />
-            <OffPlanInquiryCTA variant="compact" />
           </div>
         )}
 

@@ -1,0 +1,363 @@
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+};
+
+/**
+ * Batch Extract Pending Imports – processes ALL pending imports with PENDING_SCRAPE review_notes
+ * and updates them with full extraction (description, images, documents, amenities, etc.)
+ */
+
+// Global banned terms for sanitization
+const BANNED_TERMS_REGEX = /\b(Provident|Provident Estate|providentestate)\b/gi;
+
+function sanitizeText(text: string | null): string | null {
+  if (!text) return null;
+  return text.replace(BANNED_TERMS_REGEX, "").replace(/\s{2,}/g, " ").trim() || null;
+}
+
+async function sleep(ms: number): Promise<void> {
+  return new Promise((r) => setTimeout(r, ms + Math.random() * 500));
+}
+
+async function fetchWithRetry(url: string, options: RequestInit, maxRetries = 3): Promise<Response> {
+  let lastError: Error | null = null;
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const res = await fetch(url, options);
+      if (res.status === 502 || res.status === 503 || res.status === 429) {
+        const wait = attempt * 3000 + Math.random() * 2000;
+        console.warn(`[Retry ${attempt}/${maxRetries}] Got ${res.status}, waiting ${Math.round(wait)}ms...`);
+        await sleep(wait);
+        continue;
+      }
+      return res;
+    } catch (err) {
+      lastError = err instanceof Error ? err : new Error(String(err));
+      const wait = attempt * 2000;
+      console.warn(`[Retry ${attempt}/${maxRetries}] Network error, waiting ${wait}ms...`);
+      await sleep(wait);
+    }
+  }
+  throw lastError || new Error("Max retries exceeded");
+}
+
+function extractSlugFromUrl(url: string): string {
+  const match = url.match(/\/new-projects\/([^\/\?#]+)/);
+  return match?.[1]?.toLowerCase().replace(/\/$/, "") || "";
+}
+
+function extractImagesFromHtml(html: string, links: string[]): string[] {
+  const imageSet = new Set<string>();
+  for (const l of links) {
+    if (l.includes("cloudfront.net") && /\.(jpg|jpeg|png|webp)/i.test(l)) imageSet.add(l);
+  }
+  const imgRx = /<img[^>]+(?:src|data-src|data-lazy-src)=["']([^"']+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = imgRx.exec(html)) !== null) {
+    if (m[1]?.includes("cloudfront.net") && /\.(jpg|jpeg|png|webp)/i.test(m[1])) imageSet.add(m[1]);
+  }
+  const bgRx = /background-image:\s*url\(['"]?([^'")\s]+cloudfront\.net[^'")\s]+)['"]?\)/gi;
+  while ((m = bgRx.exec(html)) !== null) {
+    if (m[1]) imageSet.add(m[1]);
+  }
+  return Array.from(imageSet)
+    .filter((u) => !/(logo|icon|avatar|placeholder|spinner|favicon)/i.test(u))
+    .map((u) => u.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"))
+    .slice(0, 15);
+}
+
+function extractPdfsFromHtml(html: string, markdown: string): { brochure: string | null; paymentPlan: string | null; floorPlans: string[] } {
+  const pdfRx = /https?:\/\/[^\s"'<>\)]+\.pdf(?:\?[^\s"'<>\)]*)?/gi;
+  const pdfLinks = [...new Set([...(markdown.match(pdfRx) || []), ...(html.match(pdfRx) || [])])];
+  let brochure: string | null = null;
+  let paymentPlan: string | null = null;
+  const floorPlans: string[] = [];
+  for (const p of pdfLinks) {
+    const lower = p.toLowerCase();
+    if (!brochure && lower.includes("brochure")) brochure = p;
+    else if (!paymentPlan && (lower.includes("payment") || lower.includes("plan"))) paymentPlan = p;
+    else if (lower.includes("floor")) floorPlans.push(p);
+  }
+  if (!brochure && pdfLinks.length > 0) {
+    const leftover = pdfLinks.filter((p) => p !== paymentPlan && !floorPlans.includes(p));
+    if (leftover.length > 0) brochure = leftover[0];
+  }
+  return { brochure, paymentPlan, floorPlans };
+}
+
+function stripMarkdownLinks(text: string): string {
+  return text.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").trim();
+}
+
+function extractDescriptionFromMarkdown(markdown: string): string | null {
+  const aboutMatch = markdown.match(/About the project\s*\n+([^\n#]+(?:\n[^\n#]+)*)/i);
+  if (aboutMatch?.[1]) {
+    const desc = stripMarkdownLinks(aboutMatch[1]).replace(/\n+/g, " ").trim();
+    if (desc.length > 50) return sanitizeText(desc);
+  }
+  const paragraphs = markdown.split(/\n\n+/);
+  for (const p of paragraphs) {
+    const cleaned = stripMarkdownLinks(p).replace(/\n/g, " ").trim();
+    if (cleaned.length > 100 && !cleaned.startsWith("#") && !/^(Buy|Rent|Projects|Developers|Areas|Services|Blogs|Register|Details|Gallery|Floor Plans|Amenities|Location|Payment Plans)/i.test(cleaned)) {
+      return sanitizeText(cleaned.slice(0, 800));
+    }
+  }
+  return null;
+}
+
+function extractTextFromMarkdown(markdown: string): {
+  name: string | null;
+  developerName: string | null;
+  location: string | null;
+  bedrooms: string | null;
+  priceFrom: number | null;
+  handover: string | null;
+  paymentPlan: string | null;
+  description: string | null;
+  propertyType: string | null;
+  statusLabel: string | null;
+} {
+  const cleanMd = stripMarkdownLinks(markdown);
+  const titleMatch = cleanMd.match(/^#\s+(.+)/m);
+  let name = titleMatch?.[1]?.trim() || null;
+  if (name) {
+    name = name.replace(/\s+by\s+.*$/i, "").trim();
+    name = sanitizeText(name);
+  }
+  const devLinkMatch = markdown.match(/\[by\s+([^\]]+)\]/i);
+  let developerName = devLinkMatch?.[1]?.trim() || null;
+  if (!developerName) {
+    const devMatch = cleanMd.match(/by\s+([A-Z][A-Za-z\s&]+?)(?:\s*\n|\s*in\s)/i);
+    developerName = devMatch?.[1]?.trim() || null;
+  }
+  const locMatch = cleanMd.match(/(?:at|in)\s+([A-Z][A-Za-z\s,\-]+?)(?:\s*\||$|\n)/i);
+  const location = locMatch?.[1]?.trim() || null;
+  const bedMatch = cleanMd.match(/((?:Studio|[\d,&\s\-]+)\s*(?:BR|Bedrooms?|Bedroom))/i);
+  const bedrooms = bedMatch?.[1]?.trim() || null;
+  const priceMatch = cleanMd.match(/(EUR|AED|USD)\s*([\d,.]+)\s*(K|M)?/i);
+  let priceFrom: number | null = null;
+  if (priceMatch) {
+    let val = parseFloat(priceMatch[2].replace(/,/g, ""));
+    if (priceMatch[3]?.toUpperCase() === "K") val *= 1000;
+    if (priceMatch[3]?.toUpperCase() === "M") val *= 1000000;
+    if (priceMatch[1].toUpperCase() === "EUR") val *= 4.0;
+    if (priceMatch[1].toUpperCase() === "USD") val *= 3.67;
+    priceFrom = Math.round(val);
+  }
+  const handoverMatch = cleanMd.match(/(?:Handover|Completion)[:\s]*(Q[1-4]?\s*\d{4}|\d{4}|Ready)/i);
+  const handover = handoverMatch?.[1]?.trim() || null;
+  const ppMatch = cleanMd.match(/(\d{2}\/\d{2})/);
+  const paymentPlan = ppMatch?.[1] || null;
+  const description = extractDescriptionFromMarkdown(markdown);
+  const typeMatch = cleanMd.match(/(Apartment|Villa|Townhouse|Penthouse|Sky[- ]?Villa|Studio)/i);
+  const propertyType = typeMatch?.[1] || null;
+  const statusMatch = cleanMd.match(/(Future Launch|New Phase|New Launch|Coming Soon|Sold Out)/i);
+  const statusLabel = statusMatch?.[1] || null;
+  return { name, developerName, location, bedrooms, priceFrom, handover, paymentPlan, description, propertyType, statusLabel };
+}
+
+function parseBedrooms(bedroomStr: string | null): { min: number | null; max: number | null } | null {
+  if (!bedroomStr) return null;
+  const matches = bedroomStr.match(/(\d+)/g);
+  if (!matches || matches.length === 0) return null;
+  const nums = matches.map((m) => parseInt(m));
+  return { min: nums[0], max: nums.length > 1 ? nums[nums.length - 1] : nums[0] };
+}
+
+serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  const startTime = Date.now();
+  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+  const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  const firecrawlKey = Deno.env.get("FIRECRAWL_API_KEY");
+
+  if (!firecrawlKey) {
+    return new Response(JSON.stringify({ error: "Missing FIRECRAWL_API_KEY" }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+  try {
+    const { limit = 50, dryRun = false } = await req.json().catch(() => ({}));
+
+    console.log(`[BatchExtract] Starting (limit=${limit}, dryRun=${dryRun})...`);
+
+    // Get developers for matching
+    const { data: devs } = await supabase.from("developers").select("id, name, slug");
+    const devList = devs || [];
+    const devMap = buildDeveloperMap(devList);
+
+    // Fetch pending imports that still need extraction (have PENDING_SCRAPE note or no description/images)
+    const { data: imports, error: fetchErr } = await supabase
+      .from("pending_project_imports")
+      .select("id, name, slug, source_url, images, description, review_notes")
+      .eq("status", "pending")
+      .or("review_notes.ilike.%PENDING_SCRAPE%,images.eq.[]")
+      .order("created_at", { ascending: true })
+      .limit(limit);
+
+    if (fetchErr) {
+      return new Response(JSON.stringify({ error: fetchErr.message }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (!imports || imports.length === 0) {
+      return new Response(JSON.stringify({ success: true, message: "No imports need extraction", stats: { processed: 0, success: 0, errors: 0 } }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    console.log(`[BatchExtract] Found ${imports.length} imports to process`);
+
+    const stats = { processed: 0, success: 0, errors: 0, images: 0, documents: 0 };
+    const errors: Array<{ name: string; error: string }> = [];
+
+    for (const item of imports) {
+      stats.processed++;
+      if (!item.source_url) {
+        stats.errors++;
+        errors.push({ name: item.name, error: "No source_url" });
+        continue;
+      }
+
+      console.log(`[BatchExtract] Processing ${item.name}...`);
+
+      try {
+        const scrapeRes = await fetchWithRetry("https://api.firecrawl.dev/v1/scrape", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${firecrawlKey}` },
+          body: JSON.stringify({ url: item.source_url, formats: ["markdown", "links", "rawHtml"], waitFor: 8000, timeout: 60000, onlyMainContent: false }),
+        });
+
+        if (!scrapeRes.ok) {
+          const errText = await scrapeRes.text();
+          console.error(`[BatchExtract] Scrape failed for ${item.name}: ${errText.substring(0, 100)}`);
+          stats.errors++;
+          errors.push({ name: item.name, error: `Scrape failed: ${scrapeRes.status}` });
+          continue;
+        }
+
+        const scrapeData = await scrapeRes.json();
+        const markdown = scrapeData.data?.markdown || "";
+        const links = scrapeData.data?.links || [];
+        const html = scrapeData.data?.rawHtml || "";
+
+        const extracted = extractTextFromMarkdown(markdown);
+        const imageUrls = extractImagesFromHtml(html, links);
+        const { brochure, paymentPlan: ppUrl, floorPlans } = extractPdfsFromHtml(html, markdown);
+        const beds = parseBedrooms(extracted.bedrooms);
+        const dev = matchDeveloper(extracted.developerName, devMap);
+
+        const imagesPayload = imageUrls.map((url, i) => ({ url, alt_text: `${item.name} - Image ${i + 1}`, display_order: i }));
+        const documentsPayload: Array<{ url: string; type: string; name?: string }> = [];
+        if (brochure) documentsPayload.push({ url: brochure, type: "brochure", name: `${item.name} Brochure.pdf` });
+        if (ppUrl) documentsPayload.push({ url: ppUrl, type: "payment_plan", name: `${item.name} Payment Plan.pdf` });
+        for (const fp of floorPlans) documentsPayload.push({ url: fp, type: "floor_plan", name: `${item.name} Floor Plan.pdf` });
+
+        const hasMinimal = Boolean(extracted.description && extracted.developerName && imagesPayload.length >= 1);
+        const hasDocs = documentsPayload.length > 0;
+        const stillIncomplete = !hasMinimal || !hasDocs;
+
+        if (dryRun) {
+          console.log(`[DryRun] Would update ${item.name}: ${imagesPayload.length} images, ${documentsPayload.length} docs, incomplete=${stillIncomplete}`);
+          stats.success++;
+          continue;
+        }
+
+        const { error: updateErr } = await supabase
+          .from("pending_project_imports")
+          .update({
+            developer_name: sanitizeText(extracted.developerName) || item.name.split(" ")[0] || null,
+            developer_id: dev?.id || null,
+            description: extracted.description,
+            price_from: extracted.priceFrom || null,
+            bedrooms_min: beds?.min || null,
+            bedrooms_max: beds?.max || null,
+            handover_date: extracted.handover || null,
+            payment_plan: extracted.paymentPlan || null,
+            property_type_label: extracted.propertyType || null,
+            status_label: extracted.statusLabel || null,
+            images: imagesPayload,
+            documents: documentsPayload,
+            review_notes: stillIncomplete ? "INCOMPLETE" : null,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", item.id);
+
+        if (updateErr) {
+          stats.errors++;
+          errors.push({ name: item.name, error: updateErr.message });
+        } else {
+          stats.success++;
+          stats.images += imagesPayload.length;
+          stats.documents += documentsPayload.length;
+          console.log(`[BatchExtract] ✓ Updated ${item.name} (${imagesPayload.length} imgs, ${documentsPayload.length} docs)`);
+        }
+
+        // Throttle to avoid rate limits
+        await sleep(1000);
+      } catch (err) {
+        stats.errors++;
+        errors.push({ name: item.name, error: err instanceof Error ? err.message : String(err) });
+      }
+    }
+
+    const duration = Date.now() - startTime;
+    console.log(`[BatchExtract] Complete in ${duration}ms: ${stats.success} success, ${stats.errors} errors`);
+
+    return new Response(JSON.stringify({ success: true, stats, errors: errors.slice(0, 10), duration_ms: duration }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    console.error("[BatchExtract] Error:", error);
+    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+});
+
+function buildDeveloperMap(devList: Array<{ id: string; name: string; slug: string }>) {
+  const devMap = new Map<string, { id: string; name: string; slug: string }>();
+  for (const d of devList) {
+    if (!d.name) continue;
+    devMap.set(d.name.toLowerCase().replace(/[^a-z0-9]/g, ""), d);
+    const words = d.name.toLowerCase().split(/\s+/);
+    for (const w of words) {
+      if (w.length > 3) devMap.set(w, d);
+    }
+    const nameLower = d.name.toLowerCase();
+    const knownDevelopers = ["sobha", "emaar", "damac", "nakheel", "meraas", "binghatti", "azizi", "omniyat", "ellington", "danube", "select", "deyaar", "mag", "aldar", "reportage", "samana", "imtiaz", "object one", "arada", "irth", "ohana"];
+    for (const known of knownDevelopers) {
+      if (nameLower.includes(known)) devMap.set(known, d);
+    }
+  }
+  return devMap;
+}
+
+function matchDeveloper(developerName: string | null, devMap: Map<string, { id: string; name: string; slug: string }>): { id: string; name: string; slug: string } | undefined {
+  if (!developerName) return undefined;
+  const norm = developerName.toLowerCase().replace(/[^a-z0-9]/g, "");
+  let dev = devMap.get(norm);
+  if (!dev) {
+    for (const w of developerName.toLowerCase().split(/\s+/)) {
+      if (w.length > 3 && devMap.has(w)) {
+        dev = devMap.get(w);
+        break;
+      }
+    }
+  }
+  return dev;
+}
