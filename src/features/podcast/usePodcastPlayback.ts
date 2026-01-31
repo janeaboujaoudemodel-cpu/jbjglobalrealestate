@@ -57,6 +57,18 @@ function findSegmentIndexAtTime(prepared: PreparedAudio, tSeconds: number) {
 
 // translateSegments is no longer used because captions are delivered via the per-language audio.
 
+class TtsHttpError extends Error {
+  status: number;
+
+  constructor(status: number, message: string) {
+    super(message);
+    this.name = "TtsHttpError";
+    this.status = status;
+  }
+}
+
+const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+
 async function fetchTtsSegmentAudio(params: {
   speaker: PodcastSegment["speaker"];
   text: string;
@@ -89,11 +101,11 @@ async function fetchTtsSegmentAudio(params: {
   const contentType = res.headers.get("content-type") || "";
   if (contentType.includes("application/json")) {
     const data = await res.json().catch(() => ({} as any));
-    throw new Error((data as any)?.error || "Failed to generate audio");
+    throw new TtsHttpError(res.status || 500, (data as any)?.error || "Failed to generate audio");
   }
 
   if (!res.ok) {
-    throw new Error(`Audio request failed (${res.status})`);
+    throw new TtsHttpError(res.status || 500, `Audio request failed (${res.status})`);
   }
 
   // Check if this was served from cache (no credits used)
@@ -102,6 +114,27 @@ async function fetchTtsSegmentAudio(params: {
   const buffer = await res.arrayBuffer();
   
   return { buffer, wasCached, charactersBilled };
+}
+
+async function fetchTtsSegmentAudioWithRetry(params: Parameters<typeof fetchTtsSegmentAudio>[0]) {
+  // ElevenLabs enforces a concurrency limit; during first-time generation we may briefly hit it.
+  // Retry a couple times with a short backoff.
+  const maxAttempts = 3;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      return await fetchTtsSegmentAudio(params);
+    } catch (e) {
+      if (params.signal?.aborted) throw e;
+      const message = e instanceof Error ? e.message : String(e);
+      const isConcurrencyLimit = message.includes("too_many_concurrent_requests") || message.includes("Too many concurrent requests");
+
+      if (!isConcurrencyLimit || attempt === maxAttempts) throw e;
+      await sleep(250 * attempt * attempt);
+    }
+  }
+  // Unreachable, but TS wants a return.
+  return await fetchTtsSegmentAudio(params);
 }
 
 export function usePodcastPlayback(params: {
@@ -250,31 +283,70 @@ export function usePodcastPlayback(params: {
 
       const fetchSegmentsForLanguage = async (lang: string, allowGeneration: boolean) => {
         let completed = 0;
-        const results = await Promise.all(
-          params.segments.map(async (seg, i) => {
-            const res = await fetchTtsSegmentAudio({
-              speaker: seg.speaker,
-              text: seg.text,
-              episodeId: params.episodeId,
-              segmentIndex: i,
-              audioLanguage: lang,
-              // Only allow generation when explicitly permitted (first-time generation)
-              requireCache: !allowGeneration,
-              signal: abort.signal,
-            });
 
-            const decoded = await ctx.decodeAudioData(res.buffer.slice(0));
-            completed += 1;
-            setLoadingStep({ current: completed, total: params.segments.length });
+        // IMPORTANT: don't use Promise.all here — it rejects fast and leaves the rest of
+        // the requests running. When we then fall back (English / generation), we end up
+        // with overlapping batches that exceed ElevenLabs' max concurrency.
+        const MAX_CONCURRENT_TTS_REQUESTS = 4;
 
-            return {
-              index: i,
-              decoded,
-              wasCached: res.wasCached,
-              charactersBilled: res.charactersBilled,
-            };
-          }),
+        const results: Array<{
+          index: number;
+          decoded: AudioBuffer;
+          wasCached: boolean;
+          charactersBilled: number;
+        }> = new Array(params.segments.length);
+
+        let nextIndex = 0;
+        let firstError: unknown = null;
+
+        const worker = async () => {
+          while (true) {
+            if (abort.signal.aborted) throw new DOMException("Aborted", "AbortError");
+            if (firstError) return;
+
+            const i = nextIndex;
+            nextIndex += 1;
+            if (i >= params.segments.length) return;
+
+            const seg = params.segments[i];
+
+            try {
+              const ttsFn = allowGeneration ? fetchTtsSegmentAudioWithRetry : fetchTtsSegmentAudio;
+              const res = await ttsFn({
+                speaker: seg.speaker,
+                text: seg.text,
+                episodeId: params.episodeId,
+                segmentIndex: i,
+                audioLanguage: lang,
+                // Only allow generation when explicitly permitted (first-time generation)
+                requireCache: !allowGeneration,
+                signal: abort.signal,
+              });
+
+              const decoded = await ctx.decodeAudioData(res.buffer.slice(0));
+              results[i] = {
+                index: i,
+                decoded,
+                wasCached: res.wasCached,
+                charactersBilled: res.charactersBilled,
+              };
+
+              completed += 1;
+              setLoadingStep({ current: completed, total: params.segments.length });
+            } catch (e) {
+              firstError = e;
+              return;
+            }
+          }
+        };
+
+        const workers = Array.from(
+          { length: Math.min(MAX_CONCURRENT_TTS_REQUESTS, params.segments.length) },
+          () => worker(),
         );
+
+        await Promise.all(workers);
+        if (firstError) throw firstError;
         return results;
       };
 
@@ -283,16 +355,22 @@ export function usePodcastPlayback(params: {
         // First, try cache-only to avoid using credits
         results = await fetchSegmentsForLanguage(audioLang, false);
       } catch (err) {
-        // If cache miss and this is English, allow generation (one-time credit use)
+        const status = (err as any)?.status;
+
+        // Only treat 409 as a cache miss. Anything else (502, 401, decoding errors, etc.)
+        // is a real failure and should not trigger a retry/fallback loop.
+        if (status !== 409) throw err;
+
         if (audioLang === "en") {
           console.info("English audio not cached, generating...");
           results = await fetchSegmentsForLanguage("en", true);
         } else {
-          // For non-English, try English cache first, then generate English if needed
           console.info(`Audio not cached for ${audioLang}, falling back to English`);
           try {
             results = await fetchSegmentsForLanguage("en", false);
-          } catch {
+          } catch (e2) {
+            const status2 = (e2 as any)?.status;
+            if (status2 !== 409) throw e2;
             console.info("English audio not cached either, generating...");
             results = await fetchSegmentsForLanguage("en", true);
           }
