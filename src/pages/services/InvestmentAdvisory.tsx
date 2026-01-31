@@ -15,11 +15,15 @@ import {
   Shield,
   Globe,
   Briefcase,
-  User
+  User,
+  ArrowUpRight
 } from "lucide-react";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { GuideSectionHeader } from "@/components/guides/GuideSectionHeader";
+import { SEOHead } from "@/components/SEOHead";
+
+// Import hero video
+import investmentAdvisoryHeroVideo from "@/assets/videos/dubai-investment-hero.mp4";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -34,189 +38,201 @@ const staggerContainer = {
   }
 };
 
+const advisoryServices = [
+  {
+    icon: Target,
+    title: "Investment Strategy Definition",
+    description: "We help investors define a clear investment strategy based on:",
+    items: [
+      "Capital allocation goals",
+      "Time horizon (short, medium, long term)",
+      "Income vs capital appreciation focus",
+      "Risk tolerance and liquidity needs",
+      "Preferred asset class (residential, off-plan, ready, land)"
+    ],
+    footer: "Each strategy is structured before any property recommendations are made."
+  },
+  {
+    icon: BarChart3,
+    title: "Market & Asset Analysis",
+    description: "We provide objective analysis using:",
+    items: [
+      "Area-level market performance",
+      "Historical transaction trends",
+      "Rental yield benchmarks",
+      "Supply vs demand dynamics",
+      "Infrastructure and development pipelines"
+    ],
+    footer: "Advisory insights are supported by official UAE real estate data sources."
+  },
+  {
+    icon: Building2,
+    title: "Off-Plan vs Ready Property Advisory",
+    description: "We advise investors on when and why to consider:",
+    items: [
+      "Off-plan projects (pricing advantage, payment plans, growth potential)",
+      "Ready properties (immediate income, established demand, lower delivery risk)"
+    ],
+    footer: "Each option is assessed based on market cycle positioning and investor objectives."
+  },
+  {
+    icon: Layers,
+    title: "Portfolio Structuring & Diversification",
+    description: "For investors building multiple-asset portfolios, we assist with:",
+    items: [
+      "Asset diversification across locations and property types",
+      "Risk balancing between off-plan and ready assets",
+      "Income-producing vs growth-oriented assets",
+      "Staggered entry and exit planning"
+    ],
+    footer: "This ensures exposure is spread intelligently, not concentrated by coincidence."
+  },
+  {
+    icon: LogOut,
+    title: "Exit Strategy & Resale Planning",
+    description: "Every investment is evaluated with a clear exit perspective:",
+    items: [
+      "Expected holding period",
+      "Resale liquidity in the target area",
+      "Anticipated buyer demand at exit",
+      "Market absorption and competition"
+    ],
+    footer: "We advise investors on optimal exit timing and resale positioning."
+  },
+  {
+    icon: Scale,
+    title: "Due Diligence & Risk Advisory",
+    description: "Our advisory includes risk evaluation across:",
+    items: [
+      "Developer track record and delivery reliability",
+      "Project-level completion risks",
+      "Payment plan structures and exposure",
+      "Contractual terms and developer obligations"
+    ],
+    footer: "Investors receive a clear understanding of both upside potential and downside risks."
+  }
+];
+
+const doNotItems = [
+  "We do not provide financial advice or tax planning",
+  "We do not guarantee investment returns",
+  "We do not sell financial products",
+  "We do not manage client funds or escrow"
+];
+
+const targetAudience = [
+  { icon: User, label: "First-time property investors in the UAE" },
+  { icon: Globe, label: "International investors seeking market clarity" },
+  { icon: Layers, label: "Portfolio investors managing multiple assets" },
+  { icon: TrendingUp, label: "Long-term investors focused on capital preservation and growth" }
+];
+
+const whyJBJ = [
+  "Licensed UAE real estate brokerage",
+  "Market intelligence–driven advisory",
+  "Clear separation between advisory and transaction execution",
+  "Data-backed decision frameworks",
+  "Structured, professional investment process"
+];
+
 const InvestmentAdvisory = () => {
-  const advisoryServices = [
-    {
-      icon: Target,
-      title: "Investment Strategy Definition",
-      description: "We help investors define a clear investment strategy based on:",
-      items: [
-        "Capital allocation goals",
-        "Time horizon (short, medium, long term)",
-        "Income vs capital appreciation focus",
-        "Risk tolerance and liquidity needs",
-        "Preferred asset class (residential, off-plan, ready, land)"
-      ],
-      footer: "Each strategy is structured before any property recommendations are made."
-    },
-    {
-      icon: BarChart3,
-      title: "Market & Asset Analysis",
-      description: "We provide objective analysis using:",
-      items: [
-        "Area-level market performance",
-        "Historical transaction trends",
-        "Rental yield benchmarks",
-        "Supply vs demand dynamics",
-        "Infrastructure and development pipelines"
-      ],
-      footer: "Advisory insights are supported by official UAE real estate data sources, ensuring accuracy and compliance."
-    },
-    {
-      icon: Building2,
-      title: "Off-Plan vs Ready Property Advisory",
-      description: "We advise investors on when and why to consider:",
-      items: [
-        "Off-plan projects (pricing advantage, payment plans, growth potential)",
-        "Ready properties (immediate income, established demand, lower delivery risk)"
-      ],
-      footer: "Each option is assessed based on market cycle positioning, developer profile, and investor objectives."
-    },
-    {
-      icon: Layers,
-      title: "Portfolio Structuring & Diversification",
-      description: "For investors building multiple-asset portfolios, we assist with:",
-      items: [
-        "Asset diversification across locations and property types",
-        "Risk balancing between off-plan and ready assets",
-        "Income-producing vs growth-oriented assets",
-        "Staggered entry and exit planning"
-      ],
-      footer: "This ensures exposure is spread intelligently, not concentrated by coincidence."
-    },
-    {
-      icon: LogOut,
-      title: "Exit Strategy & Resale Planning",
-      description: "Every investment is evaluated with a clear exit perspective:",
-      items: [
-        "Expected holding period",
-        "Resale liquidity in the target area",
-        "Anticipated buyer demand at exit",
-        "Market absorption and competition"
-      ],
-      footer: "We advise investors on optimal exit timing and resale positioning based on market conditions."
-    },
-    {
-      icon: Scale,
-      title: "Regulatory & Compliance Guidance",
-      description: "Our advisory incorporates UAE real estate regulations, including:",
-      items: [
-        "Ownership structures and freehold zones",
-        "Transaction registration requirements",
-        "Transfer and documentation processes",
-        "Investor eligibility considerations"
-      ],
-      footer: "We ensure advisory guidance remains aligned with current regulatory frameworks."
-    }
-  ];
-
-  const doNotItems = [
-    "We do not sell financial products",
-    "We do not provide tax or legal opinions",
-    "We do not guarantee returns or performance",
-    "We do not offer speculative forecasts"
-  ];
-
-  const targetAudience = [
-    { icon: User, label: "First-time property investors in the UAE" },
-    { icon: Globe, label: "International investors seeking market clarity" },
-    { icon: Layers, label: "Portfolio investors managing multiple assets" },
-    { icon: TrendingUp, label: "Long-term investors focused on capital preservation and growth" }
-  ];
-
-  const whyJBJ = [
-    "Licensed UAE real estate brokerage",
-    "Market intelligence–driven advisory",
-    "Clear separation between advisory and transaction execution",
-    "Data-backed decision frameworks",
-    "Structured, professional investment process"
-  ];
-
   return (
-    <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-900 to-black" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
-        <div className="absolute top-20 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gold/3 rounded-full blur-3xl" />
+    <>
+      <SEOHead
+        title="Investment Advisory Services | JBJ Global Real Estate"
+        description="Strategic real estate investment advisory in the UAE. Data-driven guidance for individuals, family offices, and institutional investors."
+        canonicalPath="/services/investment-advisory"
+      />
+
+      {/* HERO SECTION - Full-screen with video background */}
+      <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
+        {/* Video Background */}
+        <div className="absolute inset-0 bg-black">
+          <video
+            className="absolute inset-0 w-full h-full object-cover"
+            src={investmentAdvisoryHeroVideo}
+            muted
+            playsInline
+            autoPlay
+            loop
+            preload="metadata"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
+        </div>
         
-        <motion.div 
-          className="container mx-auto px-4 relative z-10"
-          initial="hidden"
-          animate="visible"
-          variants={staggerContainer}
-        >
-          <div className="max-w-4xl mx-auto text-center">
-            <motion.div 
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6"
-              style={{
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
-                backdropFilter: 'blur(20px)',
-                border: '1.5px solid rgba(200,167,102,0.6)',
-                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
-              }}
-              variants={fadeInUp}
-            >
-              <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-              <span className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Investment Advisory</span>
-            </motion.div>
+        {/* Floating gold accent orbs */}
+        <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/15 rounded-full blur-[120px] pointer-events-none" />
+
+        {/* Content */}
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-4xl mx-auto"
+          >
+            {/* Label */}
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-black/30 backdrop-blur-md">
+              <TrendingUp className="w-4 h-4 text-gold" />
+              <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
+                Investment Advisory
+              </span>
+            </div>
             
-            <motion.h1 
-              className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-6 leading-tight"
-              variants={fadeInUp}
-            >
-              Strategic Real Estate <span className="text-gold">Investment Advisory</span> in the UAE
-            </motion.h1>
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-[-0.02em]">
+              Strategic Investment Advisory
+            </h1>
             
-            <motion.p 
-              className="text-lg md:text-xl text-zinc-300 font-light leading-relaxed max-w-3xl mx-auto mb-6"
-              variants={fadeInUp}
-            >
-              JBJ Global Real Estate provides structured, data-driven investment advisory services for individuals, family offices, and institutional investors seeking clarity and confidence in the UAE real estate market.
-            </motion.p>
+            <p className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-10">
+              Data-driven investment guidance for the UAE real estate market. Make informed decisions with clarity and confidence.
+            </p>
             
-            <motion.p 
-              className="text-base md:text-lg text-zinc-400 font-light leading-relaxed max-w-3xl mx-auto mb-6"
-              variants={fadeInUp}
-            >
-              Our advisory service is designed to help investors make informed property investment decisions based on market fundamentals, transaction data, regulatory frameworks, and long-term risk considerations — not speculation or sales pressure.
-            </motion.p>
-            
-            <motion.p 
-              className="text-base md:text-lg text-zinc-400 font-light leading-relaxed max-w-3xl mx-auto mb-10"
-              variants={fadeInUp}
-            >
-              We guide investors through asset selection, market timing, portfolio construction, and exit planning, ensuring every decision aligns with their objectives, risk tolerance, and investment horizon.
-            </motion.p>
-            
-            <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
-              <Link to="/contact">
-                <Button 
-                  size="lg"
-                  className="bg-gold hover:bg-gold/90 text-black font-semibold px-8 py-6 text-base"
+            {/* Hero CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/contact?service=investment-advisory">
+                <button 
+                  className="group relative inline-flex items-center justify-center gap-1.5 px-6 py-3 text-sm font-semibold tracking-wide rounded-lg transition-all duration-300 bg-transparent border border-white/60 hover:border-gold/80"
+                  style={{ boxShadow: '0 2px 10px rgba(0,0,0,0.3)' }}
                 >
-                  Speak to an Investment Advisor
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
+                  <span className="text-white group-hover:text-gold transition-colors">Speak to an Advisor</span>
+                  <ArrowUpRight 
+                    className="w-4 h-4 text-gold group-hover:scale-110 transition-all" 
+                    style={{ filter: 'drop-shadow(0 0 4px rgba(200,167,102,0.6))' }} 
+                  />
+                </button>
               </Link>
               <Link to="/properties">
-                <Button 
-                  size="lg"
-                  variant="outline"
-                  className="border-gold/50 text-gold hover:bg-gold/10 px-8 py-6 text-base"
+                <button 
+                  className="group relative inline-flex items-center justify-center gap-1.5 px-6 py-3 text-sm font-semibold tracking-wide rounded-lg transition-all duration-300 bg-transparent border border-white/60 hover:border-gold/80"
+                  style={{ boxShadow: '0 2px 10px rgba(0,0,0,0.3)' }}
                 >
-                  View Investment Opportunities
-                </Button>
+                  <span className="text-white group-hover:text-gold transition-colors">View Opportunities</span>
+                  <ArrowUpRight 
+                    className="w-4 h-4 text-gold group-hover:scale-110 transition-all" 
+                    style={{ filter: 'drop-shadow(0 0 4px rgba(200,167,102,0.6))' }} 
+                  />
+                </button>
               </Link>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
+        </div>
+        
+        {/* Scroll indicator */}
+        <motion.div 
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.6 }}
+        >
+          <span className="text-gold/60 text-xs tracking-widest uppercase">Explore</span>
+          <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
 
       {/* What Our Investment Advisory Covers */}
-      <section className="py-16 md:py-24 bg-gradient-to-b from-background to-muted/30">
-        <div className="container mx-auto px-4">
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -224,21 +240,27 @@ const InvestmentAdvisory = () => {
             variants={staggerContainer}
             className="max-w-6xl mx-auto"
           >
-            <GuideSectionHeader icon={TrendingUp} title="What Our Investment Advisory Covers" centered />
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-6"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              What Our Investment Advisory Covers
+            </motion.h2>
             
             <motion.p 
               variants={fadeInUp}
-              className="text-center text-muted-foreground max-w-2xl mx-auto mb-12"
+              className="text-center text-zinc-600 max-w-2xl mx-auto mb-12"
             >
               Our advisory scope focuses on property investment guidance, not financial product sales.
             </motion.p>
             
-            <div className="space-y-8">
+            <div className="space-y-6">
               {advisoryServices.map((service, index) => (
                 <motion.div
                   key={index}
                   variants={fadeInUp}
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 rounded-2xl p-6 md:p-8 hover:border-gold transition-all duration-300"
+                  className="jj-card-inner"
                 >
                   <div className="flex items-start gap-4">
                     <div className="flex-shrink-0 w-12 h-12 bg-black border border-gold rounded-xl flex items-center justify-center">
@@ -247,16 +269,14 @@ const InvestmentAdvisory = () => {
                     <div className="flex-1">
                       <h3 className="text-xl md:text-2xl font-medium text-black mb-3">{service.title}</h3>
                       <p className="text-zinc-600 mb-4">{service.description}</p>
-                      <div className="bg-black/5 rounded-xl p-4 mb-4">
-                        <ul className="space-y-2">
-                          {service.items.map((item, idx) => (
-                            <li key={idx} className="flex items-start gap-3">
-                              <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                              <span className="text-zinc-700 text-sm">{item}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                      <ul className="space-y-2 mb-4">
+                        {service.items.map((item, idx) => (
+                          <li key={idx} className="flex items-start gap-3">
+                            <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                            <span className="text-zinc-700 text-sm">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
                       <p className="text-sm text-zinc-600 italic">{service.footer}</p>
                     </div>
                   </div>
@@ -268,8 +288,8 @@ const InvestmentAdvisory = () => {
       </section>
 
       {/* What We Do Not Do */}
-      <section className="py-16 md:py-24 bg-black">
-        <div className="container mx-auto px-4">
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -277,24 +297,35 @@ const InvestmentAdvisory = () => {
             variants={staggerContainer}
             className="max-w-4xl mx-auto"
           >
-            <GuideSectionHeader icon={XCircle} title="What We Do Not Do" centered />
+            <motion.div variants={fadeInUp} className="flex justify-center mb-6">
+              <div className="w-14 h-14 rounded-full bg-black flex items-center justify-center border-2 border-gold">
+                <XCircle className="w-7 h-7 text-gold" />
+              </div>
+            </motion.div>
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-4"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              What We Do Not Do
+            </motion.h2>
             
             <motion.p 
               variants={fadeInUp}
-              className="text-center text-zinc-400 max-w-2xl mx-auto mb-8"
+              className="text-center text-zinc-600 max-w-2xl mx-auto mb-8"
             >
               To maintain transparency and compliance:
             </motion.p>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               {doNotItems.map((item, index) => (
                 <motion.div
                   key={index}
                   variants={fadeInUp}
-                  className="flex items-center gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl"
+                  className="flex items-center gap-4 jj-card-inner !p-4"
                 >
-                  <XCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
-                  <span className="text-zinc-300">{item}</span>
+                  <XCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+                  <span className="text-zinc-700">{item}</span>
                 </motion.div>
               ))}
             </div>
@@ -310,8 +341,8 @@ const InvestmentAdvisory = () => {
       </section>
 
       {/* Who This Service Is For */}
-      <section className="py-16 md:py-24 bg-gradient-to-b from-background to-muted/30">
-        <div className="container mx-auto px-4">
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -319,11 +350,17 @@ const InvestmentAdvisory = () => {
             variants={staggerContainer}
             className="max-w-5xl mx-auto"
           >
-            <GuideSectionHeader icon={Users} title="Who This Service Is For" centered />
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-6"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              Who This Service Is For
+            </motion.h2>
             
             <motion.p 
               variants={fadeInUp}
-              className="text-center text-muted-foreground max-w-2xl mx-auto mb-12"
+              className="text-center text-zinc-600 max-w-2xl mx-auto mb-12"
             >
               Our Investment Advisory is suitable for:
             </motion.p>
@@ -333,7 +370,7 @@ const InvestmentAdvisory = () => {
                 <motion.div
                   key={index}
                   variants={fadeInUp}
-                  className="flex items-center gap-4 p-5 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 rounded-xl hover:border-gold transition-all"
+                  className="flex items-center gap-4 jj-card-inner !p-5"
                 >
                   <div className="w-10 h-10 bg-black border border-gold rounded-lg flex items-center justify-center flex-shrink-0">
                     <item.icon className="w-5 h-5 text-gold" />
@@ -347,8 +384,8 @@ const InvestmentAdvisory = () => {
       </section>
 
       {/* Why Investors Choose JBJ Global Real Estate */}
-      <section className="py-16 md:py-24 bg-black">
-        <div className="container mx-auto px-4">
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -356,17 +393,28 @@ const InvestmentAdvisory = () => {
             variants={staggerContainer}
             className="max-w-4xl mx-auto"
           >
-            <GuideSectionHeader icon={Shield} title="Why Investors Choose JBJ Global Real Estate" centered />
+            <motion.div variants={fadeInUp} className="flex justify-center mb-6">
+              <div className="w-16 h-16 rounded-full bg-black flex items-center justify-center border-2 border-gold">
+                <Shield className="w-8 h-8 text-gold" />
+              </div>
+            </motion.div>
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              Why Investors Choose JBJ
+            </motion.h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {whyJBJ.map((reason, index) => (
                 <motion.div
                   key={index}
                   variants={fadeInUp}
-                  className="flex items-center gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl"
+                  className="flex items-center gap-4 jj-card-inner !p-4"
                 >
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0" />
-                  <span className="text-zinc-200">{reason}</span>
+                  <span className="text-zinc-800">{reason}</span>
                 </motion.div>
               ))}
             </div>
@@ -375,8 +423,8 @@ const InvestmentAdvisory = () => {
       </section>
 
       {/* Final CTA */}
-      <section className="py-16 md:py-24 bg-gradient-to-b from-background to-muted/30">
-        <div className="container mx-auto px-4">
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -386,44 +434,79 @@ const InvestmentAdvisory = () => {
           >
             <motion.h2 
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-light text-foreground mb-6"
+              className="text-3xl md:text-4xl font-bold text-black mb-6"
+              style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Start Your <span className="text-gold">Investment Advisory</span> Journey
+              Start Your Investment Advisory Journey
             </motion.h2>
             
             <motion.p 
               variants={fadeInUp}
-              className="text-lg text-muted-foreground mb-10"
+              className="text-lg text-zinc-700 mb-10"
             >
               If you are considering investing in UAE real estate and want structured, informed guidance, our advisory team is ready to assist.
             </motion.p>
             
             <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
-              <Link to="/contact">
-                <Button 
-                  size="lg"
-                  className="bg-gold hover:bg-gold/90 text-black font-semibold px-8 py-6 text-base"
-                >
-                  Request an Investment Advisory Consultation
+              <Button 
+                asChild
+                size="lg"
+                className="bg-gold hover:bg-gold-dark text-black font-semibold px-8"
+              >
+                <Link to="/contact?service=investment-advisory">
+                  Request Investment Advisory Consultation
                   <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </Link>
-              <Link to="/properties">
-                <Button 
-                  size="lg"
-                  variant="outline"
-                  className="border-gold/50 text-foreground hover:bg-gold/10 px-8 py-6 text-base"
-                >
+                </Link>
+              </Button>
+              <Button 
+                asChild
+                size="lg"
+                variant="outline"
+                className="border-gold text-gold hover:bg-gold/10"
+              >
+                <Link to="/properties">
                   Explore Current Investment Opportunities
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
+      {/* INTERNAL LINKS */}
+      <section className="bg-black py-12 border-t border-gold/20">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap justify-center gap-6 text-sm">
+            <Link
+              to="/investor-education"
+              className="text-zinc-400 hover:text-gold transition-colors"
+            >
+              Investor Education
+            </Link>
+            <Link
+              to="/market-intelligence"
+              className="text-zinc-400 hover:text-gold transition-colors"
+            >
+              Market Intelligence
+            </Link>
+            <Link
+              to="/buyer-guide"
+              className="text-zinc-400 hover:text-gold transition-colors"
+            >
+              Buyer Guide
+            </Link>
+            <Link
+              to="/contact"
+              className="text-zinc-400 hover:text-gold transition-colors"
+            >
+              Contact Us
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <Footer />
-    </div>
+    </>
   );
 };
 

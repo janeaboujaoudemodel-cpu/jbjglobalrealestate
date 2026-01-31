@@ -21,17 +21,20 @@ import {
   UserCheck,
   Lock,
   ClipboardList,
+  ArrowUpRight,
 } from "lucide-react";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+
+// Import hero video
+import buyingAdvisoryHeroVideo from "@/assets/videos/dubai-buying-hero.mp4";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -203,90 +206,95 @@ const BuyingAdvisory = () => {
         canonicalPath="/services/buying-advisory"
       />
 
-      {/* HERO SECTION */}
-      <section className="jj-hero-fullscreen relative flex items-center justify-center bg-black overflow-hidden">
-        {/* Background gradient */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, rgba(200,167,102,0.15) 0%, transparent 60%), linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,1) 100%)",
-          }}
-        />
+      {/* HERO SECTION - Full-screen with video background */}
+      <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
+        {/* Video Background */}
+        <div className="absolute inset-0 bg-black">
+          <video
+            className="absolute inset-0 w-full h-full object-cover"
+            src={buyingAdvisoryHeroVideo}
+            muted
+            playsInline
+            autoPlay
+            loop
+            preload="metadata"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
+        </div>
+        
+        {/* Floating gold accent orbs */}
+        <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/15 rounded-full blur-[120px] pointer-events-none" />
 
         {/* Content */}
-        <div className="relative z-10 container mx-auto px-4 py-20 text-center">
+        <div className="container mx-auto px-4 relative z-10">
           <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={staggerContainer}
-            className="max-w-4xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-4xl mx-auto"
           >
-            <motion.p
-              variants={fadeInUp}
-              className="text-gold text-sm tracking-[0.2em] uppercase mb-4"
-            >
-              Professional Representation
-            </motion.p>
-            <motion.h1
-              variants={fadeInUp}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
-              style={{ fontFamily: "Playfair Display, serif" }}
-            >
+            {/* Label */}
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-black/30 backdrop-blur-md">
+              <Briefcase className="w-4 h-4 text-gold" />
+              <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
+                Professional Representation
+              </span>
+            </div>
+            
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-[-0.02em]">
               Buying Advisory Services
-            </motion.h1>
-            <motion.p
-              variants={fadeInUp}
-              className="text-xl md:text-2xl text-champagne-light mb-6"
-            >
-              Professional Representation for Buyers Across Primary & Secondary
-              Markets
-            </motion.p>
-            <motion.p
-              variants={fadeInUp}
-              className="text-zinc-400 text-lg max-w-3xl mx-auto mb-10 leading-relaxed"
-            >
-              JBJ Global Real Estate provides structured, licensed buying
-              advisory services for individuals and investors seeking to
-              purchase residential or investment properties in the UAE. Our
-              advisory goes beyond general guidance — we represent your
-              interests throughout the buying process, from market analysis and
-              opportunity sourcing to negotiation, transaction coordination, and
-              completion.
-            </motion.p>
-            <motion.div
-              variants={fadeInUp}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-            >
-              <Button
-                asChild
-                size="lg"
-                className="bg-gold hover:bg-gold-dark text-black font-semibold px-8"
-              >
-                <Link to="/contact?service=buying-advisory">
-                  Request Buying Consultation
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="border-gold/50 text-gold hover:bg-gold/10"
-              >
-                <Link to="/buyer-guide">View Buyer Guide</Link>
-              </Button>
-            </motion.div>
+            </h1>
+            
+            <p className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-10">
+              Professional representation for buyers across primary & secondary markets. Expert guidance from market analysis to transaction completion.
+            </p>
+            
+            {/* Hero CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/contact?service=buying-advisory">
+                <button 
+                  className="group relative inline-flex items-center justify-center gap-1.5 px-6 py-3 text-sm font-semibold tracking-wide rounded-lg transition-all duration-300 bg-transparent border border-white/60 hover:border-gold/80"
+                  style={{ boxShadow: '0 2px 10px rgba(0,0,0,0.3)' }}
+                >
+                  <span className="text-white group-hover:text-gold transition-colors">Request Consultation</span>
+                  <ArrowUpRight 
+                    className="w-4 h-4 text-gold group-hover:scale-110 transition-all" 
+                    style={{ filter: 'drop-shadow(0 0 4px rgba(200,167,102,0.6))' }} 
+                  />
+                </button>
+              </Link>
+              <Link to="/buyer-guide">
+                <button 
+                  className="group relative inline-flex items-center justify-center gap-1.5 px-6 py-3 text-sm font-semibold tracking-wide rounded-lg transition-all duration-300 bg-transparent border border-white/60 hover:border-gold/80"
+                  style={{ boxShadow: '0 2px 10px rgba(0,0,0,0.3)' }}
+                >
+                  <span className="text-white group-hover:text-gold transition-colors">View Buyer Guide</span>
+                  <ArrowUpRight 
+                    className="w-4 h-4 text-gold group-hover:scale-110 transition-all" 
+                    style={{ filter: 'drop-shadow(0 0 4px rgba(200,167,102,0.6))' }} 
+                  />
+                </button>
+              </Link>
+            </div>
           </motion.div>
         </div>
-
-        {/* Bottom fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent" />
+        
+        {/* Scroll indicator */}
+        <motion.div 
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.6 }}
+        >
+          <span className="text-gold/60 text-xs tracking-widest uppercase">Explore</span>
+          <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
+        </motion.div>
       </section>
 
       {/* SECTION 1: WHAT BUYING ADVISORY MEANS */}
       <section className="bg-black py-20">
-        <div className="container mx-auto px-4">
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -296,24 +304,25 @@ const BuyingAdvisory = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-white mb-8"
+              className="text-3xl md:text-4xl font-bold text-black mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               What Buying Advisory Means
             </motion.h2>
             <motion.div
               variants={fadeInUp}
-              className="bg-gradient-to-br from-champagne-light/10 to-champagne/5 border border-gold/30 rounded-2xl p-8 md:p-10"
+              className="jj-card-inner"
             >
-              <p className="text-lg text-zinc-300 leading-relaxed">
-                Buying advisory is a professional service where JBJ acts as your
-                appointed representative during the purchase process. Unlike
-                educational guides, advisory involves{" "}
+              <p className="text-lg text-zinc-700 leading-relaxed">
+                JBJ Global Real Estate provides structured, licensed buying
+                advisory services for individuals and investors seeking to
+                purchase residential or investment properties in the UAE. Our
+                advisory goes beyond general guidance — we represent your
+                interests throughout the buying process, from{" "}
                 <span className="text-gold font-semibold">
-                  active market analysis, property shortlisting, negotiation
-                  support, documentation coordination, and execution management
-                </span>{" "}
-                — all aligned with your objectives, budget, and risk profile.
+                  market analysis and opportunity sourcing to negotiation,
+                  transaction coordination, and completion
+                </span>.
               </p>
             </motion.div>
           </motion.div>
@@ -321,8 +330,8 @@ const BuyingAdvisory = () => {
       </section>
 
       {/* SECTION 2: WHO THIS SERVICE IS FOR */}
-      <section className="jj-section-champagne py-20">
-        <div className="container mx-auto px-4">
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -339,17 +348,15 @@ const BuyingAdvisory = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
               {whoIsForData.map((item, index) => (
                 <motion.div key={index} variants={fadeInUp}>
-                  <Card className="h-full bg-white/80 border-gold/30 hover:border-gold hover:shadow-lg transition-all duration-300">
-                    <CardContent className="p-6 text-center">
-                      <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-black flex items-center justify-center">
-                        <item.icon className="w-7 h-7 text-gold" />
-                      </div>
-                      <h3 className="font-semibold text-black mb-2">
-                        {item.title}
-                      </h3>
-                      <p className="text-sm text-zinc-600">{item.description}</p>
-                    </CardContent>
-                  </Card>
+                  <div className="h-full jj-card-inner text-center">
+                    <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-black flex items-center justify-center">
+                      <item.icon className="w-7 h-7 text-gold" />
+                    </div>
+                    <h3 className="font-semibold text-black mb-2">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-zinc-600">{item.description}</p>
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -359,7 +366,7 @@ const BuyingAdvisory = () => {
 
       {/* SECTION 3: PRIMARY VS SECONDARY MARKET */}
       <section className="bg-black py-20">
-        <div className="container mx-auto px-4">
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -368,64 +375,60 @@ const BuyingAdvisory = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-white text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Primary vs Secondary Market Advisory
+              Primary vs Secondary Market Coverage
             </motion.h2>
             <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-              {/* Off-Plan */}
+              {/* Primary Market */}
               <motion.div variants={fadeInUp}>
-                <Card className="h-full bg-gradient-to-br from-gold/10 to-gold/5 border-gold/40">
-                  <CardContent className="p-8">
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className="w-12 h-12 rounded-xl bg-gold/20 flex items-center justify-center">
-                        <Building2 className="w-6 h-6 text-gold" />
-                      </div>
-                      <h3 className="text-xl font-bold text-white">
-                        Off-Plan (Primary Market)
-                      </h3>
+                <div className="h-full jj-card-inner">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
+                      <Building2 className="w-6 h-6 text-gold" />
                     </div>
-                    <ul className="space-y-3">
-                      {primaryMarketFeatures.map((feature, idx) => (
-                        <li
-                          key={idx}
-                          className="flex items-start gap-3 text-zinc-300"
-                        >
-                          <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
+                    <h3 className="text-xl font-bold text-black">
+                      Primary Market (Off-Plan / New)
+                    </h3>
+                  </div>
+                  <ul className="space-y-3">
+                    {primaryMarketFeatures.map((feature, idx) => (
+                      <li
+                        key={idx}
+                        className="flex items-start gap-3 text-zinc-700"
+                      >
+                        <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </motion.div>
 
-              {/* Ready/Resale */}
+              {/* Secondary Market */}
               <motion.div variants={fadeInUp}>
-                <Card className="h-full bg-gradient-to-br from-champagne/10 to-champagne/5 border-champagne/40">
-                  <CardContent className="p-8">
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className="w-12 h-12 rounded-xl bg-champagne/20 flex items-center justify-center">
-                        <Key className="w-6 h-6 text-champagne" />
-                      </div>
-                      <h3 className="text-xl font-bold text-white">
-                        Ready / Resale (Secondary Market)
-                      </h3>
+                <div className="h-full jj-card-inner">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
+                      <Key className="w-6 h-6 text-gold" />
                     </div>
-                    <ul className="space-y-3">
-                      {secondaryMarketFeatures.map((feature, idx) => (
-                        <li
-                          key={idx}
-                          className="flex items-start gap-3 text-zinc-300"
-                        >
-                          <CheckCircle2 className="w-5 h-5 text-champagne shrink-0 mt-0.5" />
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
+                    <h3 className="text-xl font-bold text-black">
+                      Secondary Market (Resale / Ready)
+                    </h3>
+                  </div>
+                  <ul className="space-y-3">
+                    {secondaryMarketFeatures.map((feature, idx) => (
+                      <li
+                        key={idx}
+                        className="flex items-start gap-3 text-zinc-700"
+                      >
+                        <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </motion.div>
             </div>
           </motion.div>
@@ -433,8 +436,8 @@ const BuyingAdvisory = () => {
       </section>
 
       {/* SECTION 4: OUR BUYING ADVISORY PROCESS */}
-      <section className="jj-section-champagne py-20">
-        <div className="container mx-auto px-4">
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -463,14 +466,14 @@ const BuyingAdvisory = () => {
                       <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center shrink-0 z-10 border-2 border-gold">
                         <span className="text-gold font-bold">{step.step}</span>
                       </div>
-                      <Card className="flex-1 bg-white/80 border-gold/20 hover:border-gold/50 transition-all">
-                        <CardContent className="p-4 flex items-center gap-4">
+                      <div className="flex-1 jj-card-inner !p-4">
+                        <div className="flex items-center gap-4">
                           <step.icon className="w-6 h-6 text-gold shrink-0" />
                           <span className="font-semibold text-black">
                             {step.title}
                           </span>
-                        </CardContent>
-                      </Card>
+                        </div>
+                      </div>
                     </motion.div>
                   ))}
                 </div>
@@ -482,7 +485,7 @@ const BuyingAdvisory = () => {
 
       {/* SECTION 5: FEES & TRANSPARENCY */}
       <section className="bg-black py-20">
-        <div className="container mx-auto px-4">
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -492,43 +495,35 @@ const BuyingAdvisory = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-white text-center mb-8"
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Fees & Transparency
             </motion.h2>
             <motion.div
               variants={fadeInUp}
-              className="bg-gradient-to-br from-gold/10 to-gold/5 border-2 border-gold/50 rounded-2xl p-8"
+              className="jj-card-inner"
             >
               <div className="flex items-start gap-4 mb-6">
                 <Banknote className="w-8 h-8 text-gold shrink-0" />
-                <h3 className="text-xl font-bold text-white">Important Notice</h3>
+                <h3 className="text-xl font-bold text-black">Fee Structure</h3>
               </div>
               <ul className="space-y-4">
-                <li className="flex items-start gap-3 text-zinc-300">
+                <li className="flex items-start gap-3 text-zinc-700">
                   <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
-                  <span>
-                    <strong className="text-white">Off-Plan Purchases:</strong>{" "}
-                    No advisory or agency fees charged to buyers
-                  </span>
+                  <span><strong>Primary market:</strong> No buyer fees — developer-paid commission</span>
                 </li>
-                <li className="flex items-start gap-3 text-zinc-300">
+                <li className="flex items-start gap-3 text-zinc-700">
                   <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
-                  <span>
-                    <strong className="text-white">
-                      Secondary Market Purchases:
-                    </strong>{" "}
-                    Agency commission applies as per UAE regulations
-                  </span>
+                  <span><strong>Secondary market:</strong> Commission disclosed at engagement</span>
                 </li>
-                <li className="flex items-start gap-3 text-zinc-300">
+                <li className="flex items-start gap-3 text-zinc-700">
                   <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
-                  <span>All fees are disclosed upfront before engagement</span>
+                  <span>Fee structures comply with UAE brokerage regulations</span>
                 </li>
-                <li className="flex items-start gap-3 text-zinc-300">
+                <li className="flex items-start gap-3 text-zinc-700">
                   <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
-                  <span>No hidden costs, markups, or price inflation</span>
+                  <span>No hidden charges or undisclosed markups</span>
                 </li>
               </ul>
             </motion.div>
@@ -537,8 +532,8 @@ const BuyingAdvisory = () => {
       </section>
 
       {/* SECTION 6: COMPLIANCE & LICENSING */}
-      <section className="jj-section-champagne py-16">
-        <div className="container mx-auto px-4">
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -547,7 +542,7 @@ const BuyingAdvisory = () => {
             className="max-w-4xl mx-auto text-center"
           >
             <motion.div variants={fadeInUp} className="flex justify-center mb-6">
-              <div className="w-16 h-16 rounded-full bg-black flex items-center justify-center">
+              <div className="w-16 h-16 rounded-full bg-black flex items-center justify-center border-2 border-gold">
                 <Shield className="w-8 h-8 text-gold" />
               </div>
             </motion.div>
@@ -562,11 +557,11 @@ const BuyingAdvisory = () => {
               variants={fadeInUp}
               className="text-lg text-zinc-700 leading-relaxed"
             >
-              JBJ Global Real Estate operates as a licensed UAE brokerage,
-              providing buying advisory services strictly within regulatory
-              frameworks. Where additional services are required (legal,
-              mortgage, valuation), clients are introduced to licensed
-              third-party professionals under separate engagement.
+              JBJ Global Real Estate operates under a UAE brokerage license
+              (RERA/DLD registration). All advisory and transaction support
+              is delivered within applicable regulatory frameworks. Where
+              required, clients may be introduced to licensed third-party
+              service providers under separate agreements.
             </motion.p>
           </motion.div>
         </div>
@@ -574,7 +569,7 @@ const BuyingAdvisory = () => {
 
       {/* SECTION 7: COMPARISON TABLE */}
       <section className="bg-black py-20">
-        <div className="container mx-auto px-4">
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -584,35 +579,35 @@ const BuyingAdvisory = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-white text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               How This Differs From the Buyer Guide
             </motion.h2>
             <motion.div
               variants={fadeInUp}
-              className="overflow-x-auto rounded-xl border border-gold/30"
+              className="overflow-x-auto rounded-xl border-2 border-gold/40"
             >
               <table className="w-full">
                 <thead>
-                  <tr className="bg-gold/20">
+                  <tr className="bg-black">
                     <th className="px-6 py-4 text-left text-sm font-bold text-gold uppercase tracking-wider">
                       Aspect
                     </th>
                     <th className="px-6 py-4 text-left text-sm font-bold text-zinc-400 uppercase tracking-wider">
                       Buyer Guide
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-bold text-gold uppercase tracking-wider">
                       Buying Advisory
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gold/20">
+                <tbody className="divide-y divide-gold/20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
                   {comparisonData.map((row, index) => (
-                    <tr key={index} className="bg-black/50">
-                      <td className="px-6 py-4 text-zinc-400">{row.aspect}</td>
-                      <td className="px-6 py-4 text-zinc-500">{row.guide}</td>
-                      <td className="px-6 py-4 text-gold font-medium">
+                    <tr key={index}>
+                      <td className="px-6 py-4 text-black font-medium">{row.aspect}</td>
+                      <td className="px-6 py-4 text-zinc-600">{row.guide}</td>
+                      <td className="px-6 py-4 text-gold font-semibold">
                         {row.advisory}
                       </td>
                     </tr>
@@ -625,8 +620,8 @@ const BuyingAdvisory = () => {
       </section>
 
       {/* SECTION 8: FAQ */}
-      <section className="jj-section-champagne py-20">
-        <div className="container mx-auto px-4">
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -635,7 +630,7 @@ const BuyingAdvisory = () => {
             className="max-w-3xl mx-auto"
           >
             <motion.div variants={fadeInUp} className="flex justify-center mb-6">
-              <div className="w-14 h-14 rounded-full bg-black flex items-center justify-center">
+              <div className="w-14 h-14 rounded-full bg-black flex items-center justify-center border-2 border-gold">
                 <HelpCircle className="w-7 h-7 text-gold" />
               </div>
             </motion.div>
@@ -652,7 +647,7 @@ const BuyingAdvisory = () => {
                   <AccordionItem
                     key={index}
                     value={`faq-${index}`}
-                    className="bg-white/80 border border-gold/30 rounded-xl overflow-hidden"
+                    className="jj-card-inner overflow-hidden"
                   >
                     <AccordionTrigger className="px-6 py-4 text-left font-semibold text-black hover:text-gold hover:no-underline">
                       {faq.question}
@@ -670,7 +665,7 @@ const BuyingAdvisory = () => {
 
       {/* FINAL CTA */}
       <section className="bg-black py-20">
-        <div className="container mx-auto px-4">
+        <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -680,17 +675,17 @@ const BuyingAdvisory = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-white mb-6"
+              className="text-3xl md:text-4xl font-bold text-black mb-6"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Ready to Buy with Confidence?
+              Ready to Buy with Professional Representation?
             </motion.h2>
             <motion.p
               variants={fadeInUp}
-              className="text-zinc-400 text-lg mb-8"
+              className="text-zinc-700 text-lg mb-8"
             >
-              Let our experienced team represent your interests throughout the
-              entire buying process.
+              Let our experienced team guide you through the entire buying
+              process with expert market analysis and negotiation support.
             </motion.p>
             <motion.div
               variants={fadeInUp}
@@ -710,7 +705,7 @@ const BuyingAdvisory = () => {
                 asChild
                 variant="outline"
                 size="lg"
-                className="border-gold/50 text-gold hover:bg-gold/10"
+                className="border-gold text-gold hover:bg-gold/10"
               >
                 <Link to="/buyer-guide">Explore Buyer Guide</Link>
               </Button>
@@ -720,7 +715,7 @@ const BuyingAdvisory = () => {
       </section>
 
       {/* INTERNAL LINKS */}
-      <section className="bg-zinc-950 py-12 border-t border-gold/20">
+      <section className="bg-black py-12 border-t border-gold/20">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center gap-6 text-sm">
             <Link

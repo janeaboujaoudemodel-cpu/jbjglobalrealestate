@@ -102,6 +102,7 @@ const DeveloperPartnersMarquee = () => {
     // MOBILE: Smaller logos to fit ~4 in viewport; DESKTOP: Keep original larger sizes
     // Fixed frame height ensures every logo sits on the same baseline (alignment).
     // Dubai Properties and Danube get taller frames for extra prominence
+    // REDUCED: Emaar and Damac logos scaled down to match other logos
     const frameH = developer.slug === "dubai-properties" 
       ? "h-14 md:h-20 lg:h-24" 
       : developer.slug === "danube-properties"
@@ -110,11 +111,14 @@ const DeveloperPartnersMarquee = () => {
 
     // Keep all logos the same HEIGHT; make specific ones feel bigger via max-width.
     // Dubai Properties gets significantly more width for visibility
+    // REDUCED: Emaar and Damac max-width reduced to match other standard logos
     const maxW =
       developer.slug === "dubai-properties"
         ? "max-w-[200px] md:max-w-[320px] lg:max-w-[400px]"
         : developer.slug === "danube-properties"
         ? "max-w-[160px] md:max-w-[240px] lg:max-w-[300px]"
+        : (developer.slug === "emaar" || developer.slug === "damac")
+        ? "max-w-[100px] md:max-w-[160px] lg:max-w-[200px]"
         : "max-w-[120px] md:max-w-[200px] lg:max-w-[240px]";
 
     // Dubai Properties needs a tiny visual lift due to whitespace inside the asset.
