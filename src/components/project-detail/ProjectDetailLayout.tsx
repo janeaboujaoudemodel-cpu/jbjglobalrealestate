@@ -370,7 +370,7 @@ export default function ProjectDetailLayout({
                   <Button 
                     size="sm"
                     className="bg-orange-500 hover:bg-orange-600 text-white border-0"
-                    onClick={() => handleDocumentDownload("brochure", brochurePrimary.url)}
+                    onClick={() => scrollToRef(brochureRef)}
                   >
                     <Download className="w-4 h-4" />
                     <span className="hidden sm:inline">Brochure</span>
