@@ -98,6 +98,13 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   });
   const [projectCount, setProjectCount] = useState<number | null>(null);
   const [pendingQueueCount, setPendingQueueCount] = useState<number | null>(null);
+  const [queueBreakdown, setQueueBreakdown] = useState<{
+    total: number | null;
+    ready: number | null;
+    needs_extraction: number | null;
+    incomplete: number | null;
+    errors: number | null;
+  }>({ total: null, ready: null, needs_extraction: null, incomplete: null, errors: null });
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [estimatedTimeRemaining, setEstimatedTimeRemaining] = useState<string>("");
   const [currentJobId, setCurrentJobId] = useState<string | null>(null);
@@ -223,12 +230,47 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   }, [currentJobId]);
 
   const loadProjectCount = async () => {
-    const [projectsRes, pendingRes] = await Promise.all([
+    const [
+      projectsRes,
+      pendingRes,
+      needsRes,
+      incompleteRes,
+      errorsRes,
+    ] = await Promise.all([
       supabase.from("projects").select("*", { count: "exact", head: true }),
-      supabase.from("pending_project_imports").select("*", { count: "exact", head: true }).eq("status", "pending")
+      supabase.from("pending_project_imports").select("*", { count: "exact", head: true }).eq("status", "pending"),
+      supabase
+        .from("pending_project_imports")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "pending")
+        .ilike("review_notes", "%PENDING_SCRAPE%"),
+      supabase
+        .from("pending_project_imports")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "pending")
+        .eq("review_notes", "INCOMPLETE"),
+      supabase
+        .from("pending_project_imports")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "pending")
+        .ilike("review_notes", "ERROR:%"),
     ]);
+
+    const total = pendingRes.count ?? null;
+    const needs = needsRes.count ?? 0;
+    const incomplete = incompleteRes.count ?? 0;
+    const errors = errorsRes.count ?? 0;
+    const ready = total === null ? null : Math.max(0, total - needs - incomplete - errors);
+
     setProjectCount(projectsRes.count);
-    setPendingQueueCount(pendingRes.count);
+    setPendingQueueCount(total);
+    setQueueBreakdown({
+      total,
+      ready,
+      needs_extraction: needs,
+      incomplete,
+      errors,
+    });
   };
 
   const loadActiveJob = async () => {
@@ -883,7 +925,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
               <CardContent className="p-4 text-center">
                 <Check className="w-6 h-6 text-blue-600 mx-auto mb-2" />
                 <div className="text-2xl font-bold text-blue-600">{totalStats.extracted}</div>
-                <div className="text-xs text-muted-foreground">Processed</div>
+                <div className="text-xs text-muted-foreground">Processed (this run)</div>
               </CardContent>
             </Card>
           </div>
@@ -1064,8 +1106,13 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                       </div>
                     </div>
                     <div className="rounded-md bg-background border border-border p-3">
-                      <div className="text-xs text-muted-foreground">Queued listings</div>
-                      <div className="font-medium text-foreground">{pendingQueueCount ?? "…"} pending</div>
+                      <div className="text-xs text-muted-foreground">Queue totals</div>
+                      <div className="font-medium text-foreground">
+                        {queueBreakdown.total ?? "…"} total · {queueBreakdown.ready ?? "…"} ready
+                      </div>
+                      <div className="text-xs text-muted-foreground mt-1">
+                        {queueBreakdown.needs_extraction ?? 0} needs · {queueBreakdown.incomplete ?? 0} incomplete · {queueBreakdown.errors ?? 0} errors
+                      </div>
                     </div>
                   </div>
 

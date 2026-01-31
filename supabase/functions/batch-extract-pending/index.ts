@@ -255,15 +255,16 @@ serve(async (req) => {
       .select("id, name, slug, source_url, images, documents, description, review_notes")
       .eq("status", "pending")
       // NOTE: PostgREST OR syntax: comma-separated conditions.
-      .or(
-        [
-          "review_notes.ilike.%PENDING_SCRAPE%",
-          "review_notes.eq.INCOMPLETE",
-          "images.eq.[]",
-          "documents.eq.[]",
-          "description.is.null",
-        ].join(","),
-      )
+       .or(
+         [
+           "review_notes.ilike.%PENDING_SCRAPE%",
+           "review_notes.eq.INCOMPLETE",
+           "review_notes.ilike.ERROR:%",
+           "images.eq.[]",
+           "documents.eq.[]",
+           "description.is.null",
+         ].join(","),
+       )
       .order("created_at", { ascending: true })
       .limit(limit);
 
@@ -389,11 +390,27 @@ serve(async (req) => {
               `[BatchExtract] ✓ Updated ${item.name} (${r.value.images} imgs, ${r.value.documents} docs, incomplete=${r.value.stillIncomplete})`,
             );
           }
-        } else {
-          stats.errors++;
-          const msg = r.reason instanceof Error ? r.reason.message : String(r.reason);
-          errors.push({ name: item?.name || "(unknown)", error: msg });
-        }
+         } else {
+           stats.errors++;
+           const msg = r.reason instanceof Error ? r.reason.message : String(r.reason);
+           errors.push({ name: item?.name || "(unknown)", error: msg });
+
+           // Persist the error so the admin can see it and so it can be retried later.
+           if (!dryRun && item?.id) {
+             const short = msg.replace(/\s+/g, " ").slice(0, 180);
+             const { error: markErr } = await supabase
+               .from("pending_project_imports")
+               .update({
+                 review_notes: `ERROR: ${short}`,
+                 updated_at: new Date().toISOString(),
+               })
+               .eq("id", item.id);
+
+             if (markErr) {
+               console.warn(`[BatchExtract] Failed to mark error for ${item?.name}: ${markErr.message}`);
+             }
+           }
+         }
       }
 
       // Optional throttle between chunks (set throttleMs=0 for turbo runs)

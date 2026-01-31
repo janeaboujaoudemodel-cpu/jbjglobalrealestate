@@ -74,6 +74,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   const navigate = useNavigate();
   const [imports, setImports] = useState<PendingImport[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [totalCount, setTotalCount] = useState<number | null>(null);
+  const [hasMore, setHasMore] = useState(false);
   const [showAll, setShowAll] = useState(!jobId);
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [selectedImport, setSelectedImport] = useState<PendingImport | null>(null);
@@ -86,25 +89,37 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   const [incompleteCount, setIncompleteCount] = useState(0);
   const { toast } = useToast();
 
+  const PAGE_SIZE = 60;
+
   useEffect(() => {
     setShowAll(!jobId);
   }, [jobId]);
 
-  const fetchPendingImports = async () => {
-    setIsLoading(true);
+  const fetchPendingImports = async (opts?: { reset?: boolean }) => {
+    const reset = opts?.reset ?? true;
+    if (reset) {
+      setIsLoading(true);
+    } else {
+      setIsLoadingMore(true);
+    }
     try {
-      // REMOVED .limit(200) to show ALL pending imports (supports 1,335+)
+      // IMPORTANT: PostgREST hard-limits at 1000 rows per request.
+      // We use range pagination to support 1,335+.
+      const offset = reset ? 0 : imports.length;
+
       let query = supabase
         .from("pending_project_imports")
-        .select("*, review_notes")
+        .select("*, review_notes", { count: "exact" })
         .eq("status", "pending")
-        .order("created_at", { ascending: false });
+        // Stable ordering (matches discovery / queue creation order)
+        .order("created_at", { ascending: true })
+        .range(offset, offset + PAGE_SIZE - 1);
 
       if (jobId && !showAll) {
         query = query.eq("job_id", jobId);
       }
 
-      const { data, error } = await query;
+      const { data, error, count } = await query;
 
       if (error) throw error;
       
@@ -137,17 +152,26 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
         source_url: item.source_url,
         created_at: item.created_at
       }));
-      
-      // Count incomplete
-      const incomplete = parsed.filter(p => 
+
+      const base = reset ? [] : imports;
+      const byId = new Map<string, PendingImport>();
+      for (const p of base) byId.set(p.id, p);
+      for (const p of parsed) byId.set(p.id, p);
+      const next = Array.from(byId.values());
+
+      setTotalCount(count ?? null);
+      setHasMore(count != null ? next.length < count : parsed.length === PAGE_SIZE);
+
+      // Count incomplete (for loaded set)
+      const incomplete = next.filter(p => 
         p.images.length === 0 || 
         p.documents.length === 0 || 
         !p.description || 
         p.developer_name?.toLowerCase() === 'unknown'
       ).length;
       setIncompleteCount(incomplete);
-      
-      setImports(parsed);
+
+      setImports(next);
       setSelectedIds(new Set());
     } catch (error) {
       console.error("Error fetching pending imports:", error);
@@ -158,6 +182,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       });
     } finally {
       setIsLoading(false);
+      setIsLoadingMore(false);
     }
   };
 
@@ -393,8 +418,10 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
 
     // Only do a full queue clear when the user is not filtering by job.
     // In filtered mode, they usually only want to affect the selected subset.
-    const isEssentiallyAllShown = totalShown > 0 && selectedCount >= Math.ceil(totalShown * 0.98);
-    const shouldClearEntireQueueFast = !isFilteredView && isEssentiallyAllShown;
+    const totalAvailable = totalCount ?? totalShown;
+    const hasLoadedAll = !hasMore && (totalCount === null || imports.length >= totalCount);
+    const isEssentiallyAllAvailable = totalAvailable > 0 && selectedCount >= Math.ceil(totalAvailable * 0.98);
+    const shouldClearEntireQueueFast = !isFilteredView && hasLoadedAll && isEssentiallyAllAvailable;
 
     const confirmed = window.confirm(
       shouldClearEntireQueueFast
@@ -676,9 +703,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           <CardTitle className="flex items-center gap-2 text-gold">
             <Building2 className="h-5 w-5 text-gold" />
             Project Approval Queue
-            {imports.length > 0 && (
+            {(totalCount ?? imports.length) > 0 && (
               <Badge className="bg-gold/20 text-gold border border-gold ml-2">
-                {imports.length} pending
+                {totalCount ?? imports.length} pending
               </Badge>
             )}
           </CardTitle>
@@ -743,7 +770,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                 )}
               </>
             )}
-            <Button variant="outline" size="sm" onClick={fetchPendingImports} disabled={isBulkProcessing} className="border-gold text-gold hover:bg-gold/10">
+            <Button variant="outline" size="sm" onClick={() => fetchPendingImports({ reset: true })} disabled={isBulkProcessing} className="border-gold text-gold hover:bg-gold/10">
               <RefreshCw className="h-4 w-4 mr-2" />
               Refresh
             </Button>
@@ -755,6 +782,10 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
             <div className="flex items-center gap-4 mb-4 text-sm">
               <div className="flex items-center gap-1">
                 <span className="text-muted-foreground">Total:</span>
+                <span className="font-medium text-foreground">{totalCount ?? imports.length}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-muted-foreground">Showing:</span>
                 <span className="font-medium text-foreground">{imports.length}</span>
               </div>
               <div className="flex items-center gap-1">
@@ -815,6 +846,26 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                   </div>
                 ))}
               </div>
+
+              {hasMore && (
+                <div className="mt-6 flex items-center justify-center">
+                  <Button
+                    variant="outline"
+                    onClick={() => fetchPendingImports({ reset: false })}
+                    disabled={isLoadingMore || isBulkProcessing}
+                    className="border-gold text-gold hover:bg-gold/10"
+                  >
+                    {isLoadingMore ? (
+                      <>
+                        <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                        Loading…
+                      </>
+                    ) : (
+                      <>Load more</>
+                    )}
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </CardContent>
