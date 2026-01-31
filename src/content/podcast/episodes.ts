@@ -43,26 +43,26 @@ export const podcastEpisodes: PodcastEpisode[] = [
     title: "Why Dubai Became the Capital of Global Investors",
     characters: ["Jane", "Alex", "Lina"],
     duration: "10:00",
-    thumbnail: ep1,
+    thumbnail: ep1, // Dubai skyline with Burj Khalifa
     segments: episode1Segments,
   },
-  { id: 2, title: "Buying Property Smartly in a Global Market", characters: ["Jane", "Alex", "Lina"], duration: "14:20", thumbnail: ep2 },
-  { id: 3, title: "The Truth About Off-Plan vs Ready Properties", characters: ["Jane", "Alex", "Lina"], duration: "11:30", thumbnail: ep3 },
-  { id: 4, title: "How High-Net-Worth Investors Protect Capital", characters: ["Jane", "Alex", "Lina"], duration: "13:15", thumbnail: ep4 },
-  { id: 5, title: "Golden Visa Strategy Through Real Estate", characters: ["Jane", "Alex", "Lina"], duration: "10:50", thumbnail: ep5 },
-  { id: 6, title: "The Psychology of Successful Investors", characters: ["Jane", "Alex", "Lina"], duration: "12:00", thumbnail: ep6 },
-  { id: 7, title: "Why Secondary Market Deals Matter", characters: ["Jane", "Alex", "Lina"], duration: "11:45", thumbnail: ep7 },
-  { id: 8, title: "Luxury Real Estate vs Mass Market Returns", characters: ["Jane", "Alex", "Lina"], duration: "13:30", thumbnail: ep8 },
-  { id: 9, title: "Mistakes First-Time Investors Always Make", characters: ["Jane", "Alex", "Lina"], duration: "14:10", thumbnail: ep9 },
-  { id: 10, title: "Building a Global Property Portfolio", characters: ["Jane", "Alex", "Lina"], duration: "15:00", thumbnail: ep10 },
-  { id: 11, title: "How Developers Really Price Projects", characters: ["Jane", "Alex", "Lina"], duration: "12:20", thumbnail: ep11 },
-  { id: 12, title: "Rental Yield vs Capital Appreciation", characters: ["Jane", "Alex", "Lina"], duration: "11:00", thumbnail: ep12 },
-  { id: 13, title: "Investor Onboarding: What Professionals Look For", characters: ["Jane", "Alex", "Lina"], duration: "10:30", thumbnail: ep13 },
-  { id: 14, title: "Real Estate as a Wealth Transfer Tool", characters: ["Jane", "Alex", "Lina"], duration: "13:45", thumbnail: ep14 },
-  { id: 15, title: "Exit Strategies Nobody Explains", characters: ["Jane", "Alex", "Lina"], duration: "12:30", thumbnail: ep15 },
-  { id: 16, title: "Legal Structures Every Investor Should Know", characters: ["Jane", "Alex", "Lina"], duration: "14:00", thumbnail: ep16 },
-  { id: 17, title: "The Future of Global Real Estate", characters: ["Jane", "Alex", "Lina"], duration: "11:15", thumbnail: ep17 },
-  { id: 18, title: "Building Trust in High-Value Transactions", characters: ["Jane", "Alex", "Lina"], duration: "10:45", thumbnail: ep18 },
-  { id: 19, title: "Why Most Investors Fail to Scale", characters: ["Jane", "Alex", "Lina"], duration: "12:50", thumbnail: ep19 },
-  { id: 20, title: "The JBJ Investment Philosophy", characters: ["Jane", "Alex", "Lina"], duration: "15:30", thumbnail: ep20 },
+  { id: 2, title: "Buying Property Smartly in a Global Market", characters: ["Jane", "Alex", "Lina"], duration: "14:20", thumbnail: ep2 }, // Luxury villa - matches buying property topic
+  { id: 3, title: "The Truth About Off-Plan vs Ready Properties", characters: ["Jane", "Alex", "Lina"], duration: "11:30", thumbnail: ep3 }, // Dubai plane view - aerial perspective
+  { id: 4, title: "How High-Net-Worth Investors Protect Capital", characters: ["Jane", "Alex", "Lina"], duration: "13:15", thumbnail: ep4 }, // Private jet - wealth preservation
+  { id: 5, title: "Golden Visa Strategy Through Real Estate", characters: ["Jane", "Alex", "Lina"], duration: "10:50", thumbnail: ep15 }, // Founder yacht Dubai - residency/lifestyle
+  { id: 6, title: "The Psychology of Successful Investors", characters: ["Jane", "Alex", "Lina"], duration: "12:00", thumbnail: ep6 }, // Yacht deck champagne - success mindset
+  { id: 7, title: "Why Secondary Market Deals Matter", characters: ["Jane", "Alex", "Lina"], duration: "11:45", thumbnail: ep7 }, // Luxury villa - secondary market
+  { id: 8, title: "Luxury Real Estate vs Mass Market Returns", characters: ["Jane", "Alex", "Lina"], duration: "13:30", thumbnail: ep8 }, // Luxury villa - luxury vs mass
+  { id: 9, title: "Mistakes First-Time Investors Always Make", characters: ["Jane", "Alex", "Lina"], duration: "14:10", thumbnail: ep9 }, // Luxury villa - learning from mistakes
+  { id: 10, title: "Building a Global Property Portfolio", characters: ["Jane", "Alex", "Lina"], duration: "15:00", thumbnail: ep10 }, // Luxury villa - portfolio building
+  { id: 11, title: "How Developers Really Price Projects", characters: ["Jane", "Alex", "Lina"], duration: "12:20", thumbnail: ep11 }, // Luxury villa - developer pricing
+  { id: 12, title: "Rental Yield vs Capital Appreciation", characters: ["Jane", "Alex", "Lina"], duration: "11:00", thumbnail: ep12 }, // Luxury villa - returns analysis
+  { id: 13, title: "Investor Onboarding: What Professionals Look For", characters: ["Jane", "Alex", "Lina"], duration: "10:30", thumbnail: ep18 }, // Founder office - professional onboarding
+  { id: 14, title: "Real Estate as a Wealth Transfer Tool", characters: ["Jane", "Alex", "Lina"], duration: "13:45", thumbnail: ep14 }, // Luxury villa - wealth transfer
+  { id: 15, title: "Exit Strategies Nobody Explains", characters: ["Jane", "Alex", "Lina"], duration: "12:30", thumbnail: ep16 }, // Jet interior - exit/mobility
+  { id: 16, title: "Legal Structures Every Investor Should Know", characters: ["Jane", "Alex", "Lina"], duration: "14:00", thumbnail: ep17 }, // Founder lifestyle - legal structures
+  { id: 17, title: "The Future of Global Real Estate", characters: ["Jane", "Alex", "Lina"], duration: "11:15", thumbnail: ep19 }, // Founder hero - future vision
+  { id: 18, title: "Building Trust in High-Value Transactions", characters: ["Jane", "Alex", "Lina"], duration: "10:45", thumbnail: ep13 }, // Luxury villa - trust/transactions
+  { id: 19, title: "Why Most Investors Fail to Scale", characters: ["Jane", "Alex", "Lina"], duration: "12:50", thumbnail: ep20 }, // Team hero - scaling with team
+  { id: 20, title: "The JBJ Investment Philosophy", characters: ["Jane", "Alex", "Lina"], duration: "15:30", thumbnail: ep5 }, // Rolls Royce - JBJ philosophy/luxury
 ];

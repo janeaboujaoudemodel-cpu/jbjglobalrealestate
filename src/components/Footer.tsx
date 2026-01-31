@@ -206,28 +206,26 @@ const Footer = () => {
             </div>
           </Link>
           
-          {/* Company Name with 3D Text Effect */}
+          {/* Company Name with Enhanced Readability */}
           <h2 
-            className="relative text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light tracking-[0.12em] sm:tracking-[0.18em] md:tracking-[0.22em] lg:tracking-[0.28em] mb-2 sm:mb-3 md:mb-4 px-2 transition-all duration-500 hover:scale-[1.01]"
+            className="relative text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold tracking-[0.08em] sm:tracking-[0.12em] md:tracking-[0.15em] lg:tracking-[0.18em] mb-2 sm:mb-3 md:mb-4 px-2 transition-all duration-500 hover:scale-[1.01]"
             style={{
-              background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 20%, #C8A766 40%, #F5E6C8 60%, #E8D5A3 80%, #D4AF37 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              textShadow: '0 4px 8px rgba(0,0,0,0.8), 0 8px 16px rgba(0,0,0,0.6), 0 2px 2px rgba(0,0,0,0.9)',
-              filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.7))',
+              color: '#FFFFFF',
+              textShadow: '0 2px 4px rgba(0,0,0,0.9), 0 4px 8px rgba(0,0,0,0.7), 0 0 30px rgba(200,167,102,0.4)',
+              letterSpacing: '0.12em',
             }}
           >
             JBJ GLOBAL REAL ESTATE
           </h2>
           
-          {/* Tagline with 3D depth */}
+          {/* Tagline with Premium Gold Styling */}
           <p 
-            className="relative text-xs sm:text-sm md:text-base tracking-[0.2em] sm:tracking-[0.3em] uppercase font-medium transition-all duration-500"
+            className="relative text-sm sm:text-base md:text-lg tracking-[0.15em] sm:tracking-[0.2em] uppercase font-semibold transition-all duration-500 px-4 py-2"
             style={{
-              background: 'linear-gradient(90deg, rgba(200,167,102,0.7) 0%, rgba(245,230,200,0.95) 50%, rgba(200,167,102,0.7) 100%)',
+              background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              textShadow: '0 3px 6px rgba(0,0,0,0.7), 0 1px 2px rgba(0,0,0,0.9)',
+              filter: 'drop-shadow(0 2px 8px rgba(200,167,102,0.6))',
             }}
           >
             Excellence in Real Estate
@@ -657,32 +655,35 @@ const Footer = () => {
           {/* Internal Divider */}
           <div className="h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
 
-          {/* Professional Tools Section - Connected */}
-          <div className="p-3 sm:p-5 md:p-8 text-center">
-            <h4 
-              className="font-bold text-[10px] sm:text-sm md:text-base uppercase tracking-[0.08em] sm:tracking-[0.15em] md:tracking-[0.2em] mb-1 sm:mb-2"
-              style={{
-                background: 'linear-gradient(135deg, #FFFFFF 0%, #D4AF37 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
-              Professional Tools
-            </h4>
-            <p className="text-zinc-400 text-[9px] sm:text-xs md:text-sm mb-2 sm:mb-4 md:mb-6 italic">AI-Powered Assistants</p>
-            <div className="flex flex-wrap justify-center gap-1 sm:gap-2 md:gap-3">
+          {/* Professional Tools Section - Premium Enhanced */}
+          <div className="p-4 sm:p-6 md:p-10 text-center">
+            <div className="mb-4 sm:mb-6">
+              <h4 
+                className="font-bold text-sm sm:text-base md:text-lg uppercase tracking-[0.12em] sm:tracking-[0.18em] md:tracking-[0.25em] mb-2"
+                style={{
+                  background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  filter: 'drop-shadow(0 2px 6px rgba(200,167,102,0.5))',
+                }}
+              >
+                ✦ Professional Tools ✦
+              </h4>
+              <p className="text-gold/70 text-xs sm:text-sm md:text-base font-medium tracking-wider">AI-Powered Assistants</p>
+            </div>
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4">
               {professionalTools.map((link) => (
                 <Link
                   key={link.href}
                   to={link.href}
-                  className="text-zinc-300 hover:text-gold transition-all duration-300 text-[9px] sm:text-[11px] md:text-xs lg:text-sm px-1.5 sm:px-3 md:px-4 py-0.5 sm:py-1.5 md:py-2 rounded-md sm:rounded-lg"
+                  className="text-white hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-lg sm:rounded-xl group"
                   style={{
-                    background: 'linear-gradient(145deg, rgba(50,50,55,0.8) 0%, rgba(30,30,35,0.9) 100%)',
-                    boxShadow: '0 4px 15px -3px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(200,167,102,0.2)',
+                    background: 'linear-gradient(145deg, rgba(30,30,35,0.95) 0%, rgba(15,15,20,0.98) 100%)',
+                    boxShadow: '0 4px 20px -3px rgba(0,0,0,0.5), inset 0 1px 0 rgba(200,167,102,0.15), inset 0 -1px 0 rgba(0,0,0,0.4)',
+                    border: '1px solid rgba(200,167,102,0.35)',
                   }}
                 >
-                  {link.label}
+                  <span className="group-hover:text-gold transition-colors">{link.label}</span>
                 </Link>
               ))}
             </div>
