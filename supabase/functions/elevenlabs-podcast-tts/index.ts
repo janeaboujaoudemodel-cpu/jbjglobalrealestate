@@ -41,7 +41,6 @@ serve(async (req) => {
       testMaxChars?: number;
     };
 
-    // Prefer the connector-managed key (ELEVENLABS_API_KEY_1) if available, otherwise fall back to the manually-set key.
     const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY_1") || Deno.env.get("ELEVENLABS_API_KEY");
     
     if (!ELEVENLABS_API_KEY) {
@@ -52,8 +51,6 @@ serve(async (req) => {
       throw new Error("Jane's voice ID not configured");
     }
 
-    // In test mode, keep the request *very* small to avoid burning credits (or failing on low-quota API keys).
-    // You can override via `testMaxChars` in the request body.
     const effectiveTestMaxChars = clampInt(testMaxChars, 1, 200, 4);
     const testTextCandidate = (segments?.[0]?.text ?? "Hi.").trim();
     const testText = (testTextCandidate.length ? testTextCandidate : "Hi.").slice(0, effectiveTestMaxChars);
@@ -62,122 +59,115 @@ serve(async (req) => {
       ? [{ speaker: "jane" as const, text: testText }]
       : segments;
 
-    console.log(`Generating podcast audio for ${segmentsToProcess.length} segments in ${language}${testMode ? ' (TEST MODE)' : ''}`);
+    // Limit to 15 segments max to avoid memory issues
+    const limitedSegments = segmentsToProcess.slice(0, 15);
 
-    // Generate audio for each segment
-    const audioChunks: ArrayBuffer[] = [];
-    
-    for (let i = 0; i < segmentsToProcess.length; i++) {
-      const segment = segmentsToProcess[i];
-      const voiceId = VOICES[segment.speaker];
-      
-      if (!voiceId) {
-        console.error(`No voice ID for speaker: ${segment.speaker}`);
-        continue;
-      }
+    console.log(`Generating podcast audio for ${limitedSegments.length} segments in ${language}${testMode ? ' (TEST MODE)' : ''}`);
 
-      console.log(`Generating segment ${i + 1}/${segmentsToProcess.length} for ${segment.speaker}`);
-
-      // Build request with stitching context
-      const requestBody: Record<string, unknown> = {
-        text: segment.text,
-        model_id: "eleven_multilingual_v2",
-        voice_settings: {
-          stability: 0.6,
-          similarity_boost: 0.8,
-          style: 0.3,
-          use_speaker_boost: true,
-          speed: 1.0,
-        },
-      };
-
-      // Add context for stitching (only in full mode)
-      if (!testMode) {
-        if (i > 0) {
-          requestBody.previous_text = segmentsToProcess[i - 1].text.slice(-200);
-        }
-        if (i < segmentsToProcess.length - 1) {
-          requestBody.next_text = segmentsToProcess[i + 1].text.slice(0, 200);
-        }
-      }
-
-      const response = await fetch(
-        `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`,
-        {
-          method: "POST",
-          headers: {
-            "xi-api-key": ELEVENLABS_API_KEY,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestBody),
-        }
-      );
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error(`ElevenLabs API error for segment ${i}:`, errorText);
-
-        // Try to return a more useful status code (instead of a generic 500)
-        let status = 502;
-        let message = `Failed to generate audio for segment ${i}: ${errorText}`;
-
+    // Use streaming to avoid memory accumulation
+    const stream = new ReadableStream({
+      async start(controller) {
         try {
-          const parsed = JSON.parse(errorText);
-          const apiStatus = parsed?.detail?.status;
-          const apiMessage = parsed?.detail?.message;
+          for (let i = 0; i < limitedSegments.length; i++) {
+            const segment = limitedSegments[i];
+            const voiceId = VOICES[segment.speaker];
+            
+            if (!voiceId) {
+              console.error(`No voice ID for speaker: ${segment.speaker}`);
+              continue;
+            }
 
-          if (apiStatus === "quota_exceeded") {
-            status = 402;
-            message = apiMessage || message;
-          } else if (response.status === 401 || response.status === 403) {
-            status = 401;
-            message = apiMessage || "ElevenLabs authentication failed";
-          } else if (response.status >= 400 && response.status < 500) {
-            status = 400;
-            message = apiMessage || message;
+            console.log(`Generating segment ${i + 1}/${limitedSegments.length} for ${segment.speaker}`);
+
+            const requestBody: Record<string, unknown> = {
+              text: segment.text,
+              model_id: "eleven_multilingual_v2",
+              voice_settings: {
+                stability: 0.6,
+                similarity_boost: 0.8,
+                style: 0.3,
+                use_speaker_boost: true,
+                speed: 1.0,
+              },
+            };
+
+            if (!testMode) {
+              if (i > 0) {
+                requestBody.previous_text = limitedSegments[i - 1].text.slice(-200);
+              }
+              if (i < limitedSegments.length - 1) {
+                requestBody.next_text = limitedSegments[i + 1].text.slice(0, 200);
+              }
+            }
+
+            const response = await fetch(
+              `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_22050_32`,
+              {
+                method: "POST",
+                headers: {
+                  "xi-api-key": ELEVENLABS_API_KEY,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(requestBody),
+              }
+            );
+
+            if (!response.ok) {
+              const errorText = await response.text();
+              console.error(`ElevenLabs API error for segment ${i}:`, errorText);
+              
+              let status = 502;
+              let message = `Failed to generate audio for segment ${i}: ${errorText}`;
+
+              try {
+                const parsed = JSON.parse(errorText);
+                const apiStatus = parsed?.detail?.status;
+                const apiMessage = parsed?.detail?.message;
+
+                if (apiStatus === "quota_exceeded") {
+                  status = 402;
+                  message = apiMessage || message;
+                } else if (response.status === 401 || response.status === 403) {
+                  status = 401;
+                  message = apiMessage || "ElevenLabs authentication failed";
+                }
+              } catch {
+                // Keep defaults
+              }
+
+              throw { status, message } satisfies HttpError;
+            }
+
+            // Stream each chunk directly instead of accumulating
+            const reader = response.body?.getReader();
+            if (reader) {
+              while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                controller.enqueue(value);
+              }
+            }
+
+            // Small delay between segments
+            if (i < limitedSegments.length - 1) {
+              await new Promise(resolve => setTimeout(resolve, 50));
+            }
           }
-        } catch {
-          // Keep defaults
+          
+          controller.close();
+        } catch (err) {
+          controller.error(err);
         }
-
-        throw { status, message } satisfies HttpError;
       }
+    });
 
-      const audioBuffer = await response.arrayBuffer();
-      audioChunks.push(audioBuffer);
-      
-      // Small delay to avoid rate limiting
-      if (i < segmentsToProcess.length - 1) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
-    }
-
-    // Combine all audio chunks
-    const totalLength = audioChunks.reduce((acc, chunk) => acc + chunk.byteLength, 0);
-    const combinedAudio = new Uint8Array(totalLength);
-    let offset = 0;
-    
-    for (const chunk of audioChunks) {
-      combinedAudio.set(new Uint8Array(chunk), offset);
-      offset += chunk.byteLength;
-    }
-
-    // Return as base64 encoded audio - convert Uint8Array to ArrayBuffer
-    const audioBase64 = base64Encode(combinedAudio.buffer);
-
-    return new Response(
-      JSON.stringify({ 
-        success: true, 
-        audioContent: audioBase64,
-        duration: Math.round(totalLength / 16000), // Rough estimate
-      }),
-      {
-        headers: {
-          ...corsHeaders,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    return new Response(stream, {
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "audio/mpeg",
+        "Transfer-Encoding": "chunked",
+      },
+    });
 
   } catch (err) {
     const status =
