@@ -93,12 +93,12 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   const fetchPendingImports = async () => {
     setIsLoading(true);
     try {
+      // REMOVED .limit(200) to show ALL pending imports (supports 1,335+)
       let query = supabase
         .from("pending_project_imports")
         .select("*, review_notes")
         .eq("status", "pending")
-        .order("created_at", { ascending: false })
-        .limit(200);
+        .order("created_at", { ascending: false });
 
       if (jobId && !showAll) {
         query = query.eq("job_id", jobId);

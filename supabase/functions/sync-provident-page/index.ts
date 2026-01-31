@@ -7,148 +7,194 @@ const corsHeaders = {
 };
 
 /**
- * ENHANCED EXTRACTION v3 - Enterprise Grade
- * 1. Robust retry logic with exponential backoff
- * 2. Validation layer for data quality
- * 3. Automatic recovery from failures
- * 4. Enhanced rate limiting protection
- * 5. Detailed logging for debugging
+ * STRICT URL MIRROR v4 – No AI required
+ * 1. Derive slug directly from Provident URL (1:1 mirroring)
+ * 2. Extract images/PDFs from HTML with regex (no AI gateway credits)
+ * 3. Fallback to AI only for enrichment if available
  */
 
-interface ProjectData {
+interface PendingImport {
   name: string;
+  slug: string;
   developer_name: string | null;
+  developer_id: string | null;
   location: string | null;
-  url: string;
-  image_urls: string[];
-  bedrooms: string | null;
+  emirate: string;
+  description: string | null;
   price_from: number | null;
-  price_text: string | null;
+  bedrooms_min: number | null;
+  bedrooms_max: number | null;
+  handover_date: string | null;
   payment_plan: string | null;
-  handover_display: string | null;
   property_type_label: string | null;
   status_label: string | null;
-  description: string | null;
-  amenities: string[] | null;
-  // Document fields
-  brochure_url?: string | null;
-  payment_plan_url?: string | null;
-  floor_plan_urls?: string[];
+  images: Array<{ url: string; alt_text: string; display_order: number }>;
+  documents: Array<{ url: string; type: string; name?: string }>;
+  source_url: string;
+  job_id?: string | null;
+  is_new_project: boolean;
+  status: string;
+  review_notes: string | null;
 }
 
-// Retry configuration
-const RETRY_CONFIG = {
-  maxRetries: 3,
-  baseDelay: 1000,
-  maxDelay: 10000,
-};
-
-// Validation rules
-const VALIDATION_RULES = {
-  minNameLength: 3,
-  minDescriptionLength: 20,
-  validImagePattern: /cloudfront\.net.*\.(jpg|jpeg|png|webp)/i,
-  excludeImagePatterns: [/logo/i, /icon/i, /banner/i, /brochure/i, /floor/i, /payment/i],
-};
-
-/**
- * Sleep with jitter for rate limiting
- */
 async function sleep(ms: number, jitter = 0.2): Promise<void> {
   const jitterMs = ms * jitter * Math.random();
   return new Promise(r => setTimeout(r, ms + jitterMs));
 }
 
-/**
- * Retry wrapper with exponential backoff
- */
-async function withRetry<T>(
-  fn: () => Promise<T>,
-  context: string,
-  maxRetries = RETRY_CONFIG.maxRetries
-): Promise<T | null> {
-  let lastError: Error | null = null;
-  
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      return await fn();
-    } catch (err) {
-      lastError = err instanceof Error ? err : new Error(String(err));
-      const delay = Math.min(
-        RETRY_CONFIG.baseDelay * Math.pow(2, attempt - 1),
-        RETRY_CONFIG.maxDelay
-      );
-      console.warn(`[${context}] Attempt ${attempt}/${maxRetries} failed: ${lastError.message}. Retrying in ${delay}ms...`);
-      
-      if (attempt < maxRetries) {
-        await sleep(delay);
-      }
+// ============================================================
+// DETERMINISTIC HTML EXTRACTION (NO AI)
+// ============================================================
+
+function extractSlugFromUrl(url: string): string {
+  // https://providentestate.com/new-projects/project-slug-here/
+  const match = url.match(/\/new-projects\/([^\/\?#]+)/);
+  return match?.[1]?.toLowerCase().replace(/\/$/, "") || "";
+}
+
+function extractImagesFromHtml(html: string, links: string[]): string[] {
+  const imageSet = new Set<string>();
+
+  // From links array
+  for (const l of links) {
+    if (l.includes("cloudfront.net") && /\.(jpg|jpeg|png|webp)/i.test(l)) {
+      imageSet.add(l);
     }
   }
-  
-  console.error(`[${context}] All ${maxRetries} attempts failed. Last error: ${lastError?.message}`);
-  return null;
+
+  // From img tags
+  const imgRx = /<img[^>]+(?:src|data-src|data-lazy-src)=["']([^"']+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = imgRx.exec(html)) !== null) {
+    if (m[1]?.includes("cloudfront.net") && /\.(jpg|jpeg|png|webp)/i.test(m[1])) {
+      imageSet.add(m[1]);
+    }
+  }
+
+  // From background-image
+  const bgRx = /background-image:\s*url\(['"]?([^'")\s]+cloudfront\.net[^'")\s]+)['"]?\)/gi;
+  while ((m = bgRx.exec(html)) !== null) {
+    if (m[1]) imageSet.add(m[1]);
+  }
+
+  // Upgrade to high-res & filter
+  return Array.from(imageSet)
+    .filter((u) => !/(logo|icon|avatar|placeholder|spinner)/i.test(u))
+    .map((u) => u.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"))
+    .slice(0, 12);
 }
 
-/**
- * Validate extracted project data
- */
-function validateProjectData(data: ProjectData): { valid: boolean; issues: string[] } {
-  const issues: string[] = [];
-  
-  // Required fields
-  if (!data.name || data.name.length < VALIDATION_RULES.minNameLength) {
-    issues.push("Invalid or missing name");
+function extractPdfsFromHtml(html: string, markdown: string): { brochure: string | null; paymentPlan: string | null; floorPlans: string[] } {
+  const pdfRx = /https?:\/\/[^\s"'<>\)]+\.pdf(?:\?[^\s"'<>\)]*)?/gi;
+  const pdfLinks = [...new Set([...(markdown.match(pdfRx) || []), ...(html.match(pdfRx) || [])])];
+
+  let brochure: string | null = null;
+  let paymentPlan: string | null = null;
+  const floorPlans: string[] = [];
+
+  for (const p of pdfLinks) {
+    const lower = p.toLowerCase();
+    if (!brochure && lower.includes("brochure")) brochure = p;
+    else if (!paymentPlan && lower.includes("payment")) paymentPlan = p;
+    else if (lower.includes("floor")) floorPlans.push(p);
   }
-  
-  // Validate images
-  const validImages = (data.image_urls || []).filter(url => {
-    if (!VALIDATION_RULES.validImagePattern.test(url)) return false;
-    return !VALIDATION_RULES.excludeImagePatterns.some(p => p.test(url));
-  });
-  
-  if (validImages.length === 0) {
-    issues.push("No valid images found");
+  if (!brochure && pdfLinks.length > 0) {
+    const leftover = pdfLinks.filter((p) => p !== paymentPlan && !floorPlans.includes(p));
+    if (leftover.length > 0) brochure = leftover[0];
   }
-  
-  // Validate price if present
-  if (data.price_from !== null && (data.price_from < 100000 || data.price_from > 500000000)) {
-    issues.push(`Suspicious price value: ${data.price_from}`);
-  }
-  
-  return { valid: issues.length === 0, issues };
+
+  return { brochure, paymentPlan, floorPlans };
 }
 
-/**
- * Sanitize and clean extracted data
- */
-function sanitizeProjectData(data: ProjectData): ProjectData {
-  // Clean name - remove excess whitespace
-  const cleanName = data.name?.trim().replace(/\s+/g, ' ') || '';
-  
-  // Clean description
-  const cleanDescription = data.description?.trim().replace(/\s+/g, ' ').substring(0, 1000) || null;
-  
-  // Filter and deduplicate images
-  const uniqueImages = [...new Set(data.image_urls)]
-    .filter(url => {
-      if (!VALIDATION_RULES.validImagePattern.test(url)) return false;
-      return !VALIDATION_RULES.excludeImagePatterns.some(p => p.test(url));
-    })
-    .map(url => url.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"))
-    .slice(0, 8);
-  
-  // Clean location
-  const cleanLocation = data.location?.trim() || null;
-  
-  return {
-    ...data,
-    name: cleanName,
-    description: cleanDescription,
-    image_urls: uniqueImages,
-    location: cleanLocation,
-  };
+function stripMarkdownLinks(text: string): string {
+  // Convert [text](url) to just text
+  return text.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").trim();
 }
+
+function extractTextFromMarkdown(markdown: string): {
+  name: string | null;
+  developerName: string | null;
+  location: string | null;
+  bedrooms: string | null;
+  priceText: string | null;
+  priceFrom: number | null;
+  handover: string | null;
+  paymentPlan: string | null;
+  description: string | null;
+  propertyType: string | null;
+  statusLabel: string | null;
+} {
+  // Strip markdown links before processing
+  const cleanMd = stripMarkdownLinks(markdown);
+
+  // Title: usually first H1 or prominent heading
+  const titleMatch = cleanMd.match(/^#\s+(.+)/m) || cleanMd.match(/^##\s+(.+)/m);
+  let name = titleMatch?.[1]?.trim() || null;
+  // Remove any trailing "by Developer" from title
+  if (name) {
+    name = name.replace(/\s+by\s+.*$/i, "").trim();
+  }
+
+  // Developer: "by [Developer]" or "Developed by [Developer]"
+  // Look for explicit developer patterns in cleaned markdown
+  const devMatch = cleanMd.match(/(?:^|\s)by\s+([A-Z][A-Za-z\s&]+?)(?:\s*\||$|\s*in\s|\n)/im);
+  const developerName = devMatch?.[1]?.trim() || null;
+
+  // Location: after "in [Location]" or "at [Location]"
+  const locMatch = cleanMd.match(/\s+in\s+([A-Z][A-Za-z\s,\-]+?)(?:\s*\||$|\n)/i);
+  const location = locMatch?.[1]?.trim() || null;
+
+  // Bedrooms: "1, 2 & 3 BR" or "Studio, 1-4 Bedrooms"
+  const bedMatch = cleanMd.match(/((?:Studio|[\d,&\s\-]+)\s*(?:BR|Bedrooms?|Bedroom))/i);
+  const bedrooms = bedMatch?.[1]?.trim() || null;
+
+  // Price: "EUR 294K" or "AED 1.5M"
+  const priceMatch = cleanMd.match(/(EUR|AED|USD)\s*([\d,.]+)\s*(K|M)?/i);
+  let priceText: string | null = null;
+  let priceFrom: number | null = null;
+  if (priceMatch) {
+    priceText = priceMatch[0];
+    let val = parseFloat(priceMatch[2].replace(/,/g, ""));
+    if (priceMatch[3]?.toUpperCase() === "K") val *= 1000;
+    if (priceMatch[3]?.toUpperCase() === "M") val *= 1000000;
+    if (priceMatch[1].toUpperCase() === "EUR") val *= 4.0; // EUR to AED
+    priceFrom = Math.round(val);
+  }
+
+  // Handover: "2029", "Q2 2028", "Ready"
+  const handoverMatch = cleanMd.match(/(?:Handover|Completion)[:\s]*(Q[1-4]?\s*\d{4}|\d{4}|Ready)/i);
+  const handover = handoverMatch?.[1]?.trim() || null;
+
+  // Payment plan: "60/40", "70/30"
+  const ppMatch = cleanMd.match(/(\d{2}\/\d{2})/);
+  const paymentPlan = ppMatch?.[1] || null;
+
+  // Description: first paragraph >50 chars
+  const descMatch = cleanMd.match(/\n\n([A-Z][^#\n]{50,500})/);
+  const description = descMatch?.[1]?.trim() || null;
+
+  // Property type
+  const typeMatch = cleanMd.match(/(Apartment|Villa|Townhouse|Penthouse|Sky[- ]?Villa|Studio)/i);
+  const propertyType = typeMatch?.[1] || null;
+
+  // Status label
+  const statusMatch = cleanMd.match(/(Future Launch|New Phase|New Launch|Coming Soon|Sold Out)/i);
+  const statusLabel = statusMatch?.[1] || null;
+
+  return { name, developerName, location, bedrooms, priceText, priceFrom, handover, paymentPlan, description, propertyType, statusLabel };
+}
+
+function parseBedrooms(bedroomStr: string | null): { min: number | null; max: number | null } | null {
+  if (!bedroomStr) return null;
+  const matches = bedroomStr.match(/(\d+)/g);
+  if (!matches || matches.length === 0) return null;
+  const nums = matches.map(m => parseInt(m));
+  return { min: nums[0], max: nums.length > 1 ? nums[nums.length - 1] : nums[0] };
+}
+
+// ============================================================
+// MAIN SERVE FUNCTION
+// ============================================================
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -159,11 +205,9 @@ serve(async (req) => {
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
   const firecrawlKey = Deno.env.get("FIRECRAWL_API_KEY");
-  const lovableKey = Deno.env.get("LOVABLE_API_KEY");
 
   if (!firecrawlKey) {
-    console.error("Missing API key: FIRECRAWL_API_KEY");
-    return new Response(JSON.stringify({ error: "Missing API keys", code: "MISSING_FIRECRAWL_KEY" }), {
+    return new Response(JSON.stringify({ error: "Missing FIRECRAWL_API_KEY" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
@@ -175,264 +219,148 @@ serve(async (req) => {
     const {
       page = 1,
       jobId = null,
-      testMode = false,
-      force = false,
-      testProject = null,
-      linksOnly = false,
       startIndex: rawStartIndex = 0,
-      batchSize: rawBatchSize = undefined,
-      validateOnly = false,
+      batchSize: rawBatchSize = 3,
+      force = false,
     } = await req.json().catch(() => ({}));
 
     const normalizedJobId = typeof jobId === "string" && jobId.length > 10 ? jobId : null;
-
     const startIndex = Math.max(0, Number(rawStartIndex) || 0);
-    const batchSize = Math.max(1, Math.min(Number(rawBatchSize ?? (testMode ? 1 : 3)), 10));
+    const batchSize = Math.max(1, Math.min(Number(rawBatchSize) || 3, 10));
 
-    console.log(`[Page ${page}] Starting ENHANCED sync v3 (startIndex=${startIndex}, batchSize=${batchSize})...`);
-    
-    // Get developers for matching (projects table uses 'developers')
+    console.log(`[Page ${page}] Starting STRICT URL MIRROR v4 (startIndex=${startIndex}, batchSize=${batchSize})...`);
+
+    // Get developers for matching
     const { data: developers, error: devError } = await supabase.from("developers").select("id, name, slug");
-    
     if (devError) {
-      console.error("Failed to fetch developers:", devError);
       return new Response(JSON.stringify({ error: "Failed to fetch developers", details: devError.message }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    
     const devList = developers || [];
+    const devMap = buildDeveloperMap(devList);
     console.log(`[Page ${page}] Loaded ${devList.length} developers for matching`);
 
-    // Build enhanced developer lookup
-    const devMap = buildDeveloperMap(devList);
+    // Step 1: Get project URLs from listing page
+    const pageSlug = page === 1 ? "" : `page/${page}/`;
+    const listingUrl = `https://providentestate.com/new-projects/${pageSlug}`;
 
-    // Single project test mode
-    if (testProject) {
-      if (!lovableKey) {
-        return new Response(JSON.stringify({ error: "Missing LOVABLE_API_KEY for AI extraction" }), {
-          status: 500,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
+    console.log(`[Page ${page}] Step 1: Fetching project URLs from ${listingUrl}...`);
 
-      console.log(`[Test] Scraping single project with retry: ${testProject}`);
-      
-      const projectData = await withRetry(
-        () => scrapeProjectDetailPage(testProject, firecrawlKey, lovableKey),
-        `Test:${testProject}`
-      );
-      
-      if (projectData) {
-        const sanitized = sanitizeProjectData(projectData);
-        const validation = validateProjectData(sanitized);
-        const dev = matchDeveloper(sanitized.developer_name, devMap);
-        
-        return new Response(JSON.stringify({
-          success: true,
-          testMode: true,
-          project: sanitized,
-          developer_matched: dev ? dev.name : null,
-          validation,
-          duration_ms: Date.now() - startTime
-        }), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      
-      return new Response(JSON.stringify({ 
-        error: "Failed to scrape project after retries",
-        url: testProject,
-        duration_ms: Date.now() - startTime
-      }), {
-        status: 500, 
+    const listRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${firecrawlKey}` },
+      body: JSON.stringify({ url: listingUrl, formats: ["links"], waitFor: 10000, timeout: 90000 }),
+    });
+
+    if (!listRes.ok) {
+      const errText = await listRes.text();
+      return new Response(JSON.stringify({ error: `Listing scrape failed: ${listRes.status}`, details: errText.substring(0, 200) }), {
+        status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // Step 1: Get project URLs from listing page with retry
-    const pageSlug = page === 1 ? "" : `page/${page}/`;
-    const listingUrl = `https://providentestate.com/new-projects/${pageSlug}`;
-    
-    console.log(`[Page ${page}] Step 1: Getting project URLs from ${listingUrl}...`);
-    
-    const projectUrls = await withRetry(async () => {
-      const listRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${firecrawlKey}`,
-        },
-        body: JSON.stringify({ 
-          url: listingUrl, 
-          formats: ["links"],
-          waitFor: 10000,
-          timeout: 90000,
-        }),
-      });
+    const listData = await listRes.json();
+    const linksRaw: string[] = listData.data?.links || [];
 
-      if (!listRes.ok) {
-        const errText = await listRes.text();
-        throw new Error(`Listing scrape failed: ${listRes.status} - ${errText.substring(0, 200)}`);
-      }
+    // Normalize & filter to project detail URLs
+    const listingUrlNormalized = listingUrl.replace(/\/$/, "");
+    const projectUrls = [...new Set(
+      linksRaw
+        .map((l) => l.trim().replace(/\/$/, ""))
+        .filter((l) => {
+          if (!l.startsWith("https://providentestate.com/new-projects/")) return false;
+          if (l.includes("/page/")) return false;
+          if (l.includes("/developed-by-")) return false;
+          if (/\/new-projects\/in-[a-z0-9\-]+$/i.test(l)) return false;
+          if (l === "https://providentestate.com/new-projects") return false;
+          if (l === listingUrlNormalized) return false;
+          return true;
+        })
+    )];
 
-      const listData = await listRes.json();
-      const linksRaw = listData.data?.links || [];
-
-      // Normalize URLs BEFORE filtering (critical: Provident often returns trailing slashes)
-      const normalizedLinks = (linksRaw as string[])
-        .map((l) => (typeof l === "string" ? l.trim().replace(/\/$/, "") : ""))
-        .filter(Boolean);
-
-      const listingUrlNormalized = listingUrl.replace(/\/$/, "");
-
-      // Filter to get project detail page URLs
-      // IMPORTANT: exclude filter pages like /new-projects/in-xxx (with/without trailing slash)
-      const urls = [...new Set(
-        normalizedLinks
-          .filter((l: string) => {
-            if (!l.startsWith("https://providentestate.com/new-projects/")) return false;
-            if (l.includes("/new-projects/page/")) return false;
-            if (l.includes("/new-projects/developed-by-")) return false;
-            if (/\/new-projects\/in-[a-z0-9\-]+$/i.test(l)) return false;
-            if (l === "https://providentestate.com/new-projects") return false;
-            if (l === "https://providentestate.com/new-projects/") return false;
-            if (l === listingUrlNormalized) return false;
-            return true;
-          })
-      )] as string[];
-      
-      if (urls.length === 0) {
-        throw new Error("No project URLs found on page");
-      }
-      
-      return urls;
-    }, `Page${page}:ListingFetch`);
-
-    if (!projectUrls || projectUrls.length === 0) {
-      return new Response(JSON.stringify({ 
-        success: true, 
-        message: "No projects found on this page (may be end of listings)", 
-        page,
-        duration_ms: Date.now() - startTime
-      }), {
+    if (projectUrls.length === 0) {
+      return new Response(JSON.stringify({ success: true, message: "No projects found on this page", page, duration_ms: Date.now() - startTime }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     console.log(`[Page ${page}] Found ${projectUrls.length} project URLs`);
 
-    // Links-only mode
-    if (linksOnly) {
-      return new Response(
-        JSON.stringify({
-          success: true,
-          page,
-          listing_url: listingUrl,
-          total_urls: projectUrls.length,
-          project_urls: projectUrls,
-          duration_ms: Date.now() - startTime,
-          mode: "links_only",
-        }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
-      );
-    }
-
-    if (!lovableKey) {
-      return new Response(JSON.stringify({ error: "Missing LOVABLE_API_KEY for AI extraction" }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    // Step 2: Process projects in batches with enhanced error handling
+    // Step 2: Process batch
     const batchEnd = Math.min(projectUrls.length, startIndex + batchSize);
     const projectsToProcess = projectUrls.slice(startIndex, batchEnd);
-    
-    console.log(`[Page ${page}] Step 2: Processing ${projectsToProcess.length} projects (${startIndex} to ${batchEnd - 1})...`);
-    
-    const stats = {
-      total: projectUrls.length,
-      processed: 0,
-      queued: 0,
-      updated: 0,
-      skipped: 0,
-      errors: 0,
-      images: 0,
-      validation_failures: 0,
-      retry_successes: 0,
-    };
 
-    const errors: Array<{ url: string; error: string }> = [];
-    const CONCURRENCY = testMode ? 1 : 2;
+    const stats = { processed: 0, queued: 0, updated: 0, skipped: 0, errors: 0, images: 0 };
+    const errorsList: Array<{ url: string; error: string }> = [];
 
-    const processOne = async (projectUrl: string) => {
-      const result = {
-        processed: 0,
-        queued: 0,
-        updated: 0,
-        skipped: 0,
-        errors: 0,
-        images: 0,
-        validation_failures: 0,
-        retry_successes: 0,
-        errorDetail: null as { url: string; error: string } | null,
-      };
-
+    for (const projectUrl of projectsToProcess) {
       try {
         console.log(`[Page ${page}] Scraping: ${projectUrl}`);
 
-        // Scrape with retry
-        const projectData = await withRetry(
-          () => scrapeProjectDetailPage(projectUrl, firecrawlKey, lovableKey),
-          `Page${page}:Project`
-        );
+        // Scrape project detail page
+        const scrapeRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${firecrawlKey}` },
+          body: JSON.stringify({ url: projectUrl, formats: ["markdown", "links", "rawHtml"], waitFor: 8000, timeout: 60000, onlyMainContent: false }),
+        });
 
-        if (!projectData || !projectData.name) {
-          console.log(`[Page ${page}] No data extracted for ${projectUrl}`);
-          result.errors++;
-          result.errorDetail = { url: projectUrl, error: "No data extracted" };
-          return result;
+        if (!scrapeRes.ok) {
+          const errText = await scrapeRes.text();
+          console.error(`[Page ${page}] Scrape failed for ${projectUrl}: ${errText.substring(0, 100)}`);
+          stats.errors++;
+          errorsList.push({ url: projectUrl, error: `Scrape failed: ${scrapeRes.status}` });
+          continue;
         }
 
-        // Sanitize and validate
-        const sanitized = sanitizeProjectData(projectData);
-        const validation = validateProjectData(sanitized);
-        
-        if (!validation.valid) {
-          console.warn(`[Page ${page}] Validation issues for ${projectUrl}: ${validation.issues.join(', ')}`);
-          result.validation_failures++;
-          // Continue anyway - log but don't skip
+        const scrapeData = await scrapeRes.json();
+        const markdown = scrapeData.data?.markdown || "";
+        const links = scrapeData.data?.links || [];
+        const html = scrapeData.data?.rawHtml || "";
+
+        if (markdown.length < 200 && html.length < 500) {
+          console.warn(`[Page ${page}] Insufficient content for ${projectUrl}`);
+          stats.errors++;
+          errorsList.push({ url: projectUrl, error: "Insufficient content" });
+          continue;
         }
 
-        result.processed++;
+        // === STRICT SLUG FROM URL ===
+        const slug = extractSlugFromUrl(projectUrl);
+        if (!slug) {
+          console.warn(`[Page ${page}] Could not derive slug from ${projectUrl}`);
+          stats.errors++;
+          errorsList.push({ url: projectUrl, error: "Could not derive slug" });
+          continue;
+        }
+
+        // === DETERMINISTIC EXTRACTION ===
+        const extracted = extractTextFromMarkdown(markdown);
+        const imageUrls = extractImagesFromHtml(html, links);
+        const { brochure, paymentPlan: ppUrl, floorPlans } = extractPdfsFromHtml(html, markdown);
 
         // Match developer
-        const dev = matchDeveloper(sanitized.developer_name, devMap);
+        const dev = matchDeveloper(extracted.developerName, devMap);
 
-        // Create slug
-        const baseName = sanitized.name.toLowerCase()
-          .replace(/[^a-z0-9\s-]/g, "")
-          .replace(/\s+/g, "-")
-          .substring(0, 50);
-        const slug = dev ? `${baseName}-${dev.slug}`.substring(0, 80) : baseName;
+        // Build name fallback: use extracted name or derive from slug
+        const projectName = extracted.name || slug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
 
-        // Check if already exists in projects
-        const { data: existingProject } = await supabase
-          .from("projects")
-          .select("id")
-          .eq("slug", slug)
-          .maybeSingle();
+        // Bedrooms
+        const beds = parseBedrooms(extracted.bedrooms);
 
-        if (existingProject && !force) {
-          console.log(`[Page ${page}] Skipping ${sanitized.name} - already exists in projects`);
-          result.skipped++;
-          return result;
-        }
+        // Images payload
+        const imagesPayload = imageUrls.map((url, i) => ({ url, alt_text: `${projectName} - Image ${i + 1}`, display_order: i }));
 
-        // Check if already exists in queue
-        const { data: existingQueueAny } = await supabase
+        // Documents payload
+        const documentsPayload: Array<{ url: string; type: string; name?: string }> = [];
+        if (brochure) documentsPayload.push({ url: brochure, type: "brochure", name: `${projectName} Brochure.pdf` });
+        if (ppUrl) documentsPayload.push({ url: ppUrl, type: "payment_plan", name: `${projectName} Payment Plan.pdf` });
+        for (const fp of floorPlans) documentsPayload.push({ url: fp, type: "floor_plan", name: `${projectName} Floor Plan.pdf` });
+
+        // Check if already in queue or projects
+        const { data: existingQueue } = await supabase
           .from("pending_project_imports")
           .select("id, status")
           .eq("slug", slug)
@@ -440,141 +368,84 @@ serve(async (req) => {
           .limit(1)
           .maybeSingle();
 
-        // Prepare images payload
-        const imagesPayload = sanitized.image_urls.map((url, i) => ({
-          url,
-          alt_text: `${sanitized.name} - Image ${i + 1}`,
-          display_order: i,
-        }));
+        const { data: existingProject } = await supabase
+          .from("projects")
+          .select("id")
+          .eq("slug", slug)
+          .maybeSingle();
 
-        // Prepare documents payload
-        const documentsPayload: Array<{ url: string; type: string; name?: string }> = [];
-        if ((sanitized as ProjectData & { brochure_url?: string | null }).brochure_url) {
-          documentsPayload.push({ url: (sanitized as ProjectData & { brochure_url?: string | null }).brochure_url!, type: "brochure", name: `${sanitized.name} Brochure.pdf` });
-        }
-        if ((sanitized as ProjectData & { payment_plan_url?: string | null }).payment_plan_url) {
-          documentsPayload.push({ url: (sanitized as ProjectData & { payment_plan_url?: string | null }).payment_plan_url!, type: "payment_plan", name: `${sanitized.name} Payment Plan.pdf` });
-        }
-        for (const fp of (sanitized as ProjectData & { floor_plan_urls?: string[] }).floor_plan_urls || []) {
-          documentsPayload.push({ url: fp, type: "floor_plan", name: `${sanitized.name} Floor Plan.pdf` });
+        if (existingProject && !force) {
+          console.log(`[Page ${page}] Skipping ${projectName} - already exists in projects`);
+          stats.skipped++;
+          stats.processed++;
+          continue;
         }
 
-        // Determine if extraction is incomplete
-        const hasMinimalData = Boolean(sanitized.description && sanitized.developer_name && sanitized.developer_name.toLowerCase() !== "unknown" && imagesPayload.length >= 1);
-        const hasDocuments = documentsPayload.length > 0;
-        const extractionIncomplete = !hasMinimalData || !hasDocuments;
-
-        // Insert to approval queue
-        const insertPayload: Record<string, unknown> = {
-          name: sanitized.name,
+        // Build insert/update payload
+        const payload: Omit<PendingImport, "is_new_project" | "status" | "review_notes"> & { job_id?: string | null } = {
+          name: projectName,
           slug,
-          developer_name: sanitized.developer_name || null,
-          location: sanitized.location || null,
+          developer_name: extracted.developerName || null,
+          developer_id: dev?.id || null,
+          location: extracted.location || null,
           emirate: "Dubai",
-          price_from: sanitized.price_from,
-          bedrooms_min: parseBedrooms(sanitized.bedrooms)?.min || null,
-          bedrooms_max: parseBedrooms(sanitized.bedrooms)?.max || null,
-          handover_date: sanitized.handover_display || null,
-          payment_plan: sanitized.payment_plan || null,
-          source_url: projectUrl,
-          property_type_label: sanitized.property_type_label || null,
-          status_label: sanitized.status_label || null,
-          description: sanitized.description || null,
-          amenities: sanitized.amenities || null,
+          description: extracted.description || null,
+          price_from: extracted.priceFrom || null,
+          bedrooms_min: beds?.min || null,
+          bedrooms_max: beds?.max || null,
+          handover_date: extracted.handover || null,
+          payment_plan: extracted.paymentPlan || null,
+          property_type_label: extracted.propertyType || null,
+          status_label: extracted.statusLabel || null,
           images: imagesPayload,
           documents: documentsPayload,
-          is_new_project: !existingQueueAny,
-          status: "pending",
-          review_notes: extractionIncomplete ? "INCOMPLETE: Re-scrape recommended" : null,
+          source_url: projectUrl,
         };
+        if (normalizedJobId) payload.job_id = normalizedJobId;
 
-        // Link the import to the current sync job (enables filtering + auditability)
-        if (normalizedJobId) {
-          insertPayload.job_id = normalizedJobId;
-        }
+        const hasMinimal = Boolean(extracted.description && extracted.developerName && imagesPayload.length >= 1);
+        const hasDocs = documentsPayload.length > 0;
+        const incomplete = !hasMinimal || !hasDocs;
 
-        if (dev?.id) {
-          insertPayload.developer_id = dev.id;
-        }
-
-        // Insert or update queue
-        if (existingQueueAny?.id) {
-          if (force || existingQueueAny.status === "pending") {
+        if (existingQueue?.id) {
+          if (force || existingQueue.status === "pending") {
             const { error: updateErr } = await supabase
               .from("pending_project_imports")
-              .update({
-                ...insertPayload,
-                status: "pending",
-                reviewed_at: null,
-                reviewed_by: null,
-                review_notes: null,
-                updated_at: new Date().toISOString(),
-              })
-              .eq("id", existingQueueAny.id);
-
+              .update({ ...payload, is_new_project: false, status: "pending", review_notes: incomplete ? "INCOMPLETE" : null, updated_at: new Date().toISOString() })
+              .eq("id", existingQueue.id);
             if (updateErr) {
-              console.error(`[Page ${page}] Update failed for ${sanitized.name}:`, updateErr);
-              result.errors++;
-              result.errorDetail = { url: projectUrl, error: updateErr.message };
+              console.error(`[Page ${page}] Update failed for ${projectName}:`, updateErr);
+              stats.errors++;
+              errorsList.push({ url: projectUrl, error: updateErr.message });
             } else {
-              console.log(`[Page ${page}] ↻ Updated: ${sanitized.name} (${sanitized.image_urls.length} images)`);
-              result.updated++;
-              result.images += sanitized.image_urls.length;
+              console.log(`[Page ${page}] ↻ Updated: ${projectName} (${imagesPayload.length} images)`);
+              stats.updated++;
+              stats.images += imagesPayload.length;
             }
           } else {
-            console.log(`[Page ${page}] Skipping ${sanitized.name} - already queued (status=${existingQueueAny.status})`);
-            result.skipped++;
+            console.log(`[Page ${page}] Skipping ${projectName} - already queued`);
+            stats.skipped++;
           }
         } else {
-          const { error: queueErr } = await supabase
-            .from("pending_project_imports")
-            .insert(insertPayload);
-
-          if (queueErr) {
-            console.error(`[Page ${page}] Insert failed for ${sanitized.name}:`, queueErr);
-            result.errors++;
-            result.errorDetail = { url: projectUrl, error: queueErr.message };
+          const { error: insertErr } = await supabase.from("pending_project_imports").insert({ ...payload, is_new_project: true, status: "pending", review_notes: incomplete ? "INCOMPLETE" : null });
+          if (insertErr) {
+            console.error(`[Page ${page}] Insert failed for ${projectName}:`, insertErr);
+            stats.errors++;
+            errorsList.push({ url: projectUrl, error: insertErr.message });
           } else {
-            console.log(`[Page ${page}] ✓ Queued: ${sanitized.name} (${sanitized.image_urls.length} images, ${sanitized.location})`);
-            result.queued++;
-            result.images += sanitized.image_urls.length;
+            console.log(`[Page ${page}] ✓ Queued: ${projectName} (${imagesPayload.length} images)`);
+            stats.queued++;
+            stats.images += imagesPayload.length;
           }
         }
-      } catch (projErr) {
-        console.error(`[Page ${page}] Error processing ${projectUrl}:`, projErr);
-        result.errors++;
-        result.errorDetail = { 
-          url: projectUrl, 
-          error: projErr instanceof Error ? projErr.message : "Unknown error" 
-        };
-      }
 
-      return result;
-    };
-
-    // Process with concurrency control
-    for (let i = 0; i < projectsToProcess.length; i += CONCURRENCY) {
-      const chunk = projectsToProcess.slice(i, i + CONCURRENCY);
-      const results = await Promise.all(chunk.map(processOne));
-
-      for (const r of results) {
-        stats.processed += r.processed;
-        stats.queued += r.queued;
-        stats.updated += r.updated;
-        stats.skipped += r.skipped;
-        stats.errors += r.errors;
-        stats.images += r.images;
-        stats.validation_failures += r.validation_failures;
-        stats.retry_successes += r.retry_successes;
-        
-        if (r.errorDetail) {
-          errors.push(r.errorDetail);
-        }
-      }
-
-      // Rate limiting between batches
-      if (i + CONCURRENCY < projectsToProcess.length) {
-        await sleep(800);
+        stats.processed++;
+        await sleep(600);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Unknown error";
+        console.error(`[Page ${page}] Error processing ${projectUrl}:`, message);
+        stats.errors++;
+        errorsList.push({ url: projectUrl, error: message });
       }
     }
 
@@ -584,328 +455,62 @@ serve(async (req) => {
     const nextStartIndex = startIndex + projectsToProcess.length;
     const remainingUrls = Math.max(0, projectUrls.length - nextStartIndex);
 
-    // UI-friendly response
-    const uiStats = {
+    return new Response(JSON.stringify({
+      success: true,
       page,
-      extracted: stats.processed,
-      created: stats.queued,
-      updated: stats.updated,
-      skipped: stats.skipped,
-      images: stats.images,
-    };
-
-    return new Response(JSON.stringify({ 
-      success: true, 
-      page,
-      stats: uiStats,
-      debug: {
-        ...stats,
-        errors_list: errors.slice(0, 5), // Only first 5 errors
-      },
+      stats: { page, extracted: stats.processed, created: stats.queued, updated: stats.updated, skipped: stats.skipped, images: stats.images },
+      debug: { ...stats, errors_list: errorsList.slice(0, 5) },
       total_urls: projectUrls.length,
       batch_start_index: startIndex,
       batch_size: batchSize,
       next_start_index: nextStartIndex,
       remaining_urls: remainingUrls,
       mode: "approval_queue",
-      extraction_method: "enterprise-v3",
-      duration_ms: duration 
+      extraction_method: "strict-url-mirror-v4",
+      duration_ms: duration,
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
 
   } catch (error) {
     console.error("Sync error:", error);
-    return new Response(JSON.stringify({
-      success: false,
-      error: error instanceof Error ? error.message : "Unknown error",
-      duration_ms: Date.now() - startTime,
-    }), {
-      status: 500, 
+    return new Response(JSON.stringify({ success: false, error: error instanceof Error ? error.message : "Unknown error", duration_ms: Date.now() - startTime }), {
+      status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });
 
-/**
- * Build enhanced developer lookup map
- */
+// ============================================================
+// HELPER FUNCTIONS
+// ============================================================
+
 function buildDeveloperMap(devList: Array<{ id: string; name: string; slug: string }>) {
   const devMap = new Map<string, { id: string; name: string; slug: string }>();
-  
   for (const d of devList) {
     if (!d.name) continue;
-    
-    // Normalized full name
     devMap.set(d.name.toLowerCase().replace(/[^a-z0-9]/g, ""), d);
-    
-    // Individual words
     const words = d.name.toLowerCase().split(/\s+/);
     for (const w of words) {
       if (w.length > 3) devMap.set(w, d);
     }
-    
-    // Common developer variations
     const nameLower = d.name.toLowerCase();
-    const knownDevelopers = [
-      "sobha", "emaar", "damac", "nakheel", "meraas", "binghatti", 
-      "azizi", "omniyat", "ellington", "danube", "select", "deyaar",
-      "mag", "aldar", "reportage", "samana", "imtiaz", "object one"
-    ];
-    
+    const knownDevelopers = ["sobha", "emaar", "damac", "nakheel", "meraas", "binghatti", "azizi", "omniyat", "ellington", "danube", "select", "deyaar", "mag", "aldar", "reportage", "samana", "imtiaz", "object one", "arada", "irth", "ohana"];
     for (const known of knownDevelopers) {
-      if (nameLower.includes(known)) {
-        devMap.set(known, d);
-      }
+      if (nameLower.includes(known)) devMap.set(known, d);
     }
   }
-  
   return devMap;
 }
 
-/**
- * Scrape a single project detail page with enhanced extraction
- */
-async function scrapeProjectDetailPage(
-  url: string, 
-  firecrawlKey: string, 
-  lovableKey: string
-): Promise<ProjectData | null> {
-  // Request rawHtml in addition to markdown/links for deeper extraction
-  const scrapeRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${firecrawlKey}`,
-    },
-    body: JSON.stringify({ 
-      url, 
-      formats: ["markdown", "links", "rawHtml"],
-      waitFor: 8000,
-      timeout: 60000,
-      onlyMainContent: false,
-    }),
-  });
-
-  if (!scrapeRes.ok) {
-    const errText = await scrapeRes.text();
-    throw new Error(`Scrape failed: ${scrapeRes.status} - ${errText.substring(0, 100)}`);
-  }
-
-  const scrapeData = await scrapeRes.json();
-  const markdown = scrapeData.data?.markdown || "";
-  const links = scrapeData.data?.links || [];
-  const html = scrapeData.data?.rawHtml || "";
-
-  if (markdown.length < 200 && html.length < 500) {
-    throw new Error(`Insufficient content: ${markdown.length} chars`);
-  }
-
-  // === Extract images from links AND rawHtml ===
-  const imageSet = new Set<string>();
-  for (const l of links) {
-    if (l.includes("cloudfront.net") && /\.(jpg|jpeg|png|webp)/i.test(l)) {
-      imageSet.add(l);
-    }
-  }
-  // Grab from img tags
-  const imgTagRx = /<img[^>]+(?:src|data-src|data-lazy-src)=["']([^"']+)["']/gi;
-  let m: RegExpExecArray | null;
-  while ((m = imgTagRx.exec(html)) !== null) {
-    if (m[1] && m[1].includes("cloudfront.net") && /\.(jpg|jpeg|png|webp)/i.test(m[1])) {
-      imageSet.add(m[1]);
-    }
-  }
-  // Grab from background-image css
-  const bgRx = /background-image:\s*url\(['"]?([^'")\s]+cloudfront\.net[^'")\s]+)['"]?\)/gi;
-  while ((m = bgRx.exec(html)) !== null) {
-    if (m[1]) imageSet.add(m[1]);
-  }
-  const imageUrls = Array.from(imageSet)
-    .filter((u) => !/(logo|icon|avatar|placeholder|spinner)/i.test(u))
-    .map((u) => u.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"));
-
-  // === Extract PDF documents ===
-  const pdfRx = /https?:\/\/[^\s"'<>\)]+\.pdf(?:\?[^\s"'<>\)]*)?/gi;
-  const pdfLinks = [...new Set([...(markdown.match(pdfRx) || []), ...(html.match(pdfRx) || [])])];
-  let brochureUrl: string | null = null;
-  let paymentPlanUrl: string | null = null;
-  const floorPlanUrls: string[] = [];
-  for (const p of pdfLinks) {
-    const lower = p.toLowerCase();
-    if (!brochureUrl && lower.includes("brochure")) brochureUrl = p;
-    else if (!paymentPlanUrl && lower.includes("payment")) paymentPlanUrl = p;
-    else if (lower.includes("floor")) floorPlanUrls.push(p);
-  }
-  if (!brochureUrl && pdfLinks.length > 0) {
-    const leftover = pdfLinks.filter((p) => p !== paymentPlanUrl && !floorPlanUrls.includes(p));
-    if (leftover.length > 0) brochureUrl = leftover[0];
-  }
-
-  // AI extraction with detailed prompt
-  const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${lovableKey}`,
-    },
-    body: JSON.stringify({
-      model: "google/gemini-2.5-flash",
-      messages: [
-        { 
-          role: "system", 
-          content: "You are an expert real estate data extractor. Extract EXACT data from Provident Estate pages. Return ONLY valid JSON, no markdown formatting." 
-        },
-        {
-          role: "user",
-          content: `Extract ALL project details from this Provident Estate project page. Mirror the EXACT information shown.
-
-PAGE CONTENT:
-${markdown.substring(0, 28000)}
-
-IMAGES FOUND:
-${imageUrls.slice(0, 25).join("\n")}
-
-DOCUMENTS FOUND:
-brochure: ${brochureUrl || "none"}
-payment_plan: ${paymentPlanUrl || "none"}
-floor_plans: ${floorPlanUrls.join(", ") || "none"}
-
-Return a JSON object with these EXACT fields:
-{
-  "name": "EXACT project title (e.g., Maybach, Vista Ridge, The Opus)",
-  "developer_name": "EXACT developer name from 'by [Developer]' or 'Developed by' text",
-  "location": "EXACT specific area (e.g., Business Bay, Dubai Marina, Meydan) - NOT just Dubai",
-  "bedrooms": "EXACT bedroom configuration as shown (e.g., Studio, 1, 2 & 3 BR or 4-6 Bedrooms)",
-  "price_from": 1500000,
-  "price_text": "EXACT original price text as displayed (e.g., EUR 295K or AED 3.18M)",
-  "payment_plan": "EXACT payment plan text (e.g., 70/30, 60/40, 20/80)",
-  "handover_display": "EXACT handover text (e.g., 2028, Q2 2029, Ready)",
-  "property_type_label": "Property type(s) from bedrooms/units section (Apartment|Villa|Townhouse|Penthouse|Sky-Villa|Studio)",
-  "status_label": "EXACT status badge text if shown (Future Launch|New Phase|New Launch|Coming Soon|Sold Out) or null",
-  "description": "First 2-3 sentences from 'About the project' section - EXACT text",
-  "amenities": ["array of amenities listed in Amenities section"],
-  "image_urls": ["3-8 UNIQUE gallery cloudfront image URLs - NO floor plans, NO brochures, NO logos"]
-}
-
-CRITICAL RULES - MIRROR EXACTLY:
-1. Copy ALL text fields EXACTLY as shown on the page
-2. Do NOT modify, summarize, or rephrase any content
-3. price_from: Convert to AED number (EUR×4.0, K=1000, M=1000000)
-4. image_urls: Only include unique cloudfront gallery images, exclude floor plans/brochures/logos
-5. Return valid JSON only - no markdown code blocks`
-        }
-      ],
-      temperature: 0.05,
-      max_tokens: 3000,
-    }),
-  });
-
-  if (!aiRes.ok) {
-    const errText = await aiRes.text();
-    throw new Error(`AI extraction failed: ${aiRes.status} - ${errText.substring(0, 100)}`);
-  }
-
-  const aiData = await aiRes.json();
-  const content = aiData.choices?.[0]?.message?.content || "";
-
-  // Robust JSON parsing
-  let jsonStr = content;
-  const codeBlockMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/);
-  if (codeBlockMatch) jsonStr = codeBlockMatch[1].trim();
-  const firstBrace = jsonStr.indexOf('{');
-  if (firstBrace === -1) throw new Error(`No JSON object found in AI response`);
-  let braceCount = 0, lastBrace = -1;
-  for (let i = firstBrace; i < jsonStr.length; i++) {
-    if (jsonStr[i] === '{') braceCount++;
-    if (jsonStr[i] === '}') { braceCount--; if (braceCount === 0) { lastBrace = i; break; } }
-  }
-  if (lastBrace === -1) throw new Error(`Malformed JSON - unbalanced braces`);
-  let cleanedJson = jsonStr.substring(firstBrace, lastBrace + 1)
-    .replace(/,\s*([\]}])/g, '$1')
-    .replace(/[\x00-\x1F\x7F]/g, ' ')
-    .replace(/:\s*"([^"]*)\n([^"]*)"/g, ': "$1 $2"')
-    .replace(/[\uFEFF\u200B-\u200D\u2060]/g, '')
-    .replace(/\\'/g, "'")
-    .replace(/\t/g, ' ');
-
-  let data: Record<string, unknown>;
-  try {
-    data = JSON.parse(cleanedJson);
-  } catch (parseErr) {
-    console.warn(`JSON parse failed, attempting manual extraction`);
-    const nameMatch = cleanedJson.match(/"name"\s*:\s*"([^"]+)"/);
-    const developerMatch = cleanedJson.match(/"developer_name"\s*:\s*"([^"]+)"/);
-    const locationMatch = cleanedJson.match(/"location"\s*:\s*"([^"]+)"/);
-    if (!nameMatch) throw new Error(`Cannot extract name from malformed JSON: ${parseErr}`);
-    data = {
-      name: nameMatch[1],
-      developer_name: developerMatch?.[1] || null,
-      location: locationMatch?.[1] || null,
-    };
-  }
-
-  const aiImageUrls = Array.isArray(data.image_urls) ? (data.image_urls as string[]) : [];
-  const combinedImages = [...new Set([...aiImageUrls, ...imageUrls])].slice(0, 12);
-
-  return {
-    name: (data.name as string) || "",
-    developer_name: (data.developer_name as string) || null,
-    location: (data.location as string) || null,
-    url,
-    image_urls: combinedImages,
-    bedrooms: (data.bedrooms as string) || null,
-    price_from: data.price_from ? Math.round(data.price_from as number) : null,
-    price_text: (data.price_text as string) || null,
-    payment_plan: (data.payment_plan as string) || null,
-    handover_display: (data.handover_display as string) || null,
-    property_type_label: (data.property_type_label as string) || null,
-    status_label: (data.status_label as string) || null,
-    description: (data.description as string) || null,
-    amenities: Array.isArray(data.amenities) ? (data.amenities as string[]) : null,
-    // Extra document fields for later insertion
-    brochure_url: brochureUrl,
-    payment_plan_url: paymentPlanUrl,
-    floor_plan_urls: floorPlanUrls,
-  } as ProjectData & { brochure_url?: string | null; payment_plan_url?: string | null; floor_plan_urls?: string[] };
-}
-
-/**
- * Match developer name to database
- */
-function matchDeveloper(
-  developerName: string | null, 
-  devMap: Map<string, { id: string; name: string; slug: string }>
-): { id: string; name: string; slug: string } | undefined {
+function matchDeveloper(developerName: string | null, devMap: Map<string, { id: string; name: string; slug: string }>): { id: string; name: string; slug: string } | undefined {
   if (!developerName) return undefined;
-  
   const norm = developerName.toLowerCase().replace(/[^a-z0-9]/g, "");
   let dev = devMap.get(norm);
-  
   if (!dev) {
     for (const w of developerName.toLowerCase().split(/\s+/)) {
-      if (w.length > 3 && devMap.has(w)) { 
-        dev = devMap.get(w); 
-        break; 
-      }
+      if (w.length > 3 && devMap.has(w)) { dev = devMap.get(w); break; }
     }
   }
-  
   return dev;
-}
-
-/**
- * Parse bedroom string to min/max
- */
-function parseBedrooms(bedroomStr: string | null): { min: number | null; max: number | null } | null {
-  if (!bedroomStr) return null;
-  
-  const matches = bedroomStr.match(/(\d+)/g);
-  if (!matches || matches.length === 0) return null;
-  
-  const nums = matches.map(m => parseInt(m));
-  return {
-    min: nums[0],
-    max: nums.length > 1 ? nums[nums.length - 1] : nums[0]
-  };
 }
