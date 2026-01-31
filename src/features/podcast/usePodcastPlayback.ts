@@ -44,6 +44,25 @@ function hashString(input: string) {
   return Math.abs(h).toString(36);
 }
 
+function findSegmentIndexAtTime(prepared: PreparedAudio, tSeconds: number) {
+  // Binary search for the last segmentStartTime <= tSeconds.
+  const starts = prepared.segmentStartTimes;
+  if (!starts.length) return 0;
+  if (tSeconds <= 0) return 0;
+
+  let lo = 0;
+  let hi = starts.length - 1;
+  while (lo <= hi) {
+    const mid = Math.floor((lo + hi) / 2);
+    const start = starts[mid];
+    const nextStart = mid + 1 < starts.length ? starts[mid + 1] : Number.POSITIVE_INFINITY;
+    if (tSeconds >= start && tSeconds < nextStart) return mid;
+    if (tSeconds < start) hi = mid - 1;
+    else lo = mid + 1;
+  }
+  return Math.max(0, Math.min(starts.length - 1, lo - 1));
+}
+
 async function translateSegments(segments: PodcastSegment[], targetLang: string, signal?: AbortSignal) {
   if (!targetLang || targetLang === "en") return segments;
 
@@ -144,6 +163,8 @@ export function usePodcastPlayback(params: {
   const [segmentIndex, setSegmentIndex] = useState(0);
   const [billing, setBilling] = useState<BillingInfo | null>(null);
 
+  const segmentIndexRef = useRef(0);
+
   // Playback clock mapping
   const playbackRef = useRef<{
     // Context time at which episode playback started
@@ -172,6 +193,21 @@ export function usePodcastPlayback(params: {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
     }
+  }, []);
+
+  const updateCaptionForTime = useCallback((tSeconds: number) => {
+    const prepared = preparedRef.current;
+    if (!prepared) return;
+
+    const idx = findSegmentIndexAtTime(prepared, tSeconds);
+    if (idx !== segmentIndexRef.current) {
+      segmentIndexRef.current = idx;
+      setSegmentIndex(idx);
+    }
+
+    const captionSegments = captionsRef.current ?? prepared.segments;
+    setCaption(captionSegments[idx]?.text || "");
+    setCaptionSpeaker(prepared.segments[idx]?.speaker ?? null);
   }, []);
 
   const ensureAudioContext = useCallback(() => {
@@ -217,6 +253,7 @@ export function usePodcastPlayback(params: {
       setCaptionSpeaker(cachedAudio.segments[0]?.speaker ?? null);
       setBilling(cachedAudio.billing);
       setSegmentIndex(0);
+      segmentIndexRef.current = 0;
       setCurrentTime(0);
       pausedAtRef.current = 0;
       setError(null);
@@ -348,6 +385,7 @@ export function usePodcastPlayback(params: {
       setCaptionSpeaker(params.segments[0]?.speaker ?? null);
       setBilling(preparedAudio.billing);
       setSegmentIndex(0);
+      segmentIndexRef.current = 0;
       setStatus("ready");
 
       // Translate captions in background (UI-only, no credit impact).
@@ -392,25 +430,10 @@ export function usePodcastPlayback(params: {
     const clamped = Math.max(0, Math.min(prepared.duration, t));
     setCurrentTime(clamped);
 
-    // Update captions by segment.
-    let idx = prepared.segmentStartTimes.length - 1;
-    for (let i = 0; i < prepared.segmentStartTimes.length; i++) {
-      const start = prepared.segmentStartTimes[i];
-      const end = start + (prepared.buffers[i]?.duration ?? 0);
-      if (clamped >= start && clamped < end) {
-        idx = i;
-        break;
-      }
-    }
-    if (idx !== segmentIndex) {
-      setSegmentIndex(idx);
-      const captionSegments = captionsRef.current ?? prepared.segments;
-      setCaption(captionSegments[idx]?.text || "");
-      setCaptionSpeaker(prepared.segments[idx]?.speaker ?? null);
-    }
+    updateCaptionForTime(clamped);
 
     rafRef.current = requestAnimationFrame(computeCurrentTime);
-  }, [params.playbackRate, segmentIndex]);
+  }, [params.playbackRate, updateCaptionForTime]);
 
   const startAt = useCallback(
     async (offsetSeconds: number) => {
@@ -433,7 +456,8 @@ export function usePodcastPlayback(params: {
         }
       }
 
-      const baseStartTime = ctx.currentTime + 0.15;
+      // Keep scheduling delay tiny to improve caption/progress sync.
+      const baseStartTime = ctx.currentTime + 0.02;
       playbackRef.current = {
         startContextTime: baseStartTime,
         startOffset: offsetSeconds,
@@ -465,10 +489,13 @@ export function usePodcastPlayback(params: {
       });
 
       sourcesRef.current = sources;
+      pausedAtRef.current = offsetSeconds;
+      setCurrentTime(offsetSeconds);
+      updateCaptionForTime(offsetSeconds);
       setStatus("playing");
       rafRef.current = requestAnimationFrame(computeCurrentTime);
     },
-    [applyVolume, computeCurrentTime, ensureAudioContext, params.playbackRate, prepare, stopInternal],
+    [applyVolume, computeCurrentTime, ensureAudioContext, params.playbackRate, prepare, stopInternal, updateCaptionForTime],
   );
 
   const play = useCallback(async () => {
@@ -486,6 +513,9 @@ export function usePodcastPlayback(params: {
   const toggle = useCallback(async () => {
     if (!canPlay) return;
 
+    // Avoid starting multiple prepares/plays on double-taps.
+    if (status === "loading") return;
+
     // IMPORTANT: Unlock audio on the user gesture (Safari/iOS requirement).
     // Do not await here; awaiting can break the gesture context.
     const ctx = ensureAudioContext();
@@ -498,13 +528,10 @@ export function usePodcastPlayback(params: {
       return;
     }
 
-    // Always ensure we are prepared before playing.
-    if (!preparedRef.current) {
-      await prepare();
-    }
-
-    await play();
-  }, [canPlay, pause, play, prepare, status]);
+    const prepared = preparedRef.current ?? (await prepare());
+    if (!prepared) return;
+    await startAt(pausedAtRef.current);
+  }, [canPlay, ensureAudioContext, pause, prepare, startAt, status]);
 
   const seek = useCallback(
     async (targetSeconds: number) => {
@@ -518,11 +545,14 @@ export function usePodcastPlayback(params: {
       pausedAtRef.current = clamped;
       setCurrentTime(clamped);
 
+      // Ensure captions update even while paused/scrubbing.
+      updateCaptionForTime(clamped);
+
       if (status === "playing") {
         await startAt(clamped);
       }
     },
-    [startAt, status],
+    [startAt, status, updateCaptionForTime],
   );
 
   // Reset when episode/language changes.
@@ -536,6 +566,7 @@ export function usePodcastPlayback(params: {
     setCaption("");
     setCaptionSpeaker(null);
     setSegmentIndex(0);
+    segmentIndexRef.current = 0;
     setBilling(null);
     setError(null);
     setStatus("idle");
