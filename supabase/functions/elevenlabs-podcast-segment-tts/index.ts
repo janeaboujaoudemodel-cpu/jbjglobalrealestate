@@ -287,7 +287,12 @@ serve(async (req) => {
           ? err.message
           : "Unknown error";
 
-    console.error("Podcast segment TTS error:", message);
+    // 409 is expected (cache miss) - don't log as error
+    if (status !== 409) {
+      console.error("Podcast segment TTS error:", message);
+    } else {
+      console.log("Cache miss - will trigger generation:", message);
+    }
 
     return new Response(JSON.stringify({ success: false, error: message }), {
       status,
