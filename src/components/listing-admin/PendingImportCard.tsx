@@ -246,7 +246,7 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired }: P
               {showMore && (
                 <button
                   type="button"
-                  className="text-gold font-medium hover:underline ml-1"
+                  className="bg-gradient-to-r from-gold via-handover to-gold bg-clip-text text-transparent font-semibold hover:opacity-80 transition-opacity ml-1"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
