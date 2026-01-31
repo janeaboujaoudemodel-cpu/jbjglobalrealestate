@@ -99,12 +99,28 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   const [projectCount, setProjectCount] = useState<number | null>(null);
   const [pendingQueueCount, setPendingQueueCount] = useState<number | null>(null);
   const [queueBreakdown, setQueueBreakdown] = useState<{
+    // All queue rows (all statuses)
     total: number | null;
-    ready: number | null;
-    needs_extraction: number | null;
-    incomplete: number | null;
-    errors: number | null;
-  }>({ total: null, ready: null, needs_extraction: null, incomplete: null, errors: null });
+    pending: number | null;
+    approved: number | null;
+    rejected: number | null;
+    merged: number | null;
+    // Sub-breakdown of ONLY pending queue rows
+    ready_pending: number | null;
+    needs_extraction_pending: number | null;
+    incomplete_pending: number | null;
+    errors_pending: number | null;
+  }>({
+    total: null,
+    pending: null,
+    approved: null,
+    rejected: null,
+    merged: null,
+    ready_pending: null,
+    needs_extraction_pending: null,
+    incomplete_pending: null,
+    errors_pending: null,
+  });
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [estimatedTimeRemaining, setEstimatedTimeRemaining] = useState<string>("");
   const [currentJobId, setCurrentJobId] = useState<string | null>(null);
@@ -233,43 +249,61 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     const [
       projectsRes,
       pendingRes,
+      approvedRes,
+      rejectedRes,
+      mergedRes,
       needsRes,
       incompleteRes,
       errorsRes,
     ] = await Promise.all([
-      supabase.from("projects").select("*", { count: "exact", head: true }),
-      supabase.from("pending_project_imports").select("*", { count: "exact", head: true }).eq("status", "pending"),
+      supabase.from("projects").select("id", { count: "exact", head: true }),
+      supabase.from("pending_project_imports").select("id", { count: "exact", head: true }).eq("status", "pending"),
+      supabase.from("pending_project_imports").select("id", { count: "exact", head: true }).eq("status", "approved"),
+      supabase.from("pending_project_imports").select("id", { count: "exact", head: true }).eq("status", "rejected"),
+      supabase.from("pending_project_imports").select("id", { count: "exact", head: true }).eq("status", "merged"),
       supabase
         .from("pending_project_imports")
-        .select("*", { count: "exact", head: true })
+        .select("id", { count: "exact", head: true })
         .eq("status", "pending")
         .ilike("review_notes", "%PENDING_SCRAPE%"),
       supabase
         .from("pending_project_imports")
-        .select("*", { count: "exact", head: true })
+        .select("id", { count: "exact", head: true })
         .eq("status", "pending")
         .eq("review_notes", "INCOMPLETE"),
       supabase
         .from("pending_project_imports")
-        .select("*", { count: "exact", head: true })
+        .select("id", { count: "exact", head: true })
         .eq("status", "pending")
         .ilike("review_notes", "ERROR:%"),
     ]);
 
-    const total = pendingRes.count ?? null;
+    const pending = pendingRes.count ?? null;
+    const approved = approvedRes.count ?? null;
+    const rejected = rejectedRes.count ?? null;
+    const merged = mergedRes.count ?? null;
+    const total =
+      pending === null || approved === null || rejected === null || merged === null
+        ? null
+        : pending + approved + rejected + merged;
+
     const needs = needsRes.count ?? 0;
     const incomplete = incompleteRes.count ?? 0;
     const errors = errorsRes.count ?? 0;
-    const ready = total === null ? null : Math.max(0, total - needs - incomplete - errors);
+    const readyPending = pending === null ? null : Math.max(0, pending - needs - incomplete - errors);
 
     setProjectCount(projectsRes.count);
-    setPendingQueueCount(total);
+    setPendingQueueCount(pending);
     setQueueBreakdown({
       total,
-      ready,
-      needs_extraction: needs,
-      incomplete,
-      errors,
+      pending,
+      approved,
+      rejected,
+      merged,
+      ready_pending: readyPending,
+      needs_extraction_pending: needs,
+      incomplete_pending: incomplete,
+      errors_pending: errors,
     });
   };
 
@@ -327,7 +361,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       // If source pages increased since this job started, inform the admin.
       if (detectedTotalPages && detectedTotalPages > jobTotalPages) {
         toast.info(
-          `Provident now has ${detectedTotalPages} pages. Your current job is ${jobTotalPages} pages. Start a new full sync later to capture the new pages.`
+          `Source portal now has ${detectedTotalPages} pages. Your current job is ${jobTotalPages} pages. Start a new full sync later to capture the new pages.`
         );
       }
     }
@@ -885,6 +919,15 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
           )}
           
           {/* Overview Stats */}
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge variant="secondary">Expected {listingsEstimate}</Badge>
+            <Badge variant="outline">Total {queueBreakdown.total ?? "…"}</Badge>
+            <Badge variant="outline">Pending {queueBreakdown.pending ?? "…"}</Badge>
+            <Badge variant="outline">Approved {queueBreakdown.approved ?? "…"}</Badge>
+            <Badge variant="outline">Rejected {queueBreakdown.rejected ?? "…"}</Badge>
+            <Badge variant="outline">Merged {queueBreakdown.merged ?? "…"}</Badge>
+          </div>
+
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <Card className="bg-card border-border shadow-sm">
               <CardContent className="p-4 text-center">
@@ -901,7 +944,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
               <CardContent className="p-4 text-center">
                 <TrendingUp className="w-6 h-6 text-emerald-600 mx-auto mb-2" />
                 <div className="text-2xl font-bold text-emerald-600">{totalStats.created}</div>
-                <div className="text-xs text-muted-foreground">New to Queue</div>
+                <div className="text-xs text-muted-foreground">Created (this run)</div>
               </CardContent>
             </Card>
             
@@ -909,7 +952,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
               <CardContent className="p-4 text-center">
                 <RefreshCw className="w-6 h-6 text-amber-600 mx-auto mb-2" />
                 <div className="text-2xl font-bold text-amber-600">{totalStats.updated}</div>
-                <div className="text-xs text-muted-foreground">Queue Updated</div>
+                <div className="text-xs text-muted-foreground">Updated (this run)</div>
               </CardContent>
             </Card>
             
@@ -917,7 +960,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
               <CardContent className="p-4 text-center">
                 <Image className="w-6 h-6 text-purple-600 mx-auto mb-2" />
                 <div className="text-2xl font-bold text-purple-600">{totalStats.images}</div>
-                <div className="text-xs text-muted-foreground">Images</div>
+                <div className="text-xs text-muted-foreground">Images (this run)</div>
               </CardContent>
             </Card>
             
@@ -925,7 +968,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
               <CardContent className="p-4 text-center">
                 <Check className="w-6 h-6 text-blue-600 mx-auto mb-2" />
                 <div className="text-2xl font-bold text-blue-600">{totalStats.extracted}</div>
-                <div className="text-xs text-muted-foreground">Processed (this run)</div>
+                <div className="text-xs text-muted-foreground">Listings processed (this run)</div>
               </CardContent>
             </Card>
           </div>
@@ -935,7 +978,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg text-foreground">
                 <RefreshCw className="w-5 h-5 text-gold" />
-                Provident Estate Sync Control
+                Source Portal Sync Control
                 {isSyncing && !isPaused && (
                   <Badge variant="outline" className="ml-auto bg-blue-100 text-blue-700 border-blue-300">
                     <Loader2 className="w-3 h-3 mr-1 animate-spin" />
@@ -1094,24 +1137,27 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                     <div className="rounded-md bg-background border border-border p-3">
                       <div className="text-xs text-muted-foreground">Totals (this run)</div>
                       <div className="font-medium text-foreground">
-                        {bulkTotals.processed} processed · {bulkTotals.success} ok · {bulkTotals.errors} errors
+                        {bulkTotals.processed} processed · {bulkTotals.success} success · {bulkTotals.errors} failed
                       </div>
                     </div>
                     <div className="rounded-md bg-background border border-border p-3">
                       <div className="text-xs text-muted-foreground">Last batch</div>
                       <div className="font-medium text-foreground">
                         {bulkLastRun
-                          ? `${bulkLastRun.processed} processed · ${bulkLastRun.success} ok · ${bulkLastRun.errors} errors`
+                          ? `${bulkLastRun.processed} processed · ${bulkLastRun.success} success · ${bulkLastRun.errors} failed`
                           : "—"}
                       </div>
                     </div>
                     <div className="rounded-md bg-background border border-border p-3">
-                      <div className="text-xs text-muted-foreground">Queue totals</div>
+                      <div className="text-xs text-muted-foreground">Queue (all statuses)</div>
                       <div className="font-medium text-foreground">
-                        {queueBreakdown.total ?? "…"} total · {queueBreakdown.ready ?? "…"} ready
+                        {queueBreakdown.total ?? "…"} total (expected {listingsEstimate})
                       </div>
                       <div className="text-xs text-muted-foreground mt-1">
-                        {queueBreakdown.needs_extraction ?? 0} needs · {queueBreakdown.incomplete ?? 0} incomplete · {queueBreakdown.errors ?? 0} errors
+                        {queueBreakdown.pending ?? "…"} pending · {queueBreakdown.approved ?? "…"} approved · {queueBreakdown.rejected ?? "…"} rejected · {queueBreakdown.merged ?? "…"} merged
+                      </div>
+                      <div className="text-xs text-muted-foreground mt-1">
+                        Pending breakdown: {queueBreakdown.ready_pending ?? "…"} ready · {queueBreakdown.needs_extraction_pending ?? 0} needs extraction · {queueBreakdown.incomplete_pending ?? 0} incomplete · {queueBreakdown.errors_pending ?? 0} failed
                       </div>
                     </div>
                   </div>

@@ -6,6 +6,17 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+const POSTGREST_PAGE_SIZE = 1000;
+
+const normalizeUrl = (raw: string): string => {
+  const trimmed = (raw || "").trim();
+  if (!trimmed) return "";
+  // Firecrawl MAP often returns links with tracking query params / fragments.
+  // We canonicalize them so they de-dupe and pass slug filtering.
+  const noQueryOrHash = trimmed.split("?")[0].split("#")[0];
+  return noQueryOrHash.replace(/\/$/, "");
+};
+
 /**
  * DISCOVER ALL PROJECTS - Uses Firecrawl MAP to find all project URLs
  * Then stores them in a queue table for batch processing
@@ -64,8 +75,9 @@ serve(async (req) => {
     // Filter to project detail URLs only
     const projectUrls = [...new Set(
       allLinks
-        .map((l: string) => l.trim().replace(/\/$/, ""))
+        .map((l: string) => normalizeUrl(l))
         .filter((l: string) => {
+          if (!l) return false;
           if (!l.startsWith("https://providentestate.com/new-projects/")) return false;
           if (l.includes("/page/")) return false;
           // Exclude developer listing pages like /new-projects/developed-by-emaar
@@ -109,31 +121,50 @@ serve(async (req) => {
       }
     }
 
+    const fetchAllSlugs = async (table: "pending_project_imports" | "projects") => {
+      const slugs: string[] = [];
+      let offset = 0;
+
+      while (true) {
+        const { data, error } = await supabase
+          .from(table)
+          .select("slug")
+          .range(offset, offset + POSTGREST_PAGE_SIZE - 1);
+
+        if (error) {
+          throw new Error(`Failed to fetch slugs from ${table}: ${error.message}`);
+        }
+
+        const batch = (data || []).map((r: any) => r.slug).filter(Boolean);
+        slugs.push(...batch);
+
+        if (!data || data.length < POSTGREST_PAGE_SIZE) break;
+        offset += POSTGREST_PAGE_SIZE;
+      }
+
+      return slugs;
+    };
+
     // Get existing slugs from the queue + approved projects.
     // This prevents duplicates across repeated discovery runs.
-    const { data: existingQueue } = await supabase
-      .from("pending_project_imports")
-      .select("slug");
-    
-    const { data: existingProjects } = await supabase
-      .from("projects")
-      .select("slug");
-
-    const existingSlugs = new Set([
-      ...(existingQueue || []).map((i: any) => i.slug).filter(Boolean),
-      ...(existingProjects || []).map((p: any) => p.slug).filter(Boolean),
+    const [existingQueueSlugs, existingProjectSlugs] = await Promise.all([
+      fetchAllSlugs("pending_project_imports"),
+      fetchAllSlugs("projects"),
     ]);
+
+    const existingSlugs = new Set([...existingQueueSlugs, ...existingProjectSlugs]);
 
     // Prepare new imports
     const newUrls: string[] = [];
     const existingUrls: string[] = [];
 
     for (const url of projectUrls) {
-      const slug = url.match(/\/new-projects\/([^\/\?#]+)/)?.[1]?.toLowerCase().replace(/\/$/, "") || "";
+      const cleanUrl = normalizeUrl(url);
+      const slug = cleanUrl.match(/\/new-projects\/([^\/\?#]+)/)?.[1]?.toLowerCase().replace(/\/$/, "") || "";
       if (slug && !existingSlugs.has(slug)) {
-        newUrls.push(url);
+        newUrls.push(cleanUrl);
       } else {
-        existingUrls.push(url);
+        existingUrls.push(cleanUrl);
       }
     }
 
