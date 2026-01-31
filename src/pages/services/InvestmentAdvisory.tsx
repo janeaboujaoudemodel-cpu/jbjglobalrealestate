@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import { SEOHead } from "@/components/SEOHead";
 
 // Import hero video
@@ -180,40 +181,22 @@ const InvestmentAdvisory = () => {
               </span>
             </div>
             
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-[-0.02em]">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-[-0.02em]">
               Strategic Investment Advisory
             </h1>
             
-            <p className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-10">
+            <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
               Data-driven investment guidance for the UAE real estate market. Make informed decisions with clarity and confidence.
             </p>
             
-            {/* Hero CTA Buttons */}
+            {/* Hero CTA Buttons - Using PremiumHeroButton for consistency */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/contact?service=investment-advisory">
-                <button 
-                  className="group relative inline-flex items-center justify-center gap-1.5 px-6 py-3 text-sm font-semibold tracking-wide rounded-lg transition-all duration-300 bg-transparent border border-white/60 hover:border-gold/80"
-                  style={{ boxShadow: '0 2px 10px rgba(0,0,0,0.3)' }}
-                >
-                  <span className="text-white group-hover:text-gold transition-colors">Speak to an Advisor</span>
-                  <ArrowUpRight 
-                    className="w-4 h-4 text-gold group-hover:scale-110 transition-all" 
-                    style={{ filter: 'drop-shadow(0 0 4px rgba(200,167,102,0.6))' }} 
-                  />
-                </button>
-              </Link>
-              <Link to="/properties">
-                <button 
-                  className="group relative inline-flex items-center justify-center gap-1.5 px-6 py-3 text-sm font-semibold tracking-wide rounded-lg transition-all duration-300 bg-transparent border border-white/60 hover:border-gold/80"
-                  style={{ boxShadow: '0 2px 10px rgba(0,0,0,0.3)' }}
-                >
-                  <span className="text-white group-hover:text-gold transition-colors">View Opportunities</span>
-                  <ArrowUpRight 
-                    className="w-4 h-4 text-gold group-hover:scale-110 transition-all" 
-                    style={{ filter: 'drop-shadow(0 0 4px rgba(200,167,102,0.6))' }} 
-                  />
-                </button>
-              </Link>
+              <PremiumHeroButton href="/contact?service=investment-advisory">
+                Speak to an Advisor
+              </PremiumHeroButton>
+              <PremiumHeroButton href="/properties">
+                View Opportunities
+              </PremiumHeroButton>
             </div>
           </motion.div>
         </div>

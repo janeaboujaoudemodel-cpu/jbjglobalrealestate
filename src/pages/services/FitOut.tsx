@@ -7,6 +7,7 @@ import {
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
+import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CONTACT_INFO } from "@/constants/stats";
 import fitOutHeroVideo from "@/assets/videos/fit-out-hero.mp4";
@@ -148,7 +149,7 @@ const FitOut = () => {
           </motion.h1>
 
           <motion.p 
-            className="text-zinc-300 text-lg md:text-xl max-w-2xl mb-8"
+            className="text-zinc-300 text-base md:text-lg max-w-2xl mb-10"
             variants={fadeInUp}
           >
             Quality fit-out and renovation services by licensed contractors. 
@@ -156,12 +157,9 @@ const FitOut = () => {
           </motion.p>
 
           <motion.div variants={fadeInUp}>
-            <Button variant="primary" size="lg" asChild>
-              <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                <span className="text-black">Get a</span><span className="text-gold"> Quote</span>
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </a>
-            </Button>
+            <PremiumHeroButton href={CONTACT_INFO.inquiryFormUrl} icon={ArrowRight}>
+              Get a Quote
+            </PremiumHeroButton>
           </motion.div>
         </motion.div>
       </section>

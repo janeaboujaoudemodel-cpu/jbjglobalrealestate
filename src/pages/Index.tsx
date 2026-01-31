@@ -20,6 +20,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { Sparkles, ArrowUpRight, ArrowRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award, PenTool, Users, Table2, Video, Home, Key, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
@@ -157,32 +158,17 @@ const Index = () => {
               >via partners</span>
             </motion.p>
 
-            {/* Hero CTA Buttons - Classy, smaller, consistent */}
+            {/* Hero CTA Buttons - Premium, consistent globally */}
             <motion.div 
               variants={fadeInUp}
-              className="flex flex-row items-center justify-center gap-3 sm:gap-4"
+              className="flex flex-col sm:flex-row items-center justify-center gap-4"
             >
-              <Link to="/properties">
-                <button 
-                  className="group relative inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4 md:px-5 py-1.5 sm:py-2 text-[10px] sm:text-[11px] md:text-xs font-medium rounded-md transition-all duration-300 bg-transparent border border-white/50 hover:border-gold/80"
-                  style={{
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
-                  }}
-                >
-                  <span className="text-white group-hover:text-gold transition-colors tracking-wide">{t('hero.explore')}</span>
-                  <ArrowUpRight className="w-3 h-3 text-gold group-hover:scale-110 transition-all" style={{ filter: 'drop-shadow(0 0 3px rgba(200,167,102,0.5))' }} />
-                </button>
-              </Link>
-              <button 
-                onClick={() => setIsInquiryOpen(true)}
-                className="group relative inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4 md:px-5 py-1.5 sm:py-2 text-[10px] sm:text-[11px] md:text-xs font-medium rounded-md transition-all duration-300 bg-transparent border border-white/50 hover:border-gold/80"
-                style={{
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
-                }}
-              >
-                <span className="text-white group-hover:text-gold transition-colors tracking-wide">{t('hero.bookConsultation')}</span>
-                <ArrowUpRight className="w-3 h-3 text-gold group-hover:scale-110 transition-all" style={{ filter: 'drop-shadow(0 0 3px rgba(200,167,102,0.5))' }} />
-              </button>
+              <PremiumHeroButton href="/properties" size="lg">
+                {t('hero.explore')}
+              </PremiumHeroButton>
+              <PremiumHeroButton onClick={() => setIsInquiryOpen(true)} size="lg">
+                {t('hero.bookConsultation')}
+              </PremiumHeroButton>
             </motion.div>
           </div>
         </motion.div>
