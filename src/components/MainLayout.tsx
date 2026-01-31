@@ -114,11 +114,53 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
   // Determine if page has a dark hero that can use transparent header
   // These pages have full-screen dark heroes where content should sit behind header
-  const darkHeroPages = ['/', '/properties', '/quiz', '/about', '/team', '/founder', '/awards', '/join'];
+  // Include ALL pages that use jj-hero-fullscreen or GuideHero component
+  const darkHeroPages = [
+    '/',
+    '/properties',
+    '/quiz',
+    '/about',
+    '/team',
+    '/founder',
+    '/awards',
+    '/join',
+    '/developers',
+    '/services',
+    '/market-intelligence',
+    '/broker-dashboard',
+    '/broker-resources',
+    '/broker-education',
+    '/company-profile',
+    '/investor/portfolio-views',
+    // Guide pages (use GuideHero which includes jj-hero-fullscreen)
+    '/areas',
+    '/buyer-guide',
+    '/rent-guide',
+    '/seller-guide',
+    '/landlord-guide',
+    '/tenant-guide',
+    '/investor-education',
+    '/guides/legal',
+    '/guides/golden-visa',
+    // Service sub-pages
+    '/services/architecture',
+    '/services/interior-design',
+    '/services/fit-out',
+    '/services/design-build',
+    '/services/law-firm',
+    '/services/buying-advisory',
+    '/services/selling-advisory',
+    '/services/rental-advisory',
+    '/services/investment-advisory',
+  ];
   const hasDarkHero = darkHeroPages.includes(location.pathname) || 
                       location.pathname.startsWith('/developers/') ||
                       location.pathname.startsWith('/project/') ||
-                      location.pathname.startsWith('/properties/');
+                      location.pathname.startsWith('/properties/') ||
+                      location.pathname.startsWith('/market-intelligence/') ||
+                      location.pathname.startsWith('/guides/') ||
+                      location.pathname.startsWith('/services/') ||
+                      location.pathname.startsWith('/investor/');
   
   // Pages with bright backgrounds need content pushed below header
   const needsHeaderSpacing = !hasDarkHero;
