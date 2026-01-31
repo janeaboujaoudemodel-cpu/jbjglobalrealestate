@@ -7125,6 +7125,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "hr_employee_onboarding_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees_secure"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "hr_employee_onboarding_task_id_fkey"
             columns: ["task_id"]
             isOneToOne: false
@@ -7140,12 +7147,15 @@ export type Database = {
           created_at: string
           created_by: string
           cv_url: string | null
+          cv_url_encrypted: string | null
           department: string | null
           email: string
+          email_encrypted: string | null
           employee_status: string | null
           full_name: string
           id: string
           phone: string | null
+          phone_encrypted: string | null
           position: string
           skills: string[] | null
           start_date: string | null
@@ -7158,12 +7168,15 @@ export type Database = {
           created_at?: string
           created_by: string
           cv_url?: string | null
+          cv_url_encrypted?: string | null
           department?: string | null
           email: string
+          email_encrypted?: string | null
           employee_status?: string | null
           full_name: string
           id?: string
           phone?: string | null
+          phone_encrypted?: string | null
           position: string
           skills?: string[] | null
           start_date?: string | null
@@ -7176,12 +7189,15 @@ export type Database = {
           created_at?: string
           created_by?: string
           cv_url?: string | null
+          cv_url_encrypted?: string | null
           department?: string | null
           email?: string
+          email_encrypted?: string | null
           employee_status?: string | null
           full_name?: string
           id?: string
           phone?: string | null
+          phone_encrypted?: string | null
           position?: string
           skills?: string[] | null
           start_date?: string | null
@@ -7579,6 +7595,13 @@ export type Database = {
             referencedRelation: "hr_employees"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "hr_leave_balance_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees_secure"
+            referencedColumns: ["id"]
+          },
         ]
       }
       hr_leave_policy: {
@@ -7729,6 +7752,13 @@ export type Database = {
             columns: ["employee_id"]
             isOneToOne: false
             referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_leave_requests_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees_secure"
             referencedColumns: ["id"]
           },
         ]
@@ -8209,6 +8239,13 @@ export type Database = {
             columns: ["employee_id"]
             isOneToOne: false
             referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_warnings_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees_secure"
             referencedColumns: ["id"]
           },
         ]
@@ -15326,6 +15363,71 @@ export type Database = {
         }
         Relationships: []
       }
+      hr_employees_secure: {
+        Row: {
+          candidate_id: string | null
+          certifications: string[] | null
+          created_at: string | null
+          created_by: string | null
+          cv_url: string | null
+          department: string | null
+          email: string | null
+          employee_status: string | null
+          full_name: string | null
+          id: string | null
+          phone: string | null
+          position: string | null
+          skills: string[] | null
+          start_date: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          candidate_id?: string | null
+          certifications?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          cv_url?: string | null
+          department?: string | null
+          email?: string | null
+          employee_status?: string | null
+          full_name?: never
+          id?: string | null
+          phone?: string | null
+          position?: string | null
+          skills?: string[] | null
+          start_date?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          candidate_id?: string | null
+          certifications?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          cv_url?: string | null
+          department?: string | null
+          email?: string | null
+          employee_status?: string | null
+          full_name?: never
+          id?: string | null
+          phone?: string | null
+          position?: string | null
+          skills?: string[] | null
+          start_date?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_employees_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "hr_candidates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       jbj_leads_secure: {
         Row: {
           assigned_broker_id: string | null
@@ -15856,6 +15958,14 @@ export type Database = {
       decrypt_bank_field: {
         Args: { encrypted_data: string; salt_id: string }
         Returns: string
+      }
+      decrypt_hr_employee_pii: {
+        Args: { p_employee_id: string }
+        Returns: {
+          cv_url: string
+          email: string
+          phone: string
+        }[]
       }
       decrypt_lead_pii:
         | { Args: { encrypted_data: string }; Returns: string }
