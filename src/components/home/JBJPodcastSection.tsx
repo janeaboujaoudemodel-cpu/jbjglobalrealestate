@@ -10,7 +10,6 @@ import {
   Globe,
   Mic,
   Radio,
-  Lock,
   Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -155,7 +154,7 @@ const JBJPodcastSection = () => {
     setIsLoading(true);
     
     try {
-      // TEST MODE: Generate short sample to test with limited credits
+      // Generate full podcast audio (testMode: false for full episode)
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-podcast-tts`,
         {
@@ -168,7 +167,7 @@ const JBJPodcastSection = () => {
           body: JSON.stringify({ 
             segments: selectedEpisode.segments,
             language: selectedLanguage,
-            testMode: true // Uses shorter intro text to save credits
+            testMode: false // Full episode generation
           }),
         }
       );
@@ -334,24 +333,9 @@ const JBJPodcastSection = () => {
   }, []);
 
   return (
-    <section className="relative py-20 md:py-28 overflow-hidden">
+    <section className="relative py-20 md:py-28 overflow-hidden jj-layer-2">
       {/* Hidden audio element */}
       <audio ref={audioRef} preload="none" />
-
-      {/* Premium Background */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-black to-zinc-900" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,hsl(var(--gold)/0.08),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,hsl(var(--gold)/0.05),transparent_50%)]" />
-        <div 
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `linear-gradient(hsl(var(--gold)) 1px, transparent 1px),
-                              linear-gradient(90deg, hsl(var(--gold)) 1px, transparent 1px)`,
-            backgroundSize: '60px 60px'
-          }}
-        />
-      </div>
 
       <div className="relative z-10 container mx-auto px-4">
         {/* Section Header */}
@@ -365,10 +349,10 @@ const JBJPodcastSection = () => {
             <Radio className="w-4 h-4" />
             <T>Exclusive Content</T>
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
             <T>The JBJ</T> <span className="text-gold"><T>Perspective</T></span>
           </h2>
-          <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-black/70 max-w-2xl mx-auto">
             <T>Real Estate, Power & Global Opportunity</T>
           </p>
         </motion.div>
@@ -384,7 +368,7 @@ const JBJPodcastSection = () => {
               viewport={{ once: true }}
               className="lg:col-span-2"
             >
-              {/* Premium Frame Container - FULL PHOTO, NO GOLD LINE FRAMING */}
+              {/* Premium Frame Container - FULL PHOTO, NO BORDERS */}
               <div className="relative rounded-xl overflow-hidden">
                 {/* Episode Thumbnail - Full frame, no border */}
                 <div className="relative aspect-video">
@@ -397,30 +381,30 @@ const JBJPodcastSection = () => {
                   {/* Subtle Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                   
-                  {/* Episode Badge - Top Left */}
+                  {/* Episode Badge - Top Left - Using proper gold, no yellow */}
                   <div className="absolute top-3 left-3">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gold text-black rounded-full text-xs font-bold uppercase tracking-wider">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-black/60 backdrop-blur-sm border border-gold/40 text-gold rounded-full text-xs font-bold uppercase tracking-wider">
                       <Mic className="w-3 h-3" />
                       <T>Episode</T> {selectedEpisode.id}
                     </span>
                   </div>
 
-                  {/* Center Play Button */}
+                  {/* Center Play Button - Using border style instead of solid fill */}
                   <button
                     onClick={handlePlayPause}
                     disabled={isLoading}
                     className="absolute inset-0 flex items-center justify-center group"
                   >
                     <div 
-                      className="w-20 h-20 rounded-full bg-gold/90 flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-all duration-300 disabled:opacity-50"
-                      style={{ boxShadow: '0 0 40px rgba(200,167,102,0.4)' }}
+                      className="w-20 h-20 rounded-full bg-black/50 backdrop-blur-sm border-2 border-gold flex items-center justify-center shadow-2xl transform group-hover:scale-110 group-hover:bg-gold transition-all duration-300 disabled:opacity-50"
+                      style={{ boxShadow: '0 0 40px rgba(200,167,102,0.3)' }}
                     >
                       {isLoading ? (
-                        <Loader2 className="w-8 h-8 text-black animate-spin" />
+                        <Loader2 className="w-8 h-8 text-gold group-hover:text-black animate-spin" />
                       ) : isPlaying ? (
-                        <Pause className="w-8 h-8 text-black" />
+                        <Pause className="w-8 h-8 text-gold group-hover:text-black" />
                       ) : (
-                        <Play className="w-8 h-8 text-black ml-1" />
+                        <Play className="w-8 h-8 text-gold group-hover:text-black ml-1" />
                       )}
                     </div>
                   </button>
@@ -429,16 +413,16 @@ const JBJPodcastSection = () => {
 
               {/* Episode Title - Outside the frame */}
               <div className="mt-4 mb-2">
-                <h3 className="text-xl md:text-2xl font-bold text-white leading-tight">
+                <h3 className="text-xl md:text-2xl font-bold text-black leading-tight">
                   <T>{selectedEpisode.title}</T>
                 </h3>
-                <p className="text-sm text-gold/80 mt-1">
+                <p className="text-sm text-gold mt-1">
                   <T>Featuring</T>: {selectedEpisode.characters.join(" • ")}
                 </p>
               </div>
 
-              {/* Audio Controls Bar */}
-              <div className="mt-4 bg-zinc-900/90 backdrop-blur-sm rounded-xl border border-gold/20 p-4">
+              {/* Audio Controls Bar - Pearl/Champagne card */}
+              <div className="mt-4 jj-card-inner rounded-xl border border-gold/30 p-4">
                 {/* Progress Bar - 0 on LEFT, duration on RIGHT */}
                 <div className="mb-4">
                   <Slider
@@ -446,10 +430,9 @@ const JBJPodcastSection = () => {
                     max={100}
                     step={0.1}
                     onValueChange={handleProgressChange}
-                    className="w-full"
-                    dir="ltr"
+                    className="w-full [direction:ltr]"
                   />
-                  <div className="flex justify-between text-xs text-zinc-500 mt-1">
+                  <div className="flex justify-between text-xs text-black/60 mt-1">
                     <span>{formatTime(currentTime)}</span>
                     <span>{duration > 0 ? formatTime(duration) : selectedEpisode.duration}</span>
                   </div>
@@ -460,44 +443,44 @@ const JBJPodcastSection = () => {
                   <div className="flex items-center gap-3">
                     <button
                       onClick={handlePrevious}
-                      className="w-10 h-10 rounded-full bg-zinc-800 hover:bg-zinc-700 flex items-center justify-center transition-colors"
+                      className="w-10 h-10 rounded-full bg-black/10 hover:bg-black/20 border border-gold/30 flex items-center justify-center transition-colors"
                     >
-                      <SkipBack className="w-5 h-5 text-white" />
+                      <SkipBack className="w-5 h-5 text-black" />
                     </button>
                     <button
                       onClick={handlePlayPause}
                       disabled={isLoading}
-                      className="w-14 h-14 rounded-full bg-gold hover:bg-gold-light flex items-center justify-center transition-colors shadow-lg disabled:opacity-50"
+                      className="w-14 h-14 rounded-full border-2 border-gold bg-transparent hover:bg-gold flex items-center justify-center transition-colors shadow-lg disabled:opacity-50 group"
                     >
                       {isLoading ? (
-                        <Loader2 className="w-6 h-6 text-black animate-spin" />
+                        <Loader2 className="w-6 h-6 text-gold group-hover:text-black animate-spin" />
                       ) : isPlaying ? (
-                        <Pause className="w-6 h-6 text-black" />
+                        <Pause className="w-6 h-6 text-gold group-hover:text-black" />
                       ) : (
-                        <Play className="w-6 h-6 text-black ml-0.5" />
+                        <Play className="w-6 h-6 text-gold group-hover:text-black ml-0.5" />
                       )}
                     </button>
                     <button
                       onClick={handleNext}
-                      className="w-10 h-10 rounded-full bg-zinc-800 hover:bg-zinc-700 flex items-center justify-center transition-colors"
+                      className="w-10 h-10 rounded-full bg-black/10 hover:bg-black/20 border border-gold/30 flex items-center justify-center transition-colors"
                     >
-                      <SkipForward className="w-5 h-5 text-white" />
+                      <SkipForward className="w-5 h-5 text-black" />
                     </button>
                   </div>
 
                   {/* Playback Speed */}
                   <button
                     onClick={cyclePlaybackSpeed}
-                    className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded-lg text-sm font-medium text-white transition-colors"
+                    className="px-3 py-1.5 bg-black/10 hover:bg-black/20 border border-gold/30 rounded-lg text-sm font-medium text-black transition-colors"
                   >
                     {playbackSpeed}x
                   </button>
 
                   {/* Language Selector - BLACK TEXT */}
                   <div className="flex items-center gap-2">
-                    <Globe className="w-4 h-4 text-zinc-400" />
+                    <Globe className="w-4 h-4 text-black/60" />
                     <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
-                      <SelectTrigger className="w-36 bg-zinc-800 border-zinc-700 text-white text-sm">
+                      <SelectTrigger className="w-36 bg-black/10 border-gold/30 text-black text-sm">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-pearl border-gold/30">
@@ -521,13 +504,13 @@ const JBJPodcastSection = () => {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={toggleMute}
-                      className="w-8 h-8 rounded-full bg-zinc-800 hover:bg-zinc-700 flex items-center justify-center transition-colors"
+                      className="w-8 h-8 rounded-full bg-black/10 hover:bg-black/20 border border-gold/30 flex items-center justify-center transition-colors"
                       title={isMuted ? "Unmute" : "Mute"}
                     >
                       {isMuted || volume[0] === 0 ? (
-                        <VolumeX className="w-4 h-4 text-zinc-400" />
+                        <VolumeX className="w-4 h-4 text-black/60" />
                       ) : (
-                        <Volume2 className="w-4 h-4 text-zinc-400" />
+                        <Volume2 className="w-4 h-4 text-black/60" />
                       )}
                     </button>
                     <Slider
@@ -542,22 +525,22 @@ const JBJPodcastSection = () => {
               </div>
             </motion.div>
 
-            {/* Episode List */}
+            {/* Episode List - Pearl/Champagne card */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               className="lg:col-span-1"
             >
-              <div className="bg-zinc-900/60 backdrop-blur-sm rounded-2xl border border-gold/20 overflow-hidden h-full">
+              <div className="jj-card-inner rounded-2xl border border-gold/30 overflow-hidden h-full">
                 <div className="p-4 border-b border-gold/20">
-                  <h3 className="text-lg font-semibold text-white"><T>All Episodes</T></h3>
-                  <p className="text-sm text-zinc-400"><T>20 episodes available</T></p>
+                  <h3 className="text-lg font-semibold text-black"><T>All Episodes</T></h3>
+                  <p className="text-sm text-black/60"><T>20 episodes available</T></p>
                 </div>
 
                 <ScrollArea className="h-[400px] lg:h-[480px]">
                   <div className="p-2">
-                    {episodes.map((episode, index) => (
+                    {episodes.map((episode) => (
                       <button
                         key={episode.id}
                         onClick={() => {
@@ -570,26 +553,24 @@ const JBJPodcastSection = () => {
                         className={`w-full p-3 rounded-xl text-left transition-all mb-1 ${
                           selectedEpisode.id === episode.id
                             ? "bg-gold/20 border border-gold/40"
-                            : "bg-zinc-800/50 hover:bg-zinc-800 border border-transparent"
+                            : "bg-black/5 hover:bg-black/10 border border-transparent"
                         }`}
                       >
                         <div className="flex items-start gap-3">
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                            selectedEpisode.id === episode.id ? "bg-gold text-black" : "bg-zinc-700 text-zinc-300"
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 border ${
+                            selectedEpisode.id === episode.id 
+                              ? "border-gold bg-gold text-black" 
+                              : "border-gold/40 bg-transparent text-gold"
                           }`}>
-                            {index === 0 ? (
-                              <Play className="w-4 h-4" />
-                            ) : (
-                              <Lock className="w-3 h-3" />
-                            )}
+                            <Play className="w-4 h-4" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className={`text-sm font-medium truncate ${
-                              selectedEpisode.id === episode.id ? "text-gold" : "text-white"
+                              selectedEpisode.id === episode.id ? "text-gold" : "text-black"
                             }`}>
                               <T>{episode.title}</T>
                             </p>
-                            <p className="text-xs text-zinc-500 mt-0.5">
+                            <p className="text-xs text-black/50 mt-0.5">
                               {episode.duration}
                             </p>
                           </div>

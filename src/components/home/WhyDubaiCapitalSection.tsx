@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { ArrowRight, Globe } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { T } from "@/components/ui/T";
 
@@ -35,7 +35,7 @@ export default function WhyDubaiCapitalSection() {
   }, []);
 
   return (
-    <section className="relative h-[70vh] bg-black overflow-hidden">
+    <section className="relative h-screen min-h-[100vh] min-h-[100dvh] bg-black overflow-hidden">
       {/* Full-frame video background - edge to edge */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -70,8 +70,8 @@ export default function WhyDubaiCapitalSection() {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.6 }}
           >
+            {/* Premium badge without Globe icon */}
             <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-gold/40 bg-black/40 backdrop-blur-sm text-[10px] uppercase tracking-[0.2em] font-semibold text-gold">
-              <Globe className="w-3 h-3" />
               <T>Global Investment Hub</T>
             </span>
 
