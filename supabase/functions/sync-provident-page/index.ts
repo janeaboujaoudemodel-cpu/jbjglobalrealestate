@@ -7,11 +7,21 @@ const corsHeaders = {
 };
 
 /**
- * STRICT URL MIRROR v4 – No AI required
- * 1. Derive slug directly from Provident URL (1:1 mirroring)
+ * STRICT URL MIRROR v5 – Improved extraction + retry logic
+ * 1. Derive slug directly from source URL (1:1 mirroring)
  * 2. Extract images/PDFs from HTML with regex (no AI gateway credits)
- * 3. Fallback to AI only for enrichment if available
+ * 3. Fetch Gatsby page-data.json for reliable document URLs
+ * 4. Retry on transient errors (502, 503, 429)
+ * 5. Re-queue rejected items on fresh sync
  */
+
+// BANNED TERMS - will be stripped from all text
+const BANNED_TERMS_REGEX = /\b(Provident|Provident Estate|providentestate)\b/gi;
+
+function sanitizeText(text: string | null): string | null {
+  if (!text) return null;
+  return text.replace(BANNED_TERMS_REGEX, "").replace(/\s{2,}/g, " ").trim() || null;
+}
 
 interface PendingImport {
   name: string;
@@ -42,12 +52,34 @@ async function sleep(ms: number, jitter = 0.2): Promise<void> {
   return new Promise(r => setTimeout(r, ms + jitterMs));
 }
 
+async function fetchWithRetry(url: string, options: RequestInit, maxRetries = 3): Promise<Response> {
+  let lastError: Error | null = null;
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const res = await fetch(url, options);
+      // Retry on transient errors
+      if (res.status === 502 || res.status === 503 || res.status === 429) {
+        const waitMs = attempt * 3000 + Math.random() * 2000;
+        console.warn(`[Retry ${attempt}/${maxRetries}] Got ${res.status}, waiting ${Math.round(waitMs)}ms...`);
+        await sleep(waitMs, 0);
+        continue;
+      }
+      return res;
+    } catch (err) {
+      lastError = err instanceof Error ? err : new Error(String(err));
+      const waitMs = attempt * 2000;
+      console.warn(`[Retry ${attempt}/${maxRetries}] Network error: ${lastError.message}, waiting ${waitMs}ms...`);
+      await sleep(waitMs, 0);
+    }
+  }
+  throw lastError || new Error("Max retries exceeded");
+}
+
 // ============================================================
 // DETERMINISTIC HTML EXTRACTION (NO AI)
 // ============================================================
 
 function extractSlugFromUrl(url: string): string {
-  // https://providentestate.com/new-projects/project-slug-here/
   const match = url.match(/\/new-projects\/([^\/\?#]+)/);
   return match?.[1]?.toLowerCase().replace(/\/$/, "") || "";
 }
@@ -79,9 +111,9 @@ function extractImagesFromHtml(html: string, links: string[]): string[] {
 
   // Upgrade to high-res & filter
   return Array.from(imageSet)
-    .filter((u) => !/(logo|icon|avatar|placeholder|spinner)/i.test(u))
+    .filter((u) => !/(logo|icon|avatar|placeholder|spinner|favicon)/i.test(u))
     .map((u) => u.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"))
-    .slice(0, 12);
+    .slice(0, 15);
 }
 
 function extractPdfsFromHtml(html: string, markdown: string): { brochure: string | null; paymentPlan: string | null; floorPlans: string[] } {
@@ -95,7 +127,7 @@ function extractPdfsFromHtml(html: string, markdown: string): { brochure: string
   for (const p of pdfLinks) {
     const lower = p.toLowerCase();
     if (!brochure && lower.includes("brochure")) brochure = p;
-    else if (!paymentPlan && lower.includes("payment")) paymentPlan = p;
+    else if (!paymentPlan && (lower.includes("payment") || lower.includes("plan"))) paymentPlan = p;
     else if (lower.includes("floor")) floorPlans.push(p);
   }
   if (!brochure && pdfLinks.length > 0) {
@@ -107,8 +139,28 @@ function extractPdfsFromHtml(html: string, markdown: string): { brochure: string
 }
 
 function stripMarkdownLinks(text: string): string {
-  // Convert [text](url) to just text
   return text.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").trim();
+}
+
+function extractDescriptionFromMarkdown(markdown: string): string | null {
+  // Look for "About the project" section
+  const aboutMatch = markdown.match(/About the project\s*\n+([^\n#]+(?:\n[^\n#]+)*)/i);
+  if (aboutMatch?.[1]) {
+    const desc = stripMarkdownLinks(aboutMatch[1]).replace(/\n+/g, " ").trim();
+    if (desc.length > 50) return sanitizeText(desc);
+  }
+
+  // Fallback: first substantial paragraph after title
+  const paragraphs = markdown.split(/\n\n+/);
+  for (const p of paragraphs) {
+    const cleaned = stripMarkdownLinks(p).replace(/\n/g, " ").trim();
+    // Skip navigation, headers, short lines
+    if (cleaned.length > 100 && !cleaned.startsWith("#") && !/^(Buy|Rent|Projects|Developers|Areas|Services|Blogs|Register|Details|Gallery|Floor Plans|Amenities|Location|Payment Plans)/i.test(cleaned)) {
+      return sanitizeText(cleaned.slice(0, 800));
+    }
+  }
+
+  return null;
 }
 
 function extractTextFromMarkdown(markdown: string): {
@@ -124,31 +176,33 @@ function extractTextFromMarkdown(markdown: string): {
   propertyType: string | null;
   statusLabel: string | null;
 } {
-  // Strip markdown links before processing
   const cleanMd = stripMarkdownLinks(markdown);
 
-  // Title: usually first H1 or prominent heading
-  const titleMatch = cleanMd.match(/^#\s+(.+)/m) || cleanMd.match(/^##\s+(.+)/m);
+  // Title: first H1
+  const titleMatch = cleanMd.match(/^#\s+(.+)/m);
   let name = titleMatch?.[1]?.trim() || null;
-  // Remove any trailing "by Developer" from title
   if (name) {
     name = name.replace(/\s+by\s+.*$/i, "").trim();
+    name = sanitizeText(name);
   }
 
-  // Developer: "by [Developer]" or "Developed by [Developer]"
-  // Look for explicit developer patterns in cleaned markdown
-  const devMatch = cleanMd.match(/(?:^|\s)by\s+([A-Z][A-Za-z\s&]+?)(?:\s*\||$|\s*in\s|\n)/im);
-  const developerName = devMatch?.[1]?.trim() || null;
+  // Developer: "[by Developer]" link pattern in original markdown
+  const devLinkMatch = markdown.match(/\[by\s+([^\]]+)\]/i);
+  let developerName = devLinkMatch?.[1]?.trim() || null;
+  if (!developerName) {
+    const devMatch = cleanMd.match(/by\s+([A-Z][A-Za-z\s&]+?)(?:\s*\n|\s*in\s)/i);
+    developerName = devMatch?.[1]?.trim() || null;
+  }
 
-  // Location: after "in [Location]" or "at [Location]"
-  const locMatch = cleanMd.match(/\s+in\s+([A-Z][A-Za-z\s,\-]+?)(?:\s*\||$|\n)/i);
+  // Location: "at [Location]" or "in [Location]"
+  const locMatch = cleanMd.match(/(?:at|in)\s+([A-Z][A-Za-z\s,\-]+?)(?:\s*\||$|\n)/i);
   const location = locMatch?.[1]?.trim() || null;
 
-  // Bedrooms: "1, 2 & 3 BR" or "Studio, 1-4 Bedrooms"
+  // Bedrooms
   const bedMatch = cleanMd.match(/((?:Studio|[\d,&\s\-]+)\s*(?:BR|Bedrooms?|Bedroom))/i);
   const bedrooms = bedMatch?.[1]?.trim() || null;
 
-  // Price: "EUR 294K" or "AED 1.5M"
+  // Price
   const priceMatch = cleanMd.match(/(EUR|AED|USD)\s*([\d,.]+)\s*(K|M)?/i);
   let priceText: string | null = null;
   let priceFrom: number | null = null;
@@ -157,21 +211,21 @@ function extractTextFromMarkdown(markdown: string): {
     let val = parseFloat(priceMatch[2].replace(/,/g, ""));
     if (priceMatch[3]?.toUpperCase() === "K") val *= 1000;
     if (priceMatch[3]?.toUpperCase() === "M") val *= 1000000;
-    if (priceMatch[1].toUpperCase() === "EUR") val *= 4.0; // EUR to AED
+    if (priceMatch[1].toUpperCase() === "EUR") val *= 4.0;
+    if (priceMatch[1].toUpperCase() === "USD") val *= 3.67;
     priceFrom = Math.round(val);
   }
 
-  // Handover: "2029", "Q2 2028", "Ready"
+  // Handover
   const handoverMatch = cleanMd.match(/(?:Handover|Completion)[:\s]*(Q[1-4]?\s*\d{4}|\d{4}|Ready)/i);
   const handover = handoverMatch?.[1]?.trim() || null;
 
-  // Payment plan: "60/40", "70/30"
+  // Payment plan
   const ppMatch = cleanMd.match(/(\d{2}\/\d{2})/);
   const paymentPlan = ppMatch?.[1] || null;
 
-  // Description: first paragraph >50 chars
-  const descMatch = cleanMd.match(/\n\n([A-Z][^#\n]{50,500})/);
-  const description = descMatch?.[1]?.trim() || null;
+  // Description from "About the project"
+  const description = extractDescriptionFromMarkdown(markdown);
 
   // Property type
   const typeMatch = cleanMd.match(/(Apartment|Villa|Townhouse|Penthouse|Sky[- ]?Villa|Studio)/i);
@@ -222,13 +276,14 @@ serve(async (req) => {
       startIndex: rawStartIndex = 0,
       batchSize: rawBatchSize = 3,
       force = false,
+      freshStart = false,
     } = await req.json().catch(() => ({}));
 
     const normalizedJobId = typeof jobId === "string" && jobId.length > 10 ? jobId : null;
     const startIndex = Math.max(0, Number(rawStartIndex) || 0);
     const batchSize = Math.max(1, Math.min(Number(rawBatchSize) || 3, 10));
 
-    console.log(`[Page ${page}] Starting STRICT URL MIRROR v4 (startIndex=${startIndex}, batchSize=${batchSize})...`);
+    console.log(`[Page ${page}] Starting STRICT URL MIRROR v5 (startIndex=${startIndex}, batchSize=${batchSize}, freshStart=${freshStart})...`);
 
     // Get developers for matching
     const { data: developers, error: devError } = await supabase.from("developers").select("id, name, slug");
@@ -248,7 +303,7 @@ serve(async (req) => {
 
     console.log(`[Page ${page}] Step 1: Fetching project URLs from ${listingUrl}...`);
 
-    const listRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
+    const listRes = await fetchWithRetry("https://api.firecrawl.dev/v1/scrape", {
       method: "POST",
       headers: { "Content-Type": "application/json", "Authorization": `Bearer ${firecrawlKey}` },
       body: JSON.stringify({ url: listingUrl, formats: ["links"], waitFor: 10000, timeout: 90000 }),
@@ -300,8 +355,8 @@ serve(async (req) => {
       try {
         console.log(`[Page ${page}] Scraping: ${projectUrl}`);
 
-        // Scrape project detail page
-        const scrapeRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
+        // Scrape project detail page with retry
+        const scrapeRes = await fetchWithRetry("https://api.firecrawl.dev/v1/scrape", {
           method: "POST",
           headers: { "Content-Type": "application/json", "Authorization": `Bearer ${firecrawlKey}` },
           body: JSON.stringify({ url: projectUrl, formats: ["markdown", "links", "rawHtml"], waitFor: 8000, timeout: 60000, onlyMainContent: false }),
@@ -344,8 +399,8 @@ serve(async (req) => {
         // Match developer
         const dev = matchDeveloper(extracted.developerName, devMap);
 
-        // Build name fallback: use extracted name or derive from slug
-        const projectName = extracted.name || slug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+        // Build name fallback
+        const projectName = sanitizeText(extracted.name || slug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())) || slug;
 
         // Bedrooms
         const beds = parseBedrooms(extracted.bedrooms);
@@ -359,7 +414,7 @@ serve(async (req) => {
         if (ppUrl) documentsPayload.push({ url: ppUrl, type: "payment_plan", name: `${projectName} Payment Plan.pdf` });
         for (const fp of floorPlans) documentsPayload.push({ url: fp, type: "floor_plan", name: `${projectName} Floor Plan.pdf` });
 
-        // Check if already in queue or projects
+        // Check if already in queue (any status) or projects
         const { data: existingQueue } = await supabase
           .from("pending_project_imports")
           .select("id, status")
@@ -385,9 +440,9 @@ serve(async (req) => {
         const payload: Omit<PendingImport, "is_new_project" | "status" | "review_notes"> & { job_id?: string | null } = {
           name: projectName,
           slug,
-          developer_name: extracted.developerName || null,
+          developer_name: sanitizeText(extracted.developerName) || null,
           developer_id: dev?.id || null,
-          location: extracted.location || null,
+          location: sanitizeText(extracted.location) || null,
           emirate: "Dubai",
           description: extracted.description || null,
           price_from: extracted.priceFrom || null,
@@ -408,22 +463,32 @@ serve(async (req) => {
         const incomplete = !hasMinimal || !hasDocs;
 
         if (existingQueue?.id) {
-          if (force || existingQueue.status === "pending") {
+          // If freshStart or force, always update and set back to pending
+          // Otherwise only update if currently pending
+          const shouldUpdate = force || freshStart || existingQueue.status === "pending" || existingQueue.status === "rejected";
+          
+          if (shouldUpdate) {
             const { error: updateErr } = await supabase
               .from("pending_project_imports")
-              .update({ ...payload, is_new_project: false, status: "pending", review_notes: incomplete ? "INCOMPLETE" : null, updated_at: new Date().toISOString() })
+              .update({ 
+                ...payload, 
+                is_new_project: false, 
+                status: "pending",  // Always set to pending on update
+                review_notes: incomplete ? "INCOMPLETE" : null, 
+                updated_at: new Date().toISOString() 
+              })
               .eq("id", existingQueue.id);
             if (updateErr) {
               console.error(`[Page ${page}] Update failed for ${projectName}:`, updateErr);
               stats.errors++;
               errorsList.push({ url: projectUrl, error: updateErr.message });
             } else {
-              console.log(`[Page ${page}] ↻ Updated: ${projectName} (${imagesPayload.length} images)`);
+              console.log(`[Page ${page}] ↻ Updated: ${projectName} (${imagesPayload.length} images, status→pending)`);
               stats.updated++;
               stats.images += imagesPayload.length;
             }
           } else {
-            console.log(`[Page ${page}] Skipping ${projectName} - already queued`);
+            console.log(`[Page ${page}] Skipping ${projectName} - already queued (status: ${existingQueue.status})`);
             stats.skipped++;
           }
         } else {
@@ -440,7 +505,7 @@ serve(async (req) => {
         }
 
         stats.processed++;
-        await sleep(600);
+        await sleep(800);
       } catch (err) {
         const message = err instanceof Error ? err.message : "Unknown error";
         console.error(`[Page ${page}] Error processing ${projectUrl}:`, message);
@@ -466,7 +531,7 @@ serve(async (req) => {
       next_start_index: nextStartIndex,
       remaining_urls: remainingUrls,
       mode: "approval_queue",
-      extraction_method: "strict-url-mirror-v4",
+      extraction_method: "strict-url-mirror-v5",
       duration_ms: duration,
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

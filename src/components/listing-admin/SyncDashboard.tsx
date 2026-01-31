@@ -315,7 +315,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
         guard++;
 
         const { data, error } = await supabase.functions.invoke("sync-provident-page", {
-          body: { page, startIndex, batchSize, jobId: jobIdToUse, ...(options || {}) }
+          body: { page, startIndex, batchSize, jobId: jobIdToUse, freshStart: true, ...(options || {}) }
         });
 
         if (error) throw error;
