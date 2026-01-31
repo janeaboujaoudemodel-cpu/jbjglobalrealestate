@@ -386,36 +386,88 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       toast({ title: "No items selected", description: "Select items to delete using the checkboxes." });
       return;
     }
-    const confirmed = window.confirm(`Delete ${selectedIds.size} selected items from the queue?`);
+
+    const isFilteredView = Boolean(jobId && !showAll);
+    const totalShown = imports.length;
+    const selectedCount = selectedIds.size;
+
+    // Only do a full queue clear when the user is not filtering by job.
+    // In filtered mode, they usually only want to affect the selected subset.
+    const isEssentiallyAllShown = totalShown > 0 && selectedCount >= Math.ceil(totalShown * 0.98);
+    const shouldClearEntireQueueFast = !isFilteredView && isEssentiallyAllShown;
+
+    const confirmed = window.confirm(
+      shouldClearEntireQueueFast
+        ? `Delete ALL pending items from the queue now? (Fast)`
+        : `Delete ${selectedCount} selected items from the queue?`
+    );
     if (!confirmed) return;
 
     setIsBulkProcessing(true);
     setBulkAction("reject");
-    setBulkDone(0);
-    setBulkTotal(selectedIds.size);
 
-    let done = 0;
-    for (const id of selectedIds) {
-      try {
-        await supabase
+    try {
+      // FAST PATH: clear the entire queue with ONE backend call.
+      if (shouldClearEntireQueueFast) {
+        setBulkDone(0);
+        setBulkTotal(1);
+
+        const { data, error } = await supabase.functions.invoke("reset-project-import-queue", {
+          body: { preserveApproved: true },
+        });
+        if (error) throw error;
+
+        setBulkDone(1);
+        toast({
+          title: "Queue cleared",
+          description: `Removed ${data?.deleted ?? "all"} items from the queue.`,
+        });
+
+        setSelectedIds(new Set());
+        await fetchPendingImports();
+        return;
+      }
+
+      // SAFE PATH: bulk-update selected items in chunks (no per-row requests).
+      const ids = Array.from(selectedIds);
+      const chunkSize = 200;
+
+      setBulkDone(0);
+      setBulkTotal(ids.length);
+
+      let done = 0;
+      for (let i = 0; i < ids.length; i += chunkSize) {
+        const chunk = ids.slice(i, i + chunkSize);
+
+        const { error } = await supabase
           .from("pending_project_imports")
           .update({
             status: "rejected",
             reviewed_at: new Date().toISOString(),
             review_notes: "Deleted by admin (selected)"
           })
-          .eq("id", id);
-        done++;
-      } catch (e) {
-        console.error("Failed to delete", id, e);
-      }
-      setBulkDone(done);
-    }
+          .in("id", chunk);
 
-    toast({ title: "Deletion complete", description: `${done} items removed from queue.` });
-    setIsBulkProcessing(false);
-    setBulkAction(null);
-    await fetchPendingImports();
+        if (error) throw error;
+
+        done += chunk.length;
+        setBulkDone(done);
+      }
+
+      toast({ title: "Deletion complete", description: `${done} items removed from queue.` });
+      setSelectedIds(new Set());
+      await fetchPendingImports();
+    } catch (e) {
+      console.error("Bulk delete failed:", e);
+      toast({
+        title: "Error",
+        description: "Failed to delete selected items",
+        variant: "destructive",
+      });
+    } finally {
+      setIsBulkProcessing(false);
+      setBulkAction(null);
+    }
   };
 
   const repairAllIncomplete = async () => {

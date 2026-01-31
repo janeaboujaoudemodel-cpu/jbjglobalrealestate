@@ -27,10 +27,16 @@ serve(async (req) => {
 
     console.log(`[ResetQueue] Starting (preserveApproved=${preserveApproved})...`);
 
-    const deleteQuery = supabase.from("pending_project_imports").delete();
-    const { data: deletedRows, error: deleteErr } = preserveApproved
-      ? await deleteQuery.neq("status", "approved").select("id")
-      : await deleteQuery.select("id");
+    // IMPORTANT: do NOT return deleted rows (can be very slow for 1k+ records).
+    // We only request a count.
+    const query = preserveApproved
+      ? supabase
+          .from("pending_project_imports")
+          .delete({ count: "exact" })
+          .neq("status", "approved")
+      : supabase.from("pending_project_imports").delete({ count: "exact" });
+
+    const { error: deleteErr, count } = await query;
 
     if (deleteErr) {
       console.error("[ResetQueue] Delete error:", deleteErr);
@@ -40,8 +46,8 @@ serve(async (req) => {
       });
     }
 
-    const deleted = deletedRows?.length || 0;
-    console.log(`[ResetQueue] Deleted ${deleted} rows`);
+    const deleted = count ?? 0;
+    console.log(`[ResetQueue] Deleted ${deleted} rows (count)`);
 
     return new Response(
       JSON.stringify({ success: true, deleted, preserveApproved }),
