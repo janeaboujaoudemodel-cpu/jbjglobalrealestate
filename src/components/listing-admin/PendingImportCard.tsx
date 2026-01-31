@@ -1,12 +1,21 @@
 import { useMemo, useState, type MouseEvent } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, ExternalLink, MapPin, Mail, Phone, MessageCircle, Bed } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { ChevronLeft, ChevronRight, ExternalLink, MapPin, Mail, Phone, MessageCircle, Bed, AlertTriangle, RefreshCw } from "lucide-react";
 import { CONTACT_INFO, getCallUrl, getWhatsAppUrl } from "@/constants/stats";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 type PendingImportCardImage = {
   url: string;
   alt?: string;
+};
+
+type PendingImportCardDocument = {
+  url: string;
+  type: string;
+  name?: string;
 };
 
 type PendingImportCardItem = {
@@ -21,11 +30,12 @@ type PendingImportCardItem = {
   property_type_label: string | null;
   status_label: string | null;
   images: PendingImportCardImage[];
-  documents: unknown[];
+  documents: PendingImportCardDocument[];
   is_new_project: boolean;
   source_url: string | null;
   bedrooms_min: number | null;
   bedrooms_max: number | null;
+  review_notes?: string | null;
 };
 
 interface PendingImportCardProps {
@@ -41,12 +51,22 @@ const truncate = (text: string, max = 120) => {
 
 export function PendingImportCard({ item, formatPrice, onReview }: PendingImportCardProps) {
   const images = useMemo(() => (item.images || []).filter((i) => !!i?.url), [item.images]);
+  const documents = useMemo(() => (item.documents || []).filter((d) => !!d?.url), [item.documents]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isRepairing, setIsRepairing] = useState(false);
 
   const activeImage = images[currentImageIndex] || images[0];
   const hasMultipleImages = images.length > 1;
 
-  // NEVER open Provident URL - always open internal review
+  // Determine if extraction is incomplete
+  const isIncomplete = Boolean(
+    item.review_notes?.includes("INCOMPLETE") ||
+    !item.description ||
+    (item.developer_name?.toLowerCase() === "unknown") ||
+    images.length === 0 ||
+    documents.length === 0
+  );
+
   const handleCardClick = () => {
     onReview();
   };
@@ -65,6 +85,25 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
     setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
+  const handleRepair = async (e: MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsRepairing(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("repair-project-extraction", {
+        body: { pendingImportId: item.id },
+      });
+      if (error) throw error;
+      toast.success(`Repaired: ${item.name} (${data.images} images, ${data.documents} docs)`);
+      // Trigger refresh by calling onReview which should ideally re-fetch (handled at parent level)
+      window.location.reload();
+    } catch (err) {
+      toast.error(`Repair failed: ${err instanceof Error ? err.message : "Unknown error"}`);
+    } finally {
+      setIsRepairing(false);
+    }
+  };
+
   const hasDescription = !!item.description?.trim();
   const truncatedDescription = item.description ? truncate(item.description, 120) : null;
   const showMore = !!item.description && item.description.length > 120;
@@ -80,10 +119,18 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
 
   return (
     <Card
-      className="overflow-hidden cursor-pointer border-2 border-gold bg-card shadow-[0_4px_20px_rgba(200,167,102,0.25)] transition-all duration-300 hover:shadow-[0_12px_40px_rgba(200,167,102,0.4)] hover:border-gold hover:scale-[1.02] hover:-translate-y-2"
+      className={`overflow-hidden cursor-pointer border-2 ${isIncomplete ? "border-amber-500" : "border-gold"} bg-card shadow-[0_4px_20px_rgba(200,167,102,0.25)] transition-all duration-300 hover:shadow-[0_12px_40px_rgba(200,167,102,0.4)] hover:scale-[1.02] hover:-translate-y-2`}
       style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
       onClick={handleCardClick}
     >
+      {/* Incomplete badge */}
+      {isIncomplete && (
+        <div className="bg-amber-500 text-white text-xs font-bold px-3 py-1 flex items-center gap-1 justify-center">
+          <AlertTriangle className="w-3 h-3" />
+          Incomplete Extraction
+        </div>
+      )}
+
       {/* Image Preview */}
       <div className="relative h-56 bg-muted">
         {activeImage?.url ? (
@@ -278,6 +325,21 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
                 </a>
               </Button>
             </div>
+
+            {/* Repair button for incomplete items */}
+            {isIncomplete && (
+              <Button
+                variant="secondary"
+                size="sm"
+                disabled={isRepairing}
+                onClick={handleRepair}
+                className="gap-1 px-3 font-medium border border-amber-400 text-amber-700 hover:bg-amber-50"
+              >
+                {isRepairing ? <RefreshCw className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+                Repair
+              </Button>
+            )}
+
             <Button
               variant="default"
               size="sm"
