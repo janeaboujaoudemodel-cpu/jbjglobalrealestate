@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
@@ -103,7 +104,9 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   const [viewingJobId, setViewingJobId] = useState<string | null>(null);
   // We keep this always enabled: the admin decides what to approve in the queue.
   const [isTestApproved] = useState(true);
-  const [activeTab, setActiveTab] = useState("approvals");
+  const [activeTab, setActiveTab] = useState("sync");
+  // Turbo removes UI delays and backend per-project throttling.
+  const [turboMode, setTurboMode] = useState(true);
   
   const isPausedRef = useRef(false);
   const isSyncingRef = useRef(false);
@@ -297,7 +300,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     try {
       // Batch the page so we actually process ALL listings on the page.
       // The backend returns remaining_urls + next_start_index so we can loop safely.
-      const batchSize = options?.testMode ? 1 : 3;
+      const batchSize = options?.testMode ? 1 : (turboMode ? 10 : 3);
       let startIndex = 0;
       let remaining = 1;
       let guard = 0;
@@ -315,7 +318,15 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
         guard++;
 
         const { data, error } = await supabase.functions.invoke("sync-provident-page", {
-          body: { page, startIndex, batchSize, jobId: jobIdToUse, freshStart: true, ...(options || {}) }
+          body: {
+            page,
+            startIndex,
+            batchSize,
+            throttleMs: turboMode ? 0 : 800,
+            jobId: jobIdToUse,
+            freshStart: true,
+            ...(options || {}),
+          }
         });
 
         if (error) throw error;
@@ -340,9 +351,10 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
 
         startIndex = nextStart;
 
-        // Light delay between batches to avoid rate limits.
-        if (remaining > 0) {
-          await new Promise((r) => setTimeout(r, 600));
+        // Delay between batches (disabled in Turbo).
+        const batchDelayMs = turboMode ? 0 : 600;
+        if (remaining > 0 && batchDelayMs > 0) {
+          await new Promise((r) => setTimeout(r, batchDelayMs));
         }
       }
 
@@ -389,7 +401,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
 
     const confirmed = window.confirm(
       "This will:\n" +
-      "1. Mark ALL pending imports as rejected (clearing the queue)\n" +
+      "1. Delete ALL pending + rejected imports (clean rebuild)\n" +
       "2. Start a new full sync from page 1\n\n" +
       "Your already-approved projects will NOT be affected.\n\n" +
       "Continue?"
@@ -398,24 +410,19 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
 
     setIsClearingPending(true);
 
-    // 1. Clear pending queue
-    const { error: clearError } = await supabase
-      .from("pending_project_imports")
-      .update({
-        status: "rejected",
-        reviewed_at: new Date().toISOString(),
-        review_notes: "Cleared by admin (fresh restart)"
-      })
-      .eq("status", "pending");
+    // 1. Hard-reset queue (prevents duplicate slugs across runs)
+    const { data, error: resetError } = await supabase.functions.invoke("reset-project-import-queue", {
+      body: { preserveApproved: true },
+    });
 
-    if (clearError) {
-      console.error("Failed to clear pending queue:", clearError);
-      toast.error("Failed to clear pending queue");
+    if (resetError) {
+      console.error("Failed to reset import queue:", resetError);
+      toast.error("Failed to reset import queue");
       setIsClearingPending(false);
       return;
     }
 
-    toast.success("Pending queue cleared");
+    toast.success(`Queue reset (${data?.deleted ?? 0} removed)`);
     await loadProjectCount();
     setIsClearingPending(false);
 
@@ -465,7 +472,10 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
 
       // Small delay between pages to avoid rate limits
       if (page < pagesTotal && !isPausedRef.current) {
-        await new Promise(r => setTimeout(r, 2000));
+        const pageDelayMs = turboMode ? 0 : 2000;
+        if (pageDelayMs > 0) {
+          await new Promise(r => setTimeout(r, pageDelayMs));
+        }
       }
     }
 
@@ -601,7 +611,10 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       
       setCurrentPage(pageStatus.page);
       await syncPage(pageStatus.page);
-      await new Promise(r => setTimeout(r, 2000));
+      const retryDelayMs = turboMode ? 0 : 2000;
+      if (retryDelayMs > 0) {
+        await new Promise(r => setTimeout(r, retryDelayMs));
+      }
     }
 
     setIsSyncing(false);
@@ -792,6 +805,17 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                   Refresh Pages
                 </Button>
               </div>
+
+              {/* Turbo mode */}
+              <div className="flex items-center justify-between rounded-md border border-border bg-muted/30 p-3">
+                <div>
+                  <div className="text-sm font-medium text-foreground">Turbo mode</div>
+                  <div className="text-xs text-muted-foreground">
+                    Runs back-to-back batches/pages (fastest). If rate limits happen, retry failed pages.
+                  </div>
+                </div>
+                <Switch checked={turboMode} onCheckedChange={setTurboMode} />
+              </div>
               
                {/* Action buttons */}
                <div className="flex flex-wrap gap-2">
@@ -812,7 +836,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                        className="bg-gold hover:bg-gold/90 text-black disabled:opacity-50"
                      >
                        <Play className="w-4 h-4 mr-2" />
-                       Start Full Sync (~{listingsEstimate.toLocaleString()} Listings)
+                        Start Full Sync{turboMode ? " (Turbo)" : ""} (~{listingsEstimate.toLocaleString()} Listings)
                      </Button>
                    )
                  ) : (

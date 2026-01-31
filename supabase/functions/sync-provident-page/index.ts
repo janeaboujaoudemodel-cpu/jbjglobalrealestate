@@ -275,6 +275,7 @@ serve(async (req) => {
       jobId = null,
       startIndex: rawStartIndex = 0,
       batchSize: rawBatchSize = 3,
+      throttleMs: rawThrottleMs = 800,
       force = false,
       freshStart = false,
     } = await req.json().catch(() => ({}));
@@ -282,8 +283,9 @@ serve(async (req) => {
     const normalizedJobId = typeof jobId === "string" && jobId.length > 10 ? jobId : null;
     const startIndex = Math.max(0, Number(rawStartIndex) || 0);
     const batchSize = Math.max(1, Math.min(Number(rawBatchSize) || 3, 10));
+    const throttleMs = Math.max(0, Math.min(Number(rawThrottleMs) ?? 800, 5000));
 
-    console.log(`[Page ${page}] Starting STRICT URL MIRROR v5 (startIndex=${startIndex}, batchSize=${batchSize}, freshStart=${freshStart})...`);
+    console.log(`[Page ${page}] Starting STRICT URL MIRROR v5 (startIndex=${startIndex}, batchSize=${batchSize}, freshStart=${freshStart}, throttleMs=${throttleMs})...`);
 
     // Get developers for matching
     const { data: developers, error: devError } = await supabase.from("developers").select("id, name, slug");
@@ -525,7 +527,7 @@ serve(async (req) => {
         }
 
         stats.processed++;
-        await sleep(800);
+        await sleep(throttleMs);
       } catch (err) {
         const message = err instanceof Error ? err.message : "Unknown error";
         console.error(`[Page ${page}] Error processing ${projectUrl}:`, message);

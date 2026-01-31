@@ -19,8 +19,9 @@ function sanitizeText(text: string | null): string | null {
   return text.replace(BANNED_TERMS_REGEX, "").replace(/\s{2,}/g, " ").trim() || null;
 }
 
-async function sleep(ms: number): Promise<void> {
-  return new Promise((r) => setTimeout(r, ms + Math.random() * 500));
+async function sleep(ms: number, jitter = 0.2): Promise<void> {
+  const jitterMs = ms * jitter * Math.random();
+  return new Promise((r) => setTimeout(r, ms + jitterMs));
 }
 
 async function fetchWithRetry(url: string, options: RequestInit, maxRetries = 3): Promise<Response> {
@@ -31,7 +32,7 @@ async function fetchWithRetry(url: string, options: RequestInit, maxRetries = 3)
       if (res.status === 502 || res.status === 503 || res.status === 429) {
         const wait = attempt * 3000 + Math.random() * 2000;
         console.warn(`[Retry ${attempt}/${maxRetries}] Got ${res.status}, waiting ${Math.round(wait)}ms...`);
-        await sleep(wait);
+        await sleep(wait, 0);
         continue;
       }
       return res;
@@ -39,7 +40,7 @@ async function fetchWithRetry(url: string, options: RequestInit, maxRetries = 3)
       lastError = err instanceof Error ? err : new Error(String(err));
       const wait = attempt * 2000;
       console.warn(`[Retry ${attempt}/${maxRetries}] Network error, waiting ${wait}ms...`);
-      await sleep(wait);
+      await sleep(wait, 0);
     }
   }
   throw lastError || new Error("Max retries exceeded");
@@ -228,9 +229,10 @@ serve(async (req) => {
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   try {
-    const { limit = 50, dryRun = false } = await req.json().catch(() => ({}));
+    const { limit = 50, dryRun = false, throttleMs: rawThrottleMs = 1000 } = await req.json().catch(() => ({}));
+    const throttleMs = Math.max(0, Math.min(Number(rawThrottleMs) ?? 1000, 5000));
 
-    console.log(`[BatchExtract] Starting (limit=${limit}, dryRun=${dryRun})...`);
+    console.log(`[BatchExtract] Starting (limit=${limit}, dryRun=${dryRun}, throttleMs=${throttleMs})...`);
 
     // Get developers for matching
     const { data: devs } = await supabase.from("developers").select("id, name, slug");
@@ -346,8 +348,10 @@ serve(async (req) => {
           console.log(`[BatchExtract] ✓ Updated ${item.name} (${imagesPayload.length} imgs, ${documentsPayload.length} docs)`);
         }
 
-        // Throttle to avoid rate limits
-        await sleep(1000);
+        // Optional throttle (set throttleMs=0 for turbo runs)
+        if (throttleMs > 0) {
+          await sleep(throttleMs, 0.2);
+        }
       } catch (err) {
         stats.errors++;
         errors.push({ name: item.name, error: err instanceof Error ? err.message : String(err) });
