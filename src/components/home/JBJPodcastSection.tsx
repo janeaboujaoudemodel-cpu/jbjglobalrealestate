@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { 
   Play, 
@@ -25,6 +25,8 @@ import { useToast } from "@/hooks/use-toast";
 import { T } from "@/components/ui/T";
 import { SafeImage } from "@/components/SafeImage";
 import { podcastEpisodes, podcastLanguages } from "@/content/podcast/episodes";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { usePodcastPlayback } from "@/features/podcast/usePodcastPlayback";
 
 const PLAYBACK_SPEEDS = [
   { value: 0.5, label: "0.5x" },
@@ -44,164 +46,45 @@ const parseDurationToSeconds = (label: string) => {
 
 const JBJPodcastSection = () => {
   const [selectedEpisode, setSelectedEpisode] = useState(podcastEpisodes[0]);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [volume, setVolume] = useState([75]);
   const [isMuted, setIsMuted] = useState(false);
   const [previousVolume, setPreviousVolume] = useState(75);
-  const [progress, setProgress] = useState(0);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(() => parseDurationToSeconds(podcastEpisodes[0].duration));
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [playbackNote, setPlaybackNote] = useState<string | null>(null);
   
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const { toast } = useToast();
+  const { language, setLanguage } = useLanguage();
 
-  // Generate podcast audio
-  const generatePodcastAudio = async () => {
+  const playback = usePodcastPlayback({
+    episodeId: selectedEpisode.id,
+    segments: selectedEpisode.segments,
+    language,
+    playbackRate: playbackSpeed,
+    volume: Math.max(0, Math.min(1, volume[0] / 100)),
+    muted: isMuted || volume[0] === 0,
+  });
+
+  const handlePlayPause = async () => {
+    setErrorMessage(null);
+    setPlaybackNote(null);
+
     if (!selectedEpisode.segments) {
       toast({
-        title: "Coming Soon",
-        description: "This episode is not yet available.",
+        title: "Episode not ready",
+        description: "This episode script is not available yet.",
         variant: "default",
       });
       return;
     }
 
-    setIsLoading(true);
-    setErrorMessage(null);
-    setPlaybackNote(null);
-
-    const requestAudioBlob = async (opts: { segments: unknown; testMode: boolean }) => {
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-podcast-tts`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
-          body: JSON.stringify({
-            segments: opts.segments,
-            language: selectedLanguage,
-            testMode: opts.testMode,
-          }),
-        },
-      );
-
-      const contentType = response.headers.get("content-type") || "";
-      if (contentType.includes("application/json")) {
-        const data = await response.json().catch(() => ({} as any));
-        throw new Error((data as any)?.error || (data as any)?.message || "Failed to generate audio");
-      }
-
-      if (!response.ok) {
-        throw new Error(`Server error: ${response.status}`);
-      }
-
-      return await response.blob();
-    };
-    
-    try {
-      // Full episode attempt first
-      const audioBlob = await requestAudioBlob({ segments: selectedEpisode.segments, testMode: false });
-      const audioBlobUrl = URL.createObjectURL(audioBlob);
-      setAudioUrl(audioBlobUrl);
-      
-      // Play the audio
-      if (audioRef.current) {
-        audioRef.current.src = audioBlobUrl;
-        audioRef.current.playbackRate = playbackSpeed;
-        await audioRef.current.play();
-        setIsPlaying(true);
-      }
-
-      toast({
-        title: "Podcast Ready",
-        description: "Episode generated with Jane's voice.",
-      });
-
-    } catch (error) {
-      console.error("Error generating podcast:", error);
-
-      const message = error instanceof Error ? error.message : "Could not generate podcast audio.";
-      const isQuotaError = /quota|credit/i.test(message);
-
-      // If voice credits are depleted, fallback to a short preview so the UI isn't stuck.
-      if (isQuotaError && selectedEpisode.segments) {
-        try {
-          setPlaybackNote("Preview mode: full episode generation is temporarily unavailable.");
-
-          const segmentsAny = selectedEpisode.segments as any;
-          const previewSegments = Array.isArray(segmentsAny) ? segmentsAny.slice(0, 1) : segmentsAny;
-
-          const previewBlob = await requestAudioBlob({ segments: previewSegments, testMode: true });
-          const previewUrl = URL.createObjectURL(previewBlob);
-          setAudioUrl(previewUrl);
-
-          if (audioRef.current) {
-            audioRef.current.src = previewUrl;
-            audioRef.current.playbackRate = playbackSpeed;
-            await audioRef.current.play();
-            setIsPlaying(true);
-          }
-
-          toast({
-            title: "Preview Playing",
-            description: "Full episodes require additional voice credits.",
-          });
-
-          return;
-        } catch (previewErr) {
-          console.error("Preview fallback failed:", previewErr);
-        }
-      }
-
-      setErrorMessage(
-        isQuotaError
-          ? "Audio generation is temporarily unavailable due to depleted voice credits. Please update your voice API key/credits to enable full episodes."
-          : message,
-      );
-      toast({
-        title: "Generation Failed",
-        description: message,
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handlePlayPause = async () => {
-    if (!audioRef.current) return;
-
-    if (isPlaying) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    } else if (audioUrl) {
-      await audioRef.current.play();
-      setIsPlaying(true);
-    } else {
-      setErrorMessage(null);
-      setPlaybackNote(null);
-      await generatePodcastAudio();
-    }
+    await playback.toggle();
   };
 
   const handlePrevious = () => {
     const currentIndex = podcastEpisodes.findIndex(ep => ep.id === selectedEpisode.id);
     if (currentIndex > 0) {
       setSelectedEpisode(podcastEpisodes[currentIndex - 1]);
-      setProgress(0);
-      setCurrentTime(0);
-      setDuration(parseDurationToSeconds(podcastEpisodes[currentIndex - 1].duration));
-      setAudioUrl(null);
-      setIsPlaying(false);
       setErrorMessage(null);
       setPlaybackNote(null);
     }
@@ -211,11 +94,6 @@ const JBJPodcastSection = () => {
     const currentIndex = podcastEpisodes.findIndex(ep => ep.id === selectedEpisode.id);
     if (currentIndex < podcastEpisodes.length - 1) {
       setSelectedEpisode(podcastEpisodes[currentIndex + 1]);
-      setProgress(0);
-      setCurrentTime(0);
-      setDuration(parseDurationToSeconds(podcastEpisodes[currentIndex + 1].duration));
-      setAudioUrl(null);
-      setIsPlaying(false);
       setErrorMessage(null);
       setPlaybackNote(null);
     }
@@ -226,9 +104,6 @@ const JBJPodcastSection = () => {
     const nextIndex = (currentIndex + 1) % PLAYBACK_SPEEDS.length;
     const newSpeed = PLAYBACK_SPEEDS[nextIndex].value;
     setPlaybackSpeed(newSpeed);
-    if (audioRef.current) {
-      audioRef.current.playbackRate = newSpeed;
-    }
   };
 
   const handleVolumeChange = (value: number[]) => {
@@ -237,10 +112,6 @@ const JBJPodcastSection = () => {
       setIsMuted(false);
       setPreviousVolume(value[0]);
     }
-    if (audioRef.current) {
-      audioRef.current.volume = value[0] / 100;
-      audioRef.current.muted = value[0] === 0;
-    }
   };
 
   const toggleMute = () => {
@@ -248,27 +119,18 @@ const JBJPodcastSection = () => {
       // Unmute - restore previous volume
       setVolume([previousVolume]);
       setIsMuted(false);
-      if (audioRef.current) {
-        audioRef.current.volume = previousVolume / 100;
-        audioRef.current.muted = false;
-      }
     } else {
       // Mute - save current volume and set to 0
       setPreviousVolume(volume[0]);
       setVolume([0]);
       setIsMuted(true);
-      if (audioRef.current) {
-        audioRef.current.muted = true;
-      }
     }
   };
 
   const handleProgressChange = (value: number[]) => {
     const newProgress = value[0];
-    setProgress(newProgress);
-    if (audioRef.current && duration > 0) {
-      audioRef.current.currentTime = (newProgress / 100) * duration;
-    }
+    const d = playback.duration || parseDurationToSeconds(selectedEpisode.duration);
+    void playback.seek((newProgress / 100) * d);
   };
 
   const formatTime = (seconds: number) => {
@@ -277,55 +139,15 @@ const JBJPodcastSection = () => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // Audio event handlers
   useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const handleTimeUpdate = () => {
-      setCurrentTime(audio.currentTime);
-      const effectiveDuration =
-        Number.isFinite(audio.duration) && audio.duration > 0
-          ? audio.duration
-          : duration;
-      if (effectiveDuration > 0) setProgress((audio.currentTime / effectiveDuration) * 100);
-    };
-
-    const handleLoadedMetadata = () => {
-      // Some stitched/concatenated audio sources may report Infinity/NaN.
-      // In that case we keep our (mm:ss) fallback duration so the UI isn't stuck at 0.
-      if (Number.isFinite(audio.duration) && audio.duration > 0) {
-        setDuration(audio.duration);
-      }
-    };
-
-    const handleEnded = () => {
-      setIsPlaying(false);
-      setProgress(0);
-      setCurrentTime(0);
-    };
-
-    audio.addEventListener('timeupdate', handleTimeUpdate);
-    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
-    audio.addEventListener('ended', handleEnded);
-
-    return () => {
-      audio.removeEventListener('timeupdate', handleTimeUpdate);
-      audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
-      audio.removeEventListener('ended', handleEnded);
-    };
-  }, [duration]);
-
-  // When the selected episode changes, reset the duration fallback (so UI never shows 0:00).
-  useEffect(() => {
-    setDuration(parseDurationToSeconds(selectedEpisode.duration));
-  }, [selectedEpisode]);
+    // Surface hook error in existing error panel.
+    if (playback.status === "error" && playback.error) {
+      setErrorMessage(playback.error);
+    }
+  }, [playback.error, playback.status]);
 
   return (
     <section className="relative py-20 md:py-28 overflow-hidden jj-layer-2">
-      {/* Hidden audio element */}
-      <audio ref={audioRef} preload="none" />
-
       <div className="relative z-10 container mx-auto px-4">
         {/* Section Header */}
         <motion.div
@@ -382,22 +204,36 @@ const JBJPodcastSection = () => {
                   {/* Center Play Button - Using border style instead of solid fill */}
                   <button
                     onClick={handlePlayPause}
-                    disabled={isLoading}
+                    disabled={playback.status === "loading"}
                     className="absolute inset-0 flex items-center justify-center group"
                   >
                     <div 
                       className="w-20 h-20 rounded-full bg-black/50 backdrop-blur-sm border-2 border-gold flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-all duration-300 disabled:opacity-50"
                       style={{ boxShadow: '0 0 40px rgba(200,167,102,0.3)' }}
                     >
-                      {isLoading ? (
+                      {playback.status === "loading" ? (
                         <Loader2 className="w-8 h-8 text-gold group-hover:text-black animate-spin" />
-                      ) : isPlaying ? (
+                      ) : playback.status === "playing" ? (
                         <Pause className="w-8 h-8 text-gold group-hover:text-black" />
                       ) : (
                         <Play className="w-8 h-8 text-gold group-hover:text-black ml-1" />
                       )}
                     </div>
                   </button>
+
+                  {/* Captions (translated to selected language) */}
+                  {playback.caption ? (
+                    <div
+                      className="absolute bottom-0 left-0 right-0 px-4 pb-4"
+                      data-no-translate
+                    >
+                      <div className="jj-card-inner/90 backdrop-blur-sm border border-gold/30 rounded-lg px-4 py-3">
+                        <p className="text-sm md:text-base text-black leading-relaxed line-clamp-3">
+                          {playback.caption}
+                        </p>
+                      </div>
+                    </div>
+                  ) : null}
                 </div>
               </div>
 
@@ -426,16 +262,23 @@ const JBJPodcastSection = () => {
                 {/* Progress Bar - 0 on LEFT, duration on RIGHT */}
                 <div className="mb-4">
                   <PodcastSlider
-                    value={[progress]}
+                      value={[playback.progress]}
                     max={100}
                     step={0.1}
                     onValueChange={handleProgressChange}
                     className="w-full [direction:ltr]"
                   />
                   <div className="flex justify-between text-xs text-black/60 mt-1">
-                    <span>{formatTime(currentTime)}</span>
-                    <span>{duration > 0 ? formatTime(duration) : selectedEpisode.duration}</span>
+                      <span>{formatTime(playback.currentTime)}</span>
+                      <span>
+                        {playback.duration > 0 ? formatTime(playback.duration) : selectedEpisode.duration}
+                      </span>
                   </div>
+                    {playback.status === "loading" && playback.loadingStep ? (
+                      <p className="mt-2 text-xs text-black/60" data-no-translate>
+                        Generating audio {playback.loadingStep.current}/{playback.loadingStep.total}…
+                      </p>
+                    ) : null}
                 </div>
 
                 {/* Controls Row */}
@@ -449,12 +292,12 @@ const JBJPodcastSection = () => {
                     </button>
                     <button
                       onClick={handlePlayPause}
-                      disabled={isLoading}
+                      disabled={playback.status === "loading"}
                       className="w-14 h-14 rounded-full border-2 border-gold bg-transparent flex items-center justify-center transition-colors shadow-lg disabled:opacity-50 group"
                     >
-                      {isLoading ? (
+                      {playback.status === "loading" ? (
                         <Loader2 className="w-6 h-6 text-gold group-hover:text-black animate-spin" />
-                      ) : isPlaying ? (
+                      ) : playback.status === "playing" ? (
                         <Pause className="w-6 h-6 text-gold group-hover:text-black" />
                       ) : (
                         <Play className="w-6 h-6 text-gold group-hover:text-black ml-0.5" />
@@ -479,7 +322,7 @@ const JBJPodcastSection = () => {
                   {/* Language Selector - BLACK TEXT */}
                   <div className="flex items-center gap-2">
                     <Globe className="w-4 h-4 text-black/60" />
-                    <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+                    <Select value={language} onValueChange={(v) => setLanguage(v as any)}>
                       <SelectTrigger className="w-36">
                         <SelectValue />
                       </SelectTrigger>
@@ -544,11 +387,6 @@ const JBJPodcastSection = () => {
                         key={episode.id}
                         onClick={() => {
                           setSelectedEpisode(episode);
-                          setProgress(0);
-                          setCurrentTime(0);
-                          setDuration(parseDurationToSeconds(episode.duration));
-                          setAudioUrl(null);
-                          setIsPlaying(false);
                           setErrorMessage(null);
                           setPlaybackNote(null);
                         }}
