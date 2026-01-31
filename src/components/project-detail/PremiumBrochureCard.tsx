@@ -191,7 +191,7 @@ const PremiumBrochureCard = ({
 
       {isLocked && (
         <p className="text-muted-foreground text-xs text-center max-w-[240px]">
-          Register your details to unlock the full brochure
+          Submit your email to unlock the brochure
         </p>
       )}
     </div>
