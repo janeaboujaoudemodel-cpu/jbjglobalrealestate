@@ -229,22 +229,41 @@ serve(async (req) => {
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   try {
-    const { limit = 50, dryRun = false, throttleMs: rawThrottleMs = 1000 } = await req.json().catch(() => ({}));
-    const throttleMs = Math.max(0, Math.min(Number(rawThrottleMs) ?? 1000, 5000));
+    const {
+      limit: rawLimit = 50,
+      dryRun = false,
+      throttleMs: rawThrottleMs = 1000,
+      concurrency: rawConcurrency = 3,
+    } = await req.json().catch(() => ({}));
 
-    console.log(`[BatchExtract] Starting (limit=${limit}, dryRun=${dryRun}, throttleMs=${throttleMs})...`);
+    const limit = Math.max(1, Math.min(Number(rawLimit) || 50, 200));
+    const throttleMs = Math.max(0, Math.min(Number(rawThrottleMs) ?? 1000, 5000));
+    const concurrency = Math.max(1, Math.min(Number(rawConcurrency) || 3, 15));
+
+    console.log(
+      `[BatchExtract] Starting (limit=${limit}, concurrency=${concurrency}, dryRun=${dryRun}, throttleMs=${throttleMs})...`,
+    );
 
     // Get developers for matching
     const { data: devs } = await supabase.from("developers").select("id, name, slug");
     const devList = devs || [];
     const devMap = buildDeveloperMap(devList);
 
-    // Fetch pending imports that still need extraction (have PENDING_SCRAPE note or no description/images)
+    // Fetch pending imports that still need extraction
     const { data: imports, error: fetchErr } = await supabase
       .from("pending_project_imports")
-      .select("id, name, slug, source_url, images, description, review_notes")
+      .select("id, name, slug, source_url, images, documents, description, review_notes")
       .eq("status", "pending")
-      .or("review_notes.ilike.%PENDING_SCRAPE%,images.eq.[]")
+      // NOTE: PostgREST OR syntax: comma-separated conditions.
+      .or(
+        [
+          "review_notes.ilike.%PENDING_SCRAPE%",
+          "review_notes.eq.INCOMPLETE",
+          "images.eq.[]",
+          "documents.eq.[]",
+          "description.is.null",
+        ].join(","),
+      )
       .order("created_at", { ascending: true })
       .limit(limit);
 
@@ -266,95 +285,120 @@ serve(async (req) => {
     const stats = { processed: 0, success: 0, errors: 0, images: 0, documents: 0 };
     const errors: Array<{ name: string; error: string }> = [];
 
-    for (const item of imports) {
-      stats.processed++;
+    const processOne = async (item: any) => {
       if (!item.source_url) {
-        stats.errors++;
-        errors.push({ name: item.name, error: "No source_url" });
-        continue;
+        throw new Error("No source_url");
       }
 
-      console.log(`[BatchExtract] Processing ${item.name}...`);
+      const scrapeRes = await fetchWithRetry("https://api.firecrawl.dev/v1/scrape", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${firecrawlKey}` },
+        body: JSON.stringify({
+          url: item.source_url,
+          formats: ["markdown", "links", "rawHtml"],
+          waitFor: 8000,
+          timeout: 60000,
+          onlyMainContent: false,
+        }),
+      });
 
-      try {
-        const scrapeRes = await fetchWithRetry("https://api.firecrawl.dev/v1/scrape", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${firecrawlKey}` },
-          body: JSON.stringify({ url: item.source_url, formats: ["markdown", "links", "rawHtml"], waitFor: 8000, timeout: 60000, onlyMainContent: false }),
-        });
+      if (!scrapeRes.ok) {
+        const errText = await scrapeRes.text();
+        console.error(`[BatchExtract] Scrape failed for ${item.name}: ${errText.substring(0, 120)}`);
+        throw new Error(`Scrape failed: ${scrapeRes.status}`);
+      }
 
-        if (!scrapeRes.ok) {
-          const errText = await scrapeRes.text();
-          console.error(`[BatchExtract] Scrape failed for ${item.name}: ${errText.substring(0, 100)}`);
-          stats.errors++;
-          errors.push({ name: item.name, error: `Scrape failed: ${scrapeRes.status}` });
-          continue;
-        }
+      const scrapeData = await scrapeRes.json();
+      const markdown = scrapeData.data?.markdown || "";
+      const links = scrapeData.data?.links || [];
+      const html = scrapeData.data?.rawHtml || "";
 
-        const scrapeData = await scrapeRes.json();
-        const markdown = scrapeData.data?.markdown || "";
-        const links = scrapeData.data?.links || [];
-        const html = scrapeData.data?.rawHtml || "";
+      const extracted = extractTextFromMarkdown(markdown);
+      const imageUrls = extractImagesFromHtml(html, links);
+      const { brochure, paymentPlan: ppUrl, floorPlans } = extractPdfsFromHtml(html, markdown);
+      const beds = parseBedrooms(extracted.bedrooms);
+      const dev = matchDeveloper(extracted.developerName, devMap);
 
-        const extracted = extractTextFromMarkdown(markdown);
-        const imageUrls = extractImagesFromHtml(html, links);
-        const { brochure, paymentPlan: ppUrl, floorPlans } = extractPdfsFromHtml(html, markdown);
-        const beds = parseBedrooms(extracted.bedrooms);
-        const dev = matchDeveloper(extracted.developerName, devMap);
+      const imagesPayload = imageUrls.map((url, i) => ({
+        url,
+        alt_text: `${item.name} - Image ${i + 1}`,
+        display_order: i,
+      }));
 
-        const imagesPayload = imageUrls.map((url, i) => ({ url, alt_text: `${item.name} - Image ${i + 1}`, display_order: i }));
-        const documentsPayload: Array<{ url: string; type: string; name?: string }> = [];
-        if (brochure) documentsPayload.push({ url: brochure, type: "brochure", name: `${item.name} Brochure.pdf` });
-        if (ppUrl) documentsPayload.push({ url: ppUrl, type: "payment_plan", name: `${item.name} Payment Plan.pdf` });
-        for (const fp of floorPlans) documentsPayload.push({ url: fp, type: "floor_plan", name: `${item.name} Floor Plan.pdf` });
+      const documentsPayload: Array<{ url: string; type: string; name?: string }> = [];
+      if (brochure) documentsPayload.push({ url: brochure, type: "brochure", name: `${item.name} Brochure.pdf` });
+      if (ppUrl) documentsPayload.push({ url: ppUrl, type: "payment_plan", name: `${item.name} Payment Plan.pdf` });
+      for (const fp of floorPlans) documentsPayload.push({ url: fp, type: "floor_plan", name: `${item.name} Floor Plan.pdf` });
 
-        const hasMinimal = Boolean(extracted.description && extracted.developerName && imagesPayload.length >= 1);
-        const hasDocs = documentsPayload.length > 0;
-        const stillIncomplete = !hasMinimal || !hasDocs;
+      const hasMinimal = Boolean(extracted.description && extracted.developerName && imagesPayload.length >= 1);
+      const hasDocs = documentsPayload.length > 0;
+      const stillIncomplete = !hasMinimal || !hasDocs;
 
-        if (dryRun) {
-          console.log(`[DryRun] Would update ${item.name}: ${imagesPayload.length} images, ${documentsPayload.length} docs, incomplete=${stillIncomplete}`);
+      if (dryRun) {
+        return { images: imagesPayload.length, documents: documentsPayload.length, stillIncomplete };
+      }
+
+      const { error: updateErr } = await supabase
+        .from("pending_project_imports")
+        .update({
+          developer_name: sanitizeText(extracted.developerName) || item.name?.split(" ")?.[0] || null,
+          developer_id: dev?.id || null,
+          description: extracted.description,
+          price_from: extracted.priceFrom || null,
+          bedrooms_min: beds?.min || null,
+          bedrooms_max: beds?.max || null,
+          handover_date: extracted.handover || null,
+          payment_plan: extracted.paymentPlan || null,
+          property_type_label: extracted.propertyType || null,
+          status_label: extracted.statusLabel || null,
+          images: imagesPayload,
+          documents: documentsPayload,
+          review_notes: stillIncomplete ? "INCOMPLETE" : null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", item.id);
+
+      if (updateErr) {
+        throw new Error(updateErr.message);
+      }
+
+      return { images: imagesPayload.length, documents: documentsPayload.length, stillIncomplete };
+    };
+
+    for (let i = 0; i < imports.length; i += concurrency) {
+      const chunk = imports.slice(i, i + concurrency);
+
+      const results = await Promise.allSettled(
+        chunk.map(async (item: any) => {
+          console.log(`[BatchExtract] Processing ${item.name}...`);
+          return await processOne(item);
+        }),
+      );
+
+      for (let j = 0; j < results.length; j++) {
+        const item = chunk[j];
+        stats.processed++;
+
+        const r = results[j];
+        if (r.status === "fulfilled") {
           stats.success++;
-          continue;
-        }
-
-        const { error: updateErr } = await supabase
-          .from("pending_project_imports")
-          .update({
-            developer_name: sanitizeText(extracted.developerName) || item.name.split(" ")[0] || null,
-            developer_id: dev?.id || null,
-            description: extracted.description,
-            price_from: extracted.priceFrom || null,
-            bedrooms_min: beds?.min || null,
-            bedrooms_max: beds?.max || null,
-            handover_date: extracted.handover || null,
-            payment_plan: extracted.paymentPlan || null,
-            property_type_label: extracted.propertyType || null,
-            status_label: extracted.statusLabel || null,
-            images: imagesPayload,
-            documents: documentsPayload,
-            review_notes: stillIncomplete ? "INCOMPLETE" : null,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", item.id);
-
-        if (updateErr) {
-          stats.errors++;
-          errors.push({ name: item.name, error: updateErr.message });
+          stats.images += r.value.images;
+          stats.documents += r.value.documents;
+          if (!dryRun) {
+            console.log(
+              `[BatchExtract] ✓ Updated ${item.name} (${r.value.images} imgs, ${r.value.documents} docs, incomplete=${r.value.stillIncomplete})`,
+            );
+          }
         } else {
-          stats.success++;
-          stats.images += imagesPayload.length;
-          stats.documents += documentsPayload.length;
-          console.log(`[BatchExtract] ✓ Updated ${item.name} (${imagesPayload.length} imgs, ${documentsPayload.length} docs)`);
+          stats.errors++;
+          const msg = r.reason instanceof Error ? r.reason.message : String(r.reason);
+          errors.push({ name: item?.name || "(unknown)", error: msg });
         }
+      }
 
-        // Optional throttle (set throttleMs=0 for turbo runs)
-        if (throttleMs > 0) {
-          await sleep(throttleMs, 0.2);
-        }
-      } catch (err) {
-        stats.errors++;
-        errors.push({ name: item.name, error: err instanceof Error ? err.message : String(err) });
+      // Optional throttle between chunks (set throttleMs=0 for turbo runs)
+      if (throttleMs > 0 && i + concurrency < imports.length) {
+        await sleep(throttleMs, 0.2);
       }
     }
 

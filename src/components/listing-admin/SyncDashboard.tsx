@@ -107,6 +107,27 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   const [activeTab, setActiveTab] = useState("sync");
   // Turbo removes UI delays and backend per-project throttling.
   const [turboMode, setTurboMode] = useState(true);
+
+  // Bulk extract runner (processes pending queue placeholders / incomplete entries)
+  const [isBulkExtractRunning, setIsBulkExtractRunning] = useState(false);
+  const bulkStopRef = useRef(false);
+  const [bulkLastRun, setBulkLastRun] = useState<{
+    processed: number;
+    success: number;
+    errors: number;
+    images: number;
+    documents: number;
+    duration_ms: number;
+  } | null>(null);
+  const [bulkTotals, setBulkTotals] = useState({ processed: 0, success: 0, errors: 0 });
+
+  const [isRebuildingQueue, setIsRebuildingQueue] = useState(false);
+  const [rebuildResult, setRebuildResult] = useState<{
+    discovered_urls?: number;
+    queued_for_scraping?: number;
+    new_urls?: number;
+    existing_urls?: number;
+  } | null>(null);
   
   const isPausedRef = useRef(false);
   const isSyncingRef = useRef(false);
@@ -317,6 +338,10 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       while (remaining > 0 && guard < 999) {
         guard++;
 
+        // CRITICAL: freshStart must ONLY be true once at the beginning of a full run.
+        // Sending freshStart=true for every batch causes repeated re-processing / queue churn.
+        const isFirstBatchOfFullRun = page === 1 && startIndex === 0 && guard === 1;
+
         const { data, error } = await supabase.functions.invoke("sync-provident-page", {
           body: {
             page,
@@ -324,7 +349,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
             batchSize,
             throttleMs: turboMode ? 0 : 800,
             jobId: jobIdToUse,
-            freshStart: true,
+            freshStart: isFirstBatchOfFullRun,
             ...(options || {}),
           }
         });
@@ -428,6 +453,109 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
 
     // 2. Start a new sync from page 1
     await startFullSync();
+  };
+
+  const rebuildQueueFromMap = async () => {
+    if (isSyncing || isRebuildingQueue || isBulkExtractRunning) return;
+
+    const confirmed = window.confirm(
+      "This will:\n" +
+        "1) Delete ALL pending/rejected queue entries (keeps approved projects)\n" +
+        "2) Rebuild the queue by discovering ALL project URLs\n\n" +
+        "Continue?"
+    );
+    if (!confirmed) return;
+
+    setIsRebuildingQueue(true);
+    setRebuildResult(null);
+
+    try {
+      // 1) Hard reset (fast, single backend call)
+      const { data: resetData, error: resetErr } = await supabase.functions.invoke("reset-project-import-queue", {
+        body: { preserveApproved: true },
+      });
+      if (resetErr) throw resetErr;
+      toast.success(`Queue cleared (${resetData?.deleted ?? 0} removed)`);
+
+      // 2) Discover + queue placeholders (MAP)
+      const { data, error } = await supabase.functions.invoke("discover-all-projects", {
+        body: { freshStart: true },
+      });
+      if (error) throw error;
+      setRebuildResult(data || null);
+      toast.success(`Queue rebuilt (${data?.queued_for_scraping ?? data?.new_urls ?? 0} queued)`);
+    } catch (e: any) {
+      console.error("Rebuild queue failed:", e);
+      toast.error(e?.message || "Failed to rebuild queue");
+    } finally {
+      setIsRebuildingQueue(false);
+      await loadProjectCount();
+    }
+  };
+
+  const startBulkExtractRunner = async () => {
+    if (isBulkExtractRunning || isRebuildingQueue) return;
+    bulkStopRef.current = false;
+    setIsBulkExtractRunning(true);
+    setBulkLastRun(null);
+    setBulkTotals({ processed: 0, success: 0, errors: 0 });
+
+    toast.info("Bulk extraction started — this will keep running until the queue is complete.");
+
+    try {
+      // Keep looping until no more work or user stops
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        if (bulkStopRef.current) break;
+
+        const limit = turboMode ? 150 : 50;
+        const throttleMs = turboMode ? 0 : 600;
+        const concurrency = turboMode ? 10 : 3;
+
+        const { data, error } = await supabase.functions.invoke("batch-extract-pending", {
+          body: { limit, throttleMs, concurrency },
+        });
+        if (error) throw error;
+
+        const processed = Number(data?.stats?.processed ?? 0);
+        const success = Number(data?.stats?.success ?? 0);
+        const errors = Number(data?.stats?.errors ?? 0);
+        const images = Number(data?.stats?.images ?? 0);
+        const documents = Number(data?.stats?.documents ?? 0);
+        const duration_ms = Number(data?.duration_ms ?? 0);
+
+        setBulkLastRun({ processed, success, errors, images, documents, duration_ms });
+        setBulkTotals((prev) => ({
+          processed: prev.processed + processed,
+          success: prev.success + success,
+          errors: prev.errors + errors,
+        }));
+
+        await loadProjectCount();
+
+        // Done when this cycle finds nothing left to process
+        if (processed <= 0) {
+          toast.success("Bulk extraction complete: nothing left in the queue.");
+          break;
+        }
+
+        // Small breather between cycles (keeps UI responsive)
+        if (!turboMode) {
+          await new Promise((r) => setTimeout(r, 800));
+        }
+      }
+    } catch (e: any) {
+      console.error("Bulk extraction runner failed:", e);
+      toast.error(e?.message || "Bulk extraction failed");
+    } finally {
+      setIsBulkExtractRunning(false);
+      bulkStopRef.current = false;
+    }
+  };
+
+  const stopBulkExtractRunner = () => {
+    bulkStopRef.current = true;
+    toast.info("Stopping after current batch finishes...");
   };
 
   const continueSyncFromPage = async (jobId: string, startPage: number, pagesTotal: number) => {
@@ -858,6 +986,15 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                    Clear Queue & Start Fresh
                  </Button>
 
+                  <Button
+                    onClick={rebuildQueueFromMap}
+                    disabled={isSyncing || isRebuildingQueue || isBulkExtractRunning}
+                    variant="outline"
+                  >
+                    <Database className={`w-4 h-4 mr-2 ${isRebuildingQueue ? "animate-pulse" : ""}`} />
+                    Rebuild Queue (All Listings)
+                  </Button>
+
                  {failedCount > 0 && !isSyncing && (
                    <Button
                      onClick={retryFailed}
@@ -875,6 +1012,69 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                    </Button>
                  )}
                </div>
+
+                {/* Queue rebuild + Bulk extraction runner */}
+                <div className="rounded-md border border-border bg-muted/20 p-4 space-y-3">
+                  <div className="flex items-center justify-between gap-3 flex-wrap">
+                    <div>
+                      <div className="text-sm font-medium text-foreground">Bulk Extract Runner</div>
+                      <div className="text-xs text-muted-foreground">
+                        Extracts missing details for the entire pending queue (placeholders + incomplete entries).
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {!isBulkExtractRunning ? (
+                        <Button
+                          onClick={startBulkExtractRunner}
+                          disabled={isSyncing || isRebuildingQueue}
+                          className="bg-gold hover:bg-gold/90 text-black"
+                        >
+                          <Play className="w-4 h-4 mr-2" />
+                          Start Bulk Extract{turboMode ? " (Turbo)" : ""}
+                        </Button>
+                      ) : (
+                        <Button onClick={stopBulkExtractRunner} variant="outline">
+                          <Pause className="w-4 h-4 mr-2" />
+                          Stop Bulk Extract
+                        </Button>
+                      )}
+                      <Button
+                        variant="outline"
+                        onClick={() => setActiveTab("approvals")}
+                        disabled={isSyncing}
+                      >
+                        View Queue
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                    <div className="rounded-md bg-background border border-border p-3">
+                      <div className="text-xs text-muted-foreground">Totals (this run)</div>
+                      <div className="font-medium text-foreground">
+                        {bulkTotals.processed} processed · {bulkTotals.success} ok · {bulkTotals.errors} errors
+                      </div>
+                    </div>
+                    <div className="rounded-md bg-background border border-border p-3">
+                      <div className="text-xs text-muted-foreground">Last batch</div>
+                      <div className="font-medium text-foreground">
+                        {bulkLastRun
+                          ? `${bulkLastRun.processed} processed · ${bulkLastRun.success} ok · ${bulkLastRun.errors} errors`
+                          : "—"}
+                      </div>
+                    </div>
+                    <div className="rounded-md bg-background border border-border p-3">
+                      <div className="text-xs text-muted-foreground">Queued listings</div>
+                      <div className="font-medium text-foreground">{pendingQueueCount ?? "…"} pending</div>
+                    </div>
+                  </div>
+
+                  {rebuildResult && (
+                    <div className="text-xs text-muted-foreground">
+                      Rebuild result: {rebuildResult.queued_for_scraping ?? rebuildResult.new_urls ?? 0} queued (discovered {rebuildResult.discovered_urls ?? "?"}).
+                    </div>
+                  )}
+                </div>
 
           {/* Progress */}
           {(isSyncing || currentPage > 0 || isPaused) && (
