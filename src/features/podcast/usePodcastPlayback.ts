@@ -105,6 +105,7 @@ async function fetchTtsSegmentAudio(params: {
   const contentType = res.headers.get("content-type") || "";
   if (contentType.includes("application/json")) {
     const data = await res.json().catch(() => ({} as any));
+    // 409 = cache miss - this is expected and handled by the caller
     throw new TtsHttpError(res.status || 500, (data as any)?.error || "Failed to generate audio");
   }
 
@@ -460,6 +461,16 @@ export function usePodcastPlayback(params: {
       return preparedAudio;
     } catch (e) {
       if ((e as any)?.name === "AbortError") return null;
+      
+      // Don't show 409 "not cached" as an error - it's handled internally
+      const status = (e as any)?.status;
+      if (status === 409) {
+        // This shouldn't normally reach here since we handle 409 in the try/catch above
+        // but if it does, don't show it as an error
+        console.log("Cache miss occurred, audio should be generating...");
+        return null;
+      }
+      
       const msg = e instanceof Error ? e.message : "Failed to prepare audio";
       setError(msg);
       setStatus("error");
