@@ -7,6 +7,7 @@ import {
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
+import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import { Card, CardContent } from "@/components/ui/card";
 import servicesHeroVideo from "@/assets/videos/services-hero.mp4";
 
@@ -161,7 +162,7 @@ const Services = () => {
           </motion.div>
 
           <motion.h1 
-            className="text-white text-2xl md:text-3xl lg:text-4xl font-bold mb-4"
+            className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
             style={{ fontFamily: "Poppins, sans-serif" }}
             variants={fadeInUp}
           >
@@ -183,21 +184,16 @@ const Services = () => {
           </motion.p>
 
           <motion.p 
-            className="text-zinc-300 text-sm md:text-base max-w-lg mx-auto mb-8"
+            className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto mb-10"
             variants={fadeInUp}
           >
             Licensed brokerage support across buying, selling, leasing, and investment.
           </motion.p>
 
           <motion.div variants={fadeInUp} className="flex justify-center">
-            <a 
-              href="#services-grid"
-              className="group inline-flex items-center justify-center gap-1.5 px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 text-[11px] sm:text-xs md:text-sm font-semibold tracking-wide rounded-lg transition-all duration-300 bg-transparent border border-white/60 hover:border-gold/80"
-              style={{ boxShadow: '0 2px 10px rgba(0,0,0,0.3)' }}
-            >
-              <span className="text-white group-hover:text-gold transition-colors">Explore Services</span>
-              <ArrowRight className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-all" />
-            </a>
+            <PremiumHeroButton href="#services-grid" icon={ArrowRight}>
+              Explore Services
+            </PremiumHeroButton>
           </motion.div>
         </motion.div>
       </section>

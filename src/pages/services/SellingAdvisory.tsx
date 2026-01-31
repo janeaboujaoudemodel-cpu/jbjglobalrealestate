@@ -29,6 +29,7 @@ import {
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
+import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Accordion,
@@ -246,40 +247,22 @@ const SellingAdvisory = () => {
               </span>
             </div>
             
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-[-0.02em]">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-[-0.02em]">
               Selling Advisory Services
             </h1>
             
-            <p className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-10">
+            <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
               Professional representation to maximize property value. Expert guidance from pricing strategy to transaction completion.
             </p>
             
-            {/* Hero CTA Buttons */}
+            {/* Hero CTA Buttons - Using PremiumHeroButton for consistency */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/contact?service=selling-advisory">
-                <button 
-                  className="group relative inline-flex items-center justify-center gap-1.5 px-6 py-3 text-sm font-semibold tracking-wide rounded-lg transition-all duration-300 bg-transparent border border-white/60 hover:border-gold/80"
-                  style={{ boxShadow: '0 2px 10px rgba(0,0,0,0.3)' }}
-                >
-                  <span className="text-white group-hover:text-gold transition-colors">Request Consultation</span>
-                  <ArrowUpRight 
-                    className="w-4 h-4 text-gold group-hover:scale-110 transition-all" 
-                    style={{ filter: 'drop-shadow(0 0 4px rgba(200,167,102,0.6))' }} 
-                  />
-                </button>
-              </Link>
-              <Link to="/seller-guide">
-                <button 
-                  className="group relative inline-flex items-center justify-center gap-1.5 px-6 py-3 text-sm font-semibold tracking-wide rounded-lg transition-all duration-300 bg-transparent border border-white/60 hover:border-gold/80"
-                  style={{ boxShadow: '0 2px 10px rgba(0,0,0,0.3)' }}
-                >
-                  <span className="text-white group-hover:text-gold transition-colors">View Seller Guide</span>
-                  <ArrowUpRight 
-                    className="w-4 h-4 text-gold group-hover:scale-110 transition-all" 
-                    style={{ filter: 'drop-shadow(0 0 4px rgba(200,167,102,0.6))' }} 
-                  />
-                </button>
-              </Link>
+              <PremiumHeroButton href="/contact?service=selling-advisory">
+                Request Consultation
+              </PremiumHeroButton>
+              <PremiumHeroButton href="/seller-guide">
+                View Seller Guide
+              </PremiumHeroButton>
             </div>
           </motion.div>
         </div>
