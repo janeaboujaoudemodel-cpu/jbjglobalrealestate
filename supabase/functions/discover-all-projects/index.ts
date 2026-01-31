@@ -89,30 +89,35 @@ serve(async (req) => {
       });
     }
 
-    // If freshStart, clear pending queue first (keep approved ones)
+    // If freshStart, clear ALL non-approved queue rows.
+    // (Clearing only 'pending' causes duplicates because previously rejected rows remain.)
     if (freshStart) {
-      console.log("[Discover] Fresh start - clearing ALL pending queue...");
-      const { error: deleteErr } = await supabase
+      console.log("[Discover] Fresh start - clearing ALL non-approved queue rows...");
+      const { error: deleteErr, count } = await supabase
         .from("pending_project_imports")
-        .delete()
-        .eq("status", "pending");
-      
-      if (deleteErr) console.error("[Discover] Delete error:", deleteErr);
+        .delete({ count: "exact" })
+        .neq("status", "approved");
+
+      if (deleteErr) {
+        console.error("[Discover] Delete error:", deleteErr);
+      } else {
+        console.log(`[Discover] Cleared ${count ?? 0} non-approved rows`);
+      }
     }
 
-    // Get existing slugs from approved projects only (so we don't skip them)
-    const { data: existingApproved } = await supabase
+    // Get existing slugs from the queue + approved projects.
+    // This prevents duplicates across repeated discovery runs.
+    const { data: existingQueue } = await supabase
       .from("pending_project_imports")
-      .select("slug")
-      .eq("status", "approved");
+      .select("slug");
     
     const { data: existingProjects } = await supabase
       .from("projects")
       .select("slug");
 
     const existingSlugs = new Set([
-      ...(existingApproved || []).map(i => i.slug),
-      ...(existingProjects || []).map(p => p.slug),
+      ...(existingQueue || []).map((i: any) => i.slug).filter(Boolean),
+      ...(existingProjects || []).map((p: any) => p.slug).filter(Boolean),
     ]);
 
     // Prepare new imports
