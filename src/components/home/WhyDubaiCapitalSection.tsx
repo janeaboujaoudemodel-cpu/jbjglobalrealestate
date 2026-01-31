@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ArrowRight, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { T } from "@/components/ui/T";
 
 import burjAlArabVideo from "@/assets/videos/why-dubai-burj-al-arab.mp4";
 import dubaiFrameVideo from "@/assets/videos/why-dubai-dubai-frame.mp4";
@@ -34,8 +35,8 @@ export default function WhyDubaiCapitalSection() {
   }, []);
 
   return (
-    <section className="relative min-h-[80vh] bg-black overflow-hidden">
-      {/* Full-frame video background */}
+    <section className="relative h-[70vh] bg-black overflow-hidden">
+      {/* Full-frame video background - edge to edge */}
       <AnimatePresence mode="wait">
         <motion.div
           key={currentScene}
@@ -55,56 +56,57 @@ export default function WhyDubaiCapitalSection() {
           >
             <source src={scenes[currentScene].src} type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
+          {/* Subtle gradient overlay - less intrusive */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
         </motion.div>
       </AnimatePresence>
 
-      {/* Content overlay */}
-      <div className="relative z-10 h-full min-h-[80vh] flex items-center">
-        <div className="px-6 md:px-12 lg:px-20 max-w-3xl">
+      {/* Content overlay - compact and premium */}
+      <div className="relative z-10 h-full flex items-center">
+        <div className="px-6 md:px-12 lg:px-16 max-w-2xl">
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.6 }}
           >
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gold/40 bg-black/50 backdrop-blur-sm text-xs uppercase tracking-[0.2em] font-semibold text-gold">
-              <Globe className="w-4 h-4" />
-              Global Investment Hub
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-gold/40 bg-black/40 backdrop-blur-sm text-[10px] uppercase tracking-[0.2em] font-semibold text-gold">
+              <Globe className="w-3 h-3" />
+              <T>Global Investment Hub</T>
             </span>
 
             <h2
-              className="mt-5 text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground leading-tight"
+              className="mt-4 text-2xl md:text-3xl lg:text-4xl font-bold text-primary-foreground leading-tight"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              Why Dubai Became the Capital of{" "}
-              <span className="text-gold">Global Investors</span>
+              <T>Why Dubai Became the Capital of</T>{" "}
+              <span className="text-gold"><T>Global Investors</T></span>
             </h2>
 
-            <p className="mt-4 text-base md:text-lg text-white/80 max-w-xl">
-              Strategic location, world-class infrastructure, and long-term government execution make Dubai the most investable city in the region.
+            <p className="mt-3 text-sm md:text-base text-white/75 max-w-md leading-relaxed">
+              <T>Strategic location, world-class infrastructure, and long-term government execution make Dubai the most investable city in the region.</T>
             </p>
 
-            {/* Stats grid */}
-            <div className="mt-6 grid grid-cols-4 gap-2 md:gap-3 max-w-lg">
+            {/* Stats grid - compact edge-to-edge design */}
+            <div className="mt-5 grid grid-cols-4 gap-1.5 max-w-sm">
               {stats.map((s) => (
                 <div
                   key={s.label}
-                  className="rounded-lg border border-gold/25 bg-black/50 backdrop-blur-sm px-2 py-3 text-center"
+                  className="rounded-md border border-gold/20 bg-black/40 backdrop-blur-sm px-2 py-2 text-center"
                 >
-                  <div className="text-xl md:text-2xl font-bold text-gold leading-none">{s.value}</div>
-                  <div className="mt-1 text-[9px] md:text-[10px] uppercase tracking-wider text-white/60">
-                    {s.label}
+                  <div className="text-lg md:text-xl font-bold text-gold leading-none">{s.value}</div>
+                  <div className="mt-0.5 text-[8px] uppercase tracking-wider text-white/50">
+                    <T>{s.label}</T>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-6">
-              <Button asChild variant="primary" size="lg">
+            <div className="mt-5">
+              <Button asChild variant="primary" size="default">
                 <Link to="/guides/investment">
-                  Explore Investment Opportunities
-                  <ArrowRight className="w-5 h-5" />
+                  <T>Explore Investment Opportunities</T>
+                  <ArrowRight className="w-4 h-4" />
                 </Link>
               </Button>
             </div>
@@ -112,19 +114,7 @@ export default function WhyDubaiCapitalSection() {
         </div>
       </div>
 
-      {/* Simple circle indicators only */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2">
-        {scenes.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => setCurrentScene(idx)}
-            className={`w-2 h-2 rounded-full transition-all ${
-              idx === currentScene ? "bg-gold" : "bg-white/40 hover:bg-white/60"
-            }`}
-            aria-label={`Scene ${idx + 1}`}
-          />
-        ))}
-      </div>
+      {/* NO DOTS - removed as per user request */}
     </section>
   );
 }
