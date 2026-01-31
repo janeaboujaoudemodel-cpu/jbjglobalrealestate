@@ -793,67 +793,64 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                 </Button>
               </div>
               
-              {/* Action buttons */}
-              <div className="flex flex-wrap gap-2">
-                {!isSyncing && !isPaused ? (
-                  <>
-                    <Button
-                      onClick={startFullSync}
-                      disabled={!isTestApproved && !currentJobId}
-                      className="bg-gold hover:bg-gold/90 text-black disabled:opacity-50"
-                    >
-                      <Play className="w-4 h-4 mr-2" />
-                      Start Full Sync (~{listingsEstimate.toLocaleString()} Listings)
-                    </Button>
-                    
-                    <Button
-                      onClick={clearPendingAndStartFresh}
-                      disabled={isClearingPending}
-                      variant="outline"
-                      className="border-red-300 text-red-700 hover:bg-red-50"
-                    >
-                      <RefreshCw className={`w-4 h-4 mr-2 ${isClearingPending ? 'animate-spin' : ''}`} />
-                      Clear Queue & Start Fresh
-                    </Button>
-                
-                {failedCount > 0 && (
-                  <Button
-                    onClick={retryFailed}
-                    variant="outline"
-                    className="border-red-300 text-red-700 hover:bg-red-50"
-                  >
-                    <RefreshCw className="w-4 h-4 mr-2" />
-                    Retry {failedCount} Failed Pages
-                  </Button>
-                )}
-                
-                <Button
-                  onClick={runTestPageOne}
-                  variant="outline"
-                  className="border-zinc-300 text-zinc-700 hover:bg-zinc-50"
-                >
-                  Test Page 1 Only
-                </Button>
-              </>
-            ) : isPaused ? (
-              <Button
-                onClick={resumeSync}
-                className="bg-gold hover:bg-gold/90 text-black"
-              >
-                <Play className="w-4 h-4 mr-2" />
-                Resume Sync from Page {currentPage + 1}
-              </Button>
-            ) : (
-              <Button
-                onClick={pauseSync}
-                variant="outline"
-                className="border-amber-300 text-amber-700 hover:bg-amber-50"
-              >
-                <Pause className="w-4 h-4 mr-2" />
-                Pause Sync
-              </Button>
-            )}
-          </div>
+               {/* Action buttons */}
+               <div className="flex flex-wrap gap-2">
+                 {!isPaused ? (
+                   isSyncing ? (
+                     <Button
+                       onClick={pauseSync}
+                       variant="outline"
+                       className="border-amber-300 text-amber-700 hover:bg-amber-50"
+                     >
+                       <Pause className="w-4 h-4 mr-2" />
+                       Pause Sync
+                     </Button>
+                   ) : (
+                     <Button
+                       onClick={startFullSync}
+                       disabled={!isTestApproved && !currentJobId}
+                       className="bg-gold hover:bg-gold/90 text-black disabled:opacity-50"
+                     >
+                       <Play className="w-4 h-4 mr-2" />
+                       Start Full Sync (~{listingsEstimate.toLocaleString()} Listings)
+                     </Button>
+                   )
+                 ) : (
+                   <Button onClick={resumeSync} className="bg-gold hover:bg-gold/90 text-black">
+                     <Play className="w-4 h-4 mr-2" />
+                     Resume Sync from Page {currentPage + 1}
+                   </Button>
+                 )}
+
+                 {/* Keep Fresh Restart button always visible so it can't “disappear”. */}
+                 <Button
+                   onClick={clearPendingAndStartFresh}
+                   disabled={isClearingPending || isSyncing}
+                   variant="outline"
+                   className="border-red-300 text-red-700 hover:bg-red-50 disabled:opacity-60"
+                   title={isSyncing ? "Pause sync first, then you can start fresh." : undefined}
+                 >
+                   <RefreshCw className={`w-4 h-4 mr-2 ${isClearingPending ? 'animate-spin' : ''}`} />
+                   Clear Queue & Start Fresh
+                 </Button>
+
+                 {failedCount > 0 && !isSyncing && (
+                   <Button
+                     onClick={retryFailed}
+                     variant="outline"
+                     className="border-red-300 text-red-700 hover:bg-red-50"
+                   >
+                     <RefreshCw className="w-4 h-4 mr-2" />
+                     Retry {failedCount} Failed Pages
+                   </Button>
+                 )}
+
+                 {!isSyncing && !isPaused && (
+                   <Button onClick={runTestPageOne} variant="outline" className="border-zinc-300 text-zinc-700 hover:bg-zinc-50">
+                     Test Page 1 Only
+                   </Button>
+                 )}
+               </div>
 
           {/* Progress */}
           {(isSyncing || currentPage > 0 || isPaused) && (
