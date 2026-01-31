@@ -41,7 +41,8 @@ serve(async (req) => {
       body: JSON.stringify({
         url: "https://providentestate.com/new-projects/",
         search: "new-projects",
-        limit: 2000,
+        // Firecrawl MAP can return up to ~5000 URLs. Using 2000 was truncating the inventory.
+        limit: 5000,
         ignoreSitemap: false,
         includeSubdomains: false,
       }),
