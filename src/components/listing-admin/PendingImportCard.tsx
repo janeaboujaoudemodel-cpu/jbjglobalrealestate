@@ -52,7 +52,11 @@ const truncate = (text: string, max = 120) => {
 };
 
 export function PendingImportCard({ item, formatPrice, onReview, onRepaired }: PendingImportCardProps) {
-  const images = useMemo(() => (item.images || []).filter((i) => !!i?.url), [item.images]);
+  // Filter out brochure/document images from gallery
+  const images = useMemo(() => {
+    const excludePattern = /(brochure|payment[-_]?plan|floor[-_]?plan|master[-_]?plan|pdf|document|General_Brochure)/i;
+    return (item.images || []).filter((i) => !!i?.url && !excludePattern.test(i.url));
+  }, [item.images]);
   const documents = useMemo(() => (item.documents || []).filter((d) => !!d?.url), [item.documents]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isRepairing, setIsRepairing] = useState(false);
