@@ -248,7 +248,7 @@ export function usePodcastPlayback(params: {
       //    is NOT allowed from the client to protect credits.
       let preparedAudio: PreparedAudio;
 
-      const fetchSegmentsForLanguage = async (lang: string) => {
+      const fetchSegmentsForLanguage = async (lang: string, allowGeneration: boolean) => {
         let completed = 0;
         const results = await Promise.all(
           params.segments.map(async (seg, i) => {
@@ -258,7 +258,8 @@ export function usePodcastPlayback(params: {
               episodeId: params.episodeId,
               segmentIndex: i,
               audioLanguage: lang,
-              requireCache: true,
+              // Only allow generation when explicitly permitted (first-time generation)
+              requireCache: !allowGeneration,
               signal: abort.signal,
             });
 
@@ -279,14 +280,22 @@ export function usePodcastPlayback(params: {
 
       let results: Awaited<ReturnType<typeof fetchSegmentsForLanguage>>;
       try {
-        results = await fetchSegmentsForLanguage(audioLang);
+        // First, try cache-only to avoid using credits
+        results = await fetchSegmentsForLanguage(audioLang, false);
       } catch (err) {
-        // If the requested language audio isn't cached, fall back to English.
-        if (audioLang !== "en") {
-          console.info(`Audio not cached for ${audioLang}, falling back to English`);
-          results = await fetchSegmentsForLanguage("en");
+        // If cache miss and this is English, allow generation (one-time credit use)
+        if (audioLang === "en") {
+          console.info("English audio not cached, generating...");
+          results = await fetchSegmentsForLanguage("en", true);
         } else {
-          throw err;
+          // For non-English, try English cache first, then generate English if needed
+          console.info(`Audio not cached for ${audioLang}, falling back to English`);
+          try {
+            results = await fetchSegmentsForLanguage("en", false);
+          } catch {
+            console.info("English audio not cached either, generating...");
+            results = await fetchSegmentsForLanguage("en", true);
+          }
         }
       }
 
