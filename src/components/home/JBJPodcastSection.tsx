@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
+import { PodcastSlider } from "@/components/ui/podcast-slider";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { T } from "@/components/ui/T";
@@ -279,7 +279,7 @@ const JBJPodcastSection = () => {
         >
           <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gold/20 to-gold/10 border border-gold/40 rounded-full text-xs uppercase tracking-[0.2em] font-semibold text-gold mb-4">
             <Radio className="w-4 h-4" />
-            <T>Exclusive Content</T>
+            <T>JBJ Podcast</T>
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
             <T>The JBJ</T> <span className="text-gold"><T>Perspective</T></span>
@@ -307,7 +307,7 @@ const JBJPodcastSection = () => {
                   <SafeImage
                     src={selectedEpisode.thumbnail}
                     alt={selectedEpisode.title}
-                    className="w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-cover"
                     fallbackSrc="/placeholder.svg"
                   />
                   
@@ -358,7 +358,7 @@ const JBJPodcastSection = () => {
               <div className="mt-4 jj-card-inner rounded-xl border border-gold/30 p-4">
                 {/* Progress Bar - 0 on LEFT, duration on RIGHT */}
                 <div className="mb-4">
-                  <Slider
+                  <PodcastSlider
                     value={[progress]}
                     max={100}
                     step={0.1}
@@ -445,7 +445,7 @@ const JBJPodcastSection = () => {
                         <Volume2 className="w-4 h-4 text-black/60" />
                       )}
                     </button>
-                    <Slider
+                    <PodcastSlider
                       value={volume}
                       max={100}
                       step={1}
