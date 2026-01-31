@@ -1,11 +1,20 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { PodcastSegment } from "@/content/podcast/types";
 
+type BillingInfo = {
+  /** Total characters billed by the TTS provider during this prepare cycle. */
+  billedCharacters: number;
+  /** How many segment responses were served from cache (0 credits). */
+  cachedSegments: number;
+  totalSegments: number;
+};
+
 type PreparedAudio = {
   segments: PodcastSegment[]; // source script (English)
   segmentStartTimes: number[]; // seconds
   duration: number; // seconds
   buffers: AudioBuffer[];
+  billing: BillingInfo;
 };
 
 type Status = "idle" | "loading" | "ready" | "playing" | "paused" | "error";
@@ -128,7 +137,9 @@ export function usePodcastPlayback(params: {
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [caption, setCaption] = useState<string>("");
+  const [captionSpeaker, setCaptionSpeaker] = useState<PodcastSegment["speaker"] | null>(null);
   const [segmentIndex, setSegmentIndex] = useState(0);
+  const [billing, setBilling] = useState<BillingInfo | null>(null);
 
   // Playback clock mapping
   const playbackRef = useRef<{
@@ -210,22 +221,42 @@ export function usePodcastPlayback(params: {
       if (cachedAudio) {
         preparedAudio = cachedAudio;
       } else {
-        const buffers: AudioBuffer[] = [];
-        for (let i = 0; i < params.segments.length; i++) {
-          setLoadingStep({ current: i + 1, total: params.segments.length });
-          const { buffer: ab } = await fetchTtsSegmentAudio({
-            speaker: params.segments[i].speaker,
-            text: params.segments[i].text,
-            episodeId: params.episodeId,
-            segmentIndex: i,
-            // Keep audio generation language stable to avoid consuming credits when users only switch UI language.
-            audioLanguage: "en",
-            signal: abort.signal,
-          });
-          // decodeAudioData may detach the buffer; pass a copy.
-          const decoded = await ctx.decodeAudioData(ab.slice(0));
-          buffers.push(decoded);
-        }
+        // IMPORTANT: load/decode in parallel so Play starts quickly.
+        let completed = 0;
+        const results = await Promise.all(
+          params.segments.map(async (seg, i) => {
+            const res = await fetchTtsSegmentAudio({
+              speaker: seg.speaker,
+              text: seg.text,
+              episodeId: params.episodeId,
+              segmentIndex: i,
+              // Keep audio generation language stable to avoid consuming credits when users only switch UI language.
+              audioLanguage: "en",
+              signal: abort.signal,
+            });
+
+            // decodeAudioData may detach the buffer; pass a copy.
+            const decoded = await ctx.decodeAudioData(res.buffer.slice(0));
+
+            completed += 1;
+            setLoadingStep({ current: completed, total: params.segments.length });
+
+            return {
+              index: i,
+              decoded,
+              wasCached: res.wasCached,
+              charactersBilled: res.charactersBilled,
+            };
+          }),
+        );
+
+        const ordered = results
+          .slice()
+          .sort((a, b) => a.index - b.index);
+
+        const buffers: AudioBuffer[] = ordered.map((r) => r.decoded);
+        const billedCharacters = ordered.reduce((sum, r) => sum + (r.charactersBilled || 0), 0);
+        const cachedSegments = ordered.filter((r) => r.wasCached).length;
 
         const segmentStartTimes: number[] = [];
         let t = 0;
@@ -239,26 +270,60 @@ export function usePodcastPlayback(params: {
           segmentStartTimes,
           duration: t,
           buffers,
+          billing: {
+            billedCharacters,
+            cachedSegments,
+            totalSegments: params.segments.length,
+          },
         };
 
         audioCache.set(audioKey, preparedAudio);
       }
 
-      // 2) Prepare captions (translated to the UI-selected language)
-      const captionsKey = buildCaptionsCacheKey(params.episodeId, params.language, params.segments);
-      const cachedCaptions = captionsCache.get(captionsKey);
-      const captionSegments = cachedCaptions
-        ? cachedCaptions
-        : await translateSegments(params.segments, params.language, abort.signal);
-      captionsCache.set(captionsKey, captionSegments);
+      // Ensure billing exists even for cache hits.
+      if (!preparedAudio.billing) {
+        preparedAudio = {
+          ...preparedAudio,
+          billing: {
+            billedCharacters: 0,
+            cachedSegments: preparedAudio.buffers.length,
+            totalSegments: preparedAudio.buffers.length,
+          },
+        };
+        audioCache.set(audioKey, preparedAudio);
+      }
 
-      captionsRef.current = captionSegments;
+      // 2) Captions: don't block audio playback. Start with English immediately.
+      captionsRef.current = params.segments;
       preparedRef.current = preparedAudio;
 
       setDuration(preparedAudio.duration);
-      setCaption(captionSegments[0]?.text || "");
+      setCaption(params.segments[0]?.text || "");
+      setCaptionSpeaker(params.segments[0]?.speaker ?? null);
+      setBilling(preparedAudio.billing);
       setSegmentIndex(0);
       setStatus("ready");
+
+      // Translate captions in background (UI-only, no credit impact).
+      if (params.language && params.language !== "en") {
+        const captionsKey = buildCaptionsCacheKey(params.episodeId, params.language, params.segments);
+        const cachedCaptions = captionsCache.get(captionsKey);
+
+        if (cachedCaptions) {
+          captionsRef.current = cachedCaptions;
+          setCaption(cachedCaptions[0]?.text || "");
+        } else {
+          translateSegments(params.segments, params.language, abort.signal)
+            .then((translated) => {
+              captionsCache.set(captionsKey, translated);
+              captionsRef.current = translated;
+              setCaption(translated[0]?.text || "");
+            })
+            .catch(() => {
+              // keep English
+            });
+        }
+      }
       return preparedAudio;
     } catch (e) {
       if ((e as any)?.name === "AbortError") return null;
@@ -295,6 +360,7 @@ export function usePodcastPlayback(params: {
       setSegmentIndex(idx);
       const captionSegments = captionsRef.current ?? prepared.segments;
       setCaption(captionSegments[idx]?.text || "");
+      setCaptionSpeaker(prepared.segments[idx]?.speaker ?? null);
     }
 
     rafRef.current = requestAnimationFrame(computeCurrentTime);
@@ -422,7 +488,9 @@ export function usePodcastPlayback(params: {
     setCurrentTime(0);
     setDuration(0);
     setCaption("");
+    setCaptionSpeaker(null);
     setSegmentIndex(0);
+    setBilling(null);
     setError(null);
     setStatus("idle");
     stopInternal();
@@ -472,10 +540,12 @@ export function usePodcastPlayback(params: {
     status,
     error,
     loadingStep,
+    billing,
     duration,
     currentTime,
     progress,
     caption,
+    captionSpeaker,
     segmentIndex,
     canPlay,
     prepare,
