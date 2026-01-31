@@ -12,7 +12,6 @@ import {
   Radio,
   Loader2
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { 
   Select,
   SelectContent,
@@ -24,97 +23,8 @@ import { Slider } from "@/components/ui/slider";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { T } from "@/components/ui/T";
-
-import episode1Thumbnail from "@/assets/podcast-episode-1-thumbnail.jpg";
-
-// Episode 1 full script segments for TTS generation
-const episode1Segments = [
-  // INTRO
-  { speaker: "jane" as const, text: "Dubai didn't grow by accident. It wasn't luck, and it wasn't coincidence. Dubai was designed — deliberately, strategically, and with long-term vision." },
-  { speaker: "jane" as const, text: "When people look at Dubai today, they see the skyline, the lifestyle, the architecture. What they don't immediately see is the system behind it — the structure, the clarity, and the intent." },
-  { speaker: "jane" as const, text: "Welcome to The JBJ Perspective. I'm Jane, and today we're unpacking why Dubai has become the capital of global investors — not just financially, but strategically. Alex, let's start simple. Why Dubai?" },
-  
-  // SECTION 1
-  { speaker: "alex" as const, text: "Dubai positioned itself early as a global platform, not just a city. From a regulatory standpoint, it removed friction before most markets even acknowledged it. Clear ownership laws, tax efficiency, fast decision-making, and leadership alignment — these are fundamentals investors look for globally." },
-  { speaker: "jane" as const, text: "Exactly. Investors don't fear volatility — they fear uncertainty. And Dubai offers certainty: clear rules, respected timelines, and consistent direction. Lina, from an investor's point of view, what matters most?" },
-  { speaker: "lina" as const, text: "Certainty and accessibility. Dubai doesn't ask where you come from — it asks what you bring. Capital, ideas, experience. That mindset alone makes investors feel welcomed rather than restricted." },
-  
-  // SECTION 2
-  { speaker: "jane" as const, text: "Let's talk real estate, because here it's not just about buying property. In Dubai, real estate is a strategy. It's about anchoring presence, residency, mobility, and long-term positioning." },
-  { speaker: "alex" as const, text: "That's a critical distinction. In many countries, property is isolated. In Dubai, it's integrated. Property connects directly to visas, lifestyle, business setup, and wealth planning." },
-  { speaker: "lina" as const, text: "And that's why smart capital comes here. Investors aren't buying square meters — they're buying optionality." },
-  { speaker: "jane" as const, text: "Exactly. One asset serving multiple purposes attracts sophisticated investors." },
-  
-  // SECTION 3
-  { speaker: "jane" as const, text: "Another defining factor is execution speed — but controlled speed. Dubai builds infrastructure before demand peaks. Policies are adjusted ahead of pressure. Growth is managed, not chased." },
-  { speaker: "alex" as const, text: "Most global cities react. Dubai anticipates. That proactive approach creates confidence." },
-  { speaker: "lina" as const, text: "Safety doesn't mean being conservative — it means being prepared. Dubai creates options, and options reduce risk." },
-  
-  // SECTION 4
-  { speaker: "jane" as const, text: "There's also a psychological aspect investors often underestimate. Capital is emotional. Investors must not be. Dubai removes emotional noise by offering structure, transparency, and choice. When people feel secure, they make better decisions." },
-  { speaker: "alex" as const, text: "And better decisions compound over time." },
-  { speaker: "lina" as const, text: "That's why long-term thinkers thrive here. This city is built for decades, not quarters." },
-  
-  // SECTION 5
-  { speaker: "jane" as const, text: "So why is Dubai attracting even more global capital today? Because the world is fragmenting. Mobility is shrinking. Regulation is tightening. Dubai is doing the opposite." },
-  { speaker: "alex" as const, text: "It's positioning itself as neutral, stable, and globally connected." },
-  { speaker: "lina" as const, text: "For investors, that's no longer a luxury — it's a necessity." },
-  
-  // CLOSING
-  { speaker: "jane" as const, text: "Dubai became the capital of global investors because it understands one fundamental truth: Vision without execution is useless. Execution without structure is dangerous. Here, vision meets structure. Ambition meets clarity. And long-term thinking is the standard, not the exception." },
-  { speaker: "jane" as const, text: "This is what we'll explore throughout The JBJ Perspective — Not just where to invest, but how to think, how to structure, and how to position yourself intelligently in a global market that never stops evolving. Thank you for listening. This is just the beginning." },
-];
-
-interface Episode {
-  id: number;
-  title: string;
-  characters: string[];
-  duration: string;
-  segments?: typeof episode1Segments;
-}
-
-const episodes: Episode[] = [
-  {
-    id: 1,
-    title: "Why Dubai Became the Capital of Global Investors",
-    characters: ["Jane", "Alex", "Lina"],
-    duration: "10:00",
-    segments: episode1Segments,
-  },
-  { id: 2, title: "Buying Property Smartly in a Global Market", characters: ["Jane", "Alex", "Lina"], duration: "14:20" },
-  { id: 3, title: "The Truth About Off-Plan vs Ready Properties", characters: ["Jane", "Alex", "Lina"], duration: "11:30" },
-  { id: 4, title: "How High-Net-Worth Investors Protect Capital", characters: ["Jane", "Alex", "Lina"], duration: "13:15" },
-  { id: 5, title: "Golden Visa Strategy Through Real Estate", characters: ["Jane", "Alex", "Lina"], duration: "10:50" },
-  { id: 6, title: "The Psychology of Successful Investors", characters: ["Jane", "Alex", "Lina"], duration: "12:00" },
-  { id: 7, title: "Why Secondary Market Deals Matter", characters: ["Jane", "Alex", "Lina"], duration: "11:45" },
-  { id: 8, title: "Luxury Real Estate vs Mass Market Returns", characters: ["Jane", "Alex", "Lina"], duration: "13:30" },
-  { id: 9, title: "Mistakes First-Time Investors Always Make", characters: ["Jane", "Alex", "Lina"], duration: "14:10" },
-  { id: 10, title: "Building a Global Property Portfolio", characters: ["Jane", "Alex", "Lina"], duration: "15:00" },
-  { id: 11, title: "How Developers Really Price Projects", characters: ["Jane", "Alex", "Lina"], duration: "12:20" },
-  { id: 12, title: "Rental Yield vs Capital Appreciation", characters: ["Jane", "Alex", "Lina"], duration: "11:00" },
-  { id: 13, title: "Investor Onboarding: What Professionals Look For", characters: ["Jane", "Alex", "Lina"], duration: "10:30" },
-  { id: 14, title: "Real Estate as a Wealth Transfer Tool", characters: ["Jane", "Alex", "Lina"], duration: "13:45" },
-  { id: 15, title: "Exit Strategies Nobody Explains", characters: ["Jane", "Alex", "Lina"], duration: "12:30" },
-  { id: 16, title: "Legal Structures Every Investor Should Know", characters: ["Jane", "Alex", "Lina"], duration: "14:00" },
-  { id: 17, title: "The Future of Global Real Estate", characters: ["Jane", "Alex", "Lina"], duration: "11:15" },
-  { id: 18, title: "Building Trust in High-Value Transactions", characters: ["Jane", "Alex", "Lina"], duration: "10:45" },
-  { id: 19, title: "Why Most Investors Fail to Scale", characters: ["Jane", "Alex", "Lina"], duration: "12:50" },
-  { id: 20, title: "The JBJ Investment Philosophy", characters: ["Jane", "Alex", "Lina"], duration: "15:30" },
-];
-
-const languages = [
-  { code: "en", name: "English", flag: "🇬🇧" },
-  { code: "ar", name: "Arabic", flag: "🇦🇪" },
-  { code: "fr", name: "French", flag: "🇫🇷" },
-  { code: "es", name: "Spanish", flag: "🇪🇸" },
-  { code: "de", name: "German", flag: "🇩🇪" },
-  { code: "it", name: "Italian", flag: "🇮🇹" },
-  { code: "tr", name: "Turkish", flag: "🇹🇷" },
-  { code: "ru", name: "Russian", flag: "🇷🇺" },
-  { code: "zh", name: "Chinese", flag: "🇨🇳" },
-  { code: "fa", name: "Persian", flag: "🇮🇷" },
-  { code: "ur", name: "Urdu", flag: "🇵🇰" }
-];
+import { SafeImage } from "@/components/SafeImage";
+import { podcastEpisodes, podcastLanguages } from "@/content/podcast/episodes";
 
 const PLAYBACK_SPEEDS = [
   { value: 0.5, label: "0.5x" },
@@ -123,8 +33,17 @@ const PLAYBACK_SPEEDS = [
   { value: 2, label: "2x" },
 ];
 
+const parseDurationToSeconds = (label: string) => {
+  // expected: mm:ss
+  const [mRaw, sRaw] = label.split(":");
+  const m = Number(mRaw);
+  const s = Number(sRaw);
+  if (!Number.isFinite(m) || !Number.isFinite(s)) return 0;
+  return Math.max(0, m * 60 + s);
+};
+
 const JBJPodcastSection = () => {
-  const [selectedEpisode, setSelectedEpisode] = useState(episodes[0]);
+  const [selectedEpisode, setSelectedEpisode] = useState(podcastEpisodes[0]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("en");
@@ -133,7 +52,7 @@ const JBJPodcastSection = () => {
   const [previousVolume, setPreviousVolume] = useState(75);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const [duration, setDuration] = useState(() => parseDurationToSeconds(podcastEpisodes[0].duration));
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   
@@ -222,22 +141,24 @@ const JBJPodcastSection = () => {
   };
 
   const handlePrevious = () => {
-    const currentIndex = episodes.findIndex(ep => ep.id === selectedEpisode.id);
+    const currentIndex = podcastEpisodes.findIndex(ep => ep.id === selectedEpisode.id);
     if (currentIndex > 0) {
-      setSelectedEpisode(episodes[currentIndex - 1]);
+      setSelectedEpisode(podcastEpisodes[currentIndex - 1]);
       setProgress(0);
       setCurrentTime(0);
+      setDuration(parseDurationToSeconds(podcastEpisodes[currentIndex - 1].duration));
       setAudioUrl(null);
       setIsPlaying(false);
     }
   };
 
   const handleNext = () => {
-    const currentIndex = episodes.findIndex(ep => ep.id === selectedEpisode.id);
-    if (currentIndex < episodes.length - 1) {
-      setSelectedEpisode(episodes[currentIndex + 1]);
+    const currentIndex = podcastEpisodes.findIndex(ep => ep.id === selectedEpisode.id);
+    if (currentIndex < podcastEpisodes.length - 1) {
+      setSelectedEpisode(podcastEpisodes[currentIndex + 1]);
       setProgress(0);
       setCurrentTime(0);
+      setDuration(parseDurationToSeconds(podcastEpisodes[currentIndex + 1].duration));
       setAudioUrl(null);
       setIsPlaying(false);
     }
@@ -306,13 +227,19 @@ const JBJPodcastSection = () => {
 
     const handleTimeUpdate = () => {
       setCurrentTime(audio.currentTime);
-      if (audio.duration > 0) {
-        setProgress((audio.currentTime / audio.duration) * 100);
-      }
+      const effectiveDuration =
+        Number.isFinite(audio.duration) && audio.duration > 0
+          ? audio.duration
+          : duration;
+      if (effectiveDuration > 0) setProgress((audio.currentTime / effectiveDuration) * 100);
     };
 
     const handleLoadedMetadata = () => {
-      setDuration(audio.duration);
+      // Some stitched/concatenated audio sources may report Infinity/NaN.
+      // In that case we keep our (mm:ss) fallback duration so the UI isn't stuck at 0.
+      if (Number.isFinite(audio.duration) && audio.duration > 0) {
+        setDuration(audio.duration);
+      }
     };
 
     const handleEnded = () => {
@@ -330,7 +257,12 @@ const JBJPodcastSection = () => {
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
       audio.removeEventListener('ended', handleEnded);
     };
-  }, []);
+  }, [duration]);
+
+  // When the selected episode changes, reset the duration fallback (so UI never shows 0:00).
+  useEffect(() => {
+    setDuration(parseDurationToSeconds(selectedEpisode.duration));
+  }, [selectedEpisode]);
 
   return (
     <section className="relative py-20 md:py-28 overflow-hidden jj-layer-2">
@@ -372,10 +304,11 @@ const JBJPodcastSection = () => {
               <div className="relative rounded-xl overflow-hidden">
                 {/* Episode Thumbnail - Full frame, no border */}
                 <div className="relative aspect-video">
-                  <img 
-                    src={episode1Thumbnail}
-                    alt="JBJ Podcast"
+                  <SafeImage
+                    src={selectedEpisode.thumbnail}
+                    alt={selectedEpisode.title}
                     className="w-full h-full object-cover"
+                    fallbackSrc="/placeholder.svg"
                   />
                   
                   {/* Subtle Gradient Overlay */}
@@ -396,7 +329,7 @@ const JBJPodcastSection = () => {
                     className="absolute inset-0 flex items-center justify-center group"
                   >
                     <div 
-                      className="w-20 h-20 rounded-full bg-black/50 backdrop-blur-sm border-2 border-gold flex items-center justify-center shadow-2xl transform group-hover:scale-110 group-hover:bg-gold transition-all duration-300 disabled:opacity-50"
+                      className="w-20 h-20 rounded-full bg-black/50 backdrop-blur-sm border-2 border-gold flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-all duration-300 disabled:opacity-50"
                       style={{ boxShadow: '0 0 40px rgba(200,167,102,0.3)' }}
                     >
                       {isLoading ? (
@@ -450,7 +383,7 @@ const JBJPodcastSection = () => {
                     <button
                       onClick={handlePlayPause}
                       disabled={isLoading}
-                      className="w-14 h-14 rounded-full border-2 border-gold bg-transparent hover:bg-gold flex items-center justify-center transition-colors shadow-lg disabled:opacity-50 group"
+                      className="w-14 h-14 rounded-full border-2 border-gold bg-transparent flex items-center justify-center transition-colors shadow-lg disabled:opacity-50 group"
                     >
                       {isLoading ? (
                         <Loader2 className="w-6 h-6 text-gold group-hover:text-black animate-spin" />
@@ -480,19 +413,18 @@ const JBJPodcastSection = () => {
                   <div className="flex items-center gap-2">
                     <Globe className="w-4 h-4 text-black/60" />
                     <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
-                      <SelectTrigger className="w-36 bg-black/10 border-gold/30 text-black text-sm">
+                      <SelectTrigger className="w-36">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent className="bg-pearl border-gold/30">
-                        {languages.map((lang) => (
+                      <SelectContent className="z-[9999]">
+                        {podcastLanguages.map((lang) => (
                           <SelectItem 
                             key={lang.code} 
                             value={lang.code}
-                            className="text-black hover:bg-gold/20 focus:bg-gold/20 focus:text-black"
                           >
                             <span className="flex items-center gap-2">
                               <span>{lang.flag}</span>
-                              <span className="text-black">{lang.name}</span>
+                              <span>{lang.name}</span>
                             </span>
                           </SelectItem>
                         ))}
@@ -540,32 +472,34 @@ const JBJPodcastSection = () => {
 
                 <ScrollArea className="h-[400px] lg:h-[480px]">
                   <div className="p-2">
-                    {episodes.map((episode) => (
+                    {podcastEpisodes.map((episode) => (
                       <button
                         key={episode.id}
                         onClick={() => {
                           setSelectedEpisode(episode);
                           setProgress(0);
                           setCurrentTime(0);
+                          setDuration(parseDurationToSeconds(episode.duration));
                           setAudioUrl(null);
                           setIsPlaying(false);
                         }}
                         className={`w-full p-3 rounded-xl text-left transition-all mb-1 ${
                           selectedEpisode.id === episode.id
-                            ? "bg-gold/20 border border-gold/40"
-                            : "bg-black/5 hover:bg-black/10 border border-transparent"
+                            ? "bg-gold/10 border border-gold/40"
+                            : "bg-pearl/60 hover:bg-pearl border border-transparent"
                         }`}
                       >
                         <div className="flex items-start gap-3">
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 border ${
-                            selectedEpisode.id === episode.id 
-                              ? "border-gold bg-gold text-black" 
-                              : "border-gold/40 bg-transparent text-gold"
-                          }`}>
-                            <Play className="w-4 h-4" />
+                          <div className="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0">
+                            <SafeImage
+                              src={episode.thumbnail}
+                              alt={episode.title}
+                              className="w-full h-full object-cover"
+                              fallbackSrc="/placeholder.svg"
+                            />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className={`text-sm font-medium truncate ${
+                            <p className={`text-sm font-medium leading-snug line-clamp-2 break-words ${
                               selectedEpisode.id === episode.id ? "text-gold" : "text-black"
                             }`}>
                               <T>{episode.title}</T>
