@@ -191,8 +191,8 @@ serve(async (req) => {
 
     console.log(`[Page ${page}] Starting ENHANCED sync v3 (startIndex=${startIndex}, batchSize=${batchSize})...`);
     
-    // Get developers for matching with caching
-    const { data: developers, error: devError } = await supabase.from("uae_developers").select("id, name, slug");
+    // Get developers for matching (projects table uses 'developers')
+    const { data: developers, error: devError } = await supabase.from("developers").select("id, name, slug");
     
     if (devError) {
       console.error("Failed to fetch developers:", devError);
@@ -278,20 +278,29 @@ serve(async (req) => {
       }
 
       const listData = await listRes.json();
-      const links = listData.data?.links || [];
-      
+      const linksRaw = listData.data?.links || [];
+
+      // Normalize URLs BEFORE filtering (critical: Provident often returns trailing slashes)
+      const normalizedLinks = (linksRaw as string[])
+        .map((l) => (typeof l === "string" ? l.trim().replace(/\/$/, "") : ""))
+        .filter(Boolean);
+
+      const listingUrlNormalized = listingUrl.replace(/\/$/, "");
+
       // Filter to get project detail page URLs
+      // IMPORTANT: exclude filter pages like /new-projects/in-xxx (with/without trailing slash)
       const urls = [...new Set(
-        links
-          .filter((l: string) => 
-            l.includes("/new-projects/") && 
-            !l.includes("page/") &&
-            !l.includes("developed-by-") &&
-            !l.match(/\/new-projects\/in-[a-z\-]+$/) && // Exclude location filter pages
-            l !== "https://providentestate.com/new-projects/" &&
-            l !== listingUrl
-          )
-          .map((l: string) => l.replace(/\/$/, ""))
+        normalizedLinks
+          .filter((l: string) => {
+            if (!l.startsWith("https://providentestate.com/new-projects/")) return false;
+            if (l.includes("/new-projects/page/")) return false;
+            if (l.includes("/new-projects/developed-by-")) return false;
+            if (/\/new-projects\/in-[a-z0-9\-]+$/i.test(l)) return false;
+            if (l === "https://providentestate.com/new-projects") return false;
+            if (l === "https://providentestate.com/new-projects/") return false;
+            if (l === listingUrlNormalized) return false;
+            return true;
+          })
       )] as string[];
       
       if (urls.length === 0) {

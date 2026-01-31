@@ -42,6 +42,7 @@ interface PendingImportCardProps {
   item: PendingImportCardItem;
   formatPrice: (price: number | null) => string | null;
   onReview: () => void;
+  onRepaired?: () => void;
 }
 
 const truncate = (text: string, max = 120) => {
@@ -49,7 +50,7 @@ const truncate = (text: string, max = 120) => {
   return text.slice(0, max).trim();
 };
 
-export function PendingImportCard({ item, formatPrice, onReview }: PendingImportCardProps) {
+export function PendingImportCard({ item, formatPrice, onReview, onRepaired }: PendingImportCardProps) {
   const images = useMemo(() => (item.images || []).filter((i) => !!i?.url), [item.images]);
   const documents = useMemo(() => (item.documents || []).filter((d) => !!d?.url), [item.documents]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -95,8 +96,7 @@ export function PendingImportCard({ item, formatPrice, onReview }: PendingImport
       });
       if (error) throw error;
       toast.success(`Repaired: ${item.name} (${data.images} images, ${data.documents} docs)`);
-      // Trigger refresh by calling onReview which should ideally re-fetch (handled at parent level)
-      window.location.reload();
+      onRepaired?.();
     } catch (err) {
       toast.error(`Repair failed: ${err instanceof Error ? err.message : "Unknown error"}`);
     } finally {
