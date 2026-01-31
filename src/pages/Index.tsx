@@ -646,14 +646,36 @@ const Index = () => {
         </div>
       </section>
 
+      {/* DIVIDER - Before Why Dubai */}
+      <section className="py-8 md:py-12 bg-black">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-center gap-6">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+            <Sparkles className="w-5 h-5 text-gold/50" />
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+          </div>
+        </div>
+      </section>
+
       <WhyDubaiCapitalSection />
+
+      {/* DIVIDER - Between Why Dubai and JBJ Podcast */}
+      <section className="py-8 md:py-12 bg-black">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-center gap-6">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+            <Sparkles className="w-5 h-5 text-gold/50" />
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+          </div>
+        </div>
+      </section>
 
       {/* JBJ PODCAST SECTION */}
       <JBJPodcastSection />
 
       {/* DIVIDER - Centered between Podcast and Best Idea Award */}
-      <section className="py-0 bg-black">
-        <div className="container mx-auto px-4 py-10 md:py-14">
+      <section className="py-8 md:py-12 bg-black">
+        <div className="container mx-auto px-4">
           <div className="flex items-center justify-center gap-6">
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
             <Sparkles className="w-5 h-5 text-gold/50" />

@@ -103,10 +103,10 @@ export default function WhyDubaiCapitalSection() {
             </div>
 
             <div className="mt-5">
-              <Button asChild variant="primary" size="default">
+              <Button asChild variant="primary" size="lg">
                 <Link to="/guides/investment">
                   <T>Explore Investment Opportunities</T>
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-5 h-5" />
                 </Link>
               </Button>
             </div>
