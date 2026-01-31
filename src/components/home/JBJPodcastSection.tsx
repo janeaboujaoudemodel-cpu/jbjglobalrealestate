@@ -35,6 +35,8 @@ const PLAYBACK_SPEEDS = [
   { value: 2, label: "2x" },
 ];
 
+const SKIP_SECONDS = 15;
+
 const parseDurationToSeconds = (label: string) => {
   // expected: mm:ss
   const [mRaw, sRaw] = label.split(":");
@@ -81,22 +83,13 @@ const JBJPodcastSection = () => {
     await playback.toggle();
   };
 
-  const handlePrevious = () => {
-    const currentIndex = podcastEpisodes.findIndex(ep => ep.id === selectedEpisode.id);
-    if (currentIndex > 0) {
-      setSelectedEpisode(podcastEpisodes[currentIndex - 1]);
-      setErrorMessage(null);
-      setPlaybackNote(null);
-    }
+  const handleSkipBack = () => {
+    void playback.seek(Math.max(0, playback.currentTime - SKIP_SECONDS));
   };
 
-  const handleNext = () => {
-    const currentIndex = podcastEpisodes.findIndex(ep => ep.id === selectedEpisode.id);
-    if (currentIndex < podcastEpisodes.length - 1) {
-      setSelectedEpisode(podcastEpisodes[currentIndex + 1]);
-      setErrorMessage(null);
-      setPlaybackNote(null);
-    }
+  const handleSkipForward = () => {
+    const d = playback.duration || parseDurationToSeconds(selectedEpisode.duration);
+    void playback.seek(Math.min(d, playback.currentTime + SKIP_SECONDS));
   };
 
   const cyclePlaybackSpeed = () => {
@@ -202,32 +195,42 @@ const JBJPodcastSection = () => {
                   </div>
 
                   {/* Center Play Button - Using border style instead of solid fill */}
-                  <button
-                    onClick={handlePlayPause}
-                    disabled={playback.status === "loading"}
-                    className="absolute inset-0 flex items-center justify-center group"
-                  >
-                    <div 
-                      className="w-20 h-20 rounded-full bg-black/50 backdrop-blur-sm border-2 border-gold flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-all duration-300 disabled:opacity-50"
-                      style={{ boxShadow: '0 0 40px rgba(200,167,102,0.3)' }}
+                  {/* IMPORTANT: the old full-frame button blocked scrolling/touch interactions.
+                      We keep only the circle clickable so scroll + controls always work. */}
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <button
+                      onClick={handlePlayPause}
+                      disabled={playback.status === "loading"}
+                      className="group pointer-events-auto"
+                      aria-label={playback.status === "playing" ? "Pause" : "Play"}
                     >
-                      {playback.status === "loading" ? (
-                        <Loader2 className="w-8 h-8 text-gold group-hover:text-black animate-spin" />
-                      ) : playback.status === "playing" ? (
-                        <Pause className="w-8 h-8 text-gold group-hover:text-black" />
-                      ) : (
-                        <Play className="w-8 h-8 text-gold group-hover:text-black ml-1" />
-                      )}
-                    </div>
-                  </button>
+                      <div 
+                        className="w-20 h-20 rounded-full bg-black/50 backdrop-blur-sm border-2 border-gold flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-all duration-300 disabled:opacity-50"
+                        style={{ boxShadow: '0 0 40px rgba(200,167,102,0.3)' }}
+                      >
+                        {playback.status === "loading" ? (
+                          <Loader2 className="w-8 h-8 text-gold group-hover:text-black animate-spin" />
+                        ) : playback.status === "playing" ? (
+                          <Pause className="w-8 h-8 text-gold group-hover:text-black" />
+                        ) : (
+                          <Play className="w-8 h-8 text-gold group-hover:text-black ml-1" />
+                        )}
+                      </div>
+                    </button>
+                  </div>
 
                   {/* Captions (translated to selected language) */}
                   {playback.caption ? (
                     <div
-                      className="absolute bottom-0 left-0 right-0 px-4 pb-4"
+                      className="absolute bottom-0 left-0 right-0 px-4 pb-4 pointer-events-none"
                       data-no-translate
                     >
                       <div className="jj-card-inner/90 backdrop-blur-sm border border-gold/30 rounded-lg px-4 py-3">
+                        {playback.captionSpeaker ? (
+                          <p className="text-[10px] uppercase tracking-[0.25em] text-black/60 mb-1">
+                            {playback.captionSpeaker}
+                          </p>
+                        ) : null}
                         <p className="text-sm md:text-base text-black leading-relaxed line-clamp-3">
                           {playback.caption}
                         </p>
@@ -276,7 +279,13 @@ const JBJPodcastSection = () => {
                   </div>
                     {playback.status === "loading" && playback.loadingStep ? (
                       <p className="mt-2 text-xs text-black/60" data-no-translate>
-                        Generating audio {playback.loadingStep.current}/{playback.loadingStep.total}…
+                        Loading audio {playback.loadingStep.current}/{playback.loadingStep.total}…
+                      </p>
+                    ) : null}
+
+                    {playback.status !== "loading" && playback.billing && playback.billing.cachedSegments === playback.billing.totalSegments ? (
+                      <p className="mt-2 text-xs text-black/60" data-no-translate>
+                        Cached audio (0 credits)
                       </p>
                     ) : null}
                 </div>
@@ -285,7 +294,7 @@ const JBJPodcastSection = () => {
                 <div className="flex items-center justify-between flex-wrap gap-4">
                   <div className="flex items-center gap-3">
                     <button
-                      onClick={handlePrevious}
+                      onClick={handleSkipBack}
                       className="w-10 h-10 rounded-full bg-black/10 hover:bg-black/20 border border-gold/30 flex items-center justify-center transition-colors"
                     >
                       <SkipBack className="w-5 h-5 text-black" />
@@ -304,7 +313,7 @@ const JBJPodcastSection = () => {
                       )}
                     </button>
                     <button
-                      onClick={handleNext}
+                      onClick={handleSkipForward}
                       className="w-10 h-10 rounded-full bg-black/10 hover:bg-black/20 border border-gold/30 flex items-center justify-center transition-colors"
                     >
                       <SkipForward className="w-5 h-5 text-black" />

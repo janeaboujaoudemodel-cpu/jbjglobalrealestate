@@ -80,6 +80,8 @@ async function fetchTtsSegmentAudio(params: {
   segmentIndex: number;
   /** Audio language for caching on the backend. Keep this stable to avoid generating new audio per UI language. */
   audioLanguage: string;
+  /** If true, backend will ONLY serve cached audio and will never generate new audio (protects credits). */
+  requireCache?: boolean;
   signal?: AbortSignal;
 }) {
   const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-podcast-segment-tts`, {
@@ -96,6 +98,7 @@ async function fetchTtsSegmentAudio(params: {
       episode_id: params.episodeId,
       segment_index: params.segmentIndex,
       language: params.audioLanguage,
+      require_cache: params.requireCache ?? true,
     }),
   });
 
@@ -200,6 +203,49 @@ export function usePodcastPlayback(params: {
     const abort = new AbortController();
     abortRef.current = abort;
 
+    // If we've already prepared this episode+script in this session, do NOT show any
+    // "generating" state; it's already cached locally.
+    const audioKey = buildAudioCacheKey(params.episodeId, params.segments);
+    const cachedAudio = audioCache.get(audioKey);
+
+    if (cachedAudio) {
+      preparedRef.current = cachedAudio;
+      captionsRef.current = params.segments;
+
+      setDuration(cachedAudio.duration);
+      setCaption((captionsRef.current?.[0]?.text ?? "") || "");
+      setCaptionSpeaker(cachedAudio.segments[0]?.speaker ?? null);
+      setBilling(cachedAudio.billing);
+      setSegmentIndex(0);
+      setCurrentTime(0);
+      pausedAtRef.current = 0;
+      setError(null);
+      setStatus("ready");
+
+      // Translate captions in background (UI-only, no credit impact).
+      if (params.language && params.language !== "en") {
+        const captionsKey = buildCaptionsCacheKey(params.episodeId, params.language, params.segments);
+        const cachedCaptions = captionsCache.get(captionsKey);
+
+        if (cachedCaptions) {
+          captionsRef.current = cachedCaptions;
+          setCaption(cachedCaptions[0]?.text || "");
+        } else {
+          translateSegments(params.segments, params.language, abort.signal)
+            .then((translated) => {
+              captionsCache.set(captionsKey, translated);
+              captionsRef.current = translated;
+              setCaption(translated[0]?.text || "");
+            })
+            .catch(() => {
+              // keep English
+            });
+        }
+      }
+
+      return cachedAudio;
+    }
+
     setStatus("loading");
     setError(null);
     setLoadingStep({ current: 0, total: params.segments.length });
@@ -213,9 +259,6 @@ export function usePodcastPlayback(params: {
       }
 
       // 1) Prepare audio (always from the original English script)
-      const audioKey = buildAudioCacheKey(params.episodeId, params.segments);
-      const cachedAudio = audioCache.get(audioKey);
-
       let preparedAudio: PreparedAudio;
 
       if (cachedAudio) {
@@ -232,6 +275,9 @@ export function usePodcastPlayback(params: {
               segmentIndex: i,
               // Keep audio generation language stable to avoid consuming credits when users only switch UI language.
               audioLanguage: "en",
+              // IMPORTANT: we NEVER generate new audio from the client. If a segment isn't cached,
+              // playback should fail rather than consuming credits.
+              requireCache: true,
               signal: abort.signal,
             });
 
