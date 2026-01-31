@@ -12894,8 +12894,11 @@ export type Database = {
           reviewed_at: string | null
           reviewed_by: string | null
           seller_email: string
+          seller_email_encrypted: string | null
           seller_full_name: string
+          seller_name_encrypted: string | null
           seller_phone: string
+          seller_phone_encrypted: string | null
           seller_type: string
           selling_urgency: string | null
           status: string
@@ -12947,8 +12950,11 @@ export type Database = {
           reviewed_at?: string | null
           reviewed_by?: string | null
           seller_email: string
+          seller_email_encrypted?: string | null
           seller_full_name: string
+          seller_name_encrypted?: string | null
           seller_phone: string
+          seller_phone_encrypted?: string | null
           seller_type?: string
           selling_urgency?: string | null
           status?: string
@@ -13000,8 +13006,11 @@ export type Database = {
           reviewed_at?: string | null
           reviewed_by?: string | null
           seller_email?: string
+          seller_email_encrypted?: string | null
           seller_full_name?: string
+          seller_name_encrypted?: string | null
           seller_phone?: string
+          seller_phone_encrypted?: string | null
           seller_type?: string
           selling_urgency?: string | null
           status?: string
@@ -15778,6 +15787,87 @@ export type Database = {
         }
         Relationships: []
       }
+      seller_listings_secure: {
+        Row: {
+          bedrooms: number | null
+          community_building: string | null
+          created_at: string | null
+          has_upgrades: boolean | null
+          id: string | null
+          is_furnished: boolean | null
+          key_highlights: string[] | null
+          preferred_contact_method: string | null
+          preferred_language: string | null
+          property_location: string | null
+          property_notes: string | null
+          property_size_sqft: number | null
+          property_status: string | null
+          property_type: string | null
+          seller_email: string | null
+          seller_full_name: string | null
+          seller_phone: string | null
+          seller_type: string | null
+          selling_urgency: string | null
+          status: string | null
+          target_selling_price: number | null
+          updated_at: string | null
+          upgrade_details: string | null
+          user_id: string | null
+        }
+        Insert: {
+          bedrooms?: number | null
+          community_building?: string | null
+          created_at?: string | null
+          has_upgrades?: boolean | null
+          id?: string | null
+          is_furnished?: boolean | null
+          key_highlights?: string[] | null
+          preferred_contact_method?: string | null
+          preferred_language?: string | null
+          property_location?: string | null
+          property_notes?: string | null
+          property_size_sqft?: number | null
+          property_status?: string | null
+          property_type?: string | null
+          seller_email?: string | null
+          seller_full_name?: string | null
+          seller_phone?: string | null
+          seller_type?: string | null
+          selling_urgency?: string | null
+          status?: string | null
+          target_selling_price?: number | null
+          updated_at?: string | null
+          upgrade_details?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          bedrooms?: number | null
+          community_building?: string | null
+          created_at?: string | null
+          has_upgrades?: boolean | null
+          id?: string | null
+          is_furnished?: boolean | null
+          key_highlights?: string[] | null
+          preferred_contact_method?: string | null
+          preferred_language?: string | null
+          property_location?: string | null
+          property_notes?: string | null
+          property_size_sqft?: number | null
+          property_status?: string | null
+          property_type?: string | null
+          seller_email?: string | null
+          seller_full_name?: string | null
+          seller_phone?: string | null
+          seller_type?: string | null
+          selling_urgency?: string | null
+          status?: string | null
+          target_selling_price?: number | null
+          updated_at?: string | null
+          upgrade_details?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       uae_developers_public: {
         Row: {
           created_at: string | null
@@ -15987,6 +16077,14 @@ export type Database = {
       decrypt_salary_bank_data: {
         Args: { encrypted_data: string }
         Returns: string
+      }
+      decrypt_seller_listing_pii: {
+        Args: { p_listing_id: string }
+        Returns: {
+          seller_email: string
+          seller_full_name: string
+          seller_phone: string
+        }[]
       }
       decrypt_vapi_call_pii: {
         Args: { p_call_id: string }
