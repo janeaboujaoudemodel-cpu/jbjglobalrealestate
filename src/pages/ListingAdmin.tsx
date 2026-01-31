@@ -79,7 +79,7 @@ const ListingAdmin = () => {
   const [showChat, setShowChat] = useState(false);
   
   // View state - 'chat', 'projects', or 'editor'
-  const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor' | 'data-sources' | 'sync'>('chat');
+  const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor' | 'data-sources' | 'sync'>('sync');
 
   // Document upload state
   const [projectDocuments, setProjectDocuments] = useState<ProjectDocument[]>([]);
