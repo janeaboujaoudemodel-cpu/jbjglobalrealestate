@@ -41,7 +41,8 @@ serve(async (req) => {
       testMaxChars?: number;
     };
 
-    const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
+    // Prefer the connector-managed key (ELEVENLABS_API_KEY_1) if available, otherwise fall back to the manually-set key.
+    const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY_1") || Deno.env.get("ELEVENLABS_API_KEY");
     
     if (!ELEVENLABS_API_KEY) {
       throw new Error("ElevenLabs API key not configured");
