@@ -297,16 +297,36 @@ serve(async (req) => {
     const devMap = buildDeveloperMap(devList);
     console.log(`[Page ${page}] Loaded ${devList.length} developers for matching`);
 
-    // Step 1: Get project URLs from listing page
+    // Step 1: Get project URLs from listing page using scroll actions for dynamic content
+    // The site uses JS-based pagination, so we need to scroll to load content
     const pageSlug = page === 1 ? "" : `page/${page}/`;
     const listingUrl = `https://providentestate.com/new-projects/${pageSlug}`;
 
-    console.log(`[Page ${page}] Step 1: Fetching project URLs from ${listingUrl}...`);
+    console.log(`[Page ${page}] Step 1: Fetching project URLs from ${listingUrl} (with scroll)...`);
+
+    // Build scroll actions to load more content - scroll multiple times to load pagination
+    const scrollActions = [];
+    const scrollsNeeded = Math.min(page, 10); // Scroll more for higher pages
+    for (let i = 0; i < scrollsNeeded; i++) {
+      scrollActions.push({ type: "scroll", direction: "down" });
+      scrollActions.push({ type: "wait", milliseconds: 500 });
+    }
+    
+    // Also click pagination if available
+    if (page > 1) {
+      scrollActions.push({ type: "wait", milliseconds: 2000 }); // Wait for page to load
+    }
 
     const listRes = await fetchWithRetry("https://api.firecrawl.dev/v1/scrape", {
       method: "POST",
       headers: { "Content-Type": "application/json", "Authorization": `Bearer ${firecrawlKey}` },
-      body: JSON.stringify({ url: listingUrl, formats: ["links"], waitFor: 10000, timeout: 90000 }),
+      body: JSON.stringify({ 
+        url: listingUrl, 
+        formats: ["links"], 
+        waitFor: 15000, 
+        timeout: 120000,
+        actions: scrollActions.length > 0 ? scrollActions : undefined
+      }),
     });
 
     if (!listRes.ok) {
