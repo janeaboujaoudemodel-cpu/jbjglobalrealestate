@@ -15,22 +15,84 @@ interface SyncStats {
   images: number;
 }
 
+interface ApprovalStats {
+  approved: number;
+  skipped: number;
+  errors: number;
+  noImages: number;
+}
+
 export const ProvidentSyncButton = () => {
   const [isSyncing, setIsSyncing] = useState(false);
+  const [isApproving, setIsApproving] = useState(false);
+  const [isRepairing, setIsRepairing] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages] = useState(89);
   const [stats, setStats] = useState<SyncStats | null>(null);
+  const [approvalStats, setApprovalStats] = useState<ApprovalStats | null>(null);
   const [totalStats, setTotalStats] = useState({ created: 0, updated: 0, images: 0 });
   const [projectCount, setProjectCount] = useState<number | null>(null);
+  const [pendingCount, setPendingCount] = useState<number | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
 
   useEffect(() => {
-    loadProjectCount();
+    loadCounts();
   }, []);
 
-  const loadProjectCount = async () => {
-    const { count } = await supabase.from("projects").select("*", { count: "exact", head: true });
-    setProjectCount(count);
+  const loadCounts = async () => {
+    const { count: pCount } = await supabase.from("projects").select("*", { count: "exact", head: true });
+    setProjectCount(pCount);
+    
+    const { count: pendCount } = await supabase
+      .from("pending_project_imports")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "pending");
+    setPendingCount(pendCount);
+  };
+
+  const bulkApprove = async () => {
+    setIsApproving(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("bulk-approve-imports", {
+        body: { limit: 200, dryRun: false }
+      });
+
+      if (error) {
+        toast.error(`Approval failed: ${error.message}`);
+        return;
+      }
+
+      if (data?.stats) {
+        setApprovalStats(data.stats);
+        toast.success(`Approved ${data.stats.approved} projects!`);
+      }
+    } catch (err) {
+      toast.error("Bulk approval failed");
+    } finally {
+      setIsApproving(false);
+      await loadCounts();
+    }
+  };
+
+  const repairImages = async () => {
+    setIsRepairing(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("repair-project-images", {
+        body: { limit: 200, dryRun: false }
+      });
+
+      if (error) {
+        toast.error(`Repair failed: ${error.message}`);
+        return;
+      }
+
+      toast.success(`Repaired images for ${data?.stats?.repaired || 0} projects!`);
+    } catch (err) {
+      toast.error("Image repair failed");
+    } finally {
+      setIsRepairing(false);
+      await loadCounts();
+    }
   };
 
   const syncPage = async (page: number): Promise<SyncStats | null> => {
@@ -143,7 +205,7 @@ export const ProvidentSyncButton = () => {
     }
 
     setIsSyncing(false);
-    await loadProjectCount();
+    await loadCounts();
     toast.success(`Sync complete! Created: ${runningTotals.created}, Updated: ${runningTotals.updated}`);
   };
 
@@ -159,7 +221,7 @@ export const ProvidentSyncButton = () => {
     }
     
     setIsSyncing(false);
-    await loadProjectCount();
+    await loadCounts();
   };
 
   const progress = totalPages > 0 ? (currentPage / totalPages) * 100 : 0;
@@ -174,9 +236,15 @@ export const ProvidentSyncButton = () => {
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Current project count */}
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-zinc-400">Projects in database:</span>
-          <span className="text-white font-semibold">{projectCount ?? "..."}</span>
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-zinc-400">Projects in database:</span>
+            <span className="text-white font-semibold">{projectCount ?? "..."}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-zinc-400">Pending approval:</span>
+            <span className="text-amber-400 font-semibold">{pendingCount ?? "..."}</span>
+          </div>
         </div>
 
         {/* Sync buttons */}
@@ -208,6 +276,44 @@ export const ProvidentSyncButton = () => {
               Test Page 1 Only
             </Button>
           )}
+        </div>
+
+        {/* Approval buttons */}
+        <div className="flex flex-wrap gap-2">
+          <Button
+            onClick={bulkApprove}
+            disabled={isApproving || isSyncing || (pendingCount ?? 0) === 0}
+            variant="secondary"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white"
+          >
+            {isApproving ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Approving...
+              </>
+            ) : (
+              <>
+                <CheckCircle2 className="w-4 h-4 mr-2" />
+                Bulk Approve ({pendingCount ?? 0})
+              </>
+            )}
+          </Button>
+          
+          <Button
+            onClick={repairImages}
+            disabled={isRepairing || isSyncing}
+            variant="outline"
+            className="border-zinc-700 text-zinc-300 hover:text-white"
+          >
+            {isRepairing ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Repairing...
+              </>
+            ) : (
+              "Repair Images"
+            )}
+          </Button>
         </div>
 
         {/* Progress bar */}

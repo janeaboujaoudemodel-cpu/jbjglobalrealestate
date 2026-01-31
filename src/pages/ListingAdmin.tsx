@@ -458,7 +458,7 @@ const ListingAdmin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-100 pt-24 lg:pt-28">
+    <div className="min-h-screen bg-zinc-100 pt-20 lg:pt-24">
       {/* Header - Clean neutral style */}
       <header className="border-b border-zinc-200 bg-white sticky top-20 lg:top-24 z-40 shadow-sm">
         <div className="px-4 py-4">
