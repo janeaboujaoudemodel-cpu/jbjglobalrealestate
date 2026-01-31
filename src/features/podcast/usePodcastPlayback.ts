@@ -83,6 +83,9 @@ async function translateSegments(segments: PodcastSegment[], targetLang: string,
 async function fetchTtsSegmentAudio(params: {
   speaker: PodcastSegment["speaker"];
   text: string;
+  episodeId: number;
+  segmentIndex: number;
+  language: string;
   signal?: AbortSignal;
 }) {
   const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-podcast-segment-tts`, {
@@ -93,7 +96,13 @@ async function fetchTtsSegmentAudio(params: {
       apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
       Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
     },
-    body: JSON.stringify({ speaker: params.speaker, text: params.text }),
+    body: JSON.stringify({
+      speaker: params.speaker,
+      text: params.text,
+      episode_id: params.episodeId,
+      segment_index: params.segmentIndex,
+      language: params.language,
+    }),
   });
 
   const contentType = res.headers.get("content-type") || "";
@@ -106,7 +115,11 @@ async function fetchTtsSegmentAudio(params: {
     throw new Error(`Audio request failed (${res.status})`);
   }
 
-  return res.arrayBuffer();
+  // Check if this was served from cache (no credits used)
+  const wasCached = res.headers.get("x-jbj-cached") === "true";
+  const buffer = await res.arrayBuffer();
+  
+  return { buffer, wasCached };
 }
 
 export function usePodcastPlayback(params: {
@@ -214,9 +227,12 @@ export function usePodcastPlayback(params: {
       const buffers: AudioBuffer[] = [];
       for (let i = 0; i < translatedSegments.length; i++) {
         setLoadingStep({ current: i + 1, total: translatedSegments.length });
-        const ab = await fetchTtsSegmentAudio({
+        const { buffer: ab } = await fetchTtsSegmentAudio({
           speaker: translatedSegments[i].speaker,
           text: translatedSegments[i].text,
+          episodeId: params.episodeId,
+          segmentIndex: i,
+          language: params.language,
           signal: abort.signal,
         });
         // decodeAudioData may detach the buffer; pass a copy.

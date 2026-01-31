@@ -11240,6 +11240,42 @@ export type Database = {
           },
         ]
       }
+      podcast_audio_cache: {
+        Row: {
+          created_at: string | null
+          duration_seconds: number | null
+          episode_id: number
+          id: string
+          language: string
+          segment_index: number
+          speaker: string
+          storage_path: string
+          text_hash: string
+        }
+        Insert: {
+          created_at?: string | null
+          duration_seconds?: number | null
+          episode_id: number
+          id?: string
+          language?: string
+          segment_index: number
+          speaker: string
+          storage_path: string
+          text_hash: string
+        }
+        Update: {
+          created_at?: string | null
+          duration_seconds?: number | null
+          episode_id?: number
+          id?: string
+          language?: string
+          segment_index?: number
+          speaker?: string
+          storage_path?: string
+          text_hash?: string
+        }
+        Relationships: []
+      }
       points_transactions: {
         Row: {
           created_at: string | null
