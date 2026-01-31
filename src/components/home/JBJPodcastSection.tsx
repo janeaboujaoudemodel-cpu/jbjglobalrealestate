@@ -151,6 +151,7 @@ const JBJPodcastSection = () => {
     setIsLoading(true);
     
     try {
+      // TEST MODE: Generate short sample to test with limited credits
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-podcast-tts`,
         {
@@ -162,7 +163,8 @@ const JBJPodcastSection = () => {
           },
           body: JSON.stringify({ 
             segments: selectedEpisode.segments,
-            language: selectedLanguage 
+            language: selectedLanguage,
+            testMode: true // Uses shorter intro text to save credits
           }),
         }
       );
