@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import { SEOHead } from "@/components/SEOHead";
+import { SectionDivider } from "@/components/ui/section-divider";
 import { 
   ArrowUpRight, 
   Sparkles, 
@@ -610,8 +611,8 @@ const AIHub = () => {
           </div>
         </div>
 
-        {/* Gold Divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+        {/* Divider */}
+        <SectionDivider />
 
         {/* Quick Benefits Strip - Active Champagne Layer */}
         <section className="py-12 bg-black">
@@ -639,8 +640,8 @@ const AIHub = () => {
           </div>
         </section>
 
-        {/* Gold Divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+        {/* Divider */}
+        <SectionDivider />
 
         {/* ALL TOOLS SECTION - Bulk view with Active Color Layer */}
         <section className="py-16 md:py-20 bg-black">
@@ -678,8 +679,8 @@ const AIHub = () => {
           </div>
         </section>
 
-        {/* Gold Divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+        {/* Divider */}
+        <SectionDivider />
 
         {/* CATEGORY SECTIONS - Active color layer with filled cards */}
         {(['property', 'productivity', 'design', 'marketing'] as ToolCategory[]).map((category) => {
@@ -734,8 +735,8 @@ const AIHub = () => {
                 </div>
               </div>
 
-              {/* Gold Divider */}
-              <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent mt-16" />
+              {/* Divider */}
+              <SectionDivider />
             </section>
           );
         })}
@@ -817,8 +818,8 @@ const AIHub = () => {
           </div>
         </section>
 
-        {/* Gold Divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+        {/* Divider */}
+        <SectionDivider />
 
         {/* MAKE MONEY SECTION - JBJ Academy, Employment Hub, Referral Program */}
         <section className="py-16 md:py-20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
@@ -1048,8 +1049,8 @@ const AIHub = () => {
           </div>
         </section>
 
-        {/* Gold Divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+        {/* Divider */}
+        <SectionDivider />
 
         {/* JOIN SECTION - 3-Layer System */}
         <section className="py-16 md:py-20 bg-black">

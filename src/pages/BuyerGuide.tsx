@@ -37,6 +37,7 @@ import { GuideHero } from "@/components/guides/GuideHero";
 import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
 import { GuideSectionHeader } from "@/components/guides/GuideSectionHeader";
 import Footer from "@/components/Footer";
+import { SectionDivider } from "@/components/ui/section-divider";
 import {
   Accordion,
   AccordionContent,
@@ -354,7 +355,7 @@ const BuyerGuide = () => {
       />
 
       {/* Divider between Hero and Who This Guide Is For */}
-      <div className="h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+      <SectionDivider />
 
       {/* Sticky Table of Contents - z-[60] to appear above JBJ support widget */}
       <div className="hidden lg:block fixed right-8 top-1/4 z-[60] max-w-xs">
