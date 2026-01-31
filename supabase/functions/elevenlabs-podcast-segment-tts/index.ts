@@ -7,6 +7,9 @@ const corsHeaders = {
   "Access-Control-Expose-Headers": "x-jbj-characters, x-jbj-cached",
 };
 
+// Bump this when changing voices / voice_settings so old cached audio is not reused.
+const VOICE_PROFILE_VERSION = "v2_clarity_2026-01-31";
+
 // Voice IDs for the podcast cast
 const VOICES = {
   jane: Deno.env.get("ELEVENLABS_VOICE_ID") || "", // Jane's cloned voice
@@ -52,11 +55,13 @@ async function callElevenLabsTts(params: {
       },
       body: JSON.stringify({
         text: params.text,
+        // Multilingual, high quality; we keep settings very stable/clean.
         model_id: "eleven_multilingual_v2",
         voice_settings: {
-          stability: 0.6,
-          similarity_boost: 0.8,
-          style: 0.3,
+          // Cleaner + more consistent tone (reduce "up/down" intonation swings)
+          stability: 0.8,
+          similarity_boost: 0.9,
+          style: 0.0,
           use_speaker_boost: true,
           speed: 1.0,
         },
@@ -77,6 +82,9 @@ async function callElevenLabsTts(params: {
 
       if (apiStatus === "quota_exceeded") {
         status = 402;
+        message = apiMessage || message;
+      } else if (apiStatus === "too_many_concurrent_requests") {
+        status = 429;
         message = apiMessage || message;
       } else if (response.status === 401 || response.status === 403) {
         status = 401;
@@ -139,7 +147,8 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const textHash = hashString(text);
+    // Include voice + profile version in the cache key so tuning changes take effect immediately.
+    const textHash = hashString(`${VOICE_PROFILE_VERSION}|${voiceId}|${outputFormat}|${text}`);
     const storagePath = `ep${episodeId}/${language}/${segmentIndex}-${speaker}-${textHash}.mp3`;
 
     // Check if audio already exists in storage

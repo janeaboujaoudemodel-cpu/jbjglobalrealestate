@@ -149,6 +149,14 @@ const JBJPodcastSection = () => {
     }
   }, [playback.error, playback.status]);
 
+  useEffect(() => {
+    if (playback.status === "loading" && playback.loadingStep) {
+      setPlaybackNote(`Preparing audio… ${playback.loadingStep.current}/${playback.loadingStep.total}`);
+    } else {
+      setPlaybackNote(null);
+    }
+  }, [playback.loadingStep, playback.status]);
+
   const effectiveDuration = playback.duration || parseDurationToSeconds(selectedEpisode.duration);
   const displayTimeSeconds = isScrubbing && effectiveDuration
     ? (Math.max(0, Math.min(100, scrubProgress)) / 100) * effectiveDuration

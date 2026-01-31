@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { PodcastSegment } from "@/content/podcast/types";
+import type { PodcastSegment, PodcastSpeaker } from "@/content/podcast/types";
+import { buildCaptionCues, findCaptionCueAtTime, type CaptionCue } from "@/features/podcast/podcastCaptions";
+import { translatePodcastSegments } from "@/features/podcast/podcastTranslate";
 
 type BillingInfo = {
   /** Total characters billed by the TTS provider during this prepare cycle. */
@@ -10,11 +12,11 @@ type BillingInfo = {
 };
 
 type PreparedAudio = {
-  segments: PodcastSegment[]; // source script (English)
   segmentStartTimes: number[]; // seconds
   duration: number; // seconds
   buffers: AudioBuffer[];
   billing: BillingInfo;
+  captionCues: CaptionCue[];
 };
 
 type Status = "idle" | "loading" | "ready" | "playing" | "paused" | "error";
@@ -55,7 +57,7 @@ function findSegmentIndexAtTime(prepared: PreparedAudio, tSeconds: number) {
   return Math.max(0, Math.min(starts.length - 1, lo - 1));
 }
 
-// translateSegments is no longer used because captions are delivered via the per-language audio.
+// Captions are computed as short timed cues (approximate) based on audio segment durations.
 
 class TtsHttpError extends Error {
   status: number;
@@ -94,7 +96,8 @@ async function fetchTtsSegmentAudio(params: {
       episode_id: params.episodeId,
       segment_index: params.segmentIndex,
       language: params.audioLanguage,
-      require_cache: params.requireCache ?? true,
+      // Default to allowing generation when not explicitly in cache-only mode.
+      require_cache: params.requireCache ?? false,
     }),
   });
 
@@ -160,6 +163,7 @@ export function usePodcastPlayback(params: {
   const [captionSpeaker, setCaptionSpeaker] = useState<PodcastSegment["speaker"] | null>(null);
   const [segmentIndex, setSegmentIndex] = useState(0);
   const [billing, setBilling] = useState<BillingInfo | null>(null);
+  const [captionCueIndex, setCaptionCueIndex] = useState(0);
 
   const segmentIndexRef = useRef(0);
 
@@ -172,8 +176,10 @@ export function usePodcastPlayback(params: {
   } | null>(null);
 
   const preparedRef = useRef<PreparedAudio | null>(null);
-  const captionsRef = useRef<PodcastSegment[] | null>(null);
+  const captionCuesRef = useRef<CaptionCue[] | null>(null);
   const pausedAtRef = useRef(0);
+  const playTokenRef = useRef(0);
+  const captionCueIndexRef = useRef(0);
 
   const canPlay = Boolean(params.segments?.length);
 
@@ -203,9 +209,20 @@ export function usePodcastPlayback(params: {
       setSegmentIndex(idx);
     }
 
-    const captionSegments = captionsRef.current ?? prepared.segments;
-    setCaption(captionSegments[idx]?.text || "");
-    setCaptionSpeaker(prepared.segments[idx]?.speaker ?? null);
+    const cues = captionCuesRef.current ?? prepared.captionCues;
+    if (cues.length) {
+      const cueIdx = findCaptionCueAtTime(cues, tSeconds);
+      if (cueIdx !== captionCueIndexRef.current) {
+        captionCueIndexRef.current = cueIdx;
+        setCaptionCueIndex(cueIdx);
+      }
+      const cue = cues[cueIdx];
+      setCaption(cue?.text || "");
+      setCaptionSpeaker((cue?.speaker as PodcastSpeaker) ?? null);
+    } else {
+      setCaption("");
+      setCaptionSpeaker(null);
+    }
   }, []);
 
   const ensureAudioContext = useCallback(() => {
@@ -245,14 +262,16 @@ export function usePodcastPlayback(params: {
 
     if (cachedAudio) {
       preparedRef.current = cachedAudio;
-      captionsRef.current = params.segments;
+      captionCuesRef.current = cachedAudio.captionCues;
 
       setDuration(cachedAudio.duration);
-      setCaption((captionsRef.current?.[0]?.text ?? "") || "");
-      setCaptionSpeaker(cachedAudio.segments[0]?.speaker ?? null);
+      setCaption(cachedAudio.captionCues[0]?.text ?? "");
+      setCaptionSpeaker(cachedAudio.captionCues[0]?.speaker ?? null);
       setBilling(cachedAudio.billing);
       setSegmentIndex(0);
       segmentIndexRef.current = 0;
+      setCaptionCueIndex(0);
+      captionCueIndexRef.current = 0;
       setCurrentTime(0);
       pausedAtRef.current = 0;
       setError(null);
@@ -277,11 +296,21 @@ export function usePodcastPlayback(params: {
       }
 
       // 1) Fetch audio – try the requested language first (cache-only). If it's not
-      //    cached yet, fall back to English (also cache-only). Generating new audio
-      //    is NOT allowed from the client to protect credits.
+      //    cached yet, generate it on-demand (then it will be cached for future plays).
       let preparedAudio: PreparedAudio;
 
-      const fetchSegmentsForLanguage = async (lang: string, allowGeneration: boolean) => {
+      // Translate the script to the selected audio language (server-cached).
+      const ttsSegments: PodcastSegment[] = await translatePodcastSegments({
+        segments: params.segments,
+        targetLang: audioLang,
+        signal: abort.signal,
+      });
+
+      const fetchSegmentsForLanguage = async (
+        lang: string,
+        allowGeneration: boolean,
+        segs: PodcastSegment[],
+      ) => {
         let completed = 0;
 
         // IMPORTANT: don't use Promise.all here — it rejects fast and leaves the rest of
@@ -308,7 +337,7 @@ export function usePodcastPlayback(params: {
             nextIndex += 1;
             if (i >= params.segments.length) return;
 
-            const seg = params.segments[i];
+            const seg = segs[i];
 
             try {
               const ttsFn = allowGeneration ? fetchTtsSegmentAudioWithRetry : fetchTtsSegmentAudio;
@@ -352,29 +381,16 @@ export function usePodcastPlayback(params: {
 
       let results: Awaited<ReturnType<typeof fetchSegmentsForLanguage>>;
       try {
-        // First, try cache-only to avoid using credits
-        results = await fetchSegmentsForLanguage(audioLang, false);
+        // First, try cache-only (fast replays, 0 credits)
+        results = await fetchSegmentsForLanguage(audioLang, false, ttsSegments);
       } catch (err) {
         const status = (err as any)?.status;
 
-        // Only treat 409 as a cache miss. Anything else (502, 401, decoding errors, etc.)
-        // is a real failure and should not trigger a retry/fallback loop.
+        // Only treat 409 as a cache miss. Anything else (502, 401, decode errors, etc.) is real.
         if (status !== 409) throw err;
 
-        if (audioLang === "en") {
-          console.info("English audio not cached, generating...");
-          results = await fetchSegmentsForLanguage("en", true);
-        } else {
-          console.info(`Audio not cached for ${audioLang}, falling back to English`);
-          try {
-            results = await fetchSegmentsForLanguage("en", false);
-          } catch (e2) {
-            const status2 = (e2 as any)?.status;
-            if (status2 !== 409) throw e2;
-            console.info("English audio not cached either, generating...");
-            results = await fetchSegmentsForLanguage("en", true);
-          }
-        }
+        // Cache miss: generate the selected language on-demand.
+        results = await fetchSegmentsForLanguage(audioLang, true, ttsSegments);
       }
 
       const ordered = results.slice().sort((a, b) => a.index - b.index);
@@ -390,8 +406,13 @@ export function usePodcastPlayback(params: {
         t += b.duration;
       }
 
+      const captionCues = buildCaptionCues({
+        segmentStartTimes,
+        segmentDurations: buffers.map((b) => b.duration),
+        segmentTexts: ttsSegments.map((s) => ({ speaker: s.speaker, text: s.text })),
+      });
+
       preparedAudio = {
-        segments: params.segments,
         segmentStartTimes,
         duration: t,
         buffers,
@@ -400,6 +421,7 @@ export function usePodcastPlayback(params: {
           cachedSegments: cachedSegmentsCount,
           totalSegments: params.segments.length,
         },
+        captionCues,
       };
 
       audioCache.set(audioKey, preparedAudio);
@@ -417,16 +439,17 @@ export function usePodcastPlayback(params: {
         audioCache.set(audioKey, preparedAudio);
       }
 
-      // 2) Captions: don't block audio playback. Start with English immediately.
-      captionsRef.current = params.segments;
+      captionCuesRef.current = preparedAudio.captionCues;
       preparedRef.current = preparedAudio;
 
       setDuration(preparedAudio.duration);
-      setCaption(params.segments[0]?.text || "");
-      setCaptionSpeaker(params.segments[0]?.speaker ?? null);
+      setCaption(preparedAudio.captionCues[0]?.text || "");
+      setCaptionSpeaker(preparedAudio.captionCues[0]?.speaker ?? null);
       setBilling(preparedAudio.billing);
       setSegmentIndex(0);
       segmentIndexRef.current = 0;
+      setCaptionCueIndex(0);
+      captionCueIndexRef.current = 0;
       setStatus("ready");
 
       // Captions are now implicitly in the audio's language, so we skip extra translation.
@@ -467,6 +490,9 @@ export function usePodcastPlayback(params: {
 
       stopInternal();
 
+      // Increment playback token so old "ended" events can't override current state.
+      const playToken = (playTokenRef.current += 1);
+
       // Find starting segment and offset into that buffer.
       let startIdx = 0;
       for (let i = 0; i < prepared.segmentStartTimes.length; i++) {
@@ -504,9 +530,9 @@ export function usePodcastPlayback(params: {
         sources.push(source);
       }
 
-      // When the last source ends, mark as finished.
+      // When the last source ends, mark as finished (only if still the active playback).
       sources[sources.length - 1]?.addEventListener("ended", () => {
-        // Only if we didn't start a new playback.
+        if (playTokenRef.current !== playToken) return;
         setStatus((s) => (s === "playing" ? "paused" : s));
       });
 
@@ -582,13 +608,15 @@ export function usePodcastPlayback(params: {
     pausedAtRef.current = 0;
     playbackRef.current = null;
     preparedRef.current = null;
-    captionsRef.current = null;
+    captionCuesRef.current = null;
     setCurrentTime(0);
     setDuration(0);
     setCaption("");
     setCaptionSpeaker(null);
     setSegmentIndex(0);
     segmentIndexRef.current = 0;
+    setCaptionCueIndex(0);
+    captionCueIndexRef.current = 0;
     setBilling(null);
     setError(null);
     setStatus("idle");
@@ -620,6 +648,7 @@ export function usePodcastPlayback(params: {
     progress,
     caption,
     captionSpeaker,
+    captionCueIndex,
     segmentIndex,
     canPlay,
     prepare,
@@ -629,3 +658,4 @@ export function usePodcastPlayback(params: {
     seek,
   };
 }
+
