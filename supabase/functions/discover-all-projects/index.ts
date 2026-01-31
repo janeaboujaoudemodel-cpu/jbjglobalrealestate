@@ -68,14 +68,18 @@ serve(async (req) => {
         .filter((l: string) => {
           if (!l.startsWith("https://providentestate.com/new-projects/")) return false;
           if (l.includes("/page/")) return false;
-          if (l.includes("/developed-by-")) return false;
+          // Exclude developer listing pages like /new-projects/developed-by-emaar
+          if (/\/new-projects\/developed-by-[^\/]+$/i.test(l)) return false;
+          // Exclude location landing pages like /new-projects/in-dubai-marina
           if (/\/new-projects\/in-[a-z0-9\-]+$/i.test(l)) return false;
           if (l === "https://providentestate.com/new-projects") return false;
           // Must have a slug after /new-projects/
-          const match = l.match(/\/new-projects\/([a-z0-9\-]+)$/i);
-          return match && match[1].length > 3;
+          const match = l.match(/\/new-projects\/([^\/\?#]+)$/i);
+          return Boolean(match && match[1] && match[1].length >= 1);
         })
-    )];
+    )]
+      // Stable ordering so the queue is consistent across runs
+      .sort();
 
     console.log(`[Discover] Found ${projectUrls.length} unique project URLs`);
 
