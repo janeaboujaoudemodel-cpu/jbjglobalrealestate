@@ -59,21 +59,17 @@ export function MegaMenuFeaturedCard({
       to={to}
       onClick={onClick}
       className={cn(
-        "block group relative overflow-hidden rounded-2xl aspect-[3/2] min-h-[320px] lg:min-h-[440px] transform transition-all duration-500 hover:scale-[1.01]",
+        // Keep the featured visual fully integrated in the dropdown (no “floating card” scale-up)
+        "block group relative overflow-hidden rounded-2xl aspect-[3/2] min-h-[320px] lg:min-h-[440px] transition-all duration-500",
         className
       )}
-      style={{
-        perspective: "1000px",
-        boxShadow:
-          "0 20px 50px -15px rgba(0,0,0,0.4), 0 0 0 2px rgba(200,167,102,0.25)",
-      }}
     >
       <div
         className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
         style={{ backgroundImage: `url(${image})` }}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-transparent" />
-      <div className="absolute inset-0 border-2 border-gold/35 rounded-2xl group-hover:border-gold transition-colors" />
+      <div className="absolute inset-0 border border-gold/25 rounded-2xl group-hover:border-gold/50 transition-colors" />
       <div className="absolute bottom-0 left-0 right-0 p-7">
         {kicker ? (
           <p className="text-gold text-xs font-bold tracking-[0.25em] uppercase mb-2">
