@@ -23,6 +23,7 @@ const MegaMenuMore: React.FC<MegaMenuMoreProps> = ({ onClose }) => {
     { label: 'Careers', href: '/join', icon: Briefcase },
     { label: 'Our Awards', href: '/awards', icon: Award },
     { label: 'Contact Us', href: '/contact', icon: Phone },
+    { label: 'Real Estate Guides', href: '/guides', icon: BookOpen },
     { label: 'Complaint Procedure', href: '/complaint', icon: ClipboardCheck },
     { label: 'Philanthropy', href: '/philanthropy', icon: Heart },
     { label: 'Testimonials', href: '/testimonials', icon: MessageCircle },

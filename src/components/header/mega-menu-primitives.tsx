@@ -14,20 +14,24 @@ type MegaMenuShellProps = {
  * - Wide, consistent container
  * - Champagne gradient background (design token classes)
  */
-export function MegaMenuShell({ children, className }: MegaMenuShellProps) {
-  return (
-    <div
-      className={cn(
-        "absolute top-full left-0 right-0 mt-0 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] z-50",
-        className
-      )}
-    >
-      {children}
-      {/* Bottom gold accent (kept) */}
-      <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
-    </div>
-  );
-}
+export const MegaMenuShell = React.forwardRef<HTMLDivElement, MegaMenuShellProps>(
+  ({ children, className }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          "absolute top-full left-0 right-0 mt-0 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] z-50",
+          className
+        )}
+      >
+        {children}
+        {/* Bottom gold accent (kept) */}
+        <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
+      </div>
+    );
+  }
+);
+MegaMenuShell.displayName = "MegaMenuShell";
 
 type MegaMenuFeaturedCardProps = {
   to: string;
