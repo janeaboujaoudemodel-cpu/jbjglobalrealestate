@@ -6,21 +6,12 @@ import { cn } from "@/lib/utils";
 
 /**
  * ============================================================
- * GLOBAL BUTTON SYSTEM - JBJ GLOBAL REAL ESTATE (LOCKED)
+ * GLOBAL BUTTON SYSTEM - JBJ GLOBAL REAL ESTATE
  * ============================================================
- * ALLOWED BRANDED STYLES:
- * - primary: 3D Champagne Gold with split text (used for main CTAs)
- * - secondary: Transparent bg with gold border → champagne fill on hover
- * - tertiary: White/champagne fill (for dark backgrounds) with black text/border
- *             On hover: text becomes gold, arrow becomes black
- * - media: For image/video backgrounds (white text → gold on hover)
- * - dark: Black bg with gold text → champagne on hover
- *
- * ENFORCEMENT:
- * - Any visual overrides passed via className are automatically stripped
- *   (bg-*, gradient from/to/via, shadow-*, scale-*, text/border color overrides).
- * - Legacy/utility variants remain ONLY as aliases to prevent build breaks;
- *   they render as one of the branded styles.
+ * IMPORTANT:
+ * - Primary CTAs must use the platform “active” color (theme primary), not gold/yellow.
+ * - We still keep the premium 3D feel, but the hue comes from --primary.
+ * - className color overrides are stripped to enforce consistency.
  * ============================================================
  */
 
@@ -39,13 +30,13 @@ const LOCKED_CHAMPAGNE_BG =
   "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]";
 
 const BTN_3D =
-  "shadow-[0_10px_30px_hsl(var(--gold)/0.35),0_6px_15px_hsl(0_0%_0%/0.22),inset_0_1px_0_hsl(0_0%_100%/0.65)]";
+  "shadow-[0_10px_30px_hsl(var(--primary)/0.25),0_6px_15px_hsl(0_0%_0%/0.22),inset_0_1px_0_hsl(0_0%_100%/0.55)]";
 const BTN_3D_HOVER =
-  "hover:shadow-[0_14px_45px_hsl(var(--gold)/0.45),0_10px_25px_hsl(0_0%_0%/0.28),inset_0_1px_0_hsl(0_0%_100%/0.75)]";
+  "hover:shadow-[0_14px_45px_hsl(var(--primary)/0.32),0_10px_25px_hsl(0_0%_0%/0.28),inset_0_1px_0_hsl(0_0%_100%/0.65)]";
 
-// PRIMARY: 3D locked champagne fill on load + gold border; hover lifts.
+// PRIMARY: Active color filled (NO gold/yellow).
 const BRAND_PRIMARY =
-  `${LOCKED_CHAMPAGNE_BG} text-foreground border-2 border-gold/80 ${BTN_3D} ${BTN_3D_HOVER} hover:-translate-y-0.5 active:translate-y-0`;
+  `bg-primary text-primary-foreground border-2 border-primary/90 ${BTN_3D} ${BTN_3D_HOVER} hover:-translate-y-0.5 active:translate-y-0`;
 
 // SECONDARY: transparent on load; on hover becomes locked champagne with dark text.
 const BRAND_SECONDARY =

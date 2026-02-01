@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -39,6 +40,10 @@ const UserProfile = () => {
   const [displayName, setDisplayName] = useState("");
   const [phone, setPhone] = useState("");
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+
+  // Preferences
+  const [emailNotifications, setEmailNotifications] = useState(true);
+  const [savingNotifications, setSavingNotifications] = useState(false);
   
   // Password change state
   const [currentPassword, setCurrentPassword] = useState("");
@@ -57,8 +62,31 @@ const UserProfile = () => {
     setDisplayName(metadata.full_name || metadata.name || user.email?.split('@')[0] || '');
     setPhone(metadata.phone || '');
     setPhotoUrl(metadata.avatar_url || metadata.picture || null);
+    setEmailNotifications(Boolean((metadata as any).email_notifications ?? true));
     setLoading(false);
   }, [user, navigate]);
+
+  const handleEmailNotificationsToggle = async (checked: boolean) => {
+    if (!user) return;
+    const prev = emailNotifications;
+    setEmailNotifications(checked);
+    setSavingNotifications(true);
+    try {
+      const { error } = await supabase.auth.updateUser({
+        data: {
+          email_notifications: checked,
+        },
+      });
+      if (error) throw error;
+      toast.success(checked ? "Email notifications enabled" : "Email notifications disabled");
+    } catch (error: any) {
+      console.error("Error updating notification preference:", error);
+      setEmailNotifications(prev);
+      toast.error(error?.message || "Failed to update notification preference");
+    } finally {
+      setSavingNotifications(false);
+    }
+  };
 
   const handleSaveProfile = async () => {
     if (!user) return;
@@ -181,7 +209,7 @@ const UserProfile = () => {
     return (
       <MainLayout>
         <div className="min-h-screen flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-gold" />
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
       </MainLayout>
     );
@@ -189,29 +217,30 @@ const UserProfile = () => {
 
   return (
     <MainLayout>
-      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="min-h-screen bg-black">
+        <div className="mx-3 md:mx-4 lg:mx-6 my-6 rounded-2xl border border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
+          <div className="container mx-auto px-4 py-8 max-w-4xl">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-zinc-900 mb-2">My Profile</h1>
-            <p className="text-zinc-600">Manage your account settings and preferences</p>
+            <h1 className="text-3xl font-bold text-foreground mb-2">My Profile</h1>
+            <p className="text-muted-foreground">Manage your account settings and preferences</p>
           </div>
 
           {/* Profile Card */}
-          <Card className="mb-8 border-2 border-gold/20 shadow-lg">
+          <Card className="mb-8 border border-border shadow-lg bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
             <CardContent className="p-6">
               <div className="flex flex-col md:flex-row items-center gap-6">
                 {/* Avatar Section */}
                 <div className="relative">
-                  <Avatar className="h-28 w-28 border-4 border-gold/30">
+                  <Avatar className="h-28 w-28 border-4 border-border/60">
                     <AvatarImage src={photoUrl || ""} alt={displayName} />
-                    <AvatarFallback className="text-3xl bg-gold text-black font-bold">
+                    <AvatarFallback className="text-3xl bg-primary text-primary-foreground font-bold">
                       {displayName.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <label 
                     htmlFor="photo-upload" 
-                    className="absolute bottom-0 right-0 p-2 bg-gold text-black rounded-full cursor-pointer hover:bg-gold-light transition-colors shadow-lg"
+                    className="absolute bottom-0 right-0 p-2 bg-primary text-primary-foreground rounded-full cursor-pointer hover:bg-primary/90 transition-colors shadow-lg"
                   >
                     {uploadingPhoto ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
@@ -231,10 +260,10 @@ const UserProfile = () => {
 
                 {/* Info Section */}
                 <div className="flex-1 text-center md:text-left">
-                  <h2 className="text-2xl font-bold text-zinc-900">{displayName}</h2>
-                  <p className="text-zinc-600">{user?.email}</p>
+                  <h2 className="text-2xl font-bold text-foreground">{displayName}</h2>
+                  <p className="text-muted-foreground">{user?.email}</p>
                   <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mt-3">
-                    <Badge variant="outline" className="border-gold/50 text-gold">
+                    <Badge variant="outline" className="border-primary/30 text-primary">
                       <User className="h-3 w-3 mr-1" />
                       Member
                     </Badge>
@@ -261,16 +290,16 @@ const UserProfile = () => {
 
           {/* Tabs */}
           <Tabs defaultValue="profile" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3 bg-white border-2 border-gold/20">
-              <TabsTrigger value="profile" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+            <TabsList className="grid w-full grid-cols-3 bg-card border border-border">
+              <TabsTrigger value="profile" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <User className="h-4 w-4 mr-2" />
                 Profile
               </TabsTrigger>
-              <TabsTrigger value="security" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <TabsTrigger value="security" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <Shield className="h-4 w-4 mr-2" />
                 Security
               </TabsTrigger>
-              <TabsTrigger value="settings" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <TabsTrigger value="settings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <Settings className="h-4 w-4 mr-2" />
                 Settings
               </TabsTrigger>
@@ -278,7 +307,7 @@ const UserProfile = () => {
 
             {/* Profile Tab */}
             <TabsContent value="profile">
-              <Card className="border-2 border-gold/20">
+              <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
                 <CardHeader>
                   <CardTitle>Personal Information</CardTitle>
                   <CardDescription>Update your personal details</CardDescription>
@@ -287,7 +316,7 @@ const UserProfile = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="displayName" className="flex items-center gap-2">
-                        <User className="h-4 w-4 text-gold" />
+                        <User className="h-4 w-4 text-primary" />
                         Display Name
                       </Label>
                       <Input
@@ -299,20 +328,20 @@ const UserProfile = () => {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email" className="flex items-center gap-2">
-                        <Mail className="h-4 w-4 text-gold" />
+                        <Mail className="h-4 w-4 text-primary" />
                         Email Address
                       </Label>
                       <Input
                         id="email"
                         value={user?.email || ""}
                         disabled
-                        className="bg-zinc-100"
+                        className="bg-muted"
                       />
                       <p className="text-xs text-zinc-500">Email cannot be changed</p>
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="phone" className="flex items-center gap-2">
-                        <Phone className="h-4 w-4 text-gold" />
+                        <Phone className="h-4 w-4 text-primary" />
                         Phone Number
                       </Label>
                       <Input
@@ -327,7 +356,7 @@ const UserProfile = () => {
                   <Separator />
 
                   <div className="flex justify-end">
-                    <Button onClick={handleSaveProfile} disabled={saving} className="bg-gold hover:bg-gold-dark text-black">
+                    <Button onClick={handleSaveProfile} disabled={saving} variant="primary">
                       {saving ? (
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                       ) : (
@@ -342,7 +371,7 @@ const UserProfile = () => {
 
             {/* Security Tab */}
             <TabsContent value="security">
-              <Card className="border-2 border-gold/20">
+              <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
                 <CardHeader>
                   <CardTitle>Change Password</CardTitle>
                   <CardDescription>Update your password to keep your account secure</CardDescription>
@@ -351,7 +380,7 @@ const UserProfile = () => {
                   <div className="space-y-4 max-w-md">
                     <div className="space-y-2">
                       <Label htmlFor="newPassword" className="flex items-center gap-2">
-                        <Lock className="h-4 w-4 text-gold" />
+                        <Lock className="h-4 w-4 text-primary" />
                         New Password
                       </Label>
                       <Input
@@ -364,7 +393,7 @@ const UserProfile = () => {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="confirmPassword" className="flex items-center gap-2">
-                        <Lock className="h-4 w-4 text-gold" />
+                        <Lock className="h-4 w-4 text-primary" />
                         Confirm New Password
                       </Label>
                       <Input
@@ -383,7 +412,7 @@ const UserProfile = () => {
                     <Button 
                       onClick={handleChangePassword} 
                       disabled={changingPassword || !newPassword || !confirmPassword}
-                      className="bg-gold hover:bg-gold-dark text-black"
+                      variant="primary"
                     >
                       {changingPassword ? (
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -399,21 +428,26 @@ const UserProfile = () => {
 
             {/* Settings Tab */}
             <TabsContent value="settings">
-              <Card className="border-2 border-gold/20">
+              <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
                 <CardHeader>
                   <CardTitle>Account Settings</CardTitle>
                   <CardDescription>Manage your account preferences</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between p-4 bg-zinc-50 rounded-lg">
+                  <div className="flex items-center justify-between p-4 rounded-lg border border-border bg-muted/20">
                     <div className="flex items-center gap-3">
-                      <Bell className="h-5 w-5 text-gold" />
+                      <Bell className="h-5 w-5 text-primary" />
                       <div>
-                        <p className="font-medium text-zinc-900">Email Notifications</p>
-                        <p className="text-sm text-zinc-600">Receive updates about your properties</p>
+                        <p className="font-medium text-foreground">Email Notifications</p>
+                        <p className="text-sm text-muted-foreground">Receive updates about your properties</p>
                       </div>
                     </div>
-                    <ChevronRight className="h-5 w-5 text-zinc-400" />
+                    <Switch
+                      checked={emailNotifications}
+                      onCheckedChange={handleEmailNotificationsToggle}
+                      disabled={savingNotifications}
+                      aria-label="Toggle email notifications"
+                    />
                   </div>
 
                   <Separator />
@@ -438,6 +472,7 @@ const UserProfile = () => {
               </Card>
             </TabsContent>
           </Tabs>
+          </div>
         </div>
       </div>
     </MainLayout>
