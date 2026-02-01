@@ -430,6 +430,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     <header
       ref={headerViewportRef}
       className="fixed top-0 left-0 right-0 z-[9999] h-24 sm:h-28 lg:h-32 overflow-visible"
+      style={{ '--header-height': '128px' } as React.CSSProperties}
     >
       {/* Ultra Premium Multi-Layer Background - Pure Black on scroll (same as footer) */}
       <div 
@@ -998,9 +999,19 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 </button>
               </div>
 
+              {/* Backdrop overlay - captures clicks outside mega menu */}
+              {activeMegaMenu && (
+                <div 
+                  className="fixed inset-0 z-40 bg-black/30 backdrop-blur-[1px]"
+                  onClick={closeMegaMenu}
+                  aria-hidden="true"
+                />
+              )}
+
               {/* Mega Menu Panels */}
               {activeMegaMenu && (
                 <div 
+                  className="relative z-50"
                   onMouseEnter={() => handleMegaMenuEnter(activeMegaMenu)}
                   onMouseLeave={handleMegaMenuLeave}
                 >

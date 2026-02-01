@@ -1315,7 +1315,6 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                       <Button
                         variant="outline"
                         onClick={() => setActiveTab("approvals")}
-                        disabled={isSyncing}
                       >
                         View Queue
                       </Button>
