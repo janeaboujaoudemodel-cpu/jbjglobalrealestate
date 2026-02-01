@@ -211,7 +211,7 @@ export default function ProjectDetailLayout({
           {/* Starting Price - Above title */}
           {typeof project.price_from === "number" && (
             <p className="text-lg md:text-xl text-white/80 mb-2">
-              Starting from <span className="text-gold font-bold text-2xl md:text-3xl">{formatPrice(project.price_from)}</span>
+              Starting from <span className="text-gold font-bold text-2xl md:text-3xl">{formatPriceUtil(project.price_from)}</span>
             </p>
           )}
 
@@ -350,7 +350,7 @@ export default function ProjectDetailLayout({
             <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Starting Price</p>
               <p className="mt-2 text-xl font-bold text-gold">
-                {typeof project.price_from === "number" ? formatPrice(project.price_from) : "On request"}
+                {typeof project.price_from === "number" ? formatPriceUtil(project.price_from) : "On request"}
               </p>
             </div>
             <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
