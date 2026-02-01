@@ -388,11 +388,15 @@ export default function ProjectDetailLayout({
             </div>
             <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Bedrooms</p>
-              <p className="mt-2 text-xl font-bold text-foreground">{bedroomsText || "Varies"}</p>
+              <p className="mt-2 text-xl font-bold text-foreground">
+                {bedroomsText || (project.bedrooms_min ? `${project.bedrooms_min} BR` : "Contact Us")}
+              </p>
             </div>
             <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Size</p>
-              <p className="mt-2 text-xl font-bold text-foreground">{sizeText || "Varies"}</p>
+              <p className="mt-2 text-xl font-bold text-foreground">
+                {sizeText || (project.size_min ? `${project.size_min.toLocaleString()} sqft` : "Contact Us")}
+              </p>
             </div>
           </div>
 
@@ -434,6 +438,60 @@ export default function ProjectDetailLayout({
                 </>
               ) : (
                 <p className="text-body text-muted-foreground">Gallery images will be available soon.</p>
+              )}
+            </div>
+          </div>
+
+          {/* UNIQUE SELLING POINTS (USP/Highlights) SECTION */}
+          <div ref={uspRef} id="usp" className="mb-12 scroll-mt-40">
+            <div className="jj-card-inner">
+              <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
+                <Star className="w-5 h-5 text-gold" />
+                Unique Selling Points
+              </h3>
+              {project.usp_bullets && project.usp_bullets.length > 0 ? (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* USP Image */}
+                  {project.usp_image_url && (
+                    <div className="rounded-xl overflow-hidden border border-gold/30">
+                      <SafeImage 
+                        src={project.usp_image_url} 
+                        alt={`${project.name} Highlights`} 
+                        className="w-full h-[300px] object-cover"
+                        fallbackSrc="/placeholder.svg"
+                      />
+                    </div>
+                  )}
+                  <div className={project.usp_image_url ? "" : "lg:col-span-2"}>
+                    {project.usp_headline && (
+                      <h4 className="text-lg font-semibold text-foreground mb-4">{project.usp_headline}</h4>
+                    )}
+                    <ul className="space-y-3">
+                      {project.usp_bullets.map((bullet, idx) => (
+                        <li key={idx} className="flex items-start gap-3">
+                          <span className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <Star className="w-3.5 h-3.5 text-gold" />
+                          </span>
+                          <span className="text-foreground">{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Button 
+                      variant="primary" 
+                      size="sm" 
+                      className="mt-6"
+                      onClick={scrollToInquiry}
+                    >
+                      <ArrowRight className="w-4 h-4" />
+                      Find Out More
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Star className="w-12 h-12 mx-auto text-gold/50 mb-3" />
+                  <p className="text-body text-muted-foreground">Unique selling points will be available soon.</p>
+                </div>
               )}
             </div>
           </div>
@@ -511,6 +569,47 @@ export default function ProjectDetailLayout({
                   </Button>
                 </a>
               </div>
+
+              {/* Location Headline & Description */}
+              {(project.location_headline || project.location_description) && (
+                <div className="mb-6">
+                  {project.location_headline && (
+                    <h4 className="text-lg font-semibold text-foreground mb-2">{project.location_headline}</h4>
+                  )}
+                  {project.location_description && (
+                    <p className="text-muted-foreground leading-relaxed">{project.location_description}</p>
+                  )}
+                </div>
+              )}
+
+              {/* Location Distances */}
+              {project.location_distances && project.location_distances.length > 0 && (
+                <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {project.location_distances.map((dist, idx) => (
+                    <div key={idx} className="flex items-center gap-3 p-3 rounded-xl border border-gold/30 bg-card">
+                      <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
+                        <Clock className="w-5 h-5 text-gold" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-foreground">{dist.time}</p>
+                        <p className="text-xs text-muted-foreground">{dist.label}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Location Image */}
+              {project.location_image_url && (
+                <div className="mb-6 rounded-xl overflow-hidden border border-gold/30">
+                  <SafeImage 
+                    src={project.location_image_url} 
+                    alt={`${project.name} Location`} 
+                    className="w-full h-[250px] object-cover"
+                    fallbackSrc="/placeholder.svg"
+                  />
+                </div>
+              )}
 
               <div className="rounded-xl overflow-hidden border border-gold/30">
                 <iframe
@@ -592,6 +691,42 @@ export default function ProjectDetailLayout({
                 Detailed payment plan documents available upon request.
               </p>
             )}
+          </div>
+
+          {/* FAQ SECTION - Questions & Answers */}
+          <div ref={faqRef} id="faq" className="mb-12 scroll-mt-40">
+            <div className="jj-card-inner">
+              <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
+                <HelpCircle className="w-5 h-5 text-gold" />
+                Questions & Answers
+              </h3>
+              {project.faqs && project.faqs.length > 0 ? (
+                <Accordion type="single" collapsible className="w-full">
+                  {project.faqs.map((faq, idx) => (
+                    <AccordionItem key={idx} value={`faq-${idx}`} className="border-b border-gold/20">
+                      <AccordionTrigger className="text-left text-foreground hover:text-gold py-4">
+                        {faq.question}
+                      </AccordionTrigger>
+                      <AccordionContent className="text-muted-foreground pb-4">
+                        {faq.answer}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              ) : (
+                <div className="text-center py-8">
+                  <HelpCircle className="w-12 h-12 mx-auto text-gold/50 mb-3" />
+                  <p className="text-body text-muted-foreground mb-4">FAQ section will be available soon.</p>
+                  <Button 
+                    variant="primary" 
+                    size="sm"
+                    onClick={scrollToInquiry}
+                  >
+                    Ask a Question
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* MORTGAGE CALCULATOR - Full Width with more spacing */}
