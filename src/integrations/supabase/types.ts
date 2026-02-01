@@ -11073,6 +11073,7 @@ export type Database = {
       pending_project_imports: {
         Row: {
           amenities: string[] | null
+          amenities_list: Json | null
           bedrooms_max: number | null
           bedrooms_min: number | null
           community_id: string | null
@@ -11083,6 +11084,8 @@ export type Database = {
           developer_name: string | null
           documents: Json | null
           emirate: string | null
+          faqs: Json | null
+          floor_plan_types: Json | null
           floors: number | null
           handover_date: string | null
           id: string
@@ -11090,9 +11093,14 @@ export type Database = {
           is_new_project: boolean | null
           job_id: string | null
           location: string | null
+          location_description: string | null
+          location_distances: Json | null
+          location_headline: string | null
+          location_image_url: string | null
           match_confidence: number | null
           matched_project_id: string | null
           name: string
+          payment_breakdown: Json | null
           payment_plan: string | null
           price_from: number | null
           price_to: number | null
@@ -11109,9 +11117,13 @@ export type Database = {
           status: string | null
           status_label: string | null
           updated_at: string
+          usp_bullets: Json | null
+          usp_headline: string | null
+          usp_image_url: string | null
         }
         Insert: {
           amenities?: string[] | null
+          amenities_list?: Json | null
           bedrooms_max?: number | null
           bedrooms_min?: number | null
           community_id?: string | null
@@ -11122,6 +11134,8 @@ export type Database = {
           developer_name?: string | null
           documents?: Json | null
           emirate?: string | null
+          faqs?: Json | null
+          floor_plan_types?: Json | null
           floors?: number | null
           handover_date?: string | null
           id?: string
@@ -11129,9 +11143,14 @@ export type Database = {
           is_new_project?: boolean | null
           job_id?: string | null
           location?: string | null
+          location_description?: string | null
+          location_distances?: Json | null
+          location_headline?: string | null
+          location_image_url?: string | null
           match_confidence?: number | null
           matched_project_id?: string | null
           name: string
+          payment_breakdown?: Json | null
           payment_plan?: string | null
           price_from?: number | null
           price_to?: number | null
@@ -11148,9 +11167,13 @@ export type Database = {
           status?: string | null
           status_label?: string | null
           updated_at?: string
+          usp_bullets?: Json | null
+          usp_headline?: string | null
+          usp_image_url?: string | null
         }
         Update: {
           amenities?: string[] | null
+          amenities_list?: Json | null
           bedrooms_max?: number | null
           bedrooms_min?: number | null
           community_id?: string | null
@@ -11161,6 +11184,8 @@ export type Database = {
           developer_name?: string | null
           documents?: Json | null
           emirate?: string | null
+          faqs?: Json | null
+          floor_plan_types?: Json | null
           floors?: number | null
           handover_date?: string | null
           id?: string
@@ -11168,9 +11193,14 @@ export type Database = {
           is_new_project?: boolean | null
           job_id?: string | null
           location?: string | null
+          location_description?: string | null
+          location_distances?: Json | null
+          location_headline?: string | null
+          location_image_url?: string | null
           match_confidence?: number | null
           matched_project_id?: string | null
           name?: string
+          payment_breakdown?: Json | null
           payment_plan?: string | null
           price_from?: number | null
           price_to?: number | null
@@ -11187,6 +11217,9 @@ export type Database = {
           status?: string | null
           status_label?: string | null
           updated_at?: string
+          usp_bullets?: Json | null
+          usp_headline?: string | null
+          usp_image_url?: string | null
         }
         Relationships: [
           {
@@ -11599,6 +11632,8 @@ export type Database = {
           developer_id: string | null
           emirate: string | null
           facilities: string[] | null
+          faqs: Json | null
+          floor_plan_types: Json | null
           floors: number | null
           furnished_status: string | null
           handover_date: string | null
@@ -11609,7 +11644,12 @@ export type Database = {
           is_premium: boolean | null
           is_sold_out: boolean | null
           location: string | null
+          location_description: string | null
+          location_distances: Json | null
+          location_headline: string | null
+          location_image_url: string | null
           name: string
+          payment_breakdown: Json | null
           payment_plan: string | null
           price_from: number | null
           price_to: number | null
@@ -11622,6 +11662,9 @@ export type Database = {
           status: string | null
           status_label: string | null
           updated_at: string
+          usp_bullets: Json | null
+          usp_headline: string | null
+          usp_image_url: string | null
           views: string[] | null
         }
         Insert: {
@@ -11634,6 +11677,8 @@ export type Database = {
           developer_id?: string | null
           emirate?: string | null
           facilities?: string[] | null
+          faqs?: Json | null
+          floor_plan_types?: Json | null
           floors?: number | null
           furnished_status?: string | null
           handover_date?: string | null
@@ -11644,7 +11689,12 @@ export type Database = {
           is_premium?: boolean | null
           is_sold_out?: boolean | null
           location?: string | null
+          location_description?: string | null
+          location_distances?: Json | null
+          location_headline?: string | null
+          location_image_url?: string | null
           name: string
+          payment_breakdown?: Json | null
           payment_plan?: string | null
           price_from?: number | null
           price_to?: number | null
@@ -11657,6 +11707,9 @@ export type Database = {
           status?: string | null
           status_label?: string | null
           updated_at?: string
+          usp_bullets?: Json | null
+          usp_headline?: string | null
+          usp_image_url?: string | null
           views?: string[] | null
         }
         Update: {
@@ -11669,6 +11722,8 @@ export type Database = {
           developer_id?: string | null
           emirate?: string | null
           facilities?: string[] | null
+          faqs?: Json | null
+          floor_plan_types?: Json | null
           floors?: number | null
           furnished_status?: string | null
           handover_date?: string | null
@@ -11679,7 +11734,12 @@ export type Database = {
           is_premium?: boolean | null
           is_sold_out?: boolean | null
           location?: string | null
+          location_description?: string | null
+          location_distances?: Json | null
+          location_headline?: string | null
+          location_image_url?: string | null
           name?: string
+          payment_breakdown?: Json | null
           payment_plan?: string | null
           price_from?: number | null
           price_to?: number | null
@@ -11692,6 +11752,9 @@ export type Database = {
           status?: string | null
           status_label?: string | null
           updated_at?: string
+          usp_bullets?: Json | null
+          usp_headline?: string | null
+          usp_image_url?: string | null
           views?: string[] | null
         }
         Relationships: [

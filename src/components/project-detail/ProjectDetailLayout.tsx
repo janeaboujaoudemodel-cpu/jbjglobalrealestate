@@ -18,6 +18,12 @@ import {
   Maximize,
   Calendar,
   CreditCard,
+  Star,
+  Clock,
+  HelpCircle,
+  ChevronDown,
+  ChevronUp,
+  ArrowRight,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -32,6 +38,12 @@ import { CONTACT_INFO, getCallUrl, getEmailUrl, getWhatsAppUrl } from "@/constan
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { SafeImage } from "@/components/SafeImage";
 import { formatPrice as formatPriceUtil } from "@/utils/formatNumber";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export type ProjectDetailData = {
   id: string;
@@ -53,6 +65,17 @@ export type ProjectDetailData = {
   amenities?: string[] | null;
   images: { id: string; url: string; alt?: string | null }[];
   documents: { id: string; type: string; url: string; name?: string | null }[];
+  // New fields for full mirroring
+  usp_headline?: string | null;
+  usp_bullets?: string[] | null;
+  usp_image_url?: string | null;
+  location_headline?: string | null;
+  location_description?: string | null;
+  location_distances?: Array<{ label: string; time: string }> | null;
+  location_image_url?: string | null;
+  floor_plan_types?: Array<{ label: string; pdfUrl?: string }> | null;
+  faqs?: Array<{ question: string; answer: string }> | null;
+  payment_breakdown?: { down_payment?: string; during_construction?: string; on_completion?: string } | null;
 };
 
 interface ProjectDetailLayoutProps {
@@ -66,14 +89,16 @@ const MIN_REASONABLE_PRICE_AED = 50_000;
 
 const MAPS_API_KEY = "AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8";
 
-// Sticky sub-nav tabs config - Brochure removed (now CTA only)
+// Sticky sub-nav tabs config - Added USP and FAQs sections
 const SUB_NAV_TABS = [
   { id: "details", label: "Details", icon: FileText },
   { id: "gallery", label: "Gallery", icon: ImageIcon },
+  { id: "usp", label: "Highlights", icon: Star },
   { id: "floor-plans", label: "Floor Plans", icon: Layers },
   { id: "amenities", label: "Amenities", icon: Building2 },
   { id: "location", label: "Location", icon: MapPin },
   { id: "payment", label: "Payment Plan", icon: CreditCard },
+  { id: "faq", label: "FAQ", icon: HelpCircle },
   { id: "ai", label: "AI Analyzer", icon: Sparkles },
   { id: "mortgage", label: "Mortgage", icon: Calculator },
 ] as const;
@@ -100,6 +125,8 @@ export default function ProjectDetailLayout({
   const floorPlansRef = useRef<HTMLDivElement>(null);
   const amenitiesRef = useRef<HTMLDivElement>(null);
   const aiRef = useRef<HTMLDivElement>(null);
+  const uspRef = useRef<HTMLDivElement>(null);
+  const faqRef = useRef<HTMLDivElement>(null);
 
   const { isLeadCaptured } = useLeadCapture();
 
@@ -144,10 +171,12 @@ export default function ProjectDetailLayout({
     const refMap: Record<string, React.RefObject<HTMLDivElement>> = {
       details: detailsRef,
       gallery: galleryRef,
+      usp: uspRef,
       "floor-plans": floorPlansRef,
       amenities: amenitiesRef,
       location: locationRef,
       payment: paymentRef,
+      faq: faqRef,
       ai: aiRef,
       mortgage: mortgageRef,
     };
