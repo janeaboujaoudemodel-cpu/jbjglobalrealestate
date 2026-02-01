@@ -260,20 +260,22 @@ serve(async (req) => {
     const devMap = buildDeveloperMap(devList);
 
     // Fetch pending imports that still need extraction
+    // NOTE: Completeness now requires documents, so we also target items missing docs.
     const { data: imports, error: fetchErr } = await supabase
       .from("pending_project_imports")
-      .select("id, name, slug, source_url, images, documents, description, review_notes")
+      .select("id, name, slug, source_url, images, documents, description, review_notes, amenities")
       .eq("status", "pending")
       // NOTE: PostgREST OR syntax: comma-separated conditions.
-       .or(
-         [
-           "review_notes.ilike.%PENDING_SCRAPE%",
-           "review_notes.eq.INCOMPLETE",
-           "review_notes.ilike.ERROR:%",
-           "images.eq.[]",
-           "description.is.null",
-         ].join(","),
-       )
+      .or(
+        [
+          "review_notes.ilike.%PENDING_SCRAPE%",
+          "review_notes.eq.INCOMPLETE",
+          "review_notes.ilike.ERROR:%",
+          "images.eq.[]",
+          "documents.eq.[]",
+          "description.is.null",
+        ].join(","),
+      )
       .order("created_at", { ascending: true })
       .limit(limit);
 
@@ -340,9 +342,10 @@ serve(async (req) => {
       if (ppUrl) documentsPayload.push({ url: ppUrl, type: "payment_plan", name: `${item.name} Payment Plan.pdf` });
       for (const fp of floorPlans) documentsPayload.push({ url: fp, type: "floor_plan", name: `${item.name} Floor Plan.pdf` });
 
+      // Strict completeness: description + developer + images + at least 1 document (brochure/floor plan/payment plan)
       const hasMinimal = Boolean(extracted.description && extracted.developerName && imagesPayload.length >= 1);
-      // Documents are optional (many source pages only show payment plan as text, not a PDF).
-      const stillIncomplete = !hasMinimal;
+      const hasDocs = documentsPayload.length > 0;
+      const stillIncomplete = !hasMinimal || !hasDocs;
 
       if (dryRun) {
         return { images: imagesPayload.length, documents: documentsPayload.length, stillIncomplete };

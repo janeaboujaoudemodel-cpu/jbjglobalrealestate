@@ -286,6 +286,8 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       needsRes,
       incompleteRes,
       errorsRes,
+      // NEW: strictly ready = has images + docs + description + valid developer
+      strictlyReadyRes,
     ] = await Promise.all([
       supabase.from("projects").select("id", { count: "exact", head: true }),
       supabase.from("pending_project_imports").select("id", { count: "exact", head: true }).eq("status", "pending"),
@@ -307,6 +309,19 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
         .select("id", { count: "exact", head: true })
         .eq("status", "pending")
         .ilike("review_notes", "ERROR:%"),
+      // Strict completeness: images + docs + description + developer
+      supabase
+        .from("pending_project_imports")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "pending")
+        .is("review_notes", null)
+        .not("description", "is", null)
+        .neq("description", "")
+        .not("developer_name", "is", null)
+        .neq("developer_name", "")
+        .not("developer_name", "ilike", "unknown")
+        .not("images", "eq", "[]")
+        .not("documents", "eq", "[]"),
     ]);
 
     const pending = pendingRes.count ?? null;
@@ -321,7 +336,8 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     const needs = needsRes.count ?? 0;
     const incomplete = incompleteRes.count ?? 0;
     const errors = errorsRes.count ?? 0;
-    const readyPending = pending === null ? null : Math.max(0, pending - needs - incomplete - errors);
+    // Now use strict completeness from DB
+    const readyPending = strictlyReadyRes.count ?? 0;
 
     setProjectCount(projectsRes.count);
     setPendingQueueCount(pending);
@@ -1273,8 +1289,8 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                     />
                   </div>
 
-                  {/* Gap alert */}
-                  {(queueBreakdown.pending ?? 0) < 1335 && (
+                  {/* Gap alert – only show if under 1333 (Provident has some duplicates; 1333 unique is acceptable) */}
+                  {(queueBreakdown.pending ?? 0) < 1333 && (
                     <div className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-xs text-amber-800">
                       <strong>Gap detected:</strong> {1335 - (queueBreakdown.pending ?? 0)} listings missing. Click "Rebuild Queue" to discover all URLs.
                     </div>
