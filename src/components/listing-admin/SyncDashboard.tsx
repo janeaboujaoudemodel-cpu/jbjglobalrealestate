@@ -159,6 +159,17 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   } | null>(null);
   const [bulkTotals, setBulkTotals] = useState({ processed: 0, success: 0, errors: 0 });
 
+  // Fix All runner - both pending extraction AND approved project image repairs
+  const [isFixAllRunning, setIsFixAllRunning] = useState(false);
+  const fixAllStopRef = useRef(false);
+  const [fixAllStats, setFixAllStats] = useState<{
+    pending_processed: number;
+    pending_success: number;
+    pending_errors: number;
+    approved_repaired: number;
+    approved_errors: number;
+  } | null>(null);
+
   const [isRebuildingQueue, setIsRebuildingQueue] = useState(false);
   const [isWiping, setIsWiping] = useState(false);
   const [rebuildResult, setRebuildResult] = useState<{
@@ -812,6 +823,96 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     toast.info("Stopping after current batch finishes...");
   };
 
+  // FIX ALL RUNNER - extracts pending queue AND repairs approved projects
+  const startFixAllRunner = async () => {
+    if (isFixAllRunning || isBulkExtractRunning || isRebuildingQueue || isSyncing) return;
+    
+    const confirmed = window.confirm(
+      "⚡ FIX ALL LISTINGS ⚡\n\n" +
+      "This will:\n" +
+      "1) Extract missing data for ALL pending queue items (incomplete/failed)\n" +
+      "2) Repair images for already-approved projects\n\n" +
+      "This may take several minutes. Continue?"
+    );
+    if (!confirmed) return;
+
+    fixAllStopRef.current = false;
+    setIsFixAllRunning(true);
+    setFixAllStats({ pending_processed: 0, pending_success: 0, pending_errors: 0, approved_repaired: 0, approved_errors: 0 });
+
+    toast.info("Fix All started — processing pending queue and approved projects...");
+
+    try {
+      // Phase 1: Extract all pending queue items
+      let pendingStats = { processed: 0, success: 0, errors: 0 };
+      while (!fixAllStopRef.current) {
+        const { data, error } = await supabase.functions.invoke("batch-extract-pending", {
+          body: { limit: 200, throttleMs: 500, concurrency: 8 },
+        });
+        if (error) throw error;
+
+        const processed = Number(data?.stats?.processed ?? 0);
+        const success = Number(data?.stats?.success ?? 0);
+        const errors = Number(data?.stats?.errors ?? 0);
+
+        pendingStats = {
+          processed: pendingStats.processed + processed,
+          success: pendingStats.success + success,
+          errors: pendingStats.errors + errors,
+        };
+
+        setFixAllStats(prev => ({
+          ...prev!,
+          pending_processed: pendingStats.processed,
+          pending_success: pendingStats.success,
+          pending_errors: pendingStats.errors,
+        }));
+
+        await loadProjectCount();
+
+        if (processed === 0) break; // No more pending items
+      }
+
+      toast.success(`Pending queue complete: ${pendingStats.success} fixed, ${pendingStats.errors} errors`);
+
+      // Phase 2: Repair approved projects (images from imports)
+      if (!fixAllStopRef.current) {
+        toast.info("Repairing approved project images...");
+        
+        const { data: repairData, error: repairError } = await supabase.functions.invoke("repair-project-images", {
+          body: { limit: 500, dryRun: false },
+        });
+
+        if (repairError) throw repairError;
+
+        const repaired = repairData?.stats?.repaired ?? 0;
+        const repairErrors = repairData?.stats?.errors ?? 0;
+
+        setFixAllStats(prev => ({
+          ...prev!,
+          approved_repaired: repaired,
+          approved_errors: repairErrors,
+        }));
+
+        toast.success(`Project images repaired: ${repaired} fixed, ${repairErrors} errors`);
+      }
+
+      toast.success("🎉 Fix All complete!");
+
+    } catch (e: any) {
+      console.error("Fix All runner failed:", e);
+      toast.error(e?.message || "Fix All failed");
+    } finally {
+      setIsFixAllRunning(false);
+      fixAllStopRef.current = false;
+    }
+  };
+
+  const stopFixAllRunner = () => {
+    fixAllStopRef.current = true;
+    toast.info("Stopping Fix All after current batch...");
+  };
+
   const continueSyncFromPage = async (jobId: string, startPage: number, pagesTotal: number) => {
     const syncStartTime = new Date();
     setStartTime(syncStartTime);
@@ -1296,11 +1397,11 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                         Extracts missing details for the entire pending queue (placeholders + incomplete entries).
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       {!isBulkExtractRunning ? (
                         <Button
                           onClick={startBulkExtractRunner}
-                          disabled={isSyncing || isRebuildingQueue}
+                          disabled={isSyncing || isRebuildingQueue || isFixAllRunning}
                           className="bg-gold hover:bg-gold/90 text-black"
                         >
                           <Play className="w-4 h-4 mr-2" />
@@ -1312,6 +1413,24 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                           Stop Bulk Extract
                         </Button>
                       )}
+
+                      {/* FIX ALL BUTTON - runs extraction + repairs approved projects */}
+                      {!isFixAllRunning ? (
+                        <Button
+                          onClick={startFixAllRunner}
+                          disabled={isSyncing || isRebuildingQueue || isBulkExtractRunning}
+                          className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                        >
+                          <RefreshCw className="w-4 h-4 mr-2" />
+                          ⚡ Fix All Listings
+                        </Button>
+                      ) : (
+                        <Button onClick={stopFixAllRunner} variant="outline" className="border-amber-400 text-amber-700">
+                          <Pause className="w-4 h-4 mr-2" />
+                          Stop Fix All
+                        </Button>
+                      )}
+
                       <Button
                         variant="outline"
                         onClick={() => setActiveTab("approvals")}
@@ -1320,6 +1439,19 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                       </Button>
                     </div>
                   </div>
+
+                  {/* Fix All stats display */}
+                  {isFixAllRunning && fixAllStats && (
+                    <div className="rounded-lg border border-emerald-300 bg-emerald-50 p-3 text-xs space-y-1">
+                      <div className="font-medium text-emerald-800">Fix All in progress...</div>
+                      <div className="text-emerald-700">
+                        Pending: {fixAllStats.pending_success} fixed, {fixAllStats.pending_errors} errors
+                      </div>
+                      <div className="text-emerald-700">
+                        Approved: {fixAllStats.approved_repaired} repaired, {fixAllStats.approved_errors} errors
+                      </div>
+                    </div>
+                  )}
 
                   {/* Unified inventory summary */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
