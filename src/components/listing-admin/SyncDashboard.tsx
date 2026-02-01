@@ -1235,42 +1235,52 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
         </CardContent>
       </Card>
 
-      {/* Page Status Grid */}
+      {/* Extraction Progress Summary - Replacing Page Grid */}
       <Card className="bg-white border-zinc-200 shadow-sm">
         <CardHeader className="pb-3">
-        <CardTitle className="text-lg text-zinc-900">Page Status ({totalPages} Pages × ~19 listings each)</CardTitle>
+          <CardTitle className="text-lg text-zinc-900">Extraction Progress (1,335 Target)</CardTitle>
         </CardHeader>
         <CardContent>
-          <ScrollArea className="h-[300px]">
-            <div className="grid grid-cols-7 md:grid-cols-10 gap-2">
-              {pageStatuses.map((pageStatus) => (
-                <button
-                  key={pageStatus.page}
-                  onClick={() => !isSyncing && syncSinglePage(pageStatus.page)}
-                  disabled={isSyncing}
-                  className={`
-                    w-10 h-10 rounded-lg flex items-center justify-center text-sm font-medium
-                    transition-all hover:scale-105 disabled:hover:scale-100 border
-                    ${pageStatus.status === 'pending' ? 'bg-zinc-100 text-zinc-600 border-zinc-200 hover:bg-zinc-200' : ''}
-                    ${pageStatus.status === 'in_progress' ? 'bg-blue-100 text-blue-700 border-blue-300 animate-pulse' : ''}
-                    ${pageStatus.status === 'success' ? 'bg-emerald-100 text-emerald-700 border-emerald-300' : ''}
-                    ${pageStatus.status === 'failed' ? 'bg-red-100 text-red-700 border-red-300' : ''}
-                  `}
-                  title={`Page ${pageStatus.page}: ${pageStatus.status}${pageStatus.error ? ` - ${pageStatus.error}` : ''}${pageStatus.stats ? ` (${pageStatus.stats.created} new, ${pageStatus.stats.updated} updated)` : ''}`}
-                >
-                  {pageStatus.status === 'in_progress' ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : pageStatus.status === 'success' ? (
-                    <FilledCheckCircle size="sm" />
-                  ) : pageStatus.status === 'failed' ? (
-                    <XCircle className="w-4 h-4" />
-                  ) : (
-                    pageStatus.page
-                  )}
-                </button>
-              ))}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+            <div className="rounded-lg border border-border bg-muted/50 p-4 text-center">
+              <div className="text-3xl font-bold text-foreground">1,335</div>
+              <div className="text-sm text-muted-foreground">Target Listings</div>
             </div>
-          </ScrollArea>
+            <div className="rounded-lg border border-border bg-muted/50 p-4 text-center">
+              <div className="text-3xl font-bold text-foreground">{queueBreakdown.pending ?? "…"}</div>
+              <div className="text-sm text-muted-foreground">In Queue</div>
+            </div>
+            <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-center">
+              <div className="text-3xl font-bold text-emerald-700">{queueBreakdown.ready_pending ?? "…"}</div>
+              <div className="text-sm text-emerald-600">Complete (Ready)</div>
+            </div>
+            <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-center">
+              <div className="text-3xl font-bold text-amber-700">{(queueBreakdown.needs_extraction_pending ?? 0) + (queueBreakdown.incomplete_pending ?? 0)}</div>
+              <div className="text-sm text-amber-600">Needs Work</div>
+            </div>
+          </div>
+          
+          {/* Progress bar */}
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Extraction Progress</span>
+              <span className="text-foreground font-medium">
+                {queueBreakdown.ready_pending ?? 0} / {queueBreakdown.pending ?? 0} complete
+              </span>
+            </div>
+            <Progress 
+              value={queueBreakdown.pending ? ((queueBreakdown.ready_pending ?? 0) / queueBreakdown.pending) * 100 : 0} 
+              className="h-3" 
+            />
+          </div>
+
+          {/* Gap alert */}
+          {(queueBreakdown.pending ?? 0) < 1335 && (
+            <div className="mt-4 rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800">
+              <strong>Gap detected:</strong> {1335 - (queueBreakdown.pending ?? 0)} listings missing from queue. 
+              Click "Rebuild Queue (All Listings)" above to re-discover all URLs.
+            </div>
+          )}
         </CardContent>
       </Card>
 

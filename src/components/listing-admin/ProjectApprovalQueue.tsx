@@ -684,7 +684,8 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-gold">
             <Building2 className="h-5 w-5 text-gold" />
-            Project Approval Queue
+            Listing Inventory
+            <Badge variant="outline" className="text-xs">1,335 Target</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -696,19 +697,28 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
     );
   }
 
+  // Calculate extraction status
+  const completeCount = imports.filter(p => 
+    p.description && 
+    p.images.length > 0 && 
+    p.documents.length > 0 && 
+    p.developer_name?.toLowerCase() !== 'unknown'
+  ).length;
+  const needsWorkCount = imports.length - completeCount;
+
   return (
     <>
       <Card className="bg-card border-2 border-gold shadow-[0_4px_20px_rgba(200,167,102,0.25)]">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-gold">
-            <Building2 className="h-5 w-5 text-gold" />
-            Project Approval Queue
-            {(totalCount ?? imports.length) > 0 && (
-              <Badge className="bg-gold/20 text-gold border border-gold ml-2">
-                {totalCount ?? imports.length} pending
-              </Badge>
-            )}
-          </CardTitle>
+          <div>
+            <CardTitle className="flex items-center gap-2 text-gold">
+              <Building2 className="h-5 w-5 text-gold" />
+              Listing Inventory
+            </CardTitle>
+            <p className="text-sm text-muted-foreground mt-1">
+              Target: 1,335 listings · Discovered: {totalCount ?? imports.length} · Loaded: {imports.length}
+            </p>
+          </div>
           <div className="flex items-center gap-2">
             {jobId && !showAll && (
               <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">
@@ -777,31 +787,29 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           </div>
         </CardHeader>
         <CardContent>
-          {/* Stats summary */}
-          {imports.length > 0 && (
-            <div className="flex items-center gap-4 mb-4 text-sm">
-              <div className="flex items-center gap-1">
-                <span className="text-muted-foreground">Total:</span>
-                <span className="font-medium text-foreground">{totalCount ?? imports.length}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="text-muted-foreground">Showing:</span>
-                <span className="font-medium text-foreground">{imports.length}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="text-muted-foreground">Complete:</span>
-                <span className="font-medium text-emerald-600">{imports.length - incompleteCount}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="text-muted-foreground">Incomplete:</span>
-                <span className="font-medium text-amber-600">{incompleteCount}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="text-muted-foreground">Selected:</span>
-                <span className="font-medium text-blue-600">{selectedIds.size}</span>
-              </div>
+          {/* Inventory status cards */}
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
+            <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
+              <div className="text-2xl font-bold text-foreground">1,335</div>
+              <div className="text-xs text-muted-foreground">Target</div>
             </div>
-          )}
+            <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
+              <div className="text-2xl font-bold text-foreground">{totalCount ?? "…"}</div>
+              <div className="text-xs text-muted-foreground">Discovered</div>
+            </div>
+            <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-center">
+              <div className="text-2xl font-bold text-emerald-700">{completeCount}</div>
+              <div className="text-xs text-emerald-600">Complete</div>
+            </div>
+            <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-center">
+              <div className="text-2xl font-bold text-amber-700">{needsWorkCount}</div>
+              <div className="text-xs text-amber-600">Needs Extraction</div>
+            </div>
+            <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 text-center">
+              <div className="text-2xl font-bold text-blue-700">{selectedIds.size}</div>
+              <div className="text-xs text-blue-600">Selected</div>
+            </div>
+          </div>
 
           {isBulkProcessing && (bulkAction === "approve" || bulkAction === "reject" || bulkAction === "repair") && bulkTotal > 0 && (
             <div className="mb-4 rounded-lg border-2 border-gold bg-card p-3">
@@ -836,6 +844,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                     <PendingImportCard
                       item={{
                         ...item,
+                        slug: item.slug,
                         review_notes: !item.description || item.images.length === 0 || item.documents.length === 0 || item.developer_name?.toLowerCase() === 'unknown' ? 'INCOMPLETE' : null
                       }}
                       formatPrice={formatPrice}
