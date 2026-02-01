@@ -8,7 +8,7 @@ interface MegaMenuAreasProps {
   onClose: () => void;
 }
 
-const MegaMenuAreas: React.FC<MegaMenuAreasProps> = ({ onClose }) => {
+const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ onClose }, ref) => {
   const areas = [
     { name: 'Dubai Creek Harbour', slug: 'dubai-creek-harbour' },
     { name: 'Business Bay', slug: 'business-bay' },
@@ -34,7 +34,7 @@ const MegaMenuAreas: React.FC<MegaMenuAreasProps> = ({ onClose }) => {
   const secondColumn = areas.slice(half);
 
   return (
-    <MegaMenuShell>
+    <MegaMenuShell ref={ref}>
       <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-10 lg:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-6">
@@ -92,6 +92,8 @@ const MegaMenuAreas: React.FC<MegaMenuAreasProps> = ({ onClose }) => {
       </div>
     </MegaMenuShell>
   );
-};
+});
+
+MegaMenuAreas.displayName = 'MegaMenuAreas';
 
 export default MegaMenuAreas;
