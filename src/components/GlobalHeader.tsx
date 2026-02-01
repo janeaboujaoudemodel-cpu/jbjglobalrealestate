@@ -64,16 +64,18 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   // Mega menu hover + click states
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
   const [pinnedMenu, setPinnedMenu] = useState<string | null>(null);
-  const megaMenuTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const megaMenuTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleMegaMenuEnter = (menu: string) => {
     if (megaMenuTimeoutRef.current) {
       clearTimeout(megaMenuTimeoutRef.current);
       megaMenuTimeoutRef.current = null;
     }
-    // If pinned, keep pinned; otherwise show hovered
-    if (!pinnedMenu) {
-      setActiveMegaMenu(menu);
+    // Hover always switches the visible menu.
+    setActiveMegaMenu(menu);
+    // If the menu is pinned open, keep it pinned but allow hover to switch what is pinned.
+    if (pinnedMenu && pinnedMenu !== menu) {
+      setPinnedMenu(menu);
     }
   };
 
@@ -82,7 +84,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     if (pinnedMenu) return;
     megaMenuTimeoutRef.current = setTimeout(() => {
       setActiveMegaMenu(null);
-    }, 150);
+    }, 220);
   };
 
   const handleMegaMenuClick = (menu: string) => {
@@ -98,9 +100,29 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   };
 
   const closeMegaMenu = () => {
+    if (megaMenuTimeoutRef.current) {
+      clearTimeout(megaMenuTimeoutRef.current);
+      megaMenuTimeoutRef.current = null;
+    }
     setPinnedMenu(null);
     setActiveMegaMenu(null);
   };
+
+  // Cleanup any pending timer on unmount.
+  useEffect(() => {
+    return () => {
+      if (megaMenuTimeoutRef.current) {
+        clearTimeout(megaMenuTimeoutRef.current);
+        megaMenuTimeoutRef.current = null;
+      }
+    };
+  }, []);
+
+  // Close any open/pinned mega menu on route changes.
+  useEffect(() => {
+    closeMegaMenu();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname, location.search]);
 
   // Close pinned menu on click outside or ESC
   useEffect(() => {

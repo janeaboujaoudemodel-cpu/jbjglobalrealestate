@@ -9,7 +9,11 @@ export function useIsTouchLayout() {
   const [isTouch, setIsTouch] = React.useState(() => {
     if (typeof window === "undefined") return false;
     try {
-      return window.matchMedia("(hover: none), (pointer: coarse)").matches;
+      const mql = window.matchMedia("(hover: none), (pointer: coarse)");
+      // Some remote/embedded browsers can incorrectly report coarse pointers.
+      // Only treat as touch when the device actually reports touch points.
+      const hasTouchPoints = (navigator.maxTouchPoints ?? 0) > 0;
+      return mql.matches && hasTouchPoints;
     } catch {
       return false;
     }
@@ -24,7 +28,10 @@ export function useIsTouchLayout() {
     }
     if (!mql) return;
 
-    const onChange = () => setIsTouch(mql!.matches);
+    const onChange = () => {
+      const hasTouchPoints = (navigator.maxTouchPoints ?? 0) > 0;
+      setIsTouch(mql!.matches && hasTouchPoints);
+    };
     onChange();
 
     // Safari fallback

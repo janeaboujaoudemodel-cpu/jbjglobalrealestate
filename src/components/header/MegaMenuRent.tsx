@@ -7,7 +7,7 @@ interface MegaMenuRentProps {
   onClose: () => void;
 }
 
-const MegaMenuRent: React.FC<MegaMenuRentProps> = ({ onClose }) => {
+const MegaMenuRent = React.forwardRef<HTMLDivElement, MegaMenuRentProps>(({ onClose }, ref) => {
   const propertyTypes = [
     { label: 'Apartments', icon: Building2, href: '/properties?type=apartment&transaction=rent' },
     { label: 'Villas', icon: Home, href: '/properties?type=villa&transaction=rent' },
@@ -25,7 +25,7 @@ const MegaMenuRent: React.FC<MegaMenuRentProps> = ({ onClose }) => {
   ];
 
   return (
-    <MegaMenuShell>
+    <MegaMenuShell ref={ref}>
       <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-10 lg:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-6">
@@ -79,6 +79,8 @@ const MegaMenuRent: React.FC<MegaMenuRentProps> = ({ onClose }) => {
       </div>
     </MegaMenuShell>
   );
-};
+});
+
+MegaMenuRent.displayName = 'MegaMenuRent';
 
 export default MegaMenuRent;

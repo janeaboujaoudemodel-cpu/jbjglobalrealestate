@@ -8,7 +8,7 @@ interface MegaMenuDevelopersProps {
   onClose: () => void;
 }
 
-const MegaMenuDevelopers: React.FC<MegaMenuDevelopersProps> = ({ onClose }) => {
+const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersProps>(({ onClose }, ref) => {
   const developers = [
     { name: 'Emaar Properties', slug: 'emaar' },
     { name: 'DAMAC Properties', slug: 'damac' },
@@ -36,7 +36,7 @@ const MegaMenuDevelopers: React.FC<MegaMenuDevelopersProps> = ({ onClose }) => {
   const secondColumn = developers.slice(half);
 
   return (
-    <MegaMenuShell>
+    <MegaMenuShell ref={ref}>
       <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-10 lg:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-6">
@@ -94,6 +94,8 @@ const MegaMenuDevelopers: React.FC<MegaMenuDevelopersProps> = ({ onClose }) => {
       </div>
     </MegaMenuShell>
   );
-};
+});
+
+MegaMenuDevelopers.displayName = 'MegaMenuDevelopers';
 
 export default MegaMenuDevelopers;
