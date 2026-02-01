@@ -15265,8 +15265,6 @@ export type Database = {
       }
       employee_salaries_secure: {
         Row: {
-          bank_account_number: string | null
-          bank_iban: string | null
           bank_name: string | null
           base_salary: number | null
           created_at: string | null
@@ -15283,8 +15281,6 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
-          bank_account_number?: never
-          bank_iban?: never
           bank_name?: string | null
           base_salary?: number | null
           created_at?: string | null
@@ -15301,8 +15297,6 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
-          bank_account_number?: never
-          bank_iban?: never
           bank_name?: string | null
           base_salary?: number | null
           created_at?: string | null
@@ -15324,151 +15318,113 @@ export type Database = {
         Row: {
           channel: string | null
           confidence_score: number | null
-          contact_identifier_masked: string | null
-          contact_name_masked: string | null
+          contact_identifier: string | null
+          contact_name: string | null
           created_at: string | null
           direction: string | null
-          flag_status: string | null
+          flagged_reason: string | null
           handled_by: string | null
           id: string | null
+          phone_line: string | null
           responded_at: string | null
           status: string | null
+          subject: string | null
           user_id: string | null
         }
         Insert: {
           channel?: string | null
           confidence_score?: number | null
-          contact_identifier_masked?: never
-          contact_name_masked?: never
+          contact_identifier?: string | null
+          contact_name?: string | null
           created_at?: string | null
           direction?: string | null
-          flag_status?: never
+          flagged_reason?: string | null
           handled_by?: string | null
           id?: string | null
+          phone_line?: string | null
           responded_at?: string | null
           status?: string | null
+          subject?: string | null
           user_id?: string | null
         }
         Update: {
           channel?: string | null
           confidence_score?: number | null
-          contact_identifier_masked?: never
-          contact_name_masked?: never
+          contact_identifier?: string | null
+          contact_name?: string | null
           created_at?: string | null
           direction?: string | null
-          flag_status?: never
+          flagged_reason?: string | null
           handled_by?: string | null
           id?: string | null
+          phone_line?: string | null
           responded_at?: string | null
           status?: string | null
+          subject?: string | null
           user_id?: string | null
         }
         Relationships: []
       }
       hr_employees_secure: {
         Row: {
-          candidate_id: string | null
-          certifications: string[] | null
           created_at: string | null
-          created_by: string | null
-          cv_url: string | null
           department: string | null
-          email: string | null
           employee_status: string | null
           full_name: string | null
           id: string | null
-          phone: string | null
           position: string | null
-          skills: string[] | null
           start_date: string | null
           updated_at: string | null
           user_id: string | null
         }
         Insert: {
-          candidate_id?: string | null
-          certifications?: string[] | null
           created_at?: string | null
-          created_by?: string | null
-          cv_url?: string | null
           department?: string | null
-          email?: string | null
           employee_status?: string | null
-          full_name?: never
+          full_name?: string | null
           id?: string | null
-          phone?: string | null
           position?: string | null
-          skills?: string[] | null
           start_date?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
         Update: {
-          candidate_id?: string | null
-          certifications?: string[] | null
           created_at?: string | null
-          created_by?: string | null
-          cv_url?: string | null
           department?: string | null
-          email?: string | null
           employee_status?: string | null
-          full_name?: never
+          full_name?: string | null
           id?: string | null
-          phone?: string | null
           position?: string | null
-          skills?: string[] | null
           start_date?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "hr_employees_candidate_id_fkey"
-            columns: ["candidate_id"]
-            isOneToOne: false
-            referencedRelation: "hr_candidates"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       jbj_leads_secure: {
         Row: {
           assigned_broker_id: string | null
-          budget_range: string | null
           created_at: string | null
-          first_name: string | null
           id: string | null
-          last_contact: string | null
-          masked_email: string | null
-          masked_phone: string | null
-          property_interest: string | null
+          name: string | null
           source: string | null
           status: string | null
           updated_at: string | null
         }
         Insert: {
           assigned_broker_id?: string | null
-          budget_range?: string | null
           created_at?: string | null
-          first_name?: never
           id?: string | null
-          last_contact?: string | null
-          masked_email?: never
-          masked_phone?: never
-          property_interest?: string | null
+          name?: string | null
           source?: string | null
           status?: string | null
           updated_at?: string | null
         }
         Update: {
           assigned_broker_id?: string | null
-          budget_range?: string | null
           created_at?: string | null
-          first_name?: never
           id?: string | null
-          last_contact?: string | null
-          masked_email?: never
-          masked_phone?: never
-          property_interest?: string | null
+          name?: string | null
           source?: string | null
           status?: string | null
           updated_at?: string | null
@@ -15485,61 +15441,25 @@ export type Database = {
       }
       leads_secure: {
         Row: {
-          age_range: string | null
-          birthday: string | null
-          consent_accurate: boolean | null
-          consent_privacy: boolean | null
           created_at: string | null
-          current_location: string | null
-          email: string | null
-          email_verified: boolean | null
           full_name: string | null
           id: string | null
-          language: string | null
-          nationality: string | null
-          page_source: string | null
-          phone: string | null
-          phone_verified: boolean | null
           source: string | null
           status: string | null
           updated_at: string | null
         }
         Insert: {
-          age_range?: string | null
-          birthday?: string | null
-          consent_accurate?: boolean | null
-          consent_privacy?: boolean | null
           created_at?: string | null
-          current_location?: string | null
-          email?: never
-          email_verified?: boolean | null
-          full_name?: never
+          full_name?: string | null
           id?: string | null
-          language?: string | null
-          nationality?: string | null
-          page_source?: string | null
-          phone?: never
-          phone_verified?: boolean | null
           source?: string | null
           status?: string | null
           updated_at?: string | null
         }
         Update: {
-          age_range?: string | null
-          birthday?: string | null
-          consent_accurate?: boolean | null
-          consent_privacy?: boolean | null
           created_at?: string | null
-          current_location?: string | null
-          email?: never
-          email_verified?: boolean | null
-          full_name?: never
+          full_name?: string | null
           id?: string | null
-          language?: string | null
-          nationality?: string | null
-          page_source?: string | null
-          phone?: never
-          phone_verified?: boolean | null
           source?: string | null
           status?: string | null
           updated_at?: string | null
@@ -15599,26 +15519,24 @@ export type Database = {
       }
       profiles_public: {
         Row: {
-          created_at: string | null
           full_name: string | null
           id: string | null
+          user_role: string | null
         }
         Insert: {
-          created_at?: string | null
           full_name?: string | null
           id?: string | null
+          user_role?: string | null
         }
         Update: {
-          created_at?: string | null
           full_name?: string | null
           id?: string | null
+          user_role?: string | null
         }
         Relationships: []
       }
       referral_partner_bank_vault_secure: {
         Row: {
-          bank_account_masked: string | null
-          bank_iban_masked: string | null
           bank_name: string | null
           created_at: string | null
           id: string | null
@@ -15626,8 +15544,6 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
-          bank_account_masked?: never
-          bank_iban_masked?: never
           bank_name?: string | null
           created_at?: string | null
           id?: string | null
@@ -15635,8 +15551,6 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
-          bank_account_masked?: never
-          bank_iban_masked?: never
           bank_name?: string | null
           created_at?: string | null
           id?: string | null
@@ -15662,54 +15576,36 @@ export type Database = {
       }
       referral_partners_safe: {
         Row: {
-          approved_at: string | null
-          commission_rate: number | null
           created_at: string | null
-          email_masked: string | null
-          full_name_masked: string | null
+          full_name: string | null
           id: string | null
           partner_type: string | null
-          phone_masked: string | null
-          referral_code: string | null
           status: string | null
           total_conversions: number | null
           total_earnings_aed: number | null
           total_referrals: number | null
-          updated_at: string | null
           user_id: string | null
         }
         Insert: {
-          approved_at?: string | null
-          commission_rate?: number | null
           created_at?: string | null
-          email_masked?: never
-          full_name_masked?: never
+          full_name?: string | null
           id?: string | null
           partner_type?: string | null
-          phone_masked?: never
-          referral_code?: string | null
           status?: string | null
           total_conversions?: number | null
           total_earnings_aed?: number | null
           total_referrals?: number | null
-          updated_at?: string | null
           user_id?: string | null
         }
         Update: {
-          approved_at?: string | null
-          commission_rate?: number | null
           created_at?: string | null
-          email_masked?: never
-          full_name_masked?: never
+          full_name?: string | null
           id?: string | null
           partner_type?: string | null
-          phone_masked?: never
-          referral_code?: string | null
           status?: string | null
           total_conversions?: number | null
           total_earnings_aed?: number | null
           total_referrals?: number | null
-          updated_at?: string | null
           user_id?: string | null
         }
         Relationships: []
@@ -15782,123 +15678,63 @@ export type Database = {
       }
       seller_listings_secure: {
         Row: {
-          bedrooms: number | null
-          community_building: string | null
           created_at: string | null
-          has_upgrades: boolean | null
           id: string | null
-          is_furnished: boolean | null
-          key_highlights: string[] | null
-          preferred_contact_method: string | null
-          preferred_language: string | null
-          property_location: string | null
-          property_notes: string | null
-          property_size_sqft: number | null
-          property_status: string | null
           property_type: string | null
-          seller_email: string | null
-          seller_full_name: string | null
-          seller_phone: string | null
-          seller_type: string | null
-          selling_urgency: string | null
           status: string | null
           target_selling_price: number | null
           updated_at: string | null
-          upgrade_details: string | null
           user_id: string | null
         }
         Insert: {
-          bedrooms?: number | null
-          community_building?: string | null
           created_at?: string | null
-          has_upgrades?: boolean | null
           id?: string | null
-          is_furnished?: boolean | null
-          key_highlights?: string[] | null
-          preferred_contact_method?: string | null
-          preferred_language?: string | null
-          property_location?: string | null
-          property_notes?: string | null
-          property_size_sqft?: number | null
-          property_status?: string | null
           property_type?: string | null
-          seller_email?: string | null
-          seller_full_name?: string | null
-          seller_phone?: string | null
-          seller_type?: string | null
-          selling_urgency?: string | null
           status?: string | null
           target_selling_price?: number | null
           updated_at?: string | null
-          upgrade_details?: string | null
           user_id?: string | null
         }
         Update: {
-          bedrooms?: number | null
-          community_building?: string | null
           created_at?: string | null
-          has_upgrades?: boolean | null
           id?: string | null
-          is_furnished?: boolean | null
-          key_highlights?: string[] | null
-          preferred_contact_method?: string | null
-          preferred_language?: string | null
-          property_location?: string | null
-          property_notes?: string | null
-          property_size_sqft?: number | null
-          property_status?: string | null
           property_type?: string | null
-          seller_email?: string | null
-          seller_full_name?: string | null
-          seller_phone?: string | null
-          seller_type?: string | null
-          selling_urgency?: string | null
           status?: string | null
           target_selling_price?: number | null
           updated_at?: string | null
-          upgrade_details?: string | null
           user_id?: string | null
         }
         Relationships: []
       }
       uae_developers_public: {
         Row: {
-          created_at: string | null
           description: string | null
           founded_year: number | null
           headquarters: string | null
           id: string | null
           is_active: boolean | null
-          location_city: string | null
-          location_emirate: string | null
           logo_url: string | null
           name: string | null
           slug: string | null
           website_url: string | null
         }
         Insert: {
-          created_at?: string | null
           description?: string | null
           founded_year?: number | null
           headquarters?: string | null
           id?: string | null
           is_active?: boolean | null
-          location_city?: string | null
-          location_emirate?: string | null
           logo_url?: string | null
           name?: string | null
           slug?: string | null
           website_url?: string | null
         }
         Update: {
-          created_at?: string | null
           description?: string | null
           founded_year?: number | null
           headquarters?: string | null
           id?: string | null
           is_active?: boolean | null
-          location_city?: string | null
-          location_emirate?: string | null
           logo_url?: string | null
           name?: string | null
           slug?: string | null
@@ -15908,23 +15744,12 @@ export type Database = {
       }
       unified_listing_approvals: {
         Row: {
-          approved_at: string | null
-          approver_department: string | null
-          approver_email: string | null
-          approver_name: string | null
-          approver_photo: string | null
-          approver_role: string | null
-          approver_title: string | null
           created_at: string | null
           id: string | null
-          listing_id: string | null
           listing_type: string | null
-          notes: string | null
-          owner_user_id: string | null
-          property_title: string | null
+          reviewed_at: string | null
           status: string | null
-          step_name: string | null
-          step_number: number | null
+          title: string | null
         }
         Relationships: []
       }
