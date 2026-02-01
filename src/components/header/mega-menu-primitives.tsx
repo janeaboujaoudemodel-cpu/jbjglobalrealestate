@@ -20,9 +20,16 @@ export const MegaMenuShell = React.forwardRef<HTMLDivElement, MegaMenuShellProps
       <div
         ref={ref}
         className={cn(
-          "absolute top-full left-0 right-0 mt-0 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] z-50",
+          // Fixed positioning to span full viewport width, positioned below header
+          "fixed left-0 right-0 z-[9999] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)]",
           className
         )}
+        style={{
+          // Position just below the header (header is h-24 sm:h-28 lg:h-32)
+          top: 'var(--header-height, 128px)',
+          // Solid gradient background - prevents any transparency issues
+          background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
+        }}
       >
         {children}
         {/* Bottom gold accent (kept) */}
