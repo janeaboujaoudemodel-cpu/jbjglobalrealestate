@@ -7,7 +7,7 @@ interface MegaMenuBuyProps {
   onClose: () => void;
 }
 
-const MegaMenuBuy: React.FC<MegaMenuBuyProps> = ({ onClose }) => {
+const MegaMenuBuy = React.forwardRef<HTMLDivElement, MegaMenuBuyProps>(({ onClose }, ref) => {
   const propertyTypes = [
     { label: 'Apartments', icon: Building2, href: '/properties?type=apartment&transaction=buy' },
     { label: 'Villas', icon: Home, href: '/properties?type=villa&transaction=buy' },
@@ -25,7 +25,7 @@ const MegaMenuBuy: React.FC<MegaMenuBuyProps> = ({ onClose }) => {
   ];
 
   return (
-    <MegaMenuShell>
+    <MegaMenuShell ref={ref}>
       <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-10 lg:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left: Featured Photo (larger + rectangular) */}
@@ -81,6 +81,8 @@ const MegaMenuBuy: React.FC<MegaMenuBuyProps> = ({ onClose }) => {
       </div>
     </MegaMenuShell>
   );
-};
+});
+
+MegaMenuBuy.displayName = 'MegaMenuBuy';
 
 export default MegaMenuBuy;

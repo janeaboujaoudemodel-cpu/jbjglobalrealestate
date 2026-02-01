@@ -11,7 +11,7 @@ interface MegaMenuServicesProps {
   onClose: () => void;
 }
 
-const MegaMenuServices: React.FC<MegaMenuServicesProps> = ({ onClose }) => {
+const MegaMenuServices = React.forwardRef<HTMLDivElement, MegaMenuServicesProps>(({ onClose }, ref) => {
   const services = [
     { name: 'Mortgages', href: '/mortgage-calculator', icon: Calculator, description: 'Find the best rates' },
     { name: 'Golden Visa', href: '/guides/golden-visa-uae', icon: Award, description: 'UAE residency program' },
@@ -28,7 +28,7 @@ const MegaMenuServices: React.FC<MegaMenuServicesProps> = ({ onClose }) => {
   ];
 
   return (
-    <MegaMenuShell>
+    <MegaMenuShell ref={ref}>
       <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-10 lg:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left: Featured Photo */}
@@ -79,6 +79,8 @@ const MegaMenuServices: React.FC<MegaMenuServicesProps> = ({ onClose }) => {
       </div>
     </MegaMenuShell>
   );
-};
+});
+
+MegaMenuServices.displayName = 'MegaMenuServices';
 
 export default MegaMenuServices;

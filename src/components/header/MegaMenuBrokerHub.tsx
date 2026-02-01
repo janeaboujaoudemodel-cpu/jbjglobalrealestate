@@ -10,7 +10,7 @@ interface MegaMenuBrokerHubProps {
   onClose: () => void;
 }
 
-const MegaMenuBrokerHub: React.FC<MegaMenuBrokerHubProps> = ({ onClose }) => {
+const MegaMenuBrokerHub = React.forwardRef<HTMLDivElement, MegaMenuBrokerHubProps>(({ onClose }, ref) => {
   const brokerDashboardLinks = [
     { name: 'Broker Dashboard', href: '/broker-dashboard', icon: UserCircle, description: 'Your broker control center' },
     { name: 'Broker Toolkit', href: '/broker-toolkit#tools', icon: Briefcase, description: 'Professional tools & resources' },
@@ -25,7 +25,7 @@ const MegaMenuBrokerHub: React.FC<MegaMenuBrokerHubProps> = ({ onClose }) => {
   ];
 
   return (
-    <MegaMenuShell>
+    <MegaMenuShell ref={ref}>
       <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-10 lg:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-6">
@@ -80,6 +80,8 @@ const MegaMenuBrokerHub: React.FC<MegaMenuBrokerHubProps> = ({ onClose }) => {
       </div>
     </MegaMenuShell>
   );
-};
+});
+
+MegaMenuBrokerHub.displayName = 'MegaMenuBrokerHub';
 
 export default MegaMenuBrokerHub;

@@ -7,7 +7,7 @@ interface MegaMenuProjectsProps {
   onClose: () => void;
 }
 
-const MegaMenuProjects: React.FC<MegaMenuProjectsProps> = ({ onClose }) => {
+const MegaMenuProjects = React.forwardRef<HTMLDivElement, MegaMenuProjectsProps>(({ onClose }, ref) => {
   const projectCategories = [
     { label: 'Off-Plan Projects', href: '/properties?status=off-plan', icon: Building2 },
     { label: 'Ready Projects', href: '/properties?status=ready', icon: Check },
@@ -17,7 +17,7 @@ const MegaMenuProjects: React.FC<MegaMenuProjectsProps> = ({ onClose }) => {
   ];
 
   return (
-    <MegaMenuShell>
+    <MegaMenuShell ref={ref}>
       <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-10 lg:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left: Single, larger rectangular photo */}
@@ -53,6 +53,8 @@ const MegaMenuProjects: React.FC<MegaMenuProjectsProps> = ({ onClose }) => {
       </div>
     </MegaMenuShell>
   );
-};
+});
+
+MegaMenuProjects.displayName = 'MegaMenuProjects';
 
 export default MegaMenuProjects;
