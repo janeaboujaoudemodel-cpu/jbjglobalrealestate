@@ -5,17 +5,20 @@ import { cn } from "@/lib/utils";
 interface PremiumBrochureCardProps {
   projectName: string;
   brochureUrl?: string;
+  projectImageUrl?: string;
   onDownloadClick: () => void;
   isLocked?: boolean;
 }
 
 /**
- * Premium Brochure Card - Styled like a real brochure resting/sleeping on a table
- * with 3D hover effect that lifts off the surface
+ * Premium Brochure Card - Styled like a real brochure/book resting on a table
+ * with project photo as cover, 3D hover effect that lifts off the surface
+ * Shows layered pages underneath for book effect
  */
 const PremiumBrochureCard = ({
   projectName,
   brochureUrl,
+  projectImageUrl,
   onDownloadClick,
   isLocked = false,
 }: PremiumBrochureCardProps) => {
@@ -47,82 +50,110 @@ const PremiumBrochureCard = ({
           transformStyle: "preserve-3d"
         }}
       >
-        {/* Card Container - Horizontal brochure proportions (like A4 landscape) */}
+        {/* Stacked Pages Effect - visible underneath the main cover */}
         <div 
-          className="relative w-[340px] h-[220px] rounded-lg overflow-hidden"
+          className="absolute w-[380px] h-[260px] rounded-lg"
+          style={{
+            transform: "translateZ(-8px) translateX(6px) translateY(6px)",
+            background: "linear-gradient(135deg, #E8DCC8 0%, #D4C4A8 100%)",
+            boxShadow: "0 4px 8px rgba(0,0,0,0.15)",
+          }}
+        />
+        <div 
+          className="absolute w-[380px] h-[260px] rounded-lg"
+          style={{
+            transform: "translateZ(-4px) translateX(3px) translateY(3px)",
+            background: "linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 100%)",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+          }}
+        />
+
+        {/* Main Card Container - Larger brochure with project image */}
+        <div 
+          className="relative w-[380px] h-[260px] rounded-lg overflow-hidden"
           style={{
             transformStyle: "preserve-3d",
             boxShadow: `
-              0 25px 50px -15px rgba(0,0,0,0.5),
-              0 10px 25px -8px rgba(0,0,0,0.3),
-              0 4px 10px -2px rgba(0,0,0,0.2),
+              0 30px 60px -15px rgba(0,0,0,0.5),
+              0 15px 35px -10px rgba(0,0,0,0.35),
+              0 5px 15px -5px rgba(0,0,0,0.25),
               inset 0 1px 0 rgba(255,255,255,0.1)
             `,
           }}
         >
-          {/* Brochure Cover Background */}
-          <div 
-            className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900"
-          />
+          {/* Project Image as Cover Background */}
+          {projectImageUrl ? (
+            <div 
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${projectImageUrl})` }}
+            />
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900" />
+          )}
+          
+          {/* Dark overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20" />
           
           {/* Premium Gold Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-gold/10 via-transparent to-gold/5" />
+          <div className="absolute inset-0 bg-gradient-to-tr from-gold/15 via-transparent to-gold/5" />
           
-          {/* Page edge effect - looks like stacked pages */}
+          {/* Page edge effect - looks like stacked pages on right */}
           <div 
-            className="absolute right-0 top-0 bottom-0 w-3 bg-gradient-to-l from-zinc-600 to-zinc-800"
+            className="absolute right-0 top-2 bottom-2 w-4 bg-gradient-to-l from-[#F5EBD7] via-[#E8DCC8] to-transparent rounded-r"
             style={{ transform: "translateZ(-2px)" }}
-          />
-          <div 
-            className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-t from-zinc-600 to-zinc-800"
-            style={{ transform: "translateZ(-2px)" }}
-          />
+          >
+            {/* Page lines */}
+            <div className="absolute inset-y-4 left-0 w-[1px] bg-gold/20" />
+            <div className="absolute inset-y-4 left-1 w-[1px] bg-gold/10" />
+            <div className="absolute inset-y-4 left-2 w-[1px] bg-gold/5" />
+          </div>
           
-          {/* Spine shadow on left */}
-          <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-black/40 to-transparent" />
+          {/* Spine effect on left - book binding */}
+          <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
+          <div className="absolute left-2 top-4 bottom-4 w-[2px] bg-gold/40 rounded-full" />
 
           {/* Gold border accent */}
-          <div className="absolute inset-0 border border-gold/40 rounded-lg" />
+          <div className="absolute inset-0 border-2 border-gold/50 rounded-lg group-hover:border-gold/80 transition-colors" />
           
           {/* Top gold line accent */}
-          <div className="absolute top-0 left-6 right-6 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+          <div className="absolute top-0 left-8 right-8 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
 
           {/* Content Layout */}
-          <div className="relative z-10 h-full flex items-center p-6">
-            {/* Left side - Brand mark */}
-            <div className="flex flex-col items-center justify-center w-24 border-r border-gold/30 pr-5 mr-5">
-              <div className="w-14 h-14 rounded-full border-2 border-gold/60 flex items-center justify-center mb-2">
-                <span className="text-gold text-lg font-bold tracking-wider">JBJ</span>
+          <div className="relative z-10 h-full flex flex-col justify-end p-6">
+            {/* Top: Brand mark */}
+            <div className="absolute top-4 left-10 flex items-center gap-2">
+              <div className="w-10 h-10 rounded-full border-2 border-gold/70 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                <span className="text-gold text-xs font-bold tracking-wider">JBJ</span>
               </div>
-              <p className="text-gold/70 text-[8px] uppercase tracking-[0.15em] text-center leading-tight">
+              <p className="text-gold/90 text-[8px] uppercase tracking-[0.15em] leading-tight">
                 Global<br/>Real Estate
               </p>
             </div>
 
-            {/* Right side - Brochure info */}
-            <div className="flex-1 flex flex-col justify-center">
-              <p className="text-gold/80 text-[9px] uppercase tracking-[0.25em] font-medium mb-2">
+            {/* Bottom: Brochure info */}
+            <div className="mt-auto">
+              <p className="text-gold text-[10px] uppercase tracking-[0.25em] font-medium mb-2 drop-shadow-lg">
                 Project Brochure
               </p>
               
               <h3 
-                className="text-white text-xl font-semibold mb-3 line-clamp-2 leading-tight"
+                className="text-white text-2xl font-bold mb-3 line-clamp-2 leading-tight drop-shadow-lg"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 {projectName}
               </h3>
 
-              <div className="w-16 h-[2px] bg-gradient-to-r from-gold to-gold/30 mb-3" />
+              <div className="w-20 h-[2px] bg-gradient-to-r from-gold to-gold/30 mb-3" />
               
-              <p className="text-white/50 text-[10px] uppercase tracking-[0.2em]">
+              <p className="text-white/70 text-[11px] uppercase tracking-[0.2em] drop-shadow">
                 Dubai • UAE
               </p>
             </div>
 
             {/* Lock indicator for locked state */}
             {isLocked && (
-              <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gold/20 border border-gold/50 flex items-center justify-center">
-                <Lock className="w-4 h-4 text-gold" />
+              <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/50 border-2 border-gold/60 flex items-center justify-center backdrop-blur-sm">
+                <Lock className="w-5 h-5 text-gold" />
               </div>
             )}
           </div>
@@ -131,16 +162,16 @@ const PremiumBrochureCard = ({
           <div 
             className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
             style={{
-              background: "linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%, transparent 100%)",
+              background: "linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 40%, transparent 100%)",
             }}
           />
         </div>
 
         {/* 3D Shadow beneath card - simulates resting on surface */}
         <div 
-          className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-[90%] h-6 blur-xl transition-all duration-300 group-hover:blur-2xl group-hover:h-10 group-hover:w-[80%] group-hover:-bottom-8"
+          className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[85%] h-8 blur-2xl transition-all duration-300 group-hover:blur-3xl group-hover:h-12 group-hover:w-[75%] group-hover:-bottom-10"
           style={{
-            background: "radial-gradient(ellipse, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 50%, transparent 80%)",
+            background: "radial-gradient(ellipse, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 50%, transparent 80%)",
           }}
         />
       </motion.div>

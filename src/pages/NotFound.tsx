@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { Home, ArrowLeft, ArrowUpRight, Briefcase, Phone, Mail, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import jbjMonogramDark from "@/assets/jbj-monogram-dark-bg.png";
+import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import Footer from "@/components/Footer";
 
@@ -46,12 +46,12 @@ const NotFound = () => {
               animate="visible"
               variants={staggerContainer}
             >
-              {/* Logo */}
+              {/* Logo - transparent background version */}
               <motion.div variants={fadeInUp} className="mb-6">
                 <img
-                  src={jbjMonogramDark}
+                  src={jbjMonogramTransparent}
                   alt="JBJ Global Real Estate"
-                  className="w-20 h-20 mx-auto object-contain"
+                  className="w-24 h-24 mx-auto object-contain"
                 />
               </motion.div>
 

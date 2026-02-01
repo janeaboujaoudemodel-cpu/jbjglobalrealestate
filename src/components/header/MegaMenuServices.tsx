@@ -30,9 +30,9 @@ const MegaMenuServices = React.forwardRef<HTMLDivElement, MegaMenuServicesProps>
   return (
     <MegaMenuShell ref={ref}>
       <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-10 lg:py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left: Featured Photo */}
-          <div className="lg:col-span-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+          {/* Left: Featured Photo - vertically centered */}
+          <div className="lg:col-span-6 flex items-center justify-center">
             <MegaMenuFeaturedCard
               to="/services"
               onClick={onClose}
@@ -41,6 +41,7 @@ const MegaMenuServices = React.forwardRef<HTMLDivElement, MegaMenuServicesProps>
               title="Representation & Services"
               description="Mortgages, Golden Visa, conveyancing, management and more"
               cta="View All Services"
+              className="w-full"
             />
           </div>
 

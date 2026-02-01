@@ -41,7 +41,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
   const currentAgent = useMemo(() => getRandomAgent(), []);
   
   // State
-  const [step, setStep] = useState<ChatStep>('collect_info');
+  const [step, setStep] = useState<ChatStep>('welcome_choice');
   const [isExistingUser, setIsExistingUser] = useState(false);
   const [userInfo, setUserInfo] = useState<UserInfo>(initialUserInfo);
   const [selectedService, setSelectedService] = useState<string | null>(null);

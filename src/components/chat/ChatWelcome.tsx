@@ -12,21 +12,21 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
   
   return (
     <div className="flex-1 p-4 flex flex-col items-center justify-center text-center">
-      {/* Logo - centered */}
-      <div className="mb-4">
+      {/* Logo - centered, larger */}
+      <div className="mb-6">
         <img
           src={jbjMonogramLightBg}
           alt="JBJ Global Real Estate"
-          className="h-24 w-auto mx-auto object-contain"
+          className="h-32 w-auto mx-auto object-contain"
         />
       </div>
 
       {/* Welcome text - centered */}
-      <div className="mb-5">
-        <h4 className="text-gold text-xl font-bold mb-2">
-          {t('chat.welcomeTitle', 'Welcome to JBJ Global Real Estate')} 👋
+      <div className="mb-6">
+        <h4 className="text-gold text-2xl font-bold mb-3">
+          {t('chat.welcomeTitle', 'Chat with our team')} 👋
         </h4>
-        <p className="text-zinc-600 text-sm">{t('chat.welcomeSubtitle', 'Your premium Real Estate partner in Dubai')}</p>
+        <p className="text-black text-base font-medium">{t('chat.welcomeSubtitle', 'Talk directly with our experts')}</p>
       </div>
 
       {/* Action buttons - full width, centered */}
@@ -68,12 +68,12 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
         </a>
       </div>
 
-      {/* Tip at bottom - centered */}
+      {/* Tip at bottom - updated text */}
       <div className="w-full px-4 py-3 bg-white/80 rounded-lg border border-gold/30">
         <p className="text-sm flex flex-wrap items-center justify-center gap-1">
           <span className="text-gold">💡</span>
           <span className="text-black font-bold">{t('chat.tip', 'Tip:')}</span>
-          <span className="text-zinc-700">{t('chat.tipText', "Our team can answer most questions right away!")}</span>
+          <span className="text-zinc-700">{t('chat.tipText', "Most of your questions can be answered through the chat with our team section for faster response.")}</span>
         </p>
       </div>
     </div>
