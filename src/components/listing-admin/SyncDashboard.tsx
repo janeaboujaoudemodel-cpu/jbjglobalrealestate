@@ -1164,180 +1164,63 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
-                    <div className="rounded-md bg-background border border-border p-3">
-                      <div className="text-xs text-muted-foreground">Totals (this run)</div>
-                      <div className="font-medium text-foreground">
-                        {bulkTotals.processed} processed · {bulkTotals.success} success · {bulkTotals.errors} failed
-                      </div>
+                  {/* Unified inventory summary */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="rounded-lg border border-border bg-muted/50 p-4 text-center">
+                      <div className="text-2xl font-bold text-foreground">1,335</div>
+                      <div className="text-xs text-muted-foreground">Target</div>
                     </div>
-                    <div className="rounded-md bg-background border border-border p-3">
-                      <div className="text-xs text-muted-foreground">Last batch</div>
-                      <div className="font-medium text-foreground">
-                        {bulkLastRun
-                          ? `${bulkLastRun.processed} processed · ${bulkLastRun.success} success · ${bulkLastRun.errors} failed`
-                          : "—"}
-                      </div>
+                    <div className="rounded-lg border border-border bg-muted/50 p-4 text-center">
+                      <div className="text-2xl font-bold text-foreground">{queueBreakdown.pending ?? "…"}</div>
+                      <div className="text-xs text-muted-foreground">In Queue</div>
                     </div>
-                    <div className="rounded-md bg-background border border-border p-3">
-                      <div className="text-xs text-muted-foreground">Queue (all statuses)</div>
-                      <div className="font-medium text-foreground">
-                        {queueBreakdown.total ?? "…"} total (expected {listingsEstimate})
+                    <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-center">
+                      <div className="text-2xl font-bold text-emerald-700">{queueBreakdown.ready_pending ?? 0}</div>
+                      <div className="text-xs text-emerald-600">Complete</div>
+                    </div>
+                    <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-center">
+                      <div className="text-2xl font-bold text-amber-700">
+                        {(queueBreakdown.needs_extraction_pending ?? 0) + (queueBreakdown.incomplete_pending ?? 0)}
                       </div>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        {queueBreakdown.pending ?? "…"} pending · {queueBreakdown.approved ?? "…"} approved · {queueBreakdown.rejected ?? "…"} rejected · {queueBreakdown.merged ?? "…"} merged
-                      </div>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        Pending breakdown: {queueBreakdown.ready_pending ?? "…"} ready · {queueBreakdown.needs_extraction_pending ?? 0} needs extraction · {queueBreakdown.incomplete_pending ?? 0} incomplete · {queueBreakdown.errors_pending ?? 0} failed
-                      </div>
+                      <div className="text-xs text-amber-600">Needs Work</div>
                     </div>
                   </div>
 
+                  {/* Progress bar */}
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-muted-foreground">Extraction Progress</span>
+                      <span className="text-foreground font-medium">
+                        {queueBreakdown.ready_pending ?? 0} / {queueBreakdown.pending ?? 0}
+                      </span>
+                    </div>
+                    <Progress
+                      value={
+                        queueBreakdown.pending
+                          ? ((queueBreakdown.ready_pending ?? 0) / queueBreakdown.pending) * 100
+                          : 0
+                      }
+                      className="h-2"
+                    />
+                  </div>
+
+                  {/* Gap alert */}
+                  {(queueBreakdown.pending ?? 0) < 1335 && (
+                    <div className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-xs text-amber-800">
+                      <strong>Gap detected:</strong> {1335 - (queueBreakdown.pending ?? 0)} listings missing. Click "Rebuild Queue" to discover all URLs.
+                    </div>
+                  )}
+
                   {rebuildResult && (
                     <div className="text-xs text-muted-foreground">
-                      Rebuild result: {rebuildResult.queued_for_scraping ?? rebuildResult.new_urls ?? 0} queued (discovered {rebuildResult.discovered_urls ?? "?"}).
+                      Rebuild: {rebuildResult.queued_for_scraping ?? rebuildResult.new_urls ?? 0} queued (discovered {rebuildResult.discovered_urls ?? "?"}).
                     </div>
                   )}
                 </div>
 
-          {/* Progress */}
-          {(isSyncing || currentPage > 0 || isPaused) && (
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-zinc-600">Progress: Page {currentPage} of {totalPages}</span>
-                <span className="text-zinc-600">{Math.round(progress)}%</span>
-              </div>
-              <Progress value={progress} className="h-3" />
-              {estimatedTimeRemaining && isSyncing && (
-                <p className="text-xs text-zinc-500 flex items-center gap-1">
-                  <Clock className="w-3 h-3" />
-                  {estimatedTimeRemaining}
-                </p>
-              )}
-            </div>
-          )}
-
-          {/* Status summary */}
-          <div className="flex gap-4 text-sm">
-            <div className="flex items-center gap-1">
-              <FilledCheckCircle size="sm" />
-              <span className="text-emerald-700 font-medium">{successCount} Success</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <XCircle className="w-4 h-4 text-red-600" />
-              <span className="text-red-700 font-medium">{failedCount} Failed</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Clock className="w-4 h-4 text-zinc-500" />
-              <span className="text-zinc-600 font-medium">{pendingCount} Pending</span>
-            </div>
-          </div>
         </CardContent>
       </Card>
 
-      {/* Extraction Progress Summary - Replacing Page Grid */}
-      <Card className="bg-white border-zinc-200 shadow-sm">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-lg text-zinc-900">Extraction Progress (1,335 Target)</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-            <div className="rounded-lg border border-border bg-muted/50 p-4 text-center">
-              <div className="text-3xl font-bold text-foreground">1,335</div>
-              <div className="text-sm text-muted-foreground">Target Listings</div>
-            </div>
-            <div className="rounded-lg border border-border bg-muted/50 p-4 text-center">
-              <div className="text-3xl font-bold text-foreground">{queueBreakdown.pending ?? "…"}</div>
-              <div className="text-sm text-muted-foreground">In Queue</div>
-            </div>
-            <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-center">
-              <div className="text-3xl font-bold text-emerald-700">{queueBreakdown.ready_pending ?? "…"}</div>
-              <div className="text-sm text-emerald-600">Complete (Ready)</div>
-            </div>
-            <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-center">
-              <div className="text-3xl font-bold text-amber-700">{(queueBreakdown.needs_extraction_pending ?? 0) + (queueBreakdown.incomplete_pending ?? 0)}</div>
-              <div className="text-sm text-amber-600">Needs Work</div>
-            </div>
-          </div>
-          
-          {/* Progress bar */}
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Extraction Progress</span>
-              <span className="text-foreground font-medium">
-                {queueBreakdown.ready_pending ?? 0} / {queueBreakdown.pending ?? 0} complete
-              </span>
-            </div>
-            <Progress 
-              value={queueBreakdown.pending ? ((queueBreakdown.ready_pending ?? 0) / queueBreakdown.pending) * 100 : 0} 
-              className="h-3" 
-            />
-          </div>
-
-          {/* Gap alert */}
-          {(queueBreakdown.pending ?? 0) < 1335 && (
-            <div className="mt-4 rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800">
-              <strong>Gap detected:</strong> {1335 - (queueBreakdown.pending ?? 0)} listings missing from queue. 
-              Click "Rebuild Queue (All Listings)" above to re-discover all URLs.
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Recent Activity Log */}
-      <Card className="bg-white border-zinc-200 shadow-sm">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-lg text-zinc-900">Recent Activity</CardTitle>
-          <p className="text-xs text-muted-foreground">Click an entry to view extracted listings in the Projects tab</p>
-        </CardHeader>
-        <CardContent>
-          <ScrollArea className="h-[200px]">
-            <div className="space-y-2">
-              {pageStatuses
-                .filter(p => p.status !== 'pending' && p.timestamp)
-                .sort((a, b) => (new Date(b.timestamp || 0).getTime()) - (new Date(a.timestamp || 0).getTime()))
-                .slice(0, 20)
-                .map((pageStatus) => (
-                  <button
-                    key={`log-${pageStatus.page}`}
-                    onClick={() => {
-                      // Switch to approvals tab and filter by current job
-                      if (currentJobId) {
-                        setViewingJobId(currentJobId);
-                      }
-                      setActiveTab("approvals");
-                    }}
-                    className={`
-                      w-full flex items-center gap-3 p-2 rounded-lg text-sm border cursor-pointer transition-all hover:scale-[1.01]
-                      ${pageStatus.status === 'success' ? 'bg-emerald-50 border-emerald-200 hover:border-emerald-400' : 'bg-red-50 border-red-200 hover:border-red-400'}
-                    `}
-                  >
-                    {pageStatus.status === 'success' ? (
-                      <FilledCheckCircle size="sm" />
-                    ) : (
-                      <XCircle className="w-4 h-4 text-red-600 flex-shrink-0" />
-                    )}
-                    <span className="text-zinc-900 font-medium">Page {pageStatus.page}</span>
-                    {pageStatus.stats && (
-                      <span className="text-zinc-600">
-                        +{pageStatus.stats.created} new, {pageStatus.stats.updated} updated, {pageStatus.stats.images} images
-                      </span>
-                    )}
-                    {pageStatus.error && (
-                      <span className="text-red-600 text-xs truncate">{pageStatus.error}</span>
-                    )}
-                    <span className="text-zinc-500 text-xs ml-auto">
-                      {pageStatus.timestamp ? new Date(pageStatus.timestamp).toLocaleTimeString() : ''}
-                    </span>
-                  </button>
-                ))}
-              {pageStatuses.filter(p => p.status !== 'pending').length === 0 && (
-                <p className="text-zinc-500 text-center py-8">No activity yet. Start a sync to see progress.</p>
-              )}
-            </div>
-          </ScrollArea>
-        </CardContent>
-        </Card>
         </TabsContent>
       </Tabs>
     </div>
