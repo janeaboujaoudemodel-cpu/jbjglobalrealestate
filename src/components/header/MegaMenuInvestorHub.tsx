@@ -10,7 +10,7 @@ interface MegaMenuInvestorHubProps {
   onClose: () => void;
 }
 
-const MegaMenuInvestorHub: React.FC<MegaMenuInvestorHubProps> = ({ onClose }) => {
+const MegaMenuInvestorHub = React.forwardRef<HTMLDivElement, MegaMenuInvestorHubProps>(({ onClose }, ref) => {
   const dashboardLinks = [
     { name: 'Investor Dashboard', href: '/my-account', icon: UserCircle, description: 'Your investment overview' },
     { name: 'Portfolio Views', href: '/favorites', icon: Heart, description: 'Saved properties & shortlists' },
@@ -25,7 +25,7 @@ const MegaMenuInvestorHub: React.FC<MegaMenuInvestorHubProps> = ({ onClose }) =>
   ];
 
   return (
-    <MegaMenuShell>
+    <MegaMenuShell ref={ref}>
       <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-10 lg:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-6">
@@ -80,6 +80,8 @@ const MegaMenuInvestorHub: React.FC<MegaMenuInvestorHubProps> = ({ onClose }) =>
       </div>
     </MegaMenuShell>
   );
-};
+});
+
+MegaMenuInvestorHub.displayName = 'MegaMenuInvestorHub';
 
 export default MegaMenuInvestorHub;

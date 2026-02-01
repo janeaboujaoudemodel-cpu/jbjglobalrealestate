@@ -15,7 +15,7 @@ interface MegaMenuMoreProps {
   onClose: () => void;
 }
 
-const MegaMenuMore: React.FC<MegaMenuMoreProps> = ({ onClose }) => {
+const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onClose }, ref) => {
   // About & Company links
   const aboutLinks = [
     { label: 'About Us', href: '/about', icon: Building2 },
@@ -36,7 +36,7 @@ const MegaMenuMore: React.FC<MegaMenuMoreProps> = ({ onClose }) => {
   ];
 
   return (
-    <MegaMenuShell>
+    <MegaMenuShell ref={ref}>
       <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-10 lg:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left: Featured photo */}
@@ -94,6 +94,8 @@ const MegaMenuMore: React.FC<MegaMenuMoreProps> = ({ onClose }) => {
       </div>
     </MegaMenuShell>
   );
-};
+});
+
+MegaMenuMore.displayName = 'MegaMenuMore';
 
 export default MegaMenuMore;
