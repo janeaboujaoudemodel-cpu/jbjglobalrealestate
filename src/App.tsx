@@ -11,6 +11,7 @@ import { PopupCoordinatorProvider } from "@/contexts/PopupCoordinatorContext";
 import { FounderVisibilityProvider } from "@/contexts/FounderVisibilityContext";
 import { ScrollToTopOnMount } from "@/components/ScrollToTop";
 import AdminBypass from "@/components/AdminBypass";
+import ListingAdminGuard from "@/components/ListingAdminGuard";
 import MainLayoutWrapper from "@/components/MainLayoutWrapper";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
 import AppErrorBoundary from "@/components/AppErrorBoundary";
@@ -361,8 +362,8 @@ const App = () => (
                 <Route path="/jbj-broker-reports" element={<JBJBrokerReports />} />
                 <Route path="/founder-assistant" element={<FoundersAssistant />} />
                 <Route path="/broker-admin-assistant" element={<BrokerAdminAssistant />} />
-                <Route path="/listing-admin" element={<ListingAdmin />} />
-                <Route path="/listing-admin/preview/:id" element={<PendingImportPreview />} />
+                <Route path="/listing-admin" element={<ListingAdminGuard><ListingAdmin /></ListingAdminGuard>} />
+                <Route path="/listing-admin/preview/:id" element={<ListingAdminGuard><PendingImportPreview /></ListingAdminGuard>} />
                 <Route path="/admin/training-guide" element={<AdminTrainingGuide />} />
                 <Route path="/team" element={<MeetTheTeam />} />
                 <Route path="/meet-the-team" element={<Navigate to="/team" replace />} />
