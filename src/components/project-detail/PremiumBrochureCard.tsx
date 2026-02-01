@@ -97,17 +97,6 @@ const PremiumBrochureCard = ({
           {/* Premium Gold Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-tr from-gold/15 via-transparent to-gold/5" />
           
-          {/* Page edge effect - looks like stacked pages on right */}
-          <div 
-            className="absolute right-0 top-2 bottom-2 w-4 bg-gradient-to-l from-[#F5EBD7] via-[#E8DCC8] to-transparent rounded-r"
-            style={{ transform: "translateZ(-2px)" }}
-          >
-            {/* Page lines */}
-            <div className="absolute inset-y-4 left-0 w-[1px] bg-gold/20" />
-            <div className="absolute inset-y-4 left-1 w-[1px] bg-gold/10" />
-            <div className="absolute inset-y-4 left-2 w-[1px] bg-gold/5" />
-          </div>
-          
           {/* Spine effect on left - book binding */}
           <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
           <div className="absolute left-2 top-4 bottom-4 w-[2px] bg-gold/40 rounded-full" />
@@ -181,26 +170,14 @@ const PremiumBrochureCard = ({
         onClick={handleClick}
         className={cn(
           "flex items-center gap-3 px-10 py-4 rounded-lg font-semibold text-base transition-all duration-300",
-          "bg-gold hover:bg-gold/90",
-          "border border-gold/80",
-          "text-black",
+          // Filled, premium (no yellow / gold fill)
+          "bg-foreground text-background hover:bg-foreground/90",
+          "border border-border",
           "group shadow-lg"
         )}
-        style={{
-          boxShadow: `
-            0 10px 30px rgba(200,167,102,0.4),
-            0 4px 12px rgba(0,0,0,0.2),
-            inset 0 1px 0 rgba(255,255,255,0.25)
-          `,
-        }}
         whileHover={{ 
           y: -3, 
           scale: 1.02,
-          boxShadow: `
-            0 16px 40px rgba(200,167,102,0.5),
-            0 8px 20px rgba(0,0,0,0.25),
-            inset 0 1px 0 rgba(255,255,255,0.3)
-          `
         }}
         whileTap={{ scale: 0.98, y: 0 }}
       >
