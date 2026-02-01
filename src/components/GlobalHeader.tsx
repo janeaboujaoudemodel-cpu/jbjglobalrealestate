@@ -38,6 +38,15 @@ import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
 import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
 
+// Mega Menu Components
+import MegaMenuBuy from "@/components/header/MegaMenuBuy";
+import MegaMenuRent from "@/components/header/MegaMenuRent";
+import MegaMenuProjects from "@/components/header/MegaMenuProjects";
+import MegaMenuDevelopers from "@/components/header/MegaMenuDevelopers";
+import MegaMenuAreas from "@/components/header/MegaMenuAreas";
+import MegaMenuServices from "@/components/header/MegaMenuServices";
+import MegaMenuMore from "@/components/header/MegaMenuMore";
+
 interface GlobalHeaderProps {
   forceSolid?: boolean;
 }
@@ -49,6 +58,28 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const [searchOpen, setSearchOpen] = useState(false);
   const { t } = useLanguage();
   const isTouchLayout = useIsTouchLayout();
+  
+  // Mega menu hover states
+  const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
+  const megaMenuTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleMegaMenuEnter = (menu: string) => {
+    if (megaMenuTimeoutRef.current) {
+      clearTimeout(megaMenuTimeoutRef.current);
+      megaMenuTimeoutRef.current = null;
+    }
+    setActiveMegaMenu(menu);
+  };
+
+  const handleMegaMenuLeave = () => {
+    megaMenuTimeoutRef.current = setTimeout(() => {
+      setActiveMegaMenu(null);
+    }, 150);
+  };
+
+  const closeMegaMenu = () => {
+    setActiveMegaMenu(null);
+  };
 
   // Locked rule:
   // - Desktop header (pill nav) must show on desktop-width screens.
@@ -231,6 +262,51 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const moreLinks = [
     { href: "/news", label: t('nav.news') || "News & Insights", icon: Newspaper },
     { href: "/join", label: t('nav.join') || "Join Our Team", icon: UserPlus },
+  ];
+
+  // Mobile menu links - Buy section
+  const mobileBuyLinks = [
+    { href: "/properties?transaction=buy", label: "Properties for Sale", icon: Home },
+    { href: "/properties?type=apartment&transaction=buy", label: "Apartments", icon: Building2 },
+    { href: "/properties?type=villa&transaction=buy", label: "Villas", icon: Home },
+    { href: "/buyer-guide", label: "Buyer's Guide", icon: FileText },
+    { href: "/mortgage-calculator", label: "Mortgage Calculator", icon: BarChart3 },
+  ];
+
+  // Mobile menu links - Rent section
+  const mobileRentLinks = [
+    { href: "/properties?transaction=rent", label: "Properties for Rent", icon: Building2 },
+    { href: "/tenant-guide", label: "Tenant's Guide", icon: FileText },
+    { href: "/services/property-management", label: "Property Management", icon: ClipboardCheck },
+  ];
+
+  // Mobile menu links - Areas section
+  const mobileAreaLinks = [
+    { href: "/areas", label: "All Areas", icon: MapPin },
+    { href: "/areas/downtown-dubai", label: "Downtown Dubai", icon: MapPin },
+    { href: "/areas/dubai-marina", label: "Dubai Marina", icon: MapPin },
+    { href: "/areas/palm-jumeirah", label: "Palm Jumeirah", icon: MapPin },
+    { href: "/areas/business-bay", label: "Business Bay", icon: MapPin },
+  ];
+
+  // Mobile menu links - Developers section  
+  const mobileDeveloperLinks = [
+    { href: "/developers", label: "All Developers", icon: Building2 },
+    { href: "/developers/emaar", label: "Emaar Properties", icon: Building2 },
+    { href: "/developers/damac", label: "DAMAC Properties", icon: Building2 },
+    { href: "/developers/sobha", label: "Sobha Realty", icon: Building2 },
+  ];
+
+  // Mobile menu links - More section
+  const mobileMoreLinks = [
+    { href: "/about", label: "About Us", icon: Building2 },
+    { href: "/team", label: "Meet the Team", icon: Users },
+    { href: "/join", label: "Careers", icon: Briefcase },
+    { href: "/awards", label: "Our Awards", icon: Award },
+    { href: "/contact", label: "Contact Us", icon: Phone },
+    { href: "/guides", label: "Real Estate Guides", icon: FileText },
+    { href: "/complaint", label: "Complaint Procedure", icon: ClipboardCheck },
+    { href: "/testimonials", label: "Testimonials", icon: Users },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -459,25 +535,25 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 {/* Scrollable Navigation */}
                 <ScrollArea className="flex-1">
                   <nav className="flex flex-col p-4">
-                    {/* 1. Home */}
-                    <Link
-                      to="/"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg border-l-2 transition-all ${
-                        isActive("/")
-                          ? "text-gold border-gold bg-gold/10"
-                          : "text-black border-transparent hover:text-gold hover:bg-gold/5 hover:border-gold/50"
-                      }`}
-                    >
-                      <Home className="w-4 h-4" />
-                      {t('nav.home')}
-                    </Link>
+                    {/* 1. Buy */}
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Buy</p>
+                    {mobileBuyLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        to={link.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                      >
+                        <link.icon className="w-4 h-4 text-gold" />
+                        {link.label}
+                      </Link>
+                    ))}
 
                     <div className="h-px bg-gold/20 my-2" />
                     
-                    {/* 2. Properties */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">{t('nav.properties')}</p>
-                    {propertiesLinks.map((link) => (
+                    {/* 2. Rent */}
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Rent</p>
+                    {mobileRentLinks.map((link) => (
                       <Link
                         key={link.href}
                         to={link.href}
@@ -491,7 +567,60 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                     <div className="h-px bg-gold/20 my-2" />
 
-                    {/* 3. Services */}
+                    {/* 3. Projects */}
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Projects</p>
+                    <Link
+                      to="/properties"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                    >
+                      <Building2 className="w-4 h-4 text-gold" />
+                      All Off-Plan Projects
+                    </Link>
+                    <Link
+                      to="/properties?status=off-plan"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                    >
+                      <Building2 className="w-4 h-4 text-gold" />
+                      New Launches
+                    </Link>
+
+                    <div className="h-px bg-gold/20 my-2" />
+
+                    {/* 4. Developers */}
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Developers</p>
+                    {mobileDeveloperLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        to={link.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                      >
+                        <link.icon className="w-4 h-4 text-gold" />
+                        {link.label}
+                      </Link>
+                    ))}
+
+                    <div className="h-px bg-gold/20 my-2" />
+
+                    {/* 5. Areas */}
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Areas</p>
+                    {mobileAreaLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        to={link.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                      >
+                        <link.icon className="w-4 h-4 text-gold" />
+                        {link.label}
+                      </Link>
+                    ))}
+
+                    <div className="h-px bg-gold/20 my-2" />
+
+                    {/* 6. Services */}
                     <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Services</p>
                     {servicesLinks.map((link) => (
                       <Link
@@ -507,105 +636,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                     <div className="h-px bg-gold/20 my-2" />
 
-                    {/* 4. Guides */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Guides</p>
-                    {guidesLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        to={link.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
-                      >
-                        <link.icon className="w-4 h-4 text-gold" />
-                        {link.label}
-                      </Link>
-                    ))}
-
-                    <div className="h-px bg-gold/20 my-2" />
-
-                    {/* 5. Market Intelligence */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Market Intelligence</p>
-                    {marketIntelLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        to={link.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
-                      >
-                        <link.icon className="w-4 h-4 text-gold" />
-                        {link.label}
-                      </Link>
-                    ))}
-
-                    <div className="h-px bg-gold/20 my-2" />
-
-                    {/* 6. Investor Hub */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Investor Hub</p>
-                    {investorHubLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        to={link.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
-                      >
-                        <link.icon className="w-4 h-4 text-gold" />
-                        {link.label}
-                      </Link>
-                    ))}
-
-                    <div className="h-px bg-gold/20 my-2" />
-
-                    {/* 7. Broker Hub */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Broker Hub</p>
-                    {brokerHubLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        to={link.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
-                      >
-                        <link.icon className="w-4 h-4 text-gold" />
-                        {link.label}
-                      </Link>
-                    ))}
-
-                    <div className="h-px bg-gold/20 my-2" />
-
-                    {/* 8. About */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">About</p>
-                    {aboutLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        to={link.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
-                      >
-                        <link.icon className="w-4 h-4 text-gold" />
-                        {link.label}
-                      </Link>
-                    ))}
-
-                    <div className="h-px bg-gold/20 my-2" />
-
-                    {/* 9. Contact */}
-                    <Link
-                      to="/contact"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg border-l-2 transition-all ${
-                        isActive("/contact")
-                          ? "text-gold border-gold bg-gold/10"
-                          : "text-black border-transparent hover:text-gold hover:bg-gold/5 hover:border-gold/50"
-                      }`}
-                    >
-                      <Phone className="w-4 h-4" />
-                      Contact
-                    </Link>
-
-                    <div className="h-px bg-gold/20 my-2" />
-
-                    {/* 10. More */}
+                    {/* 7. More */}
                     <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">More</p>
-                    {moreLinks.map((link) => (
+                    {mobileMoreLinks.map((link) => (
                       <Link
                         key={link.href}
                         to={link.href}
@@ -748,16 +781,13 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
             </div>
           )}
 
-          {/* DESKTOP HEADER (lg+): nav items with dividers - transparent on hero, solid on scroll */}
+          {/* DESKTOP HEADER (lg+): Premium Mega Menu Navigation */}
           {!shouldUseMobileHeader && (
             <nav
-              className="flex-1 min-w-0 mx-0.5 lg:mx-1 xl:mx-2 flex justify-center"
+              className="flex-1 min-w-0 mx-0.5 lg:mx-1 xl:mx-2 flex justify-center relative"
               aria-label="Primary"
+              onMouseLeave={handleMegaMenuLeave}
             >
-              {/*
-                IMPORTANT: keep right-side utility icons inside header.
-                `min-w-0` + `overflow-x-auto` prevents this pill from forcing the header to overflow.
-              */}
               <div
                 className={`min-w-0 max-w-full flex items-center gap-0 lg:gap-0.5 rounded-full px-1.5 lg:px-2 xl:px-3 py-1 transition-all duration-300 ${
                   isFullyTransparent
@@ -769,66 +799,119 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   boxShadow: '0 8px 32px -8px rgba(0,0,0,0.4), 0 0 0 1px rgba(200,167,102,0.2), inset 0 2px 0 rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.05)',
                 } : {}}
               >
-                {/* Home */}
-                <Link
-                  to="/"
-                  className={`px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all ${
+                {/* Buy */}
+                <button
+                  onMouseEnter={() => handleMegaMenuEnter('buy')}
+                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
                     isFullyTransparent
-                      ? isActive("/") ? "text-gold" : "text-white hover:text-gold"
-                      : isActive("/") ? "text-gold bg-gold/15 rounded-full" : "text-zinc-800 hover:text-gold hover:bg-gold/10 rounded-full"
+                      ? activeMegaMenu === 'buy' ? 'text-gold' : 'text-white hover:text-gold'
+                      : activeMegaMenu === 'buy' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
                   }`}
-                  style={{ letterSpacing: '0.02em' }}
                 >
-                  Home
-                </Link>
-
-                {/* Divider */}
+                  Buy
+                  <ChevronDown className={`w-3 h-3 transition-transform ${activeMegaMenu === 'buy' ? 'rotate-180' : ''}`} />
+                </button>
                 {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
 
-                {renderDropdown("Properties", propertiesLinks, () => location.pathname === '/properties')}
-                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
-                {renderDropdown("Services", servicesLinks, () => location.pathname.startsWith('/services'))}
-                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
-                {renderDropdown("Guides", guidesLinks, () => 
-                  ['/buyer-guide', '/seller-guide', '/landlord-guide', '/tenant-guide', '/areas', '/faq', '/investor-education', '/investor-faq', '/broker-faq'].some(p => location.pathname.startsWith(p))
-                )}
-                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1 self-stretch flex items-center">|</span>}
-                {renderDropdown(
-                  "Market Intel", 
-                  marketIntelLinks, 
-                  () => location.pathname.startsWith('/market-intelligence') || location.pathname === '/market-report'
-                )}
-                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
-                {renderDropdown("Investor", investorHubLinks, () => 
-                  location.pathname.includes('ai-hub') || location.pathname === '/favorites'
-                )}
-                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
-                {renderDropdown("Broker", brokerHubLinks, () => 
-                  location.pathname.includes('broker-toolkit') || location.pathname.includes('broker-education')
-                )}
-                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
-                {renderDropdown("About", aboutLinks, () => 
-                  ['/about', '/founder', '/team', '/awards'].some(p => location.pathname.startsWith(p))
-                )}
-                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
-
-                <Link
-                  to="/contact"
-                  className={`px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all ${
+                {/* Rent */}
+                <button
+                  onMouseEnter={() => handleMegaMenuEnter('rent')}
+                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
                     isFullyTransparent
-                      ? isActive("/contact") ? "text-gold" : "text-white hover:text-gold"
-                      : isActive("/contact") ? "text-gold bg-gold/15 rounded-full" : "text-zinc-800 hover:text-gold hover:bg-gold/10 rounded-full"
+                      ? activeMegaMenu === 'rent' ? 'text-gold' : 'text-white hover:text-gold'
+                      : activeMegaMenu === 'rent' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
                   }`}
-                  style={{ letterSpacing: '0.02em' }}
                 >
-                  Contact
-                </Link>
+                  Rent
+                  <ChevronDown className={`w-3 h-3 transition-transform ${activeMegaMenu === 'rent' ? 'rotate-180' : ''}`} />
+                </button>
                 {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
 
-                {renderDropdown("More", moreLinks, () => 
-                  ['/news', '/join'].some(p => location.pathname.startsWith(p))
-                )}
+                {/* Projects */}
+                <button
+                  onMouseEnter={() => handleMegaMenuEnter('projects')}
+                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
+                    isFullyTransparent
+                      ? activeMegaMenu === 'projects' ? 'text-gold' : 'text-white hover:text-gold'
+                      : activeMegaMenu === 'projects' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
+                  }`}
+                >
+                  Projects
+                  <ChevronDown className={`w-3 h-3 transition-transform ${activeMegaMenu === 'projects' ? 'rotate-180' : ''}`} />
+                </button>
+                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
+
+                {/* Developers */}
+                <button
+                  onMouseEnter={() => handleMegaMenuEnter('developers')}
+                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
+                    isFullyTransparent
+                      ? activeMegaMenu === 'developers' ? 'text-gold' : 'text-white hover:text-gold'
+                      : activeMegaMenu === 'developers' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
+                  }`}
+                >
+                  Developers
+                  <ChevronDown className={`w-3 h-3 transition-transform ${activeMegaMenu === 'developers' ? 'rotate-180' : ''}`} />
+                </button>
+                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
+
+                {/* Areas */}
+                <button
+                  onMouseEnter={() => handleMegaMenuEnter('areas')}
+                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
+                    isFullyTransparent
+                      ? activeMegaMenu === 'areas' ? 'text-gold' : 'text-white hover:text-gold'
+                      : activeMegaMenu === 'areas' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
+                  }`}
+                >
+                  Areas
+                  <ChevronDown className={`w-3 h-3 transition-transform ${activeMegaMenu === 'areas' ? 'rotate-180' : ''}`} />
+                </button>
+                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
+
+                {/* Services */}
+                <button
+                  onMouseEnter={() => handleMegaMenuEnter('services')}
+                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
+                    isFullyTransparent
+                      ? activeMegaMenu === 'services' ? 'text-gold' : 'text-white hover:text-gold'
+                      : activeMegaMenu === 'services' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
+                  }`}
+                >
+                  Services
+                  <ChevronDown className={`w-3 h-3 transition-transform ${activeMegaMenu === 'services' ? 'rotate-180' : ''}`} />
+                </button>
+                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
+
+                {/* More */}
+                <button
+                  onMouseEnter={() => handleMegaMenuEnter('more')}
+                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
+                    isFullyTransparent
+                      ? activeMegaMenu === 'more' ? 'text-gold' : 'text-white hover:text-gold'
+                      : activeMegaMenu === 'more' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
+                  }`}
+                >
+                  More
+                  <ChevronDown className={`w-3 h-3 transition-transform ${activeMegaMenu === 'more' ? 'rotate-180' : ''}`} />
+                </button>
               </div>
+
+              {/* Mega Menu Panels */}
+              {activeMegaMenu && (
+                <div 
+                  onMouseEnter={() => handleMegaMenuEnter(activeMegaMenu)}
+                  onMouseLeave={handleMegaMenuLeave}
+                >
+                  {activeMegaMenu === 'buy' && <MegaMenuBuy onClose={closeMegaMenu} />}
+                  {activeMegaMenu === 'rent' && <MegaMenuRent onClose={closeMegaMenu} />}
+                  {activeMegaMenu === 'projects' && <MegaMenuProjects onClose={closeMegaMenu} />}
+                  {activeMegaMenu === 'developers' && <MegaMenuDevelopers onClose={closeMegaMenu} />}
+                  {activeMegaMenu === 'areas' && <MegaMenuAreas onClose={closeMegaMenu} />}
+                  {activeMegaMenu === 'services' && <MegaMenuServices onClose={closeMegaMenu} />}
+                  {activeMegaMenu === 'more' && <MegaMenuMore onClose={closeMegaMenu} />}
+                </div>
+              )}
             </nav>
           )}
 
