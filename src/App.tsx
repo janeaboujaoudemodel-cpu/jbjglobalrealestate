@@ -103,6 +103,7 @@ import VerifyCertificate from "./pages/VerifyCertificate";
 import PropertyMap from "./pages/PropertyMap";
 import AdminDevelopers from "./pages/AdminDevelopers";
 import BrokerAccount from "./pages/BrokerAccount";
+import UserProfile from "./pages/UserProfile";
 import HRAgent from "./pages/HRAgent";
 import ReferralOnboarding from "./pages/ReferralOnboarding";
 import Spreadsheet from "./pages/Spreadsheet";
@@ -341,6 +342,7 @@ const App = () => (
                 <Route path="/map" element={<PropertyMap />} />
                 <Route path="/admin/developers" element={<AdminDevelopers />} />
                 <Route path="/my-account" element={<BrokerAccount />} />
+                <Route path="/profile" element={<UserProfile />} />
                 {/* Alias: older links pointing to /account */}
                 <Route path="/account" element={<Navigate to="/my-account" replace />} />
                 <Route path="/hr-agent" element={<HRAgent />} />
