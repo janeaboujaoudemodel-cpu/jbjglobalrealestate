@@ -8,6 +8,10 @@ const corsHeaders = {
 
 const POSTGREST_PAGE_SIZE = 1000;
 
+// Canonical targets matching the source portal structure
+const CANONICAL_TOTAL_PAGES = 89;
+const CANONICAL_TOTAL_LISTINGS = 1335;
+
 const normalizeUrl = (raw: string): string => {
   const trimmed = (raw || "").trim();
   if (!trimmed) return "";
@@ -15,6 +19,167 @@ const normalizeUrl = (raw: string): string => {
   // We canonicalize them so they de-dupe and pass slug filtering.
   const noQueryOrHash = trimmed.split("?")[0].split("#")[0];
   return noQueryOrHash.replace(/\/$/, "");
+};
+
+const isProjectDetailUrl = (raw: string): boolean => {
+  const l = normalizeUrl(raw);
+  if (!l) return false;
+  if (!l.startsWith("https://providentestate.com/new-projects/")) return false;
+  if (l.includes("/page/")) return false;
+  // Exclude developer listing pages like /new-projects/developed-by-emaar
+  if (/\/new-projects\/developed-by-[^\/]+$/i.test(l)) return false;
+  // Exclude location landing pages like /new-projects/in-dubai-marina
+  if (/\/new-projects\/in-[a-z0-9\-]+$/i.test(l)) return false;
+  if (l === "https://providentestate.com/new-projects") return false;
+  // Must have a slug after /new-projects/
+  const match = l.match(/\/new-projects\/([^\/\?#]+)$/i);
+  return Boolean(match && match[1] && match[1].length >= 1);
+};
+
+const extractLinksFromHtml = (html: string): string[] => {
+  // Simple href extraction (fast, no DOM parser needed)
+  const out: string[] = [];
+  const re = /href\s*=\s*["']([^"']+)["']/gi;
+  for (const m of html.matchAll(re)) {
+    const href = (m?.[1] || "").trim();
+    if (!href) continue;
+    if (href.startsWith("mailto:") || href.startsWith("tel:") || href.startsWith("javascript:")) continue;
+    if (href.startsWith("#")) continue;
+    if (href.includes("/new-projects/")) out.push(href);
+  }
+  return out;
+};
+
+const toAbsoluteProvidentUrl = (href: string): string => {
+  const h = (href || "").trim();
+  if (!h) return "";
+  if (h.startsWith("http://") || h.startsWith("https://")) return h;
+  if (h.startsWith("/")) return `https://providentestate.com${h}`;
+  // Best-effort: treat as relative to domain root
+  return `https://providentestate.com/${h.replace(/^\.\/?/, "")}`;
+};
+
+const detectTotalPagesFromHtml = (html: string): number => {
+  let maxPage = 1;
+  const re = /\/new-projects\/page\/(\d+)\/?/gi;
+  for (const m of html.matchAll(re)) {
+    const n = Number(m?.[1]);
+    if (Number.isFinite(n) && n > maxPage) maxPage = n;
+  }
+  return maxPage > 1 ? maxPage : CANONICAL_TOTAL_PAGES;
+};
+
+const mapWithConcurrency = async <T, R>(
+  items: T[],
+  concurrency: number,
+  worker: (item: T) => Promise<R>,
+): Promise<R[]> => {
+  const results: R[] = new Array(items.length);
+  let index = 0;
+  const runners = Array.from({ length: Math.max(1, concurrency) }, async () => {
+    while (index < items.length) {
+      const i = index++;
+      results[i] = await worker(items[i]);
+    }
+  });
+  await Promise.all(runners);
+  return results;
+};
+
+const fetchHtml = async (url: string, timeoutMs = 25000): Promise<{ ok: boolean; html: string }> => {
+  const controller = new AbortController();
+  const t = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, {
+      method: "GET",
+      redirect: "follow",
+      headers: {
+        // Best-effort UA to reduce bot-blocking (still may fail)
+        "user-agent":
+          "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "accept": "text/html,application/xhtml+xml",
+      },
+      signal: controller.signal,
+    });
+    const html = await res.text().catch(() => "");
+    const ok = res.ok && html.length > 1000;
+    return { ok, html };
+  } catch {
+    return { ok: false, html: "" };
+  } finally {
+    clearTimeout(t);
+  }
+};
+
+const firecrawlScrapeLinks = async (url: string, firecrawlKey: string): Promise<string[]> => {
+  const res = await fetch("https://api.firecrawl.dev/v1/scrape", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${firecrawlKey}` },
+    body: JSON.stringify({
+      url,
+      formats: ["links"],
+      waitFor: 8000,
+      timeout: 60000,
+    }),
+  });
+
+  if (!res.ok) return [];
+  const data = await res.json().catch(() => ({}));
+  return (data?.data?.links || data?.links || []) as string[];
+};
+
+const collectProjectUrlsFromListingPages = async (opts: {
+  totalPages: number;
+  firecrawlKey: string;
+  concurrency?: number;
+  forceFirecrawlAllPages?: boolean;
+}): Promise<{ urls: string[]; pages_failed: number }> => {
+  const totalPages = Math.max(1, opts.totalPages || CANONICAL_TOTAL_PAGES);
+  const concurrency = Math.max(1, Math.min(12, opts.concurrency ?? 8));
+
+  const listingPages = Array.from({ length: totalPages }, (_, i) => {
+    const page = i + 1;
+    return page === 1
+      ? "https://providentestate.com/new-projects/"
+      : `https://providentestate.com/new-projects/page/${page}/`;
+  });
+
+  const htmlResults = await mapWithConcurrency(listingPages, concurrency, async (pageUrl) => {
+    const r = await fetchHtml(pageUrl);
+    if (!r.ok) return { pageUrl, ok: false, links: [] as string[] };
+
+    const hrefs = extractLinksFromHtml(r.html);
+    const abs = hrefs.map(toAbsoluteProvidentUrl).map(normalizeUrl).filter(Boolean);
+    const projectLinks = abs.filter(isProjectDetailUrl);
+    return { pageUrl, ok: projectLinks.length > 0, links: projectLinks };
+  });
+
+  const urlsFromHtml = htmlResults.flatMap((r) => r.links);
+  const failedPages = htmlResults.filter((r) => !r.ok).map((r) => r.pageUrl);
+
+  // Firecrawl fallback:
+  // - By default: ONLY for pages that failed direct HTML discovery.
+  // - If forceFirecrawlAllPages: scrape ALL listing pages (strongest coverage).
+  const pagesToScrape = opts.forceFirecrawlAllPages ? listingPages : failedPages;
+  let pages_failed = failedPages.length;
+  let urlsFromFirecrawl: string[] = [];
+
+  if (pagesToScrape.length > 0) {
+    console.log(
+      opts.forceFirecrawlAllPages
+        ? `[Discover] Running Firecrawl scrape(links) across ALL ${listingPages.length} listing pages for maximum coverage...`
+        : `[Discover] Direct HTML discovery failed for ${failedPages.length} listing pages. Falling back to Firecrawl scrape(links) for those pages...`,
+    );
+
+    const firecrawlResults = await mapWithConcurrency(pagesToScrape, 4, async (pageUrl) => {
+      const links = await firecrawlScrapeLinks(pageUrl, opts.firecrawlKey);
+      return links.map(normalizeUrl).filter(isProjectDetailUrl);
+    });
+    urlsFromFirecrawl = firecrawlResults.flatMap((x) => x);
+  }
+
+  const merged = [...new Set([...urlsFromHtml, ...urlsFromFirecrawl])].sort();
+  return { urls: merged, pages_failed };
 };
 
 /**
@@ -41,59 +206,146 @@ serve(async (req) => {
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   try {
-    const { freshStart = false } = await req.json().catch(() => ({}));
+    const body = await req.json().catch(() => ({}));
+    const {
+      freshStart = false,
+      forceFullDiscovery = false,
+      expectedTotal = CANONICAL_TOTAL_LISTINGS,
+      skipMap = false,
+      listingPageStart,
+      listingPageEnd,
+      listingUseFirecrawl = false,
+      // NOTE: full escalation can be slow; keep disabled unless explicitly requested
+      fullFirecrawlEscalation = false,
+    } = body || {};
 
-    console.log("[Discover] Starting project URL discovery via MAP...");
+    console.log(`[Discover] Starting project URL discovery (${skipMap ? "listing-pages" : "MAP"})...`);
 
-    // Use Firecrawl MAP to get ALL URLs from the site
-    const mapRes = await fetch("https://api.firecrawl.dev/v1/map", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${firecrawlKey}` },
-      body: JSON.stringify({
-        url: "https://providentestate.com/new-projects/",
-        search: "new-projects",
-        // Firecrawl MAP can return up to ~5000 URLs. Need full inventory of 1335+
-        limit: 5000,
-        ignoreSitemap: false,
-        includeSubdomains: false,
-      }),
-    });
-
-    if (!mapRes.ok) {
-      const errText = await mapRes.text();
-      console.error("[Discover] MAP failed:", errText);
-      return new Response(JSON.stringify({ error: `MAP failed: ${mapRes.status}`, details: errText.substring(0, 300) }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+    let allLinks: string[] = [];
+    if (!skipMap) {
+      // Use Firecrawl MAP to get ALL URLs from the site
+      const mapRes = await fetch("https://api.firecrawl.dev/v1/map", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${firecrawlKey}` },
+        body: JSON.stringify({
+          url: "https://providentestate.com/new-projects/",
+          search: "new-projects",
+          // Firecrawl MAP can return up to ~5000 URLs. Need full inventory of 1335+
+          limit: 5000,
+          ignoreSitemap: false,
+          includeSubdomains: false,
+        }),
       });
+
+      if (!mapRes.ok) {
+        const errText = await mapRes.text();
+        console.error("[Discover] MAP failed:", errText);
+        return new Response(JSON.stringify({ error: `MAP failed: ${mapRes.status}`, details: errText.substring(0, 300) }), {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const mapData = await mapRes.json();
+      allLinks = mapData.links || [];
+      console.log(`[Discover] MAP returned ${allLinks.length} total URLs`);
     }
 
-    const mapData = await mapRes.json();
-    const allLinks: string[] = mapData.links || [];
-    console.log(`[Discover] MAP returned ${allLinks.length} total URLs`);
-
     // Filter to project detail URLs only
-    const projectUrls = [...new Set(
-      allLinks
-        .map((l: string) => normalizeUrl(l))
-        .filter((l: string) => {
-          if (!l) return false;
-          if (!l.startsWith("https://providentestate.com/new-projects/")) return false;
-          if (l.includes("/page/")) return false;
-          // Exclude developer listing pages like /new-projects/developed-by-emaar
-          if (/\/new-projects\/developed-by-[^\/]+$/i.test(l)) return false;
-          // Exclude location landing pages like /new-projects/in-dubai-marina
-          if (/\/new-projects\/in-[a-z0-9\-]+$/i.test(l)) return false;
-          if (l === "https://providentestate.com/new-projects") return false;
-          // Must have a slug after /new-projects/
-          const match = l.match(/\/new-projects\/([^\/\?#]+)$/i);
-          return Boolean(match && match[1] && match[1].length >= 1);
-        })
-    )]
+    let projectUrls = [...new Set(allLinks.map((l: string) => normalizeUrl(l)).filter(isProjectDetailUrl))]
       // Stable ordering so the queue is consistent across runs
       .sort();
 
-    console.log(`[Discover] Found ${projectUrls.length} unique project URLs`);
+    if (!skipMap) {
+      console.log(`[Discover] Found ${projectUrls.length} unique project URLs (MAP)`);
+    }
+
+    // If MAP misses any listings, optionally perform a full fallback discovery.
+    // This is designed to hit the canonical 1,335 inventory (89 listing pages × 15 each).
+    const expected = Number(expectedTotal) || CANONICAL_TOTAL_LISTINGS;
+    let usedFallback = false;
+    let fallbackPagesFailed = 0;
+    let detectedPages = CANONICAL_TOTAL_PAGES;
+
+    // Optional: targeted listing-page extraction in a bounded range (safe for timeouts)
+    const hasPageRange =
+      (typeof listingPageStart !== "undefined" && listingPageStart !== null) ||
+      (typeof listingPageEnd !== "undefined" && listingPageEnd !== null);
+
+    if (hasPageRange) {
+      usedFallback = true;
+
+      const root = await fetchHtml("https://providentestate.com/new-projects/");
+      if (root.ok) detectedPages = detectTotalPagesFromHtml(root.html);
+
+      const start = Math.max(1, Math.min(detectedPages, Number(listingPageStart ?? 1) || 1));
+      const end = Math.max(start, Math.min(detectedPages, Number(listingPageEnd ?? start) || start));
+      console.log(`[Discover] Listing-page range mode: pages ${start}-${end} (useFirecrawl=${Boolean(listingUseFirecrawl)})`);
+
+      const pages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
+      const pageUrls = pages.map((p) =>
+        p === 1 ? "https://providentestate.com/new-projects/" : `https://providentestate.com/new-projects/page/${p}/`
+      );
+
+      let rangeUrls: string[] = [];
+      if (listingUseFirecrawl) {
+        const scraped = await mapWithConcurrency(pageUrls, 4, async (pageUrl) => {
+          const links = await firecrawlScrapeLinks(pageUrl, firecrawlKey);
+          return links.map(normalizeUrl).filter(isProjectDetailUrl);
+        });
+        rangeUrls = scraped.flatMap((x) => x);
+      } else {
+        const htmlBatch = await mapWithConcurrency(pageUrls, 8, async (pageUrl) => {
+          const r = await fetchHtml(pageUrl);
+          if (!r.ok) return [] as string[];
+          const hrefs = extractLinksFromHtml(r.html);
+          return hrefs.map(toAbsoluteProvidentUrl).map(normalizeUrl).filter(isProjectDetailUrl);
+        });
+        rangeUrls = htmlBatch.flatMap((x) => x);
+      }
+
+      projectUrls = [...new Set([...projectUrls, ...rangeUrls])].sort();
+      console.log(`[Discover] After listing-page range merge: ${projectUrls.length} unique project URLs`);
+    }
+
+    if (forceFullDiscovery || projectUrls.length < expected) {
+      usedFallback = true;
+      console.log(`[Discover] MAP returned ${projectUrls.length} < expected ${expected}. Running full listing-page discovery fallback...`);
+
+      // Detect total pages from source HTML (best-effort); fall back to canonical 89.
+      const root = await fetchHtml("https://providentestate.com/new-projects/");
+      if (root.ok) {
+        detectedPages = detectTotalPagesFromHtml(root.html);
+      }
+
+      const { urls: byPageUrls, pages_failed } = await collectProjectUrlsFromListingPages({
+        totalPages: detectedPages,
+        firecrawlKey,
+        concurrency: 8,
+      });
+      fallbackPagesFailed = pages_failed;
+
+      // Merge MAP + fallback results
+      projectUrls = [...new Set([...projectUrls, ...byPageUrls])].sort();
+      console.log(`[Discover] After fallback merge: ${projectUrls.length} unique project URLs`);
+
+      // Optional escalation (can be slow). Prefer calling listing-page range mode in batches.
+      if (fullFirecrawlEscalation && projectUrls.length < expected) {
+        console.log(
+          `[Discover] fullFirecrawlEscalation enabled. Scraping ALL listing pages via Firecrawl (may be slow)...`,
+        );
+
+        const { urls: fullFirecrawlUrls } = await collectProjectUrlsFromListingPages({
+          totalPages: detectedPages,
+          firecrawlKey,
+          concurrency: 4,
+          forceFirecrawlAllPages: true,
+        });
+
+        projectUrls = [...new Set([...projectUrls, ...fullFirecrawlUrls])].sort();
+        console.log(`[Discover] After full Firecrawl escalation: ${projectUrls.length} unique project URLs`);
+      }
+    }
 
     if (projectUrls.length === 0) {
       return new Response(JSON.stringify({ 
@@ -209,12 +461,21 @@ serve(async (req) => {
       console.log(`[Discover] Total inserted: ${insertedCount}, errors: ${errorCount}`);
     }
 
+    // Post-insert: report current queue cardinality (distinct slugs)
+    const queueSlugsAfter = await fetchAllSlugs("pending_project_imports");
+    const queueDistinctAfter = new Set(queueSlugsAfter.filter(Boolean)).size;
+
     return new Response(JSON.stringify({
       success: true,
+      expected_total: expected,
+      used_fallback: usedFallback,
+      detected_pages: detectedPages,
+      fallback_pages_failed: fallbackPagesFailed,
       discovered_urls: projectUrls.length,
       new_urls: newUrls.length,
       existing_urls: existingUrls.length,
       queued_for_scraping: placeholders.length,
+      queue_distinct_slugs_after: queueDistinctAfter,
       sample_urls: projectUrls.slice(0, 10),
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
