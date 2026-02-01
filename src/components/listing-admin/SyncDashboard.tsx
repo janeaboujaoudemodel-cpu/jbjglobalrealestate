@@ -160,6 +160,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   const [bulkTotals, setBulkTotals] = useState({ processed: 0, success: 0, errors: 0 });
 
   const [isRebuildingQueue, setIsRebuildingQueue] = useState(false);
+  const [isWiping, setIsWiping] = useState(false);
   const [rebuildResult, setRebuildResult] = useState<{
     discovered_urls?: number;
     queued_for_scraping?: number;
@@ -576,6 +577,67 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
 
     // 2. Start a new sync from page 1
     await startFullSync();
+  };
+
+  // FULL WIPE & REBUILD - Complete database reset and rediscovery of all 1335 listings
+  const fullWipeAndRebuild = async () => {
+    if (isSyncing || isWiping || isBulkExtractRunning) return;
+
+    const confirmed = window.confirm(
+      "⚠️ FULL WIPE & REBUILD ⚠️\n\n" +
+      "This will:\n" +
+      "1) DELETE ALL projects, images, and documents from the database\n" +
+      "2) CLEAR the entire queue\n" +
+      "3) RE-DISCOVER all 1,335 project URLs from the source portal\n" +
+      "4) Queue them all for fresh extraction\n\n" +
+      "Manual projects (without source_url) will be PRESERVED.\n\n" +
+      "This is a destructive operation. Continue?"
+    );
+    if (!confirmed) return;
+
+    setIsWiping(true);
+    toast.info("Starting full wipe and rebuild...");
+
+    try {
+      // Step 1: Wipe everything
+      const { data: wipeData, error: wipeErr } = await supabase.functions.invoke("wipe-and-rebuild", {
+        body: { confirm: true, preserveManual: true },
+      });
+
+      if (wipeErr) throw wipeErr;
+      
+      toast.success(`Wiped: ${wipeData?.deleted?.projects ?? 0} projects, ${wipeData?.deleted?.queue_items ?? 0} queue items`);
+
+      // Step 2: Discover all 1335 URLs
+      toast.info("Discovering all 1,335 project URLs...");
+      
+      const { data: discoverData, error: discoverErr } = await supabase.functions.invoke("discover-all-projects", {
+        body: {
+          freshStart: true,
+          expectedTotal: 1335,
+          forceFullDiscovery: true,
+        },
+      });
+
+      if (discoverErr) throw discoverErr;
+
+      setRebuildResult(discoverData || null);
+      toast.success(`Discovered and queued ${discoverData?.queued_for_scraping ?? discoverData?.new_urls ?? 0} URLs`);
+
+      await loadProjectCount();
+
+      // Step 3: Automatically start bulk extraction
+      toast.info("Starting bulk extraction of all listings...");
+      setTimeout(() => {
+        startBulkExtractRunner();
+      }, 1000);
+
+    } catch (e: any) {
+      console.error("Full wipe and rebuild failed:", e);
+      toast.error(e?.message || "Wipe and rebuild failed");
+    } finally {
+      setIsWiping(false);
+    }
   };
 
   const rebuildQueueFromMap = async () => {
@@ -1185,6 +1247,17 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                  >
                    <RefreshCw className={`w-4 h-4 mr-2 ${isClearingPending ? 'animate-spin' : ''}`} />
                    Clear Queue & Start Fresh
+                 </Button>
+
+                 {/* FULL WIPE & REBUILD - Deletes everything and rediscovers all 1335 */}
+                 <Button
+                   onClick={fullWipeAndRebuild}
+                   disabled={isWiping || isSyncing || isBulkExtractRunning}
+                   variant="outline"
+                   className="border-red-600 text-red-800 bg-red-50 hover:bg-red-100 disabled:opacity-60"
+                 >
+                   <XCircle className={`w-4 h-4 mr-2 ${isWiping ? 'animate-spin' : ''}`} />
+                   {isWiping ? "Wiping..." : "⚠️ FULL WIPE & REBUILD"}
                  </Button>
 
                   <Button
