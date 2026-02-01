@@ -306,33 +306,43 @@ serve(async (req) => {
 
     console.log(`[Page ${page}] Step 1: Fetching project URLs from ${listingUrl} (with scroll)...`);
 
-    // Build scroll actions to load more content - scroll multiple times to load pagination
-    const scrollActions = [];
-    const scrollsNeeded = Math.min(page, 10); // Scroll more for higher pages
-    for (let i = 0; i < scrollsNeeded; i++) {
-      scrollActions.push({ type: "scroll", direction: "down" });
-      scrollActions.push({ type: "wait", milliseconds: 500 });
-    }
-    
-    // Also click pagination if available
-    if (page > 1) {
-      scrollActions.push({ type: "wait", milliseconds: 2000 }); // Wait for page to load
-    }
-
+    // SIMPLIFIED REQUEST - DO NOT use scroll actions (causes SCRAPE_ALL_ENGINES_FAILED)
+    // Firecrawl's actions feature triggers aggressive engines that get blocked by anti-bot measures
     const listRes = await fetchWithRetry("https://api.firecrawl.dev/v1/scrape", {
       method: "POST",
       headers: { "Content-Type": "application/json", "Authorization": `Bearer ${firecrawlKey}` },
       body: JSON.stringify({ 
         url: listingUrl, 
-        formats: ["links"], 
-        waitFor: 15000, 
-        timeout: 120000,
-        actions: scrollActions.length > 0 ? scrollActions : undefined
+        formats: ["links", "markdown"], 
+        waitFor: 8000,  // Reduced wait - less likely to trigger anti-bot
+        timeout: 60000,
+        onlyMainContent: false,
+        // NO actions parameter - this prevents engine failures
       }),
     });
 
     if (!listRes.ok) {
       const errText = await listRes.text();
+      let errJson: any = {};
+      try { errJson = JSON.parse(errText); } catch {}
+      
+      // Handle specific Firecrawl error codes
+      const errorCode = errJson.code || "UNKNOWN";
+      if (errorCode === "SCRAPE_ALL_ENGINES_FAILED") {
+        console.warn(`[Page ${page}] Firecrawl engines blocked for ${listingUrl} - website may be rate limiting`);
+        return new Response(JSON.stringify({ 
+          success: false, 
+          error: "Website temporarily blocking scraping. Please try again in a few minutes.",
+          code: errorCode,
+          page,
+          retry_after_seconds: 120,
+          duration_ms: Date.now() - startTime 
+        }), {
+          status: 503, // Service unavailable - indicates temporary issue
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      
       return new Response(JSON.stringify({ error: `Listing scrape failed: ${listRes.status}`, details: errText.substring(0, 200) }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -377,15 +387,40 @@ serve(async (req) => {
       try {
         console.log(`[Page ${page}] Scraping: ${projectUrl}`);
 
-        // Scrape project detail page with retry
+        // Add small delay between project scrapes to avoid rate limiting
+        if (stats.processed > 0) {
+          await sleep(throttleMs || 1500, 0.3);
+        }
+
+        // Scrape project detail page with retry - SIMPLIFIED to avoid engine failures
         const scrapeRes = await fetchWithRetry("https://api.firecrawl.dev/v1/scrape", {
           method: "POST",
           headers: { "Content-Type": "application/json", "Authorization": `Bearer ${firecrawlKey}` },
-          body: JSON.stringify({ url: projectUrl, formats: ["markdown", "links", "rawHtml"], waitFor: 8000, timeout: 60000, onlyMainContent: false }),
+          body: JSON.stringify({ 
+            url: projectUrl, 
+            formats: ["markdown", "links", "rawHtml"], 
+            waitFor: 5000,  // Reduced wait time
+            timeout: 45000, // Reduced timeout
+            onlyMainContent: false,
+            // NO actions - prevents SCRAPE_ALL_ENGINES_FAILED
+          }),
         });
 
         if (!scrapeRes.ok) {
           const errText = await scrapeRes.text();
+          let errJson: any = {};
+          try { errJson = JSON.parse(errText); } catch {}
+          
+          const errorCode = errJson.code || "UNKNOWN";
+          if (errorCode === "SCRAPE_ALL_ENGINES_FAILED") {
+            console.warn(`[Page ${page}] Engines failed for ${projectUrl} - adding to retry queue`);
+            stats.errors++;
+            errorsList.push({ url: projectUrl, error: "Rate limited - retry later" });
+            // Add longer delay before next request
+            await sleep(3000, 0.5);
+            continue;
+          }
+          
           console.error(`[Page ${page}] Scrape failed for ${projectUrl}: ${errText.substring(0, 100)}`);
           stats.errors++;
           errorsList.push({ url: projectUrl, error: `Scrape failed: ${scrapeRes.status}` });
