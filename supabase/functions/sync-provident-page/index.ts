@@ -79,9 +79,33 @@ async function fetchWithRetry(url: string, options: RequestInit, maxRetries = 3)
 // DETERMINISTIC HTML EXTRACTION (NO AI)
 // ============================================================
 
+// TAXONOMY SLUG PREFIXES & EXACT SLUGS - reject filter/taxonomy pages
+const TAXONOMY_SLUG_PREFIXES = [
+  "type-",       // e.g., type-apartment, type-villa, type-townhouse
+  "developed-by-",
+  "in-",         // e.g., in-dubai-marina, in-business-bay
+  "status-",
+  "bedrooms-",
+];
+
+const TAXONOMY_EXACT_SLUGS = new Set([
+  "apartment", "apartments", "villa", "villas", "townhouse", "townhouses",
+  "penthouse", "penthouses", "studio", "studios", "offices", "mansions",
+]);
+
 function extractSlugFromUrl(url: string): string {
   const match = url.match(/\/new-projects\/([^\/\?#]+)/);
   return match?.[1]?.toLowerCase().replace(/\/$/, "") || "";
+}
+
+function isTaxonomySlug(slug: string): boolean {
+  if (!slug) return true;
+  for (const prefix of TAXONOMY_SLUG_PREFIXES) {
+    if (slug.startsWith(prefix)) return true;
+  }
+  if (TAXONOMY_EXACT_SLUGS.has(slug)) return true;
+  if (slug.length < 3) return true;
+  return false;
 }
 
 function extractImagesFromHtml(html: string, links: string[]): string[] {
@@ -352,7 +376,7 @@ serve(async (req) => {
     const listData = await listRes.json();
     const linksRaw: string[] = listData.data?.links || [];
 
-    // Normalize & filter to project detail URLs
+    // Normalize & filter to project detail URLs ONLY (no taxonomy/filter pages)
     const listingUrlNormalized = listingUrl.replace(/\/$/, "");
     const projectUrls = [...new Set(
       linksRaw
@@ -360,10 +384,11 @@ serve(async (req) => {
         .filter((l) => {
           if (!l.startsWith("https://providentestate.com/new-projects/")) return false;
           if (l.includes("/page/")) return false;
-          if (l.includes("/developed-by-")) return false;
-          if (/\/new-projects\/in-[a-z0-9\-]+$/i.test(l)) return false;
           if (l === "https://providentestate.com/new-projects") return false;
           if (l === listingUrlNormalized) return false;
+          // Extract slug and check if it's a taxonomy/filter page
+          const slug = extractSlugFromUrl(l);
+          if (isTaxonomySlug(slug)) return false;
           return true;
         })
     )];

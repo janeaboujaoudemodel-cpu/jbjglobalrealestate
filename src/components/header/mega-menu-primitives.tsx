@@ -20,17 +20,21 @@ export const MegaMenuShell = React.forwardRef<HTMLDivElement, MegaMenuShellProps
       <div
         ref={ref}
         className={cn(
-          // Fixed positioning to span full viewport width, positioned below header
-          "fixed left-0 right-0 z-[9999] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)]",
+          // Fixed positioning with horizontal margins to show rounded corners
+          "fixed z-[9999] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] rounded-xl overflow-hidden",
           className
         )}
         style={{
-          // Position just below the header (header is h-24 sm:h-28 lg:h-32)
+          // Position just below the header with horizontal padding
           top: 'var(--header-height, 128px)',
+          left: '24px',
+          right: '24px',
           // Solid gradient background - prevents any transparency issues
           background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
         }}
       >
+        {/* Rounded gold border */}
+        <div className="absolute inset-0 rounded-xl border-2 border-gold/40 pointer-events-none" />
         {children}
         {/* Bottom gold accent (kept) */}
         <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
@@ -70,17 +74,20 @@ export function MegaMenuFeaturedCard({
       to={to}
       onClick={onClick}
       className={cn(
-        // Compact card - smaller, proper rounded corners, fits content nicely
-        "block group relative overflow-hidden rounded-xl aspect-[16/10] min-h-[200px] lg:min-h-[280px] transition-all duration-500 mb-5 lg:mb-0",
+        // Compact card with 3D effect - proper rounded corners with gold border
+        "block group relative overflow-hidden rounded-xl aspect-[16/10] min-h-[220px] lg:min-h-[320px] transition-all duration-500 mb-5 lg:mb-0",
+        // 3D depth and hover zoom effect
+        "shadow-lg hover:shadow-2xl hover:scale-[1.02] transform-gpu",
         className
       )}
     >
       <div
-        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
         style={{ backgroundImage: `url(${image})` }}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-      <div className="absolute inset-0 border border-gold/30 rounded-xl group-hover:border-gold/60 transition-colors" />
+      {/* Gold border with hover enhancement */}
+      <div className="absolute inset-0 border-2 border-gold/40 rounded-xl group-hover:border-gold/80 transition-colors" />
       <div className="absolute bottom-0 left-0 right-0 p-5">
         {kicker ? (
           <p className="text-gold text-[10px] font-bold tracking-[0.2em] uppercase mb-1.5">
@@ -91,7 +98,8 @@ export function MegaMenuFeaturedCard({
         {description ? (
           <p className="text-white/80 text-xs mb-3 max-w-[48ch] line-clamp-2">{description}</p>
         ) : null}
-        <span className="inline-flex items-center gap-1.5 text-gold font-semibold text-xs group-hover:gap-2.5 transition-all">
+        {/* CTA with gold border */}
+        <span className="inline-flex items-center gap-1.5 text-gold font-semibold text-xs group-hover:gap-2.5 transition-all px-3 py-1.5 border border-gold/50 rounded-lg bg-black/30 hover:bg-gold hover:text-black">
           {cta}
           <ArrowRight className="w-3.5 h-3.5" />
         </span>
@@ -133,8 +141,8 @@ type MegaMenuIconLinkProps = {
 
 /**
  * Standardized link row:
- * - Black title + gold icon
- * - Hover inversion (black bg, gold text)
+ * Normal: transparent bg, black icon with gold border, black title
+ * Hover: champagne-gold bg, gold title, black icon bg with gold icon
  */
 export function MegaMenuIconLink({
   to,
@@ -149,24 +157,41 @@ export function MegaMenuIconLink({
       to={to}
       onClick={onClick}
       className={cn(
-        "flex items-center gap-3 rounded-xl text-black hover:text-white hover:bg-black transition-all group",
+        "flex items-center gap-3 rounded-xl transition-all duration-300 group",
+        // Normal: transparent; Hover: champagne gradient background
+        "bg-transparent hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8]",
         compact ? "py-2 px-2.5" : "py-3 px-3"
       )}
     >
+      {/* Icon container: normal = transparent with gold border, black icon; hover = black bg, gold icon */}
       <div
         className={cn(
-          "rounded-lg bg-black border border-gold/50 flex items-center justify-center group-hover:bg-gold group-hover:border-gold transition-all shadow-lg shrink-0",
+          "rounded-lg border transition-all duration-300 flex items-center justify-center shrink-0",
+          // Normal state: transparent bg, gold border
+          "bg-transparent border-gold/50",
+          // Hover state: black bg with gold border
+          "group-hover:bg-black group-hover:border-gold",
           compact ? "w-8 h-8" : "w-10 h-10"
         )}
       >
-        <Icon className={cn("text-gold group-hover:text-black transition-colors", compact ? "w-4 h-4" : "w-5 h-5")} />
+        <Icon className={cn(
+          "transition-colors duration-300",
+          // Normal: black icon; Hover: gold icon
+          "text-black group-hover:text-gold",
+          compact ? "w-4 h-4" : "w-5 h-5"
+        )} />
       </div>
       <div className="min-w-0">
-        <span className={cn("block font-semibold group-hover:text-gold", compact ? "text-sm" : "text-sm")}>
+        {/* Title: normal = black; hover = gold */}
+        <span className={cn(
+          "block font-semibold transition-colors duration-300",
+          "text-black group-hover:text-gold",
+          compact ? "text-sm" : "text-sm"
+        )}>
           {title}
         </span>
         {description ? (
-          <span className="block text-xs text-black/60 group-hover:text-white/70 truncate">
+          <span className="block text-xs text-black/60 group-hover:text-black/70 truncate transition-colors">
             {description}
           </span>
         ) : null}

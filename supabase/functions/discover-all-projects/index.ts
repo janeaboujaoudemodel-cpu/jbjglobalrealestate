@@ -21,19 +21,45 @@ const normalizeUrl = (raw: string): string => {
   return noQueryOrHash.replace(/\/$/, "");
 };
 
+/**
+ * STRICT URL FILTER - Only accept real project detail pages.
+ * Rejects taxonomy pages, filter pages, area pages, developer pages.
+ */
+const TAXONOMY_SLUG_PREFIXES = [
+  "type-",       // e.g., type-apartment, type-villa, type-townhouse
+  "developed-by-",
+  "in-",         // e.g., in-dubai-marina, in-business-bay
+  "status-",     // potential future filter
+  "bedrooms-",   // potential future filter
+];
+
+const TAXONOMY_EXACT_SLUGS = new Set([
+  "apartment", "apartments", "villa", "villas", "townhouse", "townhouses",
+  "penthouse", "penthouses", "studio", "studios", "offices", "mansions",
+]);
+
 const isProjectDetailUrl = (raw: string): boolean => {
   const l = normalizeUrl(raw);
   if (!l) return false;
   if (!l.startsWith("https://providentestate.com/new-projects/")) return false;
   if (l.includes("/page/")) return false;
-  // Exclude developer listing pages like /new-projects/developed-by-emaar
-  if (/\/new-projects\/developed-by-[^\/]+$/i.test(l)) return false;
-  // Exclude location landing pages like /new-projects/in-dubai-marina
-  if (/\/new-projects\/in-[a-z0-9\-]+$/i.test(l)) return false;
   if (l === "https://providentestate.com/new-projects") return false;
-  // Must have a slug after /new-projects/
+
+  // Extract the slug portion
   const match = l.match(/\/new-projects\/([^\/\?#]+)$/i);
-  return Boolean(match && match[1] && match[1].length >= 1);
+  if (!match || !match[1]) return false;
+  const slug = match[1].toLowerCase();
+
+  // Reject taxonomy / filter slugs
+  for (const prefix of TAXONOMY_SLUG_PREFIXES) {
+    if (slug.startsWith(prefix)) return false;
+  }
+  if (TAXONOMY_EXACT_SLUGS.has(slug)) return false;
+
+  // Additional safety: reject if slug is only one generic word
+  if (slug.length < 3) return false;
+
+  return true;
 };
 
 const extractLinksFromHtml = (html: string): string[] => {
