@@ -31,6 +31,7 @@ import Footer from "@/components/Footer";
 import { CONTACT_INFO, getCallUrl, getEmailUrl, getWhatsAppUrl } from "@/constants/stats";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { SafeImage } from "@/components/SafeImage";
+import { formatPrice as formatPriceUtil } from "@/utils/formatNumber";
 
 export type ProjectDetailData = {
   id: string;
@@ -61,10 +62,7 @@ interface ProjectDetailLayoutProps {
   showFooter?: boolean;
 }
 
-const formatPrice = (price: number) => {
-  if (price >= 1000000) return `AED ${(price / 1000000).toFixed(2)}M`;
-  return `AED ${price.toLocaleString()}`;
-};
+const MIN_REASONABLE_PRICE_AED = 50_000;
 
 const MAPS_API_KEY = "AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8";
 

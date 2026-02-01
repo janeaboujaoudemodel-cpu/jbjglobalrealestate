@@ -29,11 +29,19 @@ export const formatPrice = (
   currency: string = 'AED',
   showSymbol: boolean = true
 ): string => {
+  // Guardrail: prevent legally-risky “AED 2” type displays caused by bad scraping/parsing.
+  // Treat obviously invalid values as unavailable pricing.
+  const MIN_REASONABLE_PRICE_AED = 50_000;
+
   if (value === null || value === undefined || value === '') return showSymbol ? `${currency} 0` : '0';
   
   const num = typeof value === 'string' ? parseFloat(value) : value;
   
   if (isNaN(num)) return showSymbol ? `${currency} 0` : '0';
+
+  if (currency === 'AED' && num > 0 && num < MIN_REASONABLE_PRICE_AED) {
+    return showSymbol ? `${currency} On request` : 'On request';
+  }
   
   const formatted = num.toLocaleString('en-US', {
     minimumFractionDigits: 0,
