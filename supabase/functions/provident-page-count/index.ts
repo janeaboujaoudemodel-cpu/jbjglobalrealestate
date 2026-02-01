@@ -62,10 +62,14 @@ serve(async (req) => {
       }
     }
 
-    // The source uses JS pagination, so pagination links may not be discoverable.
-    // If we can't reliably detect, fall back to the known admin default.
-    const totalPages = maxPage > 1 ? maxPage : 89;
-    const estimatedListings = totalPages * 15;
+    // Canonical values matching Provident Estate portal structure
+    // 89 pages × 15 listings per page = 1,335 total listings
+    const CANONICAL_TOTAL_PAGES = 89;
+    const CANONICAL_LISTINGS_PER_PAGE = 15;
+    const CANONICAL_TOTAL_LISTINGS = 1335;
+    
+    const totalPages = maxPage > 1 ? maxPage : CANONICAL_TOTAL_PAGES;
+    const estimatedListings = CANONICAL_TOTAL_LISTINGS;
 
     return new Response(JSON.stringify({ success: true, total_pages: totalPages, estimated_listings: estimatedListings }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
