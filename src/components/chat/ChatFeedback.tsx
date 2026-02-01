@@ -1,0 +1,185 @@
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { ThumbsUp, ThumbsDown, Minus, Star, CheckCircle } from 'lucide-react';
+import { T } from '@/components/ui/T';
+
+export type FeedbackType = 'positive' | 'neutral' | 'negative';
+
+interface ChatFeedbackProps {
+  onSubmitFeedback: (feedback: {
+    type: FeedbackType;
+    rating: number;
+    comment: string;
+  }) => void;
+  onSkip: () => void;
+}
+
+const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
+  const [feedbackType, setFeedbackType] = useState<FeedbackType | null>(null);
+  const [rating, setRating] = useState(0);
+  const [hoveredRating, setHoveredRating] = useState(0);
+  const [comment, setComment] = useState('');
+  const [step, setStep] = useState<'type' | 'details' | 'submitted'>('type');
+
+  const handleSelectType = (type: FeedbackType) => {
+    setFeedbackType(type);
+    // Auto-set rating based on feedback type
+    if (type === 'positive') setRating(5);
+    else if (type === 'neutral') setRating(3);
+    else setRating(1);
+    setStep('details');
+  };
+
+  const handleSubmit = () => {
+    if (feedbackType) {
+      onSubmitFeedback({
+        type: feedbackType,
+        rating,
+        comment
+      });
+      setStep('submitted');
+    }
+  };
+
+  if (step === 'submitted') {
+    return (
+      <div className="flex-1 p-4 flex flex-col items-center justify-center text-center">
+        <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
+          <CheckCircle className="w-8 h-8 text-green-500" />
+        </div>
+        <h4 className="text-black text-lg font-semibold mb-2">
+          <T>Thank You!</T>
+        </h4>
+        <p className="text-zinc-600 text-sm mb-4">
+          <T>Your feedback helps us improve our service</T>
+        </p>
+        <Button
+          onClick={onSkip}
+          className="bg-gold hover:bg-gold-light text-black"
+        >
+          <T>Close</T>
+        </Button>
+      </div>
+    );
+  }
+
+  if (step === 'type') {
+    return (
+      <div className="flex-1 p-4 flex flex-col items-center justify-center">
+        <div className="w-14 h-14 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center mb-4">
+          <Star className="w-7 h-7 text-gold" />
+        </div>
+        
+        <h4 className="text-black text-lg font-semibold mb-2 text-center">
+          <T>How was your chat experience?</T>
+        </h4>
+        <p className="text-zinc-600 text-sm text-center mb-6">
+          <T>Your feedback helps us serve you better</T>
+        </p>
+
+        <div className="flex gap-4 mb-6">
+          <button
+            onClick={() => handleSelectType('positive')}
+            className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-green-200 hover:border-green-500 hover:bg-green-50 transition-all"
+          >
+            <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+              <ThumbsUp className="w-6 h-6 text-green-600" />
+            </div>
+            <span className="text-sm font-medium text-green-700"><T>Positive</T></span>
+          </button>
+
+          <button
+            onClick={() => handleSelectType('neutral')}
+            className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-zinc-200 hover:border-zinc-400 hover:bg-zinc-50 transition-all"
+          >
+            <div className="w-12 h-12 rounded-full bg-zinc-100 flex items-center justify-center">
+              <Minus className="w-6 h-6 text-zinc-600" />
+            </div>
+            <span className="text-sm font-medium text-zinc-700"><T>Neutral</T></span>
+          </button>
+
+          <button
+            onClick={() => handleSelectType('negative')}
+            className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-red-200 hover:border-red-500 hover:bg-red-50 transition-all"
+          >
+            <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+              <ThumbsDown className="w-6 h-6 text-red-600" />
+            </div>
+            <span className="text-sm font-medium text-red-700"><T>Negative</T></span>
+          </button>
+        </div>
+
+        <button
+          onClick={onSkip}
+          className="text-zinc-500 text-sm hover:text-gold transition-colors"
+        >
+          <T>Skip feedback</T>
+        </button>
+      </div>
+    );
+  }
+
+  // Details step
+  return (
+    <div className="flex-1 p-4 flex flex-col">
+      <div className="text-center mb-4">
+        <h4 className="text-black text-lg font-semibold mb-2">
+          <T>Tell us more</T>
+        </h4>
+        <p className="text-zinc-600 text-sm">
+          <T>Rate your experience</T>
+        </p>
+      </div>
+
+      {/* Star rating */}
+      <div className="flex justify-center gap-2 mb-4">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <button
+            key={star}
+            onClick={() => setRating(star)}
+            onMouseEnter={() => setHoveredRating(star)}
+            onMouseLeave={() => setHoveredRating(0)}
+            className="transition-transform hover:scale-110"
+          >
+            <Star
+              className={`w-8 h-8 ${
+                star <= (hoveredRating || rating)
+                  ? 'text-gold fill-gold'
+                  : 'text-zinc-300'
+              }`}
+            />
+          </button>
+        ))}
+      </div>
+
+      {/* Comment */}
+      <div className="mb-4">
+        <Textarea
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          placeholder="Share your thoughts with us... (optional)"
+          className="bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 resize-none h-24"
+        />
+      </div>
+
+      <div className="mt-auto flex gap-3">
+        <Button
+          variant="outline"
+          onClick={() => setStep('type')}
+          className="flex-1 border-gold/50 text-black"
+        >
+          <T>Back</T>
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          className="flex-1 bg-gold hover:bg-gold-light text-black"
+        >
+          <T>Submit</T>
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+export default ChatFeedback;

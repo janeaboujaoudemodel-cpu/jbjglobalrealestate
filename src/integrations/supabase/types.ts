@@ -2206,46 +2206,70 @@ export type Database = {
       }
       chat_conversations: {
         Row: {
+          agent_behavior_rating: number | null
           created_at: string
+          feedback_type: string | null
+          how_heard_about_us: string | null
           id: string
           messages: Json
           page_source: string | null
           rating: number | null
           rating_feedback: string | null
+          response_speed_rating: number | null
           service_type: string | null
+          shortcut_selected: string | null
           status: string
           updated_at: string
           user_email: string
           user_name: string | null
           user_phone: string | null
+          was_helpful: boolean | null
+          what_didnt_work: string | null
+          what_improve: string | null
         }
         Insert: {
+          agent_behavior_rating?: number | null
           created_at?: string
+          feedback_type?: string | null
+          how_heard_about_us?: string | null
           id?: string
           messages?: Json
           page_source?: string | null
           rating?: number | null
           rating_feedback?: string | null
+          response_speed_rating?: number | null
           service_type?: string | null
+          shortcut_selected?: string | null
           status?: string
           updated_at?: string
           user_email: string
           user_name?: string | null
           user_phone?: string | null
+          was_helpful?: boolean | null
+          what_didnt_work?: string | null
+          what_improve?: string | null
         }
         Update: {
+          agent_behavior_rating?: number | null
           created_at?: string
+          feedback_type?: string | null
+          how_heard_about_us?: string | null
           id?: string
           messages?: Json
           page_source?: string | null
           rating?: number | null
           rating_feedback?: string | null
+          response_speed_rating?: number | null
           service_type?: string | null
+          shortcut_selected?: string | null
           status?: string
           updated_at?: string
           user_email?: string
           user_name?: string | null
           user_phone?: string | null
+          was_helpful?: boolean | null
+          what_didnt_work?: string | null
+          what_improve?: string | null
         }
         Relationships: []
       }
@@ -7081,6 +7105,68 @@ export type Database = {
           website_url?: string | null
         }
         Relationships: []
+      }
+      hr_cv_submissions: {
+        Row: {
+          chat_session_id: string | null
+          cover_letter: string | null
+          created_at: string
+          cv_url: string | null
+          email: string
+          full_name: string
+          id: string
+          notes: string | null
+          phone: string | null
+          position_applied: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          source: string | null
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          chat_session_id?: string | null
+          cover_letter?: string | null
+          created_at?: string
+          cv_url?: string | null
+          email: string
+          full_name: string
+          id?: string
+          notes?: string | null
+          phone?: string | null
+          position_applied?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          chat_session_id?: string | null
+          cover_letter?: string | null
+          created_at?: string
+          cv_url?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          notes?: string | null
+          phone?: string | null
+          position_applied?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_cv_submissions_chat_session_id_fkey"
+            columns: ["chat_session_id"]
+            isOneToOne: false
+            referencedRelation: "chat_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       hr_employee_onboarding: {
         Row: {
