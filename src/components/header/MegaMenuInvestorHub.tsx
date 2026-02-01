@@ -1,27 +1,27 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Building2, Home, Castle, Building, Briefcase, Eye, FileText, Key, Calendar, Shield, ArrowRight } from 'lucide-react';
-import menuLuxuryVilla from '@/assets/menu-luxury-villa.jpg';
+import { 
+  TrendingUp, UserCircle, Briefcase, Heart, FileText, 
+  BarChart3, Calculator, PieChart, ArrowRight
+} from 'lucide-react';
+import menuDubaiSkyline from '@/assets/menu-dubai-skyline.jpg';
 
-interface MegaMenuRentProps {
+interface MegaMenuInvestorHubProps {
   onClose: () => void;
 }
 
-const MegaMenuRent: React.FC<MegaMenuRentProps> = ({ onClose }) => {
-  const propertyTypes = [
-    { label: 'Apartments', icon: Building2, href: '/properties?type=apartment&transaction=rent' },
-    { label: 'Villas', icon: Home, href: '/properties?type=villa&transaction=rent' },
-    { label: 'Townhouses', icon: Castle, href: '/properties?type=townhouse&transaction=rent' },
-    { label: 'Penthouses', icon: Building, href: '/properties?type=penthouse&transaction=rent' },
-    { label: 'Commercial', icon: Briefcase, href: '/properties?type=commercial&transaction=rent' },
-    { label: 'See All Rentals', icon: Eye, href: '/properties?transaction=rent' },
+const MegaMenuInvestorHub: React.FC<MegaMenuInvestorHubProps> = ({ onClose }) => {
+  const dashboardLinks = [
+    { name: 'Investor Dashboard', href: '/my-account', icon: UserCircle, description: 'Your investment overview' },
+    { name: 'Portfolio Views', href: '/favorites', icon: Heart, description: 'Saved properties & shortlists' },
+    { name: 'Investor Tools', href: '/ai-hub', icon: Briefcase, description: 'AI-powered analysis tools' },
   ];
 
-  const renterResources = [
-    { label: "Tenant's Guide", href: '/tenant-guide', icon: FileText },
-    { label: 'Rental Index', href: '/dubai-rental-index', icon: Key },
-    { label: 'Property Management', href: '/services/property-management', icon: Shield },
-    { label: 'Short-term Rentals', href: '/services/short-term-rentals', icon: Calendar },
+  const toolsLinks = [
+    { name: 'Property Evaluator', href: '/property-evaluation', icon: BarChart3 },
+    { name: 'Mortgage Calculator', href: '/mortgage-calculator', icon: Calculator },
+    { name: 'ROI Calculator', href: '/roi-calculator', icon: PieChart },
+    { name: 'Market Reports', href: '/market-intelligence/reports', icon: FileText },
   ];
 
   return (
@@ -31,10 +31,10 @@ const MegaMenuRent: React.FC<MegaMenuRentProps> = ({ onClose }) => {
       
       <div className="max-w-[1400px] mx-auto px-10 py-10">
         <div className="grid grid-cols-12 gap-8">
-          {/* Featured Card - Full Width Rectangle */}
+          {/* Featured Card */}
           <div className="col-span-5">
             <Link 
-              to="/properties?transaction=rent" 
+              to="/my-account" 
               onClick={onClose}
               className="block group relative overflow-hidden rounded-2xl aspect-[4/3] transform transition-all duration-500 hover:scale-[1.02]"
               style={{ 
@@ -44,55 +44,58 @@ const MegaMenuRent: React.FC<MegaMenuRentProps> = ({ onClose }) => {
             >
               <div 
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                style={{ backgroundImage: `url(${menuLuxuryVilla})` }}
+                style={{ backgroundImage: `url(${menuDubaiSkyline})` }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
               <div className="absolute inset-0 border-2 border-gold/40 rounded-2xl group-hover:border-gold transition-colors" />
               <div className="absolute bottom-0 left-0 right-0 p-6">
-                <p className="text-gold text-xs font-bold tracking-[0.25em] uppercase mb-2">RENTALS</p>
-                <h3 className="text-white text-xl font-bold mb-2">Properties for Rent</h3>
-                <p className="text-white/80 text-sm mb-4">Find your perfect rental home in Dubai's finest communities</p>
+                <p className="text-gold text-xs font-bold tracking-[0.25em] uppercase mb-2">INVESTOR HUB</p>
+                <h3 className="text-white text-xl font-bold mb-2">Your Investment Dashboard</h3>
+                <p className="text-white/80 text-sm mb-4">Access tools, track properties, and monitor your portfolio</p>
                 <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm group-hover:gap-3 transition-all">
-                  Explore Rentals
+                  Go to Dashboard
                   <ArrowRight className="w-4 h-4" />
                 </span>
               </div>
             </Link>
           </div>
 
-          {/* Properties by Type */}
-          <div className="col-span-3">
+          {/* Dashboard & Portfolio */}
+          <div className="col-span-4">
             <h4 className="text-black font-bold text-xs tracking-[0.2em] uppercase mb-5 flex items-center gap-2 pb-2 border-b border-gold/30">
-              <Building2 className="w-4 h-4 text-gold" />
-              Properties by Type
+              <TrendingUp className="w-4 h-4 text-gold" />
+              Dashboard & Portfolio
             </h4>
-            <div className="space-y-1">
-              {propertyTypes.map((item) => (
+            <div className="space-y-2">
+              {dashboardLinks.map((item) => (
                 <Link
-                  key={item.label}
+                  key={item.name}
                   to={item.href}
                   onClick={onClose}
-                  className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-black hover:text-white hover:bg-black transition-all group"
+                  className="flex items-center gap-3 py-3 px-3 rounded-xl text-black hover:text-white hover:bg-black transition-all group border border-gold/20 hover:border-gold/50"
                 >
-                  <div className="w-9 h-9 rounded-lg bg-black border border-gold/50 flex items-center justify-center group-hover:bg-gold group-hover:border-gold transition-all shadow-lg">
-                    <item.icon className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
+                  <div className="w-10 h-10 rounded-lg bg-black border border-gold/50 flex items-center justify-center group-hover:bg-gold group-hover:border-gold transition-all shadow-lg shrink-0">
+                    <item.icon className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
                   </div>
-                  <span className="font-medium text-sm group-hover:text-gold">{item.label}</span>
+                  <div>
+                    <span className="font-semibold text-sm block group-hover:text-gold">{item.name}</span>
+                    <span className="text-xs text-black/60 group-hover:text-white/70">{item.description}</span>
+                  </div>
                 </Link>
               ))}
             </div>
           </div>
 
-          {/* Renter Resources */}
-          <div className="col-span-4">
+          {/* Investor Tools */}
+          <div className="col-span-3">
             <h4 className="text-black font-bold text-xs tracking-[0.2em] uppercase mb-5 flex items-center gap-2 pb-2 border-b border-gold/30">
-              <FileText className="w-4 h-4 text-gold" />
-              Renter Resources
+              <Briefcase className="w-4 h-4 text-gold" />
+              Investor Tools
             </h4>
             <div className="space-y-1">
-              {renterResources.map((item) => (
+              {toolsLinks.map((item) => (
                 <Link
-                  key={item.label}
+                  key={item.name}
                   to={item.href}
                   onClick={onClose}
                   className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-black hover:text-white hover:bg-black transition-all group"
@@ -100,7 +103,7 @@ const MegaMenuRent: React.FC<MegaMenuRentProps> = ({ onClose }) => {
                   <div className="w-9 h-9 rounded-lg bg-black border border-gold/50 flex items-center justify-center group-hover:bg-gold group-hover:border-gold transition-all shadow-lg">
                     <item.icon className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
                   </div>
-                  <span className="font-medium text-sm group-hover:text-gold">{item.label}</span>
+                  <span className="font-medium text-sm group-hover:text-gold">{item.name}</span>
                 </Link>
               ))}
             </div>
@@ -114,4 +117,4 @@ const MegaMenuRent: React.FC<MegaMenuRentProps> = ({ onClose }) => {
   );
 };
 
-export default MegaMenuRent;
+export default MegaMenuInvestorHub;

@@ -46,6 +46,8 @@ import MegaMenuDevelopers from "@/components/header/MegaMenuDevelopers";
 import MegaMenuAreas from "@/components/header/MegaMenuAreas";
 import MegaMenuServices from "@/components/header/MegaMenuServices";
 import MegaMenuMore from "@/components/header/MegaMenuMore";
+import MegaMenuInvestorHub from "@/components/header/MegaMenuInvestorHub";
+import MegaMenuBrokerHub from "@/components/header/MegaMenuBrokerHub";
 
 interface GlobalHeaderProps {
   forceSolid?: boolean;
@@ -883,6 +885,34 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 </button>
                 {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
 
+                {/* Investor Hub */}
+                <button
+                  onMouseEnter={() => handleMegaMenuEnter('investor')}
+                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
+                    isFullyTransparent
+                      ? activeMegaMenu === 'investor' ? 'text-gold' : 'text-white hover:text-gold'
+                      : activeMegaMenu === 'investor' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
+                  }`}
+                >
+                  Investor
+                  <ChevronDown className={`w-3 h-3 transition-transform ${activeMegaMenu === 'investor' ? 'rotate-180' : ''}`} />
+                </button>
+                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
+
+                {/* Broker Hub */}
+                <button
+                  onMouseEnter={() => handleMegaMenuEnter('broker')}
+                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
+                    isFullyTransparent
+                      ? activeMegaMenu === 'broker' ? 'text-gold' : 'text-white hover:text-gold'
+                      : activeMegaMenu === 'broker' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
+                  }`}
+                >
+                  Broker
+                  <ChevronDown className={`w-3 h-3 transition-transform ${activeMegaMenu === 'broker' ? 'rotate-180' : ''}`} />
+                </button>
+                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
+
                 {/* More */}
                 <button
                   onMouseEnter={() => handleMegaMenuEnter('more')}
@@ -909,6 +939,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   {activeMegaMenu === 'developers' && <MegaMenuDevelopers onClose={closeMegaMenu} />}
                   {activeMegaMenu === 'areas' && <MegaMenuAreas onClose={closeMegaMenu} />}
                   {activeMegaMenu === 'services' && <MegaMenuServices onClose={closeMegaMenu} />}
+                  {activeMegaMenu === 'investor' && <MegaMenuInvestorHub onClose={closeMegaMenu} />}
+                  {activeMegaMenu === 'broker' && <MegaMenuBrokerHub onClose={closeMegaMenu} />}
                   {activeMegaMenu === 'more' && <MegaMenuMore onClose={closeMegaMenu} />}
                 </div>
               )}
