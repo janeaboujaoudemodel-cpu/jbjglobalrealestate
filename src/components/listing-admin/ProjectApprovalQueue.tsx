@@ -79,7 +79,8 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   const [totalCompleteCount, setTotalCompleteCount] = useState<number | null>(null);
   const [totalNeedsWorkCount, setTotalNeedsWorkCount] = useState<number | null>(null);
   const [hasMore, setHasMore] = useState(false);
-  const [showAll, setShowAll] = useState(!jobId);
+  // Default to a single inventory view (not job-filtered) to avoid confusing partial counts.
+  const [showAll, setShowAll] = useState(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [selectedImport, setSelectedImport] = useState<PendingImport | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -94,7 +95,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   const PAGE_SIZE = 60;
 
   useEffect(() => {
-    setShowAll(!jobId);
+    // Even when routed from a job preview page, default to showing ALL pending imports.
+    // (User can still toggle to "this sync only" if needed.)
+    setShowAll(true);
   }, [jobId]);
 
   // Fetch global inventory stats (independent of pagination)
@@ -106,19 +109,12 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
         .select("id", { count: "exact", head: true })
         .eq("status", "pending");
 
-      // For complete records, we need to check:
-      // - description is not null/empty
-      // - developer_name is not null/empty/Unknown
-      // - images array has items
-      // - documents array has items
-      // Since PostgREST can't easily filter by jsonb array length, 
-      // we fetch a sample and estimate, or fetch all IDs and count client-side
-      
-      // Simplified approach: Fetch records with description + valid developer
-      // then count those locally that also have images/docs
+      // A record is considered "complete" when it has the core listing fields.
+      // Documents (brochure/payment plan PDFs) are optional on the source portal
+      // and should NOT block completion.
       const { data: potentialComplete } = await supabase
         .from("pending_project_imports")
-        .select("id, images, documents")
+        .select("id, images")
         .eq("status", "pending")
         .not("description", "is", null)
         .neq("description", "")
@@ -127,11 +123,10 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
         .not("developer_name", "ilike", "Unknown")
         .limit(2000); // Safety limit
 
-      // Count ones that also have images and documents
+      // Count ones that also have images
       const completeCount = (potentialComplete || []).filter(p => {
         const images = Array.isArray(p.images) ? p.images : [];
-        const docs = Array.isArray(p.documents) ? p.documents : [];
-        return images.length > 0 && docs.length > 0;
+        return images.length > 0;
       }).length;
       
       setTotalCount(total ?? 0);
@@ -212,7 +207,6 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       // Count incomplete (for loaded set)
       const incomplete = next.filter(p => 
         p.images.length === 0 || 
-        p.documents.length === 0 || 
         !p.description || 
         p.developer_name?.toLowerCase() === 'unknown'
       ).length;
@@ -546,50 +540,68 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   };
 
   const repairAllIncomplete = async () => {
-    const incomplete = imports.filter(p => 
-      p.images.length === 0 || 
-      p.documents.length === 0 || 
-      !p.description || 
-      p.developer_name?.toLowerCase() === 'unknown'
+    const confirmed = window.confirm(
+      `Extract missing data for ALL pending listings now?\n\n` +
+        `This will run in batches until the queue is processed and may take several minutes.`
     );
-    
-    if (incomplete.length === 0) {
-      toast({ title: "No incomplete items", description: "All items have complete data." });
-      return;
-    }
-    
-    const confirmed = window.confirm(`Repair ${incomplete.length} incomplete items?\n\nThis will re-scrape each item from the source to fetch missing data.`);
     if (!confirmed) return;
 
     setIsBulkProcessing(true);
     setBulkAction("repair");
     setBulkDone(0);
-    setBulkTotal(incomplete.length);
+    setBulkTotal(totalNeedsWorkCount ?? totalCount ?? 0);
 
     let ok = 0;
     let failed = 0;
-    for (const item of incomplete) {
-      try {
-        const { error } = await supabase.functions.invoke("repair-project-extraction", {
-          body: { pendingImportId: item.id }
-        });
-        if (error) throw error;
-        ok++;
-      } catch (e) {
-        failed++;
-        console.error("Repair failed for", item.id, e);
-      }
-      setBulkDone(ok + failed);
-    }
 
-    toast({ 
-      title: "Repair complete", 
-      description: failed > 0 ? `${ok} repaired, ${failed} failed` : `${ok} items repaired successfully` 
-    });
-    setIsBulkProcessing(false);
-    setBulkAction(null);
-    await fetchPendingImports();
-    onRefresh?.();
+    try {
+      // Keep calling the backend batch extractor until it reports nothing left to process.
+      // NOTE: This extracts from the full pending queue, not just the currently loaded page.
+      // We keep the per-call limit at 200 to reduce the number of round-trips.
+      while (true) {
+        const { data, error } = await supabase.functions.invoke("batch-extract-pending", {
+          body: {
+            limit: 200,
+            throttleMs: 0,
+            concurrency: 10,
+          },
+        });
+
+        if (error) throw error;
+
+        const processed = Number(data?.stats?.processed ?? 0);
+        const success = Number(data?.stats?.success ?? 0);
+        const errors = Number(data?.stats?.errors ?? 0);
+
+        ok += success;
+        failed += errors;
+        setBulkDone((prev) => prev + processed);
+
+        // Refresh headline stats so the dashboard doesn't show stale counts.
+        await fetchInventoryStats();
+
+        // Stop when this batch didn't fill up (or none were processed).
+        if (processed === 0 || processed < 200) break;
+      }
+
+      toast({
+        title: "Extraction complete",
+        description: failed > 0 ? `${ok} updated, ${failed} failed` : `${ok} updated successfully`,
+      });
+    } catch (e) {
+      console.error("Batch extraction failed:", e);
+      toast({
+        title: "Error",
+        description: "Batch extraction failed. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsBulkProcessing(false);
+      setBulkAction(null);
+      await fetchPendingImports();
+      await fetchInventoryStats();
+      onRefresh?.();
+    }
   };
 
   const toggleSelection = (id: string) => {
@@ -749,7 +761,6 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   const completeCount = imports.filter(p => 
     p.description && 
     p.images.length > 0 && 
-    p.documents.length > 0 && 
     p.developer_name?.toLowerCase() !== 'unknown'
   ).length;
   const needsWorkCount = imports.length - completeCount;
@@ -811,7 +822,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                     className="border-amber-400 text-amber-700 hover:bg-amber-50"
                   >
                     <RefreshCw className="h-4 w-4 mr-2" />
-                    Repair {incompleteCount} Incomplete
+                    Extract Missing Data
                   </Button>
                 )}
                 {selectedIds.size > 0 && (
@@ -893,7 +904,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                       item={{
                         ...item,
                         slug: item.slug,
-                        review_notes: !item.description || item.images.length === 0 || item.documents.length === 0 || item.developer_name?.toLowerCase() === 'unknown' ? 'INCOMPLETE' : null
+                        review_notes: !item.description || item.images.length === 0 || item.developer_name?.toLowerCase() === 'unknown' ? 'INCOMPLETE' : null
                       }}
                       formatPrice={formatPrice}
                       onReview={() => {

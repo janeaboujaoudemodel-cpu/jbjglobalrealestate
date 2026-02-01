@@ -261,7 +261,6 @@ serve(async (req) => {
            "review_notes.eq.INCOMPLETE",
            "review_notes.ilike.ERROR:%",
            "images.eq.[]",
-           "documents.eq.[]",
            "description.is.null",
          ].join(","),
        )
@@ -332,8 +331,8 @@ serve(async (req) => {
       for (const fp of floorPlans) documentsPayload.push({ url: fp, type: "floor_plan", name: `${item.name} Floor Plan.pdf` });
 
       const hasMinimal = Boolean(extracted.description && extracted.developerName && imagesPayload.length >= 1);
-      const hasDocs = documentsPayload.length > 0;
-      const stillIncomplete = !hasMinimal || !hasDocs;
+      // Documents are optional (many source pages only show payment plan as text, not a PDF).
+      const stillIncomplete = !hasMinimal;
 
       if (dryRun) {
         return { images: imagesPayload.length, documents: documentsPayload.length, stillIncomplete };
@@ -342,7 +341,9 @@ serve(async (req) => {
       const { error: updateErr } = await supabase
         .from("pending_project_imports")
         .update({
-          developer_name: sanitizeText(extracted.developerName) || item.name?.split(" ")?.[0] || null,
+          // Overwrite placeholder name with the real source title (prevents "Act One"/"Act" style duplicates).
+          name: sanitizeText(extracted.name) || item.name,
+          developer_name: sanitizeText(extracted.developerName) || item.developer_name || null,
           developer_id: dev?.id || null,
           description: extracted.description,
           price_from: extracted.priceFrom || null,
