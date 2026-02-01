@@ -9,6 +9,10 @@ interface PremiumBrochureCardProps {
   isLocked?: boolean;
 }
 
+/**
+ * Premium Brochure Card - Styled like a real brochure resting/sleeping on a table
+ * with 3D hover effect that lifts off the surface
+ */
 const PremiumBrochureCard = ({
   projectName,
   brochureUrl,
@@ -25,172 +29,165 @@ const PremiumBrochureCard = ({
 
   return (
     <div className="flex flex-col items-center gap-6">
-      {/* Premium Brochure Card - Rectangular Style */}
+      {/* Premium Brochure Card - Horizontal "sleeping" on table style */}
       <motion.div
         className="relative cursor-pointer group"
         onClick={handleClick}
-        whileHover={{ y: -12, scale: 1.05, rotateX: 5, rotateY: 3 }}
-        whileTap={{ scale: 0.98 }}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        style={{ perspective: 1000 }}
+        initial={{ rotateX: 8, rotateY: 0, y: 0 }}
+        whileHover={{ 
+          rotateX: 0, 
+          rotateY: -5, 
+          y: -20, 
+          scale: 1.02,
+          transition: { type: "spring", stiffness: 200, damping: 15 }
+        }}
+        whileTap={{ scale: 0.98, y: -10 }}
+        style={{ 
+          perspective: "1200px",
+          transformStyle: "preserve-3d"
+        }}
       >
-        {/* Card Container - Premium Rectangular A4 proportions */}
+        {/* Card Container - Horizontal brochure proportions (like A4 landscape) */}
         <div 
-          className="relative w-[280px] h-[380px] rounded-2xl overflow-hidden border-2 border-gold/60"
+          className="relative w-[340px] h-[220px] rounded-lg overflow-hidden"
           style={{
+            transformStyle: "preserve-3d",
             boxShadow: `
-              0 30px 60px -15px rgba(0,0,0,0.6),
-              0 15px 30px -10px rgba(0,0,0,0.4),
-              0 0 0 1px rgba(200,167,102,0.5),
-              inset 0 1px 0 rgba(255,255,255,0.15)
+              0 25px 50px -15px rgba(0,0,0,0.5),
+              0 10px 25px -8px rgba(0,0,0,0.3),
+              0 4px 10px -2px rgba(0,0,0,0.2),
+              inset 0 1px 0 rgba(255,255,255,0.1)
             `,
           }}
         >
-          {/* Dubai Skyline Background Image */}
+          {/* Brochure Cover Background */}
           <div 
-            className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-            style={{
-              backgroundImage: `url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1000&auto=format&fit=crop')`,
-            }}
+            className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900"
           />
           
-          {/* Premium Dark Gradient Overlays */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/40" />
-          <div className="absolute inset-0 bg-gradient-to-br from-gold/15 via-transparent to-gold/10" />
+          {/* Premium Gold Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-gold/10 via-transparent to-gold/5" />
           
-          {/* Shimmer Effect - Hidden on normal, visible on hover */}
+          {/* Page edge effect - looks like stacked pages */}
           <div 
-            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-            style={{
-              background: "linear-gradient(135deg, transparent 0%, rgba(200,167,102,0.25) 50%, transparent 100%)",
-            }}
+            className="absolute right-0 top-0 bottom-0 w-3 bg-gradient-to-l from-zinc-600 to-zinc-800"
+            style={{ transform: "translateZ(-2px)" }}
           />
+          <div 
+            className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-t from-zinc-600 to-zinc-800"
+            style={{ transform: "translateZ(-2px)" }}
+          />
+          
+          {/* Spine shadow on left */}
+          <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-black/40 to-transparent" />
 
-          {/* Corner Accents - Gold Premium - Fully visible */}
-          <div className="absolute top-4 left-4 w-12 h-12">
-            <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-gold to-transparent" />
-            <div className="absolute top-0 left-0 w-[3px] h-full bg-gradient-to-b from-gold to-transparent" />
-          </div>
-          <div className="absolute top-4 right-4 w-12 h-12">
-            <div className="absolute top-0 right-0 w-full h-[3px] bg-gradient-to-l from-gold to-transparent" />
-            <div className="absolute top-0 right-0 w-[3px] h-full bg-gradient-to-b from-gold to-transparent" />
-          </div>
-          <div className="absolute bottom-4 left-4 w-12 h-12">
-            <div className="absolute bottom-0 left-0 w-full h-[3px] bg-gradient-to-r from-gold to-transparent" />
-            <div className="absolute bottom-0 left-0 w-[3px] h-full bg-gradient-to-t from-gold to-transparent" />
-          </div>
-          <div className="absolute bottom-4 right-4 w-12 h-12">
-            <div className="absolute bottom-0 right-0 w-full h-[3px] bg-gradient-to-l from-gold to-transparent" />
-            <div className="absolute bottom-0 right-0 w-[3px] h-full bg-gradient-to-t from-gold to-transparent" />
-          </div>
+          {/* Gold border accent */}
+          <div className="absolute inset-0 border border-gold/40 rounded-lg" />
+          
+          {/* Top gold line accent */}
+          <div className="absolute top-0 left-6 right-6 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
 
-          {/* Content - Fully visible on normal load */}
-          <div className="relative z-10 h-full flex flex-col items-center justify-between p-8">
-            {/* Top Section - Brand */}
-            <div className="text-center">
-              <p className="text-gold text-[11px] uppercase tracking-[0.3em] font-semibold">
-                JBJ Global Real Estate
+          {/* Content Layout */}
+          <div className="relative z-10 h-full flex items-center p-6">
+            {/* Left side - Brand mark */}
+            <div className="flex flex-col items-center justify-center w-24 border-r border-gold/30 pr-5 mr-5">
+              <div className="w-14 h-14 rounded-full border-2 border-gold/60 flex items-center justify-center mb-2">
+                <span className="text-gold text-lg font-bold tracking-wider">JBJ</span>
+              </div>
+              <p className="text-gold/70 text-[8px] uppercase tracking-[0.15em] text-center leading-tight">
+                Global<br/>Real Estate
               </p>
             </div>
 
-            {/* Center Section - Brochure Title & Project Name */}
-            <div className="text-center flex-1 flex flex-col items-center justify-center">
-              <div className="w-20 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent mb-6" />
+            {/* Right side - Brochure info */}
+            <div className="flex-1 flex flex-col justify-center">
+              <p className="text-gold/80 text-[9px] uppercase tracking-[0.25em] font-medium mb-2">
+                Project Brochure
+              </p>
               
               <h3 
-                className="text-white text-4xl font-light tracking-[0.15em] uppercase mb-3"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                BROCHURE
-              </h3>
-              
-              <div className="w-28 h-[3px] bg-gradient-to-r from-transparent via-gold to-transparent mb-4" />
-              
-              {/* Project Name - Prominently displayed */}
-              <p 
-                className="text-gold text-xl font-bold max-w-[220px] line-clamp-2 text-center tracking-wide"
+                className="text-white text-xl font-semibold mb-3 line-clamp-2 leading-tight"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 {projectName}
-              </p>
+              </h3>
 
-              {/* Lock Icon for Locked State */}
-              {isLocked && (
-                <div className="mt-4 w-12 h-12 rounded-full bg-gold/30 border-2 border-gold flex items-center justify-center">
-                  <Lock className="w-6 h-6 text-gold" />
-                </div>
-              )}
-            </div>
-
-            {/* Bottom Section - Dubai Skyline Text */}
-            <div className="text-center">
-              <p className="text-white/70 text-[10px] uppercase tracking-[0.25em] font-medium">
+              <div className="w-16 h-[2px] bg-gradient-to-r from-gold to-gold/30 mb-3" />
+              
+              <p className="text-white/50 text-[10px] uppercase tracking-[0.2em]">
                 Dubai • UAE
               </p>
             </div>
+
+            {/* Lock indicator for locked state */}
+            {isLocked && (
+              <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gold/20 border border-gold/50 flex items-center justify-center">
+                <Lock className="w-4 h-4 text-gold" />
+              </div>
+            )}
           </div>
 
-          {/* Glossy Reflection - Visible on hover for 3D pop effect */}
+          {/* Glossy reflection on hover */}
           <div 
             className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
             style={{
-              background: "linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 40%, transparent 100%)",
+              background: "linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%, transparent 100%)",
             }}
           />
         </div>
 
-        {/* 3D Shadow beneath card - Enhanced on hover */}
+        {/* 3D Shadow beneath card - simulates resting on surface */}
         <div 
-          className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[85%] h-10 blur-2xl transition-all duration-300 group-hover:blur-3xl group-hover:h-14 group-hover:w-[95%]"
+          className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-[90%] h-6 blur-xl transition-all duration-300 group-hover:blur-2xl group-hover:h-10 group-hover:w-[80%] group-hover:-bottom-8"
           style={{
-            background: "radial-gradient(ellipse, rgba(200,167,102,0.4) 0%, rgba(0,0,0,0.5) 40%, transparent 70%)",
+            background: "radial-gradient(ellipse, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 50%, transparent 80%)",
           }}
         />
       </motion.div>
 
-      {/* Download Button - Primary CTA Style */}
+      {/* Download Button - Premium gold style */}
       <motion.button
         onClick={handleClick}
         className={cn(
-          "flex items-center gap-3 px-12 py-5 rounded-xl font-bold text-lg transition-all duration-300",
+          "flex items-center gap-3 px-10 py-4 rounded-lg font-semibold text-base transition-all duration-300",
           "bg-gold hover:bg-gold/90",
-          "border-2 border-gold",
+          "border border-gold/80",
           "text-black",
-          "group shadow-xl"
+          "group shadow-lg"
         )}
         style={{
           boxShadow: `
-            0 15px 40px rgba(200,167,102,0.5),
-            0 8px 20px rgba(0,0,0,0.25),
-            inset 0 2px 0 rgba(255,255,255,0.3)
+            0 10px 30px rgba(200,167,102,0.4),
+            0 4px 12px rgba(0,0,0,0.2),
+            inset 0 1px 0 rgba(255,255,255,0.25)
           `,
         }}
         whileHover={{ 
-          y: -5, 
+          y: -3, 
           scale: 1.02,
           boxShadow: `
-            0 22px 55px rgba(200,167,102,0.6),
-            0 12px 30px rgba(0,0,0,0.3),
-            inset 0 2px 0 rgba(255,255,255,0.4)
+            0 16px 40px rgba(200,167,102,0.5),
+            0 8px 20px rgba(0,0,0,0.25),
+            inset 0 1px 0 rgba(255,255,255,0.3)
           `
         }}
         whileTap={{ scale: 0.98, y: 0 }}
       >
         {isLocked ? (
           <>
-            <Lock className="w-6 h-6 group-hover:scale-110 transition-transform" />
+            <Lock className="w-5 h-5 group-hover:scale-110 transition-transform" />
             Unlock Brochure
           </>
         ) : (
           <>
-            <Download className="w-6 h-6 group-hover:scale-110 transition-transform" />
+            <Download className="w-5 h-5 group-hover:scale-110 transition-transform" />
             Download Brochure
           </>
         )}
       </motion.button>
 
       {isLocked && (
-        <p className="text-muted-foreground text-xs text-center max-w-[240px]">
+        <p className="text-muted-foreground text-xs text-center max-w-[220px]">
           Request brochure access
         </p>
       )}

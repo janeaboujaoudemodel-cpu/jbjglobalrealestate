@@ -52,8 +52,8 @@ type MegaMenuFeaturedCardProps = {
 };
 
 /**
- * Large rectangular featured card used in all mega menus.
- * Purposefully taller + wider to avoid looking cropped.
+ * Compact featured card used in all mega menus.
+ * Smaller size with proper rounded corners, similar to Provident style.
  */
 export function MegaMenuFeaturedCard({
   to,
@@ -70,31 +70,30 @@ export function MegaMenuFeaturedCard({
       to={to}
       onClick={onClick}
       className={cn(
-        // Keep the featured visual fully integrated in the dropdown (no “floating card” scale-up)
-        // Add spacing below on stacked (mobile) layouts so the first section doesn't feel stuck to the image.
-        "block group relative overflow-hidden rounded-2xl aspect-[3/2] min-h-[320px] lg:min-h-[440px] transition-all duration-500 mb-7 lg:mb-0",
+        // Compact card - smaller, proper rounded corners, fits content nicely
+        "block group relative overflow-hidden rounded-xl aspect-[16/10] min-h-[200px] lg:min-h-[280px] transition-all duration-500 mb-5 lg:mb-0",
         className
       )}
     >
       <div
-        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
         style={{ backgroundImage: `url(${image})` }}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-transparent" />
-      <div className="absolute inset-0 border border-gold/25 rounded-2xl group-hover:border-gold/50 transition-colors" />
-      <div className="absolute bottom-0 left-0 right-0 p-7">
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+      <div className="absolute inset-0 border border-gold/30 rounded-xl group-hover:border-gold/60 transition-colors" />
+      <div className="absolute bottom-0 left-0 right-0 p-5">
         {kicker ? (
-          <p className="text-gold text-xs font-bold tracking-[0.25em] uppercase mb-2">
+          <p className="text-gold text-[10px] font-bold tracking-[0.2em] uppercase mb-1.5">
             {kicker}
           </p>
         ) : null}
-        <h3 className="text-white text-2xl font-bold mb-2 leading-tight">{title}</h3>
+        <h3 className="text-white text-lg lg:text-xl font-bold mb-1.5 leading-tight">{title}</h3>
         {description ? (
-          <p className="text-white/80 text-sm mb-4 max-w-[52ch]">{description}</p>
+          <p className="text-white/80 text-xs mb-3 max-w-[48ch] line-clamp-2">{description}</p>
         ) : null}
-        <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm group-hover:gap-3 transition-all">
+        <span className="inline-flex items-center gap-1.5 text-gold font-semibold text-xs group-hover:gap-2.5 transition-all">
           {cta}
-          <ArrowRight className="w-4 h-4" />
+          <ArrowRight className="w-3.5 h-3.5" />
         </span>
       </div>
     </Link>

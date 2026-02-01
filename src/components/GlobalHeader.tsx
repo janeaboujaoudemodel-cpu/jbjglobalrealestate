@@ -999,16 +999,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 </button>
               </div>
 
-              {/* Backdrop overlay - captures clicks outside mega menu */}
-              {activeMegaMenu && (
-                <div 
-                  className="fixed inset-0 z-40 bg-black/30 backdrop-blur-[1px]"
-                  onClick={closeMegaMenu}
-                  aria-hidden="true"
-                />
-              )}
-
-              {/* Mega Menu Panels */}
+              {/* Mega Menu Panels - NO backdrop overlay to allow seamless hover transitions */}
               {activeMegaMenu && (
                 <div 
                   className="relative z-50"
