@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { 
   Building2, Users, Briefcase, Award, Phone, FileText, 
   AlertCircle, Heart, MessageSquare, BookOpen, BarChart3,
-  GraduationCap, TrendingUp, UserCircle, ArrowRight
+  GraduationCap, ArrowRight, Globe, MapPin
 } from 'lucide-react';
 import menuCorporateOffice from '@/assets/menu-corporate-office.jpg';
 
@@ -12,61 +12,61 @@ interface MegaMenuMoreProps {
 }
 
 const MegaMenuMore: React.FC<MegaMenuMoreProps> = ({ onClose }) => {
-  const aboutLinks = [
-    { name: 'About Us', href: '/about', icon: Building2 },
+  const companyLinks = [
+    { name: 'About JBJ Global Real Estate', href: '/about', icon: Building2 },
     { name: 'Meet the Team', href: '/team', icon: Users },
     { name: 'Careers', href: '/join', icon: Briefcase },
-    { name: 'Our Awards', href: '/awards', icon: Award },
+    { name: 'Awards & Recognition', href: '/awards', icon: Award },
     { name: 'Contact Us', href: '/contact', icon: Phone },
-  ];
-
-  const resourceLinks = [
-    { name: 'Real Estate Guides', href: '/guides', icon: BookOpen },
-    { name: 'Complaint Procedure', href: '/complaint', icon: AlertCircle },
     { name: 'Philanthropy', href: '/philanthropy', icon: Heart },
     { name: 'Testimonials', href: '/testimonials', icon: MessageSquare },
+    { name: 'Complaint Procedure', href: '/complaint', icon: AlertCircle },
   ];
 
-  const guidesLinks = [
+  const guidesEducationLinks = [
+    { name: 'All Guides', href: '/guides', icon: BookOpen, description: 'Browse all real estate guides' },
     { name: "Buyer's Guide", href: '/buyer-guide', icon: FileText },
     { name: "Seller's Guide", href: '/seller-guide', icon: FileText },
     { name: "Landlord Guide", href: '/landlord-guide', icon: FileText },
     { name: "Tenant's Guide", href: '/tenant-guide', icon: FileText },
-    { name: "Golden Visa Guide", href: '/guides/golden-visa-uae', icon: Award },
+    { name: "Golden Visa Guide", href: '/guides/golden-visa-uae', icon: Globe },
     { name: "Investor Education", href: '/investor-education', icon: GraduationCap },
   ];
 
-  const hubLinks = [
-    { name: 'Investor Hub', href: '/my-account', icon: TrendingUp, description: 'Dashboard & Tools' },
-    { name: 'Broker Hub', href: '/broker-dashboard', icon: UserCircle, description: 'Broker Resources' },
-    { name: 'Market Intelligence', href: '/market-intelligence/overview', icon: BarChart3, description: 'Data & Reports' },
+  const marketIntelligenceLinks = [
+    { name: 'Market Overview', href: '/market-intelligence/overview', icon: BarChart3, description: 'Dubai market trends & data' },
+    { name: 'Area Intelligence', href: '/market-intelligence/areas', icon: MapPin, description: 'Location-specific insights' },
+    { name: 'Market Reports', href: '/market-intelligence/reports', icon: FileText, description: 'In-depth analysis' },
   ];
 
   return (
-    <div className="absolute top-full left-0 right-0 mt-0 bg-gradient-to-br from-black via-[#0a0a0a] to-black border-t-2 border-gold/50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)] z-50">
+    <div className="absolute top-full left-0 right-0 mt-0 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-t-4 border-gold shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] z-50">
       {/* Top gold shimmer line */}
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent animate-pulse" />
+      <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
       
-      <div className="max-w-7xl mx-auto px-8 py-8">
-        <div className="grid grid-cols-12 gap-6">
-          {/* About Card - SQUARE */}
+      <div className="max-w-[1400px] mx-auto px-10 py-10">
+        <div className="grid grid-cols-12 gap-8">
+          {/* Featured Card - Company */}
           <div className="col-span-4">
             <Link 
               to="/about" 
               onClick={onClose}
-              className="block group relative overflow-hidden rounded-2xl aspect-square transform transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(200,167,102,0.3)]"
-              style={{ perspective: '1000px' }}
+              className="block group relative overflow-hidden rounded-2xl aspect-[4/3] transform transition-all duration-500 hover:scale-[1.02]"
+              style={{ 
+                perspective: '1000px',
+                boxShadow: '0 20px 50px -15px rgba(0,0,0,0.4), 0 0 0 2px rgba(200,167,102,0.3)'
+              }}
             >
               <div 
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
                 style={{ backgroundImage: `url(${menuCorporateOffice})` }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90" />
-              <div className="absolute inset-0 border-2 border-gold/20 rounded-2xl group-hover:border-gold/50 transition-colors" />
-              <div className="absolute bottom-0 left-0 right-0 p-5">
-                <p className="text-gold text-xs font-bold tracking-[0.2em] uppercase mb-2">COMPANY</p>
-                <h3 className="text-white text-lg font-bold mb-2">JBJ Global Real Estate</h3>
-                <p className="text-white/70 text-sm mb-4 line-clamp-2">Excellence in Dubai real estate since 2015</p>
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+              <div className="absolute inset-0 border-2 border-gold/40 rounded-2xl group-hover:border-gold transition-colors" />
+              <div className="absolute bottom-0 left-0 right-0 p-6">
+                <p className="text-gold text-xs font-bold tracking-[0.25em] uppercase mb-2">COMPANY</p>
+                <h3 className="text-white text-xl font-bold mb-2">JBJ Global Real Estate</h3>
+                <p className="text-white/80 text-sm mb-4">Excellence in Dubai real estate since 2015</p>
                 <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm group-hover:gap-3 transition-all">
                   Learn More
                   <ArrowRight className="w-4 h-4" />
@@ -75,89 +75,72 @@ const MegaMenuMore: React.FC<MegaMenuMoreProps> = ({ onClose }) => {
             </Link>
           </div>
 
-          {/* About & Guides Combined */}
-          <div className="col-span-4">
-            <h4 className="text-gold font-bold text-xs tracking-[0.2em] uppercase mb-4 flex items-center gap-2">
-              <Building2 className="w-4 h-4" />
-              About JBJ Global
+          {/* Company Links */}
+          <div className="col-span-3">
+            <h4 className="text-black font-bold text-xs tracking-[0.2em] uppercase mb-5 flex items-center gap-2 pb-2 border-b border-gold/30">
+              <Building2 className="w-4 h-4 text-gold" />
+              Company
             </h4>
-            <div className="space-y-1 mb-5">
-              {aboutLinks.map((item) => (
+            <div className="space-y-0.5">
+              {companyLinks.map((item) => (
                 <Link
                   key={item.name}
                   to={item.href}
                   onClick={onClose}
-                  className="flex items-center gap-3 py-2 px-3 rounded-xl text-white/80 hover:text-gold hover:bg-gold/10 transition-all group"
+                  className="flex items-center gap-3 py-2 px-3 rounded-xl text-black hover:text-white hover:bg-black transition-all group"
                 >
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center group-hover:from-gold/30 group-hover:to-gold/10 transition-all shadow-lg">
-                    <item.icon className="w-4 h-4 text-gold" />
+                  <div className="w-8 h-8 rounded-lg bg-black border border-gold/50 flex items-center justify-center group-hover:bg-gold group-hover:border-gold transition-all shadow-lg">
+                    <item.icon className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
                   </div>
-                  <span className="font-medium text-sm">{item.name}</span>
-                </Link>
-              ))}
-            </div>
-            
-            <h4 className="text-gold font-bold text-xs tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
-              <FileText className="w-4 h-4" />
-              Resources
-            </h4>
-            <div className="space-y-1">
-              {resourceLinks.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  onClick={onClose}
-                  className="flex items-center gap-3 py-2 px-3 rounded-xl text-white/80 hover:text-gold hover:bg-gold/10 transition-all group"
-                >
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center group-hover:from-gold/30 group-hover:to-gold/10 transition-all shadow-lg">
-                    <item.icon className="w-4 h-4 text-gold" />
-                  </div>
-                  <span className="font-medium text-sm">{item.name}</span>
+                  <span className="font-medium text-sm group-hover:text-gold">{item.name}</span>
                 </Link>
               ))}
             </div>
           </div>
 
-          {/* Guides & Hubs */}
-          <div className="col-span-4">
-            <h4 className="text-gold font-bold text-xs tracking-[0.2em] uppercase mb-4 flex items-center gap-2">
-              <BookOpen className="w-4 h-4" />
-              Guides & Education
+          {/* Guides & Education */}
+          <div className="col-span-2">
+            <h4 className="text-black font-bold text-xs tracking-[0.2em] uppercase mb-5 flex items-center gap-2 pb-2 border-b border-gold/30">
+              <BookOpen className="w-4 h-4 text-gold" />
+              Guides
             </h4>
-            <div className="space-y-1 mb-5">
-              {guidesLinks.map((item) => (
+            <div className="space-y-0.5">
+              {guidesEducationLinks.map((item) => (
                 <Link
                   key={item.name}
                   to={item.href}
                   onClick={onClose}
-                  className="flex items-center gap-3 py-2 px-3 rounded-xl text-white/80 hover:text-gold hover:bg-gold/10 transition-all group"
+                  className="flex items-center gap-2 py-2 px-2 rounded-xl text-black hover:text-white hover:bg-black transition-all group"
                 >
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center group-hover:from-gold/30 group-hover:to-gold/10 transition-all shadow-lg">
-                    <item.icon className="w-4 h-4 text-gold" />
+                  <div className="w-7 h-7 rounded-lg bg-black border border-gold/50 flex items-center justify-center group-hover:bg-gold group-hover:border-gold transition-all shadow-lg shrink-0">
+                    <item.icon className="w-3.5 h-3.5 text-gold group-hover:text-black transition-colors" />
                   </div>
-                  <span className="font-medium text-sm">{item.name}</span>
+                  <span className="font-medium text-xs group-hover:text-gold">{item.name}</span>
                 </Link>
               ))}
             </div>
+          </div>
 
-            <h4 className="text-gold font-bold text-xs tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
-              <TrendingUp className="w-4 h-4" />
-              Hubs & Intelligence
+          {/* Market Intelligence */}
+          <div className="col-span-3">
+            <h4 className="text-black font-bold text-xs tracking-[0.2em] uppercase mb-5 flex items-center gap-2 pb-2 border-b border-gold/30">
+              <BarChart3 className="w-4 h-4 text-gold" />
+              Market Intelligence
             </h4>
             <div className="space-y-2">
-              {hubLinks.map((item) => (
+              {marketIntelligenceLinks.map((item) => (
                 <Link
                   key={item.name}
                   to={item.href}
                   onClick={onClose}
-                  className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-white/80 hover:text-gold hover:bg-gold/10 transition-all group bg-gradient-to-br from-white/5 to-transparent border border-gold/20 hover:border-gold/40"
+                  className="flex items-center gap-3 py-3 px-3 rounded-xl text-black hover:text-white hover:bg-black transition-all group border border-gold/20 hover:border-gold/50"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-gold/30 to-gold/10 border border-gold/40 flex items-center justify-center group-hover:from-gold/40 group-hover:to-gold/20 transition-all shadow-lg">
-                    <item.icon className="w-5 h-5 text-gold" />
+                  <div className="w-10 h-10 rounded-lg bg-black border border-gold/50 flex items-center justify-center group-hover:bg-gold group-hover:border-gold transition-all shadow-lg shrink-0">
+                    <item.icon className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
                   </div>
                   <div>
-                    <span className="font-semibold text-sm block">{item.name}</span>
-                    <span className="text-xs text-white/50">{item.description}</span>
+                    <span className="font-semibold text-sm block group-hover:text-gold">{item.name}</span>
+                    <span className="text-xs text-black/60 group-hover:text-white/70">{item.description}</span>
                   </div>
                 </Link>
               ))}
@@ -166,8 +149,8 @@ const MegaMenuMore: React.FC<MegaMenuMoreProps> = ({ onClose }) => {
         </div>
       </div>
       
-      {/* Bottom gold accent with 3D effect */}
-      <div className="h-1 bg-gradient-to-r from-transparent via-gold/80 to-transparent shadow-[0_-5px_20px_rgba(200,167,102,0.3)]" />
+      {/* Bottom gold accent */}
+      <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
     </div>
   );
 };

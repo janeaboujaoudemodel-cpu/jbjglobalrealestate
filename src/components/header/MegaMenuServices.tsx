@@ -26,24 +26,24 @@ const MegaMenuServices: React.FC<MegaMenuServicesProps> = ({ onClose }) => {
   ];
 
   return (
-    <div className="absolute top-full left-0 right-0 mt-0 bg-gradient-to-br from-black via-[#0a0a0a] to-black border-t-2 border-gold/50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)] z-50">
+    <div className="absolute top-full left-0 right-0 mt-0 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-t-4 border-gold shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] z-50">
       {/* Top gold shimmer line */}
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent animate-pulse" />
+      <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
       
-      <div className="max-w-7xl mx-auto px-8 py-8">
+      <div className="max-w-[1400px] mx-auto px-10 py-10">
         {/* Section Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h4 className="text-gold font-bold text-xs tracking-[0.2em] uppercase flex items-center gap-2">
-            <Wrench className="w-4 h-4" />
+        <div className="flex items-center justify-between mb-6 pb-2 border-b border-gold/30">
+          <h4 className="text-black font-bold text-xs tracking-[0.2em] uppercase flex items-center gap-2">
+            <Wrench className="w-4 h-4 text-gold" />
             Our Services
           </h4>
           <Link 
             to="/services" 
             onClick={onClose}
-            className="text-gold text-sm font-medium hover:text-gold-light transition-colors flex items-center gap-1"
+            className="text-black text-sm font-medium hover:text-gold transition-colors flex items-center gap-1"
           >
             View All Services
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4 text-gold" />
           </Link>
         </div>
 
@@ -54,20 +54,20 @@ const MegaMenuServices: React.FC<MegaMenuServicesProps> = ({ onClose }) => {
               key={service.name}
               to={service.href}
               onClick={onClose}
-              className="group relative bg-gradient-to-br from-white/5 to-white/[0.02] border border-gold/20 rounded-2xl p-4 hover:border-gold/50 hover:bg-gold/10 transition-all transform hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(200,167,102,0.2)]"
+              className="group relative bg-white/60 border-2 border-gold/30 rounded-2xl p-4 hover:border-gold hover:bg-black transition-all transform hover:scale-[1.02] hover:shadow-[0_10px_30px_rgba(0,0,0,0.3)]"
             >
               <div className="flex items-start gap-3">
                 {/* Icon Badge */}
-                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-gold/30 to-gold/10 border border-gold/40 flex items-center justify-center group-hover:from-gold/40 group-hover:to-gold/20 transition-all shadow-lg">
-                  <service.icon className="w-5 h-5 text-gold" />
+                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-black border border-gold/50 flex items-center justify-center group-hover:bg-gold transition-all shadow-lg">
+                  <service.icon className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
                 </div>
                 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <h5 className="text-white font-semibold text-sm group-hover:text-gold transition-colors">
+                  <h5 className="text-black font-semibold text-sm group-hover:text-gold transition-colors">
                     {service.name}
                   </h5>
-                  <p className="text-white/50 text-xs mt-1 line-clamp-1">
+                  <p className="text-black/60 text-xs mt-1 line-clamp-1 group-hover:text-white/70 transition-colors">
                     {service.description}
                   </p>
                 </div>
@@ -82,8 +82,8 @@ const MegaMenuServices: React.FC<MegaMenuServicesProps> = ({ onClose }) => {
         </div>
       </div>
       
-      {/* Bottom gold accent with 3D effect */}
-      <div className="h-1 bg-gradient-to-r from-transparent via-gold/80 to-transparent shadow-[0_-5px_20px_rgba(200,167,102,0.3)]" />
+      {/* Bottom gold accent */}
+      <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
     </div>
   );
 };
