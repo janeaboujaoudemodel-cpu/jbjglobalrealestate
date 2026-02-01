@@ -217,6 +217,11 @@ serve(async (req) => {
       listingUseFirecrawl = false,
       // NOTE: full escalation can be slow; keep disabled unless explicitly requested
       fullFirecrawlEscalation = false,
+      // When running in UI-batched mode we don't want a single request to attempt full 89-page fallback.
+      // The frontend will orchestrate page-range batches instead.
+      disableAutoFallback = false,
+      // Skip post-insert queue cardinality calculation (faster for batched runs)
+      skipPostInsertStats = false,
     } = body || {};
 
     console.log(`[Discover] Starting project URL discovery (${skipMap ? "listing-pages" : "MAP"})...`);
@@ -308,7 +313,7 @@ serve(async (req) => {
       console.log(`[Discover] After listing-page range merge: ${projectUrls.length} unique project URLs`);
     }
 
-    if (forceFullDiscovery || projectUrls.length < expected) {
+    if (!disableAutoFallback && (forceFullDiscovery || projectUrls.length < expected)) {
       usedFallback = true;
       console.log(`[Discover] MAP returned ${projectUrls.length} < expected ${expected}. Running full listing-page discovery fallback...`);
 
@@ -444,17 +449,16 @@ serve(async (req) => {
       
       for (let i = 0; i < placeholders.length; i += 50) {
         const batch = placeholders.slice(i, i + 50);
-        const { error: insertErr, data: insertedData } = await supabase
+        const { error: insertErr } = await supabase
           .from("pending_project_imports")
-          .insert(batch)
-          .select("id");
+          .insert(batch);
         
         if (insertErr) {
           console.error(`[Discover] Insert batch ${i}-${i + batch.length} error:`, insertErr.message);
           errorCount += batch.length;
         } else {
-          insertedCount += insertedData?.length || batch.length;
-          console.log(`[Discover] Inserted batch ${i}-${i + batch.length} (${insertedData?.length || batch.length} rows)`);
+          insertedCount += batch.length;
+          console.log(`[Discover] Inserted batch ${i}-${i + batch.length} (${batch.length} rows)`);
         }
       }
       
@@ -462,8 +466,11 @@ serve(async (req) => {
     }
 
     // Post-insert: report current queue cardinality (distinct slugs)
-    const queueSlugsAfter = await fetchAllSlugs("pending_project_imports");
-    const queueDistinctAfter = new Set(queueSlugsAfter.filter(Boolean)).size;
+    let queueDistinctAfter: number | null = null;
+    if (!skipPostInsertStats) {
+      const queueSlugsAfter = await fetchAllSlugs("pending_project_imports");
+      queueDistinctAfter = new Set(queueSlugsAfter.filter(Boolean)).size;
+    }
 
     return new Response(JSON.stringify({
       success: true,

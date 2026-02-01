@@ -577,6 +577,15 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     setRebuildResult(null);
 
     try {
+      const TARGET = 1335;
+      const getPendingCount = async () => {
+        const { count } = await supabase
+          .from("pending_project_imports")
+          .select("id", { count: "exact", head: true })
+          .eq("status", "pending");
+        return count ?? 0;
+      };
+
       // 1) Hard reset (fast, single backend call)
       const { data: resetData, error: resetErr } = await supabase.functions.invoke("reset-project-import-queue", {
         body: { preserveApproved: true },
@@ -584,13 +593,73 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       if (resetErr) throw resetErr;
       toast.success(`Queue cleared (${resetData?.deleted ?? 0} removed)`);
 
-      // 2) Discover + queue placeholders (force full discovery to hit 1,335)
-      const { data, error } = await supabase.functions.invoke("discover-all-projects", {
-        body: { freshStart: true, forceFullDiscovery: true, expectedTotal: 1335 },
+      // 2) Fast MAP discovery ONLY (no heavy fallback inside one request)
+      // This avoids browser "Failed to fetch" / timeouts.
+      const { data: mapData, error: mapErr } = await supabase.functions.invoke("discover-all-projects", {
+        body: {
+          expectedTotal: TARGET,
+          // Don't attempt full 89-page fallback inside one request; the UI will orchestrate batches.
+          disableAutoFallback: true,
+          skipPostInsertStats: true,
+        },
       });
-      if (error) throw error;
-      setRebuildResult(data || null);
-      toast.success(`Queue rebuilt (${data?.queued_for_scraping ?? data?.new_urls ?? 0} queued)`);
+      if (mapErr) throw mapErr;
+      setRebuildResult(mapData || null);
+
+      // 3) If still short, run listing-page discovery in small page ranges.
+      // Pass A: direct HTML (fast).
+      let pending = await getPendingCount();
+      if (pending < TARGET) {
+        toast.info(`Discovery pass 1: filling missing ${TARGET - pending}…`);
+
+        const CHUNK = 10;
+        for (let start = 1; start <= 89 && pending < TARGET; start += CHUNK) {
+          const end = Math.min(89, start + CHUNK - 1);
+          const { error: rangeErr } = await supabase.functions.invoke("discover-all-projects", {
+            body: {
+              expectedTotal: TARGET,
+              skipMap: true,
+              listingPageStart: start,
+              listingPageEnd: end,
+              listingUseFirecrawl: false,
+              disableAutoFallback: true,
+              skipPostInsertStats: true,
+            },
+          });
+          if (rangeErr) {
+            // Don't stop the whole rebuild if one chunk fails.
+            console.warn(`Discovery range ${start}-${end} failed`, rangeErr);
+          }
+          pending = await getPendingCount();
+        }
+      }
+
+      // Pass B: Firecrawl links (strongest coverage) ONLY if still short.
+      if (pending < TARGET) {
+        toast.info(`Discovery pass 2: deep coverage for remaining ${TARGET - pending}…`);
+
+        const CHUNK = 10;
+        for (let start = 1; start <= 89 && pending < TARGET; start += CHUNK) {
+          const end = Math.min(89, start + CHUNK - 1);
+          const { error: rangeErr } = await supabase.functions.invoke("discover-all-projects", {
+            body: {
+              expectedTotal: TARGET,
+              skipMap: true,
+              listingPageStart: start,
+              listingPageEnd: end,
+              listingUseFirecrawl: true,
+              disableAutoFallback: true,
+              skipPostInsertStats: true,
+            },
+          });
+          if (rangeErr) {
+            console.warn(`Deep discovery range ${start}-${end} failed`, rangeErr);
+          }
+          pending = await getPendingCount();
+        }
+      }
+
+      toast.success(`Queue rebuilt (${pending.toLocaleString()} in queue)`);
     } catch (e: any) {
       console.error("Rebuild queue failed:", e);
       toast.error(e?.message || "Failed to rebuild queue");
