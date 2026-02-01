@@ -257,12 +257,8 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired }: P
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    // Navigate to public project page if slug exists, otherwise fallback to admin preview
-                    if (item.slug) {
-                      navigate(`/project/${item.slug}`);
-                    } else {
-                      onReview();
-                    }
+                    // ALWAYS use admin preview (onReview) - not public page which may not exist yet
+                    onReview();
                   }}
                 >
                   ...more

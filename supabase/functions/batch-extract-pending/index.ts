@@ -308,14 +308,25 @@ serve(async (req) => {
         body: JSON.stringify({
           url: item.source_url,
           formats: ["markdown", "links", "rawHtml"],
-          waitFor: 8000,
-          timeout: 60000,
+          waitFor: 5000,  // Reduced to avoid rate limiting
+          timeout: 45000,
           onlyMainContent: false,
         }),
       });
 
       if (!scrapeRes.ok) {
         const errText = await scrapeRes.text();
+        let errJson: any = {};
+        try { errJson = JSON.parse(errText); } catch {}
+        
+        const errorCode = errJson.code || "UNKNOWN";
+        
+        // CRITICAL: Treat SCRAPE_ALL_ENGINES_FAILED as a soft error - don't crash the whole batch
+        if (errorCode === "SCRAPE_ALL_ENGINES_FAILED") {
+          console.warn(`[BatchExtract] Engines blocked for ${item.name} - marking for retry`);
+          throw new Error(`RATE_LIMITED: Engines blocked - retry later`);
+        }
+        
         console.error(`[BatchExtract] Scrape failed for ${item.name}: ${errText.substring(0, 120)}`);
         throw new Error(`Scrape failed: ${scrapeRes.status}`);
       }
