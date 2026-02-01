@@ -274,7 +274,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             <p className="text-muted-foreground text-sm leading-relaxed mb-4 flex-1">
               {getTruncatedDescription()}
               {project.description && project.description.length > 120 && (
-                <span className="bg-gradient-to-r from-gold via-handover to-gold bg-clip-text text-transparent hover:opacity-80 cursor-pointer ml-1 font-semibold">...more</span>
+                <span className="bg-gradient-to-r from-gold via-handover to-gold bg-clip-text text-transparent hover:opacity-80 cursor-pointer ml-1 font-semibold">
+                  ...more
+                </span>
               )}
             </p>
           )}
