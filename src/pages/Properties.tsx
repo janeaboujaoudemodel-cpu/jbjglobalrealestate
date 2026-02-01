@@ -55,6 +55,7 @@ import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { OffPlanInquiryCTA } from "@/components/OffPlanInquiryCTA";
+import { FeaturedProjectAd, FEATURED_ADS } from "@/components/FeaturedProjectAd";
 
 // Currency conversion rates
 const CURRENCY_RATES: Record<string, number> = {
@@ -987,14 +988,34 @@ const Properties = () => {
               </div>
             ) : sortedProjects.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 p-4">
-                {sortedProjects.map((project) => (
-                  <ProjectCard 
-                    key={project.id} 
-                    project={project} 
-                    currency={filters.currency}
-                    sizeUnit={filters.sizeUnit}
-                  />
-                ))}
+                {sortedProjects.map((project, index) => {
+                  // Insert featured ads after specific positions (like Provident: after 6, 12, 18 cards)
+                  const adAfterIndex = [5, 11, 17]; // 0-indexed: after 6th, 12th, 18th card
+                  const adIndex = adAfterIndex.indexOf(index);
+                  const featuredAd = adIndex !== -1 && FEATURED_ADS[adIndex] ? FEATURED_ADS[adIndex] : null;
+                  
+                  return (
+                    <>
+                      <ProjectCard 
+                        key={project.id} 
+                        project={project} 
+                        currency={filters.currency}
+                        sizeUnit={filters.sizeUnit}
+                      />
+                      {featuredAd && (
+                        <FeaturedProjectAd
+                          key={`ad-${featuredAd.id}`}
+                          title={featuredAd.title}
+                          subtitle={featuredAd.subtitle}
+                          description={featuredAd.description}
+                          imageUrl={featuredAd.imageUrl}
+                          projectSlug={featuredAd.projectSlug}
+                          ctaText={featuredAd.ctaText}
+                        />
+                      )}
+                    </>
+                  );
+                })}
               </div>
             ) : (
               <div className="text-center py-20 px-4">
