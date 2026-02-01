@@ -88,14 +88,29 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   const [totalPages, setTotalPages] = useState(89);
   const [detectedTotalPages, setDetectedTotalPages] = useState<number | null>(89);
   const [isDetectingPages, setIsDetectingPages] = useState(false);
-  const [pageStatuses, setPageStatuses] = useState<PageStatus[]>([]);
-  const [totalStats, setTotalStats] = useState({ 
-    created: 0, 
-    updated: 0, 
-    skipped: 0,
-    images: 0,
-    extracted: 0 
+  
+  // Initialize pageStatuses from sessionStorage if available
+  const [pageStatuses, setPageStatuses] = useState<PageStatus[]>(() => {
+    try {
+      const saved = sessionStorage.getItem("sync_page_statuses");
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch { /* ignore */ }
+    return Array.from({ length: 89 }, (_, i) => ({
+      page: i + 1,
+      status: "pending" as const,
+    }));
   });
+  
+  const [totalStats, setTotalStats] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem("sync_total_stats");
+      if (saved) return JSON.parse(saved);
+    } catch { /* ignore */ }
+    return { created: 0, updated: 0, skipped: 0, images: 0, extracted: 0 };
+  });
+  
   const [projectCount, setProjectCount] = useState<number | null>(null);
   const [pendingQueueCount, setPendingQueueCount] = useState<number | null>(null);
   const [queueBreakdown, setQueueBreakdown] = useState<{
@@ -195,15 +210,31 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     [currentJobId]
   );
 
-  // Initialize page statuses when totalPages changes (but don't wipe while syncing).
+  // Initialize page statuses when totalPages changes (but don't wipe while syncing or if already loaded from sessionStorage).
   useEffect(() => {
     if (isSyncingRef.current) return;
-    const initialStatuses: PageStatus[] = Array.from({ length: totalPages }, (_, i) => ({
-      page: i + 1,
-      status: "pending",
-    }));
-    setPageStatuses(initialStatuses);
+    // Only reset if the current array doesn't already have entries for the right number of pages
+    setPageStatuses((prev) => {
+      if (prev.length === totalPages) return prev;
+      return Array.from({ length: totalPages }, (_, i) => ({
+        page: i + 1,
+        status: "pending" as const,
+      }));
+    });
   }, [totalPages]);
+
+  // Persist pageStatuses + totalStats to sessionStorage whenever they change
+  useEffect(() => {
+    try {
+      sessionStorage.setItem("sync_page_statuses", JSON.stringify(pageStatuses));
+    } catch { /* ignore */ }
+  }, [pageStatuses]);
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem("sync_total_stats", JSON.stringify(totalStats));
+    } catch { /* ignore */ }
+  }, [totalStats]);
 
   // On mount: load counts + detect current page count + resume any active job.
   useEffect(() => {
