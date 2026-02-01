@@ -584,9 +584,9 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       if (resetErr) throw resetErr;
       toast.success(`Queue cleared (${resetData?.deleted ?? 0} removed)`);
 
-      // 2) Discover + queue placeholders (MAP)
+      // 2) Discover + queue placeholders (force full discovery to hit 1,335)
       const { data, error } = await supabase.functions.invoke("discover-all-projects", {
-        body: { freshStart: true },
+        body: { freshStart: true, forceFullDiscovery: true, expectedTotal: 1335 },
       });
       if (error) throw error;
       setRebuildResult(data || null);
