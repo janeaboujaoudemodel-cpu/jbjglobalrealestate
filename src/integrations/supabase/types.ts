@@ -15867,6 +15867,13 @@ export type Database = {
         Args: { encrypted_data: string; salt_id: string }
         Returns: string
       }
+      decrypt_employee_salary_banking: {
+        Args: { salary_id: string }
+        Returns: {
+          bank_account_number: string
+          bank_iban: string
+        }[]
+      }
       decrypt_hr_employee_pii: {
         Args: { p_employee_id: string }
         Returns: {
