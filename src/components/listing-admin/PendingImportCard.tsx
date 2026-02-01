@@ -1,4 +1,5 @@
 import { useMemo, useState, type MouseEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -37,6 +38,7 @@ type PendingImportCardItem = {
   bedrooms_min: number | null;
   bedrooms_max: number | null;
   review_notes?: string | null;
+  slug?: string | null;
 };
 
 interface PendingImportCardProps {
@@ -52,6 +54,7 @@ const truncate = (text: string, max = 120) => {
 };
 
 export function PendingImportCard({ item, formatPrice, onReview, onRepaired }: PendingImportCardProps) {
+  const navigate = useNavigate();
   // Filter out brochure/document images from gallery
   const images = useMemo(() => {
     const excludePattern = /(brochure|payment[-_]?plan|floor[-_]?plan|master[-_]?plan|pdf|document|General_Brochure)/i;
@@ -254,7 +257,12 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired }: P
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    onReview();
+                    // Navigate to public project page if slug exists, otherwise fallback to admin preview
+                    if (item.slug) {
+                      navigate(`/project/${item.slug}`);
+                    } else {
+                      onReview();
+                    }
                   }}
                 >
                   ...more
