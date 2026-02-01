@@ -2531,6 +2531,7 @@ export type Database = {
           email_encrypted: string | null
           email_verified: boolean | null
           full_name: string
+          full_name_encrypted: string | null
           id: string
           location: string | null
           nationality: string | null
@@ -2547,6 +2548,7 @@ export type Database = {
           email_encrypted?: string | null
           email_verified?: boolean | null
           full_name: string
+          full_name_encrypted?: string | null
           id?: string
           location?: string | null
           nationality?: string | null
@@ -2563,6 +2565,7 @@ export type Database = {
           email_encrypted?: string | null
           email_verified?: boolean | null
           full_name?: string
+          full_name_encrypted?: string | null
           id?: string
           location?: string | null
           nationality?: string | null
@@ -14970,13 +14973,13 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
-          email_masked?: never
+          email_masked?: string | null
           email_verified?: boolean | null
           full_name?: string | null
           id?: string | null
           location?: string | null
           nationality?: string | null
-          phone_masked?: never
+          phone_masked?: string | null
           phone_verified?: boolean | null
           preferred_language?: string | null
           service_interest?: string | null
@@ -14984,13 +14987,13 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
-          email_masked?: never
+          email_masked?: string | null
           email_verified?: boolean | null
           full_name?: string | null
           id?: string | null
           location?: string | null
           nationality?: string | null
-          phone_masked?: never
+          phone_masked?: string | null
           phone_verified?: boolean | null
           preferred_language?: string | null
           service_interest?: string | null
@@ -15866,6 +15869,22 @@ export type Database = {
       decrypt_bank_field: {
         Args: { encrypted_data: string; salt_id: string }
         Returns: string
+      }
+      decrypt_contact_gating_pii: {
+        Args: { submission_id: string }
+        Returns: {
+          created_at: string
+          email: string
+          email_verified: boolean
+          full_name: string
+          id: string
+          location: string
+          nationality: string
+          phone: string
+          phone_verified: boolean
+          preferred_language: string
+          service_interest: string
+        }[]
       }
       decrypt_employee_salary_banking: {
         Args: { salary_id: string }
