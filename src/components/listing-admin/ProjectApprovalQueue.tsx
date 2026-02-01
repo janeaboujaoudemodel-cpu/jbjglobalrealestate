@@ -76,6 +76,8 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [totalCount, setTotalCount] = useState<number | null>(null);
+  const [totalCompleteCount, setTotalCompleteCount] = useState<number | null>(null);
+  const [totalNeedsWorkCount, setTotalNeedsWorkCount] = useState<number | null>(null);
   const [hasMore, setHasMore] = useState(false);
   const [showAll, setShowAll] = useState(!jobId);
   const [processingId, setProcessingId] = useState<string | null>(null);
@@ -94,6 +96,51 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   useEffect(() => {
     setShowAll(!jobId);
   }, [jobId]);
+
+  // Fetch global inventory stats (independent of pagination)
+  const fetchInventoryStats = async () => {
+    try {
+      // Get total pending count
+      const { count: total } = await supabase
+        .from("pending_project_imports")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "pending");
+
+      // For complete records, we need to check:
+      // - description is not null/empty
+      // - developer_name is not null/empty/Unknown
+      // - images array has items
+      // - documents array has items
+      // Since PostgREST can't easily filter by jsonb array length, 
+      // we fetch a sample and estimate, or fetch all IDs and count client-side
+      
+      // Simplified approach: Fetch records with description + valid developer
+      // then count those locally that also have images/docs
+      const { data: potentialComplete } = await supabase
+        .from("pending_project_imports")
+        .select("id, images, documents")
+        .eq("status", "pending")
+        .not("description", "is", null)
+        .neq("description", "")
+        .not("developer_name", "is", null)
+        .neq("developer_name", "")
+        .not("developer_name", "ilike", "Unknown")
+        .limit(2000); // Safety limit
+
+      // Count ones that also have images and documents
+      const completeCount = (potentialComplete || []).filter(p => {
+        const images = Array.isArray(p.images) ? p.images : [];
+        const docs = Array.isArray(p.documents) ? p.documents : [];
+        return images.length > 0 && docs.length > 0;
+      }).length;
+      
+      setTotalCount(total ?? 0);
+      setTotalCompleteCount(completeCount);
+      setTotalNeedsWorkCount((total ?? 0) - completeCount);
+    } catch (error) {
+      console.error("Error fetching inventory stats:", error);
+    }
+  };
 
   const fetchPendingImports = async (opts?: { reset?: boolean }) => {
     const reset = opts?.reset ?? true;
@@ -188,6 +235,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
 
   useEffect(() => {
     fetchPendingImports();
+    fetchInventoryStats();
   }, [jobId, showAll]);
 
   // Check for duplicates before approving
@@ -780,7 +828,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                 )}
               </>
             )}
-            <Button variant="outline" size="sm" onClick={() => fetchPendingImports({ reset: true })} disabled={isBulkProcessing} className="border-gold text-gold hover:bg-gold/10">
+            <Button variant="outline" size="sm" onClick={() => { fetchPendingImports({ reset: true }); fetchInventoryStats(); }} disabled={isBulkProcessing} className="border-gold text-gold hover:bg-gold/10">
               <RefreshCw className="h-4 w-4 mr-2" />
               Refresh
             </Button>
@@ -798,11 +846,11 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
               <div className="text-xs text-muted-foreground">Discovered</div>
             </div>
             <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-center">
-              <div className="text-2xl font-bold text-emerald-700">{completeCount}</div>
+              <div className="text-2xl font-bold text-emerald-700">{totalCompleteCount ?? completeCount}</div>
               <div className="text-xs text-emerald-600">Complete</div>
             </div>
             <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-center">
-              <div className="text-2xl font-bold text-amber-700">{needsWorkCount}</div>
+              <div className="text-2xl font-bold text-amber-700">{totalNeedsWorkCount ?? needsWorkCount}</div>
               <div className="text-xs text-amber-600">Needs Extraction</div>
             </div>
             <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 text-center">
