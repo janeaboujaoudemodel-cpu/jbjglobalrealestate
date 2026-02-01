@@ -153,13 +153,19 @@ function extractTextFromMarkdown(markdown: string): {
   
   // CRITICAL: Extract EXACT price from source - look for AED price specifically
   let priceFrom: number | null = null;
+  // Safety floor: if parsing yields an obviously invalid number (e.g. 2), drop it.
+  const MIN_REASONABLE_PRICE_AED = 50_000;
   // First try to find "From AED X" or "Starting from AED X" pattern
-  const aedFromMatch = cleanMd.match(/(?:from|starting\s+from)\s*AED\s*([\d,]+)/i);
+  // IMPORTANT: include optional K/M suffix, otherwise "AED 2M" becomes "AED 2" (legal-risk display bug).
+  const aedFromMatch = cleanMd.match(/(?:from|starting\s+from)\s*AED\s*([\d,.]+)\s*(K|M)?/i);
   if (aedFromMatch) {
-    priceFrom = parseInt(aedFromMatch[1].replace(/,/g, ""));
+    let val = parseFloat(aedFromMatch[1].replace(/,/g, ""));
+    if (aedFromMatch[2]?.toUpperCase() === "K") val *= 1000;
+    if (aedFromMatch[2]?.toUpperCase() === "M") val *= 1000000;
+    priceFrom = Math.round(val);
   } else {
     // Try "AED X" format
-    const aedMatch = cleanMd.match(/AED\s*([\d,]+)\s*(K|M)?/i);
+    const aedMatch = cleanMd.match(/AED\s*([\d,.]+)\s*(K|M)?/i);
     if (aedMatch) {
       let val = parseFloat(aedMatch[1].replace(/,/g, ""));
       if (aedMatch[2]?.toUpperCase() === "K") val *= 1000;
@@ -177,6 +183,10 @@ function extractTextFromMarkdown(markdown: string): {
         priceFrom = Math.round(val);
       }
     }
+  }
+
+  if (typeof priceFrom === "number" && priceFrom > 0 && priceFrom < MIN_REASONABLE_PRICE_AED) {
+    priceFrom = null;
   }
   
   // Handover date extraction
