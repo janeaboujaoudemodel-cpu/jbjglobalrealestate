@@ -64,7 +64,8 @@ export function MegaMenuFeaturedCard({
       onClick={onClick}
       className={cn(
         // Keep the featured visual fully integrated in the dropdown (no “floating card” scale-up)
-        "block group relative overflow-hidden rounded-2xl aspect-[3/2] min-h-[320px] lg:min-h-[440px] transition-all duration-500",
+        // Add spacing below on stacked (mobile) layouts so the first section doesn't feel stuck to the image.
+        "block group relative overflow-hidden rounded-2xl aspect-[3/2] min-h-[320px] lg:min-h-[440px] transition-all duration-500 mb-7 lg:mb-0",
         className
       )}
     >
