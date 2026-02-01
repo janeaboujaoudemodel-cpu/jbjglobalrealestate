@@ -39,8 +39,8 @@ const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersPr
     <MegaMenuShell ref={ref}>
       <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-10 lg:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Larger featured card to fill the gap */}
-          <div className="lg:col-span-5">
+          {/* Featured card - vertical stretch only, no horizontal change */}
+          <div className="lg:col-span-5 flex">
             <MegaMenuFeaturedCard
               to="/developers/emaar"
               onClick={onClose}
@@ -49,7 +49,7 @@ const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersPr
               title="Emaar Properties"
               description="Dubai's most iconic developer - creating architectural masterpieces and world-class communities"
               cta="View All Projects"
-              className="h-full min-h-[360px] lg:min-h-[400px]"
+              className="flex-1 min-h-[380px] lg:min-h-[420px]"
             />
           </div>
 

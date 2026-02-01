@@ -650,6 +650,7 @@ export default function ProjectDetailLayout({
             <PremiumBrochureCard
               projectName={project.name}
               brochureUrl={brochurePrimary?.url}
+              projectImageUrl={project.images?.[0]?.url || undefined}
               onDownloadClick={() => handleDocumentDownload("brochure", brochurePrimary?.url)}
               isLocked={!isLeadCaptured && !!brochurePrimary}
             />

@@ -75,7 +75,8 @@ export function MegaMenuFeaturedCard({
       onClick={onClick}
       className={cn(
         // Compact card with 3D effect - proper rounded corners with gold border
-        "block group relative overflow-hidden rounded-xl aspect-[16/10] min-h-[220px] lg:min-h-[320px] transition-all duration-500 mb-5 lg:mb-0",
+        // Removed aspect-ratio to allow flexible height stretching
+        "block group relative overflow-hidden rounded-xl min-h-[260px] lg:min-h-[340px] transition-all duration-500",
         // 3D depth and hover zoom effect
         "shadow-lg hover:shadow-2xl hover:scale-[1.02] transform-gpu",
         className
@@ -157,7 +158,7 @@ export function MegaMenuIconLink({
       to={to}
       onClick={onClick}
       className={cn(
-        "flex items-center gap-3 rounded-xl transition-all duration-300 group",
+        "flex items-center gap-3 rounded-xl transition-all duration-300 group relative",
         // Normal: transparent; Hover: champagne gradient background
         "bg-transparent hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8]",
         compact ? "py-2 px-2.5" : "py-3 px-3"
@@ -181,7 +182,7 @@ export function MegaMenuIconLink({
           compact ? "w-4 h-4" : "w-5 h-5"
         )} />
       </div>
-      <div className="min-w-0">
+      <div className="min-w-0 flex-1">
         {/* Title: normal = black; hover = gold */}
         <span className={cn(
           "block font-semibold transition-colors duration-300",
@@ -196,6 +197,8 @@ export function MegaMenuIconLink({
           </span>
         ) : null}
       </div>
+      {/* Thin gold divider under each page link */}
+      <div className="absolute bottom-0 left-3 right-3 h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
     </Link>
   );
 }

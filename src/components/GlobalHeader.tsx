@@ -1074,29 +1074,35 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   <DropdownMenuContent 
                     align="end" 
                     sideOffset={12}
-                    className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 min-w-[280px] shadow-2xl shadow-black/30 py-3 rounded-xl overflow-hidden"
+                    className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 min-w-[320px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.5),0_0_0_1px_rgba(200,167,102,0.3)] py-4 rounded-2xl overflow-hidden"
                   >
-                    <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+                    <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-gold to-transparent" />
 
                     {user ? (
-                      <div className="px-5 py-3 border-b border-gold/20 bg-gradient-to-r from-gold/5 to-transparent">
-                        <div className="flex items-center gap-3">
-                          <Avatar className="h-9 w-9 border border-gold/30">
+                      <div className="px-5 py-4 border-b border-gold/30 bg-gradient-to-r from-gold/10 to-transparent">
+                        <div className="flex items-center gap-4">
+                          <Avatar className="h-14 w-14 border-2 border-gold/50 shadow-lg">
                             <AvatarImage src={accountPhotoUrl ?? ""} alt={`${accountDisplayName} profile photo`} />
-                            <AvatarFallback className="bg-black text-gold text-xs font-bold">
-                              {String(accountDisplayName).charAt(0).toUpperCase()}
+                            <AvatarFallback className="bg-black text-gold text-lg font-bold">
+                              {String(accountDisplayName).split(' ').map(n => n.charAt(0).toUpperCase()).slice(0, 2).join('')}
                             </AvatarFallback>
                           </Avatar>
-                          <div className="min-w-0">
-                            <p className="text-black font-semibold text-sm truncate">{accountDisplayName}</p>
-                            <p className="text-black/70 text-xs truncate">{user.email}</p>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-black font-bold text-base truncate">{accountDisplayName}</p>
+                            <p className="text-black/60 text-sm truncate">{user.email}</p>
+                            <Link 
+                              to="/profile" 
+                              className="text-gold text-xs font-medium hover:underline mt-1 inline-block"
+                            >
+                              Edit Profile & Photo
+                            </Link>
                           </div>
                         </div>
                       </div>
                     ) : (
-                      <div className="px-5 py-3 border-b border-gold/20 bg-gradient-to-r from-gold/5 to-transparent">
-                        <p className="text-gold font-semibold text-sm tracking-wide">{t('nav.myAccount')}</p>
-                        <p className="text-black text-xs mt-1">{t('nav.signIn')}</p>
+                      <div className="px-5 py-4 border-b border-gold/30 bg-gradient-to-r from-gold/10 to-transparent">
+                        <p className="text-gold font-bold text-base tracking-wide">{t('nav.myAccount')}</p>
+                        <p className="text-black/70 text-sm mt-1">{t('nav.signIn')}</p>
                       </div>
                     )}
 
