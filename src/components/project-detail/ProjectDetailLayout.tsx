@@ -262,12 +262,6 @@ export default function ProjectDetailLayout({
                 <span className="text-sm md:text-base">{project.handover_date}</span>
               </div>
             )}
-            {project.payment_plan && (
-              <div className="flex items-center gap-2 text-white/90">
-                <CreditCard className="w-5 h-5 text-gold" />
-                <span className="text-sm md:text-base">{project.payment_plan}</span>
-              </div>
-            )}
           </div>
 
           {/* Hero CTAs - Download Brochure + Register Interest */}
@@ -366,12 +360,12 @@ export default function ProjectDetailLayout({
               <p className="mt-2 text-xl font-bold text-foreground">{project.handover_date || "TBA"}</p>
             </div>
             <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
-              <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Payment Plan</p>
-              <p className="mt-2 text-xl font-bold text-foreground">{project.payment_plan || "Available"}</p>
-            </div>
-            <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Bedrooms</p>
               <p className="mt-2 text-xl font-bold text-foreground">{bedroomsText || "Varies"}</p>
+            </div>
+            <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
+              <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Size</p>
+              <p className="mt-2 text-xl font-bold text-foreground">{sizeText || "Varies"}</p>
             </div>
           </div>
 
@@ -524,56 +518,53 @@ export default function ProjectDetailLayout({
             </div>
           </div>
 
-          {/* BROCHURE + PAYMENT PLAN */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-            {/* Premium Brochure Card */}
-            <div ref={brochureRef} id="brochure" className="jj-card-inner flex flex-col items-center justify-center py-10 scroll-mt-40">
-              <h3 className="text-h3-sm font-medium text-foreground mb-8 text-center">Project Brochure</h3>
-              <PremiumBrochureCard
-                projectName={project.name}
-                brochureUrl={brochurePrimary?.url}
-                onDownloadClick={() => handleDocumentDownload("brochure", brochurePrimary?.url)}
-                isLocked={!isLeadCaptured && !!brochurePrimary}
-              />
-            </div>
+          {/* BROCHURE (full width) */}
+          <div ref={brochureRef} id="brochure" className="jj-card-inner flex flex-col items-center justify-center py-10 mb-8 scroll-mt-40">
+            <h3 className="text-h3-sm font-medium text-foreground mb-8 text-center">Project Brochure</h3>
+            <PremiumBrochureCard
+              projectName={project.name}
+              brochureUrl={brochurePrimary?.url}
+              onDownloadClick={() => handleDocumentDownload("brochure", brochurePrimary?.url)}
+              isLocked={!isLeadCaptured && !!brochurePrimary}
+            />
+          </div>
 
-            {/* Payment Plan - Display extracted plan details */}
-            <div ref={paymentRef} id="payment" className="jj-card-inner scroll-mt-40">
-              <h3 className="text-h3-sm font-medium text-foreground mb-6 flex items-center gap-2">
-                <FileText className="w-5 h-5 text-gold" />
-                Payment Plan
-              </h3>
-              
-              {/* Payment Plan Summary */}
-              {project.payment_plan && (
-                <div className="mb-6 p-4 rounded-xl bg-gradient-to-br from-gold/10 to-gold/5 border border-gold/30">
-                  <p className="text-lg font-semibold text-foreground text-center">{project.payment_plan}</p>
-                </div>
-              )}
+          {/* PAYMENT PLAN (full width, separate section) */}
+          <div ref={paymentRef} id="payment" className="jj-card-inner scroll-mt-40 mb-16">
+            <h3 className="text-h3-sm font-medium text-foreground mb-6 flex items-center gap-2">
+              <FileText className="w-5 h-5 text-gold" />
+              Payment Plan
+            </h3>
 
-              {/* Payment Plan Documents */}
-              {paymentPlanDocs.length > 0 ? (
-                <div className="space-y-3">
-                  {paymentPlanDocs.map((doc) => (
-                    <button
-                      key={doc.id}
-                      onClick={() => handleDocumentDownload("payment_plan", doc.url)}
-                      className="flex items-center justify-between gap-3 rounded-xl border border-gold/30 bg-card p-4 hover:border-gold/60 transition-colors w-full text-left"
-                    >
-                      <div className="min-w-0">
-                        <p className="text-sm font-semibold text-foreground truncate">{doc.name || "Payment Plan"}</p>
-                        <p className="text-xs text-muted-foreground truncate">Click to download</p>
-                      </div>
-                      <Download className="w-5 h-5 text-gold flex-shrink-0" />
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-body text-muted-foreground">
-                  Detailed payment plan documents available upon request.
-                </p>
-              )}
-            </div>
+            {/* Payment Plan Summary */}
+            {project.payment_plan && (
+              <div className="mb-6 p-4 rounded-xl bg-gradient-to-br from-gold/10 to-gold/5 border border-gold/30">
+                <p className="text-lg font-semibold text-foreground text-center">{project.payment_plan}</p>
+              </div>
+            )}
+
+            {/* Payment Plan Documents */}
+            {paymentPlanDocs.length > 0 ? (
+              <div className="space-y-3">
+                {paymentPlanDocs.map((doc) => (
+                  <button
+                    key={doc.id}
+                    onClick={() => handleDocumentDownload("payment_plan", doc.url)}
+                    className="flex items-center justify-between gap-3 rounded-xl border border-gold/30 bg-card p-4 hover:border-gold/60 transition-colors w-full text-left"
+                  >
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-foreground truncate">{doc.name || "Payment Plan"}</p>
+                      <p className="text-xs text-muted-foreground truncate">Click to download</p>
+                    </div>
+                    <Download className="w-5 h-5 text-gold flex-shrink-0" />
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <p className="text-body text-muted-foreground">
+                Detailed payment plan documents available upon request.
+              </p>
+            )}
           </div>
 
           {/* MORTGAGE CALCULATOR - Full Width with more spacing */}
