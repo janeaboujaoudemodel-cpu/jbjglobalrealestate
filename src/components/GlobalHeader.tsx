@@ -61,8 +61,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const { t } = useLanguage();
   const isTouchLayout = useIsTouchLayout();
   
-  // Mega menu hover states
+  // Mega menu hover + click states
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
+  const [pinnedMenu, setPinnedMenu] = useState<string | null>(null);
   const megaMenuTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMegaMenuEnter = (menu: string) => {
@@ -70,18 +71,57 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       clearTimeout(megaMenuTimeoutRef.current);
       megaMenuTimeoutRef.current = null;
     }
-    setActiveMegaMenu(menu);
+    // If pinned, keep pinned; otherwise show hovered
+    if (!pinnedMenu) {
+      setActiveMegaMenu(menu);
+    }
   };
 
   const handleMegaMenuLeave = () => {
+    // If a menu is pinned, keep it open; otherwise close after delay
+    if (pinnedMenu) return;
     megaMenuTimeoutRef.current = setTimeout(() => {
       setActiveMegaMenu(null);
     }, 150);
   };
 
+  const handleMegaMenuClick = (menu: string) => {
+    if (pinnedMenu === menu) {
+      // Un-pin
+      setPinnedMenu(null);
+      setActiveMegaMenu(null);
+    } else {
+      // Pin this menu
+      setPinnedMenu(menu);
+      setActiveMegaMenu(menu);
+    }
+  };
+
   const closeMegaMenu = () => {
+    setPinnedMenu(null);
     setActiveMegaMenu(null);
   };
+
+  // Close pinned menu on click outside or ESC
+  useEffect(() => {
+    if (!pinnedMenu) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      // If click is not within the nav or mega-menu, close
+      if (!target.closest('nav[aria-label="Primary"]')) {
+        closeMegaMenu();
+      }
+    };
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeMegaMenu();
+    };
+    document.addEventListener("click", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [pinnedMenu]);
 
   // Locked rule:
   // - Desktop header (pill nav) must show on desktop-width screens.
@@ -804,6 +844,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 {/* Buy */}
                 <button
                   onMouseEnter={() => handleMegaMenuEnter('buy')}
+                  onClick={() => handleMegaMenuClick('buy')}
                   className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
                     isFullyTransparent
                       ? activeMegaMenu === 'buy' ? 'text-gold' : 'text-white hover:text-gold'
@@ -818,6 +859,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 {/* Rent */}
                 <button
                   onMouseEnter={() => handleMegaMenuEnter('rent')}
+                  onClick={() => handleMegaMenuClick('rent')}
                   className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
                     isFullyTransparent
                       ? activeMegaMenu === 'rent' ? 'text-gold' : 'text-white hover:text-gold'
@@ -832,6 +874,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 {/* Projects */}
                 <button
                   onMouseEnter={() => handleMegaMenuEnter('projects')}
+                  onClick={() => handleMegaMenuClick('projects')}
                   className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
                     isFullyTransparent
                       ? activeMegaMenu === 'projects' ? 'text-gold' : 'text-white hover:text-gold'
@@ -846,6 +889,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 {/* Developers */}
                 <button
                   onMouseEnter={() => handleMegaMenuEnter('developers')}
+                  onClick={() => handleMegaMenuClick('developers')}
                   className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
                     isFullyTransparent
                       ? activeMegaMenu === 'developers' ? 'text-gold' : 'text-white hover:text-gold'
@@ -860,6 +904,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 {/* Areas */}
                 <button
                   onMouseEnter={() => handleMegaMenuEnter('areas')}
+                  onClick={() => handleMegaMenuClick('areas')}
                   className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
                     isFullyTransparent
                       ? activeMegaMenu === 'areas' ? 'text-gold' : 'text-white hover:text-gold'
@@ -874,6 +919,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 {/* Services */}
                 <button
                   onMouseEnter={() => handleMegaMenuEnter('services')}
+                  onClick={() => handleMegaMenuClick('services')}
                   className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
                     isFullyTransparent
                       ? activeMegaMenu === 'services' ? 'text-gold' : 'text-white hover:text-gold'
@@ -888,6 +934,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 {/* Investor Hub */}
                 <button
                   onMouseEnter={() => handleMegaMenuEnter('investor')}
+                  onClick={() => handleMegaMenuClick('investor')}
                   className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
                     isFullyTransparent
                       ? activeMegaMenu === 'investor' ? 'text-gold' : 'text-white hover:text-gold'
@@ -902,6 +949,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 {/* Broker Hub */}
                 <button
                   onMouseEnter={() => handleMegaMenuEnter('broker')}
+                  onClick={() => handleMegaMenuClick('broker')}
                   className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
                     isFullyTransparent
                       ? activeMegaMenu === 'broker' ? 'text-gold' : 'text-white hover:text-gold'
@@ -916,6 +964,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 {/* More */}
                 <button
                   onMouseEnter={() => handleMegaMenuEnter('more')}
+                  onClick={() => handleMegaMenuClick('more')}
                   className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
                     isFullyTransparent
                       ? activeMegaMenu === 'more' ? 'text-gold' : 'text-white hover:text-gold'

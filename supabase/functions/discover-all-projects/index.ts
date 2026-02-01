@@ -86,6 +86,30 @@ const mapWithConcurrency = async <T, R>(
   return results;
 };
 
+/**
+ * Fetch HTML via Firecrawl scrape (rendered JS) – most reliable for SPAs.
+ * Falls back to raw fetch if Firecrawl fails.
+ */
+const fetchHtmlViaFirecrawl = async (
+  url: string,
+  firecrawlKey: string,
+  timeoutMs = 30000,
+): Promise<{ ok: boolean; html: string }> => {
+  try {
+    const res = await fetch("https://api.firecrawl.dev/v1/scrape", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${firecrawlKey}` },
+      body: JSON.stringify({ url, formats: ["rawHtml"], waitFor: 6000, timeout: timeoutMs }),
+    });
+    if (!res.ok) return { ok: false, html: "" };
+    const data = await res.json().catch(() => ({}));
+    const html = data?.data?.rawHtml || data?.rawHtml || "";
+    return { ok: html.length > 1000, html };
+  } catch {
+    return { ok: false, html: "" };
+  }
+};
+
 const fetchHtml = async (url: string, timeoutMs = 25000): Promise<{ ok: boolean; html: string }> => {
   const controller = new AbortController();
   const t = setTimeout(() => controller.abort(), timeoutMs);
@@ -94,10 +118,9 @@ const fetchHtml = async (url: string, timeoutMs = 25000): Promise<{ ok: boolean;
       method: "GET",
       redirect: "follow",
       headers: {
-        // Best-effort UA to reduce bot-blocking (still may fail)
         "user-agent":
           "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-        "accept": "text/html,application/xhtml+xml",
+        accept: "text/html,application/xhtml+xml",
       },
       signal: controller.signal,
     });
@@ -114,7 +137,7 @@ const fetchHtml = async (url: string, timeoutMs = 25000): Promise<{ ok: boolean;
 const firecrawlScrapeLinks = async (url: string, firecrawlKey: string): Promise<string[]> => {
   const res = await fetch("https://api.firecrawl.dev/v1/scrape", {
     method: "POST",
-    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${firecrawlKey}` },
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${firecrawlKey}` },
     body: JSON.stringify({
       url,
       formats: ["links"],
@@ -144,14 +167,24 @@ const collectProjectUrlsFromListingPages = async (opts: {
       : `https://providentestate.com/new-projects/page/${page}/`;
   });
 
+  // Provident site is JS-rendered, so plain fetch() returns empty listings.
+  // Use Firecrawl scrape(links) for each listing page directly (most reliable).
   const htmlResults = await mapWithConcurrency(listingPages, concurrency, async (pageUrl) => {
+    // Primary: Firecrawl scrape(links) — fast, reliable for JS pages
+    const links = await firecrawlScrapeLinks(pageUrl, opts.firecrawlKey);
+    const projectLinks = links.map(normalizeUrl).filter(isProjectDetailUrl);
+    if (projectLinks.length > 0) {
+      return { pageUrl, ok: true, links: projectLinks };
+    }
+
+    // Fallback: raw fetch (unlikely to work on SPA, but cheap to try)
     const r = await fetchHtml(pageUrl);
     if (!r.ok) return { pageUrl, ok: false, links: [] as string[] };
 
     const hrefs = extractLinksFromHtml(r.html);
     const abs = hrefs.map(toAbsoluteProvidentUrl).map(normalizeUrl).filter(Boolean);
-    const projectLinks = abs.filter(isProjectDetailUrl);
-    return { pageUrl, ok: projectLinks.length > 0, links: projectLinks };
+    const fallbackLinks = abs.filter(isProjectDetailUrl);
+    return { pageUrl, ok: fallbackLinks.length > 0, links: fallbackLinks };
   });
 
   const urlsFromHtml = htmlResults.flatMap((r) => r.links);
@@ -300,7 +333,13 @@ serve(async (req) => {
         });
         rangeUrls = scraped.flatMap((x) => x);
       } else {
-        const htmlBatch = await mapWithConcurrency(pageUrls, 8, async (pageUrl) => {
+        // Use Firecrawl scrape(links) first; fallback to raw HTML for each page
+        const htmlBatch = await mapWithConcurrency(pageUrls, 6, async (pageUrl) => {
+          const links = await firecrawlScrapeLinks(pageUrl, firecrawlKey);
+          const projectLinks = links.map(normalizeUrl).filter(isProjectDetailUrl);
+          if (projectLinks.length > 0) return projectLinks;
+
+          // Fallback raw fetch
           const r = await fetchHtml(pageUrl);
           if (!r.ok) return [] as string[];
           const hrefs = extractLinksFromHtml(r.html);
