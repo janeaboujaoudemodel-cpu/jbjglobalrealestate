@@ -199,6 +199,14 @@ function extractTextFromMarkdown(markdown: string): {
   description: string | null;
   propertyType: string | null;
   statusLabel: string | null;
+  uspHeadline: string | null;
+  uspBullets: string[];
+  locationHeadline: string | null;
+  locationDescription: string | null;
+  locationDistances: Array<{ place: string; distance: string }>;
+  paymentBreakdown: Array<{ milestone: string; percentage: string }>;
+  amenitiesList: string[];
+  faqs: Array<{ question: string; answer: string }>;
 } {
   const cleanMd = stripMarkdownLinks(markdown);
 
@@ -244,7 +252,7 @@ function extractTextFromMarkdown(markdown: string): {
   const handoverMatch = cleanMd.match(/(?:Handover|Completion)[:\s]*(Q[1-4]?\s*\d{4}|\d{4}|Ready)/i);
   const handover = handoverMatch?.[1]?.trim() || null;
 
-  // Payment plan
+  // Payment plan (simple format like 60/40)
   const ppMatch = cleanMd.match(/(\d{2}\/\d{2})/);
   const paymentPlan = ppMatch?.[1] || null;
 
@@ -259,7 +267,116 @@ function extractTextFromMarkdown(markdown: string): {
   const statusMatch = cleanMd.match(/(Future Launch|New Phase|New Launch|Coming Soon|Sold Out)/i);
   const statusLabel = statusMatch?.[1] || null;
 
-  return { name, developerName, location, bedrooms, priceText, priceFrom, handover, paymentPlan, description, propertyType, statusLabel };
+  // === EXTRACT USP (Unique Selling Points) ===
+  let uspHeadline: string | null = null;
+  const uspBullets: string[] = [];
+  
+  // Look for "Unique Selling Points" or "Why invest" section
+  const uspSectionMatch = markdown.match(/(?:Unique Selling Points|Why invest|Key Features|Highlights|USP)[:\s]*\n+((?:[•\-\*].*\n?)+)/i);
+  if (uspSectionMatch?.[1]) {
+    const bulletLines = uspSectionMatch[1].split('\n').filter(l => l.trim().match(/^[•\-\*]/));
+    for (const line of bulletLines) {
+      const cleaned = sanitizeText(line.replace(/^[•\-\*]\s*/, '').trim());
+      if (cleaned && cleaned.length > 5) uspBullets.push(cleaned);
+    }
+  }
+  
+  // Extract headline if available
+  const uspHeadlineMatch = cleanMd.match(/(?:Unique Selling Points|Why invest)[:\s]*([^\n]+)/i);
+  if (uspHeadlineMatch?.[1] && uspHeadlineMatch[1].length > 10) {
+    uspHeadline = sanitizeText(uspHeadlineMatch[1].trim());
+  }
+
+  // === EXTRACT LOCATION DETAILS ===
+  let locationHeadline: string | null = null;
+  let locationDescription: string | null = null;
+  const locationDistances: Array<{ place: string; distance: string }> = [];
+  
+  // Look for "Location" section
+  const locSectionMatch = markdown.match(/(?:## Location|### Location|Location Details)[:\s]*\n+([\s\S]*?)(?=##|$)/i);
+  if (locSectionMatch?.[1]) {
+    const locContent = locSectionMatch[1];
+    
+    // Extract location description (first paragraph)
+    const descMatch = locContent.match(/^([^\n•\-\*]+(?:\n[^\n•\-\*]+)*)/);
+    if (descMatch?.[1]) {
+      locationDescription = sanitizeText(stripMarkdownLinks(descMatch[1]).replace(/\n+/g, ' ').trim());
+    }
+    
+    // Extract distances (e.g., "5 mins to Dubai Mall", "10 km from airport")
+    const distanceRx = /(?:•|\-|\*|[\d]+\s*(?:min|km|m|minutes?|kilometers?))[^\n]*(?:to|from|away)[^\n]*/gi;
+    const distMatches = locContent.match(distanceRx) || [];
+    for (const dm of distMatches) {
+      const cleaned = stripMarkdownLinks(dm).replace(/^[•\-\*]\s*/, '').trim();
+      const parts = cleaned.match(/(\d+\s*(?:min|km|m|minutes?|kilometers?)s?)\s*(?:to|from|away)\s*(.+)/i);
+      if (parts) {
+        locationDistances.push({ place: sanitizeText(parts[2]) || parts[2], distance: parts[1] });
+      }
+    }
+  }
+  
+  // Fallback location headline
+  locationHeadline = location ? `Located in ${location}` : null;
+
+  // === EXTRACT PAYMENT BREAKDOWN ===
+  const paymentBreakdown: Array<{ milestone: string; percentage: string }> = [];
+  
+  // Look for "Payment Plan" section with percentages
+  const ppSectionMatch = markdown.match(/(?:Payment Plan|Payment Structure|Payment Schedule)[:\s]*\n+([\s\S]*?)(?=##|$)/i);
+  if (ppSectionMatch?.[1]) {
+    const ppContent = ppSectionMatch[1];
+    
+    // Match patterns like "20% on booking", "40% during construction", "40% on handover"
+    const ppRx = /(\d+%?)\s*(?:on|during|at|upon)\s+([^\n,]+)/gi;
+    let ppMatch: RegExpExecArray | null;
+    while ((ppMatch = ppRx.exec(ppContent)) !== null) {
+      const percentage = ppMatch[1].includes('%') ? ppMatch[1] : `${ppMatch[1]}%`;
+      const milestone = sanitizeText(ppMatch[2].trim()) || ppMatch[2].trim();
+      if (milestone && milestone.length > 2) {
+        paymentBreakdown.push({ milestone, percentage });
+      }
+    }
+  }
+
+  // === EXTRACT AMENITIES ===
+  const amenitiesList: string[] = [];
+  
+  // Look for "Amenities" section
+  const amenSectionMatch = markdown.match(/(?:Amenities|Facilities|Features)[:\s]*\n+((?:[•\-\*].*\n?)+)/i);
+  if (amenSectionMatch?.[1]) {
+    const amenLines = amenSectionMatch[1].split('\n').filter(l => l.trim().match(/^[•\-\*]/));
+    for (const line of amenLines) {
+      const cleaned = sanitizeText(line.replace(/^[•\-\*]\s*/, '').trim());
+      if (cleaned && cleaned.length > 2) amenitiesList.push(cleaned);
+    }
+  }
+
+  // === EXTRACT FAQs ===
+  const faqs: Array<{ question: string; answer: string }> = [];
+  
+  // Look for FAQ section
+  const faqSectionMatch = markdown.match(/(?:FAQ|Frequently Asked Questions|Q&A)[:\s]*\n+([\s\S]*?)(?=##|$)/i);
+  if (faqSectionMatch?.[1]) {
+    const faqContent = faqSectionMatch[1];
+    
+    // Match Q/A patterns
+    const qaRx = /(?:Q:|Question:|\*\*Q\*\*:?)\s*([^\n?]+\??)\s*\n+(?:A:|Answer:|\*\*A\*\*:?)\s*([^\n]+)/gi;
+    let qaMatch: RegExpExecArray | null;
+    while ((qaMatch = qaRx.exec(faqContent)) !== null) {
+      const question = sanitizeText(qaMatch[1].trim());
+      const answer = sanitizeText(qaMatch[2].trim());
+      if (question && answer) {
+        faqs.push({ question, answer });
+      }
+    }
+  }
+
+  return { 
+    name, developerName, location, bedrooms, priceText, priceFrom, handover, paymentPlan, 
+    description, propertyType, statusLabel,
+    uspHeadline, uspBullets, locationHeadline, locationDescription, locationDistances,
+    paymentBreakdown, amenitiesList, faqs
+  };
 }
 
 function parseBedrooms(bedroomStr: string | null): { min: number | null; max: number | null } | null {
@@ -518,8 +635,8 @@ serve(async (req) => {
           continue;
         }
 
-        // Build insert/update payload
-        const payload: Omit<PendingImport, "is_new_project" | "status" | "review_notes"> & { job_id?: string | null } = {
+        // Build insert/update payload with full extraction data
+        const payload: Record<string, any> = {
           name: projectName,
           slug,
           developer_name: sanitizeText(extracted.developerName) || null,
@@ -537,6 +654,19 @@ serve(async (req) => {
           images: imagesPayload,
           documents: documentsPayload,
           source_url: projectUrl,
+          // USP fields
+          usp_headline: extracted.uspHeadline || null,
+          usp_bullets: extracted.uspBullets.length > 0 ? extracted.uspBullets : null,
+          // Location fields
+          location_headline: extracted.locationHeadline || null,
+          location_description: extracted.locationDescription || null,
+          location_distances: extracted.locationDistances.length > 0 ? extracted.locationDistances : null,
+          // Payment breakdown
+          payment_breakdown: extracted.paymentBreakdown.length > 0 ? extracted.paymentBreakdown : null,
+          // Amenities list
+          amenities_list: extracted.amenitiesList.length > 0 ? extracted.amenitiesList : null,
+          // FAQs
+          faqs: extracted.faqs.length > 0 ? extracted.faqs : null,
         };
         if (normalizedJobId) payload.job_id = normalizedJobId;
 

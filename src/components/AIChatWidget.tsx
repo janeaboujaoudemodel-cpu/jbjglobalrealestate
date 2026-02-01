@@ -26,6 +26,9 @@ import ChatRating from './chat/ChatRating';
 import ChatSubmitted from './chat/ChatSubmitted';
 import CollapsedChatButton from './chat/CollapsedChatButton';
 import ChatAgentJoining from './chat/ChatAgentJoining';
+import ChatShortcuts, { ShortcutType } from './chat/ChatShortcuts';
+import ChatCVSubmission from './chat/ChatCVSubmission';
+import ChatFeedback, { FeedbackType } from './chat/ChatFeedback';
 
 interface AIChatWidgetProps {
   isCollapsed: boolean;
@@ -52,6 +55,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [chatHistory, setChatHistory] = useState<ChatHistoryItem[]>([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
+  const [selectedShortcut, setSelectedShortcut] = useState<ShortcutType | null>(null);
 
   // Check email in database
   const checkEmailInDatabase = async (email: string): Promise<{ exists: boolean; data?: any }> => {
@@ -131,7 +135,8 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
     if (isExisting) {
       setIsExistingUser(true);
       toast.success('Welcome back! We found your profile.');
-      setStep('chat_history');
+      // Show shortcuts for returning users instead of chat history
+      setStep('shortcuts');
     } else {
       setUserInfo(prev => ({ ...prev, email }));
       setIsExistingUser(false);
@@ -449,12 +454,67 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
     resetChat();
   };
 
+  // Handle feedback submission (new simplified feedback)
+  const handleSubmitFeedback = async (feedback: { type: FeedbackType; rating: number; comment: string }) => {
+    if (conversationId) {
+      try {
+        await supabase
+          .from('chat_conversations')
+          .update({ 
+            feedback_type: feedback.type,
+            rating: feedback.rating,
+            rating_feedback: feedback.comment || null,
+            status: 'completed'
+          })
+          .eq('id', conversationId);
+        
+        toast.success('Thank you for your feedback!');
+      } catch (error) {
+        console.error('Error saving feedback:', error);
+      }
+    }
+  };
+
+  // Handle shortcut selection
+  const handleSelectShortcut = (shortcut: ShortcutType) => {
+    setSelectedShortcut(shortcut);
+    
+    if (shortcut === 'submit_cv') {
+      setStep('cv_submission');
+    } else {
+      // Map shortcut to service type and proceed to agent
+      const serviceMap: Record<ShortcutType, string> = {
+        'submit_cv': 'careers',
+        'buy_property': 'real_estate',
+        'rent_property': 'holiday_homes',
+        'property_management': 'partner_intro',
+        'design_services': 'design_build',
+        'legal_partners': 'partner_intro',
+        'general_inquiry': 'general',
+      };
+      
+      setSelectedService(serviceMap[shortcut] || 'general');
+      handleSelectService(serviceMap[shortcut] || 'general');
+    }
+  };
+
+  // Handle CV submission success
+  const handleCVSubmitSuccess = () => {
+    setStep('feedback');
+  };
+
+  // Handle user info field update
+  const handleUserInfoFieldUpdate = (field: string, value: string) => {
+    setUserInfo(prev => ({ ...prev, [field]: value }));
+  };
+
   // Reset chat
   const resetChat = () => {
-    setStep('collect_info');
+    setStep('welcome_choice');
     setIsExistingUser(false);
     setUserInfo(initialUserInfo);
     setSelectedService(null);
+    setSelectedShortcut(null);
     setMessages([]);
     setConversationId(null);
     setFormErrors({});
@@ -467,6 +527,12 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
       case 'check_email':
         setStep('welcome_choice');
         break;
+      case 'shortcuts':
+        setStep('check_email');
+        break;
+      case 'cv_submission':
+        setStep('shortcuts');
+        break;
       case 'collect_info':
         setStep('check_email');
         break;
@@ -477,7 +543,10 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
         setStep(isExistingUser ? 'chat_history' : 'collect_info');
         break;
       case 'chatting':
-        setStep('rating');
+        setStep('feedback');
+        break;
+      case 'feedback':
+        resetChat();
         break;
     }
   };
@@ -524,11 +593,33 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
           />
         )}
 
+        {step === 'shortcuts' && (
+          <ChatShortcuts
+            userFirstName={userInfo.firstName}
+            onSelectShortcut={handleSelectShortcut}
+          />
+        )}
+
+        {step === 'cv_submission' && (
+          <ChatCVSubmission
+            userInfo={{
+              firstName: userInfo.firstName,
+              lastName: userInfo.lastName,
+              email: userInfo.email,
+              phone: userInfo.phone,
+            }}
+            onUserInfoChange={handleUserInfoFieldUpdate}
+            conversationId={conversationId}
+            onSubmitSuccess={handleCVSubmitSuccess}
+            onBack={() => setStep('shortcuts')}
+          />
+        )}
+
         {step === 'collect_info' && (
           <ChatLeadForm
             userInfo={userInfo}
             onUserInfoChange={setUserInfo}
-            onSubmit={() => setStep('select_service')}
+            onSubmit={() => setStep('shortcuts')}
             formErrors={formErrors}
             setFormErrors={setFormErrors}
           />
@@ -567,6 +658,13 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
         {step === 'rating' && (
           <ChatRating 
             onSubmitRating={handleSubmitRating}
+            onSkip={resetChat}
+          />
+        )}
+
+        {step === 'feedback' && (
+          <ChatFeedback
+            onSubmitFeedback={handleSubmitFeedback}
             onSkip={resetChat}
           />
         )}
