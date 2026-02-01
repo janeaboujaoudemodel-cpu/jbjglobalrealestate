@@ -1000,7 +1000,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                         <>
                           {/* Profile */}
                           <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
-                            <Link to="/broker-account" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
+                            <Link to="/profile" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
                               <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
                                 <User className="w-3.5 h-3.5 text-gold" />
                               </div>
