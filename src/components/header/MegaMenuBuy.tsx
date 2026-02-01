@@ -33,7 +33,7 @@ const MegaMenuBuy: React.FC<MegaMenuBuyProps> = ({ onClose }) => {
       <div className="max-w-7xl mx-auto px-8 py-8">
         <div className="grid grid-cols-12 gap-6">
           {/* Featured Card - Properties for Sale - SQUARE */}
-          <div className="col-span-3">
+          <div className="col-span-4">
             <Link 
               to="/properties?transaction=buy" 
               onClick={onClose}
@@ -58,37 +58,8 @@ const MegaMenuBuy: React.FC<MegaMenuBuyProps> = ({ onClose }) => {
             </Link>
           </div>
 
-          {/* Signature Collection Card - SQUARE */}
-          <div className="col-span-3">
-            <Link 
-              to="/signature-collection" 
-              onClick={onClose}
-              className="block group relative overflow-hidden rounded-2xl aspect-square transform transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(200,167,102,0.3)]"
-              style={{ perspective: '1000px' }}
-            >
-              <div 
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                style={{ backgroundImage: `url(${menuLuxuryVilla})` }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90" />
-              <div className="absolute inset-0 border-2 border-gold/20 rounded-2xl group-hover:border-gold/50 transition-colors" />
-              <div className="absolute top-4 right-4">
-                <span className="bg-gradient-to-r from-gold to-gold-light text-black text-[10px] font-bold px-3 py-1.5 rounded-full tracking-wider">EXCLUSIVE</span>
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 p-5">
-                <p className="text-gold text-xs font-bold tracking-[0.2em] uppercase mb-2">SIGNATURE</p>
-                <h3 className="text-white text-lg font-bold mb-2">Ultra-Premium</h3>
-                <p className="text-white/70 text-sm mb-4 line-clamp-2">Handpicked luxury estates by JBJ</p>
-                <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm group-hover:gap-3 transition-all">
-                  Explore Signature
-                  <ArrowRight className="w-4 h-4" />
-                </span>
-              </div>
-            </Link>
-          </div>
-
           {/* Properties by Type */}
-          <div className="col-span-3">
+          <div className="col-span-4">
             <h4 className="text-gold font-bold text-xs tracking-[0.2em] uppercase mb-5 flex items-center gap-2">
               <Building2 className="w-4 h-4" />
               Properties by Type
@@ -111,7 +82,7 @@ const MegaMenuBuy: React.FC<MegaMenuBuyProps> = ({ onClose }) => {
           </div>
 
           {/* Buyer Resources */}
-          <div className="col-span-3">
+          <div className="col-span-4">
             <h4 className="text-gold font-bold text-xs tracking-[0.2em] uppercase mb-5 flex items-center gap-2">
               <FileText className="w-4 h-4" />
               Buyer Resources
