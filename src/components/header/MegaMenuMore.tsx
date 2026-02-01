@@ -50,7 +50,7 @@ const MegaMenuMore: React.FC<MegaMenuMoreProps> = ({ onClose }) => {
       <div className="max-w-7xl mx-auto px-8 py-8">
         <div className="grid grid-cols-12 gap-6">
           {/* About Card - SQUARE */}
-          <div className="col-span-3">
+          <div className="col-span-4">
             <Link 
               to="/about" 
               onClick={onClose}
@@ -75,13 +75,13 @@ const MegaMenuMore: React.FC<MegaMenuMoreProps> = ({ onClose }) => {
             </Link>
           </div>
 
-          {/* About Links */}
-          <div className="col-span-3">
-            <h4 className="text-gold font-bold text-xs tracking-[0.2em] uppercase mb-5 flex items-center gap-2">
+          {/* About & Guides Combined */}
+          <div className="col-span-4">
+            <h4 className="text-gold font-bold text-xs tracking-[0.2em] uppercase mb-4 flex items-center gap-2">
               <Building2 className="w-4 h-4" />
-              About JBJ Global Real Estate
+              About JBJ Global
             </h4>
-            <div className="space-y-1">
+            <div className="space-y-1 mb-5">
               {aboutLinks.map((item) => (
                 <Link
                   key={item.name}
@@ -96,56 +96,7 @@ const MegaMenuMore: React.FC<MegaMenuMoreProps> = ({ onClose }) => {
                 </Link>
               ))}
             </div>
-          </div>
-
-          {/* Guides Section */}
-          <div className="col-span-3">
-            <h4 className="text-gold font-bold text-xs tracking-[0.2em] uppercase mb-5 flex items-center gap-2">
-              <BookOpen className="w-4 h-4" />
-              Guides & Education
-            </h4>
-            <div className="space-y-1">
-              {guidesLinks.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  onClick={onClose}
-                  className="flex items-center gap-3 py-2 px-3 rounded-xl text-white/80 hover:text-gold hover:bg-gold/10 transition-all group"
-                >
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center group-hover:from-gold/30 group-hover:to-gold/10 transition-all shadow-lg">
-                    <item.icon className="w-4 h-4 text-gold" />
-                  </div>
-                  <span className="font-medium text-sm">{item.name}</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Hubs & Resources */}
-          <div className="col-span-3">
-            <h4 className="text-gold font-bold text-xs tracking-[0.2em] uppercase mb-5 flex items-center gap-2">
-              <TrendingUp className="w-4 h-4" />
-              Hubs & Intelligence
-            </h4>
-            <div className="space-y-2 mb-6">
-              {hubLinks.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  onClick={onClose}
-                  className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-white/80 hover:text-gold hover:bg-gold/10 transition-all group bg-gradient-to-br from-white/5 to-transparent border border-gold/20 hover:border-gold/40"
-                >
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-gold/30 to-gold/10 border border-gold/40 flex items-center justify-center group-hover:from-gold/40 group-hover:to-gold/20 transition-all shadow-lg">
-                    <item.icon className="w-5 h-5 text-gold" />
-                  </div>
-                  <div>
-                    <span className="font-semibold text-sm block">{item.name}</span>
-                    <span className="text-xs text-white/50">{item.description}</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-
+            
             <h4 className="text-gold font-bold text-xs tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
               <FileText className="w-4 h-4" />
               Resources
@@ -162,6 +113,52 @@ const MegaMenuMore: React.FC<MegaMenuMoreProps> = ({ onClose }) => {
                     <item.icon className="w-4 h-4 text-gold" />
                   </div>
                   <span className="font-medium text-sm">{item.name}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Guides & Hubs */}
+          <div className="col-span-4">
+            <h4 className="text-gold font-bold text-xs tracking-[0.2em] uppercase mb-4 flex items-center gap-2">
+              <BookOpen className="w-4 h-4" />
+              Guides & Education
+            </h4>
+            <div className="space-y-1 mb-5">
+              {guidesLinks.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  onClick={onClose}
+                  className="flex items-center gap-3 py-2 px-3 rounded-xl text-white/80 hover:text-gold hover:bg-gold/10 transition-all group"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center group-hover:from-gold/30 group-hover:to-gold/10 transition-all shadow-lg">
+                    <item.icon className="w-4 h-4 text-gold" />
+                  </div>
+                  <span className="font-medium text-sm">{item.name}</span>
+                </Link>
+              ))}
+            </div>
+
+            <h4 className="text-gold font-bold text-xs tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
+              <TrendingUp className="w-4 h-4" />
+              Hubs & Intelligence
+            </h4>
+            <div className="space-y-2">
+              {hubLinks.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  onClick={onClose}
+                  className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-white/80 hover:text-gold hover:bg-gold/10 transition-all group bg-gradient-to-br from-white/5 to-transparent border border-gold/20 hover:border-gold/40"
+                >
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-gold/30 to-gold/10 border border-gold/40 flex items-center justify-center group-hover:from-gold/40 group-hover:to-gold/20 transition-all shadow-lg">
+                    <item.icon className="w-5 h-5 text-gold" />
+                  </div>
+                  <div>
+                    <span className="font-semibold text-sm block">{item.name}</span>
+                    <span className="text-xs text-white/50">{item.description}</span>
+                  </div>
                 </Link>
               ))}
             </div>
