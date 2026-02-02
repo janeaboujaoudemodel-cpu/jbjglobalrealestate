@@ -29,14 +29,18 @@ import { cn } from "@/lib/utils";
 const LOCKED_CHAMPAGNE_BG =
   "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]";
 
+// ACTIVE (Layer 2) champagne gradient used across the platform.
+// NOTE: It's a gradient, so we must apply it via `background` (not background-color).
+const ACTIVE_CHAMPAGNE_BG = "[background:var(--jj-gradient-active)]";
+
 const BTN_3D =
   "shadow-[0_10px_30px_hsl(var(--primary)/0.25),0_6px_15px_hsl(0_0%_0%/0.22),inset_0_1px_0_hsl(0_0%_100%/0.55)]";
 const BTN_3D_HOVER =
   "hover:shadow-[0_14px_45px_hsl(var(--primary)/0.32),0_10px_25px_hsl(0_0%_0%/0.28),inset_0_1px_0_hsl(0_0%_100%/0.65)]";
 
-// PRIMARY: Active color filled (NO gold/yellow).
+// PRIMARY: Active (Layer 2) champagne gradient (NO gold/yellow).
 const BRAND_PRIMARY =
-  `bg-primary text-primary-foreground border-2 border-primary/90 ${BTN_3D} ${BTN_3D_HOVER} hover:-translate-y-0.5 active:translate-y-0`;
+  `${ACTIVE_CHAMPAGNE_BG} text-foreground border-2 border-foreground/70 ${BTN_3D} ${BTN_3D_HOVER} hover:-translate-y-0.5 active:translate-y-0`;
 
 // SECONDARY: transparent on load with DARK TEXT for readability; on hover becomes locked champagne.
 const BRAND_SECONDARY =

@@ -19,7 +19,16 @@ All colors MUST be HSL.
 
     /* ACTIVE COLOR (LOCKED): match the platform's champagne active layer (NOT navy/blue). */
     --primary: 38 38% 85%;
-    --primary-foreground: 222 47% 11%;
+    /* Primary foreground must be true-black (no navy tint) */
+    --primary-foreground: 0 0% 0%;
+
+    /* Active champagne gradient (Layer 2) — reused for active buttons/sections */
+    --jj-gradient-active: linear-gradient(
+      135deg,
+      hsl(var(--champagne-1)),
+      hsl(var(--champagne-2)),
+      hsl(var(--champagne-3))
+    );
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -146,7 +155,14 @@ All colors MUST be HSL.
 
     /* Keep the same active champagne primary even in dark mode for consistency */
     --primary: 38 38% 85%;
-    --primary-foreground: 222 47% 11%;
+    --primary-foreground: 0 0% 0%;
+
+    --jj-gradient-active: linear-gradient(
+      135deg,
+      hsl(var(--champagne-1)),
+      hsl(var(--champagne-2)),
+      hsl(var(--champagne-3))
+    );
 
     --secondary: 217.2 32.6% 20%;
     --secondary-foreground: 210 40% 98%;

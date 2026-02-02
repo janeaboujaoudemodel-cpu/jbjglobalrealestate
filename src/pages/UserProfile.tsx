@@ -234,13 +234,13 @@ const UserProfile = () => {
                 <div className="relative">
                   <Avatar className="h-28 w-28 border-4 border-border/60">
                     <AvatarImage src={photoUrl || ""} alt={displayName} />
-                    <AvatarFallback className="text-3xl bg-primary text-primary-foreground font-bold">
+                    <AvatarFallback className="text-3xl [background:var(--jj-gradient-active)] text-foreground font-bold">
                       {displayName.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <label 
                     htmlFor="photo-upload" 
-                    className="absolute bottom-0 right-0 p-2 bg-primary text-primary-foreground rounded-full cursor-pointer hover:bg-primary/90 transition-colors shadow-lg"
+                    className="absolute bottom-0 right-0 p-2 [background:var(--jj-gradient-active)] text-foreground rounded-full cursor-pointer hover:opacity-90 transition-opacity shadow-lg"
                   >
                     {uploadingPhoto ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
@@ -277,7 +277,7 @@ const UserProfile = () => {
                       variant="outline" 
                       size="sm" 
                       onClick={handleRemovePhoto}
-                      className="border-red-200 text-red-600 hover:bg-red-50"
+                      className="border-destructive/40 text-destructive hover:bg-destructive/10"
                     >
                       <Trash2 className="h-4 w-4 mr-2" />
                       Remove Photo
@@ -290,16 +290,16 @@ const UserProfile = () => {
 
           {/* Tabs */}
           <Tabs defaultValue="profile" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3 bg-card border border-border">
-              <TabsTrigger value="profile" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <TabsList className="grid w-full grid-cols-3 bg-card border border-border">
+              <TabsTrigger value="profile" className="data-[state=active]:[background:var(--jj-gradient-active)] data-[state=active]:text-foreground">
                 <User className="h-4 w-4 mr-2" />
                 Profile
               </TabsTrigger>
-              <TabsTrigger value="security" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <TabsTrigger value="security" className="data-[state=active]:[background:var(--jj-gradient-active)] data-[state=active]:text-foreground">
                 <Shield className="h-4 w-4 mr-2" />
                 Security
               </TabsTrigger>
-              <TabsTrigger value="settings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <TabsTrigger value="settings" className="data-[state=active]:[background:var(--jj-gradient-active)] data-[state=active]:text-foreground">
                 <Settings className="h-4 w-4 mr-2" />
                 Settings
               </TabsTrigger>
@@ -337,7 +337,7 @@ const UserProfile = () => {
                         disabled
                         className="bg-muted"
                       />
-                      <p className="text-xs text-zinc-500">Email cannot be changed</p>
+                      <p className="text-xs text-muted-foreground">Email cannot be changed</p>
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="phone" className="flex items-center gap-2">
@@ -452,16 +452,16 @@ const UserProfile = () => {
 
                   <Separator />
 
-                  <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                  <div className="p-4 bg-destructive/10 rounded-lg border border-destructive/30">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium text-red-900">Sign Out</p>
-                        <p className="text-sm text-red-600">Sign out of your account on this device</p>
+                        <p className="font-medium text-destructive">Sign Out</p>
+                        <p className="text-sm text-destructive/80">Sign out of your account on this device</p>
                       </div>
                       <Button 
                         variant="outline" 
                         onClick={handleSignOut}
-                        className="border-red-300 text-red-600 hover:bg-red-100"
+                        className="border-destructive/40 text-destructive hover:bg-destructive/10"
                       >
                         <LogOut className="h-4 w-4 mr-2" />
                         Sign Out
