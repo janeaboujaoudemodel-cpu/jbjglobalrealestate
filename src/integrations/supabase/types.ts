@@ -11197,9 +11197,9 @@ export type Database = {
           service_charge: string | null
           size_max: number | null
           size_min: number | null
-          slug: string | null
+          slug: string
           source_id: string | null
-          source_url: string | null
+          source_url: string
           status: string | null
           status_label: string | null
           updated_at: string
@@ -11247,9 +11247,9 @@ export type Database = {
           service_charge?: string | null
           size_max?: number | null
           size_min?: number | null
-          slug?: string | null
+          slug: string
           source_id?: string | null
-          source_url?: string | null
+          source_url: string
           status?: string | null
           status_label?: string | null
           updated_at?: string
@@ -11297,9 +11297,9 @@ export type Database = {
           service_charge?: string | null
           size_max?: number | null
           size_min?: number | null
-          slug?: string | null
+          slug?: string
           source_id?: string | null
-          source_url?: string | null
+          source_url?: string
           status?: string | null
           status_label?: string | null
           updated_at?: string
