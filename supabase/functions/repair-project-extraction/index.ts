@@ -61,12 +61,30 @@ serve(async (req) => {
 
     console.log(`[RepairExtraction] Re-scraping: ${item.name} from ${url}`);
 
-    // Scrape with rawHtml
+    // Scrape with rawHtml - with rate limit handling
     const scrapeRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
       method: "POST",
       headers: { "Content-Type": "application/json", "Authorization": `Bearer ${firecrawlKey}` },
       body: JSON.stringify({ url, formats: ["markdown", "links", "rawHtml"], waitFor: 10000, timeout: 90000, onlyMainContent: false }),
     });
+
+    // Handle rate limiting gracefully - return 503 with retry guidance
+    if (scrapeRes.status === 429) {
+      const errText = await scrapeRes.text();
+      // Extract retry time from error if available
+      const retryMatch = errText.match(/retry after (\d+)s/i);
+      const retryAfter = retryMatch ? parseInt(retryMatch[1], 10) : 60;
+      console.warn(`[RepairExtraction] Rate limited for ${item.name}, retry after ${retryAfter}s`);
+      return new Response(JSON.stringify({ 
+        error: "Rate limited", 
+        code: "RATE_LIMITED",
+        retry_after_seconds: retryAfter,
+        message: `Firecrawl rate limit reached. Please wait ${retryAfter} seconds and try again.`
+      }), {
+        status: 503,
+        headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": String(retryAfter) },
+      });
+    }
 
     if (!scrapeRes.ok) {
       const errText = await scrapeRes.text();
