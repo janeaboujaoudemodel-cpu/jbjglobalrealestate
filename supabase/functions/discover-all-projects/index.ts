@@ -10,7 +10,7 @@ const POSTGREST_PAGE_SIZE = 1000;
 
 // Canonical targets matching the source portal structure
 const CANONICAL_TOTAL_PAGES = 89;
-const CANONICAL_TOTAL_LISTINGS = 1335;
+const CANONICAL_TOTAL_LISTINGS = 1336;
 
 const normalizeUrl = (raw: string): string => {
   const trimmed = (raw || "").trim();
