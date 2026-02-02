@@ -294,26 +294,32 @@ const MortgageCalculator = ({
               </div>
             </div>
 
-            {/* Payment Visualization - Premium neutral theme */}
+            {/* Payment Visualization - Premium Champagne Active Color */}
             <div className="space-y-2">
               <p className="text-muted-foreground text-sm">Payment Breakdown</p>
-              <div className="h-4 rounded-full overflow-hidden bg-muted flex">
+              <div className="h-4 rounded-full overflow-hidden bg-muted/30 flex border border-gold/20">
                 <div 
-                  className="bg-foreground transition-all duration-500"
-                  style={{ width: `${(calculations.loanAmount / calculations.totalPayment) * 100}%` }}
+                  className="transition-all duration-500"
+                  style={{ 
+                    width: `${(calculations.loanAmount / calculations.totalPayment) * 100}%`,
+                    background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)'
+                  }}
                 />
                 <div 
-                  className="bg-muted-foreground/60 transition-all duration-500"
+                  className="transition-all duration-500 bg-gold/40"
                   style={{ width: `${(calculations.totalInterest / calculations.totalPayment) * 100}%` }}
                 />
               </div>
               <div className="flex justify-between text-xs">
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-foreground" />
+                  <span 
+                    className="w-2.5 h-2.5 rounded-full border border-gold/30" 
+                    style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}
+                  />
                   <span className="text-muted-foreground">Principal</span>
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-muted-foreground/60" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-gold/40 border border-gold/30" />
                   <span className="text-muted-foreground">Interest</span>
                 </span>
               </div>

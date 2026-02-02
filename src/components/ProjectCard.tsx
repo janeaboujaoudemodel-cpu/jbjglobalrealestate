@@ -269,26 +269,25 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             )}
           </div>
           
-          {/* Description with ...more link */}
-          {getTruncatedDescription() && (
-            <p className="text-muted-foreground text-sm leading-relaxed mb-4 flex-1">
-              {getTruncatedDescription()}
-              {project.description && project.description.length > 120 && (
-                <span className="bg-gradient-to-r from-gold via-handover to-gold bg-clip-text text-transparent hover:opacity-80 cursor-pointer ml-1 font-semibold">
-                  ...more
-                </span>
-              )}
-            </p>
-          )}
+          {/* Description with ...more link - Always show more link */}
+          <p className="text-muted-foreground text-sm leading-relaxed mb-4 flex-1">
+            {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
+            <Link 
+              to={`/project/${project.slug}`}
+              className="bg-gradient-to-r from-gold via-handover to-gold bg-clip-text text-transparent hover:opacity-80 cursor-pointer ml-1 font-semibold inline-block"
+            >
+              ...more
+            </Link>
+          </p>
         </div>
       </Link>
 
-      {/* CTA Buttons - Email, Call, WhatsApp (Provident style) */}
+      {/* CTA Buttons - Email, Call, WhatsApp (Direct navigation to avoid popup blocking) */}
       <div className="px-4 pb-4 pt-0">
         <div className="grid grid-cols-3 gap-2 border-t border-gold/20 pt-4">
           <Button asChild variant="secondary" size="sm" className="w-full">
             <a
-              href={`mailto:info@jbjglobalrealestate.com?subject=Inquiry: ${project.name}`}
+              href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(project.name)}&body=${encodeURIComponent(`Hello JBJ Global Real Estate,\n\nI am interested in ${project.name}${project.location ? ` located in ${project.location}` : ''}.\n\nPlease provide more details.\n\nThank you.`)}`}
               onClick={(e) => e.stopPropagation()}
               aria-label={`Email about ${project.name}`}
             >
