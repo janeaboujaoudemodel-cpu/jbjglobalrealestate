@@ -505,34 +505,53 @@ const PendingImportPreview = () => {
     <ProjectDetailLayout
       project={mapped}
       adminBar={
-        <section className="bg-premium-bg border-b border-gold/20 py-4 sticky top-20 lg:top-24 z-40">
+        <section className="bg-gradient-to-r from-champagne via-champagne-light to-champagne border-b border-gold/30 py-4 sticky top-20 lg:top-24 z-40 shadow-md">
           <div className="container mx-auto px-4 flex items-center justify-between flex-wrap gap-4">
-            <Button variant="secondary" onClick={() => navigate("/listing-admin")}>
+            <Button 
+              variant="primary" 
+              onClick={() => navigate("/listing-admin")}
+              className="hover:shadow-lg hover:-translate-y-0.5 transition-all"
+            >
               <ArrowLeft className="w-4 h-4" />
               Back to Queue
             </Button>
 
             <div className="flex items-center gap-3 flex-wrap">
-              <Badge className="border border-gold/40 bg-card text-foreground">PENDING REVIEW</Badge>
-              <Badge className="border border-gold/40 bg-card text-foreground">
+              <Badge className="border-2 border-gold/60 bg-card text-foreground font-semibold">PENDING REVIEW</Badge>
+              <Badge className="border-2 border-gold/60 bg-card text-foreground font-semibold">
                 {pendingImport.is_new_project ? "New Project" : "Update Existing"}
               </Badge>
             </div>
 
             <div className="flex items-center gap-3">
-              <Button variant="secondary" onClick={handleReject} disabled={isProcessing}>
-                <X className="h-4 w-4" />
-                Reject
+              <Button 
+                variant="tertiary" 
+                onClick={handleReject} 
+                disabled={isProcessing}
+                className="border-red-500/60 hover:border-red-500 hover:bg-red-50 transition-all"
+              >
+                <X className="h-4 w-4 text-red-600" />
+                <span className="text-red-600">Reject</span>
               </Button>
 
               {!pendingImport.is_new_project && pendingImport.matched_project_id && (
-                <Button variant="secondary" onClick={handleMerge} disabled={isProcessing}>
+                <Button 
+                  variant="tertiary" 
+                  onClick={handleMerge} 
+                  disabled={isProcessing}
+                  className="hover:shadow-lg hover:-translate-y-0.5 transition-all"
+                >
                   <Merge className="h-4 w-4" />
                   Merge Updates
                 </Button>
               )}
 
-              <Button variant="primary" onClick={() => handleApprove(false)} disabled={isProcessing}>
+              <Button 
+                variant="primary" 
+                onClick={() => handleApprove(false)} 
+                disabled={isProcessing}
+                className="hover:shadow-lg hover:-translate-y-0.5 transition-all"
+              >
                 <Check className="h-4 w-4" />
                 {pendingImport.is_new_project ? "Approve & Create" : "Approve as New"}
               </Button>
