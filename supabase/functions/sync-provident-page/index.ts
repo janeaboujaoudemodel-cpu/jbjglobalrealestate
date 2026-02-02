@@ -57,10 +57,22 @@ async function fetchWithRetry(url: string, options: RequestInit, maxRetries = 3)
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       const res = await fetch(url, options);
-      // Retry on transient errors
-      if (res.status === 502 || res.status === 503 || res.status === 429) {
+      // Retry on transient errors with exponential backoff
+      if (res.status === 502 || res.status === 503) {
         const waitMs = attempt * 3000 + Math.random() * 2000;
         console.warn(`[Retry ${attempt}/${maxRetries}] Got ${res.status}, waiting ${Math.round(waitMs)}ms...`);
+        await sleep(waitMs, 0);
+        continue;
+      }
+      // For 429 rate limit, use much longer exponential backoff
+      if (res.status === 429) {
+        // Check if we've exhausted retries - return a soft failure instead of throwing
+        if (attempt === maxRetries) {
+          console.warn(`[Retry ${attempt}/${maxRetries}] Rate limited (429), returning soft failure...`);
+          return res; // Return the 429 response so caller can handle gracefully
+        }
+        const waitMs = Math.pow(2, attempt) * 5000 + Math.random() * 3000; // 10s, 20s, 40s exponential
+        console.warn(`[Retry ${attempt}/${maxRetries}] Rate limited (429), waiting ${Math.round(waitMs)}ms...`);
         await sleep(waitMs, 0);
         continue;
       }
@@ -461,6 +473,22 @@ serve(async (req) => {
         // NO actions parameter - this prevents engine failures
       }),
     });
+
+    // Check for rate limit soft failure (429 returned instead of throwing)
+    if (listRes.status === 429) {
+      console.warn(`[Page ${page}] Rate limited by Firecrawl API - returning retry suggestion`);
+      return new Response(JSON.stringify({ 
+        success: false, 
+        error: "Firecrawl API rate limited. Please wait and try again.",
+        code: "RATE_LIMITED",
+        page,
+        retry_after_seconds: 60,
+        duration_ms: Date.now() - startTime 
+      }), {
+        status: 503,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     if (!listRes.ok) {
       const errText = await listRes.text();
