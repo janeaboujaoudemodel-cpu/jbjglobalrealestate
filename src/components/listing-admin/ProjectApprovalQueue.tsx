@@ -90,6 +90,8 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   const [bulkTotal, setBulkTotal] = useState(0);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [incompleteCount, setIncompleteCount] = useState(0);
+  // Filter: "all" | "complete" | "needs_work"
+  const [statusFilter, setStatusFilter] = useState<"all" | "complete" | "needs_work">("all");
   const { toast } = useToast();
 
   const PAGE_SIZE = 60;
@@ -186,6 +188,23 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
         query = query.eq("job_id", jobId);
       }
 
+      // Apply status filter for complete vs needs_work
+      if (statusFilter === "complete") {
+        // Complete = has description, images, documents, valid developer
+        query = query
+          .is("review_notes", null)
+          .not("description", "is", null)
+          .neq("description", "")
+          .not("developer_name", "is", null)
+          .neq("developer_name", "")
+          .not("developer_name", "ilike", "unknown")
+          .not("images", "eq", "[]")
+          .not("documents", "eq", "[]");
+      } else if (statusFilter === "needs_work") {
+        // Needs work = PENDING_SCRAPE, INCOMPLETE, or ERROR
+        query = query.or("review_notes.ilike.%PENDING_SCRAPE%,review_notes.eq.INCOMPLETE,review_notes.ilike.ERROR:%");
+      }
+
       const { data, error, count } = await query;
 
       if (error) throw error;
@@ -255,7 +274,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   useEffect(() => {
     fetchPendingImports();
     fetchInventoryStats();
-  }, [jobId, showAll]);
+  }, [jobId, showAll, statusFilter]);
 
   // Real-time subscription to auto-refresh when extraction adds/updates data
   useEffect(() => {
@@ -907,24 +926,62 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           </div>
         </CardHeader>
         <CardContent>
-          {/* Inventory status cards */}
+          {/* Active filter indicator */}
+          {statusFilter !== "all" && (
+            <div className="mb-4 flex items-center gap-2">
+              <Badge variant="secondary" className="text-sm">
+                Showing: {statusFilter === "complete" ? "Complete" : "Needs Work"}
+              </Badge>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setStatusFilter("all")}
+                className="text-xs h-6"
+              >
+                Clear Filter
+              </Button>
+            </div>
+          )}
+          
+          {/* Inventory status cards - CLICKABLE */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
             <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
               <div className="text-2xl font-bold text-foreground">1,336</div>
               <div className="text-xs text-muted-foreground">Target</div>
             </div>
-            <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
+            <button
+              onClick={() => setStatusFilter("all")}
+              className={`rounded-lg border p-3 text-center transition-all hover:scale-105 cursor-pointer ${
+                statusFilter === "all" 
+                  ? "border-primary bg-primary/10 ring-2 ring-primary/30" 
+                  : "border-border bg-muted/50 hover:bg-muted"
+              }`}
+            >
               <div className="text-2xl font-bold text-foreground">{totalCount ?? "…"}</div>
               <div className="text-xs text-muted-foreground">In Queue</div>
-            </div>
-            <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-center">
+            </button>
+            <button
+              onClick={() => setStatusFilter("complete")}
+              className={`rounded-lg border p-3 text-center transition-all hover:scale-105 cursor-pointer ${
+                statusFilter === "complete" 
+                  ? "border-emerald-500 bg-emerald-100 ring-2 ring-emerald-300" 
+                  : "border-emerald-200 bg-emerald-50 hover:bg-emerald-100"
+              }`}
+            >
               <div className="text-2xl font-bold text-emerald-700">{totalCompleteCount ?? completeCount}</div>
-              <div className="text-xs text-emerald-600">Complete</div>
-            </div>
-            <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-center">
+              <div className="text-xs text-emerald-600">Complete ✓</div>
+            </button>
+            <button
+              onClick={() => setStatusFilter("needs_work")}
+              className={`rounded-lg border p-3 text-center transition-all hover:scale-105 cursor-pointer ${
+                statusFilter === "needs_work" 
+                  ? "border-amber-500 bg-amber-100 ring-2 ring-amber-300" 
+                  : "border-amber-200 bg-amber-50 hover:bg-amber-100"
+              }`}
+            >
               <div className="text-2xl font-bold text-amber-700">{totalNeedsWorkCount ?? needsWorkCount}</div>
               <div className="text-xs text-amber-600">Needs Work</div>
-            </div>
+            </button>
             <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 text-center">
               <div className="text-2xl font-bold text-blue-700">{selectedIds.size}</div>
               <div className="text-xs text-blue-600">Selected</div>
@@ -943,8 +1000,28 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           {imports.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
               <Check className="h-16 w-16 mb-4 text-muted-foreground" />
-              <p className="text-xl font-medium text-foreground">All caught up!</p>
-              <p className="text-sm">No projects awaiting approval</p>
+              <p className="text-xl font-medium text-foreground">
+                {statusFilter === "all" 
+                  ? "All caught up!" 
+                  : statusFilter === "complete" 
+                    ? "No complete listings found" 
+                    : "No listings need work"}
+              </p>
+              <p className="text-sm">
+                {statusFilter === "all" 
+                  ? "No projects awaiting approval" 
+                  : "Try clicking another filter above"}
+              </p>
+              {statusFilter !== "all" && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="mt-4"
+                  onClick={() => setStatusFilter("all")}
+                >
+                  Show All
+                </Button>
+              )}
             </div>
           ) : (
             <div className="p-6 rounded-xl border border-border bg-muted/10 shadow-sm">
