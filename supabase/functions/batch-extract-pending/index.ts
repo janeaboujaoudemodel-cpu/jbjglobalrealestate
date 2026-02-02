@@ -30,7 +30,10 @@ async function fetchWithRetry(url: string, options: RequestInit, maxRetries = 3)
     try {
       const res = await fetch(url, options);
       if (res.status === 502 || res.status === 503 || res.status === 429) {
-        const wait = attempt * 3000 + Math.random() * 2000;
+        // RATE LIMIT FIX: Exponential backoff with longer waits
+        // attempt 1: 10s, attempt 2: 20s, attempt 3: 40s
+        const baseWait = 10000 * Math.pow(2, attempt - 1);
+        const wait = baseWait + Math.random() * 5000;
         console.warn(`[Retry ${attempt}/${maxRetries}] Got ${res.status}, waiting ${Math.round(wait)}ms...`);
         await sleep(wait, 0);
         continue;
@@ -38,7 +41,7 @@ async function fetchWithRetry(url: string, options: RequestInit, maxRetries = 3)
       return res;
     } catch (err) {
       lastError = err instanceof Error ? err : new Error(String(err));
-      const wait = attempt * 2000;
+      const wait = attempt * 5000;
       console.warn(`[Retry ${attempt}/${maxRetries}] Network error, waiting ${wait}ms...`);
       await sleep(wait, 0);
     }
@@ -271,15 +274,19 @@ serve(async (req) => {
 
   try {
     const {
-      limit: rawLimit = 50,
+      limit: rawLimit = 25,
       dryRun = false,
-      throttleMs: rawThrottleMs = 1000,
-      concurrency: rawConcurrency = 3,
+      throttleMs: rawThrottleMs = 3000,
+      concurrency: rawConcurrency = 1,
     } = await req.json().catch(() => ({}));
 
-    const limit = Math.max(1, Math.min(Number(rawLimit) || 50, 200));
-    const throttleMs = Math.max(0, Math.min(Number(rawThrottleMs) ?? 1000, 5000));
-    const concurrency = Math.max(1, Math.min(Number(rawConcurrency) || 3, 15));
+    // RATE LIMIT FIX: Lower defaults to avoid 429 errors
+    // - limit: 25 items per batch (was 50)
+    // - concurrency: 1 (was 3) - process one at a time
+    // - throttleMs: 3000ms (was 1000ms) - longer delay between items
+    const limit = Math.max(1, Math.min(Number(rawLimit) || 25, 100));
+    const throttleMs = Math.max(1000, Math.min(Number(rawThrottleMs) ?? 3000, 10000));
+    const concurrency = Math.max(1, Math.min(Number(rawConcurrency) || 1, 5));
 
     console.log(
       `[BatchExtract] Starting (limit=${limit}, concurrency=${concurrency}, dryRun=${dryRun}, throttleMs=${throttleMs})...`,
