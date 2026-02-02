@@ -1,129 +1,126 @@
 
-## What’s actually happening (root cause)
+# Fix Plan: Broken Image Extraction & False "Repaired" Status
 
-Your “queue stuck at ~16/17”, “bulk extraction completes immediately”, and “wipe/rebuild buttons look broken” are all the same root bug:
+## Problem Summary
+1. **Image extraction captures wrong images**: The extraction function is pulling `apartment_navbar_a62fb5b437.webp` (a generic navbar/placeholder image) instead of actual project gallery photos
+2. **False "Repaired" markers**: System marks projects as "complete" based on image count (15), not image validity - all 15 images are the same broken navbar icon
+3. **Result**: Cards show "Repaired" but display broken/placeholder images when scrolling through the gallery
 
-- The **discovery function** (`discover-all-projects`) tries to insert the 1,336 URLs using an **upsert** with `onConflict: "slug"`.
-- But in the database, the current uniqueness protection on `pending_project_imports.slug` / `source_url` is implemented as **partial unique indexes** (they have `WHERE slug IS NOT NULL` / `WHERE source_url IS NOT NULL`).
-- Postgres **cannot use a partial unique index** as the conflict target for `ON CONFLICT (slug)` unless the statement also matches the index predicate. Result:
-  - Inserts fail with: **“there is no unique or exclusion constraint matching the ON CONFLICT specification”**
-  - So the discovery call returns “success” to the UI (because we weren’t surfacing insert failure properly), but **it inserts 0 rows**.
-  - Therefore:
-    - Queue stays at 0 (or whatever few were previously created by other workflows like page-sync)
-    - “Start Bulk Extraction” instantly says “Complete” because there’s nothing to process
-    - Wipe/reset appears “stuck” because the next step (discovery insert) silently fails
+## Root Cause (Technical)
 
-I confirmed this in backend logs: discover batches fail with that exact ON CONFLICT error, and “Total inserted: 0”.
+### Image Extraction Filter is Missing Key Terms
+The current exclude pattern in `batch-extract-pending/index.ts` line 69:
+```javascript
+const excludePatterns = /(logo|icon|avatar|placeholder|spinner|favicon|brochure|payment[-_]?plan|floor[-_]?plan|master[-_]?plan|pdf|document)/i;
+```
 
----
+**Missing from pattern:**
+- `navbar` - catches `apartment_navbar_a62fb5b437.webp`
+- `header` - catches header images
+- `footer` - catches footer images
+- `menu` - catches menu assets
 
-## Fix Strategy (high confidence, minimal moving parts)
+### No Image Uniqueness Validation
+The system stores 15 duplicate images of the same navbar icon and considers extraction "successful".
 
-### A) Database schema fix (the real blocker)
-**Goal:** Make Postgres accept `ON CONFLICT (slug)` and `ON CONFLICT (source_url)`.
-
-1. **Create a new migration** to update queue integrity:
-   - Remove the partial unique indexes:
-     - `DROP INDEX IF EXISTS public.pending_project_imports_slug_unique;`
-     - `DROP INDEX IF EXISTS public.pending_project_imports_source_url_unique;`
-   - Add **non-partial** unique constraints/indexes:
-     - `CREATE UNIQUE INDEX ... ON public.pending_project_imports (slug);`
-     - `CREATE UNIQUE INDEX ... ON public.pending_project_imports (source_url);`
-2. Safety in the migration:
-   - Before creating the new unique indexes:
-     - Normalize `slug` to lowercase
-     - Normalize `source_url` (strip query/hash, strip trailing slash)
-     - Remove duplicates (keep oldest row per slug/source_url)
-3. (Optional but recommended) Hardening:
-   - Set defaults / non-null:
-     - `status` default `'pending'`
-     - `slug` and `source_url` non-null (only if we are 100% sure nothing uses null; current data shows 0 nulls)
-
-**Outcome:** `discover-all-projects` can finally insert 1,336 rows reliably.
+### No Project-Specific URL Pattern Enforcement
+Real project images have URL patterns like `/off-plan/{id}/images/` but the current logic accepts ANY cloudfront image.
 
 ---
 
-### B) Backend function correctness: make failures visible and deterministic
-**Goal:** Stop reporting “success” when inserts failed.
+## Fix Implementation
 
-1. Update `supabase/functions/discover-all-projects/index.ts`:
-   - If any insert batch fails, return:
-     - `success: false`
-     - a clear `error` field (include the Postgres ON CONFLICT message)
-     - `inserted_batches`, `failed_batches`, `attempted_rows`
-   - Keep the current discovery logic, but make the response reflect reality.
-2. Add a “guardrail”:
-   - After insert loop, if `placeholders.length > 0` and `insertedCount === 0`, return HTTP 500 (or `success:false`) so the UI doesn’t proceed into extraction.
+### Change 1: Update Image Extraction Filter (`batch-extract-pending/index.ts`)
 
-**Outcome:** No more “fake success” and no more confusing UI states.
+**Update the exclude patterns** to filter out navbar/header/footer/menu images:
+```javascript
+const excludePatterns = /(logo|icon|avatar|placeholder|spinner|favicon|brochure|payment[-_]?plan|floor[-_]?plan|master[-_]?plan|pdf|document|navbar|header|footer|menu|widget|sidebar)/i;
+```
 
----
+**Add project-specific image prioritization:**
+- Prioritize URLs containing `/off-plan/` (project gallery images)
+- Only fall back to generic cloudfront images if no project-specific ones found
 
-### C) Listing Admin UI fixes (why buttons feel “stuck”)
-**Goal:** Make the admin workflow resilient and transparent.
+### Change 2: Add Image Uniqueness Check
 
-1. Update `src/components/listing-admin/SyncDashboard.tsx`:
-   - **FULL WIPE & REBUILD** currently does:
-     - wipe → single long discover call → auto start extraction
-   - Change it to:
-     - wipe → **chunked queue rebuild** (the existing `rebuildQueueFromMap` logic) → only start extraction when queue count is correct.
-2. Add “stuck detection”:
-   - After each discovery chunk, re-check pending count.
-   - If pending count does **not increase** after a discover chunk:
-     - stop the loop immediately
-     - show a toast explaining the real reason (insertion blocked / discovery failed)
-3. Bulk extraction runner improvements:
-   - Before starting bulk extraction:
-     - If pending count is 0, show “Queue is empty — rebuild queue first” and do not start.
-   - When bulk extraction reports `processed = 0`:
-     - verify whether queue still has items needing extraction
-     - if yes, show “0 eligible rows found; likely missing marker fields” (and surface diagnostics)
-     - if no, show “Complete”.
+Before storing images, deduplicate by URL and require **at least 2 unique images** for extraction to be considered successful.
 
-**Outcome:** Buttons won’t “look broken”; they’ll either complete successfully or show a precise failure reason.
+```javascript
+// Deduplicate by full URL
+const uniqueImages = [...new Set(imageUrls)];
 
----
+// Must have at least 2 unique real project images
+const hasValidImages = uniqueImages.length >= 2 && 
+  !uniqueImages.every(u => u.includes('navbar') || u.includes('apartment_navbar'));
+```
 
-## Execution / Validation Checklist (what we will test end-to-end in Preview)
+### Change 3: Update Completeness Check
 
-1. Click **Reset/Clear queue** → confirm queue becomes 0.
-2. Click **Rebuild Queue**:
-   - Expect pending queue to rise quickly (MAP inserts ~1331)
-   - Then chunk passes fill to **exactly 1,336**
-3. Confirm:
-   - Dashboard pending count == Queue view count == **1,336**
-   - No case where queue exceeds target.
-4. Click **Start Bulk Extraction**:
-   - Expect it to process many rows (not instantly “complete”)
-   - Expect `needs_extraction_pending` to decrease over time.
-5. Verify:
-   - No “0 outside / 16 inside” mismatch after refresh (counts computed consistently, errors surfaced)
+Current logic (line 361):
+```javascript
+const hasMinimal = Boolean(extracted.description && extracted.developerName && imagesPayload.length >= 1);
+```
 
----
+Updated logic:
+```javascript
+// Check for VALID images (not navbar placeholders)
+const validImages = imagesPayload.filter(img => 
+  img.url.includes('/off-plan/') || 
+  (!img.url.includes('navbar') && !img.url.includes('apartment_navbar'))
+);
+const hasMinimal = Boolean(
+  extracted.description && 
+  extracted.developerName && 
+  validImages.length >= 2
+);
+```
 
-## Files/Areas that will be changed
+### Change 4: Clear Bad Data from Database
 
-### Backend (schema)
-- New migration file to:
-  - Replace partial unique indexes with full unique indexes on:
-    - `pending_project_imports.slug`
-    - `pending_project_imports.source_url`
+Run a data repair to:
+1. Identify all rows where images contain only navbar placeholders
+2. Reset their `images` to `[]` and `review_notes` to `INCOMPLETE`
+3. Allow re-extraction with the fixed logic
 
-### Backend (function)
-- `supabase/functions/discover-all-projects/index.ts`
-  - fail fast when inserts fail
-  - return accurate inserted/error stats
+SQL to identify affected rows:
+```sql
+UPDATE pending_project_imports 
+SET images = '[]'::jsonb, 
+    review_notes = 'INCOMPLETE: Navbar images detected'
+WHERE images IS NOT NULL 
+AND jsonb_array_length(images) > 0
+AND images->0->>'url' LIKE '%apartment_navbar%';
+```
 
-### Frontend (admin)
-- `src/components/listing-admin/SyncDashboard.tsx`
-  - FULL WIPE uses chunked rebuild logic
-  - better stuck detection & guardrails
-  - extraction start conditions improved
+### Change 5: Update Repair Function (`repair-project-extraction/index.ts`)
+
+Apply the same enhanced image filtering and validation to the single-item repair function.
 
 ---
 
-## Why this will stop the recurring mistakes
-- The system was not “discovering only 17”; it was **failing to insert** the discovered set due to a database constraint mismatch.
-- Once the conflict target is fixed, queue build becomes deterministic, count can’t exceed target, and bulk extraction will have real work to do.
+## Files to Modify
 
-If you approve this plan, I’ll implement the migration + function fix first (so discovery can actually insert), then update the admin dashboard flows so the buttons cannot get into these “looks stuck but silently failed” states again.
+| File | Change |
+|------|--------|
+| `supabase/functions/batch-extract-pending/index.ts` | Enhanced image filtering, uniqueness check, validity check |
+| `supabase/functions/repair-project-extraction/index.ts` | Same enhanced image filtering |
+| Database migration | Reset corrupted image data |
+
+---
+
+## Expected Outcome
+
+1. **Image extraction will skip navbar/placeholder images** and only capture actual project gallery photos
+2. **Projects will only be marked "complete"** if they have 2+ valid, unique project images
+3. **Existing bad data will be cleared** and re-extracted with the fixed logic
+4. **"Repaired" status will be accurate** - only shown when real images are present
+
+---
+
+## Verification Steps
+
+After implementation:
+1. Run bulk extraction on a few test items
+2. Verify extracted images contain `/off-plan/` URLs (not navbar placeholders)
+3. Confirm cards display actual project photos
+4. Confirm "INCOMPLETE" badge shows for items that truly lack valid images
