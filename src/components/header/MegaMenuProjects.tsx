@@ -13,7 +13,6 @@ const MegaMenuProjects = React.forwardRef<HTMLDivElement, MegaMenuProjectsProps>
     { label: 'Ready Projects', href: '/properties?status=ready', icon: Check },
     { label: 'New Launches', href: '/properties?sort=newest', icon: Sparkles },
     { label: 'Handover Soon', href: '/properties?handover=2025', icon: Calendar },
-    { label: 'View All Projects', href: '/properties', icon: Eye },
   ];
 
   return (
@@ -37,7 +36,7 @@ const MegaMenuProjects = React.forwardRef<HTMLDivElement, MegaMenuProjectsProps>
           <div className="lg:col-span-6 lg:border-l lg:border-gold/30 lg:pl-10">
             <MegaMenuSectionTitle icon={Building2} title="Project Categories" />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
-              {projectCategories.map((item) => (
+              {projectCategories.slice(0, -1).map((item) => (
                 <MegaMenuIconLink
                   key={item.label}
                   to={item.href}
@@ -47,6 +46,17 @@ const MegaMenuProjects = React.forwardRef<HTMLDivElement, MegaMenuProjectsProps>
                   compact
                 />
               ))}
+            </div>
+            {/* View All - emphasized */}
+            <div className="mt-3">
+              <MegaMenuIconLink
+                to="/properties"
+                onClick={onClose}
+                icon={Eye}
+                title="View All Projects"
+                compact
+                emphasis
+              />
             </div>
           </div>
         </div>

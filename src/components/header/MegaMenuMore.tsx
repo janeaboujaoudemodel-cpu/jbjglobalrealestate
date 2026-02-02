@@ -58,7 +58,7 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
           <div className="lg:col-span-7 lg:border-l lg:border-gold/30 lg:pl-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {/* About & Company */}
-              <div>
+              <div className="relative">
                 <MegaMenuSectionTitle icon={Building2} title="About & Company" />
                 <div className="space-y-0.5">
                   {aboutLinks.map((item) => (
@@ -72,6 +72,8 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
                     />
                   ))}
                 </div>
+                {/* Vertical divider between columns */}
+                <div className="hidden sm:block absolute top-0 -right-3 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
               </div>
 
               {/* Resource Hubs */}

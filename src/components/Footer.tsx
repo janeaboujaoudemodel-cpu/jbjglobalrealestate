@@ -584,7 +584,7 @@ const Footer = () => {
                   WebkitTextFillColor: 'transparent',
                 }}
               >
-                Market Intel
+                Market Intelligence
               </h4>
               <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
                 {marketIntelLinks.map((link) => (
