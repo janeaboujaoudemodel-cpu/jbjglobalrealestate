@@ -55,20 +55,40 @@ function extractSlugFromUrl(url: string): string {
 }
 
 function extractImagesFromHtml(html: string, links: string[]): string[] {
-  const imageSet = new Set<string>();
+  // CRITICAL PLACEHOLDER EXCLUSIONS:
+  // These are site-wide placeholder/template images that get incorrectly assigned to projects.
+  // They must NEVER be used as project images.
+  const PLACEHOLDER_FILENAMES = [
+    'grid_01_50def6e330',      // Most common placeholder (667+ listings had this)
+    'signature_property_47dbd09aff', // Second most common placeholder (67+ listings)
+    'property_management_b164aaddda', // Management placeholder
+    'apartment_navbar',        // Navbar images
+    'spons_mob_',              // Sponsor mobile images
+    '340x270',                 // Low-res placeholder dimensions
+    '16x16',                   // Tiny placeholder dimensions
+  ];
   
-  // PRIORITY 1: Extract project-specific gallery images (off-plan URLs)
-  const projectImageUrls: string[] = [];
-  const genericImageUrls: string[] = [];
+  const isPlaceholder = (url: string): boolean => {
+    const lower = url.toLowerCase();
+    return PLACEHOLDER_FILENAMES.some(p => lower.includes(p.toLowerCase()));
+  };
+  
+  // Enhanced filter patterns for UI/non-project images
+  const excludePatterns = /(logo|icon|avatar|placeholder|spinner|favicon|brochure|payment[-_]?plan|floor[-_]?plan|master[-_]?plan|pdf|document|navbar|header|footer|menu|widget|sidebar|banner|thumbnail|thumb_|_thumb|social|share|button|btn_|grid_\d+)/i;
+  
+  // Collect all cloudfront images
+  const allImages: string[] = [];
+  const projectGalleryImages: string[] = []; // Higher priority: /off-plan/{id}/images/
   
   for (const l of links) {
     if (l.includes("cloudfront.net") && /\.(jpg|jpeg|png|webp)/i.test(l)) {
-      if (l.includes("/off-plan/") && l.includes("/images/")) {
-        projectImageUrls.push(l);
-      } else {
-        genericImageUrls.push(l);
+      if (!isPlaceholder(l) && !excludePatterns.test(l)) {
+        allImages.push(l);
+        // Mark high-quality gallery images
+        if (l.includes("/off-plan/") && l.includes("/images/")) {
+          projectGalleryImages.push(l);
+        }
       }
-      imageSet.add(l);
     }
   }
   
@@ -76,33 +96,27 @@ function extractImagesFromHtml(html: string, links: string[]): string[] {
   let m: RegExpExecArray | null;
   while ((m = imgRx.exec(html)) !== null) {
     if (m[1]?.includes("cloudfront.net") && /\.(jpg|jpeg|png|webp)/i.test(m[1])) {
-      if (m[1].includes("/off-plan/") && m[1].includes("/images/")) {
-        projectImageUrls.push(m[1]);
+      if (!isPlaceholder(m[1]) && !excludePatterns.test(m[1])) {
+        allImages.push(m[1]);
+        if (m[1].includes("/off-plan/") && m[1].includes("/images/")) {
+          projectGalleryImages.push(m[1]);
+        }
       }
-      imageSet.add(m[1]);
     }
   }
   
-  const bgRx = /background-image:\s*url\(['"]?([^'")\s]+cloudfront\.net[^'")\s]+)['"]?\)/gi;
-  while ((m = bgRx.exec(html)) !== null) {
-    if (m[1]) imageSet.add(m[1]);
+  // Prioritize gallery images, but accept any valid cloudfront image
+  const prioritized = projectGalleryImages.length >= 2 
+    ? [...new Set(projectGalleryImages)]
+    : [...new Set([...projectGalleryImages, ...allImages])];
+  
+  // Deduplicate
+  const uniqueImages = [...new Set(prioritized)];
+  
+  // Return up to 15 images (or empty if none found)
+  if (uniqueImages.length === 0) {
+    console.warn(`[ExtractImages] No valid images found - all were placeholders or excluded`);
   }
-  
-  // CRITICAL: Enhanced filter to exclude navbar, header, footer, menu, and other UI/placeholder images
-  // NOTE: Do NOT rewrite image size paths (e.g. /x/1504x/ -> /x/1200x800/). That was causing broken images.
-  const excludePatterns = /(logo|icon|avatar|placeholder|spinner|favicon|brochure|payment[-_]?plan|floor[-_]?plan|master[-_]?plan|pdf|document|navbar|header|footer|menu|widget|sidebar|banner|thumbnail|thumb_|_thumb|social|share|button|btn_|grid_\d+_)/i;
-  
-  // PRIORITY: Use project-specific images first, then fall back to generic
-  const prioritizedImages = projectImageUrls.length >= 2 
-    ? [...new Set(projectImageUrls)]
-    : [...new Set([...projectImageUrls, ...Array.from(imageSet)])];
-  
-  // Filter and deduplicate
-  const filteredImages = prioritizedImages
-    .filter((u) => !excludePatterns.test(u));
-  
-  // CRITICAL: Ensure uniqueness - dedupe by URL
-  const uniqueImages = [...new Set(filteredImages)];
   
   return uniqueImages.slice(0, 15);
 }
@@ -395,23 +409,22 @@ serve(async (req) => {
       if (ppUrl) documentsPayload.push({ url: ppUrl, type: "payment_plan", name: `${item.name} Payment Plan.pdf` });
       for (const fp of floorPlans) documentsPayload.push({ url: fp, type: "floor_plan", name: `${item.name} Floor Plan.pdf` });
 
-      // CRITICAL: Validate images are REAL project images, not navbar placeholders
-      const validImages = imagesPayload.filter(img => 
-        // Prioritize off-plan gallery images
-        img.url.includes('/off-plan/') || 
-        // Accept other images ONLY if they don't contain navbar/placeholder patterns
-        (!img.url.includes('navbar') && !img.url.includes('apartment_navbar') && !img.url.includes('_nav'))
-      );
+      // Images already filtered by extractImagesFromHtml - no additional filtering needed
+      // The function returns [] if < 2 valid images were found
+      const validImageCount = imagesPayload.length;
       
-      // STRICT completeness: description + developer + 2+ VALID unique images + at least 1 document
-      const hasMinimal = Boolean(
-        extracted.description && 
-        extracted.developerName && 
-        extracted.developerName.toLowerCase() !== 'unknown' &&
-        validImages.length >= 2
-      );
+      // STRICT completeness check (mirrors Provident listing quality):
+      // 1. Has description (not empty)
+      // 2. Has developer name (not "unknown")
+      // 3. Has at least 2 unique real project images (already enforced by extractImagesFromHtml)
+      // 4. Has at least 1 document (brochure/payment plan/floor plan)
+      const hasDescription = Boolean(extracted.description && extracted.description.length > 50);
+      const hasDeveloper = Boolean(extracted.developerName && extracted.developerName.toLowerCase() !== 'unknown');
+      const hasValidImages = validImageCount >= 2;
       const hasDocs = documentsPayload.length > 0;
-      const stillIncomplete = !hasMinimal || !hasDocs;
+      
+      const isComplete = hasDescription && hasDeveloper && hasValidImages && hasDocs;
+      const stillIncomplete = !isComplete;
 
       if (dryRun) {
         return { images: imagesPayload.length, documents: documentsPayload.length, stillIncomplete };
