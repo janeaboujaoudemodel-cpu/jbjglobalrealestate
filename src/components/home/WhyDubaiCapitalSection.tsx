@@ -1,9 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { T } from "@/components/ui/T";
+import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
 import burjAlArabVideo from "@/assets/videos/why-dubai-burj-al-arab.mp4";
 import dubaiFrameVideo from "@/assets/videos/why-dubai-dubai-frame.mp4";
@@ -36,14 +34,14 @@ export default function WhyDubaiCapitalSection() {
 
   return (
     <section className="relative h-screen min-h-[100vh] min-h-[100dvh] bg-black overflow-hidden">
-      {/* Full-frame video background - edge to edge */}
-      <AnimatePresence mode="wait">
+      {/* Full-frame video background - edge to edge with smooth crossfade */}
+      <AnimatePresence mode="sync">
         <motion.div
           key={currentScene}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.2 }}
+          transition={{ duration: 0.6 }}
           className="absolute inset-0"
         >
           <video
@@ -52,7 +50,7 @@ export default function WhyDubaiCapitalSection() {
             loop
             muted
             playsInline
-            preload="metadata"
+            preload="auto"
           >
             <source src={scenes[currentScene].src} type="video/mp4" />
           </video>
@@ -76,8 +74,11 @@ export default function WhyDubaiCapitalSection() {
             </span>
 
             <h2
-              className="mt-4 text-2xl md:text-3xl lg:text-4xl font-bold text-primary-foreground leading-tight"
-              style={{ fontFamily: "Poppins, sans-serif" }}
+              className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight"
+              style={{ 
+                fontFamily: "Poppins, sans-serif",
+                textShadow: '0 2px 8px rgba(0,0,0,0.6)'
+              }}
             >
               <T>Why Dubai Became the Capital of</T>{" "}
               <span className="text-gold"><T>Global Investors</T></span>
@@ -87,34 +88,53 @@ export default function WhyDubaiCapitalSection() {
               <T>Strategic location, world-class infrastructure, and long-term government execution make Dubai the most investable city in the region.</T>
             </p>
 
-            {/* Stats grid - compact edge-to-edge design */}
-            <div className="mt-5 grid grid-cols-4 gap-1.5 max-w-sm">
-              {stats.map((s) => (
-                <div
+            {/* Premium Stats Cards - Glass morphism with gold glow */}
+            <div className="mt-6 grid grid-cols-4 gap-2 max-w-md">
+              {stats.map((s, index) => (
+                <motion.div
                   key={s.label}
-                  className="rounded-md border border-gold/20 bg-black/40 backdrop-blur-sm px-2 py-2 text-center"
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="group relative rounded-xl overflow-hidden"
                 >
-                  <div className="text-lg md:text-xl font-bold text-gold leading-none">{s.value}</div>
-                  <div className="mt-0.5 text-[8px] uppercase tracking-wider text-white/50">
-                    <T>{s.label}</T>
+                  {/* Gradient border */}
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-gold/40 via-gold/20 to-gold/40 p-[1px]">
+                    <div className="h-full w-full rounded-xl bg-black/60 backdrop-blur-md" />
                   </div>
-                </div>
+                  
+                  {/* Content */}
+                  <div className="relative px-3 py-3 text-center">
+                    <div 
+                      className="text-xl md:text-2xl lg:text-3xl font-bold text-gold leading-none"
+                      style={{ textShadow: '0 0 20px rgba(200,167,102,0.5)' }}
+                    >
+                      {s.value}
+                    </div>
+                    <div className="mt-1 text-[9px] md:text-[10px] uppercase tracking-wider text-white/70 font-medium">
+                      <T>{s.label}</T>
+                    </div>
+                  </div>
+                  
+                  {/* Hover glow */}
+                  <div 
+                    className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                    style={{ boxShadow: '0 0 30px rgba(200,167,102,0.4)' }} 
+                  />
+                </motion.div>
               ))}
             </div>
 
-            <div className="mt-7 md:mt-9">
-              <Button asChild variant="primary" size="lg">
-                <Link to="/guides/investment">
-                  <T>Explore Investment Opportunities</T>
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
-              </Button>
+            {/* CTA Button - Matches homepage hero style */}
+            <div className="mt-8 md:mt-10">
+              <PremiumHeroButton href="/guides/investment" size="lg">
+                <T>Explore Investment Opportunities</T>
+              </PremiumHeroButton>
             </div>
           </motion.div>
         </div>
       </div>
-
-      {/* NO DOTS - removed as per user request */}
     </section>
   );
 }

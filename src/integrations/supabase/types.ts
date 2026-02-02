@@ -16475,6 +16475,7 @@ export type Database = {
         Returns: string
       }
       set_founder_visibility: { Args: { p_enabled: boolean }; Returns: boolean }
+      set_podcast_visibility: { Args: { p_enabled: boolean }; Returns: boolean }
       trigger_emergency_lockdown: {
         Args: {
           p_departments?: string[]

@@ -9,6 +9,7 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
 import { PopupCoordinatorProvider } from "@/contexts/PopupCoordinatorContext";
 import { FounderVisibilityProvider } from "@/contexts/FounderVisibilityContext";
+import { PodcastVisibilityProvider } from "@/contexts/PodcastVisibilityContext";
 import { ScrollToTopOnMount } from "@/components/ScrollToTop";
 import AdminBypass from "@/components/AdminBypass";
 import ListingAdminGuard from "@/components/ListingAdminGuard";
@@ -201,8 +202,9 @@ const App = () => (
           <BrowserRouter>
             <AuthProvider>
               <FounderVisibilityProvider>
-                <ActiveLeadProvider>
-                  <PopupCoordinatorProvider>
+                <PodcastVisibilityProvider>
+                  <ActiveLeadProvider>
+                    <PopupCoordinatorProvider>
                     <ScrollToTopOnMount />
                   <GlobalVisitorTracking />
                   <GlobalTranslator />
@@ -407,7 +409,8 @@ const App = () => (
               </Routes>
                   </PopupCoordinatorProvider>
                 </ActiveLeadProvider>
-              </FounderVisibilityProvider>
+              </PodcastVisibilityProvider>
+            </FounderVisibilityProvider>
             </AuthProvider>
           </BrowserRouter>
         </LanguageProvider>
