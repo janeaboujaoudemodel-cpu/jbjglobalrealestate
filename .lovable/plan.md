@@ -1,176 +1,224 @@
 
+Goal: Make “Fix All Listings” actually fix everything (pending + approved), restore canonical inventory count (1,335), and address the UI issues you listed (Mortgage CTA styling, account dropdown rectangular, inquiry form enhancements, contact links audit, “...more” visibility).
 
-# Fix Developers Page + Admin Extraction System
+--------------------------------------------------------------------
+1) “Fix All Listings” finished but didn’t fix anything (root causes found)
+--------------------------------------------------------------------
+What’s happening now (from code review):
+- The “⚡ Fix All Listings” button runs only:
+  Phase 1) `batch-extract-pending` (ONLY for pending queue rows)
+  Phase 2) `repair-project-images` (ONLY images for approved projects)
+- It does NOT repair approved projects’ missing description/USPs/amenities/location/docs.
+- `batch-extract-pending` only targets rows where:
+  - review_notes contains PENDING_SCRAPE / INCOMPLETE / ERROR
+  - OR images == []
+  - OR documents == []
+  - OR description is null
+  But `documents` / `images` can also be `null` (not just `[]`), which means many broken rows can be skipped.
+- The current “Fix All” call uses fixed `limit=200, concurrency=8, throttle=500` which can cause rate limiting / blocking; when blocked, items can keep cycling as ERROR and never truly “fix”.
 
-## Summary of Issues Identified
+What “Fix All Listings” must become:
+- A deterministic “repair pipeline” that:
+  1) Ensures inventory count reaches 1,335 (reconcile missing URLs)
+  2) Fixes pending queue extraction completeness (including docs/USP/location/payment breakdown)
+  3) Fixes approved projects completeness (metadata + documents + images), not just images
 
-1. **Developers page shows project listings instead of developer cards** - The page currently displays "Sunset Bay Grand" and other project cards. It should ONLY show developer cards (like Emaar, DAMAC, Binghatti, etc.)
+--------------------------------------------------------------------
+2) Restore canonical inventory count: 1,335 (you’re seeing 1,330)
+--------------------------------------------------------------------
+Implementation approach:
+A) Add an “Inventory Reconcile” step before extraction:
+- Build a backend function (repair/reconcile) that:
+  - Discovers project URLs from the 89 listing pages in batches (page ranges)
+  - Normalizes + filters URLs to project-detail pages
+  - Compares against existing `pending_project_imports` + `projects` slugs
+  - Inserts ONLY missing placeholders into `pending_project_imports` (status pending, review_notes PENDING_SCRAPE)
+  - Loops until queue distinct slugs == 1,335 (or reports which pages are failing)
 
-2. **Search/filter bar doesn't match Buy Properties page** - The Developers page uses a simplified `ProjectFilters` component. It needs the exact same champagne-layer filter UI from the Properties page
+B) Update the Listing Admin dashboard UI to:
+- Show “Inventory total (Pending + Approved + Rejected + Merged)” clearly
+- Add a “Reconcile to 1,335” button that runs the reconcile step and shows progress + remaining gap
+- If the source portal temporarily blocks scraping, show a clear “blocked/rate-limited” state and retry guidance (rather than silently “finishing”)
 
-3. **Fake MTR page** - When clicking on a developer like MTRs, it opens a fake page instead of showing actual developer data from the database
+--------------------------------------------------------------------
+3) Make Fix All actually “fix everything”
+--------------------------------------------------------------------
+We will change the “Fix All Listings” flow into 3 phases:
 
-4. **Developer extraction not working** - The `extract-developers-provident` edge function is using an outdated URL pattern (`/developed-by-`) that returns 404s. Provident's developers page has changed - developer URLs are now at `/new-projects/developed-by-{slug}/`
+Phase 0 — Reconcile Inventory (new)
+- Ensure the DB has exactly 1,335 canonical project URLs in the queue + approved/rejected/merged totals.
+- If missing, automatically insert the missing placeholders first (so extraction can fill them).
 
-5. **Only 24 developers in database** but Provident has ~45+ developers with full data (logos, feature images, descriptions)
+Phase 1 — Pending Queue Full Repair (upgrade)
+- Update `batch-extract-pending` to also target:
+  - `documents is null` and `images is null` (not only `[]`)
+  - Any row that is missing critical extracted fields (developer_name empty/unknown, etc.)
+- Add adaptive throttling/backoff:
+  - Detect a high rate of “SCRAPE_ALL_ENGINES_FAILED / RATE_LIMITED”
+  - Reduce concurrency + add delay before continuing
+  - Return structured stats: processed/success/errors/blocked + suggested_retry_after_ms
+- Upgrade extraction quality:
+  - Switch from the “light extraction” to the more comprehensive deterministic extractor where appropriate (the repo already contains `full-project-extract` which extracts USPs, amenities, location details, payment breakdown, floor plan types, FAQs, and docs more robustly).
+  - Ensure pending rows are marked INCOMPLETE only when genuinely missing required fields.
 
----
+Phase 2 — Approved Projects Full Repair (new)
+- Add a backend repair function that:
+  - Finds approved projects that are missing brochure/docs/USPs/amenities/location/payment breakdown/etc.
+  - Uses their matching `pending_project_imports` record by slug (or source_url) to backfill
+  - If pending import is also incomplete, run full extraction first, then copy into project tables
+  - Repairs BOTH:
+    - `projects` metadata fields (usp/location/payment breakdown/floor_plan_types/faqs/etc.)
+    - `project_documents` and `project_images` tables
+- Then, `repair-project-images` becomes a sub-step, not the only approved-project fix.
 
-## Part 1: Fix Developers Page Structure
+UI updates in Listing Admin:
+- Show per-phase progress: “Reconcile”, “Pending Repair”, “Approved Repair”
+- Show top errors list (first 10) returned by backend so it’s obvious why something did not fix
 
-### Current Problem
-The Developers page (src/pages/Developers.tsx) fetches projects and groups them by developer, showing PROJECT CARDS under each developer header. This is wrong.
+--------------------------------------------------------------------
+4) Why project pages show missing brochures/amenities/USPs/location details (major gap found)
+--------------------------------------------------------------------
+Even when pending imports contain extracted fields, the approval pipeline currently copies only a subset into `projects`:
+- In `approveImportInDb` (ProjectApprovalQueue), it inserts basic fields only (name, slug, developer_id, description, etc.).
+- It does NOT map advanced extracted fields like:
+  - usp_headline / usp_bullets / usp_image_url
+  - location_headline / location_description / location_distances / location_image_url
+  - floor_plan_types / faqs / payment_breakdown
+  - amenities_list (if you’re using that structure)
+This alone explains why the UI “has no extracted sections”.
 
-### Solution
-Completely redesign the page to show DEVELOPER CARDS only:
-- Remove all project fetching and display logic
-- Display developer cards in a grid (similar to Provident's layout)
-- Each card shows: feature_image_url as background, logo overlay, developer name, description preview
-- Link each card to `/developer/{slug}` for the detail page
-- Remove "Sunset Bay Grand" and any project listings from this page
+Fix:
+- Update approval mapping to copy all extracted fields from `pending_project_imports` into `projects`.
+- Ensure documents extracted in pending get inserted into `project_documents`.
+- Ensure images extracted in pending get inserted into `project_images` (already done, but keep consistent).
 
-### Developer Card Design (matching existing UI patterns)
-- 3D gold-bordered card with feature image background
-- Logo in a 3D gold plate overlay
-- Developer name with tier badge (ELITE/PREMIUM/TOP TIER/ESTABLISHED)
-- Short description preview
-- Project count from database
+--------------------------------------------------------------------
+5) Documents/brochures policy alignment (ensure projects actually have brochures)
+--------------------------------------------------------------------
+Currently, pending imports store document URLs, and approval inserts them into `project_documents` with `file_url` referencing external URLs.
+Your policy requires copying documents into internal storage.
 
----
+Fix:
+- Add a backend “document import” step that:
+  - Downloads the brochure/payment plan/floor plan PDFs from source
+  - Uploads them into internal storage
+  - Writes the internal storage URL into `project_documents.file_url`
+- Integrate this into:
+  - Phase 1 (pending repair)
+  - Phase 2 (approved repair)
+  - Approval flow (on approve / merge)
 
-## Part 2: Match Filter UI to Properties Page
+--------------------------------------------------------------------
+6) Mortgage Calculator fixes (UI)
+--------------------------------------------------------------------
+A) “Request Mortgage Partner Introduction” button
+- In `src/components/MortgageCalculator.tsx` it is already `variant="primary"`.
+- We’ll audit where it appears “not primary” and remove any custom button styling overrides that conflict with the global primary system.
 
-### Current Problem
-Developers page uses the basic `ProjectFilters` component. Properties page has a premium champagne-layer filter system with:
-- Buy/Rent toggle
-- Ready/Off-Plan status buttons
-- Advanced filters in a slide-out sheet
-- Proper 3-layer visual system (black > champagne > pearl)
+B) Payment breakdown bar (Principal / Interest) color
+- Currently uses `bg-foreground` and `bg-muted-foreground/60` (black/gray).
+- Update to use the platform active champagne style:
+  - Principal segment: active gradient `[background:var(--jj-gradient-active)]`
+  - Interest segment: a locked champagne layer (pearl gradient) to stay premium but still readable
+  - Update the legend dots to match the two segment colors.
 
-### Solution
-1. Import the same filter UI structure from Properties.tsx
-2. Adapt it for developer filtering:
-   - Search by developer name
-   - Filter by emirate (Dubai, Abu Dhabi, Sharjah, etc.)
-   - Filter by tier (Elite, Premium, Top Tier, Established)
-3. Connect filters to the developer cards grid
-4. Ensure the champagne-layer styling matches exactly
+--------------------------------------------------------------------
+7) “My Account” dropdown is not rectangular / not premium enough
+--------------------------------------------------------------------
+Current state:
+- Desktop “Account” uses `MegaMenuAccount`, but it’s a small card-style panel.
 
----
+Fix:
+- Rebuild `MegaMenuAccount` to use the same rectangular “mega menu shell” system as the other menus:
+  - Use `MegaMenuShell` (full rectangular panel, inset spacing, safe max-height, internal scroll)
+  - Premium layout: large avatar + name/email, grouped links, gold dividers, strong rectangular container feel
+  - Ensure:
+    - solid background (not transparent)
+    - high z-index
+    - not cropped on small viewports (maxHeight + overflowY auto)
 
-## Part 3: Fix Fake Developer Detail Pages
+--------------------------------------------------------------------
+8) “Register Your Interest” form improvements (ProjectInquiryForm)
+--------------------------------------------------------------------
+A) Bedrooms
+- Add:
+  - “6 Bedrooms”
+  - “7+ Bedrooms” (value “7+”)
 
-### Current Problem
-Clicking on developers like "MTRs" opens DeveloperDetail.tsx but shows no data because the developer doesn't exist in the database or has no projects.
+B) Developer selection (replaces free text input)
+- Use the existing developers table via the existing `useDevelopers()` hook.
+- Implement a searchable premium combobox:
+  - Options:
+    - Any developer
+    - List of all developers
+    - Other…
+  - If “Other…” selected: show a text field so the user can type developer name.
 
-### Solution
-1. Ensure DeveloperDetail.tsx gracefully handles developers with:
-   - No projects (show "No projects available yet")
-   - Missing data (use proper fallbacks)
-2. Only show developers that exist in the `developers` table
-3. Remove any hardcoded fake data
+C) Location selection
+- Add “Select Emirate” first (Dubai, Abu Dhabi, Sharjah, etc.)
+- Then show “Location” options filtered by emirate (using communities table if available), plus:
+  - Any location
+  - Other… (type in)
 
----
+D) Dropdown quality
+- Ensure Select/Popover panels are not transparent and have high z-index (avoids “see-through dropdown” issue).
 
-## Part 4: Fix Developer Extraction System
+--------------------------------------------------------------------
+9) Contact buttons audit (WhatsApp / Call / Email not opening)
+--------------------------------------------------------------------
+Problems found:
+- There are many patterns across the codebase:
+  - Some use `window.open(...)` (can be blocked, especially in iframes/mobile)
+  - Some hardcode wrong emails (example: ProjectCard uses `info@jbjglobalrealestate.com`)
+  - Some use correct helpers (`getWhatsAppUrl/getCallUrl/getEmailUrl`), others don’t
 
-### Current Problem
-The `extract-developers-provident` edge function fails because:
-1. It's looking for URLs with `/developed-by-` pattern
-2. Provident changed their URL structure to `/new-projects/developed-by-{slug}/`
-3. The extraction produces garbage data like "Off plan properties for sale in Dubai developed by Emaar Properties"
+Fix approach:
+- Create a single, consistent “Contact link” helper/component and use it everywhere:
+  - WhatsApp: prefer direct navigation (`window.location.href = wa.me...`) to avoid popup blocking
+  - Call: `tel:` link
+  - Email: `mailto:` link
+- Replace all hardcoded emails/phones with the canonical constants.
+- Update ProjectCard’s Email CTA to use the official email constants and correct subject line.
 
-### Analysis of Provident's Developer Page
-From the fetched Provident developers page, I can see the actual structure:
-- Each developer card has two images: feature image + logo
-- Developer URLs are: `https://providentestate.com/new-projects/developed-by-{slug}/`
-- Full developer list available directly on the /developers page
+Verification:
+- After changes, manually test on:
+  - Mobile Safari/Chrome (tap behavior)
+  - Desktop Chrome (new tab vs same tab behavior)
+  - Within the embedded preview (to ensure no blocked popups)
 
-### Solution - Rewrite the extraction function
+--------------------------------------------------------------------
+10) “...more” not visible on listings
+--------------------------------------------------------------------
+Current state:
+- ProjectCard has a “…more” span only if description exists AND is longer than 120 chars.
+- Many listings likely have no description due to the extraction/approval mapping gap, so “…more” never appears.
 
-The new extraction approach will:
+Fix:
+- First fix extraction + approval mapping so descriptions exist.
+- Then enforce “…more” visibility by:
+  - Always showing a “…more” link when a listing renders (even if description is short or missing), linking to the project page.
+  - Make it a real link (not just a span) so it’s clickable and obviously visible.
 
-1. **Direct HTML parsing of /developers page**
-   - Fetch https://providentestate.com/developers 
-   - Parse the HTML to extract all developer cards directly
-   - Each card contains: name, logo URL, feature image URL, description, and link
+--------------------------------------------------------------------
+Delivery order (fastest impact first)
+--------------------------------------------------------------------
+1) Fix approval mapping (pending -> projects) so extracted fields actually appear on project pages.
+2) Upgrade Fix All to repair approved projects metadata + docs (not just images).
+3) Fix batch-extract-pending targeting (null vs []) + adaptive backoff.
+4) Add Inventory Reconcile to reach 1,335.
+5) UI tasks: mortgage breakdown color + account menu rectangular + inquiry form upgrades.
+6) Contact audit + replace hardcoded links/emails.
+7) Enforce “…more” link display.
 
-2. **Extract data structure from page**
-   ```
-   For each developer card on the page:
-   - feature_image_url: First image (260x200 size)
-   - logo_url: Second image (296x size)
-   - name: Link text
-   - description: Paragraph following the card
-   - provident_link: href attribute
-   ```
+--------------------------------------------------------------------
+What I will need from you (only if required)
+--------------------------------------------------------------------
+- If you want the location dropdown to include a specific curated list (beyond what’s in the database), tell me the top locations you want per emirate; otherwise I’ll populate from the existing “communities” data plus an “Other” free-type option.
 
-3. **Parse developer details**
-   - Extract all ~45 developers visible on the page
-   - Save to `pending_developer_imports` for admin approval
-   - OR directly upsert to `developers` table
-
-4. **Handle image URLs**
-   - All images are on CloudFront CDN: `d3h330vgpwpjr8.cloudfront.net`
-   - URLs are already absolute and high-quality
-
----
-
-## Part 5: Admin Panel Enhancement
-
-### Update Admin Dashboard
-1. Add "Extract Developers" button that triggers the new extraction
-2. Show progress and results
-3. Allow admin to approve/reject extracted developers
-4. Provide manual edit capability before import
-
----
-
-## Technical Implementation Details
-
-### Files to Modify:
-
-1. **src/pages/Developers.tsx**
-   - Remove project-based logic
-   - Add developer card grid
-   - Import Properties page filter UI styling
-   - Add tier-based filtering
-
-2. **src/pages/DeveloperDetail.tsx**
-   - Add proper empty states
-   - Remove fake data dependencies
-
-3. **supabase/functions/extract-developers-provident/index.ts**
-   - Complete rewrite with direct page parsing
-   - Parse /developers page HTML directly
-   - Extract all developers with proper images
-
-4. **New: src/components/DeveloperCard.tsx**
-   - Reusable developer card component
-   - 3D gold-bordered design
-   - Feature image background with logo overlay
-   - Tier badge display
-
-### Database Updates:
-- Ensure `developers` table has all necessary fields
-- Clean up any garbage extraction data in `pending_developer_imports`
-
----
-
-## Developer Tiers (Locked)
-As per existing memory:
-- **ELITE**: Emaar, Nakheel, Damac, Sobha, Meraas, Aldar, Omniyat
-- **PREMIUM**: Ellington
-- **TOP TIER**: Binghatti, Majid Al Futtaim
-- **ESTABLISHED**: Danube, Azizi
-
----
-
-## Expected Outcomes
-
-1. Developers page shows only developer cards (no project listings)
-2. Filter UI matches Properties page exactly
-3. Clicking any developer goes to a real detail page with actual data
-4. Admin can extract all ~the 7 pages of the developers from Provident with proper images
-5. No fake/placeholder data anywhere
-
+After you approve, I’ll implement the above changes in code and then we’ll re-test:
+- Listing Admin: Fix All should materially reduce “Needs Work” and populate docs/USPs/amenities
+- Inventory total: 1,335
+- Project cards: “…more” visible and clickable
+- Contact CTAs: WhatsApp/Call/Email open immediately
+- Mortgage UI: active champagne styling for the breakdown and CTA
+- Account dropdown: rectangular, premium, consistent with mega menu system
