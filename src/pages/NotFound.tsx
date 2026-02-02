@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { Home, ArrowLeft, ArrowUpRight, Briefcase, Phone, Mail, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
+import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import Footer from "@/components/Footer";
 
@@ -49,7 +49,7 @@ const NotFound = () => {
               {/* Logo - transparent background version */}
               <motion.div variants={fadeInUp} className="mb-6">
                 <img
-                  src={jbjMonogramTransparent}
+                  src={jbjMonogramLightBg}
                   alt="JBJ Global Real Estate"
                   className="w-24 h-24 mx-auto object-contain"
                 />
