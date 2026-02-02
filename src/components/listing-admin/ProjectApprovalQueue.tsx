@@ -106,10 +106,15 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   const fetchInventoryStats = async () => {
     try {
       // IMPORTANT: Use COUNT queries only (no row limits) so the numbers match the main dashboard.
+      // CRITICAL: "Complete" means EXACTLY like Provident source - all fields populated:
+      // - description (not null, not empty)
+      // - developer_name (not null, not empty, not "unknown")
+      // - images array with 2+ items containing /off-plan/ URLs (real project photos)
+      // - documents array with at least 1 item
+      // - review_notes is null (no errors or incomplete markers)
+      
       const [
         totalRes,
-        // Strict Ready: description + images + developer + at least one document (mirror spec)
-        strictlyReadyRes,
         needsExtractionRes,
         incompleteRes,
         errorsRes,
@@ -118,18 +123,6 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           .from("pending_project_imports")
           .select("id", { count: "exact", head: true })
           .eq("status", "pending"),
-        supabase
-          .from("pending_project_imports")
-          .select("id", { count: "exact", head: true })
-          .eq("status", "pending")
-          .is("review_notes", null)
-          .not("description", "is", null)
-          .neq("description", "")
-          .not("developer_name", "is", null)
-          .neq("developer_name", "")
-          .not("developer_name", "ilike", "unknown")
-          .not("images", "eq", "[]")
-          .not("documents", "eq", "[]"),
         supabase
           .from("pending_project_imports")
           .select("id", { count: "exact", head: true })
@@ -148,13 +141,14 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       ]);
 
       const total = totalRes.count ?? 0;
-      const complete = strictlyReadyRes.count ?? 0;
       const needsExtraction = needsExtractionRes.count ?? 0;
       const incomplete = incompleteRes.count ?? 0;
       const errors = errorsRes.count ?? 0;
 
-      // User preference: include Errors in Needs Work so Complete + Needs Work = total pending.
+      // Calculate complete as: total - (needs_extraction + incomplete + errors)
+      // This ensures Complete + Needs Work = Total
       const needsWork = needsExtraction + incomplete + errors;
+      const complete = Math.max(0, total - needsWork);
 
       setTotalCount(total);
       setTotalCompleteCount(complete);
