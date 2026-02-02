@@ -15,16 +15,27 @@ import {
   ClipboardCheck,
   Heart,
   Sparkles,
+  Search,
 } from 'lucide-react';
-import { MegaMenuSectionTitle } from '@/components/header/mega-menu-primitives';
+import { MegaMenuIconLink, MegaMenuSectionDivider, MegaMenuSectionTitle } from '@/components/header/mega-menu-primitives';
+import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { CONTACT_INFO, getCallUrl, getWhatsAppUrl } from '@/constants/stats';
 
 interface MegaMenuSearchProps {
   onClose: () => void;
+  /** Opens the global search modal (optional) */
+  onOpenSearch?: (query: string) => void;
 }
 
-const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ onClose }, ref) => {
+const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ onClose, onOpenSearch }, ref) => {
+  const [query, setQuery] = React.useState('');
+
+  const openGlobalSearch = () => {
+    onClose();
+    onOpenSearch?.(query.trim());
+  };
+
   const servicesLinks = [
     { href: '/services/buying-advisory', label: 'Buying Advisory', icon: Home },
     { href: '/services/selling-advisory', label: 'Selling Advisory', icon: ClipboardCheck },
@@ -65,7 +76,30 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
       <div className="absolute inset-0 rounded-xl border-2 border-gold/40 pointer-events-none" />
       
       <div className="px-6 py-6">
-        <MegaMenuSectionTitle icon={Briefcase} title="Services & Shortcuts" />
+        <MegaMenuSectionTitle icon={Search} title="Search & Shortcuts" />
+
+        {/* Search bar (opens the global search modal) */}
+        <div className="mt-4 flex items-center gap-2">
+          <Input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') openGlobalSearch();
+            }}
+            placeholder="Search pages, tools, or anything…"
+            className="h-11 rounded-xl"
+            aria-label="Search"
+          />
+          <button
+            type="button"
+            onClick={openGlobalSearch}
+            className="h-11 px-4 rounded-xl border border-gold/40 bg-black/10 hover:bg-black/15 text-black text-sm font-semibold transition-colors"
+          >
+            Search
+          </button>
+        </div>
+
+        <MegaMenuSectionDivider />
         
         <div className="grid grid-cols-2 gap-6 mt-4">
           {/* Services Column */}
@@ -73,17 +107,14 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
             <p className="text-[10px] uppercase tracking-wider text-gold font-medium mb-3">Our Services</p>
             <div className="space-y-1">
               {servicesLinks.map((link) => (
-                <Link
+                <MegaMenuIconLink
                   key={link.href}
                   to={link.href}
                   onClick={onClose}
-                  className="flex items-center gap-3 py-2 px-3 rounded-lg transition-all duration-300 hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8] group"
-                >
-                  <div className="w-7 h-7 rounded-lg bg-black border border-gold/30 flex items-center justify-center group-hover:border-gold transition-colors">
-                    <link.icon className="w-3.5 h-3.5 text-gold" />
-                  </div>
-                  <span className="text-black font-medium text-sm group-hover:text-gold transition-colors">{link.label}</span>
-                </Link>
+                  icon={link.icon}
+                  title={link.label}
+                  compact
+                />
               ))}
             </div>
           </div>
@@ -93,17 +124,14 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
             <p className="text-[10px] uppercase tracking-wider text-gold font-medium mb-3">Quick Links</p>
             <div className="space-y-1">
               {navigationLinks.map((link) => (
-                <Link
+                <MegaMenuIconLink
                   key={link.href}
                   to={link.href}
                   onClick={onClose}
-                  className="flex items-center gap-3 py-2 px-3 rounded-lg transition-all duration-300 hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8] group"
-                >
-                  <div className="w-7 h-7 rounded-lg bg-black border border-gold/30 flex items-center justify-center group-hover:border-gold transition-colors">
-                    <link.icon className="w-3.5 h-3.5 text-gold" />
-                  </div>
-                  <span className="text-black font-medium text-sm group-hover:text-gold transition-colors">{link.label}</span>
-                </Link>
+                  icon={link.icon}
+                  title={link.label}
+                  compact
+                />
               ))}
             </div>
 
@@ -119,20 +147,20 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
                     onClick={onClose}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-black border border-gold/30 hover:border-gold transition-colors group"
+                    className="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-black/10 border border-gold/30 hover:border-gold/60 hover:bg-black/15 transition-colors"
                   >
-                    <link.icon className="w-4 h-4 text-gold" />
-                    <span className="text-gold text-xs font-medium">{link.label}</span>
+                    <link.icon className="w-4 h-4 text-black" />
+                    <span className="text-black text-xs font-semibold">{link.label}</span>
                   </a>
                 ) : (
                   <Link
                     key={link.href}
                     to={link.href}
                     onClick={onClose}
-                    className="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-black border border-gold/30 hover:border-gold transition-colors group"
+                    className="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-black/10 border border-gold/30 hover:border-gold/60 hover:bg-black/15 transition-colors"
                   >
-                    <link.icon className="w-4 h-4 text-gold" />
-                    <span className="text-gold text-xs font-medium">{link.label}</span>
+                    <link.icon className="w-4 h-4 text-black" />
+                    <span className="text-black text-xs font-semibold">{link.label}</span>
                   </Link>
                 )
               ))}

@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 
 interface GlobalSearchModalProps {
   isOpen: boolean;
+  initialQuery?: string;
   onClose: () => void;
 }
 
@@ -111,7 +112,7 @@ const SEARCHABLE_ITEMS = [
   },
 ];
 
-const GlobalSearchModal = ({ isOpen, onClose }: GlobalSearchModalProps) => {
+const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose }: GlobalSearchModalProps) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState(SEARCHABLE_ITEMS.slice(0, 5));
   const inputRef = useRef<HTMLInputElement>(null);
@@ -119,11 +120,12 @@ const GlobalSearchModal = ({ isOpen, onClose }: GlobalSearchModalProps) => {
 
   useEffect(() => {
     if (isOpen) {
-      setQuery("");
+      const q = (initialQuery || "").trim();
+      setQuery(q);
       setResults(SEARCHABLE_ITEMS.slice(0, 5));
       setTimeout(() => inputRef.current?.focus(), 100);
     }
-  }, [isOpen]);
+  }, [isOpen, initialQuery]);
 
   useEffect(() => {
     if (!query.trim()) {

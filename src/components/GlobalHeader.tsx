@@ -62,6 +62,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [searchInitialQuery, setSearchInitialQuery] = useState("");
   const { t } = useLanguage();
   const isTouchLayout = useIsTouchLayout();
   
@@ -133,10 +134,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     if (!pinnedMenu) return;
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      // If click is not within the nav or mega-menu, close
-      if (!target.closest('nav[aria-label="Primary"]')) {
-        closeMegaMenu();
-      }
+      // Close if click is outside the entire header (includes utility icon triggers + panels)
+      // This prevents a pinned utility menu from immediately closing on the same click.
+      if (headerViewportRef.current && !headerViewportRef.current.contains(target)) closeMegaMenu();
     };
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") closeMegaMenu();
@@ -584,6 +584,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     className="flex flex-col items-center gap-1.5 text-black hover:text-gold py-2 px-3 transition-colors"
                     onClick={() => {
                       setMobileMenuOpen(false);
+                      setSearchInitialQuery("");
                       setSearchOpen(true);
                     }}
                   >
@@ -1098,7 +1099,15 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               />
               {/* Panel container - positioned on the right */}
               <div className="absolute top-0 right-6">
-                {activeMegaMenu === 'search' && <MegaMenuSearch onClose={closeMegaMenu} />}
+                {activeMegaMenu === 'search' && (
+                  <MegaMenuSearch
+                    onClose={closeMegaMenu}
+                    onOpenSearch={(query) => {
+                      setSearchInitialQuery(query || "");
+                      setSearchOpen(true);
+                    }}
+                  />
+                )}
                 {activeMegaMenu === 'language' && <MegaMenuLanguage onClose={closeMegaMenu} />}
                 {activeMegaMenu === 'account' && <MegaMenuAccount onClose={closeMegaMenu} />}
               </div>
@@ -1107,7 +1116,14 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       </div>
 
       {/* Global Search Modal */}
-      <GlobalSearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+      <GlobalSearchModal
+        isOpen={searchOpen}
+        initialQuery={searchInitialQuery}
+        onClose={() => {
+          setSearchOpen(false);
+          setSearchInitialQuery("");
+        }}
+      />
     </header>
   );
 };
