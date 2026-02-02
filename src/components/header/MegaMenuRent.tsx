@@ -41,7 +41,8 @@ const MegaMenuRent = React.forwardRef<HTMLDivElement, MegaMenuRentProps>(({ onCl
 
           <div className="lg:col-span-6 lg:border-l lg:border-gold/30 lg:pl-10">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div>
+              {/* Column 1: Properties by Type */}
+              <div className="relative">
                 <MegaMenuSectionTitle icon={Building2} title="Properties by Type" />
                 <div className="space-y-1">
                   {propertyTypes.map((item) => (
@@ -64,8 +65,11 @@ const MegaMenuRent = React.forwardRef<HTMLDivElement, MegaMenuRentProps>(({ onCl
                     emphasis
                   />
                 </div>
+                {/* Vertical divider between columns */}
+                <div className="hidden sm:block absolute top-0 -right-3 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
               </div>
 
+              {/* Column 2: Renter Resources */}
               <div>
                 <MegaMenuSectionTitle icon={FileText} title="Renter Resources" />
                 <div className="space-y-1">

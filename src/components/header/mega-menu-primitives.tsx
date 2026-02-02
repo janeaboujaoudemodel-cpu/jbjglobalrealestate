@@ -148,7 +148,7 @@ type MegaMenuIconLinkProps = {
  * Standardized link row:
  * Normal: transparent bg, black icon with gold border, black title
  * Hover: champagne-gold bg, gold title, black icon bg with gold icon
- * Emphasis: Gold text, 3D effect, highlighted background
+ * Emphasis: Premium gold styling with black text for maximum readability - 3D effect
  */
 export function MegaMenuIconLink({
   to,
@@ -166,11 +166,11 @@ export function MegaMenuIconLink({
       className={cn(
         "flex items-center gap-3 rounded-xl transition-all duration-300 group relative",
         emphasis
-          // Emphasis style: gold bg, 3D shadow, prominent
-          ? "bg-gradient-to-r from-gold/20 via-gold/15 to-gold/20 hover:from-gold/30 hover:via-gold/25 hover:to-gold/30 shadow-[0_4px_15px_rgba(200,167,102,0.25)] hover:shadow-[0_6px_20px_rgba(200,167,102,0.35)] hover:-translate-y-0.5 border border-gold/40"
+          // Emphasis style: Gold gradient bg, black text for readability, 3D shadow
+          ? "bg-gradient-to-r from-gold/40 via-gold/30 to-gold/40 hover:from-gold/60 hover:via-gold/50 hover:to-gold/60 shadow-[0_4px_15px_rgba(200,167,102,0.35)] hover:shadow-[0_6px_20px_rgba(200,167,102,0.5)] hover:-translate-y-0.5 border-2 border-gold/60 hover:border-gold"
           // Normal: transparent; Hover: champagne gradient background
           : "bg-transparent hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8]",
-        compact ? "py-2 px-2.5" : "py-3 px-3"
+        compact ? "py-2.5 px-3" : "py-3 px-3"
       )}
     >
       {/* Icon container */}
@@ -178,7 +178,7 @@ export function MegaMenuIconLink({
         className={cn(
           "rounded-lg border transition-all duration-300 flex items-center justify-center shrink-0",
           emphasis
-            ? "bg-black border-gold/60 group-hover:border-gold"
+            ? "bg-black border-gold group-hover:border-gold group-hover:shadow-[0_0_12px_rgba(200,167,102,0.5)]"
             : "bg-transparent border-gold/50 group-hover:border-gold",
           compact ? "w-8 h-8" : "w-10 h-10"
         )}
@@ -192,11 +192,11 @@ export function MegaMenuIconLink({
         )} />
       </div>
       <div className="min-w-0 flex-1">
-        {/* Title */}
+        {/* Title - Emphasis uses black for max readability on gold bg */}
         <span className={cn(
-          "block font-semibold transition-colors duration-300",
+          "block font-bold transition-colors duration-300",
           emphasis
-            ? "text-gold group-hover:text-gold"
+            ? "text-black group-hover:text-black"
             : "text-black group-hover:text-gold",
           compact ? "text-sm" : "text-sm"
         )}>

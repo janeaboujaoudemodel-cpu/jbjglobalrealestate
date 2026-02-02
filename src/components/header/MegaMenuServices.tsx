@@ -1,8 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { 
   Calculator, Handshake, Coins, FileText, Key, Home, 
-  Wrench, Calendar, ClipboardCheck, Award, Building2, Globe, ArrowRight
+  Wrench, Calendar, ClipboardCheck, Award, Building2, Globe, Eye
 } from 'lucide-react';
 import servicesHero from '@/assets/property-consultation.png';
 import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle } from '@/components/header/mega-menu-primitives';
@@ -50,16 +49,6 @@ const MegaMenuServices = React.forwardRef<HTMLDivElement, MegaMenuServicesProps>
             <MegaMenuSectionTitle
               icon={Wrench}
               title="Our Services"
-              rightSlot={
-                <Link
-                  to="/services"
-                  onClick={onClose}
-                  className="text-black text-sm font-medium hover:text-gold transition-colors flex items-center gap-1"
-                >
-                  View All
-                  <ArrowRight className="w-4 h-4 text-gold" />
-                </Link>
-              }
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
@@ -74,6 +63,18 @@ const MegaMenuServices = React.forwardRef<HTMLDivElement, MegaMenuServicesProps>
                   compact
                 />
               ))}
+            </div>
+            
+            {/* View All - emphasized */}
+            <div className="mt-3">
+              <MegaMenuIconLink
+                to="/services"
+                onClick={onClose}
+                icon={Eye}
+                title="View All Services"
+                compact
+                emphasis
+              />
             </div>
           </div>
         </div>

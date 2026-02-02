@@ -102,13 +102,13 @@ const CATEGORY_META: Record<ToolCategory, {
   marketing: {
     label: "Marketing &",
     coloredLabel: "Content",
-    badgeClass: "bg-emerald-500/30 text-emerald-200 border-emerald-400/50",
-    // GLOW ON NORMAL LOAD (emerald), WHITE GLOW ON HOVER
-    cardClass: "bg-emerald-900/80 border-2 border-emerald-500/50 shadow-[0_0_25px_rgba(16,185,129,0.4)] hover:border-white hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)]",
-    iconWrapClass: "bg-emerald-500/30 border border-emerald-400/40",
-    iconClass: "text-emerald-300",
-    arrowClass: "text-emerald-300 group-hover:text-white",
-    glowClass: "border-emerald-500/50 shadow-[0_0_25px_rgba(16,185,129,0.4)] hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)] hover:border-white",
+    badgeClass: "bg-amber-500/30 text-amber-200 border-amber-400/50",
+    // GLOW ON NORMAL LOAD (amber), WHITE GLOW ON HOVER - Distinct from Broker Hub green
+    cardClass: "bg-amber-900/80 border-2 border-amber-500/50 shadow-[0_0_25px_rgba(245,158,11,0.4)] hover:border-white hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)]",
+    iconWrapClass: "bg-amber-500/30 border border-amber-400/40",
+    iconClass: "text-amber-300",
+    arrowClass: "text-amber-300 group-hover:text-white",
+    glowClass: "border-amber-500/50 shadow-[0_0_25px_rgba(245,158,11,0.4)] hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)] hover:border-white",
   },
   design: {
     label: "Design &",
@@ -592,18 +592,21 @@ const AIHub = () => {
                   {/* Hover fill overlay */}
                   <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
                 </button>
-                {/* View Premium Plans Button */}
+                {/* View Premium Plans Button - Using primary champagne gradient */}
                 <button 
                   onClick={() => navigate("/pricing")}
-                  className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300"
+                  className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
                   style={{
-                    background: 'linear-gradient(135deg, #c8a766 0%, #dfc07f 50%, #c8a766 100%)',
+                    background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)',
+                    border: '2px solid rgba(200,167,102,0.6)',
                     boxShadow: '0 4px 15px rgba(200,167,102,0.4), inset 0 1px 2px rgba(255,255,255,0.3)',
                   }}
                 >
-                  <Sparkles className="w-5 h-5 text-black" />
-                  <span className="text-black">View Premium Plans</span>
-                  <ArrowUpRight className="w-5 h-5 text-black" />
+                  <Sparkles className="w-5 h-5 text-gold" />
+                  <span className="text-black font-bold">View Premium Plans</span>
+                  <ArrowUpRight className="w-5 h-5 text-gold" />
+                  {/* Hover glow overlay */}
+                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 30px rgba(200,167,102,0.5), inset 0 0 15px rgba(200,167,102,0.1)' }} />
                 </button>
               </motion.div>
 
@@ -693,14 +696,14 @@ const AIHub = () => {
             property: 'bg-gradient-to-br from-purple-900/90 via-purple-900/80 to-purple-950/90',
             productivity: 'bg-gradient-to-br from-blue-900/90 via-blue-900/80 to-blue-950/90',
             design: 'bg-gradient-to-br from-pink-900/90 via-pink-900/80 to-pink-950/90',
-            marketing: 'bg-gradient-to-br from-emerald-900/90 via-emerald-900/80 to-emerald-950/90',
+            marketing: 'bg-gradient-to-br from-amber-900/90 via-amber-900/80 to-amber-950/90',
           };
 
           return (
             <section key={category} id={category === 'property' ? 'investor-tools' : `${category}-tools`} className="py-16 md:py-20 bg-black">
               <div className="container mx-auto px-3 sm:px-4">
                 {/* Active Color Layer - Category-specific */}
-                <div className={`${categoryBgMap[category]} border border-${category === 'property' ? 'purple' : category === 'productivity' ? 'blue' : category === 'design' ? 'pink' : 'emerald'}-500/30 rounded-2xl p-4 sm:p-6 shadow-lg`}>
+                <div className={`${categoryBgMap[category]} border border-${category === 'property' ? 'purple' : category === 'productivity' ? 'blue' : category === 'design' ? 'pink' : 'amber'}-500/30 rounded-2xl p-4 sm:p-6 shadow-lg`}>
                   <motion.div
                     className="text-center mb-8"
                     initial={{ opacity: 0, y: 20 }}
@@ -744,77 +747,80 @@ const AIHub = () => {
         {/* BROKER HUB PREVIEW - GREEN THEME (What you get as a registered broker) */}
         <section className="py-16 md:py-20 bg-black">
           <div className="container mx-auto px-4">
-            <motion.div
-              className="text-center mb-12"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <Badge className="bg-emerald-500/30 text-emerald-200 border-emerald-400/50 mb-4">
-                <Lock className="w-3 h-3 mr-1" />
-                JBJ Broker Hub Exclusive
-              </Badge>
-              <h2 className="text-2xl md:text-3xl font-bold mb-2">
-                <span className="text-white">Unlock More with </span>
-                <span className="text-emerald-300">JBJ Broker Hub</span>
-              </h2>
-              <p className="text-zinc-400 max-w-2xl mx-auto">
-                Registered JBJ brokers get access to additional tools, operation support, creative suite, and marketing automation.
-              </p>
-            </motion.div>
-
-            <motion.div 
-              className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={staggerContainer}
-            >
-              {brokerOnlyTools.map((tool) => renderLockedCard(tool))}
-            </motion.div>
-
-            {/* CTA to Join Broker Hub */}
-            <motion.div 
-              className="text-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <div className="inline-flex flex-col items-center gap-4 p-8 rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 shadow-[0_0_40px_rgba(200,167,102,0.3)]">
-                <h3 className="text-black text-xl font-bold">Want Access to All Tools?</h3>
-                <p className="text-zinc-600 max-w-md">
-                  Join JBJ Broker Hub and unlock operation support, creative & marketing suite, HR management, and exclusive training.
+            {/* Active Green Layer - matching the card theme */}
+            <div className="bg-gradient-to-br from-emerald-900/90 via-emerald-900/80 to-emerald-950/90 border border-emerald-500/30 rounded-2xl p-6 md:p-10 shadow-lg">
+              <motion.div
+                className="text-center mb-12"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                <Badge className="bg-emerald-500/30 text-emerald-200 border-emerald-400/50 mb-4">
+                  <Lock className="w-3 h-3 mr-1" />
+                  JBJ Broker Hub Exclusive
+                </Badge>
+                <h2 className="text-2xl md:text-3xl font-bold mb-2">
+                  <span className="text-white">Unlock More with </span>
+                  <span className="text-emerald-300">JBJ Broker Hub</span>
+                </h2>
+                <p className="text-emerald-100/70 max-w-2xl mx-auto">
+                  Registered JBJ brokers get access to additional tools, operation support, creative suite, and marketing automation.
                 </p>
-                <div className="flex flex-wrap justify-center gap-3">
-                  <Link to="/broker-toolkit">
-                    <button 
-                      className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
-                      style={{
-                        background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
-                        border: '2px solid rgba(200,167,102,0.5)',
-                        boxShadow: `
-                          0 10px 30px rgba(200,167,102,0.4),
-                          0 6px 15px rgba(0,0,0,0.2),
-                          inset 0 2px 4px rgba(255,255,255,0.9),
-                          inset 0 -2px 4px rgba(200,167,102,0.2),
-                          0 0 20px rgba(200,167,102,0.3)
-                        `,
-                      }}
-                    >
-                      <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                      <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
-                      <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-                      <span className="relative flex items-center justify-center gap-2">
-                        <Sparkles className="w-5 h-5 text-gold" />
-                        <span className="text-gold">Become Part</span>
-                        <span className="text-black">of JBJ Broker Hub</span>
-                        <ArrowUpRight className="w-5 h-5 text-black" />
-                      </span>
-                    </button>
-                  </Link>
+              </motion.div>
+
+              <motion.div 
+                className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={staggerContainer}
+              >
+                {brokerOnlyTools.map((tool) => renderLockedCard(tool))}
+              </motion.div>
+
+              {/* CTA to Join Broker Hub - with breathing room */}
+              <motion.div 
+                className="text-center mt-8"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                <div className="inline-flex flex-col items-center gap-4 p-8 rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 shadow-[0_0_40px_rgba(200,167,102,0.3)]">
+                  <h3 className="text-black text-xl font-bold">Want Access to All Tools?</h3>
+                  <p className="text-zinc-600 max-w-md">
+                    Join JBJ Broker Hub and unlock operation support, creative & marketing suite, HR management, and exclusive training.
+                  </p>
+                  <div className="flex flex-wrap justify-center gap-3">
+                    <Link to="/broker-toolkit">
+                      <button 
+                        className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
+                        style={{
+                          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+                          border: '2px solid rgba(200,167,102,0.5)',
+                          boxShadow: `
+                            0 10px 30px rgba(200,167,102,0.4),
+                            0 6px 15px rgba(0,0,0,0.2),
+                            inset 0 2px 4px rgba(255,255,255,0.9),
+                            inset 0 -2px 4px rgba(200,167,102,0.2),
+                            0 0 20px rgba(200,167,102,0.3)
+                          `,
+                        }}
+                      >
+                        <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                        <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+                        <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                        <span className="relative flex items-center justify-center gap-2">
+                          <Sparkles className="w-5 h-5 text-gold" />
+                          <span className="text-gold">Become Part</span>
+                          <span className="text-black">of JBJ Broker Hub</span>
+                          <ArrowUpRight className="w-5 h-5 text-black" />
+                        </span>
+                      </button>
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
           </div>
         </section>
 
