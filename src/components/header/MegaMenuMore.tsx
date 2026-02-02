@@ -38,9 +38,9 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
   return (
     <MegaMenuShell ref={ref}>
       <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-10 lg:py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          {/* Left: Featured photo - MUST fill the full panel height and stay centered */}
-          <div className="lg:col-span-6 flex items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
+          {/* Left: Featured photo - FULL height stretch, horizontally centered with equal margins */}
+          <div className="lg:col-span-6 flex items-stretch justify-center">
             <MegaMenuFeaturedCard
               to="/about"
               onClick={onClose}
@@ -49,7 +49,7 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
               title="About JBJ Global Real Estate"
               description="Discover our story, team, and commitment to excellence."
               cta="Learn More"
-              className="flex-1 h-full min-h-[380px] lg:min-h-[420px]"
+              className="w-full h-full"
             />
           </div>
 
