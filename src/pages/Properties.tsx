@@ -1090,7 +1090,11 @@ const Properties = () => {
                         <p className="text-zinc-600 mb-6">Try adjusting your filters or search criteria</p>
                       </>
                     )}
-                    <Button onClick={clearFilters} variant="primary" className="bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] border border-gold/30 text-black hover:bg-white">
+                    <Button
+                      onClick={clearFilters}
+                      variant="outline"
+                      className="border-border text-foreground hover:bg-muted"
+                    >
                       <X className="w-4 h-4 mr-2" />
                       Clear Filters
                     </Button>
