@@ -171,7 +171,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
     }
     try {
       // IMPORTANT: PostgREST hard-limits at 1000 rows per request.
-      // We use range pagination to support 1,335+.
+      // We use range pagination to support 1,336+.
       const offset = reset ? 0 : imports.length;
 
       let query = supabase
@@ -798,7 +798,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           <CardTitle className="flex items-center gap-2 text-foreground">
             <Building2 className="h-5 w-5 text-foreground" />
             Listing Inventory
-            <Badge variant="outline" className="text-xs">1,335 Target</Badge>
+            <Badge variant="outline" className="text-xs">1,336 Target</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -829,7 +829,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
               Listing Inventory
             </CardTitle>
             <p className="text-sm text-muted-foreground mt-1">
-              Target: 1,335 · In Queue: {totalCount ?? imports.length} · Loaded: {imports.length}
+              Target: 1,336 · In Queue: {totalCount ?? imports.length} · Loaded: {imports.length}
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -910,7 +910,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           {/* Inventory status cards */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
             <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
-              <div className="text-2xl font-bold text-foreground">1,335</div>
+              <div className="text-2xl font-bold text-foreground">1,336</div>
               <div className="text-xs text-muted-foreground">Target</div>
             </div>
             <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">

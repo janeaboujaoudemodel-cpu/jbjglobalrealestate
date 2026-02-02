@@ -600,7 +600,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     await startFullSync();
   };
 
-  // FULL WIPE & REBUILD - Complete database reset and rediscovery of all 1335 listings
+  // FULL WIPE & REBUILD - Complete database reset and rediscovery of all 1336 listings
   const fullWipeAndRebuild = async () => {
     if (isSyncing || isWiping || isBulkExtractRunning) return;
 
@@ -609,7 +609,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       "This will:\n" +
       "1) DELETE ALL projects, images, and documents from the database\n" +
       "2) CLEAR the entire queue\n" +
-      "3) RE-DISCOVER all 1,335 project URLs from the source portal\n" +
+      "3) RE-DISCOVER all 1,336 project URLs from the source portal\n" +
       "4) Queue them all for fresh extraction\n\n" +
       "Manual projects (without source_url) will be PRESERVED.\n\n" +
       "This is a destructive operation. Continue?"
@@ -629,13 +629,13 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       
       toast.success(`Wiped: ${wipeData?.deleted?.projects ?? 0} projects, ${wipeData?.deleted?.queue_items ?? 0} queue items`);
 
-      // Step 2: Discover all 1335 URLs
-      toast.info("Discovering all 1,335 project URLs...");
+      // Step 2: Discover all 1336 URLs
+      toast.info("Discovering all 1,336 project URLs...");
       
       const { data: discoverData, error: discoverErr } = await supabase.functions.invoke("discover-all-projects", {
         body: {
           freshStart: true,
-          expectedTotal: 1335,
+          expectedTotal: 1336,
           forceFullDiscovery: true,
         },
       });
@@ -676,7 +676,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     setRebuildResult(null);
 
     try {
-      const TARGET = 1335;
+      const TARGET = 1336;
       const getPendingCount = async () => {
         const { count } = await supabase
           .from("pending_project_imports")
@@ -1404,7 +1404,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                    Clear Queue & Start Fresh
                  </Button>
 
-                 {/* FULL WIPE & REBUILD - Deletes everything and rediscovers all 1335 */}
+                 {/* FULL WIPE & REBUILD - Deletes everything and rediscovers all 1336 */}
                  <Button
                    onClick={fullWipeAndRebuild}
                    disabled={isWiping || isSyncing || isBulkExtractRunning}
@@ -1510,7 +1510,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                   {/* Unified inventory summary */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div className="rounded-lg border border-border bg-muted/50 p-4 text-center">
-                      <div className="text-2xl font-bold text-foreground">1,335</div>
+                      <div className="text-2xl font-bold text-foreground">1,336</div>
                       <div className="text-xs text-muted-foreground">Target</div>
                     </div>
                     <div className="rounded-lg border border-border bg-muted/50 p-4 text-center">
@@ -1548,9 +1548,9 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                   </div>
 
                   {/* Gap alert – only show if under 1333 (Provident has some duplicates; 1333 unique is acceptable) */}
-                  {(queueBreakdown.pending ?? 0) < 1333 && (
+                  {(queueBreakdown.pending ?? 0) < 1334 && (
                     <div className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-xs text-amber-800">
-                      <strong>Gap detected:</strong> {1335 - (queueBreakdown.pending ?? 0)} listings missing. Click "Rebuild Queue" to discover all URLs.
+                      <strong>Gap detected:</strong> {1336 - (queueBreakdown.pending ?? 0)} listings missing. Click "Rebuild Queue" to discover all URLs.
                     </div>
                   )}
 

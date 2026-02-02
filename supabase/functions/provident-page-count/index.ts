@@ -50,7 +50,7 @@ serve(async (req) => {
           JSON.stringify({ 
             success: true, 
             total_pages: 89, 
-            estimated_listings: 1335,
+            estimated_listings: 1336,
             cached: true,
             note: "Using cached values due to rate limiting"
           }),
@@ -80,7 +80,7 @@ serve(async (req) => {
     // 89 pages × 15 listings per page = 1,335 total listings
     const CANONICAL_TOTAL_PAGES = 89;
     const CANONICAL_LISTINGS_PER_PAGE = 15;
-    const CANONICAL_TOTAL_LISTINGS = 1335;
+    const CANONICAL_TOTAL_LISTINGS = 1336;
     
     const totalPages = maxPage > 1 ? maxPage : CANONICAL_TOTAL_PAGES;
     const estimatedListings = CANONICAL_TOTAL_LISTINGS;
