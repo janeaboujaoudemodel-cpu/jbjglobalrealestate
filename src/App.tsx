@@ -106,6 +106,8 @@ import BrokerAccount from "./pages/BrokerAccount";
 import UserProfile from "./pages/UserProfile";
 import HRAgent from "./pages/HRAgent";
 import ReferralOnboarding from "./pages/ReferralOnboarding";
+import ReferralAdmin from "./pages/ReferralAdmin";
+import RedeemReferral from "./pages/RedeemReferral";
 import Spreadsheet from "./pages/Spreadsheet";
 import Documents from "./pages/Documents";
 import VideoMeeting from "./pages/VideoMeeting";
@@ -347,6 +349,8 @@ const App = () => (
                 <Route path="/account" element={<Navigate to="/my-account" replace />} />
                 <Route path="/hr-agent" element={<HRAgent />} />
                 <Route path="/referral-onboarding" element={<ReferralOnboarding />} />
+                <Route path="/referral-admin" element={<ReferralAdmin />} />
+                <Route path="/redeem-referral" element={<RedeemReferral />} />
                 <Route path="/signature-studio" element={<Navigate to="/document-scanner" replace />} />
                 <Route path="/spreadsheet" element={<Spreadsheet />} />
                 <Route path="/documents" element={<Documents />} />
