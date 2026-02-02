@@ -1,339 +1,129 @@
 
+## What’s actually happening (root cause)
 
-# Why Dubai Section & Podcast Visibility Implementation Plan
+Your “queue stuck at ~16/17”, “bulk extraction completes immediately”, and “wipe/rebuild buttons look broken” are all the same root bug:
 
-## Summary of Changes
+- The **discovery function** (`discover-all-projects`) tries to insert the 1,336 URLs using an **upsert** with `onConflict: "slug"`.
+- But in the database, the current uniqueness protection on `pending_project_imports.slug` / `source_url` is implemented as **partial unique indexes** (they have `WHERE slug IS NOT NULL` / `WHERE source_url IS NOT NULL`).
+- Postgres **cannot use a partial unique index** as the conflict target for `ON CONFLICT (slug)` unless the statement also matches the index predicate. Result:
+  - Inserts fail with: **“there is no unique or exclusion constraint matching the ON CONFLICT specification”**
+  - So the discovery call returns “success” to the UI (because we weren’t surfacing insert failure properly), but **it inserts 0 rows**.
+  - Therefore:
+    - Queue stays at 0 (or whatever few were previously created by other workflows like page-sync)
+    - “Start Bulk Extraction” instantly says “Complete” because there’s nothing to process
+    - Wipe/reset appears “stuck” because the next step (discovery insert) silently fails
 
-This plan addresses all the requested changes to the "Why Dubai Became the Capital of Global Investors" section and implements an admin-only visibility toggle for the JBJ Podcast section.
-
----
-
-## Part 1: Why Dubai Section - Video Transition Fixes
-
-### Issue 1: Black Screen Between Scene Transitions
-**Current State (Lines 40-62):**
-```tsx
-<AnimatePresence mode="wait">
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-    transition={{ duration: 1.2 }}  // Too slow - causes black gap
-```
-
-**Problem:** The `mode="wait"` combined with 1.2s transition creates a visible black gap when one video fades out before the next fades in.
-
-**Fix:**
-1. Change `mode="wait"` to `mode="sync"` - Allows outgoing/incoming to overlap
-2. Reduce transition duration from 1.2s to 0.6s for faster crossfade
-3. Add `preload="auto"` to improve video loading time
-4. Implement video preloading for smoother transitions
-
-**New Code:**
-```tsx
-<AnimatePresence mode="sync">
-  <motion.div
-    key={currentScene}
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-    transition={{ duration: 0.6 }}  // Faster crossfade
-    className="absolute inset-0"
-  >
-    <video
-      className="absolute inset-0 w-full h-full object-cover"
-      autoPlay
-      loop
-      muted
-      playsInline
-      preload="auto"  // Changed from "metadata" for faster loading
-    >
-```
+I confirmed this in backend logs: discover batches fail with that exact ON CONFLICT error, and “Total inserted: 0”.
 
 ---
 
-## Part 2: Title Readability - White Text with Gold Accent
+## Fix Strategy (high confidence, minimal moving parts)
 
-### Current State (Lines 78-84):
-```tsx
-<h2 className="... text-primary-foreground ...">
-  <T>Why Dubai Became the Capital of</T>{" "}
-  <span className="text-gold"><T>Global Investors</T></span>
-</h2>
-```
+### A) Database schema fix (the real blocker)
+**Goal:** Make Postgres accept `ON CONFLICT (slug)` and `ON CONFLICT (source_url)`.
 
-**Fix:** Make the main title pure white for better contrast, keep only "Global Investors" in gold:
+1. **Create a new migration** to update queue integrity:
+   - Remove the partial unique indexes:
+     - `DROP INDEX IF EXISTS public.pending_project_imports_slug_unique;`
+     - `DROP INDEX IF EXISTS public.pending_project_imports_source_url_unique;`
+   - Add **non-partial** unique constraints/indexes:
+     - `CREATE UNIQUE INDEX ... ON public.pending_project_imports (slug);`
+     - `CREATE UNIQUE INDEX ... ON public.pending_project_imports (source_url);`
+2. Safety in the migration:
+   - Before creating the new unique indexes:
+     - Normalize `slug` to lowercase
+     - Normalize `source_url` (strip query/hash, strip trailing slash)
+     - Remove duplicates (keep oldest row per slug/source_url)
+3. (Optional but recommended) Hardening:
+   - Set defaults / non-null:
+     - `status` default `'pending'`
+     - `slug` and `source_url` non-null (only if we are 100% sure nothing uses null; current data shows 0 nulls)
 
-```tsx
-<h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight"
-    style={{ 
-      fontFamily: "Poppins, sans-serif",
-      textShadow: '0 2px 8px rgba(0,0,0,0.6)'  // Add shadow for readability
-    }}>
-  <T>Why Dubai Became the Capital of</T>{" "}
-  <span className="text-gold"><T>Global Investors</T></span>
-</h2>
-```
-
----
-
-## Part 3: Premium Stats Cards Redesign
-
-### Current State (Lines 90-103):
-Simple cards with minimal styling:
-```tsx
-<div className="rounded-md border border-gold/20 bg-black/40 backdrop-blur-sm px-2 py-2 text-center">
-```
-
-**New Premium Design:**
-- Glass morphism effect with stronger blur
-- Gradient gold border that glows on hover
-- Larger, bolder value text
-- Better padding and spacing
-- Subtle shimmer animation
-
-**New Code:**
-```tsx
-<div className="mt-6 grid grid-cols-4 gap-2 max-w-md">
-  {stats.map((s, index) => (
-    <motion.div
-      key={s.label}
-      initial={{ opacity: 0, y: 10 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1 }}
-      className="group relative rounded-xl overflow-hidden"
-    >
-      {/* Gradient border */}
-      <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-gold/40 via-gold/20 to-gold/40 p-[1px]">
-        <div className="h-full w-full rounded-xl bg-black/60 backdrop-blur-md" />
-      </div>
-      
-      {/* Content */}
-      <div className="relative px-3 py-3 text-center">
-        <div className="text-xl md:text-2xl lg:text-3xl font-bold text-gold leading-none"
-             style={{ textShadow: '0 0 20px rgba(200,167,102,0.5)' }}>
-          {s.value}
-        </div>
-        <div className="mt-1 text-[9px] md:text-[10px] uppercase tracking-wider text-white/70 font-medium">
-          <T>{s.label}</T>
-        </div>
-      </div>
-      
-      {/* Hover glow */}
-      <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-           style={{ boxShadow: '0 0 30px rgba(200,167,102,0.4)' }} />
-    </motion.div>
-  ))}
-</div>
-```
+**Outcome:** `discover-all-projects` can finally insert 1,336 rows reliably.
 
 ---
 
-## Part 4: CTA Button - Match Homepage Hero Style
+### B) Backend function correctness: make failures visible and deterministic
+**Goal:** Stop reporting “success” when inserts failed.
 
-### Current State (Lines 105-112):
-```tsx
-<Button asChild variant="primary" size="lg">
-  <Link to="/guides/investment">
-    <T>Explore Investment Opportunities</T>
-    <ArrowRight className="w-5 h-5" />
-  </Link>
-</Button>
-```
+1. Update `supabase/functions/discover-all-projects/index.ts`:
+   - If any insert batch fails, return:
+     - `success: false`
+     - a clear `error` field (include the Postgres ON CONFLICT message)
+     - `inserted_batches`, `failed_batches`, `attempted_rows`
+   - Keep the current discovery logic, but make the response reflect reality.
+2. Add a “guardrail”:
+   - After insert loop, if `placeholders.length > 0` and `insertedCount === 0`, return HTTP 500 (or `success:false`) so the UI doesn’t proceed into extraction.
 
-**Fix:** Use `PremiumHeroButton` component to match homepage hero:
-
-```tsx
-import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
-
-<div className="mt-8 md:mt-10">
-  <PremiumHeroButton href="/guides/investment" size="lg">
-    <T>Explore Investment Opportunities</T>
-  </PremiumHeroButton>
-</div>
-```
-
-This applies the exact same styling as the homepage hero buttons:
-- Transparent background with white border
-- White text with gold arrow icon
-- On hover: Champagne gradient fill, gold border, black text
+**Outcome:** No more “fake success” and no more confusing UI states.
 
 ---
 
-## Part 5: Remove Gold Circle Bulb
+### C) Listing Admin UI fixes (why buttons feel “stuck”)
+**Goal:** Make the admin workflow resilient and transparent.
 
-**Note:** The search through the code did not find any explicit "gold circle bulb" element. The user may be referring to:
-1. A visual artifact in the video itself (cannot fix via code)
-2. The navigation dots which were already removed (see line 117: "NO DOTS - removed as per user request")
+1. Update `src/components/listing-admin/SyncDashboard.tsx`:
+   - **FULL WIPE & REBUILD** currently does:
+     - wipe → single long discover call → auto start extraction
+   - Change it to:
+     - wipe → **chunked queue rebuild** (the existing `rebuildQueueFromMap` logic) → only start extraction when queue count is correct.
+2. Add “stuck detection”:
+   - After each discovery chunk, re-check pending count.
+   - If pending count does **not increase** after a discover chunk:
+     - stop the loop immediately
+     - show a toast explaining the real reason (insertion blocked / discovery failed)
+3. Bulk extraction runner improvements:
+   - Before starting bulk extraction:
+     - If pending count is 0, show “Queue is empty — rebuild queue first” and do not start.
+   - When bulk extraction reports `processed = 0`:
+     - verify whether queue still has items needing extraction
+     - if yes, show “0 eligible rows found; likely missing marker fields” (and surface diagnostics)
+     - if no, show “Complete”.
 
-If there's any remaining gold circle, it might be coming from the video content itself, not the code overlay.
-
----
-
-## Part 6: JBJ Podcast Section - Admin-Only Visibility
-
-### Database Changes
-
-**Create new site_settings entry:**
-```sql
-INSERT INTO public.site_settings (setting_key, setting_value, description)
-VALUES (
-  'podcast_visibility',
-  '{"enabled": false}'::jsonb,
-  'Controls visibility of JBJ Podcast section on homepage. When disabled, section is hidden from all users except admins.'
-);
-
--- Create RPC function to toggle podcast visibility
-CREATE OR REPLACE FUNCTION public.set_podcast_visibility(p_enabled boolean)
-RETURNS boolean
-LANGUAGE plpgsql
-SECURITY DEFINER
-SET search_path = 'public'
-AS $$
-BEGIN
-  UPDATE public.site_settings
-  SET setting_value = jsonb_build_object('enabled', p_enabled),
-      updated_at = now(),
-      updated_by = auth.uid()
-  WHERE setting_key = 'podcast_visibility';
-  
-  RETURN p_enabled;
-END;
-$$;
-```
-
-### New Context: PodcastVisibilityContext
-
-**Create:** `src/contexts/PodcastVisibilityContext.tsx`
-
-```tsx
-// Similar structure to FounderVisibilityContext
-// - Fetches 'podcast_visibility' from site_settings
-// - Provides isPodcastVisible, isLoading, togglePodcastVisibility
-// - For non-admins: section is hidden when disabled
-// - For admins/owners: section is always visible for testing
-```
-
-### New Component: PodcastVisibilityToggle
-
-**Create:** `src/components/admin/PodcastVisibilityToggle.tsx`
-
-- Similar UI to FounderVisibilityToggle
-- Placed in Admin panel Security tab next to Founder toggle
-- Shows current status (Visible/Hidden)
-- Toggle switch with confirmation dialog
-
-### Update Index.tsx
-
-**Current (Line 634-635):**
-```tsx
-{/* JBJ PODCAST SECTION */}
-<JBJPodcastSection />
-```
-
-**New:**
-```tsx
-{/* JBJ PODCAST SECTION - Admin-controlled visibility */}
-<PodcastVisibilityGate>
-  <SectionDivider />
-  <JBJPodcastSection />
-</PodcastVisibilityGate>
-```
-
-**PodcastVisibilityGate Logic:**
-```tsx
-const PodcastVisibilityGate = ({ children }) => {
-  const { isPodcastVisible, isLoading } = usePodcastVisibility();
-  const [isAdmin, setIsAdmin] = useState(false);
-  const { user } = useAuth();
-  
-  useEffect(() => {
-    // Check if current user has admin/owner role
-    if (user) {
-      Promise.all([
-        supabase.rpc("has_role", { _user_id: user.id, _role: "admin" }),
-        supabase.rpc("has_role", { _user_id: user.id, _role: "owner" }),
-      ]).then(([adminRes, ownerRes]) => {
-        setIsAdmin(adminRes.data || ownerRes.data);
-      });
-    }
-  }, [user]);
-  
-  // Admin/Owner always sees podcast for testing
-  if (isAdmin) return <>{children}</>;
-  
-  // Non-admin: only show if enabled
-  if (!isPodcastVisible) return null;
-  
-  return <>{children}</>;
-};
-```
-
-### Update Admin.tsx - Security Tab
-
-**Add to imports:**
-```tsx
-import { PodcastVisibilityToggle } from "@/components/admin/PodcastVisibilityToggle";
-```
-
-**Update Security TabsContent (Line 484-487):**
-```tsx
-<TabsContent value="security" className="space-y-8">
-  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <SecurityDashboardSummary />
-    <FounderVisibilityToggle />
-  </div>
-  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <PodcastVisibilityToggle />
-  </div>
-</TabsContent>
-```
+**Outcome:** Buttons won’t “look broken”; they’ll either complete successfully or show a precise failure reason.
 
 ---
 
-## Files to Modify
+## Execution / Validation Checklist (what we will test end-to-end in Preview)
 
-| File | Changes |
-|------|---------|
-| `src/components/home/WhyDubaiCapitalSection.tsx` | Fix transitions, title, cards, CTA button |
-| `src/contexts/PodcastVisibilityContext.tsx` | **CREATE** - Context for podcast visibility |
-| `src/components/admin/PodcastVisibilityToggle.tsx` | **CREATE** - Admin toggle component |
-| `src/components/home/PodcastVisibilityGate.tsx` | **CREATE** - Gate component for conditional rendering |
-| `src/pages/Index.tsx` | Wrap podcast section with visibility gate |
-| `src/pages/Admin.tsx` | Add podcast toggle to Security tab |
-| `src/App.tsx` | Add PodcastVisibilityProvider |
-| Database Migration | Add podcast_visibility setting and RPC function |
-
----
-
-## Visual Summary
-
-| Element | Before | After |
-|---------|--------|-------|
-| Video transition | 1.2s with black gap | 0.6s smooth crossfade |
-| Title color | primary-foreground | Pure white with text shadow |
-| Stats cards | Simple bordered boxes | Premium glass cards with glow |
-| CTA button | Basic Button component | PremiumHeroButton (matches homepage) |
-| Podcast section | Always visible | Admin toggle controls visibility |
+1. Click **Reset/Clear queue** → confirm queue becomes 0.
+2. Click **Rebuild Queue**:
+   - Expect pending queue to rise quickly (MAP inserts ~1331)
+   - Then chunk passes fill to **exactly 1,336**
+3. Confirm:
+   - Dashboard pending count == Queue view count == **1,336**
+   - No case where queue exceeds target.
+4. Click **Start Bulk Extraction**:
+   - Expect it to process many rows (not instantly “complete”)
+   - Expect `needs_extraction_pending` to decrease over time.
+5. Verify:
+   - No “0 outside / 16 inside” mismatch after refresh (counts computed consistently, errors surfaced)
 
 ---
 
-## Admin Panel Addition
+## Files/Areas that will be changed
 
-The Security tab in Admin panel will have:
+### Backend (schema)
+- New migration file to:
+  - Replace partial unique indexes with full unique indexes on:
+    - `pending_project_imports.slug`
+    - `pending_project_imports.source_url`
 
-```
-+----------------------------------+----------------------------------+
-|   Security Dashboard Summary     |   Founder Visibility Control     |
-+----------------------------------+----------------------------------+
-|   Podcast Visibility Control     |                                  |
-+----------------------------------+----------------------------------+
-```
+### Backend (function)
+- `supabase/functions/discover-all-projects/index.ts`
+  - fail fast when inserts fail
+  - return accurate inserted/error stats
 
-Podcast toggle will show:
-- Current status (Visible to Public / Hidden - Admin Only)
-- Toggle switch
-- Confirmation dialog when changing
-- Info notice explaining the toggle only affects public visibility, admin always sees it
+### Frontend (admin)
+- `src/components/listing-admin/SyncDashboard.tsx`
+  - FULL WIPE uses chunked rebuild logic
+  - better stuck detection & guardrails
+  - extraction start conditions improved
 
+---
+
+## Why this will stop the recurring mistakes
+- The system was not “discovering only 17”; it was **failing to insert** the discovered set due to a database constraint mismatch.
+- Once the conflict target is fixed, queue build becomes deterministic, count can’t exceed target, and bulk extraction will have real work to do.
+
+If you approve this plan, I’ll implement the migration + function fix first (so discovery can actually insert), then update the admin dashboard flows so the buttons cannot get into these “looks stuck but silently failed” states again.
