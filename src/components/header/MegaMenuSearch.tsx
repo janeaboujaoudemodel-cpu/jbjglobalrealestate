@@ -8,7 +8,7 @@ import {
   GraduationCap,
   Home,
   MapPin,
-  MessageCircle,
+  Mail,
   Phone,
   Users,
   Building2,
@@ -17,7 +17,13 @@ import {
   Sparkles,
   Search,
 } from 'lucide-react';
-import { MegaMenuIconLink, MegaMenuSectionDivider, MegaMenuSectionTitle } from '@/components/header/mega-menu-primitives';
+import { FaWhatsapp } from 'react-icons/fa';
+import {
+  MegaMenuIconLink,
+  MegaMenuSectionDivider,
+  MegaMenuSectionTitle,
+  MegaMenuShell,
+} from '@/components/header/mega-menu-primitives';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { CONTACT_INFO, getCallUrl, getWhatsAppUrl } from '@/constants/stats';
@@ -39,16 +45,36 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
   const servicesLinks = [
     { href: '/services/buying-advisory', label: 'Buying Advisory', icon: Home },
     { href: '/services/selling-advisory', label: 'Selling Advisory', icon: ClipboardCheck },
-    { href: '/seller-listing', label: 'Sell Your Property', icon: ClipboardCheck },
+    { href: '/seller-listing', label: 'Sell Your Property Now', icon: ClipboardCheck },
     { href: '/services/rental-advisory', label: 'Rental Advisory', icon: Building2 },
     { href: '/services/investment-advisory', label: 'Investment Advisory', icon: Briefcase },
-    { href: '/guides/golden-visa-uae', label: 'Golden Visa', icon: Globe },
+    { href: '/guides/golden-visa-uae', label: 'Golden Visa Guide', icon: Globe },
     { href: '/mortgage-calculator', label: 'Mortgage Calculator', icon: Calculator },
   ];
 
-  const contactLinks = [
-    { href: getCallUrl(), label: 'Call Now', icon: Phone, external: true },
-    { href: getWhatsAppUrl('Hi, I have a question.'), label: 'WhatsApp', icon: MessageCircle, external: true },
+  type ContactIcon = React.ComponentType<{ className?: string }>;
+  const contactLinks: Array<{
+    href: string;
+    label: string;
+    icon: ContactIcon;
+    iconClassName?: string;
+    external?: boolean;
+  }> = [
+    { href: getCallUrl(), label: 'Call Now', icon: Phone, iconClassName: 'text-gold', external: true },
+    {
+      href: getWhatsAppUrl('Hi, I have a question.'),
+      label: 'WhatsApp',
+      icon: FaWhatsapp,
+      iconClassName: 'text-ai-emerald',
+      external: true,
+    },
+    {
+      href: `mailto:${CONTACT_INFO.email}`,
+      label: 'Email',
+      icon: Mail,
+      iconClassName: 'text-black',
+      external: true,
+    },
     { href: '/contact', label: 'Contact Form', icon: FileText },
   ];
 
@@ -63,27 +89,15 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
     { href: '/join', label: 'Careers', icon: Users },
     { href: '/favorites', label: 'My Favorites', icon: Heart },
     { href: '/ai-hub', label: 'AI Tools', icon: Sparkles },
+    { href: '/map', label: 'Property Map', icon: MapPin },
+    { href: '/compare', label: 'Compare Properties', icon: ClipboardCheck },
+    { href: '/quiz', label: 'AI Home Finder', icon: Sparkles },
   ];
 
   return (
-    <div
-      ref={ref}
-      className={cn(
-        "z-[9999] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] rounded-xl overflow-hidden w-[560px]",
-      )}
-      style={{
-        background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
-        // Prevent bottom cropping on shorter viewports by enabling internal scroll.
-        // The overlay starts below the header, so we subtract header height + a small bottom gutter.
-        maxHeight: 'calc(100vh - var(--header-height, 128px) - 24px)',
-        overflowY: 'auto',
-        overscrollBehavior: 'contain',
-      }}
+    <MegaMenuShell ref={ref} className={cn("overflow-hidden")}
     >
-      {/* Gold border */}
-      <div className="absolute inset-0 rounded-xl border-2 border-gold/40 pointer-events-none" />
-      
-      <div className="px-6 py-6">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-6 lg:py-7">
         <MegaMenuSectionTitle icon={Search} title="Search & Shortcuts" />
 
         {/* Search bar (opens the global search modal) */}
@@ -108,11 +122,11 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
         </div>
 
         <MegaMenuSectionDivider />
-        
-        <div className="grid grid-cols-2 gap-6 mt-4">
-          {/* Services Column */}
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+          {/* Services */}
           <div>
-            <p className="text-[10px] uppercase tracking-wider text-gold font-medium mb-3">Our Services</p>
+            <p className="text-[10px] uppercase tracking-wider text-gold font-medium mb-3">Services</p>
             <div className="space-y-1">
               {servicesLinks.map((link) => (
                 <MegaMenuIconLink
@@ -127,7 +141,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
             </div>
           </div>
 
-          {/* Navigation & Contact Column */}
+          {/* Quick Links */}
           <div>
             <p className="text-[10px] uppercase tracking-wider text-gold font-medium mb-3">Quick Links</p>
             <div className="space-y-1">
@@ -142,22 +156,25 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
                 />
               ))}
             </div>
+          </div>
 
-            {/* Contact Shortcuts */}
-            <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent my-4" />
+          {/* Contact */}
+          <div>
             <p className="text-[10px] uppercase tracking-wider text-gold font-medium mb-3">Contact</p>
-            <div className="flex gap-2">
-              {contactLinks.map((link) => (
+            <div className="grid grid-cols-2 gap-2">
+              {contactLinks.map((link) =>
                 link.external ? (
                   <a
                     key={link.href}
                     href={link.href}
-                    onClick={onClose}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-black/10 border border-gold/30 hover:border-gold/60 hover:bg-black/15 transition-colors"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onClose();
+                      window.location.href = link.href;
+                    }}
+                    className="flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-black/10 border border-gold/30 hover:border-gold/60 hover:bg-black/15 transition-colors"
                   >
-                    <link.icon className="w-4 h-4 text-black" />
+                    <link.icon className={cn("w-4 h-4", link.iconClassName ?? "text-black")} />
                     <span className="text-black text-xs font-semibold">{link.label}</span>
                   </a>
                 ) : (
@@ -165,21 +182,21 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
                     key={link.href}
                     to={link.href}
                     onClick={onClose}
-                    className="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-black/10 border border-gold/30 hover:border-gold/60 hover:bg-black/15 transition-colors"
+                    className="flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-black/10 border border-gold/30 hover:border-gold/60 hover:bg-black/15 transition-colors"
                   >
-                    <link.icon className="w-4 h-4 text-black" />
+                    <link.icon className={cn("w-4 h-4", link.iconClassName ?? "text-black")} />
                     <span className="text-black text-xs font-semibold">{link.label}</span>
                   </Link>
                 )
-              ))}
+              )}
             </div>
+            <p className="mt-3 text-[11px] text-black/70">
+              {CONTACT_INFO.email}
+            </p>
           </div>
         </div>
       </div>
-      
-      {/* Bottom gold accent */}
-      <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
-    </div>
+    </MegaMenuShell>
   );
 });
 

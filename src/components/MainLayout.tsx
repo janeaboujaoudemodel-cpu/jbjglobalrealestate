@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import GlobalHeader from "@/components/GlobalHeader";
 import AIChatWidget from "@/components/AIChatWidget";
@@ -123,7 +123,6 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     '/team',
     '/founder',
     '/awards',
-    '/join',
     '/developers',
     '/services',
     '/market-intelligence',
@@ -153,14 +152,30 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     '/services/rental-advisory',
     '/services/investment-advisory',
   ];
-  const hasDarkHero = darkHeroPages.includes(location.pathname) || 
-                      location.pathname.startsWith('/developers/') ||
-                      location.pathname.startsWith('/project/') ||
-                      location.pathname.startsWith('/properties/') ||
-                      location.pathname.startsWith('/market-intelligence/') ||
-                      location.pathname.startsWith('/guides/') ||
-                      location.pathname.startsWith('/services/') ||
-                      location.pathname.startsWith('/investor/');
+  // Route-level hint used for first render; final decision is based on whether the page actually
+  // renders a full-screen hero (.jj-hero-fullscreen). This enforces the rule:
+  // - Hero pages: transparent header, content can sit behind.
+  // - Non-hero pages: solid header + top spacing, content must never slide under.
+  const routeSuggestsDarkHero =
+    darkHeroPages.includes(location.pathname) ||
+    location.pathname.startsWith('/developers/') ||
+    location.pathname.startsWith('/project/') ||
+    location.pathname.startsWith('/properties/') ||
+    location.pathname.startsWith('/market-intelligence/') ||
+    location.pathname.startsWith('/guides/') ||
+    location.pathname.startsWith('/services/') ||
+    location.pathname.startsWith('/investor/');
+
+  const [hasDarkHero, setHasDarkHero] = useState<boolean>(routeSuggestsDarkHero);
+
+  useLayoutEffect(() => {
+    if (isAdminRoute) {
+      setHasDarkHero(false);
+      return;
+    }
+    const hasHero = !!document.querySelector('.jj-hero-fullscreen');
+    setHasDarkHero(hasHero);
+  }, [location.pathname, isAdminRoute]);
   
   // Pages with bright backgrounds need content pushed below header
   const needsHeaderSpacing = !hasDarkHero;
