@@ -629,29 +629,98 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       
       toast.success(`Wiped: ${wipeData?.deleted?.projects ?? 0} projects, ${wipeData?.deleted?.queue_items ?? 0} queue items`);
 
-      // Step 2: Discover all 1336 URLs
-      toast.info("Discovering all 1,336 project URLs...");
-      
-      const { data: discoverData, error: discoverErr } = await supabase.functions.invoke("discover-all-projects", {
+      // Step 2: Use chunked queue rebuild (more reliable than single long call)
+      const TARGET = 1336;
+      const getPendingCount = async () => {
+        const { count } = await supabase
+          .from("pending_project_imports")
+          .select("id", { count: "exact", head: true })
+          .eq("status", "pending");
+        return count ?? 0;
+      };
+
+      // Fast MAP discovery first
+      toast.info("Discovering all 1,336 project URLs (MAP pass)...");
+      const { data: mapData, error: mapErr } = await supabase.functions.invoke("discover-all-projects", {
         body: {
           freshStart: true,
-          expectedTotal: 1336,
-          forceFullDiscovery: true,
+          expectedTotal: TARGET,
+          disableAutoFallback: true,
+          skipPostInsertStats: true,
         },
       });
 
-      if (discoverErr) throw discoverErr;
+      if (mapErr) throw mapErr;
+      
+      // Check for insert failures from the discover function
+      if (mapData?.success === false) {
+        throw new Error(mapData?.error || "Discovery failed - check database constraints");
+      }
+      
+      let pending = await getPendingCount();
+      toast.info(`MAP discovered ${mapData?.discovered_urls ?? 0} URLs, inserted ${mapData?.inserted_count ?? 0}. Queue: ${pending}`);
 
-      setRebuildResult(discoverData || null);
-      toast.success(`Discovered and queued ${discoverData?.queued_for_scraping ?? discoverData?.new_urls ?? 0} URLs`);
+      // Chunked discovery passes if still short
+      let stuckCounter = 0;
+      let lastPending = pending;
+      
+      if (pending < TARGET) {
+        toast.info(`Filling missing URLs (${TARGET - pending} needed)...`);
+        
+        const CHUNK = 10;
+        for (let start = 1; start <= 89 && pending < TARGET; start += CHUNK) {
+          const end = Math.min(89, start + CHUNK - 1);
+          const { data: rangeData, error: rangeErr } = await supabase.functions.invoke("discover-all-projects", {
+            body: {
+              expectedTotal: TARGET,
+              skipMap: true,
+              listingPageStart: start,
+              listingPageEnd: end,
+              listingUseFirecrawl: true,
+              disableAutoFallback: true,
+              skipPostInsertStats: true,
+            },
+          });
+          
+          if (rangeErr || rangeData?.success === false) {
+            console.warn(`Discovery range ${start}-${end} failed:`, rangeErr?.message || rangeData?.error);
+          }
+          
+          pending = await getPendingCount();
+          
+          // STUCK DETECTION: if pending count doesn't increase after 3 consecutive chunks, stop
+          if (pending <= lastPending) {
+            stuckCounter++;
+            if (stuckCounter >= 3) {
+              toast.error(`Discovery stuck at ${pending} items. Check backend logs for constraint errors.`);
+              break;
+            }
+          } else {
+            stuckCounter = 0;
+          }
+          lastPending = pending;
+        }
+      }
 
+      setRebuildResult({
+        discovered_urls: mapData?.discovered_urls ?? 0,
+        queued_for_scraping: pending,
+        new_urls: mapData?.new_urls ?? 0,
+        existing_urls: mapData?.existing_urls ?? 0,
+      });
+      
+      toast.success(`Discovered and queued ${pending.toLocaleString()} URLs`);
       await loadProjectCount();
 
-      // Step 3: Automatically start bulk extraction
-      toast.info("Starting bulk extraction of all listings...");
-      setTimeout(() => {
-        startBulkExtractRunner();
-      }, 1000);
+      // Step 3: Only start extraction if we have items in queue
+      if (pending > 0) {
+        toast.info("Starting bulk extraction of all listings...");
+        setTimeout(() => {
+          startBulkExtractRunner();
+        }, 1000);
+      } else {
+        toast.warning("Queue is empty - no extraction needed. Check backend logs for issues.");
+      }
 
     } catch (e: any) {
       console.error("Full wipe and rebuild failed:", e);
@@ -770,12 +839,24 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
 
   const startBulkExtractRunner = async () => {
     if (isBulkExtractRunning || isRebuildingQueue) return;
+    
+    // GUARDRAIL: Check if queue has items before starting
+    const { count: pendingCount } = await supabase
+      .from("pending_project_imports")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "pending");
+    
+    if (!pendingCount || pendingCount === 0) {
+      toast.warning("Queue is empty — rebuild queue first before starting extraction.");
+      return;
+    }
+    
     bulkStopRef.current = false;
     setIsBulkExtractRunning(true);
     setBulkLastRun(null);
     setBulkTotals({ processed: 0, success: 0, errors: 0 });
 
-    toast.info("Bulk extraction started — this will keep running until the queue is complete.");
+    toast.info(`Bulk extraction started — ${pendingCount.toLocaleString()} items in queue.`);
 
     try {
       // Keep looping until no more work or user stops
@@ -810,7 +891,25 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
 
         // Done when this cycle finds nothing left to process
         if (processed <= 0) {
-          toast.success("Bulk extraction complete: nothing left in the queue.");
+          // Check if there are still items needing extraction but not "strictly ready"
+          const { count: needsExtraction } = await supabase
+            .from("pending_project_imports")
+            .select("id", { count: "exact", head: true })
+            .eq("status", "pending")
+            .ilike("review_notes", "%PENDING_SCRAPE%");
+          
+          const { count: remaining } = await supabase
+            .from("pending_project_imports")
+            .select("id", { count: "exact", head: true })
+            .eq("status", "pending");
+          
+          if ((needsExtraction ?? 0) > 0) {
+            toast.warning(`Extraction paused: ${needsExtraction} items still need extraction but may be blocked. Check review_notes.`);
+          } else if ((remaining ?? 0) > 0) {
+            toast.success(`Extraction complete. ${remaining} items remain in pending state (ready for review).`);
+          } else {
+            toast.success("Bulk extraction complete: queue is empty.");
+          }
           break;
         }
 

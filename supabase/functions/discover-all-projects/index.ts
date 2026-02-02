@@ -549,28 +549,50 @@ serve(async (req) => {
       };
     });
 
+    let insertedCount = 0;
+    let errorCount = 0;
+    let insertErrors: string[] = [];
+
     if (placeholders.length > 0) {
       // Insert in batches of 50
-      let insertedCount = 0;
-      let errorCount = 0;
-      
       for (let i = 0; i < placeholders.length; i += 50) {
         const batch = placeholders.slice(i, i + 50);
-        // Conflict-safe: do not fail the whole batch if a slug already exists (race/concurrent runs).
-        const { error: insertErr } = await supabase
+        // Conflict-safe upsert: now works correctly with full unique indexes
+        const { data: insertData, error: insertErr } = await supabase
           .from("pending_project_imports")
-          .upsert(batch, { onConflict: "slug", ignoreDuplicates: true });
+          .upsert(batch, { onConflict: "slug", ignoreDuplicates: true })
+          .select("id");
         
         if (insertErr) {
-          console.error(`[Discover] Insert batch ${i}-${i + batch.length} error:`, insertErr.message);
+          const errMsg = `Batch ${i}-${i + batch.length}: ${insertErr.message}`;
+          console.error(`[Discover] Insert error:`, errMsg);
+          insertErrors.push(errMsg);
           errorCount += batch.length;
         } else {
-          insertedCount += batch.length;
-          console.log(`[Discover] Inserted batch ${i}-${i + batch.length} (${batch.length} rows)`);
+          // Count actual inserts from response
+          const actualInserted = insertData?.length ?? batch.length;
+          insertedCount += actualInserted;
+          console.log(`[Discover] Inserted batch ${i}-${i + batch.length} (${actualInserted} rows)`);
         }
       }
       
       console.log(`[Discover] Total inserted: ${insertedCount}, errors: ${errorCount}`);
+    }
+
+    // GUARDRAIL: If we had placeholders but inserted 0, this is a critical failure
+    if (placeholders.length > 0 && insertedCount === 0 && errorCount > 0) {
+      console.error(`[Discover] CRITICAL: Attempted ${placeholders.length} inserts but all failed!`);
+      return new Response(JSON.stringify({
+        success: false,
+        error: "All queue inserts failed - database constraint issue",
+        details: insertErrors.slice(0, 5).join("; "),
+        attempted_rows: placeholders.length,
+        inserted_count: 0,
+        error_count: errorCount,
+      }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     // Post-insert: report current queue cardinality (distinct slugs)
@@ -590,6 +612,8 @@ serve(async (req) => {
       new_urls: newUrls.length,
       existing_urls: existingUrls.length,
       queued_for_scraping: placeholders.length,
+      inserted_count: insertedCount,
+      error_count: errorCount,
       queue_distinct_slugs_after: queueDistinctAfter,
       sample_urls: projectUrls.slice(0, 10),
     }), {
