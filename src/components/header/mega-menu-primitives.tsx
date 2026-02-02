@@ -29,6 +29,9 @@ export const MegaMenuShell = React.forwardRef<HTMLDivElement, MegaMenuShellProps
           top: 'var(--header-height, 128px)',
           left: '24px',
           right: '24px',
+          // Prevent the panel from touching the bottom of the viewport on smaller screens
+          maxHeight: 'calc(100vh - var(--header-height, 128px) - 24px)',
+          overflowY: 'auto',
           // Solid gradient background - prevents any transparency issues
           background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
         }}
@@ -115,21 +118,20 @@ type MegaMenuSectionTitleProps = {
   rightSlot?: React.ReactNode;
 };
 
-export function MegaMenuSectionTitle({
-  icon: Icon,
-  title,
-  rightSlot,
-}: MegaMenuSectionTitleProps) {
-  return (
-    <div className="flex items-center justify-between mb-5 pb-2 border-b border-gold/30">
-      <h4 className="text-black font-bold text-xs tracking-[0.2em] uppercase flex items-center gap-2">
-        <Icon className="w-4 h-4 text-gold" />
-        {title}
-      </h4>
-      {rightSlot}
-    </div>
-  );
-}
+export const MegaMenuSectionTitle = React.forwardRef<HTMLDivElement, MegaMenuSectionTitleProps>(
+  ({ icon: Icon, title, rightSlot }, ref) => {
+    return (
+      <div ref={ref} className="flex items-center justify-between mb-5 pb-2 border-b border-gold/30">
+        <h4 className="text-black font-bold text-xs tracking-[0.2em] uppercase flex items-center gap-2">
+          <Icon className="w-4 h-4 text-gold" />
+          {title}
+        </h4>
+        {rightSlot}
+      </div>
+    );
+  }
+);
+MegaMenuSectionTitle.displayName = "MegaMenuSectionTitle";
 
 type MegaMenuIconLinkProps = {
   to: string;
