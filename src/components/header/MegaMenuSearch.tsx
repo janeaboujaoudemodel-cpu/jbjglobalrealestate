@@ -65,7 +65,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
       href: getWhatsAppUrl('Hi, I have a question.'),
       label: 'WhatsApp',
       icon: FaWhatsapp,
-      iconClassName: 'text-ai-emerald',
+      iconClassName: 'text-[#25D366]',
       external: true,
     },
     {
@@ -75,7 +75,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
       iconClassName: 'text-black',
       external: true,
     },
-    { href: '/contact', label: 'Contact Form', icon: FileText },
+    { href: '/contact', label: 'Contact Form', icon: FileText, iconClassName: 'text-gold' },
   ];
 
   const navigationLinks = [

@@ -365,16 +365,62 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/developers/sobha", label: "Sobha Realty", icon: Building2 },
   ];
 
-  // Mobile menu links - More section
+  // Mobile menu links - More section (comprehensive)
   const mobileMoreLinks = [
+    // About & Company
     { href: "/about", label: "About Us", icon: Building2 },
     { href: "/team", label: "Meet the Team", icon: Users },
+    { href: "/brokers", label: "Our Brokers", icon: Users },
     { href: "/join", label: "Careers", icon: Briefcase },
     { href: "/awards", label: "Our Awards", icon: Award },
     { href: "/contact", label: "Contact Us", icon: Phone },
-    { href: "/guides", label: "Real Estate Guides", icon: FileText },
     { href: "/complaint", label: "Complaint Procedure", icon: ClipboardCheck },
     { href: "/testimonials", label: "Testimonials", icon: Users },
+    { href: "/press-kit", label: "Press Kit", icon: FileText },
+    { href: "/company-profile", label: "Company Profile", icon: FileText },
+    { href: "/philanthropy", label: "Philanthropy", icon: Users },
+  ];
+
+  // Mobile menu - Resources & Guides
+  const mobileResourceLinks = [
+    { href: "/guides", label: "Guides Library", icon: BookOpen },
+    { href: "/market-intelligence", label: "Market Intelligence", icon: BarChart3 },
+    { href: "/news", label: "News & Insights", icon: Newspaper },
+    { href: "/faq", label: "FAQ", icon: ClipboardCheck },
+    { href: "/buyer-guide", label: "Buyer Guide", icon: GraduationCap },
+    { href: "/seller-guide", label: "Seller Guide", icon: GraduationCap },
+    { href: "/rent-guide", label: "Rent Guide", icon: FileText },
+    { href: "/tenant-guide", label: "Tenant Guide", icon: FileText },
+    { href: "/landlord-guide", label: "Landlord Guide", icon: FileText },
+    { href: "/investor-education", label: "Investor Education", icon: GraduationCap },
+    { href: "/broker-education", label: "Broker Education", icon: GraduationCap },
+    { href: "/guides/golden-visa-uae", label: "Golden Visa Guide", icon: Globe },
+  ];
+
+  // Mobile menu - Partners & Tools
+  const mobilePartnerLinks = [
+    { href: "/partners", label: "Partners Hub", icon: Users },
+    { href: "/partners/mortgage", label: "Mortgage Partners", icon: BarChart3 },
+    { href: "/partners/legal", label: "Legal Partners", icon: FileText },
+    { href: "/partners/company-setup", label: "Company Setup", icon: Building2 },
+    { href: "/partners/visa-services", label: "Visa Services", icon: Award },
+    { href: "/referral-partner", label: "Referral Partner", icon: Users },
+    { href: "/quiz", label: "AI Home Finder", icon: Sparkles },
+    { href: "/map", label: "Property Map", icon: MapPin },
+    { href: "/compare", label: "Compare Properties", icon: ClipboardCheck },
+    { href: "/landlord-portal", label: "Landlord Portal", icon: Building2 },
+    { href: "/seller-listing", label: "Sell Your Property", icon: ClipboardCheck },
+  ];
+
+  // Mobile menu - Legal & Trust
+  const mobileLegalLinks = [
+    { href: "/terms", label: "Terms of Service", icon: FileText },
+    { href: "/privacy", label: "Privacy Policy", icon: FileText },
+    { href: "/cookies", label: "Cookies Policy", icon: FileText },
+    { href: "/trust-and-audit-center", label: "Trust & Audit Center", icon: FileText },
+    { href: "/intellectual-property", label: "Intellectual Property", icon: FileText },
+    { href: "/investor-faq", label: "Investor FAQ", icon: ClipboardCheck },
+    { href: "/broker-faq", label: "Broker FAQ", icon: ClipboardCheck },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -706,9 +752,57 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                     <div className="h-px bg-gold/20 my-2" />
 
-                    {/* 7. More */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">More</p>
+                    {/* 7. About & Company */}
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">About & Company</p>
                     {mobileMoreLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        to={link.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                      >
+                        <link.icon className="w-4 h-4 text-gold" />
+                        {link.label}
+                      </Link>
+                    ))}
+
+                    <div className="h-px bg-gold/20 my-2" />
+
+                    {/* 8. Resources & Guides */}
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Resources & Guides</p>
+                    {mobileResourceLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        to={link.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                      >
+                        <link.icon className="w-4 h-4 text-gold" />
+                        {link.label}
+                      </Link>
+                    ))}
+
+                    <div className="h-px bg-gold/20 my-2" />
+
+                    {/* 9. Partners & Tools */}
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Partners & Tools</p>
+                    {mobilePartnerLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        to={link.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                      >
+                        <link.icon className="w-4 h-4 text-gold" />
+                        {link.label}
+                      </Link>
+                    ))}
+
+                    <div className="h-px bg-gold/20 my-2" />
+
+                    {/* 10. Legal & Trust */}
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Legal & Trust</p>
+                    {mobileLegalLinks.map((link) => (
                       <Link
                         key={link.href}
                         to={link.href}
