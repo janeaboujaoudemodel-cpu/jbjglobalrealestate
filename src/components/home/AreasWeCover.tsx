@@ -1,0 +1,95 @@
+/**
+ * AreasWeCover Component - Master Blueprint Specification
+ * 12 area links auto-populated grid
+ */
+
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { MapPin, ArrowRight } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+
+interface AreaLink {
+  slug: string;
+  name: string;
+  propertyCount?: number;
+}
+
+// Top 12 Dubai areas - in production this would come from API
+const topAreas: AreaLink[] = [
+  { slug: "downtown-dubai", name: "Downtown Dubai", propertyCount: 156 },
+  { slug: "dubai-marina", name: "Dubai Marina", propertyCount: 234 },
+  { slug: "palm-jumeirah", name: "Palm Jumeirah", propertyCount: 89 },
+  { slug: "business-bay", name: "Business Bay", propertyCount: 178 },
+  { slug: "jbr", name: "JBR", propertyCount: 112 },
+  { slug: "emirates-hills", name: "Emirates Hills", propertyCount: 45 },
+  { slug: "dubai-hills", name: "Dubai Hills", propertyCount: 198 },
+  { slug: "arabian-ranches", name: "Arabian Ranches", propertyCount: 67 },
+  { slug: "jumeirah", name: "Jumeirah", propertyCount: 78 },
+  { slug: "creek-harbour", name: "Creek Harbour", propertyCount: 134 },
+  { slug: "mohammed-bin-rashid-city", name: "MBR City", propertyCount: 156 },
+  { slug: "bluewaters", name: "Bluewaters Island", propertyCount: 34 },
+];
+
+const AreasWeCover = () => {
+  const { t } = useLanguage();
+
+  return (
+    <section className="py-16 md:py-24 bg-black">
+      <div className="jj-layer-2">
+        {/* Section Header */}
+        <div className="text-center mb-10">
+          <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
+            <MapPin className="w-3.5 h-3.5 text-gold" />
+            <span className="text-black">{t('areas.label', 'Explore Dubai')}</span>
+          </span>
+          <h2 
+            className="text-2xl md:text-3xl font-bold text-black"
+            style={{ fontFamily: "Poppins, sans-serif" }}
+          >
+            {t('areas.title', 'Areas We Cover')}
+          </h2>
+        </div>
+
+        {/* Areas Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 md:gap-4">
+          {topAreas.map((area, index) => (
+            <motion.div
+              key={area.slug}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
+            >
+              <Link
+                to={`/areas/${area.slug}`}
+                className="group block p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl border-2 border-gold/20 hover:border-gold transition-all duration-300 hover:shadow-[0_4px_20px_rgba(200,167,102,0.3)] hover:-translate-y-0.5 text-center"
+              >
+                <h3 className="text-black font-semibold text-sm group-hover:text-gold transition-colors mb-1">
+                  {area.name}
+                </h3>
+                {area.propertyCount && (
+                  <p className="text-zinc-500 text-xs">
+                    {area.propertyCount} {t('areas.properties', 'properties')}
+                  </p>
+                )}
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* View All Areas CTA */}
+        <div className="text-center mt-8">
+          <Link
+            to="/areas"
+            className="inline-flex items-center gap-2 text-gold hover:text-black text-sm font-medium group"
+          >
+            <span>{t('areas.viewAll', 'View All Areas')}</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default AreasWeCover;
