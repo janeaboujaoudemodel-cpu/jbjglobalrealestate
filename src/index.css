@@ -17,8 +17,9 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* ACTIVE COLOR (LOCKED): match the platform's champagne active layer (NOT navy/blue). */
+    --primary: 38 38% 85%;
+    --primary-foreground: 222 47% 11%;
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -34,7 +35,7 @@ All colors MUST be HSL.
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 38 28% 74%;
 
     --radius: 0.5rem;
 
@@ -143,8 +144,9 @@ All colors MUST be HSL.
     --popover: 222.2 70% 8%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 45 32% 39%;
-    --primary-foreground: 0 0% 100%;
+    /* Keep the same active champagne primary even in dark mode for consistency */
+    --primary: 38 38% 85%;
+    --primary-foreground: 222 47% 11%;
 
     --secondary: 217.2 32.6% 20%;
     --secondary-foreground: 210 40% 98%;
@@ -160,7 +162,7 @@ All colors MUST be HSL.
 
     --border: 217.2 32.6% 25%;
     --input: 217.2 32.6% 25%;
-    --ring: 45 32% 39%;
+    --ring: 38 28% 74%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 45 32% 39%;

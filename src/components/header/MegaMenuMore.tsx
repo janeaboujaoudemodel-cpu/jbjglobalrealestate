@@ -40,16 +40,16 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
       <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-10 lg:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           {/* Left: Featured photo - vertically stretched and centered */}
-          <div className="lg:col-span-6 flex items-center justify-center">
+          <div className="lg:col-span-6 flex">
             <MegaMenuFeaturedCard
               to="/about"
               onClick={onClose}
               image={menuCorporateOffice}
               kicker="MORE"
-              title="About JBJ Global"
+              title="About JBJ Global Real Estate"
               description="Discover our story, team, and commitment to excellence."
               cta="Learn More"
-              className="w-full min-h-[380px] lg:min-h-[420px]"
+              className="flex-1 min-h-[380px] lg:min-h-[420px]"
             />
           </div>
 

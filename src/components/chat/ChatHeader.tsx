@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, Minus, MessageCircle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -11,7 +12,7 @@ interface ChatHeaderProps {
   onToggleCollapse: () => void;
 }
 
-const ChatHeader = ({ step, isExistingUser, onBack, onToggleCollapse }: ChatHeaderProps) => {
+const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, isExistingUser, onBack, onToggleCollapse }, ref) => {
   const { isRTL, t } = useLanguage();
   const agent = useMemo(() => getRandomAgent(), []);
 
@@ -34,7 +35,10 @@ const ChatHeader = ({ step, isExistingUser, onBack, onToggleCollapse }: ChatHead
   const showAgentPhoto = step === 'chatting';
 
   return (
-    <div className="flex items-center justify-between p-4 border-b-2 border-gold/60 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] shadow-[0_2px_10px_rgba(200,167,102,0.3)]">
+    <div
+      ref={ref}
+      className="flex items-center justify-between p-4 border-b-2 border-gold/60 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] shadow-[0_2px_10px_rgba(200,167,102,0.3)]"
+    >
       <div className="flex items-center gap-3">
         {showBackButton && (
           <Button
@@ -84,6 +88,8 @@ const ChatHeader = ({ step, isExistingUser, onBack, onToggleCollapse }: ChatHead
       </div>
     </div>
   );
-};
+});
+
+ChatHeader.displayName = 'ChatHeader';
 
 export default ChatHeader;
