@@ -164,20 +164,18 @@ export function MegaMenuIconLink({
         compact ? "py-2 px-2.5" : "py-3 px-3"
       )}
     >
-      {/* Icon container: normal = transparent with gold border, black icon; hover = black bg, gold icon */}
+      {/* Icon container: ALWAYS transparent bg, gold border; icon is black → gold on hover */}
       <div
         className={cn(
           "rounded-lg border transition-all duration-300 flex items-center justify-center shrink-0",
-          // Normal state: transparent bg, gold border
-          "bg-transparent border-gold/50",
-          // Hover state: black bg with gold border
-          "group-hover:bg-black group-hover:border-gold",
+          // BOTH normal AND hover: transparent bg with gold border (NO black fill)
+          "bg-transparent border-gold/50 group-hover:border-gold",
           compact ? "w-8 h-8" : "w-10 h-10"
         )}
       >
         <Icon className={cn(
           "transition-colors duration-300",
-          // Normal: black icon; Hover: gold icon
+          // Normal: black icon; Hover: gold icon (no black bg behind it)
           "text-black group-hover:text-gold",
           compact ? "w-4 h-4" : "w-5 h-5"
         )} />

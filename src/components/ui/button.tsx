@@ -38,9 +38,9 @@ const BTN_3D_HOVER =
 const BRAND_PRIMARY =
   `bg-primary text-primary-foreground border-2 border-primary/90 ${BTN_3D} ${BTN_3D_HOVER} hover:-translate-y-0.5 active:translate-y-0`;
 
-// SECONDARY: transparent on load; on hover becomes locked champagne with dark text.
+// SECONDARY: transparent on load with DARK TEXT for readability; on hover becomes locked champagne.
 const BRAND_SECONDARY =
-  `bg-transparent text-gold border-2 border-gold/80 ${BTN_3D} hover:${LOCKED_CHAMPAGNE_BG} hover:text-foreground hover:-translate-y-0.5 active:translate-y-0 ${BTN_3D_HOVER}`;
+  `bg-transparent text-foreground border-2 border-foreground/60 ${BTN_3D} hover:${LOCKED_CHAMPAGNE_BG} hover:text-foreground hover:border-primary/80 hover:-translate-y-0.5 active:translate-y-0 ${BTN_3D_HOVER}`;
 
 // TERTIARY: For dark backgrounds (filled) with dark text.
 const BRAND_TERTIARY =

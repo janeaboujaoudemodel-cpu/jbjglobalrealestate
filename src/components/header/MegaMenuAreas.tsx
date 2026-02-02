@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Eye, ArrowRight } from 'lucide-react';
-import menuBurjKhalifaPremium from '@/assets/menu-burj-khalifa-premium.jpg';
+import menuDowntownSkyline from '@/assets/menu-downtown-dubai-skyline.jpg';
 import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle } from '@/components/header/mega-menu-primitives';
 
 interface MegaMenuAreasProps {
@@ -37,15 +37,16 @@ const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ on
     <MegaMenuShell ref={ref}>
       <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-10 lg:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <div className="lg:col-span-6">
+          <div className="lg:col-span-6 flex">
             <MegaMenuFeaturedCard
               to="/areas"
               onClick={onClose}
-              image={menuBurjKhalifaPremium}
+              image={menuDowntownSkyline}
               kicker="AREAS"
               title="Dubai's Prime Locations"
               description="Discover the best communities in Dubai"
               cta="Explore Areas"
+              className="flex-1 min-h-[380px] lg:min-h-[420px]"
             />
           </div>
 
