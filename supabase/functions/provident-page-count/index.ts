@@ -42,17 +42,19 @@ serve(async (req) => {
       }),
     });
 
-    // Handle rate limiting gracefully - return canonical values
+    // Handle rate limiting (429) or insufficient credits (402) gracefully - return canonical values
     if (!res.ok) {
-      if (res.status === 429) {
-        console.log("Rate limited by Firecrawl, returning canonical values");
+      if (res.status === 429 || res.status === 402) {
+        console.log(`Firecrawl returned ${res.status}, returning canonical values`);
         return new Response(
           JSON.stringify({ 
             success: true, 
             total_pages: 89, 
             estimated_listings: 1336,
             cached: true,
-            note: "Using cached values due to rate limiting"
+            note: res.status === 402 
+              ? "Using cached values - Firecrawl credits exhausted" 
+              : "Using cached values due to rate limiting"
           }),
           { headers: { ...corsHeaders, "Content-Type": "application/json" } },
         );
