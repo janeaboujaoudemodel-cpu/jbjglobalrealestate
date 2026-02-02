@@ -1,175 +1,294 @@
 
-# Header Navigation & Mega Menu Fixes
 
-## Issues Identified
+# Why Dubai Section & Podcast Visibility Implementation Plan
 
-### 1. Hover Behavior - Menu Disappearing/Not Clicking
-**Root Cause:** There's a gap between the navigation pill buttons and the mega menu panels. When the mouse moves from the button to the panel, it crosses empty space which triggers `handleMegaMenuLeave` and starts a 220ms timeout to close the menu.
+## Summary of Changes
 
-**Current Code Problem (GlobalHeader.tsx lines 87-93):**
+This plan addresses all the requested changes to the "Why Dubai Became the Capital of Global Investors" section and implements an admin-only visibility toggle for the JBJ Podcast section.
+
+---
+
+## Part 1: Why Dubai Section - Video Transition Fixes
+
+### Issue 1: Black Screen Between Scene Transitions
+**Current State (Lines 40-62):**
 ```tsx
-const handleMegaMenuLeave = () => {
-  if (pinnedMenu) return;
-  megaMenuTimeoutRef.current = setTimeout(() => {
-    setActiveMegaMenu(null);
-  }, 220);  // Too short for moving to panel
+<AnimatePresence mode="wait">
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 1.2 }}  // Too slow - causes black gap
+```
+
+**Problem:** The `mode="wait"` combined with 1.2s transition creates a visible black gap when one video fades out before the next fades in.
+
+**Fix:**
+1. Change `mode="wait"` to `mode="sync"` - Allows outgoing/incoming to overlap
+2. Reduce transition duration from 1.2s to 0.6s for faster crossfade
+3. Add `preload="auto"` to improve video loading time
+4. Implement video preloading for smoother transitions
+
+**New Code:**
+```tsx
+<AnimatePresence mode="sync">
+  <motion.div
+    key={currentScene}
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.6 }}  // Faster crossfade
+    className="absolute inset-0"
+  >
+    <video
+      className="absolute inset-0 w-full h-full object-cover"
+      autoPlay
+      loop
+      muted
+      playsInline
+      preload="auto"  // Changed from "metadata" for faster loading
+    >
+```
+
+---
+
+## Part 2: Title Readability - White Text with Gold Accent
+
+### Current State (Lines 78-84):
+```tsx
+<h2 className="... text-primary-foreground ...">
+  <T>Why Dubai Became the Capital of</T>{" "}
+  <span className="text-gold"><T>Global Investors</T></span>
+</h2>
+```
+
+**Fix:** Make the main title pure white for better contrast, keep only "Global Investors" in gold:
+
+```tsx
+<h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight"
+    style={{ 
+      fontFamily: "Poppins, sans-serif",
+      textShadow: '0 2px 8px rgba(0,0,0,0.6)'  // Add shadow for readability
+    }}>
+  <T>Why Dubai Became the Capital of</T>{" "}
+  <span className="text-gold"><T>Global Investors</T></span>
+</h2>
+```
+
+---
+
+## Part 3: Premium Stats Cards Redesign
+
+### Current State (Lines 90-103):
+Simple cards with minimal styling:
+```tsx
+<div className="rounded-md border border-gold/20 bg-black/40 backdrop-blur-sm px-2 py-2 text-center">
+```
+
+**New Premium Design:**
+- Glass morphism effect with stronger blur
+- Gradient gold border that glows on hover
+- Larger, bolder value text
+- Better padding and spacing
+- Subtle shimmer animation
+
+**New Code:**
+```tsx
+<div className="mt-6 grid grid-cols-4 gap-2 max-w-md">
+  {stats.map((s, index) => (
+    <motion.div
+      key={s.label}
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.1 }}
+      className="group relative rounded-xl overflow-hidden"
+    >
+      {/* Gradient border */}
+      <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-gold/40 via-gold/20 to-gold/40 p-[1px]">
+        <div className="h-full w-full rounded-xl bg-black/60 backdrop-blur-md" />
+      </div>
+      
+      {/* Content */}
+      <div className="relative px-3 py-3 text-center">
+        <div className="text-xl md:text-2xl lg:text-3xl font-bold text-gold leading-none"
+             style={{ textShadow: '0 0 20px rgba(200,167,102,0.5)' }}>
+          {s.value}
+        </div>
+        <div className="mt-1 text-[9px] md:text-[10px] uppercase tracking-wider text-white/70 font-medium">
+          <T>{s.label}</T>
+        </div>
+      </div>
+      
+      {/* Hover glow */}
+      <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+           style={{ boxShadow: '0 0 30px rgba(200,167,102,0.4)' }} />
+    </motion.div>
+  ))}
+</div>
+```
+
+---
+
+## Part 4: CTA Button - Match Homepage Hero Style
+
+### Current State (Lines 105-112):
+```tsx
+<Button asChild variant="primary" size="lg">
+  <Link to="/guides/investment">
+    <T>Explore Investment Opportunities</T>
+    <ArrowRight className="w-5 h-5" />
+  </Link>
+</Button>
+```
+
+**Fix:** Use `PremiumHeroButton` component to match homepage hero:
+
+```tsx
+import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
+
+<div className="mt-8 md:mt-10">
+  <PremiumHeroButton href="/guides/investment" size="lg">
+    <T>Explore Investment Opportunities</T>
+  </PremiumHeroButton>
+</div>
+```
+
+This applies the exact same styling as the homepage hero buttons:
+- Transparent background with white border
+- White text with gold arrow icon
+- On hover: Champagne gradient fill, gold border, black text
+
+---
+
+## Part 5: Remove Gold Circle Bulb
+
+**Note:** The search through the code did not find any explicit "gold circle bulb" element. The user may be referring to:
+1. A visual artifact in the video itself (cannot fix via code)
+2. The navigation dots which were already removed (see line 117: "NO DOTS - removed as per user request")
+
+If there's any remaining gold circle, it might be coming from the video content itself, not the code overlay.
+
+---
+
+## Part 6: JBJ Podcast Section - Admin-Only Visibility
+
+### Database Changes
+
+**Create new site_settings entry:**
+```sql
+INSERT INTO public.site_settings (setting_key, setting_value, description)
+VALUES (
+  'podcast_visibility',
+  '{"enabled": false}'::jsonb,
+  'Controls visibility of JBJ Podcast section on homepage. When disabled, section is hidden from all users except admins.'
+);
+
+-- Create RPC function to toggle podcast visibility
+CREATE OR REPLACE FUNCTION public.set_podcast_visibility(p_enabled boolean)
+RETURNS boolean
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = 'public'
+AS $$
+BEGIN
+  UPDATE public.site_settings
+  SET setting_value = jsonb_build_object('enabled', p_enabled),
+      updated_at = now(),
+      updated_by = auth.uid()
+  WHERE setting_key = 'podcast_visibility';
+  
+  RETURN p_enabled;
+END;
+$$;
+```
+
+### New Context: PodcastVisibilityContext
+
+**Create:** `src/contexts/PodcastVisibilityContext.tsx`
+
+```tsx
+// Similar structure to FounderVisibilityContext
+// - Fetches 'podcast_visibility' from site_settings
+// - Provides isPodcastVisible, isLoading, togglePodcastVisibility
+// - For non-admins: section is hidden when disabled
+// - For admins/owners: section is always visible for testing
+```
+
+### New Component: PodcastVisibilityToggle
+
+**Create:** `src/components/admin/PodcastVisibilityToggle.tsx`
+
+- Similar UI to FounderVisibilityToggle
+- Placed in Admin panel Security tab next to Founder toggle
+- Shows current status (Visible/Hidden)
+- Toggle switch with confirmation dialog
+
+### Update Index.tsx
+
+**Current (Line 634-635):**
+```tsx
+{/* JBJ PODCAST SECTION */}
+<JBJPodcastSection />
+```
+
+**New:**
+```tsx
+{/* JBJ PODCAST SECTION - Admin-controlled visibility */}
+<PodcastVisibilityGate>
+  <SectionDivider />
+  <JBJPodcastSection />
+</PodcastVisibilityGate>
+```
+
+**PodcastVisibilityGate Logic:**
+```tsx
+const PodcastVisibilityGate = ({ children }) => {
+  const { isPodcastVisible, isLoading } = usePodcastVisibility();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const { user } = useAuth();
+  
+  useEffect(() => {
+    // Check if current user has admin/owner role
+    if (user) {
+      Promise.all([
+        supabase.rpc("has_role", { _user_id: user.id, _role: "admin" }),
+        supabase.rpc("has_role", { _user_id: user.id, _role: "owner" }),
+      ]).then(([adminRes, ownerRes]) => {
+        setIsAdmin(adminRes.data || ownerRes.data);
+      });
+    }
+  }, [user]);
+  
+  // Admin/Owner always sees podcast for testing
+  if (isAdmin) return <>{children}</>;
+  
+  // Non-admin: only show if enabled
+  if (!isPodcastVisible) return null;
+  
+  return <>{children}</>;
 };
 ```
 
-**Also:** The mega menu panels are positioned inside a `<div className="relative z-50">` which doesn't extend the hover zone from the buttons to the panels.
+### Update Admin.tsx - Security Tab
 
----
-
-### 2. "More" Menu Scrolling Issue
-**Current State:** The More menu has 4 columns with these link counts:
-- Column 1 (About & Company): 11 links
-- Column 2 (Resources & Guides): 12 links
-- Column 3 (Partners & Tools): 11 links
-- Column 4 (Legal & Trust): 7 links
-
-The last items (Philanthropy, Investor Education, Landlord Portal, Broker FAQ) require scrolling to see.
-
-**Fix Required:**
-1. Reduce padding and spacing to fit all content
-2. Move overflow items from longer columns to fill the gap in Column 4 (Legal & Trust)
-3. Set a fixed max-height that fits within viewport without scrolling
-
----
-
-### 3. Search Menu Issues
-**Current State (MegaMenuSearch.tsx):**
-- Quick Links column has 13 links, causing vertical overflow
-- Section divider cuts through Careers line
-- Large gap below contact section unused
-- Search placeholder text is small
-
-**Fix Required:**
-1. Move items after Careers to fill contact section space
-2. Remove excess links from Quick Links
-3. Enlarge search placeholder text
-4. Fix divider alignment
-5. Reduce overall height
-
----
-
-### 4. "View All Developers/Areas" CTA Title Too Small
-**Current State (MegaMenuDevelopers.tsx lines 83-90):**
-The emphasis link uses `compact` mode which makes the title small despite the card having a large gold background.
-
-**Fix Required:**
-Increase title text size in emphasis links or add a special class for these CTAs.
-
----
-
-### 5. Section Title Divider Alignment
-Previously fixed with `min-h-[36px]` on `MegaMenuSectionTitle`, but need to verify this is consistently applied.
-
----
-
-### 6. Security Hardening
-**Current Security Findings:**
-- `SUPA_rls_policy_always_true`: Overly permissive RLS policies detected
-- `rental_listings_landlord_exposure`: Landlord contact info in plaintext
-- `crm_leads_assignment_gaps`: Complex RLS policies may allow viewing unassigned leads
-
----
-
-## Solution
-
-### Phase 1: Fix Hover Behavior (GlobalHeader.tsx)
-
-**Changes:**
-1. **Increase hover timeout from 220ms to 350ms** - More time to move mouse between elements
-2. **Add a "bridge zone"** - Invisible div connecting nav buttons to mega menu panels
-3. **Ensure mega menu panel extends hover zone** - Add `onMouseEnter` to clear any pending close timeout
-
+**Add to imports:**
 ```tsx
-// Line 90: Increase timeout
-megaMenuTimeoutRef.current = setTimeout(() => {
-  setActiveMegaMenu(null);
-}, 350);  // Was 220ms
+import { PodcastVisibilityToggle } from "@/components/admin/PodcastVisibilityToggle";
+```
 
-// Lines 1101-1118: Wrap mega menus with proper hover zone
-{activeMegaMenu && (
-  <div 
-    className="absolute left-0 right-0 z-50"
-    style={{ top: '100%', paddingTop: '8px' }}  // Bridge gap
-    onMouseEnter={() => {
-      if (megaMenuTimeoutRef.current) {
-        clearTimeout(megaMenuTimeoutRef.current);
-        megaMenuTimeoutRef.current = null;
-      }
-    }}
-    onMouseLeave={handleMegaMenuLeave}
-  >
-    {activeMegaMenu === 'buy' && <MegaMenuBuy onClose={closeMegaMenu} />}
-    {/* ... other menus */}
+**Update Security TabsContent (Line 484-487):**
+```tsx
+<TabsContent value="security" className="space-y-8">
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <SecurityDashboardSummary />
+    <FounderVisibilityToggle />
   </div>
-)}
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <PodcastVisibilityToggle />
+  </div>
+</TabsContent>
 ```
-
----
-
-### Phase 2: Fix "More" Menu (MegaMenuMore.tsx)
-
-**Current Column Counts:**
-- About & Company: 11
-- Resources & Guides: 12
-- Partners & Tools: 11
-- Legal & Trust: 7
-
-**Redistribution Strategy:**
-Move 4 items from longest columns to Legal & Trust:
-- Move "Broker FAQ" from Column 2 to Column 4 (already there, but ensure no duplicate)
-- Move "Investor FAQ" from Column 2 to Column 4 (already there)
-- Keep all 4 columns balanced at ~10 items each
-
-**Additional Changes:**
-1. Reduce container padding: `py-4 lg:py-5` (from `py-6 lg:py-8`)
-2. Reduce link spacing: `space-y-0` (from `space-y-0.5`)
-3. Remove `maxHeight: 'calc(100vh - var(--header-height, 128px) - 24px)'` and `overflowY: auto` from MegaMenuShell (only for More menu)
-
----
-
-### Phase 3: Fix Search Menu (MegaMenuSearch.tsx)
-
-**Changes:**
-1. **Reduce Quick Links** - Remove items after Careers (My Favorites, AI Tools, Property Map, Compare Properties, AI Home Finder)
-2. **Move contact section up** - No wasted vertical space
-3. **Enlarge search placeholder** - Change `placeholder` font size from default to `text-base`
-4. **Fix divider** - Ensure it doesn't cut through any items
-5. **Reduce overall padding** - `py-5 lg:py-6` (from `py-6 lg:py-7`)
-
----
-
-### Phase 4: Fix "View All" CTA Size (mega-menu-primitives.tsx)
-
-**Changes to MegaMenuIconLink:**
-When `emphasis={true}`, use larger title text:
-```tsx
-<span className={cn(
-  "block font-bold transition-colors duration-300",
-  emphasis
-    ? "text-black group-hover:text-black text-base"  // Larger for CTAs
-    : "text-black group-hover:text-gold",
-  compact && !emphasis ? "text-sm" : "text-sm"
-)}>
-```
-
-Also update icon container for emphasis to be slightly larger:
-```tsx
-compact && !emphasis ? "w-8 h-8" : emphasis ? "w-10 h-10" : "w-10 h-10"
-```
-
----
-
-### Phase 5: Security Hardening
-
-1. **Run full security scan** to identify all RLS policy issues
-2. **Review and tighten RLS policies** on:
-   - `rental_listings` - Add encryption or restrict landlord contact visibility
-   - `crm_leads` - Simplify policy conditions to prevent unassigned lead access
-3. **Add frontend security reinforcement** via SecurityShield component (already exists)
 
 ---
 
@@ -177,47 +296,44 @@ compact && !emphasis ? "w-8 h-8" : emphasis ? "w-10 h-10" : "w-10 h-10"
 
 | File | Changes |
 |------|---------|
-| `src/components/GlobalHeader.tsx` | Fix hover behavior - increase timeout, add bridge zone |
-| `src/components/header/MegaMenuMore.tsx` | Redistribute links, reduce padding, remove scroll |
-| `src/components/header/MegaMenuSearch.tsx` | Reduce links, move contact up, enlarge search text |
-| `src/components/header/mega-menu-primitives.tsx` | Increase emphasis link title size, fix MegaMenuShell for no-scroll option |
-| Database Migration | Tighten RLS policies for rental_listings and crm_leads |
+| `src/components/home/WhyDubaiCapitalSection.tsx` | Fix transitions, title, cards, CTA button |
+| `src/contexts/PodcastVisibilityContext.tsx` | **CREATE** - Context for podcast visibility |
+| `src/components/admin/PodcastVisibilityToggle.tsx` | **CREATE** - Admin toggle component |
+| `src/components/home/PodcastVisibilityGate.tsx` | **CREATE** - Gate component for conditional rendering |
+| `src/pages/Index.tsx` | Wrap podcast section with visibility gate |
+| `src/pages/Admin.tsx` | Add podcast toggle to Security tab |
+| `src/App.tsx` | Add PodcastVisibilityProvider |
+| Database Migration | Add podcast_visibility setting and RPC function |
 
 ---
 
-## Technical Details
+## Visual Summary
 
-### MegaMenuMore.tsx - New Link Distribution
-
-**Column 1 - About & Company (10 items):**
-About Us, Meet the Team, Our Brokers, Careers, Our Awards, Press Kit, Company Profile, Contact Us, Complaint Procedure, Testimonials
-
-**Column 2 - Resources & Guides (10 items):**
-Guides Library, Market Intelligence, News & Insights, FAQ, Buyer Guide, Seller Guide, Rent Guide, Tenant Guide, Landlord Guide, Golden Visa Guide
-
-**Column 3 - Partners & Tools (10 items):**
-Partners Hub, Mortgage Partners, Legal Partners, Company Setup, Visa Services, Referral Partner, AI Home Finder, Property Map, Compare Properties, Sell Your Property
-
-**Column 4 - Legal & Trust (9 items):**
-Terms of Service, Privacy Policy, Cookies Policy, Trust & Audit Center, Intellectual Property, Investor FAQ, Broker FAQ, Investor Education, Landlord Portal
-
-**Total: 39 items (down from 41 by removing duplicates)**
-
-### MegaMenuSearch.tsx - Simplified Quick Links
-
-**Quick Links (9 items only):**
-About Us, Meet the Team, Our Brokers, Area Guides, Developers, Buyer Guide, Seller Guide, Careers, AI Home Finder
-
-**Contact section unchanged** - placed in proper position to fill space
+| Element | Before | After |
+|---------|--------|-------|
+| Video transition | 1.2s with black gap | 0.6s smooth crossfade |
+| Title color | primary-foreground | Pure white with text shadow |
+| Stats cards | Simple bordered boxes | Premium glass cards with glow |
+| CTA button | Basic Button component | PremiumHeroButton (matches homepage) |
+| Podcast section | Always visible | Admin toggle controls visibility |
 
 ---
 
-## Visual Result
+## Admin Panel Addition
 
-| Component | Before | After |
-|-----------|--------|-------|
-| Hover behavior | Menu disappears when moving mouse | Smooth transitions with extended hover zone |
-| More menu | Requires scrolling, unbalanced columns | All 39 links visible without scrolling |
-| Search menu | Overflow links, cut divider | Clean layout, balanced sections |
-| View All CTAs | Small text in large card | Larger, balanced text fills card properly |
-| Section dividers | Sometimes misaligned | Perfectly aligned at same vertical position |
+The Security tab in Admin panel will have:
+
+```
++----------------------------------+----------------------------------+
+|   Security Dashboard Summary     |   Founder Visibility Control     |
++----------------------------------+----------------------------------+
+|   Podcast Visibility Control     |                                  |
++----------------------------------+----------------------------------+
+```
+
+Podcast toggle will show:
+- Current status (Visible to Public / Hidden - Admin Only)
+- Toggle switch
+- Confirmation dialog when changing
+- Info notice explaining the toggle only affects public visibility, admin always sees it
+
