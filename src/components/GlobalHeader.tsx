@@ -1044,10 +1044,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 aria-label="Search"
               >
                 <Search 
-                  className={`w-5 h-5 transition-colors duration-300 ${
-                    isFullyTransparent ? 'text-white group-hover:text-gold' : 'text-gold group-hover:text-white'
-                  } ${activeMegaMenu === 'search' ? '!text-gold' : ''}`}
-                  style={!isFullyTransparent ? { filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' } : { filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }} 
+                  className={`w-5 h-5 transition-colors duration-300 text-gold group-hover:text-white ${activeMegaMenu === 'search' ? '!text-gold' : ''}`}
+                  style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }} 
                 />
               </button>
 
@@ -1062,10 +1060,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 aria-label="Language"
               >
                 <Globe 
-                  className={`w-5 h-5 transition-colors duration-300 ${
-                    isFullyTransparent ? 'text-white group-hover:text-gold' : 'text-gold group-hover:text-white'
-                  } ${activeMegaMenu === 'language' ? '!text-gold' : ''}`}
-                  style={!isFullyTransparent ? { filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' } : { filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }} 
+                  className={`w-5 h-5 transition-colors duration-300 text-gold group-hover:text-white ${activeMegaMenu === 'language' ? '!text-gold' : ''}`}
+                  style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }} 
                 />
               </button>
 
@@ -1080,10 +1076,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 aria-label={user ? t('nav.myAccount') : t('nav.signIn')}
               >
                 <User 
-                  className={`w-5 h-5 transition-colors duration-300 ${
-                    isFullyTransparent ? 'text-white group-hover:text-gold' : 'text-gold group-hover:text-white'
-                  } ${activeMegaMenu === 'account' ? '!text-gold' : ''}`}
-                  style={!isFullyTransparent ? { filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' } : { filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}
+                  className={`w-5 h-5 transition-colors duration-300 text-gold group-hover:text-white ${activeMegaMenu === 'account' ? '!text-gold' : ''}`}
+                  style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }}
                 />
               </button>
             </div>
