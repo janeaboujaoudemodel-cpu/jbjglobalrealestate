@@ -250,23 +250,34 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired }: P
           {hasDescription ? (
             <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3">
               {truncatedDescription}
-              {showMore && (
-                <button
-                  type="button"
-                  className="bg-gradient-to-r from-gold via-handover to-gold bg-clip-text text-transparent font-semibold hover:opacity-80 transition-opacity ml-1"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    // ALWAYS use admin preview (onReview) - not public page which may not exist yet
-                    onReview();
-                  }}
-                >
-                  ...more
-                </button>
-              )}
+              <button
+                type="button"
+                className="bg-gradient-to-r from-gold via-handover to-gold bg-clip-text text-transparent font-semibold hover:opacity-80 transition-opacity ml-1"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  // ALWAYS use admin preview (onReview) - not public page which may not exist yet
+                  onReview();
+                }}
+              >
+                ...more
+              </button>
             </p>
           ) : (
-            <p className="text-muted-foreground/50 text-sm italic">No description available</p>
+            <p className="text-muted-foreground/50 text-sm italic">
+              No description available
+              <button
+                type="button"
+                className="bg-gradient-to-r from-gold via-handover to-gold bg-clip-text text-transparent font-semibold hover:opacity-80 transition-opacity ml-1"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onReview();
+                }}
+              >
+                ...more
+              </button>
+            </p>
           )}
         </div>
 

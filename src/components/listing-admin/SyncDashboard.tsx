@@ -80,7 +80,7 @@ interface SyncDashboardProps {
 
 export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   // UI estimate only (the source website fluctuates)
-  const [listingsEstimate, setListingsEstimate] = useState<number>(1335);
+  const [listingsEstimate, setListingsEstimate] = useState<number>(1336);
   const [isSyncing, setIsSyncing] = useState(false);
   const [isClearingPending, setIsClearingPending] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -252,7 +252,14 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   }, [totalStats]);
 
   // On mount: load counts + detect current page count + resume any active job.
+  // CRITICAL: Clear stale sessionStorage to fix count mismatch issues
   useEffect(() => {
+    // Clear potentially stale cached stats on mount
+    try {
+      sessionStorage.removeItem("sync_page_statuses");
+      sessionStorage.removeItem("sync_total_stats");
+    } catch { /* ignore */ }
+    
     loadProjectCount();
     refreshPageCount({ silent: true });
     loadActiveJob();
