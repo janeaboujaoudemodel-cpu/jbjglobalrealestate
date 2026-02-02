@@ -257,6 +257,34 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
     fetchInventoryStats();
   }, [jobId, showAll]);
 
+  // Real-time subscription to auto-refresh when extraction adds/updates data
+  useEffect(() => {
+    const channel = supabase
+      .channel('pending_imports_realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'pending_project_imports',
+          filter: 'status=eq.pending'
+        },
+        () => {
+          // Debounce rapid updates
+          const timer = setTimeout(() => {
+            fetchPendingImports();
+            fetchInventoryStats();
+          }, 1000);
+          return () => clearTimeout(timer);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [jobId, showAll]);
+
   // Check for duplicates before approving
   const checkForDuplicates = async (importData: PendingImport): Promise<{ isDuplicate: boolean; existingProject?: any }> => {
     // Check by name similarity
