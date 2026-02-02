@@ -294,29 +294,16 @@ const DigitalCard = () => {
                 Company Introduction
               </h3>
               <div 
-                className="relative rounded-2xl overflow-hidden bg-black/5 aspect-video"
+                className="relative rounded-2xl overflow-hidden bg-black aspect-video"
                 style={{ border: `2px solid ${GOLD.primary}40` }}
               >
                 <iframe
                   className="w-full h-full"
-                  src="about:blank"
-                  data-src="https://www.youtube.com/embed/VIDEO_ID"
-                  title="Company Introduction"
+                  src="https://www.youtube.com/embed/lBXXdJ2kAtQ"
+                  title="JBJ Global Real Estate - Company Introduction"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 />
-                {/* Placeholder overlay - Using Active Champagne for icon bg, NOT YELLOW */}
-                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-black/80 to-black/60">
-                  <div className="text-center">
-                    <div 
-                      className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-2 shadow-lg"
-                      style={{ background: GOLD.activeBackground, border: `2px solid ${GOLD.primary}` }}
-                    >
-                      <Video className="w-6 h-6" style={{ color: GOLD.primary }} />
-                    </div>
-                    <p className="text-white/70 text-xs">Video Coming Soon</p>
-                  </div>
-                </div>
               </div>
             </div>
 
