@@ -314,9 +314,8 @@ export default function ProjectDetailLayout({
           <div className="flex flex-wrap gap-4">
             {brochurePrimary && (
               <Button 
-                variant="secondary" 
+                variant="hero" 
                 size="lg"
-                className="bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20"
                 onClick={() => handleDocumentDownload("brochure", brochurePrimary.url)}
               >
                 <Download className="w-5 h-5" />
@@ -324,7 +323,7 @@ export default function ProjectDetailLayout({
               </Button>
             )}
             <Button 
-              variant="hero" 
+              variant="primary" 
               size="lg"
               onClick={scrollToInquiry}
             >
