@@ -47,6 +47,8 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
     { href: '/seller-listing', label: 'Sell Your Property Now', icon: ClipboardCheck },
     { href: '/services/rental-advisory', label: 'Rental Advisory', icon: Building2 },
     { href: '/services/investment-advisory', label: 'Investment Advisory', icon: Briefcase },
+    { href: '/services/fit-out', label: 'Fit-Out Services', icon: Building2 },
+    { href: '/services/snagging', label: 'Snagging Inspection', icon: ClipboardCheck },
     { href: '/guides/golden-visa-uae', label: 'Golden Visa Guide', icon: Globe },
     { href: '/mortgage-calculator', label: 'Mortgage Calculator', icon: Calculator },
   ];
@@ -77,15 +79,15 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
     { href: '/contact', label: 'Contact Form', icon: FileText, iconClassName: 'text-gold' },
   ];
 
-  // Trimmed Quick Links - only 9 items to prevent overflow
+  // Quick Links with Guides Library and Market Intelligence
   const navigationLinks = [
     { href: '/about', label: 'About Us', icon: Building2 },
     { href: '/team', label: 'Meet the Team', icon: Users },
     { href: '/brokers', label: 'Our Brokers', icon: Users },
     { href: '/areas', label: 'Area Guides', icon: MapPin },
+    { href: '/guides', label: 'Guides Library', icon: GraduationCap },
+    { href: '/market-intelligence', label: 'Market Intelligence', icon: FileText },
     { href: '/developers', label: 'Developers', icon: Building2 },
-    { href: '/buyer-guide', label: 'Buyer Guide', icon: GraduationCap },
-    { href: '/seller-guide', label: 'Seller Guide', icon: GraduationCap },
     { href: '/join', label: 'Careers', icon: Users },
     { href: '/quiz', label: 'AI Home Finder', icon: Sparkles },
   ];
@@ -186,7 +188,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
               )}
             </div>
             <p className="mt-2 text-[11px] text-black/70">
-              {CONTACT_INFO.email}
+              CONTACT@JBJ.AE
             </p>
           </div>
         </div>

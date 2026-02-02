@@ -86,9 +86,9 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
           <>
             {/* Premium User Header - Horizontal Layout */}
             <div className="flex items-center gap-5 pb-5 mb-5 border-b-2 border-gold/40">
-              <Avatar className="h-14 w-14">
+              <Avatar className="h-16 w-16">
                 <AvatarImage src={accountPhotoUrl ?? ""} alt={`${accountDisplayName} profile photo`} className="object-cover" />
-                <AvatarFallback className="bg-black text-gold text-lg font-bold">
+                <AvatarFallback className="bg-black text-gold text-xl font-bold">
                   {getInitials(String(accountDisplayName))}
                 </AvatarFallback>
               </Avatar>
