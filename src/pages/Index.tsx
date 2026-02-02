@@ -14,6 +14,16 @@ import SupportTicketBox from "@/components/SupportTicketBox";
 import ExploreServicesCard from "@/components/home/ExploreServicesCard";
 import WhyDubaiCapitalSection from "@/components/home/WhyDubaiCapitalSection";
 
+// Master Blueprint Components
+import TrustBar from "@/components/home/TrustBar";
+import FeaturedListings from "@/components/home/FeaturedListings";
+import ServicesGrid from "@/components/home/ServicesGrid";
+import WhyChooseUs from "@/components/home/WhyChooseUs";
+import AreasWeCover from "@/components/home/AreasWeCover";
+import TestimonialsSection from "@/components/home/TestimonialsSection";
+import CTABand from "@/components/home/CTABand";
+import SearchModule from "@/components/home/SearchModule";
+
 import JBJPodcastSection from "@/components/home/JBJPodcastSection";
 import { PodcastVisibilityGate } from "@/components/home/PodcastVisibilityGate";
 import { SectionDivider } from "@/components/ui/section-divider";
@@ -200,8 +210,29 @@ const Index = () => {
         </motion.div>
       </div>
 
+      {/* TRUST BAR - Master Blueprint: Section 2 */}
+      <div className="bg-black py-4 border-y border-gold/20">
+        <TrustBar />
+      </div>
+
       {/* DEVELOPER PARTNERS MARQUEE */}
       <DeveloperPartnersMarquee />
+
+      {/* SEARCH MODULE - Master Blueprint: Hero Search */}
+      <section className="py-8 md:py-12 bg-black">
+        <div className="max-w-4xl mx-auto px-4">
+          <SearchModule variant="compact" />
+        </div>
+      </section>
+
+      {/* FEATURED LISTINGS - Master Blueprint: Section 3 (8 cards, Buy/Rent tabs) */}
+      <FeaturedListings />
+
+      {/* DIVIDER */}
+      <SectionDivider />
+
+      {/* SERVICES GRID - Master Blueprint: Section 4 (Buy, Rent, Sell, Management) */}
+      <ServicesGrid />
 
       {/* AI HOME FINDER - Premium CTA Section - Exact center between Developers and Find Your Starting Point */}
       <section className="py-16 md:py-24 bg-black">
@@ -639,8 +670,20 @@ const Index = () => {
       {/* BEST IDEA AWARD */}
       <BestIdeaAward />
 
+      {/* WHY CHOOSE US - Master Blueprint: Section 5 */}
+      <WhyChooseUs />
+
+      {/* AREAS WE COVER - Master Blueprint: Section 6 (12 area links) */}
+      <AreasWeCover />
+
+      {/* TESTIMONIALS - Master Blueprint: Section 7 (3 testimonials) */}
+      <TestimonialsSection />
+
       {/* Stats Counter Section */}
       <StatsCounter />
+
+      {/* CTA BAND - Master Blueprint: Section 8 (Ready to talk?) */}
+      <CTABand />
 
       {/* Contact CTA Section - 3-Layer System: Black > Active Champagne > Pearl Card */}
       <section className="py-16 md:py-20 bg-black">
