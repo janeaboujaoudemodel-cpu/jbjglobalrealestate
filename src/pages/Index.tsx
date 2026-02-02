@@ -15,6 +15,7 @@ import ExploreServicesCard from "@/components/home/ExploreServicesCard";
 import WhyDubaiCapitalSection from "@/components/home/WhyDubaiCapitalSection";
 
 import JBJPodcastSection from "@/components/home/JBJPodcastSection";
+import { PodcastVisibilityGate } from "@/components/home/PodcastVisibilityGate";
 import { SectionDivider } from "@/components/ui/section-divider";
 
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
@@ -628,14 +629,12 @@ const Index = () => {
 
       <WhyDubaiCapitalSection />
 
-      {/* DIVIDER - Between Why Dubai and JBJ Podcast */}
-      <SectionDivider />
-
-      {/* JBJ PODCAST SECTION */}
-      <JBJPodcastSection />
-
-      {/* DIVIDER - Centered between Podcast and Best Idea Award */}
-      <SectionDivider />
+      {/* JBJ PODCAST SECTION - Admin-controlled visibility */}
+      <PodcastVisibilityGate>
+        <SectionDivider />
+        <JBJPodcastSection />
+        <SectionDivider />
+      </PodcastVisibilityGate>
 
       {/* BEST IDEA AWARD */}
       <BestIdeaAward />
