@@ -81,18 +81,39 @@ serve(async (req) => {
     const links = scrapeData.data?.links || [];
     const html = scrapeData.data?.rawHtml || "";
 
-    // Extract images
+    // Extract images with ENHANCED filtering
     const imageSet = new Set<string>();
+    const projectImageUrls: string[] = [];
+    
     for (const l of links) {
-      if (l.includes("cloudfront.net") && /\.(jpg|jpeg|png|webp)/i.test(l)) imageSet.add(l);
+      if (l.includes("cloudfront.net") && /\.(jpg|jpeg|png|webp)/i.test(l)) {
+        imageSet.add(l);
+        if (l.includes("/off-plan/") && l.includes("/images/")) {
+          projectImageUrls.push(l);
+        }
+      }
     }
     const imgRx = /<img[^>]+(?:src|data-src|data-lazy-src)=["']([^"']+)["']/gi;
     let m: RegExpExecArray | null;
     while ((m = imgRx.exec(html)) !== null) {
-      if (m[1]?.includes("cloudfront.net") && /\.(jpg|jpeg|png|webp)/i.test(m[1])) imageSet.add(m[1]);
+      if (m[1]?.includes("cloudfront.net") && /\.(jpg|jpeg|png|webp)/i.test(m[1])) {
+        imageSet.add(m[1]);
+        if (m[1].includes("/off-plan/") && m[1].includes("/images/")) {
+          projectImageUrls.push(m[1]);
+        }
+      }
     }
-    const imageUrls = Array.from(imageSet)
-      .filter((u) => !/(logo|icon|avatar|placeholder)/i.test(u))
+    
+    // CRITICAL: Enhanced exclusion pattern - catches navbar, header, footer, menu images
+    const excludePatterns = /(logo|icon|avatar|placeholder|spinner|favicon|brochure|payment[-_]?plan|floor[-_]?plan|master[-_]?plan|pdf|document|navbar|header|footer|menu|widget|sidebar|banner|thumbnail|thumb_|_thumb|social|share|button|btn_)/i;
+    
+    // PRIORITY: Use project-specific images first, then fall back to generic
+    const prioritizedImages = projectImageUrls.length >= 2 
+      ? [...new Set(projectImageUrls)]
+      : [...new Set([...projectImageUrls, ...Array.from(imageSet)])];
+    
+    const imageUrls = prioritizedImages
+      .filter((u) => !excludePatterns.test(u))
       .map((u) => u.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"))
       .slice(0, 12);
 
@@ -179,7 +200,20 @@ Return JSON:
 
     const updatedDescription = (extracted.description as string) || item.description || null;
     const updatedDevName = (extracted.developer_name as string) || item.developer_name || null;
-    const hasMinimal = Boolean(updatedDescription && updatedDevName && updatedDevName.toLowerCase() !== "unknown" && imagesPayload.length >= 1);
+    
+    // CRITICAL: Validate images are REAL project images, not navbar placeholders
+    const validImages = imagesPayload.filter(img => 
+      img.url.includes('/off-plan/') || 
+      (!img.url.includes('navbar') && !img.url.includes('apartment_navbar') && !img.url.includes('_nav'))
+    );
+    
+    // STRICT completeness: description + developer + 2+ VALID unique images + at least 1 document
+    const hasMinimal = Boolean(
+      updatedDescription && 
+      updatedDevName && 
+      updatedDevName.toLowerCase() !== "unknown" && 
+      validImages.length >= 2
+    );
     const hasDocs = documentsPayload.length > 0;
     const stillIncomplete = !hasMinimal || !hasDocs;
 

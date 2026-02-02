@@ -53,24 +53,55 @@ function extractSlugFromUrl(url: string): string {
 
 function extractImagesFromHtml(html: string, links: string[]): string[] {
   const imageSet = new Set<string>();
+  
+  // PRIORITY 1: Extract project-specific gallery images (off-plan URLs)
+  const projectImageUrls: string[] = [];
+  const genericImageUrls: string[] = [];
+  
   for (const l of links) {
-    if (l.includes("cloudfront.net") && /\.(jpg|jpeg|png|webp)/i.test(l)) imageSet.add(l);
+    if (l.includes("cloudfront.net") && /\.(jpg|jpeg|png|webp)/i.test(l)) {
+      if (l.includes("/off-plan/") && l.includes("/images/")) {
+        projectImageUrls.push(l);
+      } else {
+        genericImageUrls.push(l);
+      }
+      imageSet.add(l);
+    }
   }
+  
   const imgRx = /<img[^>]+(?:src|data-src|data-lazy-src)=["']([^"']+)["']/gi;
   let m: RegExpExecArray | null;
   while ((m = imgRx.exec(html)) !== null) {
-    if (m[1]?.includes("cloudfront.net") && /\.(jpg|jpeg|png|webp)/i.test(m[1])) imageSet.add(m[1]);
+    if (m[1]?.includes("cloudfront.net") && /\.(jpg|jpeg|png|webp)/i.test(m[1])) {
+      if (m[1].includes("/off-plan/") && m[1].includes("/images/")) {
+        projectImageUrls.push(m[1]);
+      }
+      imageSet.add(m[1]);
+    }
   }
+  
   const bgRx = /background-image:\s*url\(['"]?([^'")\s]+cloudfront\.net[^'")\s]+)['"]?\)/gi;
   while ((m = bgRx.exec(html)) !== null) {
     if (m[1]) imageSet.add(m[1]);
   }
-  // CRITICAL: Filter out brochure, payment plan, floor plan, and document images
-  const excludePatterns = /(logo|icon|avatar|placeholder|spinner|favicon|brochure|payment[-_]?plan|floor[-_]?plan|master[-_]?plan|pdf|document)/i;
-  return Array.from(imageSet)
+  
+  // CRITICAL: Enhanced filter to exclude navbar, header, footer, menu, and other UI images
+  const excludePatterns = /(logo|icon|avatar|placeholder|spinner|favicon|brochure|payment[-_]?plan|floor[-_]?plan|master[-_]?plan|pdf|document|navbar|header|footer|menu|widget|sidebar|banner|thumbnail|thumb_|_thumb|social|share|button|btn_)/i;
+  
+  // PRIORITY: Use project-specific images first, then fall back to generic
+  const prioritizedImages = projectImageUrls.length >= 2 
+    ? [...new Set(projectImageUrls)]
+    : [...new Set([...projectImageUrls, ...Array.from(imageSet)])];
+  
+  // Filter and deduplicate
+  const filteredImages = prioritizedImages
     .filter((u) => !excludePatterns.test(u))
-    .map((u) => u.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"))
-    .slice(0, 15);
+    .map((u) => u.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"));
+  
+  // CRITICAL: Ensure uniqueness - dedupe by URL
+  const uniqueImages = [...new Set(filteredImages)];
+  
+  return uniqueImages.slice(0, 15);
 }
 
 function extractPdfsFromHtml(html: string, markdown: string): { brochure: string | null; paymentPlan: string | null; floorPlans: string[] } {
@@ -357,8 +388,21 @@ serve(async (req) => {
       if (ppUrl) documentsPayload.push({ url: ppUrl, type: "payment_plan", name: `${item.name} Payment Plan.pdf` });
       for (const fp of floorPlans) documentsPayload.push({ url: fp, type: "floor_plan", name: `${item.name} Floor Plan.pdf` });
 
-      // Strict completeness: description + developer + images + at least 1 document (brochure/floor plan/payment plan)
-      const hasMinimal = Boolean(extracted.description && extracted.developerName && imagesPayload.length >= 1);
+      // CRITICAL: Validate images are REAL project images, not navbar placeholders
+      const validImages = imagesPayload.filter(img => 
+        // Prioritize off-plan gallery images
+        img.url.includes('/off-plan/') || 
+        // Accept other images ONLY if they don't contain navbar/placeholder patterns
+        (!img.url.includes('navbar') && !img.url.includes('apartment_navbar') && !img.url.includes('_nav'))
+      );
+      
+      // STRICT completeness: description + developer + 2+ VALID unique images + at least 1 document
+      const hasMinimal = Boolean(
+        extracted.description && 
+        extracted.developerName && 
+        extracted.developerName.toLowerCase() !== 'unknown' &&
+        validImages.length >= 2
+      );
       const hasDocs = documentsPayload.length > 0;
       const stillIncomplete = !hasMinimal || !hasDocs;
 
