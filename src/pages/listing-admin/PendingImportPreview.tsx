@@ -45,8 +45,20 @@ interface PendingImport {
   size_max: number | null;
   handover_date: string | null;
   payment_plan: string | null;
+  payment_breakdown: Json | null;
   property_type_label: string | null;
   status_label: string | null;
+  amenities: string[] | null;
+  amenities_list: Json | null;
+  usp_headline: string | null;
+  usp_bullets: Json | null;
+  usp_image_url: string | null;
+  location_headline: string | null;
+  location_description: string | null;
+  location_distances: Json | null;
+  location_image_url: string | null;
+  floor_plan_types: Json | null;
+  faqs: Json | null;
   images: ImageData[];
   documents: DocumentData[];
   matched_project_id: string | null;
@@ -59,6 +71,12 @@ const parseJsonArray = <T,>(json: Json | null, defaultVal: T[] = []): T[] => {
   if (!json) return defaultVal;
   if (Array.isArray(json)) return json as T[];
   return defaultVal;
+};
+
+const parseJsonObject = (json: Json | null): Record<string, unknown> | null => {
+  if (!json) return null;
+  if (typeof json === "object" && !Array.isArray(json)) return json as Record<string, unknown>;
+  return null;
 };
 
 const PendingImportPreview = () => {
@@ -110,8 +128,20 @@ const PendingImportPreview = () => {
             size_max: data.size_max,
             handover_date: data.handover_date,
             payment_plan: data.payment_plan,
+            payment_breakdown: data.payment_breakdown,
             property_type_label: data.property_type_label,
             status_label: data.status_label,
+            amenities: data.amenities,
+            amenities_list: data.amenities_list,
+            usp_headline: data.usp_headline,
+            usp_bullets: data.usp_bullets,
+            usp_image_url: data.usp_image_url,
+            location_headline: data.location_headline,
+            location_description: data.location_description,
+            location_distances: data.location_distances,
+            location_image_url: data.location_image_url,
+            floor_plan_types: data.floor_plan_types,
+            faqs: data.faqs,
             images: parseJsonArray<ImageData>(data.images),
             documents: parseJsonArray<DocumentData>(data.documents),
             matched_project_id: data.matched_project_id,
@@ -137,6 +167,17 @@ const PendingImportPreview = () => {
 
   const mapped = useMemo<ProjectDetailData | null>(() => {
     if (!pendingImport) return null;
+
+    const amenities = pendingImport.amenities?.length
+      ? pendingImport.amenities
+      : parseJsonArray<string>(pendingImport.amenities_list);
+
+    const floorPlanTypes = parseJsonArray<{ label: string; pdfUrl?: string }>(pendingImport.floor_plan_types);
+    const faqs = parseJsonArray<{ question: string; answer: string }>(pendingImport.faqs);
+    const locationDistances = parseJsonArray<{ label: string; time: string }>(pendingImport.location_distances);
+    const uspBullets = parseJsonArray<string>(pendingImport.usp_bullets);
+    const paymentBreakdownObj = parseJsonObject(pendingImport.payment_breakdown);
+
     return {
       id: pendingImport.matched_project_id || pendingImport.id,
       name: pendingImport.name,
@@ -154,7 +195,7 @@ const PendingImportPreview = () => {
       payment_plan: pendingImport.payment_plan,
       property_type_label: pendingImport.property_type_label,
       status_label: pendingImport.status_label,
-      amenities: null,
+      amenities: amenities.length ? amenities : null,
       images: (pendingImport.images || []).map((img, idx) => ({
         id: `pending-img-${idx}`,
         url: img.url,
@@ -166,6 +207,23 @@ const PendingImportPreview = () => {
         url: d.url,
         name: d.name || d.type,
       })),
+      usp_headline: pendingImport.usp_headline,
+      usp_bullets: uspBullets.length ? uspBullets : null,
+      usp_image_url: pendingImport.usp_image_url,
+      location_headline: pendingImport.location_headline,
+      location_description: pendingImport.location_description,
+      location_distances: locationDistances.length ? locationDistances : null,
+      location_image_url: pendingImport.location_image_url,
+      floor_plan_types: floorPlanTypes.length ? floorPlanTypes : null,
+      faqs: faqs.length ? faqs : null,
+      payment_breakdown: paymentBreakdownObj
+        ? {
+            down_payment: typeof paymentBreakdownObj.down_payment === "string" ? paymentBreakdownObj.down_payment : undefined,
+            during_construction:
+              typeof paymentBreakdownObj.during_construction === "string" ? paymentBreakdownObj.during_construction : undefined,
+            on_completion: typeof paymentBreakdownObj.on_completion === "string" ? paymentBreakdownObj.on_completion : undefined,
+          }
+        : null,
     };
   }, [pendingImport]);
 

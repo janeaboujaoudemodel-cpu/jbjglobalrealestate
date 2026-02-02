@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Download, Maximize2, X } from "lucide-react";
+import { useMemo, useState } from "react";
+import { ArrowLeft, ArrowRight, Download, Maximize2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -21,10 +21,22 @@ const ImageCarousel = ({ images, projectName = "project" }: ImageCarouselProps) 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
+  const hasMultiple = useMemo(() => (images?.length ?? 0) > 1, [images]);
+
+  const goPrev = () => {
+    if (!hasMultiple) return;
+    setCurrentIndex((i) => (i === 0 ? images.length - 1 : i - 1));
+  };
+
+  const goNext = () => {
+    if (!hasMultiple) return;
+    setCurrentIndex((i) => (i === images.length - 1 ? 0 : i + 1));
+  };
+
   if (!images || images.length === 0) {
     return (
-      <div className="aspect-[16/9] bg-[#1a1a1a] rounded-lg flex items-center justify-center">
-        <p className="text-gray-500">No images available</p>
+      <div className="aspect-[16/9] bg-muted rounded-lg flex items-center justify-center">
+        <p className="text-muted-foreground">No images available</p>
       </div>
     );
   }
@@ -59,53 +71,57 @@ const ImageCarousel = ({ images, projectName = "project" }: ImageCarouselProps) 
     <>
       <div className="relative">
         {/* Main Image */}
-        <div className="aspect-[16/9] rounded-lg overflow-hidden bg-[#1a1a1a] relative group">
+        <div className="aspect-[16/9] rounded-lg overflow-hidden bg-muted relative group">
           <img
             src={images[currentIndex].image_url}
             alt={images[currentIndex].alt_text || "Project image"}
             className="w-full h-full object-cover"
           />
           
-          {/* Overlay Controls - Always Visible with 3D Premium Style */}
+          {/* Overlay Controls */}
           <div className="absolute top-4 right-4 flex gap-2">
             <button
-              className="relative w-11 h-11 rounded-xl font-bold transition-all duration-300 overflow-hidden flex items-center justify-center hover:scale-105"
-              style={{
-                background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
-                boxShadow: `
-                  0 4px 14px rgba(200,167,102,0.4),
-                  0 3px 8px rgba(0,0,0,0.15),
-                  inset 0 1px 3px rgba(255,255,255,0.9),
-                  0 0 12px rgba(200,167,102,0.3)
-                `,
-              }}
+              className="h-11 w-11 rounded-xl border border-border bg-background/70 backdrop-blur-sm shadow-lg transition-transform duration-200 hover:scale-105 flex items-center justify-center"
               onClick={() => handleDownload(images[currentIndex].image_url, currentIndex)}
               title="Download this image"
+              type="button"
             >
-              <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/70 to-transparent pointer-events-none" />
-              <Download className="w-5 h-5 text-black relative z-10" />
+              <Download className="w-5 h-5 text-foreground" />
             </button>
             <button
-              className="relative w-11 h-11 rounded-xl font-bold transition-all duration-300 overflow-hidden flex items-center justify-center hover:scale-105"
-              style={{
-                background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
-                boxShadow: `
-                  0 4px 14px rgba(200,167,102,0.4),
-                  0 3px 8px rgba(0,0,0,0.15),
-                  inset 0 1px 3px rgba(255,255,255,0.9),
-                  0 0 12px rgba(200,167,102,0.3)
-                `,
-              }}
+              className="h-11 w-11 rounded-xl border border-border bg-background/70 backdrop-blur-sm shadow-lg transition-transform duration-200 hover:scale-105 flex items-center justify-center"
               onClick={() => setIsFullscreen(true)}
               title="View fullscreen"
+              type="button"
             >
-              <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/70 to-transparent pointer-events-none" />
-              <Maximize2 className="w-5 h-5 text-black relative z-10" />
+              <Maximize2 className="w-5 h-5 text-foreground" />
             </button>
           </div>
 
+          {/* Premium left/right arrows (GALLERY ONLY) */}
+          {hasMultiple && (
+            <>
+              <button
+                type="button"
+                onClick={goPrev}
+                className="absolute left-3 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full border border-border bg-background/70 backdrop-blur-sm shadow-lg transition-all hover:bg-background/85 hover:shadow-xl flex items-center justify-center"
+                aria-label="Previous image"
+              >
+                <ArrowLeft className="h-5 w-5 text-foreground" />
+              </button>
+              <button
+                type="button"
+                onClick={goNext}
+                className="absolute right-3 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full border border-border bg-background/70 backdrop-blur-sm shadow-lg transition-all hover:bg-background/85 hover:shadow-xl flex items-center justify-center"
+                aria-label="Next image"
+              >
+                <ArrowRight className="h-5 w-5 text-foreground" />
+              </button>
+            </>
+          )}
+
           {/* Image Counter */}
-          <div className="absolute bottom-4 right-4 bg-black/50 px-3 py-1 rounded-full text-white text-sm">
+          <div className="absolute bottom-4 right-4 bg-background/70 backdrop-blur-sm px-3 py-1 rounded-full text-foreground text-sm border border-border">
             {currentIndex + 1} / {images.length}
           </div>
         </div>
@@ -118,13 +134,13 @@ const ImageCarousel = ({ images, projectName = "project" }: ImageCarouselProps) 
         {images.length > 1 && (
           <div className="mt-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-zinc-400 text-sm">{images.length} Photos</span>
+              <span className="text-muted-foreground text-sm">{images.length} Photos</span>
               {images.length > 1 && (
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={handleDownloadAll}
-                  className="text-zinc-300 hover:text-white hover:bg-zinc-800 text-sm"
+                  className="text-muted-foreground hover:text-foreground hover:bg-muted text-sm"
                 >
                   <Download className="w-4 h-4 mr-1" />
                   Download All Photos
@@ -137,8 +153,9 @@ const ImageCarousel = ({ images, projectName = "project" }: ImageCarouselProps) 
                   key={image.id}
                   onClick={() => setCurrentIndex(index)}
                   className={`aspect-[4/3] rounded overflow-hidden border-2 transition-colors relative ${
-                    index === currentIndex ? "border-white" : "border-transparent hover:border-zinc-600"
+                    index === currentIndex ? "border-primary" : "border-transparent hover:border-border"
                   }`}
+                  type="button"
                 >
                   <img
                     src={image.image_url}
@@ -146,8 +163,8 @@ const ImageCarousel = ({ images, projectName = "project" }: ImageCarouselProps) 
                     className="w-full h-full object-cover"
                   />
                   {index === 5 && images.length > 6 && (
-                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                      <span className="text-white font-semibold">+{images.length - 6}</span>
+                    <div className="absolute inset-0 bg-background/70 backdrop-blur-sm flex items-center justify-center">
+                      <span className="text-foreground font-semibold">+{images.length - 6}</span>
                     </div>
                   )}
                 </button>
@@ -159,11 +176,11 @@ const ImageCarousel = ({ images, projectName = "project" }: ImageCarouselProps) 
 
       {/* Fullscreen Dialog */}
       <Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
-        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black/95 border-none" aria-describedby={undefined}>
+        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-background border-none" aria-describedby={undefined}>
           <VisuallyHidden.Root>
             <DialogTitle>Image Gallery - {projectName}</DialogTitle>
           </VisuallyHidden.Root>
-          <div className="relative w-full h-[90vh] flex items-center justify-center">
+          <div className="relative w-full h-[90vh] flex items-center justify-center bg-background">
             <img
               src={images[currentIndex].image_url}
               alt={images[currentIndex].alt_text || "Project image"}
@@ -174,26 +191,46 @@ const ImageCarousel = ({ images, projectName = "project" }: ImageCarouselProps) 
             <Button
               variant="ghost"
               size="icon"
-              className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white rounded-full w-10 h-10"
+              className="absolute top-4 right-4 bg-background/70 hover:bg-background/85 text-foreground rounded-full w-10 h-10 border border-border"
               onClick={() => setIsFullscreen(false)}
             >
               <X className="w-6 h-6" />
             </Button>
 
-            {/* Navigation arrows hidden in fullscreen too */}
+            {/* Premium left/right arrows in fullscreen */}
+            {hasMultiple && (
+              <>
+                <button
+                  type="button"
+                  onClick={goPrev}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full border border-border bg-background/70 backdrop-blur-sm shadow-lg transition-all hover:bg-background/85 hover:shadow-xl flex items-center justify-center"
+                  aria-label="Previous image"
+                >
+                  <ArrowLeft className="h-6 w-6 text-foreground" />
+                </button>
+                <button
+                  type="button"
+                  onClick={goNext}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full border border-border bg-background/70 backdrop-blur-sm shadow-lg transition-all hover:bg-background/85 hover:shadow-xl flex items-center justify-center"
+                  aria-label="Next image"
+                >
+                  <ArrowRight className="h-6 w-6 text-foreground" />
+                </button>
+              </>
+            )}
 
             {/* Download button in fullscreen */}
             <Button
               variant="ghost"
               size="icon"
-              className="absolute top-4 left-4 bg-black/50 hover:bg-black/70 text-white rounded-full w-10 h-10"
+              className="absolute top-4 left-4 bg-background/70 hover:bg-background/85 text-foreground rounded-full w-10 h-10 border border-border"
               onClick={() => handleDownload(images[currentIndex].image_url, currentIndex)}
             >
               <Download className="w-5 h-5" />
             </Button>
 
             {/* Image counter */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 px-4 py-2 rounded-full text-white">
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-background/70 backdrop-blur-sm px-4 py-2 rounded-full text-foreground border border-border">
               {currentIndex + 1} / {images.length}
             </div>
           </div>

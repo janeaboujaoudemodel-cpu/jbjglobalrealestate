@@ -89,7 +89,7 @@ const MIN_REASONABLE_PRICE_AED = 50_000;
 
 const MAPS_API_KEY = "AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8";
 
-// Sticky sub-nav tabs config - Added USP and FAQs sections
+// Sticky sub-nav tabs config
 const SUB_NAV_TABS = [
   { id: "details", label: "Details", icon: FileText },
   { id: "gallery", label: "Gallery", icon: ImageIcon },
@@ -98,7 +98,7 @@ const SUB_NAV_TABS = [
   { id: "amenities", label: "Amenities", icon: Building2 },
   { id: "location", label: "Location", icon: MapPin },
   { id: "payment", label: "Payment Plan", icon: CreditCard },
-  { id: "faq", label: "FAQ", icon: HelpCircle },
+  { id: "faq", label: "Useful info", icon: HelpCircle },
   { id: "ai", label: "AI Analyzer", icon: Sparkles },
   { id: "mortgage", label: "Mortgage", icon: Calculator },
 ] as const;
@@ -156,6 +156,25 @@ export default function ProjectDetailLayout({
     () => project.documents.filter((d) => d.type === "floor_plan"),
     [project.documents],
   );
+
+  const visibleTabs = useMemo(() => {
+    const hasGallery = images.length > 0;
+    const hasUsp = (project.usp_bullets?.length ?? 0) > 0;
+    const hasFloorPlans = floorPlanDocs.length > 0 || (project.floor_plan_types?.length ?? 0) > 0;
+    const hasAmenities = (project.amenities?.length ?? 0) > 0;
+    const hasPayment = !!project.payment_plan || paymentPlanDocs.length > 0 || !!project.payment_breakdown;
+    const hasUsefulInfo = (project.faqs?.length ?? 0) > 0;
+
+    return SUB_NAV_TABS.filter((t) => {
+      if (t.id === "gallery") return hasGallery;
+      if (t.id === "usp") return hasUsp;
+      if (t.id === "floor-plans") return hasFloorPlans;
+      if (t.id === "amenities") return hasAmenities;
+      if (t.id === "payment") return hasPayment;
+      if (t.id === "faq") return hasUsefulInfo;
+      return true;
+    });
+  }, [floorPlanDocs.length, images.length, paymentPlanDocs.length, project.amenities, project.faqs, project.payment_breakdown, project.payment_plan, project.floor_plan_types, project.usp_bullets]);
 
   const whatsappMessage = `Hi, I'm interested in ${project.name}${project.location ? ` at ${project.location}` : ""}. Please share more details.`;
 
@@ -329,14 +348,14 @@ export default function ProjectDetailLayout({
               {/* Tab Navigation */}
               <div className="flex-1 overflow-x-auto scrollbar-hide">
                 <div className="flex items-center gap-1 py-2">
-                  {SUB_NAV_TABS.map((tab) => (
+                  {visibleTabs.map((tab) => (
                     <button
                       key={tab.id}
                       onClick={() => handleTabClick(tab.id)}
                       className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
                         activeTab === tab.id
-                          ? "bg-gold/20 text-gold"
-                          : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                          ? "bg-muted text-foreground"
+                          : "text-foreground hover:bg-muted/60"
                       }`}
                     >
                       <tab.icon className="w-4 h-4" />
@@ -357,8 +376,8 @@ export default function ProjectDetailLayout({
                 </Button>
                 {brochurePrimary && (
                   <Button 
+                    variant="primary"
                     size="sm"
-                    className="bg-orange-500 hover:bg-orange-600 text-white border-0"
                     onClick={() => scrollToRef(brochureRef)}
                   >
                     <Download className="w-4 h-4" />
@@ -410,47 +429,43 @@ export default function ProjectDetailLayout({
             </div>
           </div>
 
-          {/* GALLERY SECTION */}
-          <div ref={galleryRef} id="gallery" className="mb-12 scroll-mt-40">
-            <div className="jj-card-inner">
-              {images.length ? (
-                <>
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-h3-sm font-medium text-foreground">Project Gallery</h3>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      className="border-2 border-gold shadow-lg"
-                      onClick={() => handleDocumentDownload("images", images[0]?.url)}
-                    >
-                      <Download className="w-4 h-4" />
-                      Download Images
-                    </Button>
-                  </div>
-                  <ImageCarousel
-                    images={images.map((img) => ({
-                      id: img.id,
-                      image_url: img.url,
-                      alt_text: img.alt ?? null,
-                    }))}
-                    projectName={project.name}
-                  />
-                </>
-              ) : (
-                <p className="text-body text-muted-foreground">Gallery images will be available soon.</p>
-              )}
-            </div>
-          </div>
+           {/* GALLERY SECTION */}
+           {images.length > 0 && (
+             <div ref={galleryRef} id="gallery" className="mb-12 scroll-mt-40">
+               <div className="jj-card-inner">
+                 <div className="flex items-center justify-between mb-4">
+                   <h3 className="text-h3-sm font-medium text-foreground">Project Gallery</h3>
+                   <Button
+                     variant="primary"
+                     size="sm"
+                     onClick={() => handleDocumentDownload("images", images[0]?.url)}
+                   >
+                     <Download className="w-4 h-4" />
+                     Download Images
+                   </Button>
+                 </div>
+                 <ImageCarousel
+                   images={images.map((img) => ({
+                     id: img.id,
+                     image_url: img.url,
+                     alt_text: img.alt ?? null,
+                   }))}
+                   projectName={project.name}
+                 />
+               </div>
+             </div>
+           )}
 
-          {/* UNIQUE SELLING POINTS (USP/Highlights) SECTION */}
-          <div ref={uspRef} id="usp" className="mb-12 scroll-mt-40">
-            <div className="jj-card-inner">
-              <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
-                <Star className="w-5 h-5 text-gold" />
-                Unique Selling Points
-              </h3>
-              {project.usp_bullets && project.usp_bullets.length > 0 ? (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+           {/* UNIQUE SELLING POINTS (USP/Highlights) SECTION */}
+           {(project.usp_bullets?.length ?? 0) > 0 && (
+             <div ref={uspRef} id="usp" className="mb-12 scroll-mt-40">
+               <div className="jj-card-inner">
+                  <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
+                    <Star className="w-5 h-5 text-gold" />
+                    Unique Selling Points
+                  </h3>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {/* USP Image */}
                   {project.usp_image_url && (
                     <div className="rounded-xl overflow-hidden border border-gold/30">
@@ -486,69 +501,69 @@ export default function ProjectDetailLayout({
                       Find Out More
                     </Button>
                   </div>
+                  </div>
                 </div>
-              ) : (
-                <div className="text-center py-8">
-                  <Star className="w-12 h-12 mx-auto text-gold/50 mb-3" />
-                  <p className="text-body text-muted-foreground">Unique selling points will be available soon.</p>
-                </div>
-              )}
-            </div>
-          </div>
+              </div>
+            )}
 
-          {/* FLOOR PLANS SECTION */}
-          <div ref={floorPlansRef} id="floor-plans" className="mb-12 scroll-mt-40">
-            <div className="jj-card-inner">
-              <h3 className="text-h3-sm font-medium text-foreground">Floor Plans</h3>
-              {floorPlanDocs.length ? (
-                <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {floorPlanDocs.map((doc) => (
-                    <button
-                      key={doc.id}
-                      onClick={() => handleDocumentDownload("floor_plan", doc.url)}
-                      className="rounded-xl border border-gold/30 bg-card p-4 hover:border-gold/60 transition-colors text-left"
-                    >
-                      <p className="text-sm font-semibold text-foreground truncate">{doc.name || "Floor Plan"}</p>
-                      <p className="mt-1 text-xs text-muted-foreground truncate">Click to download</p>
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <div className="mt-4 text-center py-8">
-                  <Layers className="w-12 h-12 mx-auto text-gold/50 mb-3" />
-                  <p className="text-body text-muted-foreground mb-4">Floor plans are being prepared for this project.</p>
-                  <Button 
-                    variant="primary" 
-                    size="sm"
-                    onClick={() => handleDocumentDownload("floor_plan")}
-                  >
-                    Request Floor Plans
-                  </Button>
-                </div>
-              )}
-            </div>
-          </div>
+           {/* FLOOR PLANS SECTION */}
+           {(floorPlanDocs.length > 0 || (project.floor_plan_types?.length ?? 0) > 0) && (
+             <div ref={floorPlansRef} id="floor-plans" className="mb-12 scroll-mt-40">
+               <div className="jj-card-inner">
+                  <h3 className="text-h3-sm font-medium text-foreground">Floor Plans</h3>
 
-          {/* AMENITIES SECTION */}
-          <div ref={amenitiesRef} id="amenities" className="mb-12 scroll-mt-40">
-            <div className="jj-card-inner">
-              <h3 className="text-h3-sm font-medium text-foreground">Amenities</h3>
-              {project.amenities?.length ? (
-                <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                  {project.amenities.slice(0, 40).map((a, idx) => (
-                    <div key={idx} className="rounded-xl border border-gold/30 bg-card p-3">
-                      <p className="text-xs text-foreground">{a}</p>
+                  {floorPlanDocs.length > 0 ? (
+                    <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {floorPlanDocs.map((doc) => (
+                        <button
+                          key={doc.id}
+                          onClick={() => handleDocumentDownload("floor_plan", doc.url)}
+                          className="rounded-xl border border-gold/30 bg-card p-4 hover:border-gold/60 transition-colors text-left"
+                        >
+                          <p className="text-sm font-semibold text-foreground truncate">{doc.name || "Floor Plan"}</p>
+                          <p className="mt-1 text-xs text-muted-foreground truncate">Click to download</p>
+                        </button>
+                      ))}
                     </div>
-                  ))}
+                  ) : (
+                    <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {(project.floor_plan_types || []).map((t, idx) => (
+                        <div key={idx} className="rounded-xl border border-border bg-card p-4">
+                          <p className="text-sm font-semibold text-foreground">{t.label}</p>
+                          {t.pdfUrl ? (
+                            <button
+                              type="button"
+                              className="mt-1 text-xs text-primary underline underline-offset-4"
+                              onClick={() => handleDocumentDownload("floor_plan", t.pdfUrl)}
+                            >
+                              Download
+                            </button>
+                          ) : (
+                            <p className="mt-1 text-xs text-muted-foreground">Available on request</p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              ) : (
-                <div className="mt-4 text-center py-8">
-                  <Building2 className="w-12 h-12 mx-auto text-gold/50 mb-3" />
-                  <p className="text-body text-muted-foreground">Amenities information will be available soon.</p>
+              </div>
+            )}
+
+           {/* AMENITIES SECTION */}
+           {(project.amenities?.length ?? 0) > 0 && (
+             <div ref={amenitiesRef} id="amenities" className="mb-12 scroll-mt-40">
+               <div className="jj-card-inner">
+                  <h3 className="text-h3-sm font-medium text-foreground">Amenities</h3>
+                  <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                    {project.amenities!.slice(0, 40).map((a, idx) => (
+                      <div key={idx} className="rounded-xl border border-border bg-card p-3">
+                        <p className="text-xs text-foreground">{a}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              )}
-            </div>
-          </div>
+              </div>
+            )}
 
           {/* LOCATION MAP - Full Width */}
           <div ref={locationRef} id="location" className="mb-12 scroll-mt-40">
@@ -656,8 +671,9 @@ export default function ProjectDetailLayout({
             />
           </div>
 
-          {/* PAYMENT PLAN (full width, separate section) */}
-          <div ref={paymentRef} id="payment" className="jj-card-inner scroll-mt-40 mb-16">
+           {/* PAYMENT PLAN (full width, separate section) */}
+           {(!!project.payment_plan || paymentPlanDocs.length > 0 || !!project.payment_breakdown) && (
+           <div ref={paymentRef} id="payment" className="jj-card-inner scroll-mt-40 mb-16">
             <h3 className="text-h3-sm font-medium text-foreground mb-6 flex items-center gap-2">
               <FileText className="w-5 h-5 text-gold" />
               Payment Plan
@@ -688,47 +704,58 @@ export default function ProjectDetailLayout({
                 ))}
               </div>
             ) : (
-              <p className="text-body text-muted-foreground">
-                Detailed payment plan documents available upon request.
-              </p>
+               <></>
             )}
-          </div>
 
-          {/* FAQ SECTION - Questions & Answers */}
-          <div ref={faqRef} id="faq" className="mb-12 scroll-mt-40">
-            <div className="jj-card-inner">
-              <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
-                <HelpCircle className="w-5 h-5 text-gold" />
-                Questions & Answers
-              </h3>
-              {project.faqs && project.faqs.length > 0 ? (
-                <Accordion type="single" collapsible className="w-full">
-                  {project.faqs.map((faq, idx) => (
-                    <AccordionItem key={idx} value={`faq-${idx}`} className="border-b border-gold/20">
-                      <AccordionTrigger className="text-left text-foreground hover:text-gold py-4">
-                        {faq.question}
-                      </AccordionTrigger>
-                      <AccordionContent className="text-muted-foreground pb-4">
-                        {faq.answer}
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
-              ) : (
-                <div className="text-center py-8">
-                  <HelpCircle className="w-12 h-12 mx-auto text-gold/50 mb-3" />
-                  <p className="text-body text-muted-foreground mb-4">FAQ section will be available soon.</p>
-                  <Button 
-                    variant="primary" 
-                    size="sm"
-                    onClick={scrollToInquiry}
-                  >
-                    Ask a Question
-                  </Button>
-                </div>
-              )}
-            </div>
+             {/* Payment breakdown (milestones) */}
+             {project.payment_breakdown && (
+               <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                 {project.payment_breakdown.down_payment && (
+                   <div className="rounded-xl border border-border bg-card p-4">
+                     <p className="text-xs text-muted-foreground">Down payment</p>
+                     <p className="mt-1 text-base font-semibold text-foreground">{project.payment_breakdown.down_payment}</p>
+                   </div>
+                 )}
+                 {project.payment_breakdown.during_construction && (
+                   <div className="rounded-xl border border-border bg-card p-4">
+                     <p className="text-xs text-muted-foreground">During construction</p>
+                     <p className="mt-1 text-base font-semibold text-foreground">{project.payment_breakdown.during_construction}</p>
+                   </div>
+                 )}
+                 {project.payment_breakdown.on_completion && (
+                   <div className="rounded-xl border border-border bg-card p-4">
+                     <p className="text-xs text-muted-foreground">On completion</p>
+                     <p className="mt-1 text-base font-semibold text-foreground">{project.payment_breakdown.on_completion}</p>
+                   </div>
+                 )}
+               </div>
+             )}
           </div>
+           )}
+
+           {/* USEFUL INFO SECTION */}
+           {(project.faqs?.length ?? 0) > 0 && (
+             <div ref={faqRef} id="faq" className="mb-12 scroll-mt-40">
+               <div className="jj-card-inner">
+                 <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
+                   <HelpCircle className="w-5 h-5 text-gold" />
+                   Useful information about {project.name}
+                 </h3>
+                 <Accordion type="single" collapsible className="w-full">
+                   {project.faqs!.map((faq, idx) => (
+                     <AccordionItem key={idx} value={`faq-${idx}`} className="border-b border-border">
+                       <AccordionTrigger className="text-left text-foreground py-4">
+                         {faq.question}
+                       </AccordionTrigger>
+                       <AccordionContent className="text-muted-foreground pb-4">
+                         {faq.answer}
+                       </AccordionContent>
+                     </AccordionItem>
+                   ))}
+                 </Accordion>
+               </div>
+             </div>
+           )}
 
           {/* MORTGAGE CALCULATOR - Full Width with more spacing */}
           <div ref={mortgageRef} className="mb-20 scroll-mt-32">
