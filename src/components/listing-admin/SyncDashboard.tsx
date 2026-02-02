@@ -1469,7 +1469,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                     </div>
                     <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-center">
                       <div className="text-2xl font-bold text-amber-700">
-                        {(queueBreakdown.needs_extraction_pending ?? 0) + (queueBreakdown.incomplete_pending ?? 0)}
+                        {(queueBreakdown.needs_extraction_pending ?? 0) + (queueBreakdown.incomplete_pending ?? 0) + (queueBreakdown.errors_pending ?? 0)}
                       </div>
                       <div className="text-xs text-amber-600">Needs Work</div>
                     </div>
