@@ -12,6 +12,8 @@ const POSTGREST_PAGE_SIZE = 1000;
 const CANONICAL_TOTAL_PAGES = 89;
 const CANONICAL_TOTAL_LISTINGS = 1336;
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 const normalizeUrl = (raw: string): string => {
   const trimmed = (raw || "").trim();
   if (!trimmed) return "";
@@ -181,20 +183,39 @@ const fetchHtml = async (url: string, timeoutMs = 25000): Promise<{ ok: boolean;
 };
 
 const firecrawlScrapeLinks = async (url: string, firecrawlKey: string): Promise<string[]> => {
-  const res = await fetch("https://api.firecrawl.dev/v1/scrape", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${firecrawlKey}` },
-    body: JSON.stringify({
-      url,
-      formats: ["links"],
-      waitFor: 8000,
-      timeout: 60000,
-    }),
-  });
+  // Provident can trigger Firecrawl rate-limits; retry a few times with backoff.
+  // (No `actions` parameter on purpose — stability policy.)
+  const maxAttempts = 4;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const res = await fetch("https://api.firecrawl.dev/v1/scrape", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${firecrawlKey}` },
+      body: JSON.stringify({
+        url,
+        formats: ["links"],
+        waitFor: 8000,
+        timeout: 60000,
+      }),
+    });
 
-  if (!res.ok) return [];
-  const data = await res.json().catch(() => ({}));
-  return (data?.data?.links || data?.links || []) as string[];
+    if (res.ok) {
+      const data = await res.json().catch(() => ({}));
+      return (data?.data?.links || data?.links || []) as string[];
+    }
+
+    // Retry on rate limits / transient upstream
+    if (res.status === 429 || res.status >= 500) {
+      const backoff = Math.min(8000, 750 * Math.pow(2, attempt - 1));
+      console.log(`[Discover] Firecrawl retry ${attempt}/${maxAttempts} (${res.status}) for ${url} in ${backoff}ms`);
+      await sleep(backoff);
+      continue;
+    }
+
+    // Non-retriable
+    return [];
+  }
+
+  return [];
 };
 
 const collectProjectUrlsFromListingPages = async (opts: {
@@ -204,7 +225,8 @@ const collectProjectUrlsFromListingPages = async (opts: {
   forceFirecrawlAllPages?: boolean;
 }): Promise<{ urls: string[]; pages_failed: number }> => {
   const totalPages = Math.max(1, opts.totalPages || CANONICAL_TOTAL_PAGES);
-  const concurrency = Math.max(1, Math.min(12, opts.concurrency ?? 8));
+  // Lower concurrency to reduce rate limiting; correctness > speed for deterministic rebuilds.
+  const concurrency = Math.max(1, Math.min(6, opts.concurrency ?? 4));
 
   const listingPages = Array.from({ length: totalPages }, (_, i) => {
     const page = i + 1;
@@ -250,7 +272,7 @@ const collectProjectUrlsFromListingPages = async (opts: {
         : `[Discover] Direct HTML discovery failed for ${failedPages.length} listing pages. Falling back to Firecrawl scrape(links) for those pages...`,
     );
 
-    const firecrawlResults = await mapWithConcurrency(pagesToScrape, 4, async (pageUrl) => {
+    const firecrawlResults = await mapWithConcurrency(pagesToScrape, 3, async (pageUrl) => {
       const links = await firecrawlScrapeLinks(pageUrl, opts.firecrawlKey);
       return links.map(normalizeUrl).filter(isProjectDetailUrl);
     });
@@ -380,7 +402,7 @@ serve(async (req) => {
         rangeUrls = scraped.flatMap((x) => x);
       } else {
         // Use Firecrawl scrape(links) first; fallback to raw HTML for each page
-        const htmlBatch = await mapWithConcurrency(pageUrls, 6, async (pageUrl) => {
+        const htmlBatch = await mapWithConcurrency(pageUrls, 3, async (pageUrl) => {
           const links = await firecrawlScrapeLinks(pageUrl, firecrawlKey);
           const projectLinks = links.map(normalizeUrl).filter(isProjectDetailUrl);
           if (projectLinks.length > 0) return projectLinks;
@@ -411,7 +433,7 @@ serve(async (req) => {
       const { urls: byPageUrls, pages_failed } = await collectProjectUrlsFromListingPages({
         totalPages: detectedPages,
         firecrawlKey,
-        concurrency: 8,
+        concurrency: 4,
       });
       fallbackPagesFailed = pages_failed;
 
@@ -534,9 +556,10 @@ serve(async (req) => {
       
       for (let i = 0; i < placeholders.length; i += 50) {
         const batch = placeholders.slice(i, i + 50);
+        // Conflict-safe: do not fail the whole batch if a slug already exists (race/concurrent runs).
         const { error: insertErr } = await supabase
           .from("pending_project_imports")
-          .insert(batch);
+          .upsert(batch, { onConflict: "slug", ignoreDuplicates: true });
         
         if (insertErr) {
           console.error(`[Discover] Insert batch ${i}-${i + batch.length} error:`, insertErr.message);
