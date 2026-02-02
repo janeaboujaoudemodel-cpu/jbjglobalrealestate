@@ -75,6 +75,10 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
       )}
       style={{
         background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
+        // Prevent bottom cropping on shorter viewports by enabling internal scroll.
+        maxHeight: 'calc(100vh - var(--header-height, 128px) - 24px)',
+        overflowY: 'auto',
+        overscrollBehavior: 'contain',
       }}
     >
       <div className="absolute inset-0 rounded-xl border-2 border-gold/40 pointer-events-none" />

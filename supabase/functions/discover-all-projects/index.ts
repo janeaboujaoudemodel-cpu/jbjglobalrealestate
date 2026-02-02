@@ -15,10 +15,30 @@ const CANONICAL_TOTAL_LISTINGS = 1335;
 const normalizeUrl = (raw: string): string => {
   const trimmed = (raw || "").trim();
   if (!trimmed) return "";
+  // Firecrawl scrape(links) can return relative URLs (e.g. "/new-projects/...").
+  // Canonicalize everything to absolute Provident URLs before filtering/deduping.
+  const absolute =
+    trimmed.startsWith("http://") || trimmed.startsWith("https://")
+      ? trimmed
+      : trimmed.startsWith("/")
+        ? `https://providentestate.com${trimmed}`
+        : `https://providentestate.com/${trimmed.replace(/^\.\/?/, "")}`;
   // Firecrawl MAP often returns links with tracking query params / fragments.
   // We canonicalize them so they de-dupe and pass slug filtering.
-  const noQueryOrHash = trimmed.split("?")[0].split("#")[0];
-  return noQueryOrHash.replace(/\/$/, "");
+  const noQueryOrHash = absolute.split("?")[0].split("#")[0];
+  const withoutTrailing = noQueryOrHash.replace(/\/$/, "");
+
+  // Some link sources include sub-paths under a project (e.g. /new-projects/<slug>/something).
+  // Canonicalize them back to the base project URL so we don't miss inventory.
+  const m = withoutTrailing.match(
+    /^https?:\/\/(?:www\.)?providentestate\.com\/new-projects\/([^\/\?#]+)(?:\/.*)?$/i,
+  );
+  const slug = (m?.[1] || "").toLowerCase();
+  if (slug && slug !== "page") {
+    return `https://providentestate.com/new-projects/${m![1]}`.replace(/\/$/, "");
+  }
+
+  return withoutTrailing;
 };
 
 /**
