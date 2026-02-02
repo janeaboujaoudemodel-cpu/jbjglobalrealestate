@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import type { Json } from "@/integrations/supabase/types";
 
 export interface Project {
   id: string;
@@ -7,6 +8,18 @@ export interface Project {
   slug: string;
   description: string | null;
   location: string | null;
+  // Mirrored content (extracted)
+  usp_headline?: string | null;
+  usp_bullets?: Json | null;
+  usp_image_url?: string | null;
+  location_headline?: string | null;
+  location_description?: string | null;
+  location_distances?: Json | null;
+  location_image_url?: string | null;
+  floor_plan_types?: Json | null;
+  faqs?: Json | null;
+  payment_breakdown?: Json | null;
+  amenities_list?: Json | null;
   price_from: number | null;
   price_to: number | null;
   bedrooms_min: number | null;

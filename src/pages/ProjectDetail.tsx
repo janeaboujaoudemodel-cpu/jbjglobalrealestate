@@ -6,6 +6,77 @@ import ProjectDetailLayout, { type ProjectDetailData } from "@/components/projec
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 
+const asStringArray = (value: unknown): string[] | null => {
+  if (!Array.isArray(value)) return null;
+  const out = value.filter((v): v is string => typeof v === "string" && v.trim().length > 0);
+  return out.length ? out : null;
+};
+
+const asFaqs = (value: unknown): Array<{ question: string; answer: string }> | null => {
+  if (!Array.isArray(value)) return null;
+  const out = value
+    .map((v) => {
+      const o = v as Record<string, unknown>;
+      const q = typeof o.question === "string" ? o.question : typeof o.q === "string" ? o.q : "";
+      const a = typeof o.answer === "string" ? o.answer : typeof o.a === "string" ? o.a : "";
+      return { question: q.trim(), answer: a.trim() };
+    })
+    .filter((v) => v.question && v.answer);
+  return out.length ? out : null;
+};
+
+const asLocationDistances = (value: unknown): Array<{ label: string; time: string }> | null => {
+  if (!Array.isArray(value)) return null;
+  const out = value
+    .map((v) => {
+      const o = v as Record<string, unknown>;
+      const label =
+        typeof o.label === "string"
+          ? o.label
+          : typeof o.place === "string"
+            ? o.place
+            : typeof o.name === "string"
+              ? o.name
+              : "";
+      const time =
+        typeof o.time === "string"
+          ? o.time
+          : typeof o.distance === "string"
+            ? o.distance
+            : typeof o.value === "string"
+              ? o.value
+              : "";
+      return { label: label.trim(), time: time.trim() };
+    })
+    .filter((v) => v.label && v.time);
+  return out.length ? out : null;
+};
+
+const asPaymentBreakdown = (value: unknown): { down_payment?: string; during_construction?: string; on_completion?: string } | null => {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const o = value as Record<string, unknown>;
+
+  const down_payment = typeof o.down_payment === "string" ? o.down_payment : undefined;
+  const during_construction = typeof o.during_construction === "string" ? o.during_construction : undefined;
+  const on_completion = typeof o.on_completion === "string" ? o.on_completion : undefined;
+
+  if (!down_payment && !during_construction && !on_completion) return null;
+  return { down_payment, during_construction, on_completion };
+};
+
+const asFloorPlanTypes = (value: unknown): Array<{ label: string; pdfUrl?: string }> | null => {
+  if (!Array.isArray(value)) return null;
+  const out = value
+    .map((v) => {
+      const o = v as Record<string, unknown>;
+      const label = typeof o.label === "string" ? o.label : typeof o.type === "string" ? o.type : "";
+      const pdfUrl = typeof o.pdfUrl === "string" ? o.pdfUrl : typeof o.url === "string" ? o.url : undefined;
+      return { label: label.trim(), pdfUrl };
+    })
+    .filter((v) => v.label);
+  return out.length ? out : null;
+};
+
 const ProjectDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: project, isLoading } = useProject(slug || "");
@@ -44,6 +115,16 @@ const ProjectDetail = () => {
       amenities: project.amenities,
       images,
       documents,
+      usp_headline: project.usp_headline ?? null,
+      usp_bullets: asStringArray(project.usp_bullets),
+      usp_image_url: project.usp_image_url ?? null,
+      location_headline: project.location_headline ?? null,
+      location_description: project.location_description ?? null,
+      location_distances: asLocationDistances(project.location_distances),
+      location_image_url: project.location_image_url ?? null,
+      floor_plan_types: asFloorPlanTypes(project.floor_plan_types),
+      faqs: asFaqs(project.faqs),
+      payment_breakdown: asPaymentBreakdown(project.payment_breakdown),
     };
   }, [project]);
 
