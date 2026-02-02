@@ -16,7 +16,7 @@ interface MegaMenuMoreProps {
 }
 
 const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onClose }, ref) => {
-  // Column 1: About & Company
+  // Column 1: About & Company (10 items - balanced)
   const aboutLinks = [
     { label: 'About Us', href: '/about', icon: Building2 },
     { label: 'Meet the Team', href: '/team', icon: Users },
@@ -27,11 +27,10 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     { label: 'Company Profile', href: '/company-profile', icon: FileText },
     { label: 'Contact Us', href: '/contact', icon: Phone },
     { label: 'Complaint Procedure', href: '/complaint', icon: ClipboardCheck },
-    { label: 'Philanthropy', href: '/philanthropy', icon: Heart },
     { label: 'Testimonials', href: '/testimonials', icon: MessageCircle },
   ];
 
-  // Column 2: Resources & Guides
+  // Column 2: Resources & Guides (10 items - balanced)
   const resourceLinks = [
     { label: 'Guides Library', href: '/guides', icon: BookOpen },
     { label: 'Market Intelligence', href: '/market-intelligence', icon: BarChart3 },
@@ -42,12 +41,10 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     { label: 'Rent Guide', href: '/rent-guide', icon: BookOpen },
     { label: 'Tenant Guide', href: '/tenant-guide', icon: BookOpen },
     { label: 'Landlord Guide', href: '/landlord-guide', icon: BookOpen },
-    { label: 'Investor Education', href: '/investor-education', icon: GraduationCap },
-    { label: 'Broker Education', href: '/broker-education', icon: GraduationCap },
     { label: 'Golden Visa Guide', href: '/guides/golden-visa-uae', icon: Award },
   ];
 
-  // Column 3: Partners & Tools
+  // Column 3: Partners & Tools (10 items - balanced)
   const partnerLinks = [
     { label: 'Partners Hub', href: '/partners', icon: Users },
     { label: 'Mortgage Partners', href: '/partners/mortgage', icon: Calculator },
@@ -58,11 +55,10 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     { label: 'AI Home Finder', href: '/quiz', icon: Sparkles },
     { label: 'Property Map', href: '/map', icon: MapPin },
     { label: 'Compare Properties', href: '/compare', icon: Layers },
-    { label: 'Landlord Portal', href: '/landlord-portal', icon: Building2 },
     { label: 'Sell Your Property', href: '/seller-listing', icon: ClipboardCheck },
   ];
 
-  // Column 4: Legal & Trust
+  // Column 4: Legal & Trust (9 items - includes moved items to balance)
   const legalLinks = [
     { label: 'Terms of Service', href: '/terms', icon: FileText },
     { label: 'Privacy Policy', href: '/privacy', icon: Shield },
@@ -71,17 +67,20 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     { label: 'Intellectual Property', href: '/intellectual-property', icon: Shield },
     { label: 'Investor FAQ', href: '/investor-faq', icon: HelpCircle },
     { label: 'Broker FAQ', href: '/broker-faq', icon: HelpCircle },
+    { label: 'Investor Education', href: '/investor-education', icon: GraduationCap },
+    { label: 'Landlord Portal', href: '/landlord-portal', icon: Building2 },
+    { label: 'Philanthropy', href: '/philanthropy', icon: Heart },
   ];
 
   return (
-    <MegaMenuShell ref={ref}>
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-6 lg:py-8">
-        {/* 4 Equal Columns - No Photo, No Scrollers */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <MegaMenuShell ref={ref} noScroll>
+      <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-4 lg:py-5">
+        {/* 4 Equal Columns - No Photo, No Scrollers - Compact padding */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Column 1: About & Company */}
           <div className="relative">
             <MegaMenuSectionTitle icon={Building2} title="About & Company" />
-            <div className="space-y-0.5">
+            <div className="space-y-0">
               {aboutLinks.map((item) => (
                 <MegaMenuIconLink
                   key={item.href}
@@ -94,13 +93,13 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
               ))}
             </div>
             {/* Vertical divider */}
-            <div className="hidden lg:block absolute top-0 -right-3 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+            <div className="hidden lg:block absolute top-0 -right-2 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
           </div>
 
           {/* Column 2: Resources & Guides */}
           <div className="relative">
             <MegaMenuSectionTitle icon={BookOpen} title="Resources & Guides" />
-            <div className="space-y-0.5">
+            <div className="space-y-0">
               {resourceLinks.map((item) => (
                 <MegaMenuIconLink
                   key={item.href}
@@ -113,13 +112,13 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
               ))}
             </div>
             {/* Vertical divider */}
-            <div className="hidden lg:block absolute top-0 -right-3 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+            <div className="hidden lg:block absolute top-0 -right-2 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
           </div>
 
           {/* Column 3: Partners & Tools */}
           <div className="relative">
             <MegaMenuSectionTitle icon={Users} title="Partners & Tools" />
-            <div className="space-y-0.5">
+            <div className="space-y-0">
               {partnerLinks.map((item) => (
                 <MegaMenuIconLink
                   key={item.href}
@@ -132,13 +131,13 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
               ))}
             </div>
             {/* Vertical divider */}
-            <div className="hidden lg:block absolute top-0 -right-3 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+            <div className="hidden lg:block absolute top-0 -right-2 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
           </div>
 
           {/* Column 4: Legal & Trust */}
           <div>
             <MegaMenuSectionTitle icon={Shield} title="Legal & Trust" />
-            <div className="space-y-0.5">
+            <div className="space-y-0">
               {legalLinks.map((item) => (
                 <MegaMenuIconLink
                   key={item.href}
