@@ -86,6 +86,19 @@ serve(async (req) => {
       });
     }
 
+    // Handle insufficient credits (402) - return user-friendly error
+    if (scrapeRes.status === 402) {
+      console.warn(`[RepairExtraction] Firecrawl credits exhausted for ${item.name}`);
+      return new Response(JSON.stringify({ 
+        error: "Credits exhausted", 
+        code: "CREDITS_EXHAUSTED",
+        message: "Firecrawl API credits have run out. Please upgrade your plan at https://firecrawl.dev/pricing or wait for credits to reset."
+      }), {
+        status: 402,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     if (!scrapeRes.ok) {
       const errText = await scrapeRes.text();
       return new Response(JSON.stringify({ error: "Scrape failed", details: errText.substring(0, 200) }), {
