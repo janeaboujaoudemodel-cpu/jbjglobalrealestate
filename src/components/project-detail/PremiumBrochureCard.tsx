@@ -121,11 +121,11 @@ const PremiumBrochureCard = ({
 
             {/* Bottom: Brochure info */}
             <div className="mt-auto">
-              <p className="text-gold text-[10px] uppercase tracking-[0.25em] font-medium mb-2 drop-shadow-lg">
+              <p className="text-gold text-xs uppercase tracking-[0.25em] font-bold mb-2 drop-shadow-lg">
                 Project Brochure
               </p>
               
-              <h3 
+              <h3
                 className="text-white text-2xl font-bold mb-3 line-clamp-2 leading-tight drop-shadow-lg"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
@@ -165,15 +165,17 @@ const PremiumBrochureCard = ({
         />
       </motion.div>
 
-      {/* Download Button - Premium gold style */}
+      {/* Download Button - Premium champagne style with visible hover */}
       <motion.button
         onClick={handleClick}
         className={cn(
           "flex items-center gap-3 px-10 py-4 rounded-lg font-semibold text-base transition-all duration-300",
-          // Filled, premium (no yellow / gold fill)
-          "bg-foreground text-background hover:bg-foreground/90",
-          "border border-border",
-          "group shadow-lg"
+          // Premium champagne gradient background
+          "bg-gradient-to-r from-champagne via-champagne-light to-champagne",
+          "text-foreground border-2 border-foreground/70",
+          "shadow-[0_10px_30px_rgba(200,167,102,0.25),0_6px_15px_rgba(0,0,0,0.22)]",
+          "hover:shadow-[0_14px_45px_rgba(200,167,102,0.35)] hover:border-gold/80",
+          "group"
         )}
         whileHover={{ 
           y: -3, 
@@ -183,13 +185,13 @@ const PremiumBrochureCard = ({
       >
         {isLocked ? (
           <>
-            <Lock className="w-5 h-5 group-hover:scale-110 transition-transform" />
-            Unlock Brochure
+            <Lock className="w-5 h-5 text-foreground group-hover:text-gold group-hover:scale-110 transition-all" />
+            <span className="group-hover:text-gold transition-colors">Unlock Brochure</span>
           </>
         ) : (
           <>
-            <Download className="w-5 h-5 group-hover:scale-110 transition-transform" />
-            Download Brochure
+            <Download className="w-5 h-5 text-foreground group-hover:text-gold group-hover:scale-110 transition-all" />
+            <span className="group-hover:text-gold transition-colors">Download Brochure</span>
           </>
         )}
       </motion.button>

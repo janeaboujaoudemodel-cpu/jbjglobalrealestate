@@ -221,13 +221,13 @@ export function ProjectInquiryForm({
           />
         </div>
 
-        {/* Submit Button - Large Primary */}
+        {/* Submit Button - Large Primary with premium hover */}
         <Button 
           type="submit" 
           disabled={isSubmitting} 
           variant="primary" 
           size="lg"
-          className="w-full h-16 text-lg font-semibold shadow-lg hover:shadow-xl transition-all"
+          className="w-full h-16 text-lg font-semibold shadow-lg hover:shadow-[0_14px_45px_rgba(200,167,102,0.4)] hover:-translate-y-1 transition-all duration-300"
         >
           {isSubmitting ? (
             <>

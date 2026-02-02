@@ -286,7 +286,7 @@ const MortgageCalculator = ({
               </div>
               <div className="bg-muted/50 border border-border rounded-xl p-2 lg:p-4 overflow-hidden">
                 <p className="text-muted-foreground text-[9px] lg:text-xs mb-0.5 lg:mb-1 truncate">Total Interest</p>
-                <p className="text-gold font-bold text-xs lg:text-base truncate">{formatCurrency(calculations.totalInterest)}</p>
+                <p className="text-foreground font-bold text-xs lg:text-base truncate">{formatCurrency(calculations.totalInterest)}</p>
               </div>
               <div className="bg-muted/50 border border-border rounded-xl p-2 lg:p-4 overflow-hidden">
                 <p className="text-muted-foreground text-[9px] lg:text-xs mb-0.5 lg:mb-1 truncate">Total Payment</p>
@@ -294,36 +294,36 @@ const MortgageCalculator = ({
               </div>
             </div>
 
-            {/* Payment Visualization - Gold theme */}
+            {/* Payment Visualization - Premium neutral theme */}
             <div className="space-y-2">
               <p className="text-muted-foreground text-sm">Payment Breakdown</p>
               <div className="h-4 rounded-full overflow-hidden bg-muted flex">
                 <div 
-                  className="bg-primary transition-all duration-500"
+                  className="bg-foreground transition-all duration-500"
                   style={{ width: `${(calculations.loanAmount / calculations.totalPayment) * 100}%` }}
                 />
                 <div 
-                  className="bg-gold transition-all duration-500"
+                  className="bg-muted-foreground/60 transition-all duration-500"
                   style={{ width: `${(calculations.totalInterest / calculations.totalPayment) * 100}%` }}
                 />
               </div>
               <div className="flex justify-between text-xs">
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-primary" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-foreground" />
                   <span className="text-muted-foreground">Principal</span>
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-gold" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-muted-foreground/60" />
                   <span className="text-muted-foreground">Interest</span>
                 </span>
               </div>
             </div>
 
-            {/* CTA - Premium Gold Button */}
+            {/* CTA - Premium Gold Button with visible hover */}
             <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer" className="block">
               <Button 
                 variant="primary" 
-                className="w-full h-14 text-base font-semibold group shadow-lg hover:shadow-xl transition-all"
+                className="w-full h-14 text-base font-semibold group shadow-lg hover:shadow-[0_14px_45px_rgba(200,167,102,0.4)] hover:-translate-y-1 transition-all duration-300"
               >
                 Request Mortgage Partner Introduction
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
