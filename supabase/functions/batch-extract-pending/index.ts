@@ -88,8 +88,9 @@ function extractImagesFromHtml(html: string, links: string[]): string[] {
     if (m[1]) imageSet.add(m[1]);
   }
   
-  // CRITICAL: Enhanced filter to exclude navbar, header, footer, menu, and other UI images
-  const excludePatterns = /(logo|icon|avatar|placeholder|spinner|favicon|brochure|payment[-_]?plan|floor[-_]?plan|master[-_]?plan|pdf|document|navbar|header|footer|menu|widget|sidebar|banner|thumbnail|thumb_|_thumb|social|share|button|btn_)/i;
+  // CRITICAL: Enhanced filter to exclude navbar, header, footer, menu, and other UI/placeholder images
+  // NOTE: Do NOT rewrite image size paths (e.g. /x/1504x/ -> /x/1200x800/). That was causing broken images.
+  const excludePatterns = /(logo|icon|avatar|placeholder|spinner|favicon|brochure|payment[-_]?plan|floor[-_]?plan|master[-_]?plan|pdf|document|navbar|header|footer|menu|widget|sidebar|banner|thumbnail|thumb_|_thumb|social|share|button|btn_|grid_\d+_)/i;
   
   // PRIORITY: Use project-specific images first, then fall back to generic
   const prioritizedImages = projectImageUrls.length >= 2 
@@ -98,8 +99,7 @@ function extractImagesFromHtml(html: string, links: string[]): string[] {
   
   // Filter and deduplicate
   const filteredImages = prioritizedImages
-    .filter((u) => !excludePatterns.test(u))
-    .map((u) => u.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"));
+    .filter((u) => !excludePatterns.test(u));
   
   // CRITICAL: Ensure uniqueness - dedupe by URL
   const uniqueImages = [...new Set(filteredImages)];
