@@ -15830,31 +15830,82 @@ export type Database = {
       }
       seller_listings_secure: {
         Row: {
+          admin_approved_at: string | null
+          assistant_approved_at: string | null
+          bedrooms: number | null
+          community_building: string | null
           created_at: string | null
+          founder_approved_at: string | null
+          has_upgrades: boolean | null
           id: string | null
+          is_furnished: boolean | null
+          leadership_approved_at: string | null
+          minimum_acceptable_price: number | null
+          photo_urls: string[] | null
+          property_location: string | null
+          property_size_sqft: number | null
+          property_status: string | null
           property_type: string | null
+          reviewed_at: string | null
+          selling_urgency: string | null
           status: string | null
+          submitted_at: string | null
           target_selling_price: number | null
           updated_at: string | null
           user_id: string | null
+          went_live_at: string | null
         }
         Insert: {
+          admin_approved_at?: string | null
+          assistant_approved_at?: string | null
+          bedrooms?: number | null
+          community_building?: string | null
           created_at?: string | null
+          founder_approved_at?: string | null
+          has_upgrades?: boolean | null
           id?: string | null
+          is_furnished?: boolean | null
+          leadership_approved_at?: string | null
+          minimum_acceptable_price?: number | null
+          photo_urls?: string[] | null
+          property_location?: string | null
+          property_size_sqft?: number | null
+          property_status?: string | null
           property_type?: string | null
+          reviewed_at?: string | null
+          selling_urgency?: string | null
           status?: string | null
+          submitted_at?: string | null
           target_selling_price?: number | null
           updated_at?: string | null
           user_id?: string | null
+          went_live_at?: string | null
         }
         Update: {
+          admin_approved_at?: string | null
+          assistant_approved_at?: string | null
+          bedrooms?: number | null
+          community_building?: string | null
           created_at?: string | null
+          founder_approved_at?: string | null
+          has_upgrades?: boolean | null
           id?: string | null
+          is_furnished?: boolean | null
+          leadership_approved_at?: string | null
+          minimum_acceptable_price?: number | null
+          photo_urls?: string[] | null
+          property_location?: string | null
+          property_size_sqft?: number | null
+          property_status?: string | null
           property_type?: string | null
+          reviewed_at?: string | null
+          selling_urgency?: string | null
           status?: string | null
+          submitted_at?: string | null
           target_selling_price?: number | null
           updated_at?: string | null
           user_id?: string | null
+          went_live_at?: string | null
         }
         Relationships: []
       }
@@ -16072,11 +16123,16 @@ export type Database = {
         Returns: string
       }
       decrypt_seller_listing_pii: {
-        Args: { p_listing_id: string }
+        Args: { listing_id: string }
         Returns: {
+          created_at: string
+          id: string
+          property_location: string
+          property_type: string
           seller_email: string
           seller_full_name: string
           seller_phone: string
+          status: string
         }[]
       }
       decrypt_vapi_call_pii: {
