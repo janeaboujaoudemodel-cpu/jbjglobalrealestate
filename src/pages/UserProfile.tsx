@@ -263,8 +263,8 @@ const UserProfile = () => {
                   <h2 className="text-2xl font-bold text-foreground">{displayName}</h2>
                   <p className="text-muted-foreground">{user?.email}</p>
                   <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mt-3">
-                    <Badge variant="outline" className="border-primary/30 text-primary">
-                      <User className="h-3 w-3 mr-1" />
+                    <Badge variant="outline" className="border-gold/60 text-foreground bg-gold/10 font-semibold">
+                      <User className="h-3 w-3 mr-1 text-gold" />
                       Member
                     </Badge>
                   </div>
@@ -315,8 +315,8 @@ const UserProfile = () => {
                 <CardContent className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="displayName" className="flex items-center gap-2">
-                        <User className="h-4 w-4 text-primary" />
+                      <Label htmlFor="displayName" className="flex items-center gap-2 text-foreground font-medium">
+                        <User className="h-4 w-4 text-gold" />
                         Display Name
                       </Label>
                       <Input
@@ -327,8 +327,8 @@ const UserProfile = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="email" className="flex items-center gap-2">
-                        <Mail className="h-4 w-4 text-primary" />
+                      <Label htmlFor="email" className="flex items-center gap-2 text-foreground font-medium">
+                        <Mail className="h-4 w-4 text-gold" />
                         Email Address
                       </Label>
                       <Input
@@ -340,8 +340,8 @@ const UserProfile = () => {
                       <p className="text-xs text-muted-foreground">Email cannot be changed</p>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="phone" className="flex items-center gap-2">
-                        <Phone className="h-4 w-4 text-primary" />
+                      <Label htmlFor="phone" className="flex items-center gap-2 text-foreground font-medium">
+                        <Phone className="h-4 w-4 text-gold" />
                         Phone Number
                       </Label>
                       <Input
@@ -379,8 +379,8 @@ const UserProfile = () => {
                 <CardContent className="space-y-6">
                   <div className="space-y-4 max-w-md">
                     <div className="space-y-2">
-                      <Label htmlFor="newPassword" className="flex items-center gap-2">
-                        <Lock className="h-4 w-4 text-primary" />
+                      <Label htmlFor="newPassword" className="flex items-center gap-2 text-foreground font-medium">
+                        <Lock className="h-4 w-4 text-gold" />
                         New Password
                       </Label>
                       <Input
@@ -392,8 +392,8 @@ const UserProfile = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="confirmPassword" className="flex items-center gap-2">
-                        <Lock className="h-4 w-4 text-primary" />
+                      <Label htmlFor="confirmPassword" className="flex items-center gap-2 text-foreground font-medium">
+                        <Lock className="h-4 w-4 text-gold" />
                         Confirm New Password
                       </Label>
                       <Input
@@ -434,9 +434,9 @@ const UserProfile = () => {
                   <CardDescription>Manage your account preferences</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between p-4 rounded-lg border border-border bg-muted/20">
+                  <div className="flex items-center justify-between p-4 rounded-lg border border-gold/30 bg-gold/5">
                     <div className="flex items-center gap-3">
-                      <Bell className="h-5 w-5 text-primary" />
+                      <Bell className="h-5 w-5 text-gold" />
                       <div>
                         <p className="font-medium text-foreground">Email Notifications</p>
                         <p className="text-sm text-muted-foreground">Receive updates about your properties</p>

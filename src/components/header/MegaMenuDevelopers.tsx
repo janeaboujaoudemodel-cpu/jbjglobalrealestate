@@ -9,6 +9,7 @@ interface MegaMenuDevelopersProps {
 }
 
 const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersProps>(({ onClose }, ref) => {
+  // Reduced list - top 12 developers for more compact menu
   const developers = [
     { name: 'Emaar Properties', slug: 'emaar' },
     { name: 'DAMAC Properties', slug: 'damac' },
@@ -16,18 +17,12 @@ const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersPr
     { name: 'Nakheel Properties', slug: 'nakheel' },
     { name: 'Binghatti', slug: 'binghatti' },
     { name: 'Meraas', slug: 'meraas' },
-    { name: 'Meraki', slug: 'meraki' },
-    { name: 'Aldar Properties', slug: 'aldar' },
     { name: 'Ellington Properties', slug: 'ellington' },
-    { name: 'H&H Development', slug: 'hh-development' },
-    { name: 'Beyond', slug: 'beyond' },
-    { name: 'Leos Development', slug: 'leos' },
-    { name: 'Object One', slug: 'object-one' },
     { name: 'Azizi Developments', slug: 'azizi' },
-    { name: 'HRE Developments', slug: 'hre' },
     { name: 'Select Group', slug: 'select-group' },
     { name: 'Danube Properties', slug: 'danube' },
     { name: 'Dubai Properties', slug: 'dubai-properties' },
+    { name: 'Aldar Properties', slug: 'aldar' },
   ];
 
   // Split into two columns
@@ -37,9 +32,10 @@ const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersPr
 
   return (
     <MegaMenuShell ref={ref}>
-      <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-10 lg:py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Featured card - vertical stretch only, no horizontal change */}
+      {/* Reduced padding for smaller menu */}
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-6 lg:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Featured card - smaller height */}
           <div className="lg:col-span-5 flex">
             <MegaMenuFeaturedCard
               to="/developers/emaar"
@@ -47,29 +43,19 @@ const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersPr
               image={menuDubaiSkyline}
               kicker="DEVELOPERS"
               title="Emaar Properties"
-              description="Dubai's most iconic developer - creating architectural masterpieces and world-class communities"
+              description="Dubai's most iconic developer"
               cta="View All Projects"
-              className="flex-1 min-h-[380px] lg:min-h-[420px]"
+              className="flex-1 min-h-[260px] lg:min-h-[300px]"
             />
           </div>
 
-          <div className="lg:col-span-7 lg:border-l lg:border-gold/30 lg:pl-10">
+          <div className="lg:col-span-7 lg:border-l lg:border-gold/30 lg:pl-8">
             <MegaMenuSectionTitle
               icon={Building2}
               title="Top Developers in Dubai"
-              rightSlot={
-                <Link
-                  to="/developers"
-                  onClick={onClose}
-                  className="text-black text-sm font-medium hover:text-gold transition-colors flex items-center gap-1"
-                >
-                  <Eye className="w-4 h-4 text-gold" />
-                  View All
-                </Link>
-              }
             />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-0.5">
               {firstColumn.map((dev) => (
                 <MegaMenuIconLink
                   key={dev.slug}
@@ -90,6 +76,18 @@ const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersPr
                   compact
                 />
               ))}
+            </div>
+            
+            {/* View All - emphasized */}
+            <div className="mt-3">
+              <MegaMenuIconLink
+                to="/developers"
+                onClick={onClose}
+                icon={Eye}
+                title="View All Developers"
+                compact
+                emphasis
+              />
             </div>
           </div>
         </div>

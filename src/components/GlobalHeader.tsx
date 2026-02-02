@@ -48,6 +48,10 @@ import MegaMenuServices from "@/components/header/MegaMenuServices";
 import MegaMenuMore from "@/components/header/MegaMenuMore";
 import MegaMenuInvestorHub from "@/components/header/MegaMenuInvestorHub";
 import MegaMenuBrokerHub from "@/components/header/MegaMenuBrokerHub";
+// Utility Mega Menus
+import MegaMenuSearch from "@/components/header/MegaMenuSearch";
+import MegaMenuLanguage from "@/components/header/MegaMenuLanguage";
+import MegaMenuAccount from "@/components/header/MegaMenuAccount";
 
 interface GlobalHeaderProps {
   forceSolid?: boolean;
@@ -1032,16 +1036,17 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 boxShadow: '0 4px 16px -4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05), 0 0 30px -10px rgba(200,167,102,0.15)'
               } : {}}
             >
-              {/* Search Icon */}
+              {/* Search Icon - triggers mega menu on hover (desktop only) */}
               <button
+                onMouseEnter={() => handleMegaMenuEnter('search')}
+                onClick={() => handleMegaMenuClick('search')}
                 className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10"
-                onClick={() => setSearchOpen(true)}
                 aria-label="Search"
               >
                 <Search 
                   className={`w-5 h-5 transition-colors duration-300 ${
                     isFullyTransparent ? 'text-white group-hover:text-gold' : 'text-gold group-hover:text-white'
-                  }`}
+                  } ${activeMegaMenu === 'search' ? '!text-gold' : ''}`}
                   style={!isFullyTransparent ? { filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' } : { filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }} 
                 />
               </button>
@@ -1049,203 +1054,59 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               {/* Divider */}
               <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-gold/40'} to-transparent`} />
 
-              {/* Language Switcher */}
-              <LanguageSwitcher variant="icon-only" />
+              {/* Language Icon - triggers mega menu on hover (desktop only) */}
+              <button
+                onMouseEnter={() => handleMegaMenuEnter('language')}
+                onClick={() => handleMegaMenuClick('language')}
+                className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10"
+                aria-label="Language"
+              >
+                <Globe 
+                  className={`w-5 h-5 transition-colors duration-300 ${
+                    isFullyTransparent ? 'text-white group-hover:text-gold' : 'text-gold group-hover:text-white'
+                  } ${activeMegaMenu === 'language' ? '!text-gold' : ''}`}
+                  style={!isFullyTransparent ? { filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' } : { filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }} 
+                />
+              </button>
 
               {/* Divider */}
               <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-gold/40'} to-transparent`} />
 
-              {/* Account Icon */}
-              <div className="w-9 h-9 flex items-center justify-center">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <button 
-                      className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10"
-                      aria-label={user ? t('nav.myAccount') : t('nav.signIn')}
-                    >
-                      <User 
-                        className={`w-5 h-5 transition-colors duration-300 ${
-                          isFullyTransparent ? 'text-white group-hover:text-gold' : 'text-gold group-hover:text-white'
-                        }`}
-                        style={!isFullyTransparent ? { filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' } : { filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}
-                      />
-                    </button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent 
-                    align="end" 
-                    sideOffset={12}
-                    className="min-w-[320px] rounded-xl shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] p-0 overflow-hidden border-2 border-gold/40"
-                    style={{
-                      background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
-                    }}
-                  >
-                    {/* Top gold accent line */}
-                    <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
+              {/* Account Icon - triggers mega menu on hover (desktop only) */}
+              <button
+                onMouseEnter={() => handleMegaMenuEnter('account')}
+                onClick={() => handleMegaMenuClick('account')}
+                className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10"
+                aria-label={user ? t('nav.myAccount') : t('nav.signIn')}
+              >
+                <User 
+                  className={`w-5 h-5 transition-colors duration-300 ${
+                    isFullyTransparent ? 'text-white group-hover:text-gold' : 'text-gold group-hover:text-white'
+                  } ${activeMegaMenu === 'account' ? '!text-gold' : ''}`}
+                  style={!isFullyTransparent ? { filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' } : { filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}
+                />
+              </button>
+            </div>
+          )}
 
-                    {user ? (
-                      <div className="px-5 py-4 border-b border-gold/30 bg-gradient-to-r from-gold/10 to-transparent">
-                        <div className="flex items-center gap-4">
-                          <Avatar className="h-14 w-14 border-2 border-gold/50 shadow-lg">
-                            <AvatarImage src={accountPhotoUrl ?? ""} alt={`${accountDisplayName} profile photo`} />
-                            <AvatarFallback className="bg-black text-gold text-lg font-bold">
-                              {String(accountDisplayName).split(' ').map(n => n.charAt(0).toUpperCase()).slice(0, 2).join('')}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="min-w-0 flex-1">
-                            <p className="text-black font-bold text-base truncate">{accountDisplayName}</p>
-                            <p className="text-black/60 text-sm truncate">{user.email}</p>
-                            <Link 
-                              to="/profile" 
-                              className="text-gold text-xs font-medium hover:underline mt-1 inline-block"
-                            >
-                              Edit Profile & Photo
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="px-5 py-4 border-b border-gold/30 bg-gradient-to-r from-gold/10 to-transparent">
-                        <p className="text-gold font-bold text-base tracking-wide">{t('nav.myAccount')}</p>
-                        <p className="text-black/70 text-sm mt-1">{t('nav.signIn')}</p>
-                      </div>
-                    )}
-
-                    <div className="py-2 flex flex-col gap-1 px-2">
-                      {user ? (
-                        <>
-                          {/* Profile */}
-                          <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
-                            <Link to="/profile" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
-                              <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                                <User className="w-3.5 h-3.5 text-gold" />
-                              </div>
-                              <span className="font-medium text-sm">Profile</span>
-                            </Link>
-                          </DropdownMenuItem>
-                          {/* Favorites */}
-                          <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
-                            <Link to="/favorites" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
-                              <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                                <Heart className="w-3.5 h-3.5 text-gold" />
-                              </div>
-                              <span className="font-medium text-sm">Favorites</span>
-                            </Link>
-                          </DropdownMenuItem>
-                        </>
-                      ) : (
-                        <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
-                          <Link to={authHref} className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
-                            <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                              <User className="w-3.5 h-3.5 text-gold" />
-                            </div>
-                            <span className="font-medium text-sm">Sign In / Create Account</span>
-                          </Link>
-                        </DropdownMenuItem>
-                      )}
-                      
-                      {/* Admin/Founder shortcuts */}
-                      {user && (isAdmin || hasCRMAccess) && (
-                        <>
-                          <DropdownMenuSeparator className="bg-gold/20 my-2 mx-2" />
-                          <p className="px-3 py-1.5 text-[10px] uppercase tracking-wider text-gold font-medium">Admin Shortcuts</p>
-                          <div className="flex flex-col gap-1">
-                            {/* My Assistant - Always show for admin/founder */}
-                            <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
-                              <Link to="/founder-assistant" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
-                                <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                                  <Sparkles className="w-3.5 h-3.5 text-gold" />
-                                </div>
-                                <span className="font-medium text-sm">My Assistant</span>
-                              </Link>
-                            </DropdownMenuItem>
-                            
-                            {/* Employee Hub */}
-                            <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
-                              <Link to="/employee-hub" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
-                                <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                                  <Briefcase className="w-3.5 h-3.5 text-gold" />
-                                </div>
-                                <span className="font-medium text-sm">Employee Hub</span>
-                              </Link>
-                            </DropdownMenuItem>
-                            
-                            {/* HR Hub */}
-                            <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
-                              <Link to="/hr-dashboard" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
-                                <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                                  <Users className="w-3.5 h-3.5 text-gold" />
-                                </div>
-                                <span className="font-medium text-sm">HR Hub</span>
-                              </Link>
-                            </DropdownMenuItem>
-                            
-                            {/* Listing Admin */}
-                            <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
-                              <Link to="/listing-admin" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
-                                <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                                  <FolderOpen className="w-3.5 h-3.5 text-gold" />
-                                </div>
-                                <span className="font-medium text-sm">Listing Admin</span>
-                              </Link>
-                            </DropdownMenuItem>
-                            
-                            {/* IT Department */}
-                            <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
-                              <Link to="/it-department" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
-                                <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                                  <Monitor className="w-3.5 h-3.5 text-gold" />
-                                </div>
-                                <span className="font-medium text-sm">IT Department</span>
-                              </Link>
-                            </DropdownMenuItem>
-                            
-                            {/* CRM Dashboard */}
-                            {hasCRMAccess && (
-                              <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
-                                <Link to="/crm" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
-                                  <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                                    <Users className="w-3.5 h-3.5 text-gold" />
-                                  </div>
-                                  <span className="font-medium text-sm">{t('nav.crm') || 'CRM Dashboard'}</span>
-                                </Link>
-                              </DropdownMenuItem>
-                            )}
-                            
-                            {/* Admin Panel */}
-                            {isAdmin && (
-                              <DropdownMenuItem asChild className="p-0 focus:bg-gold/10 rounded-lg">
-                                <Link to="/admin" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
-                                  <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                                    <Settings className="w-3.5 h-3.5 text-gold" />
-                                  </div>
-                                  <span className="font-medium text-sm">Admin Panel</span>
-                                </Link>
-                              </DropdownMenuItem>
-                            )}
-                          </div>
-                        </>
-                      )}
-                    </div>
-                    
-                    {user && (
-                      <>
-                        <DropdownMenuSeparator className="bg-gold/20 mx-2" />
-                        <div className="py-2 px-2">
-                          <DropdownMenuItem onClick={() => signOut()} className="p-0 cursor-pointer focus:bg-gold/10 rounded-lg">
-                            <div className="flex items-center gap-3 text-zinc-600 hover:text-black py-2.5 px-3 transition-all w-full group rounded-lg">
-                              <div className="w-7 h-7 rounded-md bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 flex items-center justify-center group-hover:border-gold transition-colors">
-                                <LogOut className="w-3.5 h-3.5 text-black" />
-                              </div>
-                              <span className="font-medium text-sm text-black">{t('nav.signOut')}</span>
-                            </div>
-                          </DropdownMenuItem>
-                        </div>
-                      </>
-                    )}
-                    {/* Bottom gold accent line */}
-                    <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
-                  </DropdownMenuContent>
-                </DropdownMenu>
+          {/* Utility Mega Menu Panels (Search, Language, Account) */}
+          {!shouldUseMobileHeader && (activeMegaMenu === 'search' || activeMegaMenu === 'language' || activeMegaMenu === 'account') && (
+            <div 
+              className="fixed inset-0 z-[9998]"
+              style={{ top: 'var(--header-height, 128px)' }}
+              onMouseEnter={() => handleMegaMenuEnter(activeMegaMenu!)}
+              onMouseLeave={handleMegaMenuLeave}
+            >
+              {/* Backdrop */}
+              <div 
+                className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                onClick={closeMegaMenu}
+              />
+              {/* Panel container - positioned on the right */}
+              <div className="absolute top-0 right-6">
+                {activeMegaMenu === 'search' && <MegaMenuSearch onClose={closeMegaMenu} />}
+                {activeMegaMenu === 'language' && <MegaMenuLanguage onClose={closeMegaMenu} />}
+                {activeMegaMenu === 'account' && <MegaMenuAccount onClose={closeMegaMenu} />}
               </div>
             </div>
           )}

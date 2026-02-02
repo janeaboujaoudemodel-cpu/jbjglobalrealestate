@@ -140,12 +140,15 @@ type MegaMenuIconLinkProps = {
   title: string;
   description?: string;
   compact?: boolean;
+  /** Emphasis style for "See All" type links - gold, 3D, highlighted */
+  emphasis?: boolean;
 };
 
 /**
  * Standardized link row:
  * Normal: transparent bg, black icon with gold border, black title
  * Hover: champagne-gold bg, gold title, black icon bg with gold icon
+ * Emphasis: Gold text, 3D effect, highlighted background
  */
 export function MegaMenuIconLink({
   to,
@@ -154,6 +157,7 @@ export function MegaMenuIconLink({
   title,
   description,
   compact = false,
+  emphasis = false,
 }: MegaMenuIconLinkProps) {
   return (
     <Link
@@ -161,32 +165,39 @@ export function MegaMenuIconLink({
       onClick={onClick}
       className={cn(
         "flex items-center gap-3 rounded-xl transition-all duration-300 group relative",
-        // Normal: transparent; Hover: champagne gradient background
-        "bg-transparent hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8]",
+        emphasis
+          // Emphasis style: gold bg, 3D shadow, prominent
+          ? "bg-gradient-to-r from-gold/20 via-gold/15 to-gold/20 hover:from-gold/30 hover:via-gold/25 hover:to-gold/30 shadow-[0_4px_15px_rgba(200,167,102,0.25)] hover:shadow-[0_6px_20px_rgba(200,167,102,0.35)] hover:-translate-y-0.5 border border-gold/40"
+          // Normal: transparent; Hover: champagne gradient background
+          : "bg-transparent hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8]",
         compact ? "py-2 px-2.5" : "py-3 px-3"
       )}
     >
-      {/* Icon container: ALWAYS transparent bg, gold border; icon is black → gold on hover */}
+      {/* Icon container */}
       <div
         className={cn(
           "rounded-lg border transition-all duration-300 flex items-center justify-center shrink-0",
-          // BOTH normal AND hover: transparent bg with gold border (NO black fill)
-          "bg-transparent border-gold/50 group-hover:border-gold",
+          emphasis
+            ? "bg-black border-gold/60 group-hover:border-gold"
+            : "bg-transparent border-gold/50 group-hover:border-gold",
           compact ? "w-8 h-8" : "w-10 h-10"
         )}
       >
         <Icon className={cn(
           "transition-colors duration-300",
-          // Normal: black icon; Hover: gold icon (no black bg behind it)
-          "text-black group-hover:text-gold",
+          emphasis
+            ? "text-gold"
+            : "text-black group-hover:text-gold",
           compact ? "w-4 h-4" : "w-5 h-5"
         )} />
       </div>
       <div className="min-w-0 flex-1">
-        {/* Title: normal = black; hover = gold */}
+        {/* Title */}
         <span className={cn(
           "block font-semibold transition-colors duration-300",
-          "text-black group-hover:text-gold",
+          emphasis
+            ? "text-gold group-hover:text-gold"
+            : "text-black group-hover:text-gold",
           compact ? "text-sm" : "text-sm"
         )}>
           {title}
@@ -197,8 +208,19 @@ export function MegaMenuIconLink({
           </span>
         ) : null}
       </div>
-      {/* Thin gold divider under each page link */}
-      <div className="absolute bottom-0 left-3 right-3 h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+      {/* Thin gold divider under each page link - not shown for emphasis links */}
+      {!emphasis && (
+        <div className="absolute bottom-0 left-3 right-3 h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+      )}
     </Link>
+  );
+}
+
+/**
+ * Section divider - thin gold line between sections in mega menus
+ */
+export function MegaMenuSectionDivider() {
+  return (
+    <div className="my-4 h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
   );
 }

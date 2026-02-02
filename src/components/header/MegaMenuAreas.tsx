@@ -9,6 +9,7 @@ interface MegaMenuAreasProps {
 }
 
 const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ onClose }, ref) => {
+  // Reduced list - top 12 areas for more compact menu
   const areas = [
     { name: 'Dubai Creek Harbour', slug: 'dubai-creek-harbour' },
     { name: 'Business Bay', slug: 'business-bay' },
@@ -16,14 +17,10 @@ const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ on
     { name: 'Palm Jumeirah', slug: 'palm-jumeirah' },
     { name: 'Downtown Dubai', slug: 'downtown-dubai' },
     { name: 'Jumeirah Village Circle', slug: 'jvc' },
+    { name: 'Dubai Hills Estate', slug: 'dubai-hills-estate' },
     { name: 'Emaar Beachfront', slug: 'emaar-beachfront' },
     { name: 'Sobha Hartland', slug: 'sobha-hartland' },
-    { name: 'Expo City', slug: 'expo-city' },
-    { name: 'Dubai Hills Estate', slug: 'dubai-hills-estate' },
     { name: 'Dubai Islands', slug: 'dubai-islands' },
-    { name: 'Palm Jebel Ali', slug: 'palm-jebel-ali' },
-    { name: 'The World Islands', slug: 'the-world-islands' },
-    { name: 'The Oasis', slug: 'the-oasis' },
     { name: 'MBR City', slug: 'mbr-city' },
     { name: 'Jumeirah Beach Residence', slug: 'jbr' },
   ];
@@ -35,38 +32,29 @@ const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ on
 
   return (
     <MegaMenuShell ref={ref}>
-      <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-10 lg:py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <div className="lg:col-span-6 flex">
+      {/* Reduced padding for smaller menu */}
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-6 lg:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-5 flex">
             <MegaMenuFeaturedCard
               to="/areas"
               onClick={onClose}
               image={menuDowntownSkyline}
               kicker="AREAS"
               title="Dubai's Prime Locations"
-              description="Discover the best communities in Dubai"
+              description="Discover the best communities"
               cta="Explore Areas"
-              className="flex-1 min-h-[380px] lg:min-h-[420px]"
+              className="flex-1 min-h-[260px] lg:min-h-[300px]"
             />
           </div>
 
-          <div className="lg:col-span-6 lg:border-l lg:border-gold/30 lg:pl-10">
+          <div className="lg:col-span-7 lg:border-l lg:border-gold/30 lg:pl-8">
             <MegaMenuSectionTitle
               icon={MapPin}
               title="Top Areas in Dubai"
-              rightSlot={
-                <Link
-                  to="/areas"
-                  onClick={onClose}
-                  className="text-black text-sm font-medium hover:text-gold transition-colors flex items-center gap-1"
-                >
-                  <Eye className="w-4 h-4 text-gold" />
-                  View All
-                </Link>
-              }
             />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-0.5">
               {firstColumn.map((area) => (
                 <MegaMenuIconLink
                   key={area.slug}
@@ -87,6 +75,18 @@ const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ on
                   compact
                 />
               ))}
+            </div>
+            
+            {/* View All - emphasized */}
+            <div className="mt-3">
+              <MegaMenuIconLink
+                to="/areas"
+                onClick={onClose}
+                icon={Eye}
+                title="View All Areas"
+                compact
+                emphasis
+              />
             </div>
           </div>
         </div>
