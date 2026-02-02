@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
 type MegaMenuShellProps = {
   children: React.ReactNode;
   className?: string;
+  /** When true, removes max-height and overflow-y to prevent scrolling */
+  noScroll?: boolean;
 };
 
 /**
@@ -15,7 +17,7 @@ type MegaMenuShellProps = {
  * - Champagne gradient background (design token classes)
  */
 export const MegaMenuShell = React.forwardRef<HTMLDivElement, MegaMenuShellProps>(
-  ({ children, className }, ref) => {
+  ({ children, className, noScroll = false }, ref) => {
     return (
       <div
         ref={ref}
@@ -30,8 +32,11 @@ export const MegaMenuShell = React.forwardRef<HTMLDivElement, MegaMenuShellProps
           left: '24px',
           right: '24px',
           // Prevent the panel from touching the bottom of the viewport on smaller screens
-          maxHeight: 'calc(100vh - var(--header-height, 128px) - 24px)',
-          overflowY: 'auto',
+          // Unless noScroll is true - then no max-height so all content is visible
+          ...(noScroll ? {} : {
+            maxHeight: 'calc(100vh - var(--header-height, 128px) - 24px)',
+            overflowY: 'auto' as const,
+          }),
           // Solid gradient background - prevents any transparency issues
           background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
         }}
@@ -148,7 +153,7 @@ type MegaMenuIconLinkProps = {
  * Standardized link row:
  * Normal: transparent bg, black icon with gold border, black title
  * Hover: champagne-gold bg, gold title, black icon bg with gold icon
- * Emphasis: Premium gold styling with black text for maximum readability - 3D effect
+ * Emphasis: Premium gold styling with black text for maximum readability - 3D effect - LARGER title
  */
 export function MegaMenuIconLink({
   to,
@@ -170,35 +175,36 @@ export function MegaMenuIconLink({
           ? "bg-gradient-to-r from-gold/40 via-gold/30 to-gold/40 hover:from-gold/60 hover:via-gold/50 hover:to-gold/60 shadow-[0_4px_15px_rgba(200,167,102,0.35)] hover:shadow-[0_6px_20px_rgba(200,167,102,0.5)] hover:-translate-y-0.5 border-2 border-gold/60 hover:border-gold"
           // Normal: transparent; Hover: champagne gradient background
           : "bg-transparent hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8]",
-        compact ? "py-2.5 px-3" : "py-3 px-3"
+        // Emphasis links get extra padding for prominence
+        emphasis ? "py-3 px-4" : compact ? "py-2 px-2.5" : "py-3 px-3"
       )}
     >
-      {/* Icon container */}
+      {/* Icon container - larger for emphasis links */}
       <div
         className={cn(
           "rounded-lg border transition-all duration-300 flex items-center justify-center shrink-0",
           emphasis
-            ? "bg-black border-gold group-hover:border-gold group-hover:shadow-[0_0_12px_rgba(200,167,102,0.5)]"
+            ? "bg-black border-gold group-hover:border-gold group-hover:shadow-[0_0_12px_rgba(200,167,102,0.5)] w-10 h-10"
             : "bg-transparent border-gold/50 group-hover:border-gold",
-          compact ? "w-8 h-8" : "w-10 h-10"
+          !emphasis && compact ? "w-7 h-7" : !emphasis ? "w-10 h-10" : ""
         )}
       >
         <Icon className={cn(
           "transition-colors duration-300",
           emphasis
-            ? "text-gold"
+            ? "text-gold w-5 h-5"
             : "text-black group-hover:text-gold",
-          compact ? "w-4 h-4" : "w-5 h-5"
+          !emphasis && compact ? "w-3.5 h-3.5" : !emphasis ? "w-5 h-5" : ""
         )} />
       </div>
       <div className="min-w-0 flex-1">
-        {/* Title - Emphasis uses black for max readability on gold bg */}
+        {/* Title - Emphasis uses LARGER text for better visual balance in gold cards */}
         <span className={cn(
           "block font-bold transition-colors duration-300",
           emphasis
-            ? "text-black group-hover:text-black"
+            ? "text-black group-hover:text-black text-base"
             : "text-black group-hover:text-gold",
-          compact ? "text-sm" : "text-sm"
+          !emphasis && compact ? "text-[13px]" : !emphasis ? "text-sm" : ""
         )}>
           {title}
         </span>

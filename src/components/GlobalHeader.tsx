@@ -89,7 +89,15 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     if (pinnedMenu) return;
     megaMenuTimeoutRef.current = setTimeout(() => {
       setActiveMegaMenu(null);
-    }, 220);
+    }, 350); // Increased from 220ms for better hover stability
+  };
+
+  // Clear any pending close timeout when entering mega menu panels
+  const handleMegaMenuPanelEnter = () => {
+    if (megaMenuTimeoutRef.current) {
+      clearTimeout(megaMenuTimeoutRef.current);
+      megaMenuTimeoutRef.current = null;
+    }
   };
 
   const handleMegaMenuClick = (menu: string) => {
@@ -1098,11 +1106,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 </button>
               </div>
 
-              {/* Mega Menu Panels - NO backdrop overlay to allow seamless hover transitions */}
-              {activeMegaMenu && (
+              {/* Mega Menu Panels - Bridge zone for stable hover transitions */}
+              {activeMegaMenu && !['search', 'language', 'account'].includes(activeMegaMenu) && (
                 <div 
-                  className="relative z-50"
-                  onMouseEnter={() => handleMegaMenuEnter(activeMegaMenu)}
+                  className="absolute left-0 right-0 z-50"
+                  style={{ top: '100%', paddingTop: '8px' }} // Bridge gap between nav and panel
+                  onMouseEnter={handleMegaMenuPanelEnter}
                   onMouseLeave={handleMegaMenuLeave}
                 >
                   {activeMegaMenu === 'buy' && <MegaMenuBuy onClose={closeMegaMenu} />}

@@ -13,7 +13,6 @@ import {
   Users,
   Building2,
   ClipboardCheck,
-  Heart,
   Sparkles,
   Search,
 } from 'lucide-react';
@@ -78,6 +77,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
     { href: '/contact', label: 'Contact Form', icon: FileText, iconClassName: 'text-gold' },
   ];
 
+  // Trimmed Quick Links - only 9 items to prevent overflow
   const navigationLinks = [
     { href: '/about', label: 'About Us', icon: Building2 },
     { href: '/team', label: 'Meet the Team', icon: Users },
@@ -87,21 +87,16 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
     { href: '/buyer-guide', label: 'Buyer Guide', icon: GraduationCap },
     { href: '/seller-guide', label: 'Seller Guide', icon: GraduationCap },
     { href: '/join', label: 'Careers', icon: Users },
-    { href: '/favorites', label: 'My Favorites', icon: Heart },
-    { href: '/ai-hub', label: 'AI Tools', icon: Sparkles },
-    { href: '/map', label: 'Property Map', icon: MapPin },
-    { href: '/compare', label: 'Compare Properties', icon: ClipboardCheck },
     { href: '/quiz', label: 'AI Home Finder', icon: Sparkles },
   ];
 
   return (
-    <MegaMenuShell ref={ref} className={cn("overflow-hidden")}
-    >
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-6 lg:py-7">
+    <MegaMenuShell ref={ref} className={cn("overflow-hidden")} noScroll>
+      <div className="max-w-[1400px] mx-auto px-5 lg:px-8 py-4 lg:py-5">
         <MegaMenuSectionTitle icon={Search} title="Search & Shortcuts" />
 
         {/* Search bar (opens the global search modal) */}
-        <div className="mt-4 flex items-center gap-2">
+        <div className="mt-3 flex items-center gap-2">
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -109,13 +104,13 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
               if (e.key === 'Enter') openGlobalSearch();
             }}
             placeholder="Search pages, tools, or anything…"
-            className="h-11 rounded-xl"
+            className="h-12 rounded-xl text-base placeholder:text-base"
             aria-label="Search"
           />
           <button
             type="button"
             onClick={openGlobalSearch}
-            className="h-11 px-4 rounded-xl border border-gold/40 bg-black/10 hover:bg-black/15 text-black text-sm font-semibold transition-colors"
+            className="h-12 px-5 rounded-xl border border-gold/40 bg-black/10 hover:bg-black/15 text-black text-base font-semibold transition-colors"
           >
             Search
           </button>
@@ -123,11 +118,11 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
 
         <MegaMenuSectionDivider />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
           {/* Services */}
           <div>
-            <p className="text-[10px] uppercase tracking-wider text-gold font-medium mb-3">Services</p>
-            <div className="space-y-1">
+            <p className="text-[10px] uppercase tracking-wider text-gold font-medium mb-2">Services</p>
+            <div className="space-y-0">
               {servicesLinks.map((link) => (
                 <MegaMenuIconLink
                   key={link.href}
@@ -143,8 +138,8 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
 
           {/* Quick Links */}
           <div>
-            <p className="text-[10px] uppercase tracking-wider text-gold font-medium mb-3">Quick Links</p>
-            <div className="space-y-1">
+            <p className="text-[10px] uppercase tracking-wider text-gold font-medium mb-2">Quick Links</p>
+            <div className="space-y-0">
               {navigationLinks.map((link) => (
                 <MegaMenuIconLink
                   key={link.href}
@@ -160,7 +155,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
 
           {/* Contact */}
           <div>
-            <p className="text-[10px] uppercase tracking-wider text-gold font-medium mb-3">Contact</p>
+            <p className="text-[10px] uppercase tracking-wider text-gold font-medium mb-2">Contact</p>
             <div className="grid grid-cols-2 gap-2">
               {contactLinks.map((link) =>
                 link.external ? (
@@ -190,7 +185,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
                 )
               )}
             </div>
-            <p className="mt-3 text-[11px] text-black/70">
+            <p className="mt-2 text-[11px] text-black/70">
               {CONTACT_INFO.email}
             </p>
           </div>
