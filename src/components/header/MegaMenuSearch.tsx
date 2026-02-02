@@ -70,6 +70,11 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
       )}
       style={{
         background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
+        // Prevent bottom cropping on shorter viewports by enabling internal scroll.
+        // The overlay starts below the header, so we subtract header height + a small bottom gutter.
+        maxHeight: 'calc(100vh - var(--header-height, 128px) - 24px)',
+        overflowY: 'auto',
+        overscrollBehavior: 'contain',
       }}
     >
       {/* Gold border */}
