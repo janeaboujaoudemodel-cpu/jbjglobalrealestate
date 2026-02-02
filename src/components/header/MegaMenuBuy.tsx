@@ -1,7 +1,7 @@
 import React from 'react';
 import { Building2, Home, Castle, Building, Briefcase, Eye, FileText, Calculator, Wrench, Star } from 'lucide-react';
 import menuLuxuryPenthouse from '@/assets/menu-luxury-penthouse.jpg';
-import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle } from '@/components/header/mega-menu-primitives';
+import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle, MegaMenuSectionDivider } from '@/components/header/mega-menu-primitives';
 
 interface MegaMenuBuyProps {
   onClose: () => void;
@@ -14,7 +14,6 @@ const MegaMenuBuy = React.forwardRef<HTMLDivElement, MegaMenuBuyProps>(({ onClos
     { label: 'Townhouses', icon: Castle, href: '/properties?type=townhouse&transaction=buy' },
     { label: 'Penthouses', icon: Building, href: '/properties?type=penthouse&transaction=buy' },
     { label: 'Commercial', icon: Briefcase, href: '/properties?type=commercial&transaction=buy' },
-    { label: 'See All Properties', icon: Eye, href: '/properties?transaction=buy' },
   ];
 
   const buyerResources = [
@@ -26,7 +25,7 @@ const MegaMenuBuy = React.forwardRef<HTMLDivElement, MegaMenuBuyProps>(({ onClos
 
   return (
     <MegaMenuShell ref={ref}>
-      <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-10 lg:py-12">
+      <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-8 lg:py-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left: Featured Photo (larger + rectangular) */}
           <div className="lg:col-span-6">
@@ -43,7 +42,7 @@ const MegaMenuBuy = React.forwardRef<HTMLDivElement, MegaMenuBuyProps>(({ onClos
 
           {/* Right: Links (with divider) */}
           <div className="lg:col-span-6 lg:border-l lg:border-gold/30 lg:pl-10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <MegaMenuSectionTitle icon={Building2} title="Properties by Type" />
                 <div className="space-y-1">
@@ -57,6 +56,15 @@ const MegaMenuBuy = React.forwardRef<HTMLDivElement, MegaMenuBuyProps>(({ onClos
                       compact
                     />
                   ))}
+                  {/* See All - emphasized */}
+                  <MegaMenuIconLink
+                    to="/properties?transaction=buy"
+                    onClick={onClose}
+                    icon={Eye}
+                    title="See All Properties"
+                    compact
+                    emphasis
+                  />
                 </div>
               </div>
 

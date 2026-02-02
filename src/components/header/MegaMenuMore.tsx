@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
   BookOpen, BarChart3, Building2, Users, Briefcase, Award, 
-  Phone, ClipboardCheck, Heart, MessageCircle 
+  Phone, ClipboardCheck, Heart, MessageCircle, Eye 
 } from 'lucide-react';
 import menuCorporateOffice from '@/assets/menu-corporate-office.jpg';
 import {
@@ -9,6 +9,7 @@ import {
   MegaMenuIconLink,
   MegaMenuShell,
   MegaMenuSectionTitle,
+  MegaMenuSectionDivider,
 } from '@/components/header/mega-menu-primitives';
 
 interface MegaMenuMoreProps {
@@ -37,10 +38,10 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
 
   return (
     <MegaMenuShell ref={ref}>
-      <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-10 lg:py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
-          {/* Left: Featured photo - FULL height stretch, horizontally centered with equal margins */}
-          <div className="lg:col-span-6 flex items-stretch justify-center">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-6 lg:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Left: Featured photo */}
+          <div className="lg:col-span-5 flex items-stretch justify-center">
             <MegaMenuFeaturedCard
               to="/about"
               onClick={onClose}
@@ -49,17 +50,17 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
               title="About JBJ Global Real Estate"
               description="Discover our story, team, and commitment to excellence."
               cta="Learn More"
-              className="w-full h-full"
+              className="w-full h-full min-h-[280px]"
             />
           </div>
 
           {/* Right: Links */}
-          <div className="lg:col-span-6 lg:border-l lg:border-gold/30 lg:pl-10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+          <div className="lg:col-span-7 lg:border-l lg:border-gold/30 lg:pl-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {/* About & Company */}
               <div>
                 <MegaMenuSectionTitle icon={Building2} title="About & Company" />
-                <div className="space-y-1">
+                <div className="space-y-0.5">
                   {aboutLinks.map((item) => (
                     <MegaMenuIconLink
                       key={item.href}
@@ -76,7 +77,7 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
               {/* Resource Hubs */}
               <div>
                 <MegaMenuSectionTitle icon={BookOpen} title="Resource Hubs" />
-                <div className="space-y-1">
+                <div className="space-y-0.5">
                   {hubLinks.map((item) => (
                     <MegaMenuIconLink
                       key={item.href}
