@@ -103,35 +103,66 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   // Fetch global inventory stats (independent of pagination)
   const fetchInventoryStats = async () => {
     try {
-      // Get total pending count
-      const { count: total } = await supabase
-        .from("pending_project_imports")
-        .select("id", { count: "exact", head: true })
-        .eq("status", "pending");
+      // IMPORTANT: Use COUNT queries only (no row limits) so the numbers match the main dashboard.
+      const [
+        totalRes,
+        // Strict Ready: description + images + developer + at least one document (mirror spec)
+        strictlyReadyRes,
+        needsExtractionRes,
+        incompleteRes,
+        errorsRes,
+      ] = await Promise.all([
+        supabase
+          .from("pending_project_imports")
+          .select("id", { count: "exact", head: true })
+          .eq("status", "pending"),
+        supabase
+          .from("pending_project_imports")
+          .select("id", { count: "exact", head: true })
+          .eq("status", "pending")
+          .is("review_notes", null)
+          .not("description", "is", null)
+          .neq("description", "")
+          .not("developer_name", "is", null)
+          .neq("developer_name", "")
+          .not("developer_name", "ilike", "unknown")
+          .not("images", "eq", "[]")
+          .not("documents", "eq", "[]"),
+        supabase
+          .from("pending_project_imports")
+          .select("id", { count: "exact", head: true })
+          .eq("status", "pending")
+          .ilike("review_notes", "%PENDING_SCRAPE%"),
+        supabase
+          .from("pending_project_imports")
+          .select("id", { count: "exact", head: true })
+          .eq("status", "pending")
+          .eq("review_notes", "INCOMPLETE"),
+        supabase
+          .from("pending_project_imports")
+          .select("id", { count: "exact", head: true })
+          .eq("status", "pending")
+          .ilike("review_notes", "ERROR:%"),
+      ]);
 
-      // A record is considered "complete" when it has the core listing fields.
-      // Documents (brochure/payment plan PDFs) are optional on the source portal
-      // and should NOT block completion.
-      const { data: potentialComplete } = await supabase
-        .from("pending_project_imports")
-        .select("id, images")
-        .eq("status", "pending")
-        .not("description", "is", null)
-        .neq("description", "")
-        .not("developer_name", "is", null)
-        .neq("developer_name", "")
-        .not("developer_name", "ilike", "Unknown")
-        .limit(2000); // Safety limit
+      const total = totalRes.count ?? 0;
+      const complete = strictlyReadyRes.count ?? 0;
+      const needsExtraction = needsExtractionRes.count ?? 0;
+      const incomplete = incompleteRes.count ?? 0;
+      const errors = errorsRes.count ?? 0;
 
-      // Count ones that also have images
-      const completeCount = (potentialComplete || []).filter(p => {
-        const images = Array.isArray(p.images) ? p.images : [];
-        return images.length > 0;
-      }).length;
-      
-      setTotalCount(total ?? 0);
-      setTotalCompleteCount(completeCount);
-      setTotalNeedsWorkCount((total ?? 0) - completeCount);
+      // Keep wording consistent with the main dashboard: "Needs Work" = needs_extraction + incomplete
+      // (Errors are shown separately in the UI when relevant.)
+      const needsWork = needsExtraction + incomplete;
+
+      setTotalCount(total);
+      setTotalCompleteCount(complete);
+      setTotalNeedsWorkCount(needsWork);
+
+      // If errors exist, keep them reflected in the browser console for debugging.
+      if (errors > 0) {
+        console.info(`[ProjectApprovalQueue] Pending errors: ${errors}`);
+      }
     } catch (error) {
       console.error("Error fetching inventory stats:", error);
     }
@@ -740,17 +771,17 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
 
   if (isLoading) {
     return (
-      <Card className="bg-card border-2 border-gold shadow-[0_4px_20px_rgba(200,167,102,0.25)]">
+      <Card className="bg-card border border-border shadow-sm">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-gold">
-            <Building2 className="h-5 w-5 text-gold" />
+          <CardTitle className="flex items-center gap-2 text-foreground">
+            <Building2 className="h-5 w-5 text-foreground" />
             Listing Inventory
             <Badge variant="outline" className="text-xs">1,335 Target</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center py-12">
-            <RefreshCw className="h-8 w-8 animate-spin text-gold" />
+            <RefreshCw className="h-8 w-8 animate-spin text-muted-foreground" />
           </div>
         </CardContent>
       </Card>
@@ -761,21 +792,22 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   const completeCount = imports.filter(p => 
     p.description && 
     p.images.length > 0 && 
+    p.documents.length > 0 &&
     p.developer_name?.toLowerCase() !== 'unknown'
   ).length;
   const needsWorkCount = imports.length - completeCount;
 
   return (
     <>
-      <Card className="bg-card border-2 border-gold shadow-[0_4px_20px_rgba(200,167,102,0.25)]">
+      <Card className="bg-card border border-border shadow-sm">
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle className="flex items-center gap-2 text-gold">
-              <Building2 className="h-5 w-5 text-gold" />
+            <CardTitle className="flex items-center gap-2 text-foreground">
+              <Building2 className="h-5 w-5 text-foreground" />
               Listing Inventory
             </CardTitle>
             <p className="text-sm text-muted-foreground mt-1">
-              Target: 1,335 listings · Discovered: {totalCount ?? imports.length} · Loaded: {imports.length}
+              Target: 1,335 · In Queue: {totalCount ?? imports.length} · Loaded: {imports.length}
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -789,7 +821,6 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                 variant="outline"
                 size="sm"
                 onClick={() => setShowAll((v) => !v)}
-                className="border-gold text-gold hover:bg-gold/10"
               >
                 {showAll ? "Show this sync only" : "Show all pending"}
               </Button>
@@ -808,21 +839,21 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                   size="sm"
                   onClick={approveAllShown}
                   disabled={isBulkProcessing || isLoading}
-                  className="bg-gold text-black hover:bg-gold/90"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90"
                 >
                   <Check className="h-4 w-4 mr-2" />
                   Approve All ({imports.length})
                 </Button>
-                {incompleteCount > 0 && (
+                {(totalNeedsWorkCount ?? needsWorkCount) > 0 && (
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={repairAllIncomplete}
                     disabled={isBulkProcessing || isLoading}
-                    className="border-amber-400 text-amber-700 hover:bg-amber-50"
+                    className="border-primary/40 text-foreground hover:bg-muted"
                   >
                     <RefreshCw className="h-4 w-4 mr-2" />
-                    Extract Missing Data
+                    ⚡ Fix All Listings
                   </Button>
                 )}
                 {selectedIds.size > 0 && (
@@ -839,7 +870,15 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                 )}
               </>
             )}
-            <Button variant="outline" size="sm" onClick={() => { fetchPendingImports({ reset: true }); fetchInventoryStats(); }} disabled={isBulkProcessing} className="border-gold text-gold hover:bg-gold/10">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                fetchPendingImports({ reset: true });
+                fetchInventoryStats();
+              }}
+              disabled={isBulkProcessing}
+            >
               <RefreshCw className="h-4 w-4 mr-2" />
               Refresh
             </Button>
@@ -854,7 +893,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
             </div>
             <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
               <div className="text-2xl font-bold text-foreground">{totalCount ?? "…"}</div>
-              <div className="text-xs text-muted-foreground">Discovered</div>
+              <div className="text-xs text-muted-foreground">In Queue</div>
             </div>
             <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-center">
               <div className="text-2xl font-bold text-emerald-700">{totalCompleteCount ?? completeCount}</div>
@@ -862,7 +901,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
             </div>
             <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-center">
               <div className="text-2xl font-bold text-amber-700">{totalNeedsWorkCount ?? needsWorkCount}</div>
-              <div className="text-xs text-amber-600">Needs Extraction</div>
+              <div className="text-xs text-amber-600">Needs Work</div>
             </div>
             <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 text-center">
               <div className="text-2xl font-bold text-blue-700">{selectedIds.size}</div>
@@ -871,7 +910,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           </div>
 
           {isBulkProcessing && (bulkAction === "approve" || bulkAction === "reject" || bulkAction === "repair") && bulkTotal > 0 && (
-            <div className="mb-4 rounded-lg border-2 border-gold bg-card p-3">
+            <div className="mb-4 rounded-lg border border-border bg-card p-3">
               <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
                 <span>{bulkAction === "approve" ? "Approving" : bulkAction === "repair" ? "Repairing" : "Deleting"}… {bulkDone}/{bulkTotal}</span>
                 <span>{Math.round((bulkDone / bulkTotal) * 100)}%</span>
@@ -881,12 +920,12 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           )}
           {imports.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
-              <Check className="h-16 w-16 mb-4 text-gold" />
+              <Check className="h-16 w-16 mb-4 text-muted-foreground" />
               <p className="text-xl font-medium text-foreground">All caught up!</p>
               <p className="text-sm">No projects awaiting approval</p>
             </div>
           ) : (
-            <div className="p-6 rounded-xl border-2 border-gold bg-gold/5 shadow-[inset_0_0_30px_rgba(200,167,102,0.1)]">
+            <div className="p-6 rounded-xl border border-border bg-muted/10 shadow-sm">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {imports.map((item) => (
                   <div key={item.id} className="relative">
@@ -897,7 +936,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                         checked={selectedIds.has(item.id)}
                         onChange={() => toggleSelection(item.id)}
                         onClick={(e) => e.stopPropagation()}
-                        className="w-5 h-5 rounded border-2 border-gold accent-gold cursor-pointer"
+                        className="w-5 h-5 rounded border-2 border-primary/40 accent-primary cursor-pointer"
                       />
                     </div>
                     <PendingImportCard
@@ -921,7 +960,6 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                     variant="outline"
                     onClick={() => fetchPendingImports({ reset: false })}
                     disabled={isLoadingMore || isBulkProcessing}
-                    className="border-gold text-gold hover:bg-gold/10"
                   >
                     {isLoadingMore ? (
                       <>

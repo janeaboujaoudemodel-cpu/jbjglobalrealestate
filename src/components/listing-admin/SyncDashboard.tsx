@@ -1325,14 +1325,14 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                      <Button
                        onClick={startFullSync}
                        disabled={!isTestApproved && !currentJobId}
-                       className="bg-gold hover:bg-gold/90 text-black disabled:opacity-50"
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground disabled:opacity-50"
                      >
                        <Play className="w-4 h-4 mr-2" />
                         Start Full Sync{turboMode ? " (Turbo)" : ""} (~{listingsEstimate.toLocaleString()} Listings)
                      </Button>
                    )
-                 ) : (
-                   <Button onClick={resumeSync} className="bg-gold hover:bg-gold/90 text-black">
+                  ) : (
+                    <Button onClick={resumeSync} className="bg-primary hover:bg-primary/90 text-primary-foreground">
                      <Play className="w-4 h-4 mr-2" />
                      Resume Sync from Page {currentPage + 1}
                    </Button>
@@ -1402,7 +1402,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                         <Button
                           onClick={startBulkExtractRunner}
                           disabled={isSyncing || isRebuildingQueue || isFixAllRunning}
-                          className="bg-gold hover:bg-gold/90 text-black"
+                          className="bg-primary hover:bg-primary/90 text-primary-foreground"
                         >
                           <Play className="w-4 h-4 mr-2" />
                           Start Bulk Extract{turboMode ? " (Turbo)" : ""}
