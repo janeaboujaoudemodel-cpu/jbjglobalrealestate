@@ -151,18 +151,12 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       const incomplete = incompleteRes.count ?? 0;
       const errors = errorsRes.count ?? 0;
 
-      // Keep wording consistent with the main dashboard: "Needs Work" = needs_extraction + incomplete
-      // (Errors are shown separately in the UI when relevant.)
-      const needsWork = needsExtraction + incomplete;
+      // User preference: include Errors in Needs Work so Complete + Needs Work = total pending.
+      const needsWork = needsExtraction + incomplete + errors;
 
       setTotalCount(total);
       setTotalCompleteCount(complete);
       setTotalNeedsWorkCount(needsWork);
-
-      // If errors exist, keep them reflected in the browser console for debugging.
-      if (errors > 0) {
-        console.info(`[ProjectApprovalQueue] Pending errors: ${errors}`);
-      }
     } catch (error) {
       console.error("Error fetching inventory stats:", error);
     }

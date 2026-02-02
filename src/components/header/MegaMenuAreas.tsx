@@ -70,7 +70,7 @@ const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ on
               {firstColumn.map((area) => (
                 <MegaMenuIconLink
                   key={area.slug}
-                  to={`/areas/${area.slug}`}
+                  to={`/area/${area.slug}`}
                   onClick={onClose}
                   icon={MapPin}
                   title={area.name}
@@ -80,7 +80,7 @@ const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ on
               {secondColumn.map((area) => (
                 <MegaMenuIconLink
                   key={area.slug}
-                  to={`/areas/${area.slug}`}
+                  to={`/area/${area.slug}`}
                   onClick={onClose}
                   icon={MapPin}
                   title={area.name}
