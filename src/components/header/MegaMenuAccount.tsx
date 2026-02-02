@@ -79,133 +79,139 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
   return (
     <MegaMenuShell 
       ref={ref}
-      className="!left-auto !right-6 !w-[420px]"
+      className="!left-auto !right-6 !w-[640px]"
     >
       <div className="p-6">
         {user ? (
           <>
-            {/* Premium User Header - Large Avatar with Gold Gradient Background */}
-            <div className="flex items-center gap-5 pb-6 mb-6 border-b-2 border-gold/40">
-              <Avatar className="h-16 w-16">
+            {/* Premium User Header - Horizontal Layout */}
+            <div className="flex items-center gap-5 pb-5 mb-5 border-b-2 border-gold/40">
+              <Avatar className="h-14 w-14">
                 <AvatarImage src={accountPhotoUrl ?? ""} alt={`${accountDisplayName} profile photo`} className="object-cover" />
-                <AvatarFallback className="bg-black text-gold text-xl font-bold">
+                <AvatarFallback className="bg-black text-gold text-lg font-bold">
                   {getInitials(String(accountDisplayName))}
                 </AvatarFallback>
               </Avatar>
               <div className="min-w-0 flex-1">
-                <p className="text-black font-bold text-xl truncate mb-1" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                <p className="text-black font-bold text-lg truncate" style={{ fontFamily: 'Poppins, sans-serif' }}>
                   {accountDisplayName}
                 </p>
-                <p className="text-black/60 text-sm truncate mb-2">{user.email}</p>
-                <Link 
-                  to="/profile" 
-                  onClick={onClose} 
-                  className="inline-flex items-center gap-1.5 text-gold text-sm font-semibold hover:underline transition-colors"
-                >
-                  Edit Profile & Photo
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </Link>
+                <p className="text-black/60 text-sm truncate">{user.email}</p>
               </div>
+              <Link 
+                to="/profile" 
+                onClick={onClose} 
+                className="flex items-center gap-1.5 text-gold text-sm font-semibold hover:underline transition-colors shrink-0"
+              >
+                Edit Profile
+                <ChevronRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
 
-            {/* Account Links - Premium Styled */}
-            <div className="space-y-1.5 mb-4">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold px-3 py-1.5">
-                Your Account
-              </p>
-              {accountLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  onClick={onClose}
-                  className="flex items-center gap-4 py-3 px-3 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gold/15 hover:to-gold/5 group"
-                >
-                  <div className="w-11 h-11 rounded-xl bg-black border-2 border-gold/40 flex items-center justify-center group-hover:border-gold transition-colors shadow-lg">
-                    <link.icon className="w-5 h-5 text-gold" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <span className="text-black font-semibold text-sm group-hover:text-gold transition-colors block">
-                      {link.label}
-                    </span>
-                    {link.description && (
-                      <span className="text-black/50 text-xs truncate block">
-                        {link.description}
-                      </span>
-                    )}
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-black/30 group-hover:text-gold transition-colors" />
-                </Link>
-              ))}
-            </div>
-
-            {/* Admin Section */}
-            {(isAdmin || hasCRMAccess) && (
-              <>
-                <MegaMenuSectionDivider />
-                <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold px-3 py-1.5">
-                  Admin Shortcuts
+            {/* Two-Column Layout for Links */}
+            <div className="grid grid-cols-2 gap-6">
+              {/* Left Column - Account Links */}
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold px-2 py-1.5 mb-2">
+                  Your Account
                 </p>
-                <div className="grid grid-cols-2 gap-2 mt-2">
-                  {adminLinks.map((link) => (
+                <div className="space-y-1">
+                  {accountLinks.map((link) => (
                     <Link
                       key={link.href}
                       to={link.href}
                       onClick={onClose}
-                      className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gold/15 hover:to-gold/5 group"
+                      className="flex items-center gap-3 py-2.5 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gold/15 hover:to-gold/5 group"
                     >
-                      <div className="w-8 h-8 rounded-lg bg-black border border-gold/30 flex items-center justify-center group-hover:border-gold transition-colors">
+                      <div className="w-9 h-9 rounded-lg bg-black border border-gold/40 flex items-center justify-center group-hover:border-gold transition-colors">
                         <link.icon className="w-4 h-4 text-gold" />
                       </div>
-                      <span className="text-black font-medium text-xs group-hover:text-gold transition-colors truncate">
-                        {link.label}
-                      </span>
+                      <div className="flex-1 min-w-0">
+                        <span className="text-black font-semibold text-sm group-hover:text-gold transition-colors block">
+                          {link.label}
+                        </span>
+                        {link.description && (
+                          <span className="text-black/50 text-xs truncate block">
+                            {link.description}
+                          </span>
+                        )}
+                      </div>
                     </Link>
                   ))}
-                  {hasCRMAccess && (
-                    <Link 
-                      to="/crm" 
-                      onClick={onClose} 
-                      className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gold/15 hover:to-gold/5 group"
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-black border border-gold/30 flex items-center justify-center group-hover:border-gold transition-colors">
-                        <Users className="w-4 h-4 text-gold" />
-                      </div>
-                      <span className="text-black font-medium text-xs group-hover:text-gold transition-colors truncate">
-                        {t('nav.crm') || 'CRM Dashboard'}
-                      </span>
-                    </Link>
-                  )}
-                  {isAdmin && (
-                    <Link 
-                      to="/admin" 
-                      onClick={onClose} 
-                      className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gold/15 hover:to-gold/5 group"
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-black border border-gold/30 flex items-center justify-center group-hover:border-gold transition-colors">
-                        <Settings className="w-4 h-4 text-gold" />
-                      </div>
-                      <span className="text-black font-medium text-xs group-hover:text-gold transition-colors truncate">
-                        Admin Panel
-                      </span>
-                    </Link>
-                  )}
                 </div>
-              </>
-            )}
 
-            {/* Sign Out - Bottom */}
-            <MegaMenuSectionDivider />
-            <button 
-              onClick={handleSignOut} 
-              className="flex items-center gap-4 py-3 px-3 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-red-500/10 hover:to-red-500/5 group w-full mt-2"
-            >
-              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-red-500/20 to-red-600/10 border border-red-500/30 flex items-center justify-center group-hover:border-red-500 transition-colors">
-                <LogOut className="w-5 h-5 text-red-600" />
+                {/* Sign Out Button */}
+                <div className="mt-4 pt-4 border-t border-gold/30">
+                  <button 
+                    onClick={handleSignOut} 
+                    className="flex items-center gap-3 py-2.5 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-red-500/10 hover:to-red-500/5 group w-full"
+                  >
+                    <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-red-500/20 to-red-600/10 border border-red-500/30 flex items-center justify-center group-hover:border-red-500 transition-colors">
+                      <LogOut className="w-4 h-4 text-red-600" />
+                    </div>
+                    <span className="text-black font-semibold text-sm group-hover:text-red-600 transition-colors">
+                      {t('nav.signOut')}
+                    </span>
+                  </button>
+                </div>
               </div>
-              <span className="text-black font-semibold text-sm group-hover:text-red-600 transition-colors">
-                {t('nav.signOut')}
-              </span>
-            </button>
+
+              {/* Right Column - Admin Links */}
+              <div>
+                {(isAdmin || hasCRMAccess) && (
+                  <>
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold px-2 py-1.5 mb-2">
+                      Admin Shortcuts
+                    </p>
+                    <div className="space-y-1">
+                      {adminLinks.map((link) => (
+                        <Link
+                          key={link.href}
+                          to={link.href}
+                          onClick={onClose}
+                          className="flex items-center gap-2.5 py-2 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gold/15 hover:to-gold/5 group"
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-black border border-gold/30 flex items-center justify-center group-hover:border-gold transition-colors">
+                            <link.icon className="w-4 h-4 text-gold" />
+                          </div>
+                          <span className="text-black font-medium text-xs group-hover:text-gold transition-colors truncate">
+                            {link.label}
+                          </span>
+                        </Link>
+                      ))}
+                      {hasCRMAccess && (
+                        <Link 
+                          to="/crm" 
+                          onClick={onClose} 
+                          className="flex items-center gap-2.5 py-2 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gold/15 hover:to-gold/5 group"
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-black border border-gold/30 flex items-center justify-center group-hover:border-gold transition-colors">
+                            <Users className="w-4 h-4 text-gold" />
+                          </div>
+                          <span className="text-black font-medium text-xs group-hover:text-gold transition-colors truncate">
+                            {t('nav.crm') || 'CRM Dashboard'}
+                          </span>
+                        </Link>
+                      )}
+                      {isAdmin && (
+                        <Link 
+                          to="/admin" 
+                          onClick={onClose} 
+                          className="flex items-center gap-2.5 py-2 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gold/15 hover:to-gold/5 group"
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-black border border-gold/30 flex items-center justify-center group-hover:border-gold transition-colors">
+                            <Settings className="w-4 h-4 text-gold" />
+                          </div>
+                          <span className="text-black font-medium text-xs group-hover:text-gold transition-colors truncate">
+                            Admin Panel
+                          </span>
+                        </Link>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
           </>
         ) : (
           /* Logged Out State */

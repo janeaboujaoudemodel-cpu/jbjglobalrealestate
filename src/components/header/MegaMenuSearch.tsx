@@ -39,9 +39,9 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
   const servicesLinks = [
     { href: '/services/buying-advisory', label: 'Buying Advisory', icon: Home },
     { href: '/services/selling-advisory', label: 'Selling Advisory', icon: ClipboardCheck },
+    { href: '/seller-listing', label: 'Sell Your Property', icon: ClipboardCheck },
     { href: '/services/rental-advisory', label: 'Rental Advisory', icon: Building2 },
     { href: '/services/investment-advisory', label: 'Investment Advisory', icon: Briefcase },
-    { href: '/services/property-management', label: 'Property Management', icon: Building2 },
     { href: '/guides/golden-visa-uae', label: 'Golden Visa', icon: Globe },
     { href: '/mortgage-calculator', label: 'Mortgage Calculator', icon: Calculator },
   ];
@@ -54,9 +54,12 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
 
   const navigationLinks = [
     { href: '/about', label: 'About Us', icon: Building2 },
+    { href: '/team', label: 'Meet the Team', icon: Users },
+    { href: '/brokers', label: 'Our Brokers', icon: Users },
     { href: '/areas', label: 'Area Guides', icon: MapPin },
     { href: '/developers', label: 'Developers', icon: Building2 },
-    { href: '/guides', label: 'Buyer/Seller Guides', icon: GraduationCap },
+    { href: '/buyer-guide', label: 'Buyer Guide', icon: GraduationCap },
+    { href: '/seller-guide', label: 'Seller Guide', icon: GraduationCap },
     { href: '/join', label: 'Careers', icon: Users },
     { href: '/favorites', label: 'My Favorites', icon: Heart },
     { href: '/ai-hub', label: 'AI Tools', icon: Sparkles },
