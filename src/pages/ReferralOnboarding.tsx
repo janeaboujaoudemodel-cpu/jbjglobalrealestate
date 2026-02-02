@@ -196,7 +196,7 @@ export default function ReferralOnboarding() {
         emiratesIdUrl = await uploadFile(formData.emiratesIdFile, 'referral-emirates-id');
       }
 
-      // Create referral partner record
+      // Create referral partner record with all new fields
       const { error: partnerError } = await supabase
         .from('referral_partners')
         .insert({
@@ -208,6 +208,10 @@ export default function ReferralOnboarding() {
           partner_type: 'individual',
           commission_rate: 5.00,
           status: 'pending',
+          nationality: formData.nationality,
+          passport_number: formData.passportNumber,
+          signature_data_url: formData.signatureDataUrl,
+          contract_signed_at: new Date().toISOString(),
         } as any);
 
       if (partnerError) {
@@ -249,15 +253,10 @@ export default function ReferralOnboarding() {
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-8 px-4">
         <div className="max-w-3xl mx-auto">
           {/* Header - Larger logo with breathable spacing */}
+          {/* Header - Large monogram only, no duplicate text */}
           <div className="text-center mb-10">
             <div className="flex flex-col items-center justify-center mb-6">
-              <JJLogoImage variant="light" size="lg" className="w-24 h-24 md:w-28 md:h-28 mb-3" />
-              <span 
-                className="text-black font-semibold text-lg md:text-xl tracking-[0.12em] uppercase"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                JBJ GLOBAL REAL ESTATE
-              </span>
+              <JJLogoImage variant="light" size="lg" className="w-40 h-40 md:w-48 md:h-48" />
             </div>
             <h1 className="text-2xl md:text-3xl font-bold mb-2">
               <span className="text-gold">Join the Referral Circle</span>
@@ -551,11 +550,12 @@ export default function ReferralOnboarding() {
                 )}
               </AnimatePresence>
 
-              {/* Navigation */}
+              {/* Navigation - Back (secondary) and Continue/Submit (primary) */}
               <div className="flex gap-4 mt-8">
                 {currentStep > 1 && (
                   <Button
-                    variant="outline"
+                    variant="secondary"
+                    size="lg"
                     onClick={handleBack}
                     className="flex-1"
                   >
@@ -563,30 +563,17 @@ export default function ReferralOnboarding() {
                     Back
                   </Button>
                 )}
-                <button
+                <Button
+                  variant="primary"
+                  size="lg"
                   onClick={handleNext}
                   disabled={isSubmitting}
-                  className="flex-1 relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden disabled:opacity-50"
-                  style={{
-                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
-                    border: '2px solid rgba(200,167,102,0.5)',
-                    boxShadow: `
-                      0 10px 30px rgba(200,167,102,0.4),
-                      0 6px 15px rgba(0,0,0,0.2),
-                      inset 0 2px 4px rgba(255,255,255,0.9),
-                      inset 0 -2px 4px rgba(200,167,102,0.2),
-                      0 0 20px rgba(200,167,102,0.3)
-                    `,
-                  }}
+                  className="flex-1"
                 >
-                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-                  <span className="relative flex items-center justify-center gap-2">
-                    {isSubmitting && <Loader2 className="w-4 h-4 animate-spin text-black" />}
-                    <span className="text-black">{currentStep === 3 ? 'Submit' : 'Continue'}</span>
-                    {!isSubmitting && <ArrowRight className="w-4 h-4 text-gold" />}
-                  </span>
-                </button>
+                  {isSubmitting && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+                  {currentStep === 3 ? 'Submit' : 'Continue'}
+                  {!isSubmitting && <ArrowRight className="w-4 h-4 ml-2" />}
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -599,7 +586,7 @@ export default function ReferralOnboarding() {
               <DialogTitle>Application Submitted</DialogTitle>
             </VisuallyHidden.Root>
             
-            <div className="text-center py-6">
+              <div className="text-center py-6">
               <div className="w-20 h-20 bg-gradient-to-br from-gold/20 to-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
                 <PartyPopper className="w-10 h-10 text-gold" />
               </div>
@@ -621,7 +608,7 @@ export default function ReferralOnboarding() {
               <div className="space-y-3 text-left bg-muted/30 rounded-xl p-4 mb-6">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <CheckCircle className="w-4 h-4 text-green-500" />
-                  <span>Application submitted for review</span>
+                  <span>Your application has been successfully submitted</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <CheckCircle className="w-4 h-4 text-green-500" />
@@ -635,7 +622,8 @@ export default function ReferralOnboarding() {
 
               <Button
                 onClick={() => navigate('/referral-partner')}
-                className="w-full bg-gold hover:bg-gold/90 text-black"
+                variant="primary"
+                className="w-full"
               >
                 Go to Dashboard
                 <ArrowRight className="w-4 h-4 ml-2" />

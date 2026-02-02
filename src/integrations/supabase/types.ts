@@ -11995,6 +11995,69 @@ export type Database = {
         }
         Relationships: []
       }
+      referral_code_usages: {
+        Row: {
+          created_at: string
+          id: string
+          lead_id: string | null
+          notes: string | null
+          property_interest: string | null
+          referral_code: string
+          referral_partner_id: string | null
+          source: string
+          status: string | null
+          updated_at: string
+          used_by_email: string
+          used_by_name: string
+          used_by_phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lead_id?: string | null
+          notes?: string | null
+          property_interest?: string | null
+          referral_code: string
+          referral_partner_id?: string | null
+          source?: string
+          status?: string | null
+          updated_at?: string
+          used_by_email: string
+          used_by_name: string
+          used_by_phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lead_id?: string | null
+          notes?: string | null
+          property_interest?: string | null
+          referral_code?: string
+          referral_partner_id?: string | null
+          source?: string
+          status?: string | null
+          updated_at?: string
+          used_by_email?: string
+          used_by_name?: string
+          used_by_phone?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_code_usages_referral_partner_id_fkey"
+            columns: ["referral_partner_id"]
+            isOneToOne: false
+            referencedRelation: "referral_partners"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_code_usages_referral_partner_id_fkey"
+            columns: ["referral_partner_id"]
+            isOneToOne: false
+            referencedRelation: "referral_partners_safe"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       referral_commissions: {
         Row: {
           created_at: string
@@ -12292,14 +12355,18 @@ export type Database = {
           approved_at: string | null
           approved_by: string | null
           commission_rate: number
+          contract_signed_at: string | null
           created_at: string
           email: string
           full_name: string
           id: string
+          nationality: string | null
           notes: string | null
           partner_type: string
+          passport_number: string | null
           phone_e164: string | null
           referral_code: string
+          signature_data_url: string | null
           status: string
           total_conversions: number | null
           total_earnings_aed: number | null
@@ -12311,14 +12378,18 @@ export type Database = {
           approved_at?: string | null
           approved_by?: string | null
           commission_rate?: number
+          contract_signed_at?: string | null
           created_at?: string
           email: string
           full_name: string
           id?: string
+          nationality?: string | null
           notes?: string | null
           partner_type?: string
+          passport_number?: string | null
           phone_e164?: string | null
           referral_code: string
+          signature_data_url?: string | null
           status?: string
           total_conversions?: number | null
           total_earnings_aed?: number | null
@@ -12330,20 +12401,48 @@ export type Database = {
           approved_at?: string | null
           approved_by?: string | null
           commission_rate?: number
+          contract_signed_at?: string | null
           created_at?: string
           email?: string
           full_name?: string
           id?: string
+          nationality?: string | null
           notes?: string | null
           partner_type?: string
+          passport_number?: string | null
           phone_e164?: string | null
           referral_code?: string
+          signature_data_url?: string | null
           status?: string
           total_conversions?: number | null
           total_earnings_aed?: number | null
           total_referrals?: number | null
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      referral_settings: {
+        Row: {
+          created_at: string
+          id: string
+          setting_key: string
+          setting_value: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          setting_key: string
+          setting_value?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          setting_key?: string
+          setting_value?: string | null
+          updated_at?: string
         }
         Relationships: []
       }

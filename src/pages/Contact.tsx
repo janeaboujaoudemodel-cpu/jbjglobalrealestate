@@ -43,6 +43,7 @@ const consultationSchema = z.object({
   serviceNeeded: z.string().min(1, "Please select a service"),
   budgetRange: z.string().optional(),
   timeline: z.string().optional(),
+  referralCode: z.string().max(20).optional(),
   message: z.string().max(1000, "Message must be less than 1000 characters").optional(),
   confirmAccurate: z.boolean().refine((val) => val === true, {
     message: "Please confirm the information is accurate",
@@ -104,6 +105,7 @@ const Contact = () => {
       serviceNeeded: "",
       budgetRange: "",
       timeline: "",
+      referralCode: "",
       message: "",
       confirmAccurate: false,
       agreeTerms: false,
@@ -128,7 +130,35 @@ const Contact = () => {
         throw new Error('Lead capture failed');
       }
 
-      // 2) Best-effort admin notification (must NOT block user submission)
+      // 2) If referral code provided, record the usage
+      if (data.referralCode && data.referralCode.trim()) {
+        try {
+          // Find the partner by code
+          const { data: partner } = await supabase
+            .from('referral_partners')
+            .select('id')
+            .eq('referral_code', data.referralCode.toUpperCase().trim())
+            .single();
+
+          // Record usage even if partner not found (for tracking attempts)
+          await supabase
+            .from('referral_code_usages')
+            .insert({
+              referral_code: data.referralCode.toUpperCase().trim(),
+              referral_partner_id: partner?.id || null,
+              used_by_name: data.fullName,
+              used_by_email: data.email,
+              used_by_phone: data.phone,
+              property_interest: data.serviceNeeded,
+              source: 'contact_form',
+              status: 'pending',
+            });
+        } catch (refErr) {
+          console.warn('Referral code tracking failed:', refErr);
+        }
+      }
+
+      // 3) Best-effort admin notification (must NOT block user submission)
       try {
         await supabase.functions.invoke("send-inquiry-email", {
           body: {
@@ -144,6 +174,7 @@ const Contact = () => {
               budgetRange: data.budgetRange || "Not specified",
               timeline: data.timeline || "Not specified",
               marketingConsent: data.marketingConsent ? "Yes" : "No",
+              referralCode: data.referralCode || "None",
             },
             message: data.message,
           },
@@ -593,6 +624,29 @@ END:VCARD`;
                           )}
                         />
                       </div>
+
+                      {/* Referral Code */}
+                      <FormField
+                        control={form.control}
+                        name="referralCode"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-zinc-700 text-sm font-medium">Referral Code (Optional)</FormLabel>
+                            <FormControl>
+                              <Input 
+                                {...field} 
+                                className="h-12 bg-white border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold focus:bg-white rounded-lg uppercase"
+                                placeholder="e.g., JJ-ABC123"
+                                onChange={(e) => field.onChange(e.target.value.toUpperCase())}
+                              />
+                            </FormControl>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              If you were referred by a partner, enter their code here
+                            </p>
+                            <FormMessage className="text-red-500 text-xs" />
+                          </FormItem>
+                        )}
+                      />
 
                       <FormField
                         control={form.control}
