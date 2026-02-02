@@ -168,6 +168,9 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     pending_errors: number;
     approved_repaired: number;
     approved_errors: number;
+    metadata_repaired?: number;
+    images_repaired?: number;
+    documents_repaired?: number;
   } | null>(null);
 
   const [isRebuildingQueue, setIsRebuildingQueue] = useState(false);
@@ -823,31 +826,45 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     toast.info("Stopping after current batch finishes...");
   };
 
-  // FIX ALL RUNNER - extracts pending queue AND repairs approved projects
+  // FIX ALL RUNNER - 3-phase repair pipeline:
+  // Phase 1: Extract pending queue (missing images/docs/description)
+  // Phase 2: Repair approved projects (metadata, USPs, location, amenities)
+  // Phase 3: Repair approved project images and documents
   const startFixAllRunner = async () => {
     if (isFixAllRunning || isBulkExtractRunning || isRebuildingQueue || isSyncing) return;
     
     const confirmed = window.confirm(
       "⚡ FIX ALL LISTINGS ⚡\n\n" +
-      "This will:\n" +
-      "1) Extract missing data for ALL pending queue items (incomplete/failed)\n" +
-      "2) Repair images for already-approved projects\n\n" +
+      "This will run a 3-phase repair pipeline:\n\n" +
+      "Phase 1: Extract missing data for ALL pending queue items\n" +
+      "Phase 2: Repair approved projects (metadata, USPs, location, amenities, documents)\n" +
+      "Phase 3: Repair approved project images\n\n" +
       "This may take several minutes. Continue?"
     );
     if (!confirmed) return;
 
     fixAllStopRef.current = false;
     setIsFixAllRunning(true);
-    setFixAllStats({ pending_processed: 0, pending_success: 0, pending_errors: 0, approved_repaired: 0, approved_errors: 0 });
+    setFixAllStats({ 
+      pending_processed: 0, 
+      pending_success: 0, 
+      pending_errors: 0, 
+      approved_repaired: 0, 
+      approved_errors: 0,
+      metadata_repaired: 0,
+      images_repaired: 0,
+      documents_repaired: 0
+    });
 
-    toast.info("Fix All started — processing pending queue and approved projects...");
+    toast.info("Fix All started — running 3-phase repair pipeline...");
 
     try {
       // Phase 1: Extract all pending queue items
+      toast.info("Phase 1: Extracting pending queue items...");
       let pendingStats = { processed: 0, success: 0, errors: 0 };
       while (!fixAllStopRef.current) {
         const { data, error } = await supabase.functions.invoke("batch-extract-pending", {
-          body: { limit: 200, throttleMs: 500, concurrency: 8 },
+          body: { limit: 100, throttleMs: 800, concurrency: 5 }, // More conservative to avoid rate limiting
         });
         if (error) throw error;
 
@@ -873,31 +890,61 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
         if (processed === 0) break; // No more pending items
       }
 
-      toast.success(`Pending queue complete: ${pendingStats.success} fixed, ${pendingStats.errors} errors`);
+      toast.success(`Phase 1 complete: ${pendingStats.success} extracted, ${pendingStats.errors} errors`);
 
-      // Phase 2: Repair approved projects (images from imports)
+      // Phase 2: Repair approved projects (full metadata including USPs, location, docs)
       if (!fixAllStopRef.current) {
-        toast.info("Repairing approved project images...");
+        toast.info("Phase 2: Repairing approved project metadata...");
         
-        const { data: repairData, error: repairError } = await supabase.functions.invoke("repair-project-images", {
+        const { data: repairData, error: repairError } = await supabase.functions.invoke("repair-approved-projects", {
           body: { limit: 500, dryRun: false },
         });
 
         if (repairError) throw repairError;
 
         const repaired = repairData?.stats?.repaired ?? 0;
+        const metadataRepaired = repairData?.stats?.metadataRepaired ?? 0;
+        const imagesRepaired = repairData?.stats?.imagesRepaired ?? 0;
+        const documentsRepaired = repairData?.stats?.documentsRepaired ?? 0;
         const repairErrors = repairData?.stats?.errors ?? 0;
 
         setFixAllStats(prev => ({
           ...prev!,
           approved_repaired: repaired,
           approved_errors: repairErrors,
+          metadata_repaired: metadataRepaired,
+          images_repaired: imagesRepaired,
+          documents_repaired: documentsRepaired,
         }));
 
-        toast.success(`Project images repaired: ${repaired} fixed, ${repairErrors} errors`);
+        toast.success(`Phase 2 complete: ${repaired} projects repaired (${metadataRepaired} metadata, ${imagesRepaired} images, ${documentsRepaired} docs)`);
       }
 
-      toast.success("🎉 Fix All complete!");
+      // Phase 3: Additional image repair pass (for any remaining)
+      if (!fixAllStopRef.current) {
+        toast.info("Phase 3: Final image repair pass...");
+        
+        const { data: imgRepairData, error: imgRepairError } = await supabase.functions.invoke("repair-project-images", {
+          body: { limit: 500, dryRun: false },
+        });
+
+        if (imgRepairError) throw imgRepairError;
+
+        const additionalImages = imgRepairData?.stats?.repaired ?? 0;
+
+        if (additionalImages > 0) {
+          setFixAllStats(prev => ({
+            ...prev!,
+            images_repaired: (prev?.images_repaired || 0) + additionalImages,
+          }));
+          toast.success(`Phase 3 complete: ${additionalImages} additional images repaired`);
+        } else {
+          toast.success("Phase 3 complete: All images already repaired");
+        }
+      }
+
+      toast.success("🎉 Fix All complete! All 3 phases finished.");
+      await loadProjectCount();
 
     } catch (e: any) {
       console.error("Fix All runner failed:", e);

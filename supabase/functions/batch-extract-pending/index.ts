@@ -260,20 +260,24 @@ serve(async (req) => {
     const devMap = buildDeveloperMap(devList);
 
     // Fetch pending imports that still need extraction
-    // NOTE: Completeness now requires documents, so we also target items missing docs.
+    // FIXED: Also target rows where images/documents are NULL (not just empty array [])
     const { data: imports, error: fetchErr } = await supabase
       .from("pending_project_imports")
       .select("id, name, slug, source_url, images, documents, description, review_notes, amenities")
       .eq("status", "pending")
-      // NOTE: PostgREST OR syntax: comma-separated conditions.
+      // NOTE: PostgREST OR syntax - include null checks for images/documents
       .or(
         [
           "review_notes.ilike.%PENDING_SCRAPE%",
           "review_notes.eq.INCOMPLETE",
           "review_notes.ilike.ERROR:%",
           "images.eq.[]",
+          "images.is.null",
           "documents.eq.[]",
+          "documents.is.null",
           "description.is.null",
+          "developer_name.is.null",
+          "developer_name.eq.Unknown"
         ].join(","),
       )
       .order("created_at", { ascending: true })

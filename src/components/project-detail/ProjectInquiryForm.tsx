@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Send, Loader2 } from "lucide-react";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Send, Loader2, Check, ChevronsUpDown, Building2, MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useDevelopers, useCommunities, useTrendingAreas } from "@/hooks/useProjects";
+import { cn } from "@/lib/utils";
 
 interface ProjectInquiryFormProps {
   projectId: string;
@@ -14,6 +18,29 @@ interface ProjectInquiryFormProps {
   projectLocation?: string;
   developerName?: string;
 }
+
+// UAE Emirates list
+const UAE_EMIRATES = [
+  { value: "dubai", label: "Dubai" },
+  { value: "abu-dhabi", label: "Abu Dhabi" },
+  { value: "sharjah", label: "Sharjah" },
+  { value: "ajman", label: "Ajman" },
+  { value: "ras-al-khaimah", label: "Ras Al Khaimah" },
+  { value: "fujairah", label: "Fujairah" },
+  { value: "umm-al-quwain", label: "Umm Al Quwain" },
+];
+
+// Bedroom options with 6 and 7+
+const BEDROOM_OPTIONS = [
+  { value: "studio", label: "Studio" },
+  { value: "1", label: "1 Bedroom" },
+  { value: "2", label: "2 Bedrooms" },
+  { value: "3", label: "3 Bedrooms" },
+  { value: "4", label: "4 Bedrooms" },
+  { value: "5", label: "5 Bedrooms" },
+  { value: "6", label: "6 Bedrooms" },
+  { value: "7+", label: "7+ Bedrooms" },
+];
 
 export function ProjectInquiryForm({ 
   projectId, 
@@ -29,9 +56,121 @@ export function ProjectInquiryForm({
     bedrooms: "",
     size: "",
     preferredDeveloper: developerName || "",
+    selectedEmirate: "",
     location: projectLocation || "",
     message: ""
   });
+
+  // Developer combobox state
+  const [developerOpen, setDeveloperOpen] = useState(false);
+  const [developerSearch, setDeveloperSearch] = useState("");
+  const [isOtherDeveloper, setIsOtherDeveloper] = useState(false);
+  const [otherDeveloperName, setOtherDeveloperName] = useState("");
+
+  // Location combobox state
+  const [locationOpen, setLocationOpen] = useState(false);
+  const [locationSearch, setLocationSearch] = useState("");
+  const [isOtherLocation, setIsOtherLocation] = useState(false);
+  const [otherLocationName, setOtherLocationName] = useState("");
+
+  // Fetch developers and locations
+  const { data: developers } = useDevelopers();
+  const { data: communities } = useCommunities();
+  const { data: trendingAreas } = useTrendingAreas();
+
+  // Build developer options
+  const developerOptions = useMemo(() => {
+    const options: { value: string; label: string; isSpecial?: boolean }[] = [
+      { value: "any", label: "Any Developer", isSpecial: true },
+    ];
+    
+    if (developers) {
+      developers.forEach(dev => {
+        options.push({ value: dev.id, label: dev.name });
+      });
+    }
+    
+    options.push({ value: "other", label: "Other...", isSpecial: true });
+    
+    return options;
+  }, [developers]);
+
+  // Build location options filtered by selected emirate
+  const locationOptions = useMemo(() => {
+    const options: { value: string; label: string; isSpecial?: boolean }[] = [
+      { value: "any", label: "Any Location", isSpecial: true },
+    ];
+    
+    // Add communities
+    if (communities) {
+      communities.forEach(comm => {
+        options.push({ value: comm.id, label: comm.name });
+      });
+    }
+    
+    // Add trending areas filtered by emirate
+    if (trendingAreas) {
+      const filtered = formData.selectedEmirate 
+        ? trendingAreas.filter(area => area.emirate?.toLowerCase() === formData.selectedEmirate.toLowerCase())
+        : trendingAreas;
+      
+      filtered.forEach(area => {
+        if (!options.find(o => o.label === area.name)) {
+          options.push({ value: `area-${area.id}`, label: area.name });
+        }
+      });
+    }
+    
+    options.push({ value: "other", label: "Other...", isSpecial: true });
+    
+    return options;
+  }, [communities, trendingAreas, formData.selectedEmirate]);
+
+  // Filter developers by search
+  const filteredDevelopers = useMemo(() => {
+    if (!developerSearch) return developerOptions;
+    return developerOptions.filter(dev => 
+      dev.label.toLowerCase().includes(developerSearch.toLowerCase())
+    );
+  }, [developerOptions, developerSearch]);
+
+  // Filter locations by search
+  const filteredLocations = useMemo(() => {
+    if (!locationSearch) return locationOptions;
+    return locationOptions.filter(loc => 
+      loc.label.toLowerCase().includes(locationSearch.toLowerCase())
+    );
+  }, [locationOptions, locationSearch]);
+
+  const handleDeveloperSelect = (value: string) => {
+    if (value === "other") {
+      setIsOtherDeveloper(true);
+      setFormData({ ...formData, preferredDeveloper: "" });
+    } else if (value === "any") {
+      setIsOtherDeveloper(false);
+      setFormData({ ...formData, preferredDeveloper: "Any Developer" });
+    } else {
+      setIsOtherDeveloper(false);
+      const dev = developerOptions.find(d => d.value === value);
+      setFormData({ ...formData, preferredDeveloper: dev?.label || "" });
+    }
+    setDeveloperOpen(false);
+  };
+
+  const handleLocationSelect = (value: string) => {
+    if (value === "other") {
+      setIsOtherLocation(true);
+      setFormData({ ...formData, location: "" });
+    } else if (value === "any") {
+      setIsOtherLocation(false);
+      setFormData({ ...formData, location: "Any Location" });
+    } else {
+      setIsOtherLocation(false);
+      const loc = locationOptions.find(l => l.value === value);
+      setFormData({ ...formData, location: loc?.label || "" });
+    }
+    setLocationOpen(false);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,6 +183,10 @@ export function ProjectInquiryForm({
     setIsSubmitting(true);
 
     try {
+      // Determine final developer name
+      const finalDeveloper = isOtherDeveloper ? otherDeveloperName : formData.preferredDeveloper;
+      const finalLocation = isOtherLocation ? otherLocationName : formData.location;
+
       // Insert into CRM leads table
       const { error } = await supabase.from("crm_leads").insert({
         full_name: formData.name,
@@ -53,8 +196,8 @@ export function ProjectInquiryForm({
         source_details: projectName,
         preferred_bedrooms: formData.bedrooms || null,
         preferred_size_sqft: formData.size ? parseInt(formData.size) : null,
-        preferred_developer: formData.preferredDeveloper || null,
-        preferred_location: formData.location || null,
+        preferred_developer: finalDeveloper || null,
+        preferred_location: finalLocation || null,
         notes: formData.message || null,
         status: "new",
         lead_score: 80 // High intent lead from project page
@@ -78,9 +221,14 @@ export function ProjectInquiryForm({
         bedrooms: "",
         size: "",
         preferredDeveloper: developerName || "",
+        selectedEmirate: "",
         location: projectLocation || "",
         message: ""
       });
+      setIsOtherDeveloper(false);
+      setOtherDeveloperName("");
+      setIsOtherLocation(false);
+      setOtherLocationName("");
 
     } catch (error) {
       console.error("Error submitting inquiry:", error);
@@ -89,8 +237,6 @@ export function ProjectInquiryForm({
       setIsSubmitting(false);
     }
   };
-
-  const whatsappMessage = `Hi, I'm interested in ${projectName}${projectLocation ? ` at ${projectLocation}` : ''}. Please share more details.`;
 
   return (
     <div>
@@ -147,7 +293,7 @@ export function ProjectInquiryForm({
 
         {/* Two Column Grid for Optional Fields */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {/* Bedrooms (Optional) */}
+          {/* Bedrooms with 6 and 7+ */}
           <div className="space-y-2">
             <Label htmlFor="bedrooms" className="text-foreground text-sm font-medium">Bedrooms</Label>
             <Select
@@ -157,13 +303,12 @@ export function ProjectInquiryForm({
               <SelectTrigger className="h-14 text-base px-5">
                 <SelectValue placeholder="Select bedrooms" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="studio">Studio</SelectItem>
-                <SelectItem value="1">1 Bedroom</SelectItem>
-                <SelectItem value="2">2 Bedrooms</SelectItem>
-                <SelectItem value="3">3 Bedrooms</SelectItem>
-                <SelectItem value="4">4 Bedrooms</SelectItem>
-                <SelectItem value="5+">5+ Bedrooms</SelectItem>
+              <SelectContent className="bg-background border-border z-[9999]">
+                {BEDROOM_OPTIONS.map(option => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -182,30 +327,179 @@ export function ProjectInquiryForm({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {/* Location (Optional) */}
-          <div className="space-y-2">
-            <Label htmlFor="location" className="text-foreground text-sm font-medium">Location</Label>
-            <Input
-              id="location"
-              value={formData.location}
-              onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-              placeholder="e.g., Downtown Dubai"
-              className="h-14 text-base px-5"
-            />
-          </div>
+        {/* Developer Selection - Searchable Combobox */}
+        <div className="space-y-2">
+          <Label className="text-foreground text-sm font-medium flex items-center gap-2">
+            <Building2 className="w-4 h-4 text-gold" />
+            Developer
+          </Label>
+          {isOtherDeveloper ? (
+            <div className="flex gap-2">
+              <Input
+                value={otherDeveloperName}
+                onChange={(e) => setOtherDeveloperName(e.target.value)}
+                placeholder="Enter developer name"
+                className="h-14 text-base px-5 flex-1"
+              />
+              <Button 
+                type="button" 
+                variant="outline" 
+                className="h-14"
+                onClick={() => {
+                  setIsOtherDeveloper(false);
+                  setOtherDeveloperName("");
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+          ) : (
+            <Popover open={developerOpen} onOpenChange={setDeveloperOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={developerOpen}
+                  className="w-full h-14 justify-between text-base px-5 font-normal"
+                >
+                  {formData.preferredDeveloper || "Select developer..."}
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-full p-0 z-[9999] bg-background border-border" align="start">
+                <Command>
+                  <CommandInput 
+                    placeholder="Search developers..." 
+                    value={developerSearch}
+                    onValueChange={setDeveloperSearch}
+                  />
+                  <CommandList>
+                    <CommandEmpty>No developer found.</CommandEmpty>
+                    <CommandGroup>
+                      {filteredDevelopers.map((dev) => (
+                        <CommandItem
+                          key={dev.value}
+                          value={dev.value}
+                          onSelect={() => handleDeveloperSelect(dev.value)}
+                          className={cn(
+                            "cursor-pointer",
+                            dev.isSpecial && "font-semibold text-gold"
+                          )}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              formData.preferredDeveloper === dev.label ? "opacity-100" : "opacity-0"
+                            )}
+                          />
+                          {dev.label}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
+          )}
+        </div>
 
-          {/* Preferred Developer (Optional) */}
-          <div className="space-y-2">
-            <Label htmlFor="developer" className="text-foreground text-sm font-medium">Developer</Label>
-            <Input
-              id="developer"
-              value={formData.preferredDeveloper}
-              onChange={(e) => setFormData({ ...formData, preferredDeveloper: e.target.value })}
-              placeholder="e.g., Emaar, Damac"
-              className="h-14 text-base px-5"
-            />
-          </div>
+        {/* Emirate Selection */}
+        <div className="space-y-2">
+          <Label className="text-foreground text-sm font-medium flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-gold" />
+            Select Emirate
+          </Label>
+          <Select
+            value={formData.selectedEmirate}
+            onValueChange={(value) => setFormData({ ...formData, selectedEmirate: value, location: "" })}
+          >
+            <SelectTrigger className="h-14 text-base px-5">
+              <SelectValue placeholder="Select emirate..." />
+            </SelectTrigger>
+            <SelectContent className="bg-background border-border z-[9999]">
+              {UAE_EMIRATES.map(emirate => (
+                <SelectItem key={emirate.value} value={emirate.value}>
+                  {emirate.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Location Selection - Searchable Combobox */}
+        <div className="space-y-2">
+          <Label className="text-foreground text-sm font-medium flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-gold" />
+            Location
+          </Label>
+          {isOtherLocation ? (
+            <div className="flex gap-2">
+              <Input
+                value={otherLocationName}
+                onChange={(e) => setOtherLocationName(e.target.value)}
+                placeholder="Enter location name"
+                className="h-14 text-base px-5 flex-1"
+              />
+              <Button 
+                type="button" 
+                variant="outline" 
+                className="h-14"
+                onClick={() => {
+                  setIsOtherLocation(false);
+                  setOtherLocationName("");
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+          ) : (
+            <Popover open={locationOpen} onOpenChange={setLocationOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={locationOpen}
+                  className="w-full h-14 justify-between text-base px-5 font-normal"
+                >
+                  {formData.location || "Select location..."}
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-full p-0 z-[9999] bg-background border-border" align="start">
+                <Command>
+                  <CommandInput 
+                    placeholder="Search locations..." 
+                    value={locationSearch}
+                    onValueChange={setLocationSearch}
+                  />
+                  <CommandList>
+                    <CommandEmpty>No location found.</CommandEmpty>
+                    <CommandGroup>
+                      {filteredLocations.map((loc) => (
+                        <CommandItem
+                          key={loc.value}
+                          value={loc.value}
+                          onSelect={() => handleLocationSelect(loc.value)}
+                          className={cn(
+                            "cursor-pointer",
+                            loc.isSpecial && "font-semibold text-gold"
+                          )}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              formData.location === loc.label ? "opacity-100" : "opacity-0"
+                            )}
+                          />
+                          {loc.label}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
+          )}
         </div>
 
         {/* Message (Optional) */}
