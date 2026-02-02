@@ -86,23 +86,12 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
           <>
             {/* Premium User Header - Large Avatar with Gold Gradient Background */}
             <div className="flex items-center gap-5 pb-6 mb-6 border-b-2 border-gold/40">
-              <div className="relative">
-                <div 
-                  className="w-20 h-20 rounded-2xl flex items-center justify-center shadow-xl"
-                  style={{
-                    background: 'linear-gradient(135deg, #C8A766 0%, #D4AF37 50%, #B8860B 100%)',
-                  }}
-                >
-                  <Avatar className="h-[72px] w-[72px] border-2 border-white/30 rounded-xl">
-                    <AvatarImage src={accountPhotoUrl ?? ""} alt={`${accountDisplayName} profile photo`} className="object-cover" />
-                    <AvatarFallback className="bg-black text-gold text-2xl font-bold rounded-xl">
-                      {getInitials(String(accountDisplayName))}
-                    </AvatarFallback>
-                  </Avatar>
-                </div>
-                {/* Online indicator */}
-                <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-3 border-white rounded-full" />
-              </div>
+              <Avatar className="h-16 w-16">
+                <AvatarImage src={accountPhotoUrl ?? ""} alt={`${accountDisplayName} profile photo`} className="object-cover" />
+                <AvatarFallback className="bg-black text-gold text-xl font-bold">
+                  {getInitials(String(accountDisplayName))}
+                </AvatarFallback>
+              </Avatar>
               <div className="min-w-0 flex-1">
                 <p className="text-black font-bold text-xl truncate mb-1" style={{ fontFamily: 'Poppins, sans-serif' }}>
                   {accountDisplayName}
