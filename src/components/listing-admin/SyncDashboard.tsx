@@ -414,17 +414,36 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
         })));
         toast.info(`Found paused sync at page ${job.current_page}. Click Resume to continue.`);
       } else if (job.status === "running") {
-        // Resume automatically
-        setIsSyncing(true);
-        isSyncingRef.current = true;
-        setPageStatuses(prev => prev.map(p => ({
-          ...p,
-          status: p.page < job.current_page ? 'success' : p.page === job.current_page ? 'in_progress' : 'pending'
-        })));
-        toast.info(`Resuming sync from page ${job.current_page}...`);
-        
-        // Continue the sync
-        continueSyncFromPage(job.id, job.current_page, jobTotalPages);
+        // IMPORTANT: Do NOT auto-resume a running job when the admin opens the dashboard.
+        // This was making the dashboard feel "stuck" (other actions disable while syncing)
+        // and it immediately starts syncing old pages.
+        // Instead, we pause it and let the admin explicitly click Resume.
+
+        setIsPaused(true);
+        isPausedRef.current = true;
+        setIsSyncing(false);
+        isSyncingRef.current = false;
+
+        setPageStatuses((prev) =>
+          prev.map((p) => ({
+            ...p,
+            status: p.page <= job.current_page ? "success" : "pending",
+          })),
+        );
+
+        // Keep DB state consistent so other screens don't show a phantom "running" job.
+        const { error: pauseErr } = await supabase
+          .from("sync_jobs")
+          .update({ status: "paused", paused_at: new Date().toISOString() })
+          .eq("id", job.id);
+
+        if (pauseErr) {
+          console.error("Error pausing active job:", pauseErr);
+        }
+
+        toast.info(
+          `Found an in-progress sync at page ${job.current_page}. It has been paused so you can run Queue actions. Click Resume when ready.`,
+        );
       }
 
       // If source pages increased since this job started, inform the admin.
