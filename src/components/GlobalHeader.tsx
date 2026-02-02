@@ -1074,9 +1074,13 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   <DropdownMenuContent 
                     align="end" 
                     sideOffset={12}
-                    className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 min-w-[320px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.5),0_0_0_1px_rgba(200,167,102,0.3)] py-4 rounded-2xl overflow-hidden"
+                    className="min-w-[320px] rounded-xl shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] p-0 overflow-hidden border-2 border-gold/40"
+                    style={{
+                      background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
+                    }}
                   >
-                    <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+                    {/* Top gold accent line */}
+                    <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
 
                     {user ? (
                       <div className="px-5 py-4 border-b border-gold/30 bg-gradient-to-r from-gold/10 to-transparent">
@@ -1238,6 +1242,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                         </div>
                       </>
                     )}
+                    {/* Bottom gold accent line */}
+                    <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>

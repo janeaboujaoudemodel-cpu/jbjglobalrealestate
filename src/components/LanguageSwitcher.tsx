@@ -66,11 +66,15 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
       <DropdownMenuContent 
         align="end" 
         sideOffset={12}
-        className="z-[9999] bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 min-w-[200px] rounded-xl shadow-2xl shadow-black/20 p-0 overflow-hidden"
+        className="z-[9999] min-w-[280px] rounded-xl shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] p-0 overflow-hidden border-2 border-gold/40"
+        style={{
+          background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
+        }}
       >
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+        {/* Top gold accent line */}
+        <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
         <ScrollArea className="h-[320px]">
-          <div className="p-2">
+          <div className="p-3">
             {SUPPORTED_LANGUAGES.map((lang) => (
               <DropdownMenuItem 
                 key={lang.code}
@@ -78,12 +82,12 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
                 className={`flex items-center justify-between cursor-pointer transition-all duration-200 rounded-lg px-4 py-3 my-0.5 group ${
                   language === lang.code 
                     ? 'bg-gold/15 border border-gold/30' 
-                    : 'hover:bg-gold/10 hover:shadow-[0_4px_15px_rgba(200,167,102,0.2)] hover:-translate-y-0.5'
+                    : 'hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8]'
                 }`}
               >
                 <span className="flex items-center gap-3">
                   <span className="text-lg">{lang.flag}</span>
-                  <span className={`text-sm font-medium transition-colors ${
+                  <span className={`text-sm font-semibold transition-colors ${
                     language === lang.code ? 'text-gold' : 'text-black group-hover:text-gold'
                   }`}>{lang.nativeName}</span>
                 </span>
@@ -94,6 +98,8 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
             ))}
           </div>
         </ScrollArea>
+        {/* Bottom gold accent line */}
+        <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
       </DropdownMenuContent>
     </DropdownMenu>
   );
