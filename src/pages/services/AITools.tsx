@@ -5,12 +5,15 @@ import {
   Calculator,
   BarChart3,
   Home,
-  TrendingUp,
+  ClipboardList,
   HelpCircle,
   Phone,
   Shield,
-  Sparkles,
   ArrowRight,
+  Layers,
+  Save,
+  Share2,
+  FileText,
 } from "lucide-react";
 import Footer from "@/components/Footer";
 import DirectContactCTA from "@/components/DirectContactCTA";
@@ -18,7 +21,6 @@ import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import { Card, CardContent } from "@/components/ui/card";
-import AIDisclosure from "@/components/ai-governance/AIDisclosure";
 import {
   Accordion,
   AccordionContent,
@@ -42,87 +44,80 @@ const staggerContainer = {
 const tools = [
   {
     icon: Calculator,
-    title: "Mortgage Calculator",
-    description: "Estimate monthly payments based on property price, down payment, and interest rates.",
-    link: "/mortgage-calculator",
-    cta: "Calculate Now",
+    title: "ROI Snapshot Calculator",
+    description: "Estimate cashflow structure and scenario outcomes based on your inputs.",
+    link: "/roi-calculator",
+    cta: "Open Calculator",
   },
   {
     icon: BarChart3,
-    title: "Property Evaluator",
-    description: "AI-powered property valuation using market data and comparable sales.",
-    link: "/property-evaluator",
-    cta: "Evaluate Property",
+    title: "Cost Breakdown Estimator",
+    description: "Understand typical transaction cost categories and planning checkpoints.",
+    link: "/cost-estimator",
+    cta: "Estimate Costs",
   },
   {
-    icon: TrendingUp,
-    title: "Rental Index",
-    description: "Compare rental rates across Dubai areas with official RERA index data.",
-    link: "/rental-index",
-    cta: "Check Rental Rates",
+    icon: Layers,
+    title: "Area Comparison",
+    description: "Compare areas using consistent categories: accessibility, lifestyle fit, and market context modules.",
+    link: "/area-comparison",
+    cta: "Compare Areas",
   },
   {
     icon: Home,
-    title: "AI Home Finder",
-    description: "Answer questions to get personalized property recommendations.",
-    link: "/quiz",
-    cta: "Find Your Home",
+    title: "Project Comparison",
+    description: "Compare multiple projects side-by-side with structured pros/cons and unit positioning.",
+    link: "/project-comparison",
+    cta: "Compare Projects",
   },
   {
-    icon: Sparkles,
-    title: "Interior Design AI",
-    description: "Visualize property interiors with AI-generated design concepts.",
-    link: "/interior-design-ai",
-    cta: "Design Now",
-  },
-  {
-    icon: Brain,
-    title: "AI Hub",
-    description: "Explore all AI-powered tools and assistants in one place.",
-    link: "/ai-hub",
-    cta: "Explore AI Hub",
+    icon: ClipboardList,
+    title: "Rental Readiness Checklist",
+    description: "Prepare your unit for leasing with a step-by-step readiness checklist.",
+    link: "/rental-readiness",
+    cta: "Start Checklist",
   },
 ];
 
-const dataTransparency = [
-  "Property valuations use official DLD transaction data",
-  "Rental rates reference RERA rental index",
-  "Market trends based on verified transaction records",
-  "All AI outputs include source references where applicable",
+const howItWorks = [
+  { step: 1, title: "Input your scenario", icon: FileText },
+  { step: 2, title: "Review structured outputs (tables + summaries)", icon: BarChart3 },
+  { step: 3, title: "Save results into your dashboard (where available)", icon: Save },
+  { step: 4, title: "Share a formatted snapshot with your broker/team (where available)", icon: Share2 },
 ];
 
 const faqData = [
   {
-    question: "Are these AI tools free to use?",
-    answer: "Most tools are available free for registered users. Some advanced features may require a premium account.",
+    question: "Do these tools guarantee returns?",
+    answer: "No. They are decision-support tools that structure scenarios.",
   },
   {
-    question: "How accurate are the AI valuations?",
-    answer: "AI valuations are estimates based on available market data and should not be considered as official appraisals. They serve as guidance for decision-making.",
+    question: "Can I use tool outputs as official valuation?",
+    answer: "No. Valuation and regulated outcomes require official processes.",
   },
   {
-    question: "Where does the data come from?",
-    answer: "Our tools use official sources including Dubai Land Department (DLD) transaction data and RERA rental index information.",
+    question: "Why do inputs matter so much?",
+    answer: "Because scenario accuracy depends on the assumptions you provide.",
   },
   {
-    question: "Can I rely on these tools for investment decisions?",
-    answer: "These tools provide decision support but should not replace professional advice. We recommend consulting with our advisory team for significant investment decisions.",
+    question: "Can I save my results?",
+    answer: "If you're logged in, results can be saved where the dashboard supports it.",
   },
   {
-    question: "Do you store my search data?",
-    answer: "We store session data to improve your experience. Personal data handling is covered in our privacy policy.",
+    question: "Can I compare multiple projects?",
+    answer: "Yes—use the comparison tools and select multiple entries.",
   },
   {
-    question: "Are the AI recommendations biased towards certain properties?",
-    answer: "Our AI tools are designed to be objective and use standardized criteria. Recommendations are based on your inputs and market data, not sponsored listings.",
+    question: "Do the tools work for all Emirates?",
+    answer: "Tools are structured to be location-agnostic. Available data modules may vary by dataset coverage.",
   },
   {
-    question: "Can I export reports from these tools?",
-    answer: "Some tools offer export functionality for registered users. PDF reports are available for property evaluations and mortgage calculations.",
+    question: "Can a broker generate a client PDF?",
+    answer: "Where the feature exists, the platform can structure a client snapshot report.",
   },
   {
-    question: "How often is the data updated?",
-    answer: "Market data is updated regularly from official sources. Frequency varies by data type — transaction data is typically updated monthly.",
+    question: "Can I request a custom tool?",
+    answer: "Yes—submit a request under Concierge or Support.",
   },
 ];
 
@@ -130,14 +125,15 @@ const AITools = () => {
   return (
     <>
       <SEOHead
-        title="AI Calculators & Tools | JBJ Global Real Estate"
-        description="Decision support tools powered by AI. Property valuation, mortgage calculations, rental analysis, and personalized recommendations."
+        title="AI Tools & Calculators | JBJ Global Real Estate"
+        description="Clarity-first tools that support decision-making through structured inputs, transparent outputs, and consistent formatting."
         canonicalPath="/services/ai-tools"
       />
 
       {/* HERO SECTION */}
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-black">
+          {/* Video placeholder - Tools Built for Clarity */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
         </div>
@@ -160,11 +156,11 @@ const AITools = () => {
             </div>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-[-0.02em]">
-              AI Calculators & Tools
+              AI Tools & Calculators
             </h1>
             
             <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-              Decision support tools designed for clarity — using structured inputs and transparent outputs.
+              Clarity-first tools that support decision-making through structured inputs, transparent outputs, and consistent formatting.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -172,7 +168,7 @@ const AITools = () => {
                 Open Tools
               </PremiumHeroButton>
               <PremiumHeroButton href="#how-it-works">
-                How it Works
+                How It Works
               </PremiumHeroButton>
             </div>
           </motion.div>
@@ -200,11 +196,14 @@ const AITools = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Tools Library
             </motion.h2>
+            <motion.p variants={fadeInUp} className="text-zinc-600 text-center max-w-3xl mx-auto mb-12">
+              Select a tool below. Each tool is designed to help you structure decisions, compare options, and understand trade-offs—without relying on vague assumptions.
+            </motion.p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
               {tools.map((tool, index) => (
                 <motion.div key={index} variants={fadeInUp}>
@@ -234,7 +233,7 @@ const AITools = () => {
         </div>
       </section>
 
-      {/* DATA TRANSPARENCY */}
+      {/* HOW IT WORKS */}
       <section id="how-it-works" className="bg-black py-20">
         <div className="jj-layer-2">
           <motion.div
@@ -242,36 +241,43 @@ const AITools = () => {
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
-            className="max-w-4xl mx-auto"
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Data Transparency
+              How It Works
             </motion.h2>
-            <motion.div variants={fadeInUp} className="jj-card-inner">
-              <div className="flex items-center gap-4 mb-6">
-                <Shield className="w-8 h-8 text-gold" />
-                <h3 className="text-xl font-semibold text-black">Our Data Sources</h3>
+            <div className="max-w-3xl mx-auto">
+              <div className="relative">
+                <div className="absolute left-6 top-0 bottom-0 w-px bg-gold/30 hidden md:block" />
+                <div className="space-y-6">
+                  {howItWorks.map((step, index) => (
+                    <motion.div
+                      key={index}
+                      variants={fadeInUp}
+                      className="flex items-center gap-6"
+                    >
+                      <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center shrink-0 z-10 border-2 border-gold">
+                        <span className="text-gold font-bold">{step.step}</span>
+                      </div>
+                      <div className="flex-1 jj-card-inner !p-4">
+                        <div className="flex items-center gap-4">
+                          <step.icon className="w-6 h-6 text-gold shrink-0" />
+                          <span className="font-semibold text-black">{step.title}</span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
               </div>
-              <ul className="space-y-4 mb-6">
-                {dataTransparency.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-zinc-700">
-                    <div className="w-5 h-5 rounded-full bg-gold/20 flex items-center justify-center shrink-0 mt-0.5">
-                      <span className="text-gold text-xs">✓</span>
-                    </div>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* AI DISCLOSURE */}
+      {/* TRANSPARENCY & RESPONSIBLE USE */}
       <section className="bg-black py-20">
         <div className="jj-layer-2">
           <motion.div
@@ -286,10 +292,15 @@ const AITools = () => {
               className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              AI Disclosure
+              Transparency & Responsible Use
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <AIDisclosure variant="inline" mode="public" />
+              <div className="flex items-start gap-4">
+                <Shield className="w-8 h-8 text-gold shrink-0" />
+                <p className="text-zinc-700 text-lg leading-relaxed">
+                  Outputs are generated from available inputs and structured logic. Where official datasets are referenced in the platform, sources are shown inside the relevant report modules.
+                </p>
+              </div>
             </motion.div>
           </motion.div>
         </div>
@@ -352,17 +363,17 @@ const AITools = () => {
               className="text-3xl md:text-4xl font-bold text-black mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Start Using Our Tools
+              Use tools built for clarity
             </motion.h2>
             <motion.p variants={fadeInUp} className="text-zinc-600 mb-8">
-              Make informed decisions with AI-powered insights.
+              Open the library, select a tool, and structure your decision in minutes.
             </motion.p>
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button variant="primary" size="lg" asChild>
-                <Link to="/ai-hub">
+                <a href="#tools-library">
                   <Brain className="w-4 h-4 mr-2" />
-                  Explore AI Hub
-                </Link>
+                  Open Tools
+                </a>
               </Button>
               <Button variant="outline" size="lg" asChild>
                 <Link to="/contact">
