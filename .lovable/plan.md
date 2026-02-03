@@ -1,392 +1,247 @@
 
 
-# Comprehensive Fix Plan: Footer, Header, Chat, Digital Card, and Marketing Hub
-
-This plan addresses all the UI/UX issues and new feature requests across the footer, header, chat support, digital business card, and the new marketing campaign hub.
-
----
-
-## Part 1: Footer & Header Fixes
-
-### 1.1 Footer Column Alignment (Desktop)
-
-**Issue**: Services and Broker Hub sections are not aligned with Market Intelligence and Careers on the same horizontal line.
-
-**Files to modify**:
-- `src/components/Footer.tsx`
-
-**Changes**:
-- Restructure the 4-column grid layout to ensure divider lines align:
-  - Column 1: Properties + Services
-  - Column 2: Investor Hub + Broker Hub (adjusted height)
-  - Column 3: Guides + Market Intelligence
-  - Column 4: About + Careers
-- Use identical `min-h-[]` values for the top section of each column so the dividers (gold borders) align horizontally
-- Add consistent padding/margin calculations to ensure matching vertical positions
-
-### 1.2 Footer Mobile Readability
-
-**Issue**: Navigation fields not readable on phone view.
-
-**Changes**:
-- Increase minimum font size from `text-[10px]` to `text-xs` on mobile
-- Add more padding to clickable areas for touch accessibility
-- Ensure sufficient contrast for all text elements
-
-### 1.3 Header Divider Alignment (Investor Hub & Other Dropdowns)
-
-**Issue**: In Investor Hub dropdown, the dividers below "Dashboard & Portfolio" and "Investor Tools" columns are not on the same line.
-
-**Files to modify**:
-- `src/components/header/MegaMenuInvestorHub.tsx`
-- `src/components/header/mega-menu-primitives.tsx`
-
-**Changes**:
-- Add consistent `min-h-[]` containers for each column section
-- Ensure `MegaMenuSectionTitle` components in adjacent columns have matching heights
-- Apply the same fix pattern to all affected mega menus:
-  - MegaMenuBuy
-  - MegaMenuRent
-  - MegaMenuServices
-  - MegaMenuBrokerHub
-  - MegaMenuProjects
-  - MegaMenuDevelopers
-
-### 1.4 Mobile Hamburger Menu Logo
-
-**Issue**: Need to use the same logo as chat support in the mobile menu.
-
-**File to modify**:
-- `src/components/GlobalHeader.tsx`
-
-**Changes**:
-- Replace `jbjMonogramTransparent` with `jbjMonogramLightBg` (the chat support logo) in the `SheetContent` header section
-- Import the correct asset: `import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png"`
+# Comprehensive Full Audit Report
+## Security, Features, and Incomplete Tasks Analysis
 
 ---
 
-## Part 2: Chat Support Enhancements
+## PART 1: SECURITY VULNERABILITIES & RISKS
 
-### 2.1 Move Tip Higher
+### 1.1 CRITICAL Security Issues (Requires Immediate Attention)
 
-**Issue**: The tip text at the bottom of `ChatWelcome.tsx` is cropped.
+| ID | Issue | Location | Risk Level | Status |
+|----|-------|----------|------------|--------|
+| SEC-01 | **Landlord Contact Information Exposed** | `rental_listings` table | **CRITICAL** | ❌ UNRESOLVED |
+| | RLS policy `Anyone can view live rental listings` exposes landlord_name, landlord_email, landlord_phone, landlord_nationality for all live listings. Scammers can harvest this PII. | | | |
+| SEC-02 | **Chat History Cross-Session Risk** | `chat_history` table | **MEDIUM** | ⚠️ Needs Review |
+| | Multiple overlapping SELECT policies may allow session ID reuse or cross-session access if IDs are predictable. | | | |
 
-**File to modify**:
-- `src/components/chat/ChatWelcome.tsx`
+### 1.2 Security Features Implemented ✅
 
-**Changes**:
-- Move the tip section above the action buttons OR reduce bottom padding
-- Change from `mb-4` to `mt-4` if repositioned to top
-- Alternatively, reduce padding in the parent container to ensure visibility
-
-### 2.2 Remove Duplicate Form (Conversational AI Collection)
-
-**Issue**: User sees a full form after clicking "Chat with Our Team" instead of conversational collection.
-
-**Files to modify**:
-- `src/components/AIChatWidget.tsx`
-- `src/components/chat/types.ts`
-- New file: `src/components/chat/ChatConversationalCollect.tsx`
-
-**Changes**:
-1. Create new component `ChatConversationalCollect.tsx` that:
-   - Shows AI asking "May I get your full name?" → waits for response
-   - Then "May I get your email address?" → waits for response
-   - Then "May I get your phone number?" → waits for response
-   - Validates each step before proceeding
-   - Uses the existing agent photo/name
-
-2. Update `ChatStep` type to include `'conversational_collect'`
-
-3. Modify `AIChatWidget.tsx` flow:
-   - After `check_email` (for new users), go to `conversational_collect` instead of `collect_info`
-   - Remove the full form step for new users
-   - Keep the form as fallback option ("Prefer to fill a form instead?")
-
-### 2.3 Smart AI Qualification Flow
-
-**Issue**: Chat should qualify users based on their service selection with premium, professional questions.
-
-**Files to modify**:
-- `src/components/chat/ChatServiceSelector.tsx`
-- `src/components/chat/types.ts`
-- New: `supabase/functions/ai-chat-support/index.ts` (update system prompt)
-
-**Changes**:
-1. Update AI system prompt with qualification flow:
-   ```text
-   For "Buy Property" users, ask:
-   - "Are you currently located in Dubai?"
-   - "Have you invested in Dubai real estate before?"
-   - "What is your budget range?"
-   - "Which areas are you interested in?"
-   - "What property type are you looking for?"
-   - "When are you planning to make a decision?"
-   ```
-
-2. For "Careers" shortcut:
-   - Immediately show the CV submission form (`ChatCVSubmission`)
-   - Store submission in `hr_cv_submissions` table
-
-3. For "Complaint/Support":
-   - Redirect to ticket support system
-   - Create support ticket via AI with reference number
-   - Link to `/support/tickets` for formal ticket creation
-
-### 2.4 Chat Storage Security & Anti-Scam
-
-**Issue**: Messages need secure storage with proper anti-scam measures.
-
-**Database tables involved**:
-- `chat_conversations` (existing - stores full conversation)
-- `chat_history` (existing - individual message log)
-- `leads` (existing - contact details)
-
-**Changes**:
-1. All messages already stored in `chat_conversations.messages` (JSONB) with:
-   - `user_email`, `user_name`, `user_phone`
-   - Timestamps, feedback, ratings
-
-2. Add additional security fields (migration):
-   ```sql
-   ALTER TABLE chat_conversations ADD COLUMN IF NOT EXISTS ip_hash TEXT;
-   ALTER TABLE chat_conversations ADD COLUMN IF NOT EXISTS is_spam_flagged BOOLEAN DEFAULT false;
-   ALTER TABLE chat_conversations ADD COLUMN IF NOT EXISTS spam_score FLOAT;
-   ```
-
-3. Implement spam detection in AI edge function:
-   - Rate limiting per IP/email
-   - Pattern detection for spam content
-   - Flag suspicious conversations
-
-### 2.5 Chat Feedback Enhancement
-
-**Current state**: Feedback with star ratings exists in `ChatRating.tsx` and `ChatFeedback.tsx`
-
-**Confirmation**: The feedback system already stores:
-- `rating` (1-5 stars)
-- `rating_feedback` (text)
-- `feedback_type` (positive/neutral/negative)
-- `was_helpful`, `what_improve`, `how_heard_about_us`
-- `agent_behavior_rating`, `response_speed_rating`
-
-No changes needed - system is already comprehensive.
+| Feature | Status | Location |
+|---------|--------|----------|
+| SecurityShield (anti-scraping) | ✅ Working | `src/components/SecurityShield.tsx` |
+| Rate limiting on lead capture | ✅ Working | `check_lead_rate_limit_strict()` function |
+| PII Vault encryption | ✅ Working | Triggers on sensitive tables |
+| Admin role verification | ✅ Working | `has_role()` RPC function |
+| Podcast visibility admin toggle | ✅ Working | `src/components/admin/PodcastVisibilityToggle.tsx` |
+| Founder visibility admin toggle | ✅ Working | `src/components/admin/FounderVisibilityToggle.tsx` |
 
 ---
 
-## Part 3: Digital Business Card Responsiveness
+## PART 2: INCOMPLETE FEATURES (From All Previous Requests)
 
-### 3.1 Device-Responsive Layout
+### 2.1 Chat Support Enhancements
 
-**Issue**: Card shows phone view on desktop; should adapt to device size.
+| Task | Status | Details |
+|------|--------|---------|
+| Conversational AI Collection (Name → Email → Phone) | ⚠️ **PARTIALLY DONE** | Component created (`ChatConversationalCollect.tsx`) but **NOT INTEGRATED** into `AIChatWidget.tsx`. Step `'conversational_collect'` exists in types but no render case in the widget. |
+| Smart AI Qualification Flow | ❌ **NOT IMPLEMENTED** | AI should ask qualifying questions (budget, location, investment history) for buy property users. Not implemented in `ai-chat-support` edge function. |
+| Careers shortcut → CV Form | ⚠️ Partial | CV submission works but needs direct routing from chat shortcut. |
+| Support ticket creation via AI | ❌ **NOT IMPLEMENTED** | AI should be able to create support tickets with reference numbers. |
+| Chat tip position fix | ⚠️ **NEEDS VERIFICATION** | Moved in `ChatWelcome.tsx` but needs testing. |
 
-**File to modify**:
-- `src/pages/Card.tsx` or `src/components/DigitalBusinessCard.tsx`
+### 2.2 Marketing Campaign Hub
 
-**Changes**:
-1. Add responsive breakpoints:
-   - Mobile (<768px): Portrait card layout (current design)
-   - Tablet (768px-1024px): Wider card with two-column info
-   - Desktop (>1024px): Full-width premium layout with:
-     - Large hero photo on left
-     - Contact details center
-     - QR code and actions on right
-     - Background pattern/gradient
+| Task | Status | Details |
+|------|--------|---------|
+| Database tables | ❌ **NOT CREATED** | Tables `marketing_campaigns`, `newsletter_subscribers`, `marketing_templates` do not exist. |
+| Marketing Hub UI | ❌ **NOT CREATED** | No `/admin/MarketingHub` page exists. `src/pages/admin/` directory is empty. |
+| Campaign editor | ❌ **NOT CREATED** | No `src/components/marketing-hub/` directory exists. |
+| AI Content Assistant | ❌ **NOT CREATED** | No visual editing with AI prompts. |
+| WhatsApp/Email sending | ❌ **NOT CREATED** | No `send-campaign` edge function. |
 
-2. Use `useMediaQuery` hook or Tailwind responsive classes:
-   ```tsx
-   <div className="w-full max-w-[390px] md:max-w-[600px] lg:max-w-[900px] xl:max-w-full">
-   ```
+### 2.3 Homepage & UI Fixes
 
-3. Add device-specific styling:
-   - Desktop: `lg:flex lg:flex-row lg:items-center lg:gap-12`
-   - Tablet: `md:grid md:grid-cols-2`
-   - Mobile: Stack vertically (current)
+| Task | Status | Details |
+|------|--------|---------|
+| Homepage filter: sqm/sqft toggle | ❌ **NOT IMPLEMENTED** | `SearchModule.tsx` has no area size or currency filter. |
+| Homepage filter: Currency selector | ❌ **NOT IMPLEMENTED** | Only AED prices shown. |
+| Homepage filter: Full-width stretch | ⚠️ Needs verification | May need wider container. |
+| "Find Your Starting Point" mobile UI | ⚠️ **NEEDS IMPROVEMENT** | Cards use `text-[8px]` which is very small. Icons `w-3 h-3` are tiny on mobile. |
+| "How Can We Help" cards premium styling | ⚠️ Needs verification | |
+| Why Dubai video scenes replacement | ❌ **NOT DONE** | Videos exist in `src/assets/videos/` but user requested re-generation of Burj Khalifa (day-to-night) and Burj Al Arab (drone zoom in with beach). These require new video assets. |
+| Explore Services "Coming Soon" labels removal | ⚠️ Partial | `available: false` for "Facility Management" still shows disabled button. |
 
----
+### 2.4 Header & Footer Fixes
 
-## Part 4: Marketing Campaign Hub (New Feature)
+| Task | Status | Details |
+|------|--------|---------|
+| Header transparency on logo click | ✅ **DONE** | Fixed in `GlobalHeader.tsx` with route change listener. |
+| MegaMenu CTA button sizing | ⚠️ Partial | Some buttons fixed, need to verify all match rectangular style. |
+| Account dropdown sizing jitter | ⚠️ Partial | Added `min-h-[400px]` but user reports intermittent issue. |
+| Footer divider alignment | ⚠️ **NEEDS VERIFICATION** | Restructured columns but alignment verification needed. |
+| Footer mobile readability | ✅ **DONE** | Changed to `text-xs`. |
+| Mobile hamburger logo | ✅ **DONE** | Using `jbjMonogramLightBg`. |
 
-### 4.1 Database Schema
+### 2.5 Digital Business Card
 
-**New tables needed**:
+| Task | Status | Details |
+|------|--------|---------|
+| Responsive layout (phone/tablet/desktop) | ⚠️ **PARTIAL** | Updated `DigitalCard.tsx` with breakpoints but full desktop layout may need refinement. |
 
-```sql
--- Marketing campaigns table
-CREATE TABLE marketing_campaigns (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name TEXT NOT NULL,
-  description TEXT,
-  campaign_type TEXT CHECK (campaign_type IN ('email', 'whatsapp', 'social')),
-  status TEXT DEFAULT 'draft' CHECK (status IN ('draft', 'scheduled', 'sent', 'archived')),
-  content JSONB, -- Card content, images, brochure links
-  target_audience TEXT CHECK (target_audience IN ('all', 'newsletter', 'leads', 'custom')),
-  custom_recipients TEXT[], -- For custom targeting
-  scheduled_at TIMESTAMPTZ,
-  sent_at TIMESTAMPTZ,
-  created_by UUID REFERENCES auth.users(id),
-  created_at TIMESTAMPTZ DEFAULT now(),
-  updated_at TIMESTAMPTZ DEFAULT now(),
-  
-  -- Social media reuse
-  instagram_content JSONB,
-  facebook_content JSONB,
-  
-  -- Analytics
-  total_sent INTEGER DEFAULT 0,
-  total_opened INTEGER DEFAULT 0,
-  total_clicked INTEGER DEFAULT 0
-);
+### 2.6 Listing Extraction System
 
--- Newsletter subscribers (existing or new)
-CREATE TABLE IF NOT EXISTS newsletter_subscribers (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  email TEXT UNIQUE NOT NULL,
-  name TEXT,
-  subscribed_at TIMESTAMPTZ DEFAULT now(),
-  source TEXT DEFAULT 'website',
-  is_active BOOLEAN DEFAULT true
-);
+| Task | Status | Details |
+|------|--------|---------|
+| Page-data discovery (no Firecrawl) | ✅ **DONE** | `discover-all-projects` uses Gatsby JSON endpoints. |
+| Extraction regex fixes (USPs, amenities, etc.) | ⚠️ **NEEDS TESTING** | Updated patterns in `extract.ts` but user reports "Core Incomplete" still showing. |
+| Image URL repair (remove /x/1200x800/) | ✅ **DONE** | `repair-image-urls` function created. |
+| Full project detail page layout | ⚠️ **NEEDS COMPLETION** | Components created but need full integration: `ProjectBreadcrumb`, `FloorPlanGallery`, `CallToActionSection`, `NewsletterSection`. |
+| AI Audit for extraction | ❌ **NOT IMPLEMENTED** | No `audit-extraction` edge function created. |
 
--- Campaign templates
-CREATE TABLE marketing_templates (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name TEXT NOT NULL,
-  template_type TEXT,
-  content JSONB,
-  preview_image_url TEXT,
-  created_by UUID REFERENCES auth.users(id),
-  created_at TIMESTAMPTZ DEFAULT now()
-);
-```
+### 2.7 Project Detail Page Structure (Provident Mirroring)
 
-### 4.2 Marketing Hub UI
+| Task | Status | Details |
+|------|--------|---------|
+| Breadcrumb navigation | ⚠️ **CREATED** | `ProjectBreadcrumb.tsx` exists but needs integration verification. |
+| Floor plan gallery with thumbnails | ⚠️ **CREATED** | `FloorPlanGallery.tsx` exists. |
+| "Request a call back" CTA section | ⚠️ **CREATED** | `CallToActionSection.tsx` exists. |
+| "Stay in the loop" newsletter section | ⚠️ **CREATED** | `NewsletterSection.tsx` exists. |
+| FAQs section | ❌ **NOT VERIFIED** | Need to confirm extraction and display. |
+| Payment plan section with percentages | ❌ **NOT VERIFIED** | Need to confirm extraction and display. |
+| Location map with distances | ❌ **NOT VERIFIED** | Need to confirm extraction and display. |
 
-**New files**:
-- `src/pages/admin/MarketingHub.tsx`
-- `src/components/marketing-hub/CampaignEditor.tsx`
-- `src/components/marketing-hub/CampaignPreview.tsx`
-- `src/components/marketing-hub/RecipientSelector.tsx`
-- `src/components/marketing-hub/AIContentAssistant.tsx`
+### 2.8 Broker Hub
 
-**Features**:
-1. **Campaign List View**:
-   - Table showing all campaigns (draft, scheduled, sent)
-   - Quick actions: Edit, Preview, Send, Duplicate
-   - Analytics summary
+| Task | Status | Details |
+|------|--------|---------|
+| Video on hover (desktop) | ❌ **NOT IMPLEMENTED** | MegaMenuBrokerHub uses static image. User requested video on hover for broker section. |
+| Broker hero image replacement | ⚠️ **NEEDS ASSET** | Code references `broker-hub-hero.jpg` but asset may not exist. |
 
-2. **Campaign Editor**:
-   - Visual editor with drag-and-drop sections
-   - AI assistant panel for content generation
-   - File upload for brochures/videos
-   - Preview mode toggle
-   - Template save/load
+### 2.9 Admin & AI Integrations
 
-3. **Recipient Selector**:
-   - "Send to All" toggle
-   - Filter by source (newsletter, contact form, leads)
-   - Custom selection with checkboxes
-   - Import recipients option
-
-4. **AI Content Assistant**:
-   - Prompt input with file attachments
-   - Click-to-edit highlighted areas
-   - Color picker integration
-   - Generate button → Preview → Apply
-
-### 4.3 Integration with Existing AI Tools
-
-**File to modify**:
-- `src/components/design-studio/CrossToolIntegration.tsx`
-- `src/components/design-studio/index.ts`
-
-**Changes**:
-- Add Marketing Hub as an integration option
-- Connect with:
-  - Sara (Admin Assistant)
-  - AIWebDeveloperPersona
-  - Graphic Designer persona
-  - Video editing tools
+| Task | Status | Details |
+|------|--------|---------|
+| Sara admin assistant integration | ❌ **NOT INTEGRATED** | Marketing hub should integrate with Sara persona. |
+| AI Web Developer persona | ❌ **NOT CREATED** | No dedicated web dev AI persona. |
+| Graphic designer persona | ❌ **NOT CREATED** | No dedicated design AI persona. |
+| Cross-tool project saving | ❌ **NOT IMPLEMENTED** | No unified project save/load across AI tools. |
 
 ---
 
-## Part 5: Technical Implementation Details
+## PART 3: FIXES REQUIRED (Priority Order)
 
-### 5.1 Files to Create
+### Priority 1: CRITICAL Security Fixes
 
-| File | Purpose |
-|------|---------|
-| `src/components/chat/ChatConversationalCollect.tsx` | AI-guided info collection |
-| `src/pages/admin/MarketingHub.tsx` | Campaign management page |
-| `src/components/marketing-hub/CampaignEditor.tsx` | Visual campaign editor |
-| `src/components/marketing-hub/CampaignPreview.tsx` | Live preview component |
-| `src/components/marketing-hub/RecipientSelector.tsx` | Target audience selector |
-| `src/components/marketing-hub/AIContentAssistant.tsx` | AI-powered content help |
-| `supabase/functions/send-campaign/index.ts` | Campaign send edge function |
+1. **Fix landlord PII exposure in rental_listings**
+   - Create a `rental_listings_public` view that masks landlord contact info
+   - Or modify RLS to only show masked data publicly
+   - Migration required
 
-### 5.2 Files to Modify
+2. **Review chat_history RLS policies**
+   - Consolidate overlapping SELECT policies
+   - Ensure session IDs are cryptographically random
+   - Add explicit deny for cross-session access
 
-| File | Changes |
-|------|---------|
-| `src/components/Footer.tsx` | Column alignment, mobile readability |
-| `src/components/GlobalHeader.tsx` | Mobile menu logo |
-| `src/components/header/MegaMenuInvestorHub.tsx` | Divider alignment |
-| `src/components/header/mega-menu-primitives.tsx` | Consistent section heights |
-| `src/components/chat/ChatWelcome.tsx` | Move tip higher |
-| `src/components/AIChatWidget.tsx` | Conversational collection flow |
-| `src/components/chat/types.ts` | New step type |
-| `src/pages/Card.tsx` | Responsive layout |
-| `supabase/functions/ai-chat-support/index.ts` | Qualification prompts |
+### Priority 2: Complete Chat Conversational Flow
 
-### 5.3 Database Migrations
+3. **Integrate ChatConversationalCollect into AIChatWidget**
+   - Import component
+   - Add render case for `step === 'conversational_collect'`
+   - Update `handleEmailVerified` to use conversational flow instead of form
 
-1. **Chat security fields** - Add IP hash and spam detection columns
-2. **Marketing campaigns table** - Full schema creation
-3. **Newsletter subscribers** - If not existing
-4. **Marketing templates** - Reusable templates
+4. **Implement Smart Qualification in AI Chat**
+   - Update `ai-chat-support` edge function with qualification prompts
+   - Add location, budget, investment history questions
+
+### Priority 3: Marketing Hub
+
+5. **Create database tables**
+   - `marketing_campaigns`
+   - `newsletter_subscribers`
+   - `marketing_templates`
+
+6. **Create Marketing Hub UI**
+   - `/admin/marketing-hub` route
+   - Campaign list, editor, preview components
+   - AI content assistant
+
+### Priority 4: Homepage Fixes
+
+7. **Add sqm/sqft and currency to SearchModule**
+   - Area size filter with toggle
+   - Currency selector (AED/USD/EUR)
+
+8. **Improve "Find Your Starting Point" mobile**
+   - Increase text size from `text-[8px]` to `text-xs`
+   - Increase icon size
+   - Consider vertical layout on very small screens
+
+### Priority 5: Extraction & Detail Page
+
+9. **Test and verify extraction completeness**
+   - Run test extraction
+   - Verify all fields populate
+   - Fix any remaining regex issues
+
+10. **Complete project detail page integration**
+    - Verify all new components render correctly
+    - Test floor plan gallery
+    - Test CTA and newsletter sections
+
+### Priority 6: Video/Media Requests
+
+11. **Regenerate Why Dubai video scenes**
+    - Burj Khalifa: day-to-night transition with downtown skyline
+    - Burj Al Arab: drone zoom in with beach waves
+    - These require new video assets (cannot be done via code)
+
+12. **Add video hover to Broker Hub mega menu**
+    - Replace static image with video element
+    - Only on desktop
 
 ---
 
-## Part 6: Rollout Priority
+## PART 4: SUMMARY METRICS
 
-### Phase 1: Critical UI Fixes (Immediate)
-1. Footer column alignment
-2. Header divider alignment
-3. Mobile menu logo
-4. Chat tip positioning
-5. Digital card responsiveness
-
-### Phase 2: Chat Enhancements (High Priority)
-1. Conversational info collection
-2. Smart qualification flow
-3. Career form shortcut
-4. Ticket support creation
-
-### Phase 3: Marketing Hub (Medium Priority)
-1. Database schema
-2. Campaign list view
-3. Basic editor
-4. Send functionality
-
-### Phase 4: Advanced Features (Lower Priority)
-1. AI content assistant with visual editing
-2. Social media content generation
-3. Cross-tool integrations
-4. Analytics dashboard
+| Category | Total Items | Complete | Partial | Not Started |
+|----------|-------------|----------|---------|-------------|
+| Security Fixes | 2 | 0 | 1 | 1 |
+| Chat Enhancements | 5 | 0 | 3 | 2 |
+| Marketing Hub | 6 | 0 | 0 | 6 |
+| Homepage/UI | 7 | 1 | 4 | 2 |
+| Header/Footer | 7 | 3 | 4 | 0 |
+| Extraction System | 7 | 3 | 3 | 1 |
+| Project Detail | 7 | 0 | 5 | 2 |
+| Admin/AI Tools | 4 | 0 | 0 | 4 |
+| **TOTAL** | **45** | **7 (16%)** | **20 (44%)** | **18 (40%)** |
 
 ---
 
-## Summary
+## PART 5: NEXT ACTIONS
 
-This plan addresses all requested changes:
+I will implement fixes in the following order upon approval:
 
-| Category | Items Fixed |
-|----------|-------------|
-| Footer | Column alignment, mobile readability, divider consistency |
-| Header | Divider alignment, mobile logo, dropdown sizing |
-| Chat | Tip positioning, conversational collection, qualification, careers shortcut, ticket support |
-| Digital Card | Device-responsive layouts for phone/tablet/desktop |
-| Marketing Hub | Campaign creation, AI assistant, recipient targeting, template saving |
+**Batch 1 (Security + Chat)**
+- Fix rental_listings landlord PII exposure
+- Integrate ChatConversationalCollect into AIChatWidget
+- Add smart qualification to ai-chat-support
 
-All changes follow existing design patterns, use the approved UI tokens (champagne gradients, gold accents), and integrate with the current infrastructure (Supabase, Lovable AI, existing admin panels).
+**Batch 2 (Marketing Hub)**
+- Create database tables
+- Create MarketingHub page and components
+- Create send-campaign edge function
+
+**Batch 3 (Homepage + UI)**
+- Add sqm/sqft and currency to SearchModule
+- Improve Find Your Starting Point mobile sizing
+- Complete remaining header/footer fixes
+
+**Batch 4 (Extraction + Detail Page)**
+- Test and verify extraction fixes
+- Complete project detail page integration
+- Create AI audit function
+
+---
+
+## Questions for Clarification
+
+1. **Video Assets**: The Burj Khalifa day-to-night and Burj Al Arab drone videos require actual video production. Do you have these videos ready to upload, or should I use stock footage alternatives?
+
+2. **Marketing Hub Priority**: Should the Marketing Hub be a dedicated admin page (`/admin/marketing-hub`) or integrated into the existing Admin dashboard?
+
+3. **Newsletter Subscribers**: Should the newsletter signup from the project detail page also be gated (require email verification) or allow simple subscription?
+
+4. **Broker Hub Video**: Do you have a specific video clip for the broker mega menu hover, or should I use one of the existing `broker-*.mp4` files?
 
