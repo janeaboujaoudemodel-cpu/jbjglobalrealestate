@@ -1,16 +1,14 @@
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Star,
   Quote,
   Video,
-  CheckCircle2,
   HelpCircle,
-  Phone,
   Send,
-  MessageSquare,
   User,
-  Building2,
+  Shield,
+  Eye,
+  Lock,
 } from "lucide-react";
 import Footer from "@/components/Footer";
 import DirectContactCTA from "@/components/DirectContactCTA";
@@ -23,11 +21,19 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -44,36 +50,100 @@ const staggerContainer = {
   },
 };
 
-const featuredTestimonials = [
-  {
-    name: "Ahmed K.",
-    role: "First-Time Buyer",
-    location: "Dubai Marina",
-    content: "The buying process was incredibly smooth. The team guided me through every step, from initial viewing to handover. Professional and responsive throughout.",
-    rating: 5,
-  },
-  {
-    name: "Sarah M.",
-    role: "Investor",
-    location: "Downtown Dubai",
-    content: "As an overseas investor, I needed a team I could trust. JBJ provided transparent advice, regular updates, and handled the entire transaction remotely.",
-    rating: 5,
-  },
-  {
-    name: "Michael R.",
-    role: "Landlord",
-    location: "JVC",
-    content: "Property management has been excellent. Monthly reports, quick tenant coordination, and proactive maintenance handling. My property is in good hands.",
-    rating: 5,
-  },
-  {
-    name: "Fatima A.",
-    role: "Seller",
-    location: "Palm Jumeirah",
-    content: "Sold my apartment above asking price within 3 weeks. The marketing, photography, and negotiation were all top-tier. Highly recommend.",
-    rating: 5,
-  },
+const serviceTypes = [
+  "Buying",
+  "Selling",
+  "Renting",
+  "Investing",
+  "Property Management",
+  "Advisory",
+  "Broker Partnership",
+  "Other",
 ];
+
+// Testimonials organized by category
+const testimonialsByCategory = {
+  buyers: [
+    {
+      name: "Ahmed K.",
+      role: "First-Time Buyer",
+      location: "Dubai Marina",
+      content: "The buying process was incredibly smooth. The team guided me through every step, from initial viewing to handover. Professional and responsive throughout.",
+      rating: 5,
+    },
+    {
+      name: "Verified Client",
+      role: "Buyer",
+      location: "Downtown Dubai",
+      content: "Found my dream apartment with JBJ's help. The attention to detail and understanding of my requirements made all the difference.",
+      rating: 5,
+    },
+  ],
+  sellers: [
+    {
+      name: "Fatima A.",
+      role: "Property Seller",
+      location: "Palm Jumeirah",
+      content: "Sold my apartment above asking price within 3 weeks. The marketing, photography, and negotiation were all top-tier. Highly recommend.",
+      rating: 5,
+    },
+    {
+      name: "Verified Client",
+      role: "Seller",
+      location: "Business Bay",
+      content: "Professional valuation and marketing strategy led to a quick sale at an excellent price. Very satisfied with the entire process.",
+      rating: 5,
+    },
+  ],
+  investors: [
+    {
+      name: "Sarah M.",
+      role: "International Investor",
+      location: "Dubai",
+      content: "As an overseas investor, I needed a team I could trust. JBJ provided transparent advice, regular updates, and handled the entire transaction remotely.",
+      rating: 5,
+    },
+    {
+      name: "Verified Client",
+      role: "Portfolio Investor",
+      location: "UAE",
+      content: "Excellent market insights and ROI analysis. The team helped me build a diverse property portfolio aligned with my investment goals.",
+      rating: 5,
+    },
+  ],
+  landlords: [
+    {
+      name: "Michael R.",
+      role: "Landlord",
+      location: "JVC",
+      content: "Property management has been excellent. Monthly reports, quick tenant coordination, and proactive maintenance handling. My property is in good hands.",
+      rating: 5,
+    },
+    {
+      name: "Verified Client",
+      role: "Property Owner",
+      location: "Dubai Hills",
+      content: "Reliable tenant screening and hassle-free rental management. Highly recommend their landlord services.",
+      rating: 5,
+    },
+  ],
+  partners: [
+    {
+      name: "Verified Partner",
+      role: "Broker Partner",
+      location: "Dubai",
+      content: "Working with JBJ has elevated our service standards. The training, support, and collaborative approach have been invaluable.",
+      rating: 5,
+    },
+    {
+      name: "Verified Client",
+      role: "Agency Partner",
+      location: "UAE",
+      content: "Professional partnership with clear communication and mutual respect. A pleasure to collaborate with.",
+      rating: 5,
+    },
+  ],
+};
 
 const videoTestimonials = [
   { id: 1, title: "Investment Success Story", client: "International Investor", placeholder: true },
@@ -83,28 +153,28 @@ const videoTestimonials = [
 
 const faqData = [
   {
-    question: "Can I submit a testimonial anonymously?",
-    answer: "Yes. You can choose to display your testimonial with your first name only or as 'Verified Client'.",
+    question: "Can I submit anonymously?",
+    answer: "You can request anonymization. Verification email is still required.",
   },
   {
-    question: "Will my testimonial be edited?",
-    answer: "We may edit for clarity or length while preserving your message. You'll be contacted if significant changes are needed.",
+    question: "Will you edit my words?",
+    answer: "Only for clarity and removal of sensitive/private information, not meaning.",
   },
   {
-    question: "Can I include photos or videos?",
-    answer: "Yes! Video testimonials are especially valued. Contact us to arrange a video recording session.",
+    question: "Do you publish every testimonial?",
+    answer: "We publish verified, relevant testimonials that meet quality and privacy standards.",
   },
   {
-    question: "How long before my testimonial appears?",
-    answer: "Testimonials are reviewed within 5 business days. Approved submissions appear on our website shortly after.",
+    question: "Can I remove my testimonial later?",
+    answer: "Yes, request removal via the Happiness Center.",
   },
   {
-    question: "Can I update or remove my testimonial?",
-    answer: "Yes. Contact us anytime to update or remove your testimonial from our website.",
+    question: "Do you accept broker partner testimonials?",
+    answer: "Yes—those appear under Brokers & Partners.",
   },
   {
-    question: "Do I need to be a current client?",
-    answer: "We welcome testimonials from both current and past clients who have completed transactions with JBJ.",
+    question: "Can I submit a video testimonial?",
+    answer: "Yes—submit a request and our team will coordinate.",
   },
 ];
 
@@ -112,40 +182,83 @@ const Testimonials = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    transactionType: "",
+    serviceType: "",
     testimonial: "",
+    rating: "",
     consentToPublish: false,
-    anonymous: false,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.consentToPublish) {
-      toast.error("Please consent to publishing your testimonial");
+      toast.error("Please confirm your consent to publish the testimonial");
+      return;
+    }
+    if (!formData.email || !formData.testimonial) {
+      toast.error("Please fill in required fields");
       return;
     }
     toast.success("Thank you! Your testimonial has been submitted for review.");
     setFormData({
       name: "",
       email: "",
-      transactionType: "",
+      serviceType: "",
       testimonial: "",
+      rating: "",
       consentToPublish: false,
-      anonymous: false,
     });
   };
+
+  const renderTestimonialCard = (testimonial: typeof testimonialsByCategory.buyers[0], index: number) => (
+    <motion.div key={index} variants={fadeInUp}>
+      <Card className="jj-card-inner h-full">
+        <CardContent className="p-6">
+          <Quote className="w-8 h-8 text-gold/30 mb-4" />
+          <p className="text-zinc-700 mb-6 italic">
+            "{testimonial.content}"
+          </p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
+                <User className="w-5 h-5 text-gold" />
+              </div>
+              <div>
+                <p className="font-semibold text-black">{testimonial.name}</p>
+                <p className="text-sm text-zinc-500">{testimonial.role} • {testimonial.location}</p>
+              </div>
+            </div>
+            <div className="flex gap-1">
+              {[...Array(testimonial.rating)].map((_, i) => (
+                <Star key={i} className="w-4 h-4 fill-gold text-gold" />
+              ))}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
 
   return (
     <>
       <SEOHead
-        title="Client Testimonials | JBJ Global Real Estate"
-        description="Verified client feedback and success stories from property transactions in Dubai. Read real experiences from buyers, sellers, landlords, and investors."
+        title="Testimonials | JBJ Global Real Estate"
+        description="Real feedback, presented with premium formatting and privacy respect—because trust is built with receipts, not hype."
         canonicalPath="/services/testimonials"
       />
 
       {/* HERO SECTION */}
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-black">
+          {/* Video placeholder */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
+                <Star className="w-12 h-12 text-gold/60" />
+              </div>
+              <p className="text-gold/60 text-sm tracking-widest uppercase">Client Stories</p>
+              <p className="text-zinc-500 text-xs mt-2">Video placeholder only</p>
+            </div>
+          </div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
         </div>
@@ -172,7 +285,7 @@ const Testimonials = () => {
             </h1>
             
             <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-              Verified client feedback and outcomes — presented with clarity and respect for privacy.
+              Real feedback, presented with premium formatting and privacy respect—because trust is built with receipts, not hype.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -180,7 +293,7 @@ const Testimonials = () => {
                 Submit a Testimonial
               </PremiumHeroButton>
               <PremiumHeroButton href="#featured">
-                Read Stories
+                Read Client Stories
               </PremiumHeroButton>
             </div>
           </motion.div>
@@ -197,7 +310,7 @@ const Testimonials = () => {
         </motion.div>
       </section>
 
-      {/* FEATURED TESTIMONIALS */}
+      {/* FEATURED TESTIMONIALS INTRO */}
       <section id="featured" className="bg-black py-20">
         <div className="jj-layer-2">
           <motion.div
@@ -208,41 +321,85 @@ const Testimonials = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-6"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Featured Testimonials
             </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-              {featuredTestimonials.map((testimonial, index) => (
-                <motion.div key={index} variants={fadeInUp}>
-                  <Card className="jj-card-inner h-full">
-                    <CardContent className="p-6">
-                      <Quote className="w-8 h-8 text-gold/30 mb-4" />
-                      <p className="text-zinc-700 mb-6 italic">
-                        "{testimonial.content}"
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
-                            <User className="w-5 h-5 text-gold" />
-                          </div>
-                          <div>
-                            <p className="font-semibold text-black">{testimonial.name}</p>
-                            <p className="text-sm text-zinc-500">{testimonial.role} • {testimonial.location}</p>
-                          </div>
-                        </div>
-                        <div className="flex gap-1">
-                          {[...Array(testimonial.rating)].map((_, i) => (
-                            <Star key={i} className="w-4 h-4 fill-gold text-gold" />
-                          ))}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
+            <motion.p
+              variants={fadeInUp}
+              className="text-zinc-600 text-center max-w-3xl mx-auto mb-12"
+            >
+              A selection of verified client experiences across buying, selling, rentals, and advisory support. Testimonials may be anonymized upon request.
+            </motion.p>
+
+            {/* Category Tabs */}
+            <motion.div variants={fadeInUp}>
+              <Tabs defaultValue="buyers" className="max-w-5xl mx-auto">
+                <TabsList className="w-full flex flex-wrap justify-center gap-2 bg-transparent mb-8">
+                  <TabsTrigger 
+                    value="buyers" 
+                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] text-black data-[state=active]:bg-black data-[state=active]:text-gold data-[state=active]:border-gold"
+                  >
+                    Buyers
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="sellers"
+                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] text-black data-[state=active]:bg-black data-[state=active]:text-gold data-[state=active]:border-gold"
+                  >
+                    Sellers
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="investors"
+                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] text-black data-[state=active]:bg-black data-[state=active]:text-gold data-[state=active]:border-gold"
+                  >
+                    Investors
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="landlords"
+                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] text-black data-[state=active]:bg-black data-[state=active]:text-gold data-[state=active]:border-gold"
+                  >
+                    Landlords
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="partners"
+                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] text-black data-[state=active]:bg-black data-[state=active]:text-gold data-[state=active]:border-gold"
+                  >
+                    Brokers & Partners
+                  </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="buyers">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {testimonialsByCategory.buyers.map((t, i) => renderTestimonialCard(t, i))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="sellers">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {testimonialsByCategory.sellers.map((t, i) => renderTestimonialCard(t, i))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="investors">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {testimonialsByCategory.investors.map((t, i) => renderTestimonialCard(t, i))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="landlords">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {testimonialsByCategory.landlords.map((t, i) => renderTestimonialCard(t, i))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="partners">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {testimonialsByCategory.partners.map((t, i) => renderTestimonialCard(t, i))}
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -258,11 +415,17 @@ const Testimonials = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-6"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Video Testimonials
             </motion.h2>
+            <motion.p
+              variants={fadeInUp}
+              className="text-zinc-600 text-center max-w-2xl mx-auto mb-12"
+            >
+              Video testimonials appear here.
+            </motion.p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
               {videoTestimonials.map((video, index) => (
                 <motion.div key={index} variants={fadeInUp}>
@@ -300,83 +463,95 @@ const Testimonials = () => {
               className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Share Your Experience
+              Submit a Testimonial
             </motion.h2>
             <motion.div variants={fadeInUp}>
-              <Card className="jj-card-inner border-none">
+              <Card className="jj-card-inner border-2 border-gold/30">
                 <CardContent className="p-6">
                   <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="name" className="text-black">Name</Label>
-                        <Input
-                          id="name"
-                          value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          placeholder="Your name (optional)"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="email" className="text-black">Email *</Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          required
-                          placeholder="your@email.com"
-                        />
-                      </div>
-                    </div>
-
                     <div className="space-y-2">
-                      <Label htmlFor="transactionType" className="text-black">Transaction Type</Label>
+                      <Label htmlFor="name" className="text-black">Full Name (optional if anonymized)</Label>
                       <Input
-                        id="transactionType"
-                        value={formData.transactionType}
-                        onChange={(e) => setFormData({ ...formData, transactionType: e.target.value })}
-                        placeholder="e.g., Buying, Selling, Renting, Investing"
+                        id="name"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        placeholder="Your name"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="testimonial" className="text-black">Your Testimonial *</Label>
+                      <Label htmlFor="email" className="text-black">Email (required for verification, not public) *</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        required
+                        placeholder="your@email.com"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="serviceType" className="text-black">Service Type</Label>
+                      <Select
+                        value={formData.serviceType}
+                        onValueChange={(value) => setFormData({ ...formData, serviceType: value })}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select service type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {serviceTypes.map((type) => (
+                            <SelectItem key={type} value={type.toLowerCase().replace(/\s+/g, "-")}>
+                              {type}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="testimonial" className="text-black">Testimonial *</Label>
                       <Textarea
                         id="testimonial"
                         value={formData.testimonial}
                         onChange={(e) => setFormData({ ...formData, testimonial: e.target.value })}
                         required
-                        placeholder="Share your experience working with JBJ..."
+                        placeholder="Share your experience working with JBJ Global Real Estate..."
                         rows={5}
                       />
                     </div>
 
-                    <div className="space-y-4">
-                      <div className="flex items-start gap-3">
-                        <Checkbox
-                          id="anonymous"
-                          checked={formData.anonymous}
-                          onCheckedChange={(checked) => 
-                            setFormData({ ...formData, anonymous: checked as boolean })
-                          }
-                        />
-                        <Label htmlFor="anonymous" className="text-sm text-zinc-600">
-                          Display anonymously (show as "Verified Client")
-                        </Label>
-                      </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="rating" className="text-black">Rating (optional)</Label>
+                      <Select
+                        value={formData.rating}
+                        onValueChange={(value) => setFormData({ ...formData, rating: value })}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select rating" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="5">⭐⭐⭐⭐⭐ (5 Stars)</SelectItem>
+                          <SelectItem value="4">⭐⭐⭐⭐ (4 Stars)</SelectItem>
+                          <SelectItem value="3">⭐⭐⭐ (3 Stars)</SelectItem>
+                          <SelectItem value="2">⭐⭐ (2 Stars)</SelectItem>
+                          <SelectItem value="1">⭐ (1 Star)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-                      <div className="flex items-start gap-3">
-                        <Checkbox
-                          id="consent"
-                          checked={formData.consentToPublish}
-                          onCheckedChange={(checked) => 
-                            setFormData({ ...formData, consentToPublish: checked as boolean })
-                          }
-                        />
-                        <Label htmlFor="consent" className="text-sm text-zinc-600">
-                          I consent to having my testimonial published on the JBJ website and marketing materials *
-                        </Label>
-                      </div>
+                    <div className="flex items-start gap-3 p-4 rounded-xl bg-black/5 border border-gold/20">
+                      <Checkbox
+                        id="consent"
+                        checked={formData.consentToPublish}
+                        onCheckedChange={(checked) => 
+                          setFormData({ ...formData, consentToPublish: checked as boolean })
+                        }
+                      />
+                      <Label htmlFor="consent" className="text-sm text-zinc-700 leading-relaxed">
+                        I confirm this testimonial reflects my genuine experience and I allow JBJ Global Real Estate to publish it on the website. I understand personal details can be anonymized upon request. *
+                      </Label>
                     </div>
 
                     <Button type="submit" variant="primary" size="lg" className="w-full">
@@ -386,6 +561,39 @@ const Testimonials = () => {
                   </form>
                 </CardContent>
               </Card>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* PRIVACY & PUBLISHING STANDARD */}
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="max-w-4xl mx-auto"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              Privacy & Publishing Standard
+            </motion.h2>
+            <motion.div variants={fadeInUp} className="jj-card-inner">
+              <div className="flex items-start gap-4">
+                <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center shrink-0">
+                  <Lock className="w-7 h-7 text-gold" />
+                </div>
+                <div>
+                  <p className="text-zinc-700 leading-relaxed">
+                    We verify submissions for authenticity and remove sensitive data. If you request anonymization, your testimonial can be published without identifying details.
+                  </p>
+                </div>
+              </div>
             </motion.div>
           </motion.div>
         </div>
@@ -414,15 +622,12 @@ const Testimonials = () => {
                   <AccordionItem
                     key={index}
                     value={`item-${index}`}
-                    className="jj-card-inner border-none"
+                    className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] overflow-hidden"
                   >
-                    <AccordionTrigger className="text-left text-black hover:text-gold">
-                      <div className="flex items-center gap-3">
-                        <HelpCircle className="w-5 h-5 text-gold shrink-0" />
-                        {faq.question}
-                      </div>
+                    <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
+                      <span className="text-black font-medium">{faq.question}</span>
                     </AccordionTrigger>
-                    <AccordionContent className="text-zinc-600 pl-8">
+                    <AccordionContent className="px-6 pb-4 text-zinc-600">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -440,33 +645,29 @@ const Testimonials = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            variants={staggerContainer}
-            className="text-center max-w-3xl mx-auto"
+            variants={fadeInUp}
+            className="max-w-3xl mx-auto text-center"
           >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black mb-4"
-              style={{ fontFamily: "Playfair Display, serif" }}
-            >
-              Ready to Share Your Story?
-            </motion.h2>
-            <motion.p variants={fadeInUp} className="text-zinc-600 mb-8">
-              Your feedback helps us improve and helps others make informed decisions.
-            </motion.p>
-            <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="primary" size="lg" asChild>
-                <a href="#submit-testimonial">
-                  <MessageSquare className="w-4 h-4 mr-2" />
-                  Submit Testimonial
-                </a>
-              </Button>
-              <Button variant="outline" size="lg" asChild>
-                <Link to="/contact">
-                  <Phone className="w-4 h-4 mr-2" />
-                  Contact Us
-                </Link>
-              </Button>
-            </motion.div>
+            <div className="jj-card-inner border-2 border-gold/30">
+              <Star className="w-12 h-12 text-gold mx-auto mb-6" />
+              <h2
+                className="text-3xl md:text-4xl font-bold text-black mb-4"
+                style={{ fontFamily: "Playfair Display, serif" }}
+              >
+                Share Your Experience
+              </h2>
+              <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
+                Submit a testimonial and help future clients choose with confidence.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <PremiumHeroButton href="#submit-testimonial">
+                  Submit a Testimonial
+                </PremiumHeroButton>
+                <PremiumHeroButton href="/contact?type=support">
+                  Contact Support
+                </PremiumHeroButton>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
