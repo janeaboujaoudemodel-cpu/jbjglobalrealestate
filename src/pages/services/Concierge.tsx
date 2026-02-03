@@ -7,12 +7,15 @@ import {
   HelpCircle,
   Phone,
   Calendar,
-  Truck,
-  Key,
-  Wrench,
+  Users,
   FileText,
-  Home,
-  Shield,
+  Bell,
+  Zap,
+  ArrowRight,
+  Play,
+  ClipboardList,
+  Send,
+  Eye,
 } from "lucide-react";
 import Footer from "@/components/Footer";
 import DirectContactCTA from "@/components/DirectContactCTA";
@@ -40,62 +43,58 @@ const staggerContainer = {
 };
 
 const exampleRequests = [
-  { icon: Key, text: "Key collection and handover coordination" },
-  { icon: Truck, text: "Move-in/move-out logistics support" },
-  { icon: Wrench, text: "Utility connection assistance (DEWA, internet)" },
-  { icon: FileText, text: "Document collection and delivery" },
-  { icon: Calendar, text: "Viewing scheduling and coordination" },
-  { icon: Home, text: "Property access arrangements" },
-  { icon: Shield, text: "Security deposit coordination" },
-  { icon: Sparkles, text: "Cleaning service scheduling" },
+  { icon: Calendar, text: "Schedule viewings efficiently (multiple properties, optimized timing)" },
+  { icon: FileText, text: "Coordinate documentation collection and submission readiness" },
+  { icon: Users, text: "Arrange trusted service provider introductions (as applicable)" },
+  { icon: Bell, text: "Manage appointment reminders and follow-up checkpoints" },
+  { icon: Zap, text: "Support post-purchase coordination requests (utilities guidance, access timing)" },
 ];
 
 const processSteps = [
-  { step: 1, title: "Submit your concierge request", icon: FileText },
-  { step: 2, title: "Request review and feasibility assessment", icon: CheckCircle2 },
-  { step: 3, title: "Coordination and scheduling", icon: Calendar },
-  { step: 4, title: "Execution and confirmation", icon: Sparkles },
+  { step: 1, title: "Submit your request with desired timeline", icon: Send },
+  { step: 2, title: "Confirm scope and required inputs", icon: ClipboardList },
+  { step: 3, title: "Execute coordination and track progress", icon: Eye },
+  { step: 4, title: "Share results and next actions clearly", icon: CheckCircle2 },
 ];
 
-const slaInfo = [
-  "Response within 24 business hours for standard requests",
-  "Priority handling for transaction-critical items",
-  "Clear communication on timing and expectations",
-  "No guaranteed same-day service unless pre-arranged",
+const serviceStandards = [
+  "Clear checkpoint updates",
+  "One request = one tracked workflow",
+  "Priority handling for time-sensitive requests (where feasible)",
 ];
 
 const faqData = [
   {
-    question: "What kind of requests can you handle?",
-    answer: "We handle a wide range of property-related convenience requests including key collection, utility coordination, document handling, viewing scheduling, and move-in/move-out logistics.",
+    question: "Is concierge free?",
+    answer: "Concierge support is scoped and delivered based on the request type.",
   },
   {
-    question: "Is there a cost for concierge services?",
-    answer: "Some concierge services are included as part of our advisory packages. Additional or standalone requests may incur service fees, which are communicated upfront.",
+    question: "Do you provide personal errands?",
+    answer: "Only requests related to the property journey and approved concierge scope.",
   },
   {
-    question: "How quickly can you respond to requests?",
-    answer: "Standard requests receive a response within 24 business hours. Transaction-critical items are prioritized. Same-day service is not guaranteed unless pre-arranged.",
+    question: "Can you coordinate with third-party providers?",
+    answer: "Yes, where appropriate, via introductions and scheduling.",
   },
   {
-    question: "Can you handle requests outside Dubai?",
-    answer: "Our primary service area is Dubai. For requests in other emirates or locations, please inquire about availability.",
+    question: "How fast do you respond?",
+    answer: "Response cadence depends on request volume and priority.",
   },
   {
-    question: "Do you provide 24/7 service?",
-    answer: "Concierge requests are handled during business hours. Emergency situations are assessed on a case-by-case basis.",
+    question: "Can I use concierge if I'm not a client yet?",
+    answer: "Yes, for qualified requests.",
   },
   {
-    question: "Can you represent me at a viewing?",
-    answer: "Yes, we can coordinate viewing attendance on your behalf for certain situations. This is typically arranged as part of our buyer or rental advisory services.",
+    question: "Do you guarantee outcomes?",
+    answer: "No. We guarantee structured coordination and clear progress reporting.",
   },
   {
-    question: "How do I track my request status?",
-    answer: "You'll receive updates via your preferred communication channel. Status updates are provided at key milestones.",
+    question: "Can I bundle multiple requests?",
+    answer: "Yes. We can structure them as a planned workflow.",
   },
   {
-    question: "Can I cancel or modify a request?",
-    answer: "Yes, requests can be modified or cancelled with reasonable notice. Some arrangements may have cancellation policies from third-party providers.",
+    question: "How do I submit?",
+    answer: "Use the concierge request form and select priority.",
   },
 ];
 
@@ -104,7 +103,7 @@ const Concierge = () => {
     <>
       <SEOHead
         title="Concierge Convenience Services | JBJ Global Real Estate"
-        description="Operational support for your property journey. Scheduling, coordination, and time-saving logistics handled by our concierge team."
+        description="Time-saving operational support around your property journey—appointments, coordination, and structured follow-through."
         canonicalPath="/services/concierge"
       />
 
@@ -137,7 +136,7 @@ const Concierge = () => {
             </h1>
             
             <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-              Operational help around your property journey — scheduling, coordination, and time-saving logistics.
+              Time-saving operational support around your property journey—appointments, coordination, and structured follow-through.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -145,9 +144,27 @@ const Concierge = () => {
                 Request Concierge Support
               </PremiumHeroButton>
               <PremiumHeroButton href="#example-requests">
-                Browse Options
+                Browse Services
               </PremiumHeroButton>
             </div>
+
+            {/* Video Placeholder */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              className="mt-12 max-w-xl mx-auto"
+            >
+              <div className="relative rounded-2xl overflow-hidden border border-gold/30 bg-black/50 backdrop-blur-sm aspect-video">
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <div className="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center mb-4 border border-gold/40">
+                    <Play className="w-6 h-6 text-gold ml-1" />
+                  </div>
+                  <p className="text-gold text-sm font-medium">A Premium Support Layer for Busy Clients</p>
+                  <p className="text-zinc-500 text-xs mt-1">Video Coming Soon</p>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
         
@@ -162,7 +179,33 @@ const Concierge = () => {
         </motion.div>
       </section>
 
-      {/* EXAMPLE REQUESTS */}
+      {/* WHAT CONCIERGE MEANS HERE */}
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="max-w-4xl mx-auto"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              What Concierge Means Here
+            </motion.h2>
+            <motion.div variants={fadeInUp} className="jj-card-inner text-center">
+              <p className="text-zinc-700 text-lg leading-relaxed">
+                Concierge support is designed for clients who want smoother execution—less chasing, more structure, and clearer outcomes.
+              </p>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* EXAMPLES OF CONCIERGE REQUESTS */}
       <section id="example-requests" className="bg-black py-20">
         <div className="jj-layer-2">
           <motion.div
@@ -170,23 +213,24 @@ const Concierge = () => {
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
+            className="max-w-4xl mx-auto"
           >
             <motion.h2
               variants={fadeInUp}
               className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Example Requests
+              Examples of Concierge Requests
             </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
+            <div className="space-y-4">
               {exampleRequests.map((item, index) => (
                 <motion.div key={index} variants={fadeInUp}>
-                  <div className="h-full jj-card-inner !p-4">
-                    <div className="flex items-center gap-3">
+                  <div className="jj-card-inner">
+                    <div className="flex items-start gap-4">
                       <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center shrink-0">
                         <item.icon className="w-5 h-5 text-gold" />
                       </div>
-                      <span className="text-sm text-zinc-700">{item.text}</span>
+                      <span className="text-zinc-700 pt-2">{item.text}</span>
                     </div>
                   </div>
                 </motion.div>
@@ -240,7 +284,7 @@ const Concierge = () => {
         </div>
       </section>
 
-      {/* SLA INFO */}
+      {/* SERVICE STANDARDS */}
       <section className="bg-black py-20">
         <div className="jj-layer-2">
           <motion.div
@@ -255,15 +299,11 @@ const Concierge = () => {
               className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Service Expectations
+              Service Standards
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <div className="flex items-center gap-4 mb-6">
-                <Clock className="w-8 h-8 text-gold" />
-                <h3 className="text-xl font-semibold text-black">Response & Timing</h3>
-              </div>
               <ul className="space-y-4">
-                {slaInfo.map((item, idx) => (
+                {serviceStandards.map((item, idx) => (
                   <li key={idx} className="flex items-start gap-3 text-zinc-700">
                     <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                     <span>{item}</span>
@@ -332,15 +372,16 @@ const Concierge = () => {
               className="text-3xl md:text-4xl font-bold text-black mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Need Concierge Assistance?
+              Let us handle the coordination
             </motion.h2>
             <motion.p variants={fadeInUp} className="text-zinc-600 mb-8">
-              Let us handle the logistics so you can focus on what matters.
+              Submit one request and we'll structure the execution plan.
             </motion.p>
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button variant="primary" size="lg" asChild>
                 <Link to="/contact?service=concierge">
-                  Submit Concierge Request
+                  Request Concierge Support
+                  <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
               </Button>
               <Button variant="outline" size="lg" asChild>
