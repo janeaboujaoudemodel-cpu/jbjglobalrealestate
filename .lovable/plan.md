@@ -1,126 +1,129 @@
 
-# Fix Plan: Broken Image Extraction & False "Repaired" Status
+# Fix Plan: Sync Dashboard & Test Extraction Issues
 
-## Problem Summary
-1. **Image extraction captures wrong images**: The extraction function is pulling `apartment_navbar_a62fb5b437.webp` (a generic navbar/placeholder image) instead of actual project gallery photos
-2. **False "Repaired" markers**: System marks projects as "complete" based on image count (15), not image validity - all 15 images are the same broken navbar icon
-3. **Result**: Cards show "Repaired" but display broken/placeholder images when scrolling through the gallery
+## Problems Identified
 
-## Root Cause (Technical)
-
-### Image Extraction Filter is Missing Key Terms
-The current exclude pattern in `batch-extract-pending/index.ts` line 69:
-```javascript
-const excludePatterns = /(logo|icon|avatar|placeholder|spinner|favicon|brochure|payment[-_]?plan|floor[-_]?plan|master[-_]?plan|pdf|document)/i;
-```
-
-**Missing from pattern:**
-- `navbar` - catches `apartment_navbar_a62fb5b437.webp`
-- `header` - catches header images
-- `footer` - catches footer images
-- `menu` - catches menu assets
-
-### No Image Uniqueness Validation
-The system stores 15 duplicate images of the same navbar icon and considers extraction "successful".
-
-### No Project-Specific URL Pattern Enforcement
-Real project images have URL patterns like `/off-plan/{id}/images/` but the current logic accepts ANY cloudfront image.
+1. **Rebuild Queue shows confusing "Queue cleared, 0 removed" then fails with 402** — credits exhausted not detected by UI
+2. **Test extraction result disappears** when navigating away — state not persisted
+3. **Test extraction marked "Incomplete"** even with core data — criteria too strict for test panel
+4. **Credits exhausted banner not triggered** by Rebuild Queue errors
+5. **No extraction happens** because Firecrawl has no credits (all subsequent calls fail)
 
 ---
 
-## Fix Implementation
+## Implementation Plan
 
-### Change 1: Update Image Extraction Filter (`batch-extract-pending/index.ts`)
+### Phase 1: Persist Test Extraction Results
 
-**Update the exclude patterns** to filter out navbar/header/footer/menu images:
-```javascript
-const excludePatterns = /(logo|icon|avatar|placeholder|spinner|favicon|brochure|payment[-_]?plan|floor[-_]?plan|master[-_]?plan|pdf|document|navbar|header|footer|menu|widget|sidebar)/i;
+**File: `src/components/listing-admin/TestOneListingPanel.tsx`**
+
+- Store `testResult` in `sessionStorage` alongside the component state
+- On mount, restore `testResult` from `sessionStorage` if available
+- When user clicks "Reject", clear the stored result
+- This ensures the test result survives tab navigation and page refreshes
+
+### Phase 2: Separate "Core Complete" vs "Fully Complete" in Test Panel
+
+**File: `src/components/listing-admin/TestOneListingPanel.tsx`**
+
+- Change validation logic to distinguish:
+  - **Core Complete**: 2+ images + 1+ document + description (>50 chars) + developer name
+  - **Fully Complete**: Core + USPs + amenities + floor plans + payment + FAQs
+- Display both statuses clearly:
+  - Core Complete = green "Ready for Bulk" badge
+  - Fully Complete = gold "Premium Quality" badge
+- Enable the "Approve" button when **Core Complete** (not requiring Fully Complete)
+- Show checklist of what's present vs missing so user can make informed decision
+
+### Phase 3: Detect Credits Exhausted in Rebuild Queue Flow
+
+**File: `src/components/listing-admin/SyncDashboard.tsx`**
+
+- In `rebuildQueueFromMap()`, check if the `discover-all-projects` response contains `credits_exhausted: true` or status 402
+- If detected, set `setCreditsExhausted(true)` and show the credits exhausted banner
+- Stop the rebuild flow immediately with a clear message
+
+```text
+┌─────────────────────────────────────────────────────┐
+│ Rebuild Queue Flow                                  │
+├─────────────────────────────────────────────────────┤
+│ 1. Clear queue (reset-project-import-queue)         │
+│    └─ Shows "Queue cleared, X removed"              │
+│                                                     │
+│ 2. Discover URLs (discover-all-projects)            │
+│    ├─ Success → Insert URLs → Continue              │
+│    └─ 402 Error → Set creditsExhausted flag         │
+│                → Show banner                        │
+│                → Stop rebuild                       │
+└─────────────────────────────────────────────────────┘
 ```
 
-**Add project-specific image prioritization:**
-- Prioritize URLs containing `/off-plan/` (project gallery images)
-- Only fall back to generic cloudfront images if no project-specific ones found
+### Phase 4: Improve Error Handling for Discovery Calls
 
-### Change 2: Add Image Uniqueness Check
+**File: `src/components/listing-admin/SyncDashboard.tsx`**
 
-Before storing images, deduplicate by URL and require **at least 2 unique images** for extraction to be considered successful.
+- In both `rebuildQueueFromMap()` and `fullWipeAndRebuild()`:
+  - Parse the response body for `credits_exhausted` flag
+  - Handle HTTP 402 status explicitly
+  - Display user-friendly error: "Firecrawl credits exhausted. Please top up at firecrawl.dev/pricing"
 
-```javascript
-// Deduplicate by full URL
-const uniqueImages = [...new Set(imageUrls)];
+### Phase 5: Add Clear Status Indicators
 
-// Must have at least 2 unique real project images
-const hasValidImages = uniqueImages.length >= 2 && 
-  !uniqueImages.every(u => u.includes('navbar') || u.includes('apartment_navbar'));
+**File: `src/components/listing-admin/SyncDashboard.tsx`**
+
+- When `creditsExhausted` is true:
+  - Disable all extraction/rebuild buttons
+  - Show prominent banner explaining the situation
+  - Provide direct link to Firecrawl pricing page
+  - Add "Retry" button that clears the flag and attempts again
+
+---
+
+## Technical Details
+
+### SessionStorage Keys for Test Panel Persistence
+
+```text
+- "test_extraction_result" → JSON of testResult object
+- "test_extraction_approved" → "true" if user approved
 ```
 
-### Change 3: Update Completeness Check
+### Core Complete Criteria (for Approval Gate)
 
-Current logic (line 361):
-```javascript
-const hasMinimal = Boolean(extracted.description && extracted.developerName && imagesPayload.length >= 1);
-```
+| Field | Requirement |
+|-------|-------------|
+| Images | At least 2 non-placeholder URLs |
+| Documents | At least 1 mirrored PDF |
+| Description | At least 50 characters |
+| Developer | Not null and not "Unknown" |
 
-Updated logic:
-```javascript
-// Check for VALID images (not navbar placeholders)
-const validImages = imagesPayload.filter(img => 
-  img.url.includes('/off-plan/') || 
-  (!img.url.includes('navbar') && !img.url.includes('apartment_navbar'))
-);
-const hasMinimal = Boolean(
-  extracted.description && 
-  extracted.developerName && 
-  validImages.length >= 2
-);
-```
+### Credits Exhausted Detection Points
 
-### Change 4: Clear Bad Data from Database
-
-Run a data repair to:
-1. Identify all rows where images contain only navbar placeholders
-2. Reset their `images` to `[]` and `review_notes` to `INCOMPLETE`
-3. Allow re-extraction with the fixed logic
-
-SQL to identify affected rows:
-```sql
-UPDATE pending_project_imports 
-SET images = '[]'::jsonb, 
-    review_notes = 'INCOMPLETE: Navbar images detected'
-WHERE images IS NOT NULL 
-AND jsonb_array_length(images) > 0
-AND images->0->>'url' LIKE '%apartment_navbar%';
-```
-
-### Change 5: Update Repair Function (`repair-project-extraction/index.ts`)
-
-Apply the same enhanced image filtering and validation to the single-item repair function.
+1. `batch-extract-pending` → returns `credits_exhausted: true` (already implemented)
+2. `discover-all-projects` → returns HTTP 402 with `credits_exhausted: true` (already implemented)
+3. UI handlers for both functions must check for these flags
 
 ---
 
 ## Files to Modify
 
-| File | Change |
-|------|--------|
-| `supabase/functions/batch-extract-pending/index.ts` | Enhanced image filtering, uniqueness check, validity check |
-| `supabase/functions/repair-project-extraction/index.ts` | Same enhanced image filtering |
-| Database migration | Reset corrupted image data |
+1. **`src/components/listing-admin/TestOneListingPanel.tsx`**
+   - Add sessionStorage persistence for test results
+   - Separate Core vs Full completeness
+   - Show detailed checklist of extracted fields
+
+2. **`src/components/listing-admin/SyncDashboard.tsx`**
+   - Handle 402/credits_exhausted in `rebuildQueueFromMap()`
+   - Handle 402/credits_exhausted in `fullWipeAndRebuild()`
+   - Improve error messages for discovery failures
 
 ---
 
 ## Expected Outcome
 
-1. **Image extraction will skip navbar/placeholder images** and only capture actual project gallery photos
-2. **Projects will only be marked "complete"** if they have 2+ valid, unique project images
-3. **Existing bad data will be cleared** and re-extracted with the fixed logic
-4. **"Repaired" status will be accurate** - only shown when real images are present
-
----
-
-## Verification Steps
-
 After implementation:
-1. Run bulk extraction on a few test items
-2. Verify extracted images contain `/off-plan/` URLs (not navbar placeholders)
-3. Confirm cards display actual project photos
-4. Confirm "INCOMPLETE" badge shows for items that truly lack valid images
+- Test extraction results persist when navigating away
+- Users can approve extractions that have core data (images, docs, description)
+- Credits exhausted errors are immediately detected and clearly displayed
+- All extraction/rebuild buttons are disabled when credits are exhausted
+- Clear guidance on how to resolve (link to Firecrawl pricing)
