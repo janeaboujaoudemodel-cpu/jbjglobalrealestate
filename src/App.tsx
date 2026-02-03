@@ -84,6 +84,18 @@ import BuyingAdvisory from "./pages/services/BuyingAdvisory";
 import SellingAdvisory from "./pages/services/SellingAdvisory";
 import RentalAdvisory from "./pages/services/RentalAdvisory";
 import InvestmentAdvisory from "./pages/services/InvestmentAdvisory";
+import Snagging from "./pages/services/Snagging";
+import PropertyManagement from "./pages/services/PropertyManagement";
+import ShortTermRentals from "./pages/services/ShortTermRentals";
+import CurrencyExchange from "./pages/services/CurrencyExchange";
+import Concierge from "./pages/services/Concierge";
+import CompanySetup from "./pages/services/CompanySetup";
+import SignatureCollection from "./pages/services/SignatureCollection";
+import AITools from "./pages/services/AITools";
+import BrokerCertification from "./pages/services/BrokerCertification";
+import ComplaintProcedures from "./pages/services/ComplaintProcedures";
+import CustomerHappinessCenter from "./pages/services/CustomerHappinessCenter";
+import TestimonialsPage from "./pages/services/Testimonials";
 import ReferralPartner from "./pages/ReferralPartner";
 // Install page removed - PWA disabled
 import CRM from "./pages/CRM";
@@ -322,6 +334,18 @@ const App = () => (
                 <Route path="/services/rental-advisory" element={<RentalAdvisory />} />
                 <Route path="/services/investment-advisory" element={<InvestmentAdvisory />} />
                 <Route path="/services/partner-introductions" element={<Navigate to="/partners" replace />} />
+                <Route path="/services/snagging" element={<Snagging />} />
+                <Route path="/services/property-management" element={<PropertyManagement />} />
+                <Route path="/services/short-term-rentals" element={<ShortTermRentals />} />
+                <Route path="/services/currency-exchange" element={<CurrencyExchange />} />
+                <Route path="/services/concierge" element={<Concierge />} />
+                <Route path="/services/company-setup" element={<CompanySetup />} />
+                <Route path="/services/signature-collection" element={<SignatureCollection />} />
+                <Route path="/services/ai-tools" element={<AITools />} />
+                <Route path="/services/broker-certification" element={<BrokerCertification />} />
+                <Route path="/services/complaint-procedures" element={<ComplaintProcedures />} />
+                <Route path="/services/customer-happiness-center" element={<CustomerHappinessCenter />} />
+                <Route path="/services/testimonials" element={<TestimonialsPage />} />
                 <Route path="/referral-partner" element={<ReferralPartner />} />
                 <Route path="/referral" element={<Navigate to="/referral-onboarding" replace />} />
                 {/* Install page removed - PWA disabled */}
