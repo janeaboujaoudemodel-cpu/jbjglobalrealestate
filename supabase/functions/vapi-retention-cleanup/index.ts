@@ -72,29 +72,18 @@ serve(async (req) => {
       );
     }
 
-    // Also check for any unencrypted records that slipped through
-    const { data: unencryptedCheck, error: checkError } = await supabase
-      .from("vapi_call_logs")
-      .select("id")
-      .or("extracted_name.neq.***PROTECTED***,extracted_phone.neq.***PROTECTED***,extracted_email.neq.***PROTECTED***")
-      .not("extracted_name", "is", null)
-      .limit(10);
-
-    const unencryptedCount = unencryptedCheck?.length || 0;
+    // Plaintext columns have been removed - now we only have encrypted columns
+    // The check for unencrypted records is no longer needed
+    // All PII access now goes through the secure RPC function
 
     // Log the cleanup run
     const timestamp = new Date().toISOString();
     console.log(`[${timestamp}] VAPI retention cleanup: deleted ${deletedCount || 0} expired records`);
-    
-    if (unencryptedCount > 0) {
-      console.warn(`[${timestamp}] WARNING: Found ${unencryptedCount} unencrypted records`);
-    }
 
     return new Response(
       JSON.stringify({
         success: true,
         deleted_count: deletedCount || 0,
-        unencrypted_count: unencryptedCount,
         timestamp,
         message: deletedCount > 0 
           ? `Cleaned up ${deletedCount} expired VAPI call records`
