@@ -22,9 +22,9 @@ import {
   ExternalLink,
   Crown,
   Mail,
-  Sparkles
+  Sparkles,
+  HelpCircle
 } from "lucide-react";
-import dubaiLandmarksVideo from "@/assets/videos/dubai-landmarks-hero.mp4";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -56,8 +56,10 @@ import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { OffPlanInquiryCTA } from "@/components/OffPlanInquiryCTA";
 import { FeaturedProjectAd, FEATURED_ADS } from "@/components/FeaturedProjectAd";
-import { ShortlistRequestForm } from "@/components/listings";
 import { blueprintPagesSEO, trackingEvents } from "@/types/blueprint";
+import PropertiesHeroVideo from "@/components/PropertiesHeroVideo";
+import ConsultationRequestForm from "@/components/ConsultationRequestForm";
+import DirectContactCTA from "@/components/DirectContactCTA";
 
 // Currency conversion rates
 const CURRENCY_RATES: Record<string, number> = {
@@ -336,35 +338,8 @@ const Properties = () => {
       <div className="min-h-screen bg-[hsl(var(--premium-bg))]">
       
       
-      {/* Hero Section - Cinematic Video */}
-      <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
-        {/* Video Background with poster for instant display */}
-        <div className="absolute inset-0 bg-black">
-          {/* Poster/fallback image that shows immediately */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center"
-            style={{
-              backgroundImage: `url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80')`,
-            }}
-          />
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            className="absolute inset-0 w-full h-full object-cover"
-            poster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
-          >
-            <source src={dubaiLandmarksVideo} type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
-        </div>
-        
-        {/* Floating gold accent orbs */}
-        <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/5 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/10 rounded-full blur-[120px] pointer-events-none" />
-        
+      {/* Hero Section - Multi-Scene Cinematic Video */}
+      <PropertiesHeroVideo>
         <div className="relative z-10 container mx-auto px-4">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -400,18 +375,7 @@ const Properties = () => {
             </p>
           </motion.div>
         </div>
-        
-        {/* Scroll indicator */}
-        <motion.div 
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.6 }}
-        >
-          <span className="text-gold/60 text-xs tracking-widest uppercase">Explore</span>
-          <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
-        </motion.div>
-      </section>
+      </PropertiesHeroVideo>
 
       {/* Filters Section - 3-Layer System: Black > Active Champagne > Pearl Filter Boxes */}
       <section className="sticky top-16 lg:top-[72px] z-40 bg-black py-4 border-b border-gold/30">
@@ -1116,91 +1080,35 @@ const Properties = () => {
         </div>
       </section>
 
-      {/* Shortlist Request Form - Master Blueprint Compliant */}
+      {/* Consultation Request Section - Replaces Shortlist Form */}
       <section className="py-16 sm:py-20 bg-black">
         <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto">
-            <ShortlistRequestForm
-              transactionType={appliedFilters.transactionType === 'rent' ? 'rent' : 'buy'}
-              prefilledBudget={filters.priceMin > 0 ? formatPrice(filters.priceMin) : ''}
-              prefilledBedrooms={filters.bedroomsMin ? String(filters.bedroomsMin) : ''}
-              prefilledAreas={filters.emirate || ''}
-            />
+          {/* Confused about where to buy section */}
+          <div className="max-w-4xl mx-auto mb-12">
+            <div className="jj-layer-2 text-center">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-full text-xs uppercase tracking-wider text-gold mb-4">
+                <HelpCircle className="w-3 h-3" />
+                Get Expert Guidance
+              </div>
+              <h2 
+                className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-4"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                Confused About Where to <span className="text-gold">Buy or Invest</span> in Dubai?
+              </h2>
+              <p className="text-zinc-600 max-w-2xl mx-auto mb-8">
+                Our experienced advisors help you navigate Dubai's dynamic real estate market. 
+                Get personalized recommendations based on your goals, budget, and timeline.
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
-
-      {/* Quick Contact CTA - 3-Layer System: Black > Active Champagne > Pearl (noticeable size difference) */}
-      <section className="py-16 sm:py-20 bg-black">
-        {/* Active Champagne Layer - Full width with thin black contour */}
-        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 sm:p-8 md:p-10">
-          {/* Champagne Layer - Noticeably smaller than active layer */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-10 md:p-14 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F5F0E6] to-gold/20 border border-gold/50 rounded-full text-black text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20">
-              <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gold" />
-              Begin Your Journey
-            </div>
-
-            {/* Title */}
-            <h2 
-              className="text-black text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-3 sm:mb-4 leading-tight"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              <span className="text-gold">Ready</span> to Find Your Perfect Property?
-            </h2>
-            <p className="text-zinc-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed">
-              Connect with our expert team to explore Dubai's finest real estate opportunities.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4">
-              {/* Register Interest - Primary 3D Style */}
-              <a 
-                href={buildSureFormsUrl()} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="relative w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-10 rounded-xl font-bold transition-all duration-300 group overflow-hidden inline-flex items-center justify-center hover:scale-[1.02]"
-                style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
-                  boxShadow: `
-                    0 10px 30px rgba(200,167,102,0.4),
-                    0 6px 15px rgba(0,0,0,0.2),
-                    inset 0 2px 4px rgba(255,255,255,0.9),
-                    inset 0 -2px 4px rgba(200,167,102,0.2),
-                    0 0 20px rgba(200,167,102,0.3)
-                  `,
-                }}
-              >
-                <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-                <span className="relative flex items-center gap-2">
-                  <span className="text-black group-hover:text-gold transition-colors">Register</span>
-                  <span className="text-gold group-hover:text-black transition-colors">Interest</span>
-                  <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-black group-hover:text-gold transition-colors" />
-                </span>
-              </a>
-
-              {/* WhatsApp - Secondary Style */}
-              <a 
-                href={getWhatsAppUrl()} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-10 rounded-xl font-bold transition-all duration-300 inline-flex items-center justify-center gap-2 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
-              >
-                <MessageCircle className="w-4 h-4" />
-                WhatsApp
-              </a>
-
-              {/* Call Now - Secondary Style */}
-              <a 
-                href={`tel:${CONTACT_INFO.phoneRaw}`}
-                className="w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-10 rounded-xl font-bold transition-all duration-300 inline-flex items-center justify-center gap-2 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
-              >
-                <Phone className="w-4 h-4" />
-                Call Now
-              </a>
-            </div>
+          
+          {/* Consultation Form */}
+          <div className="max-w-2xl mx-auto">
+            <ConsultationRequestForm
+              title="Request a Consultation"
+              subtitle="Connect with our expert team for personalized guidance on your property journey."
+            />
           </div>
         </div>
       </section>
@@ -1208,53 +1116,8 @@ const Properties = () => {
       {/* Off-Plan Investment CTA */}
       <OffPlanInquiryCTA />
 
-      {/* Direct Contact Section - Prefer to Reach Us Directly */}
-      <section className="py-12 bg-black">
-        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8">
-          <h2 className="text-center text-2xl md:text-3xl font-bold mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
-            <span className="text-black">Prefer to Reach Us</span>{" "}
-            <span className="text-gold">Directly?</span>
-          </h2>
-          <p className="text-center text-zinc-600 text-sm mb-6 max-w-2xl mx-auto">
-            For general inquiries, consultations, or non-technical requests, you may contact us through the channels below.
-          </p>
-          <div className="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-            {/* WhatsApp CTA */}
-            <a 
-              href={getWhatsAppUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
-            >
-              <div className="w-12 h-12 bg-green-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-green-500/30">
-                <MessageCircle className="w-6 h-6 text-green-600" />
-              </div>
-              <div>
-                <h3 className="text-black font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  WhatsApp
-                </h3>
-                <p className="text-gold text-sm">{CONTACT_INFO.phone}</p>
-              </div>
-            </a>
-
-            {/* Call CTA */}
-            <a 
-              href={`tel:${CONTACT_INFO.phoneRaw}`}
-              className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
-            >
-              <div className="w-12 h-12 bg-blue-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-blue-500/30">
-                <Phone className="w-6 h-6 text-blue-600" />
-              </div>
-              <div>
-                <h3 className="text-black font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  Call Us
-                </h3>
-                <p className="text-gold text-sm">{CONTACT_INFO.phone}</p>
-              </div>
-            </a>
-          </div>
-        </div>
-      </section>
+      {/* Standardized Direct Contact CTA - Same as all pages */}
+      <DirectContactCTA />
 
       <Footer />
       

@@ -7,6 +7,7 @@ import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { PortraitImage } from "@/components/ui/portrait-image";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { FounderContent } from "@/components/FounderContent";
+import DirectContactCTA from "@/components/DirectContactCTA";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import luxuryVilla1 from "@/assets/luxury-villa-1.jpeg";
@@ -630,6 +631,9 @@ const About = () => {
             </div>
           </div>
         </section>
+
+        {/* Standardized Direct Contact CTA */}
+        <DirectContactCTA />
 
         <Footer />
       </div>
