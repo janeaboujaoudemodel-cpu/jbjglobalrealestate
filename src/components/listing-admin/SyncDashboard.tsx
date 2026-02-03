@@ -34,6 +34,7 @@ import { toast } from "sonner";
 import { SarahTestPanel } from "./SarahTestPanel";
 import { ProjectApprovalQueue } from "./ProjectApprovalQueue";
 import { DeveloperApprovalQueue } from "./DeveloperApprovalQueue";
+import { TestOneListingPanel } from "./TestOneListingPanel";
 
 interface SyncStats {
   page: number;
@@ -140,8 +141,14 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   const [estimatedTimeRemaining, setEstimatedTimeRemaining] = useState<string>("");
   const [currentJobId, setCurrentJobId] = useState<string | null>(null);
   const [viewingJobId, setViewingJobId] = useState<string | null>(null);
-  // We keep this always enabled: the admin decides what to approve in the queue.
-  const [isTestApproved] = useState(true);
+  // CRITICAL: Bulk extraction is locked until user approves a test extraction
+  const [isTestApproved, setIsTestApproved] = useState(() => {
+    try {
+      return sessionStorage.getItem("bulk_extraction_approved") === "true";
+    } catch {
+      return false;
+    }
+  });
   const [activeTab, setActiveTab] = useState("sync");
   // Turbo removes UI delays and backend per-project throttling.
   const [turboMode, setTurboMode] = useState(true);
@@ -1635,57 +1642,69 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                   </div>
                 )}
 
-                {/* Queue rebuild + Bulk extraction runner */}
-                <div className="rounded-md border border-border bg-muted/20 p-4 space-y-3">
-                  <div className="flex items-center justify-between gap-3 flex-wrap">
-                    <div>
-                      <div className="text-sm font-medium text-foreground">Bulk Extract Runner</div>
-                      <div className="text-xs text-muted-foreground">
-                        Extracts missing details for the entire pending queue (placeholders + incomplete entries).
+                {/* TEST BEFORE BULK - Show test panel if not approved */}
+                {!isTestApproved && (
+                  <TestOneListingPanel
+                    onApproved={() => {
+                      setIsTestApproved(true);
+                      try { sessionStorage.setItem("bulk_extraction_approved", "true"); } catch { /* ignore */ }
+                    }}
+                    bulkExtractDisabled={isSyncing || isRebuildingQueue || creditsExhausted}
+                  />
+                )}
+
+                {/* Queue rebuild + Bulk extraction runner - only show after test approved */}
+                {isTestApproved && (
+                  <div className="rounded-md border border-border bg-muted/20 p-4 space-y-3">
+                    <div className="flex items-center justify-between gap-3 flex-wrap">
+                      <div>
+                        <div className="text-sm font-medium text-foreground">Bulk Extract Runner</div>
+                        <div className="text-xs text-muted-foreground">
+                          Extracts missing details for the entire pending queue (placeholders + incomplete entries).
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        {!isBulkExtractRunning ? (
+                          <Button
+                            onClick={startBulkExtractRunner}
+                            disabled={isSyncing || isRebuildingQueue || isFixAllRunning || creditsExhausted}
+                            className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                          >
+                            <Play className="w-4 h-4 mr-2" />
+                            Start Bulk Extract{turboMode ? " (Turbo)" : ""}
+                          </Button>
+                        ) : (
+                          <Button onClick={stopBulkExtractRunner} variant="outline">
+                            <Pause className="w-4 h-4 mr-2" />
+                            Stop Bulk Extract
+                          </Button>
+                        )}
+
+                        {/* FIX ALL BUTTON - runs extraction + repairs approved projects */}
+                        {!isFixAllRunning ? (
+                          <Button
+                            onClick={() => startFixAllRunner(false)}
+                            disabled={isSyncing || isRebuildingQueue || isBulkExtractRunning || creditsExhausted}
+                            className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                          >
+                            <RefreshCw className="w-4 h-4 mr-2" />
+                            ⚡ Fix All Listings
+                          </Button>
+                        ) : (
+                          <Button onClick={stopFixAllRunner} variant="outline" className="border-amber-400 text-amber-700">
+                            <Pause className="w-4 h-4 mr-2" />
+                            Stop Fix All
+                          </Button>
+                        )}
+
+                        <Button
+                          variant="outline"
+                          onClick={() => setActiveTab("approvals")}
+                        >
+                          View Queue
+                        </Button>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      {!isBulkExtractRunning ? (
-                        <Button
-                          onClick={startBulkExtractRunner}
-                          disabled={isSyncing || isRebuildingQueue || isFixAllRunning || creditsExhausted}
-                          className="bg-primary hover:bg-primary/90 text-primary-foreground"
-                        >
-                          <Play className="w-4 h-4 mr-2" />
-                          Start Bulk Extract{turboMode ? " (Turbo)" : ""}
-                        </Button>
-                      ) : (
-                        <Button onClick={stopBulkExtractRunner} variant="outline">
-                          <Pause className="w-4 h-4 mr-2" />
-                          Stop Bulk Extract
-                        </Button>
-                      )}
-
-                      {/* FIX ALL BUTTON - runs extraction + repairs approved projects */}
-                      {!isFixAllRunning ? (
-                        <Button
-                          onClick={() => startFixAllRunner(false)}
-                          disabled={isSyncing || isRebuildingQueue || isBulkExtractRunning || creditsExhausted}
-                          className="bg-emerald-600 hover:bg-emerald-700 text-white"
-                        >
-                          <RefreshCw className="w-4 h-4 mr-2" />
-                          ⚡ Fix All Listings
-                        </Button>
-                      ) : (
-                        <Button onClick={stopFixAllRunner} variant="outline" className="border-amber-400 text-amber-700">
-                          <Pause className="w-4 h-4 mr-2" />
-                          Stop Fix All
-                        </Button>
-                      )}
-
-                      <Button
-                        variant="outline"
-                        onClick={() => setActiveTab("approvals")}
-                      >
-                        View Queue
-                      </Button>
-                    </div>
-                  </div>
 
                   {/* Fix All stats display */}
                   {isBulkExtractRunning && (
@@ -1768,12 +1787,13 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                     </div>
                   )}
 
-                  {rebuildResult && (
-                    <div className="text-xs text-muted-foreground">
-                      Rebuild: {rebuildResult.queued_for_scraping ?? rebuildResult.new_urls ?? 0} queued (discovered {rebuildResult.discovered_urls ?? "?"}).
-                    </div>
-                  )}
-                </div>
+                    {rebuildResult && (
+                      <div className="text-xs text-muted-foreground">
+                        Rebuild: {rebuildResult.queued_for_scraping ?? rebuildResult.new_urls ?? 0} queued (discovered {rebuildResult.discovered_urls ?? "?"}).
+                      </div>
+                    )}
+                  </div>
+                )}
 
         </CardContent>
       </Card>

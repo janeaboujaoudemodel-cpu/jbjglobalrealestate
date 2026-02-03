@@ -52,17 +52,19 @@ serve(async (req) => {
       // If the batch is still doing work when we hit this budget, it will return early
       // and the UI can immediately call again.
       maxDurationMs: rawMaxDurationMs = 50_000,
+      // NEW: Optional target ID - extract a single specific item (for testing)
+      targetId = null,
     } = await req.json().catch(() => ({}));
 
     // Guardrails for stability + to avoid client timeouts.
     // NOTE: UI can call this function repeatedly; each call should be short and safe.
-    const limit = Math.max(1, Math.min(Number(rawLimit) || 10, 25));
+    const limit = targetId ? 1 : Math.max(1, Math.min(Number(rawLimit) || 10, 25));
     const throttleMs = Math.max(0, Math.min(Number(rawThrottleMs) ?? 2500, 10_000));
     const concurrency = Math.max(1, Math.min(Number(rawConcurrency) || 1, 3));
     const maxDurationMs = Math.max(10_000, Math.min(Number(rawMaxDurationMs) || 50_000, 55_000));
 
     console.log(
-      `[BatchExtract] Starting (limit=${limit}, concurrency=${concurrency}, dryRun=${dryRun}, throttleMs=${throttleMs}, maxDurationMs=${maxDurationMs})...`,
+      `[BatchExtract] Starting (limit=${limit}, concurrency=${concurrency}, dryRun=${dryRun}, throttleMs=${throttleMs}, maxDurationMs=${maxDurationMs}, targetId=${targetId || 'none'})...`,
     );
 
     // Get developers for matching
@@ -70,35 +72,60 @@ serve(async (req) => {
     const devList = devs || [];
     const devMap = buildDeveloperMap(devList);
 
-    // Fetch pending imports that still need extraction
-    // FIXED: Also target rows where images/documents are NULL (not just empty array [])
-    const { data: imports, error: fetchErr } = await supabase
-      .from("pending_project_imports")
-      .select("id, name, slug, source_url, images, documents, description, review_notes, amenities, developer_name")
-      .eq("status", "pending")
-      // NOTE: PostgREST OR syntax - include null checks for images/documents
-      .or(
-        [
-          "review_notes.ilike.%PENDING_SCRAPE%",
-          "review_notes.eq.INCOMPLETE",
-          "review_notes.ilike.ERROR:%",
-          "images.eq.[]",
-          "images.is.null",
-          "documents.eq.[]",
-          "documents.is.null",
-          "description.is.null",
-          "developer_name.is.null",
-          "developer_name.eq.Unknown"
-        ].join(","),
-      )
-      .order("created_at", { ascending: true })
-      .limit(limit);
+    // Fetch pending imports that need extraction
+    let imports: any[] = [];
 
-    if (fetchErr) {
-      return new Response(JSON.stringify({ error: fetchErr.message }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+    if (targetId) {
+      // SINGLE TARGET MODE: Extract a specific item by ID
+      const { data: targetItem, error: targetErr } = await supabase
+        .from("pending_project_imports")
+        .select("id, name, slug, source_url, images, documents, description, review_notes, amenities, developer_name")
+        .eq("id", targetId)
+        .eq("status", "pending")
+        .single();
+
+      if (targetErr) {
+        return new Response(JSON.stringify({ error: `Target item not found: ${targetErr.message}` }), {
+          status: 404,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      imports = [targetItem];
+      console.log(`[BatchExtract] Single target mode: processing ${targetItem.name}`);
+    } else {
+      // BATCH MODE: Fetch pending imports that still need extraction
+      // FIXED: Also target rows where images/documents are NULL (not just empty array [])
+      const { data: batchImports, error: fetchErr } = await supabase
+        .from("pending_project_imports")
+        .select("id, name, slug, source_url, images, documents, description, review_notes, amenities, developer_name")
+        .eq("status", "pending")
+        // NOTE: PostgREST OR syntax - include null checks for images/documents
+        .or(
+          [
+            "review_notes.ilike.%PENDING_SCRAPE%",
+            "review_notes.eq.INCOMPLETE",
+            "review_notes.ilike.ERROR:%",
+            "images.eq.[]",
+            "images.is.null",
+            "documents.eq.[]",
+            "documents.is.null",
+            "description.is.null",
+            "developer_name.is.null",
+            "developer_name.eq.Unknown"
+          ].join(","),
+        )
+        .order("created_at", { ascending: true })
+        .limit(limit);
+
+      if (fetchErr) {
+        return new Response(JSON.stringify({ error: fetchErr.message }), {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      imports = batchImports || [];
     }
 
     if (!imports || imports.length === 0) {
