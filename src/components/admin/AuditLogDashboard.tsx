@@ -26,18 +26,18 @@ interface AuditLog {
 }
 
 const ACTION_COLORS: Record<string, string> = {
-  create: "bg-green-500/10 text-green-500 border-green-500/20",
-  read: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-  update: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
-  delete: "bg-red-500/10 text-red-500 border-red-500/20",
-  login: "bg-purple-500/10 text-purple-500 border-purple-500/20",
-  logout: "bg-gray-500/10 text-gray-500 border-gray-500/20",
-  export: "bg-cyan-500/10 text-cyan-500 border-cyan-500/20",
-  import: "bg-indigo-500/10 text-indigo-500 border-indigo-500/20",
-  approve: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
-  reject: "bg-orange-500/10 text-orange-500 border-orange-500/20",
-  block: "bg-red-500/10 text-red-500 border-red-500/20",
-  unblock: "bg-green-500/10 text-green-500 border-green-500/20",
+  create: "bg-green-100 text-green-700 border-green-200",
+  read: "bg-blue-100 text-blue-700 border-blue-200",
+  update: "bg-yellow-100 text-yellow-700 border-yellow-200",
+  delete: "bg-red-100 text-red-700 border-red-200",
+  login: "bg-purple-100 text-purple-700 border-purple-200",
+  logout: "bg-gray-100 text-gray-700 border-gray-200",
+  export: "bg-cyan-100 text-cyan-700 border-cyan-200",
+  import: "bg-indigo-100 text-indigo-700 border-indigo-200",
+  approve: "bg-emerald-100 text-emerald-700 border-emerald-200",
+  reject: "bg-orange-100 text-orange-700 border-orange-200",
+  block: "bg-red-100 text-red-700 border-red-200",
+  unblock: "bg-green-100 text-green-700 border-green-200",
 };
 
 const RESOURCE_ICONS: Record<string, string> = {
@@ -144,48 +144,48 @@ export default function AuditLogDashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Stats Cards */}
+      {/* Stats Cards - Champagne styling */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="jj-card-inner">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-gray-300">Total Events</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-black/60">Total Events</CardTitle>
+            <FileText className="h-4 w-4 text-gold" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">{stats.total}</div>
-            <p className="text-xs text-muted-foreground">Last 200 records</p>
+            <div className="text-2xl font-bold text-black">{stats.total}</div>
+            <p className="text-xs text-black/50">Last 200 records</p>
           </CardContent>
         </Card>
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="jj-card-inner">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-gray-300">Today's Activity</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-black/60">Today's Activity</CardTitle>
+            <Clock className="h-4 w-4 text-gold" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">{stats.today}</div>
-            <p className="text-xs text-muted-foreground">Events logged today</p>
+            <div className="text-2xl font-bold text-black">{stats.today}</div>
+            <p className="text-xs text-black/50">Events logged today</p>
           </CardContent>
         </Card>
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="jj-card-inner">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-gray-300">Critical Actions</CardTitle>
-            <Shield className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-black/60">Critical Actions</CardTitle>
+            <Shield className="h-4 w-4 text-red-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-400">{stats.critical}</div>
-            <p className="text-xs text-muted-foreground">Delete, block, reject</p>
+            <div className="text-2xl font-bold text-red-600">{stats.critical}</div>
+            <p className="text-xs text-black/50">Delete, block, reject</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Filters */}
-      <Card className="bg-zinc-900 border-zinc-800">
+      <Card className="jj-card-inner">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-white">
+          <CardTitle className="flex items-center gap-2 text-black">
             <Shield className="h-5 w-5 text-gold" />
             Audit Logs
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-black/60">
             Track all admin actions and sensitive data access for compliance
           </CardDescription>
         </CardHeader>
@@ -197,17 +197,17 @@ export default function AuditLogDashboard() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                className="flex-1 bg-zinc-950 border-zinc-700 text-white placeholder:text-gray-500"
+                className="flex-1 bg-white border-gold/20 text-black placeholder:text-black/40"
               />
-              <Button onClick={handleSearch} variant="secondary" className="bg-zinc-800 hover:bg-zinc-700">
+              <Button onClick={handleSearch} variant="secondary" className="bg-gold/20 hover:bg-gold/30 text-black">
                 <Search className="h-4 w-4" />
               </Button>
             </div>
             <Select value={actionFilter} onValueChange={setActionFilter}>
-              <SelectTrigger className="w-[150px] bg-zinc-950 border-zinc-700 text-white">
+              <SelectTrigger className="w-[150px] bg-white border-gold/20 text-black">
                 <SelectValue placeholder="Action type" />
               </SelectTrigger>
-              <SelectContent className="bg-zinc-900 border-zinc-700">
+              <SelectContent className="bg-white border-gold/20">
                 <SelectItem value="all">All Actions</SelectItem>
                 <SelectItem value="create">Create</SelectItem>
                 <SelectItem value="read">Read</SelectItem>
@@ -221,10 +221,10 @@ export default function AuditLogDashboard() {
               </SelectContent>
             </Select>
             <Select value={resourceFilter} onValueChange={setResourceFilter}>
-              <SelectTrigger className="w-[150px] bg-zinc-950 border-zinc-700 text-white">
+              <SelectTrigger className="w-[150px] bg-white border-gold/20 text-black">
                 <SelectValue placeholder="Resource type" />
               </SelectTrigger>
-              <SelectContent className="bg-zinc-900 border-zinc-700">
+              <SelectContent className="bg-white border-gold/20">
                 <SelectItem value="all">All Resources</SelectItem>
                 <SelectItem value="user">User</SelectItem>
                 <SelectItem value="project">Project</SelectItem>
@@ -238,55 +238,55 @@ export default function AuditLogDashboard() {
                 <SelectItem value="role">Role</SelectItem>
               </SelectContent>
             </Select>
-            <Button onClick={fetchLogs} variant="outline" className="border-zinc-700 text-white hover:bg-zinc-800">
+            <Button onClick={fetchLogs} variant="outline" className="border-gold/30 text-black hover:bg-gold/10">
               <RefreshCw className="h-4 w-4 mr-2" />
               Refresh
             </Button>
-            <Button onClick={exportToCSV} variant="outline" className="border-zinc-700 text-white hover:bg-zinc-800">
+            <Button onClick={exportToCSV} variant="outline" className="border-gold/30 text-black hover:bg-gold/10">
               <Download className="h-4 w-4 mr-2" />
               Export CSV
             </Button>
           </div>
 
           {/* Logs Table */}
-          <ScrollArea className="h-[500px] rounded-md border border-zinc-800">
+          <ScrollArea className="h-[500px] rounded-md border border-gold/20">
             <Table>
               <TableHeader>
-                <TableRow className="border-zinc-800 hover:bg-zinc-950">
-                  <TableHead className="w-[160px] text-gray-400">Timestamp</TableHead>
-                  <TableHead className="w-[180px] text-gray-400">User</TableHead>
-                  <TableHead className="w-[100px] text-gray-400">Action</TableHead>
-                  <TableHead className="w-[120px] text-gray-400">Resource</TableHead>
-                  <TableHead className="text-gray-400">Description</TableHead>
+                <TableRow className="border-gold/20 hover:bg-gold/5 bg-gradient-to-r from-[#F5EBD7] to-[#E8DCC8]">
+                  <TableHead className="w-[160px] text-black/60">Timestamp</TableHead>
+                  <TableHead className="w-[180px] text-black/60">User</TableHead>
+                  <TableHead className="w-[100px] text-black/60">Action</TableHead>
+                  <TableHead className="w-[120px] text-black/60">Resource</TableHead>
+                  <TableHead className="text-black/60">Description</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {loading ? (
                   Array.from({ length: 10 }).map((_, i) => (
-                    <TableRow key={i} className="border-zinc-800">
-                      <TableCell><Skeleton className="h-4 w-32 bg-zinc-800" /></TableCell>
-                      <TableCell><Skeleton className="h-4 w-40 bg-zinc-800" /></TableCell>
-                      <TableCell><Skeleton className="h-4 w-16 bg-zinc-800" /></TableCell>
-                      <TableCell><Skeleton className="h-4 w-20 bg-zinc-800" /></TableCell>
-                      <TableCell><Skeleton className="h-4 w-60 bg-zinc-800" /></TableCell>
+                    <TableRow key={i} className="border-gold/10">
+                      <TableCell><Skeleton className="h-4 w-32 bg-gold/10" /></TableCell>
+                      <TableCell><Skeleton className="h-4 w-40 bg-gold/10" /></TableCell>
+                      <TableCell><Skeleton className="h-4 w-16 bg-gold/10" /></TableCell>
+                      <TableCell><Skeleton className="h-4 w-20 bg-gold/10" /></TableCell>
+                      <TableCell><Skeleton className="h-4 w-60 bg-gold/10" /></TableCell>
                     </TableRow>
                   ))
                 ) : logs.length === 0 ? (
-                  <TableRow className="border-zinc-800">
-                    <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
+                  <TableRow className="border-gold/10">
+                    <TableCell colSpan={5} className="text-center text-black/50 py-8">
                       No audit logs found
                     </TableCell>
                   </TableRow>
                 ) : (
                   logs.map((log) => (
-                    <TableRow key={log.id} className="border-zinc-800 hover:bg-zinc-950/50">
-                      <TableCell className="text-xs text-gray-400">
+                    <TableRow key={log.id} className="border-gold/10 hover:bg-gold/5">
+                      <TableCell className="text-xs text-black/60">
                         {format(new Date(log.created_at), "MMM d, yyyy HH:mm:ss")}
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          <User className="h-3 w-3 text-gray-500" />
-                          <span className="text-sm text-gray-300 truncate max-w-[140px]">
+                          <User className="h-3 w-3 text-gold" />
+                          <span className="text-sm text-black truncate max-w-[140px]">
                             {log.user_email || "System"}
                           </span>
                         </div>
@@ -294,21 +294,21 @@ export default function AuditLogDashboard() {
                       <TableCell>
                         <Badge 
                           variant="outline" 
-                          className={ACTION_COLORS[log.action_type] || ""}
+                          className={ACTION_COLORS[log.action_type] || "bg-gray-100 text-gray-700"}
                         >
                           {log.action_type}
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <span className="flex items-center gap-1 text-sm text-gray-300">
+                        <span className="flex items-center gap-1 text-sm text-black/70">
                           <span>{RESOURCE_ICONS[log.resource_type] || "📦"}</span>
                           {log.resource_type}
                         </span>
                       </TableCell>
-                      <TableCell className="text-sm text-gray-300">
+                      <TableCell className="text-sm text-black/70">
                         {log.description}
                         {log.resource_id && (
-                          <span className="ml-2 text-xs text-gray-500">
+                          <span className="ml-2 text-xs text-black/40">
                             (ID: {log.resource_id.slice(0, 8)}...)
                           </span>
                         )}

@@ -210,12 +210,12 @@ const VisitorInsightsDashboard = () => {
 
   const getEventIcon = (eventType: string) => {
     switch (eventType) {
-      case 'page_view': return <Eye className="h-3 w-3 text-blue-500" />;
-      case 'click': return <MousePointer className="h-3 w-3 text-green-500" />;
-      case 'download': return <Download className="h-3 w-3 text-purple-500" />;
-      case 'upload': return <Upload className="h-3 w-3 text-orange-500" />;
+      case 'page_view': return <Eye className="h-3 w-3 text-blue-600" />;
+      case 'click': return <MousePointer className="h-3 w-3 text-green-600" />;
+      case 'download': return <Download className="h-3 w-3 text-purple-600" />;
+      case 'upload': return <Upload className="h-3 w-3 text-orange-600" />;
       case 'form_submit': return <FileText className="h-3 w-3 text-gold" />;
-      default: return <Activity className="h-3 w-3 text-gray-500" />;
+      default: return <Activity className="h-3 w-3 text-black/50" />;
     }
   };
 
@@ -224,60 +224,68 @@ const VisitorInsightsDashboard = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+          <h2 className="text-2xl font-bold text-black flex items-center gap-3">
             <Eye className="h-7 w-7 text-gold" />
             Visitor Insights
           </h2>
-          <p className="text-gray-400 mt-1">Track every visitor action, download, and behavior</p>
+          <p className="text-black/60 mt-1">Track every visitor action, download, and behavior</p>
         </div>
-        <Button onClick={fetchData} variant="outline" className="border-zinc-700">
+        <Button onClick={fetchData} variant="outline" className="border-gold/30 text-black hover:bg-gold/10">
           <RefreshCw className="h-4 w-4 mr-2" />
           Refresh
         </Button>
       </div>
 
-      {/* Stats */}
+      {/* Stats - Champagne styling */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="jj-card-inner">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Users className="h-8 w-8 text-gold" />
+              <div className="jj-icon-box-active w-12 h-12">
+                <Users className="h-6 w-6" />
+              </div>
               <div>
-                <p className="text-2xl font-bold text-white">{stats.totalSessions}</p>
-                <p className="text-sm text-gray-400">Total Sessions</p>
+                <p className="text-2xl font-bold text-black">{stats.totalSessions}</p>
+                <p className="text-sm text-black/60">Total Sessions</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="jj-card-inner">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Users className="h-8 w-8 text-green-500" />
+              <div className="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center">
+                <Users className="h-6 w-6 text-green-600" />
+              </div>
               <div>
-                <p className="text-2xl font-bold text-white">{stats.totalContacts}</p>
-                <p className="text-sm text-gray-400">Contact Submissions</p>
+                <p className="text-2xl font-bold text-black">{stats.totalContacts}</p>
+                <p className="text-sm text-black/60">Contact Submissions</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="jj-card-inner">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Smartphone className="h-8 w-8 text-blue-500" />
+              <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center">
+                <Smartphone className="h-6 w-6 text-blue-600" />
+              </div>
               <div>
-                <p className="text-2xl font-bold text-white">{stats.mobileUsers}</p>
-                <p className="text-sm text-gray-400">Mobile Users</p>
+                <p className="text-2xl font-bold text-black">{stats.mobileUsers}</p>
+                <p className="text-sm text-black/60">Mobile Users</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="jj-card-inner">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Clock className="h-8 w-8 text-purple-500" />
+              <div className="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center">
+                <Clock className="h-6 w-6 text-purple-600" />
+              </div>
               <div>
-                <p className="text-2xl font-bold text-white">{formatTimeSpent(stats.avgTimeSpent)}</p>
-                <p className="text-sm text-gray-400">Avg. Time Spent</p>
+                <p className="text-2xl font-bold text-black">{formatTimeSpent(stats.avgTimeSpent)}</p>
+                <p className="text-sm text-black/60">Avg. Time Spent</p>
               </div>
             </div>
           </CardContent>
@@ -286,7 +294,7 @@ const VisitorInsightsDashboard = () => {
 
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'sessions' | 'contacts')}>
-        <TabsList className="bg-zinc-800 border border-zinc-700">
+        <TabsList className="bg-white/50 border border-gold/20">
           <TabsTrigger value="sessions" className="data-[state=active]:bg-gold data-[state=active]:text-black">
             <Activity className="h-4 w-4 mr-2" />
             Sessions ({sessions.length})
@@ -300,12 +308,12 @@ const VisitorInsightsDashboard = () => {
         {/* Filters */}
         <div className="flex items-center gap-4 mt-4">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-black/40" />
             <Input
               placeholder={activeTab === 'sessions' ? "Search sessions..." : "Search by name, email, phone..."}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-zinc-900 border-zinc-700 text-white"
+              className="pl-10 bg-white border-gold/20 text-black"
             />
           </div>
           {activeTab === 'sessions' && (
@@ -316,7 +324,7 @@ const VisitorInsightsDashboard = () => {
                   variant={filterDevice === device ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setFilterDevice(device)}
-                  className={filterDevice === device ? 'bg-gold text-black' : 'border-zinc-700 text-gray-300'}
+                  className={filterDevice === device ? 'bg-gold text-black' : 'border-gold/30 text-black/70'}
                 >
                   {device === 'all' ? 'All' : device.charAt(0).toUpperCase() + device.slice(1)}
                 </Button>
@@ -326,9 +334,9 @@ const VisitorInsightsDashboard = () => {
         </div>
 
         <TabsContent value="sessions">
-          <Card className="bg-zinc-900 border-zinc-800 mt-4">
-            <CardHeader className="border-b border-zinc-800">
-              <CardTitle className="text-white">Recent Visitor Sessions</CardTitle>
+          <Card className="jj-card-inner mt-4">
+            <CardHeader className="border-b border-gold/20">
+              <CardTitle className="text-black">Recent Visitor Sessions</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <ScrollArea className="h-[500px]">
@@ -337,11 +345,11 @@ const VisitorInsightsDashboard = () => {
                     <RefreshCw className="h-6 w-6 animate-spin text-gold" />
                   </div>
                 ) : filteredSessions.length === 0 ? (
-                  <div className="text-center text-gray-400 py-8">No visitor sessions found</div>
+                  <div className="text-center text-black/50 py-8">No visitor sessions found</div>
                 ) : (
                   <table className="w-full">
-                    <thead className="sticky top-0 bg-zinc-800">
-                      <tr className="text-left text-gray-400 text-sm">
+                    <thead className="sticky top-0 bg-gradient-to-r from-[#F5EBD7] to-[#E8DCC8]">
+                      <tr className="text-left text-black/60 text-sm">
                         <th className="p-4">Session ID</th>
                         <th className="p-4">Device</th>
                         <th className="p-4">Location</th>
@@ -355,7 +363,7 @@ const VisitorInsightsDashboard = () => {
                       {filteredSessions.map((session) => (
                         <tr 
                           key={session.id} 
-                          className="border-t border-zinc-800 hover:bg-zinc-800/50 cursor-pointer"
+                          className="border-t border-gold/10 hover:bg-gold/5 cursor-pointer"
                           onClick={() => fetchSessionDetails(session)}
                         >
                           <td className="p-4">
@@ -364,11 +372,11 @@ const VisitorInsightsDashboard = () => {
                                 <Users className="h-4 w-4 text-gold" />
                               </div>
                               <div>
-                                <p className="text-white font-mono text-sm">
+                                <p className="text-black font-mono text-sm">
                                   {session.session_id.slice(0, 16)}...
                                 </p>
                                 {session.is_converted && (
-                                  <Badge variant="outline" className="text-xs border-green-500 text-green-500">
+                                  <Badge variant="outline" className="text-xs border-green-500 text-green-600 bg-green-50">
                                     Converted
                                   </Badge>
                                 )}
@@ -376,32 +384,32 @@ const VisitorInsightsDashboard = () => {
                             </div>
                           </td>
                           <td className="p-4">
-                            <div className="flex items-center gap-2 text-gray-300">
+                            <div className="flex items-center gap-2 text-black/70">
                               {getDeviceIcon(session.device_type)}
                               <span className="capitalize">{session.device_type || 'Unknown'}</span>
                             </div>
                           </td>
                           <td className="p-4">
-                            <div className="flex items-center gap-1 text-gray-400 text-sm">
+                            <div className="flex items-center gap-1 text-black/60 text-sm">
                               <MapPin className="h-3 w-3" />
                               {session.city || session.country || 'Unknown'}
                             </div>
                           </td>
                           <td className="p-4">
-                            <span className="text-gray-300">{formatTimeSpent(session.total_time_spent)}</span>
+                            <span className="text-black/70">{formatTimeSpent(session.total_time_spent)}</span>
                           </td>
                           <td className="p-4">
-                            <Badge variant="secondary" className="bg-zinc-700">
+                            <Badge variant="secondary" className="bg-gold/10 text-black/70">
                               {session.pages_visited || 0} pages
                             </Badge>
                           </td>
                           <td className="p-4">
-                            <div className="text-sm text-gray-400">
+                            <div className="text-sm text-black/60">
                               {formatDistanceToNow(new Date(session.created_at), { addSuffix: true })}
                             </div>
                           </td>
                           <td className="p-4">
-                            <Button size="sm" variant="ghost" className="text-gold hover:text-gold-dark">
+                            <Button size="sm" variant="ghost" className="text-gold hover:text-gold/80">
                               <ChevronRight className="h-4 w-4" />
                             </Button>
                           </td>
@@ -416,9 +424,9 @@ const VisitorInsightsDashboard = () => {
         </TabsContent>
 
         <TabsContent value="contacts">
-          <Card className="bg-zinc-900 border-zinc-800 mt-4">
-            <CardHeader className="border-b border-zinc-800">
-              <CardTitle className="text-white">Contact Submissions</CardTitle>
+          <Card className="jj-card-inner mt-4">
+            <CardHeader className="border-b border-gold/20">
+              <CardTitle className="text-black">Contact Submissions</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <ScrollArea className="h-[500px]">
@@ -427,11 +435,11 @@ const VisitorInsightsDashboard = () => {
                     <RefreshCw className="h-6 w-6 animate-spin text-gold" />
                   </div>
                 ) : filteredContacts.length === 0 ? (
-                  <div className="text-center text-gray-400 py-8">No contact submissions found</div>
+                  <div className="text-center text-black/50 py-8">No contact submissions found</div>
                 ) : (
                   <table className="w-full">
-                    <thead className="sticky top-0 bg-zinc-800">
-                      <tr className="text-left text-gray-400 text-sm">
+                    <thead className="sticky top-0 bg-gradient-to-r from-[#F5EBD7] to-[#E8DCC8]">
+                      <tr className="text-left text-black/60 text-sm">
                         <th className="p-4">Name</th>
                         <th className="p-4">Email</th>
                         <th className="p-4">Phone</th>
@@ -443,48 +451,37 @@ const VisitorInsightsDashboard = () => {
                     </thead>
                     <tbody>
                       {filteredContacts.map((contact) => (
-                        <tr key={contact.id} className="border-t border-zinc-800 hover:bg-zinc-800/50">
+                        <tr key={contact.id} className="border-t border-gold/10 hover:bg-gold/5">
                           <td className="p-4">
-                            <p className="text-white font-medium">{contact.full_name}</p>
+                            <p className="text-black font-medium">{contact.full_name}</p>
                           </td>
                           <td className="p-4">
-                            <p className="text-gray-300">{contact.email}</p>
+                            <a href={`mailto:${contact.email}`} className="text-gold hover:underline text-sm">
+                              {contact.email}
+                            </a>
                           </td>
                           <td className="p-4">
-                            <p className="text-gray-300">{contact.phone}</p>
+                            <a href={`tel:${contact.phone}`} className="text-black/70 hover:text-gold text-sm">
+                              {contact.phone}
+                            </a>
                           </td>
                           <td className="p-4">
-                            <p className="text-gray-400">{contact.nationality || '-'}</p>
+                            <span className="text-black/60 text-sm">{contact.nationality || 'N/A'}</span>
                           </td>
                           <td className="p-4">
-                            <Badge variant="secondary" className="bg-zinc-700">
+                            <Badge className="bg-gold/20 text-black/80 border-gold/30">
                               {contact.service_interest || 'General'}
                             </Badge>
                           </td>
                           <td className="p-4">
-                            <div className="text-sm text-gray-400">
-                              {formatDistanceToNow(new Date(contact.created_at), { addSuffix: true })}
+                            <div className="text-sm text-black/60">
+                              {format(new Date(contact.created_at), 'MMM d, yyyy')}
                             </div>
                           </td>
                           <td className="p-4">
-                            <div className="flex gap-1">
-                              <Button 
-                                size="sm" 
-                                variant="ghost" 
-                                className="text-green-500"
-                                onClick={() => window.open(`https://wa.me/${contact.phone.replace(/\D/g, '')}`, '_blank')}
-                              >
-                                <Phone className="h-4 w-4" />
-                              </Button>
-                              <Button 
-                                size="sm" 
-                                variant="ghost" 
-                                className="text-blue-500"
-                                onClick={() => window.open(`mailto:${contact.email}`, '_blank')}
-                              >
-                                <Mail className="h-4 w-4" />
-                              </Button>
-                            </div>
+                            <Button size="sm" variant="ghost" className="text-gold">
+                              <ExternalLink className="h-4 w-4" />
+                            </Button>
                           </td>
                         </tr>
                       ))}
@@ -499,138 +496,109 @@ const VisitorInsightsDashboard = () => {
 
       {/* Session Detail Dialog */}
       <Dialog open={showDetailDialog} onOpenChange={setShowDetailDialog}>
-        <DialogContent className="bg-zinc-900 border-zinc-800 max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] border-gold/30">
           <DialogHeader>
-            <DialogTitle className="text-white flex items-center gap-2">
+            <DialogTitle className="text-black flex items-center gap-2">
               <Eye className="h-5 w-5 text-gold" />
               Session Details
             </DialogTitle>
           </DialogHeader>
-          
+
           {selectedSession && (
-            <div className="space-y-6">
+            <div className="grid grid-cols-2 gap-6">
               {/* Session Info */}
-              <Card className="bg-zinc-800 border-zinc-700">
-                <CardHeader>
-                  <CardTitle className="text-white text-lg">Session Information</CardTitle>
-                </CardHeader>
-                <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div>
-                    <p className="text-gray-400 text-sm">Device</p>
-                    <p className="text-white font-medium capitalize">{selectedSession.device_type || 'Unknown'}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Browser</p>
-                    <p className="text-white">{selectedSession.browser || '-'}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">OS</p>
-                    <p className="text-white">{selectedSession.os || '-'}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Location</p>
-                    <p className="text-white">{selectedSession.city || selectedSession.country || '-'}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Landing Page</p>
-                    <p className="text-white text-sm">{selectedSession.landing_page || '-'}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Referrer</p>
-                    <p className="text-white text-sm truncate">{selectedSession.referrer || 'Direct'}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Time Spent</p>
-                    <p className="text-white">{formatTimeSpent(selectedSession.total_time_spent)}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Pages Visited</p>
-                    <p className="text-white">{selectedSession.pages_visited || 0}</p>
-                  </div>
-                </CardContent>
-              </Card>
+              <div className="space-y-4">
+                <Card className="bg-white/50 border-gold/20">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm text-black/60">Session Information</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-black/60">Session ID:</span>
+                      <span className="text-black font-mono">{selectedSession.session_id.slice(0, 20)}...</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-black/60">Device:</span>
+                      <span className="text-black capitalize">{selectedSession.device_type}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-black/60">Browser:</span>
+                      <span className="text-black">{selectedSession.browser || 'Unknown'}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-black/60">OS:</span>
+                      <span className="text-black">{selectedSession.os || 'Unknown'}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-black/60">Location:</span>
+                      <span className="text-black">{selectedSession.city}, {selectedSession.country}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-black/60">Time Spent:</span>
+                      <span className="text-black">{formatTimeSpent(selectedSession.total_time_spent)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-black/60">Pages Visited:</span>
+                      <span className="text-black">{selectedSession.pages_visited}</span>
+                    </div>
+                  </CardContent>
+                </Card>
 
-              {/* Tabs for Events and Documents */}
-              <Tabs defaultValue="events" className="w-full">
-                <TabsList className="bg-zinc-800 border border-zinc-700">
-                  <TabsTrigger value="events" className="data-[state=active]:bg-gold data-[state=active]:text-black">
-                    <Activity className="h-4 w-4 mr-2" />
-                    Events ({sessionEvents.length})
-                  </TabsTrigger>
-                  <TabsTrigger value="documents" className="data-[state=active]:bg-gold data-[state=active]:text-black">
-                    <FileText className="h-4 w-4 mr-2" />
-                    Documents ({sessionDocuments.length})
-                  </TabsTrigger>
-                </TabsList>
+                {/* Documents */}
+                <Card className="bg-white/50 border-gold/20">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm text-black/60">Documents Accessed</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {sessionDocuments.length === 0 ? (
+                      <p className="text-black/50 text-sm">No documents accessed</p>
+                    ) : (
+                      <div className="space-y-2">
+                        {sessionDocuments.map((doc) => (
+                          <div key={doc.id} className="flex items-center gap-2 text-sm">
+                            <FileText className="h-4 w-4 text-gold" />
+                            <span className="text-black">{doc.document_name}</span>
+                            <Badge variant="outline" className="text-xs">{doc.action}</Badge>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
 
-                <TabsContent value="events" className="mt-4">
-                  <ScrollArea className="h-[300px]">
-                    <div className="space-y-2">
+              {/* Event Timeline */}
+              <div>
+                <Card className="bg-white/50 border-gold/20">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm text-black/60">Event Timeline</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ScrollArea className="h-[400px]">
                       {sessionEvents.length === 0 ? (
-                        <p className="text-gray-400 text-center py-4">No events recorded</p>
+                        <p className="text-black/50 text-sm">No events recorded</p>
                       ) : (
-                        sessionEvents.map((event) => (
-                          <div key={event.id} className="flex items-start gap-3 p-3 bg-zinc-800 rounded-lg">
-                            <div className="mt-1">{getEventIcon(event.event_type)}</div>
-                            <div className="flex-1">
-                              <div className="flex items-center justify-between">
-                                <p className="text-white font-medium">
-                                  {event.event_name || event.event_type.replace(/_/g, ' ')}
-                                </p>
-                                <span className="text-xs text-gray-500">
+                        <div className="space-y-3">
+                          {sessionEvents.map((event) => (
+                            <div key={event.id} className="flex items-start gap-3 text-sm">
+                              <div className="mt-1">{getEventIcon(event.event_type)}</div>
+                              <div className="flex-1">
+                                <p className="text-black font-medium">{event.event_name}</p>
+                                {event.page_path && (
+                                  <p className="text-black/50 text-xs">{event.page_path}</p>
+                                )}
+                                <p className="text-black/40 text-xs">
                                   {format(new Date(event.created_at), 'HH:mm:ss')}
-                                </span>
-                              </div>
-                              {event.page_path && (
-                                <p className="text-gray-400 text-sm">{event.page_path}</p>
-                              )}
-                              {event.element_text && (
-                                <p className="text-gray-500 text-xs">Element: {event.element_text}</p>
-                              )}
-                            </div>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  </ScrollArea>
-                </TabsContent>
-
-                <TabsContent value="documents" className="mt-4">
-                  <ScrollArea className="h-[300px]">
-                    <div className="space-y-2">
-                      {sessionDocuments.length === 0 ? (
-                        <p className="text-gray-400 text-center py-4">No documents recorded</p>
-                      ) : (
-                        sessionDocuments.map((doc) => (
-                          <div key={doc.id} className="flex items-center justify-between p-3 bg-zinc-800 rounded-lg">
-                            <div className="flex items-center gap-3">
-                              {doc.action === 'upload' ? (
-                                <Upload className="h-5 w-5 text-orange-500" />
-                              ) : (
-                                <Download className="h-5 w-5 text-purple-500" />
-                              )}
-                              <div>
-                                <p className="text-white font-medium">{doc.document_name || 'Unknown'}</p>
-                                <p className="text-gray-400 text-sm capitalize">{doc.document_type} • {doc.action}</p>
+                                </p>
                               </div>
                             </div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs text-gray-500">
-                                {format(new Date(doc.created_at), 'MMM d, HH:mm')}
-                              </span>
-                              {doc.document_url && (
-                                <Button size="sm" variant="ghost" onClick={() => window.open(doc.document_url!, '_blank')}>
-                                  <ExternalLink className="h-4 w-4" />
-                                </Button>
-                              )}
-                            </div>
-                          </div>
-                        ))
+                          ))}
+                        </div>
                       )}
-                    </div>
-                  </ScrollArea>
-                </TabsContent>
-              </Tabs>
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           )}
         </DialogContent>

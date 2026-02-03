@@ -12,18 +12,18 @@ interface MegaMenuServicesProps {
 
 const MegaMenuServices = React.forwardRef<HTMLDivElement, MegaMenuServicesProps>(({ onClose }, ref) => {
   const services = [
-    { name: 'Mortgages', href: '/mortgage-calculator', icon: Calculator, description: 'Find the best rates' },
-    { name: 'Golden Visa', href: '/guides/golden-visa-uae', icon: Award, description: 'UAE residency program' },
-    { name: 'Currency Exchange', href: '/services/currency-exchange', icon: Coins, description: 'Best exchange rates' },
-    { name: 'Conveyancing', href: '/services/conveyancing', icon: FileText, description: 'Legal property transfer' },
+    { name: 'Snagging & Inspection', href: '/services/snagging', icon: ClipboardCheck, description: 'Handover inspections' },
     { name: 'Property Management', href: '/services/property-management', icon: Key, description: 'Full management services' },
-    { name: 'List Your Property', href: '/seller-listing', icon: Home, description: 'Sell or rent your property' },
-    { name: 'Property Snagging', href: '/services/snagging', icon: ClipboardCheck, description: 'Quality inspections' },
-    { name: 'Property Evaluation', href: '/property-evaluator', icon: Calculator, description: 'AI-powered valuation' },
     { name: 'Short-term Rentals', href: '/services/short-term-rentals', icon: Calendar, description: 'Holiday home management' },
-    { name: 'Partner Program', href: '/partners', icon: Handshake, description: 'Join our network' },
+    { name: 'Currency Exchange', href: '/services/currency-exchange', icon: Coins, description: 'Best exchange rates' },
+    { name: 'Concierge Services', href: '/services/concierge', icon: Handshake, description: 'Convenience coordination' },
     { name: 'Company Setup', href: '/services/company-setup', icon: Building2, description: 'Start your UAE business' },
-    { name: 'Plots & Land', href: '/properties?type=plot', icon: Globe, description: 'Land investments' },
+    { name: 'Signature Collection', href: '/services/signature-collection', icon: FileText, description: 'Document signing' },
+    { name: 'AI Tools & Calculators', href: '/services/ai-tools', icon: Calculator, description: 'AI-powered tools' },
+    { name: 'Broker Certification', href: '/services/broker-certification', icon: Award, description: 'Internal program' },
+    { name: 'Complaint Procedures', href: '/services/complaint-procedures', icon: ClipboardCheck, description: 'Raise issues' },
+    { name: 'Happiness Center', href: '/services/customer-happiness-center', icon: Globe, description: 'Support center' },
+    { name: 'Testimonials', href: '/services/testimonials', icon: Home, description: 'Client feedback' },
   ];
 
   return (
