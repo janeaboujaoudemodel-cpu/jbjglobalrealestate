@@ -52,8 +52,15 @@ function stripMarkdownLinks(text: string): string {
   return text.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
 }
 
+// CRITICAL FIX: Do NOT upscale to 1200x800 - that size returns 403 on Provident's CDN.
+// Use 464x312 which is a known working size, or preserve original if not resizable.
 function normalizeCloudfrontImage(url: string): string {
-  return url.replace(/\/x\/\d+x\d+\//, "/x/1200x800/");
+  // Only normalize if it's already a cloudfront URL with a size path
+  if (!url.includes("cloudfront.net") || !url.includes("/x/")) {
+    return url;
+  }
+  // Replace any existing size with safe 464x312 (known to work)
+  return url.replace(/\/x\/\d+x\d+\//, "/x/464x312/");
 }
 
 function extractSection(markdown: string, heading: string): string | null {

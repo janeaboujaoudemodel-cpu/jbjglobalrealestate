@@ -244,10 +244,11 @@ Return JSON array of projects:
         }
       }
 
-      // Prepare images
+      // Prepare images - CRITICAL: Do NOT upscale to 1200x800 (causes 403 errors)
+      // Use 464x312 which is known to work on Provident's CDN
       const validImages = (proj.images || [])
         .filter((url: string) => url && typeof url === 'string' && !url.includes("logo"))
-        .map((url: string) => url.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"))
+        .map((url: string) => url.replace(/\/x\/\d+x\d+\//, "/x/464x312/"))
         .slice(0, 15);
 
       // INSERT TO APPROVAL QUEUE - NOT PROJECTS TABLE
