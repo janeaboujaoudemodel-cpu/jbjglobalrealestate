@@ -3,7 +3,7 @@ import {
   BookOpen, BarChart3, Building2, Users, Briefcase, Award, 
   Phone, ClipboardCheck, Heart, MessageCircle, FileText,
   Newspaper, Scale, Layers, Sparkles, MapPin, Calculator,
-  GraduationCap, Shield, HelpCircle
+  GraduationCap, Shield, HelpCircle, Map, Compass
 } from 'lucide-react';
 import {
   MegaMenuIconLink,
@@ -30,7 +30,7 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     { label: 'Testimonials', href: '/testimonials', icon: MessageCircle },
   ];
 
-  // Column 2: Resources & Guides (10 items - balanced)
+  // Column 2: Resources & Guides (11 items - includes sitemap)
   const resourceLinks = [
     { label: 'Guides Library', href: '/guides', icon: BookOpen },
     { label: 'Market Intelligence', href: '/market-intelligence', icon: BarChart3 },
@@ -42,6 +42,7 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     { label: 'Tenant Guide', href: '/tenant-guide', icon: BookOpen },
     { label: 'Landlord Guide', href: '/landlord-guide', icon: BookOpen },
     { label: 'Golden Visa Guide', href: '/guides/golden-visa-uae', icon: Award },
+    { label: 'Sitemap', href: '/sitemap', icon: Map },
   ];
 
   // Column 3: Partners & Tools (10 items - balanced)

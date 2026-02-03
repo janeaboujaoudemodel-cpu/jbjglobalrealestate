@@ -6,8 +6,10 @@ import MarketingScripts from "@/components/marketing/MarketingScripts";
 import SecurityShield from "@/components/SecurityShield";
 import PopupLayer from "@/components/PopupLayer";
 import CommandPaletteRoot from "@/components/ui/command-palette-root";
+import GuidedTour from "@/components/GuidedTour";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useOnboardingTour } from "@/hooks/use-onboarding-tour";
 
 const CHAT_DAILY_KEY = "jj_chat_daily_shown";
 const SCROLL_DELAY_MS = 3500; // 3.5 seconds after scroll past hero
@@ -43,6 +45,9 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
   const isHomePage = location.pathname === "/";
+
+  // Onboarding tour for tablets
+  const { showTour, setShowTour, completeTour } = useOnboardingTour();
 
   // Chat collapsed state - always start collapsed
   const [isChatCollapsed, setIsChatCollapsed] = useState(true);
@@ -200,6 +205,14 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           showAttentionPulse={showAttentionPulse}
         />
       )}
+      {/* Guided Tour for tablet users */}
+      <GuidedTour 
+        isOpen={showTour} 
+        onClose={() => {
+          completeTour();
+          setShowTour(false);
+        }} 
+      />
     </div>
   );
 };

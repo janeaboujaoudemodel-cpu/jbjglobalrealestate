@@ -142,6 +142,7 @@ const Footer = () => {
     { href: "/documents", label: t('footer.documentsSpreadsheets') || "Documents & Spreadsheets" },
     { href: "/video-meeting", label: t('footer.videoMeet') || "Video Meet" },
     { href: "/ai-calendar", label: t('footer.calendarNotes') || "Calendar & Notes" },
+    { href: "/sitemap", label: "Sitemap" },
   ];
 
   // Career Links
