@@ -6,6 +6,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Brain, Clock, CheckCircle2, XCircle, TrendingUp, Zap, RefreshCw, BarChart3 } from 'lucide-react';
 import { format, subDays, subHours, startOfDay, endOfDay } from 'date-fns';
+import PageGuide from './PageGuide';
+import { getGuide } from '@/config/page-guides';
 
 interface UsageLog {
   id: string;
@@ -164,22 +166,25 @@ const AIAnalyticsDashboard = () => {
     return `${(tokens / 1000000).toFixed(2)}M`;
   };
 
+  const aiGuide = getGuide('ai-analytics');
+
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center">
-            <Brain className="w-5 h-5 text-purple-400" />
+      <div className="flex items-center justify-between flex-wrap gap-4">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center border-2 border-purple-400/30">
+            <Brain className="w-6 h-6 text-purple-500" />
           </div>
           <div>
-            <h2 className="text-white text-xl font-semibold">AI Analytics</h2>
-            <p className="text-zinc-400 text-sm">Usage metrics and performance insights</p>
+            <h2 className="text-black text-xl font-semibold">AI Analytics</h2>
+            <p className="text-black/60 text-sm">Usage metrics and performance insights</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
+          {aiGuide && <PageGuide guide={aiGuide} />}
           <Select value={timeRange} onValueChange={(v: any) => setTimeRange(v)}>
-            <SelectTrigger className="w-32 bg-zinc-800 border-zinc-700 text-white">
+            <SelectTrigger className="w-32 bg-white/80 border-2 border-gold/30 text-black">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -194,7 +199,7 @@ const AIAnalyticsDashboard = () => {
             size="sm"
             onClick={fetchLogs}
             disabled={isLoading}
-            className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+            className="border-2 border-gold/40 bg-white/80 hover:bg-gold/10 hover:border-gold text-black"
           >
             <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
             Refresh
@@ -204,60 +209,60 @@ const AIAnalyticsDashboard = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        <Card className="bg-zinc-900 border-zinc-800 p-4">
-          <div className="flex items-center gap-2 text-zinc-400 text-xs mb-2">
-            <BarChart3 className="w-4 h-4" />
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+          <div className="flex items-center gap-2 text-black/60 text-xs mb-2">
+            <BarChart3 className="w-4 h-4 text-gold" />
             Total Calls
           </div>
-          <p className="text-white text-2xl font-bold">{stats?.totalCalls || 0}</p>
+          <p className="text-black text-2xl font-bold">{stats?.totalCalls || 0}</p>
         </Card>
 
-        <Card className="bg-zinc-900 border-zinc-800 p-4">
-          <div className="flex items-center gap-2 text-zinc-400 text-xs mb-2">
-            <CheckCircle2 className="w-4 h-4 text-green-500" />
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+          <div className="flex items-center gap-2 text-black/60 text-xs mb-2">
+            <CheckCircle2 className="w-4 h-4 text-green-600" />
             Success Rate
           </div>
-          <p className="text-white text-2xl font-bold">
+          <p className="text-black text-2xl font-bold">
             {stats?.successRate.toFixed(1) || 0}%
           </p>
         </Card>
 
-        <Card className="bg-zinc-900 border-zinc-800 p-4">
-          <div className="flex items-center gap-2 text-zinc-400 text-xs mb-2">
-            <Clock className="w-4 h-4 text-blue-400" />
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+          <div className="flex items-center gap-2 text-black/60 text-xs mb-2">
+            <Clock className="w-4 h-4 text-blue-600" />
             Avg Response
           </div>
-          <p className="text-white text-2xl font-bold">
+          <p className="text-black text-2xl font-bold">
             {formatMs(stats?.avgResponseTime || 0)}
           </p>
         </Card>
 
-        <Card className="bg-zinc-900 border-zinc-800 p-4">
-          <div className="flex items-center gap-2 text-zinc-400 text-xs mb-2">
-            <Zap className="w-4 h-4 text-yellow-400" />
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+          <div className="flex items-center gap-2 text-black/60 text-xs mb-2">
+            <Zap className="w-4 h-4 text-gold" />
             Input Tokens
           </div>
-          <p className="text-white text-2xl font-bold">
+          <p className="text-black text-2xl font-bold">
             {formatTokens(stats?.totalPromptTokens || 0)}
           </p>
         </Card>
 
-        <Card className="bg-zinc-900 border-zinc-800 p-4">
-          <div className="flex items-center gap-2 text-zinc-400 text-xs mb-2">
-            <TrendingUp className="w-4 h-4 text-purple-400" />
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+          <div className="flex items-center gap-2 text-black/60 text-xs mb-2">
+            <TrendingUp className="w-4 h-4 text-purple-600" />
             Output Tokens
           </div>
-          <p className="text-white text-2xl font-bold">
+          <p className="text-black text-2xl font-bold">
             {formatTokens(stats?.totalCompletionTokens || 0)}
           </p>
         </Card>
 
-        <Card className="bg-zinc-900 border-zinc-800 p-4">
-          <div className="flex items-center gap-2 text-zinc-400 text-xs mb-2">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+          <div className="flex items-center gap-2 text-black/60 text-xs mb-2">
             <XCircle className="w-4 h-4 text-red-500" />
             Errors
           </div>
-          <p className="text-white text-2xl font-bold text-red-400">
+          <p className="text-red-500 text-2xl font-bold">
             {stats?.errorCount || 0}
           </p>
         </Card>
@@ -266,9 +271,9 @@ const AIAnalyticsDashboard = () => {
       {/* Detailed Breakdown */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* By Function */}
-        <Card className="bg-zinc-900 border-zinc-800 p-6">
-          <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
-            <Brain className="w-4 h-4 text-purple-400" />
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-6 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+          <h3 className="text-black font-semibold mb-4 flex items-center gap-2">
+            <Brain className="w-4 h-4 text-purple-500" />
             Usage by Function
           </h3>
           {stats && Object.keys(stats.byFunction).length > 0 ? (
@@ -276,16 +281,16 @@ const AIAnalyticsDashboard = () => {
               {Object.entries(stats.byFunction)
                 .sort((a, b) => b[1].calls - a[1].calls)
                 .map(([name, data]) => (
-                  <div key={name} className="flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg">
+                  <div key={name} className="flex items-center justify-between p-3 bg-white/60 border border-gold/20 rounded-lg hover:border-gold/40 transition-colors">
                     <div>
-                      <p className="text-white text-sm font-medium">{name}</p>
-                      <p className="text-zinc-500 text-xs">
+                      <p className="text-black text-sm font-medium">{name}</p>
+                      <p className="text-black/50 text-xs">
                         {data.success}/{data.calls} successful • {formatMs(data.avgTime)} avg
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-white font-semibold">{data.calls}</p>
-                      <p className={`text-xs ${data.success === data.calls ? 'text-green-400' : 'text-yellow-400'}`}>
+                      <p className="text-black font-semibold">{data.calls}</p>
+                      <p className={`text-xs ${data.success === data.calls ? 'text-green-600' : 'text-amber-600'}`}>
                         {((data.success / data.calls) * 100).toFixed(0)}%
                       </p>
                     </div>
@@ -293,14 +298,14 @@ const AIAnalyticsDashboard = () => {
                 ))}
             </div>
           ) : (
-            <p className="text-zinc-500 text-sm">No data available</p>
+            <p className="text-black/50 text-sm">No data available</p>
           )}
         </Card>
 
         {/* By Model */}
-        <Card className="bg-zinc-900 border-zinc-800 p-6">
-          <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
-            <Zap className="w-4 h-4 text-yellow-400" />
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-6 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+          <h3 className="text-black font-semibold mb-4 flex items-center gap-2">
+            <Zap className="w-4 h-4 text-gold" />
             Usage by Model
           </h3>
           {stats && Object.keys(stats.byModel).length > 0 ? (
@@ -308,37 +313,37 @@ const AIAnalyticsDashboard = () => {
               {Object.entries(stats.byModel)
                 .sort((a, b) => b[1].calls - a[1].calls)
                 .map(([model, data]) => (
-                  <div key={model} className="flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg">
+                  <div key={model} className="flex items-center justify-between p-3 bg-white/60 border border-gold/20 rounded-lg hover:border-gold/40 transition-colors">
                     <div>
-                      <p className="text-white text-sm font-medium">{model}</p>
-                      <p className="text-zinc-500 text-xs">{formatTokens(data.tokens)} tokens used</p>
+                      <p className="text-black text-sm font-medium">{model}</p>
+                      <p className="text-black/50 text-xs">{formatTokens(data.tokens)} tokens used</p>
                     </div>
-                    <p className="text-white font-semibold">{data.calls} calls</p>
+                    <p className="text-black font-semibold">{data.calls} calls</p>
                   </div>
                 ))}
             </div>
           ) : (
-            <p className="text-zinc-500 text-sm">No data available</p>
+            <p className="text-black/50 text-sm">No data available</p>
           )}
         </Card>
       </div>
 
       {/* Recent Errors */}
       {stats && stats.recentErrors.length > 0 && (
-        <Card className="bg-zinc-900 border-zinc-800 p-6">
-          <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
+        <Card className="bg-gradient-to-br from-red-50 via-[#FFF5F5] to-red-50 border-2 border-red-300/50 p-6 shadow-[0_4px_20px_rgba(239,68,68,0.1)]">
+          <h3 className="text-black font-semibold mb-4 flex items-center gap-2">
             <XCircle className="w-4 h-4 text-red-500" />
             Recent Errors
           </h3>
           <ScrollArea className="h-[200px]">
             <div className="space-y-2">
               {stats.recentErrors.map((error) => (
-                <div key={error.id} className="flex items-center justify-between p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
+                <div key={error.id} className="flex items-center justify-between p-3 bg-red-100/50 border border-red-200 rounded-lg">
                   <div>
-                    <p className="text-white text-sm font-medium">{error.function_name}</p>
-                    <p className="text-red-400 text-xs">{error.error_type || 'Unknown error'}</p>
+                    <p className="text-black text-sm font-medium">{error.function_name}</p>
+                    <p className="text-red-600 text-xs">{error.error_type || 'Unknown error'}</p>
                   </div>
-                  <p className="text-zinc-500 text-xs">
+                  <p className="text-black/50 text-xs">
                     {format(new Date(error.created_at), 'MMM d, HH:mm')}
                   </p>
                 </div>
@@ -349,39 +354,39 @@ const AIAnalyticsDashboard = () => {
       )}
 
       {/* Recent Logs */}
-      <Card className="bg-zinc-900 border-zinc-800 p-6">
-        <h3 className="text-white font-semibold mb-4">Recent Logs</h3>
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-6 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <h3 className="text-black font-semibold mb-4">Recent Logs</h3>
         <ScrollArea className="h-[300px]">
           <table className="w-full text-sm">
-            <thead className="text-zinc-500 text-xs uppercase border-b border-zinc-800">
+            <thead className="text-black/60 text-xs uppercase border-b-2 border-gold/20">
               <tr>
-                <th className="text-left pb-3">Function</th>
-                <th className="text-left pb-3">Model</th>
-                <th className="text-center pb-3">Status</th>
-                <th className="text-right pb-3">Response Time</th>
-                <th className="text-right pb-3">Tokens</th>
-                <th className="text-right pb-3">Time</th>
+                <th className="text-left pb-3 font-medium">Function</th>
+                <th className="text-left pb-3 font-medium">Model</th>
+                <th className="text-center pb-3 font-medium">Status</th>
+                <th className="text-right pb-3 font-medium">Response Time</th>
+                <th className="text-right pb-3 font-medium">Tokens</th>
+                <th className="text-right pb-3 font-medium">Time</th>
               </tr>
             </thead>
             <tbody>
               {logs.slice(0, 50).map((log) => (
-                <tr key={log.id} className="border-b border-zinc-800/50">
-                  <td className="py-2 text-white">{log.function_name}</td>
-                  <td className="py-2 text-zinc-400">{log.model}</td>
+                <tr key={log.id} className="border-b border-gold/10 hover:bg-white/40 transition-colors">
+                  <td className="py-2 text-black font-medium">{log.function_name}</td>
+                  <td className="py-2 text-black/70">{log.model}</td>
                   <td className="py-2 text-center">
                     {log.success ? (
-                      <CheckCircle2 className="w-4 h-4 text-green-500 inline" />
+                      <CheckCircle2 className="w-4 h-4 text-green-600 inline" />
                     ) : (
                       <XCircle className="w-4 h-4 text-red-500 inline" />
                     )}
                   </td>
-                  <td className="py-2 text-right text-zinc-400">
+                  <td className="py-2 text-right text-black/70">
                     {log.response_time_ms ? formatMs(log.response_time_ms) : '—'}
                   </td>
-                  <td className="py-2 text-right text-zinc-400">
+                  <td className="py-2 text-right text-black/70">
                     {(log.prompt_tokens || 0) + (log.completion_tokens || 0)}
                   </td>
-                  <td className="py-2 text-right text-zinc-500">
+                  <td className="py-2 text-right text-black/50">
                     {format(new Date(log.created_at), 'HH:mm:ss')}
                   </td>
                 </tr>
@@ -389,7 +394,7 @@ const AIAnalyticsDashboard = () => {
             </tbody>
           </table>
           {logs.length === 0 && !isLoading && (
-            <p className="text-zinc-500 text-center py-8">No AI usage logs found in this time range</p>
+            <p className="text-black/50 text-center py-8">No AI usage logs found in this time range</p>
           )}
         </ScrollArea>
       </Card>
