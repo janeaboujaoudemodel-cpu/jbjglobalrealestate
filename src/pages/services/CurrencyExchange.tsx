@@ -12,6 +12,9 @@ import {
   AlertCircle,
   Users,
   ClipboardList,
+  Play,
+  Clock,
+  Send,
 } from "lucide-react";
 import Footer from "@/components/Footer";
 import DirectContactCTA from "@/components/DirectContactCTA";
@@ -39,66 +42,59 @@ const staggerContainer = {
 };
 
 const whatWeDo = [
-  "Introduce buyers to licensed currency exchange partners",
-  "Coordinate documentation requirements",
-  "Facilitate communication between parties",
-  "Track transfer status for transaction alignment",
+  { text: "Organize your exchange request intake (currency, amount range, timing, destination)", icon: ClipboardList },
+  { text: "Prepare a documentation checklist based on transaction pathway", icon: FileText },
+  { text: "Introduce you to licensed providers when required", icon: Users },
+  { text: "Coordinate status updates and document readiness reminders", icon: Clock },
 ];
 
-const whatWeDontDo = [
-  "Provide banking or financial advice",
-  "Handle or hold client funds",
-  "Guarantee exchange rates or timing",
-  "Act as a regulated financial institution",
-];
-
-const documentsRequired = [
-  "Passport copy (buyer and beneficiaries)",
-  "Emirates ID (if UAE resident)",
-  "Proof of source of funds",
-  "Property purchase documentation",
-  "Bank statements (as required by exchange partner)",
+const typicalDocuments = [
+  "Passport / Emirates ID (as applicable)",
+  "Proof of address (as applicable)",
+  "Proof of funds / source documentation (as applicable)",
+  "Transaction context (SPA/reservation/booking reference where available)",
 ];
 
 const processSteps = [
-  { step: 1, title: "Submit currency exchange support request", icon: FileText },
-  { step: 2, title: "Documentation review and preparation", icon: ClipboardList },
-  { step: 3, title: "Partner introduction and coordination", icon: Users },
-  { step: 4, title: "Transfer confirmation and alignment with transaction", icon: CheckCircle2 },
+  { step: 1, title: "Submit your exchange intent and timing", icon: Send },
+  { step: 2, title: "Receive a checklist and routing options", icon: ClipboardList },
+  { step: 3, title: "Partner introduction (if needed)", icon: Users },
+  { step: 4, title: "Confirmation and status coordination", icon: CheckCircle2 },
+  { step: 5, title: "Completion support for payment timeline alignment", icon: Clock },
 ];
 
 const faqData = [
   {
-    question: "Why do I need currency exchange support?",
-    answer: "Many international buyers need to transfer funds across borders for property purchases. We help coordinate with licensed exchange partners to ensure smooth fund transfer aligned with your transaction timeline.",
+    question: "Can you guarantee exchange rates?",
+    answer: "No. Rates are set by providers and markets.",
   },
   {
-    question: "Do you hold or transfer my money?",
-    answer: "No. JBJ Global Real Estate does not hold, transfer, or manage client funds. We introduce you to licensed exchange partners who handle the actual currency transfer.",
+    question: "Can you handle the transfer for me?",
+    answer: "Transfers are handled by licensed providers. We coordinate intake and readiness.",
   },
   {
-    question: "How do I know the exchange partner is legitimate?",
-    answer: "We only introduce clients to licensed, regulated exchange providers. You will contract directly with the exchange partner under their regulatory framework.",
+    question: "Will I be asked for proof of funds?",
+    answer: "Often yes, depending on compliance requirements.",
   },
   {
-    question: "Can you guarantee the exchange rate?",
-    answer: "No. Exchange rates are determined by market conditions and your chosen exchange partner. We do not guarantee or fix exchange rates.",
+    question: "Do you support multiple currencies?",
+    answer: "Support depends on provider availability.",
   },
   {
-    question: "What documents do I need?",
-    answer: "Typically, you'll need passport copies, proof of source of funds, property documentation, and bank statements. Requirements vary by exchange partner and transaction size.",
+    question: "How fast can it be done?",
+    answer: "Time varies by provider, compliance checks, and documentation readiness.",
   },
   {
-    question: "How long does the transfer take?",
-    answer: "Transfer timing depends on the exchange partner, source and destination countries, and compliance requirements. Typical transfers can range from same-day to several business days.",
+    question: "Is this required for every buyer?",
+    answer: "No. It's helpful for cross-border transfers or complex routing.",
   },
   {
-    question: "Is this service free?",
-    answer: "Our coordination support is provided as part of our buyer advisory service. The exchange partner may charge fees for the actual currency transfer.",
+    question: "Is this included in brokerage fees?",
+    answer: "It is a separate coordination service scope.",
   },
   {
-    question: "What if I already have an exchange provider?",
-    answer: "You are free to use your preferred exchange provider. We can coordinate with them regarding transaction timing and documentation requirements.",
+    question: "Can you help if the buyer is overseas?",
+    answer: "Yes—intake and coordination can be done remotely.",
   },
 ];
 
@@ -107,7 +103,7 @@ const CurrencyExchange = () => {
     <>
       <SEOHead
         title="Currency Exchange Support | JBJ Global Real Estate"
-        description="Coordination support for international property buyers transferring funds. Partner introductions and documentation assistance for cross-border transactions."
+        description="Coordination support for cross-border buyers transferring funds—structured documentation, clean routing, and partner introductions when needed."
         canonicalPath="/services/currency-exchange"
       />
 
@@ -140,7 +136,7 @@ const CurrencyExchange = () => {
             </h1>
             
             <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-              Coordination support for buyers transferring funds across borders — with clear routing and documentation readiness.
+              Coordination support for cross-border buyers transferring funds—structured documentation, clean routing, and partner introductions when needed.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -148,9 +144,27 @@ const CurrencyExchange = () => {
                 Request Exchange Support
               </PremiumHeroButton>
               <PremiumHeroButton href="/contact">
-                Contact Support
+                Speak to Support
               </PremiumHeroButton>
             </div>
+
+            {/* Video Placeholder */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              className="mt-12 max-w-xl mx-auto"
+            >
+              <div className="relative rounded-2xl overflow-hidden border border-gold/30 bg-black/50 backdrop-blur-sm aspect-video">
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <div className="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center mb-4 border border-gold/40">
+                    <Play className="w-6 h-6 text-gold ml-1" />
+                  </div>
+                  <p className="text-gold text-sm font-medium">Cross-Border Buying Made Easier</p>
+                  <p className="text-zinc-500 text-xs mt-1">Video Coming Soon</p>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
         
@@ -165,61 +179,7 @@ const CurrencyExchange = () => {
         </motion.div>
       </section>
 
-      {/* WHAT WE DO / DON'T DO */}
-      <section className="bg-black py-20">
-        <div className="jj-layer-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
-            <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-              {/* What We Do */}
-              <motion.div variants={fadeInUp}>
-                <div className="h-full jj-card-inner">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
-                      <CheckCircle2 className="w-6 h-6 text-gold" />
-                    </div>
-                    <h3 className="text-xl font-bold text-black">What We Do</h3>
-                  </div>
-                  <ul className="space-y-3">
-                    {whatWeDo.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-3 text-zinc-700">
-                        <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </motion.div>
-
-              {/* What We Don't Do */}
-              <motion.div variants={fadeInUp}>
-                <div className="h-full jj-card-inner">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
-                      <AlertCircle className="w-6 h-6 text-zinc-400" />
-                    </div>
-                    <h3 className="text-xl font-bold text-black">What We Don't Do</h3>
-                  </div>
-                  <ul className="space-y-3">
-                    {whatWeDontDo.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-3 text-zinc-700">
-                        <span className="text-zinc-400">•</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </motion.div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* DOCUMENTS REQUIRED */}
+      {/* WHAT THIS SERVICE IS */}
       <section className="bg-black py-20">
         <div className="jj-layer-2">
           <motion.div
@@ -234,26 +194,119 @@ const CurrencyExchange = () => {
               className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Documents Commonly Required
+              What This Service Is
             </motion.h2>
-            <motion.div variants={fadeInUp} className="jj-card-inner">
-              <ul className="space-y-4">
-                {documentsRequired.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-zinc-700">
-                    <FileText className="w-5 h-5 text-gold shrink-0 mt-0.5" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-6 text-sm text-zinc-500 italic">
-                * Specific requirements vary by exchange partner and transaction details.
+            <motion.div variants={fadeInUp} className="jj-card-inner text-center">
+              <p className="text-zinc-700 text-lg leading-relaxed">
+                Currency exchange can create delays if documentation and routing are unclear. This service provides coordination support so buyers understand what is required and can move efficiently with the right licensed providers.
               </p>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* PROCESS STEPS */}
+      {/* WHAT WE DO */}
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="max-w-4xl mx-auto"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              What We Do
+            </motion.h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {whatWeDo.map((item, idx) => (
+                <motion.div key={idx} variants={fadeInUp} className="jj-card-inner">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center shrink-0">
+                      <item.icon className="w-5 h-5 text-gold" />
+                    </div>
+                    <span className="text-zinc-700">{item.text}</span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* WHAT WE DO NOT DO */}
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="max-w-4xl mx-auto"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-4"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              What We Do Not Do
+            </motion.h2>
+            <motion.p variants={fadeInUp} className="text-zinc-600 text-center mb-8 max-w-2xl mx-auto">
+              (Clear Scope)
+            </motion.p>
+            <motion.div variants={fadeInUp} className="jj-card-inner">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center shrink-0">
+                  <AlertCircle className="w-6 h-6 text-zinc-400" />
+                </div>
+                <p className="text-zinc-700 leading-relaxed">
+                  We do not provide banking services or regulated financial advice. Where required, we introduce clients to properly licensed providers who operate under their own terms and compliance requirements.
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* TYPICAL DOCUMENTS */}
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="max-w-4xl mx-auto"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-4"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              Typical Documents
+            </motion.h2>
+            <motion.p variants={fadeInUp} className="text-zinc-600 text-center mb-8 max-w-2xl mx-auto">
+              (May Be Requested by Providers)
+            </motion.p>
+            <motion.div variants={fadeInUp} className="jj-card-inner">
+              <ul className="space-y-4">
+                {typicalDocuments.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-3 text-zinc-700">
+                    <FileText className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
       <section className="bg-black py-20">
         <div className="jj-layer-2">
           <motion.div
@@ -354,15 +407,16 @@ const CurrencyExchange = () => {
               className="text-3xl md:text-4xl font-bold text-black mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Need Currency Exchange Support?
+              Move funds with clarity and control
             </motion.h2>
             <motion.p variants={fadeInUp} className="text-zinc-600 mb-8">
-              We'll coordinate with licensed exchange partners for your property purchase.
+              Send your timing and currency requirements to receive the correct checklist and routing plan.
             </motion.p>
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button variant="primary" size="lg" asChild>
                 <Link to="/contact?service=currency-exchange">
                   Request Exchange Support
+                  <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
               </Button>
               <Button variant="outline" size="lg" asChild>
@@ -373,16 +427,6 @@ const CurrencyExchange = () => {
               </Button>
             </motion.div>
           </motion.div>
-        </div>
-      </section>
-
-      {/* COMPLIANCE DISCLAIMER */}
-      <section className="bg-black py-8 border-t border-zinc-800">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-zinc-500 text-sm max-w-3xl mx-auto">
-            JBJ Global Real Estate provides coordination support only. Currency exchange services are provided by independent, licensed exchange partners. 
-            Clients contract directly with exchange partners under their regulatory framework. JBJ does not hold, transfer, or manage client funds.
-          </p>
         </div>
       </section>
 
