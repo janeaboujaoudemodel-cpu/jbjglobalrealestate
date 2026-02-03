@@ -185,6 +185,7 @@ import Pricing from "./pages/Pricing";
 import SecurityConsole from "./pages/SecurityConsole";
 import ITDepartment from "./pages/ITDepartment";
 import EmployeeManagementHub from "./pages/EmployeeManagementHub";
+import MarketingHub from "./pages/admin/MarketingHub";
 
 // Hidden pages (not in navigation, noindex)
 import DigitalCard from "./pages/DigitalCard";
@@ -345,6 +346,7 @@ const App = () => (
                 <Route path="/verify-certificate/:token" element={<VerifyCertificate />} />
                 <Route path="/map" element={<PropertyMap />} />
                 <Route path="/admin/developers" element={<AdminDevelopers />} />
+                <Route path="/admin/marketing-hub" element={<MarketingHub />} />
                 <Route path="/my-account" element={<BrokerAccount />} />
                 <Route path="/profile" element={<UserProfile />} />
                 {/* Alias: older links pointing to /account */}

@@ -29,6 +29,7 @@ import ChatAgentJoining from './chat/ChatAgentJoining';
 import ChatShortcuts, { ShortcutType } from './chat/ChatShortcuts';
 import ChatCVSubmission from './chat/ChatCVSubmission';
 import ChatFeedback, { FeedbackType } from './chat/ChatFeedback';
+import ChatConversationalCollect from './chat/ChatConversationalCollect';
 
 interface AIChatWidgetProps {
   isCollapsed: boolean;
@@ -140,8 +141,29 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
     } else {
       setUserInfo(prev => ({ ...prev, email }));
       setIsExistingUser(false);
-      setStep('collect_info');
+      // Use conversational AI collection instead of form
+      setStep('conversational_collect');
     }
+  };
+
+  // Handle conversational collect completion
+  const handleConversationalComplete = (info: { firstName: string; lastName: string; email: string; phone: string }) => {
+    setUserInfo(prev => ({
+      ...prev,
+      firstName: info.firstName,
+      lastName: info.lastName,
+      email: info.email,
+      phone: info.phone,
+      consentAccurate: true,
+      consentPrivacy: true,
+    }));
+    // Proceed to shortcuts after collecting info
+    setStep('shortcuts');
+  };
+
+  // Handle user preferring form instead of conversational
+  const handlePreferForm = () => {
+    setStep('collect_info');
   };
 
   // Continue existing conversation
@@ -533,8 +555,11 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
       case 'cv_submission':
         setStep('shortcuts');
         break;
-      case 'collect_info':
+      case 'conversational_collect':
         setStep('check_email');
+        break;
+      case 'collect_info':
+        setStep('conversational_collect');
         break;
       case 'chat_history':
         setStep('check_email');
@@ -612,6 +637,14 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
             conversationId={conversationId}
             onSubmitSuccess={handleCVSubmitSuccess}
             onBack={() => setStep('shortcuts')}
+          />
+        )}
+
+        {step === 'conversational_collect' && (
+          <ChatConversationalCollect
+            onComplete={handleConversationalComplete}
+            onPreferForm={handlePreferForm}
+            initialEmail={userInfo.email}
           />
         )}
 

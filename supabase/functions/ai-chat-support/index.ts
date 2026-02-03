@@ -407,7 +407,16 @@ serve(async (req) => {
       case 'buy':
         intentContext = `
 DETECTED INTENT: BUY PROPERTY
-The user wants to purchase property. Focus on:
+The user wants to purchase property. Ask these QUALIFICATION questions ONE AT A TIME:
+1. "Are you currently located in Dubai, or will you be relocating?"
+2. "Have you invested in Dubai real estate before?"
+3. "What is your approximate budget range? (e.g., AED 1M - 2M)"
+4. "Which areas are you interested in? (e.g., Dubai Marina, Downtown, JVC, Business Bay)"
+5. "What type of property are you looking for? (Apartment, Villa, Townhouse, Off-Plan)"
+6. "When are you planning to make a decision? (Immediately, 1-3 months, 6+ months)"
+7. "Are you interested in Golden Visa eligibility? (Properties above AED 2M qualify)"
+
+Focus on:
 - Property types (off-plan, ready)
 - Budgets and payment plans
 - Popular areas and developers
@@ -417,7 +426,15 @@ The user wants to purchase property. Focus on:
       case 'sell':
         intentContext = `
 DETECTED INTENT: SELL PROPERTY
-The user wants to sell their property. Focus on:
+The user wants to sell their property. Ask these QUALIFICATION questions ONE AT A TIME:
+1. "What type of property do you own? (Apartment, Villa, Townhouse, Plot)"
+2. "Where is your property located? (Area/Community)"
+3. "Is the property currently occupied or vacant?"
+4. "Do you have an idea of your expected selling price?"
+5. "When would you like to list the property?"
+6. "Do you have the title deed ready?"
+
+Focus on:
 - Property valuation process
 - Marketing approach
 - Timeline expectations

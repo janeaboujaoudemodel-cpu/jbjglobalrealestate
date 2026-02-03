@@ -2211,6 +2211,8 @@ export type Database = {
           feedback_type: string | null
           how_heard_about_us: string | null
           id: string
+          ip_hash: string | null
+          is_spam_flagged: boolean | null
           messages: Json
           page_source: string | null
           rating: number | null
@@ -2218,6 +2220,8 @@ export type Database = {
           response_speed_rating: number | null
           service_type: string | null
           shortcut_selected: string | null
+          spam_reasons: string[] | null
+          spam_score: number | null
           status: string
           updated_at: string
           user_email: string
@@ -2233,6 +2237,8 @@ export type Database = {
           feedback_type?: string | null
           how_heard_about_us?: string | null
           id?: string
+          ip_hash?: string | null
+          is_spam_flagged?: boolean | null
           messages?: Json
           page_source?: string | null
           rating?: number | null
@@ -2240,6 +2246,8 @@ export type Database = {
           response_speed_rating?: number | null
           service_type?: string | null
           shortcut_selected?: string | null
+          spam_reasons?: string[] | null
+          spam_score?: number | null
           status?: string
           updated_at?: string
           user_email: string
@@ -2255,6 +2263,8 @@ export type Database = {
           feedback_type?: string | null
           how_heard_about_us?: string | null
           id?: string
+          ip_hash?: string | null
+          is_spam_flagged?: boolean | null
           messages?: Json
           page_source?: string | null
           rating?: number | null
@@ -2262,6 +2272,8 @@ export type Database = {
           response_speed_rating?: number | null
           service_type?: string | null
           shortcut_selected?: string | null
+          spam_reasons?: string[] | null
+          spam_score?: number | null
           status?: string
           updated_at?: string
           user_email?: string
@@ -10545,6 +10557,129 @@ export type Database = {
         }
         Relationships: []
       }
+      marketing_campaigns: {
+        Row: {
+          campaign_type: string
+          content: Json | null
+          created_at: string | null
+          created_by: string | null
+          custom_recipients: string[] | null
+          description: string | null
+          facebook_content: Json | null
+          id: string
+          instagram_content: Json | null
+          linkedin_content: Json | null
+          name: string
+          preview_text: string | null
+          scheduled_at: string | null
+          sent_at: string | null
+          status: string | null
+          subject_line: string | null
+          target_audience: string | null
+          total_bounced: number | null
+          total_clicked: number | null
+          total_delivered: number | null
+          total_opened: number | null
+          total_sent: number | null
+          total_unsubscribed: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          campaign_type?: string
+          content?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          custom_recipients?: string[] | null
+          description?: string | null
+          facebook_content?: Json | null
+          id?: string
+          instagram_content?: Json | null
+          linkedin_content?: Json | null
+          name: string
+          preview_text?: string | null
+          scheduled_at?: string | null
+          sent_at?: string | null
+          status?: string | null
+          subject_line?: string | null
+          target_audience?: string | null
+          total_bounced?: number | null
+          total_clicked?: number | null
+          total_delivered?: number | null
+          total_opened?: number | null
+          total_sent?: number | null
+          total_unsubscribed?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          campaign_type?: string
+          content?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          custom_recipients?: string[] | null
+          description?: string | null
+          facebook_content?: Json | null
+          id?: string
+          instagram_content?: Json | null
+          linkedin_content?: Json | null
+          name?: string
+          preview_text?: string | null
+          scheduled_at?: string | null
+          sent_at?: string | null
+          status?: string | null
+          subject_line?: string | null
+          target_audience?: string | null
+          total_bounced?: number | null
+          total_clicked?: number | null
+          total_delivered?: number | null
+          total_opened?: number | null
+          total_sent?: number | null
+          total_unsubscribed?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      marketing_templates: {
+        Row: {
+          category: string | null
+          content: Json
+          created_at: string | null
+          created_by: string | null
+          id: string
+          is_default: boolean | null
+          name: string
+          preview_image_url: string | null
+          subject_line: string | null
+          template_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          content?: Json
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_default?: boolean | null
+          name: string
+          preview_image_url?: string | null
+          subject_line?: string | null
+          template_type?: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          content?: Json
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_default?: boolean | null
+          name?: string
+          preview_image_url?: string | null
+          subject_line?: string | null
+          template_type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       meeting_ai_notes: {
         Row: {
           action_items: Json | null
@@ -10797,6 +10932,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      newsletter_subscribers: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          is_active: boolean | null
+          name: string | null
+          preferences: Json | null
+          source: string | null
+          source_page: string | null
+          subscribed_at: string | null
+          unsubscribe_reason: string | null
+          unsubscribed_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          is_active?: boolean | null
+          name?: string | null
+          preferences?: Json | null
+          source?: string | null
+          source_page?: string | null
+          subscribed_at?: string | null
+          unsubscribe_reason?: string | null
+          unsubscribed_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          is_active?: boolean | null
+          name?: string | null
+          preferences?: Json | null
+          source?: string | null
+          source_page?: string | null
+          subscribed_at?: string | null
+          unsubscribe_reason?: string | null
+          unsubscribed_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       note_projects: {
         Row: {
@@ -15876,11 +16056,19 @@ export type Database = {
           furnished: string | null
           id: string | null
           images: string[] | null
+          landlord_email: string | null
+          landlord_name_masked: string | null
+          landlord_nationality: string | null
+          landlord_phone: string | null
+          ownership_type: string | null
           payment_terms: string | null
           property_title: string | null
           property_type: string | null
+          security_deposit: number | null
           size_sqft: number | null
           status: string | null
+          updated_at: string | null
+          user_id: string | null
           video_url: string | null
         }
         Insert: {
@@ -15897,11 +16085,19 @@ export type Database = {
           furnished?: string | null
           id?: string | null
           images?: string[] | null
+          landlord_email?: never
+          landlord_name_masked?: never
+          landlord_nationality?: never
+          landlord_phone?: never
+          ownership_type?: string | null
           payment_terms?: string | null
           property_title?: string | null
           property_type?: string | null
+          security_deposit?: number | null
           size_sqft?: number | null
           status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
           video_url?: string | null
         }
         Update: {
@@ -15918,11 +16114,19 @@ export type Database = {
           furnished?: string | null
           id?: string | null
           images?: string[] | null
+          landlord_email?: never
+          landlord_name_masked?: never
+          landlord_nationality?: never
+          landlord_phone?: never
+          ownership_type?: string | null
           payment_terms?: string | null
           property_title?: string | null
           property_type?: string | null
+          security_deposit?: number | null
           size_sqft?: number | null
           status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
           video_url?: string | null
         }
         Relationships: []
