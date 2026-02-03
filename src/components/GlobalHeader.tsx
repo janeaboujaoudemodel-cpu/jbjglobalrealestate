@@ -393,20 +393,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/philanthropy", label: "Philanthropy", icon: Users },
   ];
 
-  // Mobile menu - Resources & Guides
+  // Mobile menu - Resources & Guides (consolidated - all individual guides are accessed as books within the hub pages)
   const mobileResourceLinks = [
     { href: "/guides", label: "Guides Library", icon: BookOpen },
-    { href: "/market-intelligence", label: "Market Intelligence", icon: BarChart3 },
+    { href: "/market-intelligence/overview", label: "Market Intelligence", icon: BarChart3 },
     { href: "/news", label: "News & Insights", icon: Newspaper },
     { href: "/faq", label: "FAQ", icon: ClipboardCheck },
-    { href: "/buyer-guide", label: "Buyer Guide", icon: GraduationCap },
-    { href: "/seller-guide", label: "Seller Guide", icon: GraduationCap },
-    { href: "/rent-guide", label: "Rent Guide", icon: FileText },
-    { href: "/tenant-guide", label: "Tenant Guide", icon: FileText },
-    { href: "/landlord-guide", label: "Landlord Guide", icon: FileText },
-    { href: "/investor-education", label: "Investor Education", icon: GraduationCap },
-    { href: "/broker-education", label: "Broker Education", icon: GraduationCap },
-    { href: "/guides/golden-visa-uae", label: "Golden Visa Guide", icon: Globe },
   ];
 
   // Mobile menu - Partners & Tools
