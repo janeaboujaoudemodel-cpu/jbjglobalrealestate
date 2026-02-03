@@ -849,31 +849,33 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
         },
       });
       
-      // CRITICAL: Check for credits exhausted (402 error)
-      if (mapErr) {
-        const errMsg = mapErr?.message || "";
-        if (errMsg.includes("402") || errMsg.toLowerCase().includes("credit")) {
-          setCreditsExhausted(true);
-          toast.error("Firecrawl credits exhausted. Please top up at firecrawl.dev/pricing");
-          return;
-        }
-        throw mapErr;
-      }
+      // CRITICAL: Check for credits exhausted - can come from either error OR data
+      // supabase.functions.invoke returns 4xx responses in data, not as errors
+      const creditsExhaustedInData = mapData?.credits_exhausted === true;
+      const creditsExhaustedInError = mapErr?.message?.includes("402") || 
+                                       mapErr?.message?.toLowerCase().includes("credit");
+      const creditsExhaustedInResponse = mapData?.success === false && 
+                                          (mapData?.error?.includes("402") || 
+                                           mapData?.error?.toLowerCase().includes("credit") ||
+                                           mapData?.error?.toLowerCase().includes("exhausted"));
       
-      // Also check the response body for credits_exhausted flag
-      if (mapData?.credits_exhausted) {
+      if (creditsExhaustedInData || creditsExhaustedInError || creditsExhaustedInResponse) {
         setCreditsExhausted(true);
-        toast.error("Firecrawl credits exhausted. Stopping rebuild.");
+        toast.error("Firecrawl credits exhausted. Please top up at firecrawl.dev/pricing", {
+          duration: 10000,
+          action: {
+            label: "Get Credits",
+            onClick: () => window.open("https://firecrawl.dev/pricing", "_blank"),
+          },
+        });
+        setIsRebuildingQueue(false);
+        await loadProjectCount();
         return;
       }
       
-      // Check for 402 in the error message from successful response
-      if (mapData?.success === false) {
-        if (mapData?.error?.includes("402") || mapData?.error?.toLowerCase().includes("credit")) {
-          setCreditsExhausted(true);
-          toast.error("Firecrawl credits exhausted. Please top up at firecrawl.dev/pricing");
-          return;
-        }
+      // Handle other errors
+      if (mapErr) {
+        throw mapErr;
       }
       
       setRebuildResult(mapData || null);
