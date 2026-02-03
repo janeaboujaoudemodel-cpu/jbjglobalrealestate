@@ -135,6 +135,7 @@ import BuyerGuide from "./pages/BuyerGuide";
 import SellerGuide from "./pages/SellerGuide";
 import SellerListing from "./pages/SellerListing";
 import GoldenVisaGuide from "./pages/guides/GoldenVisaGuide";
+import Guides from "./pages/Guides";
 import RentGuide from "./pages/RentGuide";
 import TenantGuide from "./pages/TenantGuide";
 import LandlordGuide from "./pages/LandlordGuide";
@@ -241,6 +242,7 @@ const App = () => (
                 <Route path="/seller-guide" element={<SellerGuide />} />
                 <Route path="/seller-listing" element={<SellerListing />} />
                 <Route path="/golden-visa" element={<Navigate to="/guides/golden-visa-uae" replace />} />
+                <Route path="/guides" element={<Guides />} />
                 <Route path="/guides/golden-visa-uae" element={<GoldenVisaGuide />} />
                 <Route path="/rent-guide" element={<RentGuide />} />
                 <Route path="/tenant-guide" element={<TenantGuide />} />

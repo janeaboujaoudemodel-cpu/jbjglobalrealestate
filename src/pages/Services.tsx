@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
-  Briefcase, Users, Building2, TrendingUp, Key, Globe,
-  ArrowRight, CheckCircle, ChevronRight, MessageSquare, AlertCircle
+  Briefcase, Users, Building2, Key,
+  ArrowRight, CheckCircle, ChevronRight, MessageSquare, AlertCircle,
+  ClipboardCheck, Calendar, Coins, FileText, Calculator, Award
 } from "lucide-react";
 import Footer from "@/components/Footer";
 import DirectContactCTA from "@/components/DirectContactCTA";
@@ -25,86 +26,164 @@ const staggerContainer = {
   }
 };
 
-// Service cards data - exactly as specified
+// All 12 service cards as specified
 const serviceCards = [
   {
-    icon: Briefcase,
-    title: "Buying Advisory",
-    description: "Guidance and coordination for buyers navigating off-plan and ready properties across the UAE.",
+    icon: ClipboardCheck,
+    title: "Snagging & Handover Inspection",
+    description: "A structured, documented inspection to identify defects before you accept handover — with clear reporting and follow-up tracking.",
     includes: [
-      "Market navigation",
-      "Property shortlisting",
-      "Viewing coordination",
-      "Transaction process support"
+      "Unit inspection before handover",
+      "Defect identification & documentation",
+      "Snagging report packaging",
+      "Follow-up checklist tracking"
     ],
-    cta: "Explore Buying Advisory",
-    link: "/services/buying-advisory"
+    cta: "Book Snagging",
+    link: "/services/snagging"
   },
   {
     icon: Key,
-    title: "Selling Advisory",
-    description: "Structured resale support for owners and investors listing properties in the secondary market.",
+    title: "Property Management",
+    description: "Operational support to protect your asset, reduce tenant friction, and keep occupancy stable — with structured reporting.",
     includes: [
-      "Pricing strategy",
-      "Listing preparation",
-      "Buyer qualification",
-      "Sale coordination"
+      "Tenant coordination",
+      "Maintenance coordination",
+      "Payment/renewal reminders",
+      "Issue logging & resolution"
     ],
-    cta: "Explore Selling Advisory",
-    link: "/services/selling-advisory"
+    cta: "Request Management",
+    link: "/services/property-management"
+  },
+  {
+    icon: Calendar,
+    title: "Short-Term Rentals & Holiday Homes",
+    description: "A structured setup and operating workflow for short-term stays — from readiness checklist to performance monitoring.",
+    includes: [
+      "Eligibility & readiness checklist",
+      "Setup workflow coordination",
+      "Guest messaging & cleaning",
+      "Performance monitoring"
+    ],
+    cta: "Request Setup",
+    link: "/services/short-term-rentals"
+  },
+  {
+    icon: Coins,
+    title: "Currency Exchange Support",
+    description: "Coordination support for buyers transferring funds across borders — with clear routing and documentation readiness.",
+    includes: [
+      "Transfer coordination",
+      "Partner introductions",
+      "Documentation guidance",
+      "Process transparency"
+    ],
+    cta: "Request Support",
+    link: "/services/currency-exchange"
+  },
+  {
+    icon: Briefcase,
+    title: "Concierge Convenience Services",
+    description: "Operational help around your property journey — scheduling, coordination, and time-saving logistics.",
+    includes: [
+      "Appointment scheduling",
+      "Document collection",
+      "Utility coordination",
+      "Move-in assistance"
+    ],
+    cta: "Request Concierge",
+    link: "/services/concierge"
   },
   {
     icon: Building2,
-    title: "Rental Advisory",
-    description: "Professional leasing support for landlords and tenants, from listing to contract execution.",
+    title: "Company Setup Support",
+    description: "A coordination pathway for company setup through licensed specialists — structured, documented, and guided.",
     includes: [
-      "Rental pricing guidance",
-      "Listing & tenant coordination",
-      "Offer negotiation support",
-      "Lease process assistance"
+      "Partner introductions",
+      "Documentation guidance",
+      "Process coordination",
+      "Status updates"
     ],
-    cta: "Explore Rental Advisory",
-    link: "/services/rental-advisory"
+    cta: "Request Setup",
+    link: "/services/company-setup"
   },
   {
-    icon: TrendingUp,
-    title: "Investment Advisory",
-    description: "Data-driven real estate investment guidance aligned with investor objectives, timelines, and risk profiles.",
+    icon: FileText,
+    title: "Signature Collection (JBJ)",
+    description: "A controlled internal signature-request workflow for JBJ documents — tracked, timestamped, and auditable.",
     includes: [
-      "Market intelligence",
-      "Project comparison",
-      "Portfolio structuring logic",
-      "Long-term strategy support"
+      "Request submission",
+      "Status tracking",
+      "Document management",
+      "Audit trail"
     ],
-    cta: "Explore Investment Advisory",
-    link: "/services/investment-advisory"
+    cta: "Submit Request",
+    link: "/services/signature-collection"
+  },
+  {
+    icon: Calculator,
+    title: "AI Calculators & Tools",
+    description: "Decision support tools designed for clarity — using structured inputs and transparent outputs.",
+    includes: [
+      "Mortgage calculator",
+      "Property evaluator",
+      "ROI calculator",
+      "AI-powered analysis"
+    ],
+    cta: "Open Tools",
+    link: "/services/ai-tools"
+  },
+  {
+    icon: Award,
+    title: "Broker Certification (Internal)",
+    description: "An internal training and standards program created by JBJ Global Real Estate for our broker partner network.",
+    includes: [
+      "Curriculum modules",
+      "Standards training",
+      "Certification issuance",
+      "Ongoing education"
+    ],
+    note: "This is an internal program and does not grant external licensing status.",
+    cta: "View Program",
+    link: "/services/broker-certification"
+  },
+  {
+    icon: AlertCircle,
+    title: "Complaint Procedures",
+    description: "A structured pathway to raise issues, track outcomes, and ensure accountability — with clear escalation steps.",
+    includes: [
+      "Issue submission",
+      "Ticket tracking",
+      "Escalation ladder",
+      "Resolution updates"
+    ],
+    cta: "Submit Complaint",
+    link: "/services/complaint-procedures"
+  },
+  {
+    icon: MessageSquare,
+    title: "Customer Happiness Center",
+    description: "Fast routing, clear answers, and structured support — with ticket tracking and direct contact options.",
+    includes: [
+      "Support ticket creation",
+      "Direct contact options",
+      "Response tracking",
+      "Resolution support"
+    ],
+    cta: "Create Ticket",
+    link: "/services/customer-happiness-center"
   },
   {
     icon: Users,
-    title: "Partner Introductions",
-    description: "Introductions to independent, licensed third-party professionals where required.",
+    title: "Testimonials",
+    description: "Verified client feedback and outcomes — presented with clarity and respect for privacy.",
     includes: [
-      "Mortgage specialists",
-      "Legal conveyancing firms",
-      "Visa & residency consultants",
-      "Property management providers"
+      "Client testimonials",
+      "Video testimonials",
+      "Success stories",
+      "Feedback submission"
     ],
-    note: "Services are provided by independent licensed partners. Clients contract directly with partners under their own terms.",
-    cta: "View Partner Network",
-    link: "/partners"
-  },
-  {
-    icon: Globe,
-    title: "Golden Visa Guidance",
-    description: "Guidance on property-based Golden Visa eligibility and application coordination.",
-    includes: [
-      "Eligibility overview",
-      "Qualifying property criteria",
-      "Application process explanation",
-      "Partner coordination (where applicable)"
-    ],
-    cta: "View Golden Visa Guide",
-    link: "/guides/golden-visa-uae"
+    cta: "Read Stories",
+    link: "/services/testimonials"
   }
 ];
 
@@ -126,8 +205,8 @@ const Services = () => {
     <div className="min-h-screen bg-black">
       <SEOHead 
         title="Real Estate Services | JBJ Global Real Estate"
-        description="Licensed brokerage support across buying, selling, leasing, and investment — with clear scope, transparency, and expert coordination."
-        keywords="Dubai real estate services, buying advisory, selling advisory, rental advisory, investment advisory, partner introductions, golden visa"
+        description="A curated set of brokerage-adjacent services designed to simplify your property journey — delivered with premium coordination, clear process, and consistent standards."
+        keywords="Dubai real estate services, snagging, property management, short-term rentals, currency exchange, concierge, company setup"
         canonicalPath="/services"
       />
 
@@ -167,34 +246,27 @@ const Services = () => {
             style={{ fontFamily: "Poppins, sans-serif" }}
             variants={fadeInUp}
           >
-            Real Estate Services
+            Explore JBJ Services
           </motion.h1>
-          
-          {/* Premium Gold Tagline */}
-          <motion.p 
-            className="text-lg md:text-xl lg:text-2xl uppercase tracking-[0.15em] font-semibold mb-6"
-            style={{ 
-              background: 'linear-gradient(135deg, #D4AF37 0%, #F5D77A 25%, #C8A766 50%, #F5D77A 75%, #D4AF37 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              filter: 'drop-shadow(0 2px 8px rgba(200,167,102,0.6))',
-            }}
-            variants={fadeInUp}
-          >
-            Structured for Clarity
-          </motion.p>
 
           <motion.p 
-            className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto mb-10"
+            className="text-zinc-300 text-base md:text-lg max-w-3xl mx-auto mb-10"
             variants={fadeInUp}
           >
-            Licensed brokerage support across buying, selling, leasing, and investment.
+            A curated set of brokerage-adjacent services designed to simplify your property journey — delivered with premium coordination, clear process, and consistent standards.
           </motion.p>
 
-          <motion.div variants={fadeInUp} className="flex justify-center">
-            <PremiumHeroButton href="#services-grid" icon={ArrowRight}>
-              Explore Services
+          <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
+            <PremiumHeroButton href="/contact" icon={ArrowRight}>
+              Request a Service
             </PremiumHeroButton>
+            <Link 
+              to="/contact"
+              className="inline-flex items-center gap-2 px-6 py-3 border-2 border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors"
+            >
+              <MessageSquare className="w-5 h-5" />
+              Contact Support
+            </Link>
           </motion.div>
         </motion.div>
       </section>
@@ -209,7 +281,19 @@ const Services = () => {
             variants={staggerContainer}
             className="w-full px-4 sm:px-6 lg:px-8"
           >
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+            <motion.div className="text-center mb-12" variants={fadeInUp}>
+              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+                Our Service Library
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                Select a Service
+              </h2>
+              <p className="text-black/70 max-w-2xl mx-auto">
+                Select a service to view the full process, requirements, and timelines.
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
               {serviceCards.map((service) => (
                 <motion.div key={service.title} variants={fadeInUp}>
                   <Link to={service.link} className="block h-full">
@@ -218,20 +302,20 @@ const Services = () => {
                         <div className="jj-icon-box-active w-12 h-12 mb-4 group-hover:scale-110 transition-transform">
                           <service.icon className="w-6 h-6" />
                         </div>
-                        <h3 className="text-black font-semibold text-xl mb-3 group-hover:text-gold transition-colors">
+                        <h3 className="text-black font-semibold text-lg mb-2 group-hover:text-gold transition-colors">
                           {service.title}
                         </h3>
-                        <p className="text-black/70 text-sm mb-4">
+                        <p className="text-black/70 text-sm mb-4 flex-1">
                           {service.description}
                         </p>
                         
                         {/* Includes list */}
-                        <div className="bg-black/5 rounded-lg p-4 mb-4 flex-1">
+                        <div className="bg-black/5 rounded-lg p-3 mb-4">
                           <p className="text-xs text-black/50 uppercase tracking-wider mb-2 font-medium">Includes</p>
-                          <ul className="space-y-2">
+                          <ul className="space-y-1">
                             {service.includes.map((item, idx) => (
-                              <li key={idx} className="flex items-start gap-2 text-sm text-black/80">
-                                <CheckCircle className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                              <li key={idx} className="flex items-start gap-2 text-xs text-black/80">
+                                <CheckCircle className="w-3 h-3 text-gold flex-shrink-0 mt-0.5" />
                                 <span>{item}</span>
                               </li>
                             ))}
@@ -240,7 +324,7 @@ const Services = () => {
                         
                         {/* Partner note if applicable */}
                         {service.note && (
-                          <div className="bg-gold/10 rounded-lg p-3 mb-4 border border-gold/20">
+                          <div className="bg-gold/10 rounded-lg p-2 mb-4 border border-gold/20">
                             <p className="text-xs text-black/60 italic">
                               {service.note}
                             </p>
@@ -257,6 +341,45 @@ const Services = () => {
                 </motion.div>
               ))}
             </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Service Request Strip */}
+      <section className="py-16 bg-black">
+        <div className="jj-layer-2">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="w-full px-4 sm:px-6 lg:px-8"
+          >
+            <Card className="jj-card-inner max-w-4xl mx-auto">
+              <CardContent className="p-8 text-center">
+                <motion.div variants={fadeInUp}>
+                  <h2 className="text-2xl md:text-3xl font-bold mb-4 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    Not sure which service you need?
+                  </h2>
+                  <p className="text-black/70 max-w-xl mx-auto mb-6">
+                    Send one request and our team will route it to the right department.
+                  </p>
+                  <div className="flex flex-wrap justify-center gap-4">
+                    <Button variant="primary" size="lg" asChild>
+                      <Link to="/contact">
+                        <MessageSquare className="w-5 h-5 mr-2" />
+                        Open Service Request
+                      </Link>
+                    </Button>
+                    <Button variant="outline" size="lg" asChild>
+                      <Link to="/contact">
+                        Speak to Support
+                      </Link>
+                    </Button>
+                  </div>
+                </motion.div>
+              </CardContent>
+            </Card>
           </motion.div>
         </div>
       </section>
@@ -333,41 +456,6 @@ const Services = () => {
                   </div>
                 </CardContent>
               </Card>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Final CTA Section */}
-      <section className="py-20 bg-black">
-        <div className="jj-layer-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="text-center w-full px-4 sm:px-6 lg:px-8"
-          >
-            <motion.div variants={fadeInUp}>
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
-                Get Started
-              </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Not Sure Which Service You Need?
-              </h2>
-              <p className="text-black/70 max-w-2xl mx-auto mb-8">
-                Our team will guide you to the correct service based on your objective — 
-                buying, selling, leasing, or investing.
-              </p>
-            </motion.div>
-
-            <motion.div variants={fadeInUp}>
-              <Button variant="primary" size="lg" asChild>
-                <Link to="/contact">
-                  <MessageSquare className="w-5 h-5 mr-2" />
-                  Request a Consultation
-                </Link>
-              </Button>
             </motion.div>
           </motion.div>
         </div>
