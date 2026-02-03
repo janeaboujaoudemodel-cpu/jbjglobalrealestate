@@ -120,7 +120,13 @@ serve(async (req) => {
           }
         }
 
-        // Insert into projects table
+        // Insert into projects table - copy ALL extracted fields
+        // Note: amenities_list is JSONB in pending_project_imports but text[] in projects
+        // Convert JSONB array to text array for proper insertion
+        const amenitiesArray = Array.isArray(item.amenities_list) 
+          ? item.amenities_list.map((a: unknown) => String(a))
+          : (Array.isArray(item.amenities) ? item.amenities : null);
+
         const projectData = {
           name: item.name,
           slug: item.slug,
@@ -131,12 +137,30 @@ serve(async (req) => {
           price_from: item.price_from || null,
           bedrooms_min: item.bedrooms_min || null,
           bedrooms_max: item.bedrooms_max || null,
+          size_min: item.size_min || null,
+          size_max: item.size_max || null,
           handover_date: item.handover_date || null,
           payment_plan: item.payment_plan || null,
           source_url: item.source_url || null,
           property_type_label: item.property_type_label || null,
           status_label: item.status_label || null,
-          amenities: item.amenities || null,
+          // Amenities as text[] array
+          amenities: amenitiesArray,
+          // USP fields
+          usp_headline: item.usp_headline || null,
+          usp_bullets: item.usp_bullets || null,
+          usp_image_url: item.usp_image_url || null,
+          // Location fields
+          location_headline: item.location_headline || null,
+          location_description: item.location_description || null,
+          location_distances: item.location_distances || null,
+          location_image_url: item.location_image_url || null,
+          // Floor plan types
+          floor_plan_types: item.floor_plan_types || null,
+          // FAQs
+          faqs: item.faqs || null,
+          // Payment breakdown
+          payment_breakdown: item.payment_breakdown || null,
           is_offplan: true,
           is_featured: false,
           is_premium: false,

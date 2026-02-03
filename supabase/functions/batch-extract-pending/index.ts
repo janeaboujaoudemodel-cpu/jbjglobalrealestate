@@ -311,6 +311,8 @@ serve(async (req) => {
           price_from: extracted.priceFrom || null,
           bedrooms_min: extracted.bedroomsMin || null,
           bedrooms_max: extracted.bedroomsMax || null,
+          size_min: extracted.sizeMin || null,
+          size_max: extracted.sizeMax || null,
           handover_date: extracted.handover || null,
           payment_plan: extracted.paymentPlan || null,
           property_type_label: extracted.propertyType || null,
