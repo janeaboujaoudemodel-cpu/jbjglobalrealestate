@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
-  BookOpen, ArrowRight, HelpCircle
+  BookOpen, ArrowRight, HelpCircle, FileText, DollarSign, Shield, BarChart3, CheckCircle, MessageCircle
 } from "lucide-react";
 import Footer from "@/components/Footer";
 import DirectContactCTA from "@/components/DirectContactCTA";
 import { SEOHead } from "@/components/SEOHead";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
+import { Card, CardContent } from "@/components/ui/card";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -95,6 +96,35 @@ const guides = [
   }
 ];
 
+// What You'll Learn items
+const learningTopics = [
+  {
+    icon: FileText,
+    title: "Transaction structure and roles",
+    description: "Understand the step-by-step process and who does what"
+  },
+  {
+    icon: CheckCircle,
+    title: "Common documents and checkpoints",
+    description: "Know what paperwork is required and when"
+  },
+  {
+    icon: DollarSign,
+    title: "Fee clarity and what is paid when",
+    description: "Transparent breakdown of all costs involved"
+  },
+  {
+    icon: Shield,
+    title: "Risk controls and readiness checklists",
+    description: "Protect yourself with proper due diligence"
+  },
+  {
+    icon: BarChart3,
+    title: "Market intelligence reading basics",
+    description: "Understand data and trends where relevant"
+  }
+];
+
 // 3D Book Card Component
 const BookCard = ({ guide, index }: { guide: typeof guides[0]; index: number }) => {
   return (
@@ -173,23 +203,31 @@ const Guides = () => {
     <div className="min-h-screen bg-black">
       <SEOHead 
         title="Guides Library | JBJ Global Real Estate"
-        description="Explore structured guides designed to answer real questions — with clear steps, fees, and process."
+        description="Structured guides built to answer real questions—fees, steps, timelines, and best-practice workflows across buying, selling, renting, and investing."
         keywords="Dubai real estate guides, buyer guide, seller guide, landlord guide, tenant guide, golden visa guide"
         canonicalPath="/guides"
       />
 
       {/* Hero Section */}
       <section className="jj-hero-fullscreen relative flex items-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/60 via-black/80 to-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
-        
-        {/* Decorative books in background */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-32 h-48 bg-gold/20 rounded-lg transform -rotate-12" />
-          <div className="absolute top-40 right-20 w-28 h-44 bg-gold/15 rounded-lg transform rotate-6" />
-          <div className="absolute bottom-32 left-1/4 w-24 h-36 bg-gold/10 rounded-lg transform rotate-3" />
+        <div className="absolute inset-0 bg-black">
+          {/* Video placeholder */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
+                <BookOpen className="w-12 h-12 text-gold/60" />
+              </div>
+              <p className="text-gold/60 text-sm tracking-widest uppercase">How to Use the Guides</p>
+              <p className="text-zinc-500 text-xs mt-2">Video placeholder only</p>
+            </div>
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
         </div>
         
+        <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/15 rounded-full blur-[120px] pointer-events-none" />
+
         <motion.div 
           className="relative z-10 container mx-auto px-4 py-32 text-center max-w-4xl"
           initial="hidden"
@@ -197,17 +235,17 @@ const Guides = () => {
           variants={staggerContainer}
         >
           <motion.div 
-            className="flex items-center justify-center gap-2 mb-6"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-black/30 backdrop-blur-md"
             variants={fadeInUp}
           >
-            <BookOpen className="w-6 h-6 text-gold" />
-            <span className="text-gold text-sm uppercase tracking-[0.3em]">
+            <BookOpen className="w-4 h-4 text-gold" />
+            <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
               Guides
             </span>
           </motion.div>
 
           <motion.h1 
-            className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
+            className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-[-0.02em]"
             style={{ fontFamily: "Poppins, sans-serif" }}
             variants={fadeInUp}
           >
@@ -215,28 +253,67 @@ const Guides = () => {
           </motion.h1>
 
           <motion.p 
-            className="text-zinc-300 text-base md:text-lg max-w-3xl mx-auto mb-10"
+            className="text-zinc-300 text-base md:text-lg max-w-3xl mx-auto mb-10 leading-relaxed"
             variants={fadeInUp}
           >
-            Explore structured guides designed to answer real questions — with clear steps, fees, and process.
+            Structured guides built to answer real questions—fees, steps, timelines, and best-practice workflows across buying, selling, renting, and investing.
           </motion.p>
 
           <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
-            <PremiumHeroButton href="#guides-library" icon={BookOpen}>
+            <PremiumHeroButton href="#guides-library">
               Browse Guides
             </PremiumHeroButton>
-            <Link 
-              to="/contact"
-              className="inline-flex items-center gap-2 px-6 py-3 border-2 border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors"
-            >
-              <HelpCircle className="w-5 h-5" />
+            <PremiumHeroButton href="/contact">
               Ask a Question
-            </Link>
+            </PremiumHeroButton>
           </motion.div>
+        </motion.div>
+        
+        <motion.div 
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.6 }}
+        >
+          <span className="text-gold/60 text-xs tracking-widest uppercase">Explore</span>
+          <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
 
-      {/* Book Shelf Grid */}
+      {/* How This Library Works */}
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="max-w-4xl mx-auto text-center"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black mb-6"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              How This Library Works
+            </motion.h2>
+            <motion.div variants={fadeInUp} className="jj-card-inner max-w-3xl mx-auto">
+              <div className="flex items-start gap-4">
+                <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center shrink-0">
+                  <BookOpen className="w-7 h-7 text-gold" />
+                </div>
+                <div className="text-left">
+                  <p className="text-zinc-700 leading-relaxed">
+                    Choose a guide like a book. Each guide follows the same structure so you can scan quickly and act confidently.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Guide Books Grid */}
       <section id="guides-library" className="py-20 bg-black">
         <div className="jj-layer-2">
           <motion.div
@@ -247,14 +324,11 @@ const Guides = () => {
             className="w-full px-4 sm:px-6 lg:px-8"
           >
             <motion.div className="text-center mb-16" variants={fadeInUp}>
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
-                Our Collection
-              </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Premium Guide Collection
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Playfair Display, serif" }}>
+                Explore Guides
               </h2>
-              <p className="text-black/70 max-w-2xl mx-auto">
-                Each guide is crafted to provide actionable insights and clear processes for your real estate journey.
+              <p className="text-zinc-600 max-w-2xl mx-auto">
+                Select a guide to open the full page.
               </p>
             </motion.div>
 
@@ -279,8 +353,50 @@ const Guides = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 bg-black">
+      {/* What You'll Learn */}
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              What You'll Learn
+            </motion.h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+              {learningTopics.map((topic, index) => {
+                const Icon = topic.icon;
+                return (
+                  <motion.div key={index} variants={fadeInUp}>
+                    <Card className="jj-card-inner h-full">
+                      <CardContent className="p-6">
+                        <div className="flex items-start gap-4">
+                          <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center shrink-0">
+                            <Icon className="w-6 h-6 text-gold" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold text-black mb-1">{topic.title}</h3>
+                            <p className="text-sm text-zinc-600">{topic.description}</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* CTA Block */}
+      <section className="py-20 bg-black">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -289,21 +405,22 @@ const Guides = () => {
             variants={fadeInUp}
             className="text-center w-full px-4 sm:px-6 lg:px-8"
           >
-            <div className="max-w-2xl mx-auto p-8 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30">
-              <BookOpen className="w-12 h-12 text-gold mx-auto mb-4" />
-              <h2 className="text-2xl md:text-3xl font-bold mb-4 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Can't Find What You're Looking For?
+            <div className="max-w-3xl mx-auto jj-card-inner border-2 border-gold/30">
+              <HelpCircle className="w-12 h-12 text-gold mx-auto mb-6" />
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Playfair Display, serif" }}>
+                Not sure where to start?
               </h2>
-              <p className="text-black/70 mb-6">
-                Our team is ready to answer your specific questions and provide personalized guidance.
+              <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
+                Tell us your goal (buy, sell, rent, invest) and we'll route you to the right guide.
               </p>
-              <Link 
-                to="/contact"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gold text-black font-semibold rounded-lg hover:bg-gold/90 transition-colors"
-              >
-                <HelpCircle className="w-5 h-5" />
-                Ask a Question
-              </Link>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <PremiumHeroButton href="/contact">
+                  Ask a Question
+                </PremiumHeroButton>
+                <PremiumHeroButton href="/contact?type=support">
+                  Contact Support
+                </PremiumHeroButton>
+              </div>
             </div>
           </motion.div>
         </div>
