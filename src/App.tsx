@@ -15,6 +15,7 @@ import AdminBypass from "@/components/AdminBypass";
 import ListingAdminGuard from "@/components/ListingAdminGuard";
 import MainLayoutWrapper from "@/components/MainLayoutWrapper";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
+import { RedirectWithParams } from "@/components/RedirectWithParams";
 import AppErrorBoundary from "@/components/AppErrorBoundary";
 import GlobalSEO from "@/components/GlobalSEO";
 import GlobalVisitorTracking from "@/components/GlobalVisitorTracking";
@@ -237,8 +238,12 @@ const App = () => (
                 <Route path="/community/:slug" element={<CommunityDetail />} />
                 <Route path="/developers" element={<Developers />} />
                 <Route path="/developer/:slug" element={<DeveloperDetail />} />
+                {/* Redirect plural to singular for developers */}
+                <Route path="/developers/:slug" element={<RedirectWithParams to="/developer" />} />
                 <Route path="/areas" element={<AreaGuides />} />
                 <Route path="/area/:slug" element={<AreaDetail />} />
+                {/* Redirect plural to singular for areas */}
+                <Route path="/areas/:slug" element={<RedirectWithParams to="/area" />} />
                 <Route path="/buyer-guide" element={<BuyerGuide />} />
                 <Route path="/seller-guide" element={<SellerGuide />} />
                 <Route path="/seller-listing" element={<SellerListing />} />
