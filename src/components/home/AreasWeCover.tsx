@@ -77,11 +77,18 @@ const AreasWeCover = () => {
           ))}
         </div>
 
-        {/* View All Areas CTA */}
+        {/* View All Areas CTA - Premium Button Style */}
         <div className="text-center mt-8">
           <Link
             to="/areas"
-            className="inline-flex items-center gap-2 text-gold hover:text-black text-sm font-medium group"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-xl text-black font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
+            style={{
+              boxShadow: `
+                0 6px 20px rgba(200,167,102,0.3),
+                0 4px 10px rgba(0,0,0,0.15),
+                inset 0 2px 4px rgba(255,255,255,0.8)
+              `,
+            }}
           >
             <span>{t('areas.viewAll', 'View All Areas')}</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
