@@ -639,6 +639,12 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   const clearPendingAndStartFresh = async () => {
     if (isSyncing || isClearingPending) return;
 
+    // Guardrail: this flow triggers a full sync after clearing, which requires credits.
+    if (creditsExhausted) {
+      toast.error("Credits are exhausted — clear/start-fresh is disabled to avoid burning credits.");
+      return;
+    }
+
     const confirmed = window.confirm(
       "This will:\n" +
       "1. Delete ALL pending + rejected imports (clean rebuild)\n" +
@@ -673,6 +679,12 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   // FULL WIPE & REBUILD - Complete database reset and rediscovery of all 1336 listings
   const fullWipeAndRebuild = async () => {
     if (isSyncing || isWiping || isBulkExtractRunning) return;
+
+    // Guardrail: this flow uses Firecrawl MAP + extraction and will burn credits.
+    if (creditsExhausted) {
+      toast.error("Credits are exhausted — full wipe & rebuild is disabled to avoid burning credits.");
+      return;
+    }
 
     const confirmed = window.confirm(
       "⚠️ FULL WIPE & REBUILD ⚠️\n\n" +
@@ -873,6 +885,16 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
             skipPostInsertStats: true,
           },
         });
+
+          // Robust 402 detection (Supabase invoke reports non-2xx as `error`, often with `data=null`).
+          if (rangeErr) {
+            const msg = String(rangeErr.message || "");
+            if (msg.includes("402") || msg.toLowerCase().includes("credit")) {
+              setCreditsExhausted(true);
+              toast.error("Firecrawl credits exhausted detected. Extraction is disabled until you top up.");
+              break;
+            }
+          }
 
         // If the backend reports credit exhaustion anyway, lock the UI and stop further actions.
         // (Shouldn't happen in HTML mode, but this keeps us safe.)
@@ -1594,19 +1616,25 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                  {/* Keep Fresh Restart button always visible so it can't “disappear”. */}
                  <Button
                    onClick={clearPendingAndStartFresh}
-                   disabled={isClearingPending || isSyncing}
+                    disabled={isClearingPending || isSyncing || creditsExhausted}
                    variant="outline"
                    className="border-red-300 text-red-700 hover:bg-red-50 disabled:opacity-60"
-                   title={isSyncing ? "Pause sync first, then you can start fresh." : undefined}
+                    title={
+                      isSyncing
+                        ? "Pause sync first, then you can start fresh."
+                        : creditsExhausted
+                          ? "Disabled while credits are exhausted (this action triggers a full sync)."
+                          : undefined
+                    }
                  >
                    <RefreshCw className={`w-4 h-4 mr-2 ${isClearingPending ? 'animate-spin' : ''}`} />
-                   Clear Queue & Start Fresh
+                    Delete Queue & Start Fresh
                  </Button>
 
                  {/* FULL WIPE & REBUILD - Deletes everything and rediscovers all 1336 */}
                  <Button
                    onClick={fullWipeAndRebuild}
-                   disabled={isWiping || isSyncing || isBulkExtractRunning}
+                    disabled={isWiping || isSyncing || isBulkExtractRunning || creditsExhausted}
                    variant="outline"
                    className="border-red-600 text-red-800 bg-red-50 hover:bg-red-100 disabled:opacity-60"
                  >
