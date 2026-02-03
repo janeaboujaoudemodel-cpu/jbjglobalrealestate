@@ -98,6 +98,32 @@ const extractLinksFromHtml = (html: string): string[] => {
   return out;
 };
 
+// Extract project URLs even when the page is JS-driven and links are embedded in inline JSON.
+// IMPORTANT: This is credit-safe (no Firecrawl) and intentionally best-effort.
+const extractProjectUrlsFromText = (text: string): string[] => {
+  const out: string[] = [];
+  const raw = text || "";
+  if (!raw) return out;
+
+  // Absolute URLs (slug-only capture to avoid fragile escaping)
+  const absRe = /https?:\/\/(?:www\.)?providentestate\.com\/new-projects\/([a-z0-9-]{3,})(?:\/)?/gi;
+  for (const m of raw.matchAll(absRe)) {
+    const slug = (m?.[1] || "").trim();
+    if (!slug) continue;
+    out.push(`https://providentestate.com/new-projects/${slug}`);
+  }
+
+  // Relative URLs
+  const relRe = /\/new-projects\/([a-z0-9-]{3,})(?:\/)?/gi;
+  for (const m of raw.matchAll(relRe)) {
+    const slug = (m?.[1] || "").trim();
+    if (!slug) continue;
+    out.push(`https://providentestate.com/new-projects/${slug}`);
+  }
+
+  return out;
+};
+
 const toAbsoluteProvidentUrl = (href: string): string => {
   const h = (href || "").trim();
   if (!h) return "";
@@ -431,17 +457,21 @@ serve(async (req) => {
         });
         rangeUrls = scraped.flatMap((x) => x);
       } else {
-        // Use Firecrawl scrape(links) first; fallback to raw HTML for each page
+        // CREDIT-SAFE MODE (NO FIRECRAWL): only use direct HTML fetch + regex extraction.
+        // This MUST NOT call Firecrawl at all, otherwise "Rebuild Queue (Add Missing)" will burn credits.
         const htmlBatch = await mapWithConcurrency(pageUrls, 3, async (pageUrl) => {
-          const links = await firecrawlScrapeLinks(pageUrl, firecrawlKey);
-          const projectLinks = links.map(normalizeUrl).filter(isProjectDetailUrl);
-          if (projectLinks.length > 0) return projectLinks;
-
-          // Fallback raw fetch
-          const r = await fetchHtml(pageUrl);
+          const r = await fetchHtml(pageUrl, 12_000);
           if (!r.ok) return [] as string[];
+
           const hrefs = extractLinksFromHtml(r.html);
-          return hrefs.map(toAbsoluteProvidentUrl).map(normalizeUrl).filter(isProjectDetailUrl);
+          const hrefCandidates = hrefs.map(toAbsoluteProvidentUrl);
+          const textCandidates = extractProjectUrlsFromText(r.html);
+
+          const merged = [...hrefCandidates, ...textCandidates]
+            .map(normalizeUrl)
+            .filter(isProjectDetailUrl);
+
+          return [...new Set(merged)];
         });
         rangeUrls = htmlBatch.flatMap((x) => x);
       }
