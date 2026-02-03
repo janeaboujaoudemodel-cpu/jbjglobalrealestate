@@ -25,6 +25,8 @@ const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersPr
     { name: 'Aldar Properties', slug: 'aldar' },
   ];
 
+  // Build links with correct route pattern: /developer/:slug (singular)
+
   // Split into two columns
   const half = Math.ceil(developers.length / 2);
   const firstColumn = developers.slice(0, half);
@@ -38,7 +40,7 @@ const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersPr
           {/* Featured card - smaller height */}
           <div className="lg:col-span-5 flex">
             <MegaMenuFeaturedCard
-              to="/developers/emaar"
+              to="/developer/emaar"
               onClick={onClose}
               image={menuDubaiSkyline}
               kicker="DEVELOPERS"
@@ -59,7 +61,7 @@ const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersPr
               {firstColumn.map((dev) => (
                 <MegaMenuIconLink
                   key={dev.slug}
-                  to={`/developers/${dev.slug}`}
+                  to={`/developer/${dev.slug}`}
                   onClick={onClose}
                   icon={Building2}
                   title={dev.name}
@@ -69,7 +71,7 @@ const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersPr
               {secondColumn.map((dev) => (
                 <MegaMenuIconLink
                   key={dev.slug}
-                  to={`/developers/${dev.slug}`}
+                  to={`/developer/${dev.slug}`}
                   onClick={onClose}
                   icon={Building2}
                   title={dev.name}
