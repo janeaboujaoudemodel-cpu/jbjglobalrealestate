@@ -5,12 +5,16 @@ import {
   MessageSquare,
   Phone,
   Mail,
-  Clock,
   CheckCircle2,
   HelpCircle,
   Ticket,
   Send,
+  Shield,
+  FileText,
+  KeyRound,
+  Folder,
   Users,
+  ArrowUpCircle,
 } from "lucide-react";
 import Footer from "@/components/Footer";
 import DirectContactCTA from "@/components/DirectContactCTA";
@@ -50,76 +54,57 @@ const staggerContainer = {
   },
 };
 
-const contactOptions = [
-  {
-    icon: Mail,
-    title: "Email Support",
-    value: "happiness@jbjglobalrealestate.com",
-    description: "For detailed inquiries and documentation",
-    action: "mailto:happiness@jbjglobalrealestate.com",
-    cta: "Send Email",
-  },
-  {
-    icon: Phone,
-    title: "Call Us",
-    value: "+971 4 XXX XXXX",
-    description: "Direct line during business hours",
-    action: "tel:+97143334411",
-    cta: "Call Now",
-  },
-  {
-    icon: MessageSquare,
-    title: "WhatsApp",
-    value: "+971 XX XXX XXXX",
-    description: "Quick responses for urgent matters",
-    action: "https://wa.me/97143334411",
-    cta: "Message Us",
-  },
+const whatWeCanHelp = [
+  { icon: Shield, text: "Website support and login issues" },
+  { icon: Send, text: "Service requests routing" },
+  { icon: Ticket, text: "Complaint ticket creation and updates" },
+  { icon: FileText, text: "Document submission guidance" },
+  { icon: KeyRound, text: "Portal access questions" },
 ];
 
 const supportCategories = [
+  "Website Support",
+  "Login Issues",
+  "Service Request",
+  "Complaint",
+  "Document Submission",
+  "Portal Access",
   "General Inquiry",
-  "Transaction Support",
-  "Document Request",
-  "Appointment Scheduling",
-  "Service Information",
-  "Technical Support",
-  "Feedback",
   "Other",
 ];
 
 const faqData = [
   {
-    question: "What are your support hours?",
-    answer: "Our support team is available Sunday to Thursday, 9:00 AM to 6:00 PM GST. Urgent matters can be submitted anytime and will be addressed during business hours.",
+    question: "Will I always get a ticket ID?",
+    answer: "Yes—support is handled through tracked tickets.",
   },
   {
-    question: "How quickly will I get a response?",
-    answer: "Email inquiries receive a response within 24 business hours. Phone and WhatsApp during business hours typically get immediate or same-day responses.",
+    question: "How do I reference my case?",
+    answer: "Use the ticket ID in all messages.",
   },
   {
-    question: "Can I track my support ticket?",
-    answer: "Yes. When you submit a ticket, you'll receive a ticket ID via email. You can inquire about status by referencing this ID.",
+    question: "What's the fastest way to get help?",
+    answer: "Create a ticket, then email the ticket ID if it's urgent.",
   },
   {
-    question: "What if I need help outside business hours?",
-    answer: "Submit your request via email or the ticket form. Urgent transaction-related matters can also be sent via WhatsApp for priority handling the next business day.",
+    question: "Can I request a callback?",
+    answer: "Yes—include preferred time and number.",
   },
   {
-    question: "Is there a different channel for complaints?",
-    answer: "Yes. For formal complaints, please use our Complaint Procedures page which has a dedicated escalation process.",
+    question: "Do you support WhatsApp?",
+    answer: "If WhatsApp support exists on the site, you can use the same existing contact method displayed in the Direct Contact section.",
   },
   {
-    question: "Can you help with partner services (mortgage, legal, etc.)?",
-    answer: "We can provide information and introductions to our partner network. Direct service queries should be directed to the respective partners.",
+    question: "Can you help with partner services?",
+    answer: "We can route you to the right partner introduction pathway.",
   },
   {
-    question: "Do you offer in-person support?",
-    answer: "Yes. Office visits can be scheduled through our appointment system. Please contact us to arrange a meeting.",
+    question: "Do you store my documents?",
+    answer: "Documents submitted through forms are stored within platform workflows visible to authorized staff.",
   },
   {
-    question: "What information should I include in my request?",
-    answer: "Include your name, contact details, the nature of your inquiry, and any relevant reference numbers (transaction ID, property reference, etc.) for faster resolution.",
+    question: "Can I escalate a ticket?",
+    answer: "Yes—escalation options apply for unresolved tickets.",
   },
 ];
 
@@ -148,13 +133,23 @@ const CustomerHappinessCenter = () => {
     <>
       <SEOHead
         title="Customer Happiness Center | JBJ Global Real Estate"
-        description="Fast routing, clear answers, and structured support. Create tickets, reach us directly, and track your inquiries with transparency."
+        description="Fast routing, clear answers, and structured support—built around ticket tracking and professional resolution."
         canonicalPath="/services/customer-happiness-center"
       />
 
       {/* HERO SECTION */}
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-black">
+          {/* Video placeholder */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
+                <Heart className="w-12 h-12 text-gold/60" />
+              </div>
+              <p className="text-gold/60 text-sm tracking-widest uppercase">Support That Actually Works</p>
+              <p className="text-zinc-500 text-xs mt-2">Video placeholder only</p>
+            </div>
+          </div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
         </div>
@@ -181,14 +176,14 @@ const CustomerHappinessCenter = () => {
             </h1>
             
             <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-              Fast routing, clear answers, and structured support — with ticket tracking and direct contact options.
+              Fast routing, clear answers, and structured support—built around ticket tracking and professional resolution.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <PremiumHeroButton href="#create-ticket">
                 Create Support Ticket
               </PremiumHeroButton>
-              <PremiumHeroButton href="#contact-options">
+              <PremiumHeroButton href="#direct-contact">
                 Reach Us Directly
               </PremiumHeroButton>
             </div>
@@ -206,58 +201,27 @@ const CustomerHappinessCenter = () => {
         </motion.div>
       </section>
 
-      {/* DIRECT CONTACT OPTIONS */}
-      <section id="contact-options" className="bg-black py-20">
+      {/* WHAT THIS CENTER DOES */}
+      <section className="bg-black py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
+            className="max-w-4xl mx-auto"
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Reach Us Directly
+              What This Center Does
             </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-              {contactOptions.map((option, index) => (
-                <motion.div key={index} variants={fadeInUp}>
-                  <Card className="jj-card-inner h-full">
-                    <CardContent className="p-6 text-center">
-                      <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-black flex items-center justify-center">
-                        <option.icon className="w-7 h-7 text-gold" />
-                      </div>
-                      <h3 className="font-semibold text-black mb-2">{option.title}</h3>
-                      <p className="text-gold font-medium mb-2">{option.value}</p>
-                      <p className="text-sm text-zinc-600 mb-4">{option.description}</p>
-                      <Button variant="outline" size="sm" asChild className="w-full">
-                        <a href={option.action} target={option.action.startsWith("http") ? "_blank" : undefined}>
-                          {option.cta}
-                        </a>
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Email Alias Display */}
-            <motion.div variants={fadeInUp} className="mt-8 text-center">
-              <div className="inline-flex items-center gap-3 px-6 py-4 rounded-xl bg-gold/10 border border-gold/30">
-                <Mail className="w-6 h-6 text-gold" />
-                <div className="text-left">
-                  <p className="text-sm text-zinc-600">Happiness Team Email</p>
-                  <a 
-                    href="mailto:happiness@jbjglobalrealestate.com" 
-                    className="text-gold font-semibold hover:underline"
-                  >
-                    happiness@jbjglobalrealestate.com
-                  </a>
-                </div>
-              </div>
+            <motion.div variants={fadeInUp} className="jj-card-inner">
+              <p className="text-zinc-700 leading-relaxed text-center">
+                The Happiness Center exists to ensure support requests don't get lost. Every request becomes a tracked ticket with clear routing and accountability.
+              </p>
             </motion.div>
           </motion.div>
         </div>
@@ -281,7 +245,7 @@ const CustomerHappinessCenter = () => {
               Create Support Ticket
             </motion.h2>
             <motion.div variants={fadeInUp}>
-              <Card className="jj-card-inner border-none">
+              <Card className="jj-card-inner border-2 border-gold/30">
                 <CardContent className="p-6">
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -362,6 +326,79 @@ const CustomerHappinessCenter = () => {
         </div>
       </section>
 
+      {/* DIRECT CONTACT */}
+      <section id="direct-contact" className="bg-black py-20">
+        <div className="jj-layer-2">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="max-w-4xl mx-auto"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              Direct Contact
+            </motion.h2>
+            <motion.div variants={fadeInUp} className="jj-card-inner text-center">
+              <div className="flex items-center justify-center gap-4 mb-4">
+                <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center">
+                  <Mail className="w-7 h-7 text-gold" />
+                </div>
+                <div className="text-left">
+                  <p className="text-sm text-zinc-600">Happiness Center Email</p>
+                  <a 
+                    href="mailto:HAPPINESS@JBJGLOBALREALESTATE.COM" 
+                    className="text-gold font-semibold text-lg hover:underline"
+                  >
+                    HAPPINESS@JBJGLOBALREALESTATE.COM
+                  </a>
+                </div>
+              </div>
+              <p className="text-zinc-600 mt-4">
+                For urgent routing, email the Happiness Center with your ticket ID in the subject line.
+              </p>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* WHAT WE CAN HELP WITH */}
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="max-w-4xl mx-auto"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              What We Can Help With
+            </motion.h2>
+            <motion.div variants={fadeInUp} className="jj-card-inner">
+              <ul className="space-y-4">
+                {whatWeCanHelp.map((item, idx) => (
+                  <li key={idx} className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center shrink-0">
+                      <item.icon className="w-5 h-5 text-gold" />
+                    </div>
+                    <span className="text-zinc-700">{item.text}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* FAQ */}
       <section className="bg-black py-20">
         <div className="jj-layer-2">
@@ -385,15 +422,12 @@ const CustomerHappinessCenter = () => {
                   <AccordionItem
                     key={index}
                     value={`item-${index}`}
-                    className="jj-card-inner border-none"
+                    className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] overflow-hidden"
                   >
-                    <AccordionTrigger className="text-left text-black hover:text-gold">
-                      <div className="flex items-center gap-3">
-                        <HelpCircle className="w-5 h-5 text-gold shrink-0" />
-                        {faq.question}
-                      </div>
+                    <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
+                      <span className="text-black font-medium">{faq.question}</span>
                     </AccordionTrigger>
-                    <AccordionContent className="text-zinc-600 pl-8">
+                    <AccordionContent className="px-6 pb-4 text-zinc-600">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -411,33 +445,29 @@ const CustomerHappinessCenter = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            variants={staggerContainer}
-            className="text-center max-w-3xl mx-auto"
+            variants={fadeInUp}
+            className="max-w-3xl mx-auto text-center"
           >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black mb-4"
-              style={{ fontFamily: "Playfair Display, serif" }}
-            >
-              We're Here to Help
-            </motion.h2>
-            <motion.p variants={fadeInUp} className="text-zinc-600 mb-8">
-              Our happiness team is committed to making your experience seamless.
-            </motion.p>
-            <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="primary" size="lg" asChild>
-                <a href="#create-ticket">
-                  <Ticket className="w-4 h-4 mr-2" />
-                  Create New Ticket
-                </a>
-              </Button>
-              <Button variant="outline" size="lg" asChild>
-                <Link to="/contact">
-                  <Phone className="w-4 h-4 mr-2" />
-                  Contact Us
-                </Link>
-              </Button>
-            </motion.div>
+            <div className="jj-card-inner border-2 border-gold/30">
+              <Ticket className="w-12 h-12 text-gold mx-auto mb-6" />
+              <h2
+                className="text-3xl md:text-4xl font-bold text-black mb-4"
+                style={{ fontFamily: "Playfair Display, serif" }}
+              >
+                Get Support in One Workflow
+              </h2>
+              <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
+                Create a ticket to get routed and tracked properly.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <PremiumHeroButton href="#create-ticket">
+                  Create Support Ticket
+                </PremiumHeroButton>
+                <PremiumHeroButton href="mailto:HAPPINESS@JBJGLOBALREALESTATE.COM">
+                  Email Happiness Center
+                </PremiumHeroButton>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
