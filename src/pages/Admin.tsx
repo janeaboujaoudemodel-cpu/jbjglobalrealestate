@@ -64,10 +64,11 @@ import PWAAnalyticsDashboard from "@/components/admin/PWAAnalyticsDashboard";
 import VisitorInsightsDashboard from "@/components/admin/VisitorInsightsDashboard";
 import { AdminOverviewDashboard } from "@/components/admin/AdminOverviewDashboard";
 import { AdminAIAssistant } from "@/components/admin/AdminAIAssistant";
-import { ClipboardList, Users, Briefcase, Megaphone, Smartphone, LayoutDashboard, Bot, Mic } from "lucide-react";
+import { ClipboardList, Users, Briefcase, Megaphone, Smartphone, LayoutDashboard, Bot, Mic, Send } from "lucide-react";
 import VoiceRecorder from "@/components/admin/VoiceRecorder";
 import { CommandPalette } from "@/components/ui/command-palette";
 import { FloatingActionBar } from "@/components/ui/floating-action-bar";
+import { Link } from "react-router-dom";
 
 interface ProjectDocument {
   id: string;
@@ -374,6 +375,14 @@ const Admin = () => {
               <Bell className="h-4 w-4" />
               <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center">5</span>
             </Button>
+            <Link to="/admin/marketing-hub">
+              <Button
+                className="bg-gradient-to-r from-gold to-amber-600 hover:from-gold/90 hover:to-amber-600/90 text-black font-semibold shadow-lg shadow-gold/20"
+              >
+                <Send className="w-4 h-4 mr-2" />
+                Marketing Hub
+              </Button>
+            </Link>
             <Button
               variant="secondary"
               onClick={() => navigate("/")}
