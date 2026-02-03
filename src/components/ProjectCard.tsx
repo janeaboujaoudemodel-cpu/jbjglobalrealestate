@@ -136,7 +136,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
       <Link to={`/project/${project.slug}`} className="flex-1 flex flex-col">
         {/* Image with Carousel - Provident Style */}
-        <div className="aspect-[4/3] overflow-hidden relative">
+        <div className="aspect-square overflow-hidden relative">
           <VerifiedMedia
             src={images[currentImageIndex]?.image_url || images[0]?.image_url}
             alt={images[currentImageIndex]?.alt_text || project.name}

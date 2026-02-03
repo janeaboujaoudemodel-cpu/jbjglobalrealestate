@@ -25,6 +25,8 @@ export type ExtractedProjectData = {
   priceFrom: number | null;
   bedroomsMin: number | null;
   bedroomsMax: number | null;
+  sizeMin: number | null;
+  sizeMax: number | null;
   handover: string | null;
   paymentPlan: string | null;
   propertyType: string | null;
@@ -124,6 +126,24 @@ function extractBasicFields(markdown: string) {
     }
   }
 
+  // Size extraction - patterns like "500 - 2,500 sqft" or "from 800 sqft"
+  let sizeMin: number | null = null;
+  let sizeMax: number | null = null;
+  
+  // Try range pattern first: "500 - 2,500 sqft" or "500 to 2500 sq ft"
+  const sizeRangeMatch = cleanMd.match(/([\d,]+)\s*(?:to|-|–|—)\s*([\d,]+)\s*(?:sqft|sq\.?\s*ft|square feet)/i);
+  if (sizeRangeMatch) {
+    sizeMin = parseInt(sizeRangeMatch[1].replace(/,/g, ""));
+    sizeMax = parseInt(sizeRangeMatch[2].replace(/,/g, ""));
+  } else {
+    // Try single value: "from 800 sqft" or just "800 sqft"
+    const sizeSingleMatch = cleanMd.match(/(?:from\s+)?([\d,]+)\s*(?:sqft|sq\.?\s*ft|square feet)/i);
+    if (sizeSingleMatch) {
+      sizeMin = parseInt(sizeSingleMatch[1].replace(/,/g, ""));
+      sizeMax = sizeMin;
+    }
+  }
+
   // Price - prefer AED, else USD/EUR conversion (approx) just to fill numeric field.
   // NOTE: This numeric is for filtering; page copy remains in description.
   let priceFrom: number | null = null;
@@ -175,6 +195,8 @@ function extractBasicFields(markdown: string) {
     priceFrom,
     bedroomsMin,
     bedroomsMax,
+    sizeMin,
+    sizeMax,
     handover,
     paymentPlan,
     propertyType,
@@ -259,10 +281,23 @@ export function extractProvidentProjectFromScrape(args: {
     }
   }
 
-  // USP image: first image after USP label
+  // USP image: find first cloudfront image within 800 characters after USP heading
+  // This ensures we get the actual USP section image, not a random gallery image
   let uspImageUrl: string | null = null;
-  const uspImgMatch = markdown.match(/Unique Selling Points[\s\S]*?!\[[^\]]*\]\(([^)]+)\)/i);
-  if (uspImgMatch?.[1]) uspImageUrl = uspImgMatch[1];
+  const uspSectionMatch = markdown.match(/Unique Selling Points[\s\S]{0,800}/i);
+  if (uspSectionMatch) {
+    // Look for cloudfront image URL within the USP section only
+    const cloudImgMatch = uspSectionMatch[0].match(/(https:\/\/[^\s"'\)]+cloudfront[^\s"'\)]+\.(?:jpg|jpeg|png|webp))/i);
+    if (cloudImgMatch?.[1]) {
+      uspImageUrl = normalizeCloudfrontImage(cloudImgMatch[1]);
+    } else {
+      // Fallback: look for any markdown image in the section
+      const mdImgMatch = uspSectionMatch[0].match(/!\[[^\]]*\]\(([^)]+)\)/);
+      if (mdImgMatch?.[1]) {
+        uspImageUrl = normalizeCloudfrontImage(mdImgMatch[1]);
+      }
+    }
+  }
 
   // Amenities - FIXED: More flexible extraction, try multiple patterns
   const amenities: string[] = [];
@@ -289,14 +324,34 @@ export function extractProvidentProjectFromScrape(args: {
     }
   }
 
-  // Floor plan types
+  // Floor plan types - ONLY extract from Floorplans section, never from Location
   const floorPlanTypes: Array<{ label: string; pdfUrl?: string }> = [];
-  const fpSection = extractSection(markdown, "## Floorplans");
+  
+  // Try multiple heading patterns for floor plans section
+  let fpSection = extractSection(markdown, "Floorplans");
+  if (!fpSection) {
+    fpSection = extractSection(markdown, "Floor Plans");
+  }
+  if (!fpSection) {
+    // Direct match for ## Floorplans heading
+    const fpMatch = markdown.match(/##\s*Floorplans?\s*\n+([\s\S]*?)(?=\n##\s+|$)/i);
+    if (fpMatch?.[1]) {
+      fpSection = fpMatch[1].trim();
+    }
+  }
+  
   if (fpSection) {
     const lines = fpSection.split("\n").map((l) => stripMarkdownLinks(l).trim()).filter(Boolean);
     for (const line of lines) {
+      // Skip download links and CTAs
       if (/^Download/i.test(line)) continue;
-      if (line.length > 2 && line.length < 120) floorPlanTypes.push({ label: line });
+      if (/^View All/i.test(line)) continue;
+      if (/^Find out more/i.test(line)) continue;
+      // Skip lines that look like location distances (contain "Minutes" or "–")
+      if (/\d+\s*Minutes?\s*[–—\-]/i.test(line)) continue;
+      if (line.length > 2 && line.length < 120) {
+        floorPlanTypes.push({ label: line });
+      }
     }
   }
 
@@ -404,6 +459,8 @@ export function extractProvidentProjectFromScrape(args: {
     priceFrom: basic.priceFrom,
     bedroomsMin: basic.bedroomsMin,
     bedroomsMax: basic.bedroomsMax,
+    sizeMin: basic.sizeMin,
+    sizeMax: basic.sizeMax,
     handover: basic.handover,
     paymentPlan: basic.paymentPlan,
     propertyType: basic.propertyType,

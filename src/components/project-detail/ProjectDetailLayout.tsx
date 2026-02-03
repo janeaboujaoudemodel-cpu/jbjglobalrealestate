@@ -29,7 +29,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import MortgageCalculator from "@/components/MortgageCalculator";
 import ImageCarousel from "@/components/ImageCarousel";
-import ProjectInquiryForm from "@/components/project-detail/ProjectInquiryForm";
+import ConsultationRequestForm from "@/components/ConsultationRequestForm";
 import AIMarketAnalyzer from "@/components/AIMarketAnalyzer";
 import PremiumBrochureCard from "@/components/project-detail/PremiumBrochureCard";
 import LeadCaptureModal from "@/components/project-detail/LeadCaptureModal";
@@ -779,14 +779,12 @@ export default function ProjectDetailLayout({
             </div>
           </div>
 
-          {/* INQUIRY FORM - Full Width with premium styling */}
+          {/* INQUIRY FORM - Full Width with premium styling - Uses Contact Page Form */}
           <div ref={inquiryRef} className="scroll-mt-32 mb-8">
             <div className="jj-card-inner p-8 md:p-10 border-2 border-gold/40 bg-gradient-to-br from-champagne/50 via-champagne-light/30 to-champagne/50">
-              <ProjectInquiryForm
-                projectId={project.id}
-                projectName={project.name}
-                projectLocation={project.location || undefined}
-                developerName={project.developer?.name}
+              <ConsultationRequestForm
+                title={`Register Interest in ${project.name}`}
+                subtitle={`Get expert guidance on ${project.name}${project.location ? ` at ${project.location}` : ''}. Our specialists are ready to assist you.`}
               />
             </div>
           </div>
