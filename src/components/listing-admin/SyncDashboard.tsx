@@ -159,8 +159,17 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   } | null>(null);
   const [bulkTotals, setBulkTotals] = useState({ processed: 0, success: 0, errors: 0 });
 
+  // CRITICAL: Credits exhausted flag - shown as a banner and disables extraction
+  const [creditsExhausted, setCreditsExhausted] = useState(false);
+
   // Fix All runner - both pending extraction AND approved project image repairs
-  const [isFixAllRunning, setIsFixAllRunning] = useState(false);
+  const [isFixAllRunning, setIsFixAllRunning] = useState(() => {
+    try {
+      return sessionStorage.getItem("fix_all_running") === "true";
+    } catch {
+      return false;
+    }
+  });
   const fixAllStopRef = useRef(false);
   const [fixAllStats, setFixAllStats] = useState<{
     pending_processed: number;
@@ -274,6 +283,14 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     loadProjectCount();
     refreshPageCount({ silent: true });
     loadActiveJob();
+
+    // AUTO-RESUME: If Fix All was running when user navigated away, resume it now.
+    if (sessionStorage.getItem("fix_all_running") === "true") {
+      console.log("[SyncDashboard] Auto-resuming Fix All from previous session...");
+      setTimeout(() => {
+        startFixAllRunner(true); // true = silent resume (no confirm dialog)
+      }, 1000);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -912,6 +929,14 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
         const documents = Number(data?.stats?.documents ?? 0);
         const duration_ms = Number(data?.duration_ms ?? 0);
 
+        // CRITICAL: Check if credits are exhausted — stop immediately and show banner.
+        if (data?.credits_exhausted) {
+          console.error("[SyncDashboard] Firecrawl credits exhausted — stopping extraction.");
+          setCreditsExhausted(true);
+          toast.error("Firecrawl credits exhausted. Extraction stopped.");
+          break;
+        }
+
         setBulkLastRun({ processed, success, errors, images, documents, duration_ms });
         setBulkTotals((prev) => ({
           processed: prev.processed + processed,
@@ -968,21 +993,26 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   // Phase 1: Extract pending queue (missing images/docs/description)
   // Phase 2: Repair approved projects (metadata, USPs, location, amenities)
   // Phase 3: Repair approved project images and documents
-  const startFixAllRunner = async () => {
+  const startFixAllRunner = async (silentResume = false) => {
     if (isFixAllRunning || isBulkExtractRunning || isRebuildingQueue || isSyncing) return;
     
-    const confirmed = window.confirm(
-      "⚡ FIX ALL LISTINGS ⚡\n\n" +
-      "This will run a 3-phase repair pipeline:\n\n" +
-      "Phase 1: Extract missing data for ALL pending queue items\n" +
-      "Phase 2: Repair approved projects (metadata, USPs, location, amenities, documents)\n" +
-      "Phase 3: Repair approved project images\n\n" +
-      "This may take several minutes. Continue?"
-    );
-    if (!confirmed) return;
+    if (!silentResume) {
+      const confirmed = window.confirm(
+        "⚡ FIX ALL LISTINGS ⚡\n\n" +
+        "This will run a 3-phase repair pipeline:\n\n" +
+        "Phase 1: Extract missing data for ALL pending queue items\n" +
+        "Phase 2: Repair approved projects (metadata, USPs, location, amenities, documents)\n" +
+        "Phase 3: Repair approved project images\n\n" +
+        "This may take several minutes. Continue?"
+      );
+      if (!confirmed) return;
+    }
 
     fixAllStopRef.current = false;
     setIsFixAllRunning(true);
+    // Persist so we can auto-resume after navigation/refresh
+    try { sessionStorage.setItem("fix_all_running", "true"); } catch { /* ignore */ }
+
     setFixAllStats({ 
       pending_processed: 0, 
       pending_success: 0, 
@@ -994,7 +1024,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       documents_repaired: 0
     });
 
-    toast.info("Fix All started — running 3-phase repair pipeline...");
+    toast.info(silentResume ? "Resuming Fix All pipeline..." : "Fix All started — running 3-phase repair pipeline...");
 
     try {
       // Phase 1: Extract all pending queue items
@@ -1005,6 +1035,14 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
           body: { limit: 10, throttleMs: 2500, concurrency: 1, maxDurationMs: 50_000 },
         });
         if (error) throw error;
+
+        // CRITICAL: Stop if credits exhausted
+        if (data?.credits_exhausted) {
+          console.error("[FixAll] Credits exhausted — aborting.");
+          setCreditsExhausted(true);
+          toast.error("Firecrawl credits exhausted. Fix All stopped.");
+          break;
+        }
 
         const processed = Number(data?.stats?.processed ?? 0);
         const success = Number(data?.stats?.success ?? 0);
@@ -1090,11 +1128,13 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     } finally {
       setIsFixAllRunning(false);
       fixAllStopRef.current = false;
+      try { sessionStorage.removeItem("fix_all_running"); } catch { /* ignore */ }
     }
   };
 
   const stopFixAllRunner = () => {
     fixAllStopRef.current = true;
+    try { sessionStorage.removeItem("fix_all_running"); } catch { /* ignore */ }
     toast.info("Stopping Fix All after current batch...");
   };
 
@@ -1573,6 +1613,28 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                  )}
                </div>
 
+                {/* Credits exhausted banner */}
+                {creditsExhausted && (
+                  <div className="rounded-lg border-2 border-destructive bg-destructive/10 p-4 flex items-center gap-4">
+                    <AlertCircle className="w-8 h-8 text-destructive flex-shrink-0" />
+                    <div>
+                      <div className="text-sm font-bold text-destructive">Firecrawl Credits Exhausted</div>
+                      <div className="text-xs text-muted-foreground">
+                        Extraction has stopped because your Firecrawl API credits have run out.
+                        Please top up your plan at <a href="https://firecrawl.dev/pricing" target="_blank" rel="noopener noreferrer" className="underline text-primary">firecrawl.dev/pricing</a> or wait for credits to reset.
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="mt-2"
+                        onClick={() => setCreditsExhausted(false)}
+                      >
+                        Dismiss & Retry
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
                 {/* Queue rebuild + Bulk extraction runner */}
                 <div className="rounded-md border border-border bg-muted/20 p-4 space-y-3">
                   <div className="flex items-center justify-between gap-3 flex-wrap">
@@ -1586,7 +1648,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                       {!isBulkExtractRunning ? (
                         <Button
                           onClick={startBulkExtractRunner}
-                          disabled={isSyncing || isRebuildingQueue || isFixAllRunning}
+                          disabled={isSyncing || isRebuildingQueue || isFixAllRunning || creditsExhausted}
                           className="bg-primary hover:bg-primary/90 text-primary-foreground"
                         >
                           <Play className="w-4 h-4 mr-2" />
@@ -1602,8 +1664,8 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                       {/* FIX ALL BUTTON - runs extraction + repairs approved projects */}
                       {!isFixAllRunning ? (
                         <Button
-                          onClick={startFixAllRunner}
-                          disabled={isSyncing || isRebuildingQueue || isBulkExtractRunning}
+                          onClick={() => startFixAllRunner(false)}
+                          disabled={isSyncing || isRebuildingQueue || isBulkExtractRunning || creditsExhausted}
                           className="bg-emerald-600 hover:bg-emerald-700 text-white"
                         >
                           <RefreshCw className="w-4 h-4 mr-2" />

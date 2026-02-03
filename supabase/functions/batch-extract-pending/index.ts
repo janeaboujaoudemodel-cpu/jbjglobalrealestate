@@ -139,6 +139,13 @@ serve(async (req) => {
         
         const errorCode = errJson.code || "UNKNOWN";
         
+        // CRITICAL: 402 = credits exhausted — abort the entire run immediately.
+        // Continuing wastes time and confuses the user.
+        if (scrapeRes.status === 402) {
+          console.error(`[BatchExtract] Credits exhausted for ${item.name}. Aborting batch.`);
+          throw new Error(`CREDITS_EXHAUSTED`);
+        }
+        
         // CRITICAL: Treat SCRAPE_ALL_ENGINES_FAILED as a soft error - don't crash the whole batch
         if (errorCode === "SCRAPE_ALL_ENGINES_FAILED") {
           console.warn(`[BatchExtract] Engines blocked for ${item.name} - marking for retry`);
@@ -323,6 +330,8 @@ serve(async (req) => {
         }),
       );
 
+      let shouldAbort = false; // set if we hit a fatal error (credits exhausted)
+
       for (let j = 0; j < results.length; j++) {
         const item = chunk[j];
         stats.processed++;
@@ -342,6 +351,12 @@ serve(async (req) => {
            const msg = r.reason instanceof Error ? r.reason.message : String(r.reason);
            errors.push({ name: item?.name || "(unknown)", error: msg });
 
+           // CRITICAL: If credits exhausted, abort immediately (don't burn more time)
+           if (msg.includes("CREDITS_EXHAUSTED")) {
+             console.error("[BatchExtract] Credits exhausted — aborting run.");
+             shouldAbort = true;
+           }
+
            // Persist the error so the admin can see it and so it can be retried later.
            if (!dryRun && item?.id) {
              const short = msg.replace(/\s+/g, " ").slice(0, 180);
@@ -360,6 +375,12 @@ serve(async (req) => {
          }
       }
 
+      // If any item hit credits exhausted, stop the entire run NOW.
+      if (shouldAbort) {
+        timeBudgetHit = true;
+        break;
+      }
+
       // Optional throttle between chunks (set throttleMs=0 for turbo runs)
       if (throttleMs > 0 && i + concurrency < imports.length) {
         await sleep(throttleMs, 0.2);
@@ -367,7 +388,8 @@ serve(async (req) => {
     }
 
     const duration = Date.now() - startTime;
-    console.log(`[BatchExtract] Complete in ${duration}ms: ${stats.success} success, ${stats.errors} errors`);
+    const creditsExhausted = errors.some((e) => e.error.includes("CREDITS_EXHAUSTED"));
+    console.log(`[BatchExtract] Complete in ${duration}ms: ${stats.success} success, ${stats.errors} errors, creditsExhausted=${creditsExhausted}`);
 
     return new Response(
       JSON.stringify({
@@ -376,6 +398,7 @@ serve(async (req) => {
         errors: errors.slice(0, 10),
         duration_ms: duration,
         time_budget_hit: timeBudgetHit,
+        credits_exhausted: creditsExhausted,
         effective: { limit, concurrency, throttleMs, maxDurationMs },
       }),
       {
