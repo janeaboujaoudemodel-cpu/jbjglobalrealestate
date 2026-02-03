@@ -6,11 +6,12 @@ import {
   CheckCircle2,
   HelpCircle,
   Phone,
-  Clock,
   Search,
   Send,
   Eye,
-  Shield,
+  ArrowRight,
+  Upload,
+  AlertCircle,
 } from "lucide-react";
 import Footer from "@/components/Footer";
 import DirectContactCTA from "@/components/DirectContactCTA";
@@ -51,44 +52,50 @@ const staggerContainer = {
 };
 
 const statusTimeline = [
-  { stage: 1, label: "Submitted", description: "Request received and logged" },
-  { stage: 2, label: "Under Review", description: "Document being reviewed" },
-  { stage: 3, label: "Signed", description: "Signature applied" },
-  { stage: 4, label: "Completed", description: "Ready for collection/delivery" },
+  { stage: 1, label: "Submitted", description: "Your request is received and queued.", icon: Send },
+  { stage: 2, label: "Under Review", description: "Document verification and routing in progress.", icon: Eye },
+  { stage: 3, label: "Signed", description: "Signature completed and being packaged.", icon: PenTool },
+  { stage: 4, label: "Completed", description: "Final document is ready for secure delivery.", icon: CheckCircle2 },
+];
+
+const formHelperItems = [
+  { icon: Upload, text: "Upload PDF only" },
+  { icon: FileText, text: "Provide clear notes for what requires signature" },
+  { icon: AlertCircle, text: "Ensure the document is final before submission" },
 ];
 
 const faqData = [
   {
-    question: "What types of documents can be signed?",
-    answer: "Letters, internal approvals, client documents, and other official JBJ correspondence requiring authorized signatures.",
+    question: "What documents can be submitted?",
+    answer: "Only documents related to JBJ internal workflows and approved signature pathways.",
   },
   {
-    question: "How long does the signature process take?",
-    answer: "Standard requests are processed within 2-3 business days. Priority requests may be expedited based on urgency and document type.",
+    question: "Can I submit a non-PDF document?",
+    answer: "No. Convert to PDF before submission.",
   },
   {
-    question: "Who can submit a signature request?",
-    answer: "JBJ team members and authorized clients can submit signature requests through this portal.",
+    question: "Can I change the document after submission?",
+    answer: "Submit a new request. The signed copy must match the approved version.",
   },
   {
-    question: "How do I track my request?",
-    answer: "Use the 'Track Request' feature with your request ID and email to check the current status of your submission.",
+    question: "How do I know it's signed?",
+    answer: "Status will update to \"Signed\" then \"Completed.\"",
   },
   {
-    question: "Can I cancel or modify a request?",
-    answer: "Requests can be modified or cancelled before entering the 'Signed' stage. Contact support for assistance.",
+    question: "Can I request urgent signature?",
+    answer: "Use the priority field and explain urgency in notes.",
   },
   {
-    question: "Is there a limit on document size?",
-    answer: "Documents should be PDF format and under 10MB. For larger files, please contact support.",
+    question: "Who can see my request?",
+    answer: "Only authorized JBJ administrators and the relevant approvers.",
   },
   {
-    question: "Are signatures legally binding?",
-    answer: "Yes, authorized signatures from JBJ Global Real Estate are legally binding for official company documents.",
+    question: "Can I delete a request?",
+    answer: "Requests are tracked for audit. If a request is invalid, it can be closed with reason.",
   },
   {
-    question: "What if my request is rejected?",
-    answer: "You'll receive notification with the reason for rejection and guidance on how to resubmit if applicable.",
+    question: "Where do I receive the signed copy?",
+    answer: "Delivery method is shown in your completion status and secure messaging flow.",
   },
 ];
 
@@ -107,7 +114,7 @@ const SignatureCollection = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Signature request submitted successfully! You will receive a confirmation email shortly.");
+    toast.success("Signature request submitted successfully! You will receive a request ID and status timeline.");
     setFormData({
       name: "",
       email: "",
@@ -131,13 +138,14 @@ const SignatureCollection = () => {
     <>
       <SEOHead
         title="Signature Collection | JBJ Global Real Estate"
-        description="Internal signature request workflow for JBJ documents. Submit, track, and manage signature requests with full audit trail."
+        description="A controlled internal signature request workflow—tracked, timestamped, and audit-ready."
         canonicalPath="/services/signature-collection"
       />
 
       {/* HERO SECTION */}
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-black">
+          {/* Video placeholder - Controlled Approvals in One Workflow */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
         </div>
@@ -164,7 +172,7 @@ const SignatureCollection = () => {
             </h1>
             
             <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-              A controlled internal signature-request workflow for JBJ documents — tracked, timestamped, and auditable.
+              A controlled internal signature request workflow—tracked, timestamped, and audit-ready.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -189,6 +197,32 @@ const SignatureCollection = () => {
         </motion.div>
       </section>
 
+      {/* WHAT THIS PAGE IS FOR */}
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="max-w-4xl mx-auto"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              What This Page Is For
+            </motion.h2>
+            <motion.div variants={fadeInUp} className="jj-card-inner">
+              <p className="text-zinc-700 text-lg leading-relaxed">
+                This page is for signature requests tied to JBJ workflows where authorization, traceability, and document control matter.
+              </p>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* SIGNATURE REQUEST FORM */}
       <section id="submit-request" className="bg-black py-20">
         <div className="jj-layer-2">
@@ -201,11 +235,29 @@ const SignatureCollection = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Submit Signature Request
             </motion.h2>
+            <motion.p variants={fadeInUp} className="text-zinc-600 text-center mb-8">
+              Submit your request with the document attached. You will receive a request ID and status timeline.
+            </motion.p>
+            
+            {/* Form Helper Text */}
+            <motion.div variants={fadeInUp} className="mb-8">
+              <div className="jj-card-inner !bg-black/5 border border-gold/20">
+                <div className="flex flex-col gap-3">
+                  {formHelperItems.map((item, idx) => (
+                    <div key={idx} className="flex items-center gap-3 text-sm text-zinc-700">
+                      <item.icon className="w-4 h-4 text-gold shrink-0" />
+                      <span>{item.text}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+
             <motion.div variants={fadeInUp}>
               <Card className="jj-card-inner border-none">
                 <CardContent className="p-6">
@@ -274,13 +326,13 @@ const SignatureCollection = () => {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="normal">Normal</SelectItem>
-                          <SelectItem value="high">High</SelectItem>
+                          <SelectItem value="high">High (Explain urgency in notes)</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="document" className="text-black">Document Upload (PDF) *</Label>
+                      <Label htmlFor="document" className="text-black">Document Upload (PDF Only) *</Label>
                       <Input
                         id="document"
                         type="file"
@@ -288,17 +340,17 @@ const SignatureCollection = () => {
                         required
                         className="cursor-pointer"
                       />
-                      <p className="text-xs text-zinc-500">Maximum file size: 10MB</p>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="notes" className="text-black">Notes</Label>
+                      <Label htmlFor="notes" className="text-black">Notes (What requires signature) *</Label>
                       <Textarea
                         id="notes"
                         value={formData.notes}
                         onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                        placeholder="Any additional information..."
+                        placeholder="Provide clear notes for what requires signature..."
                         rows={4}
+                        required
                       />
                     </div>
 
@@ -328,7 +380,7 @@ const SignatureCollection = () => {
               className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Request Status Timeline
+              Status Timeline
             </motion.h2>
             <div className="max-w-4xl mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -336,7 +388,7 @@ const SignatureCollection = () => {
                   <motion.div key={index} variants={fadeInUp}>
                     <div className="jj-card-inner text-center h-full">
                       <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-black flex items-center justify-center border-2 border-gold">
-                        <span className="text-gold font-bold">{step.stage}</span>
+                        <step.icon className="w-5 h-5 text-gold" />
                       </div>
                       <h3 className="font-semibold text-black mb-2">{step.label}</h3>
                       <p className="text-sm text-zinc-600">{step.description}</p>
@@ -361,11 +413,14 @@ const SignatureCollection = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Track Your Request
+              Track a Request
             </motion.h2>
+            <motion.p variants={fadeInUp} className="text-zinc-600 text-center mb-8">
+              Enter your request ID and email to view the current status and any required actions.
+            </motion.p>
             <motion.div variants={fadeInUp}>
               <Card className="jj-card-inner border-none">
                 <CardContent className="p-6">
@@ -460,23 +515,23 @@ const SignatureCollection = () => {
               className="text-3xl md:text-4xl font-bold text-black mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Need Assistance?
+              Submit a signature request
             </motion.h2>
             <motion.p variants={fadeInUp} className="text-zinc-600 mb-8">
-              Contact our team for help with signature requests.
+              Upload your document and track status end-to-end.
             </motion.p>
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button variant="primary" size="lg" asChild>
                 <a href="#submit-request">
-                  <PenTool className="w-4 h-4 mr-2" />
-                  Submit New Request
+                  Submit Signature Request
+                  <ArrowRight className="w-4 h-4 ml-2" />
                 </a>
               </Button>
               <Button variant="outline" size="lg" asChild>
-                <Link to="/contact">
-                  <Phone className="w-4 h-4 mr-2" />
-                  Contact Support
-                </Link>
+                <a href="#track-request">
+                  <Search className="w-4 h-4 mr-2" />
+                  Track a Request
+                </a>
               </Button>
             </motion.div>
           </motion.div>
