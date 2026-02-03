@@ -1,275 +1,362 @@
 
-Goal: Make the listing admin preview match Provident exactly (card → full page), fix broken photos and missing fields (bedrooms/size/payment plan/brochure), stop sections “mixing into each other”, and update the “Stay in the Loop” / footer structure exactly as you specified (licensed line above the logo, no extra duplicate newsletter section).
 
--------------------------------------------------------------------------------
-1) What’s objectively broken right now (verified on your current listing)
-Route you’re on: /listing-admin/preview/54289763-0590-456f-8aaf-4ca1d9f7a93b
+# COMPREHENSIVE DEEP AUDIT: All Incomplete Tasks
+## JBJ Global Real Estate Project - Full Task Completion Plan
 
-Backend record (pending_project_imports) for this item shows:
-- images[0].url = "<Base64-Image-Removed>"  → this guarantees a broken image in UI (it is not a URL).
-- documents = []  → brochure/payment-plan docs not present, so brochure section cannot work.
-- bedrooms_min/max = null, size_min/max = null  → UI falls back to “Contact us” (the exact issue you reported).
-- payment_breakdown only has during_construction: "80%"  → incomplete payment plan display.
-- location_distances empty, faqs empty  → checklist stays red.
+---
 
-So: your report matches the data + there are also UI rendering and navigation issues to address.
+## EXECUTIVE SUMMARY
 
--------------------------------------------------------------------------------
-2) Fix broken photos (outside + inside) immediately (UI + data hygiene)
-2.1 UI filtering (so broken placeholders never render)
-Changes to implement:
-- In all mapping layers that feed images into cards and ProjectDetailLayout (PendingImportCard, TestOneListingPanel preview card, PendingImportPreview mapping, ProjectDetailLayout):
-  - Filter out any image entries where:
-    - url is not a string
-    - url does not start with http(s)
-    - url contains known placeholders like "Base64-Image-Removed"
-    - url is a data: URI
-  - Normalize Provident CDN “/x/{size}/” images to safe working size "/x/464x312/" on-the-fly for display, so mixed old sizes don’t keep 403’ing.
+Based on thorough analysis of the codebase and cross-referencing all user instructions from the project history, I have identified **23 incomplete or partially completed tasks** that require immediate implementation. This plan addresses every single one.
 
-Outcome:
-- Even if extraction writes a bad first image, the UI will skip it and use the next valid one, eliminating “broken gallery” visuals.
+---
 
-2.2 Data repair (so the DB stops carrying broken first-image placeholders)
-Changes to implement:
-- Update the extraction/repair backend functions so they never write placeholders like "<Base64-Image-Removed>" into images.
-- Add a “sanitize images” step during extraction updates:
-  - Remove placeholder entries entirely
-  - Deduplicate URLs
-  - Normalize sizes to safe size
-  - Ensure display_order is re-numbered sequentially from 0
+## CATEGORY 1: HOMEPAGE ISSUES
 
-Outcome:
-- Your queue cards and full preview become stable and deterministic.
+### 1.1 Search Module Filter Enhancements (NOT DONE)
+**Status:** ❌ Missing  
+**Location:** `src/components/home/SearchModule.tsx`  
+**Issue:** No sqm/sqft toggle, no currency selector (AED/USD/EUR), filter not full-width
 
--------------------------------------------------------------------------------
-3) Fix “View Full Page” not opening (the click should always navigate)
-You reported: clicking “View Full Page” doesn’t open.
+**Required Changes:**
+- Add area size filter with sqm/sqft toggle
+- Add currency selector dropdown (AED/USD/EUR)
+- Expand filter container to full-width of the section
+- Increase overall filter size/prominence
 
-Likely causes (based on current implementation patterns):
-- Button may be treated as type="submit" in some contexts, or click propagation/navigation is being interrupted in the card layout.
-- Some “Review card” wrappers may be capturing clicks in a way that prevents your intended navigation call from firing consistently.
+---
 
-Changes to implement (robust fix, no guessing):
-- Replace “navigate() onClick” for the “View Full Page” action with a real React Router <Link to="/listing-admin/preview/:id"> inside:
-  - TestOneListingPanel’s preview card
-  - PendingImportCard queue card action area
-- Add stopPropagation on Approve/Reject buttons so the card click and the button click never conflict.
+### 1.2 TrustBar UI Improvements (PARTIALLY DONE)
+**Status:** ⚠️ Needs improvement  
+**Location:** `src/components/home/TrustBar.tsx`  
+**Issue:** Current card-based design needs premium refinement
 
-Acceptance test:
-- From /listing-admin: click “View Full Page” → URL changes to /listing-admin/preview/:id and the full page loads every time.
+**Required Changes:**
+- Review and enhance the glass-morphism cards
+- Ensure proper spacing and alignment
+- Add subtle hover effects and refined styling
+- Match the luxury institutional brand standard
 
--------------------------------------------------------------------------------
-4) Extraction: stop “old extraction” and make it match Provident page-data deterministically
-Right now, batch-extract-pending is still primarily driven by Firecrawl markdown + regex extraction.
-You already have a page-data extractor file, but:
-- It is not currently being used as the primary source in batch-extract-pending.
-- Its parsing paths do not correctly match the real page-data JSON shape (for this listing the meaningful fields live under result.serverData.data.data).
+---
 
-4.1 Fix page-data parsing to match real Provident structure
-Implement in supabase/functions/_shared/provident/pagedata-detail.ts:
-- Correctly unwrap page-data to the inner “property detail” object:
-  - result.serverData.data.data (this is where title, developer, min_bedrooms, max_bedrooms, price, images, etc. exist)
-- Map fields exactly:
-  - name: title
-  - developerName: developer
-  - location: display_address (and/or community)
-  - bedroomsMin/Max: min_bedrooms / max_bedrooms
-  - handover: completion_year (or completion)
-  - priceFrom: price + display_price if needed
-  - images: use tile_image.url, banner_image.url, gallery images, etc. (normalized to safe size)
-  - locationDistances: parse time_to / nearby / distances if present (and only those)
-  - floorPlanTypes: parse only true floor plan objects/links, never mix distances
-  - paymentBreakdown: parse full breakdown fields if present (not just one key)
-  - brochure/payment PDFs: extract from page-data and normalize to absolute URLs
+### 1.3 "Find Your Starting Point" Mobile UI (NOT DONE)
+**Status:** ❌ Incomplete  
+**Location:** `src/pages/Index.tsx` (lines 314-385)  
+**Issue:** Text `text-[8px]` is extremely small, icons `w-3 h-3` are tiny
 
-4.2 Make page-data the primary extraction source (Firecrawl becomes fallback only)
-Implement in supabase/functions/batch-extract-pending/index.ts:
-- For each listing:
-  1) Fetch page-data.json and parse it (no Firecrawl credits required)
-  2) Fill ALL structured fields from page-data:
-     - bedrooms_min/max, size_min/max (if present), amenities_list, usp_headline/bullets, usp_image_url, location distances, FAQs, payment breakdown
-  3) Then only if something essential is missing, run Firecrawl scrape as fallback.
+**Required Changes:**
+- Increase text size from `text-[8px]` to at least `text-xs`
+- Increase icon size from `w-3 h-3` to `w-4 h-4` or larger
+- Consider vertical layout on very small screens
+- Improve overall mobile readability
 
-Outcome:
-- Bedrooms and sizes stop showing “Contact us” when the source already provides real values.
-- Payment plan stops being partial when the source provides the full plan.
+---
 
-4.3 If size/payment are missing in page-data: brochure-assisted fallback
-You requested: “If you’re not able to find the details, you can read the brochure also.”
+### 1.4 Homepage Section Order (NOT DONE)
+**Status:** ❌ Wrong order  
+**Location:** `src/pages/Index.tsx`  
+**Issue:** AI Home Finder is above Find Your Starting Point and Explore Services
 
-Implement fallback strategy:
-- If page-data does not contain size/payment breakdown:
-  - Mirror brochure PDF to internal storage (already the intended architecture).
-  - Attempt a lightweight PDF text extraction path (backend function) to detect:
-    - size ranges (sqft)
-    - payment milestone percentages
-  - If PDF parsing is not reliable for a given brochure, use AI on extracted text (not on screenshots) to produce exact values.
-- Store results in:
-  - size_min / size_max
-  - payment_breakdown (down_payment / during_construction / on_completion)
-  - payment_plan (summary string like "80/20" only if it is explicitly stated, otherwise null)
+**Required Changes (correct order):**
+1. Hero
+2. Trust Bar  
+3. Developer Partners Marquee
+4. Search Module
+5. Featured Listings
+6. Services Grid (currently "How Can We Help?")
+7. **Find Your Starting Point** (should move UP)
+8. **Explore Our Services slideshow** (should move UP)
+9. **AI Home Finder** (should move DOWN)
+10. Rest of sections...
 
-Outcome:
-- “Contact us” placeholders disappear for the majority of listings.
-- Payment plan matches Provident structure.
+---
 
--------------------------------------------------------------------------------
-5) Documents: brochures/payment plans must be present and must be internal (no external links)
-You reported: brochure missing, brochure photo missing, and content missing.
+### 1.5 Remove "How Can We Help?" Section (NOT DONE)
+**Status:** ❌ Still present  
+**Location:** `src/components/home/ServicesGrid.tsx`  
+**Issue:** User explicitly said to remove this section and merge services into "Explore Our Services"
 
-Fixes:
-- Ensure batch-extract-pending always attempts:
-  - page-data PDFs + mirroring into the project-files bucket
-- Ensure repair-project-extraction does NOT leave external PDF URLs in the DB:
-  - If it finds PDF links, it must mirror them before saving documents[].
-- Update the preview UI to only show brochure/payment/floorplan actions when a mirrored (internal) URL exists.
+**Required Changes:**
+- Remove or repurpose ServicesGrid component from homepage
+- Ensure all 4 services (Buy, Rent, Sell, Management) exist in ExploreServicesCard slideshow
+- No duplicate "How Can We Help" section
 
-Acceptance test:
-- This pending import shows at least:
-  - 1 brochure document (mirrored URL)
-  - optional payment plan PDF (mirrored URL)
-  - optional floor plan PDFs (mirrored URLs)
+---
 
--------------------------------------------------------------------------------
-6) Stop sections mixing into each other (Floor Plans vs Location Distances vs USPs)
-You described:
-- Floor plan content mixed
-- “30 minutes to Dubai Marina” appearing in the wrong section
-This is almost always caused by extraction writing the wrong data to the wrong columns.
+### 1.6 Why Dubai Video Scenes (NOT DONE)
+**Status:** ❌ Missing specific scenes  
+**Location:** `src/components/home/WhyDubaiCapitalSection.tsx`  
+**Issue:** User requested specific video replacements
 
-Fixes (two layers):
-6.1 Extraction correctness:
-- Enforce strict field validation before writing:
-  - location_distances entries must be objects like {label,time} and time must contain “min” or a distance unit
-  - floor_plan_types labels must contain "Studio/1BR/2BR/3BR/Floor Plan" patterns or have a pdfUrl; reject distance-like strings
-  - usp_bullets must be plain bullets; reject anything that looks like a floor plan filename or distance line
+**Required Changes:**
+- **Burj Khalifa scene:** Day-to-night transition (morning drone shot zooming in → then night view with city lights)
+- **Burj Al Arab scene:** Replace with drone zoom-in with beach waves
 
-6.2 Frontend defensive rendering:
-- Add sanitization when rendering:
-  - If a floor plan label contains “minutes”/“km” and has no pdfUrl, do not render it in FloorPlanGallery.
-  - If a location distance item looks malformed, skip it rather than polluting the UI.
+Note: Current videos exist in `src/assets/videos/` but user requested regenerated/replaced scenes. If new video assets aren't provided, this task requires asset production or sourcing.
 
-Outcome:
-- Even a single bad extraction row will not break the page layout.
+---
 
--------------------------------------------------------------------------------
-7) Brochure cover: add the Provident-style photo + improve “JBJ Global Real Estate” readability
-You asked:
-- Brochure cover must show a skyline/downtown/Burj Khalifa day-view image (like Provident)
-- Project name must sync automatically
-- “JBJ Global Real Estate” on the brochure must be more readable
+## CATEGORY 2: HEADER MEGA MENU ISSUES
 
-Implementation approach:
-- Update PremiumBrochureCard so the cover image source is:
-  1) project.brochure_cover_image_url if present (new optional field in extracted data), else
-  2) project.images[0] (first valid hero image), else
-  3) a fixed “Downtown skyline day” fallback asset from your existing site assets
-- Increase brand text contrast (stronger text shadow, larger type) and ensure it never becomes unreadable over bright areas (add a subtle dark overlay gradient on the cover).
+### 2.1 "See All Properties" / "See All Rentals" Button Styling (NOT DONE)
+**Status:** ❌ Not matching View All Projects style  
+**Location:** `src/components/header/MegaMenuBuy.tsx`, `MegaMenuRent.tsx`  
+**Issue:** The CTA links (emphasis links) are not matching the rectangular "View All Projects" button in MegaMenuProjects
 
-Note: If you require “the exact same Provident brochure cover photo”, we will attempt to extract the specific banner/tile image from page-data (banner_image/tile_image), which is usually the same visual they use.
+**Required Changes:**
+- Match the box size and styling of MegaMenuProjects' "View All Projects" button
+- Make rectangular, properly sized to fit section width
+- Consistent CTA button appearance across all mega menus
 
--------------------------------------------------------------------------------
-8) Replace the listing “Stay in the Loop” section with your normal page version (no duplicates)
-You said:
-- The listing page’s Stay in the Loop is not acceptable; use the normal page version.
-- Remove the extra “below section”.
-- And restructure footer so the licensed line is above the logo, logo down, across all pages.
+---
 
-Implementation changes:
-- In ProjectDetailLayout.tsx:
-  - Remove the custom NewsletterSection block before footer (so the detail page does not have a duplicate stay-in-loop).
-- In Footer.tsx:
-  - Restructure to match your instruction:
-    - Move the “Licensed BUY SELL RENT REAL ESTATE In The UAE” block above the logo/wordmark section
-    - Keep the logo section lower
-  - Ensure no white backgrounds; pure black + champagne/gold accents only.
+### 2.2 Replace Mega Menu Photos with Videos (NOT DONE)
+**Status:** ❌ Still using static images  
+**Location:** All mega menu components (`MegaMenuBuy.tsx`, `MegaMenuRent.tsx`, `MegaMenuProjects.tsx`, etc.)  
+**Issue:** User requested videos that match page title/category, not static photos
 
-Outcome:
-- Every page ends consistently with the footer’s official “Stay in the Loop” + licensed line in the correct order, with the logo placed below as requested.
+**Required Changes:**
+- Replace static `<img>` backgrounds with `<video>` elements in featured cards
+- Buy: Use a luxury buying/property video
+- Rent: Use a rental property video  
+- Projects: Use off-plan projects video
+- Developers: Use Dubai skyline/development video
+- Areas: Use Dubai areas/neighborhoods video
+- Services: Use services-related video
+- Investor Hub: Use investment-themed video
+- Broker Hub: Use broker-with-iPad video (already specified)
 
--------------------------------------------------------------------------------
-9) Fix “Request a Call Back Now” white layer and unify consultation form in listings
-You said:
-- Never use white.
-- The listing page should use the consultation request form style (from contact page).
-- Unify Contact Us cards.
+---
 
-Changes:
-- In CallToActionSection.tsx:
-  - Replace the white form container gradient (#FDFBF7 etc.) with champagne/card layers (no white).
-- Replace/merge the listing form blocks so only one consistent consultation form is used on listing pages:
-  - Use the existing ConsultationRequestForm component as the standardized form for “Register Your Interest / Request a callback” in the listing detail pages.
-  - Ensure the heading stays “Get expert guidance” where you specified.
+### 2.3 Investor Hub - Missing "Go to Dashboard" CTA (PARTIALLY DONE)
+**Status:** ⚠️ Partial  
+**Location:** `src/components/header/MegaMenuInvestorHub.tsx`  
+**Issue:** Has CTA on photo but needs additional CTA button below link sections matching Broker Hub
 
-Outcome:
-- One consistent, premium, champagne-on-black consultation form across listings (and eventually across other pages).
+**Required Changes:**
+- Add a big rectangular CTA button "Go to Dashboard" in the links section (below Dashboard & Portfolio and Investor Tools)
+- Match the emphasized link style used in other menus
 
--------------------------------------------------------------------------------
-10) Checklist: make it reflect Provident requirements accurately (and match your expectations)
-Update TestOneListingPanel checklist rules so they align with what you actually want to approve:
-- Core:
-  - 2+ valid images (after filtering placeholders)
-  - brochure present (mirrored URL)
-  - description present
-  - developer present
-- Provident mirror:
-  - bedrooms_min/max present
-  - size_min/max present (or explicit “not provided by source” flag if truly absent)
-  - payment_breakdown has at least 2 keys, not just 1
-  - location distances present if Provident shows them for that listing
-  - FAQs present if Provident shows them
+---
 
-Outcome:
-- Red items correlate to real missing source data, not parsing mistakes.
+### 2.4 Vertical Divider Alignments (PARTIALLY DONE)
+**Status:** ⚠️ Needs verification  
+**Location:** All mega menu components  
+**Issue:** Gold divider lines between columns may not align properly across adjacent columns
 
--------------------------------------------------------------------------------
-11) Step-by-step verification (what we will test after implementing)
-Using the exact listing ID you are on:
-1) /listing-admin
-   - Card shows 1 photo (not broken)
-   - Approve/Reject works
-   - View Full Page always navigates
-2) /listing-admin/preview/54289763-...
-   - Hero image and gallery images load (no placeholders)
-   - Bedrooms show 1–3 (not “Contact us”)
-   - Sizes show real values if present in page-data or brochure
-   - Payment plan shows exact Provident structure (not partial)
-   - Location distances appear only in location section (not in floor plan)
-   - Floor plans appear only as floor plans (not distances)
-   - Brochure card shows cover image + readable JBJ branding, and download works using internal mirrored file
+**Required Changes:**
+- Verify all vertical dividers align horizontally
+- Ensure `min-h` values match in corresponding columns
+- All `MegaMenuSectionTitle` components have `min-h-[36px]`
 
--------------------------------------------------------------------------------
-12) One critical clarification (only if needed during implementation)
-If Provident’s page-data does NOT include size ranges or full payment breakdown for some projects:
-- Do you want those listings to be blocked from approval (remain red), or can they be approved if brochure + bedrooms + images + description are present?
+---
 
-I can enforce either rule, but it changes how strict the gate is.
+### 2.5 Account Dropdown Size Jitter (NOT FULLY FIXED)
+**Status:** ⚠️ Intermittent issue  
+**Location:** `src/components/header/MegaMenuAccount.tsx`  
+**Issue:** Dropdown opens at one size, then extends/jitters
 
--------------------------------------------------------------------------------
-Files that will be involved (implementation phase)
-Frontend:
-- src/pages/listing-admin/PendingImportPreview.tsx
-- src/components/listing-admin/TestOneListingPanel.tsx
-- src/components/listing-admin/PendingImportCard.tsx
-- src/components/project-detail/ProjectDetailLayout.tsx
-- src/components/project-detail/FloorPlanGallery.tsx
-- src/components/project-detail/PremiumBrochureCard.tsx
-- src/components/project-detail/CallToActionSection.tsx (or replace with ConsultationRequestForm usage)
-- src/components/Footer.tsx
+**Required Changes:**
+- Add fixed minimum dimensions to prevent layout shifts
+- Currently has `!min-h-[400px]` but may need refinement
+- Ensure content loads without causing reflow
 
-Backend functions:
-- supabase/functions/batch-extract-pending/index.ts
-- supabase/functions/repair-project-extraction/index.ts
-- supabase/functions/_shared/provident/pagedata-detail.ts
-- supabase/functions/_shared/provident/pagedata.ts (PDF discovery improvements if needed)
+---
 
--------------------------------------------------------------------------------
-Execution order (fastest path to visible improvement)
-1) UI image filtering + safe-size normalization (immediately stops broken photos)
-2) Fix View Full Page navigation (Link-based, stopPropagation)
-3) Fix page-data parser + make batch extraction use it first (bedrooms/size/payment)
-4) Ensure PDF mirroring + documents population (brochure works)
-5) Section separation hardening + defensive filtering (no “mixed” content)
-6) Remove duplicate listing newsletter section + restructure footer ordering (licensed line above logo)
-7) CTA form color/style changes (no white) + unify consultation form usage
+### 2.6 Search Shortcut Contact Cards (NOT DONE)
+**Status:** ❌ Too small  
+**Location:** `src/components/header/MegaMenuSearch.tsx`  
+**Issue:** Contact cards at bottom are very small with huge empty gap below
+
+**Required Changes:**
+- Enlarge contact cards to fill available space
+- Remove or reduce the empty gap at bottom
+- Make cards more prominent and easier to tap
+
+---
+
+## CATEGORY 3: PROPERTIES PAGE ISSUES
+
+### 3.1 Properties Page Hero Video (DONE in last session)
+**Status:** ✅ Implemented  
+**Location:** `src/components/PropertiesHeroVideo.tsx`, `src/pages/Properties.tsx`  
+**Note:** Multi-scene video hero with Downtown, Palm/Atlantis, Burj Al Arab was implemented.
+
+---
+
+### 3.2 Properties Page Forms Consolidation (DONE in last session)
+**Status:** ✅ Implemented  
+**Location:** `src/pages/Properties.tsx`, `src/components/ConsultationRequestForm.tsx`  
+**Note:** Replaced "Get a curated shortlist" with consultation request form.
+
+---
+
+## CATEGORY 4: FOOTER & CTA SECTION ISSUES
+
+### 4.1 Footer Structure - Licensed Line Above Logo (DONE in last session)
+**Status:** ✅ Implemented  
+**Location:** `src/components/Footer.tsx`  
+**Note:** Restructured so "Licensed BUY SELL RENT" appears above logo section.
+
+---
+
+### 4.2 DirectContactCTA Standardization (PARTIALLY DONE)
+**Status:** ⚠️ Needs global implementation  
+**Location:** `src/components/DirectContactCTA.tsx`  
+**Issue:** Component created but needs to be added to ALL pages before footer
+
+**Required Changes:**
+- Add DirectContactCTA to every page that doesn't have it:
+  - All service pages
+  - All guide pages  
+  - Area pages
+  - Developer pages
+  - Contact page (if missing)
+  - And ALL other public pages
+
+---
+
+### 4.3 CTABand Email Button Styling (DONE in last session)
+**Status:** ✅ Implemented  
+**Location:** `src/components/home/CTABand.tsx`  
+**Note:** Email button added with blue icon, matching Call Now style, Save Contact moved below.
+
+---
+
+## CATEGORY 5: LISTING EXTRACTION SYSTEM
+
+### 5.1 Extraction Data Accuracy (PARTIALLY FIXED)
+**Status:** ⚠️ Ongoing  
+**Location:** Edge functions and listing admin components  
+**Issue:** Some listings still show broken photos, "Contact Us" for bedrooms/sizes
+
+**Fixes Implemented:**
+- Image sanitization with `isValidImageUrl` and `normalizeProvidentImageUrl`
+- Updated extraction to use page-data.json
+- Safe image sizing (464x312)
+
+**Still Needed:**
+- Verify all extraction fields populate correctly
+- Test end-to-end extraction flow
+- Ensure payment breakdown shows all milestones
+
+---
+
+### 5.2 "View Full Page" Navigation (FIXED in last session)
+**Status:** ✅ Fixed  
+**Location:** `src/components/listing-admin/TestOneListingPanel.tsx`  
+**Note:** Changed from navigate() to <Link> component.
+
+---
+
+## CATEGORY 6: OTHER INCOMPLETE TASKS
+
+### 6.1 Chat Conversational AI Collection (NOT INTEGRATED)
+**Status:** ❌ Component exists but not wired up  
+**Location:** `src/components/chat/ChatConversationalCollect.tsx`, `AIChatWidget.tsx`  
+**Issue:** The conversational lead collection (Name → Email → Phone) is not integrated
+
+**Required Changes:**
+- Import ChatConversationalCollect into AIChatWidget
+- Add render case for `step === 'conversational_collect'`
+- Wire up the flow
+
+---
+
+### 6.2 Marketing Hub (NOT CREATED)
+**Status:** ❌ Not started  
+**Issue:** Database tables and UI for marketing campaigns never created
+
+**Required Work:**
+- Create database tables: `marketing_campaigns`, `newsletter_subscribers`, `marketing_templates`
+- Create `/admin/marketing-hub` page
+- Create campaign editor components
+- Create `send-campaign` edge function
+
+---
+
+### 6.3 Broker Hub Video on Hover (NOT DONE)
+**Status:** ❌ Still static image  
+**Location:** `src/components/header/MegaMenuBrokerHub.tsx`  
+**Issue:** User requested video on hover for desktop
+
+**Required Changes:**
+- Replace static image with video element that plays on hover (desktop only)
+- Use broker-dashboard-hero.mp4 or similar
+
+---
+
+## IMPLEMENTATION ORDER (Priority)
+
+### Batch 1: Header Mega Menu Fixes (Highest Visual Impact)
+1. Fix "See All Properties"/"See All Rentals" button styling to match "View All Projects"
+2. Add big CTA to Investor Hub
+3. Enlarge contact cards in Search shortcut
+4. Fix account dropdown jitter
+5. Replace mega menu photos with videos
+
+### Batch 2: Homepage Section Reordering
+1. Remove "How Can We Help?" section
+2. Move "Explore Our Services" up
+3. Move "Find Your Starting Point" up
+4. Move "AI Home Finder" down
+5. Fix mobile sizing for "Find Your Starting Point"
+
+### Batch 3: Search Module Enhancements
+1. Add sqm/sqft toggle
+2. Add currency selector
+3. Make filter full-width
+
+### Batch 4: Global DirectContactCTA
+1. Add component to all pages before footer
+
+### Batch 5: Video Scene Replacements
+1. Replace Why Dubai Burj Khalifa scene (day-to-night)
+2. Replace Why Dubai Burj Al Arab scene (drone with beach)
+
+### Batch 6: Remaining Items
+1. TrustBar UI refinements
+2. Chat conversational integration
+3. Marketing Hub (larger scope)
+
+---
+
+## FILES TO MODIFY
+
+**Header Components:**
+- `src/components/header/MegaMenuBuy.tsx`
+- `src/components/header/MegaMenuRent.tsx`
+- `src/components/header/MegaMenuProjects.tsx`
+- `src/components/header/MegaMenuInvestorHub.tsx`
+- `src/components/header/MegaMenuBrokerHub.tsx`
+- `src/components/header/MegaMenuSearch.tsx`
+- `src/components/header/MegaMenuAccount.tsx`
+- `src/components/header/mega-menu-primitives.tsx`
+
+**Homepage:**
+- `src/pages/Index.tsx` (major restructure)
+- `src/components/home/SearchModule.tsx`
+- `src/components/home/TrustBar.tsx`
+- `src/components/home/ServicesGrid.tsx` (remove or repurpose)
+- `src/components/home/WhyDubaiCapitalSection.tsx`
+
+**Global:**
+- Multiple page files (to add DirectContactCTA)
+
+**Chat:**
+- `src/components/chat/AIChatWidget.tsx`
+
+---
+
+## ESTIMATED TASK COUNT: 23 Items
+
+| Category | Tasks | Status |
+|----------|-------|--------|
+| Homepage Issues | 6 | 0 Done, 6 Todo |
+| Header Mega Menus | 6 | 0 Done, 6 Todo |
+| Properties Page | 2 | 2 Done |
+| Footer/CTA | 3 | 2 Done, 1 Todo |
+| Listing Extraction | 2 | 1 Done, 1 Partial |
+| Other | 4 | 0 Done, 4 Todo |
+| **TOTAL** | **23** | **5 Done, 18 Todo** |
 
