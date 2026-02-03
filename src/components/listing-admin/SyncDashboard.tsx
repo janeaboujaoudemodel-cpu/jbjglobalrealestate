@@ -185,6 +185,17 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   const isPausedRef = useRef(false);
   const isSyncingRef = useRef(false);
 
+  // Derived UI metrics (avoid confusing “0 extracted” states)
+  const pendingInQueue = queueBreakdown.pending ?? 0;
+  const discoveredTotal = queueBreakdown.total ?? pendingInQueue;
+  const needsExtraction = queueBreakdown.needs_extraction_pending ?? 0;
+  const extractedCore = Math.max(0, pendingInQueue - needsExtraction);
+  const needsWorkTotal =
+    (queueBreakdown.needs_extraction_pending ?? 0) +
+    (queueBreakdown.incomplete_pending ?? 0) +
+    (queueBreakdown.errors_pending ?? 0);
+  const estimateGap = Math.max(0, (listingsEstimate ?? 0) - (discoveredTotal ?? 0));
+
   const refreshPageCount = useCallback(
     async (opts?: { silent?: boolean }): Promise<number | null> => {
       setIsDetectingPages(true);
@@ -889,7 +900,8 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
         const concurrency = turboMode ? 2 : 1;
 
         const { data, error } = await supabase.functions.invoke("batch-extract-pending", {
-          body: { limit, throttleMs, concurrency, maxDurationMs: 50_000 },
+          // Shorter time budget in Turbo makes the UI update more frequently (feels less “stuck”)
+          body: { limit, throttleMs, concurrency, maxDurationMs: turboMode ? 35_000 : 50_000 },
         });
         if (error) throw error;
 
@@ -1614,6 +1626,20 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                   </div>
 
                   {/* Fix All stats display */}
+                  {isBulkExtractRunning && (
+                    <div className="rounded-lg border border-border bg-muted/30 p-3 text-xs space-y-1">
+                      <div className="font-medium text-foreground">Bulk extraction running…</div>
+                      <div className="text-muted-foreground">
+                        Total processed: {bulkTotals.processed.toLocaleString()} (ok {bulkTotals.success.toLocaleString()}, errors {bulkTotals.errors.toLocaleString()})
+                      </div>
+                      {bulkLastRun && (
+                        <div className="text-muted-foreground">
+                          Last batch: {bulkLastRun.processed.toLocaleString()} processed in {Math.max(1, Math.round(bulkLastRun.duration_ms / 1000))}s ({bulkLastRun.images.toLocaleString()} imgs, {bulkLastRun.documents.toLocaleString()} docs)
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   {isFixAllRunning && fixAllStats && (
                     <div className="rounded-lg border border-emerald-300 bg-emerald-50 p-3 text-xs space-y-1">
                       <div className="font-medium text-emerald-800">Fix All in progress...</div>
@@ -1629,47 +1655,54 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                   {/* Unified inventory summary */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div className="rounded-lg border border-border bg-muted/50 p-4 text-center">
-                      <div className="text-2xl font-bold text-foreground">1,336</div>
-                      <div className="text-xs text-muted-foreground">Target</div>
+                      <div className="text-2xl font-bold text-foreground">{listingsEstimate.toLocaleString()}</div>
+                      <div className="text-xs text-muted-foreground">Source estimate</div>
                     </div>
                     <div className="rounded-lg border border-border bg-muted/50 p-4 text-center">
-                      <div className="text-2xl font-bold text-foreground">{queueBreakdown.pending ?? "…"}</div>
-                      <div className="text-xs text-muted-foreground">In Queue</div>
+                      <div className="text-2xl font-bold text-foreground">{(discoveredTotal ?? 0).toLocaleString()}</div>
+                      <div className="text-xs text-muted-foreground">Discovered</div>
                     </div>
-                    <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-center">
-                      <div className="text-2xl font-bold text-emerald-700">{queueBreakdown.ready_pending ?? 0}</div>
-                      <div className="text-xs text-emerald-600">Complete</div>
+                    <div className="rounded-lg border border-border bg-muted/50 p-4 text-center">
+                      <div className="text-2xl font-bold text-foreground">{pendingInQueue.toLocaleString()}</div>
+                      <div className="text-xs text-muted-foreground">Pending (queue)</div>
                     </div>
                     <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-center">
-                      <div className="text-2xl font-bold text-amber-700">
-                        {(queueBreakdown.needs_extraction_pending ?? 0) + (queueBreakdown.incomplete_pending ?? 0) + (queueBreakdown.errors_pending ?? 0)}
-                      </div>
-                      <div className="text-xs text-amber-600">Needs Work</div>
+                      <div className="text-2xl font-bold text-amber-700">{needsWorkTotal.toLocaleString()}</div>
+                      <div className="text-xs text-amber-600">Needs work</div>
                     </div>
+                  </div>
+
+                  {/* Secondary metrics */}
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                    <span>Extracted (core):</span>
+                    <span className="font-medium text-foreground">{extractedCore.toLocaleString()}</span>
+                    <span className="mx-1">•</span>
+                    <span>Strict complete:</span>
+                    <span className="font-medium text-foreground">{(queueBreakdown.ready_pending ?? 0).toLocaleString()}</span>
                   </div>
 
                   {/* Progress bar */}
                   <div className="space-y-1">
                     <div className="flex justify-between text-xs">
-                      <span className="text-muted-foreground">Extraction Progress</span>
+                      <span className="text-muted-foreground">Extraction progress (core)</span>
                       <span className="text-foreground font-medium">
-                        {queueBreakdown.ready_pending ?? 0} / {queueBreakdown.pending ?? 0}
+                        {extractedCore.toLocaleString()} / {pendingInQueue.toLocaleString()}
                       </span>
                     </div>
                     <Progress
                       value={
-                        queueBreakdown.pending
-                          ? ((queueBreakdown.ready_pending ?? 0) / queueBreakdown.pending) * 100
+                        pendingInQueue
+                          ? (extractedCore / pendingInQueue) * 100
                           : 0
                       }
                       className="h-2"
                     />
                   </div>
 
-                  {/* Gap alert – only show if under 1333 (Provident has some duplicates; 1333 unique is acceptable) */}
-                  {(queueBreakdown.pending ?? 0) < 1334 && (
+                  {/* Gap alert – only show when we’re below the current source estimate */}
+                  {estimateGap > 0 && (
                     <div className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-xs text-amber-800">
-                      <strong>Gap detected:</strong> {1336 - (queueBreakdown.pending ?? 0)} listings missing. Click "Rebuild Queue" to discover all URLs.
+                      <strong>Gap detected:</strong> {estimateGap.toLocaleString()} listings missing vs the current source estimate. Click “Rebuild Queue” to attempt full discovery.
                     </div>
                   )}
 
