@@ -7,6 +7,7 @@ import ProjectDetailLayout, { type ProjectDetailData } from "@/components/projec
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { filterValidImages } from "@/lib/imageUtils";
 import {
   Download,
   Check,
@@ -177,6 +178,14 @@ const PendingImportPreview = () => {
     const locationDistances = parseJsonArray<{ label: string; time: string }>(pendingImport.location_distances);
     const uspBullets = parseJsonArray<string>(pendingImport.usp_bullets);
     const paymentBreakdownObj = parseJsonObject(pendingImport.payment_breakdown);
+    
+    // Filter and normalize images (remove broken/placeholder URLs)
+    const rawImages = (pendingImport.images || []).map((img, idx) => ({
+      id: `pending-img-${idx}`,
+      url: img.url,
+      alt: img.alt || pendingImport.name,
+    }));
+    const validImages = filterValidImages(rawImages);
 
     return {
       id: pendingImport.matched_project_id || pendingImport.id,
@@ -196,11 +205,8 @@ const PendingImportPreview = () => {
       property_type_label: pendingImport.property_type_label,
       status_label: pendingImport.status_label,
       amenities: amenities.length ? amenities : null,
-      images: (pendingImport.images || []).map((img, idx) => ({
-        id: `pending-img-${idx}`,
-        url: img.url,
-        alt: img.alt || pendingImport.name,
-      })),
+      // Use filtered, normalized images
+      images: validImages,
       documents: (pendingImport.documents || []).map((d, idx) => ({
         id: `pending-doc-${idx}`,
         type: d.type,

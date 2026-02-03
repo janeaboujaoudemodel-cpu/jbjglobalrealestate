@@ -1,10 +1,11 @@
 import { useMemo, useState, type MouseEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SafeImage } from "@/components/SafeImage";
-import { ChevronLeft, ChevronRight, ExternalLink, MapPin, Mail, Phone, MessageCircle, Bed, AlertTriangle, RefreshCw, Check, X, Loader2 } from "lucide-react";
+import { filterValidImages, getFirstValidImageUrl } from "@/lib/imageUtils";
+import { ChevronLeft, ChevronRight, ExternalLink, MapPin, Mail, Phone, MessageCircle, Bed, AlertTriangle, RefreshCw, Check, X, Loader2, Eye } from "lucide-react";
 import { CONTACT_INFO, getCallUrl, getWhatsAppUrl } from "@/constants/stats";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -59,10 +60,12 @@ const truncate = (text: string, max = 120) => {
 
 export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onApproved, onRejected }: PendingImportCardProps) {
   const navigate = useNavigate();
-  // Filter out brochure/document images from gallery
+  // Filter out brochure/document images AND invalid placeholder images from gallery
   const images = useMemo(() => {
     const excludePattern = /(brochure|payment[-_]?plan|floor[-_]?plan|master[-_]?plan|pdf|document|General_Brochure)/i;
-    return (item.images || []).filter((i) => !!i?.url && !excludePattern.test(i.url));
+    const rawImages = (item.images || []).filter((i) => !!i?.url && !excludePattern.test(i.url));
+    // Apply additional filtering for broken URLs
+    return filterValidImages(rawImages);
   }, [item.images]);
   const documents = useMemo(() => (item.documents || []).filter((d) => !!d?.url), [item.documents]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);

@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { SafeImage } from "@/components/SafeImage";
+import { filterValidImages, getFirstValidImageUrl } from "@/lib/imageUtils";
 import {
   Loader2,
   ExternalLink,
@@ -263,7 +264,10 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
       if (projectError) throw projectError;
 
       // ========== FIXED: Parse extracted data with CORRECT types ==========
-      const images: ImageObj[] = parseJsonField<ImageObj[]>(updatedProject.images, []);
+      const rawImages: ImageObj[] = parseJsonField<ImageObj[]>(updatedProject.images, []);
+      // Filter out broken/placeholder images immediately
+      const images = filterValidImages(rawImages);
+      
       const documents: DocumentObj[] = parseJsonField<DocumentObj[]>(updatedProject.documents, []);
       const uspBullets: string[] = parseJsonField<string[]>(updatedProject.usp_bullets, []);
       // FIXED: Read amenities_list, not amenities
@@ -474,11 +478,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
     toast.info("Test rejected. Fix the extraction logic and try again.");
   };
 
-  const openFullPagePreview = () => {
-    if (testResult?.project?.id) {
-      navigate(`/listing-admin/preview/${testResult.project.id}`);
-    }
-  };
+  // NOTE: openFullPagePreview removed - using Link component instead for reliable navigation
 
   const ChecklistItem = ({ label, passed, detail }: { label: string; passed: boolean; detail?: string }) => (
     <div className="flex items-center justify-between py-1 px-2 rounded bg-zinc-50">
@@ -625,12 +625,12 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                         <p className="text-sm text-muted-foreground line-clamp-2">
                           {testResult.project.description.slice(0, 120)}
                           {testResult.project.description.length > 120 && (
-                            <button
-                              onClick={openFullPagePreview}
+                            <Link
+                              to={`/listing-admin/preview/${testResult.project.id}`}
                               className="bg-gradient-to-r from-gold via-handover to-gold bg-clip-text text-transparent font-semibold hover:opacity-80 transition-opacity ml-1"
                             >
                               ...more
-                            </button>
+                            </Link>
                           )}
                         </p>
                       )}
@@ -663,15 +663,16 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                           <ThumbsDown className="w-4 h-4" />
                           Reject
                         </Button>
-                        <Button
-                          onClick={openFullPagePreview}
-                          variant="outline"
-                          size="sm"
-                          className="gap-1 ml-auto"
-                        >
-                          <Eye className="w-4 h-4" />
-                          View Full Page
-                        </Button>
+                        <Link to={`/listing-admin/preview/${testResult.project.id}`}>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="gap-1"
+                          >
+                            <Eye className="w-4 h-4" />
+                            View Full Page
+                          </Button>
+                        </Link>
                       </div>
                     </div>
                   </div>
