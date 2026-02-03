@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Heart,
-  MessageSquare,
+  MessageCircle,
   Phone,
   Mail,
   CheckCircle2,
@@ -19,27 +19,15 @@ import {
 import Footer from "@/components/Footer";
 import DirectContactCTA from "@/components/DirectContactCTA";
 import { SEOHead } from "@/components/SEOHead";
-import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useState } from "react";
-import { toast } from "sonner";
+import SupportTicketBox from "@/components/SupportTicketBox";
+import { getWhatsAppUrl } from "@/constants/stats";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -62,17 +50,6 @@ const whatWeCanHelp = [
   { icon: KeyRound, text: "Portal access questions" },
 ];
 
-const supportCategories = [
-  "Website Support",
-  "Login Issues",
-  "Service Request",
-  "Complaint",
-  "Document Submission",
-  "Portal Access",
-  "General Inquiry",
-  "Other",
-];
-
 const faqData = [
   {
     question: "Will I always get a ticket ID?",
@@ -92,7 +69,7 @@ const faqData = [
   },
   {
     question: "Do you support WhatsApp?",
-    answer: "If WhatsApp support exists on the site, you can use the same existing contact method displayed in the Direct Contact section.",
+    answer: "Yes—you can reach us via WhatsApp using our main contact number displayed in the Direct Contact section below.",
   },
   {
     question: "Can you help with partner services?",
@@ -109,25 +86,7 @@ const faqData = [
 ];
 
 const CustomerHappinessCenter = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    category: "",
-    message: "",
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast.success("Support ticket created successfully! You will receive a confirmation email with your ticket ID.");
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      category: "",
-      message: "",
-    });
-  };
+  const whatsappUrl = getWhatsAppUrl("Hi, I need support from the Happiness Center.");
 
   return (
     <>
@@ -227,103 +186,9 @@ const CustomerHappinessCenter = () => {
         </div>
       </section>
 
-      {/* SUPPORT TICKET FORM */}
-      <section id="create-ticket" className="bg-black py-20">
-        <div className="jj-layer-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="max-w-2xl mx-auto"
-          >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
-              style={{ fontFamily: "Playfair Display, serif" }}
-            >
-              Create Support Ticket
-            </motion.h2>
-            <motion.div variants={fadeInUp}>
-              <Card className="jj-card-inner border-2 border-gold/30">
-                <CardContent className="p-6">
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="name" className="text-black">Full Name *</Label>
-                        <Input
-                          id="name"
-                          value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          required
-                          placeholder="Your full name"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="email" className="text-black">Email *</Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          required
-                          placeholder="your@email.com"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="phone" className="text-black">Phone</Label>
-                        <Input
-                          id="phone"
-                          value={formData.phone}
-                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          placeholder="+971 XX XXX XXXX"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="category" className="text-black">Category *</Label>
-                        <Select
-                          value={formData.category}
-                          onValueChange={(value) => setFormData({ ...formData, category: value })}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select category" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {supportCategories.map((cat) => (
-                              <SelectItem key={cat} value={cat.toLowerCase().replace(/\s+/g, "-")}>
-                                {cat}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="message" className="text-black">How can we help? *</Label>
-                      <Textarea
-                        id="message"
-                        value={formData.message}
-                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                        required
-                        placeholder="Describe your inquiry or issue..."
-                        rows={5}
-                      />
-                    </div>
-
-                    <Button type="submit" variant="primary" size="lg" className="w-full">
-                      <Send className="w-4 h-4 mr-2" />
-                      Submit Ticket
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </motion.div>
-        </div>
+      {/* SUPPORT TICKET SECTION - Reusing existing component */}
+      <section id="create-ticket" className="bg-black">
+        <SupportTicketBox />
       </section>
 
       {/* DIRECT CONTACT */}
@@ -343,22 +208,42 @@ const CustomerHappinessCenter = () => {
             >
               Direct Contact
             </motion.h2>
-            <motion.div variants={fadeInUp} className="jj-card-inner text-center">
-              <div className="flex items-center justify-center gap-4 mb-4">
+            <motion.div variants={fadeInUp} className="jj-card-inner">
+              {/* Email Contact */}
+              <div className="flex items-center justify-center gap-4 mb-6">
                 <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center">
                   <Mail className="w-7 h-7 text-gold" />
                 </div>
                 <div className="text-left">
                   <p className="text-sm text-zinc-600">Happiness Center Email</p>
                   <a 
-                    href="mailto:HAPPINESS@JBJGLOBALREALESTATE.COM" 
+                    href="mailto:happiness@jbjglobalrealestate.com" 
                     className="text-gold font-semibold text-lg hover:underline"
                   >
-                    HAPPINESS@JBJGLOBALREALESTATE.COM
+                    happiness@jbjglobalrealestate.com
                   </a>
                 </div>
               </div>
-              <p className="text-zinc-600 mt-4">
+
+              {/* WhatsApp Contact */}
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <div className="w-14 h-14 rounded-xl bg-green-600 flex items-center justify-center">
+                  <MessageCircle className="w-7 h-7 text-white" />
+                </div>
+                <div className="text-left">
+                  <p className="text-sm text-zinc-600">WhatsApp Support</p>
+                  <a 
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-green-600 font-semibold text-lg hover:underline"
+                  >
+                    Chat on WhatsApp
+                  </a>
+                </div>
+              </div>
+
+              <p className="text-zinc-600 text-center mt-4">
                 For urgent routing, email the Happiness Center with your ticket ID in the subject line.
               </p>
             </motion.div>
@@ -463,7 +348,7 @@ const CustomerHappinessCenter = () => {
                 <PremiumHeroButton href="#create-ticket">
                   Create Support Ticket
                 </PremiumHeroButton>
-                <PremiumHeroButton href="mailto:HAPPINESS@JBJGLOBALREALESTATE.COM">
+                <PremiumHeroButton href="mailto:happiness@jbjglobalrealestate.com">
                   Email Happiness Center
                 </PremiumHeroButton>
               </div>
