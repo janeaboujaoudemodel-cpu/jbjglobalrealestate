@@ -17,7 +17,8 @@ const corsHeaders = {
  * - project_images.image_url
  */
 
-const BROKEN_SIZE_PATTERN = /\/x\/1200x800\//g;
+// Pattern to match ANY upscaled sizes that may 403 on Provident's CDN
+const BROKEN_SIZE_PATTERN = /\/x\/(\d{3,4})x(\d{3,4})\//g;
 const SAFE_SIZE = "/x/464x312/";
 
 serve(async (req) => {

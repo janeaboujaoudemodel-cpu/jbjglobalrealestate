@@ -35,11 +35,11 @@ import PremiumBrochureCard from "@/components/project-detail/PremiumBrochureCard
 import LeadCaptureModal from "@/components/project-detail/LeadCaptureModal";
 import ProjectBreadcrumb from "@/components/project-detail/ProjectBreadcrumb";
 import CallToActionSection from "@/components/project-detail/CallToActionSection";
-import NewsletterSection from "@/components/project-detail/NewsletterSection";
 import Footer from "@/components/Footer";
 import { CONTACT_INFO, getCallUrl, getEmailUrl, getWhatsAppUrl } from "@/constants/stats";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { SafeImage } from "@/components/SafeImage";
+import { filterValidImages, getFirstValidImageUrl } from "@/lib/imageUtils";
 import { formatPrice as formatPriceUtil } from "@/utils/formatNumber";
 import {
   Accordion,
@@ -144,7 +144,11 @@ export default function ProjectDetailLayout({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const images = useMemo(() => project.images?.filter((i) => i.url) || [], [project.images]);
+  // Filter and normalize images (remove broken/placeholder URLs)
+  const images = useMemo(() => {
+    const raw = project.images?.filter((i) => i.url) || [];
+    return filterValidImages(raw);
+  }, [project.images]);
   const heroImage = images[0];
 
   const brochureDocs = useMemo(
@@ -833,8 +837,7 @@ export default function ProjectDetailLayout({
         </div>
       </section>
 
-      {/* Newsletter Section */}
-      <NewsletterSection />
+      {/* NOTE: Newsletter section removed - handled by Footer's built-in newsletter */}
 
       {/* Lead Capture Modal */}
       <LeadCaptureModal

@@ -127,8 +127,8 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
             </div>
           </div>
 
-          {/* Right: Form */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl p-6 md:p-8 shadow-lg">
+          {/* Right: Form - FIXED: Champagne gradient instead of white */}
+          <div className="bg-gradient-to-br from-champagne via-champagne-light to-champagne border-2 border-gold rounded-xl p-6 md:p-8 shadow-lg">
             {isSuccess ? (
               <div className="text-center py-8">
                 <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
@@ -157,7 +157,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                           <Input 
                             placeholder="Your full name" 
                             {...field} 
-                            className="bg-white border-gold/30 focus:border-gold"
+                            className="bg-card border-gold/30 focus:border-gold"
                           />
                         </FormControl>
                         <FormMessage />
@@ -176,7 +176,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                             type="email" 
                             placeholder="your@email.com" 
                             {...field}
-                            className="bg-white border-gold/30 focus:border-gold"
+                            className="bg-card border-gold/30 focus:border-gold"
                           />
                         </FormControl>
                         <FormMessage />
@@ -195,7 +195,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                             value={field.value}
                             onChange={field.onChange}
                             placeholder="Your phone number"
-                            className="bg-white"
+                            className="bg-card"
                           />
                         </FormControl>
                         <FormMessage />
@@ -232,7 +232,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                           <Textarea 
                             placeholder="Tell us about your requirements..."
                             {...field}
-                            className="bg-white border-gold/30 focus:border-gold min-h-[80px]"
+                            className="bg-card border-gold/30 focus:border-gold min-h-[80px]"
                           />
                         </FormControl>
                         <FormMessage />

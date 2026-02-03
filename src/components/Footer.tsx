@@ -168,7 +168,50 @@ const Footer = () => {
       {/* Full-width footer content */}
       <div className="relative w-full pt-0 pb-8 sm:pb-12 md:pb-16 lg:pb-20 px-3 sm:px-4 md:px-6 lg:px-8 bg-black">
         
-        {/* ULTRA PREMIUM Logo + Company Name Section - centered + balanced spacing */}
+        {/* RESTRUCTURED: Licensed line ABOVE the logo - as per user request */}
+        <div className="flex flex-col items-center justify-center text-center w-full max-w-7xl mx-auto relative bg-black mb-8 sm:mb-10">
+          {/* Pure black background */}
+          <div className="absolute inset-0 bg-black pointer-events-none" />
+          
+          {/* Licensed Badge - ABOVE THE LOGO */}
+          <div className="relative flex items-center justify-center gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8 flex-wrap px-1">
+            <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 bg-gradient-to-br from-gold via-gold/90 to-gold/60 rounded-full animate-pulse shadow-[0_0_20px_rgba(200,167,102,0.7),0_0_40px_rgba(200,167,102,0.3)]" />
+            <p className="text-white font-medium text-sm sm:text-base md:text-lg lg:text-xl tracking-wide text-center leading-relaxed">
+              <span 
+                className="font-bold"
+                style={{
+                  background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  filter: 'drop-shadow(0 0 10px rgba(200,167,102,0.5))',
+                }}
+              >Licensed</span> 
+              <span className="text-gold/60 mx-1 sm:mx-2">✦</span> 
+              BUY 
+              <span className="text-gold/60 mx-1 sm:mx-2">✦</span> 
+              SELL 
+              <span className="text-gold/60 mx-1 sm:mx-2">✦</span> 
+              RENT 
+              <span className="text-gold/60 mx-1 sm:mx-2">✦</span> 
+              <span className="font-bold">REAL ESTATE</span> In The 
+              <span 
+                className="font-bold ml-1"
+                style={{
+                  background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  filter: 'drop-shadow(0 0 10px rgba(200,167,102,0.5))',
+                }}
+              > UAE</span>
+            </p>
+            <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 bg-gradient-to-br from-gold via-gold/90 to-gold/60 rounded-full animate-pulse shadow-[0_0_20px_rgba(200,167,102,0.7),0_0_40px_rgba(200,167,102,0.3)]" />
+          </div>
+          <p className="relative text-zinc-400 text-xs sm:text-sm md:text-base mb-6 sm:mb-8 text-center px-2 max-w-2xl mx-auto">
+            Mortgage, legal, visa, and corporate support is provided through independent licensed partners.
+          </p>
+        </div>
+
+        {/* Logo + Company Name Section - NOW BELOW THE LICENSED LINE */}
         <div className="flex flex-col items-center justify-center text-center w-full max-w-7xl mx-auto relative bg-black">
           {/* Pure black background */}
           <div className="absolute inset-0 bg-black pointer-events-none" />
