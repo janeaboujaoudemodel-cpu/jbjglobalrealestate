@@ -136,16 +136,18 @@ serve(async (req) => {
     }
     
     // CRITICAL: Enhanced exclusion pattern - catches navbar, header, footer, menu images
-    const excludePatterns = /(logo|icon|avatar|placeholder|spinner|favicon|brochure|payment[-_]?plan|floor[-_]?plan|master[-_]?plan|pdf|document|navbar|header|footer|menu|widget|sidebar|banner|thumbnail|thumb_|_thumb|social|share|button|btn_)/i;
+    const excludePatterns = /(logo|icon|avatar|placeholder|spinner|favicon|brochure|payment[-_]?plan|floor[-_]?plan|master[-_]?plan|pdf|document|navbar|header|footer|menu|widget|sidebar|banner|thumbnail|thumb_|_thumb|social|share|button|btn_|grid_\d+|general_brochure)/i;
     
     // PRIORITY: Use project-specific images first, then fall back to generic
     const prioritizedImages = projectImageUrls.length >= 2 
       ? [...new Set(projectImageUrls)]
       : [...new Set([...projectImageUrls, ...Array.from(imageSet)])];
     
+    // CRITICAL FIX: Use SAFE image size (464x312) - 1200x800 causes 403 errors on Provident CDN
     const imageUrls = prioritizedImages
       .filter((u) => !excludePatterns.test(u))
-      .map((u) => u.replace(/\/x\/\d+x\d+\//, "/x/1200x800/"))
+      .filter((u) => !u.startsWith("data:")) // Drop base64 placeholders
+      .map((u) => u.replace(/\/x\/\d+x\d+\//, "/x/464x312/"))
       .slice(0, 12);
 
     // Extract PDFs
