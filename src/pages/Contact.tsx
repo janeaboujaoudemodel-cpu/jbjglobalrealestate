@@ -12,6 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { PhoneInput, getPhoneValidation } from "@/components/ui/phone-input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import Footer from "@/components/Footer";
+import DirectContactCTA from "@/components/DirectContactCTA";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
 import { toast } from "sonner";
@@ -943,6 +944,9 @@ END:VCARD`;
         open={meetingModalOpen} 
         onOpenChange={setMeetingModalOpen} 
       />
+
+      {/* Standardized Direct Contact CTA */}
+      <DirectContactCTA showTitle={false} />
 
       <Footer />
       </div>
