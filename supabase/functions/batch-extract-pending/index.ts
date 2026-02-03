@@ -44,22 +44,25 @@ serve(async (req) => {
 
   try {
     const {
-      limit: rawLimit = 25,
+      limit: rawLimit = 10,
       dryRun = false,
-      throttleMs: rawThrottleMs = 3000,
+      throttleMs: rawThrottleMs = 2500,
       concurrency: rawConcurrency = 1,
+      // Keep responses under typical client timeouts.
+      // If the batch is still doing work when we hit this budget, it will return early
+      // and the UI can immediately call again.
+      maxDurationMs: rawMaxDurationMs = 50_000,
     } = await req.json().catch(() => ({}));
 
-    // RATE LIMIT FIX: Lower defaults to avoid 429 errors
-    // - limit: 25 items per batch (was 50)
-    // - concurrency: 1 (was 3) - process one at a time
-    // - throttleMs: 3000ms (was 1000ms) - longer delay between items
-    const limit = Math.max(1, Math.min(Number(rawLimit) || 25, 100));
-    const throttleMs = Math.max(1000, Math.min(Number(rawThrottleMs) ?? 3000, 10000));
-    const concurrency = Math.max(1, Math.min(Number(rawConcurrency) || 1, 5));
+    // Guardrails for stability + to avoid client timeouts.
+    // NOTE: UI can call this function repeatedly; each call should be short and safe.
+    const limit = Math.max(1, Math.min(Number(rawLimit) || 10, 25));
+    const throttleMs = Math.max(0, Math.min(Number(rawThrottleMs) ?? 2500, 10_000));
+    const concurrency = Math.max(1, Math.min(Number(rawConcurrency) || 1, 3));
+    const maxDurationMs = Math.max(10_000, Math.min(Number(rawMaxDurationMs) || 50_000, 55_000));
 
     console.log(
-      `[BatchExtract] Starting (limit=${limit}, concurrency=${concurrency}, dryRun=${dryRun}, throttleMs=${throttleMs})...`,
+      `[BatchExtract] Starting (limit=${limit}, concurrency=${concurrency}, dryRun=${dryRun}, throttleMs=${throttleMs}, maxDurationMs=${maxDurationMs})...`,
     );
 
     // Get developers for matching
@@ -71,7 +74,7 @@ serve(async (req) => {
     // FIXED: Also target rows where images/documents are NULL (not just empty array [])
     const { data: imports, error: fetchErr } = await supabase
       .from("pending_project_imports")
-      .select("id, name, slug, source_url, images, documents, description, review_notes, amenities")
+      .select("id, name, slug, source_url, images, documents, description, review_notes, amenities, developer_name")
       .eq("status", "pending")
       // NOTE: PostgREST OR syntax - include null checks for images/documents
       .or(
@@ -108,6 +111,7 @@ serve(async (req) => {
 
     const stats = { processed: 0, success: 0, errors: 0, images: 0, documents: 0 };
     const errors: Array<{ name: string; error: string }> = [];
+    let timeBudgetHit = false;
 
     const processOne = async (item: any) => {
       if (!item.source_url) {
@@ -303,6 +307,13 @@ serve(async (req) => {
     };
 
     for (let i = 0; i < imports.length; i += concurrency) {
+      // Keep 1.5s headroom for logging + response serialization.
+      if (Date.now() - startTime > maxDurationMs - 1500) {
+        timeBudgetHit = true;
+        console.warn(`[BatchExtract] Time budget hit — returning early (processed=${stats.processed}/${imports.length})`);
+        break;
+      }
+
       const chunk = imports.slice(i, i + concurrency);
 
       const results = await Promise.allSettled(
@@ -358,9 +369,19 @@ serve(async (req) => {
     const duration = Date.now() - startTime;
     console.log(`[BatchExtract] Complete in ${duration}ms: ${stats.success} success, ${stats.errors} errors`);
 
-    return new Response(JSON.stringify({ success: true, stats, errors: errors.slice(0, 10), duration_ms: duration }), {
+    return new Response(
+      JSON.stringify({
+        success: true,
+        stats,
+        errors: errors.slice(0, 10),
+        duration_ms: duration,
+        time_budget_hit: timeBudgetHit,
+        effective: { limit, concurrency, throttleMs, maxDurationMs },
+      }),
+      {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+      },
+    );
   } catch (error) {
     console.error("[BatchExtract] Error:", error);
     return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }), {
