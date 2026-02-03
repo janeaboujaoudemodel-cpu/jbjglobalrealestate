@@ -75,12 +75,13 @@ export default function MarketReportHeroBook({ className }: MarketReportHeroBook
             {/* Visible Spine on Cover */}
             <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-gold/40 via-gold/20 to-transparent" />
 
-            {/* Cover Image */}
+            {/* Cover Image - Eager loading for immediate display */}
             <img
               src={luxuryVilla1}
               alt="UAE Real Estate Market Intelligence Book Cover"
               className="w-full h-48 md:h-56 object-cover opacity-60"
-              loading="lazy"
+              loading="eager"
+              fetchPriority="high"
             />
 
             {/* Cover Content */}

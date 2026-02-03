@@ -1,11 +1,12 @@
 /**
  * TestimonialsSection Component - Master Blueprint Specification
- * 3 testimonials slider with name and area
+ * 3 testimonials slider with name and area + CTA to testimonials page
  */
 
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Quote, ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { Quote, ChevronLeft, ChevronRight, Star, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Testimonial {
@@ -152,6 +153,20 @@ const TestimonialsSection = () => {
                 />
               ))}
             </div>
+          </div>
+
+          {/* CTA to Testimonials Page */}
+          <div className="text-center mt-8">
+            <Link
+              to="/services/testimonials"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white font-semibold text-sm rounded-xl hover:bg-gold hover:text-black transition-all duration-300 group"
+              style={{
+                boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
+              }}
+            >
+              <span>Read All Testimonials</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
         </div>
       </div>

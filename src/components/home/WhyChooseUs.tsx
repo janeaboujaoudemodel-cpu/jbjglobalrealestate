@@ -1,6 +1,6 @@
 /**
  * WhyChooseUs Component - Master Blueprint Specification
- * Premium 3x2 grid of value propositions
+ * Premium 3x2 grid of value propositions with proper bottom padding
  */
 
 import { motion } from "framer-motion";
@@ -70,8 +70,8 @@ const WhyChooseUs = () => {
             </p>
           </div>
 
-          {/* Value Props Grid - 3x2 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Value Props Grid - 3x2 with bottom padding */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-6">
             {valueProps.map((prop, index) => (
               <motion.div
                 key={index}
