@@ -704,10 +704,33 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
         },
       });
 
-      if (mapErr) throw mapErr;
+      // CRITICAL: Check for credits exhausted (402 error)
+      if (mapErr) {
+        // Parse the error message to detect 402
+        const errMsg = mapErr?.message || "";
+        if (errMsg.includes("402") || errMsg.toLowerCase().includes("credit")) {
+          setCreditsExhausted(true);
+          toast.error("Firecrawl credits exhausted. Please top up at firecrawl.dev/pricing");
+          return;
+        }
+        throw mapErr;
+      }
+      
+      // Also check the response body for credits_exhausted flag
+      if (mapData?.credits_exhausted) {
+        setCreditsExhausted(true);
+        toast.error("Firecrawl credits exhausted. Stopping discovery.");
+        return;
+      }
       
       // Check for insert failures from the discover function
       if (mapData?.success === false) {
+        // Also check for 402 in the error message
+        if (mapData?.error?.includes("402") || mapData?.error?.toLowerCase().includes("credit")) {
+          setCreditsExhausted(true);
+          toast.error("Firecrawl credits exhausted. Please top up at firecrawl.dev/pricing");
+          return;
+        }
         throw new Error(mapData?.error || "Discovery failed - check database constraints");
       }
       
@@ -825,7 +848,34 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
           skipPostInsertStats: true,
         },
       });
-      if (mapErr) throw mapErr;
+      
+      // CRITICAL: Check for credits exhausted (402 error)
+      if (mapErr) {
+        const errMsg = mapErr?.message || "";
+        if (errMsg.includes("402") || errMsg.toLowerCase().includes("credit")) {
+          setCreditsExhausted(true);
+          toast.error("Firecrawl credits exhausted. Please top up at firecrawl.dev/pricing");
+          return;
+        }
+        throw mapErr;
+      }
+      
+      // Also check the response body for credits_exhausted flag
+      if (mapData?.credits_exhausted) {
+        setCreditsExhausted(true);
+        toast.error("Firecrawl credits exhausted. Stopping rebuild.");
+        return;
+      }
+      
+      // Check for 402 in the error message from successful response
+      if (mapData?.success === false) {
+        if (mapData?.error?.includes("402") || mapData?.error?.toLowerCase().includes("credit")) {
+          setCreditsExhausted(true);
+          toast.error("Firecrawl credits exhausted. Please top up at firecrawl.dev/pricing");
+          return;
+        }
+      }
+      
       setRebuildResult(mapData || null);
 
       // 3) If still short, run listing-page discovery in small page ranges.
