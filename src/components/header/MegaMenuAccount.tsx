@@ -79,9 +79,9 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
   return (
     <MegaMenuShell 
       ref={ref}
-      className="!left-auto !right-6 !w-[640px]"
+      className="!left-auto !right-6 !w-[640px] !min-h-[400px]"
     >
-      <div className="p-6">
+      <div className="p-6 min-h-[380px]">
         {user ? (
           <>
             {/* Premium User Header - Horizontal Layout */}
