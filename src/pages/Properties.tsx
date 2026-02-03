@@ -54,7 +54,7 @@ import type { FilterState } from "@/components/ProjectFilters";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
-import { OffPlanInquiryCTA } from "@/components/OffPlanInquiryCTA";
+// OffPlanInquiryCTA removed - consolidated into single "Confused About Where to Buy" section
 import { FeaturedProjectAd, FEATURED_ADS } from "@/components/FeaturedProjectAd";
 import { blueprintPagesSEO, trackingEvents } from "@/types/blueprint";
 import PropertiesHeroVideo from "@/components/PropertiesHeroVideo";
@@ -1080,41 +1080,56 @@ const Properties = () => {
         </div>
       </section>
 
-      {/* Consultation Request Section - Replaces Shortlist Form */}
+      {/* CONSOLIDATED: Unified "Confused About Where to Buy" Section with Consultation Form */}
       <section className="py-16 sm:py-20 bg-black">
         <div className="container mx-auto px-4">
-          {/* Confused about where to buy section */}
-          <div className="max-w-4xl mx-auto mb-12">
-            <div className="jj-layer-2 text-center">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-full text-xs uppercase tracking-wider text-gold mb-4">
-                <HelpCircle className="w-3 h-3" />
-                Get Expert Guidance
+          <div className="max-w-5xl mx-auto">
+            <div className="jj-layer-2 p-6 sm:p-8 md:p-10 rounded-2xl">
+              <div className="grid md:grid-cols-2 gap-8 items-center">
+                {/* Left: Content */}
+                <div className="text-center md:text-left">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-full text-xs uppercase tracking-wider text-gold mb-4">
+                    <HelpCircle className="w-3 h-3" />
+                    Get Expert Guidance
+                  </div>
+                  <h2 
+                    className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-4"
+                    style={{ fontFamily: "Poppins, sans-serif" }}
+                  >
+                    Confused About Where to <span className="text-gold">Buy or Invest</span> in Dubai?
+                  </h2>
+                  <p className="text-zinc-600 mb-6">
+                    Our experienced advisors help you navigate Dubai's dynamic real estate market. 
+                    Get personalized recommendations based on your goals, budget, and timeline.
+                  </p>
+                  <ul className="space-y-2 text-sm text-zinc-600 mb-6">
+                    <li className="flex items-center gap-2 justify-center md:justify-start">
+                      <span className="w-1.5 h-1.5 rounded-full bg-gold" />
+                      Flexible payment plans tailored to your investment timeline
+                    </li>
+                    <li className="flex items-center gap-2 justify-center md:justify-start">
+                      <span className="w-1.5 h-1.5 rounded-full bg-gold" />
+                      Trusted developers: Emaar, Damac, Sobha, Nakheel & more
+                    </li>
+                    <li className="flex items-center gap-2 justify-center md:justify-start">
+                      <span className="w-1.5 h-1.5 rounded-full bg-gold" />
+                      ROI projections and market insights included
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Right: Consultation Form */}
+                <div>
+                  <ConsultationRequestForm
+                    title="Request a Consultation"
+                    subtitle="Connect with our expert team for personalized guidance."
+                  />
+                </div>
               </div>
-              <h2 
-                className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-4"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                Confused About Where to <span className="text-gold">Buy or Invest</span> in Dubai?
-              </h2>
-              <p className="text-zinc-600 max-w-2xl mx-auto mb-8">
-                Our experienced advisors help you navigate Dubai's dynamic real estate market. 
-                Get personalized recommendations based on your goals, budget, and timeline.
-              </p>
             </div>
-          </div>
-          
-          {/* Consultation Form */}
-          <div className="max-w-2xl mx-auto">
-            <ConsultationRequestForm
-              title="Request a Consultation"
-              subtitle="Connect with our expert team for personalized guidance on your property journey."
-            />
           </div>
         </div>
       </section>
-
-      {/* Off-Plan Investment CTA */}
-      <OffPlanInquiryCTA />
 
       {/* Standardized Direct Contact CTA - Same as all pages */}
       <DirectContactCTA />

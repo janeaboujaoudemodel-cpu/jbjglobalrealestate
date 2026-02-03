@@ -485,6 +485,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       ref={headerViewportRef}
       className="fixed top-0 left-0 right-0 z-[9999] h-24 sm:h-28 lg:h-32 overflow-visible"
       style={{ '--header-height': '128px' } as React.CSSProperties}
+      data-tour-target="header"
     >
       {/* Ultra Premium Multi-Layer Background - Pure Black on scroll (same as footer) */}
       <div 
@@ -603,13 +604,14 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     type="button"
                     className="inline-flex h-10 w-10 items-center justify-center bg-transparent border-0 rounded-none appearance-none transition-colors duration-300 focus:outline-none group"
                     aria-label="Open menu"
+                    data-tour-target="mobile-menu"
                   >
                     <Menu className="w-6 h-6 text-gold group-hover:text-gold-light transition-colors" />
                   </button>
                 </SheetTrigger>
                 <SheetContent
                   side="right"
-                  className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] p-0 flex flex-col h-full pt-16"
+                  className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] p-0 flex flex-col max-h-[calc(100vh-80px)] mt-20 pt-0"
                 >
                 {/* Menu Header - CHAT SUPPORT LOGO (light bg version), proper spacing */}
                 <div className="relative border-b border-gold/30 flex items-center gap-4 px-5 py-4 shrink-0">

@@ -1,7 +1,10 @@
 /**
  * DirectContactCTA Component - Standardized Contact Section for ALL Pages
  * Features: WhatsApp, Call, Email buttons + Save Contact with full vCard
- * This replaces all existing CTA sections globally
+ * 
+ * 🔒 LOCKED COMPONENT - This component is used globally across all pages.
+ * DO NOT MODIFY without reviewing impact on all service, guide, and hub pages.
+ * Any changes must maintain the same props interface and visual consistency.
  */
 
 import { motion } from "framer-motion";

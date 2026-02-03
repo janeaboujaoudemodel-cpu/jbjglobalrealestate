@@ -554,7 +554,7 @@ const Footer = () => {
             {/* Column 2: Investor Hub + Broker Hub */}
             <div className="p-2 sm:p-3 md:p-5 border-b lg:border-b-0 lg:border-r border-gold/10">
               <h4 
-                className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
+                className="font-bold text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
                   WebkitBackgroundClip: 'text',
@@ -580,7 +580,7 @@ const Footer = () => {
               </div>
               
               <h4 
-                className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
+                className="font-bold text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
                   WebkitBackgroundClip: 'text',
@@ -606,7 +606,7 @@ const Footer = () => {
             {/* Column 3: Guides + Market Intelligence */}
             <div className="p-2 sm:p-3 md:p-5 border-r border-gold/10">
               <h4 
-                className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
+                className="font-bold text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
                   WebkitBackgroundClip: 'text',
@@ -632,7 +632,7 @@ const Footer = () => {
               </div>
               
               <h4 
-                className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
+                className="font-bold text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
                   WebkitBackgroundClip: 'text',
@@ -658,7 +658,7 @@ const Footer = () => {
             {/* Column 4: About + Careers */}
             <div className="p-2 sm:p-3 md:p-5">
               <h4 
-                className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
+                className="font-bold text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
                   WebkitBackgroundClip: 'text',
@@ -684,7 +684,7 @@ const Footer = () => {
               </div>
               
               <h4 
-                className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
+                className="font-bold text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
                   WebkitBackgroundClip: 'text',
@@ -933,10 +933,10 @@ const Footer = () => {
                 </FounderContent>. Unauthorized copying, reuse, mirroring, or reproduction is prohibited.
               </p>
               
-              {/* Premium badge row - ULTRA Luxury 3D styling */}
-              <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-5 text-xs sm:text-sm md:text-base">
+              {/* Premium unified legal badge - ONE BOX with all info */}
+              <div className="flex items-center justify-center">
                 <div 
-                  className="px-5 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-xl sm:rounded-2xl relative overflow-hidden group"
+                  className="px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-xl sm:rounded-2xl relative overflow-hidden"
                   style={{
                     background: 'linear-gradient(145deg, rgba(45,45,48,0.95) 0%, rgba(28,28,31,0.98) 100%)',
                     boxShadow: '0 12px 35px -10px rgba(0,0,0,0.7), 0 0 0 1px rgba(200,167,102,0.35), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.3)',
@@ -944,7 +944,7 @@ const Footer = () => {
                 >
                   <div className="absolute inset-0 bg-gradient-to-b from-gold/5 to-transparent rounded-xl sm:rounded-2xl pointer-events-none" />
                   <span 
-                    className="font-bold tracking-wider relative z-10"
+                    className="font-bold tracking-wider relative z-10 text-sm sm:text-base md:text-lg"
                     style={{
                       background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
                       WebkitBackgroundClip: 'text',
@@ -952,61 +952,7 @@ const Footer = () => {
                       filter: 'drop-shadow(0 0 15px rgba(200,167,102,0.4))',
                     }}
                   >
-                    Real Estate Brokerage
-                  </span>
-                </div>
-                <div 
-                  className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full hidden sm:block"
-                  style={{
-                    background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 100%)',
-                    boxShadow: '0 0 15px rgba(200,167,102,0.6), 0 0 30px rgba(200,167,102,0.3)',
-                  }}
-                />
-                <div 
-                  className="px-5 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-xl sm:rounded-2xl relative overflow-hidden group"
-                  style={{
-                    background: 'linear-gradient(145deg, rgba(45,45,48,0.95) 0%, rgba(28,28,31,0.98) 100%)',
-                    boxShadow: '0 12px 35px -10px rgba(0,0,0,0.7), 0 0 0 1px rgba(200,167,102,0.35), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.3)',
-                  }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-b from-gold/5 to-transparent rounded-xl sm:rounded-2xl pointer-events-none" />
-                  <span 
-                    className="font-bold tracking-wider relative z-10"
-                    style={{
-                      background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      filter: 'drop-shadow(0 0 15px rgba(200,167,102,0.4))',
-                    }}
-                  >
-                    All Rights Reserved
-                  </span>
-                </div>
-                <div 
-                  className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full hidden sm:block"
-                  style={{
-                    background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 100%)',
-                    boxShadow: '0 0 15px rgba(200,167,102,0.6), 0 0 30px rgba(200,167,102,0.3)',
-                  }}
-                />
-                <div 
-                  className="px-5 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-xl sm:rounded-2xl relative overflow-hidden group"
-                  style={{
-                    background: 'linear-gradient(145deg, rgba(45,45,48,0.95) 0%, rgba(28,28,31,0.98) 100%)',
-                    boxShadow: '0 12px 35px -10px rgba(0,0,0,0.7), 0 0 0 1px rgba(200,167,102,0.35), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.3)',
-                  }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-b from-gold/5 to-transparent rounded-xl sm:rounded-2xl pointer-events-none" />
-                  <span 
-                    className="font-bold tracking-wider relative z-10"
-                    style={{
-                      background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      filter: 'drop-shadow(0 0 15px rgba(200,167,102,0.4))',
-                    }}
-                  >
-                    © {currentYear}
+                    Real Estate Brokerage &nbsp;•&nbsp; All Rights Reserved &nbsp;•&nbsp; © {currentYear}
                   </span>
                 </div>
               </div>
