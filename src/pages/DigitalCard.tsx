@@ -161,14 +161,14 @@ const DigitalCard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-start px-4 py-8 sm:py-12">
+    <div className="min-h-screen bg-black flex flex-col items-center justify-start px-4 py-8 sm:py-12 lg:py-16">
       
-      {/* Main Card Container - Photo is INSIDE the card, centered */}
+      {/* Main Card Container - RESPONSIVE: phone = narrow card, tablet/desktop = wider layout */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
+        className="w-full max-w-md md:max-w-2xl lg:max-w-4xl xl:max-w-6xl"
       >
         {/* Card Body - Active Champagne Layer */}
         <div 
@@ -178,9 +178,9 @@ const DigitalCard = () => {
             boxShadow: `0 20px 60px rgba(200, 167, 102, 0.3), 0 10px 30px rgba(0, 0, 0, 0.2)`
           }}
         >
-          {/* Inner Card - Locked Champagne */}
+          {/* Inner Card - Locked Champagne - RESPONSIVE LAYOUT */}
           <div 
-            className="rounded-[22px] p-6 sm:p-8"
+            className="rounded-[22px] p-6 sm:p-8 lg:p-10 xl:p-12"
             style={{ background: "linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)" }}
           >
             {/* Profile Photo - CENTERED INSIDE the card, NOT cropping head */}

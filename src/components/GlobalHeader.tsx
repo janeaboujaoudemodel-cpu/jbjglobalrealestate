@@ -619,12 +619,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   side="right"
                   className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] p-0 flex flex-col h-full pt-16"
                 >
-                {/* Menu Header - transparent monogram, proper spacing */}
+                {/* Menu Header - CHAT SUPPORT LOGO (light bg version), proper spacing */}
                 <div className="relative border-b border-gold/30 flex items-center gap-4 px-5 py-4 shrink-0">
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-                  {/* Monogram - transparent background version */}
+                  {/* Monogram - SAME AS CHAT SUPPORT (light bg version) */}
                   <img 
-                    src={jbjMonogramTransparent}
+                    src={jbjMonogramLightBg}
                     alt="JBJ"
                     className="w-16 h-16 shrink-0 object-contain"
                   />
