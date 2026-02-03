@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -20,11 +20,16 @@ import {
   Bed,
   ArrowRight,
   AlertTriangle,
+  CheckCircle,
+  XCircle,
+  Award,
 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface TestResult {
   success: boolean;
+  coreComplete: boolean;
+  fullyComplete: boolean;
   project?: {
     name: string;
     slug: string;
@@ -48,6 +53,22 @@ interface TestResult {
   };
   error?: string;
   extraction_time_ms?: number;
+  checklist?: {
+    hasImages: boolean;
+    imageCount: number;
+    hasDocs: boolean;
+    docCount: number;
+    hasDescription: boolean;
+    descriptionLength: number;
+    hasDeveloper: boolean;
+    hasUsps: boolean;
+    uspCount: number;
+    hasAmenities: boolean;
+    amenityCount: number;
+    hasLocation: boolean;
+    hasPrice: boolean;
+    hasHandover: boolean;
+  };
 }
 
 interface TestOneListingPanelProps {
@@ -55,10 +76,50 @@ interface TestOneListingPanelProps {
   bulkExtractDisabled: boolean;
 }
 
+const SESSION_KEY_RESULT = "test_extraction_result";
+const SESSION_KEY_APPROVED = "test_extraction_approved";
+
 export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOneListingPanelProps) {
   const [isExtracting, setIsExtracting] = useState(false);
-  const [testResult, setTestResult] = useState<TestResult | null>(null);
-  const [isApproved, setIsApproved] = useState(false);
+  
+  // Restore state from sessionStorage on mount
+  const [testResult, setTestResult] = useState<TestResult | null>(() => {
+    try {
+      const saved = sessionStorage.getItem(SESSION_KEY_RESULT);
+      if (saved) return JSON.parse(saved);
+    } catch { /* ignore */ }
+    return null;
+  });
+  
+  const [isApproved, setIsApproved] = useState(() => {
+    try {
+      return sessionStorage.getItem(SESSION_KEY_APPROVED) === "true";
+    } catch {
+      return false;
+    }
+  });
+
+  // Persist testResult to sessionStorage whenever it changes
+  useEffect(() => {
+    try {
+      if (testResult) {
+        sessionStorage.setItem(SESSION_KEY_RESULT, JSON.stringify(testResult));
+      } else {
+        sessionStorage.removeItem(SESSION_KEY_RESULT);
+      }
+    } catch { /* ignore */ }
+  }, [testResult]);
+
+  // Persist isApproved to sessionStorage whenever it changes
+  useEffect(() => {
+    try {
+      if (isApproved) {
+        sessionStorage.setItem(SESSION_KEY_APPROVED, "true");
+      } else {
+        sessionStorage.removeItem(SESSION_KEY_APPROVED);
+      }
+    } catch { /* ignore */ }
+  }, [isApproved]);
 
   const runTestExtraction = async () => {
     setIsExtracting(true);
@@ -89,6 +150,8 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
         if (!anyPending || anyPending.length === 0) {
           setTestResult({
             success: false,
+            coreComplete: false,
+            fullyComplete: false,
             error: "No pending items in queue. Run 'Rebuild Queue' first to discover listings.",
           });
           return;
@@ -100,6 +163,8 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
       if (!targetItem) {
         setTestResult({
           success: false,
+          coreComplete: false,
+          fullyComplete: false,
           error: "No pending items in queue.",
         });
         return;
@@ -127,7 +192,9 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
         if (data?.credits_exhausted) {
           setTestResult({
             success: false,
-            error: "Firecrawl credits exhausted. Please top up your plan.",
+            coreComplete: false,
+            fullyComplete: false,
+            error: "Firecrawl credits exhausted. Please top up your plan at firecrawl.dev/pricing",
           });
           return;
         }
@@ -188,13 +255,41 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
         }
       })();
 
-      // Validate extraction quality
+      // Build checklist
       const hasImages = images.length >= 2;
-      const hasDocs = documents.length >= 1;
+      const hasDocs = documents.some((d: any) => d.mirrored_url);
       const hasDescription = updatedProject.description && updatedProject.description.length > 50;
-      const hasDeveloper = updatedProject.developer_name && updatedProject.developer_name.toLowerCase() !== "unknown";
+      const hasDeveloper = updatedProject.developer_name && 
+        updatedProject.developer_name.toLowerCase() !== "unknown" &&
+        updatedProject.developer_name.trim() !== "";
+      const hasUsps = uspBullets.length >= 1;
+      const hasAmenities = amenities.length >= 1;
+      const hasLocation = !!updatedProject.location && updatedProject.location.trim() !== "";
+      const hasPrice = !!updatedProject.price_from;
+      const hasHandover = !!updatedProject.handover_date;
 
-      const isComplete = hasImages && hasDocs && hasDescription && hasDeveloper;
+      const checklist = {
+        hasImages,
+        imageCount: images.length,
+        hasDocs,
+        docCount: documents.filter((d: any) => d.mirrored_url).length,
+        hasDescription,
+        descriptionLength: updatedProject.description?.length ?? 0,
+        hasDeveloper,
+        hasUsps,
+        uspCount: uspBullets.length,
+        hasAmenities,
+        amenityCount: amenities.length,
+        hasLocation,
+        hasPrice,
+        hasHandover,
+      };
+
+      // Core Complete: 2+ images + 1+ mirrored doc + description (>50 chars) + valid developer
+      const coreComplete = hasImages && hasDocs && hasDescription && hasDeveloper;
+      
+      // Fully Complete: Core + USPs + amenities + location + price + handover
+      const fullyComplete = coreComplete && hasUsps && hasAmenities && hasLocation && hasPrice;
 
       // Build bedrooms display from min/max
       const bedroomsDisplay = updatedProject.bedrooms_min && updatedProject.bedrooms_max
@@ -216,7 +311,9 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
         : null;
 
       setTestResult({
-        success: isComplete,
+        success: coreComplete,
+        coreComplete,
+        fullyComplete,
         project: {
           name: updatedProject.name || "Unknown",
           slug: updatedProject.slug,
@@ -235,21 +332,21 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
           amenities,
         },
         extraction_time_ms,
-        error: isComplete 
-          ? undefined 
-          : `Extraction incomplete: ${!hasImages ? 'Missing images. ' : ''}${!hasDocs ? 'Missing documents. ' : ''}${!hasDescription ? 'Missing description. ' : ''}${!hasDeveloper ? 'Missing developer. ' : ''}`,
+        checklist,
       });
 
-      if (isComplete) {
-        toast.success("Test extraction successful! Review the result below.");
+      if (coreComplete) {
+        toast.success("Test extraction successful! Core data extracted.");
       } else {
-        toast.warning("Extraction completed but data is incomplete. See details below.");
+        toast.warning("Extraction completed but core data is missing. See checklist below.");
       }
 
     } catch (e: any) {
       console.error("Test extraction failed:", e);
       setTestResult({
         success: false,
+        coreComplete: false,
+        fullyComplete: false,
         error: e?.message || "Failed to run test extraction",
       });
       toast.error(e?.message || "Test extraction failed");
@@ -267,8 +364,27 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
   const rejectTest = () => {
     setTestResult(null);
     setIsApproved(false);
+    // Clear sessionStorage
+    try {
+      sessionStorage.removeItem(SESSION_KEY_RESULT);
+      sessionStorage.removeItem(SESSION_KEY_APPROVED);
+    } catch { /* ignore */ }
     toast.info("Test rejected. Fix the extraction logic and try again.");
   };
+
+  const ChecklistItem = ({ label, passed, detail }: { label: string; passed: boolean; detail?: string }) => (
+    <div className="flex items-center justify-between py-1 px-2 rounded bg-zinc-50">
+      <div className="flex items-center gap-2">
+        {passed ? (
+          <CheckCircle className="w-4 h-4 text-emerald-600" />
+        ) : (
+          <XCircle className="w-4 h-4 text-red-500" />
+        )}
+        <span className={`text-sm ${passed ? "text-zinc-700" : "text-red-700"}`}>{label}</span>
+      </div>
+      {detail && <span className="text-xs text-muted-foreground">{detail}</span>}
+    </div>
+  );
 
   return (
     <Card className="border-amber-200 bg-amber-50/50">
@@ -304,31 +420,99 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
         {/* Test result display */}
         {testResult && (
           <div className="space-y-4">
-            {/* Status banner */}
-            <div className={`rounded-lg p-4 flex items-start gap-3 ${
-              testResult.success 
-                ? "bg-emerald-100 border border-emerald-300" 
-                : "bg-red-100 border border-red-300"
-            }`}>
-              {testResult.success ? (
-                <Check className="w-5 h-5 text-emerald-600 mt-0.5" />
+            {/* Status banners */}
+            <div className="flex flex-wrap gap-2">
+              {testResult.coreComplete ? (
+                <Badge className="bg-emerald-600 text-white gap-1">
+                  <Check className="w-3 h-3" />
+                  Core Complete — Ready for Bulk
+                </Badge>
               ) : (
-                <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5" />
+                <Badge variant="destructive" className="gap-1">
+                  <AlertTriangle className="w-3 h-3" />
+                  Core Incomplete
+                </Badge>
               )}
-              <div>
-                <div className={`font-medium ${testResult.success ? "text-emerald-800" : "text-red-800"}`}>
-                  {testResult.success ? "Extraction Successful" : "Extraction Failed/Incomplete"}
-                </div>
-                {testResult.error && (
-                  <div className="text-sm text-red-700 mt-1">{testResult.error}</div>
-                )}
-                {testResult.extraction_time_ms && (
-                  <div className="text-xs text-muted-foreground mt-1">
-                    Completed in {(testResult.extraction_time_ms / 1000).toFixed(1)}s
-                  </div>
-                )}
-              </div>
+              {testResult.fullyComplete && (
+                <Badge className="bg-amber-500 text-white gap-1">
+                  <Award className="w-3 h-3" />
+                  Premium Quality
+                </Badge>
+              )}
             </div>
+
+            {/* Error message */}
+            {testResult.error && !testResult.coreComplete && (
+              <div className="rounded-lg p-4 bg-red-100 border border-red-300 flex items-start gap-3">
+                <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5" />
+                <div>
+                  <div className="font-medium text-red-800">Extraction Issue</div>
+                  <div className="text-sm text-red-700 mt-1">{testResult.error}</div>
+                </div>
+              </div>
+            )}
+
+            {/* Time taken */}
+            {testResult.extraction_time_ms && (
+              <div className="text-xs text-muted-foreground">
+                Completed in {(testResult.extraction_time_ms / 1000).toFixed(1)}s
+              </div>
+            )}
+
+            {/* Checklist */}
+            {testResult.checklist && (
+              <Card className="bg-white border-zinc-200">
+                <CardHeader className="py-2 px-3">
+                  <CardTitle className="text-sm">Extraction Checklist</CardTitle>
+                </CardHeader>
+                <CardContent className="py-2 px-3 space-y-1">
+                  <div className="text-xs font-medium text-zinc-500 mb-2">Core Requirements (needed for approval)</div>
+                  <ChecklistItem 
+                    label="Images (2+ required)" 
+                    passed={testResult.checklist.hasImages} 
+                    detail={`${testResult.checklist.imageCount} found`}
+                  />
+                  <ChecklistItem 
+                    label="Mirrored Documents (1+ required)" 
+                    passed={testResult.checklist.hasDocs} 
+                    detail={`${testResult.checklist.docCount} mirrored`}
+                  />
+                  <ChecklistItem 
+                    label="Description (>50 chars)" 
+                    passed={testResult.checklist.hasDescription} 
+                    detail={`${testResult.checklist.descriptionLength} chars`}
+                  />
+                  <ChecklistItem 
+                    label="Developer Name" 
+                    passed={testResult.checklist.hasDeveloper}
+                  />
+                  
+                  <div className="text-xs font-medium text-zinc-500 mt-3 mb-2">Extended Fields (nice to have)</div>
+                  <ChecklistItem 
+                    label="USP Bullets" 
+                    passed={testResult.checklist.hasUsps} 
+                    detail={`${testResult.checklist.uspCount} found`}
+                  />
+                  <ChecklistItem 
+                    label="Amenities" 
+                    passed={testResult.checklist.hasAmenities} 
+                    detail={`${testResult.checklist.amenityCount} found`}
+                  />
+                  <ChecklistItem 
+                    label="Location" 
+                    passed={testResult.checklist.hasLocation}
+                  />
+                  <ChecklistItem 
+                    label="Price" 
+                    passed={testResult.checklist.hasPrice}
+                  />
+                  <ChecklistItem 
+                    label="Handover Date" 
+                    passed={testResult.checklist.hasHandover}
+                  />
+                </CardContent>
+              </Card>
+            )}
 
             {/* Project preview */}
             {testResult.project && (
@@ -408,6 +592,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                             <Badge key={idx} variant="secondary" className="text-xs">
                               <FileText className="w-3 h-3 mr-1" />
                               {doc.type}
+                              {doc.mirrored_url && <Check className="w-3 h-3 ml-1 text-emerald-600" />}
                             </Badge>
                           ))}
                         </div>
@@ -469,7 +654,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                 <Button
                   onClick={approveTest}
                   className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
-                  disabled={!testResult.success}
+                  disabled={!testResult.coreComplete}
                 >
                   <Check className="w-4 h-4 mr-2" />
                   Approve & Enable Bulk Extraction
