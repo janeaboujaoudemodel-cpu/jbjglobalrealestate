@@ -16259,6 +16259,142 @@ export type Database = {
         }
         Relationships: []
       }
+      vapi_call_logs_masked: {
+        Row: {
+          access_count: number | null
+          ai_audited_at: string | null
+          ai_follow_up_recommended: boolean | null
+          ai_highlights: string[] | null
+          ai_issues: string[] | null
+          ai_lead_quality: string | null
+          ai_score: number | null
+          ai_sentiment: string | null
+          ai_summary: string | null
+          assistant_name: string | null
+          call_id: string | null
+          call_status: string | null
+          caller_name_masked: string | null
+          caller_phone_masked: string | null
+          created_at: string | null
+          duration_seconds: number | null
+          ended_reason: string | null
+          extracted_budget: string | null
+          extracted_email: string | null
+          extracted_interest: string | null
+          extracted_name: string | null
+          extracted_phone: string | null
+          flag_reason: string | null
+          id: string | null
+          is_flagged: boolean | null
+          lead_id: string | null
+          needs_review: boolean | null
+          notes: string | null
+          recording_url: string | null
+          retention_expires_at: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          summary: string | null
+          transcript: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          access_count?: number | null
+          ai_audited_at?: string | null
+          ai_follow_up_recommended?: boolean | null
+          ai_highlights?: string[] | null
+          ai_issues?: string[] | null
+          ai_lead_quality?: string | null
+          ai_score?: number | null
+          ai_sentiment?: string | null
+          ai_summary?: string | null
+          assistant_name?: string | null
+          call_id?: string | null
+          call_status?: string | null
+          caller_name_masked?: never
+          caller_phone_masked?: never
+          created_at?: string | null
+          duration_seconds?: number | null
+          ended_reason?: string | null
+          extracted_budget?: string | null
+          extracted_email?: never
+          extracted_interest?: string | null
+          extracted_name?: never
+          extracted_phone?: never
+          flag_reason?: string | null
+          id?: string | null
+          is_flagged?: boolean | null
+          lead_id?: string | null
+          needs_review?: boolean | null
+          notes?: string | null
+          recording_url?: never
+          retention_expires_at?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          summary?: string | null
+          transcript?: never
+          updated_at?: string | null
+        }
+        Update: {
+          access_count?: number | null
+          ai_audited_at?: string | null
+          ai_follow_up_recommended?: boolean | null
+          ai_highlights?: string[] | null
+          ai_issues?: string[] | null
+          ai_lead_quality?: string | null
+          ai_score?: number | null
+          ai_sentiment?: string | null
+          ai_summary?: string | null
+          assistant_name?: string | null
+          call_id?: string | null
+          call_status?: string | null
+          caller_name_masked?: never
+          caller_phone_masked?: never
+          created_at?: string | null
+          duration_seconds?: number | null
+          ended_reason?: string | null
+          extracted_budget?: string | null
+          extracted_email?: never
+          extracted_interest?: string | null
+          extracted_name?: never
+          extracted_phone?: never
+          flag_reason?: string | null
+          id?: string | null
+          is_flagged?: boolean | null
+          lead_id?: string | null
+          needs_review?: boolean | null
+          notes?: string | null
+          recording_url?: never
+          retention_expires_at?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          summary?: string | null
+          transcript?: never
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vapi_call_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vapi_call_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vapi_call_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       auto_assign_lead_to_available_broker: {
@@ -16361,6 +16497,7 @@ export type Database = {
         Returns: boolean
       }
       cleanup_device_tracking_data: { Args: never; Returns: number }
+      cleanup_expired_vapi_calls: { Args: never; Returns: number }
       cleanup_expired_vapi_recordings: { Args: never; Returns: number }
       cleanup_expired_verifications: { Args: never; Returns: undefined }
       cleanup_rate_limit_records: { Args: never; Returns: number }
