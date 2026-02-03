@@ -1,362 +1,276 @@
 
+# Full Audit: Search Dropdown & All Mega Menu Button/Link Verification
 
-# COMPREHENSIVE DEEP AUDIT: All Incomplete Tasks
-## JBJ Global Real Estate Project - Full Task Completion Plan
+## Overview
 
----
-
-## EXECUTIVE SUMMARY
-
-Based on thorough analysis of the codebase and cross-referencing all user instructions from the project history, I have identified **23 incomplete or partially completed tasks** that require immediate implementation. This plan addresses every single one.
-
----
-
-## CATEGORY 1: HOMEPAGE ISSUES
-
-### 1.1 Search Module Filter Enhancements (NOT DONE)
-**Status:** ❌ Missing  
-**Location:** `src/components/home/SearchModule.tsx`  
-**Issue:** No sqm/sqft toggle, no currency selector (AED/USD/EUR), filter not full-width
-
-**Required Changes:**
-- Add area size filter with sqm/sqft toggle
-- Add currency selector dropdown (AED/USD/EUR)
-- Expand filter container to full-width of the section
-- Increase overall filter size/prominence
+Based on my comprehensive analysis of all mega menu components, I have identified:
+1. **Email icon needs gold color** (currently black in MegaMenuSearch.tsx line 76)
+2. **"CONTACT@JBJ.AE" text needs removal** (line 190-192 in MegaMenuSearch.tsx)
+3. **Multiple link routing issues** across various mega menus
 
 ---
 
-### 1.2 TrustBar UI Improvements (PARTIALLY DONE)
-**Status:** ⚠️ Needs improvement  
-**Location:** `src/components/home/TrustBar.tsx`  
-**Issue:** Current card-based design needs premium refinement
+## IMMEDIATE FIXES REQUIRED
 
-**Required Changes:**
-- Review and enhance the glass-morphism cards
-- Ensure proper spacing and alignment
-- Add subtle hover effects and refined styling
-- Match the luxury institutional brand standard
+### 1. MegaMenuSearch.tsx - Email Icon & Text Fixes
 
----
+**Current Issue (line 73-78):**
+```typescript
+{
+  href: `mailto:${CONTACT_INFO.email}`,
+  label: 'Email',
+  icon: Mail,
+  iconClassName: 'text-black',  // ← WRONG: Should be gold
+  external: true,
+},
+```
 
-### 1.3 "Find Your Starting Point" Mobile UI (NOT DONE)
-**Status:** ❌ Incomplete  
-**Location:** `src/pages/Index.tsx` (lines 314-385)  
-**Issue:** Text `text-[8px]` is extremely small, icons `w-3 h-3` are tiny
+**Fix:** Change `iconClassName: 'text-black'` to `iconClassName: 'text-gold'`
 
-**Required Changes:**
-- Increase text size from `text-[8px]` to at least `text-xs`
-- Increase icon size from `w-3 h-3` to `w-4 h-4` or larger
-- Consider vertical layout on very small screens
-- Improve overall mobile readability
+**Current Issue (lines 190-192):**
+```tsx
+<p className="mt-4 text-sm text-black/80 font-semibold text-center">
+  CONTACT@JBJ.AE
+</p>
+```
 
----
-
-### 1.4 Homepage Section Order (NOT DONE)
-**Status:** ❌ Wrong order  
-**Location:** `src/pages/Index.tsx`  
-**Issue:** AI Home Finder is above Find Your Starting Point and Explore Services
-
-**Required Changes (correct order):**
-1. Hero
-2. Trust Bar  
-3. Developer Partners Marquee
-4. Search Module
-5. Featured Listings
-6. Services Grid (currently "How Can We Help?")
-7. **Find Your Starting Point** (should move UP)
-8. **Explore Our Services slideshow** (should move UP)
-9. **AI Home Finder** (should move DOWN)
-10. Rest of sections...
+**Fix:** Remove this entire block
 
 ---
 
-### 1.5 Remove "How Can We Help?" Section (NOT DONE)
-**Status:** ❌ Still present  
-**Location:** `src/components/home/ServicesGrid.tsx`  
-**Issue:** User explicitly said to remove this section and merge services into "Explore Our Services"
+## FULL BUTTON/LINK AUDIT RESULTS
 
-**Required Changes:**
-- Remove or repurpose ServicesGrid component from homepage
-- Ensure all 4 services (Buy, Rent, Sell, Management) exist in ExploreServicesCard slideshow
-- No duplicate "How Can We Help" section
+### MegaMenuSearch.tsx - Contact Cards (4 cards)
+| Card | Link | Status | Notes |
+|------|------|--------|-------|
+| Call Now | `tel:+971565911000` | ✅ Working | External link, uses `window.location.href` |
+| WhatsApp | `https://wa.me/971565911000?text=...` | ✅ Working | External link |
+| Email | `mailto:Contact@JBJ.ae` | ✅ Working | External link (icon color needs fix) |
+| Contact Form | `/contact` | ✅ Working | Route exists (App.tsx line 255) |
 
----
+### MegaMenuSearch.tsx - Services Links (9 links)
+| Link | Route | Status | Notes |
+|------|-------|--------|-------|
+| Buying Advisory | `/services/buying-advisory` | ✅ | Route line 320 |
+| Selling Advisory | `/services/selling-advisory` | ✅ | Route line 321 |
+| Sell Your Property Now | `/seller-listing` | ✅ | Route line 230 |
+| Rental Advisory | `/services/rental-advisory` | ✅ | Route line 322 |
+| Investment Advisory | `/services/investment-advisory` | ✅ | Route line 323 |
+| Fit-Out Services | `/services/fit-out` | ✅ | Route line 317 |
+| Snagging Inspection | `/services/snagging` | ⚠️ MISSING | No route defined |
+| Golden Visa Guide | `/guides/golden-visa-uae` | ✅ | Route line 232 |
+| Mortgage Calculator | `/mortgage-calculator` | ✅ | Route line 260 |
 
-### 1.6 Why Dubai Video Scenes (NOT DONE)
-**Status:** ❌ Missing specific scenes  
-**Location:** `src/components/home/WhyDubaiCapitalSection.tsx`  
-**Issue:** User requested specific video replacements
-
-**Required Changes:**
-- **Burj Khalifa scene:** Day-to-night transition (morning drone shot zooming in → then night view with city lights)
-- **Burj Al Arab scene:** Replace with drone zoom-in with beach waves
-
-Note: Current videos exist in `src/assets/videos/` but user requested regenerated/replaced scenes. If new video assets aren't provided, this task requires asset production or sourcing.
-
----
-
-## CATEGORY 2: HEADER MEGA MENU ISSUES
-
-### 2.1 "See All Properties" / "See All Rentals" Button Styling (NOT DONE)
-**Status:** ❌ Not matching View All Projects style  
-**Location:** `src/components/header/MegaMenuBuy.tsx`, `MegaMenuRent.tsx`  
-**Issue:** The CTA links (emphasis links) are not matching the rectangular "View All Projects" button in MegaMenuProjects
-
-**Required Changes:**
-- Match the box size and styling of MegaMenuProjects' "View All Projects" button
-- Make rectangular, properly sized to fit section width
-- Consistent CTA button appearance across all mega menus
-
----
-
-### 2.2 Replace Mega Menu Photos with Videos (NOT DONE)
-**Status:** ❌ Still using static images  
-**Location:** All mega menu components (`MegaMenuBuy.tsx`, `MegaMenuRent.tsx`, `MegaMenuProjects.tsx`, etc.)  
-**Issue:** User requested videos that match page title/category, not static photos
-
-**Required Changes:**
-- Replace static `<img>` backgrounds with `<video>` elements in featured cards
-- Buy: Use a luxury buying/property video
-- Rent: Use a rental property video  
-- Projects: Use off-plan projects video
-- Developers: Use Dubai skyline/development video
-- Areas: Use Dubai areas/neighborhoods video
-- Services: Use services-related video
-- Investor Hub: Use investment-themed video
-- Broker Hub: Use broker-with-iPad video (already specified)
+### MegaMenuSearch.tsx - Quick Links (9 links)
+| Link | Route | Status | Notes |
+|------|-------|--------|-------|
+| About Us | `/about` | ✅ | Route line 256 |
+| Meet the Team | `/team` | ✅ | Route line 378 |
+| Our Brokers | `/brokers` | ✅ | Route line 380 |
+| Area Guides | `/areas` | ✅ | Route line 226 |
+| Guides Library | `/guides` | ⚠️ MISSING | No route defined |
+| Market Intelligence | `/market-intelligence` | ✅ | Route line 262 |
+| Developers | `/developers` | ✅ | Route line 224 |
+| Careers | `/join` | ✅ | Route line 341 |
+| AI Home Finder | `/quiz` | ✅ | Route line 253 |
 
 ---
 
-### 2.3 Investor Hub - Missing "Go to Dashboard" CTA (PARTIALLY DONE)
-**Status:** ⚠️ Partial  
-**Location:** `src/components/header/MegaMenuInvestorHub.tsx`  
-**Issue:** Has CTA on photo but needs additional CTA button below link sections matching Broker Hub
-
-**Required Changes:**
-- Add a big rectangular CTA button "Go to Dashboard" in the links section (below Dashboard & Portfolio and Investor Tools)
-- Match the emphasized link style used in other menus
-
----
-
-### 2.4 Vertical Divider Alignments (PARTIALLY DONE)
-**Status:** ⚠️ Needs verification  
-**Location:** All mega menu components  
-**Issue:** Gold divider lines between columns may not align properly across adjacent columns
-
-**Required Changes:**
-- Verify all vertical dividers align horizontally
-- Ensure `min-h` values match in corresponding columns
-- All `MegaMenuSectionTitle` components have `min-h-[36px]`
+### MegaMenuBuy.tsx - All Links
+| Link | Route | Status |
+|------|-------|--------|
+| Properties for Sale (Featured) | `/properties?transaction=buy` | ✅ |
+| Apartments | `/properties?type=apartment&transaction=buy` | ✅ |
+| Villas | `/properties?type=villa&transaction=buy` | ✅ |
+| Townhouses | `/properties?type=townhouse&transaction=buy` | ✅ |
+| Penthouses | `/properties?type=penthouse&transaction=buy` | ✅ |
+| Commercial | `/properties?type=commercial&transaction=buy` | ✅ |
+| Buyer's Guide | `/buyer-guide` | ✅ |
+| Mortgage Calculator | `/mortgage-calculator` | ✅ |
+| Signature by JBJ | `/signature-collection` | ⚠️ MISSING |
+| Snagging & Inspection | `/services/snagging` | ⚠️ MISSING |
+| See All Properties (CTA) | `/properties?transaction=buy` | ✅ |
 
 ---
 
-### 2.5 Account Dropdown Size Jitter (NOT FULLY FIXED)
-**Status:** ⚠️ Intermittent issue  
-**Location:** `src/components/header/MegaMenuAccount.tsx`  
-**Issue:** Dropdown opens at one size, then extends/jitters
-
-**Required Changes:**
-- Add fixed minimum dimensions to prevent layout shifts
-- Currently has `!min-h-[400px]` but may need refinement
-- Ensure content loads without causing reflow
-
----
-
-### 2.6 Search Shortcut Contact Cards (NOT DONE)
-**Status:** ❌ Too small  
-**Location:** `src/components/header/MegaMenuSearch.tsx`  
-**Issue:** Contact cards at bottom are very small with huge empty gap below
-
-**Required Changes:**
-- Enlarge contact cards to fill available space
-- Remove or reduce the empty gap at bottom
-- Make cards more prominent and easier to tap
+### MegaMenuRent.tsx - All Links
+| Link | Route | Status |
+|------|-------|--------|
+| Properties for Rent (Featured) | `/properties?transaction=rent` | ✅ |
+| Apartments | `/properties?type=apartment&transaction=rent` | ✅ |
+| Villas | `/properties?type=villa&transaction=rent` | ✅ |
+| Townhouses | `/properties?type=townhouse&transaction=rent` | ✅ |
+| Penthouses | `/properties?type=penthouse&transaction=rent` | ✅ |
+| Commercial | `/properties?type=commercial&transaction=rent` | ✅ |
+| Tenant's Guide | `/tenant-guide` | ✅ |
+| Rental Index | `/dubai-rental-index` | ⚠️ MISSING (exists at `/rental-index`) |
+| Property Management | `/services/property-management` | ⚠️ MISSING |
+| Short-term Rentals | `/services/short-term-rentals` | ⚠️ MISSING |
+| See All Rentals (CTA) | `/properties?transaction=rent` | ✅ |
 
 ---
 
-## CATEGORY 3: PROPERTIES PAGE ISSUES
-
-### 3.1 Properties Page Hero Video (DONE in last session)
-**Status:** ✅ Implemented  
-**Location:** `src/components/PropertiesHeroVideo.tsx`, `src/pages/Properties.tsx`  
-**Note:** Multi-scene video hero with Downtown, Palm/Atlantis, Burj Al Arab was implemented.
-
----
-
-### 3.2 Properties Page Forms Consolidation (DONE in last session)
-**Status:** ✅ Implemented  
-**Location:** `src/pages/Properties.tsx`, `src/components/ConsultationRequestForm.tsx`  
-**Note:** Replaced "Get a curated shortlist" with consultation request form.
+### MegaMenuProjects.tsx - All Links
+| Link | Route | Status |
+|------|-------|--------|
+| Dubai Off-Plan Projects (Featured) | `/properties` | ✅ |
+| Off-Plan Projects | `/properties?status=off-plan` | ✅ |
+| Ready Projects | `/properties?status=ready` | ✅ |
+| New Launches | `/properties?sort=newest` | ✅ |
+| Handover Soon | `/properties?handover=2025` | ✅ |
+| View All Projects (CTA) | `/properties` | ✅ |
 
 ---
 
-## CATEGORY 4: FOOTER & CTA SECTION ISSUES
-
-### 4.1 Footer Structure - Licensed Line Above Logo (DONE in last session)
-**Status:** ✅ Implemented  
-**Location:** `src/components/Footer.tsx`  
-**Note:** Restructured so "Licensed BUY SELL RENT" appears above logo section.
-
----
-
-### 4.2 DirectContactCTA Standardization (PARTIALLY DONE)
-**Status:** ⚠️ Needs global implementation  
-**Location:** `src/components/DirectContactCTA.tsx`  
-**Issue:** Component created but needs to be added to ALL pages before footer
-
-**Required Changes:**
-- Add DirectContactCTA to every page that doesn't have it:
-  - All service pages
-  - All guide pages  
-  - Area pages
-  - Developer pages
-  - Contact page (if missing)
-  - And ALL other public pages
+### MegaMenuServices.tsx - All Links (12 services)
+| Link | Route | Status |
+|------|-------|--------|
+| Mortgages | `/mortgage-calculator` | ✅ |
+| Golden Visa | `/guides/golden-visa-uae` | ✅ |
+| Currency Exchange | `/services/currency-exchange` | ⚠️ MISSING |
+| Conveyancing | `/services/conveyancing` | ⚠️ MISSING |
+| Property Management | `/services/property-management` | ⚠️ MISSING |
+| List Your Property | `/seller-listing` | ✅ |
+| Property Snagging | `/services/snagging` | ⚠️ MISSING |
+| Property Evaluation | `/property-evaluator` | ✅ |
+| Short-term Rentals | `/services/short-term-rentals` | ⚠️ MISSING |
+| Partner Program | `/partners` | ✅ |
+| Company Setup | `/services/company-setup` | ⚠️ MISSING |
+| Plots & Land | `/properties?type=plot` | ✅ |
+| View All Services | `/services` | ✅ |
 
 ---
 
-### 4.3 CTABand Email Button Styling (DONE in last session)
-**Status:** ✅ Implemented  
-**Location:** `src/components/home/CTABand.tsx`  
-**Note:** Email button added with blue icon, matching Call Now style, Save Contact moved below.
+### MegaMenuAreas.tsx - All Links
+All 12 area links use pattern `/area/:slug` which is valid (route line 227).
+"View All Areas" links to `/areas` - ✅ VALID
 
 ---
 
-## CATEGORY 5: LISTING EXTRACTION SYSTEM
+### MegaMenuDevelopers.tsx - All Links
+All 12 developer links use pattern `/developers/:slug` - Note: App.tsx shows `/developer/:slug` (singular)!
 
-### 5.1 Extraction Data Accuracy (PARTIALLY FIXED)
-**Status:** ⚠️ Ongoing  
-**Location:** Edge functions and listing admin components  
-**Issue:** Some listings still show broken photos, "Contact Us" for bedrooms/sizes
+**Issue Found:** Links use `/developers/emaar` but route is `/developer/:slug` (singular)
 
-**Fixes Implemented:**
-- Image sanitization with `isValidImageUrl` and `normalizeProvidentImageUrl`
-- Updated extraction to use page-data.json
-- Safe image sizing (464x312)
-
-**Still Needed:**
-- Verify all extraction fields populate correctly
-- Test end-to-end extraction flow
-- Ensure payment breakdown shows all milestones
+All developer links are using WRONG route pattern. They should use `/developer/:slug` not `/developers/:slug`.
 
 ---
 
-### 5.2 "View Full Page" Navigation (FIXED in last session)
-**Status:** ✅ Fixed  
-**Location:** `src/components/listing-admin/TestOneListingPanel.tsx`  
-**Note:** Changed from navigate() to <Link> component.
+### MegaMenuInvestorHub.tsx - All Links
+| Link | Route | Status |
+|------|-------|--------|
+| Investor Dashboard | `/my-account` | ✅ |
+| Portfolio Views | `/favorites` | ✅ |
+| Investor Tools | `/ai-hub` | ✅ |
+| Property Evaluator | `/property-evaluation` | ⚠️ MISSING (exists at `/property-evaluator`) |
+| Mortgage Calculator | `/mortgage-calculator` | ✅ |
+| ROI Calculator | `/roi-calculator` | ⚠️ MISSING |
+| Market Reports | `/market-intelligence/reports` | ✅ |
+| Go to Dashboard (CTA) | `/my-account` | ✅ |
 
 ---
 
-## CATEGORY 6: OTHER INCOMPLETE TASKS
-
-### 6.1 Chat Conversational AI Collection (NOT INTEGRATED)
-**Status:** ❌ Component exists but not wired up  
-**Location:** `src/components/chat/ChatConversationalCollect.tsx`, `AIChatWidget.tsx`  
-**Issue:** The conversational lead collection (Name → Email → Phone) is not integrated
-
-**Required Changes:**
-- Import ChatConversationalCollect into AIChatWidget
-- Add render case for `step === 'conversational_collect'`
-- Wire up the flow
-
----
-
-### 6.2 Marketing Hub (NOT CREATED)
-**Status:** ❌ Not started  
-**Issue:** Database tables and UI for marketing campaigns never created
-
-**Required Work:**
-- Create database tables: `marketing_campaigns`, `newsletter_subscribers`, `marketing_templates`
-- Create `/admin/marketing-hub` page
-- Create campaign editor components
-- Create `send-campaign` edge function
+### MegaMenuBrokerHub.tsx - All Links
+| Link | Route | Status |
+|------|-------|--------|
+| Broker Dashboard | `/broker-dashboard` | ✅ |
+| Broker Toolkit | `/broker-toolkit#tools` | ✅ |
+| Partner Program | `/partners` | ✅ |
+| Broker Education | `/broker-education` | ✅ |
+| Broker Resources | `/broker-resources` | ✅ |
+| Broker FAQ | `/broker-faq` | ✅ |
+| Certifications | `/broker-certifications` | ⚠️ MISSING |
+| Go to Dashboard (CTA) | `/broker-dashboard` | ✅ |
 
 ---
 
-### 6.3 Broker Hub Video on Hover (NOT DONE)
-**Status:** ❌ Still static image  
-**Location:** `src/components/header/MegaMenuBrokerHub.tsx`  
-**Issue:** User requested video on hover for desktop
-
-**Required Changes:**
-- Replace static image with video element that plays on hover (desktop only)
-- Use broker-dashboard-hero.mp4 or similar
+### MegaMenuMore.tsx - All Links (40 links)
+**Missing Routes Found:**
+- `/complaint` - MISSING
+- `/testimonials` - MISSING
+- `/guides` - MISSING
 
 ---
 
-## IMPLEMENTATION ORDER (Priority)
+### MegaMenuAccount.tsx - All Links
+| Link | Route | Status |
+|------|-------|--------|
+| Edit Profile | `/profile` | ✅ |
+| My Profile | `/profile` | ✅ |
+| Favorites | `/favorites` | ✅ |
+| My Assistant | `/founder-assistant` | ✅ |
+| Employee Hub | `/employee-hub` | ✅ |
+| HR Hub | `/hr-dashboard` | ✅ |
+| Listing Admin | `/listing-admin` | ✅ |
+| IT Department | `/it-department` | ✅ |
+| CRM Dashboard | `/crm` | ✅ |
+| Admin Panel | `/admin` | ✅ |
+| Sign In | `/auth` | ✅ |
 
-### Batch 1: Header Mega Menu Fixes (Highest Visual Impact)
-1. Fix "See All Properties"/"See All Rentals" button styling to match "View All Projects"
-2. Add big CTA to Investor Hub
-3. Enlarge contact cards in Search shortcut
-4. Fix account dropdown jitter
-5. Replace mega menu photos with videos
+---
 
-### Batch 2: Homepage Section Reordering
-1. Remove "How Can We Help?" section
-2. Move "Explore Our Services" up
-3. Move "Find Your Starting Point" up
-4. Move "AI Home Finder" down
-5. Fix mobile sizing for "Find Your Starting Point"
+## SUMMARY OF ISSUES TO FIX
 
-### Batch 3: Search Module Enhancements
-1. Add sqm/sqft toggle
-2. Add currency selector
-3. Make filter full-width
+### Priority 1: MegaMenuSearch.tsx (Your Request)
+1. Change Email icon from `text-black` to `text-gold`
+2. Remove "CONTACT@JBJ.AE" text block
 
-### Batch 4: Global DirectContactCTA
-1. Add component to all pages before footer
+### Priority 2: Critical Route Fixes
+These links will show 404 errors:
 
-### Batch 5: Video Scene Replacements
-1. Replace Why Dubai Burj Khalifa scene (day-to-night)
-2. Replace Why Dubai Burj Al Arab scene (drone with beach)
+| Component | Link Text | Current Route | Fix |
+|-----------|-----------|---------------|-----|
+| MegaMenuDevelopers | All developer links | `/developers/:slug` | Change to `/developer/:slug` |
+| MegaMenuRent | Rental Index | `/dubai-rental-index` | Change to `/rental-index` |
+| MegaMenuInvestorHub | Property Evaluator | `/property-evaluation` | Change to `/property-evaluator` |
 
-### Batch 6: Remaining Items
-1. TrustBar UI refinements
-2. Chat conversational integration
-3. Marketing Hub (larger scope)
+### Priority 3: Missing Pages (Will Show 404)
+These pages don't exist and need either creation or removal from menus:
+- `/services/snagging` (referenced in Buy, Services)
+- `/services/property-management` (referenced in Rent, Services)
+- `/services/short-term-rentals` (referenced in Rent, Services)
+- `/services/currency-exchange` (referenced in Services)
+- `/services/conveyancing` (referenced in Services)
+- `/services/company-setup` (referenced in Services)
+- `/signature-collection` (referenced in Buy)
+- `/roi-calculator` (referenced in Investor Hub)
+- `/broker-certifications` (referenced in Broker Hub)
+- `/guides` (referenced in Search, More)
+- `/complaint` (referenced in More)
+- `/testimonials` (referenced in More)
 
 ---
 
 ## FILES TO MODIFY
 
-**Header Components:**
-- `src/components/header/MegaMenuBuy.tsx`
-- `src/components/header/MegaMenuRent.tsx`
-- `src/components/header/MegaMenuProjects.tsx`
-- `src/components/header/MegaMenuInvestorHub.tsx`
-- `src/components/header/MegaMenuBrokerHub.tsx`
-- `src/components/header/MegaMenuSearch.tsx`
-- `src/components/header/MegaMenuAccount.tsx`
-- `src/components/header/mega-menu-primitives.tsx`
+1. **src/components/header/MegaMenuSearch.tsx**
+   - Fix email icon color
+   - Remove CONTACT@JBJ.AE text
 
-**Homepage:**
-- `src/pages/Index.tsx` (major restructure)
-- `src/components/home/SearchModule.tsx`
-- `src/components/home/TrustBar.tsx`
-- `src/components/home/ServicesGrid.tsx` (remove or repurpose)
-- `src/components/home/WhyDubaiCapitalSection.tsx`
+2. **src/components/header/MegaMenuDevelopers.tsx**
+   - Fix all developer links from `/developers/:slug` to `/developer/:slug`
 
-**Global:**
-- Multiple page files (to add DirectContactCTA)
+3. **src/components/header/MegaMenuRent.tsx**
+   - Fix Rental Index link from `/dubai-rental-index` to `/rental-index`
 
-**Chat:**
-- `src/components/chat/AIChatWidget.tsx`
+4. **src/components/header/MegaMenuInvestorHub.tsx**
+   - Fix Property Evaluator link from `/property-evaluation` to `/property-evaluator`
+
+5. **Create placeholder pages** for commonly linked but missing routes (or remove from menus)
 
 ---
 
-## ESTIMATED TASK COUNT: 23 Items
+## IMPLEMENTATION APPROACH
 
-| Category | Tasks | Status |
-|----------|-------|--------|
-| Homepage Issues | 6 | 0 Done, 6 Todo |
-| Header Mega Menus | 6 | 0 Done, 6 Todo |
-| Properties Page | 2 | 2 Done |
-| Footer/CTA | 3 | 2 Done, 1 Todo |
-| Listing Extraction | 2 | 1 Done, 1 Partial |
-| Other | 4 | 0 Done, 4 Todo |
-| **TOTAL** | **23** | **5 Done, 18 Todo** |
+**Phase 1: Immediate Fixes (Your Request)**
+- Email icon → gold
+- Remove CONTACT@JBJ.AE text
 
+**Phase 2: Route Corrections**
+- Fix Developer links pattern
+- Fix Rental Index route
+- Fix Property Evaluator route
+
+**Phase 3: Missing Pages**
+- Create simple placeholder pages for critical missing routes OR
+- Remove broken links from menus to prevent 404 errors
