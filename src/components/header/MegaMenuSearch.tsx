@@ -155,10 +155,10 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
             </div>
           </div>
 
-          {/* Contact */}
-          <div>
-            <p className="text-[10px] uppercase tracking-wider text-gold font-medium mb-2">Contact</p>
-            <div className="grid grid-cols-2 gap-2">
+          {/* Contact - Larger cards to fill space */}
+          <div className="flex flex-col">
+            <p className="text-[10px] uppercase tracking-wider text-gold font-medium mb-3">Contact</p>
+            <div className="grid grid-cols-2 gap-3 flex-1">
               {contactLinks.map((link) =>
                 link.external ? (
                   <a
@@ -169,25 +169,25 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
                       onClose();
                       window.location.href = link.href;
                     }}
-                    className="flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-black/10 border border-gold/30 hover:border-gold/60 hover:bg-black/15 transition-colors"
+                    className="flex flex-col items-center justify-center gap-2 py-4 px-4 rounded-xl bg-gradient-to-br from-black/10 to-black/5 border-2 border-gold/40 hover:border-gold hover:bg-black/15 hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)] transition-all duration-300"
                   >
-                    <link.icon className={cn("w-4 h-4", link.iconClassName ?? "text-black")} />
-                    <span className="text-black text-xs font-semibold">{link.label}</span>
+                    <link.icon className={cn("w-6 h-6", link.iconClassName ?? "text-black")} />
+                    <span className="text-black text-sm font-bold">{link.label}</span>
                   </a>
                 ) : (
                   <Link
                     key={link.href}
                     to={link.href}
                     onClick={onClose}
-                    className="flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-black/10 border border-gold/30 hover:border-gold/60 hover:bg-black/15 transition-colors"
+                    className="flex flex-col items-center justify-center gap-2 py-4 px-4 rounded-xl bg-gradient-to-br from-black/10 to-black/5 border-2 border-gold/40 hover:border-gold hover:bg-black/15 hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)] transition-all duration-300"
                   >
-                    <link.icon className={cn("w-4 h-4", link.iconClassName ?? "text-black")} />
-                    <span className="text-black text-xs font-semibold">{link.label}</span>
+                    <link.icon className={cn("w-6 h-6", link.iconClassName ?? "text-black")} />
+                    <span className="text-black text-sm font-bold">{link.label}</span>
                   </Link>
                 )
               )}
             </div>
-            <p className="mt-2 text-[11px] text-black/70">
+            <p className="mt-4 text-sm text-black/80 font-semibold text-center">
               CONTACT@JBJ.AE
             </p>
           </div>

@@ -55,7 +55,10 @@ MegaMenuShell.displayName = "MegaMenuShell";
 type MegaMenuFeaturedCardProps = {
   to: string;
   onClick: () => void;
-  image: string;
+  /** Static image fallback */
+  image?: string;
+  /** Video source for hover playback */
+  video?: string;
   kicker?: string;
   title: string;
   description?: string;
@@ -65,39 +68,74 @@ type MegaMenuFeaturedCardProps = {
 
 /**
  * Compact featured card used in all mega menus.
- * Smaller size with proper rounded corners, similar to Provident style.
+ * Supports video on hover (desktop) with image fallback.
  */
 export function MegaMenuFeaturedCard({
   to,
   onClick,
   image,
+  video,
   kicker,
   title,
   description,
   cta,
   className,
 }: MegaMenuFeaturedCardProps) {
+  const videoRef = React.useRef<HTMLVideoElement>(null);
+
+  const handleMouseEnter = () => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+  };
+
   return (
     <Link
       to={to}
       onClick={onClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       className={cn(
         // Compact card with 3D effect - proper rounded corners with gold border
-        // Removed aspect-ratio to allow flexible height stretching
         "block group relative overflow-hidden rounded-xl min-h-[260px] lg:min-h-[340px] transition-all duration-500",
         // 3D depth and hover zoom effect
         "shadow-lg hover:shadow-2xl hover:scale-[1.02] transform-gpu",
         className
       )}
     >
-      <div
-        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-        style={{ backgroundImage: `url(${image})` }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+      {/* Video background (if provided) - hidden until hover on desktop */}
+      {video && (
+        <video
+          ref={videoRef}
+          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-0 group-hover:opacity-100 z-[1]"
+          src={video}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+        />
+      )}
+      {/* Static image background */}
+      {image && (
+        <div
+          className={cn(
+            "absolute inset-0 bg-cover bg-center transition-all duration-700 group-hover:scale-110",
+            video ? "group-hover:opacity-0" : ""
+          )}
+          style={{ backgroundImage: `url(${image})` }}
+        />
+      )}
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-[2]" />
       {/* Gold border with hover enhancement */}
-      <div className="absolute inset-0 border-2 border-gold/40 rounded-xl group-hover:border-gold/80 transition-colors" />
-      <div className="absolute bottom-0 left-0 right-0 p-5">
+      <div className="absolute inset-0 border-2 border-gold/40 rounded-xl group-hover:border-gold/80 transition-colors z-[3]" />
+      <div className="absolute bottom-0 left-0 right-0 p-5 z-[4]">
         {kicker ? (
           <p className="text-gold text-[10px] font-bold tracking-[0.2em] uppercase mb-1.5">
             {kicker}
@@ -113,6 +151,38 @@ export function MegaMenuFeaturedCard({
           <ArrowRight className="w-3.5 h-3.5" />
         </span>
       </div>
+    </Link>
+  );
+}
+
+/**
+ * Full-width rectangular CTA button for mega menus
+ * Used for "See All Properties", "View All Projects" etc.
+ */
+export function MegaMenuCTAButton({
+  to,
+  onClick,
+  icon: Icon,
+  title,
+}: {
+  to: string;
+  onClick: () => void;
+  icon: LucideIcon;
+  title: string;
+}) {
+  return (
+    <Link
+      to={to}
+      onClick={onClick}
+      className="flex items-center justify-center gap-3 w-full py-4 px-6 rounded-xl bg-gradient-to-r from-gold/50 via-gold/40 to-gold/50 hover:from-gold/70 hover:via-gold/60 hover:to-gold/70 border-2 border-gold/60 hover:border-gold shadow-[0_4px_15px_rgba(200,167,102,0.35)] hover:shadow-[0_6px_20px_rgba(200,167,102,0.5)] hover:-translate-y-0.5 transition-all duration-300 group"
+    >
+      <div className="w-10 h-10 rounded-lg bg-black border border-gold flex items-center justify-center group-hover:shadow-[0_0_12px_rgba(200,167,102,0.5)] transition-all">
+        <Icon className="w-5 h-5 text-gold" />
+      </div>
+      <span className="text-black font-bold text-base group-hover:text-black transition-colors">
+        {title}
+      </span>
+      <ArrowRight className="w-5 h-5 text-gold ml-auto" />
     </Link>
   );
 }
