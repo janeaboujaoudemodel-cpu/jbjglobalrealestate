@@ -86,6 +86,14 @@ const Footer = () => {
     { label: t('footer.sellerAdvisory') || "Seller Advisory", href: "/services/selling-advisory" },
     { label: t('footer.leasingAdvisory') || "Leasing Advisory", href: "/services/leasing-advisory" },
     { label: t('footer.investmentAdvisory') || "Investment Advisory", href: "/services/investment-advisory" },
+    { label: "Snagging & Inspection", href: "/services/snagging" },
+    { label: "Property Management", href: "/services/property-management" },
+    { label: "Short-Term Rentals", href: "/services/short-term-rentals" },
+    { label: "Currency Exchange", href: "/services/currency-exchange" },
+    { label: "Concierge Services", href: "/services/concierge" },
+    { label: "Company Setup", href: "/services/company-setup" },
+    { label: "AI Tools", href: "/services/ai-tools" },
+    { label: "Customer Happiness", href: "/services/customer-happiness-center" },
   ];
 
   // Investor Hub
