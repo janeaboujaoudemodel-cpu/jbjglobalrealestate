@@ -31,13 +31,14 @@ import {
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 
-interface CallLog {
+// Masked call log - PII fields are encrypted and show masked values
+interface CallLogMasked {
   id: string;
   call_id: string;
-  caller_phone: string | null;
-  caller_name: string | null;
+  caller_phone_masked: string | null;
+  caller_name_masked: string | null;
   duration_seconds: number | null;
-  transcript: string | null;
+  transcript_masked: string;
   summary: string | null;
   recording_url: string | null;
   ai_score: number | null;
@@ -47,9 +48,9 @@ interface CallLog {
   ai_lead_quality: string | null;
   ai_summary: string | null;
   ai_follow_up_recommended: boolean | null;
-  extracted_name: string | null;
-  extracted_phone: string | null;
-  extracted_email: string | null;
+  extracted_name_masked: string;
+  extracted_phone_masked: string;
+  extracted_email_masked: string;
   extracted_interest: string | null;
   extracted_budget: string | null;
   lead_id: string | null;
@@ -59,14 +60,27 @@ interface CallLog {
   notes: string | null;
   assistant_name: string | null;
   created_at: string;
+  access_count: number | null;
+}
+
+// Decrypted PII data - only available to owner/founder
+interface DecryptedPII {
+  extracted_name: string | null;
+  extracted_phone: string | null;
+  extracted_email: string | null;
+  caller_name: string | null;
+  caller_phone: string | null;
+  transcript: string | null;
 }
 
 export default function CallReview() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [calls, setCalls] = useState<CallLog[]>([]);
-  const [selectedCall, setSelectedCall] = useState<CallLog | null>(null);
+  const [calls, setCalls] = useState<CallLogMasked[]>([]);
+  const [selectedCall, setSelectedCall] = useState<CallLogMasked | null>(null);
+  const [decryptedPII, setDecryptedPII] = useState<DecryptedPII | null>(null);
   const [loading, setLoading] = useState(true);
+  const [decrypting, setDecrypting] = useState(false);
   const [filter, setFilter] = useState<'all' | 'flagged' | 'needs_review'>('all');
   const [notes, setNotes] = useState('');
 
@@ -78,29 +92,62 @@ export default function CallReview() {
     fetchCalls();
   }, [user, filter]);
 
+  // Fetch from masked view for security
   const fetchCalls = async () => {
     setLoading(true);
     try {
-      let query = supabase
-        .from('vapi_call_logs')
+      // Use the masked view - it doesn't have the plaintext sensitive columns
+      const { data, error } = await supabase
+        .from('vapi_call_logs_masked')
         .select('*')
-        .order('created_at', { ascending: false });
-
-      if (filter === 'flagged') {
-        query = query.eq('is_flagged', true);
-      } else if (filter === 'needs_review') {
-        query = query.eq('needs_review', true);
-      }
-
-      const { data, error } = await query.limit(50);
+        .order('created_at', { ascending: false })
+        .limit(50);
 
       if (error) throw error;
-      setCalls(data || []);
+      
+      // Apply client-side filtering since the view may not support .eq on all columns
+      let filteredData = data || [];
+      if (filter === 'flagged') {
+        filteredData = filteredData.filter(c => c.is_flagged === true);
+      } else if (filter === 'needs_review') {
+        filteredData = filteredData.filter(c => c.needs_review === true);
+      }
+      
+      setCalls(filteredData);
     } catch (error) {
       console.error('Error fetching calls:', error);
       toast.error('Failed to load call logs');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Decrypt PII for selected call - only for owner/founder
+  const decryptCallPII = async (callId: string) => {
+    setDecrypting(true);
+    setDecryptedPII(null);
+    try {
+      const { data, error } = await supabase
+        .rpc('get_vapi_call_decrypted_pii', { p_call_id: callId });
+
+      if (error) {
+        if (error.message.includes('Unauthorized')) {
+          toast.error('Access denied: Only executives can view decrypted data');
+        } else {
+          throw error;
+        }
+        return;
+      }
+
+      if (data && data.length > 0) {
+        setDecryptedPII(data[0]);
+        toast.success('PII decrypted - access logged');
+      }
+    } catch (error) {
+      console.error('Error decrypting PII:', error);
+      toast.error('Failed to decrypt call data');
+    } finally {
+      setDecrypting(false);
     }
   };
 
@@ -301,6 +348,7 @@ export default function CallReview() {
                           onClick={() => {
                             setSelectedCall(call);
                             setNotes(call.notes || '');
+                            setDecryptedPII(null); // Clear previous decryption
                           }}
                           className={`w-full p-4 text-left hover:bg-muted/50 transition-colors ${
                             selectedCall?.id === call.id ? 'bg-muted' : ''
@@ -312,7 +360,7 @@ export default function CallReview() {
                                 <Flag className="w-4 h-4 text-red-500" />
                               )}
                               <span className="font-medium">
-                                {call.extracted_name || call.caller_phone || 'Unknown Caller'}
+                                {call.caller_name_masked || call.caller_phone_masked || 'Unknown Caller'}
                               </span>
                             </div>
                             <div className={`w-8 h-8 rounded-full ${getScoreColor(call.ai_score)} flex items-center justify-center text-white text-xs font-bold`}>
@@ -348,7 +396,7 @@ export default function CallReview() {
                   <div className="flex items-start justify-between">
                     <div>
                       <CardTitle className="flex items-center gap-2">
-                        {selectedCall.extracted_name || 'Unknown Caller'}
+                        {decryptedPII?.extracted_name || decryptedPII?.caller_name || selectedCall.caller_name_masked || 'Unknown Caller'}
                         {getSentimentIcon(selectedCall.ai_sentiment)}
                       </CardTitle>
                       <p className="text-sm text-muted-foreground mt-1">
@@ -461,21 +509,75 @@ export default function CallReview() {
                     </TabsContent>
 
                     <TabsContent value="transcript">
+                      <div className="mb-4">
+                        {!decryptedPII ? (
+                          <Button 
+                            onClick={() => decryptCallPII(selectedCall.id)} 
+                            disabled={decrypting}
+                            variant="secondary"
+                            className="gap-2"
+                          >
+                            {decrypting ? (
+                              <>
+                                <RefreshCw className="w-4 h-4 animate-spin" />
+                                Decrypting...
+                              </>
+                            ) : (
+                              <>
+                                🔓 Decrypt Transcript (Executive Only)
+                              </>
+                            )}
+                          </Button>
+                        ) : (
+                          <Badge variant="outline" className="gap-1">
+                            <CheckCircle className="w-3 h-3" /> Decrypted - Access Logged
+                          </Badge>
+                        )}
+                      </div>
                       <ScrollArea className="h-[400px]">
                         <div className="p-4 bg-muted rounded-lg whitespace-pre-wrap text-sm">
-                          {selectedCall.transcript || 'No transcript available'}
+                          {decryptedPII?.transcript || selectedCall.transcript_masked || 'No transcript available'}
                         </div>
                       </ScrollArea>
                     </TabsContent>
 
                     <TabsContent value="lead" className="space-y-4">
+                      {/* Decrypt button for PII */}
+                      <div className="mb-4">
+                        {!decryptedPII ? (
+                          <Button 
+                            onClick={() => decryptCallPII(selectedCall.id)} 
+                            disabled={decrypting}
+                            variant="secondary"
+                            className="gap-2"
+                          >
+                            {decrypting ? (
+                              <>
+                                <RefreshCw className="w-4 h-4 animate-spin" />
+                                Decrypting...
+                              </>
+                            ) : (
+                              <>
+                                🔓 Decrypt Contact Info (Executive Only)
+                              </>
+                            )}
+                          </Button>
+                        ) : (
+                          <Badge variant="outline" className="gap-1">
+                            <CheckCircle className="w-3 h-3" /> Decrypted - Access Logged
+                          </Badge>
+                        )}
+                      </div>
+                      
                       <div className="grid md:grid-cols-2 gap-4">
                         <div className="p-4 bg-muted rounded-lg">
                           <div className="flex items-center gap-2 mb-1">
                             <User className="w-4 h-4 text-muted-foreground" />
                             <span className="text-sm text-muted-foreground">Name</span>
                           </div>
-                          <p className="font-medium">{selectedCall.extracted_name || 'Not provided'}</p>
+                          <p className="font-medium">
+                            {decryptedPII?.extracted_name || selectedCall.extracted_name_masked || 'Not provided'}
+                          </p>
                         </div>
                         <div className="p-4 bg-muted rounded-lg">
                           <div className="flex items-center gap-2 mb-1">
@@ -483,11 +585,11 @@ export default function CallReview() {
                             <span className="text-sm text-muted-foreground">Phone</span>
                           </div>
                           <p className="font-medium">
-                            {selectedCall.extracted_phone || selectedCall.caller_phone || 'Not provided'}
+                            {decryptedPII?.extracted_phone || decryptedPII?.caller_phone || selectedCall.caller_phone_masked || 'Not provided'}
                           </p>
-                          {(selectedCall.extracted_phone || selectedCall.caller_phone) && (
+                          {decryptedPII?.extracted_phone && (
                             <Button size="sm" variant="outline" className="mt-2" asChild>
-                              <a href={`tel:${selectedCall.extracted_phone || selectedCall.caller_phone}`}>
+                              <a href={`tel:${decryptedPII.extracted_phone}`}>
                                 <Phone className="w-3 h-3 mr-1" /> Call
                               </a>
                             </Button>
@@ -498,7 +600,9 @@ export default function CallReview() {
                             <Mail className="w-4 h-4 text-muted-foreground" />
                             <span className="text-sm text-muted-foreground">Email</span>
                           </div>
-                          <p className="font-medium">{selectedCall.extracted_email || 'Not provided'}</p>
+                          <p className="font-medium">
+                            {decryptedPII?.extracted_email || selectedCall.extracted_email_masked || 'Not provided'}
+                          </p>
                         </div>
                         <div className="p-4 bg-muted rounded-lg">
                           <div className="flex items-center gap-2 mb-1">

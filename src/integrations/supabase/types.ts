@@ -14423,12 +14423,9 @@ export type Database = {
           duration_seconds: number | null
           ended_reason: string | null
           extracted_budget: string | null
-          extracted_email: string | null
           extracted_email_encrypted: string | null
           extracted_interest: string | null
-          extracted_name: string | null
           extracted_name_encrypted: string | null
-          extracted_phone: string | null
           extracted_phone_encrypted: string | null
           flag_reason: string | null
           id: string
@@ -14443,7 +14440,6 @@ export type Database = {
           reviewed_at: string | null
           reviewed_by: string | null
           summary: string | null
-          transcript: string | null
           transcript_encrypted: string | null
           updated_at: string
         }
@@ -14466,12 +14462,9 @@ export type Database = {
           duration_seconds?: number | null
           ended_reason?: string | null
           extracted_budget?: string | null
-          extracted_email?: string | null
           extracted_email_encrypted?: string | null
           extracted_interest?: string | null
-          extracted_name?: string | null
           extracted_name_encrypted?: string | null
-          extracted_phone?: string | null
           extracted_phone_encrypted?: string | null
           flag_reason?: string | null
           id?: string
@@ -14486,7 +14479,6 @@ export type Database = {
           reviewed_at?: string | null
           reviewed_by?: string | null
           summary?: string | null
-          transcript?: string | null
           transcript_encrypted?: string | null
           updated_at?: string
         }
@@ -14509,12 +14501,9 @@ export type Database = {
           duration_seconds?: number | null
           ended_reason?: string | null
           extracted_budget?: string | null
-          extracted_email?: string | null
           extracted_email_encrypted?: string | null
           extracted_interest?: string | null
-          extracted_name?: string | null
           extracted_name_encrypted?: string | null
-          extracted_phone?: string | null
           extracted_phone_encrypted?: string | null
           flag_reason?: string | null
           id?: string
@@ -14529,7 +14518,6 @@ export type Database = {
           reviewed_at?: string | null
           reviewed_by?: string | null
           summary?: string | null
-          transcript?: string | null
           transcript_encrypted?: string | null
           updated_at?: string
         }
@@ -16279,10 +16267,10 @@ export type Database = {
           duration_seconds: number | null
           ended_reason: string | null
           extracted_budget: string | null
-          extracted_email: string | null
+          extracted_email_masked: string | null
           extracted_interest: string | null
-          extracted_name: string | null
-          extracted_phone: string | null
+          extracted_name_masked: string | null
+          extracted_phone_masked: string | null
           flag_reason: string | null
           id: string | null
           is_flagged: boolean | null
@@ -16294,7 +16282,7 @@ export type Database = {
           reviewed_at: string | null
           reviewed_by: string | null
           summary: string | null
-          transcript: string | null
+          transcript_masked: string | null
           updated_at: string | null
         }
         Insert: {
@@ -16316,10 +16304,10 @@ export type Database = {
           duration_seconds?: number | null
           ended_reason?: string | null
           extracted_budget?: string | null
-          extracted_email?: never
+          extracted_email_masked?: never
           extracted_interest?: string | null
-          extracted_name?: never
-          extracted_phone?: never
+          extracted_name_masked?: never
+          extracted_phone_masked?: never
           flag_reason?: string | null
           id?: string | null
           is_flagged?: boolean | null
@@ -16331,7 +16319,7 @@ export type Database = {
           reviewed_at?: string | null
           reviewed_by?: string | null
           summary?: string | null
-          transcript?: never
+          transcript_masked?: never
           updated_at?: string | null
         }
         Update: {
@@ -16353,10 +16341,10 @@ export type Database = {
           duration_seconds?: number | null
           ended_reason?: string | null
           extracted_budget?: string | null
-          extracted_email?: never
+          extracted_email_masked?: never
           extracted_interest?: string | null
-          extracted_name?: never
-          extracted_phone?: never
+          extracted_name_masked?: never
+          extracted_phone_masked?: never
           flag_reason?: string | null
           id?: string | null
           is_flagged?: boolean | null
@@ -16368,7 +16356,7 @@ export type Database = {
           reviewed_at?: string | null
           reviewed_by?: string | null
           summary?: string | null
-          transcript?: never
+          transcript_masked?: never
           updated_at?: string | null
         }
         Relationships: [
