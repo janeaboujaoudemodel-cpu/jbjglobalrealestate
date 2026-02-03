@@ -8,16 +8,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { PhoneInput, getPhoneValidation } from "@/components/ui/phone-input";
 import { SearchableSelect } from "@/components/ui/searchable-select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
-import { getCountryList, getLanguageList } from "@/constants/localeOptions";
+import { getLanguageList } from "@/constants/localeOptions";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
-import { MessageCircle, Phone, Send, Loader2, CheckCircle } from "lucide-react";
+import { MessageCircle, Phone, Send, Loader2, CheckCircle, Clock, Calendar } from "lucide-react";
 
 const ctaFormSchema = z.object({
   fullName: z.string().min(2, "Full name is required").max(100),
-  email: z.string().email("Please enter a valid email address"),
+  email: z.string().email("Please enter a valid Email address"),
   phone: z.string()
     .min(1, "Phone number is required")
     .refine((val) => {
@@ -27,6 +28,9 @@ const ctaFormSchema = z.object({
       message: getPhoneValidation(val).message
     })),
   language: z.string().min(1, "Please select your preferred language"),
+  preferredTime: z.string().optional(),
+  contactMethod: z.string().optional(),
+  preferredDate: z.string().optional(),
   message: z.string().max(1000).optional(),
 });
 
@@ -54,6 +58,9 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
       email: "",
       phone: "",
       language: "",
+      preferredTime: "",
+      contactMethod: "",
+      preferredDate: "",
       message: "",
     },
   });
@@ -128,17 +135,17 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
           </div>
 
           {/* Right: Form - FIXED: Champagne gradient instead of white */}
-          <div className="bg-gradient-to-br from-champagne via-champagne-light to-champagne border-2 border-gold rounded-xl p-6 md:p-8 shadow-lg">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl p-6 md:p-8 shadow-lg">
             {isSuccess ? (
               <div className="text-center py-8">
                 <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
                   <CheckCircle className="w-8 h-8 text-green-600" />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground mb-2">Thank You!</h3>
-                <p className="text-muted-foreground">We'll call you back shortly.</p>
+                <h3 className="text-xl font-semibold text-black mb-2">Thank You!</h3>
+                <p className="text-zinc-600">We'll call you back shortly.</p>
                 <Button 
                   onClick={() => setIsSuccess(false)}
-                  variant="outline"
+                  variant="secondary"
                   className="mt-4"
                 >
                   Submit Another Request
@@ -152,12 +159,11 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                     name="fullName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-foreground">Full Name *</FormLabel>
+                        <FormLabel className="text-black font-medium">Full Name *</FormLabel>
                         <FormControl>
                           <Input 
                             placeholder="Your full name" 
                             {...field} 
-                            className="bg-card border-gold/30 focus:border-gold"
                           />
                         </FormControl>
                         <FormMessage />
@@ -170,13 +176,12 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-foreground">Email *</FormLabel>
+                        <FormLabel className="text-black font-medium">Email *</FormLabel>
                         <FormControl>
                           <Input 
                             type="email" 
                             placeholder="your@email.com" 
                             {...field}
-                            className="bg-card border-gold/30 focus:border-gold"
                           />
                         </FormControl>
                         <FormMessage />
@@ -189,13 +194,12 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                     name="phone"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-foreground">Phone *</FormLabel>
+                        <FormLabel className="text-black font-medium">Phone *</FormLabel>
                         <FormControl>
                           <PhoneInput
                             value={field.value}
                             onChange={field.onChange}
                             placeholder="Your phone number"
-                            className="bg-card"
                           />
                         </FormControl>
                         <FormMessage />
@@ -208,7 +212,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                     name="language"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-foreground">Preferred Language *</FormLabel>
+                        <FormLabel className="text-black font-medium">Preferred Language *</FormLabel>
                         <FormControl>
                           <SearchableSelect
                             options={languageOptions}
@@ -222,17 +226,73 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                     )}
                   />
 
+                  {/* Preferred Time to Call */}
+                  <FormField
+                    control={form.control}
+                    name="preferredTime"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-black font-medium flex items-center gap-1.5">
+                          <Clock className="w-3.5 h-3.5 text-gold" />
+                          Preferred Time to Call
+                        </FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select time slot" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="morning">Morning (9AM - 12PM)</SelectItem>
+                            <SelectItem value="afternoon">Afternoon (12PM - 5PM)</SelectItem>
+                            <SelectItem value="evening">Evening (5PM - 8PM)</SelectItem>
+                            <SelectItem value="anytime">Anytime</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Preferred Contact Method */}
+                  <FormField
+                    control={form.control}
+                    name="contactMethod"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-black font-medium flex items-center gap-1.5">
+                          <MessageCircle className="w-3.5 h-3.5 text-gold" />
+                          Preferred Contact Method
+                        </FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="How should we contact you?" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="phone">Phone Call</SelectItem>
+                            <SelectItem value="whatsapp">WhatsApp</SelectItem>
+                            <SelectItem value="email">Email</SelectItem>
+                            <SelectItem value="zoom">Video Call (Zoom)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                   <FormField
                     control={form.control}
                     name="message"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-foreground">Message (Optional)</FormLabel>
+                        <FormLabel className="text-black font-medium">Message (Optional)</FormLabel>
                         <FormControl>
                           <Textarea 
                             placeholder="Tell us about your requirements..."
                             {...field}
-                            className="bg-card border-gold/30 focus:border-gold min-h-[80px]"
+                            className="min-h-[80px]"
                           />
                         </FormControl>
                         <FormMessage />

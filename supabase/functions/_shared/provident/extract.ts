@@ -113,31 +113,63 @@ function extractBasicFields(markdown: string) {
   const locMatch = cleanMd.match(/(?:at|in)\s+([A-Z][A-Za-z\s,\-]+?)(?:\s*\||$|\n)/i);
   const location = locMatch?.[1]?.trim() || null;
 
-  // Bedrooms
-  const bedMatch = cleanMd.match(/((?:Studio|[\d,&\s\-]+)\s*(?:BR|Bedrooms?|Bedroom))/i);
-  const bedroomsRaw = bedMatch?.[1]?.trim() || null;
+  // Bedrooms - FIXED: Multiple fallback patterns for bedroom extraction
   let bedroomsMin: number | null = null;
   let bedroomsMax: number | null = null;
-  if (bedroomsRaw) {
-    const nums = bedroomsRaw.match(/\d+/g);
-    if (nums?.length) {
-      bedroomsMin = parseInt(nums[0]);
-      bedroomsMax = parseInt(nums[nums.length - 1] || nums[0]);
+  
+  // Pattern 1: "1-3 Bedrooms" or "1 - 3 BR"
+  const bedRangeMatch = cleanMd.match(/(\d+)\s*[-–—]\s*(\d+)\s*(?:BR|Bedrooms?|Bedroom)/i);
+  if (bedRangeMatch) {
+    bedroomsMin = parseInt(bedRangeMatch[1]);
+    bedroomsMax = parseInt(bedRangeMatch[2]);
+  }
+  
+  // Pattern 2: "Studio, 1, 2, 3 BR" or "Studio, 1 & 2 Bedrooms"
+  if (!bedroomsMin) {
+    const bedListMatch = cleanMd.match(/((?:Studio(?:\s*,|\s+&|\s+and)?\s*)?(?:\d+(?:\s*,|\s*&|\s*and)?\s*)+)\s*(?:BR|Bedrooms?|Bedroom)/i);
+    if (bedListMatch) {
+      const bedroomsRaw = bedListMatch[1].trim();
+      const nums = bedroomsRaw.match(/\d+/g);
+      if (nums?.length) {
+        bedroomsMin = parseInt(nums[0]);
+        bedroomsMax = parseInt(nums[nums.length - 1] || nums[0]);
+      } else if (/studio/i.test(bedroomsRaw)) {
+        // Studio only
+        bedroomsMin = 0;
+        bedroomsMax = 0;
+      }
     }
+  }
+  
+  // Pattern 3: Simple "2 Bedrooms" or "3BR"
+  if (!bedroomsMin) {
+    const bedSimpleMatch = cleanMd.match(/(\d+)\s*(?:BR|Bedrooms?|Bedroom)/i);
+    if (bedSimpleMatch) {
+      bedroomsMin = parseInt(bedSimpleMatch[1]);
+      bedroomsMax = bedroomsMin;
+    }
+  }
+  
+  // Pattern 4: "Studio" only
+  if (!bedroomsMin && /\bstudio\b/i.test(cleanMd)) {
+    bedroomsMin = 0;
+    bedroomsMax = 0;
   }
 
   // Size extraction - patterns like "500 - 2,500 sqft" or "from 800 sqft"
+  // FIXED: Added support for "774 sq. ft. - 847 sq. ft." format with periods
   let sizeMin: number | null = null;
   let sizeMax: number | null = null;
   
-  // Try range pattern first: "500 - 2,500 sqft" or "500 to 2500 sq ft"
-  const sizeRangeMatch = cleanMd.match(/([\d,]+)\s*(?:to|-|–|—)\s*([\d,]+)\s*(?:sqft|sq\.?\s*ft|square feet)/i);
+  // Try range pattern first: "500 - 2,500 sqft" or "774 sq. ft. - 847 sq. ft."
+  const sizeRangeMatch = cleanMd.match(/([\d,]+)\s*(?:sqft|sq\.?\s*ft\.?)\s*(?:to|-|–|—)\s*([\d,]+)\s*(?:sqft|sq\.?\s*ft\.?)/i) ||
+                         cleanMd.match(/([\d,]+)\s*(?:to|-|–|—)\s*([\d,]+)\s*(?:sqft|sq\.?\s*ft\.?|square feet)/i);
   if (sizeRangeMatch) {
     sizeMin = parseInt(sizeRangeMatch[1].replace(/,/g, ""));
     sizeMax = parseInt(sizeRangeMatch[2].replace(/,/g, ""));
   } else {
-    // Try single value: "from 800 sqft" or just "800 sqft"
-    const sizeSingleMatch = cleanMd.match(/(?:from\s+)?([\d,]+)\s*(?:sqft|sq\.?\s*ft|square feet)/i);
+    // Try single value: "from 800 sqft" or just "800 sqft" or "800 sq. ft."
+    const sizeSingleMatch = cleanMd.match(/(?:from\s+)?([\d,]+)\s*(?:sqft|sq\.?\s*ft\.?|square feet)/i);
     if (sizeSingleMatch) {
       sizeMin = parseInt(sizeSingleMatch[1].replace(/,/g, ""));
       sizeMax = sizeMin;
@@ -281,21 +313,33 @@ export function extractProvidentProjectFromScrape(args: {
     }
   }
 
-  // USP image: find first cloudfront image within 800 characters after USP heading
-  // This ensures we get the actual USP section image, not a random gallery image
+  // USP image: find the ACTUAL USP section image (not floor plan diagrams)
+  // FIXED: Look for image BEFORE the bullet list, and exclude floor plan images
   let uspImageUrl: string | null = null;
-  const uspSectionMatch = markdown.match(/Unique Selling Points[\s\S]{0,800}/i);
+  const uspSectionMatch = markdown.match(/Unique Selling Points[\s\S]{0,1200}/i);
   if (uspSectionMatch) {
-    // Look for cloudfront image URL within the USP section only
-    const cloudImgMatch = uspSectionMatch[0].match(/(https:\/\/[^\s"'\)]+cloudfront[^\s"'\)]+\.(?:jpg|jpeg|png|webp))/i);
-    if (cloudImgMatch?.[1]) {
-      uspImageUrl = normalizeCloudfrontImage(cloudImgMatch[1]);
-    } else {
-      // Fallback: look for any markdown image in the section
-      const mdImgMatch = uspSectionMatch[0].match(/!\[[^\]]*\]\(([^)]+)\)/);
-      if (mdImgMatch?.[1]) {
-        uspImageUrl = normalizeCloudfrontImage(mdImgMatch[1]);
-      }
+    // Find all images in the USP section
+    const imgMatches = uspSectionMatch[0].matchAll(/!\[[^\]]*\]\(([^)]+)\)|(?:https:\/\/[^\s"'\)]+cloudfront[^\s"'\)]+\.(?:jpg|jpeg|png|webp))/gi);
+    for (const m of imgMatches) {
+      const imgUrl = m[1] || m[0];
+      if (!imgUrl) continue;
+      // CRITICAL: Skip floor plan diagrams and other non-USP images
+      if (/floor[-_]?plan|floorplan|layout|diagram|pdf/i.test(imgUrl)) continue;
+      if (/brochure|payment|document/i.test(imgUrl)) continue;
+      // Found a valid USP image
+      uspImageUrl = normalizeCloudfrontImage(imgUrl);
+      break;
+    }
+  }
+  
+  // Fallback: If no USP image found in section, try to get from gallery (first non-floor-plan image)
+  if (!uspImageUrl && args.links?.length) {
+    for (const link of args.links) {
+      if (!/\.(jpg|jpeg|png|webp)(\?|$)/i.test(link)) continue;
+      if (/floor[-_]?plan|floorplan|layout|diagram|brochure|payment/i.test(link)) continue;
+      if (EXCLUDE_IMAGE_PATTERNS.test(link)) continue;
+      uspImageUrl = normalizeCloudfrontImage(link);
+      break;
     }
   }
 
@@ -325,7 +369,29 @@ export function extractProvidentProjectFromScrape(args: {
   }
 
   // Floor plan types - ONLY extract from Floorplans section, never from Location
+  // FIXED: Filter out location distances, image links, and non-floor-plan content
   const floorPlanTypes: Array<{ label: string; pdfUrl?: string }> = [];
+  
+  // Valid floor plan type patterns (must match bedroom types or unit configurations)
+  const VALID_FLOOR_PLAN_PATTERNS = [
+    /^\d+\s*(?:BR|Bed(?:room)?s?)/i,
+    /^(?:studio|townhouse|villa|penthouse|duplex|simplex|loft|mansion)/i,
+    /^Type\s*[A-Z0-9]+/i,
+    /^Unit\s*[A-Z0-9]+/i,
+  ];
+  
+  const isValidFloorPlanLabel = (label: string): boolean => {
+    const trimmed = label.trim();
+    // Reject if it looks like location data
+    if (/\d+\s*(?:minute|min)/i.test(trimmed)) return false;
+    if (/^!\[/i.test(trimmed)) return false; // Image markdown
+    if (/^###?\s*/i.test(trimmed)) return false; // Headings
+    if (/^(?:Location|Get more|Download|View All|Find out)/i.test(trimmed)) return false;
+    if (/[–—-]\s*(?:Dubai|Airport|Mall|Beach|Marina|School|Hospital)/i.test(trimmed)) return false;
+    // Must match known floor plan patterns
+    return VALID_FLOOR_PLAN_PATTERNS.some(p => p.test(trimmed)) || 
+           (trimmed.length > 2 && trimmed.length < 50 && !trimmed.includes("–"));
+  };
   
   // Try multiple heading patterns for floor plans section
   let fpSection = extractSection(markdown, "Floorplans");
@@ -341,15 +407,18 @@ export function extractProvidentProjectFromScrape(args: {
   }
   
   if (fpSection) {
-    const lines = fpSection.split("\n").map((l) => stripMarkdownLinks(l).trim()).filter(Boolean);
+    // Stop at Location heading or image markdown
+    const cleanSection = fpSection.split(/\n(?:##|###)\s*Location/i)[0]
+                                   .split(/\n!\[/)[0]
+                                   .trim();
+    
+    const lines = cleanSection.split("\n").map((l) => stripMarkdownLinks(l).trim()).filter(Boolean);
     for (const line of lines) {
       // Skip download links and CTAs
       if (/^Download/i.test(line)) continue;
       if (/^View All/i.test(line)) continue;
       if (/^Find out more/i.test(line)) continue;
-      // Skip lines that look like location distances (contain "Minutes" or "–")
-      if (/\d+\s*Minutes?\s*[–—\-]/i.test(line)) continue;
-      if (line.length > 2 && line.length < 120) {
+      if (isValidFloorPlanLabel(line)) {
         floorPlanTypes.push({ label: line });
       }
     }

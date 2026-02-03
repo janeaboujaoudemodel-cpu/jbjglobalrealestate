@@ -92,7 +92,7 @@ const MIN_REASONABLE_PRICE_AED = 50_000;
 
 const MAPS_API_KEY = "AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8";
 
-// Sticky sub-nav tabs config
+// Sticky sub-nav tabs config - FIXED: Added Brochure tab
 const SUB_NAV_TABS = [
   { id: "details", label: "Details", icon: FileText },
   { id: "gallery", label: "Gallery", icon: ImageIcon },
@@ -100,6 +100,7 @@ const SUB_NAV_TABS = [
   { id: "floor-plans", label: "Floor Plans", icon: Layers },
   { id: "amenities", label: "Amenities", icon: Building2 },
   { id: "location", label: "Location", icon: MapPin },
+  { id: "brochure", label: "Brochure", icon: Download },
   { id: "payment", label: "Payment Plan", icon: CreditCard },
   { id: "faq", label: "Useful info", icon: HelpCircle },
   { id: "ai", label: "AI Analyzer", icon: Sparkles },
@@ -171,6 +172,7 @@ export default function ProjectDetailLayout({
     const hasAmenities = (project.amenities?.length ?? 0) > 0;
     const hasPayment = !!project.payment_plan || paymentPlanDocs.length > 0 || !!project.payment_breakdown;
     const hasUsefulInfo = (project.faqs?.length ?? 0) > 0;
+    const hasBrochure = brochureDocs.length > 0;
 
     return SUB_NAV_TABS.filter((t) => {
       if (t.id === "gallery") return hasGallery;
@@ -179,9 +181,10 @@ export default function ProjectDetailLayout({
       if (t.id === "amenities") return hasAmenities;
       if (t.id === "payment") return hasPayment;
       if (t.id === "faq") return hasUsefulInfo;
+      if (t.id === "brochure") return hasBrochure;
       return true;
     });
-  }, [floorPlanDocs.length, images.length, paymentPlanDocs.length, project.amenities, project.faqs, project.payment_breakdown, project.payment_plan, project.floor_plan_types, project.usp_bullets]);
+  }, [brochureDocs.length, floorPlanDocs.length, images.length, paymentPlanDocs.length, project.amenities, project.faqs, project.payment_breakdown, project.payment_plan, project.floor_plan_types, project.usp_bullets]);
 
   const whatsappMessage = `Hi, I'm interested in ${project.name}${project.location ? ` at ${project.location}` : ""}. Please share more details.`;
 
@@ -669,17 +672,51 @@ export default function ProjectDetailLayout({
             </div>
           </div>
 
-          {/* BROCHURE (full width) */}
-          <div ref={brochureRef} id="brochure" className="jj-card-inner flex flex-col items-center justify-center py-10 mb-8 scroll-mt-40">
-            <h3 className="text-h3-sm font-medium text-foreground mb-8 text-center">Project Brochure</h3>
-            <PremiumBrochureCard
-              projectName={project.name}
-              brochureUrl={brochurePrimary?.url}
-              projectImageUrl={project.images?.[0]?.url || undefined}
-              onDownloadClick={() => handleDocumentDownload("brochure", brochurePrimary?.url)}
-              isLocked={!isLeadCaptured && !!brochurePrimary}
-            />
+          {/* BROCHURE - Full width two-column layout */}
+          {brochurePrimary && (
+          <div ref={brochureRef} id="brochure" className="mb-12 scroll-mt-40">
+            <div className="jj-card-inner">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                {/* Left: Description */}
+                <div>
+                  <h3 className="text-h3-sm font-medium text-foreground mb-4">Project Brochure</h3>
+                  <p className="text-muted-foreground mb-4 leading-relaxed">
+                    Download the complete brochure for {project.name} to explore detailed floor plans, 
+                    pricing, payment options, and lifestyle amenities. Perfect for offline viewing and sharing.
+                  </p>
+                  <ul className="space-y-2 text-sm text-muted-foreground mb-6">
+                    <li className="flex items-center gap-2">
+                      <Star className="w-4 h-4 text-gold" /> Full floor plan layouts
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Star className="w-4 h-4 text-gold" /> Detailed specifications
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Star className="w-4 h-4 text-gold" /> Payment plan breakdown
+                    </li>
+                  </ul>
+                  <Button 
+                    variant="primary" 
+                    onClick={() => handleDocumentDownload("brochure", brochurePrimary?.url)}
+                  >
+                    <Download className="w-4 h-4" />
+                    Download Brochure
+                  </Button>
+                </div>
+                {/* Right: Brochure card */}
+                <div className="flex justify-center">
+                  <PremiumBrochureCard
+                    projectName={project.name}
+                    brochureUrl={brochurePrimary?.url}
+                    projectImageUrl={project.images?.[0]?.url || undefined}
+                    onDownloadClick={() => handleDocumentDownload("brochure", brochurePrimary?.url)}
+                    isLocked={!isLeadCaptured && !!brochurePrimary}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
+          )}
 
            {/* PAYMENT PLAN (full width, separate section) */}
            {(!!project.payment_plan || paymentPlanDocs.length > 0 || !!project.payment_breakdown) && (
