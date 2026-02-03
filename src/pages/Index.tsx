@@ -22,7 +22,7 @@ import WhyChooseUs from "@/components/home/WhyChooseUs";
 import AreasWeCover from "@/components/home/AreasWeCover";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import CTABand from "@/components/home/CTABand";
-import SearchModule from "@/components/home/SearchModule";
+import HeroSearchBar from "@/components/home/HeroSearchBar";
 
 import JBJPodcastSection from "@/components/home/JBJPodcastSection";
 import { PodcastVisibilityGate } from "@/components/home/PodcastVisibilityGate";
@@ -65,6 +65,7 @@ const Index = () => {
       
       {/* Broker Onboarding Banner - Only for brokers */}
       {isBroker && <BrokerOnboardingBanner />}
+      
       {/* HERO SECTION - LUXURY CINEMATIC VIDEO - MUST BE 100vh */}
       <div className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         {/* Video Background - Luxury Dubai Drone Footage */}
@@ -112,51 +113,61 @@ const Index = () => {
           transition={{ duration: 1.5, delay: 0.7 }}
         />
         
-        {/* Content - Centered for video visibility */}
+        {/* Content - Centered with Search Bar on Hero */}
         <motion.div 
           className="relative z-10 w-full flex flex-col items-center justify-center text-center px-4"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
-          <div className="max-w-3xl mx-auto pt-20 md:pt-24">
-            {/* H1 - Clean 2-line layout */}
-            <motion.h1 
-              variants={fadeInUp} 
-              className="text-white text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1] mb-3 md:mb-4 px-2 sm:px-0"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              <span className="block whitespace-nowrap">
-                {t('hero.buy')}<span className="inline-block w-1 h-1 md:w-1.5 md:h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
-                {t('hero.sell')}<span className="inline-block w-1 h-1 md:w-1.5 md:h-1.5 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
-                {t('hero.rent')}
-              </span>
-              {/* Delivered with Intelligence - Subtle elegant gold */}
-              <span 
-                className="block whitespace-nowrap text-sm sm:text-base md:text-xl lg:text-2xl mt-1.5 uppercase tracking-[0.2em] font-medium"
-                style={{ 
-                  background: 'linear-gradient(90deg, #C8A766 0%, #E8D4A8 50%, #C8A766 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  filter: 'drop-shadow(0 1px 4px rgba(200,167,102,0.4))',
-                }}
-              >
-                {t('hero.deliveredWith')}
-              </span>
-            </motion.h1>
-          
-            {/* Subline - Clean */}
+          <div className="max-w-4xl mx-auto pt-16 md:pt-20">
+            {/* Licensed Real Estate Brokerage - NOW FIRST (larger) */}
             <motion.p 
               variants={fadeInUp}
-              className="text-zinc-300 text-[10px] md:text-xs lg:text-sm max-w-md mx-auto leading-relaxed mb-4 md:mb-5"
+              className="text-zinc-300 text-xs sm:text-sm md:text-base uppercase tracking-[0.15em] md:tracking-[0.2em] font-medium mb-2 md:mb-3"
             >
               {t('hero.subtitle')}
             </motion.p>
 
-            {/* Partner Services - Clickable links before buttons */}
+            {/* Buy · Sell · Rent - NOW SMALLER AND BELOW */}
+            <motion.h1 
+              variants={fadeInUp} 
+              className="text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold tracking-tight leading-[1.1] mb-2 md:mb-3 px-2 sm:px-0"
+              style={{ fontFamily: "Poppins, sans-serif" }}
+            >
+              <span className="block whitespace-nowrap">
+                {t('hero.buy')}<span className="inline-block w-1 h-1 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+                {t('hero.sell')}<span className="inline-block w-1 h-1 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+                {t('hero.rent')}
+              </span>
+            </motion.h1>
+          
+            {/* Delivered with Intelligence - Subtle elegant gold */}
+            <motion.span 
+              variants={fadeInUp}
+              className="block whitespace-nowrap text-xs sm:text-sm md:text-base lg:text-lg mb-4 md:mb-6 uppercase tracking-[0.15em] md:tracking-[0.2em] font-medium"
+              style={{ 
+                background: 'linear-gradient(90deg, #C8A766 0%, #E8D4A8 50%, #C8A766 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                filter: 'drop-shadow(0 1px 4px rgba(200,167,102,0.4))',
+              }}
+            >
+              {t('hero.deliveredWith')}
+            </motion.span>
+
+            {/* SEARCH BAR - Floating on Hero, No Background */}
+            <motion.div 
+              variants={fadeInUp}
+              className="w-full max-w-5xl mx-auto mb-4 md:mb-6"
+            >
+              <HeroSearchBar />
+            </motion.div>
+
+            {/* Partner Services - Clickable links */}
             <motion.p
               variants={fadeInUp}
-              className="text-[9px] sm:text-[10px] md:text-[11px] tracking-[0.12em] uppercase mb-5 md:mb-6"
+              className="text-[9px] sm:text-[10px] md:text-[11px] tracking-[0.12em] uppercase mb-4 md:mb-5"
             >
               <Link to="/mortgage-calculator" className="text-gold hover:text-gold-light transition-colors cursor-pointer font-medium">Mortgage</Link>
               <span className="mx-1.5 sm:mx-2 text-gold/60">·</span>
@@ -174,7 +185,7 @@ const Index = () => {
             {/* Hero CTA Buttons - Premium, consistent globally */}
             <motion.div 
               variants={fadeInUp}
-              className="flex flex-col sm:flex-row items-center justify-center gap-4"
+              className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4"
             >
               <PremiumHeroButton href="/properties" size="lg">
                 {t('hero.explore')}
@@ -186,14 +197,14 @@ const Index = () => {
           </div>
         </motion.div>
         
-        {/* Scroll indicator - Animated - Clicks to scroll to trust bar */}
+        {/* Scroll indicator - Animated - Clicks to scroll to developer partners */}
         <motion.button 
           className="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-2 z-10 cursor-pointer"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2, duration: 1 }}
           onClick={() => {
-            document.getElementById('trust-bar')?.scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('developer-partners')?.scrollIntoView({ behavior: 'smooth' });
           }}
         >
           <span 
@@ -213,20 +224,15 @@ const Index = () => {
         </motion.button>
       </div>
 
-      {/* TRUST BAR - Master Blueprint: Section 2 */}
+      {/* DEVELOPER PARTNERS MARQUEE - MOVED UP: Directly under hero */}
+      <div id="developer-partners">
+        <DeveloperPartnersMarquee />
+      </div>
+
+      {/* TRUST BAR (4 Cards) - MOVED DOWN: Now after Developer Partners */}
       <div id="trust-bar" className="bg-black py-4 border-y border-gold/20">
         <TrustBar />
       </div>
-
-      {/* DEVELOPER PARTNERS MARQUEE */}
-      <DeveloperPartnersMarquee />
-
-      {/* SEARCH MODULE - Full Width - Master Blueprint: Hero Search */}
-      <section className="py-8 md:py-12 bg-black">
-        <div className="max-w-7xl mx-auto px-4">
-          <SearchModule variant="compact" />
-        </div>
-      </section>
 
       {/* FEATURED LISTINGS - Master Blueprint: Section 3 (8 cards, Buy/Rent tabs) */}
       <FeaturedListings />
@@ -234,7 +240,7 @@ const Index = () => {
       {/* DIVIDER */}
       <SectionDivider />
 
-      {/* FIND YOUR STARTING POINT - Clear Entry Points with Champagne Layer */}
+      {/* FIND YOUR STARTING POINT - Clear Entry Points with Champagne Layer - ALL 11 CARDS RESTORED */}
       <section className="py-8 md:py-16 bg-black">
         <div className="jj-layer-2">
           <div className="text-center mb-6 md:mb-10">
@@ -244,8 +250,9 @@ const Index = () => {
             </span>
           </div>
 
-          {/* Audience Entry Cards - Restored full set with 11 cards */}
+          {/* Audience Entry Cards - Full set with 11 cards */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-11 gap-2 md:gap-3 w-full mb-6 md:mb-10">
+            {/* Card 1: Buyers */}
             <Link to="/buyer-guide" className="group">
               <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
@@ -256,6 +263,8 @@ const Index = () => {
                 </div>
               </div>
             </Link>
+            
+            {/* Card 2: Sellers */}
             <Link to="/seller-guide" className="group">
               <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
@@ -266,6 +275,8 @@ const Index = () => {
                 </div>
               </div>
             </Link>
+            
+            {/* Card 3: Rentals */}
             <Link to="/rent-guide" className="group">
               <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
@@ -276,6 +287,8 @@ const Index = () => {
                 </div>
               </div>
             </Link>
+            
+            {/* Card 4: Landlords */}
             <Link to="/landlord-guide" className="group">
               <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
@@ -286,6 +299,8 @@ const Index = () => {
                 </div>
               </div>
             </Link>
+            
+            {/* Card 5: Tenants */}
             <Link to="/tenant-guide" className="group">
               <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
@@ -296,6 +311,8 @@ const Index = () => {
                 </div>
               </div>
             </Link>
+            
+            {/* Card 6: Investors */}
             <Link to="/ai-hub" className="group">
               <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
@@ -306,6 +323,8 @@ const Index = () => {
                 </div>
               </div>
             </Link>
+            
+            {/* Card 7: Visitors */}
             <Link to="/quiz" className="group">
               <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
@@ -316,6 +335,8 @@ const Index = () => {
                 </div>
               </div>
             </Link>
+            
+            {/* Card 8: Partners */}
             <Link to="/partners" className="group">
               <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
@@ -326,6 +347,8 @@ const Index = () => {
                 </div>
               </div>
             </Link>
+            
+            {/* Card 9: Golden Visa */}
             <Link to="/guides/golden-visa-uae" className="group">
               <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
@@ -336,6 +359,8 @@ const Index = () => {
                 </div>
               </div>
             </Link>
+            
+            {/* Card 10: Referral */}
             <Link to="/referral" className="group">
               <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
@@ -346,6 +371,8 @@ const Index = () => {
                 </div>
               </div>
             </Link>
+            
+            {/* Card 11: Careers */}
             <Link to="/join" className="group">
               <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
                 <div className="relative z-10">
@@ -574,54 +601,38 @@ const Index = () => {
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
                   <button 
                     onClick={() => setIsInquiryOpen(true)}
-                    className="relative inline-flex items-center justify-center gap-2 px-8 md:px-10 py-4 md:py-5 text-sm md:text-base font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] transform active:scale-95 group"
-                    style={{
-                      background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
-                      boxShadow: `
-                        0 10px 30px rgba(200,167,102,0.4),
-                        0 6px 15px rgba(0,0,0,0.2),
-                        inset 0 2px 4px rgba(255,255,255,0.9),
-                        inset 0 -2px 4px rgba(200,167,102,0.2),
-                        0 0 20px rgba(200,167,102,0.3)
-                      `,
-                    }}
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gold hover:bg-gold-dark text-black font-bold text-base rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
                   >
-                    <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                    <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-                    <span className="relative flex items-center justify-center gap-1">
-                      <Calendar className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
-                      <span className="text-black group-hover:text-gold transition-colors">Book</span>
-                      <span className="text-gold group-hover:text-black transition-colors">Consultation</span>
-                      <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
-                    </span>
+                    <Sparkles className="w-5 h-5" />
+                    Book a Consultation
+                    <ArrowUpRight className="w-5 h-5" />
                   </button>
-                  <Link to="/properties">
-                    <button 
-                      className="inline-flex items-center justify-center gap-2 px-8 md:px-10 py-4 md:py-5 text-sm md:text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white group"
-                    >
-                      Browse Properties
-                      <ArrowUpRight className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                    </button>
-                  </Link>
+                  <a 
+                    href={`https://wa.me/${CONTACT_INFO.whatsappNumber}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#25D366] hover:bg-[#1da851] text-white font-bold text-base rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
+                  >
+                    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                    WhatsApp Us
+                  </a>
                 </div>
               </motion.div>
         </div>
       </section>
 
-      {/* Support Ticket Section */}
-      <div className="pb-10 md:pb-16">
-        <SupportTicketBox />
-      </div>
+      {/* SUPPORT TICKET BOX - Always visible */}
+      <SupportTicketBox />
 
-
-      {/* Footer */}
+      {/* FOOTER */}
       <Footer />
 
-      {/* Inquiry Form Modal */}
+      {/* Inquiry Modal */}
       <InquiryFormModal 
         isOpen={isInquiryOpen} 
         onClose={() => setIsInquiryOpen(false)} 
-        source="homepage"
       />
     </section>
   );
