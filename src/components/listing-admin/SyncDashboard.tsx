@@ -167,7 +167,23 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   const [bulkTotals, setBulkTotals] = useState({ processed: 0, success: 0, errors: 0 });
 
   // CRITICAL: Credits exhausted flag - shown as a banner and disables extraction
-  const [creditsExhausted, setCreditsExhausted] = useState(false);
+  // Persisted so we don't keep re-trying credit-burning calls after navigation/refresh.
+  const [creditsExhausted, setCreditsExhausted] = useState(() => {
+    try {
+      return sessionStorage.getItem("firecrawl_credits_exhausted") === "true";
+    } catch {
+      return false;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      if (creditsExhausted) sessionStorage.setItem("firecrawl_credits_exhausted", "true");
+      else sessionStorage.removeItem("firecrawl_credits_exhausted");
+    } catch {
+      /* ignore */
+    }
+  }, [creditsExhausted]);
 
   // Fix All runner - both pending extraction AND approved project image repairs
   const [isFixAllRunning, setIsFixAllRunning] = useState(() => {
@@ -811,9 +827,9 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     if (isSyncing || isRebuildingQueue || isBulkExtractRunning) return;
 
     const confirmed = window.confirm(
-      "This will:\n" +
-        "1) Delete ALL pending/rejected queue entries (keeps approved projects)\n" +
-        "2) Rebuild the queue by discovering ALL project URLs\n\n" +
+      "Rebuild Queue (non-destructive)\n\n" +
+        "This will scan the 89 listing pages and ADD any missing items to the queue.\n" +
+        "It will NOT delete your existing queue entries.\n\n" +
         "Continue?"
     );
     if (!confirmed) return;
@@ -831,109 +847,62 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
         return count ?? 0;
       };
 
-      // 1) Hard reset (fast, single backend call)
-      const { data: resetData, error: resetErr } = await supabase.functions.invoke("reset-project-import-queue", {
-        body: { preserveApproved: true },
-      });
-      if (resetErr) throw resetErr;
-      toast.success(`Queue cleared (${resetData?.deleted ?? 0} removed)`);
+      // CREDIT-SAFE DISCOVERY ONLY:
+      // We intentionally avoid Firecrawl MAP/links here so clicking “Rebuild Queue” never burns credits.
+      let pending = await getPendingCount();
+      toast.info(
+        pending > 0
+          ? `Rebuilding queue: adding missing items (currently ${pending.toLocaleString()} pending)…`
+          : "Rebuilding queue: discovering listings…"
+      );
 
-      // 2) Fast MAP discovery ONLY (no heavy fallback inside one request)
-      // This avoids browser "Failed to fetch" / timeouts.
-      const { data: mapData, error: mapErr } = await supabase.functions.invoke("discover-all-projects", {
-        body: {
-          expectedTotal: TARGET,
-          // Don't attempt full 89-page fallback inside one request; the UI will orchestrate batches.
-          disableAutoFallback: true,
-          skipPostInsertStats: true,
-        },
-      });
-      
-      // CRITICAL: Check for credits exhausted - can come from either error OR data
-      // supabase.functions.invoke returns 4xx responses in data, not as errors
-      const creditsExhaustedInData = mapData?.credits_exhausted === true;
-      const creditsExhaustedInError = mapErr?.message?.includes("402") || 
-                                       mapErr?.message?.toLowerCase().includes("credit");
-      const creditsExhaustedInResponse = mapData?.success === false && 
-                                          (mapData?.error?.includes("402") || 
-                                           mapData?.error?.toLowerCase().includes("credit") ||
-                                           mapData?.error?.toLowerCase().includes("exhausted"));
-      
-      if (creditsExhaustedInData || creditsExhaustedInError || creditsExhaustedInResponse) {
-        setCreditsExhausted(true);
-        toast.error("Firecrawl credits exhausted. Please top up at firecrawl.dev/pricing", {
-          duration: 10000,
-          action: {
-            label: "Get Credits",
-            onClick: () => window.open("https://firecrawl.dev/pricing", "_blank"),
+      const CHUNK = 10;
+      let stuckCounter = 0;
+      let lastPending = pending;
+
+      for (let start = 1; start <= 89 && pending < TARGET; start += CHUNK) {
+        const end = Math.min(89, start + CHUNK - 1);
+        const { data: rangeData, error: rangeErr } = await supabase.functions.invoke("discover-all-projects", {
+          body: {
+            expectedTotal: TARGET,
+            skipMap: true,
+            listingPageStart: start,
+            listingPageEnd: end,
+            listingUseFirecrawl: false,
+            disableAutoFallback: true,
+            skipPostInsertStats: true,
           },
         });
-        setIsRebuildingQueue(false);
-        await loadProjectCount();
-        return;
-      }
-      
-      // Handle other errors
-      if (mapErr) {
-        throw mapErr;
-      }
-      
-      setRebuildResult(mapData || null);
 
-      // 3) If still short, run listing-page discovery in small page ranges.
-      // Pass A: direct HTML (fast).
-      let pending = await getPendingCount();
-      if (pending < TARGET) {
-        toast.info(`Discovery pass 1: filling missing ${TARGET - pending}…`);
-
-        const CHUNK = 10;
-        for (let start = 1; start <= 89 && pending < TARGET; start += CHUNK) {
-          const end = Math.min(89, start + CHUNK - 1);
-          const { error: rangeErr } = await supabase.functions.invoke("discover-all-projects", {
-            body: {
-              expectedTotal: TARGET,
-              skipMap: true,
-              listingPageStart: start,
-              listingPageEnd: end,
-              listingUseFirecrawl: false,
-              disableAutoFallback: true,
-              skipPostInsertStats: true,
-            },
-          });
-          if (rangeErr) {
-            // Don't stop the whole rebuild if one chunk fails.
-            console.warn(`Discovery range ${start}-${end} failed`, rangeErr);
-          }
-          pending = await getPendingCount();
+        // If the backend reports credit exhaustion anyway, lock the UI and stop further actions.
+        // (Shouldn't happen in HTML mode, but this keeps us safe.)
+        if (rangeData?.credits_exhausted || rangeData?.success === false && String(rangeData?.error || "").includes("402")) {
+          setCreditsExhausted(true);
+          toast.error("Credits exhausted detected. Extraction is disabled until you top up.");
+          break;
         }
-      }
 
-      // Pass B: Firecrawl links (strongest coverage) ONLY if still short.
-      if (pending < TARGET) {
-        toast.info(`Discovery pass 2: deep coverage for remaining ${TARGET - pending}…`);
-
-        const CHUNK = 10;
-        for (let start = 1; start <= 89 && pending < TARGET; start += CHUNK) {
-          const end = Math.min(89, start + CHUNK - 1);
-          const { error: rangeErr } = await supabase.functions.invoke("discover-all-projects", {
-            body: {
-              expectedTotal: TARGET,
-              skipMap: true,
-              listingPageStart: start,
-              listingPageEnd: end,
-              listingUseFirecrawl: true,
-              disableAutoFallback: true,
-              skipPostInsertStats: true,
-            },
-          });
-          if (rangeErr) {
-            console.warn(`Deep discovery range ${start}-${end} failed`, rangeErr);
-          }
-          pending = await getPendingCount();
+        if (rangeErr || rangeData?.success === false) {
+          console.warn(`Discovery range ${start}-${end} failed`, rangeErr?.message || rangeData?.error);
         }
+
+        pending = await getPendingCount();
+
+        // STUCK DETECTION: if pending count doesn't increase after 3 consecutive chunks, stop
+        if (pending <= lastPending) {
+          stuckCounter++;
+          if (stuckCounter >= 3) {
+            toast.error(`Discovery appears stuck at ${pending.toLocaleString()} pending. Check constraints/logs.`);
+            break;
+          }
+        } else {
+          stuckCounter = 0;
+        }
+        lastPending = pending;
       }
 
-      toast.success(`Queue rebuilt (${pending.toLocaleString()} in queue)`);
+      setRebuildResult({ queued_for_scraping: pending });
+      toast.success(`Queue rebuilt (now ${pending.toLocaleString()} pending)`);
     } catch (e: any) {
       console.error("Rebuild queue failed:", e);
       toast.error(e?.message || "Failed to rebuild queue");
@@ -1651,7 +1620,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                     variant="outline"
                   >
                     <Database className={`w-4 h-4 mr-2 ${isRebuildingQueue ? "animate-pulse" : ""}`} />
-                    Rebuild Queue (All Listings)
+                    Rebuild Queue (Add Missing)
                   </Button>
 
                  {failedCount > 0 && !isSyncing && (
@@ -1835,7 +1804,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                   {/* Gap alert – only show when we’re below the current source estimate */}
                   {estimateGap > 0 && (
                     <div className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-xs text-amber-800">
-                      <strong>Gap detected:</strong> {estimateGap.toLocaleString()} listings missing vs the current source estimate. Click “Rebuild Queue” to attempt full discovery.
+                      <strong>Gap detected:</strong> {estimateGap.toLocaleString()} listings missing vs the current source estimate. Click “Rebuild Queue (Add Missing)” to attempt full discovery.
                     </div>
                   )}
 

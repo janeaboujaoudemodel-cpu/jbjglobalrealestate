@@ -122,6 +122,17 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
   }, [isApproved]);
 
   const runTestExtraction = async () => {
+    if (bulkExtractDisabled) {
+      setTestResult({
+        success: false,
+        coreComplete: false,
+        fullyComplete: false,
+        error:
+          "Test extraction is currently disabled (sync/rebuild running or credits exhausted).",
+      });
+      return;
+    }
+
     setIsExtracting(true);
     setTestResult(null);
     setIsApproved(false);
@@ -136,6 +147,8 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
         .limit(1);
 
       if (fetchError) throw fetchError;
+
+      let fallbackItem: any = null;
 
       if (!pendingItems || pendingItems.length === 0) {
         // Try to find ANY pending item that needs extraction
@@ -152,13 +165,15 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
             success: false,
             coreComplete: false,
             fullyComplete: false,
-            error: "No pending items in queue. Run 'Rebuild Queue' first to discover listings.",
+            error: "No pending items in queue. Run 'Rebuild Queue (Add Missing)' first to discover listings.",
           });
           return;
         }
+
+        fallbackItem = anyPending?.[0] || null;
       }
 
-      const targetItem = pendingItems?.[0] || null;
+      const targetItem = pendingItems?.[0] || fallbackItem;
       
       if (!targetItem) {
         setTestResult({
@@ -187,19 +202,18 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
 
       const extraction_time_ms = Date.now() - startTime;
 
-      if (error) {
-        // Check for credits exhausted
-        if (data?.credits_exhausted) {
-          setTestResult({
-            success: false,
-            coreComplete: false,
-            fullyComplete: false,
-            error: "Firecrawl credits exhausted. Please top up your plan at firecrawl.dev/pricing",
-          });
-          return;
-        }
-        throw error;
+      // Credits exhausted can come back as either data OR an error
+      if (data?.credits_exhausted) {
+        setTestResult({
+          success: false,
+          coreComplete: false,
+          fullyComplete: false,
+          error: "Firecrawl credits exhausted. Please top up your plan at firecrawl.dev/pricing",
+        });
+        return;
       }
+
+      if (error) throw error;
 
       // Fetch the updated project data
       const { data: updatedProject, error: projectError } = await supabase
@@ -402,7 +416,9 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
         {!testResult && !isExtracting && (
           <Button
             onClick={runTestExtraction}
+            disabled={bulkExtractDisabled}
             className="w-full bg-amber-600 hover:bg-amber-700 text-white"
+            title={bulkExtractDisabled ? "Disabled while rebuilding/syncing or when credits are exhausted." : undefined}
           >
             <RefreshCw className="w-4 h-4 mr-2" />
             Extract One Test Listing
