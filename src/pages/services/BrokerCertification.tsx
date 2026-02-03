@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   GraduationCap,
@@ -6,18 +5,25 @@ import {
   Award,
   Users,
   CheckCircle2,
-  HelpCircle,
-  Phone,
   Shield,
   Target,
   FileText,
-  Clock,
-  Star,
+  ListChecks,
+  BarChart3,
+  Camera,
+  Handshake,
+  Home,
+  LineChart,
+  Lock,
+  UserCheck,
+  Clipboard,
+  Calendar,
+  Signature,
+  Download,
 } from "lucide-react";
 import Footer from "@/components/Footer";
 import DirectContactCTA from "@/components/DirectContactCTA";
 import { SEOHead } from "@/components/SEOHead";
-import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -40,150 +46,168 @@ const staggerContainer = {
   },
 };
 
-const whoCanEnroll = [
+const whoIsFor = [
   { icon: Users, title: "JBJ Internal Brokers", description: "Employees of JBJ Global Real Estate" },
   { icon: Shield, title: "Approved Broker Partners", description: "Invite-only partner network members" },
+  { icon: UserCheck, title: "Team Leaders", description: "Who need standardized execution across agents" },
+];
+
+const programDelivers = [
+  { icon: Target, text: "A unified service standard and client handling system" },
+  { icon: ListChecks, text: "Consistent listing quality requirements" },
+  { icon: Handshake, text: "Structured transaction coordination practices" },
+  { icon: Shield, text: "Internal compliance discipline and data handling standards" },
+  { icon: BarChart3, text: "A measurable training pathway with completion tracking" },
 ];
 
 const modules = [
   {
     number: 1,
-    title: "JBJ Standards & Client Experience",
-    goal: "Establish foundational service standards",
+    icon: Target,
+    title: "JBJ Client Experience Standard",
+    goal: "Deliver a consistent premium experience from inquiry to close.",
     topics: [
-      "JBJ brand values and positioning",
-      "Client communication protocols",
-      "Response time standards",
-      "Professional conduct guidelines",
-      "Client onboarding process",
+      "Response discipline and service tone",
+      "Intake forms that reduce friction",
+      "Client expectations framework",
     ],
+    completionCheck: "Role-play client intake + scenario handling",
   },
   {
     number: 2,
-    title: "UAE Brokerage Compliance Basics",
-    goal: "Understand regulatory requirements",
+    icon: Shield,
+    title: "Brokerage Compliance Basics (UAE Context)",
+    goal: "Operational compliance discipline in listings and communications.",
     topics: [
-      "RERA registration and licensing",
-      "DLD transaction procedures",
-      "Escrow account requirements",
-      "Anti-money laundering basics",
-      "Documentation standards",
+      "Advertising discipline and accuracy rules",
+      "Documentation readiness habits",
+      "Escalation when information is uncertain",
     ],
+    completionCheck: "Listing compliance checklist pass",
   },
   {
     number: 3,
+    icon: BarChart3,
     title: "Lead Handling & CRM Discipline",
-    goal: "Master lead management processes",
+    goal: "Make pipeline visible and measurable.",
     topics: [
-      "Lead qualification criteria",
-      "CRM data entry standards",
-      "Follow-up cadence requirements",
-      "Lead assignment protocols",
-      "Conversion tracking",
+      "Pipeline stages and conversion hygiene",
+      "Follow-up timing rules",
+      "Activity logging quality",
     ],
+    completionCheck: "CRM activity standard validation",
   },
   {
     number: 4,
+    icon: Camera,
     title: "Listing Quality & Media Standards",
-    goal: "Ensure consistent listing presentation",
+    goal: "Eliminate weak listings and raise credibility.",
     topics: [
-      "Property photography standards",
-      "Listing description guidelines",
-      "Pricing accuracy requirements",
-      "Floor plan presentation",
-      "Virtual tour standards",
+      "Minimum listing data requirements",
+      "Photo/video standards",
+      "Brochure formatting discipline",
     ],
+    completionCheck: "Listing publish-ready scoring",
   },
   {
     number: 5,
+    icon: Handshake,
     title: "Negotiation & Transaction Coordination",
-    goal: "Handle negotiations professionally",
+    goal: "Reduce deal fallout through structured control.",
     topics: [
-      "Offer presentation protocols",
-      "Negotiation techniques",
-      "Counter-offer management",
-      "Transaction timeline coordination",
-      "Stakeholder communication",
+      "Offer clarity frameworks",
+      "Negotiation messaging discipline",
+      "Transaction timeline checkpoints",
     ],
+    completionCheck: "Negotiation scenario assessment",
   },
   {
     number: 6,
-    title: "Handover, Snagging, Leasing Readiness",
-    goal: "Master post-sale and rental processes",
+    icon: Home,
+    title: "Handover, Snagging & Leasing Readiness",
+    goal: "Protect the investor asset and reduce tenant friction.",
     topics: [
-      "Handover checklist procedures",
-      "Snagging inspection basics",
-      "Move-in coordination",
-      "Tenant onboarding",
-      "Property readiness standards",
+      "Snagging workflow basics",
+      "Readiness checklist for leasing",
+      "Maintenance coordination discipline",
     ],
+    completionCheck: "Readiness plan submission",
   },
   {
     number: 7,
+    icon: LineChart,
     title: "Investor Communication & Report Interpretation",
-    goal: "Support investor clients effectively",
+    goal: "Explain data without overpromising.",
     topics: [
-      "Investment report reading",
-      "ROI communication",
-      "Market update delivery",
-      "Portfolio review meetings",
-      "Performance benchmarking",
+      "How to present structured comparisons",
+      "How to explain risks professionally",
+      "How to use reports as clarity tools",
     ],
+    completionCheck: "Investor presentation simulation",
   },
   {
     number: 8,
-    title: "Ethics, Confidentiality, Data Handling",
-    goal: "Maintain professional integrity",
+    icon: Lock,
+    title: "Ethics, Confidentiality & Data Handling",
+    goal: "Protect clients and the business.",
     topics: [
-      "Conflict of interest policies",
-      "Client confidentiality",
-      "Data protection requirements",
-      "Ethical decision-making",
-      "Reporting obligations",
+      "Confidentiality rules",
+      "Sensitive data workflows",
+      "Escalation standards",
     ],
+    completionCheck: "Confidentiality commitment + quiz",
   },
+];
+
+const adminWorkflow = [
+  { icon: UserCheck, text: "Select broker user" },
+  { icon: CheckCircle2, text: "Mark completed modules" },
+  { icon: FileText, text: "Generate certificate PDF (high-resolution print ready)" },
+  { icon: Clipboard, text: "Auto insert broker name + date" },
+  { icon: Signature, text: "Apply stored signature image (admin uploaded)" },
+  { icon: Download, text: "Save certificate record to broker profile" },
 ];
 
 const faqData = [
   {
-    question: "Is this an official government certification?",
-    answer: "No. This is an internal professional standards program created by JBJ Global Real Estate. It does not replace government licensing, regulatory registration, or external certifications.",
+    question: "Is this recognized by government authorities?",
+    answer: "No. It is an internal standards program.",
   },
   {
-    question: "Who is eligible to enroll?",
-    answer: "The program is available to JBJ internal brokers (employees) and approved broker partners (invite-only).",
+    question: "Can I enroll if I'm not in JBJ network?",
+    answer: "Enrollment is invite-only.",
+  },
+  {
+    question: "Do I receive a certificate?",
+    answer: "Yes, for internal recognition once requirements are met.",
+  },
+  {
+    question: "Is the certificate public proof of licensing?",
+    answer: "No. Licensing is separate and regulated independently.",
   },
   {
     question: "How long does the program take?",
-    answer: "The program consists of 8 modules. Completion time varies based on individual pace, typically 4-8 weeks.",
+    answer: "Depends on module completion pace and assessments.",
+  },
+  {
+    question: "Do I need to complete all modules?",
+    answer: "Yes, to receive completion status.",
+  },
+  {
+    question: "Can I retake modules?",
+    answer: "Yes, internal re-assessment can be allowed.",
   },
   {
     question: "Is there an exam?",
-    answer: "Each module has a completion check. Final certification requires satisfactory completion of all modules.",
+    answer: "Assessments exist per module.",
   },
   {
-    question: "What do I receive upon completion?",
-    answer: "Successful graduates receive a JBJ Certificate of Completion, signed by the Founder & CEO.",
+    question: "Do you provide external job placement?",
+    answer: "No. This is a standards and training pathway.",
   },
   {
-    question: "Is the certificate valid externally?",
-    answer: "The certificate recognizes internal professional standards achievement. It is not a substitute for government or regulatory certifications.",
-  },
-  {
-    question: "Can I download the course materials?",
-    answer: "Course materials are accessed through the online platform. Downloads are not available to maintain content integrity.",
-  },
-  {
-    question: "What if I fail a module?",
-    answer: "Modules can be retaken. Your enrollment coordinator will provide guidance on the retake process.",
-  },
-  {
-    question: "Is there ongoing education required?",
-    answer: "JBJ may offer continuing education modules. Initial certification is the foundation.",
-  },
-  {
-    question: "How do I request enrollment?",
-    answer: "Use the enrollment request form. JBJ internal brokers and approved partners will receive enrollment instructions.",
+    question: "Can JBJ revoke certification?",
+    answer: "Internal status can be updated based on internal program rules and conduct.",
   },
 ];
 
@@ -191,14 +215,24 @@ const BrokerCertification = () => {
   return (
     <>
       <SEOHead
-        title="Broker Certification Program | JBJ Global Real Estate"
-        description="Internal professional standards program for JBJ brokers and partners. Comprehensive training covering compliance, client service, and transaction excellence."
+        title="Broker Certification — Internal Program | JBJ Global Real Estate"
+        description="A structured internal standards program created by JBJ Global Real Estate for our broker partner network. Built for consistency, quality, and client experience alignment."
         canonicalPath="/services/broker-certification"
       />
 
       {/* HERO SECTION */}
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-black">
+          {/* Video placeholder */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
+                <GraduationCap className="w-12 h-12 text-gold/60" />
+              </div>
+              <p className="text-gold/60 text-sm tracking-widest uppercase">JBJ Standards Program Overview</p>
+              <p className="text-zinc-500 text-xs mt-2">Video placeholder only</p>
+            </div>
+          </div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
         </div>
@@ -221,18 +255,18 @@ const BrokerCertification = () => {
             </div>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-[-0.02em]">
-              Broker Certification (Internal Program)
+              Broker Certification — Internal Program
             </h1>
             
-            <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-              An internal training and standards program created by JBJ Global Real Estate for our respected broker partner network. This is not a public accreditation and does not grant external licensing status.
+            <p className="text-zinc-300 text-base md:text-lg max-w-3xl mx-auto leading-relaxed mb-10">
+              A structured internal standards program created by JBJ Global Real Estate for our broker partner network. Built for consistency, quality, and client experience alignment.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <PremiumHeroButton href="/contact?service=broker-certification">
                 Request Enrollment
               </PremiumHeroButton>
-              <PremiumHeroButton href="#curriculum">
+              <PremiumHeroButton href="#modules">
                 View Program Outline
               </PremiumHeroButton>
             </div>
@@ -250,50 +284,21 @@ const BrokerCertification = () => {
         </motion.div>
       </section>
 
-      {/* LEGAL POSITIONING */}
+      {/* IMPORTANT PROGRAM POSITIONING */}
       <section className="bg-black py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-6 text-center">
               <Shield className="w-8 h-8 text-amber-500 mx-auto mb-4" />
-              <p className="text-amber-600 font-medium">
-                This is an internal professional standards program for JBJ broker partners. It does not replace government licensing, regulatory registration, or external certifications.
+              <p className="text-amber-600 font-medium leading-relaxed">
+                This is an internal professional standards program for JBJ broker partners and internal brokers. It is not a public accreditation and does not replace any government licensing, regulatory registration, or external certification requirements.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* PROGRAM OVERVIEW */}
-      <section className="bg-black py-20">
-        <div className="jj-layer-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="max-w-4xl mx-auto text-center"
-          >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black mb-8"
-              style={{ fontFamily: "Playfair Display, serif" }}
-            >
-              Program Overview
-            </motion.h2>
-            <motion.div variants={fadeInUp} className="jj-card-inner">
-              <p className="text-lg text-zinc-700 leading-relaxed">
-                The JBJ Broker Certification Program is a comprehensive internal training curriculum designed to establish 
-                consistent professional standards across our broker network. Covering compliance, client experience, 
-                transaction management, and ethical conduct, this program ensures all JBJ representatives deliver 
-                service excellence aligned with our brand values.
-              </p>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* WHO CAN ENROLL */}
+      {/* WHO THIS PROGRAM IS FOR */}
       <section className="bg-black py-20">
         <div className="jj-layer-2">
           <motion.div
@@ -307,10 +312,10 @@ const BrokerCertification = () => {
               className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Who Can Enroll
+              Who This Program Is For
             </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-              {whoCanEnroll.map((item, index) => (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+              {whoIsFor.map((item, index) => (
                 <motion.div key={index} variants={fadeInUp}>
                   <div className="h-full jj-card-inner text-center">
                     <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-black flex items-center justify-center">
@@ -326,8 +331,41 @@ const BrokerCertification = () => {
         </div>
       </section>
 
-      {/* CURRICULUM MODULES */}
-      <section id="curriculum" className="bg-black py-20">
+      {/* WHAT THIS PROGRAM DELIVERS */}
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="max-w-4xl mx-auto"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              What This Program Delivers
+            </motion.h2>
+            <motion.div variants={fadeInUp} className="jj-card-inner">
+              <ul className="space-y-4">
+                {programDelivers.map((item, index) => (
+                  <li key={index} className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center shrink-0">
+                      <item.icon className="w-5 h-5 text-gold" />
+                    </div>
+                    <span className="text-zinc-700 pt-2">{item.text}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* PROGRAM MODULES */}
+      <section id="modules" className="bg-black py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -337,35 +375,52 @@ const BrokerCertification = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Curriculum Modules
+              Program Modules
             </motion.h2>
+            <motion.p variants={fadeInUp} className="text-zinc-600 text-center mb-12 max-w-2xl mx-auto">
+              Use "Book/Module" style cards — content is not downloadable
+            </motion.p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
               {modules.map((module, index) => (
                 <motion.div key={index} variants={fadeInUp}>
-                  <Card className="jj-card-inner h-full border-none">
-                    <CardContent className="p-6">
-                      <div className="flex items-center gap-4 mb-4">
-                        <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center border-2 border-gold">
-                          <span className="text-gold font-bold">{module.number}</span>
+                  <Card className="h-full border-2 border-gold/30 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] overflow-hidden">
+                    <CardContent className="p-0">
+                      {/* Book-style header */}
+                      <div className="bg-black p-4 flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-full bg-gold/20 border-2 border-gold flex items-center justify-center">
+                          <span className="text-gold font-bold">M{module.number}</span>
                         </div>
                         <div>
-                          <h3 className="font-semibold text-black">{module.title}</h3>
-                          <p className="text-sm text-gold">{module.goal}</p>
+                          <h3 className="font-semibold text-white">{module.title}</h3>
                         </div>
                       </div>
-                      <div className="bg-black/5 rounded-lg p-4">
-                        <p className="text-xs text-zinc-500 uppercase tracking-wider mb-2 font-medium">What You Learn</p>
-                        <ul className="space-y-2">
-                          {module.topics.map((topic, idx) => (
-                            <li key={idx} className="flex items-start gap-2 text-sm text-zinc-700">
-                              <CheckCircle2 className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                              <span>{topic}</span>
-                            </li>
-                          ))}
-                        </ul>
+                      
+                      {/* Module content */}
+                      <div className="p-6">
+                        <div className="flex items-center gap-2 mb-4">
+                          <Target className="w-4 h-4 text-gold" />
+                          <p className="text-sm text-gold font-medium">Goal: {module.goal}</p>
+                        </div>
+                        
+                        <div className="mb-4">
+                          <p className="text-xs text-zinc-500 uppercase tracking-wider mb-2 font-medium">You Learn:</p>
+                          <ul className="space-y-2">
+                            {module.topics.map((topic, idx) => (
+                              <li key={idx} className="flex items-start gap-2 text-sm text-zinc-700">
+                                <CheckCircle2 className="w-4 h-4 text-gold shrink-0 mt-0.5" />
+                                <span>{topic}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        
+                        <div className="bg-black/10 rounded-lg p-3 border border-gold/20">
+                          <p className="text-xs text-zinc-500 uppercase tracking-wider mb-1 font-medium">Completion Check:</p>
+                          <p className="text-sm text-zinc-700">{module.completionCheck}</p>
+                        </div>
                       </div>
                     </CardContent>
                   </Card>
@@ -388,11 +443,14 @@ const BrokerCertification = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Certificate Preview
             </motion.h2>
+            <motion.p variants={fadeInUp} className="text-zinc-600 text-center mb-8">
+              On-screen preview only — certificate is not downloadable publicly
+            </motion.p>
             <motion.div variants={fadeInUp}>
               <Card className="jj-card-inner border-2 border-gold/30">
                 <CardContent className="p-8 text-center">
@@ -400,21 +458,21 @@ const BrokerCertification = () => {
                   <h3 className="text-2xl font-bold text-black mb-2" style={{ fontFamily: "Playfair Display, serif" }}>
                     Certificate of Completion
                   </h3>
-                  <p className="text-zinc-500 mb-8">JBJ Broker Certification Program</p>
+                  <p className="text-zinc-500 mb-8">JBJ Broker Standards Program</p>
                   
                   <div className="border-t border-b border-gold/20 py-6 mb-6">
-                    <p className="text-lg text-zinc-400 italic">[Broker Name]</p>
-                    <p className="text-sm text-zinc-500 mt-2">has successfully completed all requirements</p>
+                    <p className="text-lg text-zinc-400 italic">[Broker Full Name]</p>
+                    <p className="text-sm text-zinc-500 mt-2">has successfully completed all program requirements</p>
                   </div>
                   
                   <div className="flex items-center justify-center gap-8">
                     <div className="text-left">
                       <p className="text-sm text-zinc-500">Issue Date</p>
-                      <p className="text-black font-medium">[Auto-generated]</p>
+                      <p className="text-black font-medium">[Auto-generated date]</p>
                     </div>
                     <div className="text-right">
                       <div className="h-16 flex items-center justify-center">
-                        <p className="text-gold italic text-sm">[Signature]</p>
+                        <p className="text-gold italic text-sm">[Signature Block]</p>
                       </div>
                       <p className="text-black font-semibold">Jane Bou Jaoude (جاين بو جودة)</p>
                       <p className="text-sm text-zinc-500">Founder & CEO</p>
@@ -422,6 +480,43 @@ const BrokerCertification = () => {
                   </div>
                 </CardContent>
               </Card>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ADMIN ISSUANCE WORKFLOW */}
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="max-w-4xl mx-auto"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-4"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              Admin Issuance Workflow
+            </motion.h2>
+            <motion.p variants={fadeInUp} className="text-zinc-600 text-center mb-8">
+              Back-office administration capabilities
+            </motion.p>
+            <motion.div variants={fadeInUp} className="jj-card-inner">
+              <p className="text-zinc-600 mb-6 font-medium">Admin can:</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {adminWorkflow.map((item, index) => (
+                  <div key={index} className="flex items-center gap-3 bg-black/5 rounded-lg p-4">
+                    <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center shrink-0">
+                      <item.icon className="w-5 h-5 text-gold" />
+                    </div>
+                    <span className="text-zinc-700 text-sm">{item.text}</span>
+                  </div>
+                ))}
+              </div>
             </motion.div>
           </motion.div>
         </div>
@@ -449,16 +544,13 @@ const BrokerCertification = () => {
                 {faqData.map((faq, index) => (
                   <AccordionItem
                     key={index}
-                    value={`item-${index}`}
-                    className="jj-card-inner border-none"
+                    value={`faq-${index}`}
+                    className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] overflow-hidden"
                   >
-                    <AccordionTrigger className="text-left text-black hover:text-gold">
-                      <div className="flex items-center gap-3">
-                        <HelpCircle className="w-5 h-5 text-gold shrink-0" />
-                        {faq.question}
-                      </div>
+                    <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
+                      <span className="text-black font-medium">{faq.question}</span>
                     </AccordionTrigger>
-                    <AccordionContent className="text-zinc-600 pl-8">
+                    <AccordionContent className="px-6 pb-4 text-zinc-600">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -476,45 +568,30 @@ const BrokerCertification = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            variants={staggerContainer}
-            className="text-center max-w-3xl mx-auto"
+            variants={fadeInUp}
+            className="max-w-3xl mx-auto text-center"
           >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black mb-4"
-              style={{ fontFamily: "Playfair Display, serif" }}
-            >
-              Ready to Get Certified?
-            </motion.h2>
-            <motion.p variants={fadeInUp} className="text-zinc-600 mb-8">
-              Join the JBJ Broker Certification Program and elevate your professional standards.
-            </motion.p>
-            <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="primary" size="lg" asChild>
-                <Link to="/contact?service=broker-certification">
-                  <GraduationCap className="w-4 h-4 mr-2" />
+            <div className="jj-card-inner border-2 border-gold/30">
+              <Award className="w-12 h-12 text-gold mx-auto mb-6" />
+              <h2
+                className="text-3xl md:text-4xl font-bold text-black mb-4"
+                style={{ fontFamily: "Playfair Display, serif" }}
+              >
+                Join the Standards Program
+              </h2>
+              <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
+                Request enrollment and receive the program pathway and requirements.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <PremiumHeroButton href="/contact?service=broker-certification">
                   Request Enrollment
-                </Link>
-              </Button>
-              <Button variant="outline" size="lg" asChild>
-                <Link to="/contact">
-                  <Phone className="w-4 h-4 mr-2" />
+                </PremiumHeroButton>
+                <PremiumHeroButton href="/contact">
                   Contact Support
-                </Link>
-              </Button>
-            </motion.div>
+                </PremiumHeroButton>
+              </div>
+            </div>
           </motion.div>
-        </div>
-      </section>
-
-      {/* COMPLIANCE DISCLAIMER */}
-      <section className="bg-black py-8 border-t border-zinc-800">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-zinc-500 text-sm max-w-3xl mx-auto">
-            The JBJ Broker Certification Program is an internal professional development initiative. 
-            Completion does not constitute government licensing or regulatory certification. 
-            Participants must maintain valid RERA registration and comply with all applicable regulations.
-          </p>
         </div>
       </section>
 
