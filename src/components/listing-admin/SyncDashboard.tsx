@@ -883,12 +883,13 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       while (true) {
         if (bulkStopRef.current) break;
 
-        const limit = turboMode ? 150 : 50;
-        const throttleMs = turboMode ? 0 : 600;
-        const concurrency = turboMode ? 10 : 3;
+        // Keep each call short to avoid client timeouts; UI will loop until done.
+        const limit = turboMode ? 25 : 10;
+        const throttleMs = turboMode ? 0 : 2500;
+        const concurrency = turboMode ? 2 : 1;
 
         const { data, error } = await supabase.functions.invoke("batch-extract-pending", {
-          body: { limit, throttleMs, concurrency },
+          body: { limit, throttleMs, concurrency, maxDurationMs: 50_000 },
         });
         if (error) throw error;
 
@@ -989,7 +990,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       let pendingStats = { processed: 0, success: 0, errors: 0 };
       while (!fixAllStopRef.current) {
         const { data, error } = await supabase.functions.invoke("batch-extract-pending", {
-          body: { limit: 100, throttleMs: 800, concurrency: 5 }, // More conservative to avoid rate limiting
+          body: { limit: 10, throttleMs: 2500, concurrency: 1, maxDurationMs: 50_000 },
         });
         if (error) throw error;
 

@@ -105,20 +105,24 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   // Fetch global inventory stats (independent of pagination)
   const fetchInventoryStats = async () => {
     try {
-      // IMPORTANT: Use COUNT queries only (no row limits) so the numbers match the main dashboard.
-      // CRITICAL: "Complete" means EXACTLY like Provident source - all fields populated:
-      // - description (not null, not empty)
-      // - developer_name (not null, not empty, not "unknown")
-      // - images array with 2+ items containing /off-plan/ URLs (real project photos)
-      // - documents array with at least 1 item
-      // - review_notes is null (no errors or incomplete markers)
-      
-      const [
-        totalRes,
-        needsExtractionRes,
-        incompleteRes,
-        errorsRes,
-      ] = await Promise.all([
+      // IMPORTANT: Use COUNT queries only (no row limits) so the numbers match the real queue.
+      // Needs Work must include BOTH explicit flags (review_notes) AND missing core fields.
+      // Otherwise the UI under-counts and Fix All appears to "stop" early.
+      const needsWorkOr = [
+        "review_notes.ilike.%PENDING_SCRAPE%",
+        "review_notes.eq.INCOMPLETE",
+        "review_notes.ilike.ERROR:%",
+        "images.eq.[]",
+        "images.is.null",
+        "documents.eq.[]",
+        "documents.is.null",
+        "description.is.null",
+        "developer_name.is.null",
+        "developer_name.ilike.unknown",
+        "developer_name.eq.Unknown",
+      ].join(",");
+
+      const [totalRes, needsWorkRes] = await Promise.all([
         supabase
           .from("pending_project_imports")
           .select("id", { count: "exact", head: true })
@@ -127,27 +131,11 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           .from("pending_project_imports")
           .select("id", { count: "exact", head: true })
           .eq("status", "pending")
-          .ilike("review_notes", "%PENDING_SCRAPE%"),
-        supabase
-          .from("pending_project_imports")
-          .select("id", { count: "exact", head: true })
-          .eq("status", "pending")
-          .eq("review_notes", "INCOMPLETE"),
-        supabase
-          .from("pending_project_imports")
-          .select("id", { count: "exact", head: true })
-          .eq("status", "pending")
-          .ilike("review_notes", "ERROR:%"),
+          .or(needsWorkOr),
       ]);
 
       const total = totalRes.count ?? 0;
-      const needsExtraction = needsExtractionRes.count ?? 0;
-      const incomplete = incompleteRes.count ?? 0;
-      const errors = errorsRes.count ?? 0;
-
-      // Calculate complete as: total - (needs_extraction + incomplete + errors)
-      // This ensures Complete + Needs Work = Total
-      const needsWork = needsExtraction + incomplete + errors;
+      const needsWork = needsWorkRes.count ?? 0;
       const complete = Math.max(0, total - needsWork);
 
       setTotalCount(total);
@@ -192,11 +180,27 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           .not("developer_name", "is", null)
           .neq("developer_name", "")
           .not("developer_name", "ilike", "unknown")
+          .not("images", "is", null)
           .not("images", "eq", "[]")
+          .not("documents", "is", null)
           .not("documents", "eq", "[]");
       } else if (statusFilter === "needs_work") {
-        // Needs work = PENDING_SCRAPE, INCOMPLETE, or ERROR
-        query = query.or("review_notes.ilike.%PENDING_SCRAPE%,review_notes.eq.INCOMPLETE,review_notes.ilike.ERROR:%");
+        // Needs work = flagged OR missing core fields
+        query = query.or(
+          [
+            "review_notes.ilike.%PENDING_SCRAPE%",
+            "review_notes.eq.INCOMPLETE",
+            "review_notes.ilike.ERROR:%",
+            "images.eq.[]",
+            "images.is.null",
+            "documents.eq.[]",
+            "documents.is.null",
+            "description.is.null",
+            "developer_name.is.null",
+            "developer_name.ilike.unknown",
+            "developer_name.eq.Unknown",
+          ].join(","),
+        );
       }
 
       const { data, error, count } = await query;
@@ -623,13 +627,15 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
     try {
       // Keep calling the backend batch extractor until it reports nothing left to process.
       // NOTE: This extracts from the full pending queue, not just the currently loaded page.
-      // We keep the per-call limit at 200 to reduce the number of round-trips.
+      // IMPORTANT: Keep each call under client timeouts; loop until processed=0.
+      const limit = 5;
       while (true) {
         const { data, error } = await supabase.functions.invoke("batch-extract-pending", {
           body: {
-            limit: 200,
-            throttleMs: 0,
-            concurrency: 10,
+            limit,
+            throttleMs: 2500,
+            concurrency: 1,
+            maxDurationMs: 50_000,
           },
         });
 
@@ -646,8 +652,8 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
         // Refresh headline stats so the dashboard doesn't show stale counts.
         await fetchInventoryStats();
 
-        // Stop when this batch didn't fill up (or none were processed).
-        if (processed === 0 || processed < 200) break;
+        // Done when this cycle finds nothing left to process.
+        if (processed === 0) break;
       }
 
       toast({

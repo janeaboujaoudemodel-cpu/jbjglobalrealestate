@@ -80,5 +80,29 @@ export async function fetchProvidentPageDataPdfUrls(args: {
 
   const pdfs: string[] = [];
   collectStringsDeep(json, pdfs);
-  return categorizePdfUrls(pdfs);
+
+  // page-data.json often contains relative PDF paths (e.g. /static/....pdf).
+  // Normalize to absolute URLs so downstream mirroring (fetch) always works.
+  const looksLikeUrlOrPath = (u: string) => {
+    // Reject filename-only strings like "Project Brochure.pdf" (no path), which are common in Gatsby data.
+    // We only want actual URLs/paths we can fetch.
+    if (/^https?:\/\//i.test(u)) return true;
+    if (u.startsWith("/")) return true;
+    if (u.includes("/")) return true;
+    return false;
+  };
+
+  const normalized = pdfs
+    .filter((u) => PDF_RX.test(u))
+    .filter(looksLikeUrlOrPath)
+    .map((u) => {
+      try {
+        return new URL(u, baseUrl).toString();
+      } catch {
+        return null;
+      }
+    })
+    .filter((u): u is string => Boolean(u));
+
+  return categorizePdfUrls(normalized);
 }
