@@ -16,6 +16,11 @@ import {
   Shield,
   Calendar,
   BarChart3,
+  MessageSquare,
+  RefreshCw,
+  Settings,
+  Play,
+  AlertCircle,
 } from "lucide-react";
 import Footer from "@/components/Footer";
 import DirectContactCTA from "@/components/DirectContactCTA";
@@ -42,65 +47,101 @@ const staggerContainer = {
   },
 };
 
-const scopeOfSupport = [
-  { icon: Users, title: "Tenant Coordination", description: "Communication and relationship management" },
-  { icon: Wrench, title: "Maintenance Coordination", description: "Repair requests and vendor management" },
-  { icon: Calendar, title: "Payment/Renewal Reminders", description: "Timely notifications and follow-ups" },
-  { icon: ClipboardList, title: "Move-in / Move-out Checklists", description: "Structured handover process" },
-  { icon: FileText, title: "Issue Logging and Tracking", description: "Resolution monitoring and reporting" },
+const managementCoverage = [
+  { 
+    icon: MessageSquare, 
+    title: "Tenant Communication Routing", 
+    description: "Issues, requests, scheduling" 
+  },
+  { 
+    icon: Wrench, 
+    title: "Maintenance Coordination", 
+    description: "Approved providers, appointment scheduling, follow-ups" 
+  },
+  { 
+    icon: RefreshCw, 
+    title: "Renewal Process Coordination", 
+    description: "Timelines, documentation, reminders" 
+  },
+  { 
+    icon: ClipboardList, 
+    title: "Move-in / Move-out Checklists", 
+    description: "Condition baseline + evidence" 
+  },
+  { 
+    icon: Home, 
+    title: "Property Readiness Planning", 
+    description: "Minor fixes, cleaning coordination, compliance reminders" 
+  },
+];
+
+const ownerControls = [
+  "What requires your approval (major repairs, replacements, vendor changes)",
+  "What can be actioned within a threshold you define",
+  "How you want updates (weekly summary, monthly snapshot, urgent alerts)",
 ];
 
 const ownerReporting = [
-  "Monthly snapshot (occupancy, issues, actions)",
-  "Maintenance log history",
-  "Tenant communication log",
+  { title: "Monthly Asset Snapshot", description: "Occupancy status, issues opened/closed, key actions" },
+  { title: "Maintenance Log", description: "Dates, issue types, status updates, vendor notes" },
+  { title: "Tenant Interaction Log", description: "Summarized communications and outcomes" },
+  { title: "Renewal/Notice Timeline", description: "Key dates and reminders" },
 ];
 
-const onboardingSteps = [
-  { step: 1, title: "Asset onboarding (unit + documents)", icon: Home },
-  { step: 2, title: "Condition baseline + checklist", icon: ClipboardList },
-  { step: 3, title: "Tenant coordination rules + approvals", icon: Users },
-  { step: 4, title: "Launch management workflow", icon: BarChart3 },
+const processSteps = [
+  { step: 1, title: "Onboarding", description: "Unit details, documents, access rules, approval rules", icon: Home },
+  { step: 2, title: "Baseline Condition", description: "Structured checklist and photo baseline (where possible)", icon: ClipboardList },
+  { step: 3, title: "Operating Workflow", description: "Tenant routing + maintenance coordination process", icon: Settings },
+  { step: 4, title: "Reporting", description: "Monthly snapshot + urgent alerts when needed", icon: BarChart3 },
 ];
 
 const requiredDocuments = [
-  "Title deed (or ownership proof)",
-  "Existing tenancy contract (if applicable)",
-  "DEWA / building access info (if applicable)",
+  "Ownership proof (e.g., title deed or equivalent)",
+  "Existing tenancy contract (if currently leased)",
+  "Building access & parking info (as applicable)",
+  "DEWA / utility status (as applicable)",
 ];
 
 const faqData = [
   {
-    question: "What does property management include?",
-    answer: "Our property management service includes tenant coordination, maintenance management, payment reminders, move-in/move-out checklists, and comprehensive reporting.",
+    question: "Do you collect rent on my behalf?",
+    answer: "Depending on structure and approvals, management can coordinate payment reminders and documentation. Collection and regulated activities follow applicable rules and agreed scope.",
   },
   {
-    question: "Do you handle tenant finding?",
-    answer: "Tenant sourcing is handled through our Rental Advisory service. Property management begins once a tenant is in place.",
+    question: "Do I lose control of decisions?",
+    answer: "No. You set approval rules. Major decisions remain yours.",
   },
   {
-    question: "How often do I receive reports?",
-    answer: "Monthly snapshots are provided covering occupancy status, maintenance issues, actions taken, and tenant communications.",
+    question: "Can you manage vacant units?",
+    answer: "Yes—readiness coordination, repairs, and preparation for marketing can be included.",
   },
   {
-    question: "Can I approve maintenance expenses?",
-    answer: "Yes, you set approval thresholds and receive notifications for expenses above your specified limit.",
+    question: "Do you do maintenance yourself?",
+    answer: "We coordinate with suitable providers. Work is performed by qualified vendors.",
   },
   {
-    question: "Do you handle rent collection?",
-    answer: "We send payment reminders and track payment status. Direct rent collection depends on your preferred arrangement.",
+    question: "How do you handle urgent issues?",
+    answer: "Urgent issues are escalated with priority communication and clear options.",
   },
   {
-    question: "What if I have multiple properties?",
-    answer: "We can manage multiple units under a single management agreement with consolidated reporting.",
+    question: "Can I see what was done each month?",
+    answer: "Yes—monthly snapshot + logs.",
   },
   {
-    question: "How do you handle emergency repairs?",
-    answer: "Emergency protocols are established during onboarding, including vendor contacts and approval processes for urgent situations.",
+    question: "Can I stop the service anytime?",
+    answer: "Offboarding terms are defined in the service agreement.",
   },
   {
-    question: "Is this service available for commercial properties?",
-    answer: "Currently, our property management service focuses on residential properties in Dubai.",
+    question: "Can you help with tenant screening?",
+    answer: "Tenant screening is typically handled under leasing/rental advisory workflows.",
+  },
+  {
+    question: "Is this the same as brokerage services?",
+    answer: "No. Management is an operational service separate from brokerage transactions.",
+  },
+  {
+    question: "Do you handle short-term rentals here?",
+    answer: "Short-term rentals are handled under the dedicated short-term service page.",
   },
 ];
 
@@ -109,7 +150,7 @@ const PropertyManagement = () => {
     <>
       <SEOHead
         title="Property Management Services | JBJ Global Real Estate"
-        description="Professional property management in Dubai. Tenant coordination, maintenance management, and structured reporting for property owners."
+        description="Operational support for owners who want cleaner tenant experience, reduced friction, and structured oversight—without losing control of approvals."
         canonicalPath="/services/property-management"
       />
 
@@ -142,16 +183,31 @@ const PropertyManagement = () => {
             </h1>
             
             <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-              Operational support to protect your asset, reduce tenant friction, and keep occupancy stable — with structured reporting.
+              Operational support for owners who want cleaner tenant experience, reduced friction, and structured oversight—without losing control of approvals.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <PremiumHeroButton href="/contact?service=property-management">
                 Request Property Management
               </PremiumHeroButton>
               <PremiumHeroButton href="/contact">
                 Speak to a Manager
               </PremiumHeroButton>
+            </div>
+
+            {/* Hero Video Placeholder */}
+            <div className="max-w-xl mx-auto">
+              <div className="relative rounded-xl overflow-hidden border border-gold/30 bg-black/50 backdrop-blur-sm">
+                <div className="aspect-video flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gold/20 flex items-center justify-center">
+                      <Play className="w-8 h-8 text-gold" />
+                    </div>
+                    <p className="text-gold text-sm font-medium">How We Protect Your Asset Daily</p>
+                    <p className="text-zinc-500 text-xs mt-1">Video Coming Soon</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>
@@ -167,7 +223,33 @@ const PropertyManagement = () => {
         </motion.div>
       </section>
 
-      {/* SCOPE OF SUPPORT */}
+      {/* WHAT PROPERTY MANAGEMENT MEANS */}
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="max-w-4xl mx-auto"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              What Property Management Means at JBJ
+            </motion.h2>
+            <motion.div variants={fadeInUp} className="jj-card-inner">
+              <p className="text-zinc-700 leading-relaxed text-center">
+                Property management is a structured workflow that helps you protect your asset and reduce tenant friction through coordination, issue logging, and owner reporting. You keep decision control via approval rules (what needs owner approval vs. auto-approved).
+              </p>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* MANAGEMENT COVERAGE */}
       <section className="bg-black py-20">
         <div className="jj-layer-2">
           <motion.div
@@ -181,10 +263,10 @@ const PropertyManagement = () => {
               className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Scope of Support
+              Management Coverage
             </motion.h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-              {scopeOfSupport.map((item, index) => (
+              {managementCoverage.map((item, index) => (
                 <motion.div key={index} variants={fadeInUp}>
                   <div className="h-full jj-card-inner">
                     <div className="flex items-start gap-4">
@@ -200,6 +282,40 @@ const PropertyManagement = () => {
                 </motion.div>
               ))}
             </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* OWNER CONTROLS */}
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="max-w-4xl mx-auto"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              Owner Controls (Premium Standard)
+            </motion.h2>
+            <motion.p variants={fadeInUp} className="text-center text-zinc-600 mb-6">
+              You choose the rules:
+            </motion.p>
+            <motion.div variants={fadeInUp} className="jj-card-inner">
+              <ul className="space-y-4">
+                {ownerControls.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-3 text-zinc-700">
+                    <Shield className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -221,25 +337,27 @@ const PropertyManagement = () => {
             >
               What You Receive
             </motion.h2>
+            <motion.p variants={fadeInUp} className="text-center text-zinc-600 mb-6">
+              Owner reporting package:
+            </motion.p>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <div className="flex items-center gap-4 mb-6">
-                <BarChart3 className="w-8 h-8 text-gold" />
-                <h3 className="text-xl font-semibold text-black">Owner Reporting</h3>
-              </div>
-              <ul className="space-y-4">
+              <div className="space-y-6">
                 {ownerReporting.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-zinc-700">
-                    <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
-                    <span>{item}</span>
-                  </li>
+                  <div key={idx} className="flex items-start gap-3">
+                    <BarChart3 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="font-semibold text-black">{item.title}</h4>
+                      <p className="text-sm text-zinc-600">{item.description}</p>
+                    </div>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* ONBOARDING PROCESS */}
+      {/* HOW IT WORKS */}
       <section className="bg-black py-20">
         <div className="jj-layer-2">
           <motion.div
@@ -253,26 +371,27 @@ const PropertyManagement = () => {
               className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Onboarding Process
+              How It Works
             </motion.h2>
             <div className="max-w-3xl mx-auto">
               <div className="relative">
                 <div className="absolute left-6 top-0 bottom-0 w-px bg-gold/30 hidden md:block" />
                 <div className="space-y-6">
-                  {onboardingSteps.map((step, index) => (
+                  {processSteps.map((step, index) => (
                     <motion.div
                       key={index}
                       variants={fadeInUp}
-                      className="flex items-center gap-6"
+                      className="flex items-start gap-6"
                     >
                       <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center shrink-0 z-10 border-2 border-gold">
                         <span className="text-gold font-bold">{step.step}</span>
                       </div>
                       <div className="flex-1 jj-card-inner !p-4">
-                        <div className="flex items-center gap-4">
-                          <step.icon className="w-6 h-6 text-gold shrink-0" />
+                        <div className="flex items-center gap-4 mb-1">
+                          <step.icon className="w-5 h-5 text-gold shrink-0" />
                           <span className="font-semibold text-black">{step.title}</span>
                         </div>
+                        <p className="text-sm text-zinc-600 ml-9">{step.description}</p>
                       </div>
                     </motion.div>
                   ))}
@@ -298,7 +417,7 @@ const PropertyManagement = () => {
               className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Required Documents
+              Required Documents (Typical)
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner">
               <ul className="space-y-4">
@@ -371,10 +490,10 @@ const PropertyManagement = () => {
               className="text-3xl md:text-4xl font-bold text-black mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Start Property Management
+              Build a Stable, Low-Friction Ownership Experience
             </motion.h2>
             <motion.p variants={fadeInUp} className="text-zinc-600 mb-8">
-              Protect your investment with professional property management.
+              Request management onboarding and define your approval rules.
             </motion.p>
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button variant="primary" size="lg" asChild>
@@ -390,16 +509,6 @@ const PropertyManagement = () => {
               </Button>
             </motion.div>
           </motion.div>
-        </div>
-      </section>
-
-      {/* COMPLIANCE DISCLAIMER */}
-      <section className="bg-black py-8 border-t border-zinc-800">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-zinc-500 text-sm max-w-3xl mx-auto">
-            Property management services are coordinated through JBJ Global Real Estate. 
-            Where specialist services are required, introductions to independent licensed partners may be provided.
-          </p>
         </div>
       </section>
 
