@@ -1,247 +1,182 @@
 
+## What is actually going wrong (root-cause, based on code + live DB data)
 
-# Comprehensive Full Audit Report
-## Security, Features, and Incomplete Tasks Analysis
+### 1) Your extraction may be working, but the **Test One Listing preview is broken and misleading**
+In `src/components/listing-admin/TestOneListingPanel.tsx`, the preview and checklist assume the extracted fields are stored in shapes that are no longer true:
 
----
+- **Images type mismatch (causes broken photos in the test panel):**
+  - DB stores `pending_project_imports.images` as an array of objects like `{ url, alt_text, display_order }`.
+  - The test panel types it as `string[]` and then does:
+    - `testResult.project.images.slice(...).map((url) => <SafeImage src={url} ... />)`
+  - If `url` is actually an object, the browser tries to load `"[object Object]"` which looks like “broken photos”.
 
-## PART 1: SECURITY VULNERABILITIES & RISKS
+- **Amenities field mismatch (causes “0 amenities” even when extraction wrote them):**
+  - Extraction writes amenities to `amenities_list`.
+  - The test panel reads `updatedProject.amenities` instead.
 
-### 1.1 CRITICAL Security Issues (Requires Immediate Attention)
+- **Documents “mirrored_url” mismatch (causes coreComplete=false even if brochure is present):**
+  - Extraction writes documents as `{ url, type, name }`.
+  - The test panel checks `documents.some(d => d.mirrored_url)`, but that field does not exist, so it always fails.
 
-| ID | Issue | Location | Risk Level | Status |
-|----|-------|----------|------------|--------|
-| SEC-01 | **Landlord Contact Information Exposed** | `rental_listings` table | **CRITICAL** | ❌ UNRESOLVED |
-| | RLS policy `Anyone can view live rental listings` exposes landlord_name, landlord_email, landlord_phone, landlord_nationality for all live listings. Scammers can harvest this PII. | | | |
-| SEC-02 | **Chat History Cross-Session Risk** | `chat_history` table | **MEDIUM** | ⚠️ Needs Review |
-| | Multiple overlapping SELECT policies may allow session ID reuse or cross-session access if IDs are predictable. | | | |
+Net effect: the test panel can show “Core Incomplete / broken images / no USPs” even when the queue + preview page could be correct.
 
-### 1.2 Security Features Implemented ✅
+### 2) Some pending items truly are not extracted yet (still `PENDING_SCRAPE`)
+From the DB, many queue items still have `review_notes = PENDING_SCRAPE` and **images/documents empty**, meaning they haven’t been processed by extraction yet. That’s separate from the test panel UI bugs.
 
-| Feature | Status | Location |
-|---------|--------|----------|
-| SecurityShield (anti-scraping) | ✅ Working | `src/components/SecurityShield.tsx` |
-| Rate limiting on lead capture | ✅ Working | `check_lead_rate_limit_strict()` function |
-| PII Vault encryption | ✅ Working | Triggers on sensitive tables |
-| Admin role verification | ✅ Working | `has_role()` RPC function |
-| Podcast visibility admin toggle | ✅ Working | `src/components/admin/PodcastVisibilityToggle.tsx` |
-| Founder visibility admin toggle | ✅ Working | `src/components/admin/FounderVisibilityToggle.tsx` |
-
----
-
-## PART 2: INCOMPLETE FEATURES (From All Previous Requests)
-
-### 2.1 Chat Support Enhancements
-
-| Task | Status | Details |
-|------|--------|---------|
-| Conversational AI Collection (Name → Email → Phone) | ⚠️ **PARTIALLY DONE** | Component created (`ChatConversationalCollect.tsx`) but **NOT INTEGRATED** into `AIChatWidget.tsx`. Step `'conversational_collect'` exists in types but no render case in the widget. |
-| Smart AI Qualification Flow | ❌ **NOT IMPLEMENTED** | AI should ask qualifying questions (budget, location, investment history) for buy property users. Not implemented in `ai-chat-support` edge function. |
-| Careers shortcut → CV Form | ⚠️ Partial | CV submission works but needs direct routing from chat shortcut. |
-| Support ticket creation via AI | ❌ **NOT IMPLEMENTED** | AI should be able to create support tickets with reference numbers. |
-| Chat tip position fix | ⚠️ **NEEDS VERIFICATION** | Moved in `ChatWelcome.tsx` but needs testing. |
-
-### 2.2 Marketing Campaign Hub
-
-| Task | Status | Details |
-|------|--------|---------|
-| Database tables | ❌ **NOT CREATED** | Tables `marketing_campaigns`, `newsletter_subscribers`, `marketing_templates` do not exist. |
-| Marketing Hub UI | ❌ **NOT CREATED** | No `/admin/MarketingHub` page exists. `src/pages/admin/` directory is empty. |
-| Campaign editor | ❌ **NOT CREATED** | No `src/components/marketing-hub/` directory exists. |
-| AI Content Assistant | ❌ **NOT CREATED** | No visual editing with AI prompts. |
-| WhatsApp/Email sending | ❌ **NOT CREATED** | No `send-campaign` edge function. |
-
-### 2.3 Homepage & UI Fixes
-
-| Task | Status | Details |
-|------|--------|---------|
-| Homepage filter: sqm/sqft toggle | ❌ **NOT IMPLEMENTED** | `SearchModule.tsx` has no area size or currency filter. |
-| Homepage filter: Currency selector | ❌ **NOT IMPLEMENTED** | Only AED prices shown. |
-| Homepage filter: Full-width stretch | ⚠️ Needs verification | May need wider container. |
-| "Find Your Starting Point" mobile UI | ⚠️ **NEEDS IMPROVEMENT** | Cards use `text-[8px]` which is very small. Icons `w-3 h-3` are tiny on mobile. |
-| "How Can We Help" cards premium styling | ⚠️ Needs verification | |
-| Why Dubai video scenes replacement | ❌ **NOT DONE** | Videos exist in `src/assets/videos/` but user requested re-generation of Burj Khalifa (day-to-night) and Burj Al Arab (drone zoom in with beach). These require new video assets. |
-| Explore Services "Coming Soon" labels removal | ⚠️ Partial | `available: false` for "Facility Management" still shows disabled button. |
-
-### 2.4 Header & Footer Fixes
-
-| Task | Status | Details |
-|------|--------|---------|
-| Header transparency on logo click | ✅ **DONE** | Fixed in `GlobalHeader.tsx` with route change listener. |
-| MegaMenu CTA button sizing | ⚠️ Partial | Some buttons fixed, need to verify all match rectangular style. |
-| Account dropdown sizing jitter | ⚠️ Partial | Added `min-h-[400px]` but user reports intermittent issue. |
-| Footer divider alignment | ⚠️ **NEEDS VERIFICATION** | Restructured columns but alignment verification needed. |
-| Footer mobile readability | ✅ **DONE** | Changed to `text-xs`. |
-| Mobile hamburger logo | ✅ **DONE** | Using `jbjMonogramLightBg`. |
-
-### 2.5 Digital Business Card
-
-| Task | Status | Details |
-|------|--------|---------|
-| Responsive layout (phone/tablet/desktop) | ⚠️ **PARTIAL** | Updated `DigitalCard.tsx` with breakpoints but full desktop layout may need refinement. |
-
-### 2.6 Listing Extraction System
-
-| Task | Status | Details |
-|------|--------|---------|
-| Page-data discovery (no Firecrawl) | ✅ **DONE** | `discover-all-projects` uses Gatsby JSON endpoints. |
-| Extraction regex fixes (USPs, amenities, etc.) | ⚠️ **NEEDS TESTING** | Updated patterns in `extract.ts` but user reports "Core Incomplete" still showing. |
-| Image URL repair (remove /x/1200x800/) | ✅ **DONE** | `repair-image-urls` function created. |
-| Full project detail page layout | ⚠️ **NEEDS COMPLETION** | Components created but need full integration: `ProjectBreadcrumb`, `FloorPlanGallery`, `CallToActionSection`, `NewsletterSection`. |
-| AI Audit for extraction | ❌ **NOT IMPLEMENTED** | No `audit-extraction` edge function created. |
-
-### 2.7 Project Detail Page Structure (Provident Mirroring)
-
-| Task | Status | Details |
-|------|--------|---------|
-| Breadcrumb navigation | ⚠️ **CREATED** | `ProjectBreadcrumb.tsx` exists but needs integration verification. |
-| Floor plan gallery with thumbnails | ⚠️ **CREATED** | `FloorPlanGallery.tsx` exists. |
-| "Request a call back" CTA section | ⚠️ **CREATED** | `CallToActionSection.tsx` exists. |
-| "Stay in the loop" newsletter section | ⚠️ **CREATED** | `NewsletterSection.tsx` exists. |
-| FAQs section | ❌ **NOT VERIFIED** | Need to confirm extraction and display. |
-| Payment plan section with percentages | ❌ **NOT VERIFIED** | Need to confirm extraction and display. |
-| Location map with distances | ❌ **NOT VERIFIED** | Need to confirm extraction and display. |
-
-### 2.8 Broker Hub
-
-| Task | Status | Details |
-|------|--------|---------|
-| Video on hover (desktop) | ❌ **NOT IMPLEMENTED** | MegaMenuBrokerHub uses static image. User requested video on hover for broker section. |
-| Broker hero image replacement | ⚠️ **NEEDS ASSET** | Code references `broker-hub-hero.jpg` but asset may not exist. |
-
-### 2.9 Admin & AI Integrations
-
-| Task | Status | Details |
-|------|--------|---------|
-| Sara admin assistant integration | ❌ **NOT INTEGRATED** | Marketing hub should integrate with Sara persona. |
-| AI Web Developer persona | ❌ **NOT CREATED** | No dedicated web dev AI persona. |
-| Graphic designer persona | ❌ **NOT CREATED** | No dedicated design AI persona. |
-| Cross-tool project saving | ❌ **NOT IMPLEMENTED** | No unified project save/load across AI tools. |
+### 3) There is a known image CDN size issue in at least one repair function
+`supabase/functions/repair-project-extraction/index.ts` upscales Provident CDN images to `/x/1200x800/`, while your stability policy notes this size can 403. This can cause “photos broken” after repair runs.
 
 ---
 
-## PART 3: FIXES REQUIRED (Priority Order)
+## What you asked for (requirements to implement exactly)
 
-### Priority 1: CRITICAL Security Fixes
+1) Admin must see **two views**:
+   - A **small Provident-style listing card** (one main photo, brief description, ...more).
+   - Clicking opens a **full detail page** that mirrors Provident (with your header/footer branding).
 
-1. **Fix landlord PII exposure in rental_listings**
-   - Create a `rental_listings_public` view that masks landlord contact info
-   - Or modify RLS to only show masked data publicly
-   - Migration required
+2) **Approve button must exist in both places**:
+   - On the small card (outside).
+   - On the full page (inside).
 
-2. **Review chat_history RLS policies**
-   - Consolidate overlapping SELECT policies
-   - Ensure session IDs are cryptographically random
-   - Add explicit deny for cross-session access
+3) Extraction must populate the real Provident sections:
+   - USP bullets + headline
+   - amenities
+   - location distances
+   - FAQs
+   - payment breakdown
+   - images + brochure docs (internally mirrored)
 
-### Priority 2: Complete Chat Conversational Flow
-
-3. **Integrate ChatConversationalCollect into AIChatWidget**
-   - Import component
-   - Add render case for `step === 'conversational_collect'`
-   - Update `handleEmailVerified` to use conversational flow instead of form
-
-4. **Implement Smart Qualification in AI Chat**
-   - Update `ai-chat-support` edge function with qualification prompts
-   - Add location, budget, investment history questions
-
-### Priority 3: Marketing Hub
-
-5. **Create database tables**
-   - `marketing_campaigns`
-   - `newsletter_subscribers`
-   - `marketing_templates`
-
-6. **Create Marketing Hub UI**
-   - `/admin/marketing-hub` route
-   - Campaign list, editor, preview components
-   - AI content assistant
-
-### Priority 4: Homepage Fixes
-
-7. **Add sqm/sqft and currency to SearchModule**
-   - Area size filter with toggle
-   - Currency selector (AED/USD/EUR)
-
-8. **Improve "Find Your Starting Point" mobile**
-   - Increase text size from `text-[8px]` to `text-xs`
-   - Increase icon size
-   - Consider vertical layout on very small screens
-
-### Priority 5: Extraction & Detail Page
-
-9. **Test and verify extraction completeness**
-   - Run test extraction
-   - Verify all fields populate
-   - Fix any remaining regex issues
-
-10. **Complete project detail page integration**
-    - Verify all new components render correctly
-    - Test floor plan gallery
-    - Test CTA and newsletter sections
-
-### Priority 6: Video/Media Requests
-
-11. **Regenerate Why Dubai video scenes**
-    - Burj Khalifa: day-to-night transition with downtown skyline
-    - Burj Al Arab: drone zoom in with beach waves
-    - These require new video assets (cannot be done via code)
-
-12. **Add video hover to Broker Hub mega menu**
-    - Replace static image with video element
-    - Only on desktop
+4) Stop “old UI/old preview” behavior; the admin flow must match the approved Provident mirroring standard.
 
 ---
 
-## PART 4: SUMMARY METRICS
+## Implementation plan (what I will change, in the correct order)
 
-| Category | Total Items | Complete | Partial | Not Started |
-|----------|-------------|----------|---------|-------------|
-| Security Fixes | 2 | 0 | 1 | 1 |
-| Chat Enhancements | 5 | 0 | 3 | 2 |
-| Marketing Hub | 6 | 0 | 0 | 6 |
-| Homepage/UI | 7 | 1 | 4 | 2 |
-| Header/Footer | 7 | 3 | 4 | 0 |
-| Extraction System | 7 | 3 | 3 | 1 |
-| Project Detail | 7 | 0 | 5 | 2 |
-| Admin/AI Tools | 4 | 0 | 0 | 4 |
-| **TOTAL** | **45** | **7 (16%)** | **20 (44%)** | **18 (40%)** |
+### A) Fix the Admin “Test One Listing” panel so it reflects reality (immediate)
+**Goal:** When you run “Test One Listing”, you must see:
+- a real small card preview (Provident style),
+- a “View Full Page” link,
+- a checklist that matches the actual database fields,
+- and images that actually render.
 
----
+**Changes**
+1. **Update TestOneListingPanel types + parsing**
+   - Parse `images` as objects and render with `img.url`.
+   - Parse `documents` as objects `{ url, type, name }`.
+   - Read `amenities_list` (JSON array) not `amenities`.
+   - Read `usp_bullets` (JSON array) correctly.
+   - Update the checklist to use:
+     - `images.length >= 2`
+     - `documents.some(d => d.type === 'brochure' && d.url)`
+     - `usp_bullets.length >= 2` (or your chosen threshold)
+     - `amenities_list.length >= 3` (or your chosen threshold)
+     - and include additional checks you requested (FAQs, distances, payment breakdown).
 
-## PART 5: NEXT ACTIONS
+2. **Add the two-view preview you demanded**
+   - Inside TestOneListingPanel, render:
+     - “Small Card Preview” using the same component style as the admin queue card (or reuse the queue card component directly).
+     - “Open Full Page Preview” button that routes to `/listing-admin/preview/:id`.
 
-I will implement fixes in the following order upon approval:
+3. **Add Approve/Reject entry points (outside + inside)**
+   - The inside approve already exists on `PendingImportPreview` (adminBar).
+   - I will add “Approve / Reject” controls to the outside card preview in TestOneListingPanel, so you can approve without opening the full page.
 
-**Batch 1 (Security + Chat)**
-- Fix rental_listings landlord PII exposure
-- Integrate ChatConversationalCollect into AIChatWidget
-- Add smart qualification to ai-chat-support
-
-**Batch 2 (Marketing Hub)**
-- Create database tables
-- Create MarketingHub page and components
-- Create send-campaign edge function
-
-**Batch 3 (Homepage + UI)**
-- Add sqm/sqft and currency to SearchModule
-- Improve Find Your Starting Point mobile sizing
-- Complete remaining header/footer fixes
-
-**Batch 4 (Extraction + Detail Page)**
-- Test and verify extraction fixes
-- Complete project detail page integration
-- Create AI audit function
+**Files**
+- `src/components/listing-admin/TestOneListingPanel.tsx` (main fix)
+- Potential small helper extracted inside the file or reuse existing:
+  - `src/components/listing-admin/PendingImportCard.tsx` (reuse or extend for approve buttons)
 
 ---
 
-## Questions for Clarification
+### B) Make the queue card (outside view) match your “Provident small listing card” requirement
+Right now, the queue uses `PendingImportCard` and clicking it routes to `/listing-admin/preview/:id` (good), but it doesn’t have outside approve/reject by default.
 
-1. **Video Assets**: The Burj Khalifa day-to-night and Burj Al Arab drone videos require actual video production. Do you have these videos ready to upload, or should I use stock footage alternatives?
+**Changes**
+1. Add **Approve** and **Reject** buttons to the card “action bar” (outside), consistent with your approved button styles.
+2. Ensure clicking the card still opens the full page, but the approve/reject buttons don’t accidentally navigate.
 
-2. **Marketing Hub Priority**: Should the Marketing Hub be a dedicated admin page (`/admin/marketing-hub`) or integrated into the existing Admin dashboard?
+**Files**
+- `src/components/listing-admin/PendingImportCard.tsx`
+- `src/components/listing-admin/ProjectApprovalQueue.tsx` (wire approve/reject handlers into cards if needed)
 
-3. **Newsletter Subscribers**: Should the newsletter signup from the project detail page also be gated (require email verification) or allow simple subscription?
+---
 
-4. **Broker Hub Video**: Do you have a specific video clip for the broker mega menu hover, or should I use one of the existing `broker-*.mp4` files?
+### C) Fix extraction so it reliably fills Provident sections (USPs, amenities, etc.)
+You are correct: if the DB fields are empty, the full Provident-mirror page cannot display them.
 
+**Key change: Prefer Provident’s Gatsby page-data JSON as a primary source when possible**
+- The page-data endpoint contains structured fields (and is far more reliable than parsing Firecrawl markdown for some pages).
+- We will use it when available and fall back to Firecrawl only when needed.
+
+**Changes**
+1. Add a shared extractor that:
+   - fetches `https://providentestate.com/page-data/new-projects/{slug}/page-data.json`
+   - pulls the structured content for:
+     - `about` / description
+     - images arrays (media_images)
+     - amenities arrays
+     - FAQ items
+     - payment plan milestones/breakdown
+     - location distances (if present)
+   - normalizes images (no `data:` URIs; no broken sizes)
+2. Update `batch-extract-pending` to:
+   - try Gatsby page-data first,
+   - then Firecrawl scrape fallback (current path),
+   - then write the same DB fields as now:
+     - `usp_headline`, `usp_bullets`, `amenities_list`, `location_distances`, `faqs`, `payment_breakdown`,
+     - `images`, `documents` (brochure mirrored to internal storage).
+3. Ensure completeness rules match the Provident mirror requirements (and match what the UI checks).
+
+**Files**
+- `supabase/functions/_shared/provident/` (new shared parser module)
+- `supabase/functions/batch-extract-pending/index.ts` (use Gatsby data, not only Firecrawl markdown)
+- (Optional) `supabase/functions/repair-project-extraction/index.ts` (see next section)
+
+---
+
+### D) Fix broken photos caused by unsafe image resizing in repair logic
+**Changes**
+1. In `repair-project-extraction`, stop rewriting to `/x/1200x800/` and instead:
+   - keep original size, or
+   - normalize to a safe size known to load (matching your stability policy).
+2. Explicitly drop `data:image/...` URLs and other non-fetchable placeholders.
+
+**Files**
+- `supabase/functions/repair-project-extraction/index.ts`
+
+---
+
+### E) Verify the full “card -> full page” workflow exactly as you described
+After the fixes, verification will be done in this exact user journey:
+
+1. Go to `/listing-admin`
+2. See the queue cards:
+   - One main photo
+   - Description with `...more`
+   - **Approve** visible on the card (outside)
+3. Click the card:
+   - Opens `/listing-admin/preview/:id`
+   - Full Provident-mirror page loads with header/footer
+   - **Approve** also available on the page (inside)
+4. USPs/Amenities/Distances/FAQs/Payment show and tabs appear (not hidden)
+5. Images load without needing scroll tricks or repair cycles
+
+---
+
+## Why it looked like I “didn’t do it”
+Based on what I can see in the repository and the DB:
+- Parts of the Provident mirror UI were created (full page preview exists and uses `ProjectDetailLayout`).
+- But the **Test One Listing panel is out-of-sync with the actual DB field shapes**, so it shows broken images + missing fields even when the extraction wrote them, and it cannot preview the two-view “small card + full page” flow the way you asked.
+- Also, many items are still `PENDING_SCRAPE`, meaning they genuinely have no extracted data yet.
+
+This plan fixes the UI truthfulness first (so you can trust what you see), then makes extraction deterministic and complete.
+
+---
+
+## One critical question (needed to implement your “Approve outside card” rule correctly)
+Where do you want the outside Approve button to live?
+
+1) On every card inside the main approval queue grid (recommended), and also inside the Test panel card preview  
+2) Only inside the Test panel card preview, and the queue grid remains “Review first, approve on page”
+
+I can implement either, but I need your choice to match your exact workflow expectation.
