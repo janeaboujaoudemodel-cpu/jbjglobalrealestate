@@ -1,403 +1,449 @@
 
-# Comprehensive Listing Fix Plan
-*Full Mirroring of Provident Portal: Cards, Extraction, Layout, Forms, and UI*
+
+# Comprehensive Mobile Menu, Currency Selector, Hero & UI Fixes
+*Fixing 8 Critical Issues Across Header, Market Intelligence, and Navigation*
 
 ---
 
-## Executive Summary
+## Summary of Issues Identified
 
-Based on thorough code analysis and database inspection, I've identified **23 distinct issues** across the listing system that need to be fixed to achieve full Provident portal mirroring. The core problems stem from:
+From my code analysis, I've identified the following problems that need to be fixed:
 
-1. **Extraction failures** - bedrooms, sizes, floor plans, FAQs, and location distances are not being extracted or are being mixed together
-2. **UI inconsistencies** - cards are rectangular not square, forms have white/black styling instead of champagne
-3. **Data corruption in database** - floor_plan_types contains location data, USP images point to floor plans instead of actual USP photos
-
----
-
-## Issues Categorized
-
-### Category A: Extraction Logic Failures
-
-| Issue | Root Cause | Impact |
-|-------|------------|--------|
-| Bedrooms show "Contact Us" | `bedrooms_min`/`bedrooms_max` are NULL in database | All cards show wrong data |
-| Size shows "Contact Us" | `size_min`/`size_max` are NULL in database | All cards show wrong data |
-| Floor plans mixed with location | Extraction regex captures location data in `floor_plan_types` | Wrong data in floor plan section |
-| Location distances empty | `location_distances` array is empty despite data existing | Location section incomplete |
-| FAQs not extracted | `faqs` array is empty | Useful Info section empty |
-| USP image wrong | `usp_image_url` points to floor plan image, not actual USP image | Wrong hero image for USP |
-
-### Category B: UI/Layout Issues
-
-| Issue | Root Cause | Impact |
-|-------|------------|--------|
-| Cards are rectangular | `aspect-[4/3]` instead of `aspect-square` in ProjectCard | Cards don't match portal style |
-| Map mixed in gallery | Gallery shows map thumbnail as last image | Confusing gallery |
-| Vertical photos have gaps | No frame/background behind vertical images | Poor visual appearance |
-| Fullscreen view cropped | Dialog `translate-y-[-50%]` causes top crop | Content hidden |
-| Forms have white/black styling | Form inputs use white background with black borders | Not champagne style |
-| CTA form has white background | CallToActionSection form uses white inputs | Inconsistent styling |
-
-### Category C: Missing Features
-
-| Issue | Root Cause | Impact |
-|-------|------------|--------|
-| Brochure not in sticky nav | `SUB_NAV_TABS` doesn't include brochure tab | Can't quick-navigate to brochure |
-| No dedicated brochure section | Brochure section lacks left-side description | Doesn't match portal style |
-| No calendar picker in forms | Forms lack date/time selection | Can't schedule callbacks |
-| No contact method preference | Forms don't ask how user wants to be contacted | Missing preference data |
-| No save/share buttons | Contact section lacks save vCard and share buttons | Missing functionality |
-| Risk section flags 2028 handover | AI Analyzer marks 2028 as risk when it's only 2 years away | Misleading analysis |
+| # | Issue | Root Cause | Files Affected |
+|---|-------|------------|----------------|
+| 1 | Mobile menu touches/overlaps header | `SheetContent` uses `inset-y-0` (full height) + `mt-20` but z-index conflicts | `GlobalHeader.tsx`, `sheet.tsx` |
+| 2 | Mobile menu logo/wordmark cropped | Container has fixed `max-h-[calc(100vh-80px)]` but content overflows on scroll | `GlobalHeader.tsx` |
+| 3 | Guides need arrows/collapsibles | Mobile menu links are flat list, no expandable sections | `GlobalHeader.tsx` |
+| 4 | Language icon labeled for Currency | `LanguageSwitcher` mobile label says "Select Language" but user expected separation | `LanguageSwitcher.tsx`, `GlobalHeader.tsx` |
+| 5 | No currency selector in header | Currency selector doesn't exist globally - only inside SearchModule | New component needed |
+| 6 | GuidedTour doesn't guide to hamburger | Tour shows features but doesn't actually open the hamburger | `GuidedTour.tsx` |
+| 7 | Market Intelligence hero has no photo/video | Hero uses black gradient only, no asset | `MarketIntelligence.tsx` |
+| 8 | Broken 404 links | MegaMenuBrokerHub links to `/broker-certifications` (wrong) | `MegaMenuBrokerHub.tsx`, `MegaMenuMore.tsx`, `GlobalHeader.tsx` |
 
 ---
 
 ## Implementation Plan
 
-### Phase 1: Fix Extraction Logic
+### Phase 1: Fix Mobile Menu Container (Logo/Wordmark Cropping)
 
-**Files to modify:**
-- `supabase/functions/_shared/provident/extract.ts`
-- `supabase/functions/batch-extract-pending/index.ts`
+**Problem:** The SheetContent applies `inset-y-0 right-0 h-full` from base styles, then `max-h-[calc(100vh-80px)] mt-20` from GlobalHeader. This creates a conflict where the menu both fills the screen AND has margin-top, causing overflow issues.
 
-**Changes:**
+**Solution:** Override the sheet positioning to start BELOW the header properly.
 
-1. **Fix bedroom extraction** (lines 117-127 in extract.ts)
-   - Current regex: `/((?:Studio|[\d,&\s\-]+)\s*(?:BR|Bedrooms?|Bedroom))/i`
-   - Problem: Not capturing bedroom ranges correctly
-   - Solution: Add fallback patterns for "Studio, 1, 2, 3 BR" format
+**File:** `src/components/GlobalHeader.tsx` (line 612-615)
 
-2. **Fix size extraction** (lines 129-145 in extract.ts)
-   - Already has regex but may not match Provident's format
-   - Add pattern for "774 sq. ft. - 847 sq. ft." format with sq. ft. (period)
+**Current:**
+```tsx
+<SheetContent
+  side="right"
+  className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] p-0 flex flex-col max-h-[calc(100vh-80px)] mt-20 pt-0"
+>
+```
 
-3. **Fix floor plan extraction** (lines 328-356 in extract.ts)
-   - Problem: Regex captures location distances as floor plan labels
-   - Solution: Stop extraction when encountering "![" (image) or "Location" heading
-   - Only keep items that are bedroom types: "1 Bedroom", "2 Bedroom", "3 Bedroom", "Townhouse", etc.
+**Fixed:**
+```tsx
+<SheetContent
+  side="right"
+  className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] p-0 flex flex-col !top-[128px] !h-[calc(100vh-128px)] !inset-y-auto"
+>
+```
 
-4. **Fix location distances extraction** (lines 380-394 in extract.ts)
-   - Problem: Pattern doesn't match all formats
-   - Solution: Extract from the lines that match "- N Minutes – Place" pattern
-   - Parse from floor_plan_types if they were incorrectly stored there
-
-5. **Fix USP image extraction** (lines 284-300 in extract.ts)
-   - Problem: Captures wrong image (floor plan instead of actual USP image)
-   - Solution: Look for image BEFORE the bullet points, not after
-   - Validate URL doesn't contain "Floorplan" in the path
-
-6. **Fix FAQ extraction** (lines 424-450 in extract.ts)
-   - Problem: Pattern doesn't capture FAQs
-   - Solution: Look for "## Question?" followed by answer text pattern
+This uses `!important` overrides to:
+- Set `top` to 128px (header height)
+- Set height to remaining viewport
+- Remove the conflicting `inset-y-0`
 
 ---
 
-### Phase 2: Fix Database Corruption
+### Phase 2: Add Collapsible Arrows for Guides/Hubs in Mobile Menu
 
-**Action:** Create data repair function to:
-1. Parse `floor_plan_types` and move location data to `location_distances`
-2. Re-extract bedrooms/sizes from description text if available
-3. Fix `usp_image_url` to point to actual USP images (not floor plans)
+**Problem:** Mobile menu shows flat lists without visual hierarchy. User wants collapsible sections with arrows.
 
-**SQL Migration:**
-```sql
--- Fix corrupted floor_plan_types that contain location data
-UPDATE projects SET 
-  floor_plan_types = (
-    SELECT jsonb_agg(item) 
-    FROM jsonb_array_elements(floor_plan_types) AS item
-    WHERE item->>'label' !~ '^- .*Minutes'
-      AND item->>'label' !~ '^!\\['
-      AND item->>'label' !~ '^Location'
-      AND item->>'label' !~ '^###'
-      AND item->>'label' !~ '^Get more'
-  )
-WHERE floor_plan_types IS NOT NULL;
+**Solution:** Convert guide/hub sections to use `Collapsible` component with chevron icons.
+
+**File:** `src/components/GlobalHeader.tsx` (lines 658-822)
+
+**New Structure:**
+```tsx
+// Add new MobileMenuSection component
+const MobileMenuSection = ({ 
+  title, 
+  links, 
+  defaultOpen = false 
+}: { 
+  title: string; 
+  links: Array<{ href: string; label: string; icon: any }>; 
+  defaultOpen?: boolean;
+}) => {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+  
+  return (
+    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+      <CollapsibleTrigger className="w-full flex items-center justify-between px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">
+        <span>{title}</span>
+        <ChevronDown className={cn(
+          "w-4 h-4 text-gold transition-transform duration-200",
+          isOpen && "rotate-180"
+        )} />
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        <div className="pl-2">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              to={link.href}
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+            >
+              <link.icon className="w-4 h-4 text-gold" />
+              {link.label}
+            </Link>
+          ))}
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
+  );
+};
+```
+
+Apply this pattern to:
+- Buy section
+- Rent section
+- Projects section
+- Developers section
+- Areas section
+- Services section
+- Resources & Guides section
+- Partners & Tools section
+
+---
+
+### Phase 3: Separate Language and Currency Icons
+
+**Problem:** Language icon is doing double duty. User wants separate currency selector.
+
+**Solution:** Create new `CurrencySwitcher` component and add it to mobile menu + desktop header.
+
+**New File:** `src/components/CurrencySwitcher.tsx`
+
+```tsx
+import { DollarSign, Check } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
+const CURRENCIES = [
+  { code: 'AED', symbol: 'AED', flag: '🇦🇪', name: 'UAE Dirham' },
+  { code: 'USD', symbol: '$', flag: '🇺🇸', name: 'US Dollar' },
+  { code: 'EUR', symbol: '€', flag: '🇪🇺', name: 'Euro' },
+  { code: 'GBP', symbol: '£', flag: '🇬🇧', name: 'British Pound' },
+];
+
+const CURRENCY_KEY = 'jj_currency';
+
+interface CurrencySwitcherProps {
+  variant?: 'default' | 'mobile' | 'icon-only';
+}
+
+const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
+  const [currency, setCurrencyState] = useState<string>(() => {
+    return localStorage.getItem(CURRENCY_KEY) || 'AED';
+  });
+
+  const setCurrency = (code: string) => {
+    setCurrencyState(code);
+    localStorage.setItem(CURRENCY_KEY, code);
+    // Dispatch event for other components to listen
+    window.dispatchEvent(new CustomEvent('currencyChange', { detail: code }));
+  };
+
+  const currentCurrency = CURRENCIES.find(c => c.code === currency) || CURRENCIES[0];
+  const isMobile = variant === 'mobile';
+  const isIconOnly = variant === 'icon-only';
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        {isMobile ? (
+          <button className="flex flex-col items-center gap-1.5 text-black hover:text-gold py-2 px-3 transition-colors">
+            <DollarSign className="w-5 h-5 text-black" />
+            <span className="text-[9px] text-black font-medium">Currency</span>
+          </button>
+        ) : isIconOnly ? (
+          <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gold/10 group">
+            <DollarSign className="w-4 h-4 text-gold group-hover:text-white group-hover:scale-110 transition-all" />
+          </button>
+        ) : (
+          <button className="h-10 px-3 text-gold hover:text-gold-light rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 flex items-center gap-2">
+            <DollarSign className="w-4 h-4" />
+            <span className="text-xs font-medium">{currentCurrency.code}</span>
+          </button>
+        )}
+      </DropdownMenuTrigger>
+      <DropdownMenuContent 
+        align="end" 
+        sideOffset={12}
+        className="z-[9999] min-w-[240px] rounded-xl shadow-2xl p-0 border-2 border-gold/40"
+        style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}
+      >
+        <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
+        <div className="p-3">
+          {CURRENCIES.map((curr) => (
+            <DropdownMenuItem 
+              key={curr.code}
+              onClick={() => setCurrency(curr.code)}
+              className={`flex items-center justify-between cursor-pointer rounded-lg px-4 py-3 my-0.5 ${
+                currency === curr.code 
+                  ? 'bg-gold/15 border border-gold/30' 
+                  : 'hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8]'
+              }`}
+            >
+              <span className="flex items-center gap-3">
+                <span className="text-lg">{curr.flag}</span>
+                <span className={`text-sm font-semibold ${
+                  currency === curr.code ? 'text-gold' : 'text-black'
+                }`}>{curr.name} ({curr.symbol})</span>
+              </span>
+              {currency === curr.code && <Check className="w-4 h-4 text-gold" />}
+            </DropdownMenuItem>
+          ))}
+        </div>
+        <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+export default CurrencySwitcher;
+```
+
+**Update GlobalHeader.tsx:**
+- Import `CurrencySwitcher`
+- Add to mobile Quick Actions Row (line 634):
+```tsx
+<LanguageSwitcher variant="mobile" />
+<CurrencySwitcher variant="mobile" />
 ```
 
 ---
 
-### Phase 3: Fix Listing Card UI
+### Phase 4: Add Auto-Walkthrough + Help Button for Mobile Menu
 
-**File:** `src/components/ProjectCard.tsx`
+**Problem:** User wants arrows pointing to Guides/Sitemap/Favorites on first visit, plus a persistent Help button.
 
-**Changes:**
-1. **Line 139: Change aspect ratio to square**
-   ```tsx
-   // FROM:
-   <div className="aspect-[4/3] overflow-hidden relative">
-   // TO:
-   <div className="aspect-square overflow-hidden relative">
-   ```
+**Solution:** Create `MobileMenuWalkthrough` component with step-by-step highlighting.
 
-2. **Filter out map images from gallery** (add URL filter)
-   ```tsx
-   const images = (project.images || []).filter(
-     img => !img.image_url?.includes('map') && !img.image_url?.includes('location')
-   );
-   ```
+**New File:** `src/components/MobileMenuWalkthrough.tsx`
 
----
+```tsx
+// Highlights specific menu items with animated arrows
+// Shows on first visit, dismissible
+// "Help" button in menu footer to re-trigger
 
-### Phase 4: Fix Gallery & Fullscreen Issues
+const WALKTHROUGH_KEY = 'jj_mobile_walkthrough_done';
 
-**File:** `src/components/ImageCarousel.tsx`
+interface WalkthroughStep {
+  targetId: string;
+  label: string;
+  description: string;
+}
 
-**Changes:**
+const STEPS: WalkthroughStep[] = [
+  { targetId: 'mobile-guides', label: 'Guides Library', description: 'Find all buyer, seller, tenant, and landlord guides here' },
+  { targetId: 'mobile-favorites', label: 'Favorites', description: 'Save and compare your favorite properties' },
+  { targetId: 'mobile-sitemap', label: 'Sitemap', description: 'Browse all pages on one screen' },
+];
 
-1. **Add background frame for vertical images**
-   ```tsx
-   <div className="relative w-full h-full bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
-     <img
-       src={images[currentIndex].image_url}
-       alt={...}
-       className="max-w-full max-h-full object-contain"
-     />
-   </div>
-   ```
+const MobileMenuWalkthrough = ({ 
+  isOpen, 
+  onComplete,
+  onClose 
+}: { 
+  isOpen: boolean;
+  onComplete: () => void;
+  onClose: () => void;
+}) => {
+  const [currentStep, setCurrentStep] = useState(0);
+  
+  // Renders overlay with arrow pointing to current target
+  // "Next" / "OK" button to advance
+  // Stores completion in localStorage
+};
+```
 
-2. **Fix fullscreen cropping** - adjust dialog positioning
-   ```tsx
-   // In Dialog content wrapper:
-   className="fixed inset-0 z-50 flex items-center justify-center p-4"
-   ```
-
-3. **Filter map images from gallery**
-   ```tsx
-   const filteredImages = images.filter(
-     img => !img.image_url?.toLowerCase().includes('map')
-   );
-   ```
-
----
-
-### Phase 5: Add Brochure to Sticky Nav & Create Dedicated Section
-
-**File:** `src/components/project-detail/ProjectDetailLayout.tsx`
-
-**Changes:**
-
-1. **Add brochure to SUB_NAV_TABS** (line 96-107)
-   ```tsx
-   const SUB_NAV_TABS = [
-     { id: "details", label: "Details", icon: FileText },
-     { id: "gallery", label: "Gallery", icon: ImageIcon },
-     { id: "usp", label: "Highlights", icon: Star },
-     { id: "floor-plans", label: "Floor Plans", icon: Layers },
-     { id: "amenities", label: "Amenities", icon: Building2 },
-     { id: "location", label: "Location", icon: MapPin },
-     { id: "brochure", label: "Brochure", icon: Download }, // NEW
-     { id: "payment", label: "Payment Plan", icon: CreditCard },
-     // ... rest
-   ];
-   ```
-
-2. **Create two-column brochure section** (around line 672)
-   ```tsx
-   <div ref={brochureRef} id="brochure" className="mb-12 scroll-mt-40">
-     <div className="jj-card-inner">
-       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-         {/* Left: Description */}
-         <div>
-           <h3 className="text-h3-sm font-medium text-foreground mb-4">
-             Project Brochure
-           </h3>
-           <p className="text-muted-foreground mb-4">
-             Download the complete brochure for {project.name} to explore 
-             detailed floor plans, pricing, payment options, and lifestyle 
-             amenities. Perfect for offline viewing and sharing.
-           </p>
-           <ul className="space-y-2 text-sm text-muted-foreground">
-             <li className="flex items-center gap-2">
-               <Check className="w-4 h-4 text-gold" /> Full floor plan layouts
-             </li>
-             <li className="flex items-center gap-2">
-               <Check className="w-4 h-4 text-gold" /> Detailed specifications
-             </li>
-             <li className="flex items-center gap-2">
-               <Check className="w-4 h-4 text-gold" /> Payment plan breakdown
-             </li>
-           </ul>
-         </div>
-         {/* Right: Brochure card */}
-         <div className="flex justify-center">
-           <PremiumBrochureCard
-             projectName={project.name}
-             brochureUrl={brochurePrimary?.url}
-             projectImageUrl={heroImageUrl}
-             onDownloadClick={() => handleDocumentDownload("brochure", brochurePrimary?.url)}
-             isLocked={!isLeadCaptured && !!brochurePrimary}
-           />
-         </div>
-       </div>
-     </div>
-   </div>
-   ```
+**Add to GlobalHeader mobile menu:**
+- Add data-id attributes to key links: `data-id="mobile-guides"`, `data-id="mobile-favorites"`, `data-id="mobile-sitemap"`
+- Add Help button at bottom of ScrollArea:
+```tsx
+<button 
+  onClick={() => setShowWalkthrough(true)}
+  className="flex items-center gap-2 px-4 py-3 text-sm text-gold hover:bg-gold/10 rounded-lg w-full"
+>
+  <HelpCircle className="w-4 h-4" />
+  Help & Navigation Guide
+</button>
+```
 
 ---
 
-### Phase 6: Fix Form Styling (Champagne Theme)
+### Phase 5: Generate & Add Market Intelligence Hero Asset
 
-**Files to modify:**
-- `src/components/project-detail/CallToActionSection.tsx`
-- `src/components/ConsultationRequestForm.tsx`
+**Problem:** Market Intelligence page has no hero background, just black gradients.
 
-**Changes for CallToActionSection.tsx (lines 150-240):**
+**Solution:** Create an edge function to generate an AI hero image for Market Intelligence, then use it as the background.
 
-1. **Change form background from white to champagne**
-   ```tsx
-   // FROM:
-   className="bg-card border-gold/30"
-   // TO:
-   className="bg-gradient-to-br from-champagne/20 via-champagne-light/10 to-champagne/20 border-gold/30"
-   ```
-
-2. **Change input styling**
-   ```tsx
-   // FROM:
-   <Input className="bg-card border-gold/30 focus:border-gold" />
-   // TO:
-   <Input className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/40 focus:border-gold text-black" />
-   ```
-
-3. **Add preferred contact time field**
-   ```tsx
-   <FormField
-     control={form.control}
-     name="preferredTime"
-     render={({ field }) => (
-       <FormItem>
-         <FormLabel className="text-foreground">Preferred Time to Call</FormLabel>
-         <Select onValueChange={field.onChange} value={field.value}>
-           <FormControl>
-             <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/40">
-               <SelectValue placeholder="Select time slot" />
-             </SelectTrigger>
-           </FormControl>
-           <SelectContent className="bg-white">
-             <SelectItem value="morning">Morning (9AM - 12PM)</SelectItem>
-             <SelectItem value="afternoon">Afternoon (12PM - 5PM)</SelectItem>
-             <SelectItem value="evening">Evening (5PM - 8PM)</SelectItem>
-             <SelectItem value="anytime">Anytime</SelectItem>
-           </SelectContent>
-         </Select>
-       </FormItem>
-     )}
-   />
-   ```
-
-4. **Add contact method preference field**
-   ```tsx
-   <FormField
-     control={form.control}
-     name="contactMethod"
-     render={({ field }) => (
-       <FormItem>
-         <FormLabel className="text-foreground">Preferred Contact Method</FormLabel>
-         <Select onValueChange={field.onChange} value={field.value}>
-           <FormControl>
-             <SelectTrigger className="...champagne styling...">
-               <SelectValue placeholder="How should we contact you?" />
-             </SelectTrigger>
-           </FormControl>
-           <SelectContent>
-             <SelectItem value="phone">Phone Call</SelectItem>
-             <SelectItem value="whatsapp">WhatsApp</SelectItem>
-             <SelectItem value="email">Email</SelectItem>
-             <SelectItem value="zoom">Video Call (Zoom)</SelectItem>
-           </SelectContent>
-         </Select>
-       </FormItem>
-     )}
-   />
-   ```
-
----
-
-### Phase 7: Fix AI Analyzer Risk Logic
-
-**File:** `src/components/AIMarketAnalyzer.tsx` (or related AI analysis component)
-
-**Change:**
-- Don't flag handover dates within 3 years as "risk"
-- Only show handover as risk if > 4 years away
+**New Edge Function:** `supabase/functions/generate-hero-image/index.ts`
 
 ```typescript
-const currentYear = new Date().getFullYear();
-const handoverYear = parseInt(handoverDate?.match(/\d{4}/)?.[0] || '0');
-const yearsUntilHandover = handoverYear - currentYear;
-
-// Only flag as risk if handover is more than 4 years away
-const isHandoverRisk = yearsUntilHandover > 4;
+// Calls Lovable AI with Gemini image model
+// Prompt: "Professional, cinematic hero image for a real estate market intelligence dashboard. 
+//          Abstract data visualization, dark background with gold accents, Dubai skyline silhouette,
+//          flowing charts and graphs, premium financial aesthetic. 16:9 aspect ratio."
+// Saves to storage bucket, returns URL
 ```
 
----
-
-### Phase 8: Add Save/Share Buttons to Contact Section
-
-**File:** `src/components/project-detail/ProjectDetailLayout.tsx`
-
-**Add after the contact cards section (around line 829):**
+**Update Market Intelligence Page:**
 ```tsx
-<div className="flex justify-center gap-4 mt-6">
-  <Button
-    variant="secondary"
-    size="sm"
-    onClick={handleSaveContact}
-    className="gap-2"
-  >
-    <Download className="w-4 h-4" />
-    Save Contact
-  </Button>
-  <Button
-    variant="secondary"
-    size="sm"
-    onClick={handleShare}
-    className="gap-2"
-  >
-    <Share2 className="w-4 h-4" />
-    Share
-  </Button>
-</div>
+// src/pages/MarketIntelligence.tsx
+<section className="jj-hero-fullscreen relative flex items-center overflow-hidden">
+  {/* Hero background image */}
+  <img 
+    src="/lovable-uploads/market-intelligence-hero.jpg"
+    alt=""
+    className="absolute inset-0 w-full h-full object-cover"
+  />
+  <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/80 to-black" />
+  // ... rest of hero content
+</section>
 ```
 
 ---
 
-### Phase 9: Fix Dialog Cropping Globally
+### Phase 6: Fix Broken 404 Links
 
-**File:** `src/components/ui/dialog.tsx`
-
-**Change line 39:**
+**MegaMenuBrokerHub.tsx (line 25):**
 ```tsx
-// FROM:
-className="fixed left-[50%] top-[50%] ... translate-y-[-50%] ..."
-// TO:
-className="fixed left-[50%] top-[50%] ... translate-y-[-50%] max-h-[calc(100vh-2rem)] ..."
+// WRONG:
+{ name: 'Certifications', href: '/broker-certifications', icon: Award },
+// CORRECT:
+{ name: 'Certifications', href: '/services/broker-certification', icon: Award },
+```
+
+**MegaMenuMore.tsx (line 29):**
+```tsx
+// WRONG:
+{ label: 'Complaint Procedure', href: '/complaint', icon: ClipboardCheck },
+{ label: 'Testimonials', href: '/testimonials', icon: MessageCircle },
+// CORRECT:
+{ label: 'Complaint Procedure', href: '/services/complaint-procedures', icon: ClipboardCheck },
+{ label: 'Testimonials', href: '/services/testimonials', icon: MessageCircle },
+```
+
+**GlobalHeader.tsx mobile links (line 389-393):**
+```tsx
+// WRONG:
+{ href: "/complaint", label: "Complaint Procedure", icon: ClipboardCheck },
+{ href: "/testimonials", label: "Testimonials", icon: Users },
+// CORRECT:
+{ href: "/services/complaint-procedures", label: "Complaint Procedure", icon: ClipboardCheck },
+{ href: "/services/testimonials", label: "Testimonials", icon: Users },
+```
+
+**Mobile Area Links (line 366-369):**
+```tsx
+// WRONG: /areas/downtown-dubai (route doesn't exist)
+// CORRECT: /area/downtown-dubai (uses :slug pattern)
+{ href: "/area/downtown-dubai", label: "Downtown Dubai", icon: MapPin },
+{ href: "/area/dubai-marina", label: "Dubai Marina", icon: MapPin },
+{ href: "/area/palm-jumeirah", label: "Palm Jumeirah", icon: MapPin },
+{ href: "/area/business-bay", label: "Business Bay", icon: MapPin },
+```
+
+**Mobile Developer Links (line 374-377):**
+```tsx
+// WRONG: /developers/emaar (route doesn't exist)
+// CORRECT: /developer/emaar (uses :slug pattern)
+{ href: "/developer/emaar", label: "Emaar Properties", icon: Building2 },
+{ href: "/developer/damac", label: "DAMAC Properties", icon: Building2 },
+{ href: "/developer/sobha", label: "Sobha Realty", icon: Building2 },
 ```
 
 ---
 
-## Files to Modify Summary
+### Phase 7: Create Missing Philanthropy Page
 
-| File | Changes |
-|------|---------|
-| `supabase/functions/_shared/provident/extract.ts` | Fix all extraction regexes (bedrooms, sizes, floor plans, location, USP, FAQs) |
-| `supabase/functions/batch-extract-pending/index.ts` | Map all fixed fields correctly |
-| `src/components/ProjectCard.tsx` | Change to square aspect ratio, filter map images |
-| `src/components/ImageCarousel.tsx` | Add frame for vertical images, filter maps, fix fullscreen |
-| `src/components/project-detail/ProjectDetailLayout.tsx` | Add brochure to nav, create dedicated brochure section, add save/share |
-| `src/components/project-detail/CallToActionSection.tsx` | Champagne form styling, add preferred time & contact method fields |
-| `src/components/ConsultationRequestForm.tsx` | Verify champagne styling is applied |
-| `src/components/AIMarketAnalyzer.tsx` | Fix handover risk logic |
-| `src/components/ui/dialog.tsx` | Fix cropping with max-height constraint |
-| Database migration | Clean corrupted floor_plan_types data |
+**Problem:** `/philanthropy` is linked but page doesn't exist.
+
+**New File:** `src/pages/Philanthropy.tsx`
+
+```tsx
+// Placeholder page with:
+// - Hero section (jj-hero-fullscreen)
+// - "Coming Soon" content
+// - Contact CTA
+// - Footer
+```
+
+**Add Route in App.tsx:**
+```tsx
+<Route path="/philanthropy" element={<Philanthropy />} />
+```
+
+---
+
+## Files to Create/Modify Summary
+
+| File | Action | Changes |
+|------|--------|---------|
+| `src/components/CurrencySwitcher.tsx` | CREATE | New currency selector component |
+| `src/components/MobileMenuWalkthrough.tsx` | CREATE | Walkthrough/help overlay |
+| `src/pages/Philanthropy.tsx` | CREATE | Missing page placeholder |
+| `src/components/GlobalHeader.tsx` | MODIFY | Fix SheetContent, add collapsibles, add currency switcher, fix 404 links |
+| `src/components/header/MegaMenuBrokerHub.tsx` | MODIFY | Fix `/broker-certifications` link |
+| `src/components/header/MegaMenuMore.tsx` | MODIFY | Fix `/complaint` and `/testimonials` links |
+| `src/pages/MarketIntelligence.tsx` | MODIFY | Add hero background image |
+| `src/App.tsx` | MODIFY | Add Philanthropy route |
+| `supabase/functions/generate-hero-image/index.ts` | CREATE | AI image generation for Market Intelligence hero |
+
+---
+
+## Technical Notes
+
+### Currency System Architecture
+- Store selected currency in `localStorage` with key `jj_currency`
+- Dispatch `currencyChange` CustomEvent when changed
+- Components like `ProjectCard`, `SearchModule`, `PropertyFilters` already have currency conversion logic
+- They will listen to the global event to update their display
+
+### Mobile Menu Walkthrough Flow
+1. First visit: After 2 seconds, if `jj_mobile_walkthrough_done` not set, open hamburger
+2. Show animated arrow pointing to "Guides Library"
+3. User taps "Next" → arrow moves to "Favorites"
+4. User taps "Next" → arrow moves to "Sitemap"
+5. User taps "Done" → localStorage marked, walkthrough dismisses
+6. "Help" button in menu footer can re-trigger anytime
+
+### Hero Image Generation
+- Uses `google/gemini-3-pro-image-preview` for higher quality
+- Generates 1920x1080 cinematic image
+- Uploads to Supabase storage
+- Returns public URL for use in `<img>` tag
 
 ---
 
 ## Execution Order
 
-1. Fix extraction logic in extract.ts (prevents future bad data)
-2. Deploy edge functions
-3. Run database cleanup migration
-4. Fix frontend UI components (cards, gallery, forms)
-5. Re-extract test listings to verify fixes
-6. Test end-to-end on mobile/tablet/desktop
+1. Fix mobile menu container positioning (prevents cropping)
+2. Add collapsible sections with arrows
+3. Create CurrencySwitcher component
+4. Add currency to mobile + desktop header
+5. Fix all 404 broken links
+6. Create Philanthropy placeholder page
+7. Generate Market Intelligence hero image
+8. Create MobileMenuWalkthrough component
+9. Test end-to-end on mobile/tablet
+
