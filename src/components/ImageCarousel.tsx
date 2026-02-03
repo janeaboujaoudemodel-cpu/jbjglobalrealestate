@@ -17,9 +17,21 @@ interface ImageCarouselProps {
   projectName?: string;
 }
 
-const ImageCarousel = ({ images, projectName = "project" }: ImageCarouselProps) => {
+const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // FIXED: Filter out map images and location thumbnails from gallery
+  const images = useMemo(() => {
+    return (rawImages || []).filter(img => {
+      const url = img.image_url?.toLowerCase() || "";
+      // Exclude map images, location images, and thumbnails
+      if (url.includes("map") && !url.includes("maptype=satellite")) return false;
+      if (url.includes("location") && url.includes("thumbnail")) return false;
+      if (url.includes("google.com/maps")) return false;
+      return true;
+    });
+  }, [rawImages]);
 
   const hasMultiple = useMemo(() => (images?.length ?? 0) > 1, [images]);
 
@@ -70,12 +82,12 @@ const ImageCarousel = ({ images, projectName = "project" }: ImageCarouselProps) 
   return (
     <>
       <div className="relative">
-        {/* Main Image */}
-        <div className="aspect-[16/9] rounded-lg overflow-hidden bg-muted relative group">
+        {/* Main Image - with background frame for vertical images */}
+        <div className="aspect-[16/9] rounded-lg overflow-hidden bg-gradient-to-br from-muted via-muted/80 to-muted/60 relative group flex items-center justify-center">
           <img
             src={images[currentIndex].image_url}
             alt={images[currentIndex].alt_text || "Project image"}
-            className="w-full h-full object-cover"
+            className="max-w-full max-h-full w-full h-full object-contain"
           />
           
           {/* Overlay Controls */}
@@ -176,11 +188,11 @@ const ImageCarousel = ({ images, projectName = "project" }: ImageCarouselProps) 
 
       {/* Fullscreen Dialog */}
       <Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
-        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-background border-none" aria-describedby={undefined}>
+        <DialogContent className="max-w-[95vw] max-h-[calc(100vh-4rem)] p-0 bg-background border-none top-[52%]" aria-describedby={undefined}>
           <VisuallyHidden.Root>
             <DialogTitle>Image Gallery - {projectName}</DialogTitle>
           </VisuallyHidden.Root>
-          <div className="relative w-full h-[90vh] flex items-center justify-center bg-background">
+          <div className="relative w-full h-[calc(90vh-2rem)] flex items-center justify-center bg-gradient-to-br from-muted via-background to-muted/80">
             <img
               src={images[currentIndex].image_url}
               alt={images[currentIndex].alt_text || "Project image"}
