@@ -182,6 +182,14 @@ const fetchHtml = async (url: string, timeoutMs = 25000): Promise<{ ok: boolean;
   }
 };
 
+// Custom error for credit exhaustion - will bubble up
+class CreditsExhaustedError extends Error {
+  constructor() {
+    super("CREDITS_EXHAUSTED");
+    this.name = "CreditsExhaustedError";
+  }
+}
+
 const firecrawlScrapeLinks = async (url: string, firecrawlKey: string): Promise<string[]> => {
   // Provident can trigger Firecrawl rate-limits; retry a few times with backoff.
   // (No `actions` parameter on purpose — stability policy.)
@@ -201,6 +209,12 @@ const firecrawlScrapeLinks = async (url: string, firecrawlKey: string): Promise<
     if (res.ok) {
       const data = await res.json().catch(() => ({}));
       return (data?.data?.links || data?.links || []) as string[];
+    }
+
+    // CRITICAL: 402 = credits exhausted - throw immediately, don't retry
+    if (res.status === 402) {
+      console.error(`[Discover] CREDITS_EXHAUSTED at ${url}`);
+      throw new CreditsExhaustedError();
     }
 
     // Retry on rate limits / transient upstream
@@ -346,6 +360,22 @@ serve(async (req) => {
       if (!mapRes.ok) {
         const errText = await mapRes.text();
         console.error("[Discover] MAP failed:", errText);
+        
+        // CRITICAL: Handle 402 credit exhaustion - stop immediately, don't throw 500
+        if (mapRes.status === 402) {
+          console.error("[Discover] CREDITS_EXHAUSTED - Firecrawl returned 402");
+          return new Response(JSON.stringify({ 
+            success: false,
+            credits_exhausted: true,
+            error: "Firecrawl credits exhausted. Please add more credits at https://firecrawl.dev/pricing",
+            canonical_pages: CANONICAL_TOTAL_PAGES,
+            canonical_listings: CANONICAL_TOTAL_LISTINGS,
+          }), {
+            status: 402,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        
         return new Response(JSON.stringify({ error: `MAP failed: ${mapRes.status}`, details: errText.substring(0, 300) }), {
           status: 500,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -622,6 +652,22 @@ serve(async (req) => {
 
   } catch (error) {
     console.error("[Discover] Error:", error);
+    
+    // CRITICAL: Handle credit exhaustion thrown from nested functions
+    if (error instanceof CreditsExhaustedError || 
+        (error instanceof Error && error.message === "CREDITS_EXHAUSTED")) {
+      return new Response(JSON.stringify({ 
+        success: false,
+        credits_exhausted: true,
+        error: "Firecrawl credits exhausted. Please add more credits at https://firecrawl.dev/pricing",
+        canonical_pages: CANONICAL_TOTAL_PAGES,
+        canonical_listings: CANONICAL_TOTAL_LISTINGS,
+      }), {
+        status: 402,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    
     return new Response(JSON.stringify({ 
       success: false, 
       error: error instanceof Error ? error.message : "Unknown error" 
