@@ -10,7 +10,7 @@ import {
   Home, Heart, User, LogOut, Settings, Menu, 
   Phone, Building2, Newspaper, ClipboardCheck, FileText,
   Sparkles, Search, Users, BookOpen, ChevronDown, Briefcase, UserCircle, FolderOpen, Monitor,
-  GraduationCap, BarChart3, MapPin, Award, UserPlus, Globe
+  GraduationCap, BarChart3, MapPin, Award, UserPlus, Globe, HelpCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -30,7 +30,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BrandMonogram } from "@/components/BrandMonogram";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import CurrencySwitcher from "@/components/CurrencySwitcher";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
+import MobileMenuWalkthrough, { useAutoWalkthrough } from "@/components/MobileMenuWalkthrough";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { cn } from "@/lib/utils";
 import { useIsTouchLayout } from "@/hooks/use-touch-layout";
 import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
@@ -63,6 +67,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchInitialQuery, setSearchInitialQuery] = useState("");
+  const [showWalkthrough, setShowWalkthrough] = useState(false);
   const { t } = useLanguage();
   const isTouchLayout = useIsTouchLayout();
   
@@ -363,18 +368,18 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   // Mobile menu links - Areas section
   const mobileAreaLinks = [
     { href: "/areas", label: "All Areas", icon: MapPin },
-    { href: "/areas/downtown-dubai", label: "Downtown Dubai", icon: MapPin },
-    { href: "/areas/dubai-marina", label: "Dubai Marina", icon: MapPin },
-    { href: "/areas/palm-jumeirah", label: "Palm Jumeirah", icon: MapPin },
-    { href: "/areas/business-bay", label: "Business Bay", icon: MapPin },
+    { href: "/area/downtown-dubai", label: "Downtown Dubai", icon: MapPin },
+    { href: "/area/dubai-marina", label: "Dubai Marina", icon: MapPin },
+    { href: "/area/palm-jumeirah", label: "Palm Jumeirah", icon: MapPin },
+    { href: "/area/business-bay", label: "Business Bay", icon: MapPin },
   ];
 
   // Mobile menu links - Developers section  
   const mobileDeveloperLinks = [
     { href: "/developers", label: "All Developers", icon: Building2 },
-    { href: "/developers/emaar", label: "Emaar Properties", icon: Building2 },
-    { href: "/developers/damac", label: "DAMAC Properties", icon: Building2 },
-    { href: "/developers/sobha", label: "Sobha Realty", icon: Building2 },
+    { href: "/developer/emaar", label: "Emaar Properties", icon: Building2 },
+    { href: "/developer/damac", label: "DAMAC Properties", icon: Building2 },
+    { href: "/developer/sobha", label: "Sobha Realty", icon: Building2 },
   ];
 
   // Mobile menu links - More section (comprehensive)
@@ -386,8 +391,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/join", label: "Careers", icon: Briefcase },
     { href: "/awards", label: "Our Awards", icon: Award },
     { href: "/contact", label: "Contact Us", icon: Phone },
-    { href: "/complaint", label: "Complaint Procedure", icon: ClipboardCheck },
-    { href: "/testimonials", label: "Testimonials", icon: Users },
+    { href: "/services/complaint-procedures", label: "Complaint Procedure", icon: ClipboardCheck },
+    { href: "/services/testimonials", label: "Testimonials", icon: Users },
     { href: "/press-kit", label: "Press Kit", icon: FileText },
     { href: "/company-profile", label: "Company Profile", icon: FileText },
     { href: "/philanthropy", label: "Philanthropy", icon: Users },
@@ -611,7 +616,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 </SheetTrigger>
                 <SheetContent
                   side="right"
-                  className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] p-0 flex flex-col max-h-[calc(100vh-80px)] mt-20 pt-0"
+                  className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] p-0 flex flex-col !top-[80px] sm:!top-[112px] lg:!top-[128px] !h-[calc(100dvh-80px)] sm:!h-[calc(100dvh-112px)] lg:!h-[calc(100dvh-128px)] !inset-y-auto"
                 >
                 {/* Menu Header - CHAT SUPPORT LOGO (light bg version), proper spacing */}
                 <div className="relative border-b border-gold/30 flex items-center gap-4 px-5 py-4 shrink-0">
@@ -652,173 +657,296 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     <span className="text-[9px] text-black font-medium">{user ? "My Account" : "Sign In"}</span>
                   </Link>
                   <LanguageSwitcher variant="mobile" />
+                  <CurrencySwitcher variant="mobile" />
                 </div>
 
-                {/* Scrollable Navigation */}
+                {/* Scrollable Navigation with Collapsible Sections */}
                 <ScrollArea className="flex-1">
                   <nav className="flex flex-col p-4">
-                    {/* 1. Buy */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Buy</p>
-                    {mobileBuyLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        to={link.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
-                      >
-                        <link.icon className="w-4 h-4 text-gold" />
-                        {link.label}
-                      </Link>
-                    ))}
+                    {/* 1. Buy - Collapsible */}
+                    <Collapsible defaultOpen>
+                      <CollapsibleTrigger className="w-full flex items-center justify-between px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                        <span>Buy</span>
+                        <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200 [&[data-state=open]>svg]:rotate-180" />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <div className="pl-2">
+                          {mobileBuyLinks.map((link) => (
+                            <Link
+                              key={link.href}
+                              to={link.href}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                            >
+                              <link.icon className="w-4 h-4 text-gold" />
+                              {link.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
 
                     <div className="h-px bg-gold/20 my-2" />
                     
-                    {/* 2. Rent */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Rent</p>
-                    {mobileRentLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        to={link.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
-                      >
-                        <link.icon className="w-4 h-4 text-gold" />
-                        {link.label}
-                      </Link>
-                    ))}
+                    {/* 2. Rent - Collapsible */}
+                    <Collapsible defaultOpen>
+                      <CollapsibleTrigger className="w-full flex items-center justify-between px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                        <span>Rent</span>
+                        <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <div className="pl-2">
+                          {mobileRentLinks.map((link) => (
+                            <Link
+                              key={link.href}
+                              to={link.href}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                            >
+                              <link.icon className="w-4 h-4 text-gold" />
+                              {link.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
 
                     <div className="h-px bg-gold/20 my-2" />
 
-                    {/* 3. Projects */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Projects</p>
-                    <Link
-                      to="/properties"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
-                    >
-                      <Building2 className="w-4 h-4 text-gold" />
-                      All Off-Plan Projects
-                    </Link>
-                    <Link
-                      to="/properties?status=off-plan"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
-                    >
-                      <Building2 className="w-4 h-4 text-gold" />
-                      New Launches
-                    </Link>
+                    {/* 3. Projects - Collapsible */}
+                    <Collapsible>
+                      <CollapsibleTrigger className="w-full flex items-center justify-between px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                        <span>Projects</span>
+                        <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <div className="pl-2">
+                          <Link
+                            to="/properties"
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                          >
+                            <Building2 className="w-4 h-4 text-gold" />
+                            All Off-Plan Projects
+                          </Link>
+                          <Link
+                            to="/properties?status=off-plan"
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                          >
+                            <Building2 className="w-4 h-4 text-gold" />
+                            New Launches
+                          </Link>
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
 
                     <div className="h-px bg-gold/20 my-2" />
 
-                    {/* 4. Developers */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Developers</p>
-                    {mobileDeveloperLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        to={link.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
-                      >
-                        <link.icon className="w-4 h-4 text-gold" />
-                        {link.label}
-                      </Link>
-                    ))}
+                    {/* 4. Developers - Collapsible */}
+                    <Collapsible>
+                      <CollapsibleTrigger className="w-full flex items-center justify-between px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                        <span>Developers</span>
+                        <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <div className="pl-2">
+                          {mobileDeveloperLinks.map((link) => (
+                            <Link
+                              key={link.href}
+                              to={link.href}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                            >
+                              <link.icon className="w-4 h-4 text-gold" />
+                              {link.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
 
                     <div className="h-px bg-gold/20 my-2" />
 
-                    {/* 5. Areas */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Areas</p>
-                    {mobileAreaLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        to={link.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
-                      >
-                        <link.icon className="w-4 h-4 text-gold" />
-                        {link.label}
-                      </Link>
-                    ))}
+                    {/* 5. Areas - Collapsible */}
+                    <Collapsible>
+                      <CollapsibleTrigger className="w-full flex items-center justify-between px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                        <span>Areas</span>
+                        <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <div className="pl-2">
+                          {mobileAreaLinks.map((link) => (
+                            <Link
+                              key={link.href}
+                              to={link.href}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                            >
+                              <link.icon className="w-4 h-4 text-gold" />
+                              {link.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
 
                     <div className="h-px bg-gold/20 my-2" />
 
-                    {/* 6. Services */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Services</p>
-                    {servicesLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        to={link.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
-                      >
-                        <link.icon className="w-4 h-4 text-gold" />
-                        {link.label}
-                      </Link>
-                    ))}
+                    {/* 6. Services - Collapsible */}
+                    <Collapsible>
+                      <CollapsibleTrigger className="w-full flex items-center justify-between px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                        <span>Services</span>
+                        <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <div className="pl-2">
+                          {servicesLinks.map((link) => (
+                            <Link
+                              key={link.href}
+                              to={link.href}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                            >
+                              <link.icon className="w-4 h-4 text-gold" />
+                              {link.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
 
                     <div className="h-px bg-gold/20 my-2" />
 
-                    {/* 7. About & Company */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">About & Company</p>
-                    {mobileMoreLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        to={link.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
-                      >
-                        <link.icon className="w-4 h-4 text-gold" />
-                        {link.label}
-                      </Link>
-                    ))}
+                    {/* 7. About & Company - Collapsible */}
+                    <Collapsible>
+                      <CollapsibleTrigger className="w-full flex items-center justify-between px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                        <span>About & Company</span>
+                        <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <div className="pl-2">
+                          {mobileMoreLinks.map((link) => (
+                            <Link
+                              key={link.href}
+                              to={link.href}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                            >
+                              <link.icon className="w-4 h-4 text-gold" />
+                              {link.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
 
                     <div className="h-px bg-gold/20 my-2" />
 
-                    {/* 8. Resources & Guides */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Resources & Guides</p>
-                    {mobileResourceLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        to={link.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                    {/* 8. Resources & Guides - Collapsible (with walkthrough target) */}
+                    <Collapsible defaultOpen>
+                      <CollapsibleTrigger 
+                        className="w-full flex items-center justify-between px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold hover:bg-gold/5 rounded-lg transition-colors"
+                        data-walkthrough-id="mobile-guides"
                       >
-                        <link.icon className="w-4 h-4 text-gold" />
-                        {link.label}
-                      </Link>
-                    ))}
+                        <span>Resources & Guides</span>
+                        <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <div className="pl-2">
+                          {mobileResourceLinks.map((link) => (
+                            <Link
+                              key={link.href}
+                              to={link.href}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                            >
+                              <link.icon className="w-4 h-4 text-gold" />
+                              {link.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
 
                     <div className="h-px bg-gold/20 my-2" />
 
-                    {/* 9. Partners & Tools */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Partners & Tools</p>
-                    {mobilePartnerLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        to={link.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
-                      >
-                        <link.icon className="w-4 h-4 text-gold" />
-                        {link.label}
-                      </Link>
-                    ))}
+                    {/* 9. Partners & Tools - Collapsible */}
+                    <Collapsible>
+                      <CollapsibleTrigger className="w-full flex items-center justify-between px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                        <span>Partners & Tools</span>
+                        <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <div className="pl-2">
+                          {mobilePartnerLinks.map((link) => (
+                            <Link
+                              key={link.href}
+                              to={link.href}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                            >
+                              <link.icon className="w-4 h-4 text-gold" />
+                              {link.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
 
                     <div className="h-px bg-gold/20 my-2" />
 
-                    {/* 10. Legal & Trust */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Legal & Trust</p>
-                    {mobileLegalLinks.map((link) => (
+                    {/* 10. Legal & Trust - Collapsible */}
+                    <Collapsible>
+                      <CollapsibleTrigger className="w-full flex items-center justify-between px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                        <span>Legal & Trust</span>
+                        <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <div className="pl-2">
+                          {mobileLegalLinks.map((link) => (
+                            <Link
+                              key={link.href}
+                              to={link.href}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                            >
+                              <link.icon className="w-4 h-4 text-gold" />
+                              {link.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
+
+                    <div className="h-px bg-gold/20 my-2" />
+
+                    {/* Quick Links with walkthrough targets */}
+                    <div className="flex flex-col gap-1">
                       <Link
-                        key={link.href}
-                        to={link.href}
+                        to="/favorites"
                         onClick={() => setMobileMenuOpen(false)}
                         className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                        data-walkthrough-id="mobile-favorites"
                       >
-                        <link.icon className="w-4 h-4 text-gold" />
-                        {link.label}
+                        <Heart className="w-4 h-4 text-gold" />
+                        Favorites
+                        {totalCount > 0 && (
+                          <span className="ml-auto bg-gold/20 text-gold text-xs font-medium px-2 py-0.5 rounded-full">
+                            {totalCount}
+                          </span>
+                        )}
                       </Link>
-                    ))}
+                      <Link
+                        to="/sitemap"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                        data-walkthrough-id="mobile-sitemap"
+                      >
+                        <MapPin className="w-4 h-4 text-gold" />
+                        Sitemap
+                      </Link>
+                    </div>
 
                     <div className="h-px bg-gold/20 my-4" />
 
@@ -944,8 +1072,24 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                         {t('nav.signIn')}
                       </Link>
                     )}
+                    {/* Help & Navigation Guide Button */}
+                    <div className="h-px bg-gold/20 my-2" />
+                    <button
+                      onClick={() => setShowWalkthrough(true)}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-gold hover:bg-gold/10 transition-colors rounded-lg w-full text-left"
+                    >
+                      <HelpCircle className="w-4 h-4 text-gold" />
+                      Help & Navigation Guide
+                    </button>
                   </nav>
                 </ScrollArea>
+                
+                {/* Mobile Menu Walkthrough */}
+                <MobileMenuWalkthrough
+                  isOpen={showWalkthrough}
+                  onComplete={() => setShowWalkthrough(false)}
+                  onClose={() => setShowWalkthrough(false)}
+                />
                 </SheetContent>
               </Sheet>
             </div>

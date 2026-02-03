@@ -61,6 +61,7 @@ import Founder from "./pages/Founder";
 import Awards from "./pages/Awards";
 import PressKit from "./pages/PressKit";
 import CompanyProfile from "./pages/CompanyProfile";
+import Philanthropy from "./pages/Philanthropy";
 import News from "./pages/News";
 import BrokerToolkit from "./pages/BrokerToolkit";
 import BrokerDashboard from "./pages/BrokerDashboard";
@@ -301,6 +302,7 @@ const App = () => (
                 <Route path="/awards" element={<Awards />} />
                 <Route path="/press-kit" element={<PressKit />} />
                 <Route path="/company-profile" element={<CompanyProfile />} />
+                <Route path="/philanthropy" element={<Philanthropy />} />
                 <Route path="/news" element={<News />} />
                 <Route path="/broker-toolkit" element={<BrokerToolkit />} />
                 {/* Alias: historical Broker Toolkit dashboard URL */}
