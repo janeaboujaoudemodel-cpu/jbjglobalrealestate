@@ -1,272 +1,192 @@
 
-# Comprehensive UI/UX Improvement Plan
-
-## Overview
-This plan addresses multiple UI/UX issues across the mobile and tablet views, including the "Confused About Where to Buy" section consolidation, footer alignment, My Account dropdown improvements, Market Intelligence hero fix, and mobile hamburger menu behavior.
+# Comprehensive Listing Fix Plan
+*Bedrooms, Sizes, Card Shape, USP Photo, Floor Plans, Newsletter Duplicate, and Contact Form*
 
 ---
 
-## Phase 1: "Confused About Where to Buy" Section Consolidation
+## Summary of Issues Found
 
-### Current Issue
-- The Properties page has **two separate sections**: One with "Confused About Where to Buy" text (lines 1083-1114) and another `OffPlanInquiryCTA` component below it (line 1117)
-- Misleading claim: "Exclusive off-plan launches with up to 80/20 payment plans" (this payment structure is unfavorable to investors)
+After analyzing the codebase and database:
 
-### Solution
-**Merge both sections into a single unified card:**
+1. **No listings appear** — The `projects` table is empty (0 rows). 16 items exist in `pending_project_imports` but have not been approved/inserted into `projects`.
 
-1. **Delete** the duplicate `OffPlanInquiryCTA` import/usage from Properties.tsx
-2. **Consolidate** the "Confused About Where to Buy" section with the consultation form into ONE card
-3. **Remove** the misleading 80/20 payment plan reference from `OffPlanInquiryCTA.tsx`
-4. **Replace** with accurate, neutral description:
-   - "Flexible payment plans tailored to your investment timeline"
-   - "Trusted developers: Emaar, Damac, Sobha, Nakheel & more"
-   - "ROI projections and market insights included"
+2. **Bedrooms and Size show "Contact Us"** — The `ProjectCard.tsx` correctly reads `bedrooms_min`/`bedrooms_max` and `size_min`/`size_max` from the database. However, since no projects exist, this cannot be tested. Additionally, the extraction edge functions (`batch-extract-pending`, `sync-provident-page`) **do not extract `size_min`/`size_max`** from the source portal — they only extract bedrooms.
 
-### Files to Modify
-- `src/pages/Properties.tsx` (remove duplicate sections, consolidate into one)
-- `src/components/OffPlanInquiryCTA.tsx` (remove 80/20 claim, update description)
+3. **Card is 4:3 (rectangular) instead of 1:1 (square)** — `ProjectCard.tsx` uses `aspect-[4/3]` for the image container, not `aspect-square`.
+
+4. **USP photo not extracted correctly** — The extraction regex looks for an image **after** the "Unique Selling Points" heading in the markdown. This often fails because the source page structure varies. The `usp_image_url` field is populated but may contain the wrong image or none.
+
+5. **Floor plan data mixed with location distances** — The extraction regex in `extract.ts` does not clearly separate floor plan types from location distances. Both patterns use similar bullet-point matching.
+
+6. **"Stay in the Loop" duplicated** — The `NewsletterSection.tsx` component is rendered separately on project detail pages, while `Footer.tsx` also has its own newsletter section. This causes duplication. The user wants **only** the footer's newsletter, not a separate section.
+
+7. **"Register Interest" form should match Contact page** — Currently `ProjectInquiryForm.tsx` uses a simplified form. The user wants the full `ConsultationRequestForm` style from the Contact page.
 
 ---
 
-## Phase 2: DirectContactCTA Global Standardization
+## Implementation Plan
 
-### Current State
-The `DirectContactCTA` component already exists and is well-designed with WhatsApp, Call, and Email buttons.
+### Phase 1: Enable Listings to Appear
 
-### Solution
-**Lock the component and ensure it's used on all pages:**
+**Files:** `supabase/functions/bulk-approve-imports/index.ts`
 
-1. Add comment header marking it as "LOCKED - DO NOT MODIFY"
-2. Audit and add `<DirectContactCTA />` to pages missing it:
-   - All service advisory pages
-   - All guide pages  
-   - Market Intelligence pages
-   - Investor/Broker hub pages
+**Action:** Invoke the bulk approval function to move pending imports into the `projects` table. The 16 pending items will be inserted with their extracted data.
 
-### Files to Modify
-- `src/components/DirectContactCTA.tsx` (add lock comment)
-- Multiple page files (add the component where missing)
+**Also:** Verify RLS policies on `projects`, `project_images`, and `project_documents` allow public `SELECT` access.
 
 ---
 
-## Phase 3: Footer Alignment & Readability Improvements
+### Phase 2: Fix Size Extraction (size_min, size_max)
 
-### Current Issues
-1. **Services column** not aligned with **Broker Hub** divider/title
-2. **Section titles too small** for the large section space
-3. **Gaps on right side** of each column not filled
-4. **Legal disclaimer section** has 3 separate boxes instead of 1 unified box
+**Files:**
+- `supabase/functions/_shared/provident/extract.ts`
+- `supabase/functions/batch-extract-pending/index.ts`
+- `supabase/functions/full-project-extract/index.ts`
 
-### Solution
+**Problem:** The current extraction does not capture property sizes from the source portal.
 
-1. **Increase title font sizes:**
-   ```
-   Current: text-[10px] sm:text-xs md:text-sm
-   New: text-xs sm:text-sm md:text-base lg:text-lg
-   ```
-
-2. **Remove min-height constraints** causing misalignment - use CSS Grid for equal columns
-
-3. **Consolidate copyright badges** into single unified box:
-   - Merge "Real Estate Brokerage | All Rights Reserved | © 2026" into one premium styled box
-   - Remove the three separate pill badges
-
-4. **Fill column gaps:**
-   - Remove excessive right padding
-   - Use `grid-cols-4` with equal column widths
-   - Ensure all link text sizes are consistent
-
-### Files to Modify
-- `src/components/Footer.tsx` (lines 500-750 for link columns, lines 937-1012 for legal badges)
+**Solution:**
+1. Add size extraction regex to `extract.ts`:
+   - Pattern: `([\d,]+)\s*(?:sqft|sq\.?\s*ft|sqm|sq\.?\s*m)` to capture min/max sizes
+   - Parse ranges like "500 - 2,500 sqft"
+2. Add `sizeMin` and `sizeMax` to the `ExtractedProjectData` type
+3. Map to `size_min` and `size_max` in `batch-extract-pending/index.ts`
 
 ---
 
-## Phase 4: My Account Dropdown Enhancement (Mobile & Desktop)
+### Phase 3: Fix Listing Card to Square (1:1)
 
-### Current Issue
-- Mobile: "My Account" link only redirects to `/my-account` (dashboard)
-- Desktop MegaMenuAccount already shows admin shortcuts, but they need to be shown for mobile too
-- User cannot access Listing Admin from iPad
+**File:** `src/components/ProjectCard.tsx`
 
-### Solution
+**Change:** Line 139
+- From: `<div className="aspect-[4/3] overflow-hidden relative">`
+- To: `<div className="aspect-square overflow-hidden relative">`
 
-**Update mobile Quick Actions "My Account" behavior:**
-
-1. **Remove redirect** from My Account button in hamburger menu
-2. **Show expanded admin shortcuts panel** when tapped (like desktop)
-3. **Add missing shortcuts:**
-   - My Assistant
-   - Employee Hub
-   - HR Hub
-   - Listing Admin (critical)
-   - IT Department
-   - CRM Dashboard
-   - Admin Panel
-
-4. **Premium UI update for MegaMenuAccount:**
-   - Add "Dashboard" link to go to role-based dashboard
-   - Add all portal shortcuts in a scrollable grid
-   - Add visual indicators for each admin section
-
-### Files to Modify
-- `src/components/GlobalHeader.tsx` (lines 644-651 - mobile My Account button)
-- `src/components/header/MegaMenuAccount.tsx` (add Dashboard link and more shortcuts)
+This makes listing cards match the source portal's square presentation.
 
 ---
 
-## Phase 5: Market Intelligence Hero Fix
+### Phase 4: Fix USP Photo Extraction
 
-### Current Issue
-The user reports the Market Intelligence hero section doesn't have a photo and buttons are broken.
+**Files:**
+- `supabase/functions/_shared/provident/extract.ts`
+- `supabase/functions/_shared/provident/pagedata-detail.ts`
 
-### Solution
-The `MarketIntelligenceHero` component accepts optional `videoSrc` or `backgroundImage` props. The issue is that `MarketOverview.tsx` is not passing these props.
+**Problem:** The USP image regex `Unique Selling Points[\s\S]*?!\[[^\]]*\]\(([^)]+)\)` often captures the wrong image or fails.
 
-1. **Add video/image to Market Intelligence pages:**
-   ```tsx
-   <MarketIntelligenceHero
-     badge="Market Intelligence"
-     badgeIcon={BarChart3}
-     title={...}
-     description={...}
-     videoSrc="/path/to/market-intelligence-hero.mp4"
-     // OR
-     backgroundImage="/path/to/market-intelligence-hero.jpg"
-   />
-   ```
-
-2. **Source appropriate media:**
-   - Use existing premium Dubai skyline video/image
-   - Or generate new cinematic video showing data analytics visualization
-
-### Files to Modify
-- `src/pages/market-intelligence/MarketOverview.tsx`
-- `src/pages/market-intelligence/AreaIntelligence.tsx`
-- `src/pages/market-intelligence/MarketReports.tsx`
-- `src/pages/market-intelligence/Methodology.tsx`
+**Solution:**
+1. Improve the regex to look for the **first cloudfront image URL within 500 characters** after the USP section heading
+2. Add fallback: If no image found in USP section, use the second gallery image as USP background
+3. Validate the URL is a cloudfront CDN image, not a brochure/floor plan PDF
 
 ---
 
-## Phase 6: Mobile Hamburger Menu Behavior Fix
+### Phase 5: Separate Floor Plans from Location Distances
 
-### Current Issue
-- Menu opens in a broken way, touching/covering the header
-- Logo and company name get cropped
-- After scrolling, it covers the full screen including header
+**File:** `supabase/functions/_shared/provident/extract.ts`
 
-### Solution
+**Problem:** `floorPlanTypes` extraction uses a pattern that can match location distance entries, and vice versa.
 
-1. **Fix SheetContent positioning:**
-   ```tsx
-   // Current issue: pt-16 is not enough
-   className="... pt-20 md:pt-24" // Increase top padding
-   ```
-
-2. **Add proper max-height constraint:**
-   ```tsx
-   className="... max-h-[calc(100vh-80px)]" // Don't cover header
-   ```
-
-3. **Fix the header section inside Sheet:**
-   - Ensure logo/company name don't get cropped
-   - Add proper spacing and overflow handling
-
-### Files to Modify
-- `src/components/GlobalHeader.tsx` (lines 610-630 - SheetContent styling)
+**Solution:**
+1. For **Floor Plans**: Only match content under the `## Floorplans` heading
+2. For **Location Distances**: Only match content under the `## Location` heading with the pattern `(\d+\s*Minutes?)\s*[–—-]\s*(.+)`
+3. Add explicit heading boundary checks to prevent cross-section leakage
 
 ---
 
-## Phase 7: Guided Tour Arrow System Enhancement
+### Phase 6: Remove Duplicate "Stay in the Loop" Section
 
-### Current State
-The GuidedTour component exists but shows modal dialogs, not actual UI arrows pointing to elements.
+**File:** `src/components/project-detail/ProjectDetailLayout.tsx`
 
-### Enhancement
-The current tour shows step-by-step explanations with "Go to" links. The user wants **visual arrows pointing to actual UI elements**.
+**Current State:** Line 840 shows `{/* NOTE: Newsletter section removed */}` but the `NewsletterSection` component may still be imported/used elsewhere.
 
-### Solution
-1. **Add overlay highlighting system:**
-   - When showing a step about "Navigation Menu", highlight the actual menu in the UI
-   - Use spotlight/highlight effect with arrow pointing to the element
+**Solution:**
+1. Verify `NewsletterSection` is NOT rendered in `ProjectDetailLayout`
+2. Ensure the Footer's built-in newsletter section is the only one displayed
+3. Remove any duplicate "Stay in the Loop" cards that appear before the footer
 
-2. **Add data attributes to target elements:**
-   ```tsx
-   <button data-tour-target="navigation-menu">Menu</button>
-   ```
+---
 
-3. **Create arrow pointer component:**
-   - Animated arrow that points to highlighted elements
-   - Pulse animation to draw attention
+### Phase 7: Use Contact Page Form for "Register Interest"
 
-### Technical Approach
+**File:** `src/components/project-detail/ProjectDetailLayout.tsx`
+
+**Change:**
+1. Replace `ProjectInquiryForm` with `ConsultationRequestForm` for the inquiry section
+2. Pass project context as default values:
+   - `serviceNeeded` pre-filled based on project type
+   - Title customized to "Register Interest in [Project Name]"
+
+---
+
+### Phase 8: Approve Pending Imports and Verify
+
+**Actions:**
+1. Call `bulk-approve-imports` edge function to insert the 16 pending items into `projects`
+2. Verify images appear (check `project_images` table)
+3. Test one project detail page to confirm all sections render correctly
+
+---
+
+## Technical Details
+
+### Database Column Mapping (batch-extract-pending)
+
 ```text
-+----------------------------------+
-|  Header                          |
-|    [Menu]  ← Arrow pointing here |
-+----------------------------------+
-|                                  |
-|  +---------------------------+   |
-|  | Tour Card                 |   |
-|  | "Click the menu to..."    |   |
-|  | [Next] [Skip]             |   |
-|  +---------------------------+   |
-|                                  |
-+----------------------------------+
+pending_project_imports       →   projects
+--------------------------------------------
+bedrooms_min                  →   bedrooms_min      ✓ Already mapped
+bedrooms_max                  →   bedrooms_max      ✓ Already mapped
+size_min                      →   size_min          ✗ NOT MAPPED (needs fix)
+size_max                      →   size_max          ✗ NOT MAPPED (needs fix)
+usp_image_url                 →   usp_image_url     ✓ Already mapped
+floor_plan_types              →   floor_plan_types  ✓ Already mapped
 ```
 
-### Files to Create/Modify
-- `src/components/GuidedTour.tsx` (add highlight overlay system)
-- `src/components/GlobalHeader.tsx` (add data-tour-target attributes)
-- `src/components/ui/tour-spotlight.tsx` (new - spotlight overlay component)
+### Size Extraction Regex (New)
+
+```typescript
+// In extract.ts
+const sizeMatch = cleanMd.match(
+  /([\d,]+)\s*(?:to|-)\s*([\d,]+)\s*(?:sqft|sq\.?\s*ft|square feet)/i
+);
+let sizeMin: number | null = null;
+let sizeMax: number | null = null;
+if (sizeMatch) {
+  sizeMin = parseInt(sizeMatch[1].replace(/,/g, ""));
+  sizeMax = parseInt(sizeMatch[2].replace(/,/g, ""));
+}
+```
+
+### USP Image Extraction (Improved)
+
+```typescript
+// Better pattern: find first cloudfront image within USP section only
+const uspSection = markdown.match(
+  /Unique Selling Points[\s\S]{0,500}(https:\/\/[^\s"]+cloudfront[^\s"]+\.(jpg|jpeg|png|webp))/i
+);
+const uspImageUrl = uspSection?.[1] || null;
+```
 
 ---
 
-## Phase 8: Hub Organization (Recommendation)
+## Files to Modify
 
-### Current State
-Multiple individual pages exist: Investor FAQ, Broker FAQ, Tenant Guide, Landlord Guide, etc.
-
-### Recommendation
-Based on analysis, the current structure with Guides Library (`/guides`) and Market Intelligence hub (`/market-intelligence/overview`) already groups content well. Individual guide pages provide deep content that shouldn't be combined.
-
-**Keep the current structure** with these improvements:
-1. Ensure all FAQ pages are linked from their respective hubs
-2. Add "Related Resources" sections at the bottom of each page
-3. Improve cross-linking between related content
+| File | Changes |
+|------|---------|
+| `src/components/ProjectCard.tsx` | Change aspect-[4/3] to aspect-square |
+| `supabase/functions/_shared/provident/extract.ts` | Add size extraction, improve USP image regex, separate floor plan from location |
+| `supabase/functions/batch-extract-pending/index.ts` | Map size_min/size_max to database update |
+| `supabase/functions/bulk-approve-imports/index.ts` | Add size_min/size_max mapping |
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Remove any duplicate newsletter, switch to ConsultationRequestForm |
 
 ---
 
-## Implementation Summary
+## Execution Order
 
-| Phase | Task | Priority | Complexity |
-|-------|------|----------|------------|
-| 1 | Consolidate "Confused" sections | High | Medium |
-| 2 | DirectContactCTA global usage | Medium | Low |
-| 3 | Footer alignment & readability | High | Medium |
-| 4 | My Account dropdown enhancement | High | Medium |
-| 5 | Market Intelligence hero fix | High | Low |
-| 6 | Mobile hamburger menu fix | High | Medium |
-| 7 | Guided tour arrow system | Medium | High |
-| 8 | Hub organization (keep current) | Low | N/A |
-
----
-
-## Technical Notes
-
-### CSS Variables Used
-- `--gold`: Primary gold accent color
-- `jj-layer-2`: Champagne gradient background
-- `jj-card-inner`: Pearl card styling
-
-### Key Components
-- `DirectContactCTA.tsx`: Standardized contact section
-- `OffPlanInquiryCTA.tsx`: Investment inquiry form
-- `GuidedTour.tsx`: Onboarding tour system
-- `MegaMenuAccount.tsx`: Desktop account dropdown
-- `Footer.tsx`: Global footer with link columns
-
-### Mobile Breakpoints
-- Mobile: < 768px
-- Tablet: 768px - 1024px  
-- Desktop: > 1024px
+1. **Fix extraction logic** (size, USP photo, floor plan separation)
+2. **Deploy edge functions**
+3. **Run bulk-approve-imports** to populate projects table
+4. **Update ProjectCard** to square aspect ratio
+5. **Update ProjectDetailLayout** to use correct form and remove newsletter duplicate
+6. **Test end-to-end** on mobile/tablet
