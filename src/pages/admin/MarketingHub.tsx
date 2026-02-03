@@ -49,6 +49,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import CampaignEditor from '@/components/marketing-hub/CampaignEditor';
+import SubscribersPanel from '@/components/marketing-hub/SubscribersPanel';
 import PageGuide from '@/components/admin/PageGuide';
 import { getGuide } from '@/config/page-guides';
 
@@ -447,27 +448,38 @@ const MarketingHub: React.FC = () => {
           </TabsContent>
 
           <TabsContent value="templates" className="m-0">
-            <div className="text-center py-12 border-2 border-gold/30 rounded-xl bg-gradient-to-br from-white/80 via-white/60 to-[#F5F0E6]">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gold/20 flex items-center justify-center">
-                <Mail className="h-8 w-8 text-gold" />
-              </div>
-              <h3 className="font-semibold mb-2 text-black">Email Templates</h3>
-              <p className="text-sm text-black/60">
-                Create reusable templates for your campaigns.
-              </p>
+            <div className="grid md:grid-cols-3 gap-4">
+              {/* Pre-built templates */}
+              {[
+                { name: 'New Listing Announcement', description: 'Announce new property listings to your audience', icon: '🏠', type: 'email' },
+                { name: 'Monthly Newsletter', description: 'Regular updates and market insights', icon: '📰', type: 'email' },
+                { name: 'Price Reduction Alert', description: 'Notify interested buyers of price drops', icon: '💰', type: 'email' },
+                { name: 'Open House Invitation', description: 'Invite prospects to property viewings', icon: '🚪', type: 'email' },
+                { name: 'Market Update', description: 'Share latest market trends and data', icon: '📊', type: 'email' },
+                { name: 'Thank You Follow-up', description: 'Thank clients after meetings or viewings', icon: '🙏', type: 'email' },
+              ].map((template, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.05 }}
+                  className="p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F5F0E6] hover:border-gold hover:shadow-lg transition-all cursor-pointer group"
+                  onClick={() => {
+                    setIsCreating(true);
+                    // Template would pre-fill content
+                  }}
+                >
+                  <div className="text-3xl mb-3">{template.icon}</div>
+                  <h3 className="font-semibold text-black group-hover:text-gold transition-colors">{template.name}</h3>
+                  <p className="text-xs text-black/60 mt-1">{template.description}</p>
+                  <Badge className="mt-3 bg-gold/20 text-black text-xs">{template.type}</Badge>
+                </motion.div>
+              ))}
             </div>
           </TabsContent>
 
           <TabsContent value="subscribers" className="m-0">
-            <div className="text-center py-12 border-2 border-gold/30 rounded-xl bg-gradient-to-br from-white/80 via-white/60 to-[#F5F0E6]">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-purple-100 flex items-center justify-center">
-                <Users className="h-8 w-8 text-purple-600" />
-              </div>
-              <h3 className="font-semibold mb-2 text-black">{subscriberCount} Active Subscribers</h3>
-              <p className="text-sm text-black/60">
-                Manage your newsletter subscribers and segments.
-              </p>
-            </div>
+            <SubscribersPanel count={subscriberCount || 0} />
           </TabsContent>
         </Tabs>
       </main>
