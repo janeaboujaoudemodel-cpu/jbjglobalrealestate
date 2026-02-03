@@ -109,7 +109,7 @@ export function OffPlanInquiryCTA({ variant = "full", className = "" }: OffPlanI
               <ul className="space-y-2 text-sm text-muted-foreground mb-6">
                 <li className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-gold" />
-                  Exclusive off-plan launches with up to 80/20 payment plans
+                  Flexible payment plans tailored to your investment timeline
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-gold" />
