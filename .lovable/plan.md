@@ -1,449 +1,437 @@
 
 
-# Comprehensive Mobile Menu, Currency Selector, Hero & UI Fixes
-*Fixing 8 Critical Issues Across Header, Market Intelligence, and Navigation*
+# Comprehensive Homepage, Header & Footer Restructuring Plan
+*Addressing Navigation Organization, Premium UI Fixes, and Content Layout Improvements*
 
 ---
 
-## Summary of Issues Identified
+## Summary of Issues to Address
 
-From my code analysis, I've identified the following problems that need to be fixed:
+Based on my codebase exploration, here are all the issues that need to be fixed:
 
-| # | Issue | Root Cause | Files Affected |
-|---|-------|------------|----------------|
-| 1 | Mobile menu touches/overlaps header | `SheetContent` uses `inset-y-0` (full height) + `mt-20` but z-index conflicts | `GlobalHeader.tsx`, `sheet.tsx` |
-| 2 | Mobile menu logo/wordmark cropped | Container has fixed `max-h-[calc(100vh-80px)]` but content overflows on scroll | `GlobalHeader.tsx` |
-| 3 | Guides need arrows/collapsibles | Mobile menu links are flat list, no expandable sections | `GlobalHeader.tsx` |
-| 4 | Language icon labeled for Currency | `LanguageSwitcher` mobile label says "Select Language" but user expected separation | `LanguageSwitcher.tsx`, `GlobalHeader.tsx` |
-| 5 | No currency selector in header | Currency selector doesn't exist globally - only inside SearchModule | New component needed |
-| 6 | GuidedTour doesn't guide to hamburger | Tour shows features but doesn't actually open the hamburger | `GuidedTour.tsx` |
-| 7 | Market Intelligence hero has no photo/video | Hero uses black gradient only, no asset | `MarketIntelligence.tsx` |
-| 8 | Broken 404 links | MegaMenuBrokerHub links to `/broker-certifications` (wrong) | `MegaMenuBrokerHub.tsx`, `MegaMenuMore.tsx`, `GlobalHeader.tsx` |
+| # | Issue | Location | Priority |
+|---|-------|----------|----------|
+| 1 | "More" dropdown shows individual guide pages instead of hub links | `MegaMenuMore.tsx` | HIGH |
+| 2 | TrustBar (4 cards under hero) not premium enough | `TrustBar.tsx` | HIGH |
+| 3 | Homepage "Discover" button should scroll to section below | `Index.tsx` | MEDIUM |
+| 4 | Find Your Starting Point section has limited cards - restore previous layout | `Index.tsx` | HIGH |
+| 5 | Duplicate "Our Services" sections - keep only one | `Index.tsx` | HIGH |
+| 6 | Market Intelligence book cover not loading immediately | `MarketReportCTA.tsx` | MEDIUM |
+| 7 | Mortgage calculator CTA buttons mismatched sizes | `Index.tsx` | MEDIUM |
+| 8 | Why Dubai section content needs premium upgrade | `WhyDubaiCapitalSection.tsx` | MEDIUM |
+| 9 | WhyChooseUs section needs more padding below last row | `WhyChooseUs.tsx` | LOW |
+| 10 | AreasWeCover "View All Areas" needs better visibility | `AreasWeCover.tsx` | LOW |
+| 11 | Testimonials section needs CTA linking to testimonials page | `TestimonialsSection.tsx` | LOW |
+| 12 | CTABand (Ready to Talk) needs approved styling | `CTABand.tsx` | MEDIUM |
+| 13 | Footer structure: Licensed badge placement, Stay in Loop positioning | `Footer.tsx` | HIGH |
+| 14 | Create AI Hub page for all AI tools | New page needed | MEDIUM |
 
 ---
 
-## Implementation Plan
+## Detailed Implementation Plan
 
-### Phase 1: Fix Mobile Menu Container (Logo/Wordmark Cropping)
+### Phase 1: Restructure "More" Mega Menu - Hub-Based Organization
 
-**Problem:** The SheetContent applies `inset-y-0 right-0 h-full` from base styles, then `max-h-[calc(100vh-80px)] mt-20` from GlobalHeader. This creates a conflict where the menu both fills the screen AND has margin-top, causing overflow issues.
+**Current Problem:** `MegaMenuMore.tsx` lists 40+ individual pages including all guides (Buyer Guide, Seller Guide, etc.), creating clutter.
 
-**Solution:** Override the sheet positioning to start BELOW the header properly.
+**Solution:** Reorganize into hub-based navigation with entry links only:
 
-**File:** `src/components/GlobalHeader.tsx` (line 612-615)
+**File:** `src/components/header/MegaMenuMore.tsx`
 
-**Current:**
+**New Structure (4 Columns):**
+
+```text
+┌─────────────────┬──────────────────┬─────────────────┬────────────────┐
+│ About & Company │ Hubs & Libraries │ Partners & Tools│ Legal & Trust  │
+├─────────────────┼──────────────────┼─────────────────┼────────────────┤
+│ About Us        │ Guides Library   │ Partners Hub    │ Terms          │
+│ Meet the Team   │ Market Intel Hub │ Mortgage        │ Privacy        │
+│ Our Brokers     │ AI Hub           │ Legal           │ Cookies        │
+│ Careers         │ Investor Hub     │ Company Setup   │ Trust Center   │
+│ Awards          │ Broker Hub       │ Visa Services   │ IP Policy      │
+│ Press Kit       │ News & Insights  │ Referral        │ Landlord Portal│
+│ Company Profile │ Sitemap          │ AI Home Finder  │ Philanthropy   │
+│ Contact Us      │                  │ Property Map    │                │
+│ Testimonials    │                  │ Compare         │                │
+└─────────────────┴──────────────────┴─────────────────┴────────────────┘
+```
+
+**Key Changes:**
+- Remove individual guides (Buyer Guide, Seller Guide, etc.) → replaced by "Guides Library" link to `/guides`
+- Remove Market Intelligence sub-pages → replaced by "Market Intelligence Hub" link to `/market-intelligence`
+- Add "AI Hub" link to `/ai-hub` (consolidates all AI tools)
+- Add "Investor Hub" link to `/investor-hub`
+- Add "Broker Hub" link to `/broker-hub`
+- Remove FAQ, Investor FAQ, Broker FAQ (moved inside their respective hubs)
+
+---
+
+### Phase 2: Premium TrustBar Redesign
+
+**Current Problem:** The 4 trust badges (RERA Licensed, Instant Response, etc.) use glass-morphism styling but user finds it not premium enough.
+
+**Solution:** Upgrade to champagne-gold filled cards with 3D depth.
+
+**File:** `src/components/home/TrustBar.tsx`
+
+**Current Styling:**
 ```tsx
-<SheetContent
-  side="right"
-  className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] p-0 flex flex-col max-h-[calc(100vh-80px)] mt-20 pt-0"
+bg-white/8 border border-white/25
+```
+
+**New Premium Styling:**
+```tsx
+// Base card styling - champagne filled with gold borders
+className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] 
+           border-2 border-gold/50 
+           shadow-[0_8px_24px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)]
+           hover:shadow-[0_12px_32px_rgba(200,167,102,0.5),0_6px_16px_rgba(0,0,0,0.3)]
+           hover:border-gold
+           hover:-translate-y-1
+           transition-all duration-300"
+
+// Text: black text with gold accents
+<span className="text-black font-bold text-sm">RERA Licensed</span>
+<span className="text-zinc-600 text-xs">DLD Registered</span>
+```
+
+**3D Effect:** Add layered shadow with `inset` highlights:
+```css
+box-shadow: 
+  0 10px 30px rgba(200,167,102,0.4),
+  0 6px 15px rgba(0,0,0,0.2),
+  inset 0 2px 4px rgba(255,255,255,0.9),
+  inset 0 -2px 4px rgba(200,167,102,0.2);
+```
+
+---
+
+### Phase 3: Fix Homepage "Discover" Scroll Behavior
+
+**Current Problem:** The "Discover" text with ChevronDown at bottom of hero doesn't scroll anywhere.
+
+**Solution:** Add smooth scroll to the Trust Bar section.
+
+**File:** `src/pages/Index.tsx` (lines 189-210)
+
+**Change Required:**
+```tsx
+// Wrap in clickable element with scroll behavior
+<motion.button 
+  onClick={() => {
+    document.getElementById('trust-bar')?.scrollIntoView({ behavior: 'smooth' });
+  }}
+  className="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-2 z-10 cursor-pointer"
 >
-```
+  <span>Discover</span>
+  <ChevronDown className="w-5 h-5 animate-bounce" />
+</motion.button>
 
-**Fixed:**
-```tsx
-<SheetContent
-  side="right"
-  className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] p-0 flex flex-col !top-[128px] !h-[calc(100vh-128px)] !inset-y-auto"
->
-```
-
-This uses `!important` overrides to:
-- Set `top` to 128px (header height)
-- Set height to remaining viewport
-- Remove the conflicting `inset-y-0`
-
----
-
-### Phase 2: Add Collapsible Arrows for Guides/Hubs in Mobile Menu
-
-**Problem:** Mobile menu shows flat lists without visual hierarchy. User wants collapsible sections with arrows.
-
-**Solution:** Convert guide/hub sections to use `Collapsible` component with chevron icons.
-
-**File:** `src/components/GlobalHeader.tsx` (lines 658-822)
-
-**New Structure:**
-```tsx
-// Add new MobileMenuSection component
-const MobileMenuSection = ({ 
-  title, 
-  links, 
-  defaultOpen = false 
-}: { 
-  title: string; 
-  links: Array<{ href: string; label: string; icon: any }>; 
-  defaultOpen?: boolean;
-}) => {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
-  
-  return (
-    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-      <CollapsibleTrigger className="w-full flex items-center justify-between px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">
-        <span>{title}</span>
-        <ChevronDown className={cn(
-          "w-4 h-4 text-gold transition-transform duration-200",
-          isOpen && "rotate-180"
-        )} />
-      </CollapsibleTrigger>
-      <CollapsibleContent>
-        <div className="pl-2">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              to={link.href}
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
-            >
-              <link.icon className="w-4 h-4 text-gold" />
-              {link.label}
-            </Link>
-          ))}
-        </div>
-      </CollapsibleContent>
-    </Collapsible>
-  );
-};
-```
-
-Apply this pattern to:
-- Buy section
-- Rent section
-- Projects section
-- Developers section
-- Areas section
-- Services section
-- Resources & Guides section
-- Partners & Tools section
-
----
-
-### Phase 3: Separate Language and Currency Icons
-
-**Problem:** Language icon is doing double duty. User wants separate currency selector.
-
-**Solution:** Create new `CurrencySwitcher` component and add it to mobile menu + desktop header.
-
-**New File:** `src/components/CurrencySwitcher.tsx`
-
-```tsx
-import { DollarSign, Check } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-
-const CURRENCIES = [
-  { code: 'AED', symbol: 'AED', flag: '🇦🇪', name: 'UAE Dirham' },
-  { code: 'USD', symbol: '$', flag: '🇺🇸', name: 'US Dollar' },
-  { code: 'EUR', symbol: '€', flag: '🇪🇺', name: 'Euro' },
-  { code: 'GBP', symbol: '£', flag: '🇬🇧', name: 'British Pound' },
-];
-
-const CURRENCY_KEY = 'jj_currency';
-
-interface CurrencySwitcherProps {
-  variant?: 'default' | 'mobile' | 'icon-only';
-}
-
-const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
-  const [currency, setCurrencyState] = useState<string>(() => {
-    return localStorage.getItem(CURRENCY_KEY) || 'AED';
-  });
-
-  const setCurrency = (code: string) => {
-    setCurrencyState(code);
-    localStorage.setItem(CURRENCY_KEY, code);
-    // Dispatch event for other components to listen
-    window.dispatchEvent(new CustomEvent('currencyChange', { detail: code }));
-  };
-
-  const currentCurrency = CURRENCIES.find(c => c.code === currency) || CURRENCIES[0];
-  const isMobile = variant === 'mobile';
-  const isIconOnly = variant === 'icon-only';
-
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        {isMobile ? (
-          <button className="flex flex-col items-center gap-1.5 text-black hover:text-gold py-2 px-3 transition-colors">
-            <DollarSign className="w-5 h-5 text-black" />
-            <span className="text-[9px] text-black font-medium">Currency</span>
-          </button>
-        ) : isIconOnly ? (
-          <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gold/10 group">
-            <DollarSign className="w-4 h-4 text-gold group-hover:text-white group-hover:scale-110 transition-all" />
-          </button>
-        ) : (
-          <button className="h-10 px-3 text-gold hover:text-gold-light rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 flex items-center gap-2">
-            <DollarSign className="w-4 h-4" />
-            <span className="text-xs font-medium">{currentCurrency.code}</span>
-          </button>
-        )}
-      </DropdownMenuTrigger>
-      <DropdownMenuContent 
-        align="end" 
-        sideOffset={12}
-        className="z-[9999] min-w-[240px] rounded-xl shadow-2xl p-0 border-2 border-gold/40"
-        style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}
-      >
-        <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
-        <div className="p-3">
-          {CURRENCIES.map((curr) => (
-            <DropdownMenuItem 
-              key={curr.code}
-              onClick={() => setCurrency(curr.code)}
-              className={`flex items-center justify-between cursor-pointer rounded-lg px-4 py-3 my-0.5 ${
-                currency === curr.code 
-                  ? 'bg-gold/15 border border-gold/30' 
-                  : 'hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8]'
-              }`}
-            >
-              <span className="flex items-center gap-3">
-                <span className="text-lg">{curr.flag}</span>
-                <span className={`text-sm font-semibold ${
-                  currency === curr.code ? 'text-gold' : 'text-black'
-                }`}>{curr.name} ({curr.symbol})</span>
-              </span>
-              {currency === curr.code && <Check className="w-4 h-4 text-gold" />}
-            </DropdownMenuItem>
-          ))}
-        </div>
-        <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-};
-
-export default CurrencySwitcher;
-```
-
-**Update GlobalHeader.tsx:**
-- Import `CurrencySwitcher`
-- Add to mobile Quick Actions Row (line 634):
-```tsx
-<LanguageSwitcher variant="mobile" />
-<CurrencySwitcher variant="mobile" />
+// Add id to TrustBar section
+<div id="trust-bar" className="bg-black py-4 border-y border-gold/20">
+  <TrustBar />
+</div>
 ```
 
 ---
 
-### Phase 4: Add Auto-Walkthrough + Help Button for Mobile Menu
+### Phase 4: Restore "Find Your Starting Point" Cards
 
-**Problem:** User wants arrows pointing to Guides/Sitemap/Favorites on first visit, plus a persistent Help button.
+**Current Problem:** Section currently has 7 cards but user says it had more previously.
 
-**Solution:** Create `MobileMenuWalkthrough` component with step-by-step highlighting.
+**Analysis:** Looking at the code, there are exactly 7 cards:
+1. Buyers → `/buyer-guide`
+2. Sellers → `/seller-guide`
+3. Rentals → `/rent-guide`
+4. Investors → `/ai-hub`
+5. Visitors → `/quiz`
+6. Referral → `/referral`
+7. Careers → `/join`
 
-**New File:** `src/components/MobileMenuWalkthrough.tsx`
+**Solution:** Based on user memory, restore additional cards. Add these:
+- Landlords → `/landlord-guide`
+- Tenants → `/tenant-guide`
+- Partners → `/partners`
+- Golden Visa → `/guides/golden-visa-uae`
 
+**File:** `src/pages/Index.tsx` (lines 235-316)
+
+**Updated Grid:** Change from `grid-cols-7` to flexible layout with all 11 cards:
 ```tsx
-// Highlights specific menu items with animated arrows
-// Shows on first visit, dismissible
-// "Help" button in menu footer to re-trigger
-
-const WALKTHROUGH_KEY = 'jj_mobile_walkthrough_done';
-
-interface WalkthroughStep {
-  targetId: string;
-  label: string;
-  description: string;
-}
-
-const STEPS: WalkthroughStep[] = [
-  { targetId: 'mobile-guides', label: 'Guides Library', description: 'Find all buyer, seller, tenant, and landlord guides here' },
-  { targetId: 'mobile-favorites', label: 'Favorites', description: 'Save and compare your favorite properties' },
-  { targetId: 'mobile-sitemap', label: 'Sitemap', description: 'Browse all pages on one screen' },
-];
-
-const MobileMenuWalkthrough = ({ 
-  isOpen, 
-  onComplete,
-  onClose 
-}: { 
-  isOpen: boolean;
-  onComplete: () => void;
-  onClose: () => void;
-}) => {
-  const [currentStep, setCurrentStep] = useState(0);
-  
-  // Renders overlay with arrow pointing to current target
-  // "Next" / "OK" button to advance
-  // Stores completion in localStorage
-};
-```
-
-**Add to GlobalHeader mobile menu:**
-- Add data-id attributes to key links: `data-id="mobile-guides"`, `data-id="mobile-favorites"`, `data-id="mobile-sitemap"`
-- Add Help button at bottom of ScrollArea:
-```tsx
-<button 
-  onClick={() => setShowWalkthrough(true)}
-  className="flex items-center gap-2 px-4 py-3 text-sm text-gold hover:bg-gold/10 rounded-lg w-full"
->
-  <HelpCircle className="w-4 h-4" />
-  Help & Navigation Guide
-</button>
+<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-11 gap-2 md:gap-3">
+  {/* Buyers, Sellers, Renters, Landlords, Tenants, Investors, Visitors, Partners, Golden Visa, Referral, Careers */}
+</div>
 ```
 
 ---
 
-### Phase 5: Generate & Add Market Intelligence Hero Asset
+### Phase 5: Remove Duplicate "Our Services" Section
 
-**Problem:** Market Intelligence page has no hero background, just black gradients.
+**Current Problem:** There are TWO `ExploreServicesCard` components rendered:
+1. Line 321: `<ExploreServicesCard />`
+2. Lines 362-378: Wrapped in `jj-layer-2` with "Our Services" badge
 
-**Solution:** Create an edge function to generate an AI hero image for Market Intelligence, then use it as the background.
+**Solution:** Remove the second duplicate (lines 362-379).
 
-**New Edge Function:** `supabase/functions/generate-hero-image/index.ts`
+**File:** `src/pages/Index.tsx`
 
-```typescript
-// Calls Lovable AI with Gemini image model
-// Prompt: "Professional, cinematic hero image for a real estate market intelligence dashboard. 
-//          Abstract data visualization, dark background with gold accents, Dubai skyline silhouette,
-//          flowing charts and graphs, premium financial aesthetic. 16:9 aspect ratio."
-// Saves to storage bucket, returns URL
-```
-
-**Update Market Intelligence Page:**
+**Delete Lines 362-379:**
 ```tsx
-// src/pages/MarketIntelligence.tsx
-<section className="jj-hero-fullscreen relative flex items-center overflow-hidden">
-  {/* Hero background image */}
-  <img 
-    src="/lovable-uploads/market-intelligence-hero.jpg"
-    alt=""
-    className="absolute inset-0 w-full h-full object-cover"
-  />
-  <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/80 to-black" />
-  // ... rest of hero content
+// DELETE THIS ENTIRE SECTION
+<section className="py-14 md:py-24 bg-black">
+  <div className="jj-layer-2">
+    <motion.div>
+      <span>Our Services</span>
+    </motion.div>
+    <div className="max-w-5xl mx-auto">
+      <ExploreServicesCard />
+    </div>
+  </div>
 </section>
 ```
 
 ---
 
-### Phase 6: Fix Broken 404 Links
+### Phase 6: Fix Market Intelligence Book Loading
 
-**MegaMenuBrokerHub.tsx (line 25):**
-```tsx
-// WRONG:
-{ name: 'Certifications', href: '/broker-certifications', icon: Award },
-// CORRECT:
-{ name: 'Certifications', href: '/services/broker-certification', icon: Award },
-```
+**Current Problem:** Book cover image doesn't appear immediately.
 
-**MegaMenuMore.tsx (line 29):**
-```tsx
-// WRONG:
-{ label: 'Complaint Procedure', href: '/complaint', icon: ClipboardCheck },
-{ label: 'Testimonials', href: '/testimonials', icon: MessageCircle },
-// CORRECT:
-{ label: 'Complaint Procedure', href: '/services/complaint-procedures', icon: ClipboardCheck },
-{ label: 'Testimonials', href: '/services/testimonials', icon: MessageCircle },
-```
+**Solution:** Add `loading="eager"` and `fetchpriority="high"` to the image.
 
-**GlobalHeader.tsx mobile links (line 389-393):**
-```tsx
-// WRONG:
-{ href: "/complaint", label: "Complaint Procedure", icon: ClipboardCheck },
-{ href: "/testimonials", label: "Testimonials", icon: Users },
-// CORRECT:
-{ href: "/services/complaint-procedures", label: "Complaint Procedure", icon: ClipboardCheck },
-{ href: "/services/testimonials", label: "Testimonials", icon: Users },
-```
+**File:** `src/components/MarketReportCTA.tsx`
 
-**Mobile Area Links (line 366-369):**
+Find the book cover image element and add:
 ```tsx
-// WRONG: /areas/downtown-dubai (route doesn't exist)
-// CORRECT: /area/downtown-dubai (uses :slug pattern)
-{ href: "/area/downtown-dubai", label: "Downtown Dubai", icon: MapPin },
-{ href: "/area/dubai-marina", label: "Dubai Marina", icon: MapPin },
-{ href: "/area/palm-jumeirah", label: "Palm Jumeirah", icon: MapPin },
-{ href: "/area/business-bay", label: "Business Bay", icon: MapPin },
-```
-
-**Mobile Developer Links (line 374-377):**
-```tsx
-// WRONG: /developers/emaar (route doesn't exist)
-// CORRECT: /developer/emaar (uses :slug pattern)
-{ href: "/developer/emaar", label: "Emaar Properties", icon: Building2 },
-{ href: "/developer/damac", label: "DAMAC Properties", icon: Building2 },
-{ href: "/developer/sobha", label: "Sobha Realty", icon: Building2 },
+<img 
+  src={bookCoverImage}
+  alt="Market Intelligence Report"
+  loading="eager"
+  fetchPriority="high"
+  className="..."
+/>
 ```
 
 ---
 
-### Phase 7: Create Missing Philanthropy Page
+### Phase 7: Fix Mortgage Calculator Button Sizes
 
-**Problem:** `/philanthropy` is linked but page doesn't exist.
+**Current Problem:** "Try Our AI Mortgage Calculator" button is smaller than "Connect with Mortgage Partner" button.
 
-**New File:** `src/pages/Philanthropy.tsx`
+**File:** `src/pages/Index.tsx` (lines 448-484)
 
+**Current:** Both buttons have `px-8 py-5` but first has additional inner styling that affects size.
+
+**Solution:** Ensure identical outer dimensions:
 ```tsx
-// Placeholder page with:
-// - Hero section (jj-hero-fullscreen)
-// - "Coming Soon" content
-// - Contact CTA
-// - Footer
-```
-
-**Add Route in App.tsx:**
-```tsx
-<Route path="/philanthropy" element={<Philanthropy />} />
+// Both buttons should use exact same padding and min-width
+className="... px-10 py-5 min-w-[280px] ..."
 ```
 
 ---
 
-## Files to Create/Modify Summary
+### Phase 8: Enhance WhyDubai Section Content
+
+**Current Problem:** User wants Burj Khalifa and Burj Al Arab scenes recreated with more premium content.
+
+**File:** `src/components/home/WhyDubaiCapitalSection.tsx`
+
+**Changes:**
+1. Add more descriptive content per scene
+2. Enhance stats cards with larger typography
+3. Add scene indicator dots showing which landmark is displayed
+
+**Enhanced Structure:**
+```tsx
+const scenes = [
+  { 
+    src: burjKhalifaVideo, 
+    title: "Burj Khalifa", 
+    description: "The world's tallest building symbolizes Dubai's ambition" 
+  },
+  { 
+    src: burjAlArabVideo, 
+    title: "Burj Al Arab", 
+    description: "Iconic 7-star luxury defining Dubai's hospitality" 
+  },
+  // ... etc
+];
+```
+
+---
+
+### Phase 9: WhyChooseUs Padding Fix
+
+**Current Problem:** Need more padding below "Exclusive Network, Priority Support, Loyalty Program" row.
+
+**File:** `src/components/home/WhyChooseUs.tsx`
+
+**Solution:** Add `pb-4` or `mb-6` to the grid container:
+```tsx
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-6">
+```
+
+---
+
+### Phase 10: AreasWeCover "View All" Visibility
+
+**Current Problem:** "View All Areas" link is not readable enough.
+
+**File:** `src/components/home/AreasWeCover.tsx` (lines 80-89)
+
+**Current:**
+```tsx
+className="inline-flex items-center gap-2 text-gold hover:text-black text-sm"
+```
+
+**Solution:** Make it a button-style with champagne background:
+```tsx
+<Link
+  to="/areas"
+  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-xl text-black font-semibold text-sm hover:border-gold hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] transition-all"
+>
+  <span>View All Areas</span>
+  <ArrowRight className="w-4 h-4" />
+</Link>
+```
+
+---
+
+### Phase 11: Testimonials CTA Link
+
+**Current Problem:** No link to testimonials page from the section.
+
+**File:** `src/components/home/TestimonialsSection.tsx`
+
+**Solution:** Add CTA below the testimonial card:
+```tsx
+// After the testimonial card div, add:
+<div className="text-center mt-8">
+  <Link
+    to="/services/testimonials"
+    className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white font-semibold rounded-xl hover:bg-gold hover:text-black transition-all"
+  >
+    <span>Read All Testimonials</span>
+    <ArrowRight className="w-4 h-4" />
+  </Link>
+</div>
+```
+
+---
+
+### Phase 12: Footer Structure Cleanup
+
+**Current Problem:** 
+- Duplicate "Licensed • BUY • SELL • RENT" badge appears both above AND inside the footer card
+- "Stay in the Loop" card should be at bottom after support ticket
+
+**File:** `src/components/Footer.tsx`
+
+**Changes Required:**
+
+1. **Remove duplicate Licensed badge** (lines 180-221) - keep only the one inside the premium card
+
+2. **Restructure footer sections order:**
+   - Contact CTA card (Ready to Get Started)
+   - Stay in the Loop subscription
+   - Support Ticket
+   - Footer Navigation & Legal
+
+This matches the user's request: "Contact CTA card → Stay in the Loop card → across all pages globally"
+
+---
+
+### Phase 13: Create AI Hub Landing Page
+
+**Current Problem:** AI tools are scattered across the site. Need consolidated hub.
+
+**New File:** `src/pages/AIHub.tsx` (if not exists, expand existing)
+
+**Content:**
+- Header: "AI Hub - Intelligent Tools for Smart Decisions"
+- Grid of AI tools with free/premium labels:
+  - AI Home Finder (Free)
+  - AI Property Evaluator (Free)
+  - AI Interior Design (Premium - Broker/Subscriber)
+  - AI Mortgage Calculator (Free)
+  - AI Comparison Tool (Free)
+  - AI Investment Analyzer (Premium)
+
+Each card shows:
+- Tool name and icon
+- Brief description
+- Free/Premium badge
+- Access requirements (e.g., "Requires Broker subscription")
+
+---
+
+## Files to Modify Summary
 
 | File | Action | Changes |
 |------|--------|---------|
-| `src/components/CurrencySwitcher.tsx` | CREATE | New currency selector component |
-| `src/components/MobileMenuWalkthrough.tsx` | CREATE | Walkthrough/help overlay |
-| `src/pages/Philanthropy.tsx` | CREATE | Missing page placeholder |
-| `src/components/GlobalHeader.tsx` | MODIFY | Fix SheetContent, add collapsibles, add currency switcher, fix 404 links |
-| `src/components/header/MegaMenuBrokerHub.tsx` | MODIFY | Fix `/broker-certifications` link |
-| `src/components/header/MegaMenuMore.tsx` | MODIFY | Fix `/complaint` and `/testimonials` links |
-| `src/pages/MarketIntelligence.tsx` | MODIFY | Add hero background image |
-| `src/App.tsx` | MODIFY | Add Philanthropy route |
-| `supabase/functions/generate-hero-image/index.ts` | CREATE | AI image generation for Market Intelligence hero |
+| `src/components/header/MegaMenuMore.tsx` | MODIFY | Reorganize to hub-based links |
+| `src/components/home/TrustBar.tsx` | MODIFY | Premium champagne+gold 3D styling |
+| `src/pages/Index.tsx` | MODIFY | Fix Discover scroll, restore cards, remove duplicate services |
+| `src/components/MarketReportCTA.tsx` | MODIFY | Eager loading for book image |
+| `src/components/home/WhyDubaiCapitalSection.tsx` | MODIFY | Enhanced scene content |
+| `src/components/home/WhyChooseUs.tsx` | MODIFY | Add bottom padding |
+| `src/components/home/AreasWeCover.tsx` | MODIFY | Premium button for View All |
+| `src/components/home/TestimonialsSection.tsx` | MODIFY | Add CTA to testimonials page |
+| `src/components/Footer.tsx` | MODIFY | Remove duplicate badge, reorder sections |
+| `src/pages/AIHub.tsx` | MODIFY/CREATE | Ensure AI tools are consolidated |
 
 ---
 
 ## Technical Notes
 
-### Currency System Architecture
-- Store selected currency in `localStorage` with key `jj_currency`
-- Dispatch `currencyChange` CustomEvent when changed
-- Components like `ProjectCard`, `SearchModule`, `PropertyFilters` already have currency conversion logic
-- They will listen to the global event to update their display
+### TrustBar 3D Effect CSS Pattern
+```css
+/* Premium 3D card effect */
+.trust-card-3d {
+  background: linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%);
+  border: 2px solid rgba(200,167,102,0.6);
+  box-shadow: 
+    0 10px 30px rgba(200,167,102,0.4),
+    0 6px 15px rgba(0,0,0,0.2),
+    inset 0 2px 4px rgba(255,255,255,0.9),
+    inset 0 -2px 4px rgba(200,167,102,0.2);
+  transition: all 0.3s ease;
+}
 
-### Mobile Menu Walkthrough Flow
-1. First visit: After 2 seconds, if `jj_mobile_walkthrough_done` not set, open hamburger
-2. Show animated arrow pointing to "Guides Library"
-3. User taps "Next" → arrow moves to "Favorites"
-4. User taps "Next" → arrow moves to "Sitemap"
-5. User taps "Done" → localStorage marked, walkthrough dismisses
-6. "Help" button in menu footer can re-trigger anytime
+.trust-card-3d:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 16px 40px rgba(200,167,102,0.5),
+    0 8px 20px rgba(0,0,0,0.25),
+    inset 0 2px 4px rgba(255,255,255,0.9),
+    inset 0 -2px 4px rgba(200,167,102,0.3);
+}
+```
 
-### Hero Image Generation
-- Uses `google/gemini-3-pro-image-preview` for higher quality
-- Generates 1920x1080 cinematic image
-- Uploads to Supabase storage
-- Returns public URL for use in `<img>` tag
+### Scroll Behavior Pattern
+```tsx
+// Smooth scroll to section
+const scrollToSection = (id: string) => {
+  document.getElementById(id)?.scrollIntoView({ 
+    behavior: 'smooth',
+    block: 'start'
+  });
+};
+```
 
 ---
 
 ## Execution Order
 
-1. Fix mobile menu container positioning (prevents cropping)
-2. Add collapsible sections with arrows
-3. Create CurrencySwitcher component
-4. Add currency to mobile + desktop header
-5. Fix all 404 broken links
-6. Create Philanthropy placeholder page
-7. Generate Market Intelligence hero image
-8. Create MobileMenuWalkthrough component
-9. Test end-to-end on mobile/tablet
+1. Restructure MegaMenuMore (hub-based navigation)
+2. Upgrade TrustBar to premium 3D styling
+3. Fix Discover scroll and add section IDs
+4. Restore Find Your Starting Point cards
+5. Remove duplicate Our Services section
+6. Fix Mortgage calculator button sizes
+7. Enhance WhyDubai section content
+8. Add padding to WhyChooseUs
+9. Make View All Areas more visible
+10. Add testimonials CTA link
+11. Clean up Footer structure
+12. Verify AI Hub page exists with proper content
 
