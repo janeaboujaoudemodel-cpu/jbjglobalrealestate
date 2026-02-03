@@ -1,196 +1,274 @@
 
-## What’s actually happening (root causes)
 
-### 1) “Rebuild Queue” only finds 16 items (not 1,336)
-Your current “credit-safe” rebuild path calls `discover-all-projects` with:
-- `skipMap: true`
-- `listingUseFirecrawl: false`
+# Comprehensive Fix: Extraction System & Project Detail Page Institutional Mirroring
 
-In that mode, the backend tries to discover project links by doing a simple HTTP fetch of `/new-projects/page/N/` and regexing `href=` values.
+## Problems Identified
 
-Problem: Provident’s listing pages are **Gatsby/JS-driven**. A plain server fetch often returns a mostly-empty shell (or a limited set of repeated links), so the backend only sees a tiny repeated subset (≈16) instead of the full inventory.
+### 1. Extraction Issues (Test Panel shows "Core Incomplete")
+The current extraction fails to capture:
+- **Mirrored Documents**: Brochure/floor plan PDFs not being downloaded
+- **USP Bullets**: Not extracting the 8 unique selling points
+- **Amenities**: Not capturing the 10 amenities (Outdoor Pool, Cinema, etc.)
+- **Location Distances**: Not extracting the 12 distance items (5 min to Dubai Opera, etc.)
+- **FAQs**: Not extracting the 6 FAQ items
+- **Payment Breakdown**: Not capturing 10%/40%/50% structure
+- **Images**: Only extracting some images, missing gallery images
 
-That’s why you get “Queue rebuilt … 16 pending”.
+### 2. Project Detail Page Missing Structure
+Current page is missing the exact Provident layout:
+- **Breadcrumb navigation**: Home / All Projects in Dubai / Downtown Dubai / [Project Name]
+- **Hero section order**: Title → Developer link → Download Brochure + Register Interest buttons → Breadcrumb
+- **Sticky nav tabs**: Details, Gallery, Floor Plans, Amenities, Location, Payment Plans, Brochure
+- **CTA sections**: "The best deals are our expertise – register now" section
+- **Newsletter section**: "Stay in the loop" email subscription section
+- **Floor plan types with thumbnails**: Showing floor plan images with download capability
 
-### 2) “Queue cleared” messaging is confusing (and sometimes destructive flows are too close)
-Even though “Rebuild Queue (Add Missing)” is intended to be non-destructive, other nearby actions (like queue reset / wipe flows) and the wording (“cleared successfully”) make it feel like the rebuild deleted your work.
-
-We need to make rebuild truly non-destructive, and make destructive actions unmistakably different (and harder to trigger accidentally).
-
-### 3) “All photos are broken”
-Your extraction pipeline currently “upscales” CloudFront URLs to `/x/1200x800/` (e.g. in `_shared/provident/extract.ts` and `provident-batch-sync`). For Provident’s CDN, many of these sizes **do not exist / are denied**, causing images to 403 (AccessDenied). That makes galleries look broken even when the listing exists.
-
-This is fixable immediately by stopping the forced resize and repairing existing stored URLs.
-
-### 4) Credits exhaustion (402) is expected — but we must stop spending credits on discovery
-Firecrawl 402 means you have no credits. The permanent fix is:
-- **Discovery must not require Firecrawl at all**
-- **When credits are exhausted, extraction must either (a) use a non-Firecrawl source or (b) be disabled clearly**
-Right now discovery/extraction still has paths that can hit Firecrawl, which is unacceptable.
-
----
-
-## Goal (the “one last time, permanently” fix)
-1) “Rebuild Queue (Add Missing)” must reliably discover **~1,336 project detail URLs** without Firecrawl.
-2) The queue UI must show the full inventory (paginated), not just 16.
-3) Images must stop breaking (no invalid CloudFront resizing), and we must bulk-repair already-stored broken URLs.
-4) The system must never burn credits silently again:
-   - discovery = 0 Firecrawl
-   - extraction = only Firecrawl when explicitly enabled and credits are available
+### 3. Test Panel Preview
+- Should show a full preview of the listing as it will appear on the public page
+- Clicking the listing or "more" should navigate to the internal project detail page
 
 ---
 
-## Implementation plan (code changes)
+## Implementation Plan
 
-### A) Replace “credit-safe HTML regex discovery” with a deterministic Gatsby Page-Data discovery (no Firecrawl)
-**Edit:** `supabase/functions/discover-all-projects/index.ts`
+### Phase 1: Fix Extraction Logic (Backend)
 
-**What we’ll change**
-- Introduce a new discovery method that fetches Provident’s Gatsby JSON endpoints:
-  - Page 1: `https://providentestate.com/page-data/new-projects/page-data.json`
-  - Page N: `https://providentestate.com/page-data/new-projects/page/{N}/page-data.json`
-- Parse:
-  - `result.serverData.data.hits[]` for `slug`, `title`, `bitrix.developer_name`, `project_location`, `price`, and image variants.
-- Generate canonical URLs: `https://providentestate.com/new-projects/${slug}`
-- Use this method whenever:
-  - `skipMap: true` (the rebuild-queue path), regardless of Firecrawl credits.
+**File: `supabase/functions/_shared/provident/extract.ts`**
 
-**Why this fixes the 16-item problem**
-Page-data endpoints return listing data as JSON and do not require JS rendering or Firecrawl. That makes discovery stable and complete.
+The extraction regex patterns need to be fixed to capture all sections from the Provident markdown output:
 
-**Also included**
-- Make `FIRECRAWL_API_KEY` optional when we’re running in page-data mode (otherwise discovery fails unnecessarily even though we’re not calling Firecrawl).
-- Return richer response fields so the UI can show:
-  - pages processed
-  - URLs discovered in that chunk
-  - “new inserts” vs “already existed”
+| Section | Current Issue | Fix |
+|---------|--------------|-----|
+| USP Bullets | Looking for `## Unique Selling Points` but content is under `Unique Selling Points` (no ##) | Update regex to match both formats |
+| Amenities | Looking for `## Amenities` but content is inline after the heading | Parse line-by-line after "Amenities" heading |
+| Location Distances | Regex `^-\s+\d+\s+Minutes?` doesn't match Provident format `- 5 Minutes – Dubai Opera` | Fix regex to handle en-dash and em-dash |
+| FAQs | Looking for `## Useful Information` but uses `##` for Q and text for A | Parse Q/A pairs correctly |
+| Payment Breakdown | Pattern expects `(\d+%?)\s*\n+Down Payment` but format is `10%\n\nDown Payment` | Adjust regex to handle double newlines |
 
-### B) Ensure discovery never overwrites existing queue items (no accidental “break my listings”)
-**Edit:** `supabase/functions/discover-all-projects/index.ts`
+```text
+Specific fixes needed:
 
-**What we’ll change**
-- Stop using `upsert()` for placeholder creation in discovery.
-- Use `insert(..., { onConflict: "slug", ignoreDuplicates: true })` (or equivalent safe insert) so existing rows are never overwritten with empty `images/documents`.
+1. extractSection() - Make heading detection more flexible:
+   - Accept "## Heading" or just "Heading" followed by newline
+   - Handle multiline content blocks
 
-**Why**
-Even if `upsert(ignoreDuplicates)` behaves unexpectedly, we will not risk wiping existing extracted content again.
+2. Amenities extraction:
+   - Current: Looks for `## Amenities` section
+   - Fix: Parse lines between "## Amenities" and next heading
+   - Each non-empty line that's not "All Amenities" is an amenity
 
-### C) Populate queue rows with metadata at discovery time (so the queue looks real immediately)
-**Edit:** `supabase/functions/discover-all-projects/index.ts`
+3. USP extraction:
+   - Current: extractSection(markdown, "Unique Selling Points")
+   - Fix: Look for "Unique Selling Points" then parse:
+     - ### headline
+     - - bullet points (8 expected)
 
-Instead of inserting “name-from-slug”, we’ll store from page-data hits:
-- `name`
-- `developer_name`
-- `location`
-- `price_from`
-- `bedrooms_min/max` (if present in hit data or parsable)
-- `images` as a list using a *known-working* CDN size (see image section below)
+4. Location distances:
+   - Current regex: /^-\s+\d+\s+Minutes?\s+[–-]\s+.+/gim
+   - Source format: "- 5 Minutes – Dubai Opera"
+   - Fix: Match "- N Minutes – Place" with en-dash (–)
 
-This reduces “broken/empty” cards and makes the queue usable even before deep extraction runs.
+5. Payment breakdown:
+   - Source format:
+     10%
+     
+     Down Payment
+   - Fix regex to handle blank lines between percentage and label
 
-### D) Fix broken images permanently: remove forced `/x/1200x800/` resizing
-**Edits:**
-- `supabase/functions/_shared/provident/extract.ts`
-- `supabase/functions/provident-batch-sync/index.ts`
-- (Any other place forcing `/x/1200x800/`)
+6. FAQs:
+   - Source format: ## Question\n\nAnswer text
+   - Fix: Parse each ## as question, following text as answer
+```
 
-**What we’ll change**
-- Remove or replace `normalizeCloudfrontImage()` so we do **not** rewrite image URLs to sizes that return AccessDenied.
-- Prefer URLs that are already known to work (e.g. `/x/464x312/` or the original variant provided by Provident).
-- Keep deduping and placeholder filtering, but do not “invent” larger sizes.
+**File: `supabase/functions/batch-extract-pending/index.ts`**
 
-### E) Bulk repair already-broken stored image URLs (queue + projects)
-**Add or extend a backend function** (implementation will be in a backend function file):
-- Scan:
-  - `pending_project_imports.images` (JSON array)
-  - `project_images.image_url`
-- Replace patterns like:
-  - `/x/1200x800/` → `/x/464x312/`
-  - (optionally) other blocked sizes → `/x/464x312/`
-- Update rows in safe batches, with a dry-run option and a summary report.
+Ensure the extracted data is properly mapped to database columns:
+- `amenities_list` → `amenities` (JSON array)
+- `usp_bullets` → JSON array
+- `location_distances` → JSON array of {label, time}
+- `faqs` → JSON array of {question, answer}
+- `payment_breakdown` → JSON object with down_payment, during_construction, on_completion
 
-This immediately restores visibility across existing listings without requiring Firecrawl.
+### Phase 2: Add Breadcrumb Navigation (Frontend)
 
-### F) Make the Rebuild Queue UI truthful and non-destructive (no more “cleared” confusion)
-**Edit:** `src/components/listing-admin/SyncDashboard.tsx`
+**File: `src/components/project-detail/ProjectDetailLayout.tsx`**
 
-**What we’ll change**
-- Rebuild loop will no longer infer progress only from `pending` count.
-  - It will display per-chunk:
-    - `discovered_urls` (from the function response)
-    - `inserted_count` (new items added)
-    - `existing_urls`
-- Change the final toast to something unambiguous like:
-  - “Rebuild complete: discovered 1,336 URLs; added 1,320 new; already had 16.”
-- Never show “cleared” wording for rebuild.
-- Ensure destructive actions (“Delete queue”, “Full wipe”) require a stronger confirmation step (e.g. typed confirmation) and are visually separated.
+Add breadcrumb below hero buttons, matching Provident's structure:
 
-### G) Prevent all credit burn by default when credits are exhausted
-**Edits:**
-- `src/components/listing-admin/SyncDashboard.tsx`
-- `src/components/listing-admin/TestOneListingPanel.tsx`
-- Backend functions that call Firecrawl (extraction-related)
+```text
+Home / All Projects in Dubai / [Area] / [Project Name]
+```
 
-**What we’ll change**
-- Keep the current UI lockout, but make it consistent:
-  - When credits exhausted is detected once, the UI stays locked and clearly shows: “Discovery still works; extraction requires credits OR fallback mode.”
-- Ensure “Rebuild Queue (Add Missing)” never calls Firecrawl (it won’t after A).
-- Optional but recommended “permanent” lock:
-  - Persist a server-side flag (database table or existing settings row) so credits exhaustion is shared across sessions/devices and backend functions can hard-stop Firecrawl calls immediately.
+Structure:
+- "Home" → `/`
+- "All Projects in Dubai" → `/properties`
+- "[Area]" → `/properties?area=[slug]` (e.g., Downtown Dubai)
+- "[Project Name]" → Current page (not linked)
 
-### H) Fix “I don’t see listings” (pagination/filters UX)
-**Edit:** `src/components/listing-admin/ProjectApprovalQueue.tsx`
+### Phase 3: Enhance Floor Plans Section (Frontend)
 
-If the queue grows to 1,336, users may only see the first page and assume it’s missing.
-We’ll make it obvious by:
-- Showing “Showing 60 of 1,336” at the top
-- Making “Load more” more prominent
-- Ensuring default filter is not accidentally stuck on “Complete” (which would show very few)
+**File: `src/components/project-detail/ProjectDetailLayout.tsx`**
 
----
+Current floor plans show text buttons. Provident shows:
+- Floor plan type buttons (1 Bedroom, 2 Bedroom, etc.)
+- Floor plan image thumbnail
+- "Download Floorplans" button
 
-## Validation / acceptance tests (what you’ll verify after release)
+Add:
+- Tab/button group for floor plan types
+- Image preview showing floor plan image
+- Download button for each type
 
-### 1) Rebuild Queue correctness
-- Go to `/listing-admin`
-- Click **Rebuild Queue (Add Missing)**
-- Expected:
-  - It reports discovery near 1,336 (or the current live count)
-  - Queue “Pending” count rises toward the full inventory
-  - No “queue cleared” messaging
+### Phase 4: Add Missing CTA Sections (Frontend)
 
-### 2) Queue visibility
-- Open the Queue tab
-- Expected:
-  - You can see the first 60 listings
-  - “Load more” reveals more (eventually reaching full count)
+**File: `src/components/project-detail/ProjectDetailLayout.tsx`**
 
-### 3) Images are no longer broken
-- In queue cards, images load (no broken thumbnails)
-- On any project detail/gallery that was previously broken, images load again after the bulk repair
+Add two new sections matching Provident:
 
-### 4) No credit burn in discovery
-- Rebuild Queue works even when Firecrawl credits are exhausted
-- No 402 errors occur during rebuild
+1. **"The best deals are our expertise – register now" section**
+   - Title: "Request a call back now" (variation from Provident's wording)
+   - Subtitle: "Partner with Dubai's Leading Real Estate Brokerage. Share your details, and our off-plan property expert will call you back shortly."
+   - Buttons: "Request a Call Back Now" | "Chat with us now" (WhatsApp)
+   - Form: Same fields as Contact page (Name, Email, Phone, Preferred Language, Message)
 
----
+2. **"Stay in the loop" section**
+   - Before footer
+   - Email subscription input
+   - Links to Terms & Privacy
 
-## Files expected to change
-Backend:
-- `supabase/functions/discover-all-projects/index.ts` (major fix)
-- `supabase/functions/_shared/provident/extract.ts` (image URL fix)
-- `supabase/functions/provident-batch-sync/index.ts` (image URL fix)
-- New/updated backend function for bulk image repair (name TBD)
+### Phase 5: Enhance Test Panel Preview (Frontend)
 
-Frontend:
-- `src/components/listing-admin/SyncDashboard.tsx` (progress + safety + wording)
-- `src/components/listing-admin/ProjectApprovalQueue.tsx` (clarify pagination/counts)
+**File: `src/components/listing-admin/TestOneListingPanel.tsx`**
+
+Current test preview shows:
+- Small card with metadata checklist
+- Basic info grid
+
+Enhance to show:
+1. **Full listing card preview** (same as ListingApprovalCard)
+2. **Clickable "View Full Page"** button to open `/properties/[slug]` in new tab
+3. **Side-by-side comparison**: Source URL iframe vs. extracted preview
+4. **AI Audit section**: Use Lovable AI to compare extraction vs source and report missing fields
+
+### Phase 6: Add AI Extraction Audit (Backend + Frontend)
+
+**New File: `supabase/functions/audit-extraction/index.ts`**
+
+Create an edge function that:
+1. Takes the extracted data + source URL
+2. Calls Lovable AI to compare
+3. Returns a list of missing/incorrect fields
+4. Suggests fixes
+
+**File: `src/components/listing-admin/TestOneListingPanel.tsx`**
+
+Add "Run AI Audit" button that:
+1. Calls `audit-extraction` function
+2. Shows audit results (what's missing, what needs fixing)
+3. Option to "Auto-Fix" using AI suggestions
 
 ---
 
-## Rollout strategy (safe and fast)
-1) Deploy discovery fix first (A+B+C). This should immediately remove the “16 only” issue.
-2) Deploy image normalization fix (D) and run image repair (E).
-3) Ship UI clarity improvements (F+H).
-4) Only after that, revisit deep extraction quality (if needed) with a strict “no credit burn without explicit approval” rule.
+## Technical Details
+
+### Extraction Regex Fixes
+
+```text
+Location Distances Pattern (current):
+/^-\s+\d+\s+Minutes?\s+[–-]\s+(.+)/gim
+
+Should be:
+/^-\s+(\d+\s+Minutes?)\s+[–—-]\s+(.+)/gim
+(Note: Add em-dash — to character class)
+
+USP Section Pattern:
+- Look for "Unique Selling Points" or "## Unique Selling Points"
+- Parse "### headline" as uspHeadline
+- Parse "- bullet" lines as uspBullets
+
+Payment Breakdown Pattern (current):
+/(\d+%?)\s*\n+Down Payment/i
+
+Should be:
+/(\d+)\s*%?\s*\n+\s*\n*Down Payment/i
+(Handle optional blank line between number and label)
+```
+
+### Database Field Mapping
+
+| Extracted Field | DB Column | Type |
+|----------------|-----------|------|
+| `amenities` | `amenities_list` | JSONB array |
+| `uspBullets` | `usp_bullets` | JSONB array |
+| `locationDistances` | `location_distances` | JSONB array |
+| `faqs` | `faqs` | JSONB array |
+| `paymentBreakdown` | `payment_breakdown` | JSONB object |
+
+### Breadcrumb Component Structure
+
+```text
+<nav className="flex items-center gap-2 text-sm">
+  <Link to="/">Home</Link>
+  <span>/</span>
+  <Link to="/properties">All Projects in Dubai</Link>
+  <span>/</span>
+  <Link to={`/properties?area=${areaSlug}`}>{areaName}</Link>
+  <span>/</span>
+  <span className="text-gold">{projectName}</span>
+</nav>
+```
+
+---
+
+## Files to Modify
+
+### Backend (Edge Functions)
+1. `supabase/functions/_shared/provident/extract.ts` - Fix all extraction regex patterns
+2. `supabase/functions/batch-extract-pending/index.ts` - Verify field mapping
+3. `supabase/functions/audit-extraction/index.ts` (NEW) - AI-powered extraction audit
+
+### Frontend
+1. `src/components/project-detail/ProjectDetailLayout.tsx` - Add breadcrumb, CTA sections, floor plan images
+2. `src/components/listing-admin/TestOneListingPanel.tsx` - Full preview, clickable listing, AI audit
+3. `src/components/project-detail/ProjectBreadcrumb.tsx` (NEW) - Reusable breadcrumb component
+4. `src/components/project-detail/FloorPlanGallery.tsx` (NEW) - Enhanced floor plan display
+5. `src/components/project-detail/CallToActionSection.tsx` (NEW) - "Best deals" CTA section
+6. `src/components/project-detail/NewsletterSection.tsx` (NEW) - "Stay in the loop" section
+
+---
+
+## Validation Checklist
+
+After implementation, verify:
+
+1. **Test Extraction**:
+   - Run test extraction on Inaura Hotels & Residences
+   - Verify all 8 USP bullets are extracted
+   - Verify all 10 amenities are extracted
+   - Verify all 12 location distances are extracted
+   - Verify 6 FAQs are extracted
+   - Verify payment breakdown (10%/40%/50%) is extracted
+   - Verify brochure PDF is mirrored
+
+2. **Project Detail Page**:
+   - Breadcrumb shows: Home / All Projects in Dubai / Downtown Dubai / Inaura Hotels & Residences
+   - Hero has: Title → Developer → Download Brochure + Register Interest → Breadcrumb
+   - Sticky nav tabs all work
+   - Floor plans show images with download buttons
+   - "Request a call back" CTA section present
+   - "Stay in the loop" newsletter section before footer
+
+3. **Test Panel**:
+   - Shows full listing card preview
+   - "View Full Page" opens internal URL
+   - AI Audit shows comparison results
+
+---
+
+## Priority Order
+
+1. **Critical (Phase 1)**: Fix extraction regex - Without this, no data flows to the page
+2. **High (Phase 2-3)**: Breadcrumb + Floor plans - Core Provident parity features
+3. **Medium (Phase 4-5)**: CTA sections + Test panel enhancements
+4. **Nice-to-have (Phase 6)**: AI Audit for automated quality checks
 
