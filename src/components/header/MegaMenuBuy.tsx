@@ -43,10 +43,11 @@ const MegaMenuBuy = React.forwardRef<HTMLDivElement, MegaMenuBuyProps>(({ onClos
           {/* Right: Links (with divider) */}
           <div className="lg:col-span-6 lg:border-l lg:border-gold/30 lg:pl-10">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Column 1: Properties by Type */}
-              <div className="relative">
+              {/* Column 1: Properties by Type - ALIGNED with matching min-height */}
+              <div className="relative flex flex-col">
                 <MegaMenuSectionTitle icon={Building2} title="Properties by Type" />
-                <div className="space-y-1">
+                {/* ALIGNED: Same min-height as Buyer Resources for aligned dividers */}
+                <div className="space-y-1 min-h-[180px]">
                   {propertyTypes.map((item) => (
                     <MegaMenuIconLink
                       key={item.label}
@@ -73,10 +74,11 @@ const MegaMenuBuy = React.forwardRef<HTMLDivElement, MegaMenuBuyProps>(({ onClos
                 <div className="hidden sm:block absolute top-0 -right-3 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
               </div>
 
-              {/* Column 2: Buyer Resources */}
-              <div>
+              {/* Column 2: Buyer Resources - ALIGNED with matching min-height */}
+              <div className="flex flex-col">
                 <MegaMenuSectionTitle icon={FileText} title="Buyer Resources" />
-                <div className="space-y-1">
+                {/* ALIGNED: Same min-height as Properties column for aligned dividers */}
+                <div className="space-y-1 min-h-[180px]">
                   {buyerResources.map((item) => (
                     <MegaMenuIconLink
                       key={item.label}

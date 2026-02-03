@@ -459,13 +459,14 @@ const Footer = () => {
               >
                 {t('footer.properties') || 'Properties'}
               </h4>
-              <div className="min-h-[92px] sm:min-h-[112px] md:min-h-[150px] mb-3 sm:mb-4 md:mb-6">
+              {/* ALIGNED: Same min-height as Column 2's Investor Hub section */}
+              <div className="min-h-[72px] sm:min-h-[88px] md:min-h-[110px] mb-3 sm:mb-4 md:mb-6">
                 <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
                   {propertiesLinks.map((link) => (
                     <li key={link.href}>
                       <Link
                         to={link.href}
-                        className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
+                        className="text-zinc-400 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
                       >
                         {link.label}
                       </Link>
@@ -510,13 +511,14 @@ const Footer = () => {
               >
                 {t('footer.investorHub') || 'Investor Hub'}
               </h4>
-              <div className="min-h-[92px] sm:min-h-[112px] md:min-h-[150px] mb-3 sm:mb-4 md:mb-6">
+              {/* ALIGNED: Same min-height as Column 1's Properties section */}
+              <div className="min-h-[72px] sm:min-h-[88px] md:min-h-[110px] mb-3 sm:mb-4 md:mb-6">
                 <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
                   {investorHubLinks.map((link) => (
                     <li key={link.href}>
                       <Link
                         to={link.href}
-                        className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
+                        className="text-zinc-400 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
                       >
                         {link.label}
                       </Link>
@@ -561,13 +563,14 @@ const Footer = () => {
               >
                 {t('footer.guides') || 'Guides'}
               </h4>
-              <div className="min-h-[168px] sm:min-h-[204px] md:min-h-[270px] mb-3 sm:mb-4 md:mb-6">
+              {/* ALIGNED: Same min-height as Column 4's About section */}
+              <div className="min-h-[120px] sm:min-h-[148px] md:min-h-[200px] mb-3 sm:mb-4 md:mb-6">
                 <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
                   {guidesLinks.map((link) => (
                     <li key={link.href}>
                       <Link
                         to={link.href}
-                        className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
+                        className="text-zinc-400 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
                       >
                         {link.label}
                       </Link>
@@ -612,13 +615,14 @@ const Footer = () => {
               >
                 About
               </h4>
-              <div className="min-h-[168px] sm:min-h-[204px] md:min-h-[270px] mb-3 sm:mb-4 md:mb-6">
+              {/* ALIGNED: Same min-height as Column 3's Guides section */}
+              <div className="min-h-[120px] sm:min-h-[148px] md:min-h-[200px] mb-3 sm:mb-4 md:mb-6">
                 <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
                   {aboutLinks.map((link) => (
                     <li key={link.href}>
                       <Link
                         to={link.href}
-                        className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
+                        className="text-zinc-400 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
                       >
                         {link.label}
                       </Link>

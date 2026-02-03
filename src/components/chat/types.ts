@@ -31,7 +31,7 @@ export interface UserInfo {
   consentPrivacy: boolean;
 }
 
-export type ChatStep = 'welcome_choice' | 'shortcuts' | 'cv_submission' | 'check_email' | 'collect_info' | 'chat_history' | 'select_service' | 'agent_joining' | 'chatting' | 'rating' | 'feedback' | 'submitted';
+export type ChatStep = 'welcome_choice' | 'shortcuts' | 'cv_submission' | 'check_email' | 'collect_info' | 'conversational_collect' | 'chat_history' | 'select_service' | 'agent_joining' | 'chatting' | 'rating' | 'feedback' | 'submitted';
 
 export interface ServiceOption {
   id: string;
