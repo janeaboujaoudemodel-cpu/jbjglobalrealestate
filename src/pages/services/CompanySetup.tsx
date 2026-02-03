@@ -7,10 +7,10 @@ import {
   HelpCircle,
   Phone,
   Users,
-  Shield,
-  Globe,
-  Briefcase,
   ClipboardList,
+  Send,
+  FolderOpen,
+  ArrowRight,
 } from "lucide-react";
 import Footer from "@/components/Footer";
 import DirectContactCTA from "@/components/DirectContactCTA";
@@ -37,60 +37,60 @@ const staggerContainer = {
   },
 };
 
-const whyThisExists = [
-  { icon: Building, title: "Property Holding", description: "Structuring property ownership through corporate entities" },
-  { icon: Globe, title: "International Investors", description: "Foreign nationals requiring UAE presence for transactions" },
-  { icon: Shield, title: "Asset Protection", description: "Separation of personal and investment assets" },
-  { icon: Briefcase, title: "Business Operations", description: "Investors planning to operate businesses alongside investments" },
+const whatWeProvide = [
+  { icon: ClipboardList, text: "Intake form to understand intended setup purpose" },
+  { icon: FileText, text: "Document checklist preparation and readiness guidance" },
+  { icon: Users, text: "Introduction to licensed providers where required" },
+  { icon: CheckCircle2, text: "Coordination of progress checkpoints and reminders" },
 ];
 
 const processSteps = [
-  { step: 1, title: "Initial intake and requirement assessment", icon: ClipboardList },
-  { step: 2, title: "Partner introduction (licensed company setup specialist)", icon: Users },
-  { step: 3, title: "Documentation preparation and submission", icon: FileText },
-  { step: 4, title: "Progress updates and completion coordination", icon: CheckCircle2 },
+  { step: 1, title: "Intake (purpose, jurisdiction preference, timeline)", icon: ClipboardList },
+  { step: 2, title: "Document checklist (based on provider requirements)", icon: FileText },
+  { step: 3, title: "Partner introduction (licensed setup specialists)", icon: Users },
+  { step: 4, title: "Submission & progress updates", icon: Send },
+  { step: 5, title: "Completion and record filing confirmation", icon: CheckCircle2 },
 ];
 
 const typicalDocuments = [
-  "Passport copies (all shareholders/directors)",
-  "Proof of address",
-  "Business plan or activity description",
-  "No objection letter (if applicable)",
-  "Bank reference letters (if applicable)",
+  "Passport / Emirates ID (as applicable)",
+  "Proof of address (as applicable)",
+  "Proposed company activity summary",
+  "Shareholder details (as applicable)",
 ];
 
 const faqData = [
   {
-    question: "Why would I need a company for property investment?",
-    answer: "Some investors prefer holding properties through corporate structures for asset protection, tax planning, or ease of ownership transfer. This is particularly common for commercial properties or large portfolios.",
+    question: "Do you provide legal services?",
+    answer: "No. Legal work is performed by licensed providers. We coordinate introductions.",
   },
   {
-    question: "Does JBJ set up companies?",
-    answer: "No. JBJ introduces clients to licensed company setup specialists. The setup service is provided by independent partners under their own regulatory framework.",
+    question: "Can you recommend a specific structure?",
+    answer: "We coordinate the process; final structure decisions are handled by licensed professionals.",
   },
   {
-    question: "What types of companies can be set up?",
-    answer: "Options include mainland LLCs, free zone companies, and offshore entities. Your setup specialist will advise on the most suitable structure for your needs.",
+    question: "How long does setup take?",
+    answer: "Depends on authority processes, documentation, and provider timeline.",
   },
   {
-    question: "How long does company setup take?",
-    answer: "Timing varies by jurisdiction and company type. Typical setups range from a few days for free zones to several weeks for mainland companies.",
+    question: "Do you handle banking?",
+    answer: "No. Banking is handled directly with banks and licensed advisors.",
   },
   {
-    question: "What are the ongoing requirements?",
-    answer: "Companies require annual renewals, accounting, and compliance filings. Your setup partner can provide ongoing support or introduce you to appropriate service providers.",
+    question: "Can overseas investors apply?",
+    answer: "Yes, subject to requirements and documentation.",
   },
   {
-    question: "Can a company buy any type of property?",
-    answer: "Company ownership rules vary by property type and location. Some freehold areas allow corporate ownership, while others have restrictions.",
+    question: "Is this required to buy property?",
+    answer: "Not necessarily. It depends on your strategy.",
   },
   {
-    question: "Do I need to be in Dubai for company setup?",
-    answer: "Many processes can be done remotely with proper documentation. Some steps may require physical presence or power of attorney arrangements.",
+    question: "Can I track progress?",
+    answer: "Yes—through status checkpoints.",
   },
   {
-    question: "What about visa and residency?",
-    answer: "Company ownership can provide visa sponsorship opportunities. Visa services are handled through separate licensed immigration specialists.",
+    question: "Can you bundle this with other services?",
+    answer: "Yes—company setup can be structured alongside property services.",
   },
 ];
 
@@ -99,13 +99,14 @@ const CompanySetup = () => {
     <>
       <SEOHead
         title="Company Setup Support | JBJ Global Real Estate"
-        description="Coordination pathway for UAE company setup through licensed specialists. Structured, documented, and guided support for property investors."
+        description="Structured coordination for company setup through licensed specialists—clear steps, document readiness, and progress tracking."
         canonicalPath="/services/company-setup"
       />
 
       {/* HERO SECTION */}
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-black">
+          {/* Video placeholder - Company Setup — Structured, Not Stressful */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
         </div>
@@ -132,14 +133,14 @@ const CompanySetup = () => {
             </h1>
             
             <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-              A coordination pathway for company setup through licensed specialists — structured, documented, and guided.
+              Structured coordination for company setup through licensed specialists—clear steps, document readiness, and progress tracking.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <PremiumHeroButton href="/contact?service=company-setup">
                 Request Company Setup
               </PremiumHeroButton>
-              <PremiumHeroButton href="/partners/company-setup">
+              <PremiumHeroButton href="/contact?service=company-setup&type=partner">
                 Partner Introduction
               </PremiumHeroButton>
             </div>
@@ -157,7 +158,33 @@ const CompanySetup = () => {
         </motion.div>
       </section>
 
-      {/* WHY THIS EXISTS */}
+      {/* WHY THIS MATTERS FOR INVESTORS */}
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="max-w-4xl mx-auto"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              Why This Matters for Investors
+            </motion.h2>
+            <motion.div variants={fadeInUp} className="jj-card-inner">
+              <p className="text-zinc-700 text-lg leading-relaxed">
+                Some investors structure ownership, operations, or tenancy through corporate entities. This page provides a clean pathway to get set up correctly with licensed professionals.
+              </p>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* WHAT WE PROVIDE */}
       <section className="bg-black py-20">
         <div className="jj-layer-2">
           <motion.div
@@ -171,30 +198,27 @@ const CompanySetup = () => {
               className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Why This Exists for Investors
+              What We Provide
             </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              {whyThisExists.map((item, index) => (
-                <motion.div key={index} variants={fadeInUp}>
-                  <div className="h-full jj-card-inner">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center shrink-0">
-                        <item.icon className="w-6 h-6 text-gold" />
+            <div className="max-w-3xl mx-auto">
+              <motion.div variants={fadeInUp} className="jj-card-inner">
+                <ul className="space-y-4">
+                  {whatWeProvide.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-4 text-zinc-700">
+                      <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center shrink-0">
+                        <item.icon className="w-5 h-5 text-gold" />
                       </div>
-                      <div>
-                        <h3 className="font-semibold text-black mb-1">{item.title}</h3>
-                        <p className="text-sm text-zinc-600">{item.description}</p>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+                      <span className="pt-2">{item.text}</span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* PROCESS STEPS */}
+      {/* TYPICAL STEPS */}
       <section className="bg-black py-20">
         <div className="jj-layer-2">
           <motion.div
@@ -208,7 +232,7 @@ const CompanySetup = () => {
               className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              How It Works
+              Typical Steps
             </motion.h2>
             <div className="max-w-3xl mx-auto">
               <div className="relative">
@@ -253,20 +277,17 @@ const CompanySetup = () => {
               className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Typical Documents Required
+              Typical Documents (May Vary)
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner">
               <ul className="space-y-4">
                 {typicalDocuments.map((item, idx) => (
                   <li key={idx} className="flex items-start gap-3 text-zinc-700">
-                    <FileText className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+                    <FolderOpen className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
-              <p className="mt-6 text-sm text-zinc-500 italic">
-                * Requirements vary by company type and jurisdiction. Your setup partner will provide a complete checklist.
-              </p>
             </motion.div>
           </motion.div>
         </div>
@@ -329,15 +350,16 @@ const CompanySetup = () => {
               className="text-3xl md:text-4xl font-bold text-black mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Ready to Set Up Your Company?
+              Start company setup with a clear workflow
             </motion.h2>
             <motion.p variants={fadeInUp} className="text-zinc-600 mb-8">
-              We'll introduce you to licensed specialists for your company setup needs.
+              Submit your intent and timeline to receive a structured checklist and next steps.
             </motion.p>
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button variant="primary" size="lg" asChild>
                 <Link to="/contact?service=company-setup">
                   Request Company Setup
+                  <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
               </Button>
               <Button variant="outline" size="lg" asChild>
@@ -348,16 +370,6 @@ const CompanySetup = () => {
               </Button>
             </motion.div>
           </motion.div>
-        </div>
-      </section>
-
-      {/* COMPLIANCE DISCLAIMER */}
-      <section className="bg-black py-8 border-t border-zinc-800">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-zinc-500 text-sm max-w-3xl mx-auto">
-            Company setup services are provided by independent, licensed specialists. JBJ Global Real Estate provides introductions and coordination support only. 
-            Clients contract directly with setup partners under their regulatory framework. JBJ does not provide legal, tax, or business advisory services.
-          </p>
         </div>
       </section>
 
