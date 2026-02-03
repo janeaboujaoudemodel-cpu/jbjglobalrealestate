@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -23,14 +24,31 @@ import {
   CheckCircle,
   XCircle,
   Award,
+  Eye,
+  ThumbsUp,
+  ThumbsDown,
 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+
+// ========== CORRECT TYPES matching DB schema ==========
+interface ImageObj {
+  url: string;
+  alt_text?: string;
+  display_order?: number;
+}
+
+interface DocumentObj {
+  url: string;
+  type: string;
+  name?: string;
+}
 
 interface TestResult {
   success: boolean;
   coreComplete: boolean;
   fullyComplete: boolean;
   project?: {
+    id: string;
     name: string;
     slug: string;
     source_url: string;
@@ -42,14 +60,13 @@ interface TestResult {
     property_type_label?: string;
     status_label?: string;
     description?: string;
-    images?: string[];
-    documents?: {
-      type: string;
-      url: string;
-      mirrored_url?: string;
-    }[];
-    usps?: string[];
-    amenities?: string[];
+    images: ImageObj[];
+    documents: DocumentObj[];
+    usp_bullets: string[];
+    amenities_list: string[];
+    faqs: Array<{ question: string; answer: string }>;
+    location_distances: Array<{ label: string; time: string }>;
+    payment_breakdown: { down_payment?: string; during_construction?: string; on_completion?: string };
   };
   error?: string;
   extraction_time_ms?: number;
@@ -58,6 +75,7 @@ interface TestResult {
     imageCount: number;
     hasDocs: boolean;
     docCount: number;
+    hasBrochure: boolean;
     hasDescription: boolean;
     descriptionLength: number;
     hasDeveloper: boolean;
@@ -68,6 +86,11 @@ interface TestResult {
     hasLocation: boolean;
     hasPrice: boolean;
     hasHandover: boolean;
+    hasFaqs: boolean;
+    faqCount: number;
+    hasDistances: boolean;
+    distanceCount: number;
+    hasPaymentBreakdown: boolean;
   };
 }
 
@@ -79,8 +102,23 @@ interface TestOneListingPanelProps {
 const SESSION_KEY_RESULT = "test_extraction_result";
 const SESSION_KEY_APPROVED = "test_extraction_approved";
 
+// Helper to parse JSON fields safely
+function parseJsonField<T>(value: unknown, defaultVal: T): T {
+  if (!value) return defaultVal;
+  if (typeof value === "string") {
+    try {
+      return JSON.parse(value) as T;
+    } catch {
+      return defaultVal;
+    }
+  }
+  return value as T;
+}
+
 export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOneListingPanelProps) {
+  const navigate = useNavigate();
   const [isExtracting, setIsExtracting] = useState(false);
+  const [isApproving, setIsApproving] = useState(false);
   
   // Restore state from sessionStorage on mount
   const [testResult, setTestResult] = useState<TestResult | null>(() => {
@@ -224,86 +262,65 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
 
       if (projectError) throw projectError;
 
-      // Parse extracted data
-      const images = (() => {
-        try {
-          const parsed = typeof updatedProject.images === "string" 
-            ? JSON.parse(updatedProject.images) 
-            : updatedProject.images;
-          return Array.isArray(parsed) ? parsed : [];
-        } catch {
-          return [];
-        }
-      })();
+      // ========== FIXED: Parse extracted data with CORRECT types ==========
+      const images: ImageObj[] = parseJsonField<ImageObj[]>(updatedProject.images, []);
+      const documents: DocumentObj[] = parseJsonField<DocumentObj[]>(updatedProject.documents, []);
+      const uspBullets: string[] = parseJsonField<string[]>(updatedProject.usp_bullets, []);
+      // FIXED: Read amenities_list, not amenities
+      const amenitiesList: string[] = parseJsonField<string[]>(updatedProject.amenities_list, []);
+      const faqs: Array<{ question: string; answer: string }> = parseJsonField(updatedProject.faqs, []);
+      const locationDistances: Array<{ label: string; time: string }> = parseJsonField(updatedProject.location_distances, []);
+      const paymentBreakdown = parseJsonField<{ down_payment?: string; during_construction?: string; on_completion?: string }>(
+        updatedProject.payment_breakdown, 
+        {}
+      );
 
-      const documents = (() => {
-        try {
-          const parsed = typeof updatedProject.documents === "string"
-            ? JSON.parse(updatedProject.documents)
-            : updatedProject.documents;
-          return Array.isArray(parsed) ? parsed : [];
-        } catch {
-          return [];
-        }
-      })();
-
-      const uspBullets = (() => {
-        try {
-          const parsed = typeof updatedProject.usp_bullets === "string"
-            ? JSON.parse(updatedProject.usp_bullets as string)
-            : updatedProject.usp_bullets;
-          return Array.isArray(parsed) ? parsed : [];
-        } catch {
-          return [];
-        }
-      })();
-
-      const amenities = (() => {
-        try {
-          const parsed = typeof updatedProject.amenities === "string"
-            ? JSON.parse(updatedProject.amenities as string)
-            : updatedProject.amenities;
-          return Array.isArray(parsed) ? parsed : [];
-        } catch {
-          return [];
-        }
-      })();
-
-      // Build checklist
+      // Build checklist with CORRECT field checks
       const hasImages = images.length >= 2;
-      const hasDocs = documents.some((d: any) => d.mirrored_url);
+      // FIXED: Check for brochure document with URL (not mirrored_url which doesn't exist)
+      const hasBrochure = documents.some((d) => d.type === "brochure" && d.url);
+      const hasDocs = documents.length > 0;
       const hasDescription = updatedProject.description && updatedProject.description.length > 50;
       const hasDeveloper = updatedProject.developer_name && 
         updatedProject.developer_name.toLowerCase() !== "unknown" &&
         updatedProject.developer_name.trim() !== "";
-      const hasUsps = uspBullets.length >= 1;
-      const hasAmenities = amenities.length >= 1;
+      const hasUsps = uspBullets.length >= 2;
+      const hasAmenities = amenitiesList.length >= 3;
       const hasLocation = !!updatedProject.location && updatedProject.location.trim() !== "";
       const hasPrice = !!updatedProject.price_from;
       const hasHandover = !!updatedProject.handover_date;
+      const hasFaqs = faqs.length >= 1;
+      const hasDistances = locationDistances.length >= 1;
+      const hasPaymentBreakdown = !!(paymentBreakdown.down_payment || paymentBreakdown.during_construction || paymentBreakdown.on_completion);
 
       const checklist = {
         hasImages,
         imageCount: images.length,
         hasDocs,
-        docCount: documents.filter((d: any) => d.mirrored_url).length,
+        docCount: documents.length,
+        hasBrochure,
         hasDescription,
         descriptionLength: updatedProject.description?.length ?? 0,
         hasDeveloper,
         hasUsps,
         uspCount: uspBullets.length,
         hasAmenities,
-        amenityCount: amenities.length,
+        amenityCount: amenitiesList.length,
         hasLocation,
         hasPrice,
         hasHandover,
+        hasFaqs,
+        faqCount: faqs.length,
+        hasDistances,
+        distanceCount: locationDistances.length,
+        hasPaymentBreakdown,
       };
 
-      // Core Complete: 2+ images + 1+ mirrored doc + description (>50 chars) + valid developer
-      const coreComplete = hasImages && hasDocs && hasDescription && hasDeveloper;
+      // Core Complete: 2+ images + brochure + description (>50 chars) + valid developer
+      const coreComplete = hasImages && hasBrochure && hasDescription && hasDeveloper;
       
-      // Fully Complete: Core + USPs + amenities + location + price + handover
-      const fullyComplete = coreComplete && hasUsps && hasAmenities && hasLocation && hasPrice;
+      // Fully Complete: Core + USPs + amenities + location + price + handover + FAQs + distances + payment
+      const fullyComplete = coreComplete && hasUsps && hasAmenities && hasLocation && hasPrice && hasFaqs;
 
       // Build bedrooms display from min/max
       const bedroomsDisplay = updatedProject.bedrooms_min && updatedProject.bedrooms_max
@@ -329,6 +346,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
         coreComplete,
         fullyComplete,
         project: {
+          id: updatedProject.id,
           name: updatedProject.name || "Unknown",
           slug: updatedProject.slug,
           source_url: updatedProject.source_url,
@@ -342,8 +360,11 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
           description: updatedProject.description,
           images,
           documents,
-          usps: uspBullets,
-          amenities,
+          usp_bullets: uspBullets,
+          amenities_list: amenitiesList,
+          faqs,
+          location_distances: locationDistances,
+          payment_breakdown: paymentBreakdown,
         },
         extraction_time_ms,
         checklist,
@@ -369,7 +390,74 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
     }
   };
 
-  const approveTest = () => {
+  const handleApproveFromCard = async () => {
+    if (!testResult?.project?.id) return;
+    
+    setIsApproving(true);
+    try {
+      // Mark as approved in DB (create actual project)
+      const projectData = testResult.project;
+      
+      const { data: newProject, error: projectError } = await supabase
+        .from("projects")
+        .insert({
+          name: projectData.name,
+          slug: projectData.slug,
+          location: projectData.location,
+          description: projectData.description,
+          price_from: testResult.project.price_text ? parseInt(testResult.project.price_text.replace(/[^\d]/g, "")) : null,
+          source_url: projectData.source_url,
+          is_offplan: true,
+          status: "active",
+        })
+        .select()
+        .single();
+
+      if (projectError) throw projectError;
+
+      // Insert images
+      if (projectData.images.length > 0 && newProject) {
+        const imageInserts = projectData.images.map((img, index) => ({
+          project_id: newProject.id,
+          image_url: img.url,
+          alt_text: img.alt_text || projectData.name,
+          display_order: index,
+        }));
+        await supabase.from("project_images").insert(imageInserts);
+      }
+
+      // Insert documents
+      if (projectData.documents.length > 0 && newProject) {
+        const docInserts = projectData.documents.map((doc, idx) => ({
+          project_id: newProject.id,
+          file_url: doc.url,
+          document_type: doc.type,
+          file_name: doc.name || `${doc.type}-${idx + 1}`,
+          display_order: idx,
+        }));
+        await supabase.from("project_documents").insert(docInserts);
+      }
+
+      // Mark pending import as approved
+      await supabase
+        .from("pending_project_imports")
+        .update({
+          status: "approved",
+          reviewed_at: new Date().toISOString(),
+        })
+        .eq("id", projectData.id);
+
+      setIsApproved(true);
+      toast.success(`"${projectData.name}" approved and added to listings!`);
+      onApproved();
+    } catch (e: any) {
+      toast.error(e?.message || "Failed to approve project");
+    } finally {
+      setIsApproving(false);
+    }
+  };
+
+  const approveTestGate = () => {
     setIsApproved(true);
     toast.success("Test approved! You can now run bulk extraction.");
     onApproved();
@@ -384,6 +472,12 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
       sessionStorage.removeItem(SESSION_KEY_APPROVED);
     } catch { /* ignore */ }
     toast.info("Test rejected. Fix the extraction logic and try again.");
+  };
+
+  const openFullPagePreview = () => {
+    if (testResult?.project?.id) {
+      navigate(`/listing-admin/preview/${testResult.project.id}`);
+    }
   };
 
   const ChecklistItem = ({ label, passed, detail }: { label: string; passed: boolean; detail?: string }) => (
@@ -475,161 +569,214 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
               </div>
             )}
 
-            {/* Checklist */}
-            {testResult.checklist && (
-              <Card className="bg-white border-zinc-200">
-                <CardHeader className="py-2 px-3">
-                  <CardTitle className="text-sm">Extraction Checklist</CardTitle>
-                </CardHeader>
-                <CardContent className="py-2 px-3 space-y-1">
-                  <div className="text-xs font-medium text-zinc-500 mb-2">Core Requirements (needed for approval)</div>
-                  <ChecklistItem 
-                    label="Images (2+ required)" 
-                    passed={testResult.checklist.hasImages} 
-                    detail={`${testResult.checklist.imageCount} found`}
-                  />
-                  <ChecklistItem 
-                    label="Mirrored Documents (1+ required)" 
-                    passed={testResult.checklist.hasDocs} 
-                    detail={`${testResult.checklist.docCount} mirrored`}
-                  />
-                  <ChecklistItem 
-                    label="Description (>50 chars)" 
-                    passed={testResult.checklist.hasDescription} 
-                    detail={`${testResult.checklist.descriptionLength} chars`}
-                  />
-                  <ChecklistItem 
-                    label="Developer Name" 
-                    passed={testResult.checklist.hasDeveloper}
-                  />
-                  
-                  <div className="text-xs font-medium text-zinc-500 mt-3 mb-2">Extended Fields (nice to have)</div>
-                  <ChecklistItem 
-                    label="USP Bullets" 
-                    passed={testResult.checklist.hasUsps} 
-                    detail={`${testResult.checklist.uspCount} found`}
-                  />
-                  <ChecklistItem 
-                    label="Amenities" 
-                    passed={testResult.checklist.hasAmenities} 
-                    detail={`${testResult.checklist.amenityCount} found`}
-                  />
-                  <ChecklistItem 
-                    label="Location" 
-                    passed={testResult.checklist.hasLocation}
-                  />
-                  <ChecklistItem 
-                    label="Price" 
-                    passed={testResult.checklist.hasPrice}
-                  />
-                  <ChecklistItem 
-                    label="Handover Date" 
-                    passed={testResult.checklist.hasHandover}
-                  />
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Project preview */}
+            {/* ========== TWO-VIEW PREVIEW ========== */}
             {testResult.project && (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {/* Extracted data card */}
-                <Card className="bg-white border-zinc-200">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-sm flex items-center justify-between">
-                      <span>Extracted Data</span>
-                      <Badge variant="outline" className="text-xs">
-                        {testResult.project.images?.length || 0} images
-                      </Badge>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    {/* Image gallery preview */}
-                    {testResult.project.images && testResult.project.images.length > 0 && (
-                      <div className="grid grid-cols-3 gap-1">
-                        {testResult.project.images.slice(0, 6).map((url, idx) => (
+              <div className="space-y-4">
+                {/* SMALL CARD PREVIEW (Provident style) */}
+                <Card className="bg-white border-gold shadow-lg overflow-hidden">
+                  <div className="flex flex-col md:flex-row">
+                    {/* Main Image */}
+                    <div className="relative w-full md:w-64 h-48 md:h-auto flex-shrink-0 bg-muted">
+                      {testResult.project.images.length > 0 ? (
+                        <SafeImage
+                          src={testResult.project.images[0].url}
+                          alt={testResult.project.images[0].alt_text || testResult.project.name}
+                          className="w-full h-full object-cover"
+                          fallbackSrc="/placeholder.svg"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <ImageIcon className="w-12 h-12 text-muted-foreground/30" />
+                        </div>
+                      )}
+                      {testResult.project.status_label && (
+                        <div className="absolute top-2 right-2 rounded bg-background/90 text-foreground border border-border px-2 py-1 text-[11px] font-medium">
+                          {testResult.project.status_label}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Card Content */}
+                    <div className="flex-1 p-4 space-y-3">
+                      <div>
+                        <h3 className="font-semibold text-lg text-foreground">{testResult.project.name}</h3>
+                        {testResult.project.developer_name && (
+                          <p className="text-sm text-gold">by {testResult.project.developer_name}</p>
+                        )}
+                      </div>
+
+                      <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                        {testResult.project.location && (
+                          <span className="flex items-center gap-1">
+                            <MapPin className="w-3.5 h-3.5" />
+                            {testResult.project.location}
+                          </span>
+                        )}
+                        {testResult.project.bedrooms && (
+                          <span className="flex items-center gap-1">
+                            <Bed className="w-3.5 h-3.5" />
+                            {testResult.project.bedrooms}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Description truncated with ...more */}
+                      {testResult.project.description && (
+                        <p className="text-sm text-muted-foreground line-clamp-2">
+                          {testResult.project.description.slice(0, 120)}
+                          {testResult.project.description.length > 120 && (
+                            <button
+                              onClick={openFullPagePreview}
+                              className="bg-gradient-to-r from-gold via-handover to-gold bg-clip-text text-transparent font-semibold hover:opacity-80 transition-opacity ml-1"
+                            >
+                              ...more
+                            </button>
+                          )}
+                        </p>
+                      )}
+
+                      {/* Price */}
+                      {testResult.project.price_text && (
+                        <div className="text-sm">
+                          <span className="text-muted-foreground">From </span>
+                          <span className="font-semibold text-foreground">{testResult.project.price_text}</span>
+                        </div>
+                      )}
+
+                      {/* ========== OUTSIDE APPROVE/REJECT BUTTONS ========== */}
+                      <div className="flex items-center gap-2 pt-2 border-t">
+                        <Button
+                          onClick={handleApproveFromCard}
+                          disabled={isApproving || isApproved}
+                          size="sm"
+                          className="gap-1 bg-emerald-600 hover:bg-emerald-700 text-white"
+                        >
+                          {isApproving ? <Loader2 className="w-4 h-4 animate-spin" /> : <ThumbsUp className="w-4 h-4" />}
+                          Approve
+                        </Button>
+                        <Button
+                          onClick={rejectTest}
+                          variant="outline"
+                          size="sm"
+                          className="gap-1 border-red-300 text-red-700 hover:bg-red-50"
+                        >
+                          <ThumbsDown className="w-4 h-4" />
+                          Reject
+                        </Button>
+                        <Button
+                          onClick={openFullPagePreview}
+                          variant="outline"
+                          size="sm"
+                          className="gap-1 ml-auto"
+                        >
+                          <Eye className="w-4 h-4" />
+                          View Full Page
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+
+                {/* CHECKLIST */}
+                {testResult.checklist && (
+                  <Card className="bg-white border-zinc-200">
+                    <CardHeader className="py-2 px-3">
+                      <CardTitle className="text-sm">Extraction Checklist (Provident Mirror Standard)</CardTitle>
+                    </CardHeader>
+                    <CardContent className="py-2 px-3 space-y-1">
+                      <div className="text-xs font-medium text-zinc-500 mb-2">Core Requirements (needed for approval)</div>
+                      <ChecklistItem 
+                        label="Images (2+ required)" 
+                        passed={testResult.checklist.hasImages} 
+                        detail={`${testResult.checklist.imageCount} found`}
+                      />
+                      <ChecklistItem 
+                        label="Brochure Document" 
+                        passed={testResult.checklist.hasBrochure} 
+                        detail={testResult.checklist.hasBrochure ? "✓ Present" : "Missing"}
+                      />
+                      <ChecklistItem 
+                        label="Description (>50 chars)" 
+                        passed={testResult.checklist.hasDescription} 
+                        detail={`${testResult.checklist.descriptionLength} chars`}
+                      />
+                      <ChecklistItem 
+                        label="Developer Name" 
+                        passed={testResult.checklist.hasDeveloper}
+                      />
+                      
+                      <div className="text-xs font-medium text-zinc-500 mt-3 mb-2">Provident Mirror Fields</div>
+                      <ChecklistItem 
+                        label="USP Bullets (2+ recommended)" 
+                        passed={testResult.checklist.hasUsps} 
+                        detail={`${testResult.checklist.uspCount} found`}
+                      />
+                      <ChecklistItem 
+                        label="Amenities (3+ recommended)" 
+                        passed={testResult.checklist.hasAmenities} 
+                        detail={`${testResult.checklist.amenityCount} found`}
+                      />
+                      <ChecklistItem 
+                        label="FAQs" 
+                        passed={testResult.checklist.hasFaqs} 
+                        detail={`${testResult.checklist.faqCount} found`}
+                      />
+                      <ChecklistItem 
+                        label="Location Distances" 
+                        passed={testResult.checklist.hasDistances} 
+                        detail={`${testResult.checklist.distanceCount} found`}
+                      />
+                      <ChecklistItem 
+                        label="Payment Breakdown" 
+                        passed={testResult.checklist.hasPaymentBreakdown}
+                      />
+                      <ChecklistItem 
+                        label="Location" 
+                        passed={testResult.checklist.hasLocation}
+                      />
+                      <ChecklistItem 
+                        label="Price" 
+                        passed={testResult.checklist.hasPrice}
+                      />
+                      <ChecklistItem 
+                        label="Handover Date" 
+                        passed={testResult.checklist.hasHandover}
+                      />
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* IMAGE GALLERY PREVIEW */}
+                {testResult.project.images.length > 0 && (
+                  <Card className="bg-white border-zinc-200">
+                    <CardHeader className="py-2 px-3">
+                      <CardTitle className="text-sm flex items-center justify-between">
+                        <span>Image Gallery Preview</span>
+                        <Badge variant="outline" className="text-xs">
+                          {testResult.project.images.length} images
+                        </Badge>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="py-2 px-3">
+                      <div className="grid grid-cols-4 gap-1">
+                        {testResult.project.images.slice(0, 8).map((img, idx) => (
                           <div key={idx} className="aspect-video bg-zinc-100 rounded overflow-hidden">
                             <SafeImage
-                              src={url}
-                              alt={`Image ${idx + 1}`}
+                              src={img.url}
+                              alt={img.alt_text || `Image ${idx + 1}`}
                               className="w-full h-full object-cover"
                               fallbackSrc="/placeholder.svg"
                             />
                           </div>
                         ))}
                       </div>
-                    )}
+                    </CardContent>
+                  </Card>
+                )}
 
-                    <div className="space-y-2 text-sm">
-                      <div className="font-medium text-lg">{testResult.project.name}</div>
-                      
-                      {testResult.project.developer_name && (
-                        <div className="flex items-center gap-2 text-zinc-600">
-                          <Building2 className="w-4 h-4" />
-                          <span>{testResult.project.developer_name}</span>
-                        </div>
-                      )}
-                      
-                      {testResult.project.location && (
-                        <div className="flex items-center gap-2 text-zinc-600">
-                          <MapPin className="w-4 h-4" />
-                          <span>{testResult.project.location}</span>
-                        </div>
-                      )}
-                      
-                      {testResult.project.price_text && (
-                        <div className="flex items-center gap-2 text-zinc-600">
-                          <DollarSign className="w-4 h-4" />
-                          <span>{testResult.project.price_text}</span>
-                        </div>
-                      )}
-                      
-                      {testResult.project.bedrooms && (
-                        <div className="flex items-center gap-2 text-zinc-600">
-                          <Bed className="w-4 h-4" />
-                          <span>{testResult.project.bedrooms}</span>
-                        </div>
-                      )}
-                      
-                      {testResult.project.handover_display && (
-                        <div className="flex items-center gap-2 text-zinc-600">
-                          <Calendar className="w-4 h-4" />
-                          <span>{testResult.project.handover_display}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Documents */}
-                    {testResult.project.documents && testResult.project.documents.length > 0 && (
-                      <div className="border-t pt-2">
-                        <div className="text-xs font-medium text-zinc-500 mb-1">Documents</div>
-                        <div className="flex flex-wrap gap-1">
-                          {testResult.project.documents.map((doc, idx) => (
-                            <Badge key={idx} variant="secondary" className="text-xs">
-                              <FileText className="w-3 h-3 mr-1" />
-                              {doc.type}
-                              {doc.mirrored_url && <Check className="w-3 h-3 ml-1 text-emerald-600" />}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Description preview */}
-                    {testResult.project.description && (
-                      <div className="border-t pt-2">
-                        <div className="text-xs font-medium text-zinc-500 mb-1">Description</div>
-                        <p className="text-xs text-zinc-600 line-clamp-4">
-                          {testResult.project.description}
-                        </p>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-
-                {/* Source URL card */}
+                {/* SOURCE URL */}
                 <Card className="bg-white border-zinc-200">
-                  <CardHeader className="pb-2">
+                  <CardHeader className="py-2 px-3">
                     <CardTitle className="text-sm flex items-center justify-between">
                       <span>Source URL</span>
                       <a
@@ -642,35 +789,23 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                       </a>
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="py-2 px-3">
                     <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3">
                       <div className="text-xs font-mono break-all text-zinc-600">
                         {testResult.project.source_url}
                       </div>
-                    </div>
-                    <div className="mt-4 text-xs text-muted-foreground">
-                      <p className="mb-2">
-                        <strong>Compare the extracted data above with the source page.</strong>
-                      </p>
-                      <ul className="list-disc list-inside space-y-1">
-                        <li>Do all images load correctly?</li>
-                        <li>Is the developer name accurate?</li>
-                        <li>Are documents (brochure, floor plans) present?</li>
-                        <li>Is the description complete?</li>
-                      </ul>
                     </div>
                   </CardContent>
                 </Card>
               </div>
             )}
 
-            {/* Approval buttons */}
-            {!isApproved && (
-              <div className="flex items-center gap-3">
+            {/* Gate approval buttons (for bulk unlock, separate from item approval) */}
+            {!isApproved && testResult.coreComplete && (
+              <div className="flex items-center gap-3 pt-2">
                 <Button
-                  onClick={approveTest}
+                  onClick={approveTestGate}
                   className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
-                  disabled={!testResult.coreComplete}
                 >
                   <Check className="w-4 h-4 mr-2" />
                   Approve & Enable Bulk Extraction

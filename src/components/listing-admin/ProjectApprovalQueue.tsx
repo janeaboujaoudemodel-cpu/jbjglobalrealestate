@@ -1051,6 +1051,20 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                       onReview={() => {
                         navigate(`/listing-admin/preview/${item.id}`);
                       }}
+                      onRepaired={() => {
+                        fetchPendingImports();
+                        fetchInventoryStats();
+                      }}
+                      onApproved={() => {
+                        fetchPendingImports();
+                        fetchInventoryStats();
+                        onRefresh?.();
+                      }}
+                      onRejected={() => {
+                        fetchPendingImports();
+                        fetchInventoryStats();
+                        onRefresh?.();
+                      }}
                     />
                   </div>
                 ))}

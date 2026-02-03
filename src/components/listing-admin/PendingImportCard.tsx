@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SafeImage } from "@/components/SafeImage";
-import { ChevronLeft, ChevronRight, ExternalLink, MapPin, Mail, Phone, MessageCircle, Bed, AlertTriangle, RefreshCw } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink, MapPin, Mail, Phone, MessageCircle, Bed, AlertTriangle, RefreshCw, Check, X, Loader2 } from "lucide-react";
 import { CONTACT_INFO, getCallUrl, getWhatsAppUrl } from "@/constants/stats";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -23,7 +23,9 @@ type PendingImportCardDocument = {
 type PendingImportCardItem = {
   id: string;
   name: string;
+  slug?: string | null;
   developer_name: string | null;
+  developer_id?: string | null;
   location: string | null;
   description: string | null;
   price_from: number | null;
@@ -38,7 +40,7 @@ type PendingImportCardItem = {
   bedrooms_min: number | null;
   bedrooms_max: number | null;
   review_notes?: string | null;
-  slug?: string | null;
+  emirate?: string;
 };
 
 interface PendingImportCardProps {
@@ -46,6 +48,8 @@ interface PendingImportCardProps {
   formatPrice: (price: number | null) => string | null;
   onReview: () => void;
   onRepaired?: () => void;
+  onApproved?: () => void;
+  onRejected?: () => void;
 }
 
 const truncate = (text: string, max = 120) => {
@@ -53,7 +57,7 @@ const truncate = (text: string, max = 120) => {
   return text.slice(0, max).trim();
 };
 
-export function PendingImportCard({ item, formatPrice, onReview, onRepaired }: PendingImportCardProps) {
+export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onApproved, onRejected }: PendingImportCardProps) {
   const navigate = useNavigate();
   // Filter out brochure/document images from gallery
   const images = useMemo(() => {
@@ -63,6 +67,8 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired }: P
   const documents = useMemo(() => (item.documents || []).filter((d) => !!d?.url), [item.documents]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isRepairing, setIsRepairing] = useState(false);
+  const [isApproving, setIsApproving] = useState(false);
+  const [isRejecting, setIsRejecting] = useState(false);
 
   const activeImage = images[currentImageIndex] || images[0];
   const hasMultipleImages = images.length > 1;
@@ -70,6 +76,7 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired }: P
   // Determine if extraction is incomplete
   const isIncomplete = Boolean(
     item.review_notes?.includes("INCOMPLETE") ||
+    item.review_notes?.includes("PENDING_SCRAPE") ||
     !item.description ||
     (item.developer_name?.toLowerCase() === "unknown") ||
     images.length === 0 ||
@@ -109,6 +116,103 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired }: P
       toast.error(`Repair failed: ${err instanceof Error ? err.message : "Unknown error"}`);
     } finally {
       setIsRepairing(false);
+    }
+  };
+
+  // ========== OUTSIDE APPROVE BUTTON ==========
+  const handleApprove = async (e: MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsApproving(true);
+    try {
+      // Create the project
+      const projectData = {
+        name: item.name,
+        slug: item.slug || item.name.toLowerCase().replace(/\s+/g, '-'),
+        developer_id: item.developer_id,
+        location: item.location,
+        emirate: item.emirate || 'Dubai',
+        description: item.description,
+        price_from: item.price_from,
+        handover_date: item.handover_date,
+        payment_plan: item.payment_plan,
+        property_type_label: item.property_type_label,
+        status_label: item.status_label,
+        source_url: item.source_url,
+        is_offplan: true,
+        status: 'active'
+      };
+
+      const { data: newProject, error: projectError } = await supabase
+        .from("projects")
+        .insert(projectData)
+        .select()
+        .single();
+
+      if (projectError) throw projectError;
+
+      // Insert images
+      if (images.length > 0 && newProject) {
+        const imageInserts = images.map((img, index) => ({
+          project_id: newProject.id,
+          image_url: img.url,
+          alt_text: img.alt || item.name,
+          display_order: index
+        }));
+        await supabase.from("project_images").insert(imageInserts);
+      }
+
+      // Insert documents
+      if (documents.length > 0 && newProject) {
+        const docInserts = documents.map((doc, idx) => ({
+          project_id: newProject.id,
+          file_url: doc.url,
+          document_type: doc.type,
+          file_name: doc.name || `${doc.type}-${idx + 1}`,
+          display_order: idx
+        }));
+        await supabase.from("project_documents").insert(docInserts);
+      }
+
+      // Mark import as approved
+      await supabase
+        .from("pending_project_imports")
+        .update({
+          status: "approved",
+          reviewed_at: new Date().toISOString()
+        })
+        .eq("id", item.id);
+
+      toast.success(`"${item.name}" approved and added to listings!`);
+      onApproved?.();
+    } catch (err) {
+      toast.error(`Approve failed: ${err instanceof Error ? err.message : "Unknown error"}`);
+    } finally {
+      setIsApproving(false);
+    }
+  };
+
+  // ========== OUTSIDE REJECT BUTTON ==========
+  const handleReject = async (e: MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsRejecting(true);
+    try {
+      await supabase
+        .from("pending_project_imports")
+        .update({
+          status: "rejected",
+          reviewed_at: new Date().toISOString(),
+          review_notes: "Rejected by admin"
+        })
+        .eq("id", item.id);
+
+      toast.info(`"${item.name}" rejected.`);
+      onRejected?.();
+    } catch (err) {
+      toast.error(`Reject failed: ${err instanceof Error ? err.message : "Unknown error"}`);
+    } finally {
+      setIsRejecting(false);
     }
   };
 
@@ -218,7 +322,7 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired }: P
         )}
       </div>
 
-      <CardContent className="p-5 flex flex-col min-h-[240px]">
+      <CardContent className="p-5 flex flex-col min-h-[280px]">
         {/* Title - 2 lines for full readability */}
         <h3 className="font-semibold text-foreground text-base mb-1 line-clamp-2 min-h-[48px]">{item.name}</h3>
 
@@ -291,14 +395,39 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired }: P
           )}
         </div>
 
-        {/* Premium action bar - pushed to bottom */}
-        <div className="mt-auto pt-3 border-t border-border">
+        {/* ========== OUTSIDE APPROVE/REJECT + ACTION BAR ========== */}
+        <div className="mt-auto pt-3 border-t border-border space-y-2">
+          {/* Approve/Reject row */}
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={handleApprove}
+              disabled={isApproving || isIncomplete}
+              size="sm"
+              className="flex-1 gap-1 bg-emerald-600 hover:bg-emerald-700 text-white"
+              title={isIncomplete ? "Complete extraction first" : "Approve and add to listings"}
+            >
+              {isApproving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+              Approve
+            </Button>
+            <Button
+              onClick={handleReject}
+              disabled={isRejecting}
+              variant="outline"
+              size="sm"
+              className="flex-1 gap-1 border-red-300 text-red-700 hover:bg-red-50"
+            >
+              {isRejecting ? <Loader2 className="w-4 h-4 animate-spin" /> : <X className="w-4 h-4" />}
+              Reject
+            </Button>
+          </div>
+
+          {/* Contact + Review row */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-10 w-10 rounded-full border border-border hover:border-primary hover:bg-primary/10 transition-all"
+                className="h-9 w-9 rounded-full border border-border hover:border-primary hover:bg-primary/10 transition-all"
                 aria-label="Email"
                 asChild
               >
@@ -314,7 +443,7 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired }: P
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-10 w-10 rounded-full border border-border hover:border-primary hover:bg-primary/10 transition-all"
+                className="h-9 w-9 rounded-full border border-border hover:border-primary hover:bg-primary/10 transition-all"
                 aria-label="Call"
                 asChild
               >
@@ -330,7 +459,7 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired }: P
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-10 w-10 rounded-full border border-border hover:border-primary hover:bg-primary/10 transition-all"
+                className="h-9 w-9 rounded-full border border-border hover:border-primary hover:bg-primary/10 transition-all"
                 aria-label="WhatsApp"
                 asChild
               >
@@ -347,33 +476,35 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired }: P
               </Button>
             </div>
 
-            {/* Repair button for incomplete items */}
-            {isIncomplete && (
-              <Button
-                variant="secondary"
-                size="sm"
-                disabled={isRepairing}
-                onClick={handleRepair}
-                className="gap-1 px-3 font-medium border border-amber-400 text-amber-700 hover:bg-amber-50"
-              >
-                {isRepairing ? <RefreshCw className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
-                Repair
-              </Button>
-            )}
+            <div className="flex items-center gap-2">
+              {/* Repair button for incomplete items */}
+              {isIncomplete && (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  disabled={isRepairing}
+                  onClick={handleRepair}
+                  className="gap-1 px-3 font-medium border border-amber-400 text-amber-700 hover:bg-amber-50"
+                >
+                  {isRepairing ? <RefreshCw className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+                  Repair
+                </Button>
+              )}
 
-            <Button
-              variant="default"
-              size="sm"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onReview();
-              }}
-              className="gap-2 px-4 font-medium"
-            >
-              <ExternalLink className="h-4 w-4" />
-              Review
-            </Button>
+              <Button
+                variant="default"
+                size="sm"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onReview();
+                }}
+                className="gap-2 px-4 font-medium"
+              >
+                <ExternalLink className="h-4 w-4" />
+                Review
+              </Button>
+            </div>
           </div>
         </div>
       </CardContent>
