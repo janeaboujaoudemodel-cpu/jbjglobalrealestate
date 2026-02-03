@@ -65,11 +65,21 @@ function normalizeCloudfrontImage(url: string): string {
 
 function extractSection(markdown: string, heading: string): string | null {
   // Extract content after a heading label, up to next ## heading.
-  // We accept both "##" headings and plain text headings in Firecrawl markdown.
-  const rx = new RegExp(`(?:^|\n)${heading}\s*\n+([\s\S]*?)(?=\n##\s+|\n#\s+|$)`, "i");
-  const m = markdown.match(rx);
-  if (!m?.[1]) return null;
-  return m[1].trim() || null;
+  // We accept both "## Heading", "### Heading", or plain text "Heading\n" formats.
+  // FIXED: More flexible pattern to handle various heading formats in Firecrawl markdown.
+  const patterns = [
+    new RegExp(`(?:^|\\n)##\\s*${heading}\\s*\\n+([\\s\\S]*?)(?=\\n##\\s+|\\n#\\s+|$)`, "i"),
+    new RegExp(`(?:^|\\n)###\\s*${heading}\\s*\\n+([\\s\\S]*?)(?=\\n##\\s+|\\n###\\s+|\\n#\\s+|$)`, "i"),
+    new RegExp(`(?:^|\\n)${heading}\\s*\\n+([\\s\\S]*?)(?=\\n##\\s+|\\n#\\s+|$)`, "i"),
+  ];
+  
+  for (const rx of patterns) {
+    const m = markdown.match(rx);
+    if (m?.[1]?.trim()) {
+      return m[1].trim();
+    }
+  }
+  return null;
 }
 
 function extractDescription(markdown: string): string | null {
@@ -220,17 +230,32 @@ export function extractProvidentProjectFromScrape(args: {
   const basic = extractBasicFields(markdown);
   const description = extractDescription(markdown);
 
-  // USPs
-  const uspSection = extractSection(markdown, "Unique Selling Points");
+  // USPs - FIXED: More flexible extraction to capture all bullet points
+  // Try multiple heading formats: "## Unique Selling Points", "### Unique Selling Points", or just "Unique Selling Points"
+  let uspSection = extractSection(markdown, "Unique Selling Points");
+  
+  // Fallback: try to find the section by scanning for the heading directly
+  if (!uspSection) {
+    const uspMatch = markdown.match(/Unique Selling Points[\s\S]*?(?=\n##\s+[A-Z]|$)/i);
+    if (uspMatch) {
+      uspSection = uspMatch[0].replace(/^Unique Selling Points\s*\n*/i, "").trim();
+    }
+  }
+  
   let uspHeadline: string | null = null;
   const uspBullets: string[] = [];
   if (uspSection) {
-    const headlineMatch = uspSection.match(/###\s+(.+)/);
+    // Look for headline with ### or ####
+    const headlineMatch = uspSection.match(/^#{2,4}\s+(.+)/m);
     uspHeadline = headlineMatch?.[1]?.trim() || null;
-    const bullets = uspSection.match(/^-\s+.+/gm) || [];
-    for (const b of bullets) {
-      const cleaned = stripMarkdownLinks(b.replace(/^-\s+/, "").trim());
-      if (cleaned) uspBullets.push(cleaned);
+    
+    // Extract all bullet points (lines starting with -)
+    const bulletLines = uspSection.split("\n").filter(line => /^\s*-\s+.+/.test(line));
+    for (const b of bulletLines) {
+      const cleaned = stripMarkdownLinks(b.replace(/^\s*-\s+/, "").trim());
+      if (cleaned && cleaned.length > 2 && !cleaned.toLowerCase().includes("find out more")) {
+        uspBullets.push(cleaned);
+      }
     }
   }
 
@@ -239,15 +264,28 @@ export function extractProvidentProjectFromScrape(args: {
   const uspImgMatch = markdown.match(/Unique Selling Points[\s\S]*?!\[[^\]]*\]\(([^)]+)\)/i);
   if (uspImgMatch?.[1]) uspImageUrl = uspImgMatch[1];
 
-  // Amenities
+  // Amenities - FIXED: More flexible extraction, try multiple patterns
   const amenities: string[] = [];
-  const amenSection = extractSection(markdown, "## Amenities");
+  let amenSection = extractSection(markdown, "Amenities");
+  
+  // Fallback: Direct scan for Amenities block
+  if (!amenSection) {
+    const amenMatch = markdown.match(/##\s*Amenities\s*\n+([\s\S]*?)(?=\n##\s+|$)/i);
+    if (amenMatch?.[1]) {
+      amenSection = amenMatch[1].trim();
+    }
+  }
+  
   if (amenSection) {
     const lines = amenSection.split("\n").map((l) => stripMarkdownLinks(l).trim()).filter(Boolean);
     for (const line of lines) {
-      // Ignore obvious CTA lines
-      if (/^(All Amenities|Find out more)$/i.test(line)) continue;
-      if (line.length > 1 && line.length < 120) amenities.push(line);
+      // Ignore obvious CTA lines and navigation items
+      if (/^(All Amenities|Find out more|View All|Show More)$/i.test(line)) continue;
+      // Skip lines that look like links or buttons
+      if (/^\[.*\]$/.test(line)) continue;
+      if (line.length > 2 && line.length < 120) {
+        amenities.push(line);
+      }
     }
   }
 
@@ -284,11 +322,19 @@ export function extractProvidentProjectFromScrape(args: {
     }
     if (descLines.length) locationDescription = descLines.join("\n").trim();
 
-    // Distances
-    const distLines = afterHeadline.match(/^-\s+\d+\s+Minutes?\s+[–-]\s+.+/gim) || [];
+    // Distances - FIXED: Handle en-dash (–), em-dash (—), and regular dash (-) 
+    // Pattern: "- N Minutes – Place" or "- N Minute – Place"
+    const distPattern = /^-\s+(\d+\s+Minutes?)\s+[–—\-]\s+(.+)/gim;
+    const distLines = afterHeadline.match(distPattern) || [];
     for (const dl of distLines) {
-      const m = dl.replace(/^-\s+/, "").match(/^(\d+\s+Minutes?)\s+[–-]\s+(.+)$/i);
-      if (m) locationDistances.push({ time: m[1].trim(), label: stripMarkdownLinks(m[2]).trim() });
+      // Re-match to extract groups
+      const m = dl.replace(/^-\s+/, "").match(/^(\d+\s+Minutes?)\s+[–—\-]\s+(.+)$/i);
+      if (m) {
+        locationDistances.push({ 
+          time: m[1].trim(), 
+          label: stripMarkdownLinks(m[2]).trim() 
+        });
+      }
     }
   }
 
@@ -296,27 +342,55 @@ export function extractProvidentProjectFromScrape(args: {
   const locImgMatch = markdown.match(/\nLocation[\s\S]*?!\[[^\]]*\]\(([^)]+)\)/i);
   if (locImgMatch?.[1]) locationImageUrl = locImgMatch[1];
 
-  // Payment breakdown
+  // Payment breakdown - FIXED: Handle various formats including double newlines
   const paymentBreakdown: { down_payment?: string; during_construction?: string; on_completion?: string } = {};
-  const paySection = extractSection(markdown, "## Payment Plans");
+  let paySection = extractSection(markdown, "Payment Plans");
+  
+  // Fallback: Direct scan for Payment Plans block
+  if (!paySection) {
+    const payMatch = markdown.match(/##\s*Payment Plans?\s*\n+([\s\S]*?)(?=\n##\s+|$)/i);
+    if (payMatch?.[1]) {
+      paySection = payMatch[1].trim();
+    }
+  }
+  
   if (paySection) {
-    const dpMatch = paySection.match(/(\d+%?)\s*\n+Down Payment/i);
-    const dcMatch = paySection.match(/(\d+%?)\s*\n+During Construction/i);
-    const ocMatch = paySection.match(/(\d+%?)\s*\n+On Completion/i);
-    if (dpMatch?.[1]) paymentBreakdown.down_payment = dpMatch[1];
-    if (dcMatch?.[1]) paymentBreakdown.during_construction = dcMatch[1];
-    if (ocMatch?.[1]) paymentBreakdown.on_completion = ocMatch[1];
+    // FIXED: More flexible patterns to handle blank lines between percentage and label
+    // Pattern: "10%\n\nDown Payment" or "10%\nDown Payment" or "10% Down Payment"
+    const dpMatch = paySection.match(/(\d+)\s*%?\s*\n*\s*\n*Down\s*Payment/i);
+    const dcMatch = paySection.match(/(\d+)\s*%?\s*\n*\s*\n*During\s*Construction/i);
+    const ocMatch = paySection.match(/(\d+)\s*%?\s*\n*\s*\n*On\s*Completion/i);
+    
+    if (dpMatch?.[1]) paymentBreakdown.down_payment = `${dpMatch[1]}%`;
+    if (dcMatch?.[1]) paymentBreakdown.during_construction = `${dcMatch[1]}%`;
+    if (ocMatch?.[1]) paymentBreakdown.on_completion = `${ocMatch[1]}%`;
   }
 
-  // FAQs
+  // FAQs - FIXED: More flexible pattern for FAQ extraction
   const faqs: Array<{ question: string; answer: string }> = [];
-  const faqSection = extractSection(markdown, "## Useful Information");
+  let faqSection = extractSection(markdown, "Useful Information");
+  
+  // Fallback: Direct scan for Useful Information block
+  if (!faqSection) {
+    const faqMatch = markdown.match(/Useful Information[\s\S]*?(?=\n##\s+[A-Z](?![\s\S]*Useful)|Stay in the loop|$)/i);
+    if (faqMatch) {
+      faqSection = faqMatch[0].replace(/^Useful Information[^\n]*\n*/i, "").trim();
+    }
+  }
+  
   if (faqSection) {
-    const qaMatches = faqSection.matchAll(/##\s+([^\n]+?)\s*\n+([^#\n][\s\S]*?)(?=\n##\s+|$)/g);
+    // Look for ## Question followed by answer text
+    // Pattern: "## Question?\n\nAnswer text" or "### Question?\nAnswer text"
+    const qaPattern = /(?:^|(?<=\n))#{2,3}\s+([^\n]+\??)\s*\n+([^#\n][\s\S]*?)(?=\n#{2,3}\s+|$)/g;
+    const qaMatches = faqSection.matchAll(qaPattern);
     for (const m of qaMatches) {
       const q = stripMarkdownLinks(m[1]).trim();
-      const a = stripMarkdownLinks(m[2]).trim();
-      if (q && a) faqs.push({ question: q, answer: a });
+      let a = stripMarkdownLinks(m[2]).trim();
+      // Clean up answer - remove "Stay in the loop" and trailing content
+      a = a.split(/Stay in the loop/i)[0].trim();
+      if (q && a && q.length > 3 && a.length > 5) {
+        faqs.push({ question: q, answer: a });
+      }
     }
   }
 

@@ -33,6 +33,9 @@ import ProjectInquiryForm from "@/components/project-detail/ProjectInquiryForm";
 import AIMarketAnalyzer from "@/components/AIMarketAnalyzer";
 import PremiumBrochureCard from "@/components/project-detail/PremiumBrochureCard";
 import LeadCaptureModal from "@/components/project-detail/LeadCaptureModal";
+import ProjectBreadcrumb from "@/components/project-detail/ProjectBreadcrumb";
+import CallToActionSection from "@/components/project-detail/CallToActionSection";
+import NewsletterSection from "@/components/project-detail/NewsletterSection";
 import Footer from "@/components/Footer";
 import { CONTACT_INFO, getCallUrl, getEmailUrl, getWhatsAppUrl } from "@/constants/stats";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
@@ -331,6 +334,9 @@ export default function ProjectDetailLayout({
               Register Interest
             </Button>
           </div>
+
+          {/* Breadcrumb Navigation */}
+          <ProjectBreadcrumb projectName={project.name} location={project.location} />
         </div>
       </section>
 
@@ -821,8 +827,14 @@ export default function ProjectDetailLayout({
               </div>
             </div>
           </div>
+
+          {/* CTA Section - Request a call back */}
+          <CallToActionSection projectName={project.name} projectId={project.id} />
         </div>
       </section>
+
+      {/* Newsletter Section */}
+      <NewsletterSection />
 
       {/* Lead Capture Modal */}
       <LeadCaptureModal
