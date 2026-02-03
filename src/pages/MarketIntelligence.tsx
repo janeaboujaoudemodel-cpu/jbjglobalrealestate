@@ -15,6 +15,7 @@ import {
   DataSourcesPanel,
 } from "@/components/market-intelligence";
 import { MARKET_DISCLAIMER } from "@/config/open-data-config";
+import marketIntelligenceHero from "@/assets/market-intelligence-hero.jpg";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -112,7 +113,13 @@ const MarketIntelligence = () => {
 
       {/* Hero Section */}
       <section className="jj-hero-fullscreen relative flex items-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 via-black to-black" />
+        {/* Hero background image */}
+        <img 
+          src={marketIntelligenceHero}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/80 to-black" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/5 via-transparent to-transparent" />
         
         <motion.div 

@@ -26,8 +26,8 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     { label: 'Press Kit', href: '/press-kit', icon: Newspaper },
     { label: 'Company Profile', href: '/company-profile', icon: FileText },
     { label: 'Contact Us', href: '/contact', icon: Phone },
-    { label: 'Complaint Procedure', href: '/complaint', icon: ClipboardCheck },
-    { label: 'Testimonials', href: '/testimonials', icon: MessageCircle },
+    { label: 'Complaint Procedure', href: '/services/complaint-procedures', icon: ClipboardCheck },
+    { label: 'Testimonials', href: '/services/testimonials', icon: MessageCircle },
   ];
 
   // Column 2: Resources & Guides (11 items - includes sitemap)

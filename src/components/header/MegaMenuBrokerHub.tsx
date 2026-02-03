@@ -22,7 +22,7 @@ const MegaMenuBrokerHub = React.forwardRef<HTMLDivElement, MegaMenuBrokerHubProp
     { name: 'Broker Education', href: '/broker-education', icon: GraduationCap },
     { name: 'Broker Resources', href: '/broker-resources', icon: FolderOpen },
     { name: 'Broker FAQ', href: '/broker-faq', icon: ClipboardCheck },
-    { name: 'Certifications', href: '/broker-certifications', icon: Award },
+    { name: 'Certifications', href: '/services/broker-certification', icon: Award },
   ];
 
   return (
