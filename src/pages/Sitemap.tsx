@@ -1,11 +1,16 @@
-import { useState, useMemo } from "react";
+/**
+ * Sitemap Page - Premium Corporate Directory
+ * Hub-based organization matching the platform structure
+ * Matches existing UI theme (colors, typography, cards, buttons)
+ */
+
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 import {
   Map,
@@ -13,31 +18,28 @@ import {
   Building2,
   Users,
   Briefcase,
-  Settings,
   FileText,
-  HelpCircle,
   ArrowRight,
-  ExternalLink,
-  Search,
-  Heart,
-  Calculator,
-  Newspaper,
-  Award,
-  Shield,
-  Phone,
-  Info,
-  GraduationCap,
-  Wrench,
-  UserCircle,
-  MapPin,
-  LayoutGrid,
-  Menu,
-  Globe,
-  MessageCircle,
-  Keyboard,
   ChevronUp,
+  Phone,
+  MessageCircle,
+  BookOpen,
+  BarChart3,
+  GraduationCap,
+  Shield,
+  Layers,
+  Key,
+  Sparkles,
+  Calculator,
+  MapPin,
+  Scale,
+  Heart,
+  Wrench,
+  Award,
+  Newspaper,
 } from "lucide-react";
-import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
+import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
+import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -52,284 +54,287 @@ const staggerContainer = {
   },
 };
 
-interface SitemapSection {
+// Quick Links for the strip under hero
+const quickLinks = [
+  { href: "/properties?transaction=buy", label: "Buy Properties", icon: Home },
+  { href: "/properties?transaction=rent", label: "Rent Properties", icon: Key },
+  { href: "/developers", label: "Developers", icon: Building2 },
+  { href: "/seller-listing", label: "List Your Property", icon: Layers },
+  { href: "/services", label: "Services", icon: Briefcase },
+  { href: "/guides", label: "Guides", icon: BookOpen },
+  { href: "/market-intelligence", label: "Market Intelligence", icon: BarChart3 },
+  { href: "/investor-education", label: "Investor Hub", icon: Layers },
+  { href: "/broker-toolkit", label: "Broker Hub", icon: GraduationCap },
+];
+
+// Hub-based sitemap structure
+interface HubSection {
+  id: string;
   title: string;
-  description: string;
   icon: React.ElementType;
-  color: string;
-  links: { href: string; label: string; description?: string }[];
+  links: { href: string; label: string }[];
 }
 
-const sitemapSections: SitemapSection[] = [
+const hubSections: HubSection[] = [
   {
-    title: "Main Navigation",
-    description: "Primary pages for exploring our platform",
+    id: "properties",
+    title: "Properties",
     icon: Home,
-    color: "text-blue-400",
     links: [
-      { href: "/", label: "Home", description: "Landing page with featured properties and services" },
-      { href: "/properties", label: "Properties", description: "Browse all available properties" },
-      { href: "/communities", label: "Communities", description: "Explore Dubai communities" },
-      { href: "/areas", label: "Area Guides", description: "Detailed guides for Dubai areas" },
-      { href: "/map", label: "Property Map", description: "Interactive map of all properties" },
-      { href: "/quiz", label: "Property Quiz", description: "Find your perfect property match" },
+      { href: "/properties", label: "All Properties" },
+      { href: "/properties?transaction=buy", label: "Buy Properties" },
+      { href: "/properties?transaction=rent", label: "Rent Properties" },
+      { href: "/developers", label: "Browse Developers" },
+      { href: "/communities", label: "Communities" },
+      { href: "/map", label: "Property Map" },
+      { href: "/seller-listing", label: "List Your Property" },
+      { href: "/compare", label: "Compare Properties" },
+      { href: "/favorites", label: "Saved Properties" },
     ],
   },
   {
-    title: "Buyer & Seller Resources",
-    description: "Guides and tools for property transactions",
-    icon: FileText,
-    color: "text-green-400",
-    links: [
-      { href: "/buyer-guide", label: "Buyer Guide", description: "Complete guide for property buyers" },
-      { href: "/seller-guide", label: "Seller Guide", description: "Tips and guides for sellers" },
-      { href: "/seller-listing", label: "List Your Property", description: "Submit your property for listing" },
-      { href: "/mortgage-calculator", label: "Mortgage Calculator", description: "Calculate your mortgage payments" },
-      { href: "/market-report", label: "Market Report", description: "Dubai real estate market insights" },
-    ],
-  },
-  {
-    title: "About JBJ Global",
-    description: "Learn about our company and team",
-    icon: Info,
-    color: "text-gold",
-    links: [
-      { href: "/about", label: "About Us", description: "Our story and mission" },
-      { href: "/founder", label: "Founder & Leadership", description: "Meet Jane Bou Jaoude" },
-      { href: "/team", label: "Meet The Team", description: "Our professional team members" },
-      { href: "/brokers", label: "Our Brokers", description: "Browse our broker directory" },
-      { href: "/company-profile", label: "Company Profile", description: "Corporate information" },
-      { href: "/awards", label: "Awards", description: "Our achievements and recognitions" },
-      { href: "/press-kit", label: "Press Kit", description: "Media resources and press materials" },
-      { href: "/news", label: "News & Insights", description: "Latest updates and articles" },
-    ],
-  },
-  {
-    title: "Our Services",
-    description: "Professional services we offer",
+    id: "services",
+    title: "Services",
     icon: Briefcase,
-    color: "text-purple-400",
     links: [
-      { href: "/services", label: "All Services", description: "Overview of all services" },
-      { href: "/services/architecture", label: "Architecture", description: "Architectural design partners" },
-      { href: "/services/interior-design", label: "Interior Design", description: "Interior design services" },
-      { href: "/services/fit-out", label: "Fit-Out", description: "Fit-out and renovation services" },
-      { href: "/services/design-build", label: "Design & Build", description: "Complete design-build solutions" },
-      { href: "/services/law-firm", label: "Legal Partners", description: "Legal consultation services" },
+      { href: "/services", label: "All Services" },
+      { href: "/services/buying-advisory", label: "Buying Advisory" },
+      { href: "/services/selling-advisory", label: "Selling Advisory" },
+      { href: "/services/rental-advisory", label: "Rental Advisory" },
+      { href: "/services/investment-advisory", label: "Investment Advisory" },
+      { href: "/partners", label: "Partner Introductions" },
+      { href: "/partners/mortgage", label: "Mortgage Partners" },
+      { href: "/partners/legal", label: "Legal Partners" },
+      { href: "/partners/company-setup", label: "Company Setup" },
+      { href: "/partners/visa-services", label: "Visa Services" },
+      { href: "/services/snagging", label: "Snagging & Inspection" },
+      { href: "/services/property-management", label: "Property Management" },
+      { href: "/services/short-term-rentals", label: "Short-Term Rentals" },
+      { href: "/services/currency-exchange", label: "Currency Exchange" },
+      { href: "/services/concierge", label: "Concierge Services" },
+      { href: "/services/company-setup", label: "Company Setup" },
     ],
   },
   {
-    title: "AI Tools & Hub",
-    description: "AI-powered tools for professionals",
-    icon: Settings,
-    color: "text-cyan-400",
+    id: "guides",
+    title: "Guides",
+    icon: BookOpen,
     links: [
-      { href: "/ai-hub", label: "AI Hub", description: "Central hub for all AI tools" },
-      { href: "/interior-design-ai", label: "AI Interior Design", description: "AI-powered interior visualization" },
-      { href: "/property-evaluator", label: "Property Evaluator", description: "AI property valuation tool" },
-      { href: "/ai-budget-planner", label: "Budget Planner", description: "Financial planning assistance" },
-      { href: "/ai-personal-shopper", label: "Personal Shopper", description: "AI property recommendations" },
-      { href: "/ai-calendar", label: "AI Calendar", description: "Smart scheduling assistant" },
-      { href: "/rental-index", label: "Rental Index", description: "Dubai rental market data" },
-      { href: "/document-scanner", label: "Document Scanner", description: "Scan & sign documents" },
-      { href: "/property-measurement", label: "Property Measurement", description: "Calculate property dimensions" },
+      { href: "/guides", label: "Guides Library" },
+      { href: "/buyer-guide", label: "Buyer Guide" },
+      { href: "/seller-guide", label: "Seller Guide" },
+      { href: "/landlord-guide", label: "Landlord Guide" },
+      { href: "/tenant-guide", label: "Tenant Guide" },
+      { href: "/areas", label: "Area Guides" },
+      { href: "/investor-education", label: "Investor Education" },
+      { href: "/faq", label: "General FAQ" },
+      { href: "/investor-faq", label: "Investor FAQ" },
+      { href: "/broker-faq", label: "Broker FAQ" },
+      { href: "/guides/golden-visa-uae", label: "Golden Visa Guide" },
     ],
   },
   {
-    title: "Broker Toolkit",
-    description: "Resources for real estate professionals",
-    icon: Wrench,
-    color: "text-orange-400",
+    id: "market-intelligence",
+    title: "Market Intelligence",
+    icon: BarChart3,
     links: [
-      { href: "/broker-toolkit", label: "Broker Toolkit", description: "Tools and resources for brokers" },
-      { href: "/broker-dashboard", label: "Broker Dashboard", description: "Personal broker dashboard" },
-      { href: "/compare", label: "Property Comparison", description: "Compare multiple properties" },
-      { href: "/business-card-scanner", label: "Business Card Scanner", description: "Scan and save contacts" },
-      { href: "/video-builder", label: "Video Builder", description: "Create property videos" },
-      { href: "/spreadsheet", label: "Spreadsheet", description: "Data management tool" },
-      { href: "/documents", label: "Documents", description: "Document management" },
+      { href: "/market-intelligence", label: "Market Intelligence Hub" },
+      { href: "/market-intelligence/overview", label: "Market Overview" },
+      { href: "/market-intelligence/areas", label: "Area Intelligence" },
+      { href: "/market-intelligence/reports", label: "Market Reports" },
+      { href: "/market-intelligence/methodology", label: "Methodology" },
     ],
   },
   {
-    title: "Careers",
-    description: "Join our team",
+    id: "investor-hub",
+    title: "Investor Hub",
+    icon: Layers,
+    links: [
+      { href: "/investor-education", label: "Investor Education" },
+      { href: "/investor-faq", label: "Investor FAQs" },
+      { href: "/ai-hub", label: "Investor Tools" },
+      { href: "/investor-dashboard", label: "Investor Dashboard" },
+      { href: "/investor-dashboard/portfolio", label: "Portfolio Views" },
+      { href: "/investor-dashboard/reports", label: "Report Access (Investor Portal)" },
+    ],
+  },
+  {
+    id: "broker-hub",
+    title: "Broker Hub",
     icon: GraduationCap,
-    color: "text-pink-400",
     links: [
-      { href: "/join", label: "Apply to Join Our Team", description: "Submit your application" },
-      { href: "/hr-agent", label: "Contact Our HR · Jessica", description: "HR virtual assistant" },
-      { href: "/onboarding", label: "Training Portal", description: "Onboarding and training" },
-      { href: "/referral-partner", label: "Referral Partner", description: "Become a referral partner" },
+      { href: "/broker-toolkit", label: "Broker Tools" },
+      { href: "/broker-dashboard", label: "Broker Dashboard" },
+      { href: "/broker-education", label: "Broker Education" },
+      { href: "/broker-resources", label: "Broker Resources" },
+      { href: "/broker-faq", label: "Broker FAQ" },
     ],
   },
   {
-    title: "Customer Support",
-    description: "Get help and provide feedback",
-    icon: HelpCircle,
-    color: "text-red-400",
+    id: "company",
+    title: "Company",
+    icon: Building2,
     links: [
-      { href: "/customer-happiness", label: "Customer Happiness", description: "Support, feedback & ideas" },
-      { href: "/contact", label: "Contact Us", description: "Get in touch with our team" },
-      { href: "/faq", label: "FAQ", description: "Frequently asked questions" },
-      { href: "/install", label: "Install App", description: "Install our mobile app" },
+      { href: "/about", label: "About JBJ Global" },
+      { href: "/contact", label: "Contact Us" },
+      { href: "/news", label: "News & Insights" },
+      { href: "/join", label: "Join Our Team" },
+      { href: "/team", label: "Meet The Team" },
+      { href: "/founder", label: "Founder & Leadership" },
+      { href: "/awards", label: "Awards & Recognition" },
+      { href: "/company-profile", label: "Company Profile" },
+      { href: "/press-kit", label: "Press Kit" },
+      { href: "/philanthropy", label: "Philanthropy" },
     ],
   },
   {
-    title: "Account & CRM",
-    description: "Manage your account and leads",
-    icon: UserCircle,
-    color: "text-indigo-400",
+    id: "tools",
+    title: "AI & Professional Tools",
+    icon: Sparkles,
     links: [
-      { href: "/my-account", label: "My Account", description: "Your personal account" },
-      { href: "/favorites", label: "Favorites", description: "Your saved properties" },
-      { href: "/crm", label: "CRM", description: "Customer relationship management" },
-      { href: "/crm/tasks", label: "CRM Tasks", description: "Task management" },
-      { href: "/crm/calendar", label: "CRM Calendar", description: "Schedule and appointments" },
-    ],
-  },
-  {
-    title: "Legal",
-    description: "Legal information and policies",
-    icon: Shield,
-    color: "text-zinc-400",
-    links: [
-      { href: "/terms", label: "Terms of Service", description: "Terms and conditions" },
-      { href: "/privacy", label: "Privacy Policy", description: "How we handle your data" },
-      { href: "/cookies", label: "Cookie Policy", description: "Cookie usage information" },
-      { href: "/intellectual-property", label: "Intellectual Property", description: "IP rights and usage" },
+      { href: "/ai-hub", label: "AI Hub" },
+      { href: "/quiz", label: "AI Home Finder" },
+      { href: "/mortgage-calculator", label: "Mortgage Calculator" },
+      { href: "/property-evaluator", label: "Property Evaluator" },
+      { href: "/rental-index", label: "Rental Index" },
+      { href: "/interior-design-ai", label: "AI Interior Design" },
+      { href: "/business-card-scanner", label: "Business Card Scanner" },
+      { href: "/documents", label: "Documents & Spreadsheets" },
+      { href: "/video-meeting", label: "Video Meet" },
+      { href: "/ai-calendar", label: "Calendar & Notes" },
     ],
   },
 ];
 
-const SitemapCard = ({ section, hideFounderLinks, searchQuery }: { section: SitemapSection; hideFounderLinks?: boolean; searchQuery: string }) => {
-  const Icon = section.icon;
+// Legal & Support section
+const legalLinks = [
+  { href: "/terms", label: "Terms of Service", icon: FileText },
+  { href: "/privacy", label: "Privacy Policy", icon: Shield },
+  { href: "/intellectual-property", label: "Intellectual Property", icon: Shield },
+  { href: "/trust-and-audit-center", label: "Trust & Audit Center", icon: Shield },
+  { href: "/services/complaint-procedures", label: "Complaint Procedures", icon: FileText },
+  { href: "/services/customer-happiness-center", label: "Customer Happiness Center", icon: Heart },
+  { href: "/cookies", label: "Cookies Policy", icon: FileText },
+];
+
+const HubCard = ({ hub, hideFounderLinks }: { hub: HubSection; hideFounderLinks?: boolean }) => {
+  const Icon = hub.icon;
   
   // Filter out founder-related links if visibility is disabled
-  let filteredLinks = hideFounderLinks 
-    ? section.links.filter(link => 
+  const filteredLinks = hideFounderLinks 
+    ? hub.links.filter(link => 
         !link.href.includes('/founder') && 
-        !link.label.toLowerCase().includes('founder') &&
-        !(link.description?.toLowerCase().includes('jane bou jaoude'))
+        !link.label.toLowerCase().includes('founder')
       )
-    : section.links;
-
-  // Apply search filter
-  if (searchQuery) {
-    const query = searchQuery.toLowerCase();
-    filteredLinks = filteredLinks.filter(link =>
-      link.label.toLowerCase().includes(query) ||
-      (link.description?.toLowerCase().includes(query))
-    );
-  }
-
-  // Don't render card if no links match
-  if (filteredLinks.length === 0) return null;
+    : hub.links;
   
   return (
-    <motion.div variants={fadeInUp}>
-      <Card className="bg-zinc-900/60 border-zinc-800 hover:border-gold/30 transition-all h-full">
-        <CardHeader className="pb-4">
-          <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 bg-zinc-800 rounded-lg flex items-center justify-center ${section.color}`}>
-              <Icon className="w-5 h-5" />
-            </div>
-            <div>
-              <CardTitle className="text-white text-lg">{section.title}</CardTitle>
-              <p className="text-zinc-500 text-sm">{section.description}</p>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <ul className="space-y-2">
-            {filteredLinks.map((link) => (
-              <li key={link.href}>
-                <Link
-                  to={link.href}
-                  className="group flex items-start gap-2 py-2 px-3 rounded-lg hover:bg-zinc-800/50 transition-colors"
-                >
-                  <ArrowRight className="w-4 h-4 text-gold mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="-ml-6 group-hover:ml-0 transition-all">
-                    <span className="text-white group-hover:text-gold transition-colors block">
-                      {link.label}
-                    </span>
-                    {link.description && (
-                      <span className="text-zinc-500 text-xs">{link.description}</span>
-                    )}
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
+    <motion.div 
+      variants={fadeInUp}
+      id={hub.id}
+      className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-5 sm:p-6 hover:border-gold hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] transition-all"
+    >
+      {/* Hub Header */}
+      <div className="flex items-center gap-3 mb-4 pb-3 border-b border-gold/30">
+        <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
+          <Icon className="w-5 h-5 text-gold" />
+        </div>
+        <h3 className="text-black text-lg font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+          {hub.title}
+        </h3>
+      </div>
+      
+      {/* Links List */}
+      <ul className="space-y-1.5">
+        {filteredLinks.map((link) => (
+          <li key={link.href}>
+            <Link
+              to={link.href}
+              className="group flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-gold/10 transition-colors"
+            >
+              <ArrowRight className="w-3.5 h-3.5 text-gold opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+              <span className="text-zinc-700 group-hover:text-black text-sm transition-colors -ml-5 group-hover:ml-0">
+                {link.label}
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </motion.div>
   );
 };
 
 const Sitemap = () => {
   const { isFounderVisible } = useFounderVisibility();
-  const [searchQuery, setSearchQuery] = useState("");
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const lastUpdated = new Date().toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  });
 
   // Handle scroll for back to top button
-  const handleScroll = () => {
-    setShowBackToTop(window.scrollY > 400);
-  };
-
-  // Calculate total pages and filtered counts
-  const totalPages = useMemo(() => {
-    return sitemapSections.reduce((acc, s) => acc + s.links.length, 0);
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 400);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const filteredSections = useMemo(() => {
-    if (!searchQuery) return sitemapSections;
-    const query = searchQuery.toLowerCase();
-    return sitemapSections.filter(section => 
-      section.title.toLowerCase().includes(query) ||
-      section.links.some(link => 
-        link.label.toLowerCase().includes(query) ||
-        link.description?.toLowerCase().includes(query)
-      )
-    );
-  }, [searchQuery]);
-  
   return (
     <>
       <SEOHead
         title="Sitemap | JBJ Global Real Estate"
-        description="Navigate the complete JBJ Global Real Estate website. Find all pages, tools, services, and resources in one convenient location."
-        keywords="sitemap, navigation, JBJ pages, website map"
+        description="Navigate the complete JBJ Global Real Estate website. Find all pages, tools, services, and resources organized by category."
+        keywords="sitemap, navigation, JBJ pages, website map, Dubai real estate"
         canonicalPath="/sitemap"
       />
 
-      <div className="min-h-screen bg-[#0D0D0D]" onScroll={handleScroll}>
-        {/* Hero Section */}
-        <section className="relative py-16 md:py-24 overflow-hidden">
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gold/10 rounded-full blur-[120px]" />
-            <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[100px]" />
-          </div>
+      <div className="min-h-screen bg-black">
+        {/* HERO SECTION */}
+        <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden" style={{ minHeight: '50vh' }}>
+          {/* Background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(200,167,102,0.15),transparent_70%)]" />
+          
+          {/* Gold accent lines */}
+          <motion.div 
+            className="absolute left-0 top-1/3 w-48 md:w-96 h-px bg-gradient-to-r from-gold/60 to-transparent"
+            initial={{ x: -100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 1.5, delay: 0.3 }}
+          />
+          <motion.div 
+            className="absolute right-0 bottom-1/3 w-48 md:w-96 h-px bg-gradient-to-l from-gold/60 to-transparent"
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 1.5, delay: 0.5 }}
+          />
 
-          <div className="container mx-auto px-4 relative z-10">
+          {/* Hero Content */}
+          <div className="relative z-10 container mx-auto px-4 py-16 md:py-24 text-center">
             <motion.div
               initial="hidden"
               animate="visible"
               variants={staggerContainer}
-              className="text-center max-w-4xl mx-auto"
+              className="max-w-4xl mx-auto"
             >
+              {/* Badge */}
               <motion.div variants={fadeInUp} className="mb-6">
-                <Badge className="bg-gold/15 text-gold border-gold/30 px-4 py-1.5">
+                <Badge className="bg-gold/15 text-gold border-gold/30 px-4 py-1.5 text-sm">
                   <Map className="w-3.5 h-3.5 mr-1.5" />
-                  Site Navigation
+                  Sitemap
                 </Badge>
               </motion.div>
 
+              {/* H1 */}
               <motion.h1
                 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4"
                 variants={fadeInUp}
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
-                <span className="text-white">Complete </span>
+                <span className="text-white">Navigate </span>
                 <span
                   style={{
                     background: "linear-gradient(135deg, #CBA64B 0%, #E8D5A3 50%, #CBA64B 100%)",
@@ -337,252 +342,192 @@ const Sitemap = () => {
                     WebkitTextFillColor: "transparent",
                   }}
                 >
-                  Sitemap
+                  JBJ Global Real Estate
                 </span>
               </motion.h1>
 
+              {/* Subtext */}
               <motion.p
                 className="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto mb-6"
                 variants={fadeInUp}
               >
-                Your complete guide to navigating JBJ Global Real Estate. 
-                Find every page, tool, and resource at a glance.
+                Your complete directory to all pages, tools, services, and resources across our platform.
               </motion.p>
 
-              <motion.div
+              {/* CTA Buttons */}
+              <motion.div 
                 variants={fadeInUp}
-                className="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-6"
-              />
-
-              {/* Quick Stats */}
-              <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-6 mb-8">
-                <div className="text-center">
-                  <p className="text-2xl sm:text-3xl font-bold text-gold">{sitemapSections.length}</p>
-                  <p className="text-zinc-500 text-sm">Categories</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-2xl sm:text-3xl font-bold text-gold">{totalPages}+</p>
-                  <p className="text-zinc-500 text-sm">Pages</p>
-                </div>
+                className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 mb-6"
+              >
+                <PremiumHeroButton href="/properties" size="lg">
+                  Browse Properties
+                </PremiumHeroButton>
+                <PremiumHeroButton href="/contact" size="lg">
+                  Contact Us
+                </PremiumHeroButton>
               </motion.div>
 
-              {/* Search Input */}
-              <motion.div variants={fadeInUp} className="max-w-md mx-auto">
-                <div className="relative">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
-                  <Input
-                    type="text"
-                    placeholder="Search pages, tools, or services..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 bg-zinc-900/80 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold/50 rounded-xl"
-                  />
-                  {searchQuery && (
-                    <button
-                      onClick={() => setSearchQuery("")}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white"
-                    >
-                      ×
-                    </button>
-                  )}
-                </div>
-                {searchQuery && (
-                  <p className="text-zinc-500 text-sm mt-2">
-                    Found {filteredSections.length} matching categories
-                  </p>
-                )}
-              </motion.div>
+              {/* Last Updated */}
+              <motion.p 
+                variants={fadeInUp}
+                className="text-zinc-500 text-xs"
+              >
+                Last Updated: {lastUpdated}
+              </motion.p>
             </motion.div>
           </div>
         </section>
 
-        {/* Quick Contact Shortcuts */}
-        <section className="py-6 border-y border-zinc-800">
+        {/* QUICK LINKS STRIP */}
+        <section className="py-6 bg-black border-y border-gold/20">
           <div className="container mx-auto px-4">
-            <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
-              <a
-                href={getCallUrl()}
-                className="flex items-center gap-2 px-4 py-2.5 bg-zinc-900 border border-zinc-700 rounded-xl hover:border-gold/50 transition-all group"
-              >
-                <Phone className="w-4 h-4 text-gold" />
-                <span className="text-white text-sm group-hover:text-gold transition-colors">Call Now</span>
-              </a>
-              <a
-                href={getWhatsAppUrl()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2.5 bg-zinc-900 border border-zinc-700 rounded-xl hover:border-green-500/50 transition-all group"
-              >
-                <MessageCircle className="w-4 h-4 text-green-500" />
-                <span className="text-white text-sm group-hover:text-green-500 transition-colors">WhatsApp</span>
-              </a>
-              <a
-                href={getEmailUrl()}
-                className="flex items-center gap-2 px-4 py-2.5 bg-zinc-900 border border-zinc-700 rounded-xl hover:border-gold/50 transition-all group"
-              >
-                <MapPin className="w-4 h-4 text-gold" />
-                <span className="text-white text-sm group-hover:text-gold transition-colors">Email Us</span>
-              </a>
-              <Link
-                to="/contact"
-                className="flex items-center gap-2 px-4 py-2.5 bg-gold/10 border border-gold/30 rounded-xl hover:bg-gold/20 transition-all group"
-              >
-                <Users className="w-4 h-4 text-gold" />
-                <span className="text-gold text-sm font-medium">Contact Page</span>
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* Divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-
-        {/* User Guide */}
-        <section className="py-10 border-b border-zinc-800">
-          <div className="container mx-auto px-4">
-            <div className="max-w-5xl mx-auto">
-              <div className="bg-gradient-to-r from-zinc-900 to-zinc-900/50 border border-zinc-800 rounded-2xl p-5 sm:p-6 md:p-8">
-                <div className="flex items-center gap-3 mb-5">
-                  <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center">
-                    <LayoutGrid className="w-6 h-6 text-gold" />
-                  </div>
-                  <div>
-                    <h2 className="text-white text-xl font-semibold">How to Navigate</h2>
-                    <p className="text-zinc-500 text-sm">Quick guide to using our platform</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
-                  <div className="flex items-start gap-3 p-3 bg-zinc-800/30 rounded-xl">
-                    <Menu className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-white font-medium">Header Menu</p>
-                      <p className="text-zinc-400">Click Buy, Rent, Projects, Services for detailed dropdowns.</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-3 bg-zinc-800/30 rounded-xl">
-                    <Search className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-white font-medium">Quick Search</p>
-                      <p className="text-zinc-400">Click the search icon for shortcuts, services & contact options.</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-3 bg-zinc-800/30 rounded-xl">
-                    <UserCircle className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-white font-medium">Account & Sign In</p>
-                      <p className="text-zinc-400">Click the user icon for account, favorites & settings.</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-3 bg-zinc-800/30 rounded-xl">
-                    <Globe className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-white font-medium">Language & Currency</p>
-                      <p className="text-zinc-400">Switch languages and currency in the header icons.</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-3 bg-zinc-800/30 rounded-xl">
-                    <Heart className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-white font-medium">Save Favorites</p>
-                      <p className="text-zinc-400">Click the heart icon on properties to save them.</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-3 bg-zinc-800/30 rounded-xl">
-                    <Keyboard className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-white font-medium">Keyboard Shortcut</p>
-                      <p className="text-zinc-400">Press <kbd className="px-1.5 py-0.5 bg-zinc-700 rounded text-xs">⌘</kbd> + <kbd className="px-1.5 py-0.5 bg-zinc-700 rounded text-xs">K</kbd> for quick navigation.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Category Jump Links */}
-        <section className="py-6 border-b border-zinc-800 overflow-x-auto">
-          <div className="container mx-auto px-4">
-            <div className="flex gap-2 justify-start sm:justify-center flex-nowrap min-w-max sm:min-w-0 sm:flex-wrap">
-              {sitemapSections.map((section) => {
-                const Icon = section.icon;
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
+              {quickLinks.map((link) => {
+                const Icon = link.icon;
                 return (
-                  <button
-                    key={section.title}
-                    onClick={() => {
-                      const element = document.getElementById(section.title.toLowerCase().replace(/\s+/g, '-'));
-                      element?.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg bg-zinc-900/60 border border-zinc-700 hover:border-gold/50 transition-all text-sm whitespace-nowrap ${section.color}`}
+                  <Link
+                    key={link.href}
+                    to={link.href}
+                    className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-lg hover:border-gold hover:shadow-lg transition-all group"
                   >
-                    <Icon className="w-4 h-4" />
-                    <span className="text-white">{section.title}</span>
-                  </button>
+                    <Icon className="w-4 h-4 text-black group-hover:text-gold transition-colors" />
+                    <span className="text-black text-xs sm:text-sm font-medium group-hover:text-gold transition-colors whitespace-nowrap">
+                      {link.label}
+                    </span>
+                  </Link>
                 );
               })}
             </div>
           </div>
         </section>
 
-        {/* Sitemap Grid */}
-        <section className="py-12 sm:py-16">
+        {/* MAIN SITEMAP DIRECTORY */}
+        <section className="py-12 sm:py-16 md:py-20 bg-black">
           <div className="container mx-auto px-4">
+            {/* Section Header */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-10"
+            >
+              <h2 className="text-white text-2xl sm:text-3xl font-bold mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+                Complete <span className="text-gold">Directory</span>
+              </h2>
+              <p className="text-zinc-400 text-sm sm:text-base max-w-xl mx-auto">
+                All pages organized by category for easy navigation
+              </p>
+            </motion.div>
+
+            {/* Hub Grid */}
             <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-50px" }}
               variants={staggerContainer}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6"
             >
-              {filteredSections.map((section) => (
-                <div key={section.title} id={section.title.toLowerCase().replace(/\s+/g, '-')}>
-                  <SitemapCard 
-                    section={section} 
-                    hideFounderLinks={!isFounderVisible} 
-                    searchQuery={searchQuery}
-                  />
-                </div>
+              {hubSections.map((hub) => (
+                <HubCard 
+                  key={hub.id} 
+                  hub={hub} 
+                  hideFounderLinks={!isFounderVisible}
+                />
               ))}
             </motion.div>
-
-            {/* No results message */}
-            {searchQuery && filteredSections.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-zinc-400 text-lg mb-4">No pages found matching "{searchQuery}"</p>
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="text-gold hover:underline"
-                >
-                  Clear search
-                </button>
-              </div>
-            )}
           </div>
         </section>
 
-        {/* Back to Top */}
-        <section className="py-10 border-t border-zinc-800">
-          <div className="container mx-auto px-4 text-center">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 text-gold hover:text-gold-dark transition-colors"
+        {/* LEGAL & SUPPORT SECTION */}
+        <section className="py-10 sm:py-12 bg-zinc-900/50 border-t border-gold/20">
+          <div className="container mx-auto px-4">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-8"
             >
-              <Home className="w-5 h-5" />
-              Back to Home
-              <ExternalLink className="w-4 h-4" />
-            </Link>
+              <h2 className="text-white text-xl sm:text-2xl font-bold mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                Support & <span className="text-gold">Legal</span>
+              </h2>
+            </motion.div>
+
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
+              {legalLinks.map((link) => {
+                const Icon = link.icon;
+                return (
+                  <Link
+                    key={link.href}
+                    to={link.href}
+                    className="flex items-center gap-2 px-4 py-2.5 bg-zinc-800/80 border border-zinc-700 rounded-lg hover:border-gold/50 hover:bg-zinc-800 transition-all group"
+                  >
+                    <Icon className="w-4 h-4 text-gold" />
+                    <span className="text-zinc-300 text-sm group-hover:text-white transition-colors">
+                      {link.label}
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* CONTACT QUICK ACCESS */}
+        <section className="py-10 sm:py-12 bg-black border-t border-zinc-800">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-wrap justify-center gap-4">
+              <a
+                href={getCallUrl()}
+                className="flex items-center gap-2 px-5 py-3 bg-gold text-black font-semibold rounded-xl hover:bg-gold-dark transition-all"
+              >
+                <Phone className="w-5 h-5" />
+                <span>Call Now</span>
+              </a>
+              <a
+                href={getWhatsAppUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-5 py-3 bg-[#25D366] text-white font-semibold rounded-xl hover:bg-[#1da851] transition-all"
+              >
+                <MessageCircle className="w-5 h-5" />
+                <span>WhatsApp</span>
+              </a>
+              <Link
+                to="/contact"
+                className="flex items-center gap-2 px-5 py-3 bg-transparent border-2 border-gold text-gold font-semibold rounded-xl hover:bg-gold/10 transition-all"
+              >
+                <Users className="w-5 h-5" />
+                <span>Contact Page</span>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* BACK TO TOP SECTION */}
+        <section className="py-8 bg-black border-t border-zinc-800">
+          <div className="container mx-auto px-4 text-center">
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gold/10 border border-gold/30 text-gold rounded-xl hover:bg-gold/20 transition-all"
+            >
+              <ChevronUp className="w-5 h-5" />
+              <span className="font-medium">Back to Top</span>
+            </button>
           </div>
         </section>
 
         {/* Floating Back to Top Button */}
         {showBackToTop && (
-          <button
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="fixed bottom-24 right-6 z-40 w-12 h-12 bg-gold text-black rounded-full shadow-lg hover:bg-gold-dark transition-all flex items-center justify-center"
             aria-label="Back to top"
           >
             <ChevronUp className="w-6 h-6" />
-          </button>
+          </motion.button>
         )}
 
         <Footer />
