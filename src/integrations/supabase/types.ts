@@ -14723,7 +14723,7 @@ export type Database = {
           special_notes: string | null
           total_investment_value: number | null
           updated_at: string | null
-          user_id: string | null
+          user_id: string
           verified_at: string | null
           verified_by: string | null
           vip_category: Database["public"]["Enums"]["vip_category"]
@@ -14747,7 +14747,7 @@ export type Database = {
           special_notes?: string | null
           total_investment_value?: number | null
           updated_at?: string | null
-          user_id?: string | null
+          user_id: string
           verified_at?: string | null
           verified_by?: string | null
           vip_category: Database["public"]["Enums"]["vip_category"]
@@ -14771,7 +14771,7 @@ export type Database = {
           special_notes?: string | null
           total_investment_value?: number | null
           updated_at?: string | null
-          user_id?: string | null
+          user_id?: string
           verified_at?: string | null
           verified_by?: string | null
           vip_category?: Database["public"]["Enums"]["vip_category"]
