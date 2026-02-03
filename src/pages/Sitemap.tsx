@@ -1,9 +1,11 @@
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 import {
   Map,
@@ -29,7 +31,13 @@ import {
   UserCircle,
   MapPin,
   LayoutGrid,
+  Menu,
+  Globe,
+  MessageCircle,
+  Keyboard,
+  ChevronUp,
 } from "lucide-react";
+import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -193,17 +201,29 @@ const sitemapSections: SitemapSection[] = [
   },
 ];
 
-const SitemapCard = ({ section, hideFounderLinks }: { section: SitemapSection; hideFounderLinks?: boolean }) => {
+const SitemapCard = ({ section, hideFounderLinks, searchQuery }: { section: SitemapSection; hideFounderLinks?: boolean; searchQuery: string }) => {
   const Icon = section.icon;
   
   // Filter out founder-related links if visibility is disabled
-  const filteredLinks = hideFounderLinks 
+  let filteredLinks = hideFounderLinks 
     ? section.links.filter(link => 
         !link.href.includes('/founder') && 
         !link.label.toLowerCase().includes('founder') &&
-        !link.description.toLowerCase().includes('jane bou jaoude')
+        !(link.description?.toLowerCase().includes('jane bou jaoude'))
       )
     : section.links;
+
+  // Apply search filter
+  if (searchQuery) {
+    const query = searchQuery.toLowerCase();
+    filteredLinks = filteredLinks.filter(link =>
+      link.label.toLowerCase().includes(query) ||
+      (link.description?.toLowerCase().includes(query))
+    );
+  }
+
+  // Don't render card if no links match
+  if (filteredLinks.length === 0) return null;
   
   return (
     <motion.div variants={fadeInUp}>
@@ -248,6 +268,30 @@ const SitemapCard = ({ section, hideFounderLinks }: { section: SitemapSection; h
 
 const Sitemap = () => {
   const { isFounderVisible } = useFounderVisibility();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showBackToTop, setShowBackToTop] = useState(false);
+
+  // Handle scroll for back to top button
+  const handleScroll = () => {
+    setShowBackToTop(window.scrollY > 400);
+  };
+
+  // Calculate total pages and filtered counts
+  const totalPages = useMemo(() => {
+    return sitemapSections.reduce((acc, s) => acc + s.links.length, 0);
+  }, []);
+
+  const filteredSections = useMemo(() => {
+    if (!searchQuery) return sitemapSections;
+    const query = searchQuery.toLowerCase();
+    return sitemapSections.filter(section => 
+      section.title.toLowerCase().includes(query) ||
+      section.links.some(link => 
+        link.label.toLowerCase().includes(query) ||
+        link.description?.toLowerCase().includes(query)
+      )
+    );
+  }, [searchQuery]);
   
   return (
     <>
@@ -258,9 +302,9 @@ const Sitemap = () => {
         canonicalPath="/sitemap"
       />
 
-      <div className="min-h-screen bg-[#0D0D0D]">
+      <div className="min-h-screen bg-[#0D0D0D]" onScroll={handleScroll}>
         {/* Hero Section */}
-        <section className="relative py-20 md:py-28 overflow-hidden">
+        <section className="relative py-16 md:py-24 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gold/10 rounded-full blur-[120px]" />
             <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[100px]" />
@@ -281,7 +325,7 @@ const Sitemap = () => {
               </motion.div>
 
               <motion.h1
-                className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4"
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4"
                 variants={fadeInUp}
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
@@ -298,7 +342,7 @@ const Sitemap = () => {
               </motion.h1>
 
               <motion.p
-                className="text-zinc-400 text-lg max-w-2xl mx-auto mb-8"
+                className="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto mb-6"
                 variants={fadeInUp}
               >
                 Your complete guide to navigating JBJ Global Real Estate. 
@@ -307,23 +351,86 @@ const Sitemap = () => {
 
               <motion.div
                 variants={fadeInUp}
-                className="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-8"
+                className="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-6"
               />
 
               {/* Quick Stats */}
-              <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-6">
+              <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-6 mb-8">
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-gold">{sitemapSections.length}</p>
+                  <p className="text-2xl sm:text-3xl font-bold text-gold">{sitemapSections.length}</p>
                   <p className="text-zinc-500 text-sm">Categories</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-gold">
-                    {sitemapSections.reduce((acc, s) => acc + s.links.length, 0)}+
-                  </p>
+                  <p className="text-2xl sm:text-3xl font-bold text-gold">{totalPages}+</p>
                   <p className="text-zinc-500 text-sm">Pages</p>
                 </div>
               </motion.div>
+
+              {/* Search Input */}
+              <motion.div variants={fadeInUp} className="max-w-md mx-auto">
+                <div className="relative">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
+                  <Input
+                    type="text"
+                    placeholder="Search pages, tools, or services..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-12 pr-4 py-3 bg-zinc-900/80 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold/50 rounded-xl"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery("")}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+                {searchQuery && (
+                  <p className="text-zinc-500 text-sm mt-2">
+                    Found {filteredSections.length} matching categories
+                  </p>
+                )}
+              </motion.div>
             </motion.div>
+          </div>
+        </section>
+
+        {/* Quick Contact Shortcuts */}
+        <section className="py-6 border-y border-zinc-800">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
+              <a
+                href={getCallUrl()}
+                className="flex items-center gap-2 px-4 py-2.5 bg-zinc-900 border border-zinc-700 rounded-xl hover:border-gold/50 transition-all group"
+              >
+                <Phone className="w-4 h-4 text-gold" />
+                <span className="text-white text-sm group-hover:text-gold transition-colors">Call Now</span>
+              </a>
+              <a
+                href={getWhatsAppUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2.5 bg-zinc-900 border border-zinc-700 rounded-xl hover:border-green-500/50 transition-all group"
+              >
+                <MessageCircle className="w-4 h-4 text-green-500" />
+                <span className="text-white text-sm group-hover:text-green-500 transition-colors">WhatsApp</span>
+              </a>
+              <a
+                href={getEmailUrl()}
+                className="flex items-center gap-2 px-4 py-2.5 bg-zinc-900 border border-zinc-700 rounded-xl hover:border-gold/50 transition-all group"
+              >
+                <MapPin className="w-4 h-4 text-gold" />
+                <span className="text-white text-sm group-hover:text-gold transition-colors">Email Us</span>
+              </a>
+              <Link
+                to="/contact"
+                className="flex items-center gap-2 px-4 py-2.5 bg-gold/10 border border-gold/30 rounded-xl hover:bg-gold/20 transition-all group"
+              >
+                <Users className="w-4 h-4 text-gold" />
+                <span className="text-gold text-sm font-medium">Contact Page</span>
+              </Link>
+            </div>
           </div>
         </section>
 
@@ -331,11 +438,11 @@ const Sitemap = () => {
         <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
         {/* User Guide */}
-        <section className="py-12 border-b border-zinc-800">
+        <section className="py-10 border-b border-zinc-800">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <div className="bg-gradient-to-r from-zinc-900 to-zinc-900/50 border border-zinc-800 rounded-2xl p-6 md:p-8">
-                <div className="flex items-center gap-3 mb-4">
+            <div className="max-w-5xl mx-auto">
+              <div className="bg-gradient-to-r from-zinc-900 to-zinc-900/50 border border-zinc-800 rounded-2xl p-5 sm:p-6 md:p-8">
+                <div className="flex items-center gap-3 mb-5">
                   <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center">
                     <LayoutGrid className="w-6 h-6 text-gold" />
                   </div>
@@ -344,33 +451,47 @@ const Sitemap = () => {
                     <p className="text-zinc-500 text-sm">Quick guide to using our platform</p>
                   </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                  <div className="flex items-start gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+                  <div className="flex items-start gap-3 p-3 bg-zinc-800/30 rounded-xl">
+                    <Menu className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-white font-medium">Header Menu</p>
+                      <p className="text-zinc-400">Click Buy, Rent, Projects, Services for detailed dropdowns.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 bg-zinc-800/30 rounded-xl">
                     <Search className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-white font-medium">Find Properties</p>
-                      <p className="text-zinc-400">Use the Properties page or take our Quiz for personalized recommendations.</p>
+                      <p className="text-white font-medium">Quick Search</p>
+                      <p className="text-zinc-400">Click the search icon for shortcuts, services & contact options.</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <Building2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-3 p-3 bg-zinc-800/30 rounded-xl">
+                    <UserCircle className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-white font-medium">Explore Areas</p>
-                      <p className="text-zinc-400">Visit Area Guides for detailed neighborhood information and insights.</p>
+                      <p className="text-white font-medium">Account & Sign In</p>
+                      <p className="text-zinc-400">Click the user icon for account, favorites & settings.</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <Settings className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-3 p-3 bg-zinc-800/30 rounded-xl">
+                    <Globe className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-white font-medium">Use AI Tools</p>
-                      <p className="text-zinc-400">Access AI Hub for interior design, valuations, and smart recommendations.</p>
+                      <p className="text-white font-medium">Language & Currency</p>
+                      <p className="text-zinc-400">Switch languages and currency in the header icons.</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-3 p-3 bg-zinc-800/30 rounded-xl">
                     <Heart className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-white font-medium">Get Support</p>
-                      <p className="text-zinc-400">Visit Customer Happiness for tickets, feedback, and creative ideas.</p>
+                      <p className="text-white font-medium">Save Favorites</p>
+                      <p className="text-zinc-400">Click the heart icon on properties to save them.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 bg-zinc-800/30 rounded-xl">
+                    <Keyboard className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-white font-medium">Keyboard Shortcut</p>
+                      <p className="text-zinc-400">Press <kbd className="px-1.5 py-0.5 bg-zinc-700 rounded text-xs">⌘</kbd> + <kbd className="px-1.5 py-0.5 bg-zinc-700 rounded text-xs">K</kbd> for quick navigation.</p>
                     </div>
                   </div>
                 </div>
@@ -379,25 +500,68 @@ const Sitemap = () => {
           </div>
         </section>
 
+        {/* Category Jump Links */}
+        <section className="py-6 border-b border-zinc-800 overflow-x-auto">
+          <div className="container mx-auto px-4">
+            <div className="flex gap-2 justify-start sm:justify-center flex-nowrap min-w-max sm:min-w-0 sm:flex-wrap">
+              {sitemapSections.map((section) => {
+                const Icon = section.icon;
+                return (
+                  <button
+                    key={section.title}
+                    onClick={() => {
+                      const element = document.getElementById(section.title.toLowerCase().replace(/\s+/g, '-'));
+                      element?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg bg-zinc-900/60 border border-zinc-700 hover:border-gold/50 transition-all text-sm whitespace-nowrap ${section.color}`}
+                  >
+                    <Icon className="w-4 h-4" />
+                    <span className="text-white">{section.title}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
         {/* Sitemap Grid */}
-        <section className="py-16">
+        <section className="py-12 sm:py-16">
           <div className="container mx-auto px-4">
             <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-50px" }}
               variants={staggerContainer}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
             >
-              {sitemapSections.map((section) => (
-                <SitemapCard key={section.title} section={section} hideFounderLinks={!isFounderVisible} />
+              {filteredSections.map((section) => (
+                <div key={section.title} id={section.title.toLowerCase().replace(/\s+/g, '-')}>
+                  <SitemapCard 
+                    section={section} 
+                    hideFounderLinks={!isFounderVisible} 
+                    searchQuery={searchQuery}
+                  />
+                </div>
               ))}
             </motion.div>
+
+            {/* No results message */}
+            {searchQuery && filteredSections.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-zinc-400 text-lg mb-4">No pages found matching "{searchQuery}"</p>
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="text-gold hover:underline"
+                >
+                  Clear search
+                </button>
+              </div>
+            )}
           </div>
         </section>
 
         {/* Back to Top */}
-        <section className="py-12 border-t border-zinc-800">
+        <section className="py-10 border-t border-zinc-800">
           <div className="container mx-auto px-4 text-center">
             <Link
               to="/"
@@ -409,6 +573,17 @@ const Sitemap = () => {
             </Link>
           </div>
         </section>
+
+        {/* Floating Back to Top Button */}
+        {showBackToTop && (
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="fixed bottom-24 right-6 z-40 w-12 h-12 bg-gold text-black rounded-full shadow-lg hover:bg-gold-dark transition-all flex items-center justify-center"
+            aria-label="Back to top"
+          >
+            <ChevronUp className="w-6 h-6" />
+          </button>
+        )}
 
         <Footer />
       </div>

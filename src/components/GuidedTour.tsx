@@ -12,7 +12,13 @@ import {
   FileSearch,
   TrendingUp,
   Calculator,
-  Brain
+  Brain,
+  Menu,
+  Search,
+  User,
+  Globe,
+  Phone,
+  Map
 } from "lucide-react";
 import { JJLogoImage } from "./JJLogoImage";
 
@@ -42,7 +48,40 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
     onClose();
   };
 
+  // Enhanced tour steps with navigation focus
   const tourSteps = [
+    {
+      icon: Menu,
+      iconColor: "text-gold",
+      iconBg: "from-gold/20 to-gold/10",
+      iconBorder: "border-gold/30",
+      title: "Navigation Menu",
+      description: "Find all pages in the header menu. Click on Buy, Rent, Projects, Services, or More to explore each section with detailed dropdown panels."
+    },
+    {
+      icon: Search,
+      iconColor: "text-blue-500",
+      iconBg: "from-blue-500/20 to-blue-600/10",
+      iconBorder: "border-blue-500/30",
+      title: "Quick Search",
+      description: "Click the search icon in the header to access services, shortcuts, and contact options. Find anything instantly across the platform."
+    },
+    {
+      icon: User,
+      iconColor: "text-purple-500",
+      iconBg: "from-purple-500/20 to-purple-600/10",
+      iconBorder: "border-purple-500/30",
+      title: "Sign In & Account",
+      description: "Click the user icon to access your account, favorites, settings, and personalized dashboard. Create an account to save properties."
+    },
+    {
+      icon: Globe,
+      iconColor: "text-cyan-500",
+      iconBg: "from-cyan-500/20 to-cyan-600/10",
+      iconBorder: "border-cyan-500/30",
+      title: "Language & Currency",
+      description: "Switch between English and Arabic, and select your preferred currency (AED, USD, EUR) using the icons in the header."
+    },
     {
       icon: Heart,
       iconColor: "text-red-500",
@@ -76,28 +115,20 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
       description: "Our AI analyzes your shortlisted properties and provides detailed investment comparisons on ROI, location value, and market trends."
     },
     {
-      icon: FileSearch,
-      iconColor: "text-cyan-500",
-      iconBg: "from-cyan-500/20 to-cyan-600/10",
-      iconBorder: "border-cyan-500/30",
-      title: "JBJ Scan & Sign Documents",
-      description: "Upload contracts, crop edges, add digital signatures, and auto-fill form fields. Manage all your investment documents digitally."
-    },
-    {
-      icon: TrendingUp,
+      icon: Map,
       iconColor: "text-emerald-500",
       iconBg: "from-emerald-500/20 to-emerald-600/10",
       iconBorder: "border-emerald-500/30",
-      title: "JBJ Rental Index Tool",
-      description: "Discover highest-performing areas for rental ROI. Compare short-term vs long-term rentals and get property valuation estimates."
+      title: "Sitemap & Help",
+      description: "Find the complete sitemap in the footer or header 'More' menu. Access every page, tool, and resource in one convenient location."
     },
     {
-      icon: Calculator,
-      iconColor: "text-orange-500",
-      iconBg: "from-orange-500/20 to-orange-600/10",
-      iconBorder: "border-orange-500/30",
-      title: "Mortgage Calculator",
-      description: "Calculate monthly payments, down payments, and connect with our mortgage advisors for personalized financing solutions."
+      icon: Phone,
+      iconColor: "text-green-500",
+      iconBg: "from-green-500/20 to-green-600/10",
+      iconBorder: "border-green-500/30",
+      title: "Contact JBJ",
+      description: "Reach us via WhatsApp, phone, or email. Click the search icon for quick contact options, or visit the Contact page for more ways to connect."
     },
     {
       icon: Send,
@@ -111,6 +142,18 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
 
   const shortcutItems = [
     {
+      icon: Menu,
+      iconColor: "text-gold",
+      title: "Header Menu",
+      description: "Buy, Rent, Projects, Services & More dropdowns"
+    },
+    {
+      icon: Search,
+      iconColor: "text-blue-500",
+      title: "Quick Search",
+      description: "Services, shortcuts & contact in header"
+    },
+    {
       icon: Heart,
       iconColor: "text-red-500",
       title: "Favorites & Shortlist",
@@ -123,16 +166,10 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
       description: "Get AI-powered investment analysis on your selections"
     },
     {
-      icon: FileSearch,
-      iconColor: "text-cyan-500",
-      title: "JBJ Scan & Sign",
-      description: "Scan, sign, and manage investment documents"
-    },
-    {
-      icon: TrendingUp,
+      icon: Map,
       iconColor: "text-emerald-500",
-      title: "Rental Index",
-      description: "Find highest ROI areas for rental investments"
+      title: "Sitemap",
+      description: "Find all pages in footer or More menu"
     },
     {
       icon: Calculator,
@@ -156,7 +193,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative w-full max-w-lg bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-2xl"
+          className="relative w-full max-w-lg bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto"
         >
           {/* Close button */}
           <button
@@ -177,7 +214,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
             }}
           />
 
-          <div className="relative p-8">
+          <div className="relative p-6 sm:p-8">
             {/* CHOICE SCREEN */}
             {showTour === 'choice' && (
               <motion.div
@@ -189,11 +226,11 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                   <JJLogoImage variant="light" size="md" />
                 </div>
 
-                <h2 className="text-2xl md:text-3xl font-semibold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  How Would You Like to Start?
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  Welcome to JBJ Global
                 </h2>
                 <p className="text-gray-600 text-sm mb-8 max-w-sm mx-auto">
-                  Take a quick guided tour to master the platform, or explore on your own
+                  Take a quick guided tour to learn how to navigate our platform, or explore on your own
                 </p>
 
                 <div className="space-y-3">
@@ -204,7 +241,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                       handleTakeTour();
                     }}
                     type="button"
-                    className="w-full py-6 bg-black hover:bg-zinc-900 text-gold font-semibold text-base shadow-xl rounded-xl group relative overflow-hidden border border-gold/20"
+                    className="w-full py-5 sm:py-6 bg-black hover:bg-zinc-900 text-gold font-semibold text-base shadow-xl rounded-xl group relative overflow-hidden border border-gold/20"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                     <Compass className="w-5 h-5 mr-3 relative z-10" />
@@ -220,7 +257,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                     }}
                     type="button"
                     variant="outline"
-                    className="w-full py-6 border-gray-300 bg-transparent text-black hover:bg-gray-100 hover:border-gold/50 group rounded-xl transition-all"
+                    className="w-full py-5 sm:py-6 border-gray-300 bg-transparent text-black hover:bg-gray-100 hover:border-gold/50 group rounded-xl transition-all"
                   >
                     <span className="flex-1 text-left font-medium">Explore by Myself</span>
                     <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-gold group-hover:translate-x-1 transition-all" />
@@ -238,32 +275,38 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                 exit={{ opacity: 0, x: -20 }}
                 className="text-center"
               >
-                {/* Step indicator */}
-                <div className="flex justify-center gap-2 mb-6">
+                {/* Step indicator - scrollable on small screens */}
+                <div className="flex justify-center gap-1.5 mb-6 flex-wrap">
                   {tourSteps.map((_, idx) => (
-                    <div
+                    <button
                       key={idx}
+                      onClick={() => setCurrentStep(idx)}
                       className={`h-1.5 rounded-full transition-all duration-300 ${
                         idx === currentStep 
-                          ? 'w-8 bg-gold' 
+                          ? 'w-6 bg-gold' 
                           : idx < currentStep 
-                            ? 'w-3 bg-gold/50' 
-                            : 'w-3 bg-gray-300'
+                            ? 'w-2.5 bg-gold/50 hover:bg-gold/70' 
+                            : 'w-2.5 bg-gray-300 hover:bg-gray-400'
                       }`}
+                      aria-label={`Go to step ${idx + 1}`}
                     />
                   ))}
                 </div>
 
+                <div className="text-xs text-gray-500 mb-4">
+                  Step {currentStep + 1} of {tourSteps.length}
+                </div>
+
                 <div className="relative inline-flex mb-6">
-                  <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${tourSteps[currentStep].iconBg} border ${tourSteps[currentStep].iconBorder} flex items-center justify-center shadow-lg`}>
+                  <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br ${tourSteps[currentStep].iconBg} border ${tourSteps[currentStep].iconBorder} flex items-center justify-center shadow-lg`}>
                     {(() => {
                       const Icon = tourSteps[currentStep].icon;
-                      return <Icon className={`w-10 h-10 ${tourSteps[currentStep].iconColor}`} />;
+                      return <Icon className={`w-8 h-8 sm:w-10 sm:h-10 ${tourSteps[currentStep].iconColor}`} />;
                     })()}
                   </div>
                 </div>
 
-                <h3 className="text-xl md:text-2xl font-semibold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
                   {tourSteps[currentStep].title}
                 </h3>
                 <p className="text-gray-600 text-sm mb-8 max-w-sm mx-auto leading-relaxed">
@@ -275,7 +318,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                     <Button
                       onClick={() => setCurrentStep(currentStep - 1)}
                       variant="outline"
-                      className="flex-1 py-5 border-gray-300 bg-transparent text-black hover:bg-gray-100 rounded-xl"
+                      className="flex-1 py-4 sm:py-5 border-gray-300 bg-transparent text-black hover:bg-gray-100 rounded-xl"
                     >
                       Back
                     </Button>
@@ -288,7 +331,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                         handleComplete();
                       }
                     }}
-                    className="flex-1 py-5 bg-black hover:bg-zinc-900 text-gold font-semibold rounded-xl group border border-gold/20"
+                    className="flex-1 py-4 sm:py-5 bg-black hover:bg-zinc-900 text-gold font-semibold rounded-xl group border border-gold/20"
                   >
                     {currentStep < tourSteps.length - 1 ? 'Next' : 'Start Exploring'}
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -304,7 +347,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                 animate={{ opacity: 1, y: 0 }}
               >
                 <div className="text-center mb-6">
-                  <h3 className="text-xl md:text-2xl font-semibold text-black mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-black mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
                     Great! Quick Overview
                   </h3>
                   <p className="text-gray-600 text-sm">
@@ -312,21 +355,21 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                   </p>
                 </div>
 
-                <div className="space-y-3 mb-6">
+                <div className="space-y-2.5 mb-6 max-h-[50vh] overflow-y-auto">
                   {shortcutItems.map((item, idx) => (
                     <motion.div
                       key={idx}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: idx * 0.1 }}
-                      className="flex items-center gap-4 p-3 bg-gray-50 border border-gray-200 rounded-xl"
+                      transition={{ delay: idx * 0.08 }}
+                      className="flex items-center gap-3 p-3 bg-gray-50 border border-gray-200 rounded-xl"
                     >
-                      <div className="w-10 h-10 rounded-lg bg-white border border-gray-200 shadow-sm flex items-center justify-center flex-shrink-0">
-                        <item.icon className={`w-5 h-5 ${item.iconColor}`} />
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-white border border-gray-200 shadow-sm flex items-center justify-center flex-shrink-0">
+                        <item.icon className={`w-4 h-4 sm:w-5 sm:h-5 ${item.iconColor}`} />
                       </div>
-                      <div className="text-left">
+                      <div className="text-left min-w-0 flex-1">
                         <p className="text-black text-sm font-medium">{item.title}</p>
-                        <p className="text-gray-500 text-xs">{item.description}</p>
+                        <p className="text-gray-500 text-xs truncate">{item.description}</p>
                       </div>
                     </motion.div>
                   ))}
@@ -334,7 +377,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
 
                 <Button
                   onClick={handleComplete}
-                  className="w-full py-5 bg-black hover:bg-zinc-900 text-gold font-semibold rounded-xl group border border-gold/20"
+                  className="w-full py-4 sm:py-5 bg-black hover:bg-zinc-900 text-gold font-semibold rounded-xl group border border-gold/20"
                 >
                   Start Exploring
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
