@@ -16,6 +16,15 @@ import {
   ClipboardList,
   Eye,
   Send,
+  Paintbrush,
+  DoorOpen,
+  Droplets,
+  Zap,
+  Wind,
+  Square,
+  Shield,
+  Calendar,
+  Play,
 } from "lucide-react";
 import Footer from "@/components/Footer";
 import DirectContactCTA from "@/components/DirectContactCTA";
@@ -42,84 +51,107 @@ const staggerContainer = {
   },
 };
 
-const whatItCovers = [
-  "Unit inspection before handover acceptance",
-  "Defect identification and documentation (photos + notes)",
-  "Snagging report packaging for developer/contractor submission",
-  "Follow-up checklist tracking until closure",
-];
-
-const whoIsFor = [
+const inspectionAreas = [
   {
-    icon: Users,
-    title: "Buyers Receiving Handover",
-    description: "Off-plan to ready property transitions",
+    icon: Paintbrush,
+    title: "Finishes & Workmanship",
+    items: "Paint, tiles, flooring alignment, gaps, cracks, sealants",
   },
   {
-    icon: Building2,
-    title: "Investors Preparing for Rent",
-    description: "Ensuring unit is rent-ready",
+    icon: DoorOpen,
+    title: "Doors & Joinery",
+    items: "Hinges, locks, alignment, cabinetry fit, soft-close, scratches",
   },
   {
-    icon: Wrench,
-    title: "Owners Planning Renovations",
-    description: "Pre-renovation condition assessment",
+    icon: Droplets,
+    title: "Bathrooms & Kitchens",
+    items: "Leaks, water pressure, drains, grouting, fittings stability",
   },
-];
-
-const processSteps = [
-  { step: 1, title: "Submit unit details + expected handover date", icon: Send },
-  { step: 2, title: "Schedule inspection window", icon: Clock },
-  { step: 3, title: "On-site inspection + evidence capture", icon: Camera },
-  { step: 4, title: "Report delivery + issue categorization", icon: FileText },
-  { step: 5, title: "Follow-up tracking (as applicable)", icon: ClipboardCheck },
+  {
+    icon: Zap,
+    title: "Electrical",
+    items: "Switches, sockets, distribution labeling, basic functionality checks",
+  },
+  {
+    icon: Wind,
+    title: "HVAC/AC Performance",
+    items: "Visible issues, thermostat response (non-invasive)",
+  },
+  {
+    icon: Square,
+    title: "Windows & Balconies",
+    items: "Sealing, alignment, opening/closing, water ingress indicators",
+  },
+  {
+    icon: Shield,
+    title: "Safety/Functional Basics",
+    items: "Visible hazards, loose items, sharp edges, missing covers",
+  },
 ];
 
 const deliverables = [
-  "Snagging report (structured)",
-  "Photo evidence set",
-  "Priority grading (critical / major / minor)",
-  "Closure checklist template",
+  "Snagging Report (structured by room/zone + issue category)",
+  "Photo evidence for each snag item",
+  "Priority tags: Critical / Major / Minor / Cosmetic",
+  "Closure checklist you can use with developer follow-up",
+  "Summary page: top issues + recommended closure order",
 ];
 
-const requirements = [
-  "Unit access confirmation",
-  "Handover notice (if available)",
-  "Any floor plan / unit reference (if available)",
+const processSteps = [
+  { step: 1, title: "Request Intake", description: "You submit unit details and handover timeline", icon: Send },
+  { step: 2, title: "Schedule", description: "We confirm access and inspection window", icon: Calendar },
+  { step: 3, title: "Inspection", description: "On-site snagging with documentation", icon: Camera },
+  { step: 4, title: "Report Delivery", description: "Report is delivered in a clear, developer-ready format", icon: FileText },
+  { step: 5, title: "Follow-Up Option", description: "If requested, a re-inspection can verify closure items", icon: ClipboardCheck },
+];
+
+const readinessChecklist = [
+  "Access confirmation (time, location, unit number)",
+  "Any handover documents provided by developer (if available)",
+  "Floor plan or unit layout (if available)",
+  "Utilities status (if the unit allows functional checks)",
 ];
 
 const faqData = [
   {
-    question: "What is snagging?",
-    answer: "Snagging is a detailed inspection of a property to identify defects, incomplete work, or issues that need to be rectified before or shortly after handover.",
-  },
-  {
-    question: "When should I book snagging?",
-    answer: "Ideally, snagging should be done before you accept handover from the developer. This gives you leverage to have issues fixed before taking possession.",
+    question: "Is snagging required in Dubai?",
+    answer: "Not mandatory, but it's a best-practice step to protect your handover and reduce disputes about defects.",
   },
   {
     question: "Do you coordinate with the developer?",
-    answer: "We provide a structured report that you can submit to the developer. We can guide you on the submission process, but direct coordination is between you and the developer.",
+    answer: "We can format the report to be developer-ready and help you maintain a closure checklist. Developer communication channels differ by project.",
   },
   {
-    question: "Do you fix defects or only report them?",
-    answer: "We provide inspection and documentation services only. Repairs are coordinated between you and the developer or your chosen contractor.",
+    question: "Do you fix the issues?",
+    answer: "Snagging identifies and documents issues. Repairs are performed by the developer or licensed contractors.",
   },
   {
-    question: "Can snagging be done after handover?",
-    answer: "Yes, but it's more effective before handover when you have more leverage. Post-handover snagging can still document issues for warranty claims.",
+    question: "Can snagging be done for ready properties?",
+    answer: "Yes. It's especially useful before moving in or renting out to reduce tenant complaints later.",
   },
   {
-    question: "What if access is delayed?",
-    answer: "We'll reschedule the inspection once you have confirmed access. Please provide at least 24 hours notice for any changes.",
+    question: "What if I can't attend the inspection?",
+    answer: "We can proceed if access is granted and you confirm permission.",
   },
   {
-    question: "How do I share the report with the developer?",
-    answer: "The report is delivered in a professional format suitable for developer submission. We provide guidance on how to present it effectively.",
+    question: "How long does it take?",
+    answer: "Depends on unit size and access. The booking confirmation will show the estimated inspection duration.",
+  },
+  {
+    question: "Do you check AC properly?",
+    answer: "We do visible and basic functional checks when possible. Specialized diagnostics require an HVAC specialist.",
+  },
+  {
+    question: "Will snagging delay handover?",
+    answer: "It shouldn't. It supports faster closure when issues are prioritized clearly.",
+  },
+  {
+    question: "Do you provide a re-inspection?",
+    answer: "Yes, as an optional follow-up service to verify closure.",
   },
   {
     question: "Is this included in brokerage services?",
-    answer: "Snagging is a separate service from our standard brokerage advisory. It's available as an add-on service for clients.",
+    answer: "Snagging is a dedicated service with its own process and booking.",
   },
 ];
 
@@ -128,7 +160,7 @@ const Snagging = () => {
     <>
       <SEOHead
         title="Snagging & Handover Inspection | JBJ Global Real Estate"
-        description="Professional snagging inspection services for property handover in Dubai. Comprehensive defect identification, documentation, and follow-up tracking."
+        description="Protect your handover with a structured inspection that documents defects clearly, prioritizes risks, and supports an efficient closure process with the developer."
         canonicalPath="/services/snagging"
       />
 
@@ -161,16 +193,31 @@ const Snagging = () => {
             </h1>
             
             <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-              A structured, documented inspection to identify defects before you accept handover — with clear reporting and follow-up tracking.
+              Protect your handover with a structured inspection that documents defects clearly, prioritizes risks, and supports an efficient closure process with the developer.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <PremiumHeroButton href="/contact?service=snagging">
-                Book a Snagging Request
+                Book Snagging Request
               </PremiumHeroButton>
               <PremiumHeroButton href="/contact">
                 Ask a Question
               </PremiumHeroButton>
+            </div>
+
+            {/* Hero Video Placeholder */}
+            <div className="max-w-xl mx-auto">
+              <div className="relative rounded-xl overflow-hidden border border-gold/30 bg-black/50 backdrop-blur-sm">
+                <div className="aspect-video flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gold/20 flex items-center justify-center">
+                      <Play className="w-8 h-8 text-gold" />
+                    </div>
+                    <p className="text-gold text-sm font-medium">How Snagging Protects Your Investment</p>
+                    <p className="text-zinc-500 text-xs mt-1">Video Coming Soon</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>
@@ -186,7 +233,7 @@ const Snagging = () => {
         </motion.div>
       </section>
 
-      {/* WHAT THIS SERVICE COVERS */}
+      {/* WHAT THIS SERVICE IS */}
       <section className="bg-black py-20">
         <div className="jj-layer-2">
           <motion.div
@@ -201,23 +248,18 @@ const Snagging = () => {
               className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              What This Service Covers
+              What This Service Is
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <ul className="space-y-4">
-                {whatItCovers.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-zinc-700">
-                    <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
+              <p className="text-zinc-700 leading-relaxed text-center">
+                Snagging is a professional inspection conducted before (or during) handover to identify workmanship defects, incomplete items, and functional issues. The outcome is a structured report designed to help you communicate clearly with the developer and track closure.
+              </p>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* WHO THIS IS FOR */}
+      {/* WHAT WE INSPECT */}
       <section className="bg-black py-20">
         <div className="jj-layer-2">
           <motion.div
@@ -231,21 +273,52 @@ const Snagging = () => {
               className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Who This Is For
+              What We Inspect
             </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              {whoIsFor.map((item, index) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+              {inspectionAreas.map((area, index) => (
                 <motion.div key={index} variants={fadeInUp}>
-                  <div className="h-full jj-card-inner text-center">
-                    <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-black flex items-center justify-center">
-                      <item.icon className="w-7 h-7 text-gold" />
+                  <div className="h-full jj-card-inner">
+                    <div className="w-12 h-12 mb-4 rounded-xl bg-black flex items-center justify-center">
+                      <area.icon className="w-6 h-6 text-gold" />
                     </div>
-                    <h3 className="font-semibold text-black mb-2">{item.title}</h3>
-                    <p className="text-sm text-zinc-600">{item.description}</p>
+                    <h3 className="font-semibold text-black mb-2">{area.title}</h3>
+                    <p className="text-sm text-zinc-600">{area.items}</p>
                   </div>
                 </motion.div>
               ))}
             </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* WHAT YOU RECEIVE */}
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="max-w-4xl mx-auto"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              What You Receive
+            </motion.h2>
+            <motion.div variants={fadeInUp} className="jj-card-inner">
+              <ul className="space-y-4">
+                {deliverables.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-3 text-zinc-700">
+                    <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -274,16 +347,17 @@ const Snagging = () => {
                     <motion.div
                       key={index}
                       variants={fadeInUp}
-                      className="flex items-center gap-6"
+                      className="flex items-start gap-6"
                     >
                       <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center shrink-0 z-10 border-2 border-gold">
                         <span className="text-gold font-bold">{step.step}</span>
                       </div>
                       <div className="flex-1 jj-card-inner !p-4">
-                        <div className="flex items-center gap-4">
-                          <step.icon className="w-6 h-6 text-gold shrink-0" />
+                        <div className="flex items-center gap-4 mb-1">
+                          <step.icon className="w-5 h-5 text-gold shrink-0" />
                           <span className="font-semibold text-black">{step.title}</span>
                         </div>
+                        <p className="text-sm text-zinc-600 ml-9">{step.description}</p>
                       </div>
                     </motion.div>
                   ))}
@@ -294,7 +368,7 @@ const Snagging = () => {
         </div>
       </section>
 
-      {/* DELIVERABLES */}
+      {/* WHEN TO BOOK */}
       <section className="bg-black py-20">
         <div className="jj-layer-2">
           <motion.div
@@ -309,44 +383,15 @@ const Snagging = () => {
               className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Deliverables
+              When to Book
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {deliverables.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-zinc-700">
-                    <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* TIMELINE */}
-      <section className="bg-black py-20">
-        <div className="jj-layer-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="max-w-4xl mx-auto text-center"
-          >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black mb-8"
-              style={{ fontFamily: "Playfair Display, serif" }}
-            >
-              Timeline
-            </motion.h2>
-            <motion.div variants={fadeInUp} className="jj-card-inner">
-              <div className="flex items-center justify-center gap-4">
-                <Clock className="w-8 h-8 text-gold" />
-                <p className="text-zinc-700">
-                  Standard turnaround: inspection + report delivery timeline displayed after booking based on unit size and access.
+              <div className="space-y-4 text-zinc-700">
+                <p>
+                  <strong className="text-black">Best timing:</strong> Immediately when you receive handover notice or access confirmation.
+                </p>
+                <p>
+                  If handover is already completed, snagging can still be used to document issues for structured follow-up.
                 </p>
               </div>
             </motion.div>
@@ -354,7 +399,7 @@ const Snagging = () => {
         </div>
       </section>
 
-      {/* REQUIREMENTS */}
+      {/* OWNER READINESS CHECKLIST */}
       <section className="bg-black py-20">
         <div className="jj-layer-2">
           <motion.div
@@ -369,17 +414,46 @@ const Snagging = () => {
               className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Requirements
+              Owner Readiness Checklist
             </motion.h2>
+            <motion.p variants={fadeInUp} className="text-center text-zinc-600 mb-6">
+              Before we arrive, prepare:
+            </motion.p>
             <motion.div variants={fadeInUp} className="jj-card-inner">
               <ul className="space-y-4">
-                {requirements.map((item, idx) => (
+                {readinessChecklist.map((item, idx) => (
                   <li key={idx} className="flex items-start gap-3 text-zinc-700">
-                    <FileText className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+                    <ClipboardList className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* SERVICE BOUNDARIES */}
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="max-w-4xl mx-auto"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              Service Boundaries
+            </motion.h2>
+            <motion.div variants={fadeInUp} className="jj-card-inner border-l-4 border-l-gold">
+              <p className="text-zinc-700 leading-relaxed">
+                This service focuses on inspection and documentation. Any repairs, remedial works, or technical testing beyond visible/functional checks are handled by the developer/contractors or specialized providers.
+              </p>
             </motion.div>
           </motion.div>
         </div>
@@ -445,7 +519,7 @@ const Snagging = () => {
               Book Your Snagging Request
             </motion.h2>
             <motion.p variants={fadeInUp} className="text-zinc-600 mb-8">
-              Get a comprehensive inspection before accepting handover.
+              Submit your unit details and preferred timeline. We'll confirm the schedule and inspection plan.
             </motion.p>
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button variant="primary" size="lg" asChild>
@@ -464,7 +538,9 @@ const Snagging = () => {
         </div>
       </section>
 
+      {/* Direct Contact CTA */}
       <DirectContactCTA />
+
       <Footer />
     </>
   );
