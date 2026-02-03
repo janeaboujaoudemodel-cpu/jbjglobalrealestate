@@ -165,15 +165,17 @@ const MortgageCalculator = ({
                 onChange={(e) => setPropertyPrice(parseFormattedNumber(e.target.value))}
                 className="bg-background border-border text-foreground focus:border-gold"
               />
-              <Slider
-                value={[propertyPrice]}
-                onValueChange={([value]) => setPropertyPrice(value)}
-                min={500000}
-                max={50000000}
-                step={100000}
-                className="py-2"
-              />
-              <div className="flex justify-between text-xs text-muted-foreground">
+              <div className="py-4">
+                <Slider
+                  value={[propertyPrice]}
+                  onValueChange={([value]) => setPropertyPrice(value)}
+                  min={500000}
+                  max={50000000}
+                  step={100000}
+                  className="w-full"
+                />
+              </div>
+              <div className="flex justify-between text-xs text-muted-foreground -mt-1">
                 <span>AED 500K</span>
                 <span>AED 50M</span>
               </div>
@@ -198,15 +200,17 @@ const MortgageCalculator = ({
                 </Label>
                 <span className="text-gold font-semibold">{downPaymentPercent}%</span>
               </div>
-              <Slider
-                value={[downPaymentPercent]}
-                onValueChange={([value]) => setDownPaymentPercent(value)}
-                min={5}
-                max={80}
-                step={5}
-                className="py-2"
-              />
-              <div className="flex justify-between text-xs text-muted-foreground">
+              <div className="py-4">
+                <Slider
+                  value={[downPaymentPercent]}
+                  onValueChange={([value]) => setDownPaymentPercent(value)}
+                  min={5}
+                  max={80}
+                  step={5}
+                  className="w-full"
+                />
+              </div>
+              <div className="flex justify-between text-xs text-muted-foreground -mt-1">
                 <span>5%</span>
                 <span>{formatCurrency(calculations.downPayment)}</span>
                 <span>80%</span>
@@ -222,15 +226,17 @@ const MortgageCalculator = ({
                 </Label>
                 <span className="text-gold font-semibold">{interestRate}%</span>
               </div>
-              <Slider
-                value={[interestRate]}
-                onValueChange={([value]) => setInterestRate(value)}
-                min={2}
-                max={10}
-                step={0.25}
-                className="py-2"
-              />
-              <div className="flex justify-between text-xs text-muted-foreground">
+              <div className="py-4">
+                <Slider
+                  value={[interestRate]}
+                  onValueChange={([value]) => setInterestRate(value)}
+                  min={2}
+                  max={10}
+                  step={0.25}
+                  className="w-full"
+                />
+              </div>
+              <div className="flex justify-between text-xs text-muted-foreground -mt-1">
                 <span>2%</span>
                 <span>10%</span>
               </div>
@@ -245,15 +251,17 @@ const MortgageCalculator = ({
                 </Label>
                 <span className="text-gold font-semibold">{loanTermYears} Years</span>
               </div>
-              <Slider
-                value={[loanTermYears]}
-                onValueChange={([value]) => setLoanTermYears(value)}
-                min={5}
-                max={30}
-                step={5}
-                className="py-2"
-              />
-              <div className="flex justify-between text-xs text-muted-foreground">
+              <div className="py-4">
+                <Slider
+                  value={[loanTermYears]}
+                  onValueChange={([value]) => setLoanTermYears(value)}
+                  min={5}
+                  max={30}
+                  step={5}
+                  className="w-full"
+                />
+              </div>
+              <div className="flex justify-between text-xs text-muted-foreground -mt-1">
                 <span>5 Years</span>
                 <span>30 Years</span>
               </div>
