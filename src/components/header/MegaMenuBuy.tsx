@@ -57,7 +57,9 @@ const MegaMenuBuy = React.forwardRef<HTMLDivElement, MegaMenuBuyProps>(({ onClos
                       compact
                     />
                   ))}
-                  {/* See All - emphasized */}
+                </div>
+                {/* See All - emphasized - outside the compact list for proper spacing */}
+                <div className="mt-3">
                   <MegaMenuIconLink
                     to="/properties?transaction=buy"
                     onClick={onClose}

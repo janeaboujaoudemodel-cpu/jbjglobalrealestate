@@ -12,202 +12,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import type { Listing } from "@/types/blueprint";
 
-// Sample featured listings data - in production this would come from API/database
-const sampleListings: Listing[] = [
-  {
-    id: "1",
-    status: "available",
-    purpose: "buy",
-    title: "Luxury 3BR Apartment in Downtown Dubai",
-    description: "Stunning views of Burj Khalifa with modern finishes",
-    price: 3500000,
-    currency: "AED",
-    location: { area: "Downtown Dubai", community: "Boulevard Point", address: "", lat: 25.1972, lng: 55.2744 },
-    propertyType: "apartment",
-    bedrooms: 3,
-    bathrooms: 4,
-    sizeSqFt: 2150,
-    images: ["https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800"],
-    videoUrl: null,
-    virtualTourUrl: null,
-    amenities: ["Pool", "Gym", "Parking"],
-    developer: "Emaar",
-    projectName: "Boulevard Point",
-    agent: { id: "a1", name: "Sarah Johnson", photoUrl: "", phone: CONTACT_INFO.phoneRaw, whatsapp: CONTACT_INFO.whatsappNumber, email: CONTACT_INFO.email, languages: ["English", "Arabic"] },
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    referenceCode: "JBJ-DT-001",
-  },
-  {
-    id: "2",
-    status: "available",
-    purpose: "buy",
-    title: "5BR Villa with Private Pool in Emirates Hills",
-    description: "Exclusive golf course views with premium finishes",
-    price: 18500000,
-    currency: "AED",
-    location: { area: "Emirates Hills", community: "Sector E", address: "", lat: 25.0657, lng: 55.1713 },
-    propertyType: "villa",
-    bedrooms: 5,
-    bathrooms: 6,
-    sizeSqFt: 8500,
-    images: ["https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800"],
-    videoUrl: null,
-    virtualTourUrl: null,
-    amenities: ["Private Pool", "Garden", "Maid's Room"],
-    developer: null,
-    projectName: null,
-    agent: { id: "a1", name: "Sarah Johnson", photoUrl: "", phone: CONTACT_INFO.phoneRaw, whatsapp: CONTACT_INFO.whatsappNumber, email: CONTACT_INFO.email, languages: ["English", "Arabic"] },
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    referenceCode: "JBJ-EH-002",
-  },
-  {
-    id: "3",
-    status: "available",
-    purpose: "buy",
-    title: "2BR Marina View Apartment",
-    description: "Modern apartment with stunning marina views",
-    price: 2200000,
-    currency: "AED",
-    location: { area: "Dubai Marina", community: "Marina Gate", address: "", lat: 25.0805, lng: 55.1403 },
-    propertyType: "apartment",
-    bedrooms: 2,
-    bathrooms: 3,
-    sizeSqFt: 1450,
-    images: ["https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800"],
-    videoUrl: null,
-    virtualTourUrl: null,
-    amenities: ["Pool", "Gym", "Concierge"],
-    developer: "Select Group",
-    projectName: "Marina Gate",
-    agent: { id: "a1", name: "Sarah Johnson", photoUrl: "", phone: CONTACT_INFO.phoneRaw, whatsapp: CONTACT_INFO.whatsappNumber, email: CONTACT_INFO.email, languages: ["English", "Arabic"] },
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    referenceCode: "JBJ-DM-003",
-  },
-  {
-    id: "4",
-    status: "available",
-    purpose: "buy",
-    title: "4BR Townhouse in Arabian Ranches",
-    description: "Family-friendly community with excellent amenities",
-    price: 4800000,
-    currency: "AED",
-    location: { area: "Arabian Ranches", community: "Samara", address: "", lat: 25.0486, lng: 55.2614 },
-    propertyType: "townhouse",
-    bedrooms: 4,
-    bathrooms: 5,
-    sizeSqFt: 3200,
-    images: ["https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800"],
-    videoUrl: null,
-    virtualTourUrl: null,
-    amenities: ["Garden", "Parking", "Community Pool"],
-    developer: "Emaar",
-    projectName: "Samara",
-    agent: { id: "a1", name: "Sarah Johnson", photoUrl: "", phone: CONTACT_INFO.phoneRaw, whatsapp: CONTACT_INFO.whatsappNumber, email: CONTACT_INFO.email, languages: ["English", "Arabic"] },
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    referenceCode: "JBJ-AR-004",
-  },
-  // Rental listings
-  {
-    id: "5",
-    status: "available",
-    purpose: "rent",
-    title: "1BR Furnished Apartment in JBR",
-    description: "Beach access with full sea views",
-    price: 120000,
-    currency: "AED",
-    location: { area: "JBR", community: "Rimal", address: "", lat: 25.0772, lng: 55.1323 },
-    propertyType: "apartment",
-    bedrooms: 1,
-    bathrooms: 2,
-    sizeSqFt: 850,
-    images: ["https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800"],
-    videoUrl: null,
-    virtualTourUrl: null,
-    amenities: ["Beach Access", "Pool", "Gym"],
-    developer: "Meraas",
-    projectName: "Rimal",
-    agent: { id: "a1", name: "Sarah Johnson", photoUrl: "", phone: CONTACT_INFO.phoneRaw, whatsapp: CONTACT_INFO.whatsappNumber, email: CONTACT_INFO.email, languages: ["English", "Arabic"] },
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    referenceCode: "JBJ-JBR-005",
-  },
-  {
-    id: "6",
-    status: "available",
-    purpose: "rent",
-    title: "2BR Apartment in Business Bay",
-    description: "Modern apartment with canal views",
-    price: 95000,
-    currency: "AED",
-    location: { area: "Business Bay", community: "Bay Square", address: "", lat: 25.1844, lng: 55.2639 },
-    propertyType: "apartment",
-    bedrooms: 2,
-    bathrooms: 2,
-    sizeSqFt: 1200,
-    images: ["https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800"],
-    videoUrl: null,
-    virtualTourUrl: null,
-    amenities: ["Pool", "Gym", "Parking"],
-    developer: null,
-    projectName: "Bay Square",
-    agent: { id: "a1", name: "Sarah Johnson", photoUrl: "", phone: CONTACT_INFO.phoneRaw, whatsapp: CONTACT_INFO.whatsappNumber, email: CONTACT_INFO.email, languages: ["English", "Arabic"] },
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    referenceCode: "JBJ-BB-006",
-  },
-  {
-    id: "7",
-    status: "available",
-    purpose: "rent",
-    title: "3BR Villa in Jumeirah",
-    description: "Private garden with modern interiors",
-    price: 280000,
-    currency: "AED",
-    location: { area: "Jumeirah", community: "Jumeirah 2", address: "", lat: 25.2145, lng: 55.2539 },
-    propertyType: "villa",
-    bedrooms: 3,
-    bathrooms: 4,
-    sizeSqFt: 3500,
-    images: ["https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800"],
-    videoUrl: null,
-    virtualTourUrl: null,
-    amenities: ["Private Garden", "Parking", "Maid's Room"],
-    developer: null,
-    projectName: null,
-    agent: { id: "a1", name: "Sarah Johnson", photoUrl: "", phone: CONTACT_INFO.phoneRaw, whatsapp: CONTACT_INFO.whatsappNumber, email: CONTACT_INFO.email, languages: ["English", "Arabic"] },
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    referenceCode: "JBJ-JUM-007",
-  },
-  {
-    id: "8",
-    status: "available",
-    purpose: "rent",
-    title: "Studio in Dubai Hills",
-    description: "Brand new with park views",
-    price: 55000,
-    currency: "AED",
-    location: { area: "Dubai Hills", community: "Collective", address: "", lat: 25.1018, lng: 55.2392 },
-    propertyType: "apartment",
-    bedrooms: 0,
-    bathrooms: 1,
-    sizeSqFt: 450,
-    images: ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800"],
-    videoUrl: null,
-    virtualTourUrl: null,
-    amenities: ["Pool", "Gym", "Retail"],
-    developer: "Emaar",
-    projectName: "Collective",
-    agent: { id: "a1", name: "Sarah Johnson", photoUrl: "", phone: CONTACT_INFO.phoneRaw, whatsapp: CONTACT_INFO.whatsappNumber, email: CONTACT_INFO.email, languages: ["English", "Arabic"] },
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    referenceCode: "JBJ-DH-008",
-  },
-];
+// Empty listings array - no fake data, will be populated from database
+const sampleListings: Listing[] = [];
 
 const formatPrice = (price: number, purpose: 'buy' | 'rent'): string => {
   if (price >= 1000000) {
@@ -326,6 +132,7 @@ const FeaturedListings = () => {
   const { t } = useLanguage();
 
   const filteredListings = sampleListings.filter(l => l.purpose === activeTab).slice(0, 4);
+  const hasListings = filteredListings.length > 0;
 
   return (
     <section className="py-16 md:py-24 bg-black">
@@ -370,7 +177,7 @@ const FeaturedListings = () => {
           </button>
         </div>
 
-        {/* Listings Grid */}
+        {/* Listings Grid or Empty State */}
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -380,9 +187,30 @@ const FeaturedListings = () => {
             transition={{ duration: 0.3 }}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
           >
-            {filteredListings.map((listing) => (
-              <ListingCard key={listing.id} listing={listing} />
-            ))}
+            {hasListings ? (
+              filteredListings.map((listing) => (
+                <ListingCard key={listing.id} listing={listing} />
+              ))
+            ) : (
+              // Empty placeholder cards
+              [1, 2, 3, 4].map((i) => (
+                <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl overflow-hidden border-2 border-gold/20 border-dashed">
+                  <div className="aspect-[4/3] bg-gradient-to-br from-gold/5 to-gold/10 flex items-center justify-center">
+                    <Home className="w-10 h-10 text-gold/30" />
+                  </div>
+                  <div className="p-4">
+                    <div className="h-3 bg-gold/10 rounded w-2/3 mb-3" />
+                    <div className="h-4 bg-gold/10 rounded w-full mb-2" />
+                    <div className="h-4 bg-gold/10 rounded w-3/4 mb-4" />
+                    <div className="flex gap-3">
+                      <div className="h-3 bg-gold/10 rounded w-16" />
+                      <div className="h-3 bg-gold/10 rounded w-16" />
+                    </div>
+                    <p className="text-xs text-zinc-500 mt-4 text-center">Listings coming soon</p>
+                  </div>
+                </div>
+              ))
+            )}
           </motion.div>
         </AnimatePresence>
 

@@ -3,7 +3,7 @@ import {
   UserCircle, Briefcase, GraduationCap, FolderOpen, 
   ClipboardCheck, Users, Award
 } from 'lucide-react';
-import menuOffplanProject from '@/assets/menu-offplan-project.jpg';
+import brokerHubHero from '@/assets/broker-hub-hero.jpg';
 import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle } from '@/components/header/mega-menu-primitives';
 
 interface MegaMenuBrokerHubProps {
@@ -32,7 +32,7 @@ const MegaMenuBrokerHub = React.forwardRef<HTMLDivElement, MegaMenuBrokerHubProp
             <MegaMenuFeaturedCard
               to="/broker-dashboard"
               onClick={onClose}
-              image={menuOffplanProject}
+              image={brokerHubHero}
               kicker="BROKER HUB"
               title="Your Broker Dashboard"
               description="Access tools, education, and resources for brokers"

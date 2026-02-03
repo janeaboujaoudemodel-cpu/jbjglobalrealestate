@@ -55,7 +55,9 @@ const MegaMenuRent = React.forwardRef<HTMLDivElement, MegaMenuRentProps>(({ onCl
                       compact
                     />
                   ))}
-                  {/* See All - emphasized */}
+                </div>
+                {/* See All - emphasized - outside the compact list for proper spacing */}
+                <div className="mt-3">
                   <MegaMenuIconLink
                     to="/properties?transaction=rent"
                     onClick={onClose}
