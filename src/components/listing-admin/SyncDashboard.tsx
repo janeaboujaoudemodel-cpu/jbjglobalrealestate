@@ -923,8 +923,21 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
         lastPending = pending;
       }
 
-      setRebuildResult({ queued_for_scraping: pending });
-      toast.success(`Queue rebuilt (now ${pending.toLocaleString()} pending)`);
+      const finalPending = await getPendingCount();
+      const totalDiscovered = rebuildResult?.discovered_urls ?? finalPending;
+      
+      setRebuildResult({ 
+        discovered_urls: totalDiscovered,
+        queued_for_scraping: finalPending,
+        new_urls: finalPending - pending, // How many were actually added
+        existing_urls: totalDiscovered - (finalPending - pending),
+      });
+      
+      // Clear, unambiguous toast - never say "cleared"
+      toast.success(
+        `Rebuild complete: ${finalPending.toLocaleString()} items now in queue` +
+        (finalPending > pending ? ` (+${(finalPending - pending).toLocaleString()} new)` : "")
+      );
     } catch (e: any) {
       console.error("Rebuild queue failed:", e);
       toast.error(e?.message || "Failed to rebuild queue");

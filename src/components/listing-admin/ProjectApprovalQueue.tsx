@@ -848,7 +848,10 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
               Listing Inventory
             </CardTitle>
             <p className="text-sm text-muted-foreground mt-1">
-              Target: 1,336 · In Queue: {totalCount ?? imports.length} · Loaded: {imports.length}
+              <span className="font-medium">Showing {imports.length.toLocaleString()}</span> of <span className="font-bold text-foreground">{(totalCount ?? imports.length).toLocaleString()}</span> pending
+              {(totalCount ?? 0) > imports.length && (
+                <span className="text-amber-600 ml-2">• Scroll down for "Load More"</span>
+              )}
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -1053,22 +1056,32 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                 ))}
               </div>
 
+              {/* Enhanced Load More section */}
               {hasMore && (
-                <div className="mt-6 flex items-center justify-center">
+                <div className="mt-8 flex flex-col items-center justify-center gap-2 py-4 border-t border-border">
+                  <div className="text-sm text-muted-foreground font-medium">
+                    Showing {imports.length.toLocaleString()} of {(totalCount ?? imports.length).toLocaleString()} listings
+                  </div>
                   <Button
-                    variant="outline"
+                    size="lg"
                     onClick={() => fetchPendingImports({ reset: false })}
                     disabled={isLoadingMore || isBulkProcessing}
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground px-8"
                   >
                     {isLoadingMore ? (
                       <>
                         <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                        Loading…
+                        Loading more…
                       </>
                     ) : (
-                      <>Load more</>
+                      <>
+                        Load More ({Math.min(PAGE_SIZE, (totalCount ?? 0) - imports.length).toLocaleString()} more)
+                      </>
                     )}
                   </Button>
+                  <div className="text-xs text-muted-foreground">
+                    {((totalCount ?? 0) - imports.length).toLocaleString()} remaining
+                  </div>
                 </div>
               )}
             </div>
