@@ -1,7 +1,8 @@
 import React from 'react';
 import { Building2, Home, Castle, Building, Briefcase, Eye, FileText, Key, Calendar, Shield } from 'lucide-react';
 import menuLuxuryVilla from '@/assets/menu-luxury-villa.jpg';
-import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle, MegaMenuSectionDivider } from '@/components/header/mega-menu-primitives';
+import dubaiRentalVideo from '@/assets/videos/dubai-rental-hero.mp4';
+import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
 
 interface MegaMenuRentProps {
   onClose: () => void;
@@ -32,6 +33,7 @@ const MegaMenuRent = React.forwardRef<HTMLDivElement, MegaMenuRentProps>(({ onCl
               to="/properties?transaction=rent"
               onClick={onClose}
               image={menuLuxuryVilla}
+              video={dubaiRentalVideo}
               kicker="RENT"
               title="Properties for Rent"
               description="Find your perfect rental home in Dubai's finest communities"
@@ -41,10 +43,9 @@ const MegaMenuRent = React.forwardRef<HTMLDivElement, MegaMenuRentProps>(({ onCl
 
           <div className="lg:col-span-6 lg:border-l lg:border-gold/30 lg:pl-10">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Column 1: Properties by Type - ALIGNED with matching min-height */}
+              {/* Column 1: Properties by Type */}
               <div className="relative flex flex-col">
                 <MegaMenuSectionTitle icon={Building2} title="Properties by Type" />
-                {/* ALIGNED: Same min-height as Renter Resources for aligned dividers */}
                 <div className="space-y-1 min-h-[180px]">
                   {propertyTypes.map((item) => (
                     <MegaMenuIconLink
@@ -57,25 +58,13 @@ const MegaMenuRent = React.forwardRef<HTMLDivElement, MegaMenuRentProps>(({ onCl
                     />
                   ))}
                 </div>
-                {/* See All - emphasized - outside the compact list for proper spacing */}
-                <div className="mt-3">
-                  <MegaMenuIconLink
-                    to="/properties?transaction=rent"
-                    onClick={onClose}
-                    icon={Eye}
-                    title="See All Rentals"
-                    compact
-                    emphasis
-                  />
-                </div>
                 {/* Vertical divider between columns */}
                 <div className="hidden sm:block absolute top-0 -right-3 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
               </div>
 
-              {/* Column 2: Renter Resources - ALIGNED with matching min-height */}
+              {/* Column 2: Renter Resources */}
               <div className="flex flex-col">
                 <MegaMenuSectionTitle icon={FileText} title="Renter Resources" />
-                {/* ALIGNED: Same min-height as Properties column for aligned dividers */}
                 <div className="space-y-1 min-h-[180px]">
                   {renterResources.map((item) => (
                     <MegaMenuIconLink
@@ -89,6 +78,16 @@ const MegaMenuRent = React.forwardRef<HTMLDivElement, MegaMenuRentProps>(({ onCl
                   ))}
                 </div>
               </div>
+            </div>
+            
+            {/* Full-width CTA Button at bottom */}
+            <div className="mt-6">
+              <MegaMenuCTAButton
+                to="/properties?transaction=rent"
+                onClick={onClose}
+                icon={Eye}
+                title="See All Rentals"
+              />
             </div>
           </div>
         </div>

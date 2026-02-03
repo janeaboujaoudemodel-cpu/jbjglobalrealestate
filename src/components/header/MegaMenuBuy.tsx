@@ -1,7 +1,8 @@
 import React from 'react';
 import { Building2, Home, Castle, Building, Briefcase, Eye, FileText, Calculator, Wrench, Star } from 'lucide-react';
 import menuLuxuryPenthouse from '@/assets/menu-luxury-penthouse.jpg';
-import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle, MegaMenuSectionDivider } from '@/components/header/mega-menu-primitives';
+import dubaiBuyingVideo from '@/assets/videos/dubai-buying-hero.mp4';
+import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
 
 interface MegaMenuBuyProps {
   onClose: () => void;
@@ -27,12 +28,13 @@ const MegaMenuBuy = React.forwardRef<HTMLDivElement, MegaMenuBuyProps>(({ onClos
     <MegaMenuShell ref={ref}>
       <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-8 lg:py-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left: Featured Photo (larger + rectangular) */}
+          {/* Left: Featured Photo with Video on Hover */}
           <div className="lg:col-span-6">
             <MegaMenuFeaturedCard
               to="/properties?transaction=buy"
               onClick={onClose}
               image={menuLuxuryPenthouse}
+              video={dubaiBuyingVideo}
               kicker="BUY"
               title="Properties for Sale"
               description="Discover luxury homes and investment opportunities in Dubai"
@@ -43,10 +45,9 @@ const MegaMenuBuy = React.forwardRef<HTMLDivElement, MegaMenuBuyProps>(({ onClos
           {/* Right: Links (with divider) */}
           <div className="lg:col-span-6 lg:border-l lg:border-gold/30 lg:pl-10">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Column 1: Properties by Type - ALIGNED with matching min-height */}
+              {/* Column 1: Properties by Type */}
               <div className="relative flex flex-col">
                 <MegaMenuSectionTitle icon={Building2} title="Properties by Type" />
-                {/* ALIGNED: Same min-height as Buyer Resources for aligned dividers */}
                 <div className="space-y-1 min-h-[180px]">
                   {propertyTypes.map((item) => (
                     <MegaMenuIconLink
@@ -59,25 +60,13 @@ const MegaMenuBuy = React.forwardRef<HTMLDivElement, MegaMenuBuyProps>(({ onClos
                     />
                   ))}
                 </div>
-                {/* See All - emphasized - outside the compact list for proper spacing */}
-                <div className="mt-3">
-                  <MegaMenuIconLink
-                    to="/properties?transaction=buy"
-                    onClick={onClose}
-                    icon={Eye}
-                    title="See All Properties"
-                    compact
-                    emphasis
-                  />
-                </div>
                 {/* Vertical divider between columns */}
                 <div className="hidden sm:block absolute top-0 -right-3 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
               </div>
 
-              {/* Column 2: Buyer Resources - ALIGNED with matching min-height */}
+              {/* Column 2: Buyer Resources */}
               <div className="flex flex-col">
                 <MegaMenuSectionTitle icon={FileText} title="Buyer Resources" />
-                {/* ALIGNED: Same min-height as Properties column for aligned dividers */}
                 <div className="space-y-1 min-h-[180px]">
                   {buyerResources.map((item) => (
                     <MegaMenuIconLink
@@ -91,6 +80,16 @@ const MegaMenuBuy = React.forwardRef<HTMLDivElement, MegaMenuBuyProps>(({ onClos
                   ))}
                 </div>
               </div>
+            </div>
+            
+            {/* Full-width CTA Button at bottom */}
+            <div className="mt-6">
+              <MegaMenuCTAButton
+                to="/properties?transaction=buy"
+                onClick={onClose}
+                icon={Eye}
+                title="See All Properties"
+              />
             </div>
           </div>
         </div>

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Building2, Calendar, Check, Sparkles, Eye } from 'lucide-react';
 import menuOffplanProject from '@/assets/menu-offplan-project.jpg';
-import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle } from '@/components/header/mega-menu-primitives';
+import dubaiLandmarksVideo from '@/assets/videos/dubai-landmarks-hero.mp4';
+import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
 
 interface MegaMenuProjectsProps {
   onClose: () => void;
@@ -19,12 +20,13 @@ const MegaMenuProjects = React.forwardRef<HTMLDivElement, MegaMenuProjectsProps>
     <MegaMenuShell ref={ref}>
       <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-10 lg:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left: Single, larger rectangular photo */}
+          {/* Left: Single, larger rectangular photo with video */}
           <div className="lg:col-span-6">
             <MegaMenuFeaturedCard
               to="/properties"
               onClick={onClose}
               image={menuOffplanProject}
+              video={dubaiLandmarksVideo}
               kicker="PROJECTS"
               title="Dubai Off-Plan Projects"
               description="Invest in Dubai's most promising developments"
@@ -36,7 +38,7 @@ const MegaMenuProjects = React.forwardRef<HTMLDivElement, MegaMenuProjectsProps>
           <div className="lg:col-span-6 lg:border-l lg:border-gold/30 lg:pl-10">
             <MegaMenuSectionTitle icon={Building2} title="Project Categories" />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
-              {projectCategories.slice(0, -1).map((item) => (
+              {projectCategories.map((item) => (
                 <MegaMenuIconLink
                   key={item.label}
                   to={item.href}
@@ -47,15 +49,13 @@ const MegaMenuProjects = React.forwardRef<HTMLDivElement, MegaMenuProjectsProps>
                 />
               ))}
             </div>
-            {/* View All - emphasized */}
-            <div className="mt-3">
-              <MegaMenuIconLink
+            {/* Full-width CTA Button */}
+            <div className="mt-6">
+              <MegaMenuCTAButton
                 to="/properties"
                 onClick={onClose}
                 icon={Eye}
                 title="View All Projects"
-                compact
-                emphasis
               />
             </div>
           </div>

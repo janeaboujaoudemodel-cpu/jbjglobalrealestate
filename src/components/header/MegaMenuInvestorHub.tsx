@@ -4,7 +4,8 @@ import {
   BarChart3, Calculator, PieChart
 } from 'lucide-react';
 import menuDubaiSkyline from '@/assets/menu-dubai-skyline.jpg';
-import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle } from '@/components/header/mega-menu-primitives';
+import dubaiInvestmentVideo from '@/assets/videos/dubai-investment-hero.mp4';
+import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
 
 interface MegaMenuInvestorHubProps {
   onClose: () => void;
@@ -33,6 +34,7 @@ const MegaMenuInvestorHub = React.forwardRef<HTMLDivElement, MegaMenuInvestorHub
               to="/my-account"
               onClick={onClose}
               image={menuDubaiSkyline}
+              video={dubaiInvestmentVideo}
               kicker="INVESTOR HUB"
               title="Your Investment Dashboard"
               description="Access tools, track properties, and monitor your portfolio"
@@ -42,10 +44,9 @@ const MegaMenuInvestorHub = React.forwardRef<HTMLDivElement, MegaMenuInvestorHub
 
           <div className="lg:col-span-6 lg:border-l lg:border-gold/30 lg:pl-10">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-              {/* Column 1: Dashboard & Portfolio - ALIGNED with matching min-height */}
+              {/* Column 1: Dashboard & Portfolio */}
               <div className="relative flex flex-col">
                 <MegaMenuSectionTitle icon={TrendingUp} title="Dashboard & Portfolio" />
-                {/* ALIGNED: Same min-height as Investor Tools column for aligned dividers */}
                 <div className="space-y-1 min-h-[160px]">
                   {dashboardLinks.map((item) => (
                     <MegaMenuIconLink
@@ -63,10 +64,9 @@ const MegaMenuInvestorHub = React.forwardRef<HTMLDivElement, MegaMenuInvestorHub
                 <div className="hidden sm:block absolute top-0 -right-4 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
               </div>
 
-              {/* Column 2: Investor Tools - ALIGNED with matching min-height */}
+              {/* Column 2: Investor Tools */}
               <div className="flex flex-col">
                 <MegaMenuSectionTitle icon={Briefcase} title="Investor Tools" />
-                {/* ALIGNED: Same min-height as Dashboard column for aligned dividers */}
                 <div className="space-y-1 min-h-[160px]">
                   {toolsLinks.map((item) => (
                     <MegaMenuIconLink
@@ -80,6 +80,16 @@ const MegaMenuInvestorHub = React.forwardRef<HTMLDivElement, MegaMenuInvestorHub
                   ))}
                 </div>
               </div>
+            </div>
+            
+            {/* Full-width CTA Button at bottom */}
+            <div className="mt-6">
+              <MegaMenuCTAButton
+                to="/my-account"
+                onClick={onClose}
+                icon={UserCircle}
+                title="Go to Dashboard"
+              />
             </div>
           </div>
         </div>

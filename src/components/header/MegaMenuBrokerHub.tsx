@@ -4,7 +4,8 @@ import {
   ClipboardCheck, Users, Award
 } from 'lucide-react';
 import brokerHubHero from '@/assets/broker-hub-hero.jpg';
-import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle } from '@/components/header/mega-menu-primitives';
+import brokerDashboardVideo from '@/assets/videos/broker-dashboard-hero.mp4';
+import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
 
 interface MegaMenuBrokerHubProps {
   onClose: () => void;
@@ -33,6 +34,7 @@ const MegaMenuBrokerHub = React.forwardRef<HTMLDivElement, MegaMenuBrokerHubProp
               to="/broker-dashboard"
               onClick={onClose}
               image={brokerHubHero}
+              video={brokerDashboardVideo}
               kicker="BROKER HUB"
               title="Your Broker Dashboard"
               description="Access tools, education, and resources for brokers"
@@ -42,10 +44,9 @@ const MegaMenuBrokerHub = React.forwardRef<HTMLDivElement, MegaMenuBrokerHubProp
 
           <div className="lg:col-span-6 lg:border-l lg:border-gold/30 lg:pl-10">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-              {/* Column 1: Dashboard & Tools - ALIGNED with matching min-height */}
+              {/* Column 1: Dashboard & Tools */}
               <div className="relative flex flex-col">
                 <MegaMenuSectionTitle icon={Briefcase} title="Dashboard & Tools" />
-                {/* ALIGNED: Same min-height as Education column for aligned dividers */}
                 <div className="space-y-1 min-h-[160px]">
                   {brokerDashboardLinks.map((item) => (
                     <MegaMenuIconLink
@@ -63,10 +64,9 @@ const MegaMenuBrokerHub = React.forwardRef<HTMLDivElement, MegaMenuBrokerHubProp
                 <div className="hidden sm:block absolute top-0 -right-4 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
               </div>
 
-              {/* Column 2: Education & Resources - ALIGNED with matching min-height */}
+              {/* Column 2: Education & Resources */}
               <div className="flex flex-col">
                 <MegaMenuSectionTitle icon={GraduationCap} title="Education & Resources" />
-                {/* ALIGNED: Same min-height as Dashboard column for aligned dividers */}
                 <div className="space-y-1 min-h-[160px]">
                   {educationLinks.map((item) => (
                     <MegaMenuIconLink
@@ -80,6 +80,16 @@ const MegaMenuBrokerHub = React.forwardRef<HTMLDivElement, MegaMenuBrokerHubProp
                   ))}
                 </div>
               </div>
+            </div>
+            
+            {/* Full-width CTA Button at bottom */}
+            <div className="mt-6">
+              <MegaMenuCTAButton
+                to="/broker-dashboard"
+                onClick={onClose}
+                icon={UserCircle}
+                title="Go to Dashboard"
+              />
             </div>
           </div>
         </div>
