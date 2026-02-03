@@ -1,274 +1,392 @@
 
 
-# Comprehensive Fix: Extraction System & Project Detail Page Institutional Mirroring
+# Comprehensive Fix Plan: Footer, Header, Chat, Digital Card, and Marketing Hub
 
-## Problems Identified
-
-### 1. Extraction Issues (Test Panel shows "Core Incomplete")
-The current extraction fails to capture:
-- **Mirrored Documents**: Brochure/floor plan PDFs not being downloaded
-- **USP Bullets**: Not extracting the 8 unique selling points
-- **Amenities**: Not capturing the 10 amenities (Outdoor Pool, Cinema, etc.)
-- **Location Distances**: Not extracting the 12 distance items (5 min to Dubai Opera, etc.)
-- **FAQs**: Not extracting the 6 FAQ items
-- **Payment Breakdown**: Not capturing 10%/40%/50% structure
-- **Images**: Only extracting some images, missing gallery images
-
-### 2. Project Detail Page Missing Structure
-Current page is missing the exact Provident layout:
-- **Breadcrumb navigation**: Home / All Projects in Dubai / Downtown Dubai / [Project Name]
-- **Hero section order**: Title → Developer link → Download Brochure + Register Interest buttons → Breadcrumb
-- **Sticky nav tabs**: Details, Gallery, Floor Plans, Amenities, Location, Payment Plans, Brochure
-- **CTA sections**: "The best deals are our expertise – register now" section
-- **Newsletter section**: "Stay in the loop" email subscription section
-- **Floor plan types with thumbnails**: Showing floor plan images with download capability
-
-### 3. Test Panel Preview
-- Should show a full preview of the listing as it will appear on the public page
-- Clicking the listing or "more" should navigate to the internal project detail page
+This plan addresses all the UI/UX issues and new feature requests across the footer, header, chat support, digital business card, and the new marketing campaign hub.
 
 ---
 
-## Implementation Plan
+## Part 1: Footer & Header Fixes
 
-### Phase 1: Fix Extraction Logic (Backend)
+### 1.1 Footer Column Alignment (Desktop)
 
-**File: `supabase/functions/_shared/provident/extract.ts`**
+**Issue**: Services and Broker Hub sections are not aligned with Market Intelligence and Careers on the same horizontal line.
 
-The extraction regex patterns need to be fixed to capture all sections from the Provident markdown output:
+**Files to modify**:
+- `src/components/Footer.tsx`
 
-| Section | Current Issue | Fix |
-|---------|--------------|-----|
-| USP Bullets | Looking for `## Unique Selling Points` but content is under `Unique Selling Points` (no ##) | Update regex to match both formats |
-| Amenities | Looking for `## Amenities` but content is inline after the heading | Parse line-by-line after "Amenities" heading |
-| Location Distances | Regex `^-\s+\d+\s+Minutes?` doesn't match Provident format `- 5 Minutes – Dubai Opera` | Fix regex to handle en-dash and em-dash |
-| FAQs | Looking for `## Useful Information` but uses `##` for Q and text for A | Parse Q/A pairs correctly |
-| Payment Breakdown | Pattern expects `(\d+%?)\s*\n+Down Payment` but format is `10%\n\nDown Payment` | Adjust regex to handle double newlines |
+**Changes**:
+- Restructure the 4-column grid layout to ensure divider lines align:
+  - Column 1: Properties + Services
+  - Column 2: Investor Hub + Broker Hub (adjusted height)
+  - Column 3: Guides + Market Intelligence
+  - Column 4: About + Careers
+- Use identical `min-h-[]` values for the top section of each column so the dividers (gold borders) align horizontally
+- Add consistent padding/margin calculations to ensure matching vertical positions
 
-```text
-Specific fixes needed:
+### 1.2 Footer Mobile Readability
 
-1. extractSection() - Make heading detection more flexible:
-   - Accept "## Heading" or just "Heading" followed by newline
-   - Handle multiline content blocks
+**Issue**: Navigation fields not readable on phone view.
 
-2. Amenities extraction:
-   - Current: Looks for `## Amenities` section
-   - Fix: Parse lines between "## Amenities" and next heading
-   - Each non-empty line that's not "All Amenities" is an amenity
+**Changes**:
+- Increase minimum font size from `text-[10px]` to `text-xs` on mobile
+- Add more padding to clickable areas for touch accessibility
+- Ensure sufficient contrast for all text elements
 
-3. USP extraction:
-   - Current: extractSection(markdown, "Unique Selling Points")
-   - Fix: Look for "Unique Selling Points" then parse:
-     - ### headline
-     - - bullet points (8 expected)
+### 1.3 Header Divider Alignment (Investor Hub & Other Dropdowns)
 
-4. Location distances:
-   - Current regex: /^-\s+\d+\s+Minutes?\s+[–-]\s+.+/gim
-   - Source format: "- 5 Minutes – Dubai Opera"
-   - Fix: Match "- N Minutes – Place" with en-dash (–)
+**Issue**: In Investor Hub dropdown, the dividers below "Dashboard & Portfolio" and "Investor Tools" columns are not on the same line.
 
-5. Payment breakdown:
-   - Source format:
-     10%
-     
-     Down Payment
-   - Fix regex to handle blank lines between percentage and label
+**Files to modify**:
+- `src/components/header/MegaMenuInvestorHub.tsx`
+- `src/components/header/mega-menu-primitives.tsx`
 
-6. FAQs:
-   - Source format: ## Question\n\nAnswer text
-   - Fix: Parse each ## as question, following text as answer
+**Changes**:
+- Add consistent `min-h-[]` containers for each column section
+- Ensure `MegaMenuSectionTitle` components in adjacent columns have matching heights
+- Apply the same fix pattern to all affected mega menus:
+  - MegaMenuBuy
+  - MegaMenuRent
+  - MegaMenuServices
+  - MegaMenuBrokerHub
+  - MegaMenuProjects
+  - MegaMenuDevelopers
+
+### 1.4 Mobile Hamburger Menu Logo
+
+**Issue**: Need to use the same logo as chat support in the mobile menu.
+
+**File to modify**:
+- `src/components/GlobalHeader.tsx`
+
+**Changes**:
+- Replace `jbjMonogramTransparent` with `jbjMonogramLightBg` (the chat support logo) in the `SheetContent` header section
+- Import the correct asset: `import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png"`
+
+---
+
+## Part 2: Chat Support Enhancements
+
+### 2.1 Move Tip Higher
+
+**Issue**: The tip text at the bottom of `ChatWelcome.tsx` is cropped.
+
+**File to modify**:
+- `src/components/chat/ChatWelcome.tsx`
+
+**Changes**:
+- Move the tip section above the action buttons OR reduce bottom padding
+- Change from `mb-4` to `mt-4` if repositioned to top
+- Alternatively, reduce padding in the parent container to ensure visibility
+
+### 2.2 Remove Duplicate Form (Conversational AI Collection)
+
+**Issue**: User sees a full form after clicking "Chat with Our Team" instead of conversational collection.
+
+**Files to modify**:
+- `src/components/AIChatWidget.tsx`
+- `src/components/chat/types.ts`
+- New file: `src/components/chat/ChatConversationalCollect.tsx`
+
+**Changes**:
+1. Create new component `ChatConversationalCollect.tsx` that:
+   - Shows AI asking "May I get your full name?" → waits for response
+   - Then "May I get your email address?" → waits for response
+   - Then "May I get your phone number?" → waits for response
+   - Validates each step before proceeding
+   - Uses the existing agent photo/name
+
+2. Update `ChatStep` type to include `'conversational_collect'`
+
+3. Modify `AIChatWidget.tsx` flow:
+   - After `check_email` (for new users), go to `conversational_collect` instead of `collect_info`
+   - Remove the full form step for new users
+   - Keep the form as fallback option ("Prefer to fill a form instead?")
+
+### 2.3 Smart AI Qualification Flow
+
+**Issue**: Chat should qualify users based on their service selection with premium, professional questions.
+
+**Files to modify**:
+- `src/components/chat/ChatServiceSelector.tsx`
+- `src/components/chat/types.ts`
+- New: `supabase/functions/ai-chat-support/index.ts` (update system prompt)
+
+**Changes**:
+1. Update AI system prompt with qualification flow:
+   ```text
+   For "Buy Property" users, ask:
+   - "Are you currently located in Dubai?"
+   - "Have you invested in Dubai real estate before?"
+   - "What is your budget range?"
+   - "Which areas are you interested in?"
+   - "What property type are you looking for?"
+   - "When are you planning to make a decision?"
+   ```
+
+2. For "Careers" shortcut:
+   - Immediately show the CV submission form (`ChatCVSubmission`)
+   - Store submission in `hr_cv_submissions` table
+
+3. For "Complaint/Support":
+   - Redirect to ticket support system
+   - Create support ticket via AI with reference number
+   - Link to `/support/tickets` for formal ticket creation
+
+### 2.4 Chat Storage Security & Anti-Scam
+
+**Issue**: Messages need secure storage with proper anti-scam measures.
+
+**Database tables involved**:
+- `chat_conversations` (existing - stores full conversation)
+- `chat_history` (existing - individual message log)
+- `leads` (existing - contact details)
+
+**Changes**:
+1. All messages already stored in `chat_conversations.messages` (JSONB) with:
+   - `user_email`, `user_name`, `user_phone`
+   - Timestamps, feedback, ratings
+
+2. Add additional security fields (migration):
+   ```sql
+   ALTER TABLE chat_conversations ADD COLUMN IF NOT EXISTS ip_hash TEXT;
+   ALTER TABLE chat_conversations ADD COLUMN IF NOT EXISTS is_spam_flagged BOOLEAN DEFAULT false;
+   ALTER TABLE chat_conversations ADD COLUMN IF NOT EXISTS spam_score FLOAT;
+   ```
+
+3. Implement spam detection in AI edge function:
+   - Rate limiting per IP/email
+   - Pattern detection for spam content
+   - Flag suspicious conversations
+
+### 2.5 Chat Feedback Enhancement
+
+**Current state**: Feedback with star ratings exists in `ChatRating.tsx` and `ChatFeedback.tsx`
+
+**Confirmation**: The feedback system already stores:
+- `rating` (1-5 stars)
+- `rating_feedback` (text)
+- `feedback_type` (positive/neutral/negative)
+- `was_helpful`, `what_improve`, `how_heard_about_us`
+- `agent_behavior_rating`, `response_speed_rating`
+
+No changes needed - system is already comprehensive.
+
+---
+
+## Part 3: Digital Business Card Responsiveness
+
+### 3.1 Device-Responsive Layout
+
+**Issue**: Card shows phone view on desktop; should adapt to device size.
+
+**File to modify**:
+- `src/pages/Card.tsx` or `src/components/DigitalBusinessCard.tsx`
+
+**Changes**:
+1. Add responsive breakpoints:
+   - Mobile (<768px): Portrait card layout (current design)
+   - Tablet (768px-1024px): Wider card with two-column info
+   - Desktop (>1024px): Full-width premium layout with:
+     - Large hero photo on left
+     - Contact details center
+     - QR code and actions on right
+     - Background pattern/gradient
+
+2. Use `useMediaQuery` hook or Tailwind responsive classes:
+   ```tsx
+   <div className="w-full max-w-[390px] md:max-w-[600px] lg:max-w-[900px] xl:max-w-full">
+   ```
+
+3. Add device-specific styling:
+   - Desktop: `lg:flex lg:flex-row lg:items-center lg:gap-12`
+   - Tablet: `md:grid md:grid-cols-2`
+   - Mobile: Stack vertically (current)
+
+---
+
+## Part 4: Marketing Campaign Hub (New Feature)
+
+### 4.1 Database Schema
+
+**New tables needed**:
+
+```sql
+-- Marketing campaigns table
+CREATE TABLE marketing_campaigns (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  description TEXT,
+  campaign_type TEXT CHECK (campaign_type IN ('email', 'whatsapp', 'social')),
+  status TEXT DEFAULT 'draft' CHECK (status IN ('draft', 'scheduled', 'sent', 'archived')),
+  content JSONB, -- Card content, images, brochure links
+  target_audience TEXT CHECK (target_audience IN ('all', 'newsletter', 'leads', 'custom')),
+  custom_recipients TEXT[], -- For custom targeting
+  scheduled_at TIMESTAMPTZ,
+  sent_at TIMESTAMPTZ,
+  created_by UUID REFERENCES auth.users(id),
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now(),
+  
+  -- Social media reuse
+  instagram_content JSONB,
+  facebook_content JSONB,
+  
+  -- Analytics
+  total_sent INTEGER DEFAULT 0,
+  total_opened INTEGER DEFAULT 0,
+  total_clicked INTEGER DEFAULT 0
+);
+
+-- Newsletter subscribers (existing or new)
+CREATE TABLE IF NOT EXISTS newsletter_subscribers (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email TEXT UNIQUE NOT NULL,
+  name TEXT,
+  subscribed_at TIMESTAMPTZ DEFAULT now(),
+  source TEXT DEFAULT 'website',
+  is_active BOOLEAN DEFAULT true
+);
+
+-- Campaign templates
+CREATE TABLE marketing_templates (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  template_type TEXT,
+  content JSONB,
+  preview_image_url TEXT,
+  created_by UUID REFERENCES auth.users(id),
+  created_at TIMESTAMPTZ DEFAULT now()
+);
 ```
 
-**File: `supabase/functions/batch-extract-pending/index.ts`**
+### 4.2 Marketing Hub UI
 
-Ensure the extracted data is properly mapped to database columns:
-- `amenities_list` → `amenities` (JSON array)
-- `usp_bullets` → JSON array
-- `location_distances` → JSON array of {label, time}
-- `faqs` → JSON array of {question, answer}
-- `payment_breakdown` → JSON object with down_payment, during_construction, on_completion
+**New files**:
+- `src/pages/admin/MarketingHub.tsx`
+- `src/components/marketing-hub/CampaignEditor.tsx`
+- `src/components/marketing-hub/CampaignPreview.tsx`
+- `src/components/marketing-hub/RecipientSelector.tsx`
+- `src/components/marketing-hub/AIContentAssistant.tsx`
 
-### Phase 2: Add Breadcrumb Navigation (Frontend)
+**Features**:
+1. **Campaign List View**:
+   - Table showing all campaigns (draft, scheduled, sent)
+   - Quick actions: Edit, Preview, Send, Duplicate
+   - Analytics summary
 
-**File: `src/components/project-detail/ProjectDetailLayout.tsx`**
+2. **Campaign Editor**:
+   - Visual editor with drag-and-drop sections
+   - AI assistant panel for content generation
+   - File upload for brochures/videos
+   - Preview mode toggle
+   - Template save/load
 
-Add breadcrumb below hero buttons, matching Provident's structure:
+3. **Recipient Selector**:
+   - "Send to All" toggle
+   - Filter by source (newsletter, contact form, leads)
+   - Custom selection with checkboxes
+   - Import recipients option
 
-```text
-Home / All Projects in Dubai / [Area] / [Project Name]
-```
+4. **AI Content Assistant**:
+   - Prompt input with file attachments
+   - Click-to-edit highlighted areas
+   - Color picker integration
+   - Generate button → Preview → Apply
 
-Structure:
-- "Home" → `/`
-- "All Projects in Dubai" → `/properties`
-- "[Area]" → `/properties?area=[slug]` (e.g., Downtown Dubai)
-- "[Project Name]" → Current page (not linked)
+### 4.3 Integration with Existing AI Tools
 
-### Phase 3: Enhance Floor Plans Section (Frontend)
+**File to modify**:
+- `src/components/design-studio/CrossToolIntegration.tsx`
+- `src/components/design-studio/index.ts`
 
-**File: `src/components/project-detail/ProjectDetailLayout.tsx`**
-
-Current floor plans show text buttons. Provident shows:
-- Floor plan type buttons (1 Bedroom, 2 Bedroom, etc.)
-- Floor plan image thumbnail
-- "Download Floorplans" button
-
-Add:
-- Tab/button group for floor plan types
-- Image preview showing floor plan image
-- Download button for each type
-
-### Phase 4: Add Missing CTA Sections (Frontend)
-
-**File: `src/components/project-detail/ProjectDetailLayout.tsx`**
-
-Add two new sections matching Provident:
-
-1. **"The best deals are our expertise – register now" section**
-   - Title: "Request a call back now" (variation from Provident's wording)
-   - Subtitle: "Partner with Dubai's Leading Real Estate Brokerage. Share your details, and our off-plan property expert will call you back shortly."
-   - Buttons: "Request a Call Back Now" | "Chat with us now" (WhatsApp)
-   - Form: Same fields as Contact page (Name, Email, Phone, Preferred Language, Message)
-
-2. **"Stay in the loop" section**
-   - Before footer
-   - Email subscription input
-   - Links to Terms & Privacy
-
-### Phase 5: Enhance Test Panel Preview (Frontend)
-
-**File: `src/components/listing-admin/TestOneListingPanel.tsx`**
-
-Current test preview shows:
-- Small card with metadata checklist
-- Basic info grid
-
-Enhance to show:
-1. **Full listing card preview** (same as ListingApprovalCard)
-2. **Clickable "View Full Page"** button to open `/properties/[slug]` in new tab
-3. **Side-by-side comparison**: Source URL iframe vs. extracted preview
-4. **AI Audit section**: Use Lovable AI to compare extraction vs source and report missing fields
-
-### Phase 6: Add AI Extraction Audit (Backend + Frontend)
-
-**New File: `supabase/functions/audit-extraction/index.ts`**
-
-Create an edge function that:
-1. Takes the extracted data + source URL
-2. Calls Lovable AI to compare
-3. Returns a list of missing/incorrect fields
-4. Suggests fixes
-
-**File: `src/components/listing-admin/TestOneListingPanel.tsx`**
-
-Add "Run AI Audit" button that:
-1. Calls `audit-extraction` function
-2. Shows audit results (what's missing, what needs fixing)
-3. Option to "Auto-Fix" using AI suggestions
+**Changes**:
+- Add Marketing Hub as an integration option
+- Connect with:
+  - Sara (Admin Assistant)
+  - AIWebDeveloperPersona
+  - Graphic Designer persona
+  - Video editing tools
 
 ---
 
-## Technical Details
+## Part 5: Technical Implementation Details
 
-### Extraction Regex Fixes
+### 5.1 Files to Create
 
-```text
-Location Distances Pattern (current):
-/^-\s+\d+\s+Minutes?\s+[–-]\s+(.+)/gim
+| File | Purpose |
+|------|---------|
+| `src/components/chat/ChatConversationalCollect.tsx` | AI-guided info collection |
+| `src/pages/admin/MarketingHub.tsx` | Campaign management page |
+| `src/components/marketing-hub/CampaignEditor.tsx` | Visual campaign editor |
+| `src/components/marketing-hub/CampaignPreview.tsx` | Live preview component |
+| `src/components/marketing-hub/RecipientSelector.tsx` | Target audience selector |
+| `src/components/marketing-hub/AIContentAssistant.tsx` | AI-powered content help |
+| `supabase/functions/send-campaign/index.ts` | Campaign send edge function |
 
-Should be:
-/^-\s+(\d+\s+Minutes?)\s+[–—-]\s+(.+)/gim
-(Note: Add em-dash — to character class)
+### 5.2 Files to Modify
 
-USP Section Pattern:
-- Look for "Unique Selling Points" or "## Unique Selling Points"
-- Parse "### headline" as uspHeadline
-- Parse "- bullet" lines as uspBullets
+| File | Changes |
+|------|---------|
+| `src/components/Footer.tsx` | Column alignment, mobile readability |
+| `src/components/GlobalHeader.tsx` | Mobile menu logo |
+| `src/components/header/MegaMenuInvestorHub.tsx` | Divider alignment |
+| `src/components/header/mega-menu-primitives.tsx` | Consistent section heights |
+| `src/components/chat/ChatWelcome.tsx` | Move tip higher |
+| `src/components/AIChatWidget.tsx` | Conversational collection flow |
+| `src/components/chat/types.ts` | New step type |
+| `src/pages/Card.tsx` | Responsive layout |
+| `supabase/functions/ai-chat-support/index.ts` | Qualification prompts |
 
-Payment Breakdown Pattern (current):
-/(\d+%?)\s*\n+Down Payment/i
+### 5.3 Database Migrations
 
-Should be:
-/(\d+)\s*%?\s*\n+\s*\n*Down Payment/i
-(Handle optional blank line between number and label)
-```
-
-### Database Field Mapping
-
-| Extracted Field | DB Column | Type |
-|----------------|-----------|------|
-| `amenities` | `amenities_list` | JSONB array |
-| `uspBullets` | `usp_bullets` | JSONB array |
-| `locationDistances` | `location_distances` | JSONB array |
-| `faqs` | `faqs` | JSONB array |
-| `paymentBreakdown` | `payment_breakdown` | JSONB object |
-
-### Breadcrumb Component Structure
-
-```text
-<nav className="flex items-center gap-2 text-sm">
-  <Link to="/">Home</Link>
-  <span>/</span>
-  <Link to="/properties">All Projects in Dubai</Link>
-  <span>/</span>
-  <Link to={`/properties?area=${areaSlug}`}>{areaName}</Link>
-  <span>/</span>
-  <span className="text-gold">{projectName}</span>
-</nav>
-```
+1. **Chat security fields** - Add IP hash and spam detection columns
+2. **Marketing campaigns table** - Full schema creation
+3. **Newsletter subscribers** - If not existing
+4. **Marketing templates** - Reusable templates
 
 ---
 
-## Files to Modify
+## Part 6: Rollout Priority
 
-### Backend (Edge Functions)
-1. `supabase/functions/_shared/provident/extract.ts` - Fix all extraction regex patterns
-2. `supabase/functions/batch-extract-pending/index.ts` - Verify field mapping
-3. `supabase/functions/audit-extraction/index.ts` (NEW) - AI-powered extraction audit
+### Phase 1: Critical UI Fixes (Immediate)
+1. Footer column alignment
+2. Header divider alignment
+3. Mobile menu logo
+4. Chat tip positioning
+5. Digital card responsiveness
 
-### Frontend
-1. `src/components/project-detail/ProjectDetailLayout.tsx` - Add breadcrumb, CTA sections, floor plan images
-2. `src/components/listing-admin/TestOneListingPanel.tsx` - Full preview, clickable listing, AI audit
-3. `src/components/project-detail/ProjectBreadcrumb.tsx` (NEW) - Reusable breadcrumb component
-4. `src/components/project-detail/FloorPlanGallery.tsx` (NEW) - Enhanced floor plan display
-5. `src/components/project-detail/CallToActionSection.tsx` (NEW) - "Best deals" CTA section
-6. `src/components/project-detail/NewsletterSection.tsx` (NEW) - "Stay in the loop" section
+### Phase 2: Chat Enhancements (High Priority)
+1. Conversational info collection
+2. Smart qualification flow
+3. Career form shortcut
+4. Ticket support creation
 
----
+### Phase 3: Marketing Hub (Medium Priority)
+1. Database schema
+2. Campaign list view
+3. Basic editor
+4. Send functionality
 
-## Validation Checklist
-
-After implementation, verify:
-
-1. **Test Extraction**:
-   - Run test extraction on Inaura Hotels & Residences
-   - Verify all 8 USP bullets are extracted
-   - Verify all 10 amenities are extracted
-   - Verify all 12 location distances are extracted
-   - Verify 6 FAQs are extracted
-   - Verify payment breakdown (10%/40%/50%) is extracted
-   - Verify brochure PDF is mirrored
-
-2. **Project Detail Page**:
-   - Breadcrumb shows: Home / All Projects in Dubai / Downtown Dubai / Inaura Hotels & Residences
-   - Hero has: Title → Developer → Download Brochure + Register Interest → Breadcrumb
-   - Sticky nav tabs all work
-   - Floor plans show images with download buttons
-   - "Request a call back" CTA section present
-   - "Stay in the loop" newsletter section before footer
-
-3. **Test Panel**:
-   - Shows full listing card preview
-   - "View Full Page" opens internal URL
-   - AI Audit shows comparison results
+### Phase 4: Advanced Features (Lower Priority)
+1. AI content assistant with visual editing
+2. Social media content generation
+3. Cross-tool integrations
+4. Analytics dashboard
 
 ---
 
-## Priority Order
+## Summary
 
-1. **Critical (Phase 1)**: Fix extraction regex - Without this, no data flows to the page
-2. **High (Phase 2-3)**: Breadcrumb + Floor plans - Core Provident parity features
-3. **Medium (Phase 4-5)**: CTA sections + Test panel enhancements
-4. **Nice-to-have (Phase 6)**: AI Audit for automated quality checks
+This plan addresses all requested changes:
+
+| Category | Items Fixed |
+|----------|-------------|
+| Footer | Column alignment, mobile readability, divider consistency |
+| Header | Divider alignment, mobile logo, dropdown sizing |
+| Chat | Tip positioning, conversational collection, qualification, careers shortcut, ticket support |
+| Digital Card | Device-responsive layouts for phone/tablet/desktop |
+| Marketing Hub | Campaign creation, AI assistant, recipient targeting, template saving |
+
+All changes follow existing design patterns, use the approved UI tokens (champagne gradients, gold accents), and integrate with the current infrastructure (Supabase, Lovable AI, existing admin panels).
 
