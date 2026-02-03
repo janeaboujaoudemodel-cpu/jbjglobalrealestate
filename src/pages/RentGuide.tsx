@@ -33,6 +33,7 @@ import { GuideSection } from "@/components/guides/GuideSection";
 import { GuideSectionHeader } from "@/components/guides/GuideSectionHeader";
 import { GuideCTA } from "@/components/guides/GuideCTA";
 import Footer from "@/components/Footer";
+import DirectContactCTA from "@/components/DirectContactCTA";
 
 const RentGuide = () => {
   const rentalProcess = [
@@ -455,6 +456,9 @@ const RentGuide = () => {
           <GuideNavigation current="/rent-guide" guides={GUIDE_LINKS} />
         </div>
       </div>
+
+      {/* Standardized Direct Contact CTA */}
+      <DirectContactCTA />
 
       <Footer />
     </div>

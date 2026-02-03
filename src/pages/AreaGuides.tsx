@@ -30,6 +30,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Footer from "@/components/Footer";
+import DirectContactCTA from "@/components/DirectContactCTA";
 import { SEOHead } from "@/components/SEOHead";
 import { AREA_GUIDES, UAE_EMIRATES as EMIRATES_DATA } from "@/constants/areaGuides";
 import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
@@ -1090,6 +1091,9 @@ const AreaGuides = () => {
           </div>
         </section>
       </div>
+
+      {/* Standardized Direct Contact CTA */}
+      <DirectContactCTA />
 
       <Footer />
     </div>

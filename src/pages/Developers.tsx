@@ -11,6 +11,7 @@ import {
 import { useDevelopers, useProjects } from "@/hooks/useProjects";
 import DeveloperCard from "@/components/DeveloperCard";
 import Footer from "@/components/Footer";
+import DirectContactCTA from "@/components/DirectContactCTA";
 import { SEOHead } from "@/components/SEOHead";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -270,6 +271,9 @@ const Developers = () => {
             )}
           </div>
         </section>
+
+        {/* Standardized Direct Contact CTA */}
+        <DirectContactCTA />
 
         <Footer />
       </div>
