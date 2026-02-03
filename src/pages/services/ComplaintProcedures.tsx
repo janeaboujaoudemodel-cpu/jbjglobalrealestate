@@ -9,14 +9,23 @@ import {
   Clock,
   Shield,
   MessageSquare,
-  ArrowUp,
+  ArrowRight,
   Send,
+  Eye,
+  Lightbulb,
+  FileCheck,
+  ArrowUpCircle,
+  XCircle,
+  Upload,
+  Users,
+  Ticket,
 } from "lucide-react";
 import Footer from "@/components/Footer";
 import DirectContactCTA from "@/components/DirectContactCTA";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Accordion,
   AccordionContent,
@@ -37,68 +46,92 @@ const staggerContainer = {
   },
 };
 
-const whatQualifies = [
-  "Service quality issues not resolved through standard support",
-  "Miscommunication or misinformation from JBJ representatives",
-  "Transaction process concerns requiring investigation",
-  "Professional conduct matters",
-  "Data privacy concerns",
-  "Billing or fee disputes",
-];
-
-const processSteps = [
-  { step: 1, title: "Submit formal complaint with details", icon: Send },
-  { step: 2, title: "Receive ticket ID and acknowledgment", icon: FileText },
-  { step: 3, title: "Investigation by designated team member", icon: Shield },
-  { step: 4, title: "Resolution communication and closure", icon: CheckCircle2 },
-];
-
-const escalationLadder = [
-  { level: 1, title: "Customer Support", description: "Initial resolution attempt", timeline: "24-48 hours" },
-  { level: 2, title: "Department Manager", description: "If unresolved at Level 1", timeline: "3-5 business days" },
-  { level: 3, title: "Compliance Officer", description: "Regulatory or conduct matters", timeline: "5-7 business days" },
-  { level: 4, title: "Executive Review", description: "Final escalation if needed", timeline: "7-10 business days" },
+const workflowSteps = [
+  { 
+    step: 1, 
+    title: "Submission", 
+    description: "You submit the complaint with details and evidence",
+    icon: Send 
+  },
+  { 
+    step: 2, 
+    title: "Acknowledgment", 
+    description: "You receive a ticket ID and timeline expectations",
+    icon: FileText 
+  },
+  { 
+    step: 3, 
+    title: "Review", 
+    description: "The relevant department reviews facts and communication logs",
+    icon: Eye 
+  },
+  { 
+    step: 4, 
+    title: "Resolution Proposal", 
+    description: "Action plan or explanation with next steps",
+    icon: Lightbulb 
+  },
+  { 
+    step: 5, 
+    title: "Escalation (if required)", 
+    description: "Higher review tier if unresolved",
+    icon: ArrowUpCircle 
+  },
+  { 
+    step: 6, 
+    title: "Closure", 
+    description: "Final outcome documented",
+    icon: FileCheck 
+  },
 ];
 
 const whatYouReceive = [
-  "Unique ticket ID for tracking",
-  "Acknowledgment within 24 hours",
-  "Status updates at key milestones",
-  "Written resolution summary",
+  { icon: Ticket, text: "Ticket ID for tracking" },
+  { icon: MessageSquare, text: "Clear status updates" },
+  { icon: FileCheck, text: "A documented resolution outcome" },
+  { icon: ArrowUpCircle, text: "Escalation option if you disagree with the outcome" },
+];
+
+const goodComplaintFormat = [
+  "What happened (timeline)",
+  "Who was involved (names if known)",
+  "What you expected vs what occurred",
+  "Evidence: screenshots, emails, documents",
+  "What resolution you seek",
 ];
 
 const faqData = [
   {
-    question: "What qualifies as a complaint vs. a support request?",
-    answer: "Support requests are for general assistance, questions, or service inquiries. Complaints are for issues you feel were not adequately addressed through normal support channels or involve conduct/service quality concerns.",
+    question: "How long does complaint review take?",
+    answer: "Depends on complexity and evidence. You will see status updates in your ticket.",
   },
   {
-    question: "How long does the complaint process take?",
-    answer: "Simple complaints may be resolved in 24-48 hours. Complex matters requiring investigation may take 5-10 business days depending on the nature of the issue.",
+    question: "Can I submit anonymously?",
+    answer: "For process integrity, contact details are typically required to proceed meaningfully.",
   },
   {
     question: "Can I escalate if I'm not satisfied?",
-    answer: "Yes. The escalation ladder provides clear pathways from support through to executive review if needed.",
+    answer: "Yes. The workflow includes escalation tiers.",
   },
   {
-    question: "Is my complaint confidential?",
-    answer: "Yes. Complaints are handled confidentially and shared only with those necessary to investigate and resolve the matter.",
+    question: "Will I receive written confirmation?",
+    answer: "Yes—outcomes are documented.",
   },
   {
-    question: "Can I submit a complaint anonymously?",
-    answer: "Anonymous feedback can be submitted, but our ability to investigate and respond may be limited without contact details.",
+    question: "Will submitting a complaint affect my service?",
+    answer: "No—complaints are handled as formal quality control inputs.",
   },
   {
-    question: "What if my complaint involves a third party?",
-    answer: "We can address JBJ-related aspects. Issues with independent partners are handled through their respective processes, though we can facilitate communication.",
+    question: "What if my complaint involves a third-party partner?",
+    answer: "We will document and route properly. Third-party outcomes depend on their own processes.",
   },
   {
-    question: "Will filing a complaint affect my transaction?",
-    answer: "No. Complaints are handled separately from ongoing transactions and will not adversely affect your service.",
+    question: "Can I attach files?",
+    answer: "Yes—submit evidence to support clarity.",
   },
   {
-    question: "What outcomes can I expect?",
-    answer: "Outcomes vary based on the complaint type. Possible resolutions include apologies, process corrections, service credits, or referral to appropriate authorities for serious matters.",
+    question: "Can I track my complaint?",
+    answer: "Yes—use your ticket ID.",
   },
 ];
 
@@ -107,13 +140,23 @@ const ComplaintProcedures = () => {
     <>
       <SEOHead
         title="Complaint Procedures | JBJ Global Real Estate"
-        description="Structured complaint handling process with clear escalation steps. Submit, track, and resolve issues with transparency and accountability."
+        description="A structured pathway to raise concerns, track outcomes, and escalate responsibly—without noise or confusion."
         canonicalPath="/services/complaint-procedures"
       />
 
       {/* HERO SECTION */}
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-black">
+          {/* Video placeholder */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
+                <AlertTriangle className="w-12 h-12 text-gold/60" />
+              </div>
+              <p className="text-gold/60 text-sm tracking-widest uppercase">How Complaints Are Handled</p>
+              <p className="text-zinc-500 text-xs mt-2">Video placeholder only</p>
+            </div>
+          </div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
         </div>
@@ -140,7 +183,7 @@ const ComplaintProcedures = () => {
             </h1>
             
             <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-              A structured pathway to raise issues, track outcomes, and ensure accountability — with clear escalation steps.
+              A structured pathway to raise concerns, track outcomes, and escalate responsibly—without noise or confusion.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -165,7 +208,7 @@ const ComplaintProcedures = () => {
         </motion.div>
       </section>
 
-      {/* WHAT QUALIFIES */}
+      {/* WHAT QUALIFIES AS A COMPLAINT */}
       <section className="bg-black py-20">
         <div className="jj-layer-2">
           <motion.div
@@ -183,20 +226,15 @@ const ComplaintProcedures = () => {
               What Qualifies as a Complaint
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <ul className="space-y-4">
-                {whatQualifies.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-zinc-700">
-                    <AlertTriangle className="w-5 h-5 text-gold shrink-0 mt-0.5" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
+              <p className="text-zinc-700 leading-relaxed">
+                A complaint is any formal issue related to service quality, communication breakdown, process deviation, or misconduct concerns that requires structured review and resolution.
+              </p>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* PROCESS STEPS */}
+      {/* THE COMPLAINT WORKFLOW */}
       <section className="bg-black py-20">
         <div className="jj-layer-2">
           <motion.div
@@ -210,73 +248,35 @@ const ComplaintProcedures = () => {
               className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Complaint Process
+              The Complaint Workflow
             </motion.h2>
-            <div className="max-w-3xl mx-auto">
+            <div className="max-w-4xl mx-auto">
               <div className="relative">
+                {/* Vertical line connector */}
                 <div className="absolute left-6 top-0 bottom-0 w-px bg-gold/30 hidden md:block" />
                 <div className="space-y-6">
-                  {processSteps.map((step, index) => (
+                  {workflowSteps.map((step, index) => (
                     <motion.div
                       key={index}
                       variants={fadeInUp}
-                      className="flex items-center gap-6"
+                      className="flex items-start gap-6"
                     >
                       <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center shrink-0 z-10 border-2 border-gold">
                         <span className="text-gold font-bold">{step.step}</span>
                       </div>
                       <div className="flex-1 jj-card-inner !p-4">
-                        <div className="flex items-center gap-4">
-                          <step.icon className="w-6 h-6 text-gold shrink-0" />
-                          <span className="font-semibold text-black">{step.title}</span>
+                        <div className="flex items-start gap-4">
+                          <step.icon className="w-6 h-6 text-gold shrink-0 mt-1" />
+                          <div>
+                            <h3 className="font-semibold text-black">{step.title}</h3>
+                            <p className="text-sm text-zinc-600 mt-1">{step.description}</p>
+                          </div>
                         </div>
                       </div>
                     </motion.div>
                   ))}
                 </div>
               </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ESCALATION LADDER */}
-      <section className="bg-black py-20">
-        <div className="jj-layer-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
-              style={{ fontFamily: "Playfair Display, serif" }}
-            >
-              Escalation Ladder
-            </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
-              {escalationLadder.map((level, index) => (
-                <motion.div key={index} variants={fadeInUp}>
-                  <div className="jj-card-inner text-center h-full relative">
-                    {index < escalationLadder.length - 1 && (
-                      <div className="hidden md:block absolute -right-2 top-1/2 -translate-y-1/2 z-10">
-                        <ArrowUp className="w-4 h-4 text-gold rotate-90" />
-                      </div>
-                    )}
-                    <div className="w-10 h-10 mx-auto mb-3 rounded-full bg-black flex items-center justify-center border border-gold">
-                      <span className="text-gold font-bold text-sm">{level.level}</span>
-                    </div>
-                    <h3 className="font-semibold text-black text-sm mb-1">{level.title}</h3>
-                    <p className="text-xs text-zinc-600 mb-2">{level.description}</p>
-                    <div className="flex items-center justify-center gap-1 text-xs text-gold">
-                      <Clock className="w-3 h-3" />
-                      {level.timeline}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
             </div>
           </motion.div>
         </div>
@@ -299,9 +299,46 @@ const ComplaintProcedures = () => {
             >
               What You Receive
             </motion.h2>
+            <motion.div variants={fadeInUp}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {whatYouReceive.map((item, index) => (
+                  <div key={index} className="jj-card-inner flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-lg bg-black flex items-center justify-center shrink-0">
+                      <item.icon className="w-6 h-6 text-gold" />
+                    </div>
+                    <span className="text-zinc-700">{item.text}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* HOW TO SUBMIT */}
+      <section className="bg-black py-20">
+        <div className="jj-layer-2">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="max-w-4xl mx-auto"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-4"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              How to Submit
+            </motion.h2>
+            <motion.p variants={fadeInUp} className="text-zinc-600 text-center mb-8">
+              Good Complaint Format
+            </motion.p>
             <motion.div variants={fadeInUp} className="jj-card-inner">
+              <p className="text-zinc-600 mb-6 font-medium">Include:</p>
               <ul className="space-y-4">
-                {whatYouReceive.map((item, idx) => (
+                {goodComplaintFormat.map((item, idx) => (
                   <li key={idx} className="flex items-start gap-3 text-zinc-700">
                     <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                     <span>{item}</span>
@@ -336,15 +373,12 @@ const ComplaintProcedures = () => {
                   <AccordionItem
                     key={index}
                     value={`item-${index}`}
-                    className="jj-card-inner border-none"
+                    className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] overflow-hidden"
                   >
-                    <AccordionTrigger className="text-left text-black hover:text-gold">
-                      <div className="flex items-center gap-3">
-                        <HelpCircle className="w-5 h-5 text-gold shrink-0" />
-                        {faq.question}
-                      </div>
+                    <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
+                      <span className="text-black font-medium">{faq.question}</span>
                     </AccordionTrigger>
-                    <AccordionContent className="text-zinc-600 pl-8">
+                    <AccordionContent className="px-6 pb-4 text-zinc-600">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -362,33 +396,29 @@ const ComplaintProcedures = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            variants={staggerContainer}
-            className="text-center max-w-3xl mx-auto"
+            variants={fadeInUp}
+            className="max-w-3xl mx-auto text-center"
           >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black mb-4"
-              style={{ fontFamily: "Playfair Display, serif" }}
-            >
-              Need to File a Complaint?
-            </motion.h2>
-            <motion.p variants={fadeInUp} className="text-zinc-600 mb-8">
-              We take all complaints seriously and are committed to fair resolution.
-            </motion.p>
-            <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="primary" size="lg" asChild>
-                <Link to="/contact?type=complaint">
-                  <AlertTriangle className="w-4 h-4 mr-2" />
-                  Submit Complaint
-                </Link>
-              </Button>
-              <Button variant="outline" size="lg" asChild>
-                <Link to="/contact">
-                  <Phone className="w-4 h-4 mr-2" />
-                  Contact Support
-                </Link>
-              </Button>
-            </motion.div>
+            <div className="jj-card-inner border-2 border-gold/30">
+              <AlertTriangle className="w-12 h-12 text-gold mx-auto mb-6" />
+              <h2
+                className="text-3xl md:text-4xl font-bold text-black mb-4"
+                style={{ fontFamily: "Playfair Display, serif" }}
+              >
+                Submit a Complaint with Clarity
+              </h2>
+              <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
+                Use the form to log the issue and receive a trackable ticket ID.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <PremiumHeroButton href="/contact?type=complaint">
+                  Submit a Complaint
+                </PremiumHeroButton>
+                <PremiumHeroButton href="/contact?type=support">
+                  Create Support Ticket
+                </PremiumHeroButton>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
