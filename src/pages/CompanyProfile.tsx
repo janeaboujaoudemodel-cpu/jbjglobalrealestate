@@ -21,14 +21,19 @@ import {
   Key,
   HardHat,
   ChevronRight,
-  User
+  User,
+  BookOpen
 } from "lucide-react";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import { Button } from "@/components/ui/button";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import { toast } from "sonner";
+import { FounderContent } from "@/components/FounderContent";
+import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
+import Footer from "@/components/Footer";
 
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
+import founderCompanyProfile from "@/assets/founder-company-profile.jpg";
 
 function SectionShell({
   children,
@@ -38,7 +43,7 @@ function SectionShell({
   className?: string;
 }) {
   return (
-    <section className={`py-20 bg-black ${className ?? ""}`.trim()}>
+    <section className={`py-12 md:py-16 bg-black ${className ?? ""}`.trim()}>
       <div className="jj-layer-2">
         <div className="w-full px-4 sm:px-6 lg:px-8">{children}</div>
       </div>
@@ -63,7 +68,8 @@ const staggerContainer = {
 const PROFILE_CONTENT = {
   coverPage: {
     title: "JBJ Global Real Estate",
-    subtitle: "Founder & CEO, Jane Bou Jaoude"
+    subtitle: "Founder & CEO, Jane Bou Jaoude",
+    subtitleFallback: "Company Profile"
   },
   executiveSummary: `JBJ Global Real Estate is a Dubai-based real estate brokerage built on precision, transparency, and long-term client relationships. Operating across Dubai's most active residential and investment markets, the firm provides structured advisory for buying, selling, leasing, and investing in property.
 
@@ -194,7 +200,7 @@ Clients working with JBJ can expect direct oversight, transparent communication,
 
   companySnapshot: {
     headquarters: "Dubai, UAE",
-    serviceAreas: "Dubai",
+    serviceAreas: "GCC & Globally",
     languages: "English",
     contact: CONTACT_INFO.phone,
     email: CONTACT_INFO.email,
@@ -210,8 +216,76 @@ Clients working with JBJ can expect direct oversight, transparent communication,
   ]
 };
 
+// 3D Book Preview Component
+const BookPreview3D = ({ onClick, isGenerating }: { onClick: () => void; isGenerating: boolean }) => {
+  return (
+    <div className="relative group cursor-pointer" onClick={onClick}>
+      {/* 3D Book Container */}
+      <div className="relative w-64 h-80 mx-auto perspective-1000">
+        {/* Book wrapper with 3D transform */}
+        <div className="relative w-full h-full transform-style-3d transition-transform duration-500 group-hover:rotate-y-[-15deg]">
+          {/* Front Cover */}
+          <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black rounded-r-lg shadow-2xl border border-gold/30 overflow-hidden">
+            {/* Gold accent top */}
+            <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-gold via-gold-light to-gold" />
+            
+            {/* JBJ Logo */}
+            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 text-center">
+              <span className="text-5xl font-bold text-gold" style={{ fontFamily: "Poppins, sans-serif" }}>JBJ</span>
+              <p className="text-white text-xs tracking-[0.3em] mt-2">GLOBAL REAL ESTATE</p>
+            </div>
+            
+            {/* Title */}
+            <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 text-center w-full px-4">
+              <div className="h-px w-3/4 mx-auto bg-gradient-to-r from-transparent via-gold to-transparent mb-4" />
+              <p className="text-gold text-lg font-semibold tracking-wider">COMPANY PROFILE</p>
+              <p className="text-white/60 text-xs mt-2">2025 Edition</p>
+            </div>
+            
+            {/* Gold accent bottom */}
+            <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-gold via-gold-light to-gold" />
+          </div>
+          
+          {/* Book Spine */}
+          <div className="absolute top-0 left-0 w-4 h-full bg-gradient-to-r from-zinc-800 to-black transform origin-left rotate-y-[-90deg] translate-x-[-8px] rounded-l">
+            <div className="absolute top-0 left-0 right-0 h-2 bg-gold" />
+            <div className="absolute bottom-0 left-0 right-0 h-2 bg-gold" />
+          </div>
+          
+          {/* Pages peek */}
+          <div className="absolute top-1 right-0 bottom-1 w-2 bg-gradient-to-r from-zinc-200 to-zinc-100 transform origin-right translate-x-1 rounded-r-sm">
+            <div className="absolute inset-0 flex flex-col justify-evenly px-0.5">
+              {[...Array(20)].map((_, i) => (
+                <div key={i} className="h-px bg-zinc-300" />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Download overlay on hover */}
+      <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
+        <div className="text-center">
+          {isGenerating ? (
+            <div className="w-12 h-12 border-4 border-gold/30 border-t-gold rounded-full animate-spin mx-auto" />
+          ) : (
+            <>
+              <Download className="w-12 h-12 text-gold mx-auto mb-2" />
+              <p className="text-white font-semibold">Download PDF</p>
+            </>
+          )}
+        </div>
+      </div>
+      
+      {/* Shadow */}
+      <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-48 h-4 bg-black/30 blur-lg rounded-full" />
+    </div>
+  );
+};
+
 const CompanyProfile = () => {
   const [isGenerating, setIsGenerating] = useState(false);
+  const { isFounderVisible } = useFounderVisibility();
 
   const generatePDF = async () => {
     setIsGenerating(true);
@@ -253,6 +327,10 @@ const CompanyProfile = () => {
         return lines;
       };
 
+      // Track page numbers for TOC
+      let currentPageNumber = 1;
+      const tocItems: { title: string; page: number }[] = [];
+
       // === PAGE 1: Cover ===
       const page1 = pdfDoc.addPage([pageWidth, pageHeight]);
       page1.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: blackColor });
@@ -280,20 +358,69 @@ const CompanyProfile = () => {
         font: helveticaBold,
         color: goldColor,
       });
-      page1.drawText("Founder & CEO, Jane Bou Jaoude", {
-        x: pageWidth / 2 - 120,
-        y: pageHeight / 2 - 100,
-        size: 14,
+      
+      // Only show founder subtitle if visible
+      if (isFounderVisible) {
+        page1.drawText("Founder & CEO, Jane Bou Jaoude", {
+          x: pageWidth / 2 - 120,
+          y: pageHeight / 2 - 100,
+          size: 14,
+          font: helvetica,
+          color: grayColor,
+        });
+      }
+      
+      page1.drawText("2025 Edition", {
+        x: pageWidth / 2 - 40,
+        y: 60,
+        size: 12,
         font: helvetica,
         color: grayColor,
       });
       page1.drawRectangle({ x: 0, y: 0, width: pageWidth, height: 8, color: goldColor });
+      currentPageNumber++;
 
-      // === PAGE 2: Executive Summary ===
+      // === PAGE 2: Table of Contents ===
+      const tocPage = pdfDoc.addPage([pageWidth, pageHeight]);
+      tocPage.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: whiteColor });
+      tocPage.drawRectangle({ x: 0, y: pageHeight - 50, width: pageWidth, height: 50, color: blackColor });
+      tocPage.drawText("JBJ GLOBAL REAL ESTATE", { x: margin, y: pageHeight - 32, size: 12, font: helveticaBold, color: goldColor });
+      
+      tocPage.drawText("TABLE OF CONTENTS", { x: margin, y: pageHeight - 100, size: 22, font: helveticaBold, color: blackColor });
+      tocPage.drawRectangle({ x: margin, y: pageHeight - 108, width: 180, height: 3, color: goldColor });
+      
+      // TOC entries
+      const tocEntries = [
+        { title: "Executive Summary", page: 3 },
+        { title: "Brand Story", page: 4 },
+        { title: "Vision, Mission & Values", page: 5 },
+        { title: "Services", page: 6 },
+        { title: "Our Process", page: 7 },
+        { title: "Why JBJ", page: 8 },
+        { title: "Areas of Focus", page: 9 },
+        { title: "Client Experience Standards", page: 10 },
+        { title: "Trust & Compliance", page: 11 },
+        ...(isFounderVisible ? [{ title: "Founder Profile", page: 12 }] : []),
+        { title: "Company Snapshot & Contact", page: isFounderVisible ? 13 : 12 },
+      ];
+      
+      let tocY = pageHeight - 160;
+      tocEntries.forEach((entry, index) => {
+        tocPage.drawText(`${index + 1}.`, { x: margin, y: tocY, size: 12, font: helveticaBold, color: goldColor });
+        tocPage.drawText(entry.title, { x: margin + 30, y: tocY, size: 12, font: helvetica, color: blackColor });
+        tocPage.drawText(`${entry.page}`, { x: pageWidth - margin - 20, y: tocY, size: 12, font: helvetica, color: grayColor });
+        tocY -= 28;
+      });
+      
+      tocPage.drawText("www.jbj.ae", { x: pageWidth / 2 - 30, y: 25, size: 10, font: helvetica, color: goldColor });
+      currentPageNumber++;
+
+      // === PAGE 3: Executive Summary ===
       const page2 = pdfDoc.addPage([pageWidth, pageHeight]);
       page2.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: whiteColor });
       page2.drawRectangle({ x: 0, y: pageHeight - 50, width: pageWidth, height: 50, color: blackColor });
       page2.drawText("JBJ GLOBAL REAL ESTATE", { x: margin, y: pageHeight - 32, size: 12, font: helveticaBold, color: goldColor });
+      page2.drawText("Page 3", { x: pageWidth - margin - 30, y: pageHeight - 32, size: 10, font: helvetica, color: grayColor });
       
       page2.drawText("EXECUTIVE SUMMARY", { x: margin, y: pageHeight - 100, size: 22, font: helveticaBold, color: blackColor });
       page2.drawRectangle({ x: margin, y: pageHeight - 108, width: 140, height: 3, color: goldColor });
@@ -306,11 +433,12 @@ const CompanyProfile = () => {
       });
       page2.drawText("www.jbj.ae", { x: pageWidth / 2 - 30, y: 25, size: 10, font: helvetica, color: goldColor });
 
-      // === PAGE 3: Brand Story ===
+      // === PAGE 4: Brand Story ===
       const page3 = pdfDoc.addPage([pageWidth, pageHeight]);
       page3.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: whiteColor });
       page3.drawRectangle({ x: 0, y: pageHeight - 50, width: pageWidth, height: 50, color: blackColor });
       page3.drawText("JBJ GLOBAL REAL ESTATE", { x: margin, y: pageHeight - 32, size: 12, font: helveticaBold, color: goldColor });
+      page3.drawText("Page 4", { x: pageWidth - margin - 30, y: pageHeight - 32, size: 10, font: helvetica, color: grayColor });
       
       page3.drawText("BRAND STORY", { x: margin, y: pageHeight - 100, size: 22, font: helveticaBold, color: blackColor });
       page3.drawRectangle({ x: margin, y: pageHeight - 108, width: 100, height: 3, color: goldColor });
@@ -323,11 +451,12 @@ const CompanyProfile = () => {
       });
       page3.drawText("www.jbj.ae", { x: pageWidth / 2 - 30, y: 25, size: 10, font: helvetica, color: goldColor });
 
-      // === PAGE 4: Vision / Mission / Values ===
+      // === PAGE 5: Vision / Mission / Values ===
       const page4 = pdfDoc.addPage([pageWidth, pageHeight]);
       page4.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: whiteColor });
       page4.drawRectangle({ x: 0, y: pageHeight - 50, width: pageWidth, height: 50, color: blackColor });
       page4.drawText("JBJ GLOBAL REAL ESTATE", { x: margin, y: pageHeight - 32, size: 12, font: helveticaBold, color: goldColor });
+      page4.drawText("Page 5", { x: pageWidth - margin - 30, y: pageHeight - 32, size: 10, font: helvetica, color: grayColor });
       
       page4.drawText("VISION", { x: margin, y: pageHeight - 100, size: 18, font: helveticaBold, color: blackColor });
       page4.drawRectangle({ x: margin, y: pageHeight - 106, width: 50, height: 2, color: goldColor });
@@ -359,11 +488,12 @@ const CompanyProfile = () => {
       });
       page4.drawText("www.jbj.ae", { x: pageWidth / 2 - 30, y: 25, size: 10, font: helvetica, color: goldColor });
 
-      // === PAGE 5: Services ===
+      // === PAGE 6: Services ===
       const page5 = pdfDoc.addPage([pageWidth, pageHeight]);
       page5.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: whiteColor });
       page5.drawRectangle({ x: 0, y: pageHeight - 50, width: pageWidth, height: 50, color: blackColor });
       page5.drawText("JBJ GLOBAL REAL ESTATE", { x: margin, y: pageHeight - 32, size: 12, font: helveticaBold, color: goldColor });
+      page5.drawText("Page 6", { x: pageWidth - margin - 30, y: pageHeight - 32, size: 10, font: helvetica, color: grayColor });
       
       page5.drawText("WHAT WE DO — SERVICES", { x: margin, y: pageHeight - 100, size: 22, font: helveticaBold, color: blackColor });
       page5.drawRectangle({ x: margin, y: pageHeight - 108, width: 180, height: 3, color: goldColor });
@@ -381,11 +511,12 @@ const CompanyProfile = () => {
       });
       page5.drawText("www.jbj.ae", { x: pageWidth / 2 - 30, y: 25, size: 10, font: helvetica, color: goldColor });
 
-      // === PAGE 6: Process ===
+      // === PAGE 7: Process ===
       const page6 = pdfDoc.addPage([pageWidth, pageHeight]);
       page6.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: whiteColor });
       page6.drawRectangle({ x: 0, y: pageHeight - 50, width: pageWidth, height: 50, color: blackColor });
       page6.drawText("JBJ GLOBAL REAL ESTATE", { x: margin, y: pageHeight - 32, size: 12, font: helveticaBold, color: goldColor });
+      page6.drawText("Page 7", { x: pageWidth - margin - 30, y: pageHeight - 32, size: 10, font: helvetica, color: grayColor });
       
       page6.drawText("OUR PROCESS", { x: margin, y: pageHeight - 100, size: 22, font: helveticaBold, color: blackColor });
       page6.drawRectangle({ x: margin, y: pageHeight - 108, width: 100, height: 3, color: goldColor });
@@ -399,11 +530,12 @@ const CompanyProfile = () => {
       });
       page6.drawText("www.jbj.ae", { x: pageWidth / 2 - 30, y: 25, size: 10, font: helvetica, color: goldColor });
 
-      // === PAGE 7: Why JBJ ===
+      // === PAGE 8: Why JBJ ===
       const page7 = pdfDoc.addPage([pageWidth, pageHeight]);
       page7.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: whiteColor });
       page7.drawRectangle({ x: 0, y: pageHeight - 50, width: pageWidth, height: 50, color: blackColor });
       page7.drawText("JBJ GLOBAL REAL ESTATE", { x: margin, y: pageHeight - 32, size: 12, font: helveticaBold, color: goldColor });
+      page7.drawText("Page 8", { x: pageWidth - margin - 30, y: pageHeight - 32, size: 10, font: helvetica, color: grayColor });
       
       page7.drawText("WHY JBJ", { x: margin, y: pageHeight - 100, size: 22, font: helveticaBold, color: blackColor });
       page7.drawRectangle({ x: margin, y: pageHeight - 108, width: 70, height: 3, color: goldColor });
@@ -422,11 +554,12 @@ const CompanyProfile = () => {
       });
       page7.drawText("www.jbj.ae", { x: pageWidth / 2 - 30, y: 25, size: 10, font: helvetica, color: goldColor });
 
-      // === PAGE 8: Areas of Focus ===
+      // === PAGE 9: Areas of Focus ===
       const page8 = pdfDoc.addPage([pageWidth, pageHeight]);
       page8.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: whiteColor });
       page8.drawRectangle({ x: 0, y: pageHeight - 50, width: pageWidth, height: 50, color: blackColor });
       page8.drawText("JBJ GLOBAL REAL ESTATE", { x: margin, y: pageHeight - 32, size: 12, font: helveticaBold, color: goldColor });
+      page8.drawText("Page 9", { x: pageWidth - margin - 30, y: pageHeight - 32, size: 10, font: helvetica, color: grayColor });
       
       page8.drawText("AREAS OF FOCUS", { x: margin, y: pageHeight - 100, size: 22, font: helveticaBold, color: blackColor });
       page8.drawRectangle({ x: margin, y: pageHeight - 108, width: 120, height: 3, color: goldColor });
@@ -445,11 +578,12 @@ const CompanyProfile = () => {
       });
       page8.drawText("www.jbj.ae", { x: pageWidth / 2 - 30, y: 25, size: 10, font: helvetica, color: goldColor });
 
-      // === PAGE 9: Client Experience ===
+      // === PAGE 10: Client Experience ===
       const page9 = pdfDoc.addPage([pageWidth, pageHeight]);
       page9.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: whiteColor });
       page9.drawRectangle({ x: 0, y: pageHeight - 50, width: pageWidth, height: 50, color: blackColor });
       page9.drawText("JBJ GLOBAL REAL ESTATE", { x: margin, y: pageHeight - 32, size: 12, font: helveticaBold, color: goldColor });
+      page9.drawText("Page 10", { x: pageWidth - margin - 35, y: pageHeight - 32, size: 10, font: helvetica, color: grayColor });
       
       page9.drawText("CLIENT EXPERIENCE STANDARDS", { x: margin, y: pageHeight - 100, size: 22, font: helveticaBold, color: blackColor });
       page9.drawRectangle({ x: margin, y: pageHeight - 108, width: 220, height: 3, color: goldColor });
@@ -462,11 +596,12 @@ const CompanyProfile = () => {
       });
       page9.drawText("www.jbj.ae", { x: pageWidth / 2 - 30, y: 25, size: 10, font: helvetica, color: goldColor });
 
-      // === PAGE 10: Trust & Compliance ===
+      // === PAGE 11: Trust & Compliance ===
       const page10 = pdfDoc.addPage([pageWidth, pageHeight]);
       page10.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: whiteColor });
       page10.drawRectangle({ x: 0, y: pageHeight - 50, width: pageWidth, height: 50, color: blackColor });
       page10.drawText("JBJ GLOBAL REAL ESTATE", { x: margin, y: pageHeight - 32, size: 12, font: helveticaBold, color: goldColor });
+      page10.drawText("Page 11", { x: pageWidth - margin - 35, y: pageHeight - 32, size: 10, font: helvetica, color: grayColor });
       
       page10.drawText("TRUST & COMPLIANCE", { x: margin, y: pageHeight - 100, size: 22, font: helveticaBold, color: blackColor });
       page10.drawRectangle({ x: margin, y: pageHeight - 108, width: 150, height: 3, color: goldColor });
@@ -479,32 +614,37 @@ const CompanyProfile = () => {
       });
       page10.drawText("www.jbj.ae", { x: pageWidth / 2 - 30, y: 25, size: 10, font: helvetica, color: goldColor });
 
-      // === PAGE 11: Founder Profile ===
-      const page11 = pdfDoc.addPage([pageWidth, pageHeight]);
-      page11.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: blackColor });
-      page11.drawRectangle({ x: 0, y: pageHeight - 8, width: pageWidth, height: 8, color: goldColor });
-      
-      page11.drawText("FOUNDER PROFILE", { x: margin, y: pageHeight - 80, size: 22, font: helveticaBold, color: goldColor });
-      page11.drawRectangle({ x: margin, y: pageHeight - 88, width: 130, height: 2, color: goldColor });
-      
-      page11.drawText(PROFILE_CONTENT.founderProfile.name, { x: margin, y: pageHeight - 130, size: 28, font: helveticaBold, color: whiteColor });
-      page11.drawText(PROFILE_CONTENT.founderProfile.title, { x: margin, y: pageHeight - 155, size: 14, font: helvetica, color: goldColor });
-      
-      const bioLines = wrapText(PROFILE_CONTENT.founderProfile.bio.replace(/\n\n/g, ' '), pageWidth - margin * 2 - 50, 10, helvetica);
-      yPos = pageHeight - 200;
-      bioLines.forEach((line) => {
-        page11.drawText(line, { x: margin, y: yPos, size: 10, font: helvetica, color: grayColor });
-        yPos -= 16;
-      });
-      
-      page11.drawText(`"${PROFILE_CONTENT.founderProfile.quote}"`, { x: margin, y: 100, size: 16, font: helveticaBold, color: goldColor });
-      page11.drawText("— Jane Bou Jaoude", { x: margin, y: 75, size: 12, font: helvetica, color: grayColor });
-      page11.drawRectangle({ x: 0, y: 0, width: pageWidth, height: 8, color: goldColor });
+      // === PAGE 12: Founder Profile (CONDITIONAL) ===
+      if (isFounderVisible) {
+        const page11 = pdfDoc.addPage([pageWidth, pageHeight]);
+        page11.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: blackColor });
+        page11.drawRectangle({ x: 0, y: pageHeight - 8, width: pageWidth, height: 8, color: goldColor });
+        page11.drawText("Page 12", { x: pageWidth - margin - 35, y: pageHeight - 32, size: 10, font: helvetica, color: grayColor });
+        
+        page11.drawText("FOUNDER PROFILE", { x: margin, y: pageHeight - 80, size: 22, font: helveticaBold, color: goldColor });
+        page11.drawRectangle({ x: margin, y: pageHeight - 88, width: 130, height: 2, color: goldColor });
+        
+        page11.drawText(PROFILE_CONTENT.founderProfile.name, { x: margin, y: pageHeight - 130, size: 28, font: helveticaBold, color: whiteColor });
+        page11.drawText(PROFILE_CONTENT.founderProfile.title, { x: margin, y: pageHeight - 155, size: 14, font: helvetica, color: goldColor });
+        
+        const bioLines = wrapText(PROFILE_CONTENT.founderProfile.bio.replace(/\n\n/g, ' '), pageWidth - margin * 2 - 50, 10, helvetica);
+        yPos = pageHeight - 200;
+        bioLines.forEach((line) => {
+          page11.drawText(line, { x: margin, y: yPos, size: 10, font: helvetica, color: grayColor });
+          yPos -= 16;
+        });
+        
+        page11.drawText(`"${PROFILE_CONTENT.founderProfile.quote}"`, { x: margin, y: 100, size: 16, font: helveticaBold, color: goldColor });
+        page11.drawText("— Jane Bou Jaoude", { x: margin, y: 75, size: 12, font: helvetica, color: grayColor });
+        page11.drawRectangle({ x: 0, y: 0, width: pageWidth, height: 8, color: goldColor });
+      }
 
-      // === PAGE 12: Company Snapshot & Contact ===
+      // === FINAL PAGE: Company Snapshot & Contact (Back Cover) ===
+      const pageNumber = isFounderVisible ? 13 : 12;
       const page12 = pdfDoc.addPage([pageWidth, pageHeight]);
       page12.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: blackColor });
       page12.drawRectangle({ x: 0, y: pageHeight - 8, width: pageWidth, height: 8, color: goldColor });
+      page12.drawText(`Page ${pageNumber}`, { x: pageWidth - margin - 35, y: pageHeight - 32, size: 10, font: helvetica, color: grayColor });
       
       page12.drawText("COMPANY SNAPSHOT", { x: margin, y: pageHeight - 80, size: 22, font: helveticaBold, color: goldColor });
       page12.drawRectangle({ x: margin, y: pageHeight - 88, width: 150, height: 2, color: goldColor });
@@ -552,7 +692,7 @@ const CompanyProfile = () => {
       toast.success("Company Profile downloaded successfully!");
     } catch (error) {
       console.error("Error generating PDF:", error);
-      toast.error("Failed to generate PDF");
+      toast.error("Failed to generate PDF. Please try again.");
     } finally {
       setIsGenerating(false);
     }
@@ -627,7 +767,9 @@ const CompanyProfile = () => {
             </span>
           </motion.h1>
           <motion.p className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto mb-8" variants={fadeInUp}>
-            {PROFILE_CONTENT.coverPage.subtitle}
+            <FounderContent fallback={PROFILE_CONTENT.coverPage.subtitleFallback}>
+              {PROFILE_CONTENT.coverPage.subtitle}
+            </FounderContent>
           </motion.p>
 
           <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
@@ -919,7 +1061,7 @@ const CompanyProfile = () => {
       </SectionShell>
 
       {/* 10. Trust & Compliance */}
-      <SectionShell className="py-16">
+      <SectionShell>
         <div className="max-w-6xl mx-auto">
           <div className="jj-card-inner">
             <div className="flex items-start gap-4">
@@ -935,43 +1077,50 @@ const CompanyProfile = () => {
         </div>
       </SectionShell>
 
-      {/* 11. Founder Profile */}
-      <SectionShell>
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Leadership</span>
-            <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Founder Profile
-            </h2>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="jj-card-inner"
-          >
-            <div className="flex flex-col md:flex-row items-start gap-8">
-              <div className="jj-icon-box-active w-20 h-20 rounded-full border border-gold/40 flex items-center justify-center flex-shrink-0">
-                <User className="w-10 h-10" />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-black text-2xl font-bold mb-1">{PROFILE_CONTENT.founderProfile.name}</h3>
-                <p className="text-black/70 mb-6">{PROFILE_CONTENT.founderProfile.title}</p>
-                <div className="space-y-4 text-black/70 leading-relaxed mb-8">
-                  {PROFILE_CONTENT.founderProfile.bio.split("\n\n").map((para, i) => (
-                    <p key={i}>{para}</p>
-                  ))}
-                </div>
-                <blockquote className="border-l-4 border-gold pl-6 py-2">
-                  <p className="text-black text-xl italic mb-2">"{PROFILE_CONTENT.founderProfile.quote}"</p>
-                  <cite className="text-black/60 text-sm">— {PROFILE_CONTENT.founderProfile.name}</cite>
-                </blockquote>
-              </div>
+      {/* 11. Founder Profile - WRAPPED IN FOUNDER CONTENT */}
+      <FounderContent>
+        <SectionShell>
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Leadership</span>
+              <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                Founder Profile
+              </h2>
             </div>
-          </motion.div>
-        </div>
-      </SectionShell>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="jj-card-inner"
+            >
+              <div className="flex flex-col md:flex-row items-start gap-8">
+                {/* Founder Photo */}
+                <div className="w-32 h-40 md:w-40 md:h-52 rounded-xl overflow-hidden border-2 border-gold/30 shadow-xl flex-shrink-0">
+                  <img 
+                    src={founderCompanyProfile} 
+                    alt={PROFILE_CONTENT.founderProfile.name}
+                    className="w-full h-full object-cover object-top"
+                  />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-black text-2xl font-bold mb-1">{PROFILE_CONTENT.founderProfile.name}</h3>
+                  <p className="text-gold mb-6">{PROFILE_CONTENT.founderProfile.title}</p>
+                  <div className="space-y-4 text-black/70 leading-relaxed mb-8">
+                    {PROFILE_CONTENT.founderProfile.bio.split("\n\n").map((para, i) => (
+                      <p key={i}>{para}</p>
+                    ))}
+                  </div>
+                  <blockquote className="border-l-4 border-gold pl-6 py-2">
+                    <p className="text-black text-xl italic mb-2">"{PROFILE_CONTENT.founderProfile.quote}"</p>
+                    <cite className="text-black/60 text-sm">— {PROFILE_CONTENT.founderProfile.name}</cite>
+                  </blockquote>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </SectionShell>
+      </FounderContent>
 
       {/* 12. Company Snapshot */}
       <SectionShell>
@@ -1090,36 +1239,58 @@ const CompanyProfile = () => {
         </motion.div>
       </SectionShell>
 
-      {/* 14. PDF Download Module */}
+      {/* 14. PDF Download Module with 3D Book Preview */}
       <SectionShell>
         <motion.div
-          className="max-w-4xl mx-auto text-center jj-card-inner"
+          className="max-w-4xl mx-auto text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <div className="jj-icon-box-active w-16 h-16 mx-auto mb-6">
-            <FileText className="w-8 h-8" />
+          <div className="text-center mb-8">
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Download</span>
+            <h2 className="text-black text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Get the Full Company Profile
+            </h2>
+            <p className="text-black/70">
+              {isFounderVisible ? "13" : "12"}-page A4 Landscape • Professional Format
+            </p>
           </div>
-          <h2 className="text-black text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-            Download Company Profile
-          </h2>
-          <p className="text-black/70 text-lg mb-8">JBJ_Global_Real_Estate_Company_Profile.pdf</p>
-          <Button onClick={generatePDF} disabled={isGenerating} variant="primary" size="lg">
-            {isGenerating ? (
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-                Generating...
+
+          <div className="jj-card-inner py-12">
+            {/* 3D Book Preview */}
+            <BookPreview3D onClick={generatePDF} isGenerating={isGenerating} />
+
+            <div className="mt-8 flex flex-col items-center gap-4">
+              <p className="text-black/60 text-sm">
+                JBJ_Global_Real_Estate_Company_Profile.pdf
+              </p>
+              <div className="flex flex-wrap justify-center gap-3">
+                <Button onClick={generatePDF} disabled={isGenerating} variant="primary" size="lg">
+                  {isGenerating ? (
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                      Generating...
+                    </div>
+                  ) : (
+                    <>
+                      <Download className="w-5 h-5" />
+                      Download PDF
+                    </>
+                  )}
+                </Button>
+                <Button onClick={handleWhatsApp} variant="outline" size="lg" className="border-gold text-gold hover:bg-gold hover:text-black">
+                  <BookOpen className="w-5 h-5" />
+                  Request Print Copy
+                </Button>
               </div>
-            ) : (
-              <>
-                <Download className="w-5 h-5" />
-                Download Company Profile
-              </>
-            )}
-          </Button>
+            </div>
+          </div>
         </motion.div>
       </SectionShell>
+
+      {/* Footer */}
+      <Footer />
 
       {/* Mobile Sticky Actions */}
       <div className="lg:hidden fixed bottom-4 left-4 right-4 z-50 flex gap-2">
