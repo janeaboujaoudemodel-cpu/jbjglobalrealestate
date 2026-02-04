@@ -6,12 +6,20 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Reelly API is hosted on Xano - common base URLs to try
+// Reelly API is hosted on Xano - trying various known patterns
 const REELLY_API_BASES = [
+  "https://x8ki-letl-twmt.n7.xano.io/api:reelly",
+  "https://x8ki-letl-twmt.n7.xano.io/api:main", 
+  "https://x8ki-letl-twmt.n7.xano.io/api:v1",
+  "https://xjjw-lzm6-nklx.n7c.xano.io/api:reelly",
+  "https://xjjw-lzm6-nklx.n7c.xano.io/api:main",
+  "https://xjjw-lzm6-nklx.n7c.xano.io/api:v1",
   "https://api.reelly.io/api:main",
+  "https://api.reelly.io/api:reelly",
   "https://api.reelly.io/api:v1",
-  "https://api.reelly.io/api",
-  "https://x8ki-letl-twmt.n7.xano.io/api:main", // Common Xano subdomain pattern
+  // Common Xano subdomain patterns
+  "https://xnqa-hwdm-qnjf.n7.xano.io/api:main",
+  "https://xnqa-hwdm-qnjf.n7.xano.io/api:reelly",
 ];
 
 interface ReellyProject {
@@ -57,26 +65,40 @@ interface ReellyProject {
   rental_yield?: number;
 }
 
-async function tryReellyEndpoint(apiKey: string, baseUrl: string, endpoint: string): Promise<any> {
-  const url = `${baseUrl}${endpoint}`;
+async function tryReellyEndpoint(apiKey: string, url: string): Promise<{ ok: boolean; status: number; data?: any; error?: string }> {
   console.log(`[Reelly API] Trying: ${url}`);
   
-  const response = await fetch(url, {
-    method: "GET",
-    headers: {
-      "Authorization": `Bearer ${apiKey}`,
-      "X-API-Key": apiKey,
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-    },
-  });
-  
-  if (!response.ok) {
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+    });
+    
     const text = await response.text();
-    throw new Error(`${response.status}: ${text.slice(0, 200)}`);
+    
+    // Check if it's HTML (error page)
+    if (text.trim().startsWith("<!DOCTYPE") || text.trim().startsWith("<html")) {
+      return { ok: false, status: response.status, error: "HTML response (error page)" };
+    }
+    
+    try {
+      const data = JSON.parse(text);
+      
+      if (!response.ok) {
+        return { ok: false, status: response.status, error: JSON.stringify(data).slice(0, 200) };
+      }
+      
+      return { ok: true, status: response.status, data };
+    } catch {
+      return { ok: false, status: response.status, error: `Non-JSON response: ${text.slice(0, 100)}` };
+    }
+  } catch (err) {
+    return { ok: false, status: 0, error: err instanceof Error ? err.message : String(err) };
   }
-  
-  return response.json();
 }
 
 async function discoverReellyApi(apiKey: string): Promise<{ baseUrl: string; endpoint: string; data: any }> {
@@ -84,93 +106,38 @@ async function discoverReellyApi(apiKey: string): Promise<{ baseUrl: string; end
     "/projects",
     "/project",
     "/off-plan",
-    "/offplan",
+    "/offplan", 
     "/properties",
     "/listings",
     "/developments",
+    "/all-projects",
+    "/get-projects",
   ];
+  
+  const results: Array<{ url: string; status: number; error?: string }> = [];
   
   for (const baseUrl of REELLY_API_BASES) {
     for (const endpoint of endpoints) {
-      try {
-        const data = await tryReellyEndpoint(apiKey, baseUrl, endpoint);
-        console.log(`[Reelly API] SUCCESS: ${baseUrl}${endpoint}`);
-        return { baseUrl, endpoint, data };
-      } catch (err) {
-        // Continue trying
+      const url = `${baseUrl}${endpoint}`;
+      const result = await tryReellyEndpoint(apiKey, url);
+      
+      if (result.ok && result.data) {
+        console.log(`[Reelly API] SUCCESS: ${url}`);
+        return { baseUrl, endpoint, data: result.data };
       }
+      
+      results.push({ url, status: result.status, error: result.error });
+      
+      // Small delay to avoid rate limiting
+      await new Promise(r => setTimeout(r, 100));
     }
   }
   
-  throw new Error("Could not discover Reelly API endpoint. Please check the API key and contact Reelly support for the correct API base URL.");
-}
-
-async function fetchReellyProjects(apiKey: string, options?: { 
-  baseUrl?: string; 
-  endpoint?: string;
-  page?: number; 
-  limit?: number;
-}): Promise<any> {
-  const page = options?.page || 1;
-  const limit = options?.limit || 100;
+  // Log all attempts for debugging
+  console.error("[Reelly API] All attempts failed:");
+  results.forEach(r => console.error(`  ${r.url}: ${r.status} - ${r.error}`));
   
-  // If we know the endpoint, use it directly
-  if (options?.baseUrl && options?.endpoint) {
-    const url = `${options.baseUrl}${options.endpoint}?page=${page}&per_page=${limit}`;
-    return tryReellyEndpoint(apiKey, options.baseUrl, `${options.endpoint}?page=${page}&per_page=${limit}`);
-  }
-  
-  // Otherwise discover it
-  const discovery = await discoverReellyApi(apiKey);
-  return discovery.data;
-}
-
-async function fetchAllReellyProjects(apiKey: string): Promise<ReellyProject[]> {
-  // First discover the API
-  const discovery = await discoverReellyApi(apiKey);
-  
-  const allProjects: ReellyProject[] = [];
-  
-  // Handle response format
-  const initialProjects = Array.isArray(discovery.data) 
-    ? discovery.data 
-    : discovery.data?.items || discovery.data?.projects || discovery.data?.data || [];
-  
-  allProjects.push(...initialProjects);
-  
-  // Check for pagination
-  const total = discovery.data?.total || discovery.data?.meta?.total || discovery.data?.pagination?.total;
-  const perPage = discovery.data?.per_page || discovery.data?.meta?.per_page || 100;
-  
-  if (total && allProjects.length < total) {
-    const totalPages = Math.ceil(total / perPage);
-    
-    for (let page = 2; page <= totalPages && page <= 50; page++) {
-      try {
-        const pageData = await tryReellyEndpoint(
-          apiKey, 
-          discovery.baseUrl, 
-          `${discovery.endpoint}?page=${page}&per_page=${perPage}`
-        );
-        
-        const projects = Array.isArray(pageData) 
-          ? pageData 
-          : pageData?.items || pageData?.projects || pageData?.data || [];
-        
-        if (projects.length === 0) break;
-        allProjects.push(...projects);
-        
-        // Rate limiting
-        await new Promise(r => setTimeout(r, 300));
-      } catch (err) {
-        console.warn(`[Reelly API] Page ${page} failed:`, err);
-        break;
-      }
-    }
-  }
-  
-  console.log(`[Reelly API] Total projects fetched: ${allProjects.length}`);
-  return allProjects;
+  throw new Error(`Could not discover Reelly API endpoint after trying ${results.length} combinations. The API key may be invalid or the API base URL is custom. Please contact Reelly support for the correct API documentation URL.`);
 }
 
 function normalizeReellyProject(project: ReellyProject): any {
@@ -254,11 +221,34 @@ serve(async (req) => {
       );
     }
 
-    const { action, project_id } = await req.json().catch(() => ({}));
+    const body = await req.json().catch(() => ({}));
+    const { action, custom_base_url } = body;
+
+    // Allow custom base URL to be provided
+    const baseUrls = custom_base_url ? [custom_base_url, ...REELLY_API_BASES] : REELLY_API_BASES;
 
     // Test API connection and discover endpoint
     if (action === "test" || action === "discover") {
       try {
+        // If custom URL provided, try it first
+        if (custom_base_url) {
+          const endpoints = ["/projects", "/project", "/off-plan", "/properties"];
+          for (const ep of endpoints) {
+            const result = await tryReellyEndpoint(apiKey, `${custom_base_url}${ep}`);
+            if (result.ok) {
+              return new Response(
+                JSON.stringify({ 
+                  success: true, 
+                  message: "Reelly API connection successful",
+                  discovered_endpoint: `${custom_base_url}${ep}`,
+                  sample: result.data,
+                }),
+                { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+              );
+            }
+          }
+        }
+        
         const discovery = await discoverReellyApi(apiKey);
         const sampleProjects = Array.isArray(discovery.data) 
           ? discovery.data.slice(0, 3)
@@ -279,7 +269,7 @@ serve(async (req) => {
           JSON.stringify({ 
             success: false, 
             error: `API discovery failed: ${err instanceof Error ? err.message : String(err)}`,
-            tried_bases: REELLY_API_BASES,
+            hint: "Please provide the 'custom_base_url' parameter with the API base URL from Reelly documentation (e.g., 'https://xxxxx.xano.io/api:main')",
           }),
           { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
@@ -290,8 +280,14 @@ serve(async (req) => {
     if (action === "fetch-all" || action === "sync") {
       console.log("[Reelly API] Starting full project fetch...");
       
-      const projects = await fetchAllReellyProjects(apiKey);
-      const normalizedProjects = projects.map(normalizeReellyProject);
+      const discovery = await discoverReellyApi(apiKey);
+      
+      // Get all projects from first response
+      const allProjects: ReellyProject[] = Array.isArray(discovery.data) 
+        ? discovery.data 
+        : discovery.data?.items || discovery.data?.projects || discovery.data?.data || [];
+      
+      const normalizedProjects = allProjects.map(normalizeReellyProject);
       
       console.log(`[Reelly API] Fetched and normalized ${normalizedProjects.length} projects`);
       
@@ -307,7 +303,6 @@ serve(async (req) => {
         
         for (const project of normalizedProjects) {
           try {
-            // Check if already exists
             const { data: existing } = await supabase
               .from("pending_project_imports")
               .select("id")
@@ -316,7 +311,6 @@ serve(async (req) => {
               .maybeSingle();
             
             if (existing) {
-              // Update existing
               const { error } = await supabase
                 .from("pending_project_imports")
                 .update({
@@ -328,7 +322,6 @@ serve(async (req) => {
               if (error) throw error;
               updated++;
             } else {
-              // Insert new
               const { error } = await supabase
                 .from("pending_project_imports")
                 .insert({
@@ -371,7 +364,8 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         success: false, 
-        error: "Invalid action. Use 'test', 'discover', 'fetch-all', or 'sync'" 
+        error: "Invalid action. Use 'test', 'discover', 'fetch-all', or 'sync'",
+        hint: "You can also provide 'custom_base_url' if you know the API base URL"
       }),
       { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
