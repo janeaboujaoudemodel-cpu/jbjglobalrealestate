@@ -1,14 +1,15 @@
 /**
  * HeroSearchBar Component - Premium Single-Line Search Bar
- * - Buy/Rent toggle only (Off-Plan moved to property status filter inside dialog)
+ * - Buy/Rent as dropdown box (matching AED/sqft style)
  * - Single dropdown for Currency selection
  * - Single dropdown for Area unit selection
- * - Comprehensive filters in dialog with all property types, developer, community, etc.
+ * - Emirates filter in advanced filters
+ * - Comprehensive filters with all property types, developer, community, etc.
  */
 
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Search, ChevronDown, SlidersHorizontal, Sparkles, DollarSign, Ruler } from "lucide-react";
+import { Search, ChevronDown, SlidersHorizontal, Sparkles, DollarSign, Ruler, Home, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -33,6 +34,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useDevelopers, useCommunities } from "@/hooks/useProjects";
 import { cn } from "@/lib/utils";
 
+// Bedroom options - now up to 7+
 const bedroomOptions = [
   { value: "any", label: "Any" },
   { value: "studio", label: "Studio" },
@@ -40,7 +42,9 @@ const bedroomOptions = [
   { value: "2", label: "2" },
   { value: "3", label: "3" },
   { value: "4", label: "4" },
-  { value: "5+", label: "5+" },
+  { value: "5", label: "5" },
+  { value: "6", label: "6" },
+  { value: "7+", label: "7+" },
 ];
 
 // All supported currencies - unified across the platform
@@ -82,12 +86,100 @@ const PROPERTY_STATUS = [
   { value: "off-plan", label: "Off-Plan" },
 ];
 
+// UAE Emirates
+const UAE_EMIRATES = [
+  { value: "all", label: "All Emirates" },
+  { value: "Dubai", label: "Dubai" },
+  { value: "Abu Dhabi", label: "Abu Dhabi" },
+  { value: "Sharjah", label: "Sharjah" },
+  { value: "Ras Al Khaimah", label: "Ras Al Khaimah" },
+  { value: "Ajman", label: "Ajman" },
+  { value: "Fujairah", label: "Fujairah" },
+  { value: "Umm Al Quwain", label: "Umm Al Quwain" },
+];
+
 // Sort options
 const SORT_OPTIONS = [
   { value: "newest", label: "Newest First" },
   { value: "oldest", label: "Oldest First" },
   { value: "price-low", label: "Cheapest First" },
   { value: "price-high", label: "Most Expensive First" },
+  { value: "size-large", label: "Largest First" },
+  { value: "size-small", label: "Smallest First" },
+];
+
+// Comprehensive UAE Developer List - All major developers
+export const UAE_DEVELOPERS = [
+  // Tier 1 - Elite
+  { id: "emaar", name: "Emaar Properties" },
+  { id: "nakheel", name: "Nakheel" },
+  { id: "damac", name: "DAMAC Properties" },
+  { id: "sobha", name: "Sobha Realty" },
+  { id: "meraas", name: "Meraas" },
+  { id: "aldar", name: "Aldar Properties" },
+  { id: "omniyat", name: "Omniyat" },
+  // Tier 2 - Premium
+  { id: "ellington", name: "Ellington Properties" },
+  { id: "select-group", name: "Select Group" },
+  { id: "dubai-properties", name: "Dubai Properties" },
+  { id: "wasl", name: "Wasl" },
+  // Tier 3 - Top Tier
+  { id: "binghatti", name: "Binghatti Developers" },
+  { id: "majid-al-futtaim", name: "Majid Al Futtaim" },
+  { id: "deyaar", name: "Deyaar Development" },
+  { id: "dubai-holding", name: "Dubai Holding" },
+  // Tier 4 - Established
+  { id: "danube", name: "Danube Properties" },
+  { id: "azizi", name: "Azizi Developments" },
+  { id: "samana", name: "Samana Developers" },
+  { id: "reportage", name: "Reportage Properties" },
+  { id: "vincitore", name: "Vincitore" },
+  // Additional Major Developers
+  { id: "object-one", name: "Object One" },
+  { id: "tiger", name: "Tiger Group" },
+  { id: "seven-tides", name: "Seven Tides" },
+  { id: "imtiaz", name: "Imtiaz Developments" },
+  { id: "mag", name: "MAG Property Development" },
+  { id: "bloom", name: "Bloom Holding" },
+  { id: "meydan", name: "Meydan Group" },
+  { id: "arada", name: "Arada" },
+  { id: "eagle-hills", name: "Eagle Hills" },
+  { id: "esnaad", name: "Esnaad" },
+  { id: "rak-properties", name: "RAK Properties" },
+  { id: "sharjah-holding", name: "Sharjah Holding" },
+  { id: "aljada", name: "Aljada" },
+  { id: "tilal", name: "Tilal Properties" },
+  { id: "palace", name: "Palace Group" },
+  { id: "prestige", name: "Prestige One" },
+  { id: "iman", name: "Iman Developers" },
+  { id: "oasis", name: "Oasis Real Estate" },
+  { id: "bayanat", name: "Bayanat Properties" },
+  { id: "h&h", name: "H&H Development" },
+  { id: "object-one", name: "Object One" },
+  { id: "dar-al-arkan", name: "Dar Al Arkan" },
+  { id: "first-group", name: "First Group" },
+  { id: "cayan", name: "Cayan Group" },
+  { id: "dubai-investments", name: "Dubai Investments" },
+  { id: "oia", name: "OIA" },
+  { id: "range-international", name: "Range International" },
+  { id: "serenity", name: "Serenity Developers" },
+  { id: "fam", name: "FAM Properties" },
+  { id: "aark", name: "AARK Developers" },
+  { id: "dhg", name: "Dubai Hills Group" },
+  { id: "sobha-hartland", name: "Sobha Hartland" },
+  { id: "district-one", name: "District One" },
+  { id: "mina-rashid", name: "Mina Rashid" },
+  { id: "jvc", name: "JVC Properties" },
+  { id: "haven", name: "Haven Real Estate" },
+  { id: "ipa", name: "IPA Properties" },
+  { id: "noble", name: "Noble International" },
+  { id: "luxe", name: "Luxe Developers" },
+  { id: "dhabi", name: "Dhabi Group" },
+  { id: "al-habtoor", name: "Al Habtoor Group" },
+  { id: "burj-jumeirah", name: "Burj Jumeirah" },
+  { id: "aqua", name: "Aqua Properties" },
+  { id: "koa", name: "KOA" },
+  { id: "aston-martini", name: "Aston Martin Residences" },
 ];
 
 const priceRanges = {
@@ -289,6 +381,7 @@ const HeroSearchBar = () => {
   const [sortBy, setSortBy] = useState('newest');
   const [developerId, setDeveloperId] = useState('all');
   const [communityId, setCommunityId] = useState('all');
+  const [emirate, setEmirate] = useState('all');
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   const { data: developers } = useDevelopers();
@@ -296,6 +389,26 @@ const HeroSearchBar = () => {
   
   const navigate = useNavigate();
   const { t } = useLanguage();
+
+  // Combine DB developers with static list, removing duplicates
+  const allDevelopers = (() => {
+    const dbDevs = developers || [];
+    const staticDevs = UAE_DEVELOPERS;
+    const combined = [...dbDevs];
+    
+    // Add static developers that aren't already in DB
+    staticDevs.forEach(staticDev => {
+      const exists = dbDevs.some(dbDev => 
+        dbDev.name.toLowerCase().includes(staticDev.name.toLowerCase()) ||
+        staticDev.name.toLowerCase().includes(dbDev.name.toLowerCase())
+      );
+      if (!exists) {
+        combined.push({ id: staticDev.id, name: staticDev.name, rank: 999 } as any);
+      }
+    });
+    
+    return combined.sort((a, b) => (a.rank ?? 999) - (b.rank ?? 999));
+  })();
 
   const handleSearch = () => {
     const params = new URLSearchParams();
@@ -309,6 +422,7 @@ const HeroSearchBar = () => {
     if (sortBy !== 'newest') params.set('sort', sortBy);
     if (developerId !== 'all') params.set('developer', developerId);
     if (communityId !== 'all') params.set('community', communityId);
+    if (emirate !== 'all') params.set('emirate', emirate);
     
     if (priceRange !== 'any') {
       const [min, max] = priceRange.split('-');
@@ -336,6 +450,7 @@ const HeroSearchBar = () => {
         size_range: sizeRange,
         area_unit: areaUnit,
         sort_by: sortBy,
+        emirate,
       });
     }
 
@@ -363,19 +478,60 @@ const HeroSearchBar = () => {
 
   return (
     <div className="w-full">
-      {/* Currency & Area Unit Dropdowns - Single box each */}
-      <div className="flex flex-wrap items-center gap-3 mb-4">
+      {/* Top Row: Buy/Rent, Currency, Area Unit - All as dropdown boxes in same style */}
+      <div className="flex flex-wrap items-center gap-2 mb-3">
+        {/* Buy/Rent Dropdown - Same style as AED and sqft */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 transition-all text-sm">
+              <Home className="w-3.5 h-3.5 text-gold" />
+              <span className="font-medium">{purpose === 'buy' ? 'Buy' : 'Rent'}</span>
+              <ChevronDown className="w-3 h-3 text-white/60" />
+            </button>
+          </PopoverTrigger>
+          <PopoverContent 
+            className="w-32 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[9999]"
+            side="bottom"
+            align="start"
+            sideOffset={4}
+          >
+            <div className="text-xs font-semibold text-black/60 px-3 py-1.5 uppercase tracking-wider">Purpose</div>
+            {(['buy', 'rent'] as const).map((p) => (
+              <button
+                key={p}
+                onClick={() => {
+                  setPurpose(p);
+                  setPriceRange('any');
+                }}
+                className={cn(
+                  "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors capitalize",
+                  purpose === p 
+                    ? "bg-gold/20 text-black font-semibold border border-gold/40" 
+                    : "text-black hover:bg-white/50"
+                )}
+              >
+                {p}
+              </button>
+            ))}
+          </PopoverContent>
+        </Popover>
+
         {/* Currency Dropdown */}
         <Popover>
           <PopoverTrigger asChild>
-            <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 transition-all">
-              <DollarSign className="w-4 h-4 text-gold" />
-              <span className="text-sm font-medium">{currentCurrency.flag} {currentCurrency.code}</span>
-              <ChevronDown className="w-3.5 h-3.5 text-white/60" />
+            <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 transition-all text-sm">
+              <DollarSign className="w-3.5 h-3.5 text-gold" />
+              <span className="font-medium">{currentCurrency.flag} {currentCurrency.code}</span>
+              <ChevronDown className="w-3 h-3 text-white/60" />
             </button>
           </PopoverTrigger>
-          <PopoverContent className="w-56 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
-            <div className="text-xs font-semibold text-black/60 px-3 py-2 uppercase tracking-wider">Select Currency</div>
+          <PopoverContent 
+            className="w-48 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[9999]"
+            side="bottom"
+            align="start"
+            sideOffset={4}
+          >
+            <div className="text-xs font-semibold text-black/60 px-3 py-1.5 uppercase tracking-wider">Currency</div>
             {SUPPORTED_CURRENCIES.map((c) => (
               <button
                 key={c.code}
@@ -384,15 +540,15 @@ const HeroSearchBar = () => {
                   setPriceRange('any');
                 }}
                 className={cn(
-                  "w-full text-left px-3 py-2.5 rounded-lg text-sm transition-colors flex items-center gap-3",
+                  "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2",
                   currency === c.code 
                     ? "bg-gold/20 text-black font-semibold border border-gold/40" 
                     : "text-black hover:bg-white/50"
                 )}
               >
-                <span className="text-base">{c.flag}</span>
+                <span>{c.flag}</span>
                 <span>{c.label}</span>
-                <span className="text-black/50 ml-auto">{c.symbol}</span>
+                <span className="text-black/50 ml-auto text-xs">{c.symbol}</span>
               </button>
             ))}
           </PopoverContent>
@@ -401,14 +557,19 @@ const HeroSearchBar = () => {
         {/* Area Unit Dropdown */}
         <Popover>
           <PopoverTrigger asChild>
-            <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 transition-all">
-              <Ruler className="w-4 h-4 text-gold" />
-              <span className="text-sm font-medium">{areaUnit}</span>
-              <ChevronDown className="w-3.5 h-3.5 text-white/60" />
+            <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 transition-all text-sm">
+              <Ruler className="w-3.5 h-3.5 text-gold" />
+              <span className="font-medium">{areaUnit}</span>
+              <ChevronDown className="w-3 h-3 text-white/60" />
             </button>
           </PopoverTrigger>
-          <PopoverContent className="w-40 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
-            <div className="text-xs font-semibold text-black/60 px-3 py-2 uppercase tracking-wider">Size Unit</div>
+          <PopoverContent 
+            className="w-44 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[9999]"
+            side="bottom"
+            align="start"
+            sideOffset={4}
+          >
+            <div className="text-xs font-semibold text-black/60 px-3 py-1.5 uppercase tracking-wider">Size Unit</div>
             {(['sqft', 'sqm'] as const).map((u) => (
               <button
                 key={u}
@@ -417,7 +578,7 @@ const HeroSearchBar = () => {
                   setSizeRange('any');
                 }}
                 className={cn(
-                  "w-full text-left px-3 py-2.5 rounded-lg text-sm transition-colors",
+                  "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors",
                   areaUnit === u 
                     ? "bg-gold/20 text-black font-semibold border border-gold/40" 
                     : "text-black hover:bg-white/50"
@@ -430,31 +591,36 @@ const HeroSearchBar = () => {
         </Popover>
       </div>
 
-      {/* Main Search Bar - Single Line Premium Design */}
+      {/* Main Search Bar - Compact Single Line */}
       <div className="flex items-center justify-start">
         <div className="flex items-center bg-white/10 backdrop-blur-md border border-white/30 rounded-xl overflow-hidden w-full max-w-4xl">
           {/* Location Search Input */}
-          <div className="flex-1 flex items-center px-4 border-r border-white/20">
-            <Search className="w-5 h-5 text-gold shrink-0" />
+          <div className="flex-1 flex items-center px-3 border-r border-white/20">
+            <Search className="w-4 h-4 text-gold shrink-0" />
             <input
               type="text"
               placeholder="Area, project or community"
               value={locationSearch}
               onChange={(e) => setLocationSearch(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/60 px-3 py-3.5 text-base font-medium"
+              className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/60 px-2 py-3 text-sm font-medium"
             />
           </div>
 
           {/* Beds Dropdown */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-1.5 px-4 py-3.5 text-white font-medium text-sm hover:bg-white/10 transition-colors border-r border-white/20 whitespace-nowrap">
+              <button className="flex items-center gap-1 px-3 py-3 text-white font-medium text-sm hover:bg-white/10 transition-colors border-r border-white/20 whitespace-nowrap">
                 {getBedsLabel()}
-                <ChevronDown className="w-4 h-4 text-gold" />
+                <ChevronDown className="w-3.5 h-3.5 text-gold" />
               </button>
             </PopoverTrigger>
-            <PopoverContent className="w-40 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30">
+            <PopoverContent 
+              className="w-36 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[9999]"
+              side="bottom"
+              align="start"
+              sideOffset={4}
+            >
               {bedroomOptions.map((option) => (
                 <button
                   key={option.value}
@@ -475,12 +641,17 @@ const HeroSearchBar = () => {
           {/* Price Range Dropdown */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-1.5 px-4 py-3.5 text-white font-medium text-sm hover:bg-white/10 transition-colors border-r border-white/20 whitespace-nowrap">
+              <button className="flex items-center gap-1 px-3 py-3 text-white font-medium text-sm hover:bg-white/10 transition-colors border-r border-white/20 whitespace-nowrap">
                 {getPriceLabel()}
-                <ChevronDown className="w-4 h-4 text-gold" />
+                <ChevronDown className="w-3.5 h-3.5 text-gold" />
               </button>
             </PopoverTrigger>
-            <PopoverContent className="w-48 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30">
+            <PopoverContent 
+              className="w-44 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[9999]"
+              side="bottom"
+              align="start"
+              sideOffset={4}
+            >
               {getCurrentPriceRanges().map((option) => (
                 <button
                   key={option.value}
@@ -501,27 +672,64 @@ const HeroSearchBar = () => {
           {/* More Filters Button */}
           <Dialog open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
             <DialogTrigger asChild>
-              <button className="flex items-center gap-1.5 px-4 py-3.5 text-white font-medium text-sm hover:bg-white/10 transition-colors border-r border-white/20">
-                <SlidersHorizontal className="w-4 h-4 text-gold" />
+              <button className="flex items-center gap-1 px-3 py-3 text-white font-medium text-sm hover:bg-white/10 transition-colors border-r border-white/20">
+                <SlidersHorizontal className="w-3.5 h-3.5 text-gold" />
                 <span className="hidden sm:inline">Filters</span>
               </button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[600px] max-h-[85vh] overflow-y-auto bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+            <DialogContent className="sm:max-w-[650px] max-h-[85vh] overflow-y-auto bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
               <DialogHeader>
                 <DialogTitle className="text-black text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                   Advanced Filters
                 </DialogTitle>
               </DialogHeader>
-              <div className="grid gap-5 py-4">
-                {/* Property Type */}
+              <div className="grid gap-4 py-4">
+                {/* Row 1: Property Type & Status */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm font-semibold text-black/80 mb-2 block">Property Type</label>
+                    <Select value={propertyType} onValueChange={setPropertyType}>
+                      <SelectTrigger className="h-11 bg-white border-gold/30">
+                        <SelectValue placeholder="All Types" />
+                      </SelectTrigger>
+                      <SelectContent className="z-[10000]">
+                        {PROPERTY_TYPES.map((item) => (
+                          <SelectItem key={item.value} value={item.value}>
+                            {item.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="text-sm font-semibold text-black/80 mb-2 block">Status</label>
+                    <Select value={propertyStatus} onValueChange={setPropertyStatus}>
+                      <SelectTrigger className="h-11 bg-white border-gold/30">
+                        <SelectValue placeholder="All Status" />
+                      </SelectTrigger>
+                      <SelectContent className="z-[10000]">
+                        {PROPERTY_STATUS.map((item) => (
+                          <SelectItem key={item.value} value={item.value}>
+                            {item.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                {/* Row 2: Emirates Filter */}
                 <div>
-                  <label className="text-sm font-semibold text-black/80 mb-2 block">Property Type</label>
-                  <Select value={propertyType} onValueChange={setPropertyType}>
-                    <SelectTrigger className="h-12 bg-white border-gold/30">
-                      <SelectValue placeholder="All Types" />
+                  <label className="text-sm font-semibold text-black/80 mb-2 block flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-gold" />
+                    Emirate
+                  </label>
+                  <Select value={emirate} onValueChange={setEmirate}>
+                    <SelectTrigger className="h-11 bg-white border-gold/30">
+                      <SelectValue placeholder="All Emirates" />
                     </SelectTrigger>
-                    <SelectContent>
-                      {PROPERTY_TYPES.map((item) => (
+                    <SelectContent className="z-[10000]">
+                      {UAE_EMIRATES.map((item) => (
                         <SelectItem key={item.value} value={item.value}>
                           {item.label}
                         </SelectItem>
@@ -530,50 +738,67 @@ const HeroSearchBar = () => {
                   </Select>
                 </div>
 
-                {/* Property Status (Ready / Off-Plan) */}
-                <div>
-                  <label className="text-sm font-semibold text-black/80 mb-2 block">Property Status</label>
-                  <Select value={propertyStatus} onValueChange={setPropertyStatus}>
-                    <SelectTrigger className="h-12 bg-white border-gold/30">
-                      <SelectValue placeholder="All Status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {PROPERTY_STATUS.map((item) => (
-                        <SelectItem key={item.value} value={item.value}>
-                          {item.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                {/* Row 3: Price Range (From - To) & Size Range (From - To) & Sort */}
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <label className="text-sm font-semibold text-black/80 mb-2 block">Price Range</label>
+                      <Select value={priceRange} onValueChange={setPriceRange}>
+                        <SelectTrigger className="h-11 bg-white border-gold/30">
+                          <SelectValue placeholder="Any Price" />
+                        </SelectTrigger>
+                        <SelectContent className="z-[10000]">
+                          {getCurrentPriceRanges().map((item) => (
+                            <SelectItem key={item.value} value={item.value}>
+                              {item.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="text-sm font-semibold text-black/80 mb-2 block">Size ({areaUnit})</label>
+                      <Select value={sizeRange} onValueChange={setSizeRange}>
+                        <SelectTrigger className="h-11 bg-white border-gold/30">
+                          <SelectValue placeholder="Any Size" />
+                        </SelectTrigger>
+                        <SelectContent className="z-[10000]">
+                          {areaRanges[areaUnit].map((item) => (
+                            <SelectItem key={item.value} value={item.value}>
+                              {item.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="text-sm font-semibold text-black/80 mb-2 block">Sort By</label>
+                      <Select value={sortBy} onValueChange={setSortBy}>
+                        <SelectTrigger className="h-11 bg-white border-gold/30">
+                          <SelectValue placeholder="Newest First" />
+                        </SelectTrigger>
+                        <SelectContent className="z-[10000]">
+                          {SORT_OPTIONS.map((item) => (
+                            <SelectItem key={item.value} value={item.value}>
+                              {item.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Size Range */}
-                <div>
-                  <label className="text-sm font-semibold text-black/80 mb-2 block">Size ({areaUnit})</label>
-                  <Select value={sizeRange} onValueChange={setSizeRange}>
-                    <SelectTrigger className="h-12 bg-white border-gold/30">
-                      <SelectValue placeholder="Any Size" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {areaRanges[areaUnit].map((item) => (
-                        <SelectItem key={item.value} value={item.value}>
-                          {item.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Developer */}
+                {/* Row 4: Developer */}
                 <div>
                   <label className="text-sm font-semibold text-black/80 mb-2 block">Developer</label>
                   <Select value={developerId} onValueChange={setDeveloperId}>
-                    <SelectTrigger className="h-12 bg-white border-gold/30">
+                    <SelectTrigger className="h-11 bg-white border-gold/30">
                       <SelectValue placeholder="All Developers" />
                     </SelectTrigger>
-                    <SelectContent className="max-h-60">
+                    <SelectContent className="max-h-60 z-[10000]">
                       <SelectItem value="all">All Developers</SelectItem>
-                      {developers?.sort((a, b) => (a.rank ?? 999) - (b.rank ?? 999)).map((dev) => (
+                      {allDevelopers.map((dev) => (
                         <SelectItem key={dev.id} value={dev.id}>
                           {dev.name}
                         </SelectItem>
@@ -582,14 +807,14 @@ const HeroSearchBar = () => {
                   </Select>
                 </div>
 
-                {/* Community / Area */}
+                {/* Row 5: Community / Area */}
                 <div>
                   <label className="text-sm font-semibold text-black/80 mb-2 block">Community / Area</label>
                   <Select value={communityId} onValueChange={setCommunityId}>
-                    <SelectTrigger className="h-12 bg-white border-gold/30">
+                    <SelectTrigger className="h-11 bg-white border-gold/30">
                       <SelectValue placeholder="All Areas" />
                     </SelectTrigger>
-                    <SelectContent className="max-h-60">
+                    <SelectContent className="max-h-60 z-[10000]">
                       <SelectItem value="all">All Areas</SelectItem>
                       {communities?.sort((a, b) => a.name.localeCompare(b.name)).map((comm) => (
                         <SelectItem key={comm.id} value={comm.id}>
@@ -600,37 +825,20 @@ const HeroSearchBar = () => {
                   </Select>
                 </div>
 
-                {/* Sort By */}
-                <div>
-                  <label className="text-sm font-semibold text-black/80 mb-2 block">Sort By</label>
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="h-12 bg-white border-gold/30">
-                      <SelectValue placeholder="Newest First" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {SORT_OPTIONS.map((item) => (
-                        <SelectItem key={item.value} value={item.value}>
-                          {item.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
                 {/* AI Home Finder Link */}
                 <Link
                   to="/ai-hub"
-                  className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-gold/10 to-gold/5 border border-gold/30 hover:border-gold/50 transition-all group"
+                  className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-purple-500/20 to-purple-600/10 border border-purple-400/40 hover:border-purple-400/60 transition-all group"
                   onClick={() => setIsFiltersOpen(false)}
                 >
-                  <div className="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center">
-                    <Sparkles className="w-5 h-5 text-gold" />
+                  <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
+                    <Sparkles className="w-5 h-5 text-purple-400" />
                   </div>
                   <div className="flex-1">
                     <p className="text-black font-semibold text-sm">Not sure what you're looking for?</p>
                     <p className="text-black/60 text-xs">Try our AI Home Finder for personalized recommendations</p>
                   </div>
-                  <ChevronDown className="w-5 h-5 text-gold -rotate-90 group-hover:translate-x-1 transition-transform" />
+                  <ChevronDown className="w-5 h-5 text-purple-400 -rotate-90 group-hover:translate-x-1 transition-transform" />
                 </Link>
 
                 {/* Apply Filters Button */}
@@ -640,7 +848,7 @@ const HeroSearchBar = () => {
                     handleSearch();
                   }}
                   variant="primary"
-                  className="w-full h-12 text-base rounded-xl mt-2"
+                  className="w-full h-11 text-base rounded-xl mt-2"
                 >
                   Apply Filters
                 </Button>
@@ -651,38 +859,12 @@ const HeroSearchBar = () => {
           {/* Search Button */}
           <Button
             onClick={handleSearch}
-            className="h-full px-6 py-3.5 bg-gold hover:bg-gold-dark text-black font-bold text-base rounded-none rounded-r-xl transition-all duration-300"
+            className="h-full px-5 py-3 bg-gold hover:bg-gold-dark text-black font-bold text-sm rounded-none rounded-r-xl transition-all duration-300"
           >
-            <Search className="w-5 h-5 mr-2" />
+            <Search className="w-4 h-4 mr-1.5" />
             Search
           </Button>
         </div>
-      </div>
-
-      {/* Purpose Toggle Pills - Buy / Rent only (Off-Plan moved to filters) */}
-      <div className="flex items-center justify-start gap-2 mt-4">
-        <button
-          onClick={() => setPurpose('buy')}
-          className={cn(
-            "px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-300",
-            purpose === 'buy'
-              ? 'bg-white/90 text-black shadow-lg'
-              : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm border border-white/20'
-          )}
-        >
-          Buy
-        </button>
-        <button
-          onClick={() => setPurpose('rent')}
-          className={cn(
-            "px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-300",
-            purpose === 'rent'
-              ? 'bg-white/90 text-black shadow-lg'
-              : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm border border-white/20'
-          )}
-        >
-          Rent
-        </button>
       </div>
     </div>
   );
