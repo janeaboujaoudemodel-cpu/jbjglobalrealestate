@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +12,6 @@ import {
   RefreshCw, Download, CheckCircle, XCircle, 
   ExternalLink, Info, Zap, Database, CloudDownload, Play, ArrowRight
 } from "lucide-react";
-import { Link } from "react-router-dom";
 
 interface ApiSyncResult {
   success: boolean;
@@ -40,6 +40,7 @@ type RecentPendingImport = {
 };
 
 export function ReellyImportPanel() {
+  const navigate = useNavigate();
   const [isTestingApi, setIsTestingApi] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [apiConnected, setApiConnected] = useState<boolean | null>(null);
@@ -50,6 +51,15 @@ export function ReellyImportPanel() {
   const [recentImports, setRecentImports] = useState<RecentPendingImport[]>([]);
   const [isRecentOpen, setIsRecentOpen] = useState(false);
   const [isRecentLoading, setIsRecentLoading] = useState(false);
+
+  const goToApprovalQueue = () => {
+    // Force navigation even if already on similar URL
+    navigate("/listing-admin?view=sync&syncTab=approvals", { replace: true });
+    // Trigger a small delay then force refresh the URL params
+    setTimeout(() => {
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    }, 50);
+  };
 
   const handleTestApiConnection = async () => {
     setIsTestingApi(true);
@@ -353,13 +363,13 @@ export function ReellyImportPanel() {
                           {(syncResult.inserted || 0) + (syncResult.updated || 0)} projects synced → Now approve or reject them
                         </p>
                       </div>
-                      <Link
-                        to="/listing-admin?view=sync&syncTab=approvals"
+                      <button
+                        onClick={goToApprovalQueue}
                         className="flex-shrink-0 bg-white text-blue-700 px-6 py-3 rounded-lg font-bold hover:bg-blue-50 transition shadow-md text-lg flex items-center gap-2"
                       >
                         Open Approval Queue
                         <ArrowRight className="w-5 h-5" />
-                      </Link>
+                      </button>
                     </div>
                   </div>
                   
@@ -448,13 +458,13 @@ export function ReellyImportPanel() {
                   <Button variant="outline" onClick={() => setIsRecentOpen(false)}>
                     Close
                   </Button>
-                  <Link 
-                    to="/listing-admin?view=sync&syncTab=approvals" 
+                  <button 
+                    onClick={() => { setIsRecentOpen(false); goToApprovalQueue(); }}
                     className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-700 transition"
                   >
                     Open Approval Queue
                     <ArrowRight className="w-4 h-4" />
-                  </Link>
+                  </button>
                 </div>
               </div>
             </DialogContent>
