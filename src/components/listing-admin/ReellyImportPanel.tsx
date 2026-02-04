@@ -2,25 +2,22 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { 
-  RefreshCw, Download, CheckCircle, XCircle, AlertCircle, 
-  ExternalLink, Info, Zap, Database, CloudDownload, Play
+  RefreshCw, Download, CheckCircle, XCircle, 
+  ExternalLink, Info, Zap, Database, CloudDownload, Play, ArrowRight
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface ApiSyncResult {
   success: boolean;
   total_available?: number;
-  // Aggregated totals (computed client-side during full sync)
   total_fetched?: number;
   total_published?: number;
-  // Per-page values returned by backend
   page_fetched?: number;
   page_published?: number;
   inserted?: number;
@@ -43,7 +40,6 @@ type RecentPendingImport = {
 };
 
 export function ReellyImportPanel() {
-  // API Sync State
   const [isTestingApi, setIsTestingApi] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [apiConnected, setApiConnected] = useState<boolean | null>(null);
@@ -55,7 +51,6 @@ export function ReellyImportPanel() {
   const [isRecentOpen, setIsRecentOpen] = useState(false);
   const [isRecentLoading, setIsRecentLoading] = useState(false);
 
-  // Test API Connection
   const handleTestApiConnection = async () => {
     setIsTestingApi(true);
     setApiConnected(null);
@@ -84,7 +79,6 @@ export function ReellyImportPanel() {
     }
   };
 
-  // Sync projects from API
   const handleSyncProjects = async (fullSync: boolean = false) => {
     setIsSyncing(true);
     setSyncResult(null);
@@ -94,7 +88,6 @@ export function ReellyImportPanel() {
     setRecentImports([]);
 
     try {
-      // IMPORTANT: Full sync can take several minutes; do it in small pages to avoid browser timeouts.
       const pageSize = fullSync ? 50 : 100;
       let cursor: string | null = null;
       let safety = 0;
@@ -116,7 +109,6 @@ export function ReellyImportPanel() {
             action: "sync",
             limit: pageSize,
             cursor,
-            // legacy flag (ignored server-side but harmless)
             fullSync,
           },
         });
@@ -146,7 +138,6 @@ export function ReellyImportPanel() {
 
         cursor = data.next_cursor ?? null;
 
-        // Quick sync = one page only
         if (!fullSync) break;
 
         safety++;
@@ -157,7 +148,6 @@ export function ReellyImportPanel() {
 
       toast.success(fullSync ? "Full sync completed!" : (aggregated.message || "Sync completed!"));
 
-      // Fetch the actual projects processed in this run so the counters can be clickable.
       setIsRecentLoading(true);
       const { data: recent, error: recentErr } = await supabase
         .from("pending_project_imports")
@@ -189,15 +179,13 @@ export function ReellyImportPanel() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div>
         <h2 className="text-2xl font-bold text-zinc-900 mb-2">Reelly Integration</h2>
         <p className="text-zinc-600">
-          Import projects from Reelly via API or web scraping
+          Import projects from Reelly via API
         </p>
       </div>
 
-      {/* ===== API SYNC SECTION (NEW) ===== */}
       <Card className="bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-200 shadow-lg">
         <CardHeader>
           <div className="flex items-center gap-3">
@@ -217,9 +205,7 @@ export function ReellyImportPanel() {
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* API Status */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Test Connection */}
             <div className="bg-white/80 rounded-xl p-4 border border-emerald-200">
               <h3 className="font-semibold text-zinc-900 mb-3 flex items-center gap-2">
                 <Database className="w-4 h-4 text-emerald-600" />
@@ -254,7 +240,6 @@ export function ReellyImportPanel() {
               )}
             </div>
 
-            {/* Sync Projects */}
             <div className="bg-white/80 rounded-xl p-4 border border-emerald-200">
               <h3 className="font-semibold text-zinc-900 mb-3 flex items-center gap-2">
                 <CloudDownload className="w-4 h-4 text-emerald-600" />
@@ -291,7 +276,6 @@ export function ReellyImportPanel() {
             </div>
           </div>
 
-          {/* Sync Results */}
           {isSyncing && (
             <div className="bg-white/80 rounded-xl p-4 border border-emerald-200">
               <div className="flex items-center gap-3 mb-3">
@@ -330,7 +314,7 @@ export function ReellyImportPanel() {
                       onClick={() => setIsRecentOpen(true)}
                     >
                       <p className="text-xl font-bold text-blue-600">{syncResult.total_fetched?.toLocaleString() || '-'}</p>
-                      <p className="text-xs text-zinc-500">Fetched (this run)</p>
+                      <p className="text-xs text-zinc-500">Fetched</p>
                     </button>
                     <button
                       type="button"
@@ -357,30 +341,41 @@ export function ReellyImportPanel() {
                       <p className="text-xs text-zinc-500">Skipped</p>
                     </button>
                   </div>
+
+                  {/* BIG CTA to Approval Queue */}
+                  <div className="p-5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl text-white shadow-lg">
+                    <div className="flex items-center justify-between gap-4 flex-wrap">
+                      <div>
+                        <h4 className="font-bold text-xl flex items-center gap-2">
+                          🎉 Projects ready for review!
+                        </h4>
+                        <p className="text-blue-100 text-sm mt-1">
+                          {(syncResult.inserted || 0) + (syncResult.updated || 0)} projects synced → Now approve or reject them
+                        </p>
+                      </div>
+                      <Link
+                        to="/listing-admin?view=sync&syncTab=approvals"
+                        className="flex-shrink-0 bg-white text-blue-700 px-6 py-3 rounded-lg font-bold hover:bg-blue-50 transition shadow-md text-lg flex items-center gap-2"
+                      >
+                        Open Approval Queue
+                        <ArrowRight className="w-5 h-5" />
+                      </Link>
+                    </div>
+                  </div>
                   
-                  <Alert className="border-emerald-300 bg-emerald-50">
+                  <Alert className="mt-4 border-emerald-300 bg-emerald-50">
                     <CheckCircle className="h-4 w-4 text-emerald-600" />
                     <AlertDescription className="text-emerald-700">
                       {syncResult.message}
                     </AlertDescription>
                   </Alert>
 
-                  <Alert className="mt-3 border-blue-300 bg-blue-50">
-                    <Info className="h-4 w-4 text-blue-600" />
-                    <AlertTitle className="text-blue-900">Nothing is auto-approved</AlertTitle>
-                    <AlertDescription className="text-blue-700">
-                      <div>
-                        <div>
-                          <strong>New = 0</strong> just means these Reelly projects were already in your pending queue from a previous sync.
-                          They’re still <strong>Pending</strong> and require your approval.
-                        </div>
-                        <Link
-                          to="/listing-admin?view=sync&syncTab=approvals"
-                          className="inline-block mt-2 font-semibold underline hover:no-underline"
-                        >
-                          Open Approval Queue →
-                        </Link>
-                      </div>
+                  <Alert className="mt-3 border-amber-300 bg-amber-50">
+                    <Info className="h-4 w-4 text-amber-600" />
+                    <AlertTitle className="text-amber-900">Why "New = 0"?</AlertTitle>
+                    <AlertDescription className="text-amber-700">
+                      These projects already existed in your pending queue from a previous sync. 
+                      They're still <strong>pending</strong> and waiting for your approval.
                     </AlertDescription>
                   </Alert>
 
@@ -408,7 +403,6 @@ export function ReellyImportPanel() {
             </div>
           )}
 
-          {/* Sync-run details modal */}
           <Dialog open={isRecentOpen} onOpenChange={setIsRecentOpen}>
             <DialogContent className="max-w-2xl">
               <DialogHeader>
@@ -454,8 +448,12 @@ export function ReellyImportPanel() {
                   <Button variant="outline" onClick={() => setIsRecentOpen(false)}>
                     Close
                   </Button>
-                  <Link to="/listing-admin?view=sync&syncTab=approvals" className="font-semibold underline hover:no-underline">
-                    Open Approval Queue →
+                  <Link 
+                    to="/listing-admin?view=sync&syncTab=approvals" 
+                    className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-700 transition"
+                  >
+                    Open Approval Queue
+                    <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
               </div>
@@ -464,7 +462,6 @@ export function ReellyImportPanel() {
         </CardContent>
       </Card>
 
-      {/* Divider */}
       <div className="relative py-4">
         <div className="absolute inset-0 flex items-center">
           <div className="w-full border-t border-zinc-300" />
@@ -476,7 +473,6 @@ export function ReellyImportPanel() {
         </div>
       </div>
 
-      {/* ===== LEGACY SCRAPING SECTION ===== */}
       <Alert className="border-zinc-300 bg-zinc-50">
         <Info className="h-4 w-4 text-zinc-500" />
         <AlertTitle className="text-zinc-600">Web Scraping (Deprecated)</AlertTitle>
@@ -486,7 +482,6 @@ export function ReellyImportPanel() {
         </AlertDescription>
       </Alert>
 
-      {/* Legacy Get API Key Card */}
       <Card className="bg-white border-zinc-200 opacity-60">
         <CardHeader>
           <CardTitle className="text-lg text-zinc-500">Need a Reelly API Key?</CardTitle>
