@@ -1012,7 +1012,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
             <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
               <div className="text-2xl font-bold text-foreground">
-                {sourceFilter === "provident" ? "1,336" : sourceFilter === "reelly" ? "~1,800" : "All"}
+                {sourceFilter === "provident" ? "1,336" : sourceFilter === "reelly" ? "1,803" : totalCount ?? "..."}
               </div>
               <div className="text-xs text-muted-foreground">Target</div>
             </div>
