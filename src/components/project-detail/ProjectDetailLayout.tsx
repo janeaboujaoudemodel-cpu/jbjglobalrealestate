@@ -416,6 +416,16 @@ export default function ProjectDetailLayout({
           <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40" />
         </div>
 
+        {/* Sold Out Badge - Top Right */}
+        {(project.status_label?.toLowerCase().includes('sold') || 
+          project.availability_status?.toLowerCase().includes('sold')) && (
+          <div className="absolute top-28 right-4 md:right-8 z-30">
+            <div className="bg-red-600 text-white px-6 py-3 rounded-lg text-lg font-bold uppercase shadow-2xl border-2 border-red-400 animate-pulse">
+              SOLD OUT
+            </div>
+          </div>
+        )}
+
         {/* Hero content - Bottom aligned */}
         <div className="relative z-20 container mx-auto px-4 md:px-8 h-full flex flex-col justify-end pb-8">
           {/* Starting Price - Above title */}
@@ -573,13 +583,13 @@ export default function ProjectDetailLayout({
             <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Bedrooms</p>
               <p className="mt-2 text-xl font-bold text-foreground">
-                {bedroomsText || (project.bedrooms_min ? `${project.bedrooms_min} BR` : "Contact Us")}
+                {bedroomsText || (project.bedrooms_min ? `${project.bedrooms_min} BR` : "View Details")}
               </p>
             </div>
             <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Size</p>
               <p className="mt-2 text-xl font-bold text-foreground">
-                {sizeText || (project.size_min ? `${project.size_min.toLocaleString()} sqft` : "Contact Us")}
+                {sizeText || (project.size_min ? `${project.size_min.toLocaleString()} sqft` : "View Details")}
               </p>
             </div>
           </div>
@@ -1041,38 +1051,41 @@ export default function ProjectDetailLayout({
             </div>
           </div>
 
-          {/* CONTACT DETAILS - Separated Section with Gold Borders */}
+          {/* CONTACT DETAILS - Separated Section with Colored Icons */}
           <div className="mb-8">
             <div className="jj-card-inner p-6 md:p-10">
               <h3 className="text-h3-sm font-medium text-foreground mb-8 text-center">Contact Us Directly</h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-3xl mx-auto">
+                {/* WhatsApp - Green */}
                 <a 
                   href={getWhatsAppUrl(whatsappMessage)} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex flex-col items-center gap-4 p-6 rounded-2xl border-2 border-gold/50 bg-gradient-to-br from-card via-card to-gold/5 hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all group"
+                  className="flex flex-col items-center gap-4 p-6 rounded-2xl border-2 border-emerald-500/50 bg-gradient-to-br from-card via-card to-emerald-500/5 hover:border-emerald-500 hover:shadow-lg hover:shadow-emerald-500/20 transition-all group"
                 >
-                  <div className="w-14 h-14 rounded-full bg-gold/10 border-2 border-gold/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <MessageCircle className="w-7 h-7 text-gold" />
+                  <div className="w-14 h-14 rounded-full bg-emerald-500/20 border-2 border-emerald-500/40 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <MessageCircle className="w-7 h-7 text-emerald-500" />
                   </div>
                   <span className="text-base font-semibold text-foreground">WhatsApp</span>
                   <span className="text-sm text-muted-foreground">{CONTACT_INFO.phone}</span>
                 </a>
+                {/* Call - Blue */}
                 <a 
                   href={getCallUrl()}
-                  className="flex flex-col items-center gap-4 p-6 rounded-2xl border-2 border-gold/50 bg-gradient-to-br from-card via-card to-gold/5 hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all group"
+                  className="flex flex-col items-center gap-4 p-6 rounded-2xl border-2 border-blue-500/50 bg-gradient-to-br from-card via-card to-blue-500/5 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/20 transition-all group"
                 >
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-gold/40 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Phone className="w-7 h-7 text-gold" />
+                  <div className="w-14 h-14 rounded-full bg-blue-500/20 border-2 border-blue-500/40 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Phone className="w-7 h-7 text-blue-500" />
                   </div>
                   <span className="text-base font-semibold text-foreground">Call Us</span>
                   <span className="text-sm text-muted-foreground">{CONTACT_INFO.phone}</span>
                 </a>
+                {/* Email - Gold */}
                 <a 
                   href={getEmailUrl()}
-                  className="flex flex-col items-center gap-4 p-6 rounded-2xl border-2 border-gold/50 bg-gradient-to-br from-card via-card to-gold/5 hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all group"
+                  className="flex flex-col items-center gap-4 p-6 rounded-2xl border-2 border-gold/50 bg-gradient-to-br from-card via-card to-gold/5 hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all group"
                 >
-                  <div className="w-14 h-14 rounded-full bg-gold/10 border-2 border-gold/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div className="w-14 h-14 rounded-full bg-gold/20 border-2 border-gold/40 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <Mail className="w-7 h-7 text-gold" />
                   </div>
                   <span className="text-base font-semibold text-foreground">Email</span>

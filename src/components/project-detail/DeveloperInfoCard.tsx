@@ -36,7 +36,7 @@ export default function DeveloperInfoCard({ developer, projectName }: DeveloperI
     : developer.description;
 
   return (
-    <div className="w-full bg-premium-bg border-y border-gold/20">
+    <div className="w-full jj-section-champagne border-y border-gold/20">
       <div className="container mx-auto px-4 md:px-8 py-8 md:py-12">
         <div className="flex flex-col lg:flex-row gap-8 items-start">
           {/* Developer Logo - White Box */}
@@ -60,7 +60,7 @@ export default function DeveloperInfoCard({ developer, projectName }: DeveloperI
           <div className="flex-1">
             {/* Header */}
             <div className="flex items-center gap-3 mb-3">
-              <h3 className="text-2xl md:text-3xl font-bold text-white">{developer.name}</h3>
+              <h3 className="text-2xl md:text-3xl font-bold text-foreground">{developer.name}</h3>
               <Award className="w-6 h-6 text-gold" />
             </div>
             
@@ -76,7 +76,7 @@ export default function DeveloperInfoCard({ developer, projectName }: DeveloperI
             {stats.length > 0 && (
               <div className="flex flex-wrap gap-4 mb-5">
                 {stats.map((stat, idx) => (
-                  <div key={idx} className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gold/20 bg-gold/5">
+                  <div key={idx} className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gold/20 bg-card">
                     <stat.icon className="w-4 h-4 text-gold" />
                     <div>
                       <span className="text-lg font-bold text-gold">{stat.value}</span>
