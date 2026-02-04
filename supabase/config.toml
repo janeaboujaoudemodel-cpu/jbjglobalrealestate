@@ -125,3 +125,6 @@ verify_jwt = false
 
 [functions.sync-provident-page]
 verify_jwt = false
+
+[functions.reelly-fill-missing-assets]
+verify_jwt = false
