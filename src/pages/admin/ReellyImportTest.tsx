@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { RefreshCw, Download, CheckCircle, XCircle, AlertCircle, ArrowLeft } from "lucide-react";
+import { RefreshCw, Download, CheckCircle, XCircle, AlertCircle, ArrowLeft, ExternalLink, Key, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface ImportResult {
@@ -43,6 +44,7 @@ const ReellyImportTest = () => {
   const [importResults, setImportResults] = useState<ImportResult[]>([]);
   const [importErrors, setImportErrors] = useState<ImportError[]>([]);
   const [importSummary, setImportSummary] = useState<ImportSummary | null>(null);
+  const [showApiInfo, setShowApiInfo] = useState(true);
 
   const handleTestAuth = async () => {
     setIsAuthenticating(true);
@@ -142,6 +144,36 @@ const ReellyImportTest = () => {
           </p>
         </div>
 
+        {/* Reelly API Info */}
+        {showApiInfo && (
+          <Alert className="mb-6 border-primary/50 bg-primary/5">
+            <Info className="h-4 w-4" />
+            <AlertTitle>Reelly API Required</AlertTitle>
+            <AlertDescription className="space-y-2">
+              <p>
+                Reelly has an official REST API that provides reliable access to project data.
+                Get a free API key (includes 20 projects for testing).
+              </p>
+              <div className="flex gap-2 mt-3">
+                <a 
+                  href="https://jtoq1zj8zqz.typeform.com/to/ztWlQc0l?plan=free" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="default" size="sm">
+                    <Key className="h-4 w-4 mr-2" />
+                    Get Free API Key
+                    <ExternalLink className="h-3 w-3 ml-2" />
+                  </Button>
+                </a>
+                <Button variant="ghost" size="sm" onClick={() => setShowApiInfo(false)}>
+                  Dismiss
+                </Button>
+              </div>
+            </AlertDescription>
+          </Alert>
+        )}
+
         {/* Target Projects */}
         <Card className="mb-6">
           <CardHeader>
@@ -164,7 +196,7 @@ const ReellyImportTest = () => {
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
               Step 1: Test Authentication
-              {authStatus === "success" && <CheckCircle className="h-5 w-5 text-green-500" />}
+              {authStatus === "success" && <CheckCircle className="h-5 w-5 text-primary" />}
               {authStatus === "failed" && <XCircle className="h-5 w-5 text-destructive" />}
             </CardTitle>
             <CardDescription>
@@ -236,10 +268,10 @@ const ReellyImportTest = () => {
             <CardTitle className="text-lg flex items-center gap-2">
               Step 3: Import Projects
               {importSummary && importSummary.failed === 0 && (
-                <CheckCircle className="h-5 w-5 text-green-500" />
+                <CheckCircle className="h-5 w-5 text-primary" />
               )}
               {importSummary && importSummary.failed > 0 && (
-                <AlertCircle className="h-5 w-5 text-yellow-500" />
+                <AlertCircle className="h-5 w-5 text-accent" />
               )}
             </CardTitle>
             <CardDescription>
@@ -278,12 +310,12 @@ const ReellyImportTest = () => {
                   <p className="text-2xl font-bold text-foreground">{importSummary.processed}</p>
                   <p className="text-xs text-muted-foreground">Processed</p>
                 </div>
-                <div className="bg-green-500/10 rounded-lg p-3 text-center">
-                  <p className="text-2xl font-bold text-green-600">{importSummary.created}</p>
+                <div className="bg-primary/10 rounded-lg p-3 text-center">
+                  <p className="text-2xl font-bold text-primary">{importSummary.created}</p>
                   <p className="text-xs text-muted-foreground">Created</p>
                 </div>
-                <div className="bg-blue-500/10 rounded-lg p-3 text-center">
-                  <p className="text-2xl font-bold text-blue-600">{importSummary.updated}</p>
+                <div className="bg-secondary/20 rounded-lg p-3 text-center">
+                  <p className="text-2xl font-bold text-secondary-foreground">{importSummary.updated}</p>
                   <p className="text-xs text-muted-foreground">Updated</p>
                 </div>
                 <div className="bg-destructive/10 rounded-lg p-3 text-center">
