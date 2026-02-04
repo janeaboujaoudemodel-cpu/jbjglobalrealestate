@@ -120,6 +120,18 @@ export function ReellyImportPanel() {
         </p>
       </div>
 
+      {/* Critical Warning - Reelly URLs are broken */}
+      <Alert className="border-red-500 bg-red-50">
+        <AlertCircle className="h-4 w-4 text-red-600" />
+        <AlertTitle className="text-red-900">Reelly URLs Currently Unavailable</AlertTitle>
+        <AlertDescription className="text-red-700">
+          The Reelly <code>/off-plan/</code> URL structure has been deprecated. 
+          Their platform has moved to <code>soft.reelly.io</code> which requires API access.
+          <br /><br />
+          <strong>Next steps:</strong> Contact Reelly for API access or update target URLs to the new format.
+        </AlertDescription>
+      </Alert>
+
       {/* Scraping Info */}
       <Alert className="border-primary/50 bg-primary/5">
         <Info className="h-4 w-4" />

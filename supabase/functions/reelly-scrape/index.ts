@@ -91,13 +91,46 @@ function parseProjectData(
   html: string,
   links: string[],
   metadata: Record<string, unknown>
-): ScrapedProject {
+): ScrapedProject | null {
+  // CRITICAL: Detect 404/error pages before parsing
+  const errorIndicators = [
+    "page not found",
+    "doesn't exist",
+    "has been moved",
+    "404",
+    "not available",
+    "under maintenance",
+    "page-not-found",
+  ];
+  
+  const lowerMarkdown = markdown.toLowerCase();
+  const lowerHtml = html.toLowerCase();
+  
+  for (const indicator of errorIndicators) {
+    if (lowerMarkdown.includes(indicator) || lowerHtml.includes(indicator)) {
+      console.log(`Detected error page: contains "${indicator}"`);
+      return null; // Return null for error pages
+    }
+  }
+  
+  // Check for minimal content (error pages are usually very short)
+  if (markdown.length < 200 && !markdown.includes("AED")) {
+    console.log(`Page content too short (${markdown.length} chars) - likely error page`);
+    return null;
+  }
+
   // Extract name from metadata or first heading
   const name =
     String(metadata.title || "")
       .replace(" | Reelly", "")
       .replace(" - Reelly", "")
       .trim() || extractPattern(markdown, /^#\s+(.+)$/m) || "Unknown Project";
+
+  // Reject generic/error names
+  if (name === "Not Found" || name === "Unknown Project" || name === "404" || name.includes("Page Not Found")) {
+    console.log(`Rejected invalid project name: ${name}`);
+    return null;
+  }
 
   // Extract developer
   const developer =
@@ -153,8 +186,21 @@ function parseProjectData(
   // Extract description
   const description = extractDescription(markdown);
 
-  // Extract images
+  // Extract images - must have valid images
   const images = extractImages(html, links);
+  
+  // Validate: must have at least 1 real image (not error page SVGs)
+  const validImages = images.filter(img => 
+    !img.includes("page-not-found") && 
+    !img.includes("error") &&
+    !img.includes("404") &&
+    (img.endsWith(".jpg") || img.endsWith(".jpeg") || img.endsWith(".png") || img.endsWith(".webp"))
+  );
+  
+  if (validImages.length === 0) {
+    console.log("No valid images found - likely error page");
+    return null;
+  }
 
   // Find brochure/PDF
   const brochureUrl =
@@ -176,7 +222,7 @@ function parseProjectData(
     sizeMax,
     handoverDate,
     description,
-    images,
+    images: validImages,
     brochureUrl,
   };
 }
@@ -390,7 +436,7 @@ Deno.serve(async (req) => {
           if (!scraped) {
             errors.push({
               project: target.name,
-              error: "Failed to scrape project data",
+              error: "Page returned 404 or error content - URL may be deprecated. Reelly has moved to soft.reelly.io which requires API access.",
             });
             continue;
           }
