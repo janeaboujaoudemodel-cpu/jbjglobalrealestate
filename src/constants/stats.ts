@@ -53,6 +53,7 @@ export const CONTACT_INFO = {
   careersEmail: 'Careers@JBJ.ae',
   partnershipsEmail: 'Partnerships@JBJ.ae',
   securityEmail: 'Security@JBJ.ae',
+  happinessEmail: 'Happiness@JBJ.ae',
   whatsappNumber: '971565911000',
   whatsappMessage: "Hi, I'm interested in learning more about property brokerage services with JBJ Global Real Estate.",
   address: 'Downtown Dubai, UAE',
