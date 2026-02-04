@@ -635,26 +635,26 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   </span>
                 </div>
 
-                {/* Quick Actions Row - All aligned, all black, no shadows */}
-                <div className="flex items-center justify-between px-4 py-3 border-b border-gold/20">
+                {/* Quick Actions Row - All aligned with fixed widths */}
+                <div className="flex items-center justify-evenly px-4 py-3 border-b border-gold/20">
                   <button
-                    className="flex flex-col items-center gap-1.5 text-black hover:text-gold py-2 px-3 transition-colors"
+                    className="flex flex-col items-center justify-center gap-1.5 text-black hover:text-gold py-2 w-16 transition-colors"
                     onClick={() => {
                       setMobileMenuOpen(false);
                       setSearchInitialQuery("");
                       setSearchOpen(true);
                     }}
                   >
-                    <Search className="w-5 h-5 text-black" />
-                    <span className="text-[9px] text-black font-medium">Search</span>
+                    <Search className="w-5 h-5" />
+                    <span className="text-[9px] font-medium text-center">Search</span>
                   </button>
                   <Link
                     to={user ? "/my-account" : authHref}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex flex-col items-center gap-1.5 text-black hover:text-gold py-2 px-3 transition-colors"
+                    className="flex flex-col items-center justify-center gap-1.5 text-black hover:text-gold py-2 w-16 transition-colors"
                   >
-                    <User className="w-5 h-5 text-black" />
-                    <span className="text-[9px] text-black font-medium">{user ? "My Account" : "Sign In"}</span>
+                    <User className="w-5 h-5" />
+                    <span className="text-[9px] font-medium text-center">{user ? "Account" : "Sign In"}</span>
                   </Link>
                   <LanguageSwitcher variant="mobile" />
                   <CurrencySwitcher variant="mobile" />
@@ -1081,15 +1081,80 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                       <HelpCircle className="w-4 h-4 text-gold" />
                       Help & Navigation Guide
                     </button>
+                    
+                    {/* Monogram Branding Footer */}
+                    <div className="mt-4 pt-4 border-t border-gold/20 flex justify-center">
+                      <img 
+                        src={jbjMonogramLightBg}
+                        alt="JBJ Global Real Estate"
+                        className="w-12 h-12 object-contain opacity-60"
+                      />
+                    </div>
                   </nav>
                 </ScrollArea>
                 
-                {/* Mobile Menu Walkthrough */}
-                <MobileMenuWalkthrough
-                  isOpen={showWalkthrough}
-                  onComplete={() => setShowWalkthrough(false)}
-                  onClose={() => setShowWalkthrough(false)}
-                />
+                {/* Mobile Menu Walkthrough - show guided tour modal */}
+                {showWalkthrough && (
+                  <div className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/70 p-4">
+                    <div 
+                      className="relative max-w-md w-full rounded-2xl p-6 border-2 border-gold/40 shadow-2xl"
+                      style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}
+                    >
+                      {/* Close button */}
+                      <button
+                        onClick={() => setShowWalkthrough(false)}
+                        className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gold/20 transition-colors"
+                      >
+                        <span className="text-zinc-600 text-xl">×</span>
+                      </button>
+                      
+                      {/* Monogram */}
+                      <div className="flex justify-center mb-4">
+                        <img 
+                          src={jbjMonogramLightBg}
+                          alt="JBJ"
+                          className="w-16 h-16 object-contain"
+                        />
+                      </div>
+                      
+                      {/* Content */}
+                      <h3 className="text-black font-bold text-xl text-center mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+                        Welcome to JBJ Global Real Estate
+                      </h3>
+                      <p className="text-zinc-600 text-sm text-center mb-6 leading-relaxed">
+                        Navigate our platform with ease. Use the menu sections above to explore properties, services, guides, and more. 
+                        Need help? Contact us anytime.
+                      </p>
+                      
+                      {/* Quick Tips */}
+                      <div className="space-y-3 mb-6">
+                        <div className="flex items-start gap-3 text-sm">
+                          <span className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-xs shrink-0">1</span>
+                          <span className="text-zinc-700"><strong>Buy & Rent</strong> – Browse properties for sale or rent</span>
+                        </div>
+                        <div className="flex items-start gap-3 text-sm">
+                          <span className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-xs shrink-0">2</span>
+                          <span className="text-zinc-700"><strong>Services</strong> – Explore our brokerage services</span>
+                        </div>
+                        <div className="flex items-start gap-3 text-sm">
+                          <span className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-xs shrink-0">3</span>
+                          <span className="text-zinc-700"><strong>Contact</strong> – Reach us via WhatsApp, call, or email</span>
+                        </div>
+                      </div>
+                      
+                      {/* Got it button */}
+                      <button
+                        onClick={() => {
+                          setShowWalkthrough(false);
+                          localStorage.setItem('jj_mobile_walkthrough_done', 'true');
+                        }}
+                        className="w-full py-3 bg-black text-gold font-semibold rounded-xl hover:bg-zinc-900 transition-colors"
+                      >
+                        Got it!
+                      </button>
+                    </div>
+                  </div>
+                )}
                 </SheetContent>
               </Sheet>
             </div>

@@ -14,7 +14,7 @@ const SOCIAL_LINKS = {
   linkedin: "https://www.linkedin.com/company/jbj-global-real-estate/",
   instagram: "https://www.instagram.com/jbj.global/",
   tiktok: "https://www.tiktok.com/@jbj.global",
-  website: "https://jbj.ae",
+  website: "https://JBJ.AE",
 };
 
 // Generate comprehensive vCard with all contact details

@@ -93,6 +93,7 @@ Today, JBJ Global Real Estate serves local and international clients seeking rel
     { title: "Integrity", description: "Advice aligned with client objectives, not incentives." },
     { title: "Discipline", description: "Consistent processes and risk-aware execution." },
     { title: "Responsiveness", description: "Direct access and timely communication." },
+    { title: "Loyalty", description: "Long-term commitment to client success and trust." },
     { title: "Accountability", description: "Responsibility throughout the transaction lifecycle." }
   ],
 
@@ -204,9 +205,9 @@ Clients working with JBJ can expect direct oversight, transparent communication,
     languages: "English",
     contact: CONTACT_INFO.phone,
     email: CONTACT_INFO.email,
-    website: "www.jbj.ae",
+    website: "WWW.JBJ.AE",
     whatsapp: CONTACT_INFO.phone,
-    workingHours: "Sunday–Thursday, 9:00–6:00"
+    workingHours: "Monday–Sunday, 9:00 AM – 9:00 PM"
   },
 
   ctas: [

@@ -27,11 +27,11 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
         {isMobile ? (
           <button
             type="button"
-            className="flex flex-col items-center gap-1.5 text-black hover:text-gold py-2 px-3 transition-colors"
+            className="flex flex-col items-center justify-center gap-1.5 text-black hover:text-gold py-2 w-16 transition-colors"
             aria-label={t('header.language')}
           >
-            <Globe className="w-5 h-5 text-black pointer-events-none" />
-            <span className="text-[9px] text-black font-medium pointer-events-none">Select Language</span>
+            <Globe className="w-5 h-5 pointer-events-none" />
+            <span className="text-[9px] font-medium text-center pointer-events-none">Language</span>
           </button>
         ) : isIconOnly ? (
           <button

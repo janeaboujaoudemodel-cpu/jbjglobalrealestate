@@ -193,9 +193,9 @@ CAPABILITIES:
 - Monitor social media engagement
 
 JBJ CONTACT INFO:
-📧 Email: Contact@JBJ.ae
+📧 Email: CONTACT@JBJ.AE
 📞 Phone: +971 56 591 1000
-🌐 Website: www.jbj.ae
+🌐 Website: WWW.JBJ.AE
 
 When asked to do tasks, confirm you've understood and will handle it. For complex requests, break them down into steps.`;
   };

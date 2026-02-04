@@ -330,8 +330,8 @@ const COMPANY_INFO = {
   location: "Dubai, United Arab Emirates",
   country: "UAE",
   phone: "+971 56 591 1000",
-  email: "contact@jbj.ae",
-  website: "jbj.ae",
+  email: "CONTACT@JBJ.AE",
+  website: "JBJ.AE",
   services: [
     "Off-plan property sales",
     "Ready property sales", 
