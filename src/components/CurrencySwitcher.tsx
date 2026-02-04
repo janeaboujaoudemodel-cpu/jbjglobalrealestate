@@ -50,9 +50,9 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         {isMobile ? (
-          <button className="flex flex-col items-center gap-1.5 text-black hover:text-gold py-2 px-3 transition-colors">
-            <DollarSign className="w-5 h-5 text-black" />
-            <span className="text-[9px] text-black font-medium">Currency</span>
+          <button className="flex flex-col items-center justify-center gap-1.5 text-black hover:text-gold py-2 w-16 transition-colors">
+            <DollarSign className="w-5 h-5" />
+            <span className="text-[9px] font-medium text-center">Currency</span>
           </button>
         ) : isIconOnly ? (
           <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gold/10 group">

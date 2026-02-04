@@ -275,7 +275,7 @@ END:VCARD`;
     {
       icon: Calendar,
       title: "Business Hours",
-      value: "Sun–Thu | 9AM–6PM UAE",
+      value: "Mon–Sun | 9AM–9PM UAE",
       action: null,
       iconColor: "text-gold",
       titleColor: "text-black",

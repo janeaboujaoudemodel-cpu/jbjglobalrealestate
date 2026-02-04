@@ -148,9 +148,9 @@ export const COMPANY_KNOWLEDGE = {
   
   contact: {
     phone: '+971 56 591 1000',
-    email: 'Contact@JBJ.ae',
-    privacyEmail: 'Privacy@JBJ.ae',
-    website: 'www.JBJ.ae',
+    email: 'CONTACT@JBJ.AE',
+    privacyEmail: 'PRIVACY@JBJ.AE',
+    website: 'WWW.JBJ.AE',
   },
   
   locations: ['Dubai (HQ)', 'London', 'Riyadh'],
