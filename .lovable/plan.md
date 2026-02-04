@@ -1,302 +1,352 @@
 
-# Comprehensive Data Extraction & Display Fix Plan
+# Complete Fix Plan: Automatic API Data Flow, Progress Bugs & Payment Plan Display
 
-## Issues Summary
+## Root Cause Analysis
 
-| Issue | Root Cause | Priority |
-|-------|------------|----------|
-| Queue not showing all | Pagination (60/page) - "Load More" button exists | Low (feature working) |
-| `#` hashtags in descriptions | Markdown not rendered as HTML | High |
-| Missing Reelly data (floor plans, units, amenities) | API only provides basic project data | High |
-| Floor plans broken | `floor_plan_types` empty for Reelly imports | High |
-| Bedroom labels incomplete | Only min/max, not labels | Medium |
-| Reelly login not working | `REELLY_EMAIL`/`REELLY_PASSWORD` secrets exist but unused | Clarified - API uses only `REELLY_API_KEY` |
+### Issue 1: 778 Reelly imports show as "Incomplete" with no developer
 
----
-
-## Phase 1: Fix Markdown/Hashtag Rendering in Descriptions
-
-**Problem:** The `description` field from Reelly contains markdown text with `#` headers that display literally.
-
-**Solution:** Create a markdown-to-HTML renderer and sanitize before display.
-
-### File: `src/lib/markdownUtils.ts` (New)
-
-```typescript
-import DOMPurify from 'dompurify';
-
-/**
- * Convert markdown text to safe HTML
- * Handles: headers (#), bold (**), italic (*), lists, links
- */
-export function renderMarkdownToHtml(markdown: string | null): string {
-  if (!markdown) return '';
-  
-  let html = markdown
-    // Headers
-    .replace(/^### (.+)$/gm, '<h4 class="font-semibold text-lg mt-4 mb-2">$1</h4>')
-    .replace(/^## (.+)$/gm, '<h3 class="font-bold text-xl mt-6 mb-3">$1</h3>')
-    .replace(/^# (.+)$/gm, '<h2 class="font-bold text-2xl mt-8 mb-4">$1</h2>')
-    // Bold & italic
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    // Lists
-    .replace(/^- (.+)$/gm, '<li>$1</li>')
-    .replace(/(<li>.*<\/li>\n?)+/g, '<ul class="list-disc pl-5 space-y-1">$&</ul>')
-    // Line breaks
-    .replace(/\n\n/g, '</p><p class="mt-3">')
-    .replace(/\n/g, '<br/>');
-  
-  // Wrap in paragraph
-  if (!html.startsWith('<')) html = `<p>${html}</p>`;
-  
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: ['h2', 'h3', 'h4', 'p', 'br', 'strong', 'em', 'ul', 'li', 'a'],
-    ALLOWED_ATTR: ['href', 'class', 'target', 'rel'],
-  });
-}
-
-/**
- * Strip all markdown formatting for plain text display
- */
-export function stripMarkdown(markdown: string | null): string {
-  if (!markdown) return '';
-  return markdown
-    .replace(/#{1,6}\s*/g, '')
-    .replace(/\*\*(.+?)\*\*/g, '$1')
-    .replace(/\*(.+?)\*/g, '$1')
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    .replace(/^[-*]\s*/gm, '• ')
-    .trim();
-}
+**Database Query Results:**
+```
+no_developer: 778 (100% missing)
+no_floor_plans: 778 (100% missing)
+no_payment_plan: 778 (100% missing)
 ```
 
-### File: `src/components/project-detail/ProjectDetailLayout.tsx`
+**Root Cause:** The `reelly-api-sync` edge function:
+1. Saves `developer_name` as a string ("Dar Global") but NOT `developer_id`
+2. The completion check requires `developer_id` (foreign key) NOT just developer_name
+3. No payment_plan, no floor_plan_types extracted - Reelly API doesn't provide these fields directly
 
-Update the description section (around line 604):
+### Issue 2: Fix Progress Shows "1 on 50" then "5000%" - Broken Numbers
 
-**Before:**
+**Root Cause:** The "Fix All" runner is designed for **Provident extraction** (Firecrawl scraping), not for Reelly API data. When it runs against Reelly imports:
+- It calls `batch-extract-pending` which uses Firecrawl to scrape
+- Reelly source URLs (`https://reelly.io/project/34#reelly_34`) aren't Provident pages
+- The scraper fails or returns garbage data
+- Progress calculation shows wrong percentages due to error accumulation
+
+### Issue 3: Payment Plan 3-Color Visualization Not Showing
+
+**Root Cause:** The `PaymentPlanVisualization` component only renders when:
 ```tsx
-<p className="mt-4 text-body text-muted-foreground leading-relaxed whitespace-pre-line">
-  {project.description || "Details will be provided by our team."}
-</p>
+{(!!project.payment_plan || paymentPlanDocs.length > 0 || !!project.payment_breakdown) && (
 ```
 
-**After:**
-```tsx
-{project.description ? (
-  <div 
-    className="mt-4 text-body text-muted-foreground leading-relaxed prose prose-sm dark:prose-invert max-w-none"
-    dangerouslySetInnerHTML={{ 
-      __html: renderMarkdownToHtml(project.description) 
-    }}
-  />
-) : (
-  <p className="mt-4 text-body text-muted-foreground">
-    Details will be provided by our team.
-  </p>
-)}
+But Reelly imports have:
+- `payment_plan: null`
+- `payment_breakdown: {}` (empty object)
+- No payment plan documents
+
+The API doesn't provide payment plan data directly, so the section never renders.
+
+### Issue 4: User Expectation - Automatic Loading Without Manual Sync
+
+**Current State:** Reelly data is synced to `pending_project_imports` (staging table) and requires manual approval before appearing on the website.
+
+**User Expectation:** Once API connection exists, data should flow automatically to the live website without admin intervention.
+
+---
+
+## Solution Architecture
+
+### Philosophy Change: Reelly = Live API, Provident = Scraping Queue
+
+```text
++-------------------+     +----------------------+     +-------------+
+|    Reelly API     | --> |   pending_project    | --> |   projects  |
+| (structured data) |     |      imports         |     |   (live)    |
++-------------------+     +----------------------+     +-------------+
+                               |
+                               | AUTO-APPROVE if complete
+                               v
+                          [website displays]
+
+vs current:
+
++-------------------+     +----------------------+     +-------------+
+|    Reelly API     | --> |   pending_project    | --> |   projects  |
++-------------------+     |      imports         |     +-------------+
+                          +----------------------+
+                               |
+                               | MANUAL APPROVAL REQUIRED
+                               v
+                          [admin clicks approve]
 ```
 
 ---
 
-## Phase 2: Enhance Reelly API Sync with Additional Endpoints
+## Implementation Plan
 
-**Problem:** The Reelly API `/projects` endpoint only provides basic data. We need to check for additional endpoints for:
-- Floor plans
-- Unit types and availability
-- Gallery images
-- Documents/brochures
+### Phase 1: Fix Developer Linking in Reelly Sync
 
-**Investigation Required:** Check Reelly API documentation for:
-- `/projects/{id}` - Detailed single project endpoint
-- `/projects/{id}/units` - Unit types and pricing
-- `/projects/{id}/floorplans` - Floor plan images/PDFs
-- `/projects/{id}/media` - Additional gallery images
+**Problem:** `developer_name` is saved but `developer_id` is null
 
-### File: `supabase/functions/reelly-api-sync/index.ts`
+**File:** `supabase/functions/reelly-api-sync/index.ts`
 
-Add detailed project fetch for each project:
+**Change:** After mapping project data, look up or create developer in the `developers` table:
 
 ```typescript
-// Add after basic project sync
-async function fetchProjectDetails(apiKey: string, projectId: number): Promise<ReellyProjectDetails | null> {
-  try {
-    const url = `https://api-reelly.up.railway.app/api/v2/clients/projects/${projectId}`;
-    const response = await fetch(url, {
-      headers: { "X-API-Key": apiKey, "Accept": "application/json" }
-    });
-    if (!response.ok) return null;
-    return await response.json();
-  } catch {
-    return null;
-  }
-}
-
-// In the sync loop, after basic data:
-const details = await fetchProjectDetails(apiKey, project.id);
-if (details) {
-  // Extract additional fields: floor_plans, units, gallery, documents
-  mappedProject.floor_plan_types = details.floor_plans?.map(fp => ({
-    label: fp.name,
-    imageUrl: fp.image_url,
-    pdfUrl: fp.pdf_url,
-  })) || null;
+// After mapReellyToImport, before database insert:
+async function getOrCreateDeveloper(supabase, developerName: string): Promise<string | null> {
+  if (!developerName) return null;
   
-  mappedProject.unit_types = details.units?.map(u => ({
-    type: u.type,
-    bedrooms: u.bedrooms,
-    size_sqft: u.size,
-    price_from: u.price,
-  })) || null;
-}
-```
-
-**Note:** This requires API documentation to confirm endpoint structure. If `/projects/{id}` doesn't provide more data, we may need to use the "API + fill missing assets" approach via Firecrawl for specific pages.
-
----
-
-## Phase 3: Add Missing Database Columns
-
-### Database Migration
-
-```sql
--- Add columns for Reelly detailed data if not exists
-ALTER TABLE pending_project_imports 
-  ADD COLUMN IF NOT EXISTS unit_types JSONB DEFAULT '[]',
-  ADD COLUMN IF NOT EXISTS available_units INTEGER,
-  ADD COLUMN IF NOT EXISTS master_plan_url TEXT,
-  ADD COLUMN IF NOT EXISTS gallery_images JSONB DEFAULT '[]';
-
--- Add same columns to projects table
-ALTER TABLE projects
-  ADD COLUMN IF NOT EXISTS master_plan_url TEXT;
-```
-
----
-
-## Phase 4: Hybrid Extraction Strategy (API + Fill Missing Assets)
-
-Since the user selected "API + fill missing assets", implement a two-stage approach:
-
-### Stage 1: Reelly API (fast, structured data)
-- Basic project info ✓
-- Developer info ✓
-- Location/coordinates ✓
-- Pricing ✓
-- Status ✓
-
-### Stage 2: Targeted Firecrawl Scraping (only for missing assets)
-- Floor plan images/PDFs
-- Brochure PDFs
-- Amenity photos with labels
-- Master plan images
-
-### File: `supabase/functions/reelly-fill-missing-assets/index.ts` (New)
-
-```typescript
-/**
- * Fill missing assets for Reelly-imported projects
- * Uses Firecrawl to scrape the public Reelly page for assets not in API
- */
-
-async function fillMissingAssets(importId: string, reellyProjectId: number) {
-  // Only scrape if we're missing specific assets
-  const { data: pending } = await supabase
-    .from("pending_project_imports")
-    .select("floor_plan_types, documents, amenities_list")
-    .eq("id", importId)
+  // Try to find existing developer by name (case-insensitive)
+  const { data: existing } = await supabase
+    .from("developers")
+    .select("id")
+    .ilike("name", developerName)
+    .maybeSingle();
+  
+  if (existing) return existing.id;
+  
+  // Create new developer
+  const slug = developerName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  const { data: newDev, error } = await supabase
+    .from("developers")
+    .insert({
+      name: developerName,
+      slug: slug,
+      is_active: true,
+    })
+    .select("id")
     .single();
   
-  const needsFloorPlans = !pending?.floor_plan_types?.length;
-  const needsDocuments = !pending?.documents?.length;
-  
-  if (!needsFloorPlans && !needsDocuments) {
-    return { skipped: true };
+  if (error) {
+    console.error(`Failed to create developer ${developerName}:`, error);
+    return null;
   }
   
-  // Scrape the Reelly public page for this project
-  const url = `https://reelly.io/off-plan/${reellyProjectId}`;
-  const scrapeResult = await firecrawlScrape(url);
+  return newDev?.id || null;
+}
+
+// In sync loop:
+const developerId = await getOrCreateDeveloper(supabase, project.developer);
+mappedProject.developer_id = developerId;
+```
+
+### Phase 2: Extract Payment Plan from Description/Overview
+
+**Problem:** Reelly API doesn't provide `payment_plan` field, but the description often contains payment info.
+
+**File:** `supabase/functions/reelly-api-sync/index.ts`
+
+**Change:** Parse payment plan from project overview:
+
+```typescript
+function extractPaymentPlanFromOverview(overview: string | null): {
+  payment_plan: string | null;
+  payment_breakdown: object | null;
+} {
+  if (!overview) return { payment_plan: null, payment_breakdown: null };
   
-  // Extract floor plans, brochure, etc.
-  const extracted = extractAssets(scrapeResult);
+  // Look for payment plan patterns
+  // Pattern 1: "60/40", "70/30", "80/20"
+  const ratioMatch = overview.match(/(\d{2})\/(\d{2})\s*payment/i);
+  if (ratioMatch) {
+    return {
+      payment_plan: `${ratioMatch[1]}/${ratioMatch[2]}`,
+      payment_breakdown: {
+        down_payment: `${Math.min(parseInt(ratioMatch[1]), 20)}%`,
+        during_construction: `${parseInt(ratioMatch[1]) - Math.min(parseInt(ratioMatch[1]), 20)}%`,
+        on_completion: `${ratioMatch[2]}%`,
+      }
+    };
+  }
   
-  // Update only missing fields
-  await supabase
-    .from("pending_project_imports")
-    .update({
-      floor_plan_types: needsFloorPlans ? extracted.floorPlans : pending.floor_plan_types,
-      documents: needsDocuments ? extracted.documents : pending.documents,
-    })
-    .eq("id", importId);
+  // Pattern 2: "10% down payment", "20% on booking"
+  const downPaymentMatch = overview.match(/(\d+)%?\s*(?:down\s*payment|on\s*booking)/i);
+  const handoverMatch = overview.match(/(\d+)%?\s*(?:on\s*handover|on\s*completion)/i);
+  
+  if (downPaymentMatch || handoverMatch) {
+    const down = downPaymentMatch ? parseInt(downPaymentMatch[1]) : 20;
+    const handover = handoverMatch ? parseInt(handoverMatch[1]) : 40;
+    const construction = 100 - down - handover;
+    
+    return {
+      payment_plan: `${down + construction}/${handover}`,
+      payment_breakdown: {
+        down_payment: `${down}%`,
+        during_construction: `${construction}%`,
+        on_completion: `${handover}%`,
+      }
+    };
+  }
+  
+  return { payment_plan: null, payment_breakdown: null };
 }
 ```
 
----
+### Phase 3: Auto-Approve Complete Reelly Imports
 
-## Phase 5: Display Bedroom Types as Labels
+**Problem:** User doesn't want to manually approve each project.
 
-### File: `src/components/project-detail/ProjectDetailLayout.tsx`
+**File:** `supabase/functions/reelly-api-sync/index.ts`
 
-Update bedroom display to show full labels when available:
+**Change:** After insert/update, if project is "complete", auto-create in `projects` table:
+
+```typescript
+function isProjectComplete(data: any): boolean {
+  return !!(
+    data.name &&
+    data.description &&
+    data.developer_id &&
+    data.images?.length > 0 &&
+    data.price_from > 0
+  );
+}
+
+// After upserting to pending_project_imports:
+if (isProjectComplete(mappedProject)) {
+  // Auto-approve: insert directly to projects table
+  const projectData = {
+    ...mappedProject,
+    source: 'reelly',
+    status: 'active',
+    is_offplan: true,
+  };
+  
+  await supabase
+    .from("projects")
+    .upsert(projectData, { onConflict: "slug" });
+  
+  // Mark pending import as approved
+  await supabase
+    .from("pending_project_imports")
+    .update({ status: "approved", reviewed_at: new Date().toISOString() })
+    .eq("id", pendingImportId);
+}
+```
+
+### Phase 4: Fix Progress Calculation Bug
+
+**Problem:** "1 on 50" and "5000%" displays
+
+**File:** `src/components/listing-admin/SyncDashboard.tsx`
+
+**Change:** Add source-aware batch processing and fix percentage calculation:
+
+```typescript
+// Line ~1062 - Fix progress calculation
+const progressPercent = bulkTotal > 0 
+  ? Math.min(100, Math.round((bulkDone / bulkTotal) * 100))
+  : 0;
+
+// Ensure we never show > 100%
+<span>{progressPercent}%</span>
+```
+
+Also, the "Fix All" button should NOT process Reelly imports with Firecrawl:
+
+```typescript
+// In batch-extract-pending, skip Reelly sources
+const { data: pending } = await supabase
+  .from("pending_project_imports")
+  .select("id, source_url")
+  .eq("status", "pending")
+  .not("source_url", "ilike", "%reelly%") // Skip Reelly imports
+  .ilike("review_notes", "%PENDING_SCRAPE%")
+  .limit(limit);
+```
+
+### Phase 5: Create Reelly-Specific Enrichment Function
+
+**Problem:** Reelly imports need enrichment (floor plans, etc.) from their website, not Provident.
+
+**File:** `supabase/functions/reelly-fill-missing-assets/index.ts` (already created)
+
+**Change:** Update to actually scrape Reelly project pages for:
+- Floor plan images/PDFs
+- Brochure PDFs
+- Payment plan documents
+- Gallery images
+
+**UI Change:** Add "Enrich Reelly Data" button in ReellyImportPanel that calls this function instead of the Provident "Fix All".
+
+### Phase 6: Separate Reelly Queue Actions
+
+**File:** `src/components/listing-admin/ReellyImportPanel.tsx`
+
+**Change:** Replace "View Queue" with dedicated Reelly actions:
 
 ```tsx
-// Around line 372, update bedroomsText calculation
-const bedroomsText = useMemo(() => {
-  // If bedroom_types array exists with labels, show those
-  if (project.bedroom_types && Array.isArray(project.bedroom_types) && project.bedroom_types.length > 0) {
-    return project.bedroom_types.join(', ');
-  }
-  // Fallback to min/max
-  if (!project.bedrooms_min) return null;
-  if (project.bedrooms_min === project.bedrooms_max) return `${project.bedrooms_min} BR`;
-  return `${project.bedrooms_min}-${project.bedrooms_max} BR`;
-}, [project.bedrooms_min, project.bedrooms_max, project.bedroom_types]);
+// Instead of navigating to shared queue:
+<Button onClick={runReellyEnrichment}>
+  Enrich Missing Data
+</Button>
+
+<Button onClick={autoApproveCompleteReelly}>
+  Auto-Approve Complete
+</Button>
 ```
 
 ---
 
-## Phase 6: Clarify Reelly Login Issue
+## Database Changes
 
-**Status:** The `REELLY_EMAIL` and `REELLY_PASSWORD` secrets were stored but are **not used** anywhere in the codebase. The Reelly API uses only `REELLY_API_KEY` for authentication via the `X-API-Key` header.
-
-**Your Options:**
-1. **If API key works:** Continue using API key only (current approach works)
-2. **If API key stopped working:** Contact Reelly support to reissue or verify the API key
-3. **If session login is required:** Implement a session-based auth flow using the email/password (would require significant changes)
-
-**Current State:** The Reelly API syncs are working with the API key. If you're having issues with your Reelly **website** login (not this app), that's a separate issue to resolve directly with Reelly.
+```sql
+-- No new tables needed, but ensure these columns exist on pending_project_imports:
+-- (Already exist based on schema check)
+ALTER TABLE pending_project_imports 
+  ADD COLUMN IF NOT EXISTS developer_id UUID REFERENCES developers(id);
+```
 
 ---
 
-## Implementation Order
-
-1. **Phase 1** - Fix markdown rendering (immediate visual fix)
-2. **Phase 5** - Display bedroom types labels (requires Phase 2/3 data)
-3. **Phase 3** - Database columns (prep for new data)
-4. **Phase 2** - Enhance Reelly API sync (pending API documentation)
-5. **Phase 4** - Hybrid fill missing assets (for floor plans/brochures)
-
----
-
-## Files to Create/Modify
+## File Changes Summary
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `src/lib/markdownUtils.ts` | Create | Markdown to HTML conversion |
-| `src/components/project-detail/ProjectDetailLayout.tsx` | Edit | Render description as HTML, bedroom labels |
-| `supabase/functions/reelly-api-sync/index.ts` | Edit | Add detailed project fetch |
-| `supabase/functions/reelly-fill-missing-assets/index.ts` | Create | Scrape missing floor plans/brochures |
-| Database migration | Create | Add missing columns |
+| `supabase/functions/reelly-api-sync/index.ts` | Edit | Add developer linking, payment extraction, auto-approve |
+| `supabase/functions/reelly-fill-missing-assets/index.ts` | Edit | Enhance to scrape floor plans, brochures |
+| `supabase/functions/batch-extract-pending/index.ts` | Edit | Skip Reelly sources (they use different enrichment) |
+| `src/components/listing-admin/ReellyImportPanel.tsx` | Edit | Add dedicated enrich/approve actions |
+| `src/components/listing-admin/SyncDashboard.tsx` | Edit | Fix progress calculation, source-aware UI |
 
 ---
 
-## Expected Outcome
+## Expected Outcome After Implementation
 
-After implementation:
-1. **Descriptions** render cleanly without `#` hashtags showing as text
-2. **Bedroom labels** show full types like "1 BR, 2 BR, 3 BR Duplex, Penthouse"
-3. **Floor plans** section shows data when available, fallback message when not
-4. **Reelly data** is enriched with targeted scraping for missing assets only
-5. **Provident and Reelly queues** properly separated with source filter tabs
+1. **Reelly Sync:**
+   - Projects automatically link to developers (creates if needed)
+   - Payment plans extracted from description text
+   - Complete projects auto-approve to live website
+   
+2. **Admin UI:**
+   - Separate "Enrich Reelly" button (not Provident Fix All)
+   - Progress shows accurate percentages (never > 100%)
+   - Queue properly filters by source
+   
+3. **Project Display:**
+   - Payment Plan 3-color visualization shows when data extracted
+   - Developer info displays correctly
+   - All Reelly data flows automatically
+
+4. **No Manual Work:**
+   - API sync → auto-approve → live on website
+   - Only incomplete projects need manual review
+
+---
+
+## Technical Details
+
+### Payment Plan Colors (PaymentPlanVisualization.tsx)
+
+The component already has 3-color support:
+- **Emerald (booking):** `bg-emerald-500`
+- **Amber (construction):** `bg-amber-500`  
+- **Gold (handover):** `bg-gold`
+
+The issue is that `payment_plan` and `payment_breakdown` are null. Once we extract these from the description, the visualization will appear.
+
+### Developer ID Linking
+
+Current flow:
+1. API returns `developer: "Dar Global"` (string)
+2. We save `developer_name: "Dar Global"` ✓
+3. We save `developer_id: null` ✗
+
+New flow:
+1. API returns `developer: "Dar Global"`
+2. Query `developers` table for name match
+3. If not found, INSERT new developer
+4. Save both `developer_name` AND `developer_id`
