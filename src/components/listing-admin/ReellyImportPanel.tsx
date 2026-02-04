@@ -120,25 +120,41 @@ export function ReellyImportPanel() {
         </p>
       </div>
 
-      {/* Critical Warning - Reelly URLs are broken */}
-      <Alert className="border-red-500 bg-red-50">
-        <AlertCircle className="h-4 w-4 text-red-600" />
-        <AlertTitle className="text-red-900">Reelly URLs Currently Unavailable</AlertTitle>
-        <AlertDescription className="text-red-700">
-          The Reelly <code>/off-plan/</code> URL structure has been deprecated. 
-          Their platform has moved to <code>soft.reelly.io</code> which requires API access.
+      {/* Solution: Get Free Reelly API Key */}
+      <Alert className="border-emerald-500 bg-emerald-50">
+        <CheckCircle className="h-4 w-4 text-emerald-600" />
+        <AlertTitle className="text-emerald-900">Solution: Get a FREE Reelly API Key</AlertTitle>
+        <AlertDescription className="text-emerald-700">
+          Reelly offers a <strong>free API key</strong> with access to 20 projects for testing.
           <br /><br />
-          <strong>Next steps:</strong> Contact Reelly for API access or update target URLs to the new format.
+          <strong>How to get started:</strong>
+          <ol className="list-decimal ml-4 mt-2 space-y-1">
+            <li>Click the link below to request your free API key</li>
+            <li>Fill out the Typeform (takes 2 minutes)</li>
+            <li>You'll receive API credentials and Swagger documentation</li>
+            <li>Come back here and we'll integrate the API</li>
+          </ol>
+          <div className="mt-4">
+            <a 
+              href="https://jtoq1zj8zqz.typeform.com/to/ztWlQc0l?plan=free" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-md font-medium hover:bg-emerald-700 transition-colors"
+            >
+              <ExternalLink className="h-4 w-4" />
+              Get Free Reelly API Key
+            </a>
+          </div>
         </AlertDescription>
       </Alert>
 
-      {/* Scraping Info */}
-      <Alert className="border-primary/50 bg-primary/5">
-        <Info className="h-4 w-4" />
-        <AlertTitle>Web Scraping Mode</AlertTitle>
-        <AlertDescription>
-          Using Firecrawl to scrape project data directly from Reelly. 
-          This extracts project details, images, and documents from each listing page.
+      {/* Scraping Info - deprecated */}
+      <Alert className="border-zinc-300 bg-zinc-50">
+        <Info className="h-4 w-4 text-zinc-500" />
+        <AlertTitle className="text-zinc-600">Web Scraping (Deprecated)</AlertTitle>
+        <AlertDescription className="text-zinc-500">
+          The scraping approach below no longer works since Reelly moved to a new platform.
+          Use the official API instead for reliable data access.
         </AlertDescription>
       </Alert>
 
