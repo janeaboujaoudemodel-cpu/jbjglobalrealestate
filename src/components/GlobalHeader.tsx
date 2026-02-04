@@ -94,7 +94,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     if (pinnedMenu) return;
     megaMenuTimeoutRef.current = setTimeout(() => {
       setActiveMegaMenu(null);
-    }, 350); // Increased from 220ms for better hover stability
+    }, 450); // Increased timeout for more forgiving hover transitions
   };
 
   // Clear any pending close timeout when entering mega menu panels
@@ -1115,9 +1115,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               >
                 {/* Buy */}
                 <button
-                  onMouseEnter={() => handleMegaMenuEnter('buy')}
+                  onPointerEnter={() => handleMegaMenuEnter('buy')}
                   onClick={() => handleMegaMenuClick('buy')}
-                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
+                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'buy' ? 'text-gold' : 'text-white hover:text-gold'
                       : activeMegaMenu === 'buy' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
@@ -1130,9 +1130,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                 {/* Rent */}
                 <button
-                  onMouseEnter={() => handleMegaMenuEnter('rent')}
+                  onPointerEnter={() => handleMegaMenuEnter('rent')}
                   onClick={() => handleMegaMenuClick('rent')}
-                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
+                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'rent' ? 'text-gold' : 'text-white hover:text-gold'
                       : activeMegaMenu === 'rent' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
@@ -1145,9 +1145,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                 {/* Projects */}
                 <button
-                  onMouseEnter={() => handleMegaMenuEnter('projects')}
+                  onPointerEnter={() => handleMegaMenuEnter('projects')}
                   onClick={() => handleMegaMenuClick('projects')}
-                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
+                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'projects' ? 'text-gold' : 'text-white hover:text-gold'
                       : activeMegaMenu === 'projects' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
@@ -1160,9 +1160,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                 {/* Developers */}
                 <button
-                  onMouseEnter={() => handleMegaMenuEnter('developers')}
+                  onPointerEnter={() => handleMegaMenuEnter('developers')}
                   onClick={() => handleMegaMenuClick('developers')}
-                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
+                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'developers' ? 'text-gold' : 'text-white hover:text-gold'
                       : activeMegaMenu === 'developers' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
@@ -1175,9 +1175,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                 {/* Areas */}
                 <button
-                  onMouseEnter={() => handleMegaMenuEnter('areas')}
+                  onPointerEnter={() => handleMegaMenuEnter('areas')}
                   onClick={() => handleMegaMenuClick('areas')}
-                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
+                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'areas' ? 'text-gold' : 'text-white hover:text-gold'
                       : activeMegaMenu === 'areas' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
@@ -1190,9 +1190,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                 {/* Services */}
                 <button
-                  onMouseEnter={() => handleMegaMenuEnter('services')}
+                  onPointerEnter={() => handleMegaMenuEnter('services')}
                   onClick={() => handleMegaMenuClick('services')}
-                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
+                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'services' ? 'text-gold' : 'text-white hover:text-gold'
                       : activeMegaMenu === 'services' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
@@ -1205,9 +1205,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                 {/* Investor Hub */}
                 <button
-                  onMouseEnter={() => handleMegaMenuEnter('investor')}
+                  onPointerEnter={() => handleMegaMenuEnter('investor')}
                   onClick={() => handleMegaMenuClick('investor')}
-                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
+                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'investor' ? 'text-gold' : 'text-white hover:text-gold'
                       : activeMegaMenu === 'investor' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
@@ -1220,9 +1220,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                 {/* Broker Hub */}
                 <button
-                  onMouseEnter={() => handleMegaMenuEnter('broker')}
+                  onPointerEnter={() => handleMegaMenuEnter('broker')}
                   onClick={() => handleMegaMenuClick('broker')}
-                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
+                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'broker' ? 'text-gold' : 'text-white hover:text-gold'
                       : activeMegaMenu === 'broker' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
@@ -1235,9 +1235,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                 {/* More */}
                 <button
-                  onMouseEnter={() => handleMegaMenuEnter('more')}
+                  onPointerEnter={() => handleMegaMenuEnter('more')}
                   onClick={() => handleMegaMenuClick('more')}
-                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
+                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'more' ? 'text-gold' : 'text-white hover:text-gold'
                       : activeMegaMenu === 'more' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
@@ -1248,24 +1248,32 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 </button>
               </div>
 
-              {/* Mega Menu Panels - Bridge zone for stable hover transitions */}
+              {/* Mega Menu Panels - Enhanced bridge zone for stable hover transitions */}
               {activeMegaMenu && !['search', 'language', 'account'].includes(activeMegaMenu) && (
-                <div 
-                  className="absolute left-0 right-0 z-50"
-                  style={{ top: '100%', paddingTop: '8px' }} // Bridge gap between nav and panel
-                  onMouseEnter={handleMegaMenuPanelEnter}
-                  onMouseLeave={handleMegaMenuLeave}
-                >
-                  {activeMegaMenu === 'buy' && <MegaMenuBuy onClose={closeMegaMenu} />}
-                  {activeMegaMenu === 'rent' && <MegaMenuRent onClose={closeMegaMenu} />}
-                  {activeMegaMenu === 'projects' && <MegaMenuProjects onClose={closeMegaMenu} />}
-                  {activeMegaMenu === 'developers' && <MegaMenuDevelopers onClose={closeMegaMenu} />}
-                  {activeMegaMenu === 'areas' && <MegaMenuAreas onClose={closeMegaMenu} />}
-                  {activeMegaMenu === 'services' && <MegaMenuServices onClose={closeMegaMenu} />}
-                  {activeMegaMenu === 'investor' && <MegaMenuInvestorHub onClose={closeMegaMenu} />}
-                  {activeMegaMenu === 'broker' && <MegaMenuBrokerHub onClose={closeMegaMenu} />}
-                  {activeMegaMenu === 'more' && <MegaMenuMore onClose={closeMegaMenu} />}
-                </div>
+                <>
+                  {/* Invisible bridge zone - catches mouse during transition from nav to panel */}
+                  <div 
+                    className="absolute left-0 right-0 h-4 z-50 pointer-events-auto"
+                    style={{ top: '100%' }}
+                    onPointerEnter={handleMegaMenuPanelEnter}
+                  />
+                  <div 
+                    className="absolute left-0 right-0 z-50 pointer-events-auto"
+                    style={{ top: 'calc(100% + 12px)' }} // 12px bridge gap for smoother transitions
+                    onPointerEnter={handleMegaMenuPanelEnter}
+                    onPointerLeave={handleMegaMenuLeave}
+                  >
+                    {activeMegaMenu === 'buy' && <MegaMenuBuy onClose={closeMegaMenu} />}
+                    {activeMegaMenu === 'rent' && <MegaMenuRent onClose={closeMegaMenu} />}
+                    {activeMegaMenu === 'projects' && <MegaMenuProjects onClose={closeMegaMenu} />}
+                    {activeMegaMenu === 'developers' && <MegaMenuDevelopers onClose={closeMegaMenu} />}
+                    {activeMegaMenu === 'areas' && <MegaMenuAreas onClose={closeMegaMenu} />}
+                    {activeMegaMenu === 'services' && <MegaMenuServices onClose={closeMegaMenu} />}
+                    {activeMegaMenu === 'investor' && <MegaMenuInvestorHub onClose={closeMegaMenu} />}
+                    {activeMegaMenu === 'broker' && <MegaMenuBrokerHub onClose={closeMegaMenu} />}
+                    {activeMegaMenu === 'more' && <MegaMenuMore onClose={closeMegaMenu} />}
+                  </div>
+                </>
               )}
             </nav>
           )}

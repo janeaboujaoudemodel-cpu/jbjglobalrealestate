@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { 
   Phone, Mail, Globe, Share2, Download, MessageCircle, Video, 
@@ -11,6 +11,12 @@ import { toast } from "sonner";
 
 // Import CEO photo - same as used in team/leadership
 import janePhoto from '@/assets/ceo/jane-ceo-private-jet.jpg';
+
+// Import company intro video (self-hosted MP4 for fast loading)
+import jbjIntroVideo from '@/assets/videos/jbj-company-intro.mp4';
+
+// Import logo for video poster
+import jbjMonogramLightTransparent from '@/assets/jbj-monogram-light-transparent.png';
 
 // Contact info constants - LOCKED (from BRAND_LOCK)
 // CASING RULE: JBJ.AE, Contact@JBJ.AE - EXACTLY as specified
@@ -27,9 +33,14 @@ const CONTACT_INFO = {
   // LOCKED: Exact casing - Contact@JBJ.AE
   email: "Contact@JBJ.AE",
   emailDisplay: "Contact@JBJ.AE",
-  phone: "+971 56 591 1000",
-  phoneClean: "+971565911000",
-  whatsapp: "+971565911000",
+  // Company phone
+  phoneCompany: "+971 56 591 1000",
+  phoneCompanyClean: "+971565911000",
+  whatsappCompany: "971565911000",
+  // Personal phone
+  phonePersonal: "+971 54 716 7107",
+  phonePersonalClean: "+971547167107",
+  whatsappPersonal: "971547167107",
   // LOCKED: Website as JBJ.AE (display), https://jbj.ae (link)
   website: "https://jbj.ae",
   websiteDisplay: "JBJ.AE",
@@ -56,25 +67,61 @@ const GOLD = {
   activeBackground: "linear-gradient(135deg, #F5EBD7, #E8DCC8, #D4C4A8)",
 };
 
-// Generate vCard content - FIXED with correct name and clean data
-const generateVCard = (): string => {
+// Generate Company vCard
+const generateCompanyVCard = (): string => {
+  return `BEGIN:VCARD
+VERSION:3.0
+FN:JBJ Global Real Estate
+ORG:${CONTACT_INFO.company}
+TITLE:Premium Real Estate Brokerage
+TEL;TYPE=WORK,VOICE:${CONTACT_INFO.phoneCompany}
+EMAIL;TYPE=WORK:${CONTACT_INFO.email}
+URL:${CONTACT_INFO.websiteDisplay}
+ADR;TYPE=WORK:;;Dubai;;UAE;;
+X-SOCIALPROFILE;TYPE=linkedin:${CONTACT_INFO.linkedinCompany}
+X-SOCIALPROFILE;TYPE=instagram:${CONTACT_INFO.instagramCompany}
+X-SOCIALPROFILE;TYPE=tiktok:${CONTACT_INFO.tiktokCompany}
+NOTE:Licensed Dubai Real Estate Brokerage - Premium Property Services
+END:VCARD`;
+};
+
+// Generate Personal vCard
+const generatePersonalVCard = (): string => {
   return `BEGIN:VCARD
 VERSION:3.0
 FN:${CONTACT_INFO.name}
 N:Bou Jaoude;Jane;;;
 ORG:${CONTACT_INFO.company}
 TITLE:${CONTACT_INFO.title}
-TEL;TYPE=CELL,VOICE:${CONTACT_INFO.phone}
+TEL;TYPE=CELL,VOICE:${CONTACT_INFO.phonePersonal}
 EMAIL;TYPE=WORK:${CONTACT_INFO.email}
 URL:${CONTACT_INFO.websiteDisplay}
 ADR;TYPE=WORK:;;Dubai;;UAE;;
+X-SOCIALPROFILE;TYPE=linkedin:${CONTACT_INFO.linkedinPersonal}
+X-SOCIALPROFILE;TYPE=instagram:${CONTACT_INFO.instagramPersonal}
+X-SOCIALPROFILE;TYPE=tiktok:${CONTACT_INFO.tiktokPersonal}
 NOTE:Founder & CEO of JBJ Global Real Estate LLC - Licensed Dubai Property Brokerage
 END:VCARD`;
 };
 
-// Download vCard
-const downloadVCard = () => {
-  const vcard = generateVCard();
+// Download Company vCard
+const downloadCompanyVCard = () => {
+  const vcard = generateCompanyVCard();
+  const blob = new Blob([vcard], { type: "text/vcard;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "JBJ-Global-Real-Estate.vcf";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+  toast.success("Company contact saved!");
+};
+
+// Download Personal vCard
+const downloadPersonalVCard = () => {
+  const vcard = generatePersonalVCard();
   const blob = new Blob([vcard], { type: "text/vcard;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
@@ -84,19 +131,20 @@ const downloadVCard = () => {
   link.click();
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
+  toast.success("Personal contact saved!");
 };
 
 // Fast WhatsApp redirect - uses direct protocol
-const openWhatsApp = () => {
+const openWhatsApp = (phone: string) => {
   const message = encodeURIComponent("Hi Jane, I connected via your digital business card.");
-  const whatsappUrl = `whatsapp://send?phone=${CONTACT_INFO.whatsapp.replace(/\+/g, "")}&text=${message}`;
+  const whatsappUrl = `whatsapp://send?phone=${phone}&text=${message}`;
   
   // Try native first, fallback to web
   window.location.href = whatsappUrl;
   
   // Fallback after short delay if native doesn't work
   setTimeout(() => {
-    window.open(`https://wa.me/${CONTACT_INFO.whatsapp.replace(/\+/g, "")}?text=${message}`, "_blank");
+    window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
   }, 300);
 };
 
@@ -104,6 +152,7 @@ const DigitalCard = () => {
   const [showCallOptions, setShowCallOptions] = useState(false);
   const [showShareOptions, setShowShareOptions] = useState(false);
   const [copied, setCopied] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   // Set noindex meta tag
   useEffect(() => {
@@ -115,12 +164,30 @@ const DigitalCard = () => {
       metaRobots.setAttribute("name", "robots");
       document.head.appendChild(metaRobots);
     }
-    metaRobots.setAttribute("content", "noindex, nofollow");
+    metaRobots.setAttribute("content", "noindex, nofollow, noarchive, nosnippet");
+
+    // Add googlebot-specific meta
+    let metaGooglebot = document.querySelector('meta[name="googlebot"]');
+    if (!metaGooglebot) {
+      metaGooglebot = document.createElement("meta");
+      metaGooglebot.setAttribute("name", "googlebot");
+      document.head.appendChild(metaGooglebot);
+    }
+    metaGooglebot.setAttribute("content", "noindex, nofollow");
 
     return () => {
       metaRobots?.remove();
+      metaGooglebot?.remove();
     };
   }, []);
+
+  // Handle video end - freeze on first frame (logo visible)
+  const handleVideoEnd = () => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.pause();
+    }
+  };
 
   // Share functions
   const cardUrl = window.location.href;
@@ -210,6 +277,7 @@ const DigitalCard = () => {
                       alt={`${CONTACT_INFO.name} - ${CONTACT_INFO.title}`}
                       className="w-full h-full object-cover"
                       style={{ objectPosition: "center top" }}
+                      loading="eager"
                     />
                   </div>
                 </div>
@@ -284,7 +352,7 @@ const DigitalCard = () => {
               </p>
             </div>
 
-            {/* Video Introduction */}
+            {/* Video Introduction - Self-hosted MP4 for fast loading */}
             <div 
               className="mb-6 pb-6"
               style={{ borderBottom: `1px solid ${GOLD.primary}33` }}
@@ -297,515 +365,271 @@ const DigitalCard = () => {
                 className="relative rounded-2xl overflow-hidden bg-black aspect-video"
                 style={{ border: `2px solid ${GOLD.primary}40` }}
               >
-                <iframe
-                  className="w-full h-full"
-                  src="https://www.youtube.com/embed/lBXXdJ2kAtQ"
-                  title="JBJ Global Real Estate - Company Introduction"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
+                <video
+                  ref={videoRef}
+                  className="w-full h-full object-cover"
+                  controls
+                  poster={jbjMonogramLightTransparent}
+                  preload="metadata"
+                  onEnded={handleVideoEnd}
+                  playsInline
+                >
+                  <source src={jbjIntroVideo} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
               </div>
             </div>
 
-            {/* Contact Actions */}
-            <div className="space-y-3">
-              {/* Save Contact - Primary Gold Button */}
+            {/* COMPANY CONTACT SECTION */}
+            <div 
+              className="mb-6 pb-6"
+              style={{ borderBottom: `1px solid ${GOLD.primary}33` }}
+            >
+              <h3 className="text-xs font-semibold text-black/50 mb-3 uppercase tracking-wider text-center">
+                Company Line
+              </h3>
+              
+              {/* Company Phone Display */}
+              <div className="text-center mb-4">
+                <p className="text-lg font-bold text-black">{CONTACT_INFO.phoneCompany}</p>
+              </div>
+
+              {/* Company Action Buttons */}
+              <div className="flex flex-wrap gap-2 justify-center mb-3">
+                {/* Call Company */}
+                <a
+                  href={`tel:${CONTACT_INFO.phoneCompanyClean}`}
+                  className="flex items-center gap-2 py-3 px-5 rounded-xl bg-white text-black font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+                  style={{ border: `2px solid ${GOLD.primary}50` }}
+                >
+                  <Phone className="w-4 h-4" style={{ color: GOLD.primary }} />
+                  <span className="text-sm">Call</span>
+                </a>
+
+                {/* WhatsApp Company */}
+                <button
+                  onClick={() => openWhatsApp(CONTACT_INFO.whatsappCompany)}
+                  className="flex items-center gap-2 py-3 px-5 rounded-xl bg-white text-black font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+                  style={{ border: `2px solid #25D36650` }}
+                >
+                  <MessageCircle className="w-4 h-4 text-[#25D366]" />
+                  <span className="text-sm">WhatsApp</span>
+                </button>
+              </div>
+
+              {/* Save Company Contact */}
               <button
-                onClick={downloadVCard}
-                className="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-xl text-black font-bold shadow-lg hover:shadow-xl transition-all active:scale-[0.98]"
+                onClick={downloadCompanyVCard}
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-black font-semibold shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
                 style={{ 
                   background: GOLD.gradient,
                   border: `2px solid ${GOLD.primary}`,
-                  boxShadow: `0 4px 14px ${GOLD.primary}60`
                 }}
               >
-                <Download className="w-5 h-5" />
-                <span>Save to Contacts</span>
+                <Download className="w-4 h-4" />
+                <span className="text-sm">Save Company Contact</span>
               </button>
+            </div>
 
-              {/* Call - Shows all options */}
-              <button
-                onClick={() => setShowCallOptions(true)}
-                className="w-full flex items-center justify-between py-4 px-6 rounded-xl bg-white text-black font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98] group"
-                style={{ border: `2px solid ${GOLD.primary}50` }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = GOLD.primary;
-                  e.currentTarget.style.background = "linear-gradient(135deg, #FDFBF7, #F5F0E6)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = `${GOLD.primary}50`;
-                  e.currentTarget.style.background = "white";
-                }}
-              >
-                <div className="flex items-center gap-3">
-                  <div 
-                    className="w-10 h-10 rounded-full flex items-center justify-center transition-all"
-                    style={{ 
-                      background: "linear-gradient(135deg, #F5EBD7, #E8DCC8)",
-                      border: `1px solid ${GOLD.primary}50`
-                    }}
-                  >
-                    <Phone className="w-5 h-5" style={{ color: GOLD.primary }} />
-                  </div>
-                  <div className="text-left">
-                    <span className="block font-semibold">Call</span>
-                    <span className="text-xs text-black/50">{CONTACT_INFO.phone}</span>
-                  </div>
-                </div>
-                <span className="text-sm" style={{ color: GOLD.primary }}>Tap for options</span>
-              </button>
-
-              {/* WhatsApp - Fast redirect */}
-              <button
-                onClick={openWhatsApp}
-                className="w-full flex items-center gap-3 py-4 px-6 rounded-xl bg-white text-black font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98] group"
-                style={{ border: `2px solid ${GOLD.primary}50` }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = GOLD.primary;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = `${GOLD.primary}50`;
-                }}
-              >
-                <div 
-                  className="w-10 h-10 rounded-full flex items-center justify-center transition-all"
-                  style={{ 
-                    background: "linear-gradient(135deg, #25D36620, #25D36610)",
-                    border: "1px solid #25D36650"
-                  }}
-                >
-                  <MessageCircle className="w-5 h-5 text-[#25D366]" />
-                </div>
-                <div className="text-left">
-                  <span className="block font-semibold">WhatsApp</span>
-                  <span className="text-xs text-black/50">Send a message</span>
-                </div>
-              </button>
-
-              {/* Email - Clickable with mailto: */}
-              <a
-                href={`mailto:${CONTACT_INFO.email}?subject=${encodeURIComponent("Inquiry via Digital Business Card")}`}
-                className="w-full flex items-center gap-3 py-4 px-6 rounded-xl bg-white text-black font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98] group"
-                style={{ border: `2px solid ${GOLD.primary}50` }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = GOLD.primary;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = `${GOLD.primary}50`;
-                }}
-              >
-                <div 
-                  className="w-10 h-10 rounded-full flex items-center justify-center transition-all"
-                  style={{ 
-                    background: GOLD.activeBackground,
-                    border: `1px solid ${GOLD.primary}50`
-                  }}
-                >
-                  <Mail className="w-5 h-5" style={{ color: GOLD.primary }} />
-                </div>
-                <div className="text-left">
-                  <span className="block font-semibold">Send Email</span>
-                  <span className="text-xs text-black/50">{CONTACT_INFO.emailDisplay}</span>
-                </div>
-              </a>
-
-              {/* Website */}
-              <a
-                href={CONTACT_INFO.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full flex items-center gap-3 py-4 px-6 rounded-xl bg-white text-black font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98] group"
-                style={{ border: `2px solid ${GOLD.primary}50` }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = GOLD.primary;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = `${GOLD.primary}50`;
-                }}
-              >
-                <div 
-                  className="w-10 h-10 rounded-full flex items-center justify-center transition-all"
-                  style={{ 
-                    background: GOLD.activeBackground,
-                    border: `1px solid ${GOLD.primary}50`
-                  }}
-                >
-                  <Globe className="w-5 h-5" style={{ color: GOLD.primary }} />
-                </div>
-                <div className="text-left">
-                  <span className="block font-semibold">Website</span>
-                  <span className="text-xs text-black/50">{CONTACT_INFO.websiteDisplay}</span>
-                </div>
-              </a>
-
-              {/* Social Links Section */}
-              <div 
-                className="pt-4 mt-4"
-                style={{ borderTop: `1px solid ${GOLD.primary}33` }}
-              >
-                <p className="text-xs text-black/50 text-center mb-3 uppercase tracking-wider font-medium">Connect With Us</p>
-                
-                {/* Company Socials */}
-                <p className="text-xs text-black/40 text-center mb-2">JBJ Global Real Estate</p>
-                <div className="flex justify-center gap-3 mb-4">
-                  <a
-                    href={CONTACT_INFO.linkedinCompany}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg"
-                    style={{ 
-                      background: "white",
-                      border: `2px solid ${GOLD.primary}50`
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = GOLD.gradient;
-                      e.currentTarget.style.borderColor = GOLD.primary;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "white";
-                      e.currentTarget.style.borderColor = `${GOLD.primary}50`;
-                    }}
-                  >
-                    <FaLinkedinIn className="w-5 h-5" style={{ color: GOLD.primary }} />
-                  </a>
-                  <a
-                    href={CONTACT_INFO.instagramCompany}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg"
-                    style={{ 
-                      background: "white",
-                      border: `2px solid ${GOLD.primary}50`
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = GOLD.gradient;
-                      e.currentTarget.style.borderColor = GOLD.primary;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "white";
-                      e.currentTarget.style.borderColor = `${GOLD.primary}50`;
-                    }}
-                  >
-                    <FaInstagram className="w-5 h-5" style={{ color: GOLD.primary }} />
-                  </a>
-                  <a
-                    href={CONTACT_INFO.tiktokCompany}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg"
-                    style={{ 
-                      background: "white",
-                      border: `2px solid ${GOLD.primary}50`
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = GOLD.gradient;
-                      e.currentTarget.style.borderColor = GOLD.primary;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "white";
-                      e.currentTarget.style.borderColor = `${GOLD.primary}50`;
-                    }}
-                  >
-                    <FaTiktok className="w-5 h-5" style={{ color: GOLD.primary }} />
-                  </a>
-                  <a
-                    href={CONTACT_INFO.facebookCompany}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg"
-                    style={{ 
-                      background: "white",
-                      border: `2px solid ${GOLD.primary}50`
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = GOLD.gradient;
-                      e.currentTarget.style.borderColor = GOLD.primary;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "white";
-                      e.currentTarget.style.borderColor = `${GOLD.primary}50`;
-                    }}
-                  >
-                    <FaFacebookF className="w-5 h-5" style={{ color: GOLD.primary }} />
-                  </a>
-                </div>
-
-                {/* Personal Socials - Same icons as company: LinkedIn, Instagram, Facebook, TikTok */}
-                <p className="text-xs text-black/40 text-center mb-2">Jane Bou Jaoude</p>
-                <div className="flex justify-center gap-3">
-                  <a
-                    href={CONTACT_INFO.linkedinPersonal}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg"
-                    style={{ 
-                      background: "white",
-                      border: `2px solid ${GOLD.primary}50`
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = GOLD.gradient;
-                      e.currentTarget.style.borderColor = GOLD.primary;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "white";
-                      e.currentTarget.style.borderColor = `${GOLD.primary}50`;
-                    }}
-                  >
-                    <FaLinkedinIn className="w-5 h-5" style={{ color: GOLD.primary }} />
-                  </a>
-                  <a
-                    href={CONTACT_INFO.instagramPersonal}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg"
-                    style={{ 
-                      background: "white",
-                      border: `2px solid ${GOLD.primary}50`
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = GOLD.gradient;
-                      e.currentTarget.style.borderColor = GOLD.primary;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "white";
-                      e.currentTarget.style.borderColor = `${GOLD.primary}50`;
-                    }}
-                  >
-                    <FaInstagram className="w-5 h-5" style={{ color: GOLD.primary }} />
-                  </a>
-                  <a
-                    href={CONTACT_INFO.facebookPersonal}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg"
-                    style={{ 
-                      background: "white",
-                      border: `2px solid ${GOLD.primary}50`
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = GOLD.gradient;
-                      e.currentTarget.style.borderColor = GOLD.primary;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "white";
-                      e.currentTarget.style.borderColor = `${GOLD.primary}50`;
-                    }}
-                  >
-                    <FaFacebookF className="w-5 h-5" style={{ color: GOLD.primary }} />
-                  </a>
-                  <a
-                    href={CONTACT_INFO.tiktokPersonal}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg"
-                    style={{ 
-                      background: "white",
-                      border: `2px solid ${GOLD.primary}50`
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = GOLD.gradient;
-                      e.currentTarget.style.borderColor = GOLD.primary;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "white";
-                      e.currentTarget.style.borderColor = `${GOLD.primary}50`;
-                    }}
-                  >
-                    <FaTiktok className="w-5 h-5" style={{ color: GOLD.primary }} />
-                  </a>
-                </div>
+            {/* PERSONAL CONTACT SECTION */}
+            <div 
+              className="mb-6 pb-6"
+              style={{ borderBottom: `1px solid ${GOLD.primary}33` }}
+            >
+              <h3 className="text-xs font-semibold text-black/50 mb-3 uppercase tracking-wider text-center">
+                Personal Line
+              </h3>
+              
+              {/* Personal Phone Display */}
+              <div className="text-center mb-4">
+                <p className="text-lg font-bold text-black">{CONTACT_INFO.phonePersonal}</p>
               </div>
 
-              {/* Share Button - Opens share options modal */}
+              {/* Personal Action Buttons */}
+              <div className="flex flex-wrap gap-2 justify-center mb-3">
+                {/* Call Personal */}
+                <a
+                  href={`tel:${CONTACT_INFO.phonePersonalClean}`}
+                  className="flex items-center gap-2 py-3 px-5 rounded-xl bg-white text-black font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+                  style={{ border: `2px solid ${GOLD.primary}50` }}
+                >
+                  <Phone className="w-4 h-4" style={{ color: GOLD.primary }} />
+                  <span className="text-sm">Call</span>
+                </a>
+
+                {/* WhatsApp Personal */}
+                <button
+                  onClick={() => openWhatsApp(CONTACT_INFO.whatsappPersonal)}
+                  className="flex items-center gap-2 py-3 px-5 rounded-xl bg-white text-black font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+                  style={{ border: `2px solid #25D36650` }}
+                >
+                  <MessageCircle className="w-4 h-4 text-[#25D366]" />
+                  <span className="text-sm">WhatsApp</span>
+                </button>
+              </div>
+
+              {/* Save Personal Contact */}
+              <button
+                onClick={downloadPersonalVCard}
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-black font-semibold shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+                style={{ 
+                  background: GOLD.gradient,
+                  border: `2px solid ${GOLD.primary}`,
+                }}
+              >
+                <Download className="w-4 h-4" />
+                <span className="text-sm">Save Personal Contact</span>
+              </button>
+            </div>
+
+            {/* Email - Clickable with mailto: */}
+            <a
+              href={`mailto:${CONTACT_INFO.email}?subject=${encodeURIComponent("Inquiry via Digital Business Card")}`}
+              className="w-full flex items-center gap-3 py-4 px-6 rounded-xl bg-white text-black font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98] group mb-3"
+              style={{ border: `2px solid ${GOLD.primary}50` }}
+            >
+              <div 
+                className="w-10 h-10 rounded-full flex items-center justify-center transition-all"
+                style={{ 
+                  background: GOLD.activeBackground,
+                  border: `1px solid ${GOLD.primary}50`
+                }}
+              >
+                <Mail className="w-5 h-5" style={{ color: GOLD.primary }} />
+              </div>
+              <div className="text-left">
+                <span className="block font-semibold">Send Email</span>
+                <span className="text-xs text-black/50">{CONTACT_INFO.emailDisplay}</span>
+              </div>
+            </a>
+
+            {/* Website */}
+            <a
+              href={CONTACT_INFO.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center gap-3 py-4 px-6 rounded-xl bg-white text-black font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98] group mb-3"
+              style={{ border: `2px solid ${GOLD.primary}50` }}
+            >
+              <div 
+                className="w-10 h-10 rounded-full flex items-center justify-center transition-all"
+                style={{ 
+                  background: GOLD.activeBackground,
+                  border: `1px solid ${GOLD.primary}50`
+                }}
+              >
+                <Globe className="w-5 h-5" style={{ color: GOLD.primary }} />
+              </div>
+              <div className="text-left">
+                <span className="block font-semibold">Website</span>
+                <span className="text-xs text-black/50">{CONTACT_INFO.websiteDisplay}</span>
+              </div>
+            </a>
+
+            {/* Social Links Section */}
+            <div 
+              className="pt-4 mt-4"
+              style={{ borderTop: `1px solid ${GOLD.primary}33` }}
+            >
+              <p className="text-xs text-black/50 text-center mb-3 uppercase tracking-wider font-medium">Connect With Us</p>
+              
+              {/* Company Socials */}
+              <p className="text-xs text-black/40 text-center mb-2">JBJ Global Real Estate</p>
+              <div className="flex justify-center gap-3 mb-4">
+                <a
+                  href={CONTACT_INFO.linkedinCompany}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white"
+                  style={{ border: `2px solid ${GOLD.primary}50` }}
+                >
+                  <FaLinkedinIn className="w-5 h-5" style={{ color: GOLD.primary }} />
+                </a>
+                <a
+                  href={CONTACT_INFO.instagramCompany}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white"
+                  style={{ border: `2px solid ${GOLD.primary}50` }}
+                >
+                  <FaInstagram className="w-5 h-5" style={{ color: GOLD.primary }} />
+                </a>
+                <a
+                  href={CONTACT_INFO.tiktokCompany}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white"
+                  style={{ border: `2px solid ${GOLD.primary}50` }}
+                >
+                  <FaTiktok className="w-5 h-5" style={{ color: GOLD.primary }} />
+                </a>
+                <a
+                  href={CONTACT_INFO.facebookCompany}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white"
+                  style={{ border: `2px solid ${GOLD.primary}50` }}
+                >
+                  <FaFacebookF className="w-5 h-5" style={{ color: GOLD.primary }} />
+                </a>
+              </div>
+
+              {/* Personal Socials - Same icons as company: LinkedIn, Instagram, Facebook, TikTok */}
+              <p className="text-xs text-black/40 text-center mb-2">Jane Bou Jaoude</p>
+              <div className="flex justify-center gap-3">
+                <a
+                  href={CONTACT_INFO.linkedinPersonal}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white"
+                  style={{ border: `2px solid ${GOLD.primary}50` }}
+                >
+                  <FaLinkedinIn className="w-5 h-5" style={{ color: GOLD.primary }} />
+                </a>
+                <a
+                  href={CONTACT_INFO.instagramPersonal}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white"
+                  style={{ border: `2px solid ${GOLD.primary}50` }}
+                >
+                  <FaInstagram className="w-5 h-5" style={{ color: GOLD.primary }} />
+                </a>
+                <a
+                  href={CONTACT_INFO.facebookPersonal}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white"
+                  style={{ border: `2px solid ${GOLD.primary}50` }}
+                >
+                  <FaFacebookF className="w-5 h-5" style={{ color: GOLD.primary }} />
+                </a>
+                <a
+                  href={CONTACT_INFO.tiktokPersonal}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white"
+                  style={{ border: `2px solid ${GOLD.primary}50` }}
+                >
+                  <FaTiktok className="w-5 h-5" style={{ color: GOLD.primary }} />
+                </a>
+              </div>
+            </div>
+
+            {/* Share Card Button */}
+            <div className="mt-6 pt-4" style={{ borderTop: `1px solid ${GOLD.primary}33` }}>
               <button
                 onClick={() => setShowShareOptions(true)}
-                className="w-full flex items-center justify-center gap-3 py-3 px-6 rounded-xl bg-black/5 border border-black/10 text-black/70 font-medium hover:bg-black/10 transition-all active:scale-[0.98] mt-4"
+                className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-xl bg-black text-white font-semibold shadow-lg hover:shadow-xl transition-all active:scale-[0.98]"
+                style={{ border: `2px solid ${GOLD.primary}` }}
               >
-                <Share2 className="w-4 h-4" />
-                <span className="text-sm">Share this Card</span>
+                <Share2 className="w-5 h-5" style={{ color: GOLD.primary }} />
+                <span>Share This Card</span>
               </button>
             </div>
           </div>
         </div>
       </motion.div>
-
-      {/* Powered by */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-        className="mt-8 text-center"
-      >
-        <p className="text-xs text-white/30">
-          Powered by <span style={{ color: `${GOLD.primary}99` }}>JBJ Global Real Estate</span>
-        </p>
-      </motion.div>
-
-      {/* Call Options Modal - Full iOS-style options */}
-      <AnimatePresence>
-        {showCallOptions && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/70 z-50 flex items-end sm:items-center justify-center p-4"
-            onClick={() => setShowCallOptions(false)}
-          >
-            <motion.div
-              initial={{ y: 100, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 100, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl"
-              style={{ background: "linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)" }}
-            >
-              {/* Header */}
-              <div 
-                className="p-5"
-                style={{ 
-                  borderBottom: `1px solid ${GOLD.primary}33`,
-                  background: "linear-gradient(135deg, #F5EBD7, #E8DCC8)"
-                }}
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-bold text-black text-lg">Contact Options</h3>
-                    <p className="text-sm text-black/60">{CONTACT_INFO.phone}</p>
-                  </div>
-                  <button
-                    onClick={() => setShowCallOptions(false)}
-                    className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center hover:bg-black/10 transition-colors"
-                  >
-                    <X className="w-5 h-5 text-black/60" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Options */}
-              <div className="p-3 space-y-2">
-                {/* Mobile Call */}
-                <a
-                  href={`tel:${CONTACT_INFO.phoneClean}`}
-                  className="flex items-center gap-4 p-4 rounded-2xl bg-white transition-all hover:shadow-md"
-                  style={{ border: `1px solid ${GOLD.primary}33` }}
-                  onMouseEnter={(e) => e.currentTarget.style.borderColor = GOLD.primary}
-                  onMouseLeave={(e) => e.currentTarget.style.borderColor = `${GOLD.primary}33`}
-                >
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#34C759] to-[#30B350] flex items-center justify-center shadow-md">
-                    <PhoneCall className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-semibold text-black">Mobile Call</p>
-                    <p className="text-sm text-black/60">Direct phone call</p>
-                  </div>
-                </a>
-
-                {/* FaceTime Audio */}
-                <a
-                  href={`facetime-audio:${CONTACT_INFO.phoneClean}`}
-                  className="flex items-center gap-4 p-4 rounded-2xl bg-white transition-all hover:shadow-md"
-                  style={{ border: `1px solid ${GOLD.primary}33` }}
-                  onMouseEnter={(e) => e.currentTarget.style.borderColor = GOLD.primary}
-                  onMouseLeave={(e) => e.currentTarget.style.borderColor = `${GOLD.primary}33`}
-                >
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#34C759] to-[#30B350] flex items-center justify-center shadow-md">
-                    <Phone className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-semibold text-black">FaceTime Audio</p>
-                    <p className="text-sm text-black/60">iOS voice call</p>
-                  </div>
-                </a>
-
-                {/* FaceTime Video */}
-                <a
-                  href={`facetime:${CONTACT_INFO.phoneClean}`}
-                  className="flex items-center gap-4 p-4 rounded-2xl bg-white transition-all hover:shadow-md"
-                  style={{ border: `1px solid ${GOLD.primary}33` }}
-                  onMouseEnter={(e) => e.currentTarget.style.borderColor = GOLD.primary}
-                  onMouseLeave={(e) => e.currentTarget.style.borderColor = `${GOLD.primary}33`}
-                >
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#34C759] to-[#30B350] flex items-center justify-center shadow-md">
-                    <Video className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-semibold text-black">FaceTime Video</p>
-                    <p className="text-sm text-black/60">iOS video call</p>
-                  </div>
-                </a>
-
-                {/* WhatsApp Call */}
-                <button
-                  onClick={() => {
-                    setShowCallOptions(false);
-                    openWhatsApp();
-                  }}
-                  className="w-full flex items-center gap-4 p-4 rounded-2xl bg-white transition-all hover:shadow-md text-left"
-                  style={{ border: `1px solid ${GOLD.primary}33` }}
-                  onMouseEnter={(e) => e.currentTarget.style.borderColor = GOLD.primary}
-                  onMouseLeave={(e) => e.currentTarget.style.borderColor = `${GOLD.primary}33`}
-                >
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#25D366] to-[#128C7E] flex items-center justify-center shadow-md">
-                    <MessageCircle className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-semibold text-black">WhatsApp</p>
-                    <p className="text-sm text-black/60">Voice or video call</p>
-                  </div>
-                </button>
-
-                {/* Send SMS */}
-                <a
-                  href={`sms:${CONTACT_INFO.phoneClean}`}
-                  className="flex items-center gap-4 p-4 rounded-2xl bg-white transition-all hover:shadow-md"
-                  style={{ border: `1px solid ${GOLD.primary}33` }}
-                  onMouseEnter={(e) => e.currentTarget.style.borderColor = GOLD.primary}
-                  onMouseLeave={(e) => e.currentTarget.style.borderColor = `${GOLD.primary}33`}
-                >
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#007AFF] to-[#0056B3] flex items-center justify-center shadow-md">
-                    <MessageCircle className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-semibold text-black">Send SMS</p>
-                    <p className="text-sm text-black/60">Text message</p>
-                  </div>
-                </a>
-
-                {/* Copy Number */}
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(CONTACT_INFO.phone);
-                    setShowCallOptions(false);
-                  }}
-                  className="w-full flex items-center gap-4 p-4 rounded-2xl bg-white transition-all hover:shadow-md text-left"
-                  style={{ border: `1px solid ${GOLD.primary}33` }}
-                  onMouseEnter={(e) => e.currentTarget.style.borderColor = GOLD.primary}
-                  onMouseLeave={(e) => e.currentTarget.style.borderColor = `${GOLD.primary}33`}
-                >
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#8E8E93] to-[#636366] flex items-center justify-center shadow-md">
-                    <Calendar className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-semibold text-black">Copy Number</p>
-                    <p className="text-sm text-black/60">{CONTACT_INFO.phone}</p>
-                  </div>
-                </button>
-              </div>
-
-              {/* Cancel */}
-              <div className="p-3 pt-0">
-                <button
-                  onClick={() => setShowCallOptions(false)}
-                  className="w-full py-4 rounded-2xl bg-white text-black font-semibold hover:bg-black/5 transition-colors"
-                  style={{ border: `1px solid ${GOLD.primary}33` }}
-                >
-                  Cancel
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Share Options Modal */}
       <AnimatePresence>
@@ -814,7 +638,7 @@ const DigitalCard = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/70 z-50 flex items-end sm:items-center justify-center p-4"
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4"
             onClick={() => setShowShareOptions(false)}
           >
             <motion.div
@@ -822,124 +646,141 @@ const DigitalCard = () => {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 100, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl"
+              className="w-full max-w-md rounded-2xl p-6 shadow-2xl"
               style={{ background: "linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)" }}
             >
-              {/* Header */}
-              <div 
-                className="p-5"
-                style={{ 
-                  borderBottom: `1px solid ${GOLD.primary}33`,
-                  background: GOLD.activeBackground
-                }}
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-bold text-black text-lg">Share This Card</h3>
-                    <p className="text-sm text-black/60">Choose how to share</p>
-                  </div>
-                  <button
-                    onClick={() => setShowShareOptions(false)}
-                    className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center hover:bg-black/10 transition-colors"
-                  >
-                    <X className="w-5 h-5 text-black/60" />
-                  </button>
-                </div>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-bold text-black">Share This Card</h3>
+                <button
+                  onClick={() => setShowShareOptions(false)}
+                  className="w-8 h-8 rounded-full flex items-center justify-center bg-black/10 hover:bg-black/20 transition-colors"
+                >
+                  <X className="w-4 h-4 text-black" />
+                </button>
               </div>
 
-              {/* Share Options */}
-              <div className="p-3 space-y-2">
+              <div className="space-y-3">
                 {/* Copy Link */}
                 <button
                   onClick={handleCopyLink}
-                  className="w-full flex items-center gap-4 p-4 rounded-2xl bg-white transition-all hover:shadow-md text-left"
-                  style={{ border: `1px solid ${GOLD.primary}33` }}
+                  className="w-full flex items-center gap-3 py-3 px-4 rounded-xl bg-white shadow-md hover:shadow-lg transition-all"
+                  style={{ border: `2px solid ${GOLD.primary}50` }}
                 >
-                  <div 
-                    className="w-12 h-12 rounded-full flex items-center justify-center shadow-md"
-                    style={{ background: GOLD.activeBackground, border: `2px solid ${GOLD.primary}` }}
-                  >
-                    {copied ? <Check className="w-6 h-6 text-green-600" /> : <Copy className="w-6 h-6" style={{ color: GOLD.primary }} />}
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-semibold text-black">{copied ? "Copied!" : "Copy Link"}</p>
-                    <p className="text-sm text-black/60">Copy card link to clipboard</p>
-                  </div>
+                  {copied ? <Check className="w-5 h-5 text-green-500" /> : <Copy className="w-5 h-5" style={{ color: GOLD.primary }} />}
+                  <span className="font-medium text-black">{copied ? "Copied!" : "Copy Link"}</span>
                 </button>
 
-                {/* Email */}
-                <button
-                  onClick={shareViaEmail}
-                  className="w-full flex items-center gap-4 p-4 rounded-2xl bg-white transition-all hover:shadow-md text-left"
-                  style={{ border: `1px solid ${GOLD.primary}33` }}
-                >
-                  <div 
-                    className="w-12 h-12 rounded-full flex items-center justify-center shadow-md"
-                    style={{ background: GOLD.activeBackground, border: `2px solid ${GOLD.primary}` }}
-                  >
-                    <Mail className="w-6 h-6" style={{ color: GOLD.primary }} />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-semibold text-black">Share via Email</p>
-                    <p className="text-sm text-black/60">Send in an email</p>
-                  </div>
-                </button>
-
-                {/* WhatsApp */}
+                {/* Share via WhatsApp */}
                 <button
                   onClick={shareViaWhatsApp}
-                  className="w-full flex items-center gap-4 p-4 rounded-2xl bg-white transition-all hover:shadow-md text-left"
-                  style={{ border: `1px solid ${GOLD.primary}33` }}
+                  className="w-full flex items-center gap-3 py-3 px-4 rounded-xl bg-white shadow-md hover:shadow-lg transition-all"
+                  style={{ border: `2px solid ${GOLD.primary}50` }}
                 >
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#25D366] to-[#128C7E] flex items-center justify-center shadow-md">
-                    <MessageCircle className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-semibold text-black">Share via WhatsApp</p>
-                    <p className="text-sm text-black/60">Send to a contact</p>
-                  </div>
+                  <MessageCircle className="w-5 h-5 text-[#25D366]" />
+                  <span className="font-medium text-black">Share via WhatsApp</span>
                 </button>
 
-                {/* Instagram */}
+                {/* Share via Email */}
+                <button
+                  onClick={shareViaEmail}
+                  className="w-full flex items-center gap-3 py-3 px-4 rounded-xl bg-white shadow-md hover:shadow-lg transition-all"
+                  style={{ border: `2px solid ${GOLD.primary}50` }}
+                >
+                  <Mail className="w-5 h-5" style={{ color: GOLD.primary }} />
+                  <span className="font-medium text-black">Share via Email</span>
+                </button>
+
+                {/* Share via Instagram */}
                 <button
                   onClick={shareViaInstagram}
-                  className="w-full flex items-center gap-4 p-4 rounded-2xl bg-white transition-all hover:shadow-md text-left"
-                  style={{ border: `1px solid ${GOLD.primary}33` }}
+                  className="w-full flex items-center gap-3 py-3 px-4 rounded-xl bg-white shadow-md hover:shadow-lg transition-all"
+                  style={{ border: `2px solid ${GOLD.primary}50` }}
                 >
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#833AB4] via-[#FD1D1D] to-[#F77737] flex items-center justify-center shadow-md">
-                    <FaInstagram className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-semibold text-black">Share via Instagram</p>
-                    <p className="text-sm text-black/60">Copy link & open Instagram</p>
-                  </div>
+                  <FaInstagram className="w-5 h-5" style={{ color: GOLD.primary }} />
+                  <span className="font-medium text-black">Share via Instagram</span>
                 </button>
 
-                {/* Snapchat */}
+                {/* Share via Snapchat */}
                 <button
                   onClick={shareViaSnapchat}
-                  className="w-full flex items-center gap-4 p-4 rounded-2xl bg-white transition-all hover:shadow-md text-left"
-                  style={{ border: `1px solid ${GOLD.primary}33` }}
+                  className="w-full flex items-center gap-3 py-3 px-4 rounded-xl bg-white shadow-md hover:shadow-lg transition-all"
+                  style={{ border: `2px solid ${GOLD.primary}50` }}
                 >
-                  <div className="w-12 h-12 rounded-full bg-[#FFFC00] flex items-center justify-center shadow-md">
-                    <FaSnapchatGhost className="w-6 h-6 text-black" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-semibold text-black">Share via Snapchat</p>
-                    <p className="text-sm text-black/60">Send to Snapchat</p>
-                  </div>
+                  <FaSnapchatGhost className="w-5 h-5" style={{ color: "#FFFC00" }} />
+                  <span className="font-medium text-black">Share via Snapchat</span>
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Call Options Modal - Simplified (no longer needed since we have direct call buttons) */}
+      <AnimatePresence>
+        {showCallOptions && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+            onClick={() => setShowCallOptions(false)}
+          >
+            <motion.div
+              initial={{ y: 100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 100, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-md rounded-2xl p-6 shadow-2xl"
+              style={{ background: "linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)" }}
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-bold text-black">Choose a Line</h3>
+                <button
+                  onClick={() => setShowCallOptions(false)}
+                  className="w-8 h-8 rounded-full flex items-center justify-center bg-black/10 hover:bg-black/20 transition-colors"
+                >
+                  <X className="w-4 h-4 text-black" />
                 </button>
               </div>
 
-              {/* Cancel */}
-              <div className="p-3 pt-0">
-                <button
-                  onClick={() => setShowShareOptions(false)}
-                  className="w-full py-4 rounded-2xl bg-white text-black font-semibold hover:bg-black/5 transition-colors"
-                  style={{ border: `1px solid ${GOLD.primary}33` }}
+              <div className="space-y-3">
+                {/* Company Line */}
+                <a
+                  href={`tel:${CONTACT_INFO.phoneCompanyClean}`}
+                  onClick={() => setShowCallOptions(false)}
+                  className="w-full flex items-center gap-3 py-4 px-4 rounded-xl bg-white shadow-md hover:shadow-lg transition-all"
+                  style={{ border: `2px solid ${GOLD.primary}50` }}
                 >
-                  Cancel
-                </button>
+                  <div 
+                    className="w-12 h-12 rounded-full flex items-center justify-center"
+                    style={{ background: GOLD.activeBackground, border: `1px solid ${GOLD.primary}50` }}
+                  >
+                    <Building2 className="w-6 h-6" style={{ color: GOLD.primary }} />
+                  </div>
+                  <div>
+                    <span className="block font-semibold text-black">Company Line</span>
+                    <span className="text-sm text-black/60">{CONTACT_INFO.phoneCompany}</span>
+                  </div>
+                </a>
+
+                {/* Personal Line */}
+                <a
+                  href={`tel:${CONTACT_INFO.phonePersonalClean}`}
+                  onClick={() => setShowCallOptions(false)}
+                  className="w-full flex items-center gap-3 py-4 px-4 rounded-xl bg-white shadow-md hover:shadow-lg transition-all"
+                  style={{ border: `2px solid ${GOLD.primary}50` }}
+                >
+                  <div 
+                    className="w-12 h-12 rounded-full flex items-center justify-center"
+                    style={{ background: GOLD.activeBackground, border: `1px solid ${GOLD.primary}50` }}
+                  >
+                    <PhoneCall className="w-6 h-6" style={{ color: GOLD.primary }} />
+                  </div>
+                  <div>
+                    <span className="block font-semibold text-black">Personal Line</span>
+                    <span className="text-sm text-black/60">{CONTACT_INFO.phonePersonal}</span>
+                  </div>
+                </a>
               </div>
             </motion.div>
           </motion.div>

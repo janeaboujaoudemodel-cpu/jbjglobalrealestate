@@ -428,9 +428,9 @@ const Sitemap = () => {
           </div>
         </section>
 
-        {/* MAIN SITEMAP DIRECTORY */}
+        {/* MAIN SITEMAP DIRECTORY - Following 3-Layer System */}
         <section className="py-12 sm:py-16 md:py-20 bg-black">
-          <div className="container mx-auto px-4">
+          <div className="jj-layer-2">
             {/* Section Header */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -438,10 +438,10 @@ const Sitemap = () => {
               viewport={{ once: true }}
               className="text-center mb-10"
             >
-              <h2 className="text-white text-2xl sm:text-3xl font-bold mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-black text-2xl sm:text-3xl font-bold mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Complete <span className="text-gold">Directory</span>
               </h2>
-              <p className="text-zinc-400 text-sm sm:text-base max-w-xl mx-auto">
+              <p className="text-zinc-600 text-sm sm:text-base max-w-xl mx-auto">
                 All pages organized by category for easy navigation
               </p>
             </motion.div>
@@ -465,16 +465,16 @@ const Sitemap = () => {
           </div>
         </section>
 
-        {/* LEGAL & SUPPORT SECTION */}
-        <section className="py-10 sm:py-12 bg-zinc-900/50 border-t border-gold/20">
-          <div className="container mx-auto px-4">
+        {/* LEGAL & SUPPORT SECTION - Following 3-Layer System */}
+        <section className="py-10 sm:py-12 bg-black">
+          <div className="jj-layer-2">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="text-center mb-8"
             >
-              <h2 className="text-white text-xl sm:text-2xl font-bold mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-black text-xl sm:text-2xl font-bold mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Support & <span className="text-gold">Legal</span>
               </h2>
             </motion.div>
@@ -486,10 +486,10 @@ const Sitemap = () => {
                   <Link
                     key={link.href}
                     to={link.href}
-                    className="flex items-center gap-2 px-4 py-2.5 bg-zinc-800/80 border border-zinc-700 rounded-lg hover:border-gold/50 hover:bg-zinc-800 transition-all group"
+                    className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-lg hover:border-gold hover:shadow-lg transition-all group"
                   >
                     <Icon className="w-4 h-4 text-gold" />
-                    <span className="text-zinc-300 text-sm group-hover:text-white transition-colors">
+                    <span className="text-zinc-700 group-hover:text-black text-sm transition-colors">
                       {link.label}
                     </span>
                   </Link>
@@ -507,9 +507,9 @@ const Sitemap = () => {
           <div className="container mx-auto px-4 text-center">
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gold/10 border border-gold/30 text-gold rounded-xl hover:bg-gold/20 transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl hover:border-gold hover:shadow-lg transition-all"
             >
-              <ChevronUp className="w-5 h-5" />
+              <ChevronUp className="w-5 h-5 text-gold" />
               <span className="font-medium">Back to Top</span>
             </button>
           </div>
