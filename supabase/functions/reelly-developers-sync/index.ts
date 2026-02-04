@@ -56,7 +56,12 @@ function generateSlug(name: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-function mapReellyDeveloperToDb(dev: ReellyDeveloper) {
+function mapReellyDeveloperToDb(dev: ReellyDeveloper): ReturnType<typeof mapReellyDeveloperToDb> | null {
+  // Skip developers with null/empty names
+  if (!dev.name || typeof dev.name !== 'string' || !dev.name.trim()) {
+    return null;
+  }
+
   // Get main office or first office for headquarters
   const mainOffice = dev.offices?.find(o => o.is_main) || dev.offices?.[0];
   const headquarters = mainOffice?.address || mainOffice?.region || null;
@@ -67,8 +72,6 @@ function mapReellyDeveloperToDb(dev: ReellyDeveloper) {
     logo_url: dev.logo?.url || null,
     description: dev.description || null,
     headquarters: headquarters,
-    // Store Reelly ID in a predictable way for deduplication
-    // We'll use the name + slug combo for matching since there's no external_id column
   };
 }
 
@@ -169,6 +172,13 @@ Deno.serve(async (req) => {
     for (const dev of developers) {
       try {
         const mapped = mapReellyDeveloperToDb(dev);
+        
+        // Skip developers with invalid data (null/empty name)
+        if (!mapped) {
+          skipped++;
+          console.log(`[ReellyDevSync] Skipped developer with invalid/null name (ID: ${dev.id})`);
+          continue;
+        }
         
         // Check if developer already exists by slug or name
         const existingBySlugMatch = existingBySlug.get(mapped.slug);
