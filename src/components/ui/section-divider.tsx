@@ -2,17 +2,16 @@ import { Sparkles } from "lucide-react";
 
 type SectionDividerProps = {
   className?: string;
-  compact?: boolean;
 };
 
 /**
- * Global premium divider with locked, symmetric vertical spacing.
+ * Global premium divider with locked, minimal vertical spacing.
  * Use this anywhere you need the gold-sparkles separator between major sections.
- * Set compact=true for reduced spacing between tightly grouped sections.
+ * Sections provide their own padding (py-12 md:py-16); divider is a pure visual separator.
  */
-export function SectionDivider({ className, compact = false }: SectionDividerProps) {
+export function SectionDivider({ className }: SectionDividerProps) {
   return (
-    <section className={`bg-black ${compact ? 'py-4 md:py-5' : 'py-6 md:py-8'} ${className ?? ""}`.trim()}>
+    <section className={`bg-black py-2 md:py-3 ${className ?? ""}`.trim()}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-center gap-6">
           <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />

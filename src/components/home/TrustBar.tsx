@@ -46,7 +46,7 @@ const TrustBar = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5, duration: 0.6 }}
-      className="flex flex-wrap items-center justify-center gap-4 md:gap-6 lg:gap-8 py-5 px-4"
+      className="flex flex-wrap items-center justify-center gap-4 md:gap-6 lg:gap-8 py-8 md:py-10 px-4"
     >
       {trustItems.map((item, index) => (
         <motion.div

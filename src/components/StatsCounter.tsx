@@ -161,7 +161,7 @@ const StatsCounter = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-16 md:py-20 bg-black">
+    <section ref={sectionRef} className="py-12 md:py-16 bg-black">
       {/* Active Champagne Section Layer - using global jj-layer-2 */}
       <div className="jj-layer-2">
           {/* Section Header - Premium Label */}

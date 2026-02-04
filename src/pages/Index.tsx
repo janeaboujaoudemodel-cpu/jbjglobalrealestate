@@ -174,10 +174,10 @@ const Index = () => {
       </div>
 
       {/* DIVIDER - Separates Developer Partners from Trust Bar */}
-      <SectionDivider compact />
+      <SectionDivider />
 
       {/* TRUST BAR (4 Cards) - Centered with proper divider alignment */}
-      <div id="trust-bar" className="bg-black py-3">
+      <div id="trust-bar" className="bg-black py-8 md:py-10">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center gap-4 mb-3">
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/25 to-gold/40" />
@@ -192,10 +192,10 @@ const Index = () => {
       <FeaturedListings />
 
       {/* DIVIDER */}
-      <SectionDivider compact />
+      <SectionDivider />
 
       {/* FIND YOUR STARTING POINT - Clear Entry Points with Champagne Layer - ALL 11 CARDS RESTORED */}
-      <section className="py-6 md:py-12 bg-black">
+      <section className="py-12 md:py-16 bg-black">
         <div className="jj-layer-2">
           <div className="text-center mb-6 md:mb-10">
             <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-semibold shadow-md">
@@ -380,20 +380,20 @@ const Index = () => {
       </section>
 
       {/* DIVIDER */}
-      <SectionDivider compact />
+      <SectionDivider />
 
       {/* AI COMPARISON & ANALYZER PREVIEW */}
-      <section className="py-6 md:py-14 bg-black">
+      <section className="py-12 md:py-16 bg-black">
         <div className="jj-layer-2">
           <AIComparisonWidget />
         </div>
       </section>
 
       {/* DIVIDER */}
-      <SectionDivider compact />
+      <SectionDivider />
 
       {/* MARKET REPORT CTA - Active Champagne Layer */}
-      <section className="py-8 md:py-16 bg-black">
+      <section className="py-12 md:py-16 bg-black">
         <div className="jj-layer-2">
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 md:border-2 rounded-xl md:rounded-3xl p-4 md:p-10 shadow-xl">
             <motion.div
@@ -413,10 +413,10 @@ const Index = () => {
       </section>
 
       {/* DIVIDER */}
-      <SectionDivider compact />
+      <SectionDivider />
 
       {/* MORTGAGE CALCULATOR SECTION - Compact on mobile */}
-      <section className="py-8 md:py-16 bg-black">
+      <section className="py-12 md:py-16 bg-black">
         <div className="jj-layer-2">
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 md:border-2 rounded-xl md:rounded-3xl p-4 md:p-12 shadow-xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 md:w-64 h-32 md:h-64 bg-gold/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
@@ -489,34 +489,52 @@ const Index = () => {
       </section>
 
       {/* DIVIDER - Before Why Dubai */}
-      <SectionDivider compact />
+      <SectionDivider />
 
       <WhyDubaiCapitalSection />
 
       {/* JBJ PODCAST SECTION - Admin-controlled visibility */}
       <PodcastVisibilityGate>
-        <SectionDivider compact />
+        <SectionDivider />
         <JBJPodcastSection />
-        <SectionDivider compact />
+        <SectionDivider />
       </PodcastVisibilityGate>
 
       {/* BEST IDEA AWARD */}
       <BestIdeaAward />
 
+      {/* DIVIDER */}
+      <SectionDivider />
+
       {/* WHY CHOOSE US - Master Blueprint: Section 5 */}
       <WhyChooseUs />
+
+      {/* DIVIDER */}
+      <SectionDivider />
 
       {/* AREAS WE COVER - Master Blueprint: Section 6 (12 area links) */}
       <AreasWeCover />
 
+      {/* DIVIDER */}
+      <SectionDivider />
+
       {/* TESTIMONIALS - Master Blueprint: Section 7 (3 testimonials) */}
       <TestimonialsSection />
+
+      {/* DIVIDER */}
+      <SectionDivider />
 
       {/* Stats Counter Section */}
       <StatsCounter />
 
+      {/* DIVIDER */}
+      <SectionDivider />
+
       {/* CTA BAND - Master Blueprint: Section 8 (Ready to Get Started?) */}
       <CTABand />
+
+      {/* DIVIDER */}
+      <SectionDivider />
 
       {/* SUPPORT TICKET BOX - Always visible */}
       <SupportTicketBox />

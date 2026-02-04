@@ -50,7 +50,7 @@ const WhyChooseUs = () => {
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-black">
+    <section className="py-12 md:py-16 bg-black">
       <div className="jj-layer-2">
         <div className="max-w-5xl mx-auto">
           {/* Section Header */}
