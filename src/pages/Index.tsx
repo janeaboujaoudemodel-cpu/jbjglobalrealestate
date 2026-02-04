@@ -164,64 +164,8 @@ const Index = () => {
               <HeroSearchBar />
             </motion.div>
 
-            {/* Partner Services - Clickable links */}
-            <motion.p
-              variants={fadeInUp}
-              className="text-[9px] sm:text-[10px] md:text-[11px] tracking-[0.12em] uppercase mb-4 md:mb-5"
-            >
-              <Link to="/mortgage-calculator" className="text-gold hover:text-gold-light transition-colors cursor-pointer font-medium">Mortgage</Link>
-              <span className="mx-1.5 sm:mx-2 text-gold/60">·</span>
-              <Link to="/guides/legal" className="text-gold hover:text-gold-light transition-colors cursor-pointer font-medium">Legal</Link>
-              <span className="mx-1.5 sm:mx-2 text-gold/60">·</span>
-              <Link to="/guides/golden-visa" className="text-gold hover:text-gold-light transition-colors cursor-pointer font-medium">Visa</Link>
-              <span 
-                className="text-white normal-case tracking-normal ml-1.5 sm:ml-2 font-semibold"
-                style={{
-                  textShadow: '0 2px 4px rgba(0,0,0,0.8), 0 4px 8px rgba(0,0,0,0.5), 1px 1px 0 rgba(0,0,0,0.3)',
-                }}
-              >via partners</span>
-            </motion.p>
-
-            {/* Hero CTA Buttons - Premium, consistent globally */}
-            <motion.div 
-              variants={fadeInUp}
-              className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4"
-            >
-              <PremiumHeroButton href="/properties" size="lg">
-                {t('hero.explore')}
-              </PremiumHeroButton>
-              <PremiumHeroButton onClick={() => setIsInquiryOpen(true)} size="lg">
-                {t('hero.bookConsultation')}
-              </PremiumHeroButton>
-            </motion.div>
           </div>
         </motion.div>
-        
-        {/* Scroll indicator - Animated - Clicks to scroll to developer partners */}
-        <motion.button 
-          className="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-2 z-10 cursor-pointer"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2, duration: 1 }}
-          onClick={() => {
-            document.getElementById('developer-partners')?.scrollIntoView({ behavior: 'smooth' });
-          }}
-        >
-          <span 
-            className="text-[10px] uppercase tracking-[0.3em] bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] bg-clip-text text-transparent"
-            style={{ 
-              filter: 'drop-shadow(0 0 8px rgba(200,167,102,0.5)) drop-shadow(0 0 16px rgba(200,167,102,0.35))',
-              textShadow: '0 1px 3px rgba(0, 0, 0, 0.2)',
-            }}
-          >{t('hero.discover')}</span>
-          <ChevronDown 
-            className="w-5 h-5 animate-bounce" 
-            style={{ 
-              color: '#E8DCC8',
-              filter: 'drop-shadow(0 0 8px rgba(200,167,102,0.6)) drop-shadow(0 0 16px rgba(200,167,102,0.4))',
-            }} 
-          />
-        </motion.button>
       </div>
 
       {/* DEVELOPER PARTNERS MARQUEE - MOVED UP: Directly under hero */}
