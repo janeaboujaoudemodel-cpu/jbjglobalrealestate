@@ -46,8 +46,9 @@ import ListingAdminChat from "@/components/listing-admin/ListingAdminChat";
 import { PendingUpdatesQueue } from "@/components/listing-admin/PendingUpdatesQueue";
 import { ExtractionJobsPanel } from "@/components/listing-admin/ExtractionJobsPanel";
 import SyncDashboard from "@/components/listing-admin/SyncDashboard";
+import { ReellyImportPanel } from "@/components/listing-admin/ReellyImportPanel";
 // OffPlanInquiryCTA removed from admin per user request
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, Globe } from "lucide-react";
 
 interface ProjectDocument {
   id: string;
@@ -79,7 +80,7 @@ const ListingAdmin = () => {
   const [showChat, setShowChat] = useState(false);
   
   // View state - 'chat', 'projects', or 'editor'
-  const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor' | 'data-sources' | 'sync'>('sync');
+  const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor' | 'data-sources' | 'sync' | 'reelly'>('sync');
 
   // Document upload state
   const [projectDocuments, setProjectDocuments] = useState<ProjectDocument[]>([]);
@@ -536,6 +537,13 @@ const ListingAdmin = () => {
                 Sync Dashboard
               </Button>
               <Button
+                onClick={() => { setActiveView('reelly'); setShowChat(false); setIsEditing(false); setIsCreating(false); }}
+                variant={activeView === 'reelly' ? 'primary' : 'secondary'}
+              >
+                <Globe className="w-4 h-4 mr-2" />
+                Reelly Import
+              </Button>
+              <Button
                 onClick={() => { handleCreateNew(); setActiveView('editor'); }}
                 variant="secondary"
               >
@@ -582,6 +590,13 @@ const ListingAdmin = () => {
         {activeView === 'sync' && (
           <div className="container mx-auto px-4 py-6 space-y-6">
             <SyncDashboard />
+          </div>
+        )}
+
+        {/* Reelly Import View */}
+        {activeView === 'reelly' && (
+          <div className="container mx-auto px-4 py-6">
+            <ReellyImportPanel />
           </div>
         )}
 
