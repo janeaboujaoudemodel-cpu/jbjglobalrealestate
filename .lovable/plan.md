@@ -70,6 +70,16 @@ Files updated:
 - submit-support-ticket edge function
 - And more...
 
+### ✅ 9. CRM Chat Persistence
+- Created `crm_chat_messages` table with RLS policies
+- Created `useCRMChatMessages` hook for database-backed chat
+- Messages now persist across sessions with realtime sync
+
+### ✅ 10. CRM Action Logging
+- Created `crm_action_logs` table with RLS policies
+- Created `useCRMActionLog` hook for logging actions
+- WhatsApp, Email, Call, and Video buttons now log to timeline
+
 ---
 
 ## No Pending Tasks
