@@ -75,6 +75,13 @@ function generateSlug(name: string, developer: string): string {
   return base.slice(0, 100); // Limit slug length
 }
 
+function generateAreaSlug(name: string): string {
+  return name.toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+    .slice(0, 100);
+}
+
 function mapConstructionStatus(status: string): string {
   const statusMap: Record<string, string> = {
     'under_construction': 'Under Construction',
@@ -113,7 +120,28 @@ function mapSaleStatus(status: string): string | null {
   return statusMap[status] || status;
 }
 
-function mapReellyToImport(project: ReellyProject) {
+// Determine emirate/country from region
+function getEmirateFromRegion(region: string): string {
+  const regionMap: Record<string, string> = {
+    'dubai': 'Dubai',
+    'abu dhabi': 'Abu Dhabi',
+    'sharjah': 'Sharjah',
+    'ajman': 'Ajman',
+    'ras al khaimah': 'Ras Al Khaimah',
+    'fujairah': 'Fujairah',
+    'umm al quwain': 'Umm Al Quwain',
+    // International
+    'cyprus': 'Cyprus',
+    'indonesia': 'Indonesia',
+    'oman': 'Oman',
+    'thailand': 'Thailand',
+  };
+  
+  const normalized = region?.toLowerCase().trim();
+  return regionMap[normalized] || region || 'Dubai';
+}
+
+function mapReellyToImport(project: ReellyProject, areaId: string | null) {
   const slug = generateSlug(project.name, project.developer);
   
   // Parse handover date from completion_datetime
@@ -170,12 +198,15 @@ function mapReellyToImport(project: ReellyProject) {
     constructionProgress = 0;
   }
 
+  // Get area name from district
+  const areaName = project.location?.district || null;
+
   return {
     name: project.name,
     slug: `${slug}-${project.id}`, // Ensure uniqueness with ID suffix
     developer_name: project.developer,
     location: locationStr,
-    emirate: project.location?.region || 'Dubai',
+    emirate: getEmirateFromRegion(project.location?.region),
     description: project.overview || project.short_description || null,
     price_from: project.min_price > 0 ? project.min_price : null,
     price_to: project.max_price > 0 ? project.max_price : null,
@@ -194,6 +225,9 @@ function mapReellyToImport(project: ReellyProject) {
     construction_start_date: project.construction_start_date || null,
     construction_progress: constructionProgress,
     video_url: videoUrl,
+    // Area reference
+    area_id: areaId,
+    area_name: areaName,
     // Use source_url to store external_id for deduplication
     source_url: `https://reelly.io/project/${project.id}#${externalId}`,
   };
@@ -233,6 +267,60 @@ function assertValidCursorUrl(url: string) {
   if (!parsed.pathname.startsWith("/api/v2/clients/projects")) {
     throw new Error("Invalid cursor path");
   }
+}
+
+// Upsert an area and return its ID
+async function upsertArea(
+  supabase: ReturnType<typeof createClient>,
+  location: ReellyLocation | null
+): Promise<string | null> {
+  if (!location?.district) return null;
+  
+  const areaName = location.district;
+  const areaSlug = generateAreaSlug(areaName);
+  const emirate = getEmirateFromRegion(location.region);
+  
+  // Try to find existing area
+  const { data: existing } = await supabase
+    .from("areas")
+    .select("id")
+    .eq("slug", areaSlug)
+    .maybeSingle();
+  
+  if (existing) {
+    return existing.id;
+  }
+  
+  // Insert new area
+  const { data: newArea, error } = await supabase
+    .from("areas")
+    .insert({
+      name: areaName,
+      slug: areaSlug,
+      emirate: emirate,
+      latitude: location.latitude || null,
+      longitude: location.longitude || null,
+      is_active: true,
+      is_trending: false,
+    })
+    .select("id")
+    .single();
+  
+  if (error) {
+    // Handle duplicate key error (race condition)
+    if ((error as any)?.code === "23505") {
+      const { data: retried } = await supabase
+        .from("areas")
+        .select("id")
+        .eq("slug", areaSlug)
+        .maybeSingle();
+      return retried?.id || null;
+    }
+    console.error(`[Reelly API] Error inserting area ${areaName}:`, error);
+    return null;
+  }
+  
+  return newArea?.id || null;
 }
 
 Deno.serve(async (req) => {
@@ -314,11 +402,18 @@ Deno.serve(async (req) => {
     let inserted = 0;
     let updated = 0;
     let skipped = 0;
+    let areasCreated = 0;
     const errors: string[] = [];
 
     for (const project of publishedProjects) {
       try {
-        const mappedProject = mapReellyToImport(project);
+        // Upsert area first and get its ID
+        const areaId = await upsertArea(supabase, project.location);
+        if (areaId && !await areaExisted(supabase, project.location?.district)) {
+          areasCreated++;
+        }
+        
+        const mappedProject = mapReellyToImport(project, areaId);
 
         // Check if exists by source_url pattern (contains reelly_ID)
         const externalId = `reelly_${project.id}`;
@@ -410,10 +505,11 @@ Deno.serve(async (req) => {
         inserted,
         updated,
         skipped,
+        areas_created: areasCreated,
         errors: errors.slice(0, 10),
         next_cursor: nextCursor,
         done: !nextCursor,
-        message: `Processed ${projects.length} projects (${inserted} new, ${updated} updated, ${skipped} skipped)`,
+        message: `Processed ${projects.length} projects (${inserted} new, ${updated} updated, ${skipped} skipped, ${areasCreated} new areas)`,
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
@@ -429,3 +525,21 @@ Deno.serve(async (req) => {
     );
   }
 });
+
+// Helper to check if area already existed before this sync
+async function areaExisted(supabase: ReturnType<typeof createClient>, areaName: string | undefined): Promise<boolean> {
+  if (!areaName) return true;
+  const slug = generateAreaSlug(areaName);
+  const { data } = await supabase
+    .from("areas")
+    .select("created_at")
+    .eq("slug", slug)
+    .maybeSingle();
+  
+  if (!data) return false;
+  
+  // If created more than 1 minute ago, it existed before
+  const createdAt = new Date(data.created_at);
+  const now = new Date();
+  return (now.getTime() - createdAt.getTime()) > 60000;
+}

@@ -1,37 +1,37 @@
 /**
  * AreasWeCover Component - Master Blueprint Specification
- * 12 area links auto-populated grid
+ * 12 area links auto-populated grid from database
  */
 
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MapPin, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-
-interface AreaLink {
-  slug: string;
-  name: string;
-  propertyCount?: number;
-}
-
-// Top 12 Dubai areas - in production this would come from API
-const topAreas: AreaLink[] = [
-  { slug: "downtown-dubai", name: "Downtown Dubai", propertyCount: 156 },
-  { slug: "dubai-marina", name: "Dubai Marina", propertyCount: 234 },
-  { slug: "palm-jumeirah", name: "Palm Jumeirah", propertyCount: 89 },
-  { slug: "business-bay", name: "Business Bay", propertyCount: 178 },
-  { slug: "jbr", name: "JBR", propertyCount: 112 },
-  { slug: "emirates-hills", name: "Emirates Hills", propertyCount: 45 },
-  { slug: "dubai-hills", name: "Dubai Hills", propertyCount: 198 },
-  { slug: "arabian-ranches", name: "Arabian Ranches", propertyCount: 67 },
-  { slug: "jumeirah", name: "Jumeirah", propertyCount: 78 },
-  { slug: "creek-harbour", name: "Creek Harbour", propertyCount: 134 },
-  { slug: "mohammed-bin-rashid-city", name: "MBR City", propertyCount: 156 },
-  { slug: "bluewaters", name: "Bluewaters Island", propertyCount: 34 },
-];
+import { useAreas } from "@/hooks/useAreas";
 
 const AreasWeCover = () => {
   const { t } = useLanguage();
+  const { data: areas, isLoading } = useAreas({ limit: 12 });
+
+  // Fallback static areas if database is empty
+  const fallbackAreas = [
+    { slug: "downtown-dubai", name: "Downtown Dubai" },
+    { slug: "dubai-marina", name: "Dubai Marina" },
+    { slug: "palm-jumeirah", name: "Palm Jumeirah" },
+    { slug: "business-bay", name: "Business Bay" },
+    { slug: "jbr", name: "JBR" },
+    { slug: "emirates-hills", name: "Emirates Hills" },
+    { slug: "dubai-hills", name: "Dubai Hills" },
+    { slug: "arabian-ranches", name: "Arabian Ranches" },
+    { slug: "jumeirah", name: "Jumeirah" },
+    { slug: "creek-harbour", name: "Creek Harbour" },
+    { slug: "mbr-city", name: "MBR City" },
+    { slug: "bluewaters", name: "Bluewaters Island" },
+  ];
+
+  const displayAreas = areas && areas.length > 0 
+    ? areas.map(a => ({ slug: a.slug, name: a.name, propertyCount: a.property_count }))
+    : fallbackAreas;
 
   return (
     <section className="py-12 md:py-16 bg-black">
@@ -52,7 +52,7 @@ const AreasWeCover = () => {
 
         {/* Areas Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 md:gap-4">
-          {topAreas.map((area, index) => (
+          {displayAreas.map((area, index) => (
             <motion.div
               key={area.slug}
               initial={{ opacity: 0, scale: 0.95 }}
@@ -61,7 +61,7 @@ const AreasWeCover = () => {
               transition={{ duration: 0.3, delay: index * 0.05 }}
             >
               <Link
-                to={`/areas/${area.slug}`}
+                to={`/area/${area.slug}`}
                 className="group block p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl border-2 border-gold/20 hover:border-gold transition-all duration-300 hover:shadow-[0_4px_20px_rgba(200,167,102,0.3)] hover:-translate-y-0.5 text-center"
               >
                 <h3 className="text-black font-semibold text-sm group-hover:text-gold transition-colors">
