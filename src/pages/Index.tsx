@@ -337,17 +337,16 @@ const Index = () => {
       {/* EXPLORE OUR SERVICES SLIDESHOW */}
       <ExploreServicesCard />
 
-      {/* AI HOME FINDER - Premium CTA Section */}
+      {/* AI HOME FINDER - Premium CTA Section - CENTERED */}
       <section className="py-16 md:py-24 bg-black">
-        <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_minmax(0,42rem)_1fr] items-center">
-            <div className="hidden lg:block" aria-hidden />
+        <div className="jj-layer-2">
+          <div className="flex justify-center">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="w-full max-w-2xl mx-auto lg:mx-0"
+              className="w-full max-w-2xl"
             >
               <Link to="/quiz" className="block group">
                 <div
@@ -372,7 +371,6 @@ const Index = () => {
                 </div>
               </Link>
             </motion.div>
-            <div className="hidden lg:block" aria-hidden />
           </div>
         </div>
       </section>
