@@ -39,6 +39,8 @@ import {
   Wrench,
   Award,
   Newspaper,
+  Headphones,
+  Calendar,
 } from "lucide-react";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
@@ -194,12 +196,45 @@ const hubSections: HubSection[] = [
     title: "AI & Professional Tools",
     icon: Sparkles,
     links: [
+      // Hub Entry
       { href: "/ai-hub", label: "AI Hub" },
+      
+      // Property Intelligence
       { href: "/quiz", label: "AI Home Finder" },
-      { href: "/mortgage-calculator", label: "Mortgage Calculator" },
       { href: "/property-evaluator", label: "Property Evaluator" },
+      { href: "/mortgage-calculator", label: "Mortgage Calculator" },
       { href: "/rental-index", label: "Rental Index" },
       { href: "/interior-design-ai", label: "AI Interior Design" },
+      { href: "/ai-hub#virtual-staging", label: "AI Virtual Staging" },
+      { href: "/ai-hub#price-predictor", label: "AI Price Predictor" },
+      { href: "/ai-hub#neighborhood-insights", label: "AI Neighborhood Insights" },
+      { href: "/ai-hub#property-analyzer", label: "AI Property Analyzer" },
+      
+      // Lead & Sales
+      { href: "/ai-hub#lead-qualification", label: "AI Lead Qualification" },
+      { href: "/ai-hub#followup-scheduler", label: "AI Follow-up Scheduler" },
+      { href: "/ai-hub#objection-handler", label: "AI Objection Handler" },
+      { href: "/ai-hub#client-matcher", label: "AI Client Matcher" },
+      
+      // Analytics
+      { href: "/ai-hub#market-report", label: "AI Market Report" },
+      { href: "/ai-hub#competitor-analysis", label: "AI Competitor Analysis" },
+      { href: "/ai-hub#roi-calculator", label: "AI ROI Calculator" },
+      { href: "/ai-hub#investment-report", label: "AI Investment Report" },
+      
+      // Communication
+      { href: "/ai-hub#meeting-summarizer", label: "AI Meeting Summarizer" },
+      { href: "/ai-hub#translation-hub", label: "AI Translation Hub" },
+      { href: "/ai-hub#video-tour-script", label: "AI Video Tour Script" },
+      { href: "/ai-hub#email-generator", label: "AI Email Generator" },
+      { href: "/ai-hub#social-media", label: "AI Social Media" },
+      { href: "/ai-hub#description-writer", label: "AI Description Writer" },
+      
+      // Documents
+      { href: "/ai-hub#contract-reviewer", label: "AI Contract Reviewer" },
+      { href: "/ai-hub#document-generator", label: "AI Document Generator" },
+      
+      // Productivity Tools
       { href: "/business-card-scanner", label: "Business Card Scanner" },
       { href: "/documents", label: "Documents & Spreadsheets" },
       { href: "/video-meeting", label: "Video Meet" },
@@ -211,14 +246,17 @@ const hubSections: HubSection[] = [
     title: "Careers",
     icon: Briefcase,
     links: [
+      { href: "/join", label: "Submit Your CV" },
       { href: "/join", label: "Join Our Team" },
       { href: "/join?type=broker", label: "Become a Broker" },
       { href: "/join?type=agent", label: "Apply as Agent" },
       { href: "/join?type=marketing", label: "Marketing Positions" },
       { href: "/join?type=tech", label: "Technology Roles" },
+      { href: "/join?type=admin", label: "Administrative Roles" },
       { href: "/broker-toolkit", label: "Broker Resources" },
       { href: "/broker-education", label: "Training Programs" },
       { href: "/team", label: "Meet Our Team" },
+      { href: "/onboarding", label: "Onboarding Process" },
     ],
   },
 ];
@@ -267,12 +305,12 @@ const HubCard = ({ hub, hideFounderLinks }: { hub: HubSection; hideFounderLinks?
           <li key={link.href}>
             <Link
               to={link.href}
-              className="group flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-gold/10 transition-colors"
+              className="group flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-gold/10 transition-colors"
             >
               <span className="text-zinc-700 group-hover:text-black text-sm transition-colors">
                 {link.label}
               </span>
-              <ArrowRight className="w-3.5 h-3.5 text-gold opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 ml-auto" />
+              <ArrowRight className="w-3.5 h-3.5 text-gold opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
             </Link>
           </li>
         ))}
@@ -495,6 +533,85 @@ const Sitemap = () => {
                   </Link>
                 );
               })}
+            </div>
+          </div>
+        </section>
+
+        {/* SUPPORT & CONTACT CARDS */}
+        <section className="py-10 sm:py-12 bg-black">
+          <div className="jj-layer-2">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-8"
+            >
+              <h2 className="text-black text-xl sm:text-2xl font-bold mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                Get <span className="text-gold">In Touch</span>
+              </h2>
+              <p className="text-zinc-600 text-sm">Choose your preferred way to connect with us</p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 max-w-4xl mx-auto">
+              {/* Support Ticket */}
+              <Link to="/contact?type=support">
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0 }}
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all text-center group"
+                >
+                  <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                    <Headphones className="w-7 h-7 text-gold" />
+                  </div>
+                  <h3 className="text-black font-bold text-lg mb-2">Support Ticket</h3>
+                  <p className="text-zinc-600 text-sm mb-4">Get help with any questions or issues</p>
+                  <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm">
+                    Submit Ticket <ArrowRight className="w-4 h-4" />
+                  </span>
+                </motion.div>
+              </Link>
+
+              {/* Free Consultation */}
+              <Link to="/contact?type=consultation">
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 }}
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all text-center group"
+                >
+                  <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                    <Calendar className="w-7 h-7 text-gold" />
+                  </div>
+                  <h3 className="text-black font-bold text-lg mb-2">Free Consultation</h3>
+                  <p className="text-zinc-600 text-sm mb-4">Book a call with our expert advisors</p>
+                  <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm">
+                    Book Now <ArrowRight className="w-4 h-4" />
+                  </span>
+                </motion.div>
+              </Link>
+
+              {/* Contact Us */}
+              <Link to="/contact">
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2 }}
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all text-center group"
+                >
+                  <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                    <Phone className="w-7 h-7 text-gold" />
+                  </div>
+                  <h3 className="text-black font-bold text-lg mb-2">Contact Us</h3>
+                  <p className="text-zinc-600 text-sm mb-4">Reach our team directly via phone or email</p>
+                  <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm">
+                    Get in Touch <ArrowRight className="w-4 h-4" />
+                  </span>
+                </motion.div>
+              </Link>
             </div>
           </div>
         </section>
