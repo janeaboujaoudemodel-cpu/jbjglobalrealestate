@@ -43,6 +43,21 @@ export interface Project {
   status_label: string | null; // e.g. "Future Launch", "New Phase"
   created_at: string;
   updated_at: string;
+  // Reelly-compatible fields
+  unit_types?: Json | null;
+  construction_progress?: number | null;
+  construction_start_date?: string | null;
+  expected_completion?: string | null;
+  availability_status?: string | null;
+  total_units?: number | null;
+  available_units?: number | null;
+  down_payment_percent?: number | null;
+  video_url?: string | null;
+  virtual_tour_url?: string | null;
+  roi_estimate?: number | null;
+  rental_yield_estimate?: number | null;
+  import_source?: string | null;
+  external_id?: string | null;
   developer: {
     id: string;
     name: string;
