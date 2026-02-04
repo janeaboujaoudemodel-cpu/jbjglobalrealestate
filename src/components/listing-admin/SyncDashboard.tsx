@@ -396,7 +396,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
         .select("id", { count: "exact", head: true })
         .eq("status", "pending")
         .ilike("review_notes", "ERROR:%"),
-      // Strict completeness: images + docs + description + developer
+      // Strict completeness: images + description + developer (documents optional for Reelly imports)
       supabase
         .from("pending_project_imports")
         .select("id", { count: "exact", head: true })
@@ -407,8 +407,8 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
         .not("developer_name", "is", null)
         .neq("developer_name", "")
         .not("developer_name", "ilike", "unknown")
-        .not("images", "eq", "[]")
-        .not("documents", "eq", "[]"),
+        .not("images", "is", null)
+        .not("images", "eq", "[]"),
     ]);
 
     const pending = pendingRes.count ?? null;
