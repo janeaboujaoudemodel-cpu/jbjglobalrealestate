@@ -333,7 +333,10 @@ Deno.serve(async (req) => {
           inserted++;
         }
       } catch (err) {
-        const errMsg = `${project.name}: ${err instanceof Error ? err.message : String(err)}`;
+        const errorDetails = err && typeof err === 'object' && 'message' in err 
+          ? (err as any).message 
+          : JSON.stringify(err);
+        const errMsg = `${project.name}: ${errorDetails}`;
         console.error(`[Reelly API] Error:`, errMsg);
         errors.push(errMsg);
       }
