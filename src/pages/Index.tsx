@@ -120,7 +120,7 @@ const Index = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          <div className="max-w-5xl pt-20 md:pt-24">
+          <div className="max-w-5xl pt-28 md:pt-36">
             {/* Buy · Sell · Rent - MAIN HEADLINE FIRST with gold dot after Rent */}
             <motion.h1 
               variants={fadeInUp} 
