@@ -12005,13 +12005,20 @@ export type Database = {
         Row: {
           amenities: string[] | null
           amenities_list: Json | null
+          availability_status: string | null
+          available_units: number | null
           bedrooms_max: number | null
           bedrooms_min: number | null
           community_id: string | null
+          construction_progress: number | null
+          construction_start_date: string | null
           created_at: string
           description: string | null
           developer_id: string | null
+          down_payment_percent: number | null
           emirate: string | null
+          expected_completion: string | null
+          external_id: string | null
           facilities: string[] | null
           faqs: Json | null
           floor_plan_types: Json | null
@@ -12020,6 +12027,7 @@ export type Database = {
           handover_date: string | null
           highlights: Json | null
           id: string
+          import_source: string | null
           is_developer_direct: boolean | null
           is_featured: boolean | null
           is_offplan: boolean | null
@@ -12038,6 +12046,8 @@ export type Database = {
           price_from: number | null
           price_to: number | null
           property_type_label: string | null
+          rental_yield_estimate: number | null
+          roi_estimate: number | null
           service_charge: string | null
           size_max: number | null
           size_min: number | null
@@ -12047,23 +12057,34 @@ export type Database = {
           source_url: string | null
           status: string | null
           status_label: string | null
+          total_units: number | null
+          unit_types: Json | null
           units_data: Json | null
           updated_at: string
           usp_bullets: Json | null
           usp_headline: string | null
           usp_image_url: string | null
+          video_url: string | null
           views: string[] | null
+          virtual_tour_url: string | null
         }
         Insert: {
           amenities?: string[] | null
           amenities_list?: Json | null
+          availability_status?: string | null
+          available_units?: number | null
           bedrooms_max?: number | null
           bedrooms_min?: number | null
           community_id?: string | null
+          construction_progress?: number | null
+          construction_start_date?: string | null
           created_at?: string
           description?: string | null
           developer_id?: string | null
+          down_payment_percent?: number | null
           emirate?: string | null
+          expected_completion?: string | null
+          external_id?: string | null
           facilities?: string[] | null
           faqs?: Json | null
           floor_plan_types?: Json | null
@@ -12072,6 +12093,7 @@ export type Database = {
           handover_date?: string | null
           highlights?: Json | null
           id?: string
+          import_source?: string | null
           is_developer_direct?: boolean | null
           is_featured?: boolean | null
           is_offplan?: boolean | null
@@ -12090,6 +12112,8 @@ export type Database = {
           price_from?: number | null
           price_to?: number | null
           property_type_label?: string | null
+          rental_yield_estimate?: number | null
+          roi_estimate?: number | null
           service_charge?: string | null
           size_max?: number | null
           size_min?: number | null
@@ -12099,23 +12123,34 @@ export type Database = {
           source_url?: string | null
           status?: string | null
           status_label?: string | null
+          total_units?: number | null
+          unit_types?: Json | null
           units_data?: Json | null
           updated_at?: string
           usp_bullets?: Json | null
           usp_headline?: string | null
           usp_image_url?: string | null
+          video_url?: string | null
           views?: string[] | null
+          virtual_tour_url?: string | null
         }
         Update: {
           amenities?: string[] | null
           amenities_list?: Json | null
+          availability_status?: string | null
+          available_units?: number | null
           bedrooms_max?: number | null
           bedrooms_min?: number | null
           community_id?: string | null
+          construction_progress?: number | null
+          construction_start_date?: string | null
           created_at?: string
           description?: string | null
           developer_id?: string | null
+          down_payment_percent?: number | null
           emirate?: string | null
+          expected_completion?: string | null
+          external_id?: string | null
           facilities?: string[] | null
           faqs?: Json | null
           floor_plan_types?: Json | null
@@ -12124,6 +12159,7 @@ export type Database = {
           handover_date?: string | null
           highlights?: Json | null
           id?: string
+          import_source?: string | null
           is_developer_direct?: boolean | null
           is_featured?: boolean | null
           is_offplan?: boolean | null
@@ -12142,6 +12178,8 @@ export type Database = {
           price_from?: number | null
           price_to?: number | null
           property_type_label?: string | null
+          rental_yield_estimate?: number | null
+          roi_estimate?: number | null
           service_charge?: string | null
           size_max?: number | null
           size_min?: number | null
@@ -12151,12 +12189,16 @@ export type Database = {
           source_url?: string | null
           status?: string | null
           status_label?: string | null
+          total_units?: number | null
+          unit_types?: Json | null
           units_data?: Json | null
           updated_at?: string
           usp_bullets?: Json | null
           usp_headline?: string | null
           usp_image_url?: string | null
+          video_url?: string | null
           views?: string[] | null
+          virtual_tour_url?: string | null
         }
         Relationships: [
           {

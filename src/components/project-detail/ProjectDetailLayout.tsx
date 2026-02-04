@@ -26,6 +26,9 @@ import {
   ArrowRight,
   UserPlus,
   Share2,
+  HardHat,
+  Video,
+  TrendingUp,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -38,6 +41,10 @@ import LeadCaptureModal from "@/components/project-detail/LeadCaptureModal";
 import ProjectBreadcrumb from "@/components/project-detail/ProjectBreadcrumb";
 import CallToActionSection from "@/components/project-detail/CallToActionSection";
 import FloorPlanGallery from "@/components/project-detail/FloorPlanGallery";
+import UnitInventorySection from "@/components/project-detail/UnitInventorySection";
+import ConstructionTimelineSection from "@/components/project-detail/ConstructionTimelineSection";
+import ProjectMediaSection from "@/components/project-detail/ProjectMediaSection";
+import InvestmentMetricsSection from "@/components/project-detail/InvestmentMetricsSection";
 import Footer from "@/components/Footer";
 import { CONTACT_INFO, getCallUrl, getEmailUrl, getWhatsAppUrl } from "@/constants/stats";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
@@ -72,7 +79,7 @@ export type ProjectDetailData = {
   amenities?: string[] | null;
   images: { id: string; url: string; alt?: string | null }[];
   documents: { id: string; type: string; url: string; name?: string | null }[];
-  // New fields for full mirroring
+  // Mirroring fields
   usp_headline?: string | null;
   usp_bullets?: string[] | null;
   usp_image_url?: string | null;
@@ -83,6 +90,27 @@ export type ProjectDetailData = {
   floor_plan_types?: Array<{ label: string; pdfUrl?: string }> | null;
   faqs?: Array<{ question: string; answer: string }> | null;
   payment_breakdown?: { down_payment?: string; during_construction?: string; on_completion?: string } | null;
+  // Reelly-compatible fields
+  unit_types?: Array<{
+    type: string;
+    size_from?: number;
+    size_to?: number;
+    price_from?: number;
+    price_to?: number;
+    available_units?: number;
+    total_units?: number;
+    status?: "available" | "limited" | "sold_out";
+  }> | null;
+  construction_progress?: number | null;
+  construction_start_date?: string | null;
+  expected_completion?: string | null;
+  availability_status?: string | null;
+  total_units?: number | null;
+  available_units?: number | null;
+  video_url?: string | null;
+  virtual_tour_url?: string | null;
+  roi_estimate?: number | null;
+  rental_yield_estimate?: number | null;
 };
 
 interface ProjectDetailLayoutProps {
@@ -96,16 +124,20 @@ const MIN_REASONABLE_PRICE_AED = 50_000;
 
 const MAPS_API_KEY = "AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8";
 
-// Sticky sub-nav tabs config - FIXED: Added Brochure tab
+// Sticky sub-nav tabs config - Reelly-style sections added
 const SUB_NAV_TABS = [
   { id: "details", label: "Details", icon: FileText },
   { id: "gallery", label: "Gallery", icon: ImageIcon },
+  { id: "units", label: "Units", icon: Bed },
+  { id: "construction", label: "Progress", icon: HardHat },
   { id: "usp", label: "Highlights", icon: Star },
   { id: "floor-plans", label: "Floor Plans", icon: Layers },
   { id: "amenities", label: "Amenities", icon: Building2 },
+  { id: "media", label: "Media", icon: Video },
   { id: "location", label: "Location", icon: MapPin },
   { id: "brochure", label: "Brochure", icon: Download },
   { id: "payment", label: "Payment Plan", icon: CreditCard },
+  { id: "investment", label: "Investment", icon: TrendingUp },
   { id: "faq", label: "Useful info", icon: HelpCircle },
   { id: "ai", label: "AI Analyzer", icon: Sparkles },
   { id: "mortgage", label: "Mortgage", icon: Calculator },
@@ -137,6 +169,11 @@ export default function ProjectDetailLayout({
   const aiRef = useRef<HTMLDivElement>(null);
   const uspRef = useRef<HTMLDivElement>(null);
   const faqRef = useRef<HTMLDivElement>(null);
+  // New Reelly-style section refs
+  const unitsRef = useRef<HTMLDivElement>(null);
+  const constructionRef = useRef<HTMLDivElement>(null);
+  const mediaRef = useRef<HTMLDivElement>(null);
+  const investmentRef = useRef<HTMLDivElement>(null);
 
   const { isLeadCaptured } = useLeadCapture();
 
@@ -191,6 +228,11 @@ export default function ProjectDetailLayout({
     const hasPayment = !!project.payment_plan || paymentPlanDocs.length > 0 || !!project.payment_breakdown;
     const hasUsefulInfo = (project.faqs?.length ?? 0) > 0;
     const hasBrochure = brochureDocs.length > 0;
+    // Reelly-style sections
+    const hasUnits = (project.unit_types?.length ?? 0) > 0;
+    const hasConstruction = project.construction_progress !== null && project.construction_progress !== undefined;
+    const hasMedia = !!project.video_url || !!project.virtual_tour_url;
+    const hasInvestment = !!project.roi_estimate || !!project.rental_yield_estimate;
 
     return SUB_NAV_TABS.filter((t) => {
       if (t.id === "gallery") return hasGallery;
@@ -200,9 +242,13 @@ export default function ProjectDetailLayout({
       if (t.id === "payment") return hasPayment;
       if (t.id === "faq") return hasUsefulInfo;
       if (t.id === "brochure") return hasBrochure;
+      if (t.id === "units") return hasUnits;
+      if (t.id === "construction") return hasConstruction;
+      if (t.id === "media") return hasMedia;
+      if (t.id === "investment") return hasInvestment;
       return true;
     });
-  }, [brochureDocs.length, floorPlanDocs.length, images.length, paymentPlanDocs.length, project.amenities, project.faqs, project.payment_breakdown, project.payment_plan, project.floor_plan_types, project.usp_bullets]);
+  }, [brochureDocs.length, floorPlanDocs.length, images.length, paymentPlanDocs.length, project.amenities, project.faqs, project.payment_breakdown, project.payment_plan, project.floor_plan_types, project.usp_bullets, project.unit_types, project.construction_progress, project.video_url, project.virtual_tour_url, project.roi_estimate, project.rental_yield_estimate]);
 
   const whatsappMessage = `Hi, I'm interested in ${project.name}${project.location ? ` at ${project.location}` : ""}. Please share more details.`;
 
@@ -227,6 +273,11 @@ export default function ProjectDetailLayout({
       faq: faqRef,
       ai: aiRef,
       mortgage: mortgageRef,
+      // Reelly-style sections
+      units: unitsRef,
+      construction: constructionRef,
+      media: mediaRef,
+      investment: investmentRef,
     };
     const targetRef = refMap[tabId];
     if (targetRef) scrollToRef(targetRef);
@@ -516,6 +567,31 @@ export default function ProjectDetailLayout({
              </div>
            )}
 
+           {/* UNIT TYPES & INVENTORY SECTION (Reelly-style) */}
+           {(project.unit_types?.length ?? 0) > 0 && (
+             <div ref={unitsRef} id="units" className="mb-12 scroll-mt-40">
+               <UnitInventorySection
+                 unitTypes={project.unit_types || []}
+                 totalUnits={project.total_units}
+                 availableUnits={project.available_units}
+                 projectName={project.name}
+               />
+             </div>
+           )}
+
+           {/* CONSTRUCTION TIMELINE SECTION (Reelly-style) */}
+           {(project.construction_progress !== null && project.construction_progress !== undefined) && (
+             <div ref={constructionRef} id="construction" className="mb-12 scroll-mt-40">
+               <ConstructionTimelineSection
+                 constructionProgress={project.construction_progress}
+                 constructionStartDate={project.construction_start_date}
+                 expectedCompletion={project.expected_completion}
+                 handoverDate={project.handover_date}
+                 projectName={project.name}
+               />
+             </div>
+           )}
+
            {/* UNIQUE SELLING POINTS (USP/Highlights) SECTION */}
            {(project.usp_bullets?.length ?? 0) > 0 && (
              <div ref={uspRef} id="usp" className="mb-12 scroll-mt-40">
@@ -599,7 +675,18 @@ export default function ProjectDetailLayout({
                   </div>
                 </div>
               </div>
-            )}
+             )}
+
+           {/* PROJECT MEDIA SECTION (Reelly-style) */}
+           {(project.video_url || project.virtual_tour_url) && (
+             <div ref={mediaRef} id="media" className="mb-12 scroll-mt-40">
+               <ProjectMediaSection
+                 videoUrl={project.video_url}
+                 virtualTourUrl={project.virtual_tour_url}
+                 projectName={project.name}
+               />
+             </div>
+           )}
 
           {/* LOCATION MAP - Full Width */}
           <div ref={locationRef} id="location" className="mb-12 scroll-mt-40">
@@ -819,6 +906,19 @@ export default function ProjectDetailLayout({
                );
              })()}
           </div>
+           )}
+
+           {/* INVESTMENT METRICS SECTION (Reelly-style) */}
+           {(project.roi_estimate || project.rental_yield_estimate) && (
+             <div ref={investmentRef} id="investment" className="mb-12 scroll-mt-40">
+               <InvestmentMetricsSection
+                 roiEstimate={project.roi_estimate}
+                 rentalYieldEstimate={project.rental_yield_estimate}
+                 priceFrom={project.price_from}
+                 projectName={project.name}
+                 onContactClick={scrollToInquiry}
+               />
+             </div>
            )}
 
            {/* USEFUL INFO SECTION */}

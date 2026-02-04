@@ -77,6 +77,24 @@ const asFloorPlanTypes = (value: unknown): Array<{ label: string; pdfUrl?: strin
   return out.length ? out : null;
 };
 
+const asUnitTypes = (value: unknown): Array<{ type: string; size_from?: number; size_to?: number; price_from?: number; price_to?: number; available_units?: number; total_units?: number; status?: "available" | "limited" | "sold_out" }> | null => {
+  if (!Array.isArray(value)) return null;
+  const out = value.map((v) => {
+    const o = v as Record<string, unknown>;
+    return {
+      type: typeof o.type === "string" ? o.type : "Unit",
+      size_from: typeof o.size_from === "number" ? o.size_from : undefined,
+      size_to: typeof o.size_to === "number" ? o.size_to : undefined,
+      price_from: typeof o.price_from === "number" ? o.price_from : undefined,
+      price_to: typeof o.price_to === "number" ? o.price_to : undefined,
+      available_units: typeof o.available_units === "number" ? o.available_units : undefined,
+      total_units: typeof o.total_units === "number" ? o.total_units : undefined,
+      status: ["available", "limited", "sold_out"].includes(o.status as string) ? o.status as "available" | "limited" | "sold_out" : undefined,
+    };
+  }).filter(v => v.type);
+  return out.length ? out : null;
+};
+
 const ProjectDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: project, isLoading } = useProject(slug || "");
@@ -125,6 +143,18 @@ const ProjectDetail = () => {
       floor_plan_types: asFloorPlanTypes(project.floor_plan_types),
       faqs: asFaqs(project.faqs),
       payment_breakdown: asPaymentBreakdown(project.payment_breakdown),
+      // Reelly-compatible fields
+      unit_types: asUnitTypes(project.unit_types),
+      construction_progress: project.construction_progress ?? null,
+      construction_start_date: project.construction_start_date ?? null,
+      expected_completion: project.expected_completion ?? null,
+      availability_status: project.availability_status ?? null,
+      total_units: project.total_units ?? null,
+      available_units: project.available_units ?? null,
+      video_url: project.video_url ?? null,
+      virtual_tour_url: project.virtual_tour_url ?? null,
+      roi_estimate: project.roi_estimate ?? null,
+      rental_yield_estimate: project.rental_yield_estimate ?? null,
     };
   }, [project]);
 
