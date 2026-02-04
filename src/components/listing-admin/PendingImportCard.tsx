@@ -248,8 +248,8 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
         </div>
       )}
 
-      {/* Image Preview */}
-      <div className="relative h-56 bg-muted">
+      {/* Image Preview - Square aspect ratio like source portal */}
+      <div className="relative aspect-square bg-muted">
         {activeImage?.url ? (
           <SafeImage
             src={activeImage.url}
@@ -329,9 +329,17 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
         {/* Title - 2 lines for full readability */}
         <h3 className="font-semibold text-foreground text-base mb-1 line-clamp-2 min-h-[48px]">{item.name}</h3>
 
-        {/* Developer - fixed height */}
+        {/* Developer - fixed height, gold & clickable */}
         <div className="h-5 mb-2">
-          {item.developer_name && <p className="text-sm text-gold truncate">by {item.developer_name}</p>}
+          {item.developer_name && (
+            <Link 
+              to="/developers"
+              onClick={(e) => e.stopPropagation()}
+              className="text-sm text-gold truncate hover:underline inline-block"
+            >
+              by {item.developer_name}
+            </Link>
+          )}
         </div>
 
         {/* Location & Bedrooms - fixed height */}

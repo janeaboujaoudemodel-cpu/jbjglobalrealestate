@@ -24,6 +24,8 @@ import {
   ChevronDown,
   ChevronUp,
   ArrowRight,
+  UserPlus,
+  Share2,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -904,6 +906,59 @@ export default function ProjectDetailLayout({
                   <span className="text-base font-semibold text-foreground">Email</span>
                   <span className="text-sm text-muted-foreground">{CONTACT_INFO.email}</span>
                 </a>
+              </div>
+              
+              {/* Save Contact & Share Buttons */}
+              <div className="flex justify-center gap-4 mt-8">
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    const vcard = `BEGIN:VCARD
+VERSION:3.0
+N:JBJ Global Real Estate
+FN:JBJ Global Real Estate
+ORG:JBJ Global Real Estate
+TEL;TYPE=WORK,VOICE:${CONTACT_INFO.phone}
+EMAIL:${CONTACT_INFO.email}
+URL:https://jbjglobalrealestate.lovable.app
+END:VCARD`;
+                    const blob = new Blob([vcard], { type: 'text/vcard' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = 'JBJ-Global-Real-Estate.vcf';
+                    link.click();
+                    URL.revokeObjectURL(url);
+                  }}
+                  className="gap-2"
+                >
+                  <UserPlus className="w-4 h-4" />
+                  Save Contact
+                </Button>
+                <Button
+                  variant="secondary"
+                  onClick={async () => {
+                    const shareData = {
+                      title: project.name,
+                      text: `Check out ${project.name} - ${project.location || 'Dubai, UAE'}`,
+                      url: window.location.href,
+                    };
+                    if (navigator.share) {
+                      try {
+                        await navigator.share(shareData);
+                      } catch {
+                        // User cancelled or error
+                      }
+                    } else {
+                      navigator.clipboard.writeText(window.location.href);
+                      // Note: toast would need to be imported
+                    }
+                  }}
+                  className="gap-2"
+                >
+                  <Share2 className="w-4 h-4" />
+                  Share
+                </Button>
               </div>
             </div>
           </div>
