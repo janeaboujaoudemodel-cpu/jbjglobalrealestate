@@ -126,14 +126,15 @@ export interface ReellyDeveloper {
   project_count?: number;
 }
 
-// Area/District types
+// Area/District types (from /locations or /areas endpoint)
 export interface ReellyArea {
   id: number;
   name: string;
-  description?: string;
-  emirate?: string;
-  country?: string;
+  description: string | null; // Can be empty string, null, or detailed text (EN/RU)
 }
+
+// API response for areas
+export type ReellyAreasResponse = ReellyPaginatedResponse<ReellyArea>;
 
 // Emirate/Region types
 export interface ReellyEmirate {
