@@ -88,9 +88,9 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
           <>
             {/* Premium User Header - Horizontal Layout */}
             <div className="flex items-center gap-5 pb-5 mb-5 border-b-2 border-gold/40">
-              <Avatar className="h-16 w-16">
+              <Avatar className="h-16 w-16 border-2 border-gold/60">
                 <AvatarImage src={accountPhotoUrl ?? ""} alt={`${accountDisplayName} profile photo`} className="object-cover" />
-                <AvatarFallback className="bg-black text-gold text-xl font-bold">
+                <AvatarFallback className="bg-transparent border-2 border-gold text-gold text-xl font-bold">
                   {getInitials(String(accountDisplayName))}
                 </AvatarFallback>
               </Avatar>
@@ -125,8 +125,8 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                       onClick={onClose}
                       className="flex items-center gap-3 py-2.5 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gold/15 hover:to-gold/5 group"
                     >
-                      <div className="w-9 h-9 rounded-lg bg-black border border-gold/40 flex items-center justify-center group-hover:border-gold transition-colors">
-                        <link.icon className="w-4 h-4 text-gold" />
+                      <div className="w-9 h-9 rounded-lg bg-transparent border-2 border-gold/40 flex items-center justify-center group-hover:border-gold group-hover:bg-gold/10 transition-colors">
+                        <link.icon className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <span className="text-black font-semibold text-sm group-hover:text-gold transition-colors block">
@@ -148,8 +148,8 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                     onClick={handleSignOut} 
                     className="flex items-center gap-3 py-2.5 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-red-500/10 hover:to-red-500/5 group w-full"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-red-500/20 to-red-600/10 border border-red-500/30 flex items-center justify-center group-hover:border-red-500 transition-colors">
-                      <LogOut className="w-4 h-4 text-red-600" />
+                    <div className="w-9 h-9 rounded-lg bg-transparent border-2 border-red-500/30 flex items-center justify-center group-hover:border-red-500 group-hover:bg-red-500/10 transition-colors">
+                      <LogOut className="w-4 h-4 text-red-600 group-hover:text-red-500" />
                     </div>
                     <span className="text-black font-semibold text-sm group-hover:text-red-600 transition-colors">
                       {t('nav.signOut')}
@@ -173,8 +173,8 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           onClick={onClose}
                           className="flex items-center gap-2.5 py-2 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gold/15 hover:to-gold/5 group"
                         >
-                          <div className="w-8 h-8 rounded-lg bg-black border border-gold/30 flex items-center justify-center group-hover:border-gold transition-colors">
-                            <link.icon className="w-4 h-4 text-gold" />
+                          <div className="w-8 h-8 rounded-lg bg-transparent border-2 border-gold/30 flex items-center justify-center group-hover:border-gold group-hover:bg-gold/10 transition-colors">
+                            <link.icon className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
                           </div>
                           <span className="text-black font-medium text-xs group-hover:text-gold transition-colors truncate">
                             {link.label}
@@ -187,8 +187,8 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           onClick={onClose} 
                           className="flex items-center gap-2.5 py-2 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gold/15 hover:to-gold/5 group"
                         >
-                          <div className="w-8 h-8 rounded-lg bg-black border border-gold/30 flex items-center justify-center group-hover:border-gold transition-colors">
-                            <Users className="w-4 h-4 text-gold" />
+                          <div className="w-8 h-8 rounded-lg bg-transparent border-2 border-gold/30 flex items-center justify-center group-hover:border-gold group-hover:bg-gold/10 transition-colors">
+                            <Users className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
                           </div>
                           <span className="text-black font-medium text-xs group-hover:text-gold transition-colors truncate">
                             {t('nav.crm') || 'CRM Dashboard'}
@@ -201,8 +201,8 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           onClick={onClose} 
                           className="flex items-center gap-2.5 py-2 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gold/15 hover:to-gold/5 group"
                         >
-                          <div className="w-8 h-8 rounded-lg bg-black border border-gold/30 flex items-center justify-center group-hover:border-gold transition-colors">
-                            <Settings className="w-4 h-4 text-gold" />
+                          <div className="w-8 h-8 rounded-lg bg-transparent border-2 border-gold/30 flex items-center justify-center group-hover:border-gold group-hover:bg-gold/10 transition-colors">
+                            <Settings className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
                           </div>
                           <span className="text-black font-medium text-xs group-hover:text-gold transition-colors truncate">
                             Admin Panel

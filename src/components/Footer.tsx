@@ -138,18 +138,46 @@ const Footer = () => {
     { label: t('footer.newsInsights') || "News & Insights", href: "/news" },
   ];
 
-  // Professional Tools
+  // Professional Tools - Complete list
   const professionalTools = [
-    { href: "/compare", label: t('footer.propertyComparison') || "Property Comparison" },
-    { href: "/property-evaluator", label: t('footer.propertyEvaluator') || "JBJ Property Evaluator" },
-    { href: "/rental-index", label: t('footer.rentalIndex') || "JBJ Rental Index" },
-    { href: "/mortgage-calculator", label: t('footer.mortgageCalculator') || "Mortgage Calculator" },
-    { href: "/quiz", label: t('footer.aiHomeFinder') || "AI Home Finder" },
-    { href: "/interior-design-ai", label: t('footer.aiInteriorDesign') || "AI Interior Design" },
-    { href: "/business-card-scanner", label: t('footer.businessCardScanner') || "Business Card Scanner" },
-    { href: "/documents", label: t('footer.documentsSpreadsheets') || "Documents & Spreadsheets" },
-    { href: "/video-meeting", label: t('footer.videoMeet') || "Video Meet" },
-    { href: "/ai-calendar", label: t('footer.calendarNotes') || "Calendar & Notes" },
+    // Property Tools
+    { href: "/compare", label: "Property Comparison" },
+    { href: "/property-evaluator", label: "JBJ Property Evaluator" },
+    { href: "/rental-index", label: "JBJ Rental Index" },
+    { href: "/mortgage-calculator", label: "Mortgage Calculator" },
+    { href: "/quiz", label: "AI Home Finder" },
+    // AI Design & Staging
+    { href: "/interior-design-ai", label: "AI Interior Design" },
+    { href: "/virtual-staging-ai", label: "AI Virtual Staging" },
+    // AI Analytics
+    { href: "/ai-price-predictor", label: "AI Price Predictor" },
+    { href: "/ai-neighborhood-insights", label: "AI Neighborhood Insights" },
+    { href: "/ai-property-analyzer", label: "AI Property Analyzer" },
+    // AI Sales & CRM
+    { href: "/ai-lead-qualification", label: "AI Lead Qualification" },
+    { href: "/ai-follow-up-scheduler", label: "AI Follow-up Scheduler" },
+    { href: "/ai-objection-handler", label: "AI Objection Handler" },
+    { href: "/ai-client-matcher", label: "AI Client Matcher" },
+    // AI Reports & Investment
+    { href: "/ai-market-report", label: "AI Market Report" },
+    { href: "/ai-competitor-analysis", label: "AI Competitor Analysis" },
+    { href: "/ai-roi-calculator", label: "AI ROI Calculator" },
+    { href: "/ai-investment-report", label: "AI Investment Report" },
+    // AI Communication
+    { href: "/ai-meeting-summarizer", label: "AI Meeting Summarizer" },
+    { href: "/ai-translation-hub", label: "AI Translation Hub" },
+    { href: "/ai-video-tour-script", label: "AI Video Tour Script" },
+    { href: "/ai-email-generator", label: "AI Email Generator" },
+    // AI Content
+    { href: "/ai-social-media", label: "AI Social Media" },
+    { href: "/ai-description-writer", label: "AI Description Writer" },
+    { href: "/ai-contract-reviewer", label: "AI Contract Reviewer" },
+    { href: "/ai-document-generator", label: "AI Document Generator" },
+    // Productivity Tools
+    { href: "/business-card-scanner", label: "Business Card Scanner" },
+    { href: "/documents", label: "Documents & Spreadsheets" },
+    { href: "/video-meeting", label: "Video Meet" },
+    { href: "/ai-calendar", label: "Calendar & Notes" },
     { href: "/sitemap", label: "Sitemap" },
   ];
 
