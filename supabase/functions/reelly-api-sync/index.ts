@@ -169,12 +169,14 @@ function mapReellyToImport(project: ReellyProject) {
     handover_display: project.completion_date || null, // Human-readable like "DEC 2024"
     status_label: mapSaleStatus(project.sale_status) || mapConstructionStatus(project.construction_status),
     images: images.length > 0 ? images : null,
+    // Geo coordinates for map display
+    latitude: project.location?.latitude || null,
+    longitude: project.location?.longitude || null,
     // Additional Reelly fields
     total_units: project.units_count > 0 ? project.units_count : null,
     construction_start_date: project.construction_start_date || null,
     construction_progress: constructionProgress,
     video_url: videoUrl,
-    managing_company: project.managing_company || null,
     // Use source_url to store external_id for deduplication
     source_url: `https://reelly.io/project/${project.id}#${externalId}`,
   };
