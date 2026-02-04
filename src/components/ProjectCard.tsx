@@ -8,6 +8,7 @@ import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { SafeImage } from "@/components/SafeImage";
 import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
+import { DeveloperLink } from "@/components/ui/developer-link";
 
 interface ProjectCardProps {
   project: Project & { is_sold_out?: boolean | null };
@@ -135,8 +136,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
       )}
 
       <Link to={`/project/${project.slug}`} className="flex-1 flex flex-col">
-        {/* Image with Carousel - Provident Style */}
-        <div className="aspect-square overflow-hidden relative">
+        {/* Image with Carousel - VERTICAL PORTRAIT aspect ratio (Provident style) */}
+        <div className="aspect-[3/4] overflow-hidden relative">
           <VerifiedMedia
             src={images[currentImageIndex]?.image_url || images[0]?.image_url}
             alt={images[currentImageIndex]?.alt_text || project.name}
@@ -226,21 +227,14 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             {project.name}
           </h4>
           
-          {/* Developer - Clickable Link */}
+          {/* Developer - ALWAYS Clickable (using DeveloperLink component) */}
           {project.developer && (
-            <p className="text-muted-foreground text-sm mb-2">
-              by{' '}
-              <Link 
-                to={`/developer/${project.developer.slug}`}
-                onClick={(e) => e.stopPropagation()}
-                className={
-                  "font-semibold transition-all hover:underline " +
-                  "bg-gradient-to-r from-gold via-handover to-gold bg-clip-text text-transparent"
-                }
-              >
-                {project.developer.name}
-              </Link>
-            </p>
+            <DeveloperLink 
+              name={project.developer.name}
+              slug={project.developer.slug}
+              className="text-sm mb-2 block"
+              showPrefix={true}
+            />
           )}
           
           {/* Starting Price - Orange/Gold */}

@@ -42,18 +42,19 @@ export const COMPANY_STATS_LEGACY = {
 };
 
 // Contact information - OFFICIAL JBJ GLOBAL REAL ESTATE
-// EMAIL RULE: First letter capitalized, JBJ always in capitals (e.g., Contact@JBJ.ae)
+// 🔒 EMAIL RULE: ALL EMAILS MUST BE FULL CAPITAL LETTERS (e.g., CONTACT@JBJ.AE)
+// This is a LOCKED rule - never use lowercase for email addresses
 export const CONTACT_INFO = {
   phone: '+971 56 591 1000',
   phoneRaw: '+971565911000',
-  email: 'Contact@JBJ.ae',
-  emailCapitalized: 'Contact@JBJ.ae',
-  privacyEmail: 'Privacy@JBJ.ae',
-  supportEmail: 'Support@JBJ.ae',
-  careersEmail: 'Careers@JBJ.ae',
-  partnershipsEmail: 'Partnerships@JBJ.ae',
-  securityEmail: 'Security@JBJ.ae',
-  happinessEmail: 'Happiness@JBJ.ae',
+  email: 'CONTACT@JBJ.AE',
+  emailCapitalized: 'CONTACT@JBJ.AE',
+  privacyEmail: 'PRIVACY@JBJ.AE',
+  supportEmail: 'SUPPORT@JBJ.AE',
+  careersEmail: 'CAREERS@JBJ.AE',
+  partnershipsEmail: 'PARTNERSHIPS@JBJ.AE',
+  securityEmail: 'SECURITY@JBJ.AE',
+  happinessEmail: 'HAPPINESS@JBJ.AE',
   whatsappNumber: '971565911000',
   whatsappMessage: "Hi, I'm interested in learning more about property brokerage services with JBJ Global Real Estate.",
   address: 'Downtown Dubai, UAE',
@@ -63,7 +64,7 @@ export const CONTACT_INFO = {
   founder: 'Jane Bou Jaoude',
   founderArabic: 'جاين بو جودة',
   founderBilingual: 'Jane Bou Jaoude (جاين بو جودة)',
-  domain: 'JBJ.ae',
+  domain: 'JBJ.AE',
 };
 
 // Generate WhatsApp URL
