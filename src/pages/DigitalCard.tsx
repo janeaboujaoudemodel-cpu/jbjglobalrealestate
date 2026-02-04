@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import janePhoto from '@/assets/ceo/jane-ceo-private-jet.jpg';
 
 // Import company intro video (self-hosted MP4 for fast loading)
-import jbjIntroVideo from '@/assets/videos/burj-khalifa-day-to-night.mp4';
+import jbjIntroVideo from '@/assets/videos/jbj-company-intro.mp4';
 
 // Import logo for video poster
 import jbjMonogramLightTransparent from '@/assets/jbj-monogram-light-transparent.png';
