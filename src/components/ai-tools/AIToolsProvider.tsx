@@ -179,6 +179,66 @@ export const AI_TOOLS_CONFIG = {
     category: "Documents",
     icon: "FilePlus",
   },
+
+  // Property Analysis (additional)
+  propertyAnalyzer: {
+    id: "property-analyzer",
+    name: "JBJ AI Property Analyzer",
+    description: "Deep analysis of property features, market position, and investment potential",
+    function: "ai-property-analyzer",
+    category: "Property Intelligence",
+    icon: "Building",
+  },
+
+  // Client Matching
+  clientMatcher: {
+    id: "client-matcher",
+    name: "JBJ AI Client Matcher",
+    description: "Match clients with ideal properties based on preferences and budget",
+    function: "ai-client-matcher",
+    category: "Lead & Sales",
+    icon: "Users",
+  },
+
+  // Email Generator
+  emailGenerator: {
+    id: "email-generator",
+    name: "JBJ AI Email Generator",
+    description: "Create professional follow-up and marketing emails",
+    function: "ai-email-generator",
+    category: "Communication",
+    icon: "Mail",
+  },
+
+  // Social Media Content
+  socialMediaGenerator: {
+    id: "social-media-generator",
+    name: "JBJ AI Social Media",
+    description: "Generate engaging social media posts for property listings",
+    function: "ai-social-media",
+    category: "Communication",
+    icon: "Share2",
+  },
+
+  // Property Description Writer
+  descriptionWriter: {
+    id: "description-writer",
+    name: "JBJ AI Description Writer",
+    description: "Create compelling property descriptions for listings",
+    function: "ai-description-writer",
+    category: "Communication",
+    icon: "PenTool",
+  },
+
+  // Investment Report
+  investmentReport: {
+    id: "investment-report",
+    name: "JBJ AI Investment Report",
+    description: "Generate detailed investment opportunity reports",
+    function: "ai-investment-report",
+    category: "Analytics",
+    icon: "TrendingUp",
+  },
 };
 
 export type AIToolKey = keyof typeof AI_TOOLS_CONFIG;
