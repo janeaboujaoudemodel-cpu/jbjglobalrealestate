@@ -1,169 +1,428 @@
 
-# Comprehensive Project Detail Page Enhancement
+# Comprehensive Filter System Overhaul - Reelly-Style with Premium UI
 
-## Issues Identified from Analysis
+## Executive Summary
 
-### Data Issues from Reelly API
-| Issue | Root Cause | Impact |
-|-------|-----------|--------|
-| **Bedrooms: "Contact Us"** | `bedrooms_min`/`bedrooms_max` are NULL in Reelly data for Amalia | Shows fallback text |
-| **Size: "Contact Us"** | `size_min`/`size_max` are NULL in Reelly data | Shows fallback text |
-| **Only 1 gallery photo** | Reelly API only provides 1 cover image for this project | Gallery shows single image |
-| **"Sold Out" not showing inside page** | `status_label` exists ("Sold Out") but not prominently displayed in hero/header |
-| **Hashtags in description** | Description has "##### Project general facts" markdown headers | Renders literally |
+This plan merges the Reelly filter system features with your existing JBJ Global filter infrastructure while maintaining your premium gold/champagne UI design. The result will be a professional-grade filter experience that matches Reelly's functionality but with your distinctive branding.
 
-### UI/UX Issues
-| Issue | Current State | Required State |
-|-------|--------------|----------------|
-| **Page load slow** | Many components loading sequentially | Add lazy loading + skeleton optimization |
-| **Developer section (Dar)** | Black background card | Use premium champagne layer styling |
-| **Contact icons** | All using gold styling | WhatsApp=green, Call=blue, Email=gold circles |
-| **Payment plan** | Has 3 colors but needs connecting line | Add horizontal timeline with dots |
-| **About section markdown** | Showing raw "##### headers" | Parse and style as sections |
-| **Finishing/Materials section** | No visuals | Add AI-generated premium photos |
-| **Brochure section** | Only visible if brochure doc exists | Always show with inquiry CTA |
-| **Location distances** | Exists but needs more prominence | Keep current grid layout |
+## Current State Analysis
 
-### Missing Features
-- Source links (Reelly + Provident URLs for comparison)
-- "Sold Out" badge in page header/hero
-- Finishing & Materials visual section with premium stock photos
-- Developer detailed info (founded year, projects delivered, worth)
+### What You Already Have
+- **HeroSearchBar**: Comprehensive filter with 10 currencies, bedrooms up to 7+, property types including commercial
+- **Properties Page**: Sticky filter bar, advanced filters dialog, Buy/Rent/All/Ready/Off-Plan quick toggles
+- **PropertyMap Page**: Leaflet-based map with price markers and filter panel
+- **Favorites/Shortlist**: Full implementation with guest and authenticated user support
+- **ProjectFilters**: Extensive filter options including views, amenities, facilities
 
-## Implementation Plan
+### What's Missing (From Reelly)
+1. **Sale Status with colored dots** (Announced-pink, Pre-sale-green, Start of Sale-yellow, On Sale-blue, Sold Out-red)
+2. **Payment Plan slider** (0-100% pre-handover/post-handover)
+3. **Multi-select Emirates with checkboxes**
+4. **Handover date range picker** (from/to year)
+5. **Broker Mode vs Investor Mode toggle**
+6. **Settings dropdown** (units, currency, display mode)
+7. **3D Map with satellite view and developer logos**
+8. **Save Filter functionality**
+9. **Project count badge in filter**
+10. **Escape key to exit map**
 
-### Phase 1: Data Display Fixes
+---
 
-#### 1.1 Show "Sold Out" Badge in Hero and Quick Facts
-Add prominent sold-out status indicator when `status_label` contains "Sold Out":
-- Hero section: Red "SOLD OUT" banner overlay
-- Quick Facts Bar: Already shows status, ensure red styling
-- File: `ProjectDetailLayout.tsx` (lines 399-500)
+## Implementation Architecture
 
-#### 1.2 Fix Description Markdown Parsing
-The description contains raw markdown headers like "##### Project general facts". Update the parser:
-- Strip leading `#####` headers and convert to styled section headings
-- Add "Finishing and Materials" section with premium visuals
-- File: `ProjectDetailLayout.tsx` (description section around line 612-628)
+### Phase 1: Unified Filter State & Constants
 
-#### 1.3 Handle Missing Bedroom/Size Data Gracefully
-When data is NULL, show "View Details" instead of "Contact Us":
-- File: `ProjectDetailLayout.tsx` (lines 573-584)
+**New Constants File: `src/constants/filterConfig.ts`**
+```text
+Central configuration for all filter options with consistent values across Homepage, Properties, and Map pages:
 
-### Phase 2: UI Premium Styling
+SALE_STATUS_CONFIG:
+- Announced: { color: "bg-pink-400", dotClass: "bg-pink-400" }
+- Pre-sale (EOI): { color: "bg-green-400", dotClass: "bg-green-400" }
+- Start of Sales: { color: "bg-yellow-400", dotClass: "bg-yellow-400" }
+- On Sale: { color: "bg-blue-400", dotClass: "bg-blue-400" }
+- Sold Out: { color: "bg-red-500", dotClass: "bg-red-500" }
 
-#### 2.1 Developer Section - Remove Black Background
-Update `DeveloperInfoCard.tsx` to use champagne layer styling:
-- Change from `bg-premium-bg` (black) to `jj-layer-2` champagne gradient
-- Add developer stats from database (founded_year, completed_projects)
-- Fetch additional developer info including description
+PROPERTY_TYPES (Extended):
+- Apartments, Villa, Townhouse, Penthouse, Duplex, Simplex, Sky Villas
+- Plot, Land, Retail, Offices, Commercial
 
-#### 2.2 Contact Us Section - Colored Icon Circles
-Update the contact cards (lines 1044-1081):
-- WhatsApp: Green circle (`bg-green-500/20`, icon `text-green-500`)
-- Call: Blue circle (`bg-blue-500/20`, icon `text-blue-500`)
-- Email: Gold circle (keep current `bg-gold/20`)
+BEDROOMS: Studio, 1, 2, 3, 4, 5, 6, 7+
 
-#### 2.3 Payment Plan Timeline
-Update `PaymentPlanVisualization.tsx`:
-- Add horizontal timeline with connected dots
-- Three-color sections (green, gold, champagne)
-- Connecting line between milestones
+EMIRATES (Checkbox-enabled):
+- Dubai, Abu Dhabi, Sharjah, Ras Al Khaimah, Ajman, Fujairah, Umm Al Quwain
+- International: Cyprus, Indonesia, Oman, Thailand
+```
 
-### Phase 3: Missing Sections
+### Phase 2: Enhanced FilterState Interface
 
-#### 3.1 Finishing & Materials Section
-Create new component when description mentions finishing/materials:
-- Parse description for "Finishing and materials" section
-- Add 3-4 premium stock photos (kitchen, bathroom, flooring)
-- Use AI-generated placeholder images for premium look
+**Updated `FilterState` in `src/components/ProjectFilters.tsx`**
+```text
+New fields to add:
+- saleStatus: string[] (multi-select with colored dots)
+- paymentPlanMin: number (0-100)
+- paymentPlanMax: number (0-100)
+- hasPostHandover: boolean
+- handoverYearFrom: number | null
+- handoverYearTo: number | null
+- selectedEmirates: string[] (multi-select)
+- displayMode: 'broker' | 'investor'
+```
 
-#### 3.2 Source Links for Comparison
-Add "View on Reelly" and "View on Provident" buttons:
-- Display in DataFreshnessIndicator component
-- Show when `source_url` is available
-- Link to original listing for comparison
+### Phase 3: UI Components
 
-#### 3.3 Always Show Brochure Section
-Show brochure section even when no PDF exists:
-- Display "Request Brochure" CTA
-- Open inquiry form instead of download
+#### 3.1 Sale Status Dropdown with Colored Dots
+**Location**: Both HeroSearchBar and Properties filters
 
-### Phase 4: Performance Optimization
+```text
+Visual Design:
++----------------------------------+
+| Status                      [v]  |
++----------------------------------+
+|  ● Announced         [x]         |  <- Pink dot
+|  ● Pre-sale (EOI)    [x]         |  <- Green dot
+|  ● Start of Sales    [ ]         |  <- Yellow dot
+|  ● On Sale           [x]         |  <- Light blue dot
+|  ● Sold Out          [ ]         |  <- Red dot
++----------------------------------+
+| Selected: 3                      |
++----------------------------------+
+```
 
-#### 4.1 Lazy Load Sections
-Add lazy loading for below-fold sections:
-- AI Analyzer
-- Mortgage Calculator
-- Map embed
-- Use React.lazy() + Suspense
+#### 3.2 Payment Plan Slider
+**New Component: `src/components/filters/PaymentPlanSlider.tsx`**
 
-#### 4.2 Image Optimization
-- Add loading="lazy" to gallery images
-- Use skeleton loaders during image load
+```text
+Visual Design:
++------------------------------------------+
+| Payment Plan                             |
++------------------------------------------+
+|     Pre-Handover        Post-Handover    |
+|  [====●==========|============●====]     |
+|   20%                           80%      |
++------------------------------------------+
+| [ ] Post-handover payments only          |
++------------------------------------------+
+| [Reset]                                  |
++------------------------------------------+
+```
 
-## Files to Modify
+#### 3.3 Emirates Multi-Select with Checkboxes
+**Enhanced Dropdown**
 
+```text
++----------------------------------+
+| Emirates                    [v]  |
++----------------------------------+
+|  [x] Dubai                       |
+|  [x] Abu Dhabi                   |
+|  [ ] Sharjah                     |
+|  [ ] Ras Al Khaimah              |
+|  [ ] Ajman                       |
+|  [ ] Fujairah                    |
+|  [ ] Umm Al Quwain               |
+|  --- International ---           |
+|  [ ] Cyprus                      |
+|  [ ] Indonesia                   |
+|  [ ] Oman                        |
+|  [ ] Thailand                    |
++----------------------------------+
+| Selected: 2 | [Clear]            |
++----------------------------------+
+```
+
+#### 3.4 Handover Date Range
+**New Filter Section**
+
+```text
++------------------------------------------+
+| Project Handover By                      |
++------------------------------------------+
+| From: [2024 v]    To: [2028 v]          |
++------------------------------------------+
+```
+
+#### 3.5 Broker/Investor Mode Toggle
+**Top Bar Addition**
+
+```text
++------------------------------------------+
+| [🏢 Broker Mode] | [📈 Investor Mode]    |
++------------------------------------------+
+```
+
+- **Broker Mode**: Shows commission info, developer contacts, quick share buttons
+- **Investor Mode**: Shows ROI metrics, rental yield, payment structure focus
+
+#### 3.6 Settings Dropdown (Top Right)
+**New Component: `src/components/filters/SettingsDropdown.tsx`**
+
+```text
++----------------------------------+
+| ⚙️ Settings                [v]  |
++----------------------------------+
+| Measure Unit                     |
+|  ( ) Square Feet                 |
+|  (●) Square Meters               |
++----------------------------------+
+| Currency                         |
+|  [AED v] (10 currencies)         |
++----------------------------------+
+| Display Mode                     |
+|  [Investor Mode v]               |
++----------------------------------+
+| [Apply Settings]                 |
++----------------------------------+
+```
+
+#### 3.7 Filter Toolbar Enhancement
+**Add to Properties Page Filter Bar**
+
+```text
++-----------------------------------------------------------------------+
+| [Save Filter 💾] | [Favorites ❤️ (5)] | [Shortlist 📋 (3)] | [Map 🗺️] |
++-----------------------------------------------------------------------+
+```
+
+### Phase 4: Enhanced Map View
+
+#### 4.1 Map Tile Provider Update
+**Switch to Satellite View**
+
+```typescript
+// Current: OpenStreetMap standard
+<TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+
+// New: Satellite view with terrain (shows beach colors)
+<TileLayer 
+  url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+  attribution="Tiles &copy; Esri"
+/>
+```
+
+#### 4.2 Developer Logo Markers
+**Enhanced Marker Component**
+
+```text
+Map Display:
+- Each project shows developer logo (40x40px circle)
+- Hover reveals tooltip with:
+  - Project name
+  - Developer name
+  - Location
+  - "Learn More →" link
+- Click opens project detail card
+```
+
+#### 4.3 3D Map Toggle
+**Add 3D View Option**
+
+```text
+Map Controls (Bottom Right):
++--------+
+| [+]    |  <- Zoom in
+| [-]    |  <- Zoom out
++--------+
+| [2D]   |  <- Toggle 2D/3D
+| [3D]   |
++--------+
+| [🛰️]   |  <- Satellite toggle
++--------+
+```
+
+#### 4.4 Escape Key Handler
+```typescript
+useEffect(() => {
+  const handleEscape = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      if (isMapFullscreen) closeMap();
+      if (selectedProject) setSelectedProject(null);
+    }
+  };
+  window.addEventListener('keydown', handleEscape);
+  return () => window.removeEventListener('keydown', handleEscape);
+}, [isMapFullscreen, selectedProject]);
+```
+
+### Phase 5: Sticky Filter Behavior
+
+**Current**: Filter bar is sticky at `top-16`
+**Enhancement**: Add fixed filter + cards in same scrolling section
+
+```text
+Page Layout:
++------------------------------------------+
+| Global Header (fixed)                    |
++------------------------------------------+
+| Hero Section (scrolls away)              |
++------------------------------------------+
+| Filter Bar (becomes sticky)              | <- Sticks on scroll
++------------------------------------------+
+| Project Cards Grid                       |
+| (scrolls within viewport)                |
++------------------------------------------+
+```
+
+### Phase 6: Full Filter Dialog Enhancement
+
+**Updated Advanced Filters Dialog**
+
+```text
++--------------------------------------------------+
+| Search & Filter                    [X]           |
++--------------------------------------------------+
+| 🔍 Type a project, developer, or district...    |
++--------------------------------------------------+
+| Emirates                           [Multi ▼]     |
+| (Shows selected count)                           |
++--------------------------------------------------+
+| Payment Plan                                     |
+| [====●==========|============●====]              |
+|  20%            |            80%                 |
+| [ ] Post-handover payments only                  |
++--------------------------------------------------+
+| Price Range                                      |
+| Min: [______]  Max: [______]                     |
++--------------------------------------------------+
+| Size Range (sqft)                                |
+| Min: [______]  Max: [______]                     |
++--------------------------------------------------+
+| Development Status                               |
+| [Ready] [Off-Plan] [Under Construction]          |
++--------------------------------------------------+
+| Sale Status                                      |
+| ● Announced  ● Pre-sale  ● Start  ● On Sale     |
++--------------------------------------------------+
+| Unit Type                                        |
+| [All Types ▼]                                    |
+| Apartments, Villa, Townhouse, Penthouse,         |
+| Duplex, Simplex, Sky Villas, Plot, Land,        |
+| Retail, Offices, Commercial                      |
++--------------------------------------------------+
+| Bedrooms                                         |
+| [Studio] [1] [2] [3] [4] [5] [6] [7+]           |
++--------------------------------------------------+
+| Handover By                                      |
+| From: [2024]  To: [2028]                        |
++--------------------------------------------------+
+| [Clear All]        [Show 1,803 Projects]        |
++--------------------------------------------------+
+```
+
+---
+
+## Files to Create/Modify
+
+### New Files
+| File | Purpose |
+|------|---------|
+| `src/constants/filterConfig.ts` | Centralized filter configuration with colors, options |
+| `src/components/filters/SaleStatusFilter.tsx` | Sale status multi-select with colored dots |
+| `src/components/filters/PaymentPlanSlider.tsx` | Dual-handle slider for payment plan % |
+| `src/components/filters/EmiratesMultiSelect.tsx` | Checkbox-based multi-select for emirates |
+| `src/components/filters/HandoverDateRange.tsx` | From/To year pickers |
+| `src/components/filters/SettingsDropdown.tsx` | Unit, currency, display mode settings |
+| `src/components/filters/DisplayModeToggle.tsx` | Broker vs Investor mode switcher |
+| `src/components/filters/SavedFiltersManager.tsx` | Save/load filter presets |
+| `src/components/map/DeveloperLogoMarker.tsx` | Custom map marker with developer logo |
+| `src/components/map/MapControls.tsx` | Zoom, 2D/3D, satellite toggle controls |
+| `src/hooks/useSavedFilters.ts` | Hook for saving/loading filter presets |
+
+### Modified Files
 | File | Changes |
 |------|---------|
-| `src/components/project-detail/ProjectDetailLayout.tsx` | Hero sold-out badge, description parsing, contact icon colors, missing data handling |
-| `src/components/project-detail/DeveloperInfoCard.tsx` | Champagne styling, fetch full developer info |
-| `src/components/project-detail/PaymentPlanVisualization.tsx` | Timeline with connecting line |
-| `src/pages/ProjectDetail.tsx` | Pass developer details to layout |
-| `src/hooks/useProjects.ts` | Include developer details in query |
-| **NEW** `src/components/project-detail/FinishingMaterialsSection.tsx` | Premium finishing visuals |
+| `src/components/ProjectFilters.tsx` | Add new filter fields to FilterState, integrate new filter components |
+| `src/components/home/HeroSearchBar.tsx` | Add sale status filter, settings dropdown, display mode toggle |
+| `src/pages/Properties.tsx` | Add favorites/shortlist badges to toolbar, integrate new filters |
+| `src/pages/PropertyMap.tsx` | Satellite tiles, developer logos, 3D toggle, escape handler |
+| `src/constants/saleStatus.ts` | Add color configuration for each status |
+| `src/constants/propertyTypes.ts` | Add Simplex, Sky Villas to options |
+
+---
 
 ## Technical Details
 
-### Hero Sold Out Badge
-```tsx
-{/* Add after hero title */}
-{(project.status_label?.toLowerCase().includes('sold') || 
-  project.availability_status?.toLowerCase().includes('sold')) && (
-  <div className="absolute top-24 right-4 md:right-8 z-30">
-    <Badge className="bg-red-600 text-white px-4 py-2 text-sm font-bold uppercase">
-      Sold Out
-    </Badge>
-  </div>
-)}
-```
-
-### Contact Icon Colors
-```tsx
-{/* WhatsApp - Green */}
-<div className="w-14 h-14 rounded-full bg-green-500/20 border-2 border-green-500/40 flex items-center justify-center">
-  <MessageCircle className="w-7 h-7 text-green-500" />
-</div>
-
-{/* Call - Blue */}
-<div className="w-14 h-14 rounded-full bg-blue-500/20 border-2 border-blue-500/40 flex items-center justify-center">
-  <Phone className="w-7 h-7 text-blue-500" />
-</div>
-
-{/* Email - Gold (keep current) */}
-```
-
-### Developer Card Champagne Styling
-```tsx
-{/* Change from black to champagne */}
-<div className="w-full jj-section-champagne border-y border-gold/20">
-```
-
-### Developer Query Enhancement
-Include founded_year, completed_projects, description:
+### Sale Status Colors (Matching Reelly)
 ```typescript
-developer:developers(id, name, slug, logo_url, founded_year, completed_projects, description, headquarters)
+export const SALE_STATUS_COLORS = {
+  "Announced": { bg: "bg-pink-400", text: "text-pink-400", dot: "bg-pink-400" },
+  "Presale (EOI)": { bg: "bg-green-400", text: "text-green-400", dot: "bg-green-400" },
+  "Start of Sales": { bg: "bg-yellow-400", text: "text-yellow-400", dot: "bg-yellow-400" },
+  "On Sale": { bg: "bg-blue-400", text: "text-blue-400", dot: "bg-blue-400" },
+  "Sold Out": { bg: "bg-red-500", text: "text-red-500", dot: "bg-red-500" },
+};
 ```
+
+### Payment Plan Filter Logic
+```typescript
+// Filter projects by payment plan percentage
+const filterByPaymentPlan = (project: Project, min: number, max: number) => {
+  const downPayment = project.down_payment_percent || 20;
+  const preHandover = 100 - downPayment;
+  return preHandover >= min && preHandover <= max;
+};
+```
+
+### Extended Unit Types
+```typescript
+export const EXTENDED_PROPERTY_TYPES = [
+  { value: "apartments", label: "Apartments" },
+  { value: "villa", label: "Villa" },
+  { value: "townhouse", label: "Townhouse" },
+  { value: "penthouse", label: "Penthouse" },
+  { value: "duplex", label: "Duplex" },
+  { value: "simplex", label: "Simplex" },  // NEW
+  { value: "sky-villas", label: "Sky Villas" },  // NEW
+  { value: "mansion", label: "Mansion" },
+  { value: "plot", label: "Plot" },
+  { value: "land", label: "Land" },
+  { value: "retail", label: "Retail" },
+  { value: "offices", label: "Offices" },
+  { value: "commercial", label: "Commercial" },
+];
+```
+
+### Saved Filters Schema
+```typescript
+interface SavedFilter {
+  id: string;
+  name: string;
+  filters: FilterState;
+  createdAt: Date;
+  isDefault?: boolean;
+}
+// Store in localStorage for guests, database for authenticated users
+```
+
+---
+
+## Implementation Priority
+
+| Priority | Component | Complexity | Impact |
+|----------|-----------|------------|--------|
+| 1 | Sale Status with colored dots | Low | High |
+| 2 | Emirates multi-select | Medium | High |
+| 3 | Favorites/Shortlist badges in toolbar | Low | High |
+| 4 | Settings dropdown | Low | Medium |
+| 5 | Payment Plan slider | Medium | Medium |
+| 6 | Handover date range | Low | Medium |
+| 7 | Display Mode toggle | Low | Medium |
+| 8 | Save Filter functionality | Medium | Medium |
+| 9 | Satellite map with logos | High | High |
+| 10 | 3D map toggle | High | Low |
+
+---
 
 ## Expected Results
 
 After implementation:
-- Sold Out projects clearly marked in hero + header
-- "Contact Us" replaced with "View Details" for missing data
-- Developer section uses premium champagne styling with full company info
-- WhatsApp=green, Call=blue, Email=gold icon circles
-- Payment plan has visual timeline with connecting line
-- Description sections properly parsed with styled headings
-- Finishing/Materials section with premium visuals
-- Performance improved with lazy loading
-- Source comparison links available
+- **Filter parity with Reelly** while maintaining your premium gold/champagne design
+- **Colored sale status dots** for instant visual recognition
+- **Payment plan filtering** for investor-focused browsing
+- **Multi-select emirates** with checkbox UI
+- **Broker/Investor mode** for role-specific information display
+- **Satellite map** with developer logos and 3D capabilities
+- **Save filters** for returning users
+- **Consistent experience** across Homepage, Properties, and Map pages
+- **Project count badge** showing "1,803 Projects" in filter
+- **Escape key** to quickly exit map view
