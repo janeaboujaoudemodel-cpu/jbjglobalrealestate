@@ -82,6 +82,13 @@ function generateAreaSlug(name: string): string {
     .slice(0, 100);
 }
 
+function generateDeveloperSlug(name: string): string {
+  return name.toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+    .slice(0, 100);
+}
+
 function mapConstructionStatus(status: string): string {
   const statusMap: Record<string, string> = {
     'under_construction': 'Under Construction',
@@ -141,7 +148,219 @@ function getEmirateFromRegion(region: string): string {
   return regionMap[normalized] || region || 'Dubai';
 }
 
-function mapReellyToImport(project: ReellyProject, areaId: string | null) {
+// ============================================================
+// NEW: Extract payment plan from description/overview text
+// ============================================================
+function extractPaymentPlanFromOverview(overview: string | null): {
+  payment_plan: string | null;
+  payment_breakdown: Record<string, string> | null;
+} {
+  if (!overview) return { payment_plan: null, payment_breakdown: null };
+  
+  // Pattern 1: "60/40", "70/30", "80/20" payment plan
+  const ratioMatch = overview.match(/(\d{2})\/(\d{2})\s*(?:payment|plan)?/i);
+  if (ratioMatch) {
+    const first = parseInt(ratioMatch[1], 10);
+    const second = parseInt(ratioMatch[2], 10);
+    if (first + second === 100) {
+      const booking = Math.min(first, 20);
+      const construction = first - booking;
+      return {
+        payment_plan: `${first}/${second}`,
+        payment_breakdown: {
+          down_payment: `${booking}%`,
+          during_construction: `${construction}%`,
+          on_completion: `${second}%`,
+        }
+      };
+    }
+  }
+  
+  // Pattern 2: "10% down payment", "20% on booking", "40% on handover"
+  const downPaymentMatch = overview.match(/(\d+)%?\s*(?:down\s*payment|on\s*booking|booking)/i);
+  const handoverMatch = overview.match(/(\d+)%?\s*(?:on\s*handover|on\s*completion|handover|completion)/i);
+  const constructionMatch = overview.match(/(\d+)%?\s*(?:during\s*construction|construction)/i);
+  
+  if (downPaymentMatch || handoverMatch) {
+    const down = downPaymentMatch ? parseInt(downPaymentMatch[1], 10) : 10;
+    const handover = handoverMatch ? parseInt(handoverMatch[1], 10) : 40;
+    const construction = constructionMatch 
+      ? parseInt(constructionMatch[1], 10) 
+      : Math.max(0, 100 - down - handover);
+    
+    return {
+      payment_plan: `${down + construction}/${handover}`,
+      payment_breakdown: {
+        down_payment: `${down}%`,
+        during_construction: `${construction}%`,
+        on_completion: `${handover}%`,
+      }
+    };
+  }
+  
+  // Pattern 3: "Easy payment plan" or "Flexible payment" without specifics
+  if (/easy\s*payment|flexible\s*payment/i.test(overview)) {
+    return {
+      payment_plan: "Flexible",
+      payment_breakdown: null
+    };
+  }
+  
+  return { payment_plan: null, payment_breakdown: null };
+}
+
+// ============================================================
+// NEW: Get or create developer and return its UUID
+// ============================================================
+async function getOrCreateDeveloper(
+  supabase: ReturnType<typeof createClient>,
+  developerName: string | null
+): Promise<string | null> {
+  if (!developerName || developerName.trim() === '') return null;
+  
+  const name = developerName.trim();
+  const slug = generateDeveloperSlug(name);
+  
+  // Try to find existing developer by name (case-insensitive)
+  const { data: existing } = await supabase
+    .from("developers")
+    .select("id")
+    .ilike("name", name)
+    .maybeSingle();
+  
+  if (existing) {
+    return existing.id;
+  }
+  
+  // Try by slug as fallback
+  const { data: existingBySlug } = await supabase
+    .from("developers")
+    .select("id")
+    .eq("slug", slug)
+    .maybeSingle();
+  
+  if (existingBySlug) {
+    return existingBySlug.id;
+  }
+  
+  // Create new developer
+  const { data: newDev, error } = await supabase
+    .from("developers")
+    .insert({
+      name: name,
+      slug: slug,
+      is_active: true,
+    })
+    .select("id")
+    .single();
+  
+  if (error) {
+    // Handle duplicate key error (race condition)
+    if ((error as any)?.code === "23505") {
+      const { data: retried } = await supabase
+        .from("developers")
+        .select("id")
+        .ilike("name", name)
+        .maybeSingle();
+      return retried?.id || null;
+    }
+    console.error(`[Reelly API] Error creating developer ${name}:`, error);
+    return null;
+  }
+  
+  console.log(`[Reelly API] Created new developer: ${name} (${newDev?.id})`);
+  return newDev?.id || null;
+}
+
+// ============================================================
+// Check if a project is complete enough for auto-approval
+// ============================================================
+function isProjectComplete(data: any): boolean {
+  return !!(
+    data.name &&
+    data.description && data.description.length > 50 &&
+    data.developer_id && // Must have linked developer
+    data.images && data.images.length > 0 &&
+    data.price_from && data.price_from > 0
+  );
+}
+
+// ============================================================
+// Auto-approve complete project to live projects table
+// ============================================================
+async function autoApproveToProjects(
+  supabase: ReturnType<typeof createClient>,
+  mappedProject: any,
+  pendingImportId: string
+): Promise<boolean> {
+  try {
+    // Build project data for the live projects table
+    const projectData = {
+      name: mappedProject.name,
+      slug: mappedProject.slug,
+      description: mappedProject.description,
+      short_description: mappedProject.description?.substring(0, 200) || null,
+      developer_id: mappedProject.developer_id,
+      developer_name: mappedProject.developer_name,
+      area_id: mappedProject.area_id,
+      location: mappedProject.location,
+      emirate: mappedProject.emirate,
+      latitude: mappedProject.latitude,
+      longitude: mappedProject.longitude,
+      price_from: mappedProject.price_from,
+      price_to: mappedProject.price_to,
+      size_min: mappedProject.size_min,
+      size_max: mappedProject.size_max,
+      handover_date: mappedProject.handover_date,
+      handover_display: mappedProject.handover_display,
+      status_label: mappedProject.status_label,
+      images: mappedProject.images,
+      total_units: mappedProject.total_units,
+      floors: mappedProject.floors,
+      payment_plan: mappedProject.payment_plan,
+      payment_breakdown: mappedProject.payment_breakdown,
+      construction_progress: mappedProject.construction_progress,
+      video_url: mappedProject.video_url,
+      is_offplan: true,
+      is_active: true,
+      source: 'reelly',
+      source_url: mappedProject.source_url,
+    };
+
+    // Upsert to projects table (use slug as conflict key)
+    const { error: projectError } = await supabase
+      .from("projects")
+      .upsert(projectData, { onConflict: "slug" });
+
+    if (projectError) {
+      console.error(`[Reelly API] Failed to auto-approve ${mappedProject.name}:`, projectError);
+      return false;
+    }
+
+    // Mark pending import as approved
+    const { error: updateError } = await supabase
+      .from("pending_project_imports")
+      .update({ 
+        status: "approved", 
+        reviewed_at: new Date().toISOString(),
+        review_notes: "AUTO_APPROVED: Complete data from Reelly API"
+      })
+      .eq("id", pendingImportId);
+
+    if (updateError) {
+      console.error(`[Reelly API] Failed to update pending import status:`, updateError);
+      return false;
+    }
+
+    console.log(`[Reelly API] Auto-approved: ${mappedProject.name}`);
+    return true;
+  } catch (err) {
+    console.error(`[Reelly API] Auto-approve error:`, err);
+    return false;
+  }
+}
+
+function mapReellyToImport(project: ReellyProject, areaId: string | null, developerId: string | null) {
   const slug = generateSlug(project.name, project.developer);
   
   // Parse handover date from completion_datetime
@@ -201,10 +420,15 @@ function mapReellyToImport(project: ReellyProject, areaId: string | null) {
   // Get area name from district
   const areaName = project.location?.district || null;
 
+  // Extract payment plan from overview/description
+  const overview = project.overview || project.short_description || '';
+  const { payment_plan, payment_breakdown } = extractPaymentPlanFromOverview(overview);
+
   return {
     name: project.name,
     slug: `${slug}-${project.id}`, // Ensure uniqueness with ID suffix
     developer_name: project.developer,
+    developer_id: developerId, // NEW: Link to developers table
     location: locationStr,
     emirate: getEmirateFromRegion(project.location?.region),
     description: project.overview || project.short_description || null,
@@ -225,11 +449,16 @@ function mapReellyToImport(project: ReellyProject, areaId: string | null) {
     construction_start_date: project.construction_start_date || null,
     construction_progress: constructionProgress,
     video_url: videoUrl,
+    // Payment plan extracted from overview
+    payment_plan: payment_plan,
+    payment_breakdown: payment_breakdown,
     // Area reference
     area_id: areaId,
     area_name: areaName,
     // Use source_url to store external_id for deduplication
     source_url: `https://reelly.io/project/${project.id}#${externalId}`,
+    // Clear review notes since Reelly data is structured
+    review_notes: null,
   };
 }
 
@@ -346,12 +575,14 @@ Deno.serve(async (req) => {
       action?: "test" | "sync";
       limit?: number;
       cursor?: string | null;
+      autoApprove?: boolean; // NEW: Auto-approve complete projects
       // legacy
       fullSync?: boolean;
     } = {
       action: "sync",
       limit: 50,
       cursor: null,
+      autoApprove: true, // Default to auto-approve
     };
     try {
       const body = await req.json();
@@ -360,7 +591,7 @@ Deno.serve(async (req) => {
       // No body provided, use defaults
     }
 
-    console.log(`[Reelly API] Starting with action: ${options.action}`);
+    console.log(`[Reelly API] Starting with action: ${options.action}, autoApprove: ${options.autoApprove}`);
 
     // Test connection
     if (options.action === 'test') {
@@ -402,7 +633,9 @@ Deno.serve(async (req) => {
     let inserted = 0;
     let updated = 0;
     let skipped = 0;
+    let autoApproved = 0;
     let areasCreated = 0;
+    let developersCreated = 0;
     const errors: string[] = [];
 
     for (const project of publishedProjects) {
@@ -413,7 +646,13 @@ Deno.serve(async (req) => {
           areasCreated++;
         }
         
-        const mappedProject = mapReellyToImport(project, areaId);
+        // Get or create developer and get its UUID
+        const developerId = await getOrCreateDeveloper(supabase, project.developer);
+        if (developerId) {
+          // Track new developers (optional - could add a check here)
+        }
+        
+        const mappedProject = mapReellyToImport(project, areaId, developerId);
 
         // Check if exists by source_url pattern (contains reelly_ID)
         const externalId = `reelly_${project.id}`;
@@ -422,6 +661,8 @@ Deno.serve(async (req) => {
           .select("id, status")
           .like("source_url", `%${externalId}%`)
           .maybeSingle();
+
+        let pendingImportId: string | null = null;
 
         if (existing) {
           // Only update if not already approved
@@ -440,16 +681,19 @@ Deno.serve(async (req) => {
 
           if (error) throw error;
           updated++;
+          pendingImportId = existing.id;
         } else {
           // Insert new
-          const { error } = await supabase
+          const { data: insertedRow, error } = await supabase
             .from("pending_project_imports")
             .insert({
               ...mappedProject,
               status: "pending",
               created_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
-            });
+            })
+            .select("id")
+            .single();
 
           if (error) {
             // If this project was inserted previously with a different source_url pattern,
@@ -477,6 +721,7 @@ Deno.serve(async (req) => {
 
                 if (updateErr) throw updateErr;
                 updated++;
+                pendingImportId = existingBySlug.id;
                 continue;
               }
             }
@@ -485,6 +730,15 @@ Deno.serve(async (req) => {
           }
 
           inserted++;
+          pendingImportId = insertedRow?.id || null;
+        }
+
+        // AUTO-APPROVE: If project is complete, push to live projects table
+        if (options.autoApprove && pendingImportId && isProjectComplete(mappedProject)) {
+          const approved = await autoApproveToProjects(supabase, mappedProject, pendingImportId);
+          if (approved) {
+            autoApproved++;
+          }
         }
       } catch (err) {
         const errorDetails = err && typeof err === 'object' && 'message' in err 
@@ -505,11 +759,13 @@ Deno.serve(async (req) => {
         inserted,
         updated,
         skipped,
+        auto_approved: autoApproved,
         areas_created: areasCreated,
+        developers_linked: publishedProjects.length - errors.length,
         errors: errors.slice(0, 10),
         next_cursor: nextCursor,
         done: !nextCursor,
-        message: `Processed ${projects.length} projects (${inserted} new, ${updated} updated, ${skipped} skipped, ${areasCreated} new areas)`,
+        message: `Processed ${projects.length} projects (${inserted} new, ${updated} updated, ${skipped} skipped, ${autoApproved} auto-approved, ${areasCreated} new areas)`,
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );

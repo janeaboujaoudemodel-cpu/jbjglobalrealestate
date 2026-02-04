@@ -23,6 +23,7 @@ interface ApiSyncResult {
   inserted?: number;
   updated?: number;
   skipped?: number;
+  auto_approved?: number; // NEW: Count of auto-approved projects
   errors?: string[];
   message?: string;
   error?: string;
@@ -413,7 +414,7 @@ export function ReellyImportPanel() {
               
               {syncResult.success ? (
                 <>
-                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+                  <div className="grid grid-cols-2 md:grid-cols-6 gap-3 mb-4">
                     <button
                       type="button"
                       className="bg-zinc-100 rounded-lg p-3 text-center hover:shadow-sm transition"
@@ -448,6 +449,14 @@ export function ReellyImportPanel() {
                     </button>
                     <button
                       type="button"
+                      className="bg-green-100 rounded-lg p-3 text-center hover:shadow-sm transition border-2 border-green-300"
+                      onClick={() => setIsRecentOpen(true)}
+                    >
+                      <p className="text-xl font-bold text-green-700">{syncResult.auto_approved || 0}</p>
+                      <p className="text-xs text-green-600 font-medium">Auto-Approved ✓</p>
+                    </button>
+                    <button
+                      type="button"
                       className="bg-zinc-100 rounded-lg p-3 text-center hover:shadow-sm transition"
                       onClick={() => setIsRecentOpen(true)}
                     >
@@ -456,26 +465,45 @@ export function ReellyImportPanel() {
                     </button>
                   </div>
 
-                  {/* BIG CTA to Approval Queue */}
-                  <div className="p-5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl text-white shadow-lg">
-                    <div className="flex items-center justify-between gap-4 flex-wrap">
-                      <div>
-                        <h4 className="font-bold text-xl flex items-center gap-2">
-                          🎉 Projects ready for review!
-                        </h4>
-                        <p className="text-blue-100 text-sm mt-1">
-                          {(syncResult.inserted || 0) + (syncResult.updated || 0)} projects synced → Now approve or reject them
-                        </p>
+                  {/* Auto-Approved Success Banner */}
+                  {(syncResult.auto_approved || 0) > 0 && (
+                    <div className="p-5 bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl text-white shadow-lg mb-4">
+                      <div className="flex items-center gap-4">
+                        <CheckCircle className="w-10 h-10 text-white" />
+                        <div>
+                          <h4 className="font-bold text-xl">
+                            🚀 {syncResult.auto_approved} Projects Auto-Published!
+                          </h4>
+                          <p className="text-green-100 text-sm mt-1">
+                            Complete projects were automatically pushed to your live website.
+                          </p>
+                        </div>
                       </div>
-                      <button
-                        onClick={goToApprovalQueue}
-                        className="flex-shrink-0 bg-white text-blue-700 px-6 py-3 rounded-lg font-bold hover:bg-blue-50 transition shadow-md text-lg flex items-center gap-2"
-                      >
-                        Open Approval Queue
-                        <ArrowRight className="w-5 h-5" />
-                      </button>
                     </div>
-                  </div>
+                  )}
+
+                  {/* CTA to Approval Queue for remaining pending */}
+                  {((syncResult.inserted || 0) + (syncResult.updated || 0) - (syncResult.auto_approved || 0)) > 0 && (
+                    <div className="p-5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl text-white shadow-lg">
+                      <div className="flex items-center justify-between gap-4 flex-wrap">
+                        <div>
+                          <h4 className="font-bold text-xl flex items-center gap-2">
+                            📋 {(syncResult.inserted || 0) + (syncResult.updated || 0) - (syncResult.auto_approved || 0)} projects need review
+                          </h4>
+                          <p className="text-blue-100 text-sm mt-1">
+                            Some projects need more data before going live (floor plans, brochures, etc.)
+                          </p>
+                        </div>
+                        <button
+                          onClick={goToApprovalQueue}
+                          className="flex-shrink-0 bg-white text-blue-700 px-6 py-3 rounded-lg font-bold hover:bg-blue-50 transition shadow-md text-lg flex items-center gap-2"
+                        >
+                          Open Approval Queue
+                          <ArrowRight className="w-5 h-5" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
                   
                   <Alert className="mt-4 border-emerald-300 bg-emerald-50">
                     <CheckCircle className="h-4 w-4 text-emerald-600" />
@@ -484,14 +512,16 @@ export function ReellyImportPanel() {
                     </AlertDescription>
                   </Alert>
 
-                  <Alert className="mt-3 border-amber-300 bg-amber-50">
-                    <Info className="h-4 w-4 text-amber-600" />
-                    <AlertTitle className="text-amber-900">Why "New = 0"?</AlertTitle>
-                    <AlertDescription className="text-amber-700">
-                      These projects already existed in your pending queue from a previous sync. 
-                      They're still <strong>pending</strong> and waiting for your approval.
-                    </AlertDescription>
-                  </Alert>
+                  {(syncResult.auto_approved || 0) === 0 && (
+                    <Alert className="mt-3 border-amber-300 bg-amber-50">
+                      <Info className="h-4 w-4 text-amber-600" />
+                      <AlertTitle className="text-amber-900">No Auto-Approvals?</AlertTitle>
+                      <AlertDescription className="text-amber-700">
+                        Projects need a developer link, description, cover image, and price to be auto-approved.
+                        Missing data items will appear in the approval queue for manual review.
+                      </AlertDescription>
+                    </Alert>
+                  )}
 
                   {syncResult.errors && syncResult.errors.length > 0 && (
                     <div className="mt-4">

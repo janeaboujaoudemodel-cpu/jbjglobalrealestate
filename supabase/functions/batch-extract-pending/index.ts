@@ -96,11 +96,14 @@ serve(async (req) => {
       console.log(`[BatchExtract] Single target mode: processing ${targetItem.name}`);
     } else {
       // BATCH MODE: Fetch pending imports that still need extraction
+      // CRITICAL: Skip Reelly imports - they use API data and don't need Firecrawl scraping
       // FIXED: Also target rows where images/documents are NULL (not just empty array [])
       const { data: batchImports, error: fetchErr } = await supabase
         .from("pending_project_imports")
         .select("id, name, slug, source_url, images, documents, description, review_notes, amenities, developer_name")
         .eq("status", "pending")
+        // CRITICAL: Skip Reelly sources - they use different enrichment (reelly-fill-missing-assets)
+        .not("source_url", "ilike", "%reelly%")
         // NOTE: PostgREST OR syntax - include null checks for images/documents
         .or(
           [
@@ -127,6 +130,7 @@ serve(async (req) => {
       }
 
       imports = batchImports || [];
+      console.log(`[BatchExtract] Skipping Reelly imports (use reelly-fill-missing-assets instead)`);
     }
 
     if (!imports || imports.length === 0) {
