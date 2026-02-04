@@ -25,6 +25,7 @@ import {
 import Footer from "@/components/Footer";
 import InvestorDocumentVault from "@/components/investor/InvestorDocumentVault";
 import CTABand from "@/components/home/CTABand";
+import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import {
   LayoutDashboard,
   Building2,
@@ -48,6 +49,13 @@ import {
   CheckCircle2,
   Calendar,
   Shield,
+  Heart,
+  Search,
+  ListChecks,
+  Phone,
+  Mail,
+  BookOpen,
+  Lock,
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -105,11 +113,11 @@ interface ActivityItem {
   created_at: string;
 }
 
-interface InsightCard {
-  area: string;
-  indicator: string;
-  summary: string;
-  timestamp: string;
+interface RequestItem {
+  id: string;
+  type: 'consultation' | 'shortlist' | 'list_property' | 'support';
+  label: string;
+  status: 'not_submitted' | 'submitted' | 'in_review';
 }
 
 export default function InvestorDashboard() {
@@ -123,18 +131,19 @@ export default function InvestorDashboard() {
   const [reports, setReports] = useState<Report[]>([]);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [activities, setActivities] = useState<ActivityItem[]>([]);
-  const [insights] = useState<InsightCard[]>([
-    { area: "Dubai Marina", indicator: "Growth", summary: "Sustained demand in waterfront units.", timestamp: "Jan 2026" },
-    { area: "Business Bay", indicator: "Stability", summary: "Steady pricing with high occupancy.", timestamp: "Jan 2026" },
-    { area: "Palm Jumeirah", indicator: "Premium", summary: "Continued interest in luxury segment.", timestamp: "Jan 2026" },
+  const [requests, setRequests] = useState<RequestItem[]>([
+    { id: '1', type: 'consultation', label: 'Private Consultation Request', status: 'not_submitted' },
+    { id: '2', type: 'shortlist', label: 'Curated Shortlist Request', status: 'not_submitted' },
+    { id: '3', type: 'list_property', label: 'List Your Property Request', status: 'not_submitted' },
+    { id: '4', type: 'support', label: 'Support Ticket', status: 'not_submitted' },
   ]);
 
   // KPI stats
   const [stats, setStats] = useState({
-    totalProperties: 0,
-    activeInvestments: 0,
-    underReview: 0,
+    watchlistProjects: 0,
+    savedSearches: 0,
     reportsAvailable: 0,
+    activeRequests: 0,
   });
 
   useEffect(() => {
@@ -170,7 +179,7 @@ export default function InvestorDashboard() {
         });
       }
 
-      // Fetch linked properties (from favorites as portfolio)
+      // Fetch linked properties (from favorites as watchlist)
       const { data: favoritesData } = await supabase
         .from('favorites')
         .select('id, project_id, created_at')
@@ -178,7 +187,6 @@ export default function InvestorDashboard() {
         .limit(10);
 
       if (favoritesData && favoritesData.length > 0) {
-        // Get project details for favorites
         const projectIds = favoritesData.map(f => f.project_id);
         const { data: projectsData } = await supabase
           .from('projects')
@@ -193,13 +201,12 @@ export default function InvestorDashboard() {
             emirate: p.emirate || 'Dubai',
             type: p.status === 'off-plan' ? 'off-plan' : 'ready',
             status: 'under_evaluation' as const,
-            image_url: null, // Projects table doesn't have main_image_url
+            image_url: null,
           }));
           setLinkedProperties(properties);
           setStats(prev => ({ 
             ...prev, 
-            totalProperties: properties.length,
-            underReview: properties.filter(p => p.status === 'under_evaluation').length,
+            watchlistProjects: properties.length,
           }));
         }
       }
@@ -220,10 +227,13 @@ export default function InvestorDashboard() {
           created_at: t.created_at,
         }));
         setActivities(activityItems);
+        
+        // Update active requests count
+        const activeCount = ticketData.filter(t => t.status !== 'closed').length;
+        setStats(prev => ({ ...prev, activeRequests: activeCount }));
       }
 
-      // Set mock report count (will be replaced with real data when reports table exists)
-      setStats(prev => ({ ...prev, reportsAvailable: 0 }));
+      setStats(prev => ({ ...prev, reportsAvailable: 0, savedSearches: 0 }));
 
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
@@ -259,6 +269,22 @@ export default function InvestorDashboard() {
     );
   };
 
+  const getRequestStatusBadge = (status: RequestItem['status']) => {
+    const styles = {
+      not_submitted: 'bg-zinc-500/10 text-zinc-500 border-zinc-500/30',
+      submitted: 'bg-blue-500/10 text-blue-600 border-blue-500/30',
+      in_review: 'bg-amber-500/10 text-amber-600 border-amber-500/30',
+    };
+    const labels = {
+      not_submitted: 'Not Submitted',
+      submitted: 'Submitted',
+      in_review: 'In Review',
+    };
+    return <Badge className={styles[status]}>{labels[status]}</Badge>;
+  };
+
+  const whatsappMessage = "Hi JBJ Global Real Estate, I'm an investor and I'd like support with my dashboard.";
+
   if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -277,7 +303,7 @@ export default function InvestorDashboard() {
           variants={staggerContainer}
           className="space-y-8"
         >
-          {/* SECTION 1: Dashboard Header */}
+          {/* HERO / HEADER BLOCK */}
           <motion.div variants={fadeInUp}>
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
               <CardContent className="p-6 md:p-8">
@@ -293,10 +319,13 @@ export default function InvestorDashboard() {
                       <h1 className="text-2xl md:text-3xl font-semibold text-foreground mb-1">
                         Investor Dashboard
                       </h1>
-                      <p className="text-muted-foreground text-sm mb-3">
-                        Overview of your investments, activity, and reports
+                      <p className="text-lg font-medium text-foreground mb-1">
+                        Your Portfolio. Your Reports. One Private Workspace.
                       </p>
-                      <div className="flex items-center gap-2">
+                      <p className="text-muted-foreground text-sm mb-3">
+                        A secure investor workspace for tracking watchlists, accessing market intelligence, and managing your requests with JBJ Global Real Estate.
+                      </p>
+                      <div className="flex items-center gap-2 flex-wrap justify-center md:justify-start">
                         <Badge className="bg-gold/20 text-gold border-gold/30">
                           <User className="w-3 h-3 mr-1" />
                           Investor Account
@@ -334,22 +363,42 @@ export default function InvestorDashboard() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
+
+                {/* Hero CTAs */}
+                <div className="mt-6 flex flex-wrap gap-3 justify-center md:justify-start">
+                  <Link to="/contact?type=consultation">
+                    <Button variant="primary">
+                      Request a Private Consultation
+                    </Button>
+                  </Link>
+                  <a href={getWhatsAppUrl(whatsappMessage)} target="_blank" rel="noopener noreferrer">
+                    <Button variant="secondary" className="gap-2">
+                      <MessageCircle className="w-4 h-4" />
+                      Ask JBJ on WhatsApp
+                    </Button>
+                  </a>
+                </div>
+
+                <p className="text-xs text-muted-foreground mt-4 text-center md:text-left">
+                  Information shown here is personalized and may depend on the data you choose to add. Market information is provided for guidance and is subject to change.
+                </p>
               </CardContent>
             </Card>
           </motion.div>
 
-          {/* SECTION 2: Quick Stats Row (KPI Cards) */}
+          {/* SECTION 1: Snapshot (KPI Cards Row) */}
           <motion.div variants={fadeInUp}>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
                 <CardContent className="p-5">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center">
-                      <Building2 className="w-6 h-6 text-blue-500" />
+                      <Heart className="w-6 h-6 text-blue-500" />
                     </div>
                     <div>
-                      <p className="text-2xl font-bold text-foreground">{stats.totalProperties}</p>
-                      <p className="text-xs text-muted-foreground">Total Properties Linked</p>
+                      <p className="text-2xl font-bold text-foreground">{stats.watchlistProjects}</p>
+                      <p className="text-xs text-muted-foreground">Watchlist Projects</p>
+                      <p className="text-[10px] text-muted-foreground/70">Projects you saved for comparison.</p>
                     </div>
                   </div>
                 </CardContent>
@@ -359,25 +408,12 @@ export default function InvestorDashboard() {
                 <CardContent className="p-5">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center">
-                      <TrendingUp className="w-6 h-6 text-emerald-500" />
+                      <Search className="w-6 h-6 text-emerald-500" />
                     </div>
                     <div>
-                      <p className="text-2xl font-bold text-foreground">{stats.activeInvestments}</p>
-                      <p className="text-xs text-muted-foreground">Active Investments</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-                <CardContent className="p-5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center">
-                      <Clock className="w-6 h-6 text-amber-500" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-foreground">{stats.underReview}</p>
-                      <p className="text-xs text-muted-foreground">Under Review</p>
+                      <p className="text-2xl font-bold text-foreground">{stats.savedSearches}</p>
+                      <p className="text-xs text-muted-foreground">Saved Searches</p>
+                      <p className="text-[10px] text-muted-foreground/70">Filters you saved for quick access.</p>
                     </div>
                   </div>
                 </CardContent>
@@ -392,6 +428,22 @@ export default function InvestorDashboard() {
                     <div>
                       <p className="text-2xl font-bold text-foreground">{stats.reportsAvailable}</p>
                       <p className="text-xs text-muted-foreground">Reports Available</p>
+                      <p className="text-[10px] text-muted-foreground/70">Market/area reports you can open anytime.</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                <CardContent className="p-5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center">
+                      <ListChecks className="w-6 h-6 text-amber-500" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-foreground">{stats.activeRequests}</p>
+                      <p className="text-xs text-muted-foreground">Active Requests</p>
+                      <p className="text-[10px] text-muted-foreground/70">Consultations, shortlist requests, and support tickets.</p>
                     </div>
                   </div>
                 </CardContent>
@@ -399,25 +451,92 @@ export default function InvestorDashboard() {
             </div>
           </motion.div>
 
-          {/* SECTION 3: My Portfolio */}
+          {/* SECTION 2: Quick Actions */}
           <motion.div variants={fadeInUp}>
             <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
               <Briefcase className="w-5 h-5 text-gold" />
-              My Portfolio
+              Quick Actions
             </h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Link to="/contact?type=shortlist">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-gold transition-colors cursor-pointer group h-full">
+                  <CardContent className="p-5">
+                    <div className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center mb-3 group-hover:bg-gold/20 transition-colors">
+                      <ListChecks className="w-5 h-5 text-gold" />
+                    </div>
+                    <h4 className="font-semibold text-foreground group-hover:text-gold transition-colors mb-1">Get a Curated Shortlist</h4>
+                    <p className="text-xs text-muted-foreground">Tell us your budget, timeline, and priorities — we'll prepare a curated shortlist with clear comparisons.</p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              <Link to="/compare">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-gold transition-colors cursor-pointer group h-full">
+                  <CardContent className="p-5">
+                    <div className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center mb-3 group-hover:bg-gold/20 transition-colors">
+                      <BarChart3 className="w-5 h-5 text-gold" />
+                    </div>
+                    <h4 className="font-semibold text-foreground group-hover:text-gold transition-colors mb-1">Compare Projects</h4>
+                    <p className="text-xs text-muted-foreground">Compare price per sqft, payment plan structure, handover timing, and location positioning.</p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              <Link to="/contact?type=roi">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-gold transition-colors cursor-pointer group h-full">
+                  <CardContent className="p-5">
+                    <div className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center mb-3 group-hover:bg-gold/20 transition-colors">
+                      <TrendingUp className="w-5 h-5 text-gold" />
+                    </div>
+                    <h4 className="font-semibold text-foreground group-hover:text-gold transition-colors mb-1">Request ROI Snapshot</h4>
+                    <p className="text-xs text-muted-foreground">Receive a structured rental/resale context snapshot based on available official data sources.</p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              <Link to="/contact?type=advisor">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-gold transition-colors cursor-pointer group h-full">
+                  <CardContent className="p-5">
+                    <div className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center mb-3 group-hover:bg-gold/20 transition-colors">
+                      <MessageCircle className="w-5 h-5 text-gold" />
+                    </div>
+                    <h4 className="font-semibold text-foreground group-hover:text-gold transition-colors mb-1">Speak to an Advisor</h4>
+                    <p className="text-xs text-muted-foreground">Book a private consultation for investment strategy and market navigation.</p>
+                  </CardContent>
+                </Card>
+              </Link>
+            </div>
+          </motion.div>
+
+          {/* SECTION 3: Your Watchlist */}
+          <motion.div variants={fadeInUp}>
+            <h3 className="text-xl font-semibold text-foreground mb-2 flex items-center gap-2">
+              <Heart className="w-5 h-5 text-gold" />
+              Your Watchlist
+            </h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Save projects you want to revisit, compare, or discuss with our team.
+            </p>
             {linkedProperties.length === 0 ? (
               <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
                 <CardContent className="p-8 text-center">
-                  <Building2 className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-foreground font-medium mb-2">No properties linked yet</p>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Browse our properties and add them to your portfolio
+                  <Heart className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-foreground font-medium mb-2">No projects saved yet.</p>
+                  <p className="text-sm text-muted-foreground mb-6">
+                    Add projects to your watchlist from the Buy Properties portal, then return here to compare and request a shortlist.
                   </p>
-                  <Link to="/properties">
-                    <Button variant="primary">
-                      Explore Properties
-                    </Button>
-                  </Link>
+                  <div className="flex flex-wrap gap-3 justify-center">
+                    <Link to="/properties?transactionType=buy">
+                      <Button variant="primary">
+                        Browse Buy Properties
+                      </Button>
+                    </Link>
+                    <Link to="/contact?type=shortlist">
+                      <Button variant="secondary">
+                        Request a Shortlist
+                      </Button>
+                    </Link>
+                  </div>
                 </CardContent>
               </Card>
             ) : (
@@ -464,93 +583,114 @@ export default function InvestorDashboard() {
             )}
           </motion.div>
 
-          {/* SECTION 4: Investment Insights */}
+          {/* SECTION 4: Portfolio Views */}
           <motion.div variants={fadeInUp}>
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <BarChart3 className="w-5 h-5 text-gold" />
-              Investment Insights
+            <h3 className="text-xl font-semibold text-foreground mb-2 flex items-center gap-2">
+              <Briefcase className="w-5 h-5 text-gold" />
+              Portfolio Views
             </h3>
-            <div className="grid md:grid-cols-3 gap-4">
-              {insights.map((insight, index) => (
-                <Card key={index} className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-                  <CardContent className="p-5">
-                    <div className="flex items-start justify-between mb-3">
-                      <h4 className="font-semibold text-foreground">{insight.area}</h4>
-                      <Badge className={
-                        insight.indicator === 'Growth' 
-                          ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/30'
-                          : insight.indicator === 'Stability'
-                          ? 'bg-blue-500/10 text-blue-600 border-blue-500/30'
-                          : 'bg-gold/10 text-gold border-gold/30'
-                      }>
-                        {insight.indicator}
-                      </Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground mb-2">{insight.summary}</p>
-                    <p className="text-xs text-muted-foreground flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      {insight.timestamp}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-            <p className="text-xs text-muted-foreground mt-3 text-center italic">
-              Insights are informational only. No ROI guarantees or projections.
+            <p className="text-sm text-muted-foreground mb-4">
+              Build a simple view of your holdings and target allocations. You control what you add.
             </p>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                <CardContent className="p-5 text-center">
+                  <Building2 className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                  <p className="font-medium text-foreground">Owned Assets</p>
+                  <Badge className="mt-2 bg-zinc-500/10 text-zinc-500 border-zinc-500/30">Coming Soon</Badge>
+                </CardContent>
+              </Card>
+              
+              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                <CardContent className="p-5 text-center">
+                  <Heart className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                  <p className="font-medium text-foreground">Target Assets (Wishlist)</p>
+                  <p className="text-xs text-muted-foreground mt-1">Add from watchlist</p>
+                </CardContent>
+              </Card>
+              
+              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                <CardContent className="p-5 text-center">
+                  <TrendingUp className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                  <p className="font-medium text-foreground">Rental Performance Notes</p>
+                  <p className="text-xs text-muted-foreground mt-1">Optional</p>
+                </CardContent>
+              </Card>
+              
+              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                <CardContent className="p-5 text-center">
+                  <Lock className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                  <p className="font-medium text-foreground">Document Vault</p>
+                  <p className="text-xs text-muted-foreground mt-1">Private</p>
+                </CardContent>
+              </Card>
+            </div>
+            <p className="text-xs text-muted-foreground mt-3">
+              Portfolio views appear once you add at least one asset or wishlist target. You can start by requesting setup support.
+            </p>
+            <div className="mt-3">
+              <Link to="/contact?type=portfolio">
+                <Button variant="secondary">
+                  Request Portfolio Setup
+                </Button>
+              </Link>
+            </div>
           </motion.div>
 
-          {/* SECTION 5: Reports Access */}
+          {/* SECTION 5: Report Access */}
           <motion.div variants={fadeInUp}>
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+            <h3 className="text-xl font-semibold text-foreground mb-2 flex items-center gap-2">
               <FileText className="w-5 h-5 text-gold" />
-              My Reports
+              Report Access
             </h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Open the latest market and area intelligence available to you.
+            </p>
             <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-              {reports.length === 0 ? (
-                <CardContent className="p-8 text-center">
-                  <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground mb-2">No reports available</p>
-                  <p className="text-sm text-muted-foreground">
-                    Reports are generated internally by JBJ systems and will appear here when available.
-                  </p>
-                </CardContent>
-              ) : (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Report Name</TableHead>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Date Generated</TableHead>
-                      <TableHead className="text-right">Action</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {reports.map((report) => (
-                      <TableRow key={report.id}>
-                        <TableCell className="font-medium">{report.name}</TableCell>
-                        <TableCell>
-                          <Badge variant="outline" className="capitalize">{report.type}</Badge>
-                        </TableCell>
-                        <TableCell>{format(new Date(report.generated_at), 'MMM d, yyyy')}</TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex justify-end gap-2">
-                            <Button variant="secondary" size="sm">
-                              <Eye className="w-4 h-4 mr-1" />
-                              View
-                            </Button>
-                            <Button variant="secondary" size="sm">
-                              <Download className="w-4 h-4 mr-1" />
-                              Download
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              )}
+              <CardContent className="p-4">
+                <div className="space-y-2">
+                  <Link to="/market-intelligence" className="block">
+                    <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gold/5 transition-colors">
+                      <div className="flex items-center gap-3">
+                        <BarChart3 className="w-5 h-5 text-gold" />
+                        <span className="font-medium text-foreground">Market Overview</span>
+                      </div>
+                      <ChevronDown className="w-4 h-4 text-muted-foreground rotate-[-90deg]" />
+                    </div>
+                  </Link>
+                  <Link to="/market-intelligence/areas" className="block">
+                    <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gold/5 transition-colors">
+                      <div className="flex items-center gap-3">
+                        <MapPin className="w-5 h-5 text-gold" />
+                        <span className="font-medium text-foreground">Area Intelligence</span>
+                      </div>
+                      <ChevronDown className="w-4 h-4 text-muted-foreground rotate-[-90deg]" />
+                    </div>
+                  </Link>
+                  <Link to="/market-intelligence/reports" className="block">
+                    <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gold/5 transition-colors">
+                      <div className="flex items-center gap-3">
+                        <FileText className="w-5 h-5 text-gold" />
+                        <span className="font-medium text-foreground">Market Reports</span>
+                      </div>
+                      <ChevronDown className="w-4 h-4 text-muted-foreground rotate-[-90deg]" />
+                    </div>
+                  </Link>
+                  <Link to="/market-intelligence/methodology" className="block">
+                    <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gold/5 transition-colors">
+                      <div className="flex items-center gap-3">
+                        <BookOpen className="w-5 h-5 text-gold" />
+                        <span className="font-medium text-foreground">Methodology & Sources</span>
+                      </div>
+                      <ChevronDown className="w-4 h-4 text-muted-foreground rotate-[-90deg]" />
+                    </div>
+                  </Link>
+                </div>
+              </CardContent>
             </Card>
+            <p className="text-xs text-muted-foreground mt-2">
+              Reports are built from aggregated official open-data sources where available, and are provided for informational purposes only.
+            </p>
           </motion.div>
 
           {/* SECTION 6: My Documents (Upload & Sync) */}
@@ -562,147 +702,101 @@ export default function InvestorDashboard() {
             <InvestorDocumentVault userId={user?.id || ""} />
           </motion.div>
 
-          {/* SECTION 7: Property Documents */}
+          {/* SECTION 7: Requests & Support */}
           <motion.div variants={fadeInUp}>
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <FileText className="w-5 h-5 text-gold" />
-              Property Documents
+            <h3 className="text-xl font-semibold text-foreground mb-2 flex items-center gap-2">
+              <ListChecks className="w-5 h-5 text-gold" />
+              Requests & Support
             </h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Track your active requests and submissions in one place.
+            </p>
             <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-              {documents.length === 0 ? (
-                <CardContent className="p-8 text-center">
-                  <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-foreground font-medium mb-2">No property documents yet</p>
-                  <p className="text-sm text-muted-foreground">
-                    Documents related to your properties will appear here.
-                  </p>
-                </CardContent>
-              ) : (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="text-foreground">Document Name</TableHead>
-                      <TableHead className="text-foreground">Related Property</TableHead>
-                      <TableHead className="text-foreground">Upload Date</TableHead>
-                      <TableHead className="text-right text-foreground">Action</TableHead>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-foreground">Request Type</TableHead>
+                    <TableHead className="text-right text-foreground">Status</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {requests.map((request) => (
+                    <TableRow key={request.id}>
+                      <TableCell className="font-medium text-foreground">{request.label}</TableCell>
+                      <TableCell className="text-right">
+                        {getRequestStatusBadge(request.status)}
+                      </TableCell>
                     </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {documents.map((doc) => (
-                      <TableRow key={doc.id}>
-                        <TableCell className="font-medium text-foreground">{doc.name}</TableCell>
-                        <TableCell className="text-foreground">{doc.property_name || '—'}</TableCell>
-                        <TableCell className="text-foreground">{format(new Date(doc.uploaded_at), 'MMM d, yyyy')}</TableCell>
-                        <TableCell className="text-right">
-                          <Button variant="secondary" size="sm">
-                            <Eye className="w-4 h-4 mr-1" />
-                            View
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              )}
+                  ))}
+                </TableBody>
+              </Table>
             </Card>
-            <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
-              <Shield className="w-3 h-3" />
-              Documents are visible only to you and authorized JBJ advisors.
+            <p className="text-xs text-muted-foreground mt-2">
+              Once you submit a request, its status will appear here.
             </p>
           </motion.div>
 
-          {/* SECTION 7: Activity & Notifications */}
+          {/* SECTION 8: How This Dashboard Works */}
           <motion.div variants={fadeInUp}>
             <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Bell className="w-5 h-5 text-gold" />
-              Recent Activity
+              <HelpCircle className="w-5 h-5 text-gold" />
+              How This Dashboard Works
             </h3>
             <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-              {activities.length === 0 ? (
-                <CardContent className="p-8 text-center">
-                  <Bell className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-foreground font-medium">No recent activity</p>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Status updates, admin actions, and notifications will appear here.
-                  </p>
-                </CardContent>
-              ) : (
-                <CardContent className="p-4">
-                  <div className="space-y-3">
-                    {activities.map((activity) => (
-                      <div key={activity.id} className="flex items-start gap-3 p-3 rounded-lg bg-muted/30 border border-border/50">
-                        <div className="w-8 h-8 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
-                          {activity.type === 'status_update' && <CheckCircle2 className="w-4 h-4 text-emerald-500" />}
-                          {activity.type === 'admin_action' && <User className="w-4 h-4 text-blue-500" />}
-                          {activity.type === 'report_available' && <FileText className="w-4 h-4 text-purple-500" />}
-                          {activity.type === 'notification' && <Bell className="w-4 h-4 text-gold" />}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm text-foreground">{activity.message}</p>
-                          <p className="text-xs text-muted-foreground mt-1">
-                            {format(new Date(activity.created_at), 'MMM d, yyyy · h:mm a')}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              )}
+              <CardContent className="p-6">
+                <ul className="space-y-3 text-sm text-foreground">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                    <span>You can explore the platform freely as a visitor.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                    <span>When you submit an investor request (shortlist, consultation, or report access), your dashboard becomes your private workspace.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                    <span>You decide what you add (watchlist, portfolio items, documents).</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                    <span>JBJ may respond to your requests and upload report files or comparisons into your workspace, visible only to you and authorized JBJ administrators.</span>
+                  </li>
+                </ul>
+              </CardContent>
             </Card>
           </motion.div>
 
-          {/* SECTION 8: Profile & Settings Shortcut */}
+          {/* SECTION 9: Compliance & Privacy (Compact) */}
           <motion.div variants={fadeInUp}>
             <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Settings className="w-5 h-5 text-gold" />
-              Quick Settings
+              <Shield className="w-5 h-5 text-gold" />
+              Trust, Privacy & Use of Information
             </h3>
-            <div className="grid md:grid-cols-3 gap-4">
-              <Link to="/my-account">
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-gold transition-colors cursor-pointer group">
-                  <CardContent className="p-5 flex items-center gap-4">
-                    <div className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                      <User className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground group-hover:text-gold transition-colors">My Profile</h4>
-                      <p className="text-xs text-muted-foreground">Update your information</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-
-              <Link to="/settings/notifications">
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-gold transition-colors cursor-pointer group">
-                  <CardContent className="p-5 flex items-center gap-4">
-                    <div className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                      <Bell className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground group-hover:text-gold transition-colors">Notification Preferences</h4>
-                      <p className="text-xs text-muted-foreground">Manage alerts</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-
-              <Link to="/settings/security">
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-gold transition-colors cursor-pointer group">
-                  <CardContent className="p-5 flex items-center gap-4">
-                    <div className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                      <Shield className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground group-hover:text-gold transition-colors">Security Settings</h4>
-                      <p className="text-xs text-muted-foreground">Password & access</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            </div>
+            <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+              <CardContent className="p-6">
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-start gap-2">
+                    <Shield className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                    <span>Information is provided for guidance and is subject to change.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Shield className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                    <span>Market intelligence and tools are informational and do not guarantee outcomes.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Shield className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                    <span>Your data is treated as confidential and is accessible only to you and authorized JBJ administrators.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Shield className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                    <span>If partner services are introduced (legal, mortgage, visa), the client contracts directly with the independent licensed partner.</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
           </motion.div>
 
-          {/* SECTION 9: Support & Assistance */}
+          {/* Footer CTA Strip */}
           <motion.div variants={fadeInUp}>
             <Card className="border-2 border-gold/30 bg-gradient-to-br from-zinc-900/95 via-zinc-900/90 to-black">
               <CardContent className="p-6 md:p-8">
@@ -717,33 +811,23 @@ export default function InvestorDashboard() {
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-3">
-                    <Link to="/contact?type=advisor">
+                    <Link to="/contact?type=consultation">
                       <Button variant="primary">
-                        <MessageCircle className="w-4 h-4 mr-2" />
-                        Contact Advisor
+                        Request a Private Consultation
                       </Button>
                     </Link>
-                    <Link to="/contact?type=support">
-                      <Button variant="secondary">
-                        <HelpCircle className="w-4 h-4 mr-2" />
-                        Submit Support Request
+                    <a href={getWhatsAppUrl(whatsappMessage)} target="_blank" rel="noopener noreferrer">
+                      <Button variant="secondary" className="gap-2">
+                        <MessageCircle className="w-4 h-4" />
+                        Ask JBJ on WhatsApp
                       </Button>
-                    </Link>
+                    </a>
                   </div>
                 </div>
               </CardContent>
             </Card>
           </motion.div>
 
-          {/* SECTION 10: Compliance Footer Note */}
-          <motion.div variants={fadeInUp}>
-            <div className="text-center py-6 border-t border-border/50">
-              <p className="text-xs text-muted-foreground max-w-2xl mx-auto">
-                This dashboard provides informational access to properties and market insights.
-                JBJ Global Real Estate does not provide financial guarantees or residency approvals through this platform.
-              </p>
-            </div>
-          </motion.div>
         </motion.div>
       </div>
 
