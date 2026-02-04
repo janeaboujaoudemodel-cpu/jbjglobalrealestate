@@ -2,7 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 // Reelly API configuration - confirmed endpoint
@@ -177,38 +177,15 @@ async function fetchProjectsPage(apiKey: string, url: string): Promise<ReellyRes
   return await response.json();
 }
 
-async function fetchAllProjects(apiKey: string, onProgress?: (fetched: number, total: number) => void): Promise<ReellyProject[]> {
-  const allProjects: ReellyProject[] = [];
-  let nextUrl: string | null = `${REELLY_API_BASE}?limit=100`;
-  let pageCount = 0;
-  const maxPages = 30; // Safety limit (100 * 30 = 3000 max projects)
-  let totalCount = 0;
-
-  while (nextUrl && pageCount < maxPages) {
-    const data = await fetchProjectsPage(apiKey, nextUrl);
-    
-    if (pageCount === 0) {
-      totalCount = data.count;
-      console.log(`[Reelly API] Total projects available: ${totalCount}`);
-    }
-    
-    allProjects.push(...data.results);
-    nextUrl = data.next;
-    pageCount++;
-
-    console.log(`[Reelly API] Page ${pageCount}: fetched ${data.results.length} (total: ${allProjects.length}/${totalCount})`);
-    
-    if (onProgress) {
-      onProgress(allProjects.length, totalCount);
-    }
-
-    // Small delay between pages to be respectful
-    if (nextUrl) {
-      await new Promise(r => setTimeout(r, 200));
-    }
+function assertValidCursorUrl(url: string) {
+  // Prevent SSRF / arbitrary URL fetching: only allow the known Reelly endpoint.
+  const parsed = new URL(url);
+  if (parsed.origin !== "https://api-reelly.up.railway.app") {
+    throw new Error("Invalid cursor origin");
   }
-
-  return allProjects;
+  if (!parsed.pathname.startsWith("/api/v2/clients/projects")) {
+    throw new Error("Invalid cursor path");
+  }
 }
 
 Deno.serve(async (req) => {
@@ -230,10 +207,16 @@ Deno.serve(async (req) => {
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     // Parse request body for options
-    let options = { 
-      action: 'sync',
-      fullSync: false, 
-      limit: 100,
+    let options: {
+      action?: "test" | "sync";
+      limit?: number;
+      cursor?: string | null;
+      // legacy
+      fullSync?: boolean;
+    } = {
+      action: "sync",
+      limit: 50,
+      cursor: null,
     };
     try {
       const body = await req.json();
@@ -263,21 +246,18 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Fetch projects
-    let projects: ReellyProject[];
-    let totalAvailable = 0;
-    
-    if (options.fullSync) {
-      // Fetch all pages
-      projects = await fetchAllProjects(apiKey);
-      totalAvailable = projects.length;
-    } else {
-      // Fetch limited for testing
-      const data = await fetchProjectsPage(apiKey, `${REELLY_API_BASE}?limit=${options.limit}`);
-      projects = data.results;
-      totalAvailable = data.count;
-      console.log(`[Reelly API] Fetched ${projects.length} of ${totalAvailable} total projects`);
-    }
+    // Fetch ONE page per request to avoid timeouts; UI can loop using next_cursor.
+    const limit = Math.min(Math.max(Number(options.limit ?? 50), 1), 100);
+    const cursor = options.cursor ? String(options.cursor) : null;
+
+    const pageUrl = cursor ?? `${REELLY_API_BASE}?limit=${limit}`;
+    assertValidCursorUrl(pageUrl);
+
+    const page = await fetchProjectsPage(apiKey, pageUrl);
+    const projects = page.results;
+    const totalAvailable = page.count;
+    const nextCursor = page.next;
+    console.log(`[Reelly API] Page fetched ${projects.length} of ${totalAvailable} total projects`);
 
     // Filter to only published projects
     const publishedProjects = projects.filter(p => p.is_published);
@@ -329,7 +309,39 @@ Deno.serve(async (req) => {
               updated_at: new Date().toISOString(),
             });
 
-          if (error) throw error;
+          if (error) {
+            // If this project was inserted previously with a different source_url pattern,
+            // fall back to updating by slug instead of failing the whole request.
+            if ((error as any)?.code === "23505" || String((error as any)?.message || "").includes("duplicate key")) {
+              const { data: existingBySlug } = await supabase
+                .from("pending_project_imports")
+                .select("id, status")
+                .eq("slug", mappedProject.slug)
+                .maybeSingle();
+
+              if (existingBySlug) {
+                if (existingBySlug.status === "approved") {
+                  skipped++;
+                  continue;
+                }
+
+                const { error: updateErr } = await supabase
+                  .from("pending_project_imports")
+                  .update({
+                    ...mappedProject,
+                    updated_at: new Date().toISOString(),
+                  })
+                  .eq("id", existingBySlug.id);
+
+                if (updateErr) throw updateErr;
+                updated++;
+                continue;
+              }
+            }
+
+            throw error;
+          }
+
           inserted++;
         }
       } catch (err) {
@@ -346,13 +358,15 @@ Deno.serve(async (req) => {
       JSON.stringify({
         success: true,
         total_available: totalAvailable,
-        total_fetched: projects.length,
-        total_published: publishedProjects.length,
+        page_fetched: projects.length,
+        page_published: publishedProjects.length,
         inserted,
         updated,
         skipped,
         errors: errors.slice(0, 10),
-        message: `Synced ${inserted + updated} projects from Reelly API (${skipped} skipped as already approved)`,
+        next_cursor: nextCursor,
+        done: !nextCursor,
+        message: `Processed ${projects.length} projects (${inserted} new, ${updated} updated, ${skipped} skipped)`,
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
