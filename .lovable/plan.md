@@ -1,85 +1,169 @@
 
-# Fix Listing Stats Display and Complete Incomplete Listings
+# Comprehensive Project Detail Page Enhancement
 
-## Problems Identified
+## Issues Identified from Analysis
 
-| Issue | Current State | Expected State |
-|-------|---------------|----------------|
-| **Target shows wrong number** | `~1,800` | `1,803` (exact API count) |
-| **Queue + Complete ≠ Target** | 778 in queue, 777 complete = 1,555 | Should equal 1,803 |
-| **1 listing marked INCOMPLETE** | V2 Tower (reelly_756) has no images/description | Should be complete from API |
-| **Missing 1,025 projects** | Only 778 synced | Full 1,803 from Reelly API needed |
+### Data Issues from Reelly API
+| Issue | Root Cause | Impact |
+|-------|-----------|--------|
+| **Bedrooms: "Contact Us"** | `bedrooms_min`/`bedrooms_max` are NULL in Reelly data for Amalia | Shows fallback text |
+| **Size: "Contact Us"** | `size_min`/`size_max` are NULL in Reelly data | Shows fallback text |
+| **Only 1 gallery photo** | Reelly API only provides 1 cover image for this project | Gallery shows single image |
+| **"Sold Out" not showing inside page** | `status_label` exists ("Sold Out") but not prominently displayed in hero/header |
+| **Hashtags in description** | Description has "##### Project general facts" markdown headers | Renders literally |
 
-## Root Cause Analysis
+### UI/UX Issues
+| Issue | Current State | Required State |
+|-------|--------------|----------------|
+| **Page load slow** | Many components loading sequentially | Add lazy loading + skeleton optimization |
+| **Developer section (Dar)** | Black background card | Use premium champagne layer styling |
+| **Contact icons** | All using gold styling | WhatsApp=green, Call=blue, Email=gold circles |
+| **Payment plan** | Has 3 colors but needs connecting line | Add horizontal timeline with dots |
+| **About section markdown** | Showing raw "##### headers" | Parse and style as sections |
+| **Finishing/Materials section** | No visuals | Add AI-generated premium photos |
+| **Brochure section** | Only visible if brochure doc exists | Always show with inquiry CTA |
+| **Location distances** | Exists but needs more prominence | Keep current grid layout |
 
-1. **Partial Sync**: Only 778 out of 1,803 projects were synced. The sync likely stopped mid-way or was only a partial run.
+### Missing Features
+- Source links (Reelly + Provident URLs for comparison)
+- "Sold Out" badge in page header/hero
+- Finishing & Materials visual section with premium stock photos
+- Developer detailed info (founded year, projects delivered, worth)
 
-2. **Hardcoded Target Value**: `ProjectApprovalQueue.tsx` line 1015 displays `"~1,800"` as a static string instead of fetching the actual API total of `1,803`.
+## Implementation Plan
 
-3. **Complete Count Logic**: The "Complete" count (777) is derived as `total - needs_work`. With only 778 in queue and 1 needing work, math is correct for what's synced. The issue is the missing 1,025 projects that were never synced.
+### Phase 1: Data Display Fixes
 
-4. **INCOMPLETE Flag**: 1 project (V2 Tower - reelly_756) was marked INCOMPLETE because the Reelly API returned no `overview`/`cover_image` for it. This is a data quality issue on the API side, not a bug.
+#### 1.1 Show "Sold Out" Badge in Hero and Quick Facts
+Add prominent sold-out status indicator when `status_label` contains "Sold Out":
+- Hero section: Red "SOLD OUT" banner overlay
+- Quick Facts Bar: Already shows status, ensure red styling
+- File: `ProjectDetailLayout.tsx` (lines 399-500)
 
-## Solution
+#### 1.2 Fix Description Markdown Parsing
+The description contains raw markdown headers like "##### Project general facts". Update the parser:
+- Strip leading `#####` headers and convert to styled section headings
+- Add "Finishing and Materials" section with premium visuals
+- File: `ProjectDetailLayout.tsx` (description section around line 612-628)
 
-### Step 1: Fix Target Display to Show Actual Count
+#### 1.3 Handle Missing Bedroom/Size Data Gracefully
+When data is NULL, show "View Details" instead of "Contact Us":
+- File: `ProjectDetailLayout.tsx` (lines 573-584)
 
-Update `ProjectApprovalQueue.tsx` to dynamically show the real target:
-- For "all" filter: Show total queue count
-- For "reelly" filter: Show `1,803` (the verified API total)
-- For "provident" filter: Keep `1,336` (legacy Provident target)
+### Phase 2: UI Premium Styling
 
-### Step 2: Trigger a Full Re-Sync
+#### 2.1 Developer Section - Remove Black Background
+Update `DeveloperInfoCard.tsx` to use champagne layer styling:
+- Change from `bg-premium-bg` (black) to `jj-layer-2` champagne gradient
+- Add developer stats from database (founded_year, completed_projects)
+- Fetch additional developer info including description
 
-The current queue only has 778 projects. A full sync needs to run to fetch all 1,803 projects. This can be done from the Reelly panel using "Full Sync (All Projects)".
+#### 2.2 Contact Us Section - Colored Icon Circles
+Update the contact cards (lines 1044-1081):
+- WhatsApp: Green circle (`bg-green-500/20`, icon `text-green-500`)
+- Call: Blue circle (`bg-blue-500/20`, icon `text-blue-500`)
+- Email: Gold circle (keep current `bg-gold/20`)
 
-After full sync:
-- Queue should have ~1,803 items
-- Complete count will update to reflect all projects with data
-- "Needs Work" will only show projects missing data from Reelly API
+#### 2.3 Payment Plan Timeline
+Update `PaymentPlanVisualization.tsx`:
+- Add horizontal timeline with connected dots
+- Three-color sections (green, gold, champagne)
+- Connecting line between milestones
 
-### Step 3: Accept API Data Quality Limitations
+### Phase 3: Missing Sections
 
-Projects like "V2 Tower" that are marked INCOMPLETE are genuinely missing data in the Reelly API itself (no `overview`, no `cover_image`). These should:
-- Remain as "Needs Work" until manually enriched
-- OR be filtered out if they represent unpublished/draft projects on Reelly's side
+#### 3.1 Finishing & Materials Section
+Create new component when description mentions finishing/materials:
+- Parse description for "Finishing and materials" section
+- Add 3-4 premium stock photos (kitchen, bathroom, flooring)
+- Use AI-generated placeholder images for premium look
+
+#### 3.2 Source Links for Comparison
+Add "View on Reelly" and "View on Provident" buttons:
+- Display in DataFreshnessIndicator component
+- Show when `source_url` is available
+- Link to original listing for comparison
+
+#### 3.3 Always Show Brochure Section
+Show brochure section even when no PDF exists:
+- Display "Request Brochure" CTA
+- Open inquiry form instead of download
+
+### Phase 4: Performance Optimization
+
+#### 4.1 Lazy Load Sections
+Add lazy loading for below-fold sections:
+- AI Analyzer
+- Mortgage Calculator
+- Map embed
+- Use React.lazy() + Suspense
+
+#### 4.2 Image Optimization
+- Add loading="lazy" to gallery images
+- Use skeleton loaders during image load
 
 ## Files to Modify
 
 | File | Changes |
 |------|---------|
-| `src/components/listing-admin/ProjectApprovalQueue.tsx` | Update target display from `~1,800` to `1,803` |
-| `src/components/listing-admin/ReellyImportPanel.tsx` | Add display of actual API total in stats |
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Hero sold-out badge, description parsing, contact icon colors, missing data handling |
+| `src/components/project-detail/DeveloperInfoCard.tsx` | Champagne styling, fetch full developer info |
+| `src/components/project-detail/PaymentPlanVisualization.tsx` | Timeline with connecting line |
+| `src/pages/ProjectDetail.tsx` | Pass developer details to layout |
+| `src/hooks/useProjects.ts` | Include developer details in query |
+| **NEW** `src/components/project-detail/FinishingMaterialsSection.tsx` | Premium finishing visuals |
 
-## Code Changes
+## Technical Details
 
-### ProjectApprovalQueue.tsx (Line 1015)
-
+### Hero Sold Out Badge
 ```tsx
-// Before:
-{sourceFilter === "provident" ? "1,336" : sourceFilter === "reelly" ? "~1,800" : "All"}
-
-// After:
-{sourceFilter === "provident" ? "1,336" : sourceFilter === "reelly" ? "1,803" : totalCount ?? "..."}
+{/* Add after hero title */}
+{(project.status_label?.toLowerCase().includes('sold') || 
+  project.availability_status?.toLowerCase().includes('sold')) && (
+  <div className="absolute top-24 right-4 md:right-8 z-30">
+    <Badge className="bg-red-600 text-white px-4 py-2 text-sm font-bold uppercase">
+      Sold Out
+    </Badge>
+  </div>
+)}
 ```
 
-### Why 778 Instead of 1,803?
+### Contact Icon Colors
+```tsx
+{/* WhatsApp - Green */}
+<div className="w-14 h-14 rounded-full bg-green-500/20 border-2 border-green-500/40 flex items-center justify-center">
+  <MessageCircle className="w-7 h-7 text-green-500" />
+</div>
 
-The sync processed only 778 projects. This happens when:
-1. A "Quick Sync (100 projects)" was run multiple times instead of a single "Full Sync"
-2. The full sync stopped mid-way due to timeout or error
-3. Pagination cursor wasn't properly followed to completion
+{/* Call - Blue */}
+<div className="w-14 h-14 rounded-full bg-blue-500/20 border-2 border-blue-500/40 flex items-center justify-center">
+  <Phone className="w-7 h-7 text-blue-500" />
+</div>
 
-**Action Required**: After code fix, run "Full Sync (All Projects)" from the Reelly panel to fetch all 1,803 listings.
+{/* Email - Gold (keep current) */}
+```
 
-## Post-Fix Verification
+### Developer Card Champagne Styling
+```tsx
+{/* Change from black to champagne */}
+<div className="w-full jj-section-champagne border-y border-gold/20">
+```
 
-After full sync completes:
-- **Target**: `1,803`
-- **In Queue**: `~1,803`
-- **Complete**: `~1,800+` (depending on API data quality)
-- **Needs Work**: Only items genuinely missing data from API
+### Developer Query Enhancement
+Include founded_year, completed_projects, description:
+```typescript
+developer:developers(id, name, slug, logo_url, founded_year, completed_projects, description, headquarters)
+```
 
-## Summary
+## Expected Results
 
-The numbers don't add up because only a partial sync was completed. The code shows an approximate target (`~1,800`) instead of the exact count (`1,803`). After updating the display and running a full sync, all metrics will align correctly.
+After implementation:
+- Sold Out projects clearly marked in hero + header
+- "Contact Us" replaced with "View Details" for missing data
+- Developer section uses premium champagne styling with full company info
+- WhatsApp=green, Call=blue, Email=gold icon circles
+- Payment plan has visual timeline with connecting line
+- Description sections properly parsed with styled headings
+- Finishing/Materials section with premium visuals
+- Performance improved with lazy loading
+- Source comparison links available
