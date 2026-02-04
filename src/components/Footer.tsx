@@ -911,7 +911,7 @@ const Footer = () => {
                       filter: 'drop-shadow(0 0 15px rgba(200,167,102,0.4))',
                     }}
                   >
-                    Real Estate Brokerage &nbsp;•&nbsp; All Rights Reserved &nbsp;•&nbsp; © {currentYear}
+                    JBJ Global Real Estate &nbsp;|&nbsp; All Rights Reserved &nbsp;|&nbsp; © {currentYear}
                   </span>
                 </div>
               </div>
