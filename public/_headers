@@ -21,3 +21,8 @@
 /assets/*
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0
   Pragma: no-cache
+
+# Digital Business Card - Noindex for search engines
+/card
+  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0

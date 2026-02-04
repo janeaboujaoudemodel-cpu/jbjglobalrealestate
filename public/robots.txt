@@ -69,6 +69,9 @@ Disallow: /api/
 Disallow: /*.json$
 Disallow: /*?*
 
+# Digital Business Card - Private/Unlisted (noindex)
+Disallow: /card
+
 # Allow important resources
 Allow: /og-image.jpg
 Allow: /favicon.png
