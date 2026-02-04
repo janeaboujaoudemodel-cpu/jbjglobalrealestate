@@ -1,8 +1,9 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { fetchWithRetry, sleep } from "../_shared/provident/http.ts";
-import { extractProvidentProjectFromScrape } from "../_shared/provident/extract.ts";
+import { extractProvidentProjectFromScrape, type ExtractedProjectData } from "../_shared/provident/extract.ts";
 import { fetchProvidentPageDataPdfUrls } from "../_shared/provident/pagedata.ts";
+import { fetchProvidentPageDataDetail, type PageDataProjectDetail } from "../_shared/provident/pagedata-detail.ts";
 import { mirrorRemotePdfToPublicStorage } from "../_shared/provident/storage.ts";
 
 const corsHeaders = {
@@ -147,13 +148,30 @@ serve(async (req) => {
 
       const slug = (item.slug || extractSlugFromUrl(item.source_url) || "").toLowerCase();
 
+      // ============================================================
+      // PHASE 1: Try Gatsby page-data FIRST (free, structured data)
+      // ============================================================
+      let pageDataResult: PageDataProjectDetail | null = null;
+      try {
+        console.log(`[BatchExtract] Trying page-data for ${slug}...`);
+        pageDataResult = await fetchProvidentPageDataDetail(slug);
+        if (pageDataResult) {
+          console.log(`[BatchExtract] Page-data returned: ${pageDataResult.faqs?.length || 0} FAQs, ${pageDataResult.locationDistances?.length || 0} distances, ${pageDataResult.amenities?.length || 0} amenities`);
+        }
+      } catch (e) {
+        console.warn(`[BatchExtract] Page-data failed for ${slug}:`, e);
+      }
+
+      // ============================================================
+      // PHASE 2: Firecrawl scrape for images & fallback data
+      // ============================================================
       const scrapeRes = await fetchWithRetry("https://api.firecrawl.dev/v1/scrape", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${firecrawlKey}` },
         body: JSON.stringify({
           url: item.source_url,
           formats: ["markdown", "links", "rawHtml"],
-          waitFor: 5000,  // Reduced to avoid rate limiting
+          waitFor: 5000,
           timeout: 45000,
           onlyMainContent: false,
         }),
@@ -167,13 +185,12 @@ serve(async (req) => {
         const errorCode = errJson.code || "UNKNOWN";
         
         // CRITICAL: 402 = credits exhausted — abort the entire run immediately.
-        // Continuing wastes time and confuses the user.
         if (scrapeRes.status === 402) {
           console.error(`[BatchExtract] Credits exhausted for ${item.name}. Aborting batch.`);
           throw new Error(`CREDITS_EXHAUSTED`);
         }
         
-        // CRITICAL: Treat SCRAPE_ALL_ENGINES_FAILED as a soft error - don't crash the whole batch
+        // CRITICAL: Treat SCRAPE_ALL_ENGINES_FAILED as a soft error
         if (errorCode === "SCRAPE_ALL_ENGINES_FAILED") {
           console.warn(`[BatchExtract] Engines blocked for ${item.name} - marking for retry`);
           throw new Error(`RATE_LIMITED: Engines blocked - retry later`);
@@ -188,28 +205,100 @@ serve(async (req) => {
       const links = scrapeData.data?.links || [];
       const html = scrapeData.data?.rawHtml || "";
 
-      const extracted = extractProvidentProjectFromScrape({ markdown, html, links });
+      // Extract via Firecrawl markdown parsing
+      const firecrawlExtracted = extractProvidentProjectFromScrape({ markdown, html, links });
 
-      // Discover PDF URLs deterministically from Gatsby page-data (most reliable for brochure)
+      // ============================================================
+      // PHASE 3: MERGE page-data + Firecrawl (page-data wins for structured fields)
+      // ============================================================
+      const extracted: ExtractedProjectData = {
+        // Basic fields: prefer page-data, fallback to Firecrawl
+        name: pageDataResult?.name || firecrawlExtracted.name,
+        developerName: pageDataResult?.developerName || firecrawlExtracted.developerName,
+        description: pageDataResult?.description || firecrawlExtracted.description,
+        location: pageDataResult?.location || firecrawlExtracted.location,
+        priceFrom: pageDataResult?.priceFrom || firecrawlExtracted.priceFrom,
+        bedroomsMin: pageDataResult?.bedroomsMin || firecrawlExtracted.bedroomsMin,
+        bedroomsMax: pageDataResult?.bedroomsMax || firecrawlExtracted.bedroomsMax,
+        sizeMin: firecrawlExtracted.sizeMin, // page-data doesn't have size
+        sizeMax: firecrawlExtracted.sizeMax,
+        handover: pageDataResult?.handover || firecrawlExtracted.handover,
+        paymentPlan: pageDataResult?.paymentPlan || firecrawlExtracted.paymentPlan,
+        propertyType: pageDataResult?.propertyType || firecrawlExtracted.propertyType,
+        statusLabel: pageDataResult?.statusLabel || firecrawlExtracted.statusLabel,
+        
+        // USP: prefer page-data, merge bullets
+        uspHeadline: pageDataResult?.uspHeadline || firecrawlExtracted.uspHeadline,
+        uspBullets: (pageDataResult?.uspBullets?.length ?? 0) > 0 
+          ? pageDataResult!.uspBullets 
+          : firecrawlExtracted.uspBullets,
+        uspImageUrl: pageDataResult?.uspImageUrl || firecrawlExtracted.uspImageUrl,
+        
+        // Location: prefer page-data for structured distances
+        locationHeadline: pageDataResult?.locationHeadline || firecrawlExtracted.locationHeadline,
+        locationDescription: pageDataResult?.locationDescription || firecrawlExtracted.locationDescription,
+        locationDistances: (pageDataResult?.locationDistances?.length ?? 0) > 0 
+          ? pageDataResult!.locationDistances 
+          : firecrawlExtracted.locationDistances,
+        locationImageUrl: pageDataResult?.locationImageUrl || firecrawlExtracted.locationImageUrl,
+        
+        // Amenities: prefer page-data
+        amenities: (pageDataResult?.amenities?.length ?? 0) > 0 
+          ? pageDataResult!.amenities 
+          : firecrawlExtracted.amenities,
+        
+        // Floor plans: merge both sources
+        floorPlanTypes: (pageDataResult?.floorPlanTypes?.length ?? 0) > 0 
+          ? pageDataResult!.floorPlanTypes 
+          : firecrawlExtracted.floorPlanTypes,
+        
+        // FAQs: prefer page-data (structured)
+        faqs: (pageDataResult?.faqs?.length ?? 0) > 0 
+          ? pageDataResult!.faqs 
+          : firecrawlExtracted.faqs,
+        
+        // Payment: prefer page-data
+        paymentBreakdown: Object.keys(pageDataResult?.paymentBreakdown || {}).length > 0
+          ? pageDataResult!.paymentBreakdown
+          : firecrawlExtracted.paymentBreakdown,
+        
+        // Images: ALWAYS prefer Firecrawl (more comprehensive), fallback to page-data
+        images: firecrawlExtracted.images.length >= 2 
+          ? firecrawlExtracted.images 
+          : (pageDataResult?.images || firecrawlExtracted.images),
+      };
+
+      console.log(`[BatchExtract] Merged extraction for ${item.name}: ${extracted.faqs.length} FAQs, ${extracted.locationDistances.length} distances, ${extracted.amenities.length} amenities, ${extracted.images.length} images`);
+
+      // ============================================================
+      // PHASE 4: Discover and mirror PDFs
+      // ============================================================
+      // First try page-data PDFs, then fallback to pagedata.ts discovery
       const pageDataPdfs = slug
         ? await fetchProvidentPageDataPdfUrls({ baseUrl: PROVIDENT_BASE, slug })
         : { all: [], brochure: null, paymentPlan: null, floorPlans: [] as string[] };
 
-      // Mirror PDFs into our own public storage so brochure downloads always work.
-      const documentsPayload: Array<{ url: string; type: string; name?: string }> = [];
+      // Merge PDF URLs from page-data-detail if available
+      const brochureSource = pageDataResult?.brochureUrl || pageDataPdfs.brochure;
+      const paymentPlanSource = pageDataResult?.paymentPlanPdfUrl || pageDataPdfs.paymentPlan;
+      const floorPlanSources = [
+        ...(pageDataResult?.floorPlanPdfUrls || []),
+        ...pageDataPdfs.floorPlans,
+      ].filter((v, i, a) => a.indexOf(v) === i); // dedupe
 
+      const documentsPayload: Array<{ url: string; type: string; name?: string }> = [];
       const nameForFiles = extracted.name || item.name;
 
-      if (pageDataPdfs.brochure) {
+      if (brochureSource) {
         const mirrored = await mirrorRemotePdfToPublicStorage({
           supabase,
           bucket: PROJECT_FILES_BUCKET,
           slug,
           type: "brochure",
-          sourceUrl: pageDataPdfs.brochure,
+          sourceUrl: brochureSource,
           projectNameForFile: nameForFiles,
         });
-        if (mirrored) {
+        if (mirrored && mirrored.publicUrl) {
           documentsPayload.push({
             url: mirrored.publicUrl,
             type: "brochure",
@@ -218,16 +307,16 @@ serve(async (req) => {
         }
       }
 
-      if (pageDataPdfs.paymentPlan) {
+      if (paymentPlanSource) {
         const mirrored = await mirrorRemotePdfToPublicStorage({
           supabase,
           bucket: PROJECT_FILES_BUCKET,
           slug,
           type: "payment_plan",
-          sourceUrl: pageDataPdfs.paymentPlan,
+          sourceUrl: paymentPlanSource,
           projectNameForFile: nameForFiles,
         });
-        if (mirrored) {
+        if (mirrored && mirrored.publicUrl) {
           documentsPayload.push({
             url: mirrored.publicUrl,
             type: "payment_plan",
@@ -236,7 +325,7 @@ serve(async (req) => {
         }
       }
 
-      const floorPlanUrls = (pageDataPdfs.floorPlans || []).slice(0, 10);
+      const floorPlanUrls = floorPlanSources.slice(0, 10);
       for (let i = 0; i < floorPlanUrls.length; i++) {
         const fp = floorPlanUrls[i];
         const mirrored = await mirrorRemotePdfToPublicStorage({
@@ -248,7 +337,7 @@ serve(async (req) => {
           sourceUrl: fp,
           projectNameForFile: nameForFiles,
         });
-        if (mirrored) {
+        if (mirrored && mirrored.publicUrl) {
           documentsPayload.push({
             url: mirrored.publicUrl,
             type: "floor_plan",

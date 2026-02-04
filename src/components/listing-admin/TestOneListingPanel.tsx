@@ -681,6 +681,9 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                   <Card className="bg-white border-zinc-200">
                     <CardHeader className="py-2 px-3">
                       <CardTitle className="text-sm">Extraction Checklist (Provident Mirror Standard)</CardTitle>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Uses Gatsby page-data.json (free) + Firecrawl scraping for comprehensive extraction
+                      </p>
                     </CardHeader>
                     <CardContent className="py-2 px-3 space-y-1">
                       <div className="text-xs font-medium text-zinc-500 mb-2">Core Requirements (needed for approval)</div>
@@ -692,7 +695,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                       <ChecklistItem 
                         label="Brochure Document" 
                         passed={testResult.checklist.hasBrochure} 
-                        detail={testResult.checklist.hasBrochure ? "✓ Present" : "Missing"}
+                        detail={testResult.checklist.hasBrochure ? "✓ Mirrored to storage" : "Not found in page-data or Firecrawl"}
                       />
                       <ChecklistItem 
                         label="Description (>50 chars)" 
@@ -702,49 +705,54 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                       <ChecklistItem 
                         label="Developer Name" 
                         passed={testResult.checklist.hasDeveloper}
+                        detail={testResult.checklist.hasDeveloper ? testResult.project?.developer_name : "Unknown or missing"}
                       />
                       
-                      <div className="text-xs font-medium text-zinc-500 mt-3 mb-2">Provident Mirror Fields</div>
+                      <div className="text-xs font-medium text-zinc-500 mt-3 mb-2">Extended Fields (from page-data.json + Firecrawl)</div>
                       <ChecklistItem 
                         label="USP Bullets (2+ recommended)" 
                         passed={testResult.checklist.hasUsps} 
-                        detail={`${testResult.checklist.uspCount} found`}
+                        detail={testResult.checklist.uspCount > 0 ? `${testResult.checklist.uspCount} found` : "Not in page-data or markdown"}
                       />
                       <ChecklistItem 
                         label="Amenities (3+ recommended)" 
                         passed={testResult.checklist.hasAmenities} 
-                        detail={`${testResult.checklist.amenityCount} found`}
+                        detail={testResult.checklist.amenityCount > 0 ? `${testResult.checklist.amenityCount} found` : "Not in page-data or markdown"}
                       />
                       <ChecklistItem 
                         label="FAQs" 
                         passed={testResult.checklist.hasFaqs} 
-                        detail={`${testResult.checklist.faqCount} found`}
+                        detail={testResult.checklist.faqCount > 0 ? `${testResult.checklist.faqCount} found` : "Not in Useful Information section"}
                       />
                       <ChecklistItem 
                         label="Location Distances" 
                         passed={testResult.checklist.hasDistances} 
-                        detail={`${testResult.checklist.distanceCount} found`}
+                        detail={testResult.checklist.distanceCount > 0 ? `${testResult.checklist.distanceCount} found` : "Not in Location section"}
                       />
                       <ChecklistItem 
                         label="Payment Breakdown" 
                         passed={testResult.checklist.hasPaymentBreakdown}
+                        detail={testResult.checklist.hasPaymentBreakdown ? "✓ Parsed" : "Not found in Payment Plans section"}
                       />
                       <ChecklistItem 
                         label="Floor Plans" 
                         passed={testResult.checklist.hasFloorPlans} 
-                        detail={`${testResult.checklist.floorPlanCount} found`}
+                        detail={testResult.checklist.floorPlanCount > 0 ? `${testResult.checklist.floorPlanCount} types` : "None found"}
                       />
                       <ChecklistItem 
                         label="Location" 
                         passed={testResult.checklist.hasLocation}
+                        detail={testResult.checklist.hasLocation ? testResult.project?.location : "Not extracted"}
                       />
                       <ChecklistItem 
                         label="Price" 
                         passed={testResult.checklist.hasPrice}
+                        detail={testResult.checklist.hasPrice ? testResult.project?.price_text : "Not found"}
                       />
                       <ChecklistItem 
                         label="Handover Date" 
                         passed={testResult.checklist.hasHandover}
+                        detail={testResult.checklist.hasHandover ? testResult.project?.handover_display : "Not extracted"}
                       />
                     </CardContent>
                   </Card>
