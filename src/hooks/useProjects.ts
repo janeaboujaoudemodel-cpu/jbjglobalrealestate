@@ -2,7 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
 
-export interface Project {
+// Re-export the unified type for backwards compatibility
+export type { UnifiedProject as Project } from "@/types/unifiedProject";
+import type { UnifiedProject } from "@/types/unifiedProject";
+
+// Legacy Project interface - keeping for backwards compatibility during transition
+export interface LegacyProject {
   id: string;
   name: string;
   slug: string;
@@ -39,11 +44,25 @@ export interface Project {
   is_featured: boolean | null;
   is_premium: boolean | null;
   is_sold_out: boolean | null;
-  property_type_label: string | null; // e.g. "Apartment, Sky-Villa"
-  status_label: string | null; // e.g. "Future Launch", "New Phase"
+  property_type_label: string | null;
+  status_label: string | null;
   created_at: string;
   updated_at: string;
   // Reelly-compatible fields
+  reelly_id?: number | null;
+  reelly_developer_id?: number | null;
+  construction_status?: string | null;
+  sale_status?: string | null;
+  short_description?: string | null;
+  building_count?: number | null;
+  area_name?: string | null;
+  sector?: string | null;
+  price_currency?: string | null;
+  area_unit?: string | null;
+  cover_image_url?: string | null;
+  is_published?: boolean | null;
+  source_updated_at?: string | null;
+  developer_name?: string | null;
   unit_types?: Json | null;
   construction_progress?: number | null;
   construction_start_date?: string | null;
@@ -58,6 +77,9 @@ export interface Project {
   rental_yield_estimate?: number | null;
   import_source?: string | null;
   external_id?: string | null;
+  source?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
   developer: {
     id: string;
     name: string;
@@ -178,7 +200,7 @@ export function useProjects() {
         .order("created_at", { ascending: false });
       
       if (error) throw error;
-      return data as Project[];
+      return data as UnifiedProject[];
     },
   });
 }
@@ -200,7 +222,7 @@ export function useProjectsByCommunity(communitySlug: string) {
         .order("created_at", { ascending: false });
       
       if (error) throw error;
-      return data as Project[];
+      return data as UnifiedProject[];
     },
     enabled: !!communitySlug,
   });
@@ -223,7 +245,7 @@ export function useProjectsByDeveloper(developerSlug: string) {
         .order("created_at", { ascending: false });
       
       if (error) throw error;
-      return data as Project[];
+      return data as UnifiedProject[];
     },
     enabled: !!developerSlug,
   });
@@ -246,7 +268,7 @@ export function useProject(projectSlug: string) {
         .maybeSingle();
       
       if (error) throw error;
-      return data as Project | null;
+      return data as UnifiedProject | null;
     },
     enabled: !!projectSlug,
   });
