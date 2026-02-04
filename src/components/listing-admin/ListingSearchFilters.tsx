@@ -44,6 +44,16 @@ const EMIRATES = [
   { value: "Thailand", label: "Thailand" },
 ];
 
+// Sale status options from Reelly API
+const SALE_STATUSES = [
+  { value: "all", label: "All Sale Statuses" },
+  { value: "Announced", label: "Announced" },
+  { value: "On Sale", label: "On Sale" },
+  { value: "Out of Stock", label: "Out of Stock" },
+  { value: "Presale (EOI)", label: "Presale (EOI)" },
+  { value: "Start of Sales", label: "Start of Sales" },
+];
+
 const ListingSearchFilters = ({
   developers,
   onSearchChange,

@@ -86,6 +86,16 @@ const PROPERTY_STATUS = [
   { value: "off-plan", label: "Off-Plan" },
 ];
 
+// Sale status options from Reelly API
+const SALE_STATUS_OPTIONS = [
+  { value: "all", label: "All Sale Statuses" },
+  { value: "Announced", label: "Announced" },
+  { value: "On Sale", label: "On Sale" },
+  { value: "Out of Stock", label: "Out of Stock" },
+  { value: "Presale (EOI)", label: "Presale (EOI)" },
+  { value: "Start of Sales", label: "Start of Sales" },
+];
+
 // UAE Emirates + International priority countries
 const UAE_EMIRATES = [
   { value: "all", label: "All Locations" },
@@ -383,6 +393,7 @@ const HeroSearchBar = () => {
   const [sizeRange, setSizeRange] = useState('any');
   const [propertyType, setPropertyType] = useState('all');
   const [propertyStatus, setPropertyStatus] = useState('all');
+  const [saleStatus, setSaleStatus] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
   const [developerId, setDeveloperId] = useState('all');
   const [communityId, setCommunityId] = useState('all');
@@ -424,6 +435,7 @@ const HeroSearchBar = () => {
     if (bedrooms !== 'any') params.set('beds', bedrooms);
     if (propertyType !== 'all') params.set('type', propertyType);
     if (propertyStatus !== 'all') params.set('status', propertyStatus);
+    if (saleStatus !== 'all') params.set('saleStatus', saleStatus);
     if (sortBy !== 'newest') params.set('sort', sortBy);
     if (developerId !== 'all') params.set('developer', developerId);
     if (communityId !== 'all') params.set('community', communityId);
@@ -727,7 +739,24 @@ const HeroSearchBar = () => {
                   </div>
                 </div>
 
-                {/* Row 2: Emirates Filter */}
+                {/* Row 2: Sale Status */}
+                <div>
+                  <label className="text-sm font-semibold text-black/80 mb-2 block">Sale Status</label>
+                  <Select value={saleStatus} onValueChange={setSaleStatus}>
+                    <SelectTrigger className="h-11 bg-white border-gold/30">
+                      <SelectValue placeholder="All Sale Statuses" />
+                    </SelectTrigger>
+                    <SelectContent className="z-[10000]">
+                      {SALE_STATUS_OPTIONS.map((item) => (
+                        <SelectItem key={item.value} value={item.value}>
+                          {item.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Row 3: Emirates Filter */}
                 <div>
                   <label className="text-sm font-semibold text-black/80 mb-2 block flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-gold" />
