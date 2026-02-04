@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { 
@@ -32,6 +33,15 @@ interface ApiSyncResult {
   done?: boolean;
 }
 
+type RecentPendingImport = {
+  id: string;
+  name: string;
+  slug: string | null;
+  status: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
 export function ReellyImportPanel() {
   // API Sync State
   const [isTestingApi, setIsTestingApi] = useState(false);
@@ -40,6 +50,10 @@ export function ReellyImportPanel() {
   const [syncResult, setSyncResult] = useState<ApiSyncResult | null>(null);
   const [totalProjects, setTotalProjects] = useState<number | null>(null);
   const [syncProgress, setSyncProgress] = useState<{ fetched: number; total: number } | null>(null);
+  const [syncStartedAt, setSyncStartedAt] = useState<string | null>(null);
+  const [recentImports, setRecentImports] = useState<RecentPendingImport[]>([]);
+  const [isRecentOpen, setIsRecentOpen] = useState(false);
+  const [isRecentLoading, setIsRecentLoading] = useState(false);
 
   // Test API Connection
   const handleTestApiConnection = async () => {
@@ -75,6 +89,9 @@ export function ReellyImportPanel() {
     setIsSyncing(true);
     setSyncResult(null);
     setSyncProgress(null);
+    const startedAt = new Date().toISOString();
+    setSyncStartedAt(startedAt);
+    setRecentImports([]);
 
     try {
       // IMPORTANT: Full sync can take several minutes; do it in small pages to avoid browser timeouts.
@@ -139,11 +156,28 @@ export function ReellyImportPanel() {
       } while (cursor);
 
       toast.success(fullSync ? "Full sync completed!" : (aggregated.message || "Sync completed!"));
+
+      // Fetch the actual projects processed in this run so the counters can be clickable.
+      setIsRecentLoading(true);
+      const { data: recent, error: recentErr } = await supabase
+        .from("pending_project_imports")
+        .select("id, name, slug, status, created_at, updated_at")
+        .ilike("source_url", "%reelly_%")
+        .gte("updated_at", startedAt)
+        .order("updated_at", { ascending: false })
+        .limit(200);
+
+      if (recentErr) {
+        console.error("Failed to fetch recent pending imports:", recentErr);
+      } else {
+        setRecentImports((recent || []) as RecentPendingImport[]);
+      }
     } catch (err: any) {
       console.error("Sync error:", err);
       toast.error(err.message || "Failed to sync projects");
       setSyncResult({ success: false, error: err.message });
     } finally {
+      setIsRecentLoading(false);
       setIsSyncing(false);
     }
   };
@@ -282,32 +316,71 @@ export function ReellyImportPanel() {
               {syncResult.success ? (
                 <>
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
-                    <div className="bg-zinc-100 rounded-lg p-3 text-center">
+                    <button
+                      type="button"
+                      className="bg-zinc-100 rounded-lg p-3 text-center hover:shadow-sm transition"
+                      onClick={() => setIsRecentOpen(true)}
+                    >
                       <p className="text-xl font-bold text-zinc-900">{syncResult.total_available?.toLocaleString() || '-'}</p>
                       <p className="text-xs text-zinc-500">Total Available</p>
-                    </div>
-                    <div className="bg-blue-50 rounded-lg p-3 text-center">
+                    </button>
+                    <button
+                      type="button"
+                      className="bg-blue-50 rounded-lg p-3 text-center hover:shadow-sm transition"
+                      onClick={() => setIsRecentOpen(true)}
+                    >
                       <p className="text-xl font-bold text-blue-600">{syncResult.total_fetched?.toLocaleString() || '-'}</p>
-                      <p className="text-xs text-zinc-500">Fetched</p>
-                    </div>
-                    <div className="bg-emerald-50 rounded-lg p-3 text-center">
+                      <p className="text-xs text-zinc-500">Fetched (this run)</p>
+                    </button>
+                    <button
+                      type="button"
+                      className="bg-emerald-50 rounded-lg p-3 text-center hover:shadow-sm transition"
+                      onClick={() => setIsRecentOpen(true)}
+                    >
                       <p className="text-xl font-bold text-emerald-600">{syncResult.inserted || 0}</p>
                       <p className="text-xs text-zinc-500">New</p>
-                    </div>
-                    <div className="bg-amber-50 rounded-lg p-3 text-center">
+                    </button>
+                    <button
+                      type="button"
+                      className="bg-amber-50 rounded-lg p-3 text-center hover:shadow-sm transition"
+                      onClick={() => setIsRecentOpen(true)}
+                    >
                       <p className="text-xl font-bold text-amber-600">{syncResult.updated || 0}</p>
                       <p className="text-xs text-zinc-500">Updated</p>
-                    </div>
-                    <div className="bg-zinc-100 rounded-lg p-3 text-center">
+                    </button>
+                    <button
+                      type="button"
+                      className="bg-zinc-100 rounded-lg p-3 text-center hover:shadow-sm transition"
+                      onClick={() => setIsRecentOpen(true)}
+                    >
                       <p className="text-xl font-bold text-zinc-500">{syncResult.skipped || 0}</p>
                       <p className="text-xs text-zinc-500">Skipped</p>
-                    </div>
+                    </button>
                   </div>
                   
                   <Alert className="border-emerald-300 bg-emerald-50">
                     <CheckCircle className="h-4 w-4 text-emerald-600" />
                     <AlertDescription className="text-emerald-700">
                       {syncResult.message}
+                    </AlertDescription>
+                  </Alert>
+
+                  <Alert className="mt-3 border-blue-300 bg-blue-50">
+                    <Info className="h-4 w-4 text-blue-600" />
+                    <AlertTitle className="text-blue-900">Nothing is auto-approved</AlertTitle>
+                    <AlertDescription className="text-blue-700">
+                      <div>
+                        <div>
+                          <strong>New = 0</strong> just means these Reelly projects were already in your pending queue from a previous sync.
+                          They’re still <strong>Pending</strong> and require your approval.
+                        </div>
+                        <Link
+                          to="/listing-admin?view=sync&syncTab=approvals"
+                          className="inline-block mt-2 font-semibold underline hover:no-underline"
+                        >
+                          Open Approval Queue →
+                        </Link>
+                      </div>
                     </AlertDescription>
                   </Alert>
 
@@ -335,25 +408,59 @@ export function ReellyImportPanel() {
             </div>
           )}
 
-          {/* Quick Link to Approval Queue */}
-          {syncResult?.success && (syncResult.inserted || 0) > 0 && (
-            <Alert className="border-blue-300 bg-blue-50">
-              <Info className="h-4 w-4 text-blue-600" />
-              <AlertTitle className="text-blue-900">Projects Ready for Review</AlertTitle>
-              <AlertDescription className="text-blue-700">
-                {syncResult.inserted} new projects have been added to the pending imports queue.
-                <Link 
-                  to="/listing-admin" 
-                  onClick={() => {
-                    // This will navigate to sync tab which has approval queue
-                  }}
-                  className="ml-2 font-semibold underline hover:no-underline"
-                >
-                  Go to Approval Queue →
-                </Link>
-              </AlertDescription>
-            </Alert>
-          )}
+          {/* Sync-run details modal */}
+          <Dialog open={isRecentOpen} onOpenChange={setIsRecentOpen}>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>Reelly projects processed in this sync</DialogTitle>
+              </DialogHeader>
+
+              <div className="text-sm text-zinc-600">
+                {isRecentLoading ? (
+                  <div className="flex items-center gap-2">
+                    <RefreshCw className="h-4 w-4 animate-spin" />
+                    Loading…
+                  </div>
+                ) : recentImports.length === 0 ? (
+                  <div>
+                    No items found for this run.
+                    {syncStartedAt ? (
+                      <div className="text-xs text-zinc-500 mt-1">Looking for updates since {new Date(syncStartedAt).toLocaleString()}</div>
+                    ) : null}
+                  </div>
+                ) : (
+                  <div className="space-y-2 max-h-[420px] overflow-y-auto pr-2">
+                    {recentImports.map((p) => {
+                      const isNew = syncStartedAt
+                        ? new Date(p.created_at).getTime() >= new Date(syncStartedAt).getTime()
+                        : false;
+                      return (
+                        <div key={p.id} className="flex items-center justify-between gap-3 border rounded-lg p-2">
+                          <div className="min-w-0">
+                            <div className="font-medium text-zinc-900 truncate">{p.name}</div>
+                            <div className="text-xs text-zinc-500 truncate">{p.slug}</div>
+                          </div>
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            <Badge variant={isNew ? "default" : "secondary"}>{isNew ? "New" : "Updated"}</Badge>
+                            <Badge variant="outline">{p.status || "pending"}</Badge>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                <div className="mt-4 flex items-center justify-between gap-3">
+                  <Button variant="outline" onClick={() => setIsRecentOpen(false)}>
+                    Close
+                  </Button>
+                  <Link to="/listing-admin?view=sync&syncTab=approvals" className="font-semibold underline hover:no-underline">
+                    Open Approval Queue →
+                  </Link>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </CardContent>
       </Card>
 

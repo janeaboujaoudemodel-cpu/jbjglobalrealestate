@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useListingAdmin } from "@/hooks/useListingAdmin";
@@ -62,6 +62,7 @@ interface ProjectDocument {
 
 const ListingAdmin = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, signOut, isAdmin } = useAuth();
   const { t } = useLanguage();
   const { isListingAdmin, adminData, isLoading: checkingAdmin } = useListingAdmin();
@@ -81,6 +82,21 @@ const ListingAdmin = () => {
   
   // View state - 'chat', 'projects', or 'editor'
   const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor' | 'data-sources' | 'sync' | 'reelly'>('sync');
+
+  // Allow deep-links like /listing-admin?view=sync&syncTab=approvals
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const view = params.get("view");
+    const allowed = new Set(["chat", "projects", "editor", "data-sources", "sync", "reelly"]);
+    if (view && allowed.has(view) && view !== activeView) {
+      setActiveView(view as any);
+      // Reset sub-modes when switching views via URL
+      setIsEditing(false);
+      setIsCreating(false);
+      setShowChat(view === "chat");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search]);
 
   // Document upload state
   const [projectDocuments, setProjectDocuments] = useState<ProjectDocument[]>([]);
