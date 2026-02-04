@@ -23,6 +23,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Footer from "@/components/Footer";
+import InvestorDocumentVault from "@/components/investor/InvestorDocumentVault";
+import CTABand from "@/components/home/CTABand";
 import {
   LayoutDashboard,
   Building2,
@@ -277,7 +279,7 @@ export default function InvestorDashboard() {
         >
           {/* SECTION 1: Dashboard Header */}
           <motion.div variants={fadeInUp}>
-            <Card className="bg-gradient-to-br from-zinc-900/95 via-zinc-900/90 to-black border border-gold/20">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
               <CardContent className="p-6 md:p-8">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                   <div className="flex flex-col md:flex-row items-center gap-6">
@@ -288,10 +290,10 @@ export default function InvestorDashboard() {
                       </AvatarFallback>
                     </Avatar>
                     <div className="text-center md:text-left">
-                      <h1 className="text-2xl md:text-3xl font-semibold text-white mb-1">
+                      <h1 className="text-2xl md:text-3xl font-semibold text-foreground mb-1">
                         Investor Dashboard
                       </h1>
-                      <p className="text-zinc-400 text-sm mb-3">
+                      <p className="text-muted-foreground text-sm mb-3">
                         Overview of your investments, activity, and reports
                       </p>
                       <div className="flex items-center gap-2">
@@ -299,7 +301,7 @@ export default function InvestorDashboard() {
                           <User className="w-3 h-3 mr-1" />
                           Investor Account
                         </Badge>
-                        <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30">
+                        <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30">
                           <Shield className="w-3 h-3 mr-1" />
                           Verified
                         </Badge>
@@ -339,7 +341,7 @@ export default function InvestorDashboard() {
           {/* SECTION 2: Quick Stats Row (KPI Cards) */}
           <motion.div variants={fadeInUp}>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Card className="border-2 border-gold/30">
+              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
                 <CardContent className="p-5">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center">
@@ -353,7 +355,7 @@ export default function InvestorDashboard() {
                 </CardContent>
               </Card>
 
-              <Card className="border-2 border-gold/30">
+              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
                 <CardContent className="p-5">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center">
@@ -367,7 +369,7 @@ export default function InvestorDashboard() {
                 </CardContent>
               </Card>
 
-              <Card className="border-2 border-gold/30">
+              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
                 <CardContent className="p-5">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center">
@@ -381,7 +383,7 @@ export default function InvestorDashboard() {
                 </CardContent>
               </Card>
 
-              <Card className="border-2 border-gold/30">
+              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
                 <CardContent className="p-5">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center">
@@ -404,10 +406,10 @@ export default function InvestorDashboard() {
               My Portfolio
             </h3>
             {linkedProperties.length === 0 ? (
-              <Card className="border-2 border-gold/30">
+              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
                 <CardContent className="p-8 text-center">
                   <Building2 className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground mb-2">No properties linked yet</p>
+                  <p className="text-foreground font-medium mb-2">No properties linked yet</p>
                   <p className="text-sm text-muted-foreground mb-4">
                     Browse our properties and add them to your portfolio
                   </p>
@@ -421,7 +423,7 @@ export default function InvestorDashboard() {
             ) : (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {linkedProperties.map((property) => (
-                  <Card key={property.id} className="border-2 border-gold/30 overflow-hidden group hover:border-gold transition-colors">
+                  <Card key={property.id} className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] overflow-hidden group hover:border-gold transition-colors">
                     <div className="aspect-video relative overflow-hidden bg-zinc-100">
                       {property.image_url ? (
                         <img 
@@ -470,7 +472,7 @@ export default function InvestorDashboard() {
             </h3>
             <div className="grid md:grid-cols-3 gap-4">
               {insights.map((insight, index) => (
-                <Card key={index} className="border-2 border-gold/30">
+                <Card key={index} className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
                   <CardContent className="p-5">
                     <div className="flex items-start justify-between mb-3">
                       <h4 className="font-semibold text-foreground">{insight.area}</h4>
@@ -504,7 +506,7 @@ export default function InvestorDashboard() {
               <FileText className="w-5 h-5 text-gold" />
               My Reports
             </h3>
-            <Card className="border-2 border-gold/30">
+            <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
               {reports.length === 0 ? (
                 <CardContent className="p-8 text-center">
                   <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
@@ -551,37 +553,46 @@ export default function InvestorDashboard() {
             </Card>
           </motion.div>
 
-          {/* SECTION 6: Document Center */}
+          {/* SECTION 6: My Documents (Upload & Sync) */}
           <motion.div variants={fadeInUp}>
             <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
               <FolderOpen className="w-5 h-5 text-gold" />
-              Documents
+              My Documents
             </h3>
-            <Card className="border-2 border-gold/30">
+            <InvestorDocumentVault userId={user?.id || ""} />
+          </motion.div>
+
+          {/* SECTION 7: Property Documents */}
+          <motion.div variants={fadeInUp}>
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <FileText className="w-5 h-5 text-gold" />
+              Property Documents
+            </h3>
+            <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
               {documents.length === 0 ? (
                 <CardContent className="p-8 text-center">
-                  <FolderOpen className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground mb-2">No documents available</p>
+                  <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-foreground font-medium mb-2">No property documents yet</p>
                   <p className="text-sm text-muted-foreground">
-                    Secure documents will appear here when uploaded by your advisor.
+                    Documents related to your properties will appear here.
                   </p>
                 </CardContent>
               ) : (
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Document Name</TableHead>
-                      <TableHead>Related Property</TableHead>
-                      <TableHead>Upload Date</TableHead>
-                      <TableHead className="text-right">Action</TableHead>
+                      <TableHead className="text-foreground">Document Name</TableHead>
+                      <TableHead className="text-foreground">Related Property</TableHead>
+                      <TableHead className="text-foreground">Upload Date</TableHead>
+                      <TableHead className="text-right text-foreground">Action</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {documents.map((doc) => (
                       <TableRow key={doc.id}>
-                        <TableCell className="font-medium">{doc.name}</TableCell>
-                        <TableCell>{doc.property_name || '—'}</TableCell>
-                        <TableCell>{format(new Date(doc.uploaded_at), 'MMM d, yyyy')}</TableCell>
+                        <TableCell className="font-medium text-foreground">{doc.name}</TableCell>
+                        <TableCell className="text-foreground">{doc.property_name || '—'}</TableCell>
+                        <TableCell className="text-foreground">{format(new Date(doc.uploaded_at), 'MMM d, yyyy')}</TableCell>
                         <TableCell className="text-right">
                           <Button variant="secondary" size="sm">
                             <Eye className="w-4 h-4 mr-1" />
@@ -606,11 +617,11 @@ export default function InvestorDashboard() {
               <Bell className="w-5 h-5 text-gold" />
               Recent Activity
             </h3>
-            <Card className="border-2 border-gold/30">
+            <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
               {activities.length === 0 ? (
                 <CardContent className="p-8 text-center">
                   <Bell className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">No recent activity</p>
+                  <p className="text-foreground font-medium">No recent activity</p>
                   <p className="text-sm text-muted-foreground mt-1">
                     Status updates, admin actions, and notifications will appear here.
                   </p>
@@ -648,7 +659,7 @@ export default function InvestorDashboard() {
             </h3>
             <div className="grid md:grid-cols-3 gap-4">
               <Link to="/my-account">
-                <Card className="border-2 border-gold/30 hover:border-gold transition-colors cursor-pointer group">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-gold transition-colors cursor-pointer group">
                   <CardContent className="p-5 flex items-center gap-4">
                     <div className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center group-hover:bg-gold/20 transition-colors">
                       <User className="w-5 h-5 text-gold" />
@@ -662,7 +673,7 @@ export default function InvestorDashboard() {
               </Link>
 
               <Link to="/settings/notifications">
-                <Card className="border-2 border-gold/30 hover:border-gold transition-colors cursor-pointer group">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-gold transition-colors cursor-pointer group">
                   <CardContent className="p-5 flex items-center gap-4">
                     <div className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center group-hover:bg-gold/20 transition-colors">
                       <Bell className="w-5 h-5 text-gold" />
@@ -676,7 +687,7 @@ export default function InvestorDashboard() {
               </Link>
 
               <Link to="/settings/security">
-                <Card className="border-2 border-gold/30 hover:border-gold transition-colors cursor-pointer group">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-gold transition-colors cursor-pointer group">
                   <CardContent className="p-5 flex items-center gap-4">
                     <div className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center group-hover:bg-gold/20 transition-colors">
                       <Shield className="w-5 h-5 text-gold" />

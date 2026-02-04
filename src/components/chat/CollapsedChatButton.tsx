@@ -22,12 +22,7 @@ const CollapsedChatButton = ({ onToggle, onMinimize, showAttentionPulse = false 
     <div className={`fixed bottom-6 ${isRTL ? 'left-4' : 'right-4'} z-[10050]`}>
       {/* Main button - On mobile and desktop, show medium box with pulse on first daily load */}
       <div className="relative">
-        {showAttentionPulse && (
-          <>
-            <span className="absolute inset-0 rounded-xl bg-gold/30 animate-ping pointer-events-none" />
-            <span className="absolute inset-0 rounded-xl bg-gold/20 animate-pulse pointer-events-none" />
-          </>
-        )}
+        {/* Removed gold attention pulse - cleaner UI */}
 
         {/* Show medium box with attention pulse (first daily load) on ALL devices */}
         {showAttentionPulse ? (

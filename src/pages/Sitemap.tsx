@@ -9,6 +9,8 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import sitemapHeroVideo from "@/assets/videos/sitemap-hero.mp4";
+import CTABand from "@/components/home/CTABand";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
@@ -204,6 +206,21 @@ const hubSections: HubSection[] = [
       { href: "/ai-calendar", label: "Calendar & Notes" },
     ],
   },
+  {
+    id: "careers",
+    title: "Careers",
+    icon: Briefcase,
+    links: [
+      { href: "/join", label: "Join Our Team" },
+      { href: "/join?type=broker", label: "Become a Broker" },
+      { href: "/join?type=agent", label: "Apply as Agent" },
+      { href: "/join?type=marketing", label: "Marketing Positions" },
+      { href: "/join?type=tech", label: "Technology Roles" },
+      { href: "/broker-toolkit", label: "Broker Resources" },
+      { href: "/broker-education", label: "Training Programs" },
+      { href: "/team", label: "Meet Our Team" },
+    ],
+  },
 ];
 
 // Legal & Support section
@@ -252,10 +269,10 @@ const HubCard = ({ hub, hideFounderLinks }: { hub: HubSection; hideFounderLinks?
               to={link.href}
               className="group flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-gold/10 transition-colors"
             >
-              <ArrowRight className="w-3.5 h-3.5 text-gold opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
-              <span className="text-zinc-700 group-hover:text-black text-sm transition-colors -ml-5 group-hover:ml-0">
+              <span className="text-zinc-700 group-hover:text-black text-sm transition-colors">
                 {link.label}
               </span>
+              <ArrowRight className="w-3.5 h-3.5 text-gold opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 ml-auto" />
             </Link>
           </li>
         ))}
@@ -294,19 +311,29 @@ const Sitemap = () => {
       <div className="min-h-screen bg-black">
         {/* HERO SECTION */}
         <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden" style={{ minHeight: '50vh' }}>
-          {/* Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(200,167,102,0.15),transparent_70%)]" />
+          {/* Video Background */}
+          <div className="absolute inset-0 z-0">
+            <video 
+              autoPlay 
+              loop 
+              muted 
+              playsInline 
+              className="absolute inset-0 w-full h-full object-cover"
+            >
+              <source src={sitemapHeroVideo} type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
+          </div>
           
           {/* Gold accent lines */}
           <motion.div 
-            className="absolute left-0 top-1/3 w-48 md:w-96 h-px bg-gradient-to-r from-gold/60 to-transparent"
+            className="absolute left-0 top-1/3 w-48 md:w-96 h-px bg-gradient-to-r from-gold/60 to-transparent z-10"
             initial={{ x: -100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 1.5, delay: 0.3 }}
           />
           <motion.div 
-            className="absolute right-0 bottom-1/3 w-48 md:w-96 h-px bg-gradient-to-l from-gold/60 to-transparent"
+            className="absolute right-0 bottom-1/3 w-48 md:w-96 h-px bg-gradient-to-l from-gold/60 to-transparent z-10"
             initial={{ x: 100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 1.5, delay: 0.5 }}
@@ -472,36 +499,8 @@ const Sitemap = () => {
           </div>
         </section>
 
-        {/* CONTACT QUICK ACCESS */}
-        <section className="py-10 sm:py-12 bg-black border-t border-zinc-800">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-wrap justify-center gap-4">
-              <a
-                href={getCallUrl()}
-                className="flex items-center gap-2 px-5 py-3 bg-gold text-black font-semibold rounded-xl hover:bg-gold-dark transition-all"
-              >
-                <Phone className="w-5 h-5" />
-                <span>Call Now</span>
-              </a>
-              <a
-                href={getWhatsAppUrl()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-5 py-3 bg-[#25D366] text-white font-semibold rounded-xl hover:bg-[#1da851] transition-all"
-              >
-                <MessageCircle className="w-5 h-5" />
-                <span>WhatsApp</span>
-              </a>
-              <Link
-                to="/contact"
-                className="flex items-center gap-2 px-5 py-3 bg-transparent border-2 border-gold text-gold font-semibold rounded-xl hover:bg-gold/10 transition-all"
-              >
-                <Users className="w-5 h-5" />
-                <span>Contact Page</span>
-              </Link>
-            </div>
-          </div>
-        </section>
+        {/* READY TO GET STARTED - CTABand */}
+        <CTABand />
 
         {/* BACK TO TOP SECTION */}
         <section className="py-8 bg-black border-t border-zinc-800">

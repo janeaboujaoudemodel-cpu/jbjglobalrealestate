@@ -8860,6 +8860,51 @@ export type Database = {
         }
         Relationships: []
       }
+      investor_documents: {
+        Row: {
+          created_at: string
+          document_name: string
+          document_type: string
+          expiry_date: string | null
+          file_size: number | null
+          file_url: string
+          id: string
+          is_verified: boolean | null
+          mime_type: string | null
+          updated_at: string
+          user_id: string
+          verification_notes: string | null
+        }
+        Insert: {
+          created_at?: string
+          document_name: string
+          document_type: string
+          expiry_date?: string | null
+          file_size?: number | null
+          file_url: string
+          id?: string
+          is_verified?: boolean | null
+          mime_type?: string | null
+          updated_at?: string
+          user_id: string
+          verification_notes?: string | null
+        }
+        Update: {
+          created_at?: string
+          document_name?: string
+          document_type?: string
+          expiry_date?: string | null
+          file_size?: number | null
+          file_url?: string
+          id?: string
+          is_verified?: boolean | null
+          mime_type?: string | null
+          updated_at?: string
+          user_id?: string
+          verification_notes?: string | null
+        }
+        Relationships: []
+      }
       ip_blocklist: {
         Row: {
           block_count: number
