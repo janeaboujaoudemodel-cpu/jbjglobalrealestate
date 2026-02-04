@@ -163,7 +163,8 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                         <FormControl>
                           <Input 
                             placeholder="Your full name" 
-                            {...field} 
+                            {...field}
+                            className="bg-white border-gold/30 focus:border-gold text-black rounded-lg"
                           />
                         </FormControl>
                         <FormMessage />
@@ -182,6 +183,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                             type="email" 
                             placeholder="your@email.com" 
                             {...field}
+                            className="bg-white border-gold/30 focus:border-gold text-black rounded-lg"
                           />
                         </FormControl>
                         <FormMessage />
@@ -200,6 +202,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                             value={field.value}
                             onChange={field.onChange}
                             placeholder="Your phone number"
+                            className="bg-white border-gold/30 focus:border-gold rounded-lg [&_button]:rounded-l-lg [&_input]:rounded-r-lg"
                           />
                         </FormControl>
                         <FormMessage />
@@ -238,7 +241,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                         </FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="bg-white border-gold/30 focus:border-gold text-black rounded-lg">
                               <SelectValue placeholder="Select time slot" />
                             </SelectTrigger>
                           </FormControl>
@@ -266,7 +269,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                         </FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="bg-white border-gold/30 focus:border-gold text-black rounded-lg">
                               <SelectValue placeholder="How should we contact you?" />
                             </SelectTrigger>
                           </FormControl>
@@ -292,7 +295,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                           <Textarea 
                             placeholder="Tell us about your requirements..."
                             {...field}
-                            className="min-h-[80px]"
+                            className="min-h-[80px] bg-white border-gold/30 focus:border-gold text-black rounded-lg"
                           />
                         </FormControl>
                         <FormMessage />

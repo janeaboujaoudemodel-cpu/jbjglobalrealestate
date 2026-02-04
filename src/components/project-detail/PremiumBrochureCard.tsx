@@ -1,4 +1,5 @@
-import { Download, Lock } from "lucide-react";
+import * as React from "react";
+import { Download, Lock, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -22,9 +23,40 @@ const PremiumBrochureCard = ({
   onDownloadClick,
   isLocked = false,
 }: PremiumBrochureCardProps) => {
+  const [isDownloading, setIsDownloading] = React.useState(false);
+
+  // Fetch and download as blob to bypass ad-blocker blocking Supabase URLs
+  const handleBlobDownload = async () => {
+    if (!brochureUrl) {
+      onDownloadClick();
+      return;
+    }
+    
+    setIsDownloading(true);
+    try {
+      const response = await fetch(brochureUrl);
+      if (!response.ok) throw new Error('Download failed');
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${projectName.replace(/\s+/g, '-')}-Brochure.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.warn('Blob download failed, trying direct open:', error);
+      // Fallback to window.open
+      window.open(brochureUrl, '_blank');
+    } finally {
+      setIsDownloading(false);
+    }
+  };
   const handleClick = () => {
     if (!isLocked && brochureUrl) {
-      window.open(brochureUrl, "_blank");
+      handleBlobDownload();
     } else {
       onDownloadClick();
     }
@@ -187,6 +219,11 @@ const PremiumBrochureCard = ({
           <>
             <Lock className="w-5 h-5 text-foreground group-hover:text-gold group-hover:scale-110 transition-all" />
             <span className="group-hover:text-gold transition-colors">Unlock Brochure</span>
+          </>
+        ) : isDownloading ? (
+          <>
+            <Loader2 className="w-5 h-5 text-foreground animate-spin" />
+            <span>Downloading...</span>
           </>
         ) : (
           <>
