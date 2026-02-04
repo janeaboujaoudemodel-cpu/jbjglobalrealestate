@@ -39,12 +39,13 @@ interface ReellyDeveloper {
   }>;
 }
 
-interface ReellyDevelopersResponse {
+// Response can be an array directly or paginated object
+type ReellyDevelopersResponse = ReellyDeveloper[] | {
   count: number;
   next: string | null;
   previous: string | null;
   results: ReellyDeveloper[];
-}
+};
 
 function generateSlug(name: string): string {
   return name
@@ -118,8 +119,13 @@ Deno.serve(async (req) => {
       );
     }
 
-    const data: ReellyDevelopersResponse = await response.json();
-    console.log(`[ReellyDevSync] Fetched ${data.results.length} developers (total: ${data.count})`);
+    const rawData = await response.json();
+    
+    // Handle both array and paginated response formats
+    const developers: ReellyDeveloper[] = Array.isArray(rawData) ? rawData : rawData.results || [];
+    const totalCount = Array.isArray(rawData) ? rawData.length : rawData.count || developers.length;
+    
+    console.log(`[ReellyDevSync] Fetched ${developers.length} developers (total: ${totalCount})`);
 
     if (mode === "test") {
       // Just return stats for test mode
@@ -127,9 +133,9 @@ Deno.serve(async (req) => {
         JSON.stringify({
           success: true,
           mode: "test",
-          total_available: data.count,
-          sample_count: data.results.length,
-          sample_developers: data.results.slice(0, 5).map(d => ({
+          total_available: totalCount,
+          sample_count: developers.length,
+          sample_developers: developers.slice(0, 5).map(d => ({
             id: d.id,
             name: d.name,
             has_logo: !!d.logo?.url,
@@ -160,7 +166,7 @@ Deno.serve(async (req) => {
       (existingDevs || []).map(d => [d.name.toLowerCase().trim(), d])
     );
 
-    for (const dev of data.results) {
+    for (const dev of developers) {
       try {
         const mapped = mapReellyDeveloperToDb(dev);
         
@@ -224,8 +230,8 @@ Deno.serve(async (req) => {
       JSON.stringify({
         success: true,
         mode,
-        total_available: data.count,
-        processed: data.results.length,
+        total_available: totalCount,
+        processed: developers.length,
         inserted,
         updated,
         skipped,
