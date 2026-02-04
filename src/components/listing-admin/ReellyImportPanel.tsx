@@ -93,8 +93,8 @@ export function ReellyImportPanel() {
   const [emiratesList, setEmiratesList] = useState<string[]>([]);
 
   const goToApprovalQueue = () => {
-    // Force navigation even if already on similar URL
-    navigate("/listing-admin?view=sync&syncTab=approvals", { replace: true });
+    // Navigate to Reelly-filtered queue
+    navigate("/listing-admin?view=sync&syncTab=approvals&source=reelly", { replace: true });
     // Trigger a small delay then force refresh the URL params
     setTimeout(() => {
       window.dispatchEvent(new PopStateEvent('popstate'));
