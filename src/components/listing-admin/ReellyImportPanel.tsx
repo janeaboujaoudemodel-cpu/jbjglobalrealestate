@@ -39,6 +39,19 @@ type RecentPendingImport = {
   updated_at: string;
 };
 
+interface DevSyncResult {
+  success: boolean;
+  mode?: string;
+  total_available?: number;
+  processed?: number;
+  inserted?: number;
+  updated?: number;
+  skipped?: number;
+  errors?: number;
+  error_details?: string[];
+  error?: string;
+}
+
 export function ReellyImportPanel() {
   const navigate = useNavigate();
   const [isTestingApi, setIsTestingApi] = useState(false);
@@ -51,6 +64,11 @@ export function ReellyImportPanel() {
   const [recentImports, setRecentImports] = useState<RecentPendingImport[]>([]);
   const [isRecentOpen, setIsRecentOpen] = useState(false);
   const [isRecentLoading, setIsRecentLoading] = useState(false);
+  
+  // Developer sync state
+  const [isSyncingDevs, setIsSyncingDevs] = useState(false);
+  const [devSyncResult, setDevSyncResult] = useState<DevSyncResult | null>(null);
+  const [totalDevelopers, setTotalDevelopers] = useState<number | null>(null);
 
   const goToApprovalQueue = () => {
     // Force navigation even if already on similar URL
@@ -59,6 +77,40 @@ export function ReellyImportPanel() {
     setTimeout(() => {
       window.dispatchEvent(new PopStateEvent('popstate'));
     }, 50);
+  };
+
+  const handleSyncDevelopers = async (mode: "test" | "quick" | "full") => {
+    setIsSyncingDevs(true);
+    setDevSyncResult(null);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("reelly-developers-sync", {
+        body: { mode },
+      });
+
+      if (error) throw error;
+
+      if (data?.success) {
+        setDevSyncResult(data);
+        if (data.total_available) {
+          setTotalDevelopers(data.total_available);
+        }
+        if (mode === "test") {
+          toast.success(`Developer API connected! ${data.total_available} developers available`);
+        } else {
+          toast.success(`Synced ${data.inserted} new, ${data.updated} updated developers`);
+        }
+      } else {
+        setDevSyncResult({ success: false, error: data?.error });
+        toast.error(data?.error || "Developer sync failed");
+      }
+    } catch (err: any) {
+      console.error("Developer sync error:", err);
+      setDevSyncResult({ success: false, error: err.message });
+      toast.error(err.message || "Failed to sync developers");
+    } finally {
+      setIsSyncingDevs(false);
+    }
   };
 
   const handleTestApiConnection = async () => {
@@ -469,6 +521,109 @@ export function ReellyImportPanel() {
               </div>
             </DialogContent>
           </Dialog>
+        </CardContent>
+      </Card>
+
+      {/* Developer Sync Section */}
+      <Card className="bg-gradient-to-br from-purple-50 to-indigo-50 border-purple-200 shadow-lg">
+        <CardHeader>
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-purple-500">
+              <Database className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <CardTitle className="text-xl text-purple-900 flex items-center gap-2">
+                Developer Sync
+                {totalDevelopers && <CheckCircle className="h-5 w-5 text-purple-500" />}
+              </CardTitle>
+              <CardDescription className="text-purple-700">
+                Sync developer profiles from Reelly API
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <Button 
+              onClick={() => handleSyncDevelopers("test")} 
+              disabled={isSyncingDevs}
+              variant="outline"
+              className="border-purple-300 text-purple-700 hover:bg-purple-50"
+            >
+              {isSyncingDevs ? (
+                <>
+                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                  Testing...
+                </>
+              ) : (
+                <>
+                  <Zap className="h-4 w-4 mr-2" />
+                  Test Connection
+                </>
+              )}
+            </Button>
+            <Button 
+              onClick={() => handleSyncDevelopers("quick")} 
+              disabled={isSyncingDevs}
+              className="bg-purple-600 hover:bg-purple-700"
+            >
+              <Play className="h-4 w-4 mr-2" />
+              Quick Sync (50)
+            </Button>
+            <Button 
+              onClick={() => handleSyncDevelopers("full")} 
+              disabled={isSyncingDevs}
+              variant="outline"
+              className="border-purple-300 text-purple-700 hover:bg-purple-50"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Full Sync
+            </Button>
+          </div>
+
+          {totalDevelopers && (
+            <div className="p-3 bg-purple-100 rounded-lg">
+              <p className="text-purple-800 text-sm font-medium">
+                ✓ {totalDevelopers.toLocaleString()} developers available in Reelly API
+              </p>
+            </div>
+          )}
+
+          {devSyncResult && devSyncResult.success && devSyncResult.mode !== "test" && (
+            <div className="bg-white/80 rounded-xl p-4 border border-purple-200">
+              <h3 className="font-semibold text-zinc-900 mb-3">Developer Sync Results</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="bg-purple-50 rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-purple-900">{devSyncResult.processed || 0}</p>
+                  <p className="text-xs text-purple-600">Processed</p>
+                </div>
+                <div className="bg-emerald-50 rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-emerald-700">{devSyncResult.inserted || 0}</p>
+                  <p className="text-xs text-emerald-600">New</p>
+                </div>
+                <div className="bg-blue-50 rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-blue-700">{devSyncResult.updated || 0}</p>
+                  <p className="text-xs text-blue-600">Updated</p>
+                </div>
+                <div className="bg-zinc-50 rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-zinc-700">{devSyncResult.skipped || 0}</p>
+                  <p className="text-xs text-zinc-600">Skipped</p>
+                </div>
+              </div>
+              {devSyncResult.errors && devSyncResult.errors > 0 && (
+                <p className="text-sm text-red-600 mt-2">⚠ {devSyncResult.errors} errors occurred</p>
+              )}
+            </div>
+          )}
+
+          {devSyncResult && !devSyncResult.success && (
+            <Alert className="border-red-300 bg-red-50">
+              <XCircle className="h-4 w-4 text-red-600" />
+              <AlertDescription className="text-red-700">
+                {devSyncResult.error || "Developer sync failed"}
+              </AlertDescription>
+            </Alert>
+          )}
         </CardContent>
       </Card>
 
