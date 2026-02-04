@@ -2568,6 +2568,7 @@ export type Database = {
           email_verified: boolean | null
           full_name: string
           full_name_encrypted: string | null
+          honeypot_field: string | null
           id: string
           location: string | null
           nationality: string | null
@@ -2585,6 +2586,7 @@ export type Database = {
           email_verified?: boolean | null
           full_name: string
           full_name_encrypted?: string | null
+          honeypot_field?: string | null
           id?: string
           location?: string | null
           nationality?: string | null
@@ -2602,6 +2604,7 @@ export type Database = {
           email_verified?: boolean | null
           full_name?: string
           full_name_encrypted?: string | null
+          honeypot_field?: string | null
           id?: string
           location?: string | null
           nationality?: string | null
