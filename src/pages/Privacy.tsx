@@ -156,9 +156,9 @@ const Privacy = () => {
                   <strong>JBJ Global Real Estate</strong><br />
                   Real Estate Brokerage<br />
                   Downtown Dubai, United Arab Emirates<br />
-                  General Inquiries: <a href="mailto:Contact@JBJ.ae" className="text-gold hover:underline">Contact@JBJ.ae</a><br />
+                  General Inquiries: <a href="mailto:CONTACT@JBJ.AE" className="text-gold hover:underline">CONTACT@JBJ.AE</a><br />
                   Phone: <a href="tel:+971565911000" className="text-gold hover:underline">+971 56 591 1000</a><br />
-                  Data Protection: <a href="mailto:Privacy@JBJ.ae" className="text-gold hover:underline">Privacy@JBJ.ae</a>
+                  Data Protection: <a href="mailto:PRIVACY@JBJ.AE" className="text-gold hover:underline">PRIVACY@JBJ.AE</a>
                 </p>
                 <p className="mt-4 text-zinc-500 text-sm">
                   © {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.

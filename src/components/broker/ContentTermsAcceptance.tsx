@@ -120,7 +120,7 @@ export default function ContentTermsAcceptance({
                   <p className="text-zinc-500">
                     © {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
                     <br />
-                    For copyright inquiries: legal@jbj.ae
+                    For copyright inquiries: LEGAL@JBJ.AE
                   </p>
                 </div>
               </motion.div>

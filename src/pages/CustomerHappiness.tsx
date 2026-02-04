@@ -921,8 +921,8 @@ const CustomerHappiness = () => {
                   <CardContent className="p-6 text-center">
                     <Mail className="w-8 h-8 text-gold mx-auto mb-3" />
                     <p className="text-white font-medium mb-1">Email Us</p>
-                    <a href="mailto:Contact@JBJ.ae" className="text-zinc-400 hover:text-gold">
-                      Contact@JBJ.ae
+                    <a href="mailto:CONTACT@JBJ.AE" className="text-zinc-400 hover:text-gold">
+                      CONTACT@JBJ.AE
                     </a>
                   </CardContent>
                 </Card>
@@ -930,7 +930,7 @@ const CustomerHappiness = () => {
                   <CardContent className="p-6 text-center">
                     <Calendar className="w-8 h-8 text-gold mx-auto mb-3" />
                     <p className="text-white font-medium mb-1">Office Hours</p>
-                    <p className="text-zinc-400">Sun-Thu: 9AM-6PM</p>
+                    <p className="text-zinc-400">Mon–Sun: 9AM–9PM</p>
                   </CardContent>
                 </Card>
               </div>

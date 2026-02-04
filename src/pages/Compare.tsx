@@ -24,7 +24,7 @@ import { Badge } from "@/components/ui/badge";
 import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
 import { useActiveLead } from "@/contexts/ActiveLeadContext";
 
-const INQUIRY_FORM_URL = "https://JBJ.ae/contact";
+const INQUIRY_FORM_URL = "https://JBJ.AE/contact";
 const COMPARE_FREE_KEY = "jbj_compare_free_used";
 
 interface AIAnalysis {

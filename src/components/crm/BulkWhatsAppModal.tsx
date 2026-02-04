@@ -44,7 +44,7 @@ const BulkWhatsAppModal = ({ open, onClose, userId, preSelectedLeadIds }: BulkWh
 We're excited to share exclusive updates on the latest luxury properties in Dubai.
 
 Visit our website to explore:
-🔗 https://jbj.ae
+🔗 https://JBJ.AE
 
 Looking forward to assisting you!
 

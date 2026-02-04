@@ -289,9 +289,9 @@ const BrokerCircleSection = () => {
           
           {/* Contact Info */}
           <div className="mt-8 flex items-center justify-center gap-6 text-sm text-zinc-500">
-            <a href="mailto:Contact@JBJ.ae" className="flex items-center gap-2 hover:text-gold transition-colors">
+            <a href="mailto:CONTACT@JBJ.AE" className="flex items-center gap-2 hover:text-gold transition-colors">
               <Mail className="h-4 w-4" />
-              Contact@JBJ.ae
+              CONTACT@JBJ.AE
             </a>
             <a href="tel:+971565911000" className="flex items-center gap-2 hover:text-gold transition-colors">
               <Phone className="h-4 w-4" />

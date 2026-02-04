@@ -92,7 +92,7 @@ const MarketReport = () => {
   };
 
   const downloadBook = (existingWindow?: Window | null) => {
-    const websiteUrl = "https://JBJ.ae";
+    const websiteUrl = "https://JBJ.AE";
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(websiteUrl + "/quiz")}`;
     
     // Villa images for visual enhancement (removed banned placeholder photo-1512917774080-9991f1c4c750)

@@ -28,7 +28,7 @@ export const AMANDA_CORE_IDENTITY = {
   otherLanguages: 'Professional translation services for all other languages',
   location: 'London Office (Remote)',
   phone: '+44 20 7946 0958', // UK number for authenticity
-  email: 'amanda.clarke@jbj.ae',
+  email: 'AMANDA.CLARKE@JBJ.AE',
   workingHours: '08:00 - 20:00 GST (flexible for CEO needs)',
   
   // Personal backstory for realistic interactions

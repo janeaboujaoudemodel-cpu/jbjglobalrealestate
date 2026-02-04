@@ -206,7 +206,7 @@ Please contact me to discuss these options further.
 
 Best regards`);
 
-    window.location.href = `mailto:Contact@JBJ.ae?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:CONTACT@JBJ.AE?subject=${subject}&body=${body}`;
     setShareModalOpen(false);
     toast.success("Opening email client...");
   };

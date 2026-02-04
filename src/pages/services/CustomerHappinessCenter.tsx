@@ -217,7 +217,7 @@ const CustomerHappinessCenter = () => {
                 <div className="text-left">
                   <p className="text-sm text-zinc-600">Happiness Center Email</p>
                   <a 
-                    href="mailto:Happiness@JBJ.ae" 
+                    href="mailto:HAPPINESS@JBJ.AE" 
                     className="text-gold font-semibold text-lg hover:underline"
                   >
                     HAPPINESS@JBJ.AE
@@ -348,7 +348,7 @@ const CustomerHappinessCenter = () => {
                 <PremiumHeroButton href="#create-ticket">
                   Create Support Ticket
                 </PremiumHeroButton>
-                <PremiumHeroButton href="mailto:Happiness@JBJ.ae">
+                <PremiumHeroButton href="mailto:HAPPINESS@JBJ.AE">
                   Email Happiness Center
                 </PremiumHeroButton>
               </div>
