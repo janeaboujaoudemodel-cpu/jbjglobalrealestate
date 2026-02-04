@@ -154,54 +154,63 @@ export default function PaymentPlanVisualization({
         </div>
       )}
 
-      {/* Visual Progress Bar - 3 Color Premium */}
+      {/* Visual Timeline with Connecting Line - 3 Color Premium */}
       {total > 0 && (
         <div className="mb-8">
-          <div className="h-5 rounded-full bg-muted overflow-hidden flex shadow-inner">
+          {/* Progress Bar */}
+          <div className="h-6 rounded-full bg-muted overflow-hidden flex shadow-inner relative">
             {bookingPct > 0 && (
               <div 
-                className="h-full bg-emerald-500 transition-all relative group"
+                className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all relative group flex items-center justify-center"
                 style={{ width: `${(bookingPct / total) * 100}%` }}
               >
-                <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="text-[10px] font-bold text-white drop-shadow-sm">
                   {bookingPct}%
                 </span>
               </div>
             )}
             {constructionPct > 0 && (
               <div 
-                className="h-full bg-gold transition-all relative group"
+                className="h-full bg-gradient-to-r from-gold to-amber-400 transition-all relative group flex items-center justify-center"
                 style={{ width: `${(constructionPct / total) * 100}%` }}
               >
-                <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-black opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="text-[10px] font-bold text-black drop-shadow-sm">
                   {constructionPct}%
                 </span>
               </div>
             )}
             {handoverPct > 0 && (
               <div 
-                className="h-full bg-champagne-dark transition-all relative group border-l-2 border-black/20"
+                className="h-full bg-gradient-to-r from-champagne-dark to-champagne transition-all relative group flex items-center justify-center"
                 style={{ width: `${(handoverPct / total) * 100}%` }}
               >
-                <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-black opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="text-[10px] font-bold text-black drop-shadow-sm">
                   {handoverPct}%
                 </span>
               </div>
             )}
           </div>
-          <div className="flex justify-between mt-3 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
-              Booking
-            </span>
-            <span className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-gold" />
-              Construction
-            </span>
-            <span className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-champagne-dark" />
-              Handover {handoverDate && `(${handoverDate})`}
-            </span>
+          
+          {/* Timeline Dots with Connecting Line */}
+          <div className="relative mt-4">
+            {/* Connecting Line */}
+            <div className="absolute top-3 left-0 right-0 h-0.5 bg-gradient-to-r from-emerald-500 via-gold to-champagne-dark" />
+            
+            {/* Timeline Dots */}
+            <div className="flex justify-between relative">
+              <div className="flex flex-col items-center">
+                <div className="w-6 h-6 rounded-full bg-emerald-500 border-4 border-card shadow-lg z-10" />
+                <span className="mt-2 text-xs text-muted-foreground text-center">Booking</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="w-6 h-6 rounded-full bg-gold border-4 border-card shadow-lg z-10" />
+                <span className="mt-2 text-xs text-muted-foreground text-center">Construction</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="w-6 h-6 rounded-full bg-champagne-dark border-4 border-card shadow-lg z-10" />
+                <span className="mt-2 text-xs text-muted-foreground text-center">Handover{handoverDate && <br />}<span className="text-gold font-medium">{handoverDate}</span></span>
+              </div>
+            </div>
           </div>
         </div>
       )}

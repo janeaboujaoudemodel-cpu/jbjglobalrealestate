@@ -123,10 +123,12 @@ const ProjectDetail = () => {
         name: project.developer.name, 
         slug: project.developer.slug,
         // Additional developer fields for DeveloperInfoCard
-        logo_url: undefined, // Will be available when we add to hook
-        founded_year: undefined,
-        completed_projects: undefined,
-        offplan_projects: undefined,
+        logo_url: (project.developer as any).logo_url ?? null,
+        founded_year: (project.developer as any).founded_year ?? null,
+        completed_projects: (project.developer as any).completed_projects ?? null,
+        offplan_projects: (project.developer as any).offplan_projects ?? null,
+        description: (project.developer as any).description ?? null,
+        headquarters: (project.developer as any).headquarters ?? null,
       } : null,
       price_from: project.price_from,
       price_to: project.price_to,
