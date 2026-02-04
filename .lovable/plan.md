@@ -1,280 +1,311 @@
 
-# Comprehensive Fix Plan: Digital Card, Header, Sitemap, Footer & CTABand
+# Sitemap Enhancement Plan: AI Tools, Careers Card, CTABand, UI Fixes & Premium Video
 
 ## Overview
-This plan addresses all the issues raised: adding a second phone number to the digital business card, optimizing video loading, noindex enforcement, header hover stability, sitemap UI/layering, footer duplication, and CTABand consistency.
+This plan addresses multiple enhancements to the Sitemap page including adding missing AI tools, a new Careers card, standardized CTA sections, chat support arrow removal, proper navigation arrow placement, and a premium hero video.
 
 ---
 
-## Part 1: Digital Business Card (/card) Enhancements
+## Part 1: Add Missing AI Tools to Sitemap
 
-### 1.1 Add Second Phone Number with Separate Save Contacts
+### 1.1 Problem Analysis
 
-**Current State**: Single phone number `+971 56 591 1000` with one "Save to Contacts" button.
+The Sitemap's "AI & Professional Tools" section (id: "tools") currently lists only 10 tools:
+- AI Hub
+- AI Home Finder
+- Mortgage Calculator
+- Property Evaluator
+- Rental Index
+- AI Interior Design
+- Business Card Scanner
+- Documents & Spreadsheets
+- Video Meet
+- Calendar & Notes
 
-**Target State**: Two phone numbers displayed:
-- **Company**: +971 56 591 1000
-- **Personal**: +971 54 716 7107 (new)
+**Missing from `AI_TOOLS_CONFIG` (20 AI tools defined):**
+- Virtual Staging
+- Price Predictor
+- Neighborhood Insights
+- Lead Qualification
+- Follow-up Scheduler
+- Objection Handler
+- Market Report
+- Competitor Analysis
+- ROI Calculator
+- Meeting Summarizer
+- Translation Hub
+- Video Tour Script
+- Contract Reviewer
+- Document Generator
+- Property Analyzer
+- Client Matcher
+- Email Generator
+- Social Media Generator
+- Description Writer
+- Investment Report
 
-Each number will have its own "Save Contact" button beneath it.
+### 1.2 Solution
 
-**File**: `src/pages/DigitalCard.tsx`
+Update the "tools" hub section in `hubSections` array to include all AI tools from `AI_TOOLS_CONFIG`. Organize them logically:
 
-**Changes**:
-1. Add `phonePersonal` and `phonePersonalClean` to `CONTACT_INFO`
-2. Create two separate vCard generation functions:
-   - `generateCompanyVCard()` - Uses company phone, company social links
-   - `generatePersonalVCard()` - Uses personal phone, personal social links
-3. Replace single "Call" button section with two distinct contact cards:
-   ```text
-   ┌─────────────────────────────────┐
-   │ COMPANY                         │
-   │ +971 56 591 1000                │
-   │ [Call]  [WhatsApp]  [Save]      │
-   └─────────────────────────────────┘
-   ┌─────────────────────────────────┐
-   │ PERSONAL                        │
-   │ +971 54 716 7107                │
-   │ [Call]  [WhatsApp]  [Save]      │
-   └─────────────────────────────────┘
-   ```
-
-### 1.2 Replace YouTube Embed with Self-Hosted MP4
-
-**Problem**: YouTube embed loads slowly and shows recommendations at the end.
-
-**Solution**: Replace `<iframe>` with a native `<video>` element using a self-hosted MP4 file.
-
-**Changes**:
-1. Import video from assets: `import jbjIntroVideo from "@/assets/videos/jbj-company-intro.mp4";`
-2. Replace the YouTube iframe (lines 300-307) with:
-   ```tsx
-   <video
-     className="w-full h-full object-cover"
-     controls
-     poster={jbjMonogramPoster}
-     preload="metadata"
-     onEnded={(e) => {
-       // Freeze on last frame (poster-like end state)
-       e.currentTarget.currentTime = 0;
-       e.currentTarget.pause();
-     }}
-   >
-     <source src={jbjIntroVideo} type="video/mp4" />
-   </video>
-   ```
-3. Add loading="lazy" optimization and a poster image for instant visual
-4. On video end, pause and reset to frame 0 (frozen state) - no auto-replay, no recommendations
-
-### 1.3 Premium UI Polish
-- Ensure fast initial render by using `loading="lazy"` on heavy assets
-- Add subtle fade-in animations using existing framer-motion patterns
-- Keep page responsive and lightweight
-
-### 1.4 Noindex Enforcement (Search Engine Exclusion)
-
-**Current State**: Has runtime `noindex` meta tag injection in useEffect.
-
-**Additional Hardening**:
-1. **robots.txt** (public/robots.txt): Add explicit disallow:
-   ```
-   User-agent: *
-   Disallow: /card
-   ```
-2. **sitemap.xml** (public/sitemap.xml): Verify /card is NOT listed (already not present - good)
-3. **X-Robots-Tag Header** (public/_headers): Add header:
-   ```
-   /card
-     X-Robots-Tag: noindex, nofollow
-   ```
-4. Keep existing runtime meta tag as defense-in-depth
-
----
-
-## Part 2: Header Mega Menu Hover Stability
-
-### 2.1 Problem Analysis
-
-The mega menu disappears inconsistently when moving from the nav button to the dropdown panel. Root cause: there's a gap between the trigger button and the panel, and mouse events firing during the transition cause the menu to close.
-
-**Current Implementation** (GlobalHeader.tsx):
-- `handleMegaMenuEnter` clears timeout and sets active menu
-- `handleMegaMenuLeave` sets a 350ms timeout to close (unless pinned)
-- Panel has 8px `paddingTop` as a "bridge zone"
-
-**Issue**: The 8px bridge isn't always enough, especially with slower mouse movements or diagonal paths.
-
-### 2.2 Solution: Enhanced Bridge Zone + Pointer Events
-
-**File**: `src/components/GlobalHeader.tsx`
-
-**Changes**:
-1. Increase the bridge gap from 8px to 12px for more forgiving hover transitions
-2. Add `pointer-events: auto` explicitly on the bridge zone
-3. Create an invisible hover-catching layer that spans from the nav buttons to the panel top:
-   ```tsx
-   {/* Invisible bridge zone for stable hover transitions */}
-   <div 
-     className="absolute left-0 right-0 h-4 pointer-events-auto"
-     style={{ top: 'calc(100% - 4px)' }}
-     onMouseEnter={handleMegaMenuPanelEnter}
-   />
-   ```
-4. Increase the close timeout from 350ms to 450ms for smoother transitions
-5. Add `onPointerEnter`/`onPointerLeave` instead of just `onMouseEnter`/`onMouseLeave` for better touch+mouse hybrid device support
-
-### 2.3 Cursor Consistency
-
-Ensure all nav buttons show pointer cursor:
-```tsx
-className="... cursor-pointer ..."
+```typescript
+{
+  id: "tools",
+  title: "AI & Professional Tools",
+  icon: Sparkles,
+  links: [
+    // Hub Entry
+    { href: "/ai-hub", label: "AI Hub" },
+    
+    // Property Intelligence
+    { href: "/quiz", label: "AI Home Finder" },
+    { href: "/property-evaluator", label: "Property Evaluator" },
+    { href: "/mortgage-calculator", label: "Mortgage Calculator" },
+    { href: "/rental-index", label: "Rental Index" },
+    { href: "/interior-design-ai", label: "AI Interior Design" },
+    { href: "/ai-hub#virtual-staging", label: "AI Virtual Staging" },
+    { href: "/ai-hub#price-predictor", label: "AI Price Predictor" },
+    { href: "/ai-hub#neighborhood-insights", label: "AI Neighborhood Insights" },
+    { href: "/ai-hub#property-analyzer", label: "AI Property Analyzer" },
+    
+    // Lead & Sales
+    { href: "/ai-hub#lead-qualification", label: "AI Lead Qualification" },
+    { href: "/ai-hub#followup-scheduler", label: "AI Follow-up Scheduler" },
+    { href: "/ai-hub#objection-handler", label: "AI Objection Handler" },
+    { href: "/ai-hub#client-matcher", label: "AI Client Matcher" },
+    
+    // Analytics
+    { href: "/ai-hub#market-report", label: "AI Market Report" },
+    { href: "/ai-hub#competitor-analysis", label: "AI Competitor Analysis" },
+    { href: "/ai-hub#roi-calculator", label: "AI ROI Calculator" },
+    { href: "/ai-hub#investment-report", label: "AI Investment Report" },
+    
+    // Communication
+    { href: "/ai-hub#meeting-summarizer", label: "AI Meeting Summarizer" },
+    { href: "/ai-hub#translation-hub", label: "AI Translation Hub" },
+    { href: "/ai-hub#video-tour-script", label: "AI Video Tour Script" },
+    { href: "/ai-hub#email-generator", label: "AI Email Generator" },
+    { href: "/ai-hub#social-media", label: "AI Social Media" },
+    { href: "/ai-hub#description-writer", label: "AI Description Writer" },
+    
+    // Documents
+    { href: "/ai-hub#contract-reviewer", label: "AI Contract Reviewer" },
+    { href: "/ai-hub#document-generator", label: "AI Document Generator" },
+    
+    // Productivity Tools
+    { href: "/business-card-scanner", label: "Business Card Scanner" },
+    { href: "/documents", label: "Documents & Spreadsheets" },
+    { href: "/video-meeting", label: "Video Meet" },
+    { href: "/ai-calendar", label: "Calendar & Notes" },
+  ],
+},
 ```
 
 ---
 
-## Part 3: Sitemap Page UI Fix (3-Layer System)
+## Part 2: Add New "Careers" Hub Card
 
-### 3.1 Problem
+### 2.1 Current State
 
-Content cards sit directly on the black background instead of following the global 3-layer system:
-- Layer 1: Black background
-- Layer 2: Active champagne container (jj-layer-2)
-- Layer 3: Pearl inner cards (jj-card-inner)
+A "Careers" card already exists in `hubSections` (id: "careers") with these links:
+- Join Our Team
+- Become a Broker
+- Apply as Agent
+- Marketing Positions
+- Technology Roles
+- Broker Resources
+- Training Programs
+- Meet Our Team
 
-### 3.2 Solution
+### 2.2 Enhancement
+
+Add HR-focused messaging and CV submission emphasis. Update the links to highlight the CV submission process:
+
+```typescript
+{
+  id: "careers",
+  title: "Careers",
+  icon: Briefcase,
+  links: [
+    { href: "/join", label: "Submit Your CV" },  // Primary action
+    { href: "/join", label: "Join Our Team" },
+    { href: "/join?type=broker", label: "Become a Broker" },
+    { href: "/join?type=agent", label: "Apply as Agent" },
+    { href: "/join?type=marketing", label: "Marketing Positions" },
+    { href: "/join?type=tech", label: "Technology Roles" },
+    { href: "/join?type=admin", label: "Administrative Roles" },
+    { href: "/broker-toolkit", label: "Broker Resources" },
+    { href: "/broker-education", label: "Training Programs" },
+    { href: "/team", label: "Meet Our Team" },
+    { href: "/onboarding", label: "Onboarding Process" },
+  ],
+},
+```
+
+---
+
+## Part 3: Add Support Ticket, Consultation Form & Contact Sections
+
+### 3.1 Current State
+
+The page has:
+- Legal & Support section with basic links
+- CTABand component ("Ready to Get Started?")
+
+### 3.2 Enhancement
+
+Add a new "Support & Contact" section BEFORE CTABand with three premium cards:
+
+```text
+┌─────────────────────────────────────────────────────────────────┐
+│                     SUPPORT & CONTACT                           │
+├─────────────────┬───────────────────┬───────────────────────────┤
+│ SUPPORT TICKET  │ FREE CONSULTATION │ CONTACT US               │
+│ [Headphones]    │ [Calendar]        │ [Phone]                   │
+│ Get help with   │ Book a free call  │ Reach our team           │
+│ any questions   │ with our experts  │ directly                 │
+│ [Submit Ticket] │ [Book Now]        │ [Contact]                │
+└─────────────────┴───────────────────┴───────────────────────────┘
+```
 
 **File**: `src/pages/Sitemap.tsx`
 
-**Changes to Main Directory Section** (lines 431-466):
+Add this new section between Legal & Support and CTABand:
 
 ```tsx
-{/* MAIN SITEMAP DIRECTORY - Following 3-Layer System */}
-<section className="py-12 sm:py-16 md:py-20 bg-black">
-  <div className="jj-layer-2">  {/* Layer 2: Active champagne wrapper */}
-    {/* Section Header */}
+{/* SUPPORT & CONTACT CARDS */}
+<section className="py-10 sm:py-12 bg-black">
+  <div className="jj-layer-2">
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="text-center mb-10"
+      className="text-center mb-8"
     >
-      <h2 className="text-black text-2xl sm:text-3xl font-bold mb-3">
-        Complete <span className="text-gold">Directory</span>
+      <h2 className="text-black text-xl sm:text-2xl font-bold mb-2">
+        Get <span className="text-gold">In Touch</span>
       </h2>
-      <p className="text-zinc-600 text-sm sm:text-base max-w-xl mx-auto">
-        All pages organized by category for easy navigation
-      </p>
+      <p className="text-zinc-600 text-sm">Choose your preferred way to connect with us</p>
     </motion.div>
 
-    {/* Hub Grid - Cards are already using champagne styling, just ensure proper border */}
-    <motion.div ...>
-      {hubSections.map((hub) => (
-        <HubCard key={hub.id} hub={hub} hideFounderLinks={!isFounderVisible} />
-      ))}
-    </motion.div>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 max-w-4xl mx-auto">
+      {/* Support Ticket */}
+      <Link to="/contact?type=support">
+        <motion.div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all text-center group">
+          <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+            <Headphones className="w-7 h-7 text-gold" />
+          </div>
+          <h3 className="text-black font-bold text-lg mb-2">Support Ticket</h3>
+          <p className="text-zinc-600 text-sm mb-4">Get help with any questions or issues</p>
+          <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm">
+            Submit Ticket <ArrowRight className="w-4 h-4" />
+          </span>
+        </motion.div>
+      </Link>
+
+      {/* Free Consultation */}
+      <Link to="/contact?type=consultation">
+        <motion.div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all text-center group">
+          <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+            <Calendar className="w-7 h-7 text-gold" />
+          </div>
+          <h3 className="text-black font-bold text-lg mb-2">Free Consultation</h3>
+          <p className="text-zinc-600 text-sm mb-4">Book a call with our expert advisors</p>
+          <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm">
+            Book Now <ArrowRight className="w-4 h-4" />
+          </span>
+        </motion.div>
+      </Link>
+
+      {/* Contact Us */}
+      <Link to="/contact">
+        <motion.div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all text-center group">
+          <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+            <Phone className="w-7 h-7 text-gold" />
+          </div>
+          <h3 className="text-black font-bold text-lg mb-2">Contact Us</h3>
+          <p className="text-zinc-600 text-sm mb-4">Reach our team directly via phone or email</p>
+          <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm">
+            Get in Touch <ArrowRight className="w-4 h-4" />
+          </span>
+        </motion.div>
+      </Link>
+    </div>
   </div>
 </section>
 ```
 
-**Changes to Legal Section** (lines 468-500):
-- Wrap in `jj-layer-2` container
-- Update link buttons to use champagne styling instead of zinc
+---
 
-**Changes to HubCard Component**:
-- Arrows should appear on the RIGHT side:
-  ```tsx
-  <span className="text-zinc-700 group-hover:text-black text-sm transition-colors flex-1">
+## Part 4: Remove Gold Arrow from Chat Support
+
+### 4.1 Current State
+
+The gold attention pulse arrow has ALREADY been removed from `CollapsedChatButton.tsx` (line 25 shows comment: "Removed gold attention pulse - cleaner UI").
+
+### 4.2 Verification
+
+No action needed - already implemented. The chat button now shows:
+- Medium box with pulse on first daily load
+- Small icon state otherwise
+- No gold arrow/pulse decoration
+
+---
+
+## Part 5: Move Navigation Arrows to Right Side
+
+### 5.1 Current State
+
+In `HubCard` component (line 275), the arrow is already positioned on the right with `ml-auto`:
+```tsx
+<ArrowRight className="... flex-shrink-0 ml-auto" />
+```
+
+### 5.2 Issue
+
+The flex layout may not be properly ensuring arrows appear consistently on the right. Need to verify the link structure uses proper flex alignment.
+
+### 5.3 Solution
+
+Update the link structure to ensure proper right-side arrow placement:
+
+```tsx
+<Link
+  to={link.href}
+  className="group flex items-center justify-between gap-2 py-1.5 px-2 rounded-lg hover:bg-gold/10 transition-colors"
+>
+  <span className="text-zinc-700 group-hover:text-black text-sm transition-colors">
     {link.label}
   </span>
   <ArrowRight className="w-3.5 h-3.5 text-gold opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
-  ```
-- Already positioned with `ml-auto` in current code - verify it renders on right
-
-**Button Fixes**:
-- Hero section buttons use `PremiumHeroButton` (already correct)
-- Quick links strip: ensure buttons use champagne gradient (already correct)
-- Back to top button: use primary variant styling
-
----
-
-## Part 4: Footer Fixes
-
-### 4.1 Remove Duplicate "Licensed by" Section
-
-**Problem**: The "Licensed by BUY ✦ SELL ✦ RENT ✦ REAL ESTATE In The UAE" text appears TWICE:
-1. Lines 186-216: Above the logo (first occurrence)
-2. Lines 360-392: Inside the newsletter card (second occurrence - DUPLICATE)
-
-**Solution**: Remove the FIRST occurrence (lines 181-221), keeping only the one inside the premium 3D card.
-
-**File**: `src/components/Footer.tsx`
-
-**Remove lines 180-221** (the section labeled "RESTRUCTURED: Licensed line ABOVE the logo"):
-```tsx
-// DELETE THIS ENTIRE BLOCK:
-{/* RESTRUCTURED: Licensed line ABOVE the logo - as per user request */}
-<div className="flex flex-col items-center ... mb-8 sm:mb-10">
-  ...Licensed Badge - ABOVE THE LOGO...
-</div>
+</Link>
 ```
 
-### 4.2 Reorder: Move "Stay in the Loop" Card ABOVE Monogram
-
-**Current Order**:
-1. Logo + Company Name
-2. Premium 3D Card (Licensed + Stay in the Loop + Newsletter + Socials)
-3. Navigation Grid
-4. Legal Section
-
-**New Order**:
-1. Premium 3D Card (Licensed + Stay in the Loop + Newsletter + Socials)
-2. Logo + Company Name
-3. Navigation Grid
-4. Legal Section
-
-**Implementation**: Move the `{/* ULTRA PREMIUM 3D Card */}` section (lines 287-441) to appear BEFORE the `{/* Logo + Company Name Section */}` (lines 223-285).
+Key changes:
+- Changed `gap-2` to `justify-between` for proper spacing
+- Arrow naturally falls to the right with no `ml-auto` needed
 
 ---
 
-## Part 5: CTABand - Use Approved Version
+## Part 6: Premium Hero Video for Sitemap
 
-### 5.1 Verify Current Implementation
+### 6.1 Current State
 
-**File**: `src/components/home/CTABand.tsx`
+The sitemap page uses `sitemap-hero.mp4` which may not be premium quality.
 
-**Current state** (already correct per memory):
-- Title: "Ready to Get Started?"
-- Subtitle: "Connect with our expert team."
-- Buttons: WhatsApp (green), Call Now (gold), Email (blue)
-- Below: Save Contact button
-- Below: Preferred Email box
+### 6.2 Solution
 
-This matches the approved specification in `memory/style/components/global-cta-get-started-v1`.
+Generate a new premium cinematic video for the sitemap hero:
+- 8-10 second seamless loop
+- Ultra-HD Dubai skyline establishing shot
+- Features: Burj Khalifa, Downtown Dubai, Marina
+- Slow cinematic pan or aerial movement
+- Golden hour or twilight lighting
+- No audio (will be muted anyway)
 
-### 5.2 Ensure Consistent Usage
+The video should convey "comprehensive platform overview" - showing the breadth of Dubai real estate that JBJ covers.
 
-Verify that pages using CTABand import and use it correctly:
-- `src/pages/Index.tsx` - ✓ Uses `<CTABand />`
-- `src/pages/Sitemap.tsx` - ✓ Uses `<CTABand />`
-- `src/pages/InvestorDashboard.tsx` - ✓ Uses `<CTABand />`
-
-No changes needed if already using the correct component.
-
----
-
-## Part 6: Sitemap Hero Video
-
-**Current State**: Uses `sitemap-hero.mp4` video.
-
-**Enhancement**: Ensure video is premium Dubai skyline footage matching the institutional brand. If the current video needs replacement, generate a new one with:
-- Downtown Dubai / Burj Khalifa establishing shot
-- Smooth cinematic panning
-- 4-8 second loop
-- No audio required
-
-**File**: `src/pages/Sitemap.tsx` - Already imports `sitemapHeroVideo`
-
-If video quality is acceptable, no change needed. Otherwise, generate and replace.
+**File**: `src/assets/videos/sitemap-hero.mp4` (replace existing)
 
 ---
 
@@ -282,93 +313,108 @@ If video quality is acceptable, no change needed. Otherwise, generate and replac
 
 | File | Changes |
 |------|---------|
-| `src/pages/DigitalCard.tsx` | Add second phone number with separate vCards, replace YouTube with MP4, freeze video on end |
-| `src/components/GlobalHeader.tsx` | Enhance hover bridge zone, increase timeout, add cursor-pointer |
-| `src/pages/Sitemap.tsx` | Wrap sections in jj-layer-2, fix text colors, ensure arrows on right |
-| `src/components/Footer.tsx` | Remove duplicate licensed section, reorder to put Stay in Loop card above logo |
-| `public/robots.txt` | Add `Disallow: /card` rule |
-| `public/_headers` | Add X-Robots-Tag header for /card |
+| `src/pages/Sitemap.tsx` | Add all AI tools to tools hub, enhance Careers links, add Support & Contact section with 3 cards, fix arrow positioning |
+| `src/assets/videos/sitemap-hero.mp4` | Replace with premium Dubai cinematic video |
 
 ---
 
-## Technical Details
+## Technical Implementation Details
 
-### Digital Card vCard Generation
+### Updated hubSections Array Structure
 
 ```typescript
-// Company vCard
-const generateCompanyVCard = (): string => {
-  return `BEGIN:VCARD
-VERSION:3.0
-FN:JBJ Global Real Estate
-ORG:JBJ Global Real Estate LLC
-TITLE:Premium Real Estate Brokerage
-TEL;TYPE=WORK,VOICE:+971 56 591 1000
-EMAIL;TYPE=WORK:Contact@JBJ.AE
-URL:https://jbj.ae
-ADR;TYPE=WORK:;;Dubai;;UAE;;
-END:VCARD`;
-};
-
-// Personal vCard  
-const generatePersonalVCard = (): string => {
-  return `BEGIN:VCARD
-VERSION:3.0
-FN:Jane Bou Jaoude
-N:Bou Jaoude;Jane;;;
-ORG:JBJ Global Real Estate LLC
-TITLE:Founder & CEO
-TEL;TYPE=CELL,VOICE:+971 54 716 7107
-EMAIL;TYPE=WORK:Contact@JBJ.AE
-URL:https://jbj.ae
-END:VCARD`;
-};
+const hubSections: HubSection[] = [
+  // ... existing sections (properties, services, guides, market-intelligence, investor-hub, broker-hub, company)
+  
+  {
+    id: "tools",
+    title: "AI & Professional Tools",
+    icon: Sparkles,
+    links: [
+      // Hub Entry
+      { href: "/ai-hub", label: "AI Hub" },
+      
+      // Property Intelligence (10 tools)
+      { href: "/quiz", label: "AI Home Finder" },
+      { href: "/property-evaluator", label: "Property Evaluator" },
+      { href: "/mortgage-calculator", label: "Mortgage Calculator" },
+      { href: "/rental-index", label: "Rental Index" },
+      { href: "/interior-design-ai", label: "AI Interior Design" },
+      { href: "/ai-hub#virtual-staging", label: "AI Virtual Staging" },
+      { href: "/ai-hub#price-predictor", label: "AI Price Predictor" },
+      { href: "/ai-hub#neighborhood-insights", label: "AI Neighborhood Insights" },
+      { href: "/ai-hub#property-analyzer", label: "AI Property Analyzer" },
+      
+      // Lead & Sales (4 tools)
+      { href: "/ai-hub#lead-qualification", label: "AI Lead Qualification" },
+      { href: "/ai-hub#followup-scheduler", label: "AI Follow-up Scheduler" },
+      { href: "/ai-hub#objection-handler", label: "AI Objection Handler" },
+      { href: "/ai-hub#client-matcher", label: "AI Client Matcher" },
+      
+      // Analytics (4 tools)
+      { href: "/ai-hub#market-report", label: "AI Market Report" },
+      { href: "/ai-hub#competitor-analysis", label: "AI Competitor Analysis" },
+      { href: "/ai-hub#roi-calculator", label: "AI ROI Calculator" },
+      { href: "/ai-hub#investment-report", label: "AI Investment Report" },
+      
+      // Communication (6 tools)
+      { href: "/ai-hub#meeting-summarizer", label: "AI Meeting Summarizer" },
+      { href: "/ai-hub#translation-hub", label: "AI Translation Hub" },
+      { href: "/ai-hub#video-tour-script", label: "AI Video Tour Script" },
+      { href: "/ai-hub#email-generator", label: "AI Email Generator" },
+      { href: "/ai-hub#social-media", label: "AI Social Media" },
+      { href: "/ai-hub#description-writer", label: "AI Description Writer" },
+      
+      // Documents (2 tools)
+      { href: "/ai-hub#contract-reviewer", label: "AI Contract Reviewer" },
+      { href: "/ai-hub#document-generator", label: "AI Document Generator" },
+      
+      // Productivity (4 tools)
+      { href: "/business-card-scanner", label: "Business Card Scanner" },
+      { href: "/documents", label: "Documents & Spreadsheets" },
+      { href: "/video-meeting", label: "Video Meet" },
+      { href: "/ai-calendar", label: "Calendar & Notes" },
+    ],
+  },
+  
+  {
+    id: "careers",
+    title: "Careers",
+    icon: Briefcase,
+    links: [
+      { href: "/join", label: "Submit Your CV" },
+      { href: "/join", label: "Join Our Team" },
+      { href: "/join?type=broker", label: "Become a Broker" },
+      { href: "/join?type=agent", label: "Apply as Agent" },
+      { href: "/join?type=marketing", label: "Marketing Positions" },
+      { href: "/join?type=tech", label: "Technology Roles" },
+      { href: "/join?type=admin", label: "Administrative Roles" },
+      { href: "/broker-toolkit", label: "Broker Resources" },
+      { href: "/broker-education", label: "Training Programs" },
+      { href: "/team", label: "Meet Our Team" },
+      { href: "/onboarding", label: "Onboarding Process" },
+    ],
+  },
+];
 ```
 
-### Header Hover Bridge Enhancement
+### New Imports Required
 
-```tsx
-{/* Mega Menu Panels - Enhanced bridge zone */}
-{activeMegaMenu && !['search', 'language', 'account'].includes(activeMegaMenu) && (
-  <>
-    {/* Invisible hover bridge - catches mouse during transition */}
-    <div 
-      className="absolute left-0 right-0 h-4 z-50"
-      style={{ top: '100%' }}
-      onPointerEnter={handleMegaMenuPanelEnter}
-    />
-    <div 
-      className="absolute left-0 right-0 z-50"
-      style={{ top: 'calc(100% + 12px)' }}
-      onPointerEnter={handleMegaMenuPanelEnter}
-      onPointerLeave={handleMegaMenuLeave}
-    >
-      {activeMegaMenu === 'buy' && <MegaMenuBuy onClose={closeMegaMenu} />}
-      {/* ... other menus */}
-    </div>
-  </>
-)}
+```typescript
+import { 
+  // existing imports...
+  Calendar,
+  Headphones,
+} from "lucide-react";
 ```
 
-### Sitemap 3-Layer Fix
+### Page Section Order (Updated)
 
-```tsx
-{/* MAIN SITEMAP DIRECTORY - 3-Layer System */}
-<section className="py-12 sm:py-16 md:py-20 bg-black">
-  <div className="jj-layer-2">
-    <motion.div className="text-center mb-10">
-      <h2 className="text-black text-2xl sm:text-3xl font-bold mb-3">
-        Complete <span className="text-gold">Directory</span>
-      </h2>
-      <p className="text-zinc-600 text-sm sm:text-base max-w-xl mx-auto">
-        All pages organized by category for easy navigation
-      </p>
-    </motion.div>
-    <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
-      {hubSections.map((hub) => (
-        <HubCard key={hub.id} hub={hub} hideFounderLinks={!isFounderVisible} />
-      ))}
-    </motion.div>
-  </div>
-</section>
-```
+1. Hero Section (with premium video)
+2. Quick Links Strip
+3. Main Directory (Hub Grid)
+4. Legal & Support Section
+5. **NEW: Support & Contact Cards** (Support Ticket, Consultation, Contact Us)
+6. CTABand ("Ready to Get Started?")
+7. Back to Top Section
+8. Footer
