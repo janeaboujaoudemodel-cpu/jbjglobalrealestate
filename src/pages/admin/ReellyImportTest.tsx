@@ -144,35 +144,15 @@ const ReellyImportTest = () => {
           </p>
         </div>
 
-        {/* Reelly API Info */}
-        {showApiInfo && (
-          <Alert className="mb-6 border-primary/50 bg-primary/5">
-            <Info className="h-4 w-4" />
-            <AlertTitle>Reelly API Required</AlertTitle>
-            <AlertDescription className="space-y-2">
-              <p>
-                Reelly has an official REST API that provides reliable access to project data.
-                Get a free API key (includes 20 projects for testing).
-              </p>
-              <div className="flex gap-2 mt-3">
-                <a 
-                  href="https://jtoq1zj8zqz.typeform.com/to/ztWlQc0l?plan=free" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="default" size="sm">
-                    <Key className="h-4 w-4 mr-2" />
-                    Get Free API Key
-                    <ExternalLink className="h-3 w-3 ml-2" />
-                  </Button>
-                </a>
-                <Button variant="ghost" size="sm" onClick={() => setShowApiInfo(false)}>
-                  Dismiss
-                </Button>
-              </div>
-            </AlertDescription>
-          </Alert>
-        )}
+        {/* Scraping Info */}
+        <Alert className="mb-6 border-primary/50 bg-primary/5">
+          <Info className="h-4 w-4" />
+          <AlertTitle>Web Scraping Mode</AlertTitle>
+          <AlertDescription>
+            Using Firecrawl to scrape project data directly from Reelly. 
+            This extracts project details, images, and documents from each listing page.
+          </AlertDescription>
+        </Alert>
 
         {/* Target Projects */}
         <Card className="mb-6">
