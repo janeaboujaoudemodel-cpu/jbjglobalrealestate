@@ -216,7 +216,7 @@ function normalizeSaleStatus(status: string | null): string | null {
   const map: Record<string, string> = {
     "announced": "Announced",
     "on_sale": "On Sale",
-    "out_of_stock": "Out of Stock",
+    "out_of_stock": "Sold Out",
     "presale_eoi": "Presale (EOI)",
     "start_of_sales": "Start of Sales",
   };

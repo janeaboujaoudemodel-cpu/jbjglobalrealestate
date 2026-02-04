@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
 import ShortlistBadgeButton from "./ShortlistBadgeButton";
-import { ChevronLeft, ChevronRight, MapPin, Bed, Mail, Phone, MessageCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Bed, Mail, Phone, MessageCircle, Building2 } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { SafeImage } from "@/components/SafeImage";
 import { VerifiedMedia } from "@/components/ui/verified-media";
@@ -60,6 +60,28 @@ const shouldShowNewStatus = (projectName: string): boolean => {
   return PROJECTS_WITH_NEW_STATUS.some(p => normalized.includes(p) || p.includes(normalized));
 };
 
+// Get sale status badge styling
+const getSaleStatusBadge = (status?: string | null) => {
+  if (!status) return null;
+  
+  const normalizedStatus = status.toLowerCase();
+  
+  if (normalizedStatus.includes('on sale') || normalizedStatus.includes('start')) {
+    return { label: 'On Sale', className: 'bg-emerald-500 text-white' };
+  }
+  if (normalizedStatus.includes('sold') || normalizedStatus.includes('out of stock')) {
+    return { label: 'Sold Out', className: 'bg-destructive text-destructive-foreground' };
+  }
+  if (normalizedStatus.includes('announced')) {
+    return { label: 'Announced', className: 'bg-gold text-black' };
+  }
+  if (normalizedStatus.includes('presale') || normalizedStatus.includes('eoi')) {
+    return { label: 'Presale', className: 'bg-amber-500 text-black' };
+  }
+  
+  return null;
+};
+
 const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, currency = 'EUR', sizeUnit = 'sqft' }: ProjectCardProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const images = project.images || [];
@@ -84,15 +106,36 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   const getBedroomsText = () => {
     if (!project.bedrooms_min) return null;
     if (project.bedrooms_min === project.bedrooms_max) {
-      return project.bedrooms_min.toString();
+      return `${project.bedrooms_min} BR`;
     }
-    return `${project.bedrooms_min}, ${project.bedrooms_min + 1}${project.bedrooms_max && project.bedrooms_max > project.bedrooms_min + 1 ? `, ${project.bedrooms_max}` : ''}`;
+    return `${project.bedrooms_min}-${project.bedrooms_max} BR`;
   };
 
-  // Truncate description for card preview
+  // Get unit types inline (1BR • 2BR • 3BR style)
+  const getUnitTypesText = () => {
+    const types: string[] = [];
+    if (project.bedrooms_min === 0 || (project as any).has_studio) types.push('Studio');
+    if (project.bedrooms_min && project.bedrooms_max) {
+      for (let i = project.bedrooms_min; i <= Math.min(project.bedrooms_max, 5); i++) {
+        if (i > 0) types.push(`${i}BR`);
+      }
+    }
+    return types.length > 0 ? types.join(' • ') : null;
+  };
+
+  // Get size range text
+  const getSizeText = () => {
+    if (!project.size_min) return null;
+    const min = project.size_min.toLocaleString();
+    const max = project.size_max?.toLocaleString();
+    if (min === max || !max) return `${min} ${sizeUnit}`;
+    return `${min}-${max} ${sizeUnit}`;
+  };
+
+  // Truncate description for card preview - shorter for landscape card
   const getTruncatedDescription = () => {
     if (!project.description) return null;
-    const maxLength = 120;
+    const maxLength = 80; // Shorter for landscape layout
     if (project.description.length <= maxLength) return project.description;
     return project.description.substring(0, maxLength).trim();
   };
@@ -111,11 +154,12 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   };
 
   const statusLabel = getStatusLabel();
+  const saleStatusBadge = getSaleStatusBadge(project.status_label);
 
   return (
     <div
       className={
-        "group relative overflow-hidden rounded-lg border-2 border-gold/40 transition-all duration-300 flex flex-col " +
+        "group relative overflow-hidden rounded-xl border-2 border-gold/40 transition-all duration-300 flex flex-col " +
         "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
         "shadow-[0_0_18px_hsl(var(--gold)/0.14),0_18px_55px_hsl(0_0%_0%/0.16)] hover:border-gold/70 " +
         "hover:shadow-[0_0_26px_hsl(var(--gold)/0.18),0_26px_75px_hsl(0_0%_0%/0.20)]"
@@ -130,14 +174,25 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
       {/* Badge Button */}
       {showBadgeButton && (
-        <div className="absolute top-3 left-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="absolute top-12 right-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
           <ShortlistBadgeButton projectId={project.id} size="sm" showBadgeIndicator={true} />
         </div>
       )}
 
       <Link to={`/project/${project.slug}`} className="flex-1 flex flex-col">
-        {/* Image with Carousel - VERTICAL PORTRAIT aspect ratio (Provident style) */}
-        <div className="aspect-[3/4] overflow-hidden relative">
+        {/* Image with Carousel - LANDSCAPE aspect ratio (16:10 - Premium Hybrid) */}
+        <div className="aspect-[16/10] overflow-hidden relative">
+          {/* Developer Logo Overlay - Top Left */}
+          {(project.developer as any)?.logo_url && (
+            <div className="absolute top-3 left-3 z-15 w-12 h-12 rounded-lg bg-white shadow-lg border border-gold/30 flex items-center justify-center overflow-hidden">
+              <img 
+                src={(project.developer as any).logo_url} 
+                alt={project.developer?.name}
+                className="w-10 h-10 object-contain"
+              />
+            </div>
+          )}
+
           <VerifiedMedia
             src={images[currentImageIndex]?.image_url || images[0]?.image_url}
             alt={images[currentImageIndex]?.alt_text || project.name}
@@ -173,7 +228,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                 <ChevronRight className="w-4 h-4" />
               </button>
               
-              {/* Image Dots Indicator - Bottom center above handover */}
+              {/* Image Dots Indicator - Bottom center */}
               <div className="absolute bottom-14 left-1/2 -translate-x-1/2 flex gap-1 z-10">
                 {images.slice(0, 5).map((_, idx) => (
                   <span
@@ -189,17 +244,17 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </>
           )}
           
-          {/* Top-Left: Property Type Label (dark background) */}
-          {project.property_type_label && (
+          {/* Top-Left: Property Type Label (if no developer logo) */}
+          {project.property_type_label && !(project.developer as any)?.logo_url && (
             <div className="absolute top-3 left-3 z-10 bg-premium-bg/90 text-gold px-2 py-1 rounded text-xs font-semibold border border-gold/30">
               {project.property_type_label}
             </div>
           )}
           
-          {/* Top-Right: Status Label (white background, only for specific projects) */}
-          {statusLabel && (
-            <div className="absolute top-3 right-3 z-10 px-2 py-1 rounded text-xs font-semibold border border-gold/30 bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] text-foreground">
-              {statusLabel}
+          {/* Top-Right: Sale Status Badge (Reelly-style) */}
+          {saleStatusBadge && (
+            <div className={`absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${saleStatusBadge.className}`}>
+              {saleStatusBadge.label}
             </div>
           )}
           
@@ -210,7 +265,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </div>
           )}
           
-          {/* Sold Out Badge */}
+          {/* Sold Out Badge - Full overlay */}
           {project.is_sold_out && (
             <div className="absolute inset-0 bg-premium-bg/65 flex items-center justify-center z-20">
               <span className="bg-destructive text-destructive-foreground px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wider">
@@ -220,51 +275,59 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           )}
         </div>
         
-        {/* Content - Provident Style */}
+        {/* Content - Premium Hybrid Style */}
         <div className="p-4 flex-1 flex flex-col">
-          {/* Project Name - Gray color */}
-          <h4 className="text-foreground text-lg font-semibold mb-1 line-clamp-2 hover:text-gold transition-colors">
+          {/* Project Name */}
+          <h4 className="text-foreground text-lg font-bold mb-1 line-clamp-1 hover:text-gold transition-colors">
             {project.name}
           </h4>
           
-          {/* Developer - ALWAYS Clickable (using DeveloperLink component) */}
-          {project.developer && (
-            <DeveloperLink 
-              name={project.developer.name}
-              slug={project.developer.slug}
-              className="text-sm mb-2 block"
-              showPrefix={true}
-            />
+          {/* Location with icon */}
+          {project.location && (
+            <div className="flex items-center gap-1.5 text-muted-foreground text-sm mb-2">
+              <MapPin className="w-3.5 h-3.5 text-gold/70 flex-shrink-0" />
+              <span className="truncate">{project.location}</span>
+            </div>
           )}
+          
+          {/* Divider */}
+          <div className="h-px bg-gold/20 my-2" />
           
           {/* Starting Price - Orange/Gold */}
           {project.price_from && (
-            <p className="text-sm mb-3">
-              <span className="text-muted-foreground">Starting Price </span>
-              <span className="text-handover font-semibold">
+            <p className="text-sm mb-2">
+              <span className="text-muted-foreground">Starting from </span>
+              <span className="text-handover font-bold text-lg">
                 {formatPriceWithCurrency(project.price_from, currency)}
               </span>
             </p>
           )}
           
-          {/* Location with icon + Bedrooms with icon */}
-          <div className="flex items-center gap-4 text-muted-foreground text-sm mb-3">
-            {project.location && (
-              <div className="flex items-center gap-1.5">
-                <MapPin className="w-4 h-4 text-gold/70" />
-                <span className="truncate max-w-[120px]">{project.location}</span>
-              </div>
+          {/* Developer - ALWAYS Clickable (Gold line - separate) */}
+          {project.developer && (
+            <DeveloperLink 
+              name={project.developer.name}
+              slug={project.developer.slug}
+              className="text-sm mb-3 block"
+              showPrefix={true}
+            />
+          )}
+          
+          {/* Unit Types Row (1BR • 2BR • 3BR | 800-1500 sqft) */}
+          <div className="flex items-center gap-2 text-muted-foreground text-xs mb-3 flex-wrap">
+            {getUnitTypesText() && (
+              <span className="font-medium">{getUnitTypesText()}</span>
             )}
-            {getBedroomsText() && (
-              <div className="flex items-center gap-1.5">
-                <Bed className="w-4 h-4 text-gold/70" />
-                <span>{getBedroomsText()}</span>
-              </div>
+            {getUnitTypesText() && getSizeText() && (
+              <span className="text-gold/50">|</span>
+            )}
+            {getSizeText() && (
+              <span>{getSizeText()}</span>
             )}
           </div>
           
-          {/* Description with ...more link - Always show more link */}
-          <p className="text-muted-foreground text-sm leading-relaxed mb-4 flex-1">
+          {/* Description with ...more link - Shorter */}
+          <p className="text-muted-foreground text-sm leading-relaxed mb-3 flex-1 line-clamp-2">
             {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
             <Link 
               to={`/project/${project.slug}`}
@@ -276,9 +339,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         </div>
       </Link>
 
-      {/* CTA Buttons - Email, Call, WhatsApp (Direct navigation to avoid popup blocking) */}
+      {/* CTA Buttons - Email, Call, WhatsApp */}
       <div className="px-4 pb-4 pt-0">
-        <div className="grid grid-cols-3 gap-2 border-t border-gold/20 pt-4">
+        <div className="grid grid-cols-3 gap-2 border-t border-gold/20 pt-3">
           <Button asChild variant="secondary" size="sm" className="w-full">
             <a
               href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(project.name)}&body=${encodeURIComponent(`Hello JBJ Global Real Estate,\n\nI am interested in ${project.name}${project.location ? ` located in ${project.location}` : ''}.\n\nPlease provide more details.\n\nThank you.`)}`}

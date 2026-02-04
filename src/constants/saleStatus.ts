@@ -7,7 +7,7 @@ export const SALE_STATUS_OPTIONS = [
   { value: "all", label: "All Statuses" },
   { value: "announced", label: "Announced" },
   { value: "on_sale", label: "On Sale" },
-  { value: "out_of_stock", label: "Out of Stock" },
+  { value: "out_of_stock", label: "Sold Out" },
   { value: "presale_eoi", label: "Presale (EOI)" },
   { value: "start_of_sales", label: "Start of Sales" },
 ] as const;
@@ -16,13 +16,13 @@ export const SALE_STATUS_OPTIONS = [
 export const SALE_STATUS_LABELS: Record<string, string> = {
   "announced": "Announced",
   "on_sale": "On Sale", 
-  "out_of_stock": "Out of Stock",
+  "out_of_stock": "Sold Out",
   "presale_eoi": "Presale (EOI)",
   "start_of_sales": "Start of Sales",
   // Alternative API formats
   "Announced": "Announced",
   "On Sale": "On Sale",
-  "Out of Stock": "Out of Stock",
+  "Out of Stock": "Sold Out",
   "Presale (EOI)": "Presale (EOI)",
   "Start of Sales": "Start of Sales",
 };
@@ -35,20 +35,20 @@ export function normalizeSaleStatus(apiStatus: string | null | undefined): strin
     // Exact matches from API
     "Announced": "Announced",
     "On Sale": "On Sale",
-    "Out of Stock": "Out of Stock",
+    "Out of Stock": "Sold Out",
     "Presale (EOI)": "Presale (EOI)",
     "Start of Sales": "Start of Sales",
     // Snake case variants
     "announced": "Announced",
     "on_sale": "On Sale",
-    "out_of_stock": "Out of Stock",
+    "out_of_stock": "Sold Out",
     "presale_eoi": "Presale (EOI)",
     "start_of_sales": "Start of Sales",
     // Legacy mappings
     "available": "On Sale",
     "coming_soon": "Announced",
     "limited": "On Sale",
-    "sold_out": "Out of Stock",
+    "sold_out": "Sold Out",
   };
   
   return normalizedMap[apiStatus] || apiStatus;
