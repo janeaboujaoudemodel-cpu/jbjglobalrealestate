@@ -11458,6 +11458,8 @@ export type Database = {
           bedrooms_min: number | null
           community_id: string | null
           community_name: string | null
+          construction_progress: number | null
+          construction_start_date: string | null
           created_at: string
           description: string | null
           developer_id: string | null
@@ -11468,15 +11470,18 @@ export type Database = {
           floor_plan_types: Json | null
           floors: number | null
           handover_date: string | null
+          handover_display: string | null
           id: string
           images: Json | null
           is_new_project: boolean | null
           job_id: string | null
+          latitude: number | null
           location: string | null
           location_description: string | null
           location_distances: Json | null
           location_headline: string | null
           location_image_url: string | null
+          longitude: number | null
           match_confidence: number | null
           matched_project_id: string | null
           name: string
@@ -11496,10 +11501,12 @@ export type Database = {
           source_url: string
           status: string | null
           status_label: string | null
+          total_units: number | null
           updated_at: string
           usp_bullets: Json | null
           usp_headline: string | null
           usp_image_url: string | null
+          video_url: string | null
         }
         Insert: {
           amenities?: string[] | null
@@ -11508,6 +11515,8 @@ export type Database = {
           bedrooms_min?: number | null
           community_id?: string | null
           community_name?: string | null
+          construction_progress?: number | null
+          construction_start_date?: string | null
           created_at?: string
           description?: string | null
           developer_id?: string | null
@@ -11518,15 +11527,18 @@ export type Database = {
           floor_plan_types?: Json | null
           floors?: number | null
           handover_date?: string | null
+          handover_display?: string | null
           id?: string
           images?: Json | null
           is_new_project?: boolean | null
           job_id?: string | null
+          latitude?: number | null
           location?: string | null
           location_description?: string | null
           location_distances?: Json | null
           location_headline?: string | null
           location_image_url?: string | null
+          longitude?: number | null
           match_confidence?: number | null
           matched_project_id?: string | null
           name: string
@@ -11546,10 +11558,12 @@ export type Database = {
           source_url: string
           status?: string | null
           status_label?: string | null
+          total_units?: number | null
           updated_at?: string
           usp_bullets?: Json | null
           usp_headline?: string | null
           usp_image_url?: string | null
+          video_url?: string | null
         }
         Update: {
           amenities?: string[] | null
@@ -11558,6 +11572,8 @@ export type Database = {
           bedrooms_min?: number | null
           community_id?: string | null
           community_name?: string | null
+          construction_progress?: number | null
+          construction_start_date?: string | null
           created_at?: string
           description?: string | null
           developer_id?: string | null
@@ -11568,15 +11584,18 @@ export type Database = {
           floor_plan_types?: Json | null
           floors?: number | null
           handover_date?: string | null
+          handover_display?: string | null
           id?: string
           images?: Json | null
           is_new_project?: boolean | null
           job_id?: string | null
+          latitude?: number | null
           location?: string | null
           location_description?: string | null
           location_distances?: Json | null
           location_headline?: string | null
           location_image_url?: string | null
+          longitude?: number | null
           match_confidence?: number | null
           matched_project_id?: string | null
           name?: string
@@ -11596,10 +11615,12 @@ export type Database = {
           source_url?: string
           status?: string | null
           status_label?: string | null
+          total_units?: number | null
           updated_at?: string
           usp_bullets?: Json | null
           usp_headline?: string | null
           usp_image_url?: string | null
+          video_url?: string | null
         }
         Relationships: [
           {
