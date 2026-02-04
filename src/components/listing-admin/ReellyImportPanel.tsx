@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   RefreshCw, Download, CheckCircle, XCircle, 
-  ExternalLink, Info, Zap, Database, CloudDownload, Play, ArrowRight
+  ExternalLink, Info, Zap, Database, CloudDownload, Play, ArrowRight, MapPin
 } from "lucide-react";
 
 interface ApiSyncResult {
@@ -52,6 +52,22 @@ interface DevSyncResult {
   error?: string;
 }
 
+interface AreasSyncResult {
+  success: boolean;
+  action?: string;
+  emirates_count?: number;
+  emirates?: string[];
+  areas_count?: number;
+  total_available?: number;
+  processed?: number;
+  inserted?: number;
+  updated?: number;
+  skipped?: number;
+  errors?: number;
+  error_details?: string[];
+  error?: string;
+}
+
 export function ReellyImportPanel() {
   const navigate = useNavigate();
   const [isTestingApi, setIsTestingApi] = useState(false);
@@ -69,6 +85,12 @@ export function ReellyImportPanel() {
   const [isSyncingDevs, setIsSyncingDevs] = useState(false);
   const [devSyncResult, setDevSyncResult] = useState<DevSyncResult | null>(null);
   const [totalDevelopers, setTotalDevelopers] = useState<number | null>(null);
+
+  // Areas sync state
+  const [isSyncingAreas, setIsSyncingAreas] = useState(false);
+  const [areasSyncResult, setAreasSyncResult] = useState<AreasSyncResult | null>(null);
+  const [totalAreas, setTotalAreas] = useState<number | null>(null);
+  const [emiratesList, setEmiratesList] = useState<string[]>([]);
 
   const goToApprovalQueue = () => {
     // Force navigation even if already on similar URL
@@ -110,6 +132,43 @@ export function ReellyImportPanel() {
       toast.error(err.message || "Failed to sync developers");
     } finally {
       setIsSyncingDevs(false);
+    }
+  };
+
+  const handleSyncAreas = async (action: "test" | "sync_areas") => {
+    setIsSyncingAreas(true);
+    setAreasSyncResult(null);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("reelly-areas-sync", {
+        body: { action },
+      });
+
+      if (error) throw error;
+
+      if (data?.success) {
+        setAreasSyncResult(data);
+        if (data.areas_count) {
+          setTotalAreas(data.areas_count);
+        }
+        if (data.emirates) {
+          setEmiratesList(data.emirates);
+        }
+        if (action === "test") {
+          toast.success(`Areas API connected! ${data.areas_count} areas, ${data.emirates_count} emirates`);
+        } else {
+          toast.success(`Synced ${data.inserted} new, ${data.updated} updated areas`);
+        }
+      } else {
+        setAreasSyncResult({ success: false, error: data?.error });
+        toast.error(data?.error || "Areas sync failed");
+      }
+    } catch (err: any) {
+      console.error("Areas sync error:", err);
+      setAreasSyncResult({ success: false, error: err.message });
+      toast.error(err.message || "Failed to sync areas");
+    } finally {
+      setIsSyncingAreas(false);
     }
   };
 
@@ -621,6 +680,114 @@ export function ReellyImportPanel() {
               <XCircle className="h-4 w-4 text-red-600" />
               <AlertDescription className="text-red-700">
                 {devSyncResult.error || "Developer sync failed"}
+              </AlertDescription>
+            </Alert>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Areas & Emirates Sync Section */}
+      <Card className="bg-gradient-to-br from-cyan-50 to-blue-50 border-cyan-200 shadow-lg">
+        <CardHeader>
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-cyan-500">
+              <MapPin className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <CardTitle className="text-xl text-cyan-900 flex items-center gap-2">
+                Areas & Emirates Sync
+                {totalAreas && <CheckCircle className="h-5 w-5 text-cyan-500" />}
+              </CardTitle>
+              <CardDescription className="text-cyan-700">
+                Sync areas and emirates from Reelly API for location data
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <Button 
+              onClick={() => handleSyncAreas("test")} 
+              disabled={isSyncingAreas}
+              variant="outline"
+              className="border-cyan-300 text-cyan-700 hover:bg-cyan-50"
+            >
+              {isSyncingAreas ? (
+                <>
+                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                  Testing...
+                </>
+              ) : (
+                <>
+                  <Zap className="h-4 w-4 mr-2" />
+                  Test Connection
+                </>
+              )}
+            </Button>
+            <Button 
+              onClick={() => handleSyncAreas("sync_areas")} 
+              disabled={isSyncingAreas}
+              className="bg-cyan-600 hover:bg-cyan-700"
+            >
+              {isSyncingAreas ? (
+                <>
+                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                  Syncing...
+                </>
+              ) : (
+                <>
+                  <Download className="h-4 w-4 mr-2" />
+                  Sync All Areas
+                </>
+              )}
+            </Button>
+          </div>
+
+          {totalAreas && (
+            <div className="p-3 bg-cyan-100 rounded-lg">
+              <p className="text-cyan-800 text-sm font-medium">
+                ✓ {totalAreas.toLocaleString()} areas available in Reelly API
+              </p>
+              {emiratesList.length > 0 && (
+                <p className="text-cyan-700 text-xs mt-1">
+                  Emirates: {emiratesList.join(", ")}
+                </p>
+              )}
+            </div>
+          )}
+
+          {areasSyncResult && areasSyncResult.success && areasSyncResult.action === "sync_areas" && (
+            <div className="bg-white/80 rounded-xl p-4 border border-cyan-200">
+              <h3 className="font-semibold text-zinc-900 mb-3">Areas Sync Results</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="bg-cyan-50 rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-cyan-900">{areasSyncResult.processed || 0}</p>
+                  <p className="text-xs text-cyan-600">Processed</p>
+                </div>
+                <div className="bg-emerald-50 rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-emerald-700">{areasSyncResult.inserted || 0}</p>
+                  <p className="text-xs text-emerald-600">New</p>
+                </div>
+                <div className="bg-blue-50 rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-blue-700">{areasSyncResult.updated || 0}</p>
+                  <p className="text-xs text-blue-600">Updated</p>
+                </div>
+                <div className="bg-zinc-50 rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-zinc-700">{areasSyncResult.skipped || 0}</p>
+                  <p className="text-xs text-zinc-600">Skipped</p>
+                </div>
+              </div>
+              {areasSyncResult.errors && areasSyncResult.errors > 0 && (
+                <p className="text-sm text-red-600 mt-2">⚠ {areasSyncResult.errors} errors occurred</p>
+              )}
+            </div>
+          )}
+
+          {areasSyncResult && !areasSyncResult.success && (
+            <Alert className="border-red-300 bg-red-50">
+              <XCircle className="h-4 w-4 text-red-600" />
+              <AlertDescription className="text-red-700">
+                {areasSyncResult.error || "Areas sync failed"}
               </AlertDescription>
             </Alert>
           )}
