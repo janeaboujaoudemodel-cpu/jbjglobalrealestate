@@ -113,39 +113,39 @@ const Index = () => {
           transition={{ duration: 1.5, delay: 0.7 }}
         />
         
-        {/* Content - Centered with Search Bar on Hero */}
+        {/* Content - Left-aligned with Search Bar on Hero */}
         <motion.div 
-          className="relative z-10 w-full flex flex-col items-center justify-center text-center px-4"
+          className="relative z-10 w-full flex flex-col items-start justify-center px-4 sm:px-8 md:px-12 lg:px-16"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
-          <div className="max-w-4xl mx-auto pt-16 md:pt-20">
-            {/* Licensed Real Estate Brokerage - NOW FIRST (larger) */}
-            <motion.p 
-              variants={fadeInUp}
-              className="text-zinc-300 text-xs sm:text-sm md:text-base uppercase tracking-[0.15em] md:tracking-[0.2em] font-medium mb-2 md:mb-3"
-            >
-              {t('hero.subtitle')}
-            </motion.p>
-
-            {/* Buy · Sell · Rent - NOW SMALLER AND BELOW */}
+          <div className="max-w-5xl pt-20 md:pt-24">
+            {/* Buy · Sell · Rent - MAIN HEADLINE FIRST with gold dot after Rent */}
             <motion.h1 
               variants={fadeInUp} 
-              className="text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold tracking-tight leading-[1.1] mb-2 md:mb-3 px-2 sm:px-0"
+              className="text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight leading-[1.1] mb-2 md:mb-3"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
               <span className="block whitespace-nowrap">
-                {t('hero.buy')}<span className="inline-block w-1 h-1 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
-                {t('hero.sell')}<span className="inline-block w-1 h-1 rounded-full mx-1 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
-                {t('hero.rent')}
+                {t('hero.buy')}<span className="inline-block w-1.5 h-1.5 rounded-full mx-2 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+                {t('hero.sell')}<span className="inline-block w-1.5 h-1.5 rounded-full mx-2 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+                {t('hero.rent')}<span className="inline-block w-1.5 h-1.5 rounded-full mx-2 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
               </span>
             </motion.h1>
+
+            {/* Licensed Real Estate Brokerage - SMALLER SUBTITLE SECOND */}
+            <motion.p 
+              variants={fadeInUp}
+              className="text-zinc-400 text-[10px] sm:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-medium mb-2 md:mb-3"
+            >
+              {t('hero.subtitle')}
+            </motion.p>
           
             {/* Delivered with Intelligence - Subtle elegant gold */}
             <motion.span 
               variants={fadeInUp}
-              className="block whitespace-nowrap text-xs sm:text-sm md:text-base lg:text-lg mb-4 md:mb-6 uppercase tracking-[0.15em] md:tracking-[0.2em] font-medium"
+              className="block whitespace-nowrap text-xs sm:text-sm md:text-base lg:text-lg mb-6 md:mb-8 uppercase tracking-[0.15em] md:tracking-[0.2em] font-medium"
               style={{ 
                 background: 'linear-gradient(90deg, #C8A766 0%, #E8D4A8 50%, #C8A766 100%)',
                 WebkitBackgroundClip: 'text',
@@ -156,10 +156,10 @@ const Index = () => {
               {t('hero.deliveredWith')}
             </motion.span>
 
-            {/* SEARCH BAR - Floating on Hero, No Background */}
+            {/* SEARCH BAR - Pushed down, left-aligned */}
             <motion.div 
               variants={fadeInUp}
-              className="w-full max-w-5xl mx-auto mb-4 md:mb-6"
+              className="w-full max-w-5xl mt-2 mb-4 md:mb-6"
             >
               <HeroSearchBar />
             </motion.div>
