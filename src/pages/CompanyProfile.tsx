@@ -2,39 +2,36 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { 
   Download, 
-  Share2, 
   FileText, 
   Building2, 
   Globe, 
   Users, 
-  Award, 
   Shield,
   Target,
   CheckCircle,
+  Phone,
   MessageCircle,
+  ArrowRight,
+  Clock,
+  MapPin,
   Mail,
-  Copy,
-  Check
+  Briefcase,
+  Eye,
+  Heart,
+  Zap,
+  ClipboardCheck,
+  Home,
+  TrendingUp,
+  Key,
+  HardHat,
+  ChevronRight,
+  User
 } from "lucide-react";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import { Link } from "react-router-dom";
-import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { JJLogoImage } from "@/components/JJLogoImage";
-import { COMPANY_STATS, CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
+import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import { toast } from "sonner";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 
@@ -51,45 +48,159 @@ const staggerContainer = {
   }
 };
 
-const companyInfo = {
-  name: "JBJ Global Real Estate",
-  tagline: "Buy. Sell. Rent. Delivered with Intelligence.",
-  founded: "2025",
-  headquarters: "Downtown Dubai, UAE",
-  ceo: "Founder & CEO Jane Bou Jaoude",
-  about: `JBJ Global Real Estate is a Dubai-based real estate brokerage licensed to BUY, SELL, and RENT properties across the UAE. Founded by Founder & CEO Jane Bou Jaoude, we provide brokerage support and partner introductions for discerning clients seeking exceptional properties in the UAE.
+// Exact content from Section 2 - DO NOT MODIFY
+const PROFILE_CONTENT = {
+  coverPage: {
+    title: "JBJ Global Real Estate",
+    subtitle: "Founder & CEO, Jane Bou Jaoude"
+  },
+  executiveSummary: `JBJ Global Real Estate is a Dubai-based real estate brokerage built on precision, transparency, and long-term client relationships. Operating across Dubai's most active residential and investment markets, the firm provides structured advisory for buying, selling, leasing, and investing in property.
 
-Our founder-led approach ensures that every client receives personalized attention and professional guidance, backed by our extensive market knowledge and exclusive network of developers, legal partners, and service providers.
+Our approach is defined by clarity rather than volume. Every engagement begins with understanding the client's objective, risk profile, and timeline, followed by data-driven market evaluation and disciplined execution. We work with homeowners, landlords, investors, and institutional buyers who value informed decision-making and professional representation.
 
-We serve UAE-based and international clients interested in UAE real estate, offering expert brokerage services with a commitment to excellence.`,
-  mission: "To provide discerning clients with professional brokerage support for buying, selling, and renting, along with access to the UAE's most exclusive properties, delivered with the highest standards of integrity, expertise, and personalized service.",
-  vision: "To be the trusted choice for clients seeking premium real estate brokerage services in the UAE, recognized for our commitment to client success.",
-  services: [
-    "Property Sales & Rental Brokerage",
-    "Legal Partner Introductions",
-    "Interior Design & Architecture Partners",
-    "Mortgage Partner Introductions",
-    "Golden Visa Assistance (via Partners)",
-    "Holiday Homes Management"
-  ],
+JBJ Global Real Estate combines on-ground market expertise with modern intelligence tools, ensuring each recommendation is grounded in verifiable information, not assumptions. From first consultation to completion and beyond, clients receive direct access, responsive communication, and accountability at every stage.`,
+
+  brandStory: `JBJ Global Real Estate was founded with a clear mandate: to elevate the standard of real estate advisory in Dubai by replacing transactional brokerage with structured, client-centric representation.
+
+The Dubai property market is dynamic, fast-moving, and opportunity-rich — but it also demands discipline, accurate information, and local expertise. JBJ was established to guide clients through this complexity with confidence and clarity. The firm's foundation is built on experience across residential sales, leasing, investment structuring, and developer-led projects.
+
+Founder-led and strategically focused, JBJ Global Real Estate operates with the understanding that real estate decisions have long-term financial and lifestyle impact. Our role is not to sell inventory, but to interpret the market, present clear options, and support informed decisions aligned with each client's goals.
+
+Today, JBJ Global Real Estate serves local and international clients seeking reliable representation, transparent processes, and premium service delivery in Dubai's evolving property landscape.`,
+
+  vision: "To be a trusted reference for real estate advisory in Dubai through clarity, discipline, and client confidence.",
+  mission: "To provide structured, transparent real estate guidance that protects client interests and supports informed decision-making.",
+  
   values: [
-    { title: "Trust & Integrity", description: "Building lasting relationships through transparency and honesty" },
-    { title: "Excellence", description: "Delivering exceptional outcomes with meticulous attention to detail" },
-    { title: "UAE Focus", description: "Serving UAE-based and international clients interested in UAE real estate" },
+    { title: "Clarity", description: "Information presented accurately, without exaggeration." },
+    { title: "Integrity", description: "Advice aligned with client objectives, not incentives." },
+    { title: "Discipline", description: "Consistent processes and risk-aware execution." },
+    { title: "Responsiveness", description: "Direct access and timely communication." },
+    { title: "Accountability", description: "Responsibility throughout the transaction lifecycle." }
   ],
-  stats: {
-    yearsInDubai: "5+",
-    brokersTrainedBy: `${COMPANY_STATS.brokersTrainedBy.end.toLocaleString()}${COMPANY_STATS.brokersTrainedBy.suffix}`,
-    socialFollowers: "1M+",
-    teamManaged: "495+"
-  }
+
+  services: [
+    {
+      title: "Residential Sales Advisory",
+      description: "Advisory support for primary and secondary market purchases.",
+      idealFor: "Homeowners and investors.",
+      deliverables: "Market evaluation, property shortlisting, transaction coordination.",
+      icon: Home
+    },
+    {
+      title: "Premium Leasing (Rentals)",
+      description: "Structured leasing for residential properties.",
+      idealFor: "Tenants and landlords.",
+      deliverables: "Rental valuation, tenant sourcing, contract coordination.",
+      icon: Key
+    },
+    {
+      title: "Seller Representation & Pricing Strategy",
+      description: "Professional representation for property owners.",
+      idealFor: "Homeowners and investors selling assets.",
+      deliverables: "Pricing strategy, marketing coordination, negotiation support.",
+      icon: TrendingUp
+    },
+    {
+      title: "Landlord Services / Property Management",
+      description: "Operational support for rental assets.",
+      idealFor: "Portfolio landlords.",
+      deliverables: "Leasing oversight, tenant coordination, renewal management.",
+      icon: Building2
+    },
+    {
+      title: "Investment Advisory",
+      description: "Data-driven advisory for property investment decisions.",
+      idealFor: "Yield-focused investors.",
+      deliverables: "Market analysis, risk assessment, scenario comparison.",
+      icon: Briefcase
+    },
+    {
+      title: "New Developments / Off-Plan Advisory",
+      description: "Guidance on developer-led projects.",
+      idealFor: "Investors and early buyers.",
+      deliverables: "Project evaluation, payment plan analysis, booking coordination.",
+      icon: HardHat
+    }
+  ],
+
+  process: [
+    { step: 1, title: "Consultation", description: "Understand objectives and constraints." },
+    { step: 2, title: "Market Review", description: "Data-based evaluation of options." },
+    { step: 3, title: "Shortlisting", description: "Curated selection aligned with goals." },
+    { step: 4, title: "Execution", description: "Viewing, negotiation, coordination." },
+    { step: 5, title: "Transaction", description: "Documentation and closing support." },
+    { step: 6, title: "After-Care", description: "Post-transaction guidance and follow-up." }
+  ],
+
+  differentiators: [
+    "Objective-driven advisory",
+    "Clear pricing and market logic",
+    "Curated property selection",
+    "Strong developer and landlord network",
+    "Negotiation discipline",
+    "Transparent communication",
+    "End-to-end coordination",
+    "Client confidentiality"
+  ],
+
+  areas: [
+    "Downtown Dubai",
+    "Business Bay",
+    "Dubai Marina",
+    "Palm Jumeirah",
+    "JBR",
+    "City Walk",
+    "DIFC",
+    "Meydan",
+    "Dubai Hills Estate",
+    "Jumeirah Islands",
+    "Jumeirah Village Circle",
+    "Arabian Ranches"
+  ],
+
+  clientExperience: [
+    "Clear expectations from day one",
+    "Verified information only",
+    "Timely updates",
+    "Single point of contact",
+    "Confidential handling of data",
+    "No pressure-based selling",
+    "Structured documentation",
+    "Post-transaction support"
+  ],
+
+  trustCompliance: `All information is provided for guidance and is subject to change. JBJ Global Real Estate does not guarantee outcomes, returns, or timelines. Property data may be updated by developers, owners, or authorities. Client information is handled in accordance with applicable data protection standards.`,
+
+  founderProfile: {
+    name: "Jane Bou Jaoude",
+    title: "Founder & CEO",
+    bio: `Jane Bou Jaoude is the Founder & CEO of JBJ Global Real Estate. Her leadership philosophy centers on clarity, accountability, and long-term client trust. With hands-on involvement in advisory strategy and client engagement, she ensures that every transaction reflects disciplined market understanding rather than speculation.
+
+Clients working with JBJ can expect direct oversight, transparent communication, and advice grounded in practical market realities. Jane's approach prioritizes alignment with client objectives, risk awareness, and execution quality.`,
+    quote: "Real estate decisions deserve clarity, not pressure."
+  },
+
+  companySnapshot: {
+    headquarters: "Dubai, UAE",
+    serviceAreas: "Dubai",
+    languages: "English",
+    contact: CONTACT_INFO.phone,
+    email: CONTACT_INFO.email,
+    website: "www.jbj.ae",
+    whatsapp: CONTACT_INFO.phone,
+    workingHours: "Sunday–Thursday, 9:00–6:00"
+  },
+
+  ctas: [
+    { title: "Request a Private Consultation", description: "Book a confidential advisory session.", action: "consultation" },
+    { title: "List Your Property", description: "Receive a structured pricing strategy.", action: "list" },
+    { title: "Get a Curated Shortlist", description: "Access verified opportunities.", action: "shortlist" }
+  ]
 };
 
 const CompanyProfile = () => {
   const [isGenerating, setIsGenerating] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
-  const [pdfBlob, setPdfBlob] = useState<Blob | null>(null);
-  const [copied, setCopied] = useState(false);
 
   const generatePDF = async () => {
     setIsGenerating(true);
@@ -99,580 +210,335 @@ const CompanyProfile = () => {
       const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
       const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-      // Page dimensions
-      const pageWidth = 612;
-      const pageHeight = 792;
+      // A4 Landscape dimensions
+      const pageWidth = 842;
+      const pageHeight = 595;
       const margin = 50;
       
       // Colors
-      const goldColor = rgb(0.66, 0.57, 0.35); // #A8925A
+      const goldColor = rgb(0.66, 0.57, 0.35);
       const blackColor = rgb(0.05, 0.05, 0.05);
       const grayColor = rgb(0.4, 0.4, 0.4);
       const whiteColor = rgb(1, 1, 1);
 
+      // Helper function to wrap text
+      const wrapText = (text: string, maxWidth: number, fontSize: number, font: typeof helvetica): string[] => {
+        const words = text.split(' ');
+        const lines: string[] = [];
+        let currentLine = '';
+        
+        for (const word of words) {
+          const testLine = currentLine ? `${currentLine} ${word}` : word;
+          const width = font.widthOfTextAtSize(testLine, fontSize);
+          
+          if (width > maxWidth && currentLine) {
+            lines.push(currentLine);
+            currentLine = word;
+          } else {
+            currentLine = testLine;
+          }
+        }
+        if (currentLine) lines.push(currentLine);
+        return lines;
+      };
+
       // === PAGE 1: Cover ===
       const page1 = pdfDoc.addPage([pageWidth, pageHeight]);
+      page1.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: blackColor });
+      page1.drawRectangle({ x: 0, y: pageHeight - 8, width: pageWidth, height: 8, color: goldColor });
       
-      // Black background
-      page1.drawRectangle({
-        x: 0,
-        y: 0,
-        width: pageWidth,
-        height: pageHeight,
-        color: blackColor,
-      });
-
-      // Gold accent line at top
-      page1.drawRectangle({
-        x: 0,
-        y: pageHeight - 8,
-        width: pageWidth,
-        height: 8,
-        color: goldColor,
-      });
-
-      // Logo text
       page1.drawText("JBJ", {
-        x: pageWidth / 2 - 45,
-        y: pageHeight - 200,
-        size: 72,
+        x: pageWidth / 2 - 60,
+        y: pageHeight / 2 + 80,
+        size: 96,
         font: helveticaBold,
         color: goldColor,
       });
-
       page1.drawText("GLOBAL REAL ESTATE", {
-        x: pageWidth / 2 - 130,
-        y: pageHeight - 250,
-        size: 20,
+        x: pageWidth / 2 - 140,
+        y: pageHeight / 2 + 20,
+        size: 24,
         font: helveticaBold,
         color: whiteColor,
       });
-
-      // Decorative line
-      page1.drawRectangle({
-        x: margin,
-        y: pageHeight - 280,
-        width: pageWidth - margin * 2,
-        height: 1,
-        color: goldColor,
-      });
-
-      // Company Profile title
+      page1.drawRectangle({ x: margin, y: pageHeight / 2 - 10, width: pageWidth - margin * 2, height: 1, color: goldColor });
       page1.drawText("COMPANY PROFILE", {
-        x: pageWidth / 2 - 120,
-        y: pageHeight - 360,
+        x: pageWidth / 2 - 100,
+        y: pageHeight / 2 - 60,
         size: 28,
         font: helveticaBold,
         color: goldColor,
       });
-
-      page1.drawText("2025", {
-        x: pageWidth / 2 - 25,
-        y: pageHeight - 400,
-        size: 18,
+      page1.drawText("Founder & CEO, Jane Bou Jaoude", {
+        x: pageWidth / 2 - 120,
+        y: pageHeight / 2 - 100,
+        size: 14,
         font: helvetica,
         color: grayColor,
       });
+      page1.drawRectangle({ x: 0, y: 0, width: pageWidth, height: 8, color: goldColor });
 
-      // Tagline
-      page1.drawText("Buy. Sell. Rent.", {
-        x: pageWidth / 2 - 70,
-        y: pageHeight - 500,
-        size: 18,
-        font: helveticaBold,
-        color: goldColor,
-      });
-      page1.drawText("Delivered with Intelligence.", {
-        x: pageWidth / 2 - 105,
-        y: pageHeight - 525,
-        size: 16,
-        font: helvetica,
-        color: whiteColor,
-      });
-
-      // Bottom gold accent
-      page1.drawRectangle({
-        x: 0,
-        y: 0,
-        width: pageWidth,
-        height: 8,
-        color: goldColor,
-      });
-
-      // === PAGE 2: About Us ===
+      // === PAGE 2: Executive Summary ===
       const page2 = pdfDoc.addPage([pageWidth, pageHeight]);
+      page2.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: whiteColor });
+      page2.drawRectangle({ x: 0, y: pageHeight - 50, width: pageWidth, height: 50, color: blackColor });
+      page2.drawText("JBJ GLOBAL REAL ESTATE", { x: margin, y: pageHeight - 32, size: 12, font: helveticaBold, color: goldColor });
       
-      page2.drawRectangle({
-        x: 0,
-        y: 0,
-        width: pageWidth,
-        height: pageHeight,
-        color: whiteColor,
+      page2.drawText("EXECUTIVE SUMMARY", { x: margin, y: pageHeight - 100, size: 22, font: helveticaBold, color: blackColor });
+      page2.drawRectangle({ x: margin, y: pageHeight - 108, width: 140, height: 3, color: goldColor });
+      
+      const summaryLines = wrapText(PROFILE_CONTENT.executiveSummary.replace(/\n\n/g, ' '), pageWidth - margin * 2 - 50, 10, helvetica);
+      let yPos = pageHeight - 140;
+      summaryLines.forEach((line) => {
+        page2.drawText(line, { x: margin, y: yPos, size: 10, font: helvetica, color: grayColor });
+        yPos -= 16;
       });
+      page2.drawText("www.jbj.ae", { x: pageWidth / 2 - 30, y: 25, size: 10, font: helvetica, color: goldColor });
 
-      // Header
-      page2.drawRectangle({
-        x: 0,
-        y: pageHeight - 60,
-        width: pageWidth,
-        height: 60,
-        color: blackColor,
+      // === PAGE 3: Brand Story ===
+      const page3 = pdfDoc.addPage([pageWidth, pageHeight]);
+      page3.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: whiteColor });
+      page3.drawRectangle({ x: 0, y: pageHeight - 50, width: pageWidth, height: 50, color: blackColor });
+      page3.drawText("JBJ GLOBAL REAL ESTATE", { x: margin, y: pageHeight - 32, size: 12, font: helveticaBold, color: goldColor });
+      
+      page3.drawText("BRAND STORY", { x: margin, y: pageHeight - 100, size: 22, font: helveticaBold, color: blackColor });
+      page3.drawRectangle({ x: margin, y: pageHeight - 108, width: 100, height: 3, color: goldColor });
+      
+      const storyLines = wrapText(PROFILE_CONTENT.brandStory.replace(/\n\n/g, ' '), pageWidth - margin * 2 - 50, 10, helvetica);
+      yPos = pageHeight - 140;
+      storyLines.forEach((line) => {
+        page3.drawText(line, { x: margin, y: yPos, size: 10, font: helvetica, color: grayColor });
+        yPos -= 16;
       });
+      page3.drawText("www.jbj.ae", { x: pageWidth / 2 - 30, y: 25, size: 10, font: helvetica, color: goldColor });
 
-      page2.drawText("JBJ GLOBAL REAL ESTATE", {
-        x: margin,
-        y: pageHeight - 40,
-        size: 14,
-        font: helveticaBold,
-        color: goldColor,
-      });
-
-      // Section title
-      page2.drawText("ABOUT US", {
-        x: margin,
-        y: pageHeight - 110,
-        size: 24,
-        font: helveticaBold,
-        color: blackColor,
-      });
-
-      page2.drawRectangle({
-        x: margin,
-        y: pageHeight - 120,
-        width: 80,
-        height: 3,
-        color: goldColor,
-      });
-
-      // About text (wrapped)
-      const aboutLines = [
-        "JBJ Global Real Estate is a Dubai-based real estate brokerage",
-        "licensed to BUY, SELL, and RENT properties across the UAE.",
-        "Founded by entrepreneur Jane Bou Jaoude, we provide brokerage",
-        "support and partner introductions for discerning clients seeking",
-        "exceptional properties in the UAE.",
-        "",
-        "Our founder-led approach ensures that every client receives",
-        "personalized attention and professional guidance, backed by our",
-        "extensive market knowledge and exclusive network of developers,",
-        "legal experts, and luxury service providers.",
-        "",
-        "Mortgage, legal, visa, and corporate services are provided",
-        "through licensed partners."
-      ];
-
-      let yPos = pageHeight - 160;
-      aboutLines.forEach((line) => {
-        page2.drawText(line, {
-          x: margin,
-          y: yPos,
-          size: 11,
-          font: helvetica,
-          color: grayColor,
-        });
+      // === PAGE 4: Vision / Mission / Values ===
+      const page4 = pdfDoc.addPage([pageWidth, pageHeight]);
+      page4.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: whiteColor });
+      page4.drawRectangle({ x: 0, y: pageHeight - 50, width: pageWidth, height: 50, color: blackColor });
+      page4.drawText("JBJ GLOBAL REAL ESTATE", { x: margin, y: pageHeight - 32, size: 12, font: helveticaBold, color: goldColor });
+      
+      page4.drawText("VISION", { x: margin, y: pageHeight - 100, size: 18, font: helveticaBold, color: blackColor });
+      page4.drawRectangle({ x: margin, y: pageHeight - 106, width: 50, height: 2, color: goldColor });
+      const visionLines = wrapText(PROFILE_CONTENT.vision, pageWidth - margin * 2 - 100, 11, helvetica);
+      yPos = pageHeight - 130;
+      visionLines.forEach((line) => {
+        page4.drawText(line, { x: margin, y: yPos, size: 11, font: helvetica, color: grayColor });
         yPos -= 18;
       });
-
-      // Mission & Vision
-      yPos -= 20;
-      page2.drawText("OUR MISSION", {
-        x: margin,
-        y: yPos,
-        size: 14,
-        font: helveticaBold,
-        color: blackColor,
-      });
       
-      yPos -= 25;
-      const missionLines = [
-        "To provide discerning clients with professional brokerage support",
-        "and access to the UAE's most exclusive properties, delivered with",
-        "the highest standards of integrity, expertise, and service."
-      ];
+      yPos -= 20;
+      page4.drawText("MISSION", { x: margin, y: yPos, size: 18, font: helveticaBold, color: blackColor });
+      page4.drawRectangle({ x: margin, y: yPos - 6, width: 60, height: 2, color: goldColor });
+      yPos -= 30;
+      const missionLines = wrapText(PROFILE_CONTENT.mission, pageWidth - margin * 2 - 100, 11, helvetica);
       missionLines.forEach((line) => {
-        page2.drawText(line, {
-          x: margin,
-          y: yPos,
-          size: 10,
-          font: helvetica,
-          color: grayColor,
-        });
-        yPos -= 15;
+        page4.drawText(line, { x: margin, y: yPos, size: 11, font: helvetica, color: grayColor });
+        yPos -= 18;
       });
-
+      
       yPos -= 20;
-      page2.drawText("OUR VISION", {
-        x: margin,
-        y: yPos,
-        size: 14,
-        font: helveticaBold,
-        color: blackColor,
+      page4.drawText("VALUES", { x: margin, y: yPos, size: 18, font: helveticaBold, color: blackColor });
+      page4.drawRectangle({ x: margin, y: yPos - 6, width: 50, height: 2, color: goldColor });
+      yPos -= 35;
+      PROFILE_CONTENT.values.forEach((value) => {
+        page4.drawText(`• ${value.title}`, { x: margin, y: yPos, size: 11, font: helveticaBold, color: blackColor });
+        page4.drawText(` — ${value.description}`, { x: margin + 80, y: yPos, size: 10, font: helvetica, color: grayColor });
+        yPos -= 22;
       });
+      page4.drawText("www.jbj.ae", { x: pageWidth / 2 - 30, y: 25, size: 10, font: helvetica, color: goldColor });
+
+      // === PAGE 5: Services ===
+      const page5 = pdfDoc.addPage([pageWidth, pageHeight]);
+      page5.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: whiteColor });
+      page5.drawRectangle({ x: 0, y: pageHeight - 50, width: pageWidth, height: 50, color: blackColor });
+      page5.drawText("JBJ GLOBAL REAL ESTATE", { x: margin, y: pageHeight - 32, size: 12, font: helveticaBold, color: goldColor });
       
-      yPos -= 25;
-      const visionLines = [
-        "To be the trusted choice for clients seeking premium real estate",
-        "brokerage services in the UAE, recognized for our commitment",
-        "to client success and exceptional service."
-      ];
-      visionLines.forEach((line) => {
-        page2.drawText(line, {
-          x: margin,
-          y: yPos,
-          size: 10,
-          font: helvetica,
-          color: grayColor,
-        });
-        yPos -= 15;
-      });
-
-      // Footer
-      page2.drawText("www.jbj.ae", {
-        x: pageWidth / 2 - 30,
-        y: 30,
-        size: 10,
-        font: helvetica,
-        color: goldColor,
-      });
-
-      // === PAGE 3: Stats & Services ===
-      const page3 = pdfDoc.addPage([pageWidth, pageHeight]);
+      page5.drawText("WHAT WE DO — SERVICES", { x: margin, y: pageHeight - 100, size: 22, font: helveticaBold, color: blackColor });
+      page5.drawRectangle({ x: margin, y: pageHeight - 108, width: 180, height: 3, color: goldColor });
       
-      page3.drawRectangle({
-        x: 0,
-        y: 0,
-        width: pageWidth,
-        height: pageHeight,
-        color: whiteColor,
+      yPos = pageHeight - 140;
+      PROFILE_CONTENT.services.forEach((service) => {
+        page5.drawText(service.title, { x: margin, y: yPos, size: 12, font: helveticaBold, color: blackColor });
+        yPos -= 16;
+        page5.drawText(service.description, { x: margin, y: yPos, size: 9, font: helvetica, color: grayColor });
+        yPos -= 14;
+        page5.drawText(`Ideal for: ${service.idealFor}`, { x: margin, y: yPos, size: 9, font: helvetica, color: grayColor });
+        yPos -= 14;
+        page5.drawText(`Deliverables: ${service.deliverables}`, { x: margin, y: yPos, size: 9, font: helvetica, color: grayColor });
+        yPos -= 28;
       });
+      page5.drawText("www.jbj.ae", { x: pageWidth / 2 - 30, y: 25, size: 10, font: helvetica, color: goldColor });
 
-      // Header
-      page3.drawRectangle({
-        x: 0,
-        y: pageHeight - 60,
-        width: pageWidth,
-        height: 60,
-        color: blackColor,
-      });
-
-      page3.drawText("JBJ GLOBAL REAL ESTATE", {
-        x: margin,
-        y: pageHeight - 40,
-        size: 14,
-        font: helveticaBold,
-        color: goldColor,
-      });
-
-      // Stats section
-      page3.drawText("OUR ACHIEVEMENTS", {
-        x: margin,
-        y: pageHeight - 110,
-        size: 24,
-        font: helveticaBold,
-        color: blackColor,
-      });
-
-      page3.drawRectangle({
-        x: margin,
-        y: pageHeight - 120,
-        width: 130,
-        height: 3,
-        color: goldColor,
-      });
-
-      // Stats grid - Verified figures only
-      const statsData = [
-        { label: "Industry Experience", value: "12+ Years" },
-        { label: "Brokers Trained By Founder", value: `${COMPANY_STATS.brokersTrainedBy.end.toLocaleString()}${COMPANY_STATS.brokersTrainedBy.suffix}` },
-        { label: "Social Followers (All Platforms)", value: "1M+" },
-        { label: "Team Members", value: "10+" },
-      ];
-
-      let statX = margin;
-      let statY = pageHeight - 180;
-      const statWidth = (pageWidth - margin * 2) / 3;
-
-      statsData.forEach((stat, index) => {
-        if (index > 0 && index % 3 === 0) {
-          statX = margin;
-          statY -= 80;
-        }
-
-        page3.drawText(stat.value, {
-          x: statX,
-          y: statY,
-          size: 28,
-          font: helveticaBold,
-          color: goldColor,
-        });
-
-        page3.drawText(stat.label, {
-          x: statX,
-          y: statY - 20,
-          size: 10,
-          font: helvetica,
-          color: grayColor,
-        });
-
-        statX += statWidth;
-      });
-
-      // Services section
-      page3.drawText("OUR SERVICES", {
-        x: margin,
-        y: pageHeight - 360,
-        size: 24,
-        font: helveticaBold,
-        color: blackColor,
-      });
-
-      page3.drawRectangle({
-        x: margin,
-        y: pageHeight - 370,
-        width: 100,
-        height: 3,
-        color: goldColor,
-      });
-
-      const services = [
-        "Property Sales & Rental Brokerage",
-        "Legal Partner Introductions",
-        "Interior Design & Architecture Partners",
-        "Mortgage Partner Introductions",
-        "Golden Visa Assistance (via Partners)",
-        "Holiday Homes Management"
-      ];
-
-      yPos = pageHeight - 410;
-      services.forEach((service) => {
-        page3.drawText("•", {
-          x: margin,
-          y: yPos,
-          size: 12,
-          font: helveticaBold,
-          color: goldColor,
-        });
-        page3.drawText(service, {
-          x: margin + 15,
-          y: yPos,
-          size: 12,
-          font: helvetica,
-          color: blackColor,
-        });
-        yPos -= 25;
-      });
-
-      // Footer
-      page3.drawText("www.jbj.ae", {
-        x: pageWidth / 2 - 30,
-        y: 30,
-        size: 10,
-        font: helvetica,
-        color: goldColor,
-      });
-
-      // === PAGE 4: Contact ===
-      const page4 = pdfDoc.addPage([pageWidth, pageHeight]);
+      // === PAGE 6: Process ===
+      const page6 = pdfDoc.addPage([pageWidth, pageHeight]);
+      page6.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: whiteColor });
+      page6.drawRectangle({ x: 0, y: pageHeight - 50, width: pageWidth, height: 50, color: blackColor });
+      page6.drawText("JBJ GLOBAL REAL ESTATE", { x: margin, y: pageHeight - 32, size: 12, font: helveticaBold, color: goldColor });
       
-      page4.drawRectangle({
-        x: 0,
-        y: 0,
-        width: pageWidth,
-        height: pageHeight,
-        color: blackColor,
-      });
-
-      // Gold accent at top
-      page4.drawRectangle({
-        x: 0,
-        y: pageHeight - 8,
-        width: pageWidth,
-        height: 8,
-        color: goldColor,
-      });
-
-      // Logo
-      page4.drawText("JBJ", {
-        x: pageWidth / 2 - 35,
-        y: pageHeight - 150,
-        size: 56,
-        font: helveticaBold,
-        color: goldColor,
-      });
-
-      page4.drawText("GLOBAL REAL ESTATE", {
-        x: pageWidth / 2 - 110,
-        y: pageHeight - 195,
-        size: 18,
-        font: helveticaBold,
-        color: whiteColor,
-      });
-
-      // Contact section
-      page4.drawText("CONTACT US", {
-        x: pageWidth / 2 - 70,
-        y: pageHeight - 300,
-        size: 24,
-        font: helveticaBold,
-        color: goldColor,
-      });
-
-      page4.drawRectangle({
-        x: pageWidth / 2 - 50,
-        y: pageHeight - 310,
-        width: 100,
-        height: 2,
-        color: goldColor,
-      });
-
-      const contactDetails = [
-        { label: "Location", value: "Downtown Dubai, UAE" },
-        { label: "Phone", value: "+971 56 591 1000" },
-        { label: "Email", value: "Contact@JBJ.ae" },
-        { label: "Website", value: "www.jbj.ae" },
-      ];
-
-      yPos = pageHeight - 370;
-      contactDetails.forEach((contact) => {
-        page4.drawText(contact.label, {
-          x: pageWidth / 2 - 80,
-          y: yPos,
-          size: 10,
-          font: helvetica,
-          color: grayColor,
-        });
-        page4.drawText(contact.value, {
-          x: pageWidth / 2 - 80,
-          y: yPos - 18,
-          size: 14,
-          font: helveticaBold,
-          color: whiteColor,
-        });
+      page6.drawText("OUR PROCESS", { x: margin, y: pageHeight - 100, size: 22, font: helveticaBold, color: blackColor });
+      page6.drawRectangle({ x: margin, y: pageHeight - 108, width: 100, height: 3, color: goldColor });
+      
+      yPos = pageHeight - 160;
+      PROFILE_CONTENT.process.forEach((step) => {
+        page6.drawText(`${step.step}.`, { x: margin, y: yPos, size: 24, font: helveticaBold, color: goldColor });
+        page6.drawText(step.title, { x: margin + 40, y: yPos, size: 14, font: helveticaBold, color: blackColor });
+        page6.drawText(step.description, { x: margin + 40, y: yPos - 18, size: 10, font: helvetica, color: grayColor });
         yPos -= 55;
       });
+      page6.drawText("www.jbj.ae", { x: pageWidth / 2 - 30, y: 25, size: 10, font: helvetica, color: goldColor });
 
-      // CTA
-      page4.drawText("Schedule a Consultation Today", {
-        x: pageWidth / 2 - 110,
-        y: 150,
-        size: 14,
-        font: helveticaBold,
-        color: goldColor,
-      });
-
-      // Bottom text
-      page4.drawText("Real Estate Brokerage | Dubai, UAE", {
-        x: pageWidth / 2 - 90,
-        y: 50,
-        size: 10,
-        font: helvetica,
-        color: grayColor,
-      });
-
-      // Gold accent at bottom
-      page4.drawRectangle({
-        x: 0,
-        y: 0,
-        width: pageWidth,
-        height: 8,
-        color: goldColor,
-      });
-
-      // === PAGE 5: Legal Disclaimer ===
-      const page5 = pdfDoc.addPage([pageWidth, pageHeight]);
+      // === PAGE 7: Why JBJ ===
+      const page7 = pdfDoc.addPage([pageWidth, pageHeight]);
+      page7.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: whiteColor });
+      page7.drawRectangle({ x: 0, y: pageHeight - 50, width: pageWidth, height: 50, color: blackColor });
+      page7.drawText("JBJ GLOBAL REAL ESTATE", { x: margin, y: pageHeight - 32, size: 12, font: helveticaBold, color: goldColor });
       
-      page5.drawRectangle({
-        x: 0,
-        y: 0,
-        width: pageWidth,
-        height: pageHeight,
-        color: whiteColor,
+      page7.drawText("WHY JBJ", { x: margin, y: pageHeight - 100, size: 22, font: helveticaBold, color: blackColor });
+      page7.drawRectangle({ x: margin, y: pageHeight - 108, width: 70, height: 3, color: goldColor });
+      
+      yPos = pageHeight - 150;
+      const leftCol = PROFILE_CONTENT.differentiators.slice(0, 4);
+      const rightCol = PROFILE_CONTENT.differentiators.slice(4);
+      
+      leftCol.forEach((item, i) => {
+        page7.drawText("•", { x: margin, y: yPos - (i * 35), size: 14, font: helveticaBold, color: goldColor });
+        page7.drawText(item, { x: margin + 20, y: yPos - (i * 35), size: 12, font: helvetica, color: blackColor });
       });
-
-      // Header
-      page5.drawRectangle({
-        x: 0,
-        y: pageHeight - 60,
-        width: pageWidth,
-        height: 60,
-        color: blackColor,
+      rightCol.forEach((item, i) => {
+        page7.drawText("•", { x: pageWidth / 2, y: yPos - (i * 35), size: 14, font: helveticaBold, color: goldColor });
+        page7.drawText(item, { x: pageWidth / 2 + 20, y: yPos - (i * 35), size: 12, font: helvetica, color: blackColor });
       });
+      page7.drawText("www.jbj.ae", { x: pageWidth / 2 - 30, y: 25, size: 10, font: helvetica, color: goldColor });
 
-      page5.drawText("JBJ GLOBAL REAL ESTATE", {
-        x: margin,
-        y: pageHeight - 40,
-        size: 14,
-        font: helveticaBold,
-        color: goldColor,
+      // === PAGE 8: Areas of Focus ===
+      const page8 = pdfDoc.addPage([pageWidth, pageHeight]);
+      page8.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: whiteColor });
+      page8.drawRectangle({ x: 0, y: pageHeight - 50, width: pageWidth, height: 50, color: blackColor });
+      page8.drawText("JBJ GLOBAL REAL ESTATE", { x: margin, y: pageHeight - 32, size: 12, font: helveticaBold, color: goldColor });
+      
+      page8.drawText("AREAS OF FOCUS", { x: margin, y: pageHeight - 100, size: 22, font: helveticaBold, color: blackColor });
+      page8.drawRectangle({ x: margin, y: pageHeight - 108, width: 120, height: 3, color: goldColor });
+      
+      yPos = pageHeight - 150;
+      const areaLeftCol = PROFILE_CONTENT.areas.slice(0, 6);
+      const areaRightCol = PROFILE_CONTENT.areas.slice(6);
+      
+      areaLeftCol.forEach((area, i) => {
+        page8.drawText("•", { x: margin, y: yPos - (i * 30), size: 14, font: helveticaBold, color: goldColor });
+        page8.drawText(area, { x: margin + 20, y: yPos - (i * 30), size: 12, font: helvetica, color: blackColor });
       });
-
-      // Section title
-      page5.drawText("LEGAL DISCLAIMER", {
-        x: margin,
-        y: pageHeight - 110,
-        size: 24,
-        font: helveticaBold,
-        color: blackColor,
+      areaRightCol.forEach((area, i) => {
+        page8.drawText("•", { x: pageWidth / 2, y: yPos - (i * 30), size: 14, font: helveticaBold, color: goldColor });
+        page8.drawText(area, { x: pageWidth / 2 + 20, y: yPos - (i * 30), size: 12, font: helvetica, color: blackColor });
       });
+      page8.drawText("www.jbj.ae", { x: pageWidth / 2 - 30, y: 25, size: 10, font: helvetica, color: goldColor });
 
-      page5.drawRectangle({
-        x: margin,
-        y: pageHeight - 120,
-        width: 120,
-        height: 3,
-        color: goldColor,
+      // === PAGE 9: Client Experience ===
+      const page9 = pdfDoc.addPage([pageWidth, pageHeight]);
+      page9.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: whiteColor });
+      page9.drawRectangle({ x: 0, y: pageHeight - 50, width: pageWidth, height: 50, color: blackColor });
+      page9.drawText("JBJ GLOBAL REAL ESTATE", { x: margin, y: pageHeight - 32, size: 12, font: helveticaBold, color: goldColor });
+      
+      page9.drawText("CLIENT EXPERIENCE STANDARDS", { x: margin, y: pageHeight - 100, size: 22, font: helveticaBold, color: blackColor });
+      page9.drawRectangle({ x: margin, y: pageHeight - 108, width: 220, height: 3, color: goldColor });
+      
+      yPos = pageHeight - 150;
+      PROFILE_CONTENT.clientExperience.forEach((item) => {
+        page9.drawText("✓", { x: margin, y: yPos, size: 14, font: helveticaBold, color: goldColor });
+        page9.drawText(item, { x: margin + 25, y: yPos, size: 12, font: helvetica, color: blackColor });
+        yPos -= 35;
       });
+      page9.drawText("www.jbj.ae", { x: pageWidth / 2 - 30, y: 25, size: 10, font: helvetica, color: goldColor });
 
-      // Disclaimer text
-      const disclaimerLines = [
-        "IMPORTANT NOTICE:",
-        "",
-        "JBJ Global Real Estate is a Dubai-based real estate brokerage",
-        "specializing in property sales, rentals, and holiday homes,",
-        "with full investment and professional advisory services.",
-        "",
-        "For legal matters, we can introduce you to licensed law firms.",
-        "For mortgage services, we can connect you with licensed brokers.",
-        "",
-        "All information in this document is provided based on our company",
-        "insights and expertise. We recommend independent verification",
-        "before making any property decisions.",
-        "",
-        "Statistics and figures shown are based on founder experience and",
-        "company records. Past performance is not indicative of future results.",
-        "",
-        "Licensed by: Dubai Land Department (DLD)",
-        "Regulated by: Real Estate Regulatory Agency (RERA)",
-        "",
-        "© 2025 JBJ Global Real Estate. All rights reserved.",
+      // === PAGE 10: Trust & Compliance ===
+      const page10 = pdfDoc.addPage([pageWidth, pageHeight]);
+      page10.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: whiteColor });
+      page10.drawRectangle({ x: 0, y: pageHeight - 50, width: pageWidth, height: 50, color: blackColor });
+      page10.drawText("JBJ GLOBAL REAL ESTATE", { x: margin, y: pageHeight - 32, size: 12, font: helveticaBold, color: goldColor });
+      
+      page10.drawText("TRUST & COMPLIANCE", { x: margin, y: pageHeight - 100, size: 22, font: helveticaBold, color: blackColor });
+      page10.drawRectangle({ x: margin, y: pageHeight - 108, width: 150, height: 3, color: goldColor });
+      
+      const trustLines = wrapText(PROFILE_CONTENT.trustCompliance, pageWidth - margin * 2 - 100, 11, helvetica);
+      yPos = pageHeight - 150;
+      trustLines.forEach((line) => {
+        page10.drawText(line, { x: margin, y: yPos, size: 11, font: helvetica, color: grayColor });
+        yPos -= 20;
+      });
+      page10.drawText("www.jbj.ae", { x: pageWidth / 2 - 30, y: 25, size: 10, font: helvetica, color: goldColor });
+
+      // === PAGE 11: Founder Profile ===
+      const page11 = pdfDoc.addPage([pageWidth, pageHeight]);
+      page11.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: blackColor });
+      page11.drawRectangle({ x: 0, y: pageHeight - 8, width: pageWidth, height: 8, color: goldColor });
+      
+      page11.drawText("FOUNDER PROFILE", { x: margin, y: pageHeight - 80, size: 22, font: helveticaBold, color: goldColor });
+      page11.drawRectangle({ x: margin, y: pageHeight - 88, width: 130, height: 2, color: goldColor });
+      
+      page11.drawText(PROFILE_CONTENT.founderProfile.name, { x: margin, y: pageHeight - 130, size: 28, font: helveticaBold, color: whiteColor });
+      page11.drawText(PROFILE_CONTENT.founderProfile.title, { x: margin, y: pageHeight - 155, size: 14, font: helvetica, color: goldColor });
+      
+      const bioLines = wrapText(PROFILE_CONTENT.founderProfile.bio.replace(/\n\n/g, ' '), pageWidth - margin * 2 - 50, 10, helvetica);
+      yPos = pageHeight - 200;
+      bioLines.forEach((line) => {
+        page11.drawText(line, { x: margin, y: yPos, size: 10, font: helvetica, color: grayColor });
+        yPos -= 16;
+      });
+      
+      page11.drawText(`"${PROFILE_CONTENT.founderProfile.quote}"`, { x: margin, y: 100, size: 16, font: helveticaBold, color: goldColor });
+      page11.drawText("— Jane Bou Jaoude", { x: margin, y: 75, size: 12, font: helvetica, color: grayColor });
+      page11.drawRectangle({ x: 0, y: 0, width: pageWidth, height: 8, color: goldColor });
+
+      // === PAGE 12: Company Snapshot & Contact ===
+      const page12 = pdfDoc.addPage([pageWidth, pageHeight]);
+      page12.drawRectangle({ x: 0, y: 0, width: pageWidth, height: pageHeight, color: blackColor });
+      page12.drawRectangle({ x: 0, y: pageHeight - 8, width: pageWidth, height: 8, color: goldColor });
+      
+      page12.drawText("COMPANY SNAPSHOT", { x: margin, y: pageHeight - 80, size: 22, font: helveticaBold, color: goldColor });
+      page12.drawRectangle({ x: margin, y: pageHeight - 88, width: 150, height: 2, color: goldColor });
+      
+      const snapshotItems = [
+        { label: "Headquarters", value: PROFILE_CONTENT.companySnapshot.headquarters },
+        { label: "Service Areas", value: PROFILE_CONTENT.companySnapshot.serviceAreas },
+        { label: "Languages", value: PROFILE_CONTENT.companySnapshot.languages },
+        { label: "Contact", value: PROFILE_CONTENT.companySnapshot.contact },
+        { label: "Email", value: PROFILE_CONTENT.companySnapshot.email },
+        { label: "Website", value: PROFILE_CONTENT.companySnapshot.website },
+        { label: "Working Hours", value: PROFILE_CONTENT.companySnapshot.workingHours },
       ];
-
-      yPos = pageHeight - 160;
-      disclaimerLines.forEach((line) => {
-        const isHeader = line === "IMPORTANT NOTICE:" || line.startsWith("Licensed by:") || line.startsWith("Regulated by:");
-        page5.drawText(line, {
-          x: margin,
-          y: yPos,
-          size: isHeader ? 11 : 10,
-          font: isHeader ? helveticaBold : helvetica,
-          color: isHeader ? blackColor : grayColor,
-        });
-        yPos -= line === "" ? 10 : 16;
+      
+      yPos = pageHeight - 130;
+      snapshotItems.forEach((item) => {
+        page12.drawText(item.label + ":", { x: margin, y: yPos, size: 10, font: helvetica, color: grayColor });
+        page12.drawText(item.value, { x: margin + 120, y: yPos, size: 11, font: helveticaBold, color: whiteColor });
+        yPos -= 28;
       });
-
-      // Footer
-      page5.drawText("www.jbj.ae", {
-        x: pageWidth / 2 - 30,
-        y: 30,
-        size: 10,
-        font: helvetica,
-        color: goldColor,
+      
+      // CTAs
+      yPos = 180;
+      page12.drawText("READY TO START?", { x: pageWidth / 2 - 80, y: yPos, size: 18, font: helveticaBold, color: goldColor });
+      page12.drawRectangle({ x: pageWidth / 2 - 60, y: yPos - 8, width: 120, height: 2, color: goldColor });
+      
+      PROFILE_CONTENT.ctas.forEach((cta) => {
+        yPos -= 35;
+        page12.drawText(`• ${cta.title}`, { x: margin + 100, y: yPos, size: 12, font: helveticaBold, color: whiteColor });
+        page12.drawText(cta.description, { x: margin + 100, y: yPos - 15, size: 10, font: helvetica, color: grayColor });
       });
+      
+      page12.drawRectangle({ x: 0, y: 0, width: pageWidth, height: 8, color: goldColor });
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([new Uint8Array(pdfBytes)], { type: "application/pdf" });
-      setPdfBlob(blob);
-      setShowPreview(true);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "JBJ_Global_Real_Estate_Company_Profile.pdf";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast.success("Company Profile downloaded successfully!");
     } catch (error) {
       console.error("Error generating PDF:", error);
       toast.error("Failed to generate PDF");
@@ -681,48 +547,47 @@ const CompanyProfile = () => {
     }
   };
 
-  const handleDownload = () => {
-    if (!pdfBlob) return;
-    const url = URL.createObjectURL(pdfBlob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "JJ-Global-Capital-Company-Profile.pdf";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    toast.success("Company Profile downloaded successfully!");
+  const handleWhatsApp = () => {
+    window.location.href = getWhatsAppUrl("Hello, I would like to request a private consultation.");
   };
 
-  const handleShareWhatsApp = () => {
-    const message = encodeURIComponent(
-      "Check out JBJ Global Real Estate - UAE's Premier Real Estate Brokerage. Download their company profile at: https://jbj.ae/company-profile"
-    );
-    window.open(`https://wa.me/?text=${message}`, "_blank");
-  };
-
-  const handleShareEmail = () => {
-    const subject = encodeURIComponent("JBJ Global Real Estate - Company Profile");
-    const body = encodeURIComponent(
-      "I wanted to share with you the company profile of JBJ Global Real Estate, UAE's Premier Real Estate Brokerage.\n\nVisit: https://jbj.ae/company-profile"
-    );
-    window.location.href = `mailto:?subject=${subject}&body=${body}`;
-  };
-
-  const handleCopyLink = async () => {
-    try {
-      await navigator.clipboard.writeText("https://jbj.ae/company-profile");
-      setCopied(true);
-      toast.success("Link copied to clipboard!");
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      toast.error("Failed to copy link");
-    }
+  const handleCall = () => {
+    window.location.href = `tel:${CONTACT_INFO.phoneRaw}`;
   };
 
   return (
     <div className="min-h-screen bg-black">
-      {/* Hero Section */}
+      {/* Sticky Actions (Desktop) */}
+      <div className="hidden lg:flex fixed right-6 top-1/2 -translate-y-1/2 z-50 flex-col gap-3">
+        <button
+          onClick={handleWhatsApp}
+          className="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform"
+          aria-label="WhatsApp"
+        >
+          <MessageCircle className="w-5 h-5" />
+        </button>
+        <button
+          onClick={handleCall}
+          className="w-12 h-12 rounded-full bg-gold flex items-center justify-center text-black shadow-lg hover:scale-110 transition-transform"
+          aria-label="Call"
+        >
+          <Phone className="w-5 h-5" />
+        </button>
+        <button
+          onClick={generatePDF}
+          disabled={isGenerating}
+          className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-black shadow-lg hover:scale-110 transition-transform disabled:opacity-50"
+          aria-label="Download PDF"
+        >
+          {isGenerating ? (
+            <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+          ) : (
+            <Download className="w-5 h-5" />
+          )}
+        </button>
+      </div>
+
+      {/* 1. Hero Section */}
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img 
@@ -746,19 +611,19 @@ const CompanyProfile = () => {
             Company Profile
           </motion.span>
           <motion.h1 
-            className="text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
+            className="text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-4"
             style={{ fontFamily: "Poppins, sans-serif" }}
             variants={fadeInUp}
           >
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">
-              JBJ Global Real Estate
+              {PROFILE_CONTENT.coverPage.title}
             </span>
           </motion.h1>
           <motion.p 
             className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto mb-8"
             variants={fadeInUp}
           >
-            {companyInfo.tagline}
+            {PROFILE_CONTENT.coverPage.subtitle}
           </motion.p>
           
           <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
@@ -784,14 +649,8 @@ const CompanyProfile = () => {
         </motion.div>
       </section>
 
-      {/* Company Overview Section */}
+      {/* 2. Executive Summary */}
       <section className="py-20 relative overflow-hidden">
-        <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] pointer-events-none"
-          style={{
-            background: "radial-gradient(ellipse at center, hsl(40 32% 51% / 0.08) 0%, transparent 60%)",
-          }}
-        />
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -800,176 +659,442 @@ const CompanyProfile = () => {
             className="max-w-4xl mx-auto"
           >
             <div className="text-center mb-12">
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">About Us</span>
-              <h2 
-                className="text-white text-3xl md:text-4xl font-bold mb-6"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                A Legacy of Excellence
+              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Overview</span>
+              <h2 className="text-white text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+                Executive Summary
               </h2>
             </div>
             
-            <div className="space-y-6 text-zinc-400 leading-relaxed text-center md:text-left">
-              <p>{companyInfo.about}</p>
+            <div className="space-y-6 text-zinc-400 leading-relaxed">
+              {PROFILE_CONTENT.executiveSummary.split('\n\n').map((para, i) => (
+                <p key={i}>{para}</p>
+              ))}
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Stats Grid */}
-      <section className="py-16 bg-zinc-900/30">
+      {/* 3. Brand Story */}
+      <section className="py-20 bg-zinc-900/30">
         <div className="container mx-auto px-4">
-          <motion.div 
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6"
-            initial="hidden"
-            whileInView="visible"
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            variants={staggerContainer}
+            className="max-w-4xl mx-auto"
           >
-            {Object.entries(companyInfo.stats).map(([key, value]) => (
-              <motion.div 
-                key={key}
-                className="text-center p-6 bg-black/50 rounded-xl border border-zinc-800"
-                variants={fadeInUp}
-              >
-                <p className="text-gold text-2xl md:text-3xl font-bold mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  {value}
-                </p>
-                <p className="text-zinc-500 text-xs uppercase tracking-wider">
-                  {key.replace(/([A-Z])/g, ' $1').trim()}
-                </p>
-              </motion.div>
-            ))}
+            <div className="text-center mb-12">
+              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Story</span>
+              <h2 className="text-white text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+                Brand Story
+              </h2>
+            </div>
+            
+            <div className="space-y-6 text-zinc-400 leading-relaxed">
+              {PROFILE_CONTENT.brandStory.split('\n\n').map((para, i) => (
+                <p key={i}>{para}</p>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Mission & Vision */}
+      {/* 4. Vision / Mission / Values */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8"
-            >
-              <Target className="w-12 h-12 text-gold mb-4" />
-              <h3 className="text-white text-xl font-bold mb-4">Our Mission</h3>
-              <p className="text-zinc-400 leading-relaxed">{companyInfo.mission}</p>
-            </motion.div>
+          <div className="max-w-5xl mx-auto">
+            {/* Vision & Mission */}
+            <div className="grid md:grid-cols-2 gap-8 mb-16">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8"
+              >
+                <Eye className="w-12 h-12 text-gold mb-4" />
+                <h3 className="text-white text-xl font-bold mb-4">Vision</h3>
+                <p className="text-zinc-400 leading-relaxed">{PROFILE_CONTENT.vision}</p>
+              </motion.div>
+              
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8"
+              >
+                <Target className="w-12 h-12 text-gold mb-4" />
+                <h3 className="text-white text-xl font-bold mb-4">Mission</h3>
+                <p className="text-zinc-400 leading-relaxed">{PROFILE_CONTENT.mission}</p>
+              </motion.div>
+            </div>
+
+            {/* Values */}
+            <div className="text-center mb-12">
+              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Foundation</span>
+              <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                Values
+              </h2>
+            </div>
             
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+            <motion.div 
+              className="grid md:grid-cols-5 gap-4"
+              initial="hidden"
+              whileInView="visible"
               viewport={{ once: true }}
-              className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8"
+              variants={staggerContainer}
             >
-              <Globe className="w-12 h-12 text-gold mb-4" />
-              <h3 className="text-white text-xl font-bold mb-4">Our Vision</h3>
-              <p className="text-zinc-400 leading-relaxed">{companyInfo.vision}</p>
+              {PROFILE_CONTENT.values.map((value) => (
+                <motion.div 
+                  key={value.title}
+                  className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold/30 transition-colors"
+                  variants={fadeInUp}
+                >
+                  <Heart className="w-8 h-8 text-gold mx-auto mb-3" />
+                  <h3 className="text-white text-sm font-bold mb-2">{value.title}</h3>
+                  <p className="text-zinc-500 text-xs">{value.description}</p>
+                </motion.div>
+              ))}
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Services */}
+      {/* 5. Services (6-card grid) */}
       <section className="py-20 bg-gradient-to-b from-zinc-900/50 to-black">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">What We Offer</span>
-            <h2 
-              className="text-white text-3xl md:text-4xl font-bold"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Our Services
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">What We Do</span>
+            <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Services
             </h2>
           </div>
           
           <motion.div 
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto"
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
           >
-            {companyInfo.services.map((service, index) => (
-              <motion.div 
-                key={service}
-                className="flex items-center gap-4 p-5 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold/30 transition-colors"
-                variants={fadeInUp}
-              >
-                <CheckCircle className="w-6 h-6 text-gold flex-shrink-0" />
-                <span className="text-white">{service}</span>
-              </motion.div>
-            ))}
+            {PROFILE_CONTENT.services.map((service) => {
+              const Icon = service.icon;
+              return (
+                <motion.div 
+                  key={service.title}
+                  className="p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold/30 transition-colors"
+                  variants={fadeInUp}
+                >
+                  <Icon className="w-10 h-10 text-gold mb-4" />
+                  <h3 className="text-white text-lg font-bold mb-2">{service.title}</h3>
+                  <p className="text-zinc-400 text-sm mb-3">{service.description}</p>
+                  <p className="text-zinc-500 text-xs mb-1"><strong className="text-zinc-400">Ideal for:</strong> {service.idealFor}</p>
+                  <p className="text-zinc-500 text-xs"><strong className="text-zinc-400">Deliverables:</strong> {service.deliverables}</p>
+                </motion.div>
+              );
+            })}
           </motion.div>
         </div>
       </section>
 
-      {/* Values */}
+      {/* 6. Process (timeline) */}
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Values</span>
-            <h2 
-              className="text-white text-3xl md:text-4xl font-bold"
-              style={{ fontFamily: "Poppins, sans-serif" }}
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">How We Work</span>
+            <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Our Process
+            </h2>
+          </div>
+          
+          <div className="max-w-4xl mx-auto">
+            <motion.div 
+              className="relative"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
             >
-              The Pillars of Our Success
+              {/* Timeline line */}
+              <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-gold via-gold/50 to-transparent hidden md:block" />
+              
+              {PROFILE_CONTENT.process.map((step, index) => (
+                <motion.div 
+                  key={step.step}
+                  className="flex items-start gap-6 mb-8 last:mb-0"
+                  variants={fadeInUp}
+                >
+                  <div className="w-16 h-16 rounded-full bg-gold/20 border-2 border-gold flex items-center justify-center flex-shrink-0">
+                    <span className="text-gold text-xl font-bold">{step.step}</span>
+                  </div>
+                  <div className="pt-3">
+                    <h3 className="text-white text-lg font-bold mb-1">{step.title}</h3>
+                    <p className="text-zinc-400">{step.description}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* 7. Differentiators */}
+      <section className="py-20 bg-zinc-900/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Edge</span>
+            <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Why JBJ
             </h2>
           </div>
           
           <motion.div 
-            className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto"
+            className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
           >
-            {companyInfo.values.map((value) => (
+            {PROFILE_CONTENT.differentiators.map((item) => (
               <motion.div 
-                key={value.title}
-                className="text-center p-8 bg-zinc-900/50 border border-zinc-800 rounded-2xl hover:border-gold/30 transition-colors"
+                key={item}
+                className="flex items-center gap-3 p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold/30 transition-colors"
                 variants={fadeInUp}
               >
-                <Shield className="w-12 h-12 text-gold mx-auto mb-4" />
-                <h3 className="text-white text-xl font-bold mb-3">{value.title}</h3>
-                <p className="text-zinc-400">{value.description}</p>
+                <CheckCircle className="w-5 h-5 text-gold flex-shrink-0" />
+                <span className="text-white text-sm">{item}</span>
               </motion.div>
             ))}
           </motion.div>
         </div>
       </section>
 
-      {/* Legal Disclaimer Section */}
+      {/* 8. Areas of Focus */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Where We Operate</span>
+            <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Areas of Focus
+            </h2>
+          </div>
+          
+          <motion.div 
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-4xl mx-auto"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
+            {PROFILE_CONTENT.areas.map((area) => (
+              <motion.div 
+                key={area}
+                className="flex items-center gap-2 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg hover:border-gold/30 transition-colors"
+                variants={fadeInUp}
+              >
+                <MapPin className="w-4 h-4 text-gold flex-shrink-0" />
+                <span className="text-white text-sm">{area}</span>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 9. Client Experience Standards */}
+      <section className="py-20 bg-zinc-900/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Commitment</span>
+            <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Client Experience Standards
+            </h2>
+          </div>
+          
+          <motion.div 
+            className="grid md:grid-cols-2 gap-4 max-w-3xl mx-auto"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
+            {PROFILE_CONTENT.clientExperience.map((item) => (
+              <motion.div 
+                key={item}
+                className="flex items-center gap-3 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg"
+                variants={fadeInUp}
+              >
+                <CheckCircle className="w-5 h-5 text-gold flex-shrink-0" />
+                <span className="text-zinc-300">{item}</span>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 10. Trust & Compliance */}
       <section className="py-12 bg-zinc-950">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto p-8 bg-amber-500/5 border border-amber-500/20 rounded-2xl">
             <div className="flex items-start gap-4">
               <Shield className="w-8 h-8 text-amber-500 flex-shrink-0 mt-1" />
               <div>
-                <h3 className="text-amber-400 font-bold text-lg mb-3">Important Disclaimer</h3>
-                <div className="space-y-3 text-sm text-zinc-400">
-                  <p>
-                    JBJ Global Real Estate is a Dubai-based <strong className="text-zinc-300">real estate brokerage</strong> specializing 
-                    in property sales, rentals, and holiday homes. We are NOT a financial institution, law firm, or mortgage provider.
-                  </p>
-                  <p>
-                    We do NOT provide legal, mortgage, or financial advice. Legal, mortgage, and property management 
-                    services are provided through introductions to independent licensed third parties who contract directly with clients.
-                  </p>
-                  <p className="text-zinc-500 text-xs">
-                    Licensed by Dubai Land Department (DLD) • Regulated by Real Estate Regulatory Agency (RERA)
-                  </p>
-                </div>
+                <h3 className="text-amber-400 font-bold text-lg mb-3">Trust & Compliance</h3>
+                <p className="text-zinc-400 text-sm leading-relaxed">
+                  {PROFILE_CONTENT.trustCompliance}
+                </p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Download CTA */}
+      {/* 11. Founder Profile */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Leadership</span>
+              <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                Founder Profile
+              </h2>
+            </div>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-3xl p-8 md:p-12 border border-gold/20"
+            >
+              <div className="flex flex-col md:flex-row items-start gap-8">
+                <div className="w-24 h-24 rounded-full bg-gold/20 border-2 border-gold flex items-center justify-center flex-shrink-0">
+                  <User className="w-12 h-12 text-gold" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-white text-2xl font-bold mb-1">{PROFILE_CONTENT.founderProfile.name}</h3>
+                  <p className="text-gold mb-6">{PROFILE_CONTENT.founderProfile.title}</p>
+                  <div className="space-y-4 text-zinc-400 leading-relaxed mb-8">
+                    {PROFILE_CONTENT.founderProfile.bio.split('\n\n').map((para, i) => (
+                      <p key={i}>{para}</p>
+                    ))}
+                  </div>
+                  <blockquote className="border-l-4 border-gold pl-6 py-2">
+                    <p className="text-gold text-xl italic mb-2">"{PROFILE_CONTENT.founderProfile.quote}"</p>
+                    <cite className="text-zinc-500 text-sm">— {PROFILE_CONTENT.founderProfile.name}</cite>
+                  </blockquote>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* 12. Company Snapshot */}
+      <section className="py-20 bg-zinc-900/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">At a Glance</span>
+            <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Company Snapshot
+            </h2>
+          </div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-2xl mx-auto bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex items-center gap-4">
+                <Building2 className="w-5 h-5 text-gold" />
+                <div>
+                  <p className="text-zinc-500 text-xs uppercase">Headquarters</p>
+                  <p className="text-white">{PROFILE_CONTENT.companySnapshot.headquarters}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <MapPin className="w-5 h-5 text-gold" />
+                <div>
+                  <p className="text-zinc-500 text-xs uppercase">Service Areas</p>
+                  <p className="text-white">{PROFILE_CONTENT.companySnapshot.serviceAreas}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <Globe className="w-5 h-5 text-gold" />
+                <div>
+                  <p className="text-zinc-500 text-xs uppercase">Languages</p>
+                  <p className="text-white">{PROFILE_CONTENT.companySnapshot.languages}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <Phone className="w-5 h-5 text-gold" />
+                <div>
+                  <p className="text-zinc-500 text-xs uppercase">Contact</p>
+                  <p className="text-white">{PROFILE_CONTENT.companySnapshot.contact}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <Mail className="w-5 h-5 text-gold" />
+                <div>
+                  <p className="text-zinc-500 text-xs uppercase">Email</p>
+                  <p className="text-white">{PROFILE_CONTENT.companySnapshot.email}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <Globe className="w-5 h-5 text-gold" />
+                <div>
+                  <p className="text-zinc-500 text-xs uppercase">Website</p>
+                  <p className="text-white">{PROFILE_CONTENT.companySnapshot.website}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4 md:col-span-2">
+                <Clock className="w-5 h-5 text-gold" />
+                <div>
+                  <p className="text-zinc-500 text-xs uppercase">Working Hours</p>
+                  <p className="text-white">{PROFILE_CONTENT.companySnapshot.workingHours}</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 13. Calls to Action */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Get Started</span>
+            <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Ready to Connect?
+            </h2>
+          </div>
+          
+          <motion.div 
+            className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
+            {PROFILE_CONTENT.ctas.map((cta) => (
+              <motion.div
+                key={cta.title}
+                variants={fadeInUp}
+                className="bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-2xl p-6 border border-gold/20 hover:border-gold/40 transition-colors group cursor-pointer"
+                onClick={handleWhatsApp}
+              >
+                <h3 className="text-white text-lg font-bold mb-2 group-hover:text-gold transition-colors">{cta.title}</h3>
+                <p className="text-zinc-400 text-sm mb-4">{cta.description}</p>
+                <div className="flex items-center text-gold text-sm">
+                  <span>Get Started</span>
+                  <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 14. PDF Download Module */}
       <section className="py-20 bg-gradient-to-b from-zinc-900/50 to-black">
         <div className="container mx-auto px-4">
           <motion.div 
@@ -979,14 +1104,11 @@ const CompanyProfile = () => {
             viewport={{ once: true }}
           >
             <FileText className="w-16 h-16 text-gold mx-auto mb-6" />
-            <h2 
-              className="text-white text-3xl md:text-4xl font-bold mb-4"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Get Our Company Profile
+            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Download Company Profile
             </h2>
             <p className="text-zinc-400 text-lg mb-8">
-              Download our comprehensive company profile to learn more about JBJ Global Real Estate
+              Get our comprehensive company profile in PDF format
             </p>
             <Button
               onClick={generatePDF}
@@ -997,99 +1119,50 @@ const CompanyProfile = () => {
               {isGenerating ? (
                 <div className="flex items-center gap-2">
                   <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-                  Generating PDF...
+                  Generating...
                 </div>
               ) : (
                 <>
                   <Download className="w-5 h-5 mr-2" />
-                  Download PDF
+                  Download Company Profile
                 </>
               )}
             </Button>
+            <p className="text-zinc-500 text-sm mt-4">
+              JBJ_Global_Real_Estate_Company_Profile.pdf
+            </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Preview Modal */}
-      <Dialog open={showPreview} onOpenChange={setShowPreview}>
-        <DialogContent className="max-w-2xl bg-zinc-900 border-zinc-800">
-          <DialogHeader>
-            <DialogTitle className="text-white text-xl flex items-center gap-2">
-              <FileText className="w-5 h-5 text-gold" />
-              JBJ Global Real Estate - Company Profile
-            </DialogTitle>
-          </DialogHeader>
-          
-          <div className="py-6">
-            {/* PDF Preview Card */}
-            <div className="bg-black rounded-xl p-8 border border-gold/20 mb-6">
-              <div className="flex items-center justify-center mb-6">
-                <JJLogoImage variant="dark" size="lg" />
-              </div>
-              <div className="text-center">
-                <p className="text-gold text-sm uppercase tracking-[0.3em] mb-2">Company Profile</p>
-                <p className="text-white text-2xl font-bold mb-1" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  JBJ Global Real Estate
-                </p>
-                <p className="text-zinc-500 text-sm">5 Pages • PDF Document</p>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="space-y-3">
-              <Button
-                onClick={handleDownload}
-                variant="primary"
-                className="w-full py-6"
-              >
-                <Download className="w-5 h-5 mr-2" />
-                Save to Device
-              </Button>
-              
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="w-full border-zinc-700 text-white hover:bg-zinc-800 py-6"
-                  >
-                    <Share2 className="w-5 h-5 mr-2" />
-                    Share Profile
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="center" className="bg-zinc-900 border-zinc-800 w-64">
-                  <DropdownMenuItem
-                    onClick={handleShareWhatsApp}
-                    className="text-zinc-300 hover:text-white hover:bg-zinc-800 cursor-pointer py-3"
-                  >
-                    <MessageCircle className="w-5 h-5 mr-3 text-green-500" />
-                    Share via WhatsApp
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={handleShareEmail}
-                    className="text-zinc-300 hover:text-white hover:bg-zinc-800 cursor-pointer py-3"
-                  >
-                    <Mail className="w-5 h-5 mr-3 text-gold" />
-                    Share via Email
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={handleCopyLink}
-                    className="text-zinc-300 hover:text-white hover:bg-zinc-800 cursor-pointer py-3"
-                  >
-                    {copied ? (
-                      <Check className="w-5 h-5 mr-3 text-green-500" />
-                    ) : (
-                      <Copy className="w-5 h-5 mr-3" />
-                    )}
-                    Copy Link
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      <Footer />
+      {/* Mobile Sticky Actions */}
+      <div className="lg:hidden fixed bottom-4 left-4 right-4 z-50 flex gap-2">
+        <button
+          onClick={handleWhatsApp}
+          className="flex-1 py-3 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow-lg"
+        >
+          <MessageCircle className="w-5 h-5 mr-2" />
+          WhatsApp
+        </button>
+        <button
+          onClick={handleCall}
+          className="flex-1 py-3 rounded-full bg-gold flex items-center justify-center text-black shadow-lg"
+        >
+          <Phone className="w-5 h-5 mr-2" />
+          Call
+        </button>
+        <button
+          onClick={generatePDF}
+          disabled={isGenerating}
+          className="py-3 px-4 rounded-full bg-white flex items-center justify-center text-black shadow-lg disabled:opacity-50"
+        >
+          {isGenerating ? (
+            <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+          ) : (
+            <Download className="w-5 h-5" />
+          )}
+        </button>
+      </div>
     </div>
   );
 };
