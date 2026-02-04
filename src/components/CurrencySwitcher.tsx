@@ -7,11 +7,18 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-const CURRENCIES = [
+// Unified currency list - same across the entire platform
+export const SUPPORTED_CURRENCIES = [
   { code: 'AED', symbol: 'AED', flag: '🇦🇪', name: 'UAE Dirham' },
   { code: 'USD', symbol: '$', flag: '🇺🇸', name: 'US Dollar' },
   { code: 'EUR', symbol: '€', flag: '🇪🇺', name: 'Euro' },
   { code: 'GBP', symbol: '£', flag: '🇬🇧', name: 'British Pound' },
+  { code: 'INR', symbol: '₹', flag: '🇮🇳', name: 'Indian Rupee' },
+  { code: 'SAR', symbol: 'SAR', flag: '🇸🇦', name: 'Saudi Riyal' },
+  { code: 'CNY', symbol: '¥', flag: '🇨🇳', name: 'Chinese Yuan' },
+  { code: 'RUB', symbol: '₽', flag: '🇷🇺', name: 'Russian Ruble' },
+  { code: 'CAD', symbol: 'C$', flag: '🇨🇦', name: 'Canadian Dollar' },
+  { code: 'AUD', symbol: 'A$', flag: '🇦🇺', name: 'Australian Dollar' },
 ];
 
 const CURRENCY_KEY = 'jj_currency';
@@ -35,7 +42,7 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
     window.dispatchEvent(new CustomEvent('currencyChange', { detail: code }));
   };
 
-  const currentCurrency = CURRENCIES.find(c => c.code === currency) || CURRENCIES[0];
+  const currentCurrency = SUPPORTED_CURRENCIES.find(c => c.code === currency) || SUPPORTED_CURRENCIES[0];
   const isMobile = variant === 'mobile';
   const isIconOnly = variant === 'icon-only';
 
@@ -61,12 +68,15 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
       <DropdownMenuContent 
         align="end" 
         sideOffset={12}
-        className="z-[9999] min-w-[240px] rounded-xl shadow-2xl p-0 border-2 border-gold/40"
+        className="z-[9999] min-w-[280px] rounded-xl shadow-2xl p-0 border-2 border-gold/40"
         style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}
       >
         <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
-        <div className="p-3">
-          {CURRENCIES.map((curr) => (
+        <div className="px-4 py-3 border-b border-gold/20">
+          <p className="text-xs font-semibold text-black/60 uppercase tracking-wider">Select Currency</p>
+        </div>
+        <div className="p-2 max-h-80 overflow-y-auto">
+          {SUPPORTED_CURRENCIES.map((curr) => (
             <DropdownMenuItem 
               key={curr.code}
               onClick={() => setCurrency(curr.code)}
@@ -80,9 +90,12 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
                 <span className="text-lg">{curr.flag}</span>
                 <span className={`text-sm font-semibold ${
                   currency === curr.code ? 'text-gold' : 'text-black'
-                }`}>{curr.name} ({curr.symbol})</span>
+                }`}>{curr.name}</span>
               </span>
-              {currency === curr.code && <Check className="w-4 h-4 text-gold" />}
+              <span className="flex items-center gap-2">
+                <span className="text-black/50 text-sm">{curr.symbol}</span>
+                {currency === curr.code && <Check className="w-4 h-4 text-gold" />}
+              </span>
             </DropdownMenuItem>
           ))}
         </div>
