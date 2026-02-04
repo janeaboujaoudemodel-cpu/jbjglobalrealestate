@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -274,6 +274,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
     fetchInventoryStats();
   }, [jobId, showAll, statusFilter]);
 
+  // Debounce ref for realtime subscription
+  const refreshTimerRef = useRef<NodeJS.Timeout | null>(null);
+
   // Real-time subscription to auto-refresh when extraction adds/updates data
   useEffect(() => {
     const channel = supabase
@@ -287,17 +290,23 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           filter: 'status=eq.pending'
         },
         () => {
-          // Debounce rapid updates
-          const timer = setTimeout(() => {
+          // Clear previous timer to properly debounce
+          if (refreshTimerRef.current) {
+            clearTimeout(refreshTimerRef.current);
+          }
+          // Debounce rapid updates (1.5s delay)
+          refreshTimerRef.current = setTimeout(() => {
             fetchPendingImports();
             fetchInventoryStats();
-          }, 1000);
-          return () => clearTimeout(timer);
+          }, 1500);
         }
       )
       .subscribe();
 
     return () => {
+      if (refreshTimerRef.current) {
+        clearTimeout(refreshTimerRef.current);
+      }
       supabase.removeChannel(channel);
     };
   }, [jobId, showAll]);

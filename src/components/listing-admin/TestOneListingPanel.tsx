@@ -92,6 +92,8 @@ interface TestResult {
     hasDistances: boolean;
     distanceCount: number;
     hasPaymentBreakdown: boolean;
+    hasFloorPlans: boolean;
+    floorPlanCount: number;
   };
 }
 
@@ -296,6 +298,10 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
       const hasFaqs = faqs.length >= 1;
       const hasDistances = locationDistances.length >= 1;
       const hasPaymentBreakdown = !!(paymentBreakdown.down_payment || paymentBreakdown.during_construction || paymentBreakdown.on_completion);
+      
+      // Parse floor plan types
+      const floorPlanTypes: Array<{ label: string }> = parseJsonField(updatedProject.floor_plan_types, []);
+      const hasFloorPlans = floorPlanTypes.length >= 1;
 
       const checklist = {
         hasImages,
@@ -318,6 +324,8 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
         hasDistances,
         distanceCount: locationDistances.length,
         hasPaymentBreakdown,
+        hasFloorPlans,
+        floorPlanCount: floorPlanTypes.length,
       };
 
       // Core Complete: 2+ images + brochure + description (>50 chars) + valid developer
@@ -663,16 +671,6 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                           <ThumbsDown className="w-4 h-4" />
                           Reject
                         </Button>
-                        <Link to={`/listing-admin/preview/${testResult.project.id}`}>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="gap-1"
-                          >
-                            <Eye className="w-4 h-4" />
-                            View Full Page
-                          </Button>
-                        </Link>
                       </div>
                     </div>
                   </div>
@@ -730,6 +728,11 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                       <ChecklistItem 
                         label="Payment Breakdown" 
                         passed={testResult.checklist.hasPaymentBreakdown}
+                      />
+                      <ChecklistItem 
+                        label="Floor Plans" 
+                        passed={testResult.checklist.hasFloorPlans} 
+                        detail={`${testResult.checklist.floorPlanCount} found`}
                       />
                       <ChecklistItem 
                         label="Location" 

@@ -2,7 +2,8 @@ import * as React from "react";
 import { Download, Lock, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
+import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
+import downtownDubai from "@/assets/menu-downtown-dubai-skyline.jpg";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 interface PremiumBrochureCardProps {
   projectName: string;
@@ -118,15 +119,11 @@ const PremiumBrochureCard = ({
             `,
           }}
         >
-          {/* Project Image as Cover Background */}
-          {projectImageUrl ? (
-            <div 
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${projectImageUrl})` }}
-            />
-          ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900" />
-          )}
+          {/* Consistent Downtown Dubai Background for All Brochures */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${downtownDubai})` }}
+          />
           
           {/* Dark overlay for text readability */}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20" />
@@ -150,7 +147,7 @@ const PremiumBrochureCard = ({
             <div className="absolute top-4 left-10 flex items-center gap-3">
               <div className="w-11 h-11 rounded-full border-2 border-gold/70 flex items-center justify-center bg-black/50 backdrop-blur-sm p-1.5">
                 <img 
-                  src={jbjMonogramTransparent} 
+                  src={jbjMonogramNobuffer} 
                   alt="JBJ" 
                   className="w-full h-full object-contain"
                 />
