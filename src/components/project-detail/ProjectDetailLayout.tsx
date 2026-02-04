@@ -58,6 +58,7 @@ import { SafeImage } from "@/components/SafeImage";
 import { filterValidImages, getFirstValidImageUrl } from "@/lib/imageUtils";
 import { formatPrice as formatPriceUtil } from "@/utils/formatNumber";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
+import { renderMarkdownToHtml } from "@/lib/markdownUtils";
 import {
   Accordion,
   AccordionContent,
@@ -368,12 +369,18 @@ export default function ProjectDetailLayout({
       : "Benefit from extended payment terms";
   }, [project.handover_date, project.payment_plan]);
 
-  // Format bedrooms text
+  // Format bedrooms text - prefer bedroom_types array if available
   const bedroomsText = useMemo(() => {
+    // If bedroom_types array exists with labels, show those
+    const bedroomTypes = (project as any).bedroom_types;
+    if (bedroomTypes && Array.isArray(bedroomTypes) && bedroomTypes.length > 0) {
+      return bedroomTypes.join(', ');
+    }
+    // Fallback to min/max
     if (!project.bedrooms_min) return null;
     if (project.bedrooms_min === project.bedrooms_max) return `${project.bedrooms_min} BR`;
     return `${project.bedrooms_min}-${project.bedrooms_max} BR`;
-  }, [project.bedrooms_min, project.bedrooms_max]);
+  }, [project.bedrooms_min, project.bedrooms_max, (project as any).bedroom_types]);
 
   // Format size text
   const sizeText = useMemo(() => {
@@ -601,9 +608,18 @@ export default function ProjectDetailLayout({
           <div ref={detailsRef} id="details" className="mb-12 scroll-mt-40">
             <div className="jj-card-inner">
               <h2 className="text-h3 font-medium text-foreground">About {project.name}</h2>
-              <p className="mt-4 text-body text-muted-foreground leading-relaxed whitespace-pre-line">
-                {project.description || "Details will be provided by our team."}
-              </p>
+              {project.description ? (
+                <div 
+                  className="mt-4 text-body text-muted-foreground leading-relaxed prose prose-sm dark:prose-invert max-w-none"
+                  dangerouslySetInnerHTML={{ 
+                    __html: renderMarkdownToHtml(project.description) 
+                  }}
+                />
+              ) : (
+                <p className="mt-4 text-body text-muted-foreground">
+                  Details will be provided by our team.
+                </p>
+              )}
             </div>
           </div>
 
