@@ -425,7 +425,18 @@ export function extractProvidentProjectFromScrape(args: {
   }
 
   // Location - FIXED: Extended patterns for distances
-  const locSection = extractSection(markdown, "Location");
+  // Note: Provident sometimes has just "Location" as plain text, not "## Location"
+  let locSection = extractSection(markdown, "Location");
+  
+  // Fallback: Look for "Location" followed by "### headline" pattern (without ## prefix)
+  if (!locSection) {
+    const locMatch = markdown.match(/(?:^|\n)Location\s*\n+([\s\S]*?)(?=\n##\s+[A-Z]|\n##\s+Payment|\n##\s+The best|$)/i);
+    if (locMatch?.[1]) {
+      locSection = locMatch[1].trim();
+    }
+  }
+  
+  
   let locationHeadline: string | null = null;
   let locationDescription: string | null = null;
   const locationDistances: Array<{ label: string; time: string }> = [];
@@ -434,82 +445,85 @@ export function extractProvidentProjectFromScrape(args: {
     const headlineMatch = locSection.match(/###\s+(.+)/);
     locationHeadline = headlineMatch?.[1]?.trim() || null;
 
-    // Description: first paragraph after headline
+    // Description: first paragraph after headline (stop at numbered distance lines)
     const afterHeadline = locSection.split(/###\s+[^\n]+\n/)[1] || locSection;
     const descLines: string[] = [];
     for (const line of afterHeadline.split("\n")) {
       const t = stripMarkdownLinks(line).trim();
       if (!t) continue;
+      // Stop if we hit a distance line (starts with number)
+      if (/^\d+\s*(minute|min)/i.test(t)) break;
       if (t.startsWith("- ")) break;
       if (/^Get more information$/i.test(t)) continue;
       descLines.push(t);
     }
     if (descLines.length) locationDescription = descLines.join("\n").trim();
+    
 
     // Distances - ENHANCED: Multiple patterns to handle all Provident variations
-    // Pattern 1: "- N Minutes – Place" or "- N Minute – Place" (with en-dash, em-dash, or hyphen)
-    // Pattern 2: "- N min drive to Place" or "- N mins to Place"
-    // Pattern 3: "N Minutes – Place" (without leading dash)
-    // Pattern 4: "Place - N minutes" (reversed order)
-    // Pattern 5: "N km to Place" or "N km from Place"
+    // Format variations found:
+    // - "3 minutes – Meydan Hotel & Racecourse" (no leading dash)
+    // - "- 3 Minutes – Place"
+    // - "N min drive to Place"
+    // - "Place – N minutes" (reversed)
+    // - "N km to/from Place"
     
-    const allDistLines = afterHeadline.split("\n").filter(l => l.trim());
+    // IMPORTANT: Scan the ENTIRE locSection, not just afterHeadline
+    // because distances may appear before or mixed with content
+    const allDistLines = locSection.split("\n").filter(l => l.trim());
     
     for (const dl of allDistLines) {
       const trimmed = dl.trim().replace(/^-\s+/, "");
       
       // Skip non-distance lines
       if (!trimmed || /^!\[/.test(trimmed) || /^###?\s*/.test(trimmed)) continue;
-      if (/^(Get more|Download|View All|Find out)/i.test(trimmed)) continue;
+      if (/^(Get more|Download|View All|Find out|Location|##)/i.test(trimmed)) continue;
+      // Skip if too long (likely a paragraph, not a distance line)
+      if (trimmed.length > 100) continue;
       
-      // Pattern 1: "N Minutes – Place"
-      const m1 = trimmed.match(/^(\d+\s+Minutes?)\s+[–—\-]\s+(.+)$/i);
+      // Pattern 1: "N minutes – Place" or "N minute – Place" (most common on Provident)
+      // Uses en-dash (–), em-dash (—), or hyphen (-) as separator
+      const m1 = trimmed.match(/^(\d+)\s*(minutes?|mins?)\s*[–—\-]+\s*(.+)$/i);
       if (m1) {
+        const num = m1[1];
+        const timeFormatted = parseInt(num) === 1 ? `${num} Minute` : `${num} Minutes`;
         locationDistances.push({ 
-          time: m1[1].trim(), 
-          label: stripMarkdownLinks(m1[2]).trim() 
+          time: timeFormatted, 
+          label: stripMarkdownLinks(m1[3]).trim() 
         });
         continue;
       }
       
-      // Pattern 2: "N min drive to Place"
-      const m2 = trimmed.match(/^(\d+\s*(?:min|mins|minute|minutes?))\s+(?:drive\s+)?(?:to|from)\s+(.+)$/i);
+      // Pattern 2: "N min drive to Place" or "N mins to Place"
+      const m2 = trimmed.match(/^(\d+)\s*(min|mins|minute|minutes?)\s*(?:drive\s+)?(?:to|from)\s+(.+)$/i);
       if (m2) {
-        const timeNorm = m2[1].replace(/\b(min|mins)\b/i, "Minutes").replace(/\b(minute)\b/i, "Minutes");
+        const num = m2[1];
+        const timeFormatted = parseInt(num) === 1 ? `${num} Minute` : `${num} Minutes`;
         locationDistances.push({ 
-          time: timeNorm.trim(), 
-          label: stripMarkdownLinks(m2[2]).trim() 
+          time: timeFormatted, 
+          label: stripMarkdownLinks(m2[3]).trim() 
         });
         continue;
       }
       
-      // Pattern 3: No leading dash "N Minutes – Place"
-      const m3 = trimmed.match(/^(\d+\s+Minutes?)\s+[–—\-]\s+(.+)$/i);
+      // Pattern 3: Reversed "Place – N minutes" or "Place - N min"
+      const m3 = trimmed.match(/^([^–—\-\d]+?)\s*[–—\-]+\s*(\d+)\s*(minutes?|mins?)$/i);
       if (m3) {
+        const num = m3[2];
+        const timeFormatted = parseInt(num) === 1 ? `${num} Minute` : `${num} Minutes`;
         locationDistances.push({ 
-          time: m3[1].trim(), 
-          label: stripMarkdownLinks(m3[2]).trim() 
+          time: timeFormatted, 
+          label: stripMarkdownLinks(m3[1]).trim() 
         });
         continue;
       }
       
-      // Pattern 4: Reversed "Place – N minutes" or "Place - N min"
-      const m4 = trimmed.match(/^([^–—\-\d]+?)\s*[–—\-]\s*(\d+\s*(?:Minutes?|mins?))$/i);
+      // Pattern 4: "N km to/from Place"
+      const m4 = trimmed.match(/^(\d+)\s*km\s+(?:to|from)\s+(.+)$/i);
       if (m4) {
-        const timeNorm = m4[2].replace(/\b(min|mins)\b/i, "Minutes");
         locationDistances.push({ 
-          time: timeNorm.trim(), 
-          label: stripMarkdownLinks(m4[1]).trim() 
-        });
-        continue;
-      }
-      
-      // Pattern 5: "N km to/from Place"
-      const m5 = trimmed.match(/^(\d+\s*km)\s+(?:to|from)\s+(.+)$/i);
-      if (m5) {
-        locationDistances.push({ 
-          time: m5[1].trim(), 
-          label: stripMarkdownLinks(m5[2]).trim() 
+          time: `${m4[1]} km`, 
+          label: stripMarkdownLinks(m4[2]).trim() 
         });
       }
     }
@@ -544,10 +558,12 @@ export function extractProvidentProjectFromScrape(args: {
   }
 
   // FAQs - FIXED: Extended heading detection and flexible Q/A parsing
+  // Provident format: "## Useful Information about [Project]\n## What is...?\n\nAnswer..."
   const faqs: Array<{ question: string; answer: string }> = [];
   
   // Try multiple FAQ section headings - ENHANCED: Added more variations
   const faqHeadings = [
+    "Useful Information about", 
     "Useful Information", 
     "FAQ", 
     "FAQs", 
@@ -560,30 +576,59 @@ export function extractProvidentProjectFromScrape(args: {
   let faqSection: string | null = null;
   
   for (const heading of faqHeadings) {
+    // First try extractSection which handles ## headings
     faqSection = extractSection(markdown, heading);
-    if (faqSection) break;
+    if (faqSection && faqSection.length > 50) break;
     
-    // Fallback: Direct regex scan with word boundaries
+    // Fallback: Direct regex scan - looser matching for "Useful Information about X" pattern
     const escapedHeading = heading.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const faqRegex = new RegExp(`(?:^|\\n)(?:#{2,4}\\s*)?${escapedHeading}[\\s\\S]*?(?=\\n##\\s+[A-Z]|Stay in the loop|$)`, "i");
+    const faqRegex = new RegExp(`(?:^|\\n)#{2,4}\\s*${escapedHeading}[^\\n]*\\n([\\s\\S]*?)(?=\\n#{1,2}\\s+Stay|\\n#{1,2}\\s+The best deals|$)`, "i");
     const faqMatch = markdown.match(faqRegex);
-    if (faqMatch) {
-      faqSection = faqMatch[0].replace(new RegExp(`^(?:#{2,4}\\s*)?${escapedHeading}[^\\n]*\\n*`, "i"), "").trim();
-      break;
+    if (faqMatch?.[1]) {
+      faqSection = faqMatch[1].trim();
+      if (faqSection.length > 50) break;
     }
   }
   
   if (faqSection) {
-    // Pattern 1: "## Question?\n\nAnswer text" or "### Question?\nAnswer text"
-    const qaPattern = /(?:^|(?<=\n))#{2,3}\s+([^\n]+\??)\s*\n+([^#\n][\s\S]*?)(?=\n#{2,3}\s+|$)/g;
-    const qaMatches = faqSection.matchAll(qaPattern);
-    for (const m of qaMatches) {
-      const q = stripMarkdownLinks(m[1]).trim();
-      let a = stripMarkdownLinks(m[2]).trim();
-      // Clean up answer - remove "Stay in the loop" and trailing content
-      a = a.split(/Stay in the loop/i)[0].trim();
-      if (q && a && q.length > 3 && a.length > 5) {
-        faqs.push({ question: q, answer: a });
+    // Pattern 1: "## Question?\n\nAnswer text" (most common Provident format)
+    // Match: ## heading followed by non-heading text
+    const lines = faqSection.split("\n");
+    let currentQuestion: string | null = null;
+    let currentAnswer: string[] = [];
+    
+    for (const line of lines) {
+      const trimmedLine = line.trim();
+      
+      // Check if this is a question heading (## What is...? or ### Why should...?)
+      const headingMatch = trimmedLine.match(/^#{2,4}\s+(.+\??)$/);
+      
+      if (headingMatch) {
+        // Save previous Q&A if exists
+        if (currentQuestion && currentAnswer.length > 0) {
+          const answerText = currentAnswer.join(" ").trim();
+          if (answerText.length > 5 && !answerText.toLowerCase().startsWith("stay in the loop")) {
+            faqs.push({ question: currentQuestion, answer: answerText });
+          }
+        }
+        // Start new Q&A
+        currentQuestion = stripMarkdownLinks(headingMatch[1]).trim();
+        currentAnswer = [];
+      } else if (currentQuestion && trimmedLine) {
+        // Skip "Stay in the loop" and footer content
+        if (/^Stay in the loop|^Subscribe|^By clicking/i.test(trimmedLine)) break;
+        // Skip short lines that look like CTAs
+        if (/^(Read More|Learn More|Contact Us|Get in Touch)$/i.test(trimmedLine)) continue;
+        // Add to answer
+        currentAnswer.push(stripMarkdownLinks(trimmedLine));
+      }
+    }
+    
+    // Don't forget the last Q&A
+    if (currentQuestion && currentAnswer.length > 0) {
+      const answerText = currentAnswer.join(" ").trim();
+      if (answerText.length > 5 && !answerText.toLowerCase().startsWith("stay in the loop")) {
+        faqs.push({ question: currentQuestion, answer: answerText });
       }
     }
     
