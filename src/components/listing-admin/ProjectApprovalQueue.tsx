@@ -1059,9 +1059,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
             <div className="mb-4 rounded-lg border border-border bg-card p-3">
               <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
                 <span>{bulkAction === "approve" ? "Approving" : bulkAction === "repair" ? "Repairing" : "Deleting"}… {bulkDone}/{bulkTotal}</span>
-                <span>{Math.round((bulkDone / bulkTotal) * 100)}%</span>
+                <span>{Math.min(100, Math.round((bulkDone / bulkTotal) * 100))}%</span>
               </div>
-              <Progress value={(bulkDone / bulkTotal) * 100} className="h-2" />
+              <Progress value={Math.min(100, (bulkDone / bulkTotal) * 100)} className="h-2" />
             </div>
           )}
           {imports.length === 0 ? (
