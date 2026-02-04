@@ -12250,16 +12250,22 @@ export type Database = {
           amenities: string[] | null
           amenities_list: Json | null
           area_id: string | null
+          area_name: string | null
+          area_unit: string | null
           availability_status: string | null
           available_units: number | null
           bedrooms_max: number | null
           bedrooms_min: number | null
+          building_count: number | null
           community_id: string | null
           construction_progress: number | null
           construction_start_date: string | null
+          construction_status: string | null
+          cover_image_url: string | null
           created_at: string
           description: string | null
           developer_id: string | null
+          developer_name: string | null
           down_payment_percent: number | null
           emirate: string | null
           expected_completion: string | null
@@ -12277,6 +12283,7 @@ export type Database = {
           is_featured: boolean | null
           is_offplan: boolean | null
           is_premium: boolean | null
+          is_published: boolean | null
           is_sold_out: boolean | null
           latitude: number | null
           location: string | null
@@ -12288,17 +12295,24 @@ export type Database = {
           name: string
           payment_breakdown: Json | null
           payment_plan: string | null
+          price_currency: string | null
           price_from: number | null
           price_to: number | null
           property_type_label: string | null
+          reelly_developer_id: number | null
+          reelly_id: number | null
           rental_yield_estimate: number | null
           roi_estimate: number | null
+          sale_status: string | null
+          sector: string | null
           service_charge: string | null
+          short_description: string | null
           size_max: number | null
           size_min: number | null
           slug: string
           source: string | null
           source_id: string | null
+          source_updated_at: string | null
           source_url: string | null
           status: string | null
           status_label: string | null
@@ -12317,16 +12331,22 @@ export type Database = {
           amenities?: string[] | null
           amenities_list?: Json | null
           area_id?: string | null
+          area_name?: string | null
+          area_unit?: string | null
           availability_status?: string | null
           available_units?: number | null
           bedrooms_max?: number | null
           bedrooms_min?: number | null
+          building_count?: number | null
           community_id?: string | null
           construction_progress?: number | null
           construction_start_date?: string | null
+          construction_status?: string | null
+          cover_image_url?: string | null
           created_at?: string
           description?: string | null
           developer_id?: string | null
+          developer_name?: string | null
           down_payment_percent?: number | null
           emirate?: string | null
           expected_completion?: string | null
@@ -12344,6 +12364,7 @@ export type Database = {
           is_featured?: boolean | null
           is_offplan?: boolean | null
           is_premium?: boolean | null
+          is_published?: boolean | null
           is_sold_out?: boolean | null
           latitude?: number | null
           location?: string | null
@@ -12355,17 +12376,24 @@ export type Database = {
           name: string
           payment_breakdown?: Json | null
           payment_plan?: string | null
+          price_currency?: string | null
           price_from?: number | null
           price_to?: number | null
           property_type_label?: string | null
+          reelly_developer_id?: number | null
+          reelly_id?: number | null
           rental_yield_estimate?: number | null
           roi_estimate?: number | null
+          sale_status?: string | null
+          sector?: string | null
           service_charge?: string | null
+          short_description?: string | null
           size_max?: number | null
           size_min?: number | null
           slug: string
           source?: string | null
           source_id?: string | null
+          source_updated_at?: string | null
           source_url?: string | null
           status?: string | null
           status_label?: string | null
@@ -12384,16 +12412,22 @@ export type Database = {
           amenities?: string[] | null
           amenities_list?: Json | null
           area_id?: string | null
+          area_name?: string | null
+          area_unit?: string | null
           availability_status?: string | null
           available_units?: number | null
           bedrooms_max?: number | null
           bedrooms_min?: number | null
+          building_count?: number | null
           community_id?: string | null
           construction_progress?: number | null
           construction_start_date?: string | null
+          construction_status?: string | null
+          cover_image_url?: string | null
           created_at?: string
           description?: string | null
           developer_id?: string | null
+          developer_name?: string | null
           down_payment_percent?: number | null
           emirate?: string | null
           expected_completion?: string | null
@@ -12411,6 +12445,7 @@ export type Database = {
           is_featured?: boolean | null
           is_offplan?: boolean | null
           is_premium?: boolean | null
+          is_published?: boolean | null
           is_sold_out?: boolean | null
           latitude?: number | null
           location?: string | null
@@ -12422,17 +12457,24 @@ export type Database = {
           name?: string
           payment_breakdown?: Json | null
           payment_plan?: string | null
+          price_currency?: string | null
           price_from?: number | null
           price_to?: number | null
           property_type_label?: string | null
+          reelly_developer_id?: number | null
+          reelly_id?: number | null
           rental_yield_estimate?: number | null
           roi_estimate?: number | null
+          sale_status?: string | null
+          sector?: string | null
           service_charge?: string | null
+          short_description?: string | null
           size_max?: number | null
           size_min?: number | null
           slug?: string
           source?: string | null
           source_id?: string | null
+          source_updated_at?: string | null
           source_url?: string | null
           status?: string | null
           status_label?: string | null
