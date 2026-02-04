@@ -65,12 +65,13 @@ interface CallLogMasked {
 
 // Decrypted PII data - only available to owner/founder
 interface DecryptedPII {
+  id: string;
   extracted_name: string | null;
   extracted_phone: string | null;
   extracted_email: string | null;
-  caller_name: string | null;
-  caller_phone: string | null;
   transcript: string | null;
+  recording_url: string | null;
+  created_at: string;
 }
 
 export default function CallReview() {
@@ -396,7 +397,7 @@ export default function CallReview() {
                   <div className="flex items-start justify-between">
                     <div>
                       <CardTitle className="flex items-center gap-2">
-                        {decryptedPII?.extracted_name || decryptedPII?.caller_name || selectedCall.caller_name_masked || 'Unknown Caller'}
+                        {decryptedPII?.extracted_name || selectedCall.caller_name_masked || 'Unknown Caller'}
                         {getSentimentIcon(selectedCall.ai_sentiment)}
                       </CardTitle>
                       <p className="text-sm text-muted-foreground mt-1">
@@ -585,7 +586,7 @@ export default function CallReview() {
                             <span className="text-sm text-muted-foreground">Phone</span>
                           </div>
                           <p className="font-medium">
-                            {decryptedPII?.extracted_phone || decryptedPII?.caller_phone || selectedCall.caller_phone_masked || 'Not provided'}
+                            {decryptedPII?.extracted_phone || selectedCall.caller_phone_masked || 'Not provided'}
                           </p>
                           {decryptedPII?.extracted_phone && (
                             <Button size="sm" variant="outline" className="mt-2" asChild>
