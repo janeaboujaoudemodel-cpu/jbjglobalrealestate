@@ -2,7 +2,7 @@ import * as React from "react";
 import { Download, Lock, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-
+import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
 interface PremiumBrochureCardProps {
   projectName: string;
   brochureUrl?: string;
@@ -141,13 +141,23 @@ const PremiumBrochureCard = ({
 
           {/* Content Layout */}
           <div className="relative z-10 h-full flex flex-col justify-end p-6">
-            {/* Top: Brand mark */}
-            <div className="absolute top-4 left-10 flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full border-2 border-gold/70 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-                <span className="text-gold text-xs font-bold tracking-wider">JBJ</span>
+            {/* Top: Brand mark with real monogram */}
+            <div className="absolute top-4 left-10 flex items-center gap-3">
+              <div className="w-11 h-11 rounded-full border-2 border-gold/70 flex items-center justify-center bg-black/50 backdrop-blur-sm p-1.5">
+                <img 
+                  src={jbjMonogramTransparent} 
+                  alt="JBJ" 
+                  className="w-full h-full object-contain"
+                />
               </div>
-              <p className="text-gold/90 text-[8px] uppercase tracking-[0.15em] leading-tight">
-                Global<br/>Real Estate
+              <p 
+                className="text-white text-[10px] font-semibold uppercase tracking-[0.18em] leading-relaxed drop-shadow-lg"
+                style={{ 
+                  fontFamily: "Poppins, sans-serif",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.8)"
+                }}
+              >
+                <span className="text-gold font-bold">JBJ</span> Global<br/>Real Estate
               </p>
             </div>
 
