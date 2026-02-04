@@ -1,153 +1,113 @@
 
-# Enhancement Plan: Premium Sections, License Cards & Developer Info
+# Certificate Enhancement Plan
 
-## Overview
-This plan addresses four key improvements requested:
-1. Keep payment plan section as-is (already approved as good)
-2. Fix contract forms to be more professional with real estate templates
-3. Update License Cards (Buy/Sell/Rent) to use active champagne background
-4. Enhance Developer Info Card to show complete descriptions from Reelly API data
+## Changes Requested
 
----
+1. **More Champagne-Gold Background with 3D Effect**
+   - Update the certificate card gradient to be richer champagne-gold
+   - Add 3D shadow effects and inner highlights for premium depth
 
-## 1. License Cards Background Fix
+2. **Replace [AUTO] with Actual Certificate Number**
+   - Change `JBJ-CERT-[AUTO]` to `JBJ-CERT-2024-001` (sample number format)
 
-### Problem
-The "How Can We Help?" service cards (Buy, Rent, Sell, Management) in `ServicesGrid.tsx` are sitting on a black background section, which doesn't match the active champagne layer system.
-
-### Solution
-Update the section to use `jj-layer-2` (active champagne) background instead of black.
-
-**File**: `src/components/home/ServicesGrid.tsx`
-
-Changes:
-- Change outer section from `bg-black` to use the proper layer system
-- Cards are already using champagne gradient styling which is correct
-- The parent section needs to match the premium UI layering standards
+3. **Wrap Founder Name in FounderContent Toggle**
+   - The "Jane Bou Jaoude, Founder & CEO" section needs to be wrapped with `FounderContent` component
+   - When founder visibility is OFF: Hide this section or show generic fallback
+   - When founder visibility is ON: Show the full founder details
 
 ---
 
-## 2. Enhanced Developer Info Card
+## Implementation Details
 
-### Problem
-The current `DeveloperInfoCard.tsx` shows only:
-- Developer name
-- Founded year
-- Completed projects count
-- Off-plan projects count
+### File: `src/pages/services/BrokerCertification.tsx`
 
-It does NOT show the full description about the developer (e.g., "Binghatti is a visionary real estate developer renowned for its commitment to iconic architecture...").
-
-### Solution
-Expand the DeveloperInfoCard to include:
-- Full developer description (from Reelly API)
-- Headquarters location
-- More professional premium styling
-
-**File**: `src/components/project-detail/DeveloperInfoCard.tsx`
-
-Changes:
-- Add `description` and `headquarters` props to the interface
-- Display the developer description in a formatted paragraph
-- Show headquarters with a location icon
-- Use expandable accordion if description is long (> 200 chars)
-- Maintain the premium gold/champagne styling
-
-**File**: `src/components/project-detail/ProjectDetailLayout.tsx`
-
-Changes:
-- Pass the developer description and headquarters to DeveloperInfoCard
-- Ensure the data flows from the project query to the component
-
----
-
-## 3. Professional Contract Forms Hub
-
-### Problem
-The current `Documents.tsx` is a generic rich text editor with no real estate-specific templates. Users need professional contract forms.
-
-### Solution
-Create a dedicated Contract Forms Hub with UAE real estate document templates.
-
-**New File**: `src/pages/ContractForms.tsx`
-
-Features:
-- Grid of professional contract form templates
-- Categories: Sales, Rentals, MoU, Agency Agreements
-- Each template includes:
-  - Template name and description
-  - Preview thumbnail
-  - "Fill & Generate" or "Download Template" actions
-  - DLD/RERA reference where applicable
-
-Templates to include:
-1. **Memorandum of Understanding (MoU)** - For buyer-seller initial agreement
-2. **Form F (Listing Agreement)** - RERA standard listing form
-3. **Tenancy Contract (Ejari)** - Standard rental agreement
-4. **Form A (Buyer Registration)** - Developer registration form
-5. **No Objection Certificate (NOC) Request** - Transfer documentation
-6. **Property Reservation Form** - Off-plan booking form
-
-UI Design:
-- Use `jj-layer-2` champagne background
-- `jj-card-inner` pearl cards for each template
-- Gold accents and icons
-- Professional institutional styling
-
-**Route Update**: `src/App.tsx`
-- Add route `/contract-forms` for the new page
-
----
-
-## 4. Update ServicesGrid Cards Styling
-
-### Current State
-Cards use champagne gradient which is correct, but the outer section uses black background.
-
-### Updated Design
-- Section background: Remove black, use layering system
-- Maintain existing card styling with gold borders
-- Ensure proper contrast and premium feel
-
----
-
-## Technical Summary
-
-| File | Change Type | Description |
-|------|-------------|-------------|
-| `src/components/home/ServicesGrid.tsx` | Edit | Change section background to proper layer system |
-| `src/components/project-detail/DeveloperInfoCard.tsx` | Edit | Add description, headquarters, expand styling |
-| `src/components/project-detail/ProjectDetailLayout.tsx` | Edit | Pass developer description to DeveloperInfoCard |
-| `src/pages/ContractForms.tsx` | Create | New professional contract forms hub |
-| `src/App.tsx` | Edit | Add route for contract forms |
-
----
-
-## Expected Outcome
-
-1. **ServicesGrid** - Cards will appear on champagne/pearl background matching the premium UI system
-2. **DeveloperInfoCard** - Shows complete developer profile including "Binghatti is a visionary real estate developer..." and "Headquarters: Dubai, UAE"
-3. **ContractForms** - Professional grid of UAE real estate document templates with clear categorization
-4. **Payment Plan** - No changes (already approved as good)
-
----
-
-## Developer Info Example (Binghatti)
-
-After enhancement, the Developer section will show:
-
-```
-[Logo] Binghatti
-      
-Founded: 2008 | Completed: 40+ | Off-plan: 45+
-Headquarters: Dubai, UAE
-
-Binghatti is a visionary real estate developer renowned for its 
-commitment to iconic architecture and innovative design. From its 
-inception, the brand has set itself apart by creating hyper-properties 
-that blend artistic expression with modern functionality...
-
-[View All Projects by Binghatti →]
+**1. Add Import**
+```tsx
+import { FounderContent } from "@/components/FounderContent";
 ```
 
-This provides investors with comprehensive developer credibility information directly on the project page.
+**2. Update Certificate Card Background (Line 468)**
+
+Current:
+```tsx
+<Card className="jj-card-inner border-4 border-gold/50 pt-8 bg-gradient-to-br from-[#FDFBF7] via-[#F8F4EC] to-[#F0E8D8] shadow-2xl">
+```
+
+New - Richer champagne-gold with 3D styling:
+```tsx
+<Card 
+  className="jj-card-inner border-4 border-gold/60 pt-8 shadow-2xl"
+  style={{
+    background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 25%, #D4C4A8 50%, #E8DCC8 75%, #F5EBD7 100%)',
+    boxShadow: `
+      0 25px 50px rgba(200,167,102,0.4),
+      0 15px 30px rgba(0,0,0,0.2),
+      inset 0 2px 10px rgba(255,255,255,0.9),
+      inset 0 -3px 10px rgba(200,167,102,0.25),
+      0 0 40px rgba(200,167,102,0.2)
+    `,
+  }}
+>
+```
+
+**3. Replace Certificate Number (Line 519)**
+
+Current:
+```tsx
+Certificate No: <span className="font-mono text-black">JBJ-CERT-[AUTO]</span>
+```
+
+New:
+```tsx
+Certificate No: <span className="font-mono text-black">JBJ-CERT-2024-001</span>
+```
+
+**4. Wrap Founder Section in FounderContent (Lines 509-513)**
+
+Current:
+```tsx
+<div className="text-right">
+  <p className="text-black font-semibold">Jane Bou Jaoude</p>
+  <p className="text-xs text-muted-foreground">Founder & CEO</p>
+  <p className="text-gold italic text-xs mt-1">جاين بو جودة</p>
+</div>
+```
+
+New - Wrapped with FounderContent:
+```tsx
+<div className="text-right">
+  <FounderContent
+    fallback={
+      <>
+        <p className="text-black font-semibold">JBJ Global Real Estate</p>
+        <p className="text-xs text-muted-foreground">Executive Leadership</p>
+      </>
+    }
+  >
+    <p className="text-black font-semibold">Jane Bou Jaoude</p>
+    <p className="text-xs text-muted-foreground">Founder & CEO</p>
+    <p className="text-gold italic text-xs mt-1">جاين بو جودة</p>
+  </FounderContent>
+</div>
+```
+
+---
+
+## Visual Result
+
+The certificate will have:
+- Richer champagne-gold gradient background
+- Premium 3D depth with multiple shadow layers and inner highlights
+- Sample certificate number `JBJ-CERT-2024-001`
+- Founder name that respects the admin visibility toggle (hidden when toggle is OFF)
+
+---
+
+## Summary
+
+| Change | Location |
+|--------|----------|
+| Add FounderContent import | Line 1 imports |
+| Rich champagne-gold 3D background | Line 468 |
+| Certificate number `2024-001` | Line 519 |
+| Founder name wrapped in toggle | Lines 509-513 |
