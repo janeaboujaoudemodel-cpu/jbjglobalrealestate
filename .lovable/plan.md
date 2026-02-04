@@ -1,336 +1,263 @@
 
-# Comprehensive UI/UX Fixes and Refinements Plan
-
-## Summary
-This plan addresses all the issues you've outlined across the homepage, filters, header navigation, footer, profile page, and global UI consistency. The changes will improve visual polish, fix dropdown behaviors, standardize button styling, add missing tools, and ensure footer placement is correct across all pages.
-
----
-
-## Section 1: Properties Filter - Premium Sorting Labels
-
-### Current Issue
-- Sort options use labels like "Sort by Newest First" which is not premium
-- Labels: "Newest", "Oldest", "Low > High", "High > Low"
-
-### Solution
-Update sort option labels to professional terminology:
-- **"Newest"** - Recently Added
-- **"Oldest"** - First Listed  
-- **"Low > High"** - Price: Low to High
-- **"High > Low"** - Price: High to Low
-
-**Files to modify:**
-- `src/pages/Properties.tsx` (lines 890-907)
-- `src/components/home/HeroSearchBar.tsx` (SORT_OPTIONS array, lines 102-109)
+## Goals (what will be “fixed”)
+1. **Extraction completeness**: brochure + floor plans + FAQs + location distances + full bedroom configurations (3, 4, 5… not just one).
+2. **Media integrity**: no broken last image; USP headline + USP image must match Provident (no “same regenerated image”).
+3. **1:1 mirroring feel**: hero uses the correct Provident hero media and **does not feel zoomed/cropped wrong**.
+4. **Downloads always work**: brochure/floor plan PDFs always downloadable (no blocked URLs).
+5. **Performance**: map loads faster; page feels lighter.
+6. **Global rules**:
+   - “Contact Us directly” section standardized and present site-wide (including admin surfaces if required).
+   - “Request a Callback” standardized and placed as mandated.
+   - Footer: the **Licensed / Stay in the Loop card must be above the monogram**.
+   - Emails **must be FULL CAPITAL LETTERS** everywhere.
+   - Developer name **always clickable** everywhere.
+   - Listing cards **vertical portrait**, not rectangular.
 
 ---
 
-## Section 2: Homepage Hero - "Not sure what you're looking for?" Label Visibility
+## What I found in the code (why this is happening)
+### A) Brochure & Floor plan failures are almost certainly “pipeline mismatch”
+You currently have multiple extraction/sync pathways that behave differently:
 
-### Current Issue
-- The AI Home Finder prompt inside Advanced Filters looks faded
-- Star/Sparkles icon lacks 3D depth and hover styling
+- **Best pipeline**: `supabase/functions/batch-extract-pending`
+  - It uses Gatsby **page-data.json** to deterministically discover PDF URLs (`_shared/provident/pagedata.ts`)
+  - Then **mirrors PDFs into our public storage** (`_shared/provident/storage.ts`) so downloads won’t be blocked
+  - This is the correct, stable approach.
 
-### Solution
-1. Increase text contrast: change `text-black` to stronger opacity
-2. Add 3D shadow/glow to the Sparkles icon
-3. Add hover state with scale and glow effect
+- **Other pipelines** (likely still being used somewhere) do **not** mirror PDFs, or they upscale images to sizes that can 403:
+  - `repair-project-extraction` and `provident-sync-all` contain `/x/1200x800/` upscales (known to 403).
+  - `provident-sync-master` uses `/x/800x600/` (can also be risky).
+  - `full-project-extract` is deterministic but still does `/x/1200x800/` and can collect PDFs unreliably.
 
-**Files to modify:**
-- `src/components/home/HeroSearchBar.tsx` (lines 828-842)
+If a project was created/updated via one of the “old paths”, you can end up with:
+- PDFs pointing to remote Provident URLs (blocked/unreliable)
+- Missing floor plan PDFs entirely
+- Broken images due to CDN size 403
 
----
+### B) FAQ and Location Distances extraction is regex-driven and still too narrow
+`_shared/provident/extract.ts` already improved:
+- Location distances allow en-dash/em-dash.
+- FAQs parse “Useful Information” blocks.
 
-## Section 3: Search Bar - "Community" Label Cropping
+But Provident pages can vary:
+- Headings sometimes differ (FAQ, Useful info, Q&A, Frequently Asked Questions).
+- Distance formats vary (“5 min drive”, “10 mins”, without “Minutes – Place”).
+So we need broader patterns and stronger section boundary control.
 
-### Current Issue
-- The placeholder "Area, project or community" has the "y" of "community" cropped/not fully readable
+### C) Bedrooms “only 3 bedroom” is a data model + extraction issue
+Your UI mainly shows `bedrooms_min` / `bedrooms_max`, which compresses “3, 4, 5” into a range or sometimes incorrectly into a single value if extraction finds only one match.
 
-### Solution
-- Ensure the input has adequate padding and the placeholder text has proper width
+To meet your rule (“show all configurations”), we should store:
+- **bedroom_configurations list**: e.g. `["3", "4", "5"]` (and optionally `Studio`)
+while still keeping min/max for filtering.
 
-**Files to modify:**
-- `src/components/home/HeroSearchBar.tsx` (lines 596-608)
+### D) Hero “zoom” and USP image “same regenerated photo”
+Right now hero image is chosen from `project.images[0]` after filtering.
+That is not guaranteed to be the same image Provident uses for the hero banner.
 
----
+We need to extract and persist **explicit hero_image_url** and **explicit usp_image_url**, instead of relying on “first image in gallery”.
 
-## Section 4: AI Home Finder Section - Restore Background Card
+### E) Forms “still not fixed”
+Your forms are inconsistent in how they notify:
+- Some call `send-inquiry-email`, but that function currently requires fields like **nationality + language** (schema validation), which many forms do not provide.
+- Result: the user sees success, but notifications can silently fail.
 
-### Current Issue
-- Background card was removed when it should have been kept
-- Only needed to be centered
+We should standardize a “lead notification” backend function or relax validation to support multiple form types.
 
-### Solution
-1. Restore the gradient/glass-effect background card behind the AI Home Finder link
-2. Ensure section is properly centered
-3. Maintain purple color for label (never faded)
-
-**Files to modify:**
-- `src/pages/Index.tsx` (lines 347-374)
-
----
-
-## Section 5: Global Section Spacing - Reduce & Standardize
-
-### Current Issue
-- Gap between sections (like AI Property Comparison and Free Market Intelligence Book) is too large
-- Dividers not consistently centered
-
-### Solution
-1. Reduce spacing in SectionDivider - already has `compact` prop, but reduce further
-2. Update sections to use `compact` consistently
-3. Ensure dividers are mathematically centered
-
-**Files to modify:**
-- `src/components/ui/section-divider.tsx` (adjust compact spacing from `py-6` to `py-4`)
-- `src/pages/Index.tsx` (ensure all dividers use `compact`)
+### F) Email casing rule is currently inconsistent
+`src/constants/stats.ts` currently uses mixed case and even includes a comment contradicting your rule.
+Also `send-inquiry-email` sends to `contact@jbj.ae` (lowercase).
+We must lock it to FULL CAPS everywhere (UI + functions + mailto + vCard).
 
 ---
 
-## Section 6: Why Dubai Section - Layout/Spacing Fix
+## Implementation plan (prioritized, minimal risk, staged)
+### Phase 1 — Make brochure + floor plans always present and always downloadable (highest priority)
+1. **Make PDF mirroring more robust** in `_shared/provident/storage.ts`:
+   - Remove/relax the early “must end in .pdf” guard (page-data sometimes returns URLs that don’t neatly end with `.pdf` or have redirects).
+   - Add fetch headers (`User-Agent`, `Accept`) to reduce 403/blocked responses.
+   - Improve validation fallback:
+     - If PDF magic bytes mismatch but `content-type` is `application/pdf`, accept it (some CDNs can add wrappers).
+     - Log and return structured reason if mirroring fails.
 
-### Current Issue
-- "Why Dubai Became the Capital of Global Investors" section spacing not optimal
+2. **Unify all extraction paths to use PDF mirroring**:
+   - Ensure any pathway that writes `project_documents` for brochure/payment/floor plans uses `mirrorRemotePdfToPublicStorage`.
+   - Specifically audit/fix:
+     - `repair-project-extraction`
+     - `provident-scrape-project`
+     - `sync-provident-page` (if it touches docs)
+     - `provident-full-sync` (if still used)
 
-### Solution
-- Verify vertical padding and alignment with other full-screen hero sections
-- This section uses a full-screen video with overlay - ensure consistent spacing above/below
+3. **Guarantee Floor Plan docs are written correctly**:
+   - Confirm `document_type="floor_plan"` with a valid URL (mirrored public storage URL).
+   - Ensure display order is deterministic.
 
-**Files to modify:**
-- `src/components/home/WhyDubaiCapitalSection.tsx` (if needed)
+4. **Admin debugging support**
+   - When mirroring fails, write a short machine-readable reason into `pending_project_imports.review_notes` (e.g. `PDF_MIRROR_FAILED: <reason>`), so you can see why it failed without guesswork.
 
----
-
-## Section 7: "Ready to Get Started" Contact Cards - Use Approved Card Style
-
-### Current Issue
-- Contact cards in CTABand don't match the approved style from DirectContactCTA component
-- Create Support Ticket button lacks proper hover styling
-
-### Solution
-1. Use `DirectContactCTA` component styling as the global standard
-2. Ensure card layout includes: circular icons, proper sizing, gold borders, hover lift effect
-3. Update CTABand to match the approved DirectContactCTA card styling
-
-**Files to modify:**
-- `src/components/home/CTABand.tsx` - refactor to use same card styling as DirectContactCTA
-
----
-
-## Section 8: Primary Button Styling - Global Lock (Drop Your Idea Style)
-
-### Current Issue
-- Some primary buttons (Create Support Ticket, Read All Testimonials) don't match the "Drop Your Idea" button style
-- Missing proper 3D effects and hover color inversion
-
-### Solution
-The "Drop Your Idea" button in `BestIdeaAward.tsx` (lines 226-251) is the approved primary style:
-```
-- Champagne gradient background
-- Gold border with glow
-- 3D highlight/shadow layers
-- Icon BEFORE text: Gold icon, split text (first half black, second half gold)
-- Hover: All colors invert, glow intensifies
-```
-
-Update all primary buttons globally to match this style by ensuring `variant="primary"` in Button component correctly applies these effects.
-
-**Files to modify:**
-- `src/components/ui/button.tsx` (verify BRAND_PRIMARY matches the 3D Drop Your Idea style)
-- `src/components/SupportTicketBox.tsx` (lines 338-363 - update button to use approved style)
-- Any other buttons using non-standard primary styling
+**Done condition**:
+- In the listing admin “Test One Listing”, checklist shows:
+  - `hasBrochure = true`
+  - `hasFloorPlans = true` (either docs or types, but docs preferred)
 
 ---
 
-## Section 9: Footer - Professional Tools Section - Add Missing AI Tools
+### Phase 2 — Fix FAQs + Location Distances extraction to be Provident-stable
+1. In `_shared/provident/extract.ts`:
+   - Extend FAQ section detection to match headings:
+     - `Useful Information`, `FAQ`, `FAQs`, `Frequently Asked Questions`, `Q&A`
+   - Improve Q/A parsing:
+     - Accept headings that are not strictly `##` (sometimes `###` or bold patterns).
+     - Accept answers spanning multiple lines until next question block.
+   - Extend distance parsing:
+     - Support formats like:
+       - `- 5 min drive to Dubai Mall`
+       - `- 10 mins to DXB`
+       - `5 Minutes – Dubai Mall` (without leading dash)
+     - Normalize into `{ time, label }`.
 
-### Current Issue
-- Professional Tools section in footer is missing many AI tools that exist on the sitemap
+2. Ensure **floor plan isolation** remains enforced (no mixing location bullets into floor plan types).
 
-### Solution
-Add all missing tools to match the Sitemap's "AI & Professional Tools" section:
-- AI Home Finder, Property Evaluator, Mortgage Calculator, Rental Index, AI Interior Design
-- AI Virtual Staging, AI Price Predictor, AI Neighborhood Insights, AI Property Analyzer
-- AI Lead Qualification, AI Follow-up Scheduler, AI Objection Handler, AI Client Matcher
-- AI Market Report, AI Competitor Analysis, AI ROI Calculator, AI Investment Report
-- AI Meeting Summarizer, AI Translation Hub, AI Video Tour Script, AI Email Generator
-- AI Social Media, AI Description Writer, AI Contract Reviewer, AI Document Generator
-- Business Card Scanner, Documents & Spreadsheets, Video Meet, Calendar & Notes
-
-**Files to modify:**
-- `src/components/Footer.tsx` (lines 141-154 - expand professionalTools array)
-
----
-
-## Section 10: Profile Page - Footer Missing
-
-### Current Issue
-- `/profile` page (UserProfile.tsx) doesn't have a Footer
-- Rule: ALL pages (frontend and backend) must have Footer, except `/card`
-
-### Solution
-Profile page uses MainLayout which doesn't include Footer by default. Need to add Footer component.
-
-**Files to modify:**
-- `src/pages/UserProfile.tsx` - add `<Footer />` at the bottom after the main content
+**Done condition**:
+- `faqs.length >= 1` and `location_distances.length >= 1` for a known-good Provident page that contains them.
 
 ---
 
-## Section 11: Header Account Dropdown - Icon Styling
+### Phase 3 — Bedrooms: store and display ALL configurations (not just one)
+1. **Database changes** (Test → later publish to Live):
+   - Add JSONB/text[] fields:
+     - `pending_project_imports.bedroom_configurations` (jsonb)
+     - `projects.bedroom_configurations` (jsonb)
+   - Keep existing `bedrooms_min/max` for filtering.
 
-### Current Issue
-- Account icon in header dropdown shows filled black background (too heavy)
-- Should be: gold icon with black border, empty/transparent fill
-- Hover: border becomes gold, icon becomes black
+2. Extraction:
+   - Parse bedroom configurations as an ordered unique list:
+     - Example output: `["3", "4", "5"]`
+     - Include `Studio` as `"0"` or `"Studio"` (decide one canonical representation).
+   - Derive min/max from that list.
 
-### Solution
-Update the avatar fallback styling in MegaMenuAccount to:
-- Remove filled black background
-- Use outline/border styling instead
-- Add proper hover state
+3. Frontend:
+   - Update `ProjectDetail.tsx` mapping + `ProjectDetailLayout` hero stats display:
+     - Show “3 • 4 • 5 Bedrooms” (premium, explicit)
+     - Fall back to range if list absent.
+   - Update `ProjectCard` to display the explicit list (and keep it compact).
 
-**Files to modify:**
-- `src/components/header/MegaMenuAccount.tsx` (lines 91-96 - avatar styling)
-- `src/components/GlobalHeader.tsx` (account icon button styling if needed)
-
----
-
-## Section 12: Profile Page - Phone Number with Country Code Selector
-
-### Current Issue
-- Phone number field doesn't have country code selection
-- User should be able to select from list or type/search country code
-
-### Solution
-Use the existing `PhoneInput` component which already has:
-- Country code dropdown
-- Auto-detection from timezone
-- Search functionality
-- Validation
-
-Replace the simple `<Input>` for phone with `<PhoneInput>` component.
-
-**Files to modify:**
-- `src/pages/UserProfile.tsx` (lines 342-352 - replace Input with PhoneInput)
+**Done condition**:
+- A page that has 3/4/5 shows **all** (not only 3, not only 3-5).
 
 ---
 
-## Section 13: Profile Page - Email Address Change
+### Phase 4 — Fix broken last photo + hero mismatch + USP title/image correctness
+1. **Stop producing risky CDN sizes everywhere**
+   - Remove `/x/1200x800/` and `/x/800x600/` rewrites from any remaining edge functions.
+   - Normalize to safe `/x/464x312/` consistently (you already have `repair-image-urls` to clean existing data).
 
-### Current Issue
-- Email cannot be changed currently (locked)
-- User requested: changeable with verification
+2. **Persist explicit hero image**
+   - Add `projects.hero_image_url` + `pending_project_imports.hero_image_url` (jsonb/text).
+   - Extract hero image from:
+     - `og:image` meta
+     - hero slider container in rawHtml
+     - first “banner” image near the top of the page (not navbar assets)
+   - UI uses this for hero instead of `images[0]`.
 
-### Solution
-1. Add a "Change Email" flow with Supabase's `updateUser` for email
-2. Supabase will send a verification email to both old and new addresses
-3. Email change only takes effect after clicking confirmation link
+3. **USP title + USP image**
+   - Improve USP extraction:
+     - Headline: ensure it’s the **actual USP section title**, not a leftover heading.
+     - Image: choose the first valid USP section image that is not floor plan/diagram and not identical to hero.
+   - UI fallback order:
+     1) usp_image_url
+     2) location_image_url (if Provident uses a similar panel image style)
+     3) first gallery image (last resort)
 
-**Files to modify:**
-- `src/pages/UserProfile.tsx` - add email change functionality
+4. **Frontend resilience to broken images**
+   - In carousels/hero: on image error, automatically advance to next valid image rather than showing a broken frame.
 
----
-
-## Section 14: Header Mega Menu - Videos Instead of Photos
-
-### Current Issue
-- When hovering on header menu navigation items, static photos are shown
-- Should show videos like on other parts of the site
-
-### Solution
-The mega menu primitives already support video on hover via `MegaMenuFeaturedCard`:
-- `video` prop exists and plays on mouse enter
-- Need to ensure all mega menus pass video sources
-
-Currently implemented in: MegaMenuBuy, MegaMenuRent, MegaMenuProjects, MegaMenuBrokerHub
-
-Verify videos are connected for all mega menus.
-
-**Files to verify/modify:**
-- `src/components/header/MegaMenuDevelopers.tsx` (add video prop)
-- `src/components/header/MegaMenuAreas.tsx` (add video prop)
-- `src/components/header/MegaMenuServices.tsx` (add video prop)
+**Done condition**:
+- No broken “last image” in gallery.
+- USP panel shows a different, correct image (not repeating hero or a regenerated placeholder).
 
 ---
 
-## Section 15: Hero Search Bar - Buy Button Styling
+### Phase 5 — Performance: faster map load + lighter page feel
+1. **Lazy-mount the map iframe**
+   - Do not render the iframe until:
+     - user scrolls near the location section, or
+     - user clicks “Load Map”
+   - Add `loading="lazy"` and keep it out of initial render.
 
-### Current Issue
-- "Buy" box styling doesn't match the search bar styling
-- Should match the search bar colors and appearance
+2. **Replace initial iframe with a fast preview**
+   - Show a static preview card + “Open in Maps” button immediately.
+   - Load iframe only if requested.
 
-### Solution
-Update the Buy/Rent dropdown trigger to have similar styling to the main search bar (same background, border, and text colors).
+3. General performance audit (quick wins)
+   - Ensure only the first hero media is `fetchPriority="high"`.
+   - Everything else lazy loads.
 
-**Files to modify:**
-- `src/components/home/HeroSearchBar.tsx` (lines 484-491 - update button styling)
-
----
-
-## Section 16: Currency Dropdown - Remove Flag from Trigger (Keep in Dropdown)
-
-### Current Issue
-- AED box shows UAE flag in the trigger button
-- Should only show "AED" in the trigger
-- Keep flags inside the dropdown when expanded
-
-### Solution
-Remove `{currentCurrency.flag}` from PopoverTrigger, keep it only in the dropdown items.
-
-**Files to modify:**
-- `src/components/home/HeroSearchBar.tsx` (line 524 - remove flag from trigger)
+**Done condition**:
+- Page becomes interactive faster; map no longer blocks initial load.
 
 ---
 
-## Section 17: Dropdown Flip Behavior - Always Open Downward
+### Phase 6 — Global UI rules you listed (contact section, footer order, email caps, developer link, vertical cards)
+1. **Email FULL CAPS everywhere**
+   - Update `CONTACT_INFO` to:
+     - `CONTACT@JBJ.AE`, `SUPPORT@JBJ.AE`, etc.
+   - Update all mailto links and vCard generator.
+   - Update backend email recipients (e.g. `send-inquiry-email`) to use FULL CAPS.
 
-### Current Issue
-- Currency/sqft dropdowns flip upward when near top of page, overlapping header
+2. **Global “Contact Us directly” section**
+   - Centralize insertion to avoid “some pages forgot”:
+     - Prefer: render `DirectContactCTA` in `MainLayout` for all routes except `/card` (and optionally `/auth` if you want).
+   - Remove duplicates from pages that already add it (to prevent double sections).
 
-### Solution
-Force popovers to always open downward with collision detection disabled or adjusted:
-- Add `collisionBoundary={null}` or use `avoidCollisions={false}` on PopoverContent
-- Ensure `side="bottom"` is enforced
+3. **Request a Callback section globally**
+   - Decide the single approved component:
+     - likely `CallToActionSection` (already matches Provident style)
+   - Render it globally just above:
+     - DirectContactCTA
+     - then “Stay in the Loop”
+     - then Footer
 
-**Files to modify:**
-- `src/components/home/HeroSearchBar.tsx` (all PopoverContent instances - add collision handling)
+4. **Footer ordering fix**
+   - Reorder `Footer.tsx` so:
+     - 3D card (Licensed + Stay in the Loop) appears **above** the monogram block (as you mandated).
+
+5. **Developer name clickable global lock**
+   - Create a small reusable `DeveloperLink` component and replace all “by Developer” occurrences across:
+     - cards
+     - detail pages
+     - admin preview cards
+   - Always link to `/developer/:slug` when slug exists.
+
+6. **Listing card vertical portrait**
+   - Update `ProjectCard`:
+     - Replace `aspect-square` with a portrait ratio (matching your approved vertical card spec).
+   - Ensure image remains `object-cover` with the same Provident feel.
 
 ---
 
-## Technical Implementation Notes
+## Testing / Validation (end-to-end, non-negotiable)
+1. In Listing Admin:
+   - Run **Test One Listing** on a known failing Provident URL.
+   - Confirm checklist passes: images (2+), brochure mirrored, floor plans present, FAQs, distances, USP.
+2. Open the approved project detail page:
+   - Brochure downloads via proxy (no blocks).
+   - Floor plan tab shows PDFs with Download buttons.
+   - Hero looks identical to Provident (correct image and framing).
+3. Verify global rules:
+   - Emails are FULL CAPS everywhere.
+   - Developer names are clickable everywhere.
+   - Footer order matches your instruction.
+4. Performance:
+   - First paint is faster; map loads on demand.
 
-### Files Requiring Changes (in order of complexity)
+---
 
-1. **src/components/home/HeroSearchBar.tsx** - Multiple fixes (sorting labels, AI prompt styling, community label, Buy button, currency flag, dropdown behavior)
+## Critical inputs needed (to execute quickly and verify fixes)
+To avoid guessing, implementation will begin by targeting one real failing project:
+- Provide **one Provident project URL** that is currently failing in your admin preview (or the pending import id/slug shown in the admin queue).
+- Confirm how you want Studio represented in “configurations”:
+  - Option A: `Studio, 1, 2, 3`
+  - Option B: `0, 1, 2, 3` (less premium)
 
-2. **src/pages/Index.tsx** - AI Home Finder section restoration, divider spacing
-
-3. **src/pages/UserProfile.tsx** - Footer, PhoneInput integration, email change flow
-
-4. **src/components/Footer.tsx** - Expand professional tools list
-
-5. **src/components/home/CTABand.tsx** - Update to approved card styling
-
-6. **src/components/ui/section-divider.tsx** - Reduce compact spacing
-
-7. **src/components/header/MegaMenuAccount.tsx** - Icon styling refinements
-
-8. **src/components/SupportTicketBox.tsx** - Button styling update
-
-9. **Mega menu components** - Add video sources to featured cards
-
-### Dependencies
-- No new dependencies required
-- All components and utilities exist
-
-### Testing Checklist
-- [ ] Homepage hero dropdowns open downward only
-- [ ] All primary buttons match "Drop Your Idea" style
-- [ ] Profile page has Footer
-- [ ] Profile page phone input has country code selector
-- [ ] Profile page email is changeable with verification
-- [ ] Footer professional tools section includes all AI tools
-- [ ] Section dividers are properly centered
-- [ ] AI Home Finder section has background card restored
-- [ ] Mega menu featured cards show videos on hover
-- [ ] Account dropdown icons are outlined, not filled
+Once we have that single example, we’ll iterate until that listing is perfect, then run the bulk repair pipeline safely.
