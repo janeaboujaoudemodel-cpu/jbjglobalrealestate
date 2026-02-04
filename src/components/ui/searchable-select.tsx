@@ -44,7 +44,7 @@ export function SearchableSelect({
     }
   }, [open]);
 
-  // Filter and sort options - priority item first, remove "Other", then alphabetical
+  // Filter and sort options - priority item first, then alphabetical
   const filteredOptions = useMemo(() => {
     const filtered = options.filter((opt) => {
       if (opt === "Other") return false; // Remove "Other" option

@@ -86,9 +86,9 @@ const PROPERTY_STATUS = [
   { value: "off-plan", label: "Off-Plan" },
 ];
 
-// UAE Emirates
+// UAE Emirates + International priority countries
 const UAE_EMIRATES = [
-  { value: "all", label: "All Emirates" },
+  { value: "all", label: "All Locations" },
   { value: "Dubai", label: "Dubai" },
   { value: "Abu Dhabi", label: "Abu Dhabi" },
   { value: "Sharjah", label: "Sharjah" },
@@ -96,6 +96,11 @@ const UAE_EMIRATES = [
   { value: "Ajman", label: "Ajman" },
   { value: "Fujairah", label: "Fujairah" },
   { value: "Umm Al Quwain", label: "Umm Al Quwain" },
+  // International priority countries
+  { value: "Cyprus", label: "Cyprus" },
+  { value: "Indonesia", label: "Indonesia" },
+  { value: "Oman", label: "Oman" },
+  { value: "Thailand", label: "Thailand" },
 ];
 
 // Sort options - Premium labels

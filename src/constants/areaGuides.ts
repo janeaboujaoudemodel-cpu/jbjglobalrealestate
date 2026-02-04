@@ -1887,6 +1887,17 @@ export const UAE_EMIRATES = [
   },
 ];
 
+// International priority countries for property location filters
+export const INTERNATIONAL_LOCATIONS = [
+  { id: "cyprus", name: "Cyprus", areas: [] },
+  { id: "indonesia", name: "Indonesia", areas: [] },
+  { id: "oman", name: "Oman", areas: [] },
+  { id: "thailand", name: "Thailand", areas: [] },
+];
+
+// Combined locations: UAE Emirates + International priority countries
+export const ALL_PROPERTY_LOCATIONS = [...UAE_EMIRATES, ...INTERNATIONAL_LOCATIONS];
+
 export const getAreaBySlug = (slug: string): AreaGuide | undefined => {
   return AREA_GUIDES.find(area => area.slug === slug);
 };
