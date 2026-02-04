@@ -49,11 +49,18 @@ export interface ReellyVideoReview {
   thumbnail_url?: string;
 }
 
-// Project types
+// Developer object (used in markers endpoint)
+export interface ReellyDeveloperRef {
+  id: number;
+  name: string;
+  logo?: ReellyCoverImage | null;
+}
+
+// Project types (full detail endpoint)
 export interface ReellyProject {
   id: number;
   name: string;
-  developer: string; // Developer name (not ID)
+  developer: string; // Developer name (not ID) - full project endpoint
   construction_status: ReellyConstructionStatus;
   sale_status: ReellySaleStatus;
   overview: string | null; // Markdown with sections
@@ -78,6 +85,20 @@ export interface ReellyProject {
   is_published: boolean;
   cover_image: ReellyCoverImage | null;
   updated_at: string; // ISO date
+}
+
+// Project marker (markers endpoint - lighter payload for map)
+export interface ReellyProjectMarker {
+  id: number;
+  name: string;
+  developer: ReellyDeveloperRef; // Developer object with id/name/logo
+  location: ReellyLocation;
+  completion_datetime: string | null;
+  cover_image: ReellyCoverImage | null;
+  sale_status: ReellySaleStatus;
+  min_price: number;
+  status: ReellyConstructionStatus; // Note: "status" not "construction_status"
+  is_partner_project: boolean;
 }
 
 // Status enums
@@ -131,8 +152,9 @@ export interface ReellyLanguage {
   default: boolean;
 }
 
-// API response for projects list
+// API response types
 export type ReellyProjectsResponse = ReellyPaginatedResponse<ReellyProject>;
+export type ReellyMarkersResponse = ReellyPaginatedResponse<ReellyProjectMarker>;
 
 // Mapping functions to convert Reelly data to our database format
 export function mapReellyProjectToDatabase(project: ReellyProject) {
