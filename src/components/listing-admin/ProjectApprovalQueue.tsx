@@ -107,15 +107,13 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
     try {
       // IMPORTANT: Use COUNT queries only (no row limits) so the numbers match the real queue.
       // Needs Work must include BOTH explicit flags (review_notes) AND missing core fields.
-      // Otherwise the UI under-counts and Fix All appears to "stop" early.
+      // NOTE: Documents are optional (Reelly imports don't have them) - removed from requirements
       const needsWorkOr = [
         "review_notes.ilike.%PENDING_SCRAPE%",
         "review_notes.eq.INCOMPLETE",
         "review_notes.ilike.ERROR:%",
         "images.eq.[]",
         "images.is.null",
-        "documents.eq.[]",
-        "documents.is.null",
         "description.is.null",
         "developer_name.is.null",
         "developer_name.ilike.unknown",
@@ -171,8 +169,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       }
 
       // Apply status filter for complete vs needs_work
+      // NOTE: Documents are optional (Reelly API doesn't provide them)
+      // Complete = has description, images, valid developer
       if (statusFilter === "complete") {
-        // Complete = has description, images, documents, valid developer
         query = query
           .is("review_notes", null)
           .not("description", "is", null)
@@ -181,11 +180,11 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           .neq("developer_name", "")
           .not("developer_name", "ilike", "unknown")
           .not("images", "is", null)
-          .not("images", "eq", "[]")
-          .not("documents", "is", null)
-          .not("documents", "eq", "[]");
+          .not("images", "eq", "[]");
+        // NOTE: documents requirement removed - Reelly imports don't have documents
       } else if (statusFilter === "needs_work") {
-        // Needs work = flagged OR missing core fields
+        // Needs work = flagged OR missing CORE fields (images, description, developer)
+        // Documents are optional and excluded from this check
         query = query.or(
           [
             "review_notes.ilike.%PENDING_SCRAPE%",
@@ -193,8 +192,6 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
             "review_notes.ilike.ERROR:%",
             "images.eq.[]",
             "images.is.null",
-            "documents.eq.[]",
-            "documents.is.null",
             "description.is.null",
             "developer_name.is.null",
             "developer_name.ilike.unknown",
