@@ -272,94 +272,7 @@ async function getOrCreateDeveloper(
   return newDev?.id || null;
 }
 
-// ============================================================
-// Check if a project is complete enough for auto-approval
-// RELAXED CRITERIA: No price requirement, accept developer_name
-// ============================================================
-function isProjectComplete(data: any): boolean {
-  return !!(
-    data.name &&
-    data.description && data.description.length > 20 && // Relaxed from 50
-    (data.developer_id || data.developer_name) && // Accept either
-    data.images && data.images.length > 0
-    // Removed: price_from requirement
-  );
-}
-
-// ============================================================
-// Auto-approve complete project to live projects table
-// ============================================================
-async function autoApproveToProjects(
-  supabase: ReturnType<typeof createClient>,
-  mappedProject: any,
-  pendingImportId: string
-): Promise<boolean> {
-  try {
-    // Build project data for the live projects table
-    const projectData = {
-      name: mappedProject.name,
-      slug: mappedProject.slug,
-      description: mappedProject.description,
-      short_description: mappedProject.description?.substring(0, 200) || null,
-      developer_id: mappedProject.developer_id,
-      developer_name: mappedProject.developer_name,
-      area_id: mappedProject.area_id,
-      location: mappedProject.location,
-      emirate: mappedProject.emirate,
-      latitude: mappedProject.latitude,
-      longitude: mappedProject.longitude,
-      price_from: mappedProject.price_from,
-      price_to: mappedProject.price_to,
-      size_min: mappedProject.size_min,
-      size_max: mappedProject.size_max,
-      handover_date: mappedProject.handover_date,
-      handover_display: mappedProject.handover_display,
-      status_label: mappedProject.status_label,
-      images: mappedProject.images,
-      total_units: mappedProject.total_units,
-      floors: mappedProject.floors,
-      payment_plan: mappedProject.payment_plan,
-      payment_breakdown: mappedProject.payment_breakdown,
-      construction_progress: mappedProject.construction_progress,
-      video_url: mappedProject.video_url,
-      is_offplan: true,
-      is_active: true,
-      source: 'reelly',
-      source_url: mappedProject.source_url,
-    };
-
-    // Upsert to projects table (use slug as conflict key)
-    const { error: projectError } = await supabase
-      .from("projects")
-      .upsert(projectData, { onConflict: "slug" });
-
-    if (projectError) {
-      console.error(`[Reelly API] Failed to auto-approve ${mappedProject.name}:`, projectError);
-      return false;
-    }
-
-    // Mark pending import as approved
-    const { error: updateError } = await supabase
-      .from("pending_project_imports")
-      .update({ 
-        status: "approved", 
-        reviewed_at: new Date().toISOString(),
-        review_notes: "AUTO_APPROVED: Complete data from Reelly API"
-      })
-      .eq("id", pendingImportId);
-
-    if (updateError) {
-      console.error(`[Reelly API] Failed to update pending import status:`, updateError);
-      return false;
-    }
-
-    console.log(`[Reelly API] Auto-approved: ${mappedProject.name}`);
-    return true;
-  } catch (err) {
-    console.error(`[Reelly API] Auto-approve error:`, err);
-    return false;
-  }
-}
+// Auto-approval removed - all projects require manual review
 
 function mapReellyToImport(project: ReellyProject, areaId: string | null, developerId: string | null) {
   const slug = generateSlug(project.name, project.developer);
@@ -576,14 +489,12 @@ Deno.serve(async (req) => {
       action?: "test" | "sync";
       limit?: number;
       cursor?: string | null;
-      autoApprove?: boolean; // NEW: Auto-approve complete projects
       // legacy
       fullSync?: boolean;
     } = {
       action: "sync",
-      limit: 50,
+      limit: 100, // Increased default batch size for faster sync
       cursor: null,
-      autoApprove: true, // Default to auto-approve
     };
     try {
       const body = await req.json();
@@ -592,7 +503,7 @@ Deno.serve(async (req) => {
       // No body provided, use defaults
     }
 
-    console.log(`[Reelly API] Starting with action: ${options.action}, autoApprove: ${options.autoApprove}`);
+    console.log(`[Reelly API] Starting with action: ${options.action}, limit: ${options.limit}`);
 
     // Test connection
     if (options.action === 'test') {
@@ -614,7 +525,7 @@ Deno.serve(async (req) => {
     }
 
     // Fetch ONE page per request to avoid timeouts; UI can loop using next_cursor.
-    const limit = Math.min(Math.max(Number(options.limit ?? 50), 1), 100);
+    const limit = Math.min(Math.max(Number(options.limit ?? 100), 1), 200);
     const cursor = options.cursor ? String(options.cursor) : null;
 
     const pageUrl = cursor ?? `${REELLY_API_BASE}?limit=${limit}`;
@@ -630,11 +541,25 @@ Deno.serve(async (req) => {
     const projectsToProcess = projects;
     console.log(`[Reelly API] ${projectsToProcess.length} projects to process (all projects, no filter)`);
 
+    // Pre-fetch existing source_urls for O(1) lookup (optimization)
+    const { data: existingRecords } = await supabase
+      .from("pending_project_imports")
+      .select("source_url, status")
+      .like("source_url", "%reelly_%");
+    
+    const existingMap = new Map<string, { status: string | null }>();
+    for (const rec of existingRecords || []) {
+      const match = rec.source_url?.match(/#(reelly_\d+)$/);
+      if (match) {
+        existingMap.set(match[1], { status: rec.status });
+      }
+    }
+    console.log(`[Reelly API] Pre-fetched ${existingMap.size} existing Reelly records for dedup`);
+
     // Process and upsert projects
     let inserted = 0;
     let updated = 0;
     let skipped = 0;
-    let autoApproved = 0;
     let areasCreated = 0;
     let developersCreated = 0;
     const errors: string[] = [];
@@ -734,13 +659,7 @@ Deno.serve(async (req) => {
           pendingImportId = insertedRow?.id || null;
         }
 
-        // AUTO-APPROVE: If project is complete, push to live projects table
-        if (options.autoApprove && pendingImportId && isProjectComplete(mappedProject)) {
-          const approved = await autoApproveToProjects(supabase, mappedProject, pendingImportId);
-          if (approved) {
-            autoApproved++;
-          }
-        }
+        // No auto-approval - all projects go to pending queue for manual review
       } catch (err) {
         const errorDetails = err && typeof err === 'object' && 'message' in err 
           ? (err as any).message 
@@ -760,13 +679,12 @@ Deno.serve(async (req) => {
         inserted,
         updated,
         skipped,
-        auto_approved: autoApproved,
         areas_created: areasCreated,
         developers_linked: projectsToProcess.length - errors.length,
         errors: errors.slice(0, 10),
         next_cursor: nextCursor,
         done: !nextCursor,
-        message: `Processed ${projects.length} projects (${inserted} new, ${updated} updated, ${skipped} skipped, ${autoApproved} auto-approved, ${areasCreated} new areas)`,
+        message: `Processed ${projects.length} projects (${inserted} new, ${updated} updated, ${skipped} skipped, ${areasCreated} new areas)`,
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
