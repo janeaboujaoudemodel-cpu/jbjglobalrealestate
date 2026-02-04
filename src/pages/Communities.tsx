@@ -10,7 +10,7 @@ const Communities = React.forwardRef<HTMLElement>((_, ref) => {
       {/* Layer 1: Black base */}
       <section
         ref={ref}
-        className="relative w-full min-h-screen py-16 md:py-24 bg-black"
+        className="relative w-full min-h-screen py-12 md:py-16 bg-black"
       >
         {/* Layer 2: Active Champagne - using global locked gutter */}
         <div className="jj-layer-2">
