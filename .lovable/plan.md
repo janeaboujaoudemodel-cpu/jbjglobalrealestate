@@ -1,76 +1,49 @@
 
+# Fix Reelly Sync: Remove Auto-Approval & Speed Improvements
 
-# Clean Database & Extract Fresh from Reelly Only
+## Problems Identified
 
-## Current State Analysis
-
-Your database currently has:
-
-| Table | Total Records | From Reelly | Fake/Old Data |
-|-------|---------------|-------------|---------------|
-| **Projects** | 0 | 0 | Already clean |
-| **Pending Queue** | 794 | 778 | 16 Provident entries |
-| **Areas** | 170 | 138 | 32 manually created |
-
-The projects table is already empty. We need to clean the areas and pending queue, then sync fresh data from Reelly.
+| Issue | Root Cause | Solution |
+|-------|------------|----------|
+| **Auto-approval happening** | `autoApprove: true` is default in edge function | Remove auto-approval entirely |
+| **Sync is slow (stuck at 3%)** | Sequential processing: 50 projects → 36 API calls, each with individual DB upserts | Increase batch size, add batched DB operations, show better progress feedback |
+| **Progress feels frozen** | UI only updates after each batch completes (50 projects) | Add estimated time, improve progress display |
 
 ---
 
-## Cleanup Plan
+## Solution Overview
 
-### Step 1: Delete Non-Reelly Areas (32 records)
+### 1. Remove Auto-Approval Completely
 
-Delete areas that were manually created (no `reelly_id`):
-- JBR, Emaar Beachfront, Blue Waters Island
-- Meydan, Dubailand, JLT, Sports City
-- JVC, MBR City, Motor City, etc.
+**Edge Function (`reelly-api-sync/index.ts`):**
+- Remove `autoApprove` option entirely
+- Delete `autoApproveToProjects()` function
+- Delete `isProjectComplete()` function
+- Projects will ONLY go to `pending_project_imports` table
+- You must manually approve to make them live
 
-Keep the 138 areas that have valid `reelly_id` from Reelly API.
+**Result:** All synced projects stay in the approval queue until you review and approve them.
 
-### Step 2: Delete Non-Reelly Queue Items (16 records)
+### 2. Speed Up Sync (Batch Processing)
 
-Remove the 16 Provident-sourced entries from `pending_project_imports`:
-- Palmiera Collective, Salva, Capeside Marina Residences
-- The Grove, Grove Ridge, Mercedes-Benz Places, etc.
+**Edge Function Changes:**
+- Increase default page size from 50 to 100
+- Batch database inserts (bulk upsert instead of one-by-one)
+- Skip developer/area creation if already exists (reduce DB queries)
+- Remove redundant lookups
 
-Keep the 778 Reelly queue items.
+**UI Changes:**
+- Show estimated time remaining
+- Update progress more frequently
+- Add "items/second" metric
 
-### Step 3: Fresh Reelly Sync (1803 projects)
+### 3. Improved Progress Display
 
-After cleanup, trigger a full Reelly sync to:
-1. Import all 1803 projects from Reelly API
-2. Link developers automatically
-3. Extract all areas from project locations
-4. Auto-approve complete listings
-
----
-
-## Implementation
-
-### Update `wipe-and-rebuild` Edge Function
-
-Add new options to support selective cleanup:
-
-```typescript
-// New parameters:
-{
-  confirm: true,
-  mode: "reelly_only"  // New mode for Reelly-only cleanup
-}
+Show clearer feedback:
 ```
-
-**Mode: "reelly_only"** will:
-1. Delete all areas WITHOUT `reelly_id` (32 records)
-2. Delete all queue items NOT from Reelly (16 records)  
-3. Delete all projects (already 0)
-4. Keep Reelly-sourced data intact
-
-### Add Admin UI Button
-
-Add a "Clean & Sync Reelly Only" button to the Listing Admin that:
-1. Calls `wipe-and-rebuild` with `mode: "reelly_only"`
-2. Automatically triggers `reelly-api-sync` for full 1803 projects
-3. Triggers `reelly-areas-sync` to refresh areas
+Syncing... 450 / 1803 projects (25%)
+Speed: ~50 projects/sec • Est. ~30 seconds remaining
+```
 
 ---
 
@@ -78,19 +51,72 @@ Add a "Clean & Sync Reelly Only" button to the Listing Admin that:
 
 | File | Changes |
 |------|---------|
-| `supabase/functions/wipe-and-rebuild/index.ts` | Add `reelly_only` mode for selective cleanup |
-| `src/components/listing-admin/ReellyImportPanel.tsx` | Add "Clean & Sync Fresh" button |
+| `supabase/functions/reelly-api-sync/index.ts` | Remove auto-approval, increase batch size, optimize upserts |
+| `src/components/listing-admin/ReellyImportPanel.tsx` | Remove auto-approve UI references, improve progress display |
 
 ---
 
-## Expected Result After Cleanup
+## Technical Changes
 
-| Table | Before | After |
-|-------|--------|-------|
-| Projects | 0 | 1803 (all from Reelly) |
-| Pending Queue | 794 | 1803 (all from Reelly) |
-| Areas | 170 | ~138+ (all with reelly_id) |
-| Developers | current | 547 (linked from Reelly) |
+### Edge Function: Remove Auto-Approval
 
-All data will be clean, consistent, and sourced exclusively from the Reelly API.
+```typescript
+// REMOVE these lines:
+autoApprove?: boolean; // DELETE option
+autoApprove: true, // DELETE default
+isProjectComplete() // DELETE function
+autoApproveToProjects() // DELETE function
 
+// REMOVE this block (lines 737-743):
+if (options.autoApprove && pendingImportId && isProjectComplete(...)) {
+  const approved = await autoApproveToProjects(...);
+  if (approved) autoApproved++;
+}
+
+// REMOVE from response:
+auto_approved: autoApproved, // DELETE
+```
+
+### Edge Function: Speed Optimization
+
+```typescript
+// Increase default page size
+const limit = Math.min(Math.max(Number(options.limit ?? 100), 1), 200);
+
+// Pre-fetch all existing source_urls for batch check
+const existingUrls = new Set(
+  (await supabase.from("pending_project_imports")
+    .select("source_url")
+    .like("source_url", "%reelly_%")).data?.map(r => r.source_url) || []
+);
+
+// Skip individual lookups, use Set for O(1) check
+```
+
+### UI: Better Progress Display
+
+```typescript
+// Calculate estimated time
+const elapsedMs = Date.now() - syncStartTime;
+const projectsPerSec = syncProgress.fetched / (elapsedMs / 1000);
+const remaining = syncProgress.total - syncProgress.fetched;
+const estimatedSecondsLeft = Math.ceil(remaining / projectsPerSec);
+
+// Display:
+// "Fetched 450 / 1803 (25%) • ~50/sec • ~30s remaining"
+```
+
+---
+
+## Summary of Changes
+
+1. **Remove auto-approval** - Projects only go to pending queue, require manual approval
+2. **Increase batch size** - 100 projects per API call instead of 50
+3. **Pre-fetch existing records** - Avoid N individual lookups
+4. **Better progress UI** - Show speed and estimated time remaining
+
+After these changes:
+- Full sync of 1803 projects will complete faster (~1-2 minutes vs 3-5 minutes)
+- NO projects will be auto-approved
+- You approve manually from the queue
+- Progress bar shows real-time speed and ETA
