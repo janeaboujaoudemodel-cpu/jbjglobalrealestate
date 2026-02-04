@@ -289,10 +289,10 @@ export const SECURITY_SCORE_FACTORS = {
 // Official contact info (sanitized)
 export const APPROVED_CONTACT_INFO = {
   phone: '+971 56 591 1000',
-  email: 'Contact@JBJ.ae',
-  privacy_email: 'Privacy@JBJ.ae',
-  security_email: 'Security@JBJ.ae',
-  compliance_email: 'Compliance@JBJ.ae'
+  email: 'CONTACT@JBJ.AE',
+  privacy_email: 'PRIVACY@JBJ.AE',
+  security_email: 'SECURITY@JBJ.AE',
+  compliance_email: 'COMPLIANCE@JBJ.AE'
 };
 
 // Compliance training types (Enhanced)

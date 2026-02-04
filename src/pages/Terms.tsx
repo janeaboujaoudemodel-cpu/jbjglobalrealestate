@@ -172,7 +172,7 @@ const Terms = () => {
                   <strong>JBJ Global Real Estate</strong><br />
                   Real Estate Brokerage<br />
                   Dubai, United Arab Emirates<br />
-                  Email: <a href="mailto:Privacy@JBJ.ae" className="text-gold hover:underline">Privacy@JBJ.ae</a>
+                  Email: <a href="mailto:PRIVACY@JBJ.AE" className="text-gold hover:underline">PRIVACY@JBJ.AE</a>
                 </p>
                 <p className="mt-6 text-zinc-500 text-sm">
                   © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.

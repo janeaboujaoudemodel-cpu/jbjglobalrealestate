@@ -71,8 +71,8 @@ interface CRMAssistantPanelProps {
 const COMPANY_CONTACTS = {
   name: "JBJ GLOBAL REAL ESTATE",
   phone: "+971 56 591 1000",
-  email: "Contact@JBJ.ae",
-  website: "www.JBJ.ae",
+  email: "CONTACT@JBJ.AE",
+  website: "WWW.JBJ.AE",
   address: "Dubai, UAE",
   founderPhone: "+971 56 591 1000"
 };

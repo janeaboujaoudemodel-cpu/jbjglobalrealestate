@@ -115,11 +115,11 @@ export function BrokerToolkitCTA() {
                 </a>
                 <span className="text-zinc-300 hidden sm:block">|</span>
                 <a
-                  href="mailto:Contact@JBJ.ae"
+                  href="mailto:CONTACT@JBJ.AE"
                   className="flex items-center gap-2 text-zinc-600 hover:text-gold transition-colors"
                 >
                   <Mail className="w-5 h-5 text-gold" />
-                  Contact@JBJ.ae
+                  CONTACT@JBJ.AE
                 </a>
               </div>
             </motion.div>

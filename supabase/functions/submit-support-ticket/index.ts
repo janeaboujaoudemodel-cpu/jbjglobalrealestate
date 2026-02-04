@@ -9,14 +9,14 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Email Rule: First letter capitalized, JBJ always in capitals
+// Email Rule: ALL CAPS for JBJ.AE emails
 const OFFICIAL_EMAILS = {
-  support: 'Support@JBJ.ae',
-  contact: 'Contact@JBJ.ae',
-  privacy: 'Privacy@JBJ.ae',
-  careers: 'Careers@JBJ.ae',
-  partnerships: 'Partnerships@JBJ.ae',
-  security: 'Security@JBJ.ae',
+  support: 'SUPPORT@JBJ.AE',
+  contact: 'CONTACT@JBJ.AE',
+  privacy: 'PRIVACY@JBJ.AE',
+  careers: 'CAREERS@JBJ.AE',
+  partnerships: 'PARTNERSHIPS@JBJ.AE',
+  security: 'SECURITY@JBJ.AE',
 };
 
 interface TicketRequest {
