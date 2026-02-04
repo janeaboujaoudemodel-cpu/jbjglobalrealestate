@@ -306,7 +306,7 @@ export const ConsultationRequestForm = ({
                   <Checkbox
                     checked={field.value}
                     onCheckedChange={field.onChange}
-                    className="border-zinc-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                    className="border-gold/30 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
                   />
                 </FormControl>
                 <FormLabel className="text-black text-sm leading-tight font-normal">

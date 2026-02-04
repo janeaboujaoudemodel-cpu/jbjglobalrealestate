@@ -35,12 +35,14 @@ import PremiumBrochureCard from "@/components/project-detail/PremiumBrochureCard
 import LeadCaptureModal from "@/components/project-detail/LeadCaptureModal";
 import ProjectBreadcrumb from "@/components/project-detail/ProjectBreadcrumb";
 import CallToActionSection from "@/components/project-detail/CallToActionSection";
+import FloorPlanGallery from "@/components/project-detail/FloorPlanGallery";
 import Footer from "@/components/Footer";
 import { CONTACT_INFO, getCallUrl, getEmailUrl, getWhatsAppUrl } from "@/constants/stats";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { SafeImage } from "@/components/SafeImage";
 import { filterValidImages, getFirstValidImageUrl } from "@/lib/imageUtils";
 import { formatPrice as formatPriceUtil } from "@/utils/formatNumber";
+import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 import {
   Accordion,
   AccordionContent,
@@ -107,6 +109,8 @@ const SUB_NAV_TABS = [
   { id: "mortgage", label: "Mortgage", icon: Calculator },
 ] as const;
 
+const normalizeDocType = (value: string) => value.toLowerCase().trim().replace(/[\s-]+/g, "_");
+
 export default function ProjectDetailLayout({
   project,
   adminBar,
@@ -153,15 +157,27 @@ export default function ProjectDetailLayout({
   const heroImage = images[0];
 
   const brochureDocs = useMemo(
-    () => project.documents.filter((d) => d.type === "brochure"),
+    () =>
+      project.documents.filter((d) => {
+        const t = normalizeDocType(d.type || "");
+        return t === "brochure" || t.includes("brochure");
+      }),
     [project.documents],
   );
   const paymentPlanDocs = useMemo(
-    () => project.documents.filter((d) => d.type === "payment_plan"),
+    () =>
+      project.documents.filter((d) => {
+        const t = normalizeDocType(d.type || "");
+        return t === "payment_plan" || t === "paymentplan" || (t.includes("payment") && t.includes("plan"));
+      }),
     [project.documents],
   );
   const floorPlanDocs = useMemo(
-    () => project.documents.filter((d) => d.type === "floor_plan"),
+    () =>
+      project.documents.filter((d) => {
+        const t = normalizeDocType(d.type || "");
+        return t === "floor_plan" || t === "floorplan" || (t.includes("floor") && t.includes("plan"));
+      }),
     [project.documents],
   );
 
@@ -204,6 +220,7 @@ export default function ProjectDetailLayout({
       "floor-plans": floorPlansRef,
       amenities: amenitiesRef,
       location: locationRef,
+      brochure: brochureRef,
       payment: paymentRef,
       faq: faqRef,
       ai: aiRef,
@@ -213,19 +230,47 @@ export default function ProjectDetailLayout({
     if (targetRef) scrollToRef(targetRef);
   };
 
-  const handleDocumentDownload = (type: "brochure" | "floor_plan" | "payment_plan" | "images", url?: string) => {
-    if (isLeadCaptured && url) {
-      window.open(url, "_blank");
-    } else {
-      setCaptureDocType(type);
-      setCaptureDocUrl(url);
-      setLeadCaptureOpen(true);
+  const handleDocumentDownload = (
+    type: "brochure" | "floor_plan" | "payment_plan" | "images",
+    url?: string,
+    filename?: string,
+  ) => {
+    const resolvedUrl = url
+      ? type === "images"
+        ? url
+        : maybeProxyStorageUrl(
+            url,
+            filename || `${project.name.replace(/\s+/g, "-")}-${type.replace(/_/g, "-")}.pdf`,
+          )
+      : undefined;
+
+    if (isLeadCaptured && resolvedUrl) {
+      window.open(resolvedUrl, "_blank");
+      return;
     }
+
+    setCaptureDocType(type);
+    setCaptureDocUrl(resolvedUrl);
+    setLeadCaptureOpen(true);
   };
 
   const mapQuery = `${project.name}${project.location ? `, ${project.location}` : ""}, Dubai, UAE`;
   const brochurePrimary = brochureDocs[0];
   const heroImageUrl = images[0]?.url;
+
+  const paymentPlanBenefitHeadline = useMemo(() => {
+    const raw = (project.payment_plan || "").trim();
+    if (!raw) return null;
+    // Only reframe when copy looks explicitly negative ("until YYYY handover")
+    const hasUntilYear = /until\s*20\d{2}/i.test(raw);
+    const hasHandover = /handover/i.test(raw);
+    if (!hasUntilYear || !hasHandover) return null;
+
+    const year = raw.match(/(20\d{2})/)?.[1] || project.handover_date?.match(/(20\d{2})/)?.[1];
+    return year
+      ? `Benefit from extended payment terms until ${year} handover`
+      : "Benefit from extended payment terms";
+  }, [project.handover_date, project.payment_plan]);
 
   // Format bedrooms text
   const bedroomsText = useMemo(() => {
@@ -523,44 +568,20 @@ export default function ProjectDetailLayout({
            {(floorPlanDocs.length > 0 || (project.floor_plan_types?.length ?? 0) > 0) && (
              <div ref={floorPlansRef} id="floor-plans" className="mb-12 scroll-mt-40">
                <div className="jj-card-inner">
-                  <h3 className="text-h3-sm font-medium text-foreground">Floor Plans</h3>
-
-                  {floorPlanDocs.length > 0 ? (
-                    <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {floorPlanDocs.map((doc) => (
-                        <button
-                          key={doc.id}
-                          onClick={() => handleDocumentDownload("floor_plan", doc.url)}
-                          className="rounded-xl border border-gold/30 bg-card p-4 hover:border-gold/60 transition-colors text-left"
-                        >
-                          <p className="text-sm font-semibold text-foreground truncate">{doc.name || "Floor Plan"}</p>
-                          <p className="mt-1 text-xs text-muted-foreground truncate">Click to download</p>
-                        </button>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {(project.floor_plan_types || []).map((t, idx) => (
-                        <div key={idx} className="rounded-xl border border-border bg-card p-4">
-                          <p className="text-sm font-semibold text-foreground">{t.label}</p>
-                          {t.pdfUrl ? (
-                            <button
-                              type="button"
-                              className="mt-1 text-xs text-primary underline underline-offset-4"
-                              onClick={() => handleDocumentDownload("floor_plan", t.pdfUrl)}
-                            >
-                              Download
-                            </button>
-                          ) : (
-                            <p className="mt-1 text-xs text-muted-foreground">Available on request</p>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
+                 <h3 className="text-h3-sm font-medium text-foreground">Floor Plans</h3>
+                 <div className="mt-6">
+                   <FloorPlanGallery
+                     floorPlanTypes={project.floor_plan_types ?? null}
+                     floorPlanDocs={floorPlanDocs}
+                     projectName={project.name}
+                     onDownload={(_, url) => handleDocumentDownload("floor_plan", url)}
+                     brochureUrl={brochurePrimary?.url}
+                     onDownloadBrochure={(url) => handleDocumentDownload("brochure", url)}
+                   />
+                 </div>
+               </div>
+             </div>
+           )}
 
            {/* AMENITIES SECTION */}
            {(project.amenities?.length ?? 0) > 0 && (
@@ -727,6 +748,11 @@ export default function ProjectDetailLayout({
             </h3>
 
             {/* Payment Plan Summary */}
+             {paymentPlanBenefitHeadline && (
+               <p className="text-sm text-muted-foreground text-center mb-3">
+                 {paymentPlanBenefitHeadline}
+               </p>
+             )}
             {project.payment_plan && (
               <div className="mb-6 p-4 rounded-xl bg-gradient-to-br from-gold/10 to-gold/5 border border-gold/30">
                 <p className="text-lg font-semibold text-foreground text-center">{project.payment_plan}</p>
@@ -852,8 +878,8 @@ export default function ProjectDetailLayout({
                   rel="noopener noreferrer"
                   className="flex flex-col items-center gap-4 p-6 rounded-2xl border-2 border-gold/50 bg-gradient-to-br from-card via-card to-gold/5 hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all group"
                 >
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-green-500/20 to-green-500/5 border-2 border-green-500/40 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <MessageCircle className="w-7 h-7 text-green-500" />
+                  <div className="w-14 h-14 rounded-full bg-gold/10 border-2 border-gold/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <MessageCircle className="w-7 h-7 text-gold" />
                   </div>
                   <span className="text-base font-semibold text-foreground">WhatsApp</span>
                   <span className="text-sm text-muted-foreground">{CONTACT_INFO.phone}</span>
@@ -872,8 +898,8 @@ export default function ProjectDetailLayout({
                   href={getEmailUrl()}
                   className="flex flex-col items-center gap-4 p-6 rounded-2xl border-2 border-gold/50 bg-gradient-to-br from-card via-card to-gold/5 hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all group"
                 >
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500/20 to-blue-500/5 border-2 border-blue-500/40 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Mail className="w-7 h-7 text-blue-500" />
+                  <div className="w-14 h-14 rounded-full bg-gold/10 border-2 border-gold/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Mail className="w-7 h-7 text-gold" />
                   </div>
                   <span className="text-base font-semibold text-foreground">Email</span>
                   <span className="text-sm text-muted-foreground">{CONTACT_INFO.email}</span>

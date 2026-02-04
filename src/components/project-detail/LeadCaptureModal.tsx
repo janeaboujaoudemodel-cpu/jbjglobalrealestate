@@ -7,6 +7,7 @@ import { FileText, Download, Loader2, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { z } from "zod";
+import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 
 const leadSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters").max(100),
@@ -85,7 +86,7 @@ const LeadCaptureModal = ({
         setFormData({ name: "", email: "", phone: "" });
         
         if (documentUrl) {
-          window.open(documentUrl, "_blank");
+            window.open(maybeProxyStorageUrl(documentUrl), "_blank");
         }
         
         onSuccess?.();
