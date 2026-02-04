@@ -125,7 +125,7 @@ const SALE_STATUS = [
   { value: "all", label: "All Sale Statuses" },
   { value: "Announced", label: "Announced" },
   { value: "On Sale", label: "On Sale" },
-  { value: "Out of Stock", label: "Out of Stock" },
+  { value: "Sold Out", label: "Sold Out" },
   { value: "Presale (EOI)", label: "Presale (EOI)" },
   { value: "Start of Sales", label: "Start of Sales" },
 ];

@@ -1,5 +1,4 @@
-import { CreditCard, Calendar, CheckCircle, Home, Percent } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
+import { CreditCard, Calendar, CheckCircle, Home, Percent, Clock } from "lucide-react";
 
 interface PaymentBreakdown {
   down_payment?: string;
@@ -13,6 +12,7 @@ interface PaymentPlanVisualizationProps {
   handoverDate?: string | null;
   downPaymentPercent?: number | null;
   projectName: string;
+  postHandoverYears?: number | null;
 }
 
 export default function PaymentPlanVisualization({
@@ -21,6 +21,7 @@ export default function PaymentPlanVisualization({
   handoverDate,
   downPaymentPercent,
   projectName,
+  postHandoverYears,
 }: PaymentPlanVisualizationProps) {
   // Parse payment plan percentages from string like "60/40", "70/30", "80/20"
   const parsePaymentPlan = (plan?: string | null): { booking: number; construction: number; handover: number } | null => {
@@ -55,7 +56,8 @@ export default function PaymentPlanVisualization({
       value: paymentBreakdown.down_payment,
       icon: CheckCircle,
       color: "text-emerald-400",
-      bgColor: "bg-emerald-500/20",
+      bgColor: "bg-emerald-500",
+      ringColor: "ring-emerald-500/30",
     });
   } else if (parsed || downPaymentPercent) {
     milestones.push({
@@ -63,7 +65,8 @@ export default function PaymentPlanVisualization({
       value: `${downPaymentPercent || parsed?.booking || 10}%`,
       icon: CheckCircle,
       color: "text-emerald-400",
-      bgColor: "bg-emerald-500/20",
+      bgColor: "bg-emerald-500",
+      ringColor: "ring-emerald-500/30",
     });
   }
   
@@ -72,16 +75,18 @@ export default function PaymentPlanVisualization({
       label: "During Construction",
       value: paymentBreakdown.during_construction,
       icon: Calendar,
-      color: "text-amber-400",
-      bgColor: "bg-amber-500/20",
+      color: "text-gold",
+      bgColor: "bg-gold",
+      ringColor: "ring-gold/30",
     });
   } else if (parsed?.construction) {
     milestones.push({
       label: "During Construction",
       value: `${parsed.construction}%`,
       icon: Calendar,
-      color: "text-amber-400",
-      bgColor: "bg-amber-500/20",
+      color: "text-gold",
+      bgColor: "bg-gold",
+      ringColor: "ring-gold/30",
     });
   }
   
@@ -90,16 +95,18 @@ export default function PaymentPlanVisualization({
       label: "On Handover",
       value: paymentBreakdown.on_completion,
       icon: Home,
-      color: "text-gold",
-      bgColor: "bg-gold/20",
+      color: "text-champagne-dark",
+      bgColor: "bg-champagne-dark",
+      ringColor: "ring-champagne-dark/30",
     });
   } else if (parsed?.handover) {
     milestones.push({
       label: "On Handover",
       value: `${parsed.handover}%`,
       icon: Home,
-      color: "text-gold",
-      bgColor: "bg-gold/20",
+      color: "text-champagne-dark",
+      bgColor: "bg-champagne-dark",
+      ringColor: "ring-champagne-dark/30",
     });
   }
 
@@ -122,65 +129,99 @@ export default function PaymentPlanVisualization({
         Payment Plan
       </h3>
 
-      {/* Payment Plan Summary */}
+      {/* Payment Plan Summary - Premium Box */}
       {paymentPlan && (
-        <div className="mb-6 p-4 rounded-xl border border-gold/30 bg-gold/5">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
-              <Percent className="w-6 h-6 text-gold" />
+        <div className="mb-6 p-5 rounded-xl border border-gold/30 bg-gradient-to-br from-gold/5 to-gold/10">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-full bg-gold/20 flex items-center justify-center ring-4 ring-gold/10">
+              <Percent className="w-7 h-7 text-gold" />
             </div>
             <div>
-              <p className="text-lg font-bold text-gold">{paymentPlan}</p>
+              <p className="text-2xl font-bold text-gold">{paymentPlan}</p>
               <p className="text-sm text-muted-foreground">Flexible Payment Structure</p>
             </div>
           </div>
+          
+          {/* Post-Handover Badge */}
+          {postHandoverYears && postHandoverYears > 0 && (
+            <div className="mt-4 flex items-center gap-2 px-3 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-lg w-fit">
+              <Clock className="w-4 h-4 text-emerald-400" />
+              <span className="text-sm font-medium text-emerald-400">
+                {postHandoverYears} {postHandoverYears === 1 ? 'Year' : 'Years'} Post-Handover
+              </span>
+            </div>
+          )}
         </div>
       )}
 
-      {/* Visual Progress Bar */}
+      {/* Visual Progress Bar - 3 Color Premium */}
       {total > 0 && (
-        <div className="mb-6">
-          <div className="h-4 rounded-full bg-muted overflow-hidden flex">
+        <div className="mb-8">
+          <div className="h-5 rounded-full bg-muted overflow-hidden flex shadow-inner">
             {bookingPct > 0 && (
               <div 
-                className="h-full bg-emerald-500 transition-all"
+                className="h-full bg-emerald-500 transition-all relative group"
                 style={{ width: `${(bookingPct / total) * 100}%` }}
-              />
+              >
+                <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                  {bookingPct}%
+                </span>
+              </div>
             )}
             {constructionPct > 0 && (
               <div 
-                className="h-full bg-amber-500 transition-all"
+                className="h-full bg-gold transition-all relative group"
                 style={{ width: `${(constructionPct / total) * 100}%` }}
-              />
+              >
+                <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-black opacity-0 group-hover:opacity-100 transition-opacity">
+                  {constructionPct}%
+                </span>
+              </div>
             )}
             {handoverPct > 0 && (
               <div 
-                className="h-full bg-gold transition-all"
+                className="h-full bg-champagne-dark transition-all relative group border-l-2 border-black/20"
                 style={{ width: `${(handoverPct / total) * 100}%` }}
-              />
+              >
+                <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-black opacity-0 group-hover:opacity-100 transition-opacity">
+                  {handoverPct}%
+                </span>
+              </div>
             )}
           </div>
-          <div className="flex justify-between mt-2 text-xs text-muted-foreground">
-            <span>Booking</span>
-            <span>Construction</span>
-            <span>Handover {handoverDate && `(${handoverDate})`}</span>
+          <div className="flex justify-between mt-3 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              Booking
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-gold" />
+              Construction
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-champagne-dark" />
+              Handover {handoverDate && `(${handoverDate})`}
+            </span>
           </div>
         </div>
       )}
 
-      {/* Payment Milestones */}
+      {/* Payment Milestones - Percentage Circles (Reelly-style) */}
       {milestones.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {milestones.map((milestone, idx) => (
             <div 
               key={idx}
-              className="p-4 rounded-xl border border-gold/20 bg-card hover:border-gold/40 transition-all"
+              className="p-5 rounded-xl border border-gold/20 bg-card hover:border-gold/40 transition-all text-center"
             >
-              <div className={`w-10 h-10 rounded-full ${milestone.bgColor} flex items-center justify-center mb-3`}>
-                <milestone.icon className={`w-5 h-5 ${milestone.color}`} />
+              {/* Percentage Circle */}
+              <div className={`w-16 h-16 rounded-full ${milestone.bgColor}/20 flex items-center justify-center mx-auto mb-3 ring-4 ${milestone.ringColor}`}>
+                <span className={`text-xl font-bold ${milestone.color}`}>
+                  {getPercentageValue(milestone.value)}%
+                </span>
               </div>
-              <p className="text-2xl font-bold text-foreground">{milestone.value}</p>
-              <p className="text-sm text-muted-foreground">{milestone.label}</p>
+              <milestone.icon className={`w-5 h-5 ${milestone.color} mx-auto mb-2`} />
+              <p className="text-sm font-medium text-muted-foreground">{milestone.label}</p>
             </div>
           ))}
         </div>
@@ -188,10 +229,17 @@ export default function PaymentPlanVisualization({
 
       {/* Benefit Statement */}
       {handoverDate && (
-        <p className="mt-6 text-sm text-muted-foreground italic">
+        <p className="mt-6 text-sm text-muted-foreground italic text-center">
           Benefit from extended payment terms until {handoverDate} handover
         </p>
       )}
+
+      {/* Report Issue Link */}
+      <div className="mt-6 pt-4 border-t border-gold/10 text-center">
+        <button className="text-xs text-muted-foreground hover:text-gold transition-colors">
+          Notice something incorrect? Report an issue
+        </button>
+      </div>
     </div>
   );
 }

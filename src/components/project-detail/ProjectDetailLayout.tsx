@@ -51,6 +51,10 @@ import PaymentPlanVisualization from "@/components/project-detail/PaymentPlanVis
 import MasterPlanSection from "@/components/project-detail/MasterPlanSection";
 import HouseDetailsSection from "@/components/project-detail/HouseDetailsSection";
 import DataFreshnessIndicator from "@/components/project-detail/DataFreshnessIndicator";
+import RecommendedProjects from "@/components/project-detail/RecommendedProjects";
+import ReportIssueButton from "@/components/project-detail/ReportIssueButton";
+import AmenitiesWithPhotos from "@/components/project-detail/AmenitiesWithPhotos";
+import PointsOfInterest from "@/components/project-detail/PointsOfInterest";
 import Footer from "@/components/Footer";
 import { CONTACT_INFO, getCallUrl, getEmailUrl, getWhatsAppUrl } from "@/constants/stats";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
@@ -769,21 +773,18 @@ export default function ProjectDetailLayout({
              </div>
            )}
 
-           {/* AMENITIES SECTION */}
+           {/* AMENITIES SECTION - Premium with Icons */}
            {(project.amenities?.length ?? 0) > 0 && (
-             <div ref={amenitiesRef} id="amenities" className="mb-12 scroll-mt-40">
-               <div className="jj-card-inner">
-                  <h3 className="text-h3-sm font-medium text-foreground">Amenities</h3>
-                  <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                    {project.amenities!.slice(0, 40).map((a, idx) => (
-                      <div key={idx} className="rounded-xl border border-border bg-card p-3">
-                        <p className="text-xs text-foreground">{a}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-             )}
+              <div ref={amenitiesRef} id="amenities" className="mb-12 scroll-mt-40">
+                <div className="jj-card-inner">
+                   <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
+                     <Building2 className="w-5 h-5 text-gold" />
+                     Amenities & Features
+                   </h3>
+                   <AmenitiesWithPhotos amenities={project.amenities!} />
+                 </div>
+               </div>
+              )}
 
            {/* PROJECT MEDIA SECTION (Reelly-style) */}
            {(project.video_url || project.virtual_tour_url) && (

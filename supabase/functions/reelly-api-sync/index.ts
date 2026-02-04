@@ -108,20 +108,20 @@ function mapSaleStatus(status: string): string | null {
     // Exact matches from Reelly API
     "Announced": "Announced",
     "On Sale": "On Sale",
-    "Out of Stock": "Out of Stock",
+    "Out of Stock": "Sold Out",
     "Presale (EOI)": "Presale (EOI)",
     "Start of Sales": "Start of Sales",
     // Snake case variants
     "announced": "Announced",
     "on_sale": "On Sale",
-    "out_of_stock": "Out of Stock",
+    "out_of_stock": "Sold Out",
     "presale_eoi": "Presale (EOI)",
     "start_of_sales": "Start of Sales",
     // Legacy mappings for backward compatibility
     "available": "On Sale",
     "coming_soon": "Announced",
     "limited": "On Sale",
-    "sold_out": "Out of Stock",
+    "sold_out": "Sold Out",
   };
   
   return statusMap[status] || status;
@@ -274,14 +274,15 @@ async function getOrCreateDeveloper(
 
 // ============================================================
 // Check if a project is complete enough for auto-approval
+// RELAXED CRITERIA: No price requirement, accept developer_name
 // ============================================================
 function isProjectComplete(data: any): boolean {
   return !!(
     data.name &&
-    data.description && data.description.length > 50 &&
-    data.developer_id && // Must have linked developer
-    data.images && data.images.length > 0 &&
-    data.price_from && data.price_from > 0
+    data.description && data.description.length > 20 && // Relaxed from 50
+    (data.developer_id || data.developer_name) && // Accept either
+    data.images && data.images.length > 0
+    // Removed: price_from requirement
   );
 }
 
@@ -625,9 +626,9 @@ Deno.serve(async (req) => {
     const nextCursor = page.next;
     console.log(`[Reelly API] Page fetched ${projects.length} of ${totalAvailable} total projects`);
 
-    // Filter to only published projects
-    const publishedProjects = projects.filter(p => p.is_published);
-    console.log(`[Reelly API] ${publishedProjects.length} published projects to process`);
+    // Process ALL projects (removed is_published filter to get full 1803)
+    const projectsToProcess = projects;
+    console.log(`[Reelly API] ${projectsToProcess.length} projects to process (all projects, no filter)`);
 
     // Process and upsert projects
     let inserted = 0;
@@ -638,7 +639,7 @@ Deno.serve(async (req) => {
     let developersCreated = 0;
     const errors: string[] = [];
 
-    for (const project of publishedProjects) {
+    for (const project of projectsToProcess) {
       try {
         // Upsert area first and get its ID
         const areaId = await upsertArea(supabase, project.location);
@@ -755,13 +756,13 @@ Deno.serve(async (req) => {
         success: true,
         total_available: totalAvailable,
         page_fetched: projects.length,
-        page_published: publishedProjects.length,
+        page_processed: projectsToProcess.length,
         inserted,
         updated,
         skipped,
         auto_approved: autoApproved,
         areas_created: areasCreated,
-        developers_linked: publishedProjects.length - errors.length,
+        developers_linked: projectsToProcess.length - errors.length,
         errors: errors.slice(0, 10),
         next_cursor: nextCursor,
         done: !nextCursor,
