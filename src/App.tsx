@@ -205,6 +205,16 @@ import MarketingHub from "./pages/admin/MarketingHub";
 // Hidden pages (not in navigation, noindex)
 import DigitalCard from "./pages/DigitalCard";
 
+// Blueprint pages
+import SellWithUs from "./pages/SellWithUs";
+import RequestValuation from "./pages/RequestValuation";
+import LandlordListForm from "./pages/LandlordListForm";
+import InvestorServices from "./pages/InvestorServices";
+import JoinInvestorList from "./pages/JoinInvestorList";
+import Reviews from "./pages/Reviews";
+import ThankYou from "./pages/ThankYou";
+import Disclaimers from "./pages/Disclaimers";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -301,7 +311,27 @@ const App = () => (
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/cookies" element={<Cookies />} />
+                <Route path="/disclaimers" element={<Disclaimers />} />
                 <Route path="/trust-and-audit-center" element={<TrustAndAuditCenter />} />
+                
+                {/* Blueprint routes - New pages */}
+                <Route path="/sell" element={<SellWithUs />} />
+                <Route path="/sell/valuation" element={<RequestValuation />} />
+                <Route path="/property-management/list" element={<LandlordListForm />} />
+                <Route path="/investors" element={<InvestorServices />} />
+                <Route path="/investors/join" element={<JoinInvestorList />} />
+                <Route path="/reviews" element={<Reviews />} />
+                <Route path="/thank-you" element={<ThankYou />} />
+                
+                {/* Blueprint route aliases/redirects */}
+                <Route path="/buy" element={<Navigate to="/properties?transactionType=buy" replace />} />
+                <Route path="/rent" element={<Navigate to="/properties?transactionType=rent" replace />} />
+                <Route path="/property-management" element={<Navigate to="/services/property-management" replace />} />
+                <Route path="/guides/buying" element={<Navigate to="/buyer-guide" replace />} />
+                <Route path="/guides/renting" element={<Navigate to="/rent-guide" replace />} />
+                <Route path="/guides/selling" element={<Navigate to="/seller-guide" replace />} />
+                <Route path="/guides/landlords" element={<Navigate to="/landlord-guide" replace />} />
+                <Route path="/blog" element={<Navigate to="/news" replace />} />
                 <Route path="/governance/partners" element={<PartnerGovernance />} />
                 <Route path="/founder" element={<Founder />} />
                 <Route path="/awards" element={<Awards />} />
