@@ -10,7 +10,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   RefreshCw, Download, CheckCircle, XCircle, 
-  ExternalLink, Info, Zap, Database, CloudDownload, Play, ArrowRight, MapPin
+  ExternalLink, Info, Zap, Database, CloudDownload, Play, ArrowRight, MapPin,
+  Trash2, AlertTriangle
 } from "lucide-react";
 
 interface ApiSyncResult {
@@ -69,6 +70,21 @@ interface AreasSyncResult {
   error?: string;
 }
 
+interface CleanupResult {
+  success: boolean;
+  mode?: string;
+  deleted?: {
+    non_reelly_areas?: number;
+    non_reelly_queue_items?: number;
+  };
+  remaining?: {
+    areas?: number;
+    queue_items?: number;
+  };
+  message?: string;
+  error?: string;
+}
+
 export function ReellyImportPanel() {
   const navigate = useNavigate();
   const [isTestingApi, setIsTestingApi] = useState(false);
@@ -93,6 +109,11 @@ export function ReellyImportPanel() {
   const [totalAreas, setTotalAreas] = useState<number | null>(null);
   const [emiratesList, setEmiratesList] = useState<string[]>([]);
 
+  // Clean & Sync state
+  const [isCleaningAndSyncing, setIsCleaningAndSyncing] = useState(false);
+  const [cleanupResult, setCleanupResult] = useState<CleanupResult | null>(null);
+  const [cleanupStep, setCleanupStep] = useState<string | null>(null);
+
   const goToApprovalQueue = () => {
     // Navigate to Reelly-filtered queue
     navigate("/listing-admin?view=sync&syncTab=approvals&source=reelly", { replace: true });
@@ -100,6 +121,49 @@ export function ReellyImportPanel() {
     setTimeout(() => {
       window.dispatchEvent(new PopStateEvent('popstate'));
     }, 50);
+  };
+
+  /**
+   * Clean & Sync Fresh - Removes non-Reelly data and triggers full sync
+   */
+  const handleCleanAndSync = async () => {
+    if (!confirm("⚠️ This will:\n\n1. Delete all non-Reelly areas (32 records)\n2. Delete all non-Reelly queue items (16 records)\n3. Run a full sync of 1,803 projects from Reelly API\n\nContinue?")) {
+      return;
+    }
+
+    setIsCleaningAndSyncing(true);
+    setCleanupResult(null);
+    setCleanupStep("cleanup");
+
+    try {
+      // Step 1: Clean non-Reelly data
+      const { data: wipeData, error: wipeError } = await supabase.functions.invoke("wipe-and-rebuild", {
+        body: { confirm: true, mode: "reelly_only" },
+      });
+
+      if (wipeError) throw wipeError;
+      if (!wipeData?.success) throw new Error(wipeData?.error || "Cleanup failed");
+
+      setCleanupResult(wipeData);
+      toast.success(`Cleaned ${wipeData.deleted?.non_reelly_areas || 0} areas, ${wipeData.deleted?.non_reelly_queue_items || 0} queue items`);
+
+      // Step 2: Full Reelly project sync
+      setCleanupStep("syncing");
+      await handleSyncProjects(true);
+
+      // Step 3: Extract areas from synced projects
+      setCleanupStep("areas");
+      await handleSyncAreas("extract_from_projects");
+
+      setCleanupStep("done");
+      toast.success("✅ Clean & Sync completed! All data now from Reelly API.");
+    } catch (err: any) {
+      console.error("Clean & Sync error:", err);
+      toast.error(err.message || "Clean & Sync failed");
+      setCleanupResult({ success: false, error: err.message });
+    } finally {
+      setIsCleaningAndSyncing(false);
+    }
   };
 
   const handleSyncDevelopers = async (mode: "test" | "quick" | "full") => {
@@ -603,6 +667,110 @@ export function ReellyImportPanel() {
               </div>
             </DialogContent>
           </Dialog>
+        </CardContent>
+      </Card>
+
+      {/* Clean & Sync Fresh - Reelly Only */}
+      <Card className="bg-gradient-to-br from-red-50 to-orange-50 border-red-200 shadow-lg">
+        <CardHeader>
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-red-500">
+              <Trash2 className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <CardTitle className="text-xl text-red-900 flex items-center gap-2">
+                Clean & Sync Fresh
+                {cleanupStep === "done" && <CheckCircle className="h-5 w-5 text-green-500" />}
+              </CardTitle>
+              <CardDescription className="text-red-700">
+                Delete non-Reelly data and sync fresh from API
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Alert className="border-amber-300 bg-amber-50">
+            <AlertTriangle className="h-4 w-4 text-amber-600" />
+            <AlertTitle className="text-amber-900">Destructive Action</AlertTitle>
+            <AlertDescription className="text-amber-700">
+              This will permanently delete all manually-created areas and non-Reelly queue items,
+              then sync all 1,803 projects fresh from the Reelly API.
+            </AlertDescription>
+          </Alert>
+
+          <div className="bg-white/80 rounded-xl p-4 border border-red-200">
+            <h3 className="font-semibold text-zinc-900 mb-3">What will happen:</h3>
+            <ol className="list-decimal list-inside space-y-2 text-sm text-zinc-700">
+              <li>Delete ~32 areas without <code className="bg-zinc-100 px-1 rounded">reelly_id</code></li>
+              <li>Delete ~16 queue items not from Reelly (Provident-sourced)</li>
+              <li>Run full sync of all 1,803 Reelly projects</li>
+              <li>Extract and update areas from synced projects</li>
+            </ol>
+          </div>
+
+          {isCleaningAndSyncing && cleanupStep && (
+            <div className="bg-white/80 rounded-xl p-4 border border-red-200">
+              <div className="flex items-center gap-3">
+                <RefreshCw className="h-5 w-5 text-red-600 animate-spin" />
+                <span className="font-medium text-zinc-900">
+                  {cleanupStep === "cleanup" && "Step 1/3: Cleaning non-Reelly data..."}
+                  {cleanupStep === "syncing" && "Step 2/3: Syncing projects from Reelly API..."}
+                  {cleanupStep === "areas" && "Step 3/3: Extracting areas from projects..."}
+                  {cleanupStep === "done" && "✅ All done!"}
+                </span>
+              </div>
+              {cleanupStep === "syncing" && syncProgress && (
+                <div className="mt-3">
+                  <Progress value={syncPercent} className="h-2" />
+                  <p className="text-sm text-zinc-500 mt-2">
+                    Fetched {syncProgress.fetched.toLocaleString()} / {syncProgress.total.toLocaleString()}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {cleanupResult && cleanupResult.success && (
+            <div className="bg-white/80 rounded-xl p-4 border border-green-200">
+              <h3 className="font-semibold text-zinc-900 mb-3">Cleanup Results</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="bg-red-50 rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-red-600">{cleanupResult.deleted?.non_reelly_areas || 0}</p>
+                  <p className="text-xs text-red-500">Areas Deleted</p>
+                </div>
+                <div className="bg-red-50 rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-red-600">{cleanupResult.deleted?.non_reelly_queue_items || 0}</p>
+                  <p className="text-xs text-red-500">Queue Deleted</p>
+                </div>
+                <div className="bg-green-50 rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-green-600">{cleanupResult.remaining?.areas || 0}</p>
+                  <p className="text-xs text-green-500">Areas Remaining</p>
+                </div>
+                <div className="bg-green-50 rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-green-600">{cleanupResult.remaining?.queue_items || 0}</p>
+                  <p className="text-xs text-green-500">Queue Remaining</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <Button 
+            onClick={handleCleanAndSync} 
+            disabled={isCleaningAndSyncing || isSyncing}
+            className="w-full bg-red-600 hover:bg-red-700"
+          >
+            {isCleaningAndSyncing ? (
+              <>
+                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              <>
+                <Trash2 className="h-4 w-4 mr-2" />
+                Clean & Sync Fresh (Reelly Only)
+              </>
+            )}
+          </Button>
         </CardContent>
       </Card>
 

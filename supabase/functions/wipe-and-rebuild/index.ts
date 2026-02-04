@@ -7,10 +7,11 @@ const corsHeaders = {
 };
 
 /**
- * WIPE AND REBUILD - Full restart for 1,335 listing mirror
- * 1. Deletes all projects, project_images, project_documents
- * 2. Clears pending_project_imports queue
- * 3. Returns success - caller should then invoke discover-all-projects
+ * WIPE AND REBUILD - Full restart or Reelly-only cleanup
+ * 
+ * Modes:
+ * - "full" (default): Delete all projects, images, docs, and queue
+ * - "reelly_only": Only delete non-Reelly data (areas without reelly_id, queue items not from Reelly)
  */
 
 serve(async (req) => {
@@ -23,18 +24,70 @@ serve(async (req) => {
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   try {
-    const { confirm = false, preserveManual = true } = await req.json().catch(() => ({}));
+    const { confirm = false, mode = "full", preserveManual = true } = await req.json().catch(() => ({}));
 
     if (!confirm) {
       return new Response(JSON.stringify({ 
         error: "Confirmation required. Pass confirm: true to proceed.",
-        warning: "This will DELETE all projects and queue items!" 
+        warning: mode === "reelly_only" 
+          ? "This will DELETE non-Reelly areas and queue items!" 
+          : "This will DELETE all projects and queue items!" 
       }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
+    // ========== REELLY-ONLY MODE ==========
+    if (mode === "reelly_only") {
+      console.log("[Wipe] Starting Reelly-only cleanup...");
+
+      // 1. Delete areas WITHOUT reelly_id (manually created)
+      const { error: areasErr, count: areasDeleted } = await supabase
+        .from("areas")
+        .delete({ count: "exact" })
+        .is("reelly_id", null);
+
+      if (areasErr) console.error("[Wipe] Error deleting non-Reelly areas:", areasErr);
+      else console.log(`[Wipe] Deleted ${areasDeleted} non-Reelly areas`);
+
+      // 2. Delete queue items NOT from Reelly (Provident-sourced)
+      // Reelly items have source_url containing "reelly_"
+      const { error: queueErr, count: queueDeleted } = await supabase
+        .from("pending_project_imports")
+        .delete({ count: "exact" })
+        .not("source_url", "ilike", "%reelly_%");
+
+      if (queueErr) console.error("[Wipe] Error deleting non-Reelly queue:", queueErr);
+      else console.log(`[Wipe] Deleted ${queueDeleted} non-Reelly queue items`);
+
+      // 3. Get remaining counts
+      const { count: remainingAreas } = await supabase
+        .from("areas")
+        .select("id", { count: "exact", head: true });
+
+      const { count: remainingQueue } = await supabase
+        .from("pending_project_imports")
+        .select("id", { count: "exact", head: true });
+
+      return new Response(JSON.stringify({
+        success: true,
+        mode: "reelly_only",
+        deleted: {
+          non_reelly_areas: areasDeleted ?? 0,
+          non_reelly_queue_items: queueDeleted ?? 0,
+        },
+        remaining: {
+          areas: remainingAreas ?? 0,
+          queue_items: remainingQueue ?? 0,
+        },
+        message: "Non-Reelly data cleaned. Ready for fresh Reelly sync.",
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // ========== FULL WIPE MODE ==========
     console.log("[Wipe] Starting full wipe...");
 
     // 1. Get count of what we're deleting
@@ -99,6 +152,7 @@ serve(async (req) => {
 
     return new Response(JSON.stringify({
       success: true,
+      mode: "full",
       deleted: {
         projects: projectsDeleted,
         project_images: imgCount ?? 0,
