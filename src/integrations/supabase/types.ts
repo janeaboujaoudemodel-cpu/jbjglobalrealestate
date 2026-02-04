@@ -11632,6 +11632,7 @@ export type Database = {
           amenities_list: Json | null
           area_id: string | null
           area_name: string | null
+          bedroom_types: Json | null
           bedrooms_max: number | null
           bedrooms_min: number | null
           community_id: string | null
@@ -11691,6 +11692,7 @@ export type Database = {
           amenities_list?: Json | null
           area_id?: string | null
           area_name?: string | null
+          bedroom_types?: Json | null
           bedrooms_max?: number | null
           bedrooms_min?: number | null
           community_id?: string | null
@@ -11750,6 +11752,7 @@ export type Database = {
           amenities_list?: Json | null
           area_id?: string | null
           area_name?: string | null
+          bedroom_types?: Json | null
           bedrooms_max?: number | null
           bedrooms_min?: number | null
           community_id?: string | null
@@ -12254,6 +12257,7 @@ export type Database = {
           area_unit: string | null
           availability_status: string | null
           available_units: number | null
+          bedroom_types: Json | null
           bedrooms_max: number | null
           bedrooms_min: number | null
           building_count: number | null
@@ -12335,6 +12339,7 @@ export type Database = {
           area_unit?: string | null
           availability_status?: string | null
           available_units?: number | null
+          bedroom_types?: Json | null
           bedrooms_max?: number | null
           bedrooms_min?: number | null
           building_count?: number | null
@@ -12416,6 +12421,7 @@ export type Database = {
           area_unit?: string | null
           availability_status?: string | null
           available_units?: number | null
+          bedroom_types?: Json | null
           bedrooms_max?: number | null
           bedrooms_min?: number | null
           building_count?: number | null

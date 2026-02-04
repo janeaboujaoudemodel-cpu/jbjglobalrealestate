@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -72,6 +72,7 @@ const parseJsonArray = <T,>(json: Json | null, defaultVal: T[] = []): T[] => {
 
 export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueProps) {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [imports, setImports] = useState<PendingImport[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -92,6 +93,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   const [incompleteCount, setIncompleteCount] = useState(0);
   // Filter: "all" | "complete" | "needs_work"
   const [statusFilter, setStatusFilter] = useState<"all" | "complete" | "needs_work">("all");
+  // Source filter: "all" | "provident" | "reelly"
+  const sourceFromUrl = searchParams.get("source") as "all" | "provident" | "reelly" | null;
+  const [sourceFilter, setSourceFilter] = useState<"all" | "provident" | "reelly">(sourceFromUrl || "all");
   const { toast } = useToast();
 
   const PAGE_SIZE = 60;
@@ -120,17 +124,28 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
         "developer_name.eq.Unknown",
       ].join(",");
 
-      const [totalRes, needsWorkRes] = await Promise.all([
-        supabase
-          .from("pending_project_imports")
-          .select("id", { count: "exact", head: true })
-          .eq("status", "pending"),
-        supabase
-          .from("pending_project_imports")
-          .select("id", { count: "exact", head: true })
-          .eq("status", "pending")
-          .or(needsWorkOr),
-      ]);
+      // Build base queries with source filter
+      let totalQuery = supabase
+        .from("pending_project_imports")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "pending");
+      
+      let needsWorkQuery = supabase
+        .from("pending_project_imports")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "pending")
+        .or(needsWorkOr);
+
+      // Apply source filter to stats
+      if (sourceFilter === "provident") {
+        totalQuery = totalQuery.ilike("source_url", "%providentestate.com%");
+        needsWorkQuery = needsWorkQuery.ilike("source_url", "%providentestate.com%");
+      } else if (sourceFilter === "reelly") {
+        totalQuery = totalQuery.ilike("source_url", "%reelly%");
+        needsWorkQuery = needsWorkQuery.ilike("source_url", "%reelly%");
+      }
+
+      const [totalRes, needsWorkRes] = await Promise.all([totalQuery, needsWorkQuery]);
 
       const total = totalRes.count ?? 0;
       const needsWork = needsWorkRes.count ?? 0;
@@ -166,6 +181,13 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
 
       if (jobId && !showAll) {
         query = query.eq("job_id", jobId);
+      }
+
+      // Apply source filter for Provident vs Reelly
+      if (sourceFilter === "provident") {
+        query = query.ilike("source_url", "%providentestate.com%");
+      } else if (sourceFilter === "reelly") {
+        query = query.ilike("source_url", "%reelly%");
       }
 
       // Apply status filter for complete vs needs_work
@@ -269,7 +291,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   useEffect(() => {
     fetchPendingImports();
     fetchInventoryStats();
-  }, [jobId, showAll, statusFilter]);
+  }, [jobId, showAll, statusFilter, sourceFilter]);
 
   // Debounce ref for realtime subscription
   const refreshTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -952,10 +974,46 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
             </div>
           )}
           
+          {/* Source filter tabs - Provident vs Reelly */}
+          <div className="flex gap-2 mb-4">
+            <button
+              onClick={() => setSourceFilter("all")}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                sourceFilter === "all"
+                  ? "bg-primary text-primary-foreground shadow-md"
+                  : "bg-muted border border-border text-foreground hover:bg-muted/80"
+              }`}
+            >
+              All Sources
+            </button>
+            <button
+              onClick={() => setSourceFilter("provident")}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                sourceFilter === "provident"
+                  ? "bg-blue-600 text-white shadow-md"
+                  : "bg-blue-50 border border-blue-200 text-blue-700 hover:bg-blue-100"
+              }`}
+            >
+              Provident
+            </button>
+            <button
+              onClick={() => setSourceFilter("reelly")}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                sourceFilter === "reelly"
+                  ? "bg-emerald-600 text-white shadow-md"
+                  : "bg-emerald-50 border border-emerald-200 text-emerald-700 hover:bg-emerald-100"
+              }`}
+            >
+              Reelly
+            </button>
+          </div>
+
           {/* Inventory status cards - CLICKABLE */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
             <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
-              <div className="text-2xl font-bold text-foreground">1,336</div>
+              <div className="text-2xl font-bold text-foreground">
+                {sourceFilter === "provident" ? "1,336" : sourceFilter === "reelly" ? "~1,800" : "All"}
+              </div>
               <div className="text-xs text-muted-foreground">Target</div>
             </div>
             <button

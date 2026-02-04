@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Download, Layers, ChevronLeft, ChevronRight } from "lucide-react";
+import { Download, Layers, ChevronLeft, ChevronRight, AlertCircle, Mail } from "lucide-react";
 import { SafeImage } from "@/components/SafeImage";
 import { cn } from "@/lib/utils";
 
@@ -24,6 +24,7 @@ interface FloorPlanGalleryProps {
   onDownload: (type: "floor_plan", url?: string) => void;
   brochureUrl?: string;
   onDownloadBrochure?: (url: string) => void;
+  onRequestFloorPlans?: () => void;
 }
 
 /**
@@ -37,8 +38,10 @@ export function FloorPlanGallery({
   onDownload,
   brochureUrl,
   onDownloadBrochure,
+  onRequestFloorPlans,
 }: FloorPlanGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [imageError, setImageError] = useState<Record<string, boolean>>({});
   
   // Combine floor plan types and documents into a unified list
   const floorPlans = [
@@ -56,7 +59,40 @@ export function FloorPlanGallery({
     })),
   ];
 
-  if (floorPlans.length === 0) return null;
+  // Show fallback if no floor plans at all
+  if (floorPlans.length === 0) {
+    return (
+      <div className="text-center p-8 bg-muted/30 rounded-xl border border-border">
+        <Layers className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+        <h3 className="font-semibold text-foreground mb-2">Floor Plans Coming Soon</h3>
+        <p className="text-muted-foreground text-sm mb-4">
+          Floor plans for this project are available upon request.
+        </p>
+        <div className="flex flex-wrap gap-2 justify-center">
+          {brochureUrl && onDownloadBrochure && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onDownloadBrochure(brochureUrl)}
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Download Brochure
+            </Button>
+          )}
+          {onRequestFloorPlans && (
+            <Button
+              variant="default"
+              size="sm"
+              onClick={onRequestFloorPlans}
+            >
+              <Mail className="w-4 h-4 mr-2" />
+              Request Floor Plans
+            </Button>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   const activePlan = floorPlans[activeIndex];
 
@@ -67,6 +103,12 @@ export function FloorPlanGallery({
   const handleNext = () => {
     setActiveIndex((prev) => (prev < floorPlans.length - 1 ? prev + 1 : 0));
   };
+
+  const handleImageError = (id: string) => {
+    setImageError(prev => ({ ...prev, [id]: true }));
+  };
+
+  const hasImageError = activePlan ? imageError[activePlan.id] : false;
 
   return (
     <div className="space-y-6">
@@ -79,8 +121,8 @@ export function FloorPlanGallery({
             className={cn(
               "px-4 py-2 rounded-lg text-sm font-medium transition-all",
               activeIndex === idx
-                ? "bg-gold text-black shadow-md"
-                : "bg-card border border-border text-foreground hover:border-gold/50"
+                ? "bg-primary text-primary-foreground shadow-md"
+                : "bg-card border border-border text-foreground hover:border-primary/50"
             )}
           >
             {fp.label}
@@ -89,19 +131,29 @@ export function FloorPlanGallery({
       </div>
 
       {/* Floor Plan Preview Card */}
-      <div className="relative rounded-xl border-2 border-gold/30 bg-card overflow-hidden">
+      <div className="relative rounded-xl border-2 border-primary/30 bg-card overflow-hidden">
         {/* Image preview area */}
         <div className="relative aspect-[4/3] bg-gradient-to-br from-muted/50 to-muted flex items-center justify-center">
-          {activePlan?.imageUrl ? (
+          {activePlan?.imageUrl && !hasImageError ? (
             <SafeImage
               src={activePlan.imageUrl}
               alt={`${projectName} - ${activePlan.label}`}
               className="w-full h-full object-contain p-4"
               fallbackSrc="/placeholder.svg"
+              onError={() => handleImageError(activePlan.id)}
             />
           ) : (
             <div className="text-center p-8">
-              <Layers className="w-16 h-16 text-gold/40 mx-auto mb-4" />
+              {hasImageError ? (
+                <>
+                  <AlertCircle className="w-16 h-16 text-amber-500/60 mx-auto mb-4" />
+                  <p className="text-muted-foreground text-sm mb-2">
+                    Floor plan image couldn't be loaded
+                  </p>
+                </>
+              ) : (
+                <Layers className="w-16 h-16 text-primary/40 mx-auto mb-4" />
+              )}
               <p className="text-muted-foreground text-sm">
                 {activePlan?.pdfUrl 
                   ? "Click download to view the floor plan PDF"
@@ -118,7 +170,7 @@ export function FloorPlanGallery({
                     size="sm"
                     onClick={() => onDownloadBrochure(brochureUrl)}
                   >
-                    <Download className="w-4 h-4" />
+                    <Download className="w-4 h-4 mr-2" />
                     Download Brochure
                   </Button>
                 </div>
@@ -155,16 +207,28 @@ export function FloorPlanGallery({
               {activeIndex + 1} of {floorPlans.length} floor plans
             </p>
           </div>
-          {activePlan?.pdfUrl && (
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => onDownload("floor_plan", activePlan.pdfUrl)}
-            >
-              <Download className="w-4 h-4" />
-              Download Floor Plan
-            </Button>
-          )}
+          <div className="flex gap-2">
+            {activePlan?.pdfUrl && (
+              <Button
+                variant="default"
+                size="sm"
+                onClick={() => onDownload("floor_plan", activePlan.pdfUrl)}
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Download
+              </Button>
+            )}
+            {onRequestFloorPlans && !activePlan?.pdfUrl && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onRequestFloorPlans}
+              >
+                <Mail className="w-4 h-4 mr-2" />
+                Request
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -182,7 +246,7 @@ export function FloorPlanGallery({
               }
             }}
           >
-            <Download className="w-4 h-4" />
+            <Download className="w-4 h-4 mr-2" />
             Download All Floor Plans
           </Button>
         </div>
