@@ -136,15 +136,18 @@ export interface ReellyArea {
 // API response for areas
 export type ReellyAreasResponse = ReellyPaginatedResponse<ReellyArea>;
 
-// Emirate/Region types
+// Emirate/Region types (bounding box for map viewport)
 export interface ReellyEmirate {
   id: number;
-  name: string;
-  sw_latitude: number;
-  sw_longitude: number;
-  ne_latitude: number;
-  ne_longitude: number;
+  name: string; // "Dubai", "Abu Dhabi", "Sharjah", etc.
+  sw_latitude: number; // Southwest corner latitude
+  sw_longitude: number; // Southwest corner longitude
+  ne_latitude: number; // Northeast corner latitude
+  ne_longitude: number; // Northeast corner longitude
 }
+
+// API response for emirates
+export type ReellyEmiratesResponse = ReellyEmirate[]; // Note: Not paginated, returns array directly
 
 // Language types
 export interface ReellyLanguage {
