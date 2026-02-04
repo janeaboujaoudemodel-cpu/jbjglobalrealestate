@@ -3,14 +3,17 @@ import { Link } from 'react-router-dom';
 import { MapPin, Eye, ArrowRight } from 'lucide-react';
 import menuDowntownSkyline from '@/assets/menu-downtown-dubai-skyline.jpg';
 import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle } from '@/components/header/mega-menu-primitives';
+import { useAreas } from '@/hooks/useAreas';
 
 interface MegaMenuAreasProps {
   onClose: () => void;
 }
 
 const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ onClose }, ref) => {
-  // Reduced list - top 12 areas for more compact menu
-  const areas = [
+  const { data: areas } = useAreas({ limit: 12 });
+
+  // Fallback static areas if database is empty
+  const fallbackAreas = [
     { name: 'Dubai Creek Harbour', slug: 'dubai-creek-harbour' },
     { name: 'Business Bay', slug: 'business-bay' },
     { name: 'Dubai Marina', slug: 'dubai-marina' },
@@ -25,10 +28,14 @@ const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ on
     { name: 'Jumeirah Beach Residence', slug: 'jbr' },
   ];
 
+  const displayAreas = areas && areas.length > 0 
+    ? areas.map(a => ({ name: a.name, slug: a.slug }))
+    : fallbackAreas;
+
   // Split into two columns
-  const half = Math.ceil(areas.length / 2);
-  const firstColumn = areas.slice(0, half);
-  const secondColumn = areas.slice(half);
+  const half = Math.ceil(displayAreas.length / 2);
+  const firstColumn = displayAreas.slice(0, half);
+  const secondColumn = displayAreas.slice(half);
 
   return (
     <MegaMenuShell ref={ref}>

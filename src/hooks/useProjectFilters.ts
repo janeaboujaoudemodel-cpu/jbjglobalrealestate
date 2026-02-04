@@ -15,6 +15,7 @@ export const defaultFilters: FilterState = {
   handoverStatus: null,
   emirate: null,
   trendingArea: null,
+  areaId: null,
   furnishedStatus: null,
   saleStatus: null,
   views: [],
@@ -141,6 +142,12 @@ export function useFilteredProjects(
           project.location?.toLowerCase().includes(areaName) ||
           project.community?.name.toLowerCase().includes(areaName);
         if (!matchesArea) return false;
+      }
+
+      // Area ID filter (matches project.area_id from database)
+      if (filters.areaId) {
+        const projectAreaId = (project as unknown as { area_id?: string }).area_id;
+        if (projectAreaId !== filters.areaId) return false;
       }
 
       // Handover status filter

@@ -49,6 +49,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import Footer from "@/components/Footer";
 import ProjectCard from "@/components/ProjectCard";
 import { useProjects, useCommunities, useDevelopers } from "@/hooks/useProjects";
+import { useAreas } from "@/hooks/useAreas";
 import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
 import type { FilterState } from "@/components/ProjectFilters";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
@@ -87,6 +88,7 @@ interface ExtendedFilterState extends Omit<FilterState, 'currency'> {
   bathroomsMin: number | null;
   completionStatus: string | null;
   investmentType: string | null;
+  areaId: string | null;
 }
 
 const defaultExtendedFilters: ExtendedFilterState = {
@@ -98,6 +100,7 @@ const defaultExtendedFilters: ExtendedFilterState = {
   completionStatus: null,
   investmentType: null,
   saleStatus: null,
+  areaId: null,
 };
 
 const PROPERTY_TYPES = [
@@ -156,6 +159,7 @@ const Properties = () => {
   const { data: projects, isLoading } = useProjects();
   const { data: communities } = useCommunities();
   const { data: developers } = useDevelopers();
+  const { data: areas } = useAreas();
   const { t } = useLanguage();
   
   const [filters, setFilters] = useState<ExtendedFilterState>(defaultExtendedFilters);
@@ -850,6 +854,28 @@ const Properties = () => {
                           {SALE_STATUS.map((status) => (
                             <SelectItem key={status.value} value={status.value} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
                               {status.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Area Filter */}
+                    <div>
+                      <label className="text-sm text-gold font-medium mb-2 block">Area</label>
+                      <Select
+                        value={filters.areaId || "all"}
+                        onValueChange={(value) => updateFilter("areaId", value === "all" ? null : value)}
+                      >
+                        <SelectTrigger className="w-full h-12 bg-[#F5F0E6] border-gold/30 text-black">
+                          <MapPin className="w-4 h-4 mr-2 text-gold" />
+                          <SelectValue placeholder="All Areas" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white border-gold/30 max-h-60">
+                          <SelectItem value="all" className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">All Areas</SelectItem>
+                          {areas?.map((area) => (
+                            <SelectItem key={area.id} value={area.id} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
+                              {area.name} ({area.emirate})
                             </SelectItem>
                           ))}
                         </SelectContent>

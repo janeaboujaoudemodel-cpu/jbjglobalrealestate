@@ -38,6 +38,7 @@ export interface FilterState {
   handoverStatus: string | null; // 'ready' | 'off-plan' | 'close-to-handover' | year
   emirate: string | null;
   trendingArea: string | null;
+  areaId: string | null; // New: database area ID for filtering
   furnishedStatus: string | null; // 'furnished' | 'semi-furnished' | 'unfurnished'
   saleStatus: string | null; // 'Announced' | 'On Sale' | 'Out of Stock' | 'Presale (EOI)' | 'Start of Sales'
   views: string[];
@@ -250,6 +251,7 @@ const ProjectFilters = ({
       handoverStatus: null,
       emirate: null,
       trendingArea: null,
+      areaId: null,
       furnishedStatus: null,
       saleStatus: null,
       views: [],

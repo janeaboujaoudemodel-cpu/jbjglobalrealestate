@@ -452,6 +452,60 @@ export type Database = {
         }
         Relationships: []
       }
+      areas: {
+        Row: {
+          country: string | null
+          created_at: string
+          description: string | null
+          emirate: string
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          is_trending: boolean | null
+          latitude: number | null
+          longitude: number | null
+          name: string
+          property_count: number | null
+          reelly_id: number | null
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string
+          description?: string | null
+          emirate?: string
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          is_trending?: boolean | null
+          latitude?: number | null
+          longitude?: number | null
+          name: string
+          property_count?: number | null
+          reelly_id?: number | null
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          country?: string | null
+          created_at?: string
+          description?: string | null
+          emirate?: string
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          is_trending?: boolean | null
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          property_count?: number | null
+          reelly_id?: number | null
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       assistant_ai_logs: {
         Row: {
           action_taken: string
@@ -11454,6 +11508,8 @@ export type Database = {
         Row: {
           amenities: string[] | null
           amenities_list: Json | null
+          area_id: string | null
+          area_name: string | null
           bedrooms_max: number | null
           bedrooms_min: number | null
           community_id: string | null
@@ -11511,6 +11567,8 @@ export type Database = {
         Insert: {
           amenities?: string[] | null
           amenities_list?: Json | null
+          area_id?: string | null
+          area_name?: string | null
           bedrooms_max?: number | null
           bedrooms_min?: number | null
           community_id?: string | null
@@ -11568,6 +11626,8 @@ export type Database = {
         Update: {
           amenities?: string[] | null
           amenities_list?: Json | null
+          area_id?: string | null
+          area_name?: string | null
           bedrooms_max?: number | null
           bedrooms_min?: number | null
           community_id?: string | null
@@ -12026,6 +12086,7 @@ export type Database = {
         Row: {
           amenities: string[] | null
           amenities_list: Json | null
+          area_id: string | null
           availability_status: string | null
           available_units: number | null
           bedrooms_max: number | null
@@ -12092,6 +12153,7 @@ export type Database = {
         Insert: {
           amenities?: string[] | null
           amenities_list?: Json | null
+          area_id?: string | null
           availability_status?: string | null
           available_units?: number | null
           bedrooms_max?: number | null
@@ -12158,6 +12220,7 @@ export type Database = {
         Update: {
           amenities?: string[] | null
           amenities_list?: Json | null
+          area_id?: string | null
           availability_status?: string | null
           available_units?: number | null
           bedrooms_max?: number | null
@@ -12222,6 +12285,13 @@ export type Database = {
           virtual_tour_url?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "projects_area_id_fkey"
+            columns: ["area_id"]
+            isOneToOne: false
+            referencedRelation: "areas"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "projects_community_id_fkey"
             columns: ["community_id"]
