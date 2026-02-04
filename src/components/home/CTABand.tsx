@@ -1,6 +1,6 @@
 /**
  * CTABand Component - Master Blueprint Specification
- * "Ready to talk?" section with WhatsApp, Call, Email + Save Contact below
+ * "Ready to Get Started?" section with WhatsApp, Call, Email + Save Contact below
  */
 
 import { motion } from "framer-motion";
@@ -71,12 +71,12 @@ const CTABand = () => {
             className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-4"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            {t('cta.readyToTalk', 'Ready to Talk?')}
+            Ready to <span className="text-gold">Get Started?</span>
           </h2>
 
           {/* Subtext */}
           <p className="text-zinc-600 text-sm md:text-base max-w-xl mx-auto mb-8 leading-relaxed">
-            {t('cta.subtitle', 'Get a shortlist, a rental option, a valuation, or a management quote—today.')}
+            Connect with our expert team.
           </p>
 
           {/* Action Buttons - Row with WhatsApp, Call, Email */}
