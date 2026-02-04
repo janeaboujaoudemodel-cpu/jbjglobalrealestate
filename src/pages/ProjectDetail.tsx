@@ -119,13 +119,22 @@ const ProjectDetail = () => {
       slug: project.slug,
       description: project.description,
       location: project.location,
-      developer: project.developer ? { name: project.developer.name, slug: project.developer.slug } : null,
+      developer: project.developer ? { 
+        name: project.developer.name, 
+        slug: project.developer.slug,
+        // Additional developer fields for DeveloperInfoCard
+        logo_url: undefined, // Will be available when we add to hook
+        founded_year: undefined,
+        completed_projects: undefined,
+        offplan_projects: undefined,
+      } : null,
       price_from: project.price_from,
       price_to: project.price_to,
       bedrooms_min: project.bedrooms_min,
       bedrooms_max: project.bedrooms_max,
       size_min: project.size_min,
       size_max: project.size_max,
+      floors: project.floors,
       handover_date: project.handover_date,
       payment_plan: project.payment_plan,
       property_type_label: project.property_type_label,
@@ -151,10 +160,22 @@ const ProjectDetail = () => {
       availability_status: project.availability_status ?? null,
       total_units: project.total_units ?? null,
       available_units: project.available_units ?? null,
+      down_payment_percent: project.down_payment_percent ?? null,
       video_url: project.video_url ?? null,
       virtual_tour_url: project.virtual_tour_url ?? null,
       roi_estimate: project.roi_estimate ?? null,
       rental_yield_estimate: project.rental_yield_estimate ?? null,
+      // House details
+      service_charge: project.service_charge ?? null,
+      finishing_standard: undefined, // Future field
+      ceiling_height: undefined, // Future field
+      // Master plan
+      master_plan_image_url: undefined, // Future field
+      community_highlights: undefined, // Future field
+      // Data freshness
+      updated_at: project.updated_at ?? null,
+      import_source: project.import_source ?? null,
+      external_id: project.external_id ?? null,
     };
   }, [project]);
 

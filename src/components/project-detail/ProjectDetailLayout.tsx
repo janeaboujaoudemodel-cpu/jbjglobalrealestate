@@ -45,6 +45,12 @@ import UnitInventorySection from "@/components/project-detail/UnitInventorySecti
 import ConstructionTimelineSection from "@/components/project-detail/ConstructionTimelineSection";
 import ProjectMediaSection from "@/components/project-detail/ProjectMediaSection";
 import InvestmentMetricsSection from "@/components/project-detail/InvestmentMetricsSection";
+import DeveloperInfoCard from "@/components/project-detail/DeveloperInfoCard";
+import QuickFactsBar from "@/components/project-detail/QuickFactsBar";
+import PaymentPlanVisualization from "@/components/project-detail/PaymentPlanVisualization";
+import MasterPlanSection from "@/components/project-detail/MasterPlanSection";
+import HouseDetailsSection from "@/components/project-detail/HouseDetailsSection";
+import DataFreshnessIndicator from "@/components/project-detail/DataFreshnessIndicator";
 import Footer from "@/components/Footer";
 import { CONTACT_INFO, getCallUrl, getEmailUrl, getWhatsAppUrl } from "@/constants/stats";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
@@ -65,13 +71,21 @@ export type ProjectDetailData = {
   slug?: string | null;
   description?: string | null;
   location?: string | null;
-  developer?: { name: string; slug?: string | null } | null;
+  developer?: { 
+    name: string; 
+    slug?: string | null;
+    logo_url?: string | null;
+    founded_year?: number | null;
+    completed_projects?: number | null;
+    offplan_projects?: number | null;
+  } | null;
   price_from?: number | null;
   price_to?: number | null;
   bedrooms_min?: number | null;
   bedrooms_max?: number | null;
   size_min?: number | null;
   size_max?: number | null;
+  floors?: number | null;
   handover_date?: string | null;
   payment_plan?: string | null;
   property_type_label?: string | null;
@@ -107,10 +121,22 @@ export type ProjectDetailData = {
   availability_status?: string | null;
   total_units?: number | null;
   available_units?: number | null;
+  down_payment_percent?: number | null;
   video_url?: string | null;
   virtual_tour_url?: string | null;
   roi_estimate?: number | null;
   rental_yield_estimate?: number | null;
+  // House details
+  service_charge?: string | null;
+  finishing_standard?: string | null;
+  ceiling_height?: string | null;
+  // Master plan
+  master_plan_image_url?: string | null;
+  community_highlights?: string[] | null;
+  // Data freshness
+  updated_at?: string | null;
+  import_source?: string | null;
+  external_id?: string | null;
 };
 
 interface ProjectDetailLayoutProps {
@@ -130,11 +156,14 @@ const SUB_NAV_TABS = [
   { id: "gallery", label: "Gallery", icon: ImageIcon },
   { id: "units", label: "Units", icon: Bed },
   { id: "construction", label: "Progress", icon: HardHat },
+  { id: "developer", label: "Developer", icon: Building2 },
   { id: "usp", label: "Highlights", icon: Star },
   { id: "floor-plans", label: "Floor Plans", icon: Layers },
+  { id: "house-details", label: "Specs", icon: Home },
   { id: "amenities", label: "Amenities", icon: Building2 },
   { id: "media", label: "Media", icon: Video },
   { id: "location", label: "Location", icon: MapPin },
+  { id: "master-plan", label: "Master Plan", icon: MapIcon },
   { id: "brochure", label: "Brochure", icon: Download },
   { id: "payment", label: "Payment Plan", icon: CreditCard },
   { id: "investment", label: "Investment", icon: TrendingUp },
@@ -174,6 +203,9 @@ export default function ProjectDetailLayout({
   const constructionRef = useRef<HTMLDivElement>(null);
   const mediaRef = useRef<HTMLDivElement>(null);
   const investmentRef = useRef<HTMLDivElement>(null);
+  const developerRef = useRef<HTMLDivElement>(null);
+  const houseDetailsRef = useRef<HTMLDivElement>(null);
+  const masterPlanRef = useRef<HTMLDivElement>(null);
 
   const { isLeadCaptured } = useLeadCapture();
 
@@ -233,6 +265,9 @@ export default function ProjectDetailLayout({
     const hasConstruction = project.construction_progress !== null && project.construction_progress !== undefined;
     const hasMedia = !!project.video_url || !!project.virtual_tour_url;
     const hasInvestment = !!project.roi_estimate || !!project.rental_yield_estimate;
+    const hasDeveloper = !!project.developer;
+    const hasHouseDetails = !!project.floors || !!project.total_units || !!project.service_charge || !!project.finishing_standard;
+    const hasMasterPlan = !!project.master_plan_image_url || (project.community_highlights?.length ?? 0) > 0;
 
     return SUB_NAV_TABS.filter((t) => {
       if (t.id === "gallery") return hasGallery;
@@ -246,9 +281,12 @@ export default function ProjectDetailLayout({
       if (t.id === "construction") return hasConstruction;
       if (t.id === "media") return hasMedia;
       if (t.id === "investment") return hasInvestment;
+      if (t.id === "developer") return hasDeveloper;
+      if (t.id === "house-details") return hasHouseDetails;
+      if (t.id === "master-plan") return hasMasterPlan;
       return true;
     });
-  }, [brochureDocs.length, floorPlanDocs.length, images.length, paymentPlanDocs.length, project.amenities, project.faqs, project.payment_breakdown, project.payment_plan, project.floor_plan_types, project.usp_bullets, project.unit_types, project.construction_progress, project.video_url, project.virtual_tour_url, project.roi_estimate, project.rental_yield_estimate]);
+  }, [brochureDocs.length, floorPlanDocs.length, images.length, paymentPlanDocs.length, project.amenities, project.faqs, project.payment_breakdown, project.payment_plan, project.floor_plan_types, project.usp_bullets, project.unit_types, project.construction_progress, project.video_url, project.virtual_tour_url, project.roi_estimate, project.rental_yield_estimate, project.developer, project.floors, project.total_units, project.service_charge, project.finishing_standard, project.master_plan_image_url, project.community_highlights]);
 
   const whatsappMessage = `Hi, I'm interested in ${project.name}${project.location ? ` at ${project.location}` : ""}. Please share more details.`;
 
@@ -278,6 +316,9 @@ export default function ProjectDetailLayout({
       construction: constructionRef,
       media: mediaRef,
       investment: investmentRef,
+      developer: developerRef,
+      "house-details": houseDetailsRef,
+      "master-plan": masterPlanRef,
     };
     const targetRef = refMap[tabId];
     if (targetRef) scrollToRef(targetRef);
@@ -530,6 +571,30 @@ export default function ProjectDetailLayout({
             </div>
           </div>
 
+          {/* QUICK FACTS BAR - Reelly-style horizontal bar */}
+          <div className="mb-12">
+            <QuickFactsBar
+              propertyType={project.property_type_label}
+              totalUnits={project.total_units}
+              floors={project.floors}
+              availabilityStatus={project.availability_status}
+              statusLabel={project.status_label}
+              handoverDate={project.handover_date}
+              updatedAt={project.updated_at}
+            />
+          </div>
+
+          {/* DATA FRESHNESS INDICATOR */}
+          {(project.updated_at || project.import_source) && (
+            <div className="mb-8 flex justify-end">
+              <DataFreshnessIndicator
+                updatedAt={project.updated_at}
+                importSource={project.import_source}
+                externalId={project.external_id}
+              />
+            </div>
+          )}
+
           {/* DETAILS SECTION */}
           <div ref={detailsRef} id="details" className="mb-12 scroll-mt-40">
             <div className="jj-card-inner">
@@ -592,6 +657,16 @@ export default function ProjectDetailLayout({
              </div>
            )}
 
+           {/* DEVELOPER INFO SECTION (Reelly-style) */}
+           {project.developer && (
+             <div ref={developerRef} id="developer" className="mb-12 scroll-mt-40">
+               <DeveloperInfoCard
+                 developer={project.developer}
+                 projectName={project.name}
+               />
+             </div>
+           )}
+
            {/* UNIQUE SELLING POINTS (USP/Highlights) SECTION */}
            {(project.usp_bullets?.length ?? 0) > 0 && (
              <div ref={uspRef} id="usp" className="mb-12 scroll-mt-40">
@@ -640,7 +715,22 @@ export default function ProjectDetailLayout({
                   </div>
                 </div>
               </div>
-            )}
+           )}
+
+           {/* HOUSE DETAILS SECTION (Reelly-style) */}
+           {(project.floors || project.total_units || project.service_charge || project.finishing_standard) && (
+             <div ref={houseDetailsRef} id="house-details" className="mb-12 scroll-mt-40">
+               <HouseDetailsSection
+                 floors={project.floors}
+                 totalUnits={project.total_units}
+                 buildingType={project.property_type_label}
+                 ceilingHeight={project.ceiling_height}
+                 finishingStandard={project.finishing_standard}
+                 serviceCharge={project.service_charge}
+                 projectName={project.name}
+               />
+             </div>
+           )}
 
            {/* FLOOR PLANS SECTION */}
            {(floorPlanDocs.length > 0 || (project.floor_plan_types?.length ?? 0) > 0) && (
@@ -764,6 +854,17 @@ export default function ProjectDetailLayout({
             </div>
           </div>
 
+          {/* MASTER PLAN SECTION (Reelly-style) */}
+          {(project.master_plan_image_url || (project.community_highlights?.length ?? 0) > 0) && (
+            <div ref={masterPlanRef} id="master-plan" className="mb-12 scroll-mt-40">
+              <MasterPlanSection
+                masterPlanImageUrl={project.master_plan_image_url}
+                communityHighlights={project.community_highlights}
+                projectName={project.name}
+              />
+            </div>
+          )}
+
           {/* AI ANALYZER SECTION */}
           <div ref={aiRef} id="ai" className="mb-12 scroll-mt-40">
             <div className="jj-card-inner">
@@ -828,84 +929,36 @@ export default function ProjectDetailLayout({
           </div>
           )}
 
-           {/* PAYMENT PLAN (full width, separate section) */}
+           {/* PAYMENT PLAN VISUALIZATION (Reelly-style enhanced) */}
            {(!!project.payment_plan || paymentPlanDocs.length > 0 || !!project.payment_breakdown) && (
-           <div ref={paymentRef} id="payment" className="jj-card-inner scroll-mt-40 mb-16">
-            <h3 className="text-h3-sm font-medium text-foreground mb-6 flex items-center gap-2">
-              <FileText className="w-5 h-5 text-gold" />
-              Payment Plan
-            </h3>
-
-            {/* Payment Plan Summary */}
-             {paymentPlanBenefitHeadline && (
-               <p className="text-sm text-muted-foreground text-center mb-3">
-                 {paymentPlanBenefitHeadline}
-               </p>
+           <div ref={paymentRef} id="payment" className="mb-16 scroll-mt-40">
+             <PaymentPlanVisualization
+               paymentPlan={project.payment_plan}
+               paymentBreakdown={project.payment_breakdown}
+               handoverDate={project.handover_date}
+               downPaymentPercent={project.down_payment_percent}
+               projectName={project.name}
+             />
+             
+             {/* Payment Plan Documents - still show if available */}
+             {paymentPlanDocs.length > 0 && (
+               <div className="mt-6 space-y-3">
+                 {paymentPlanDocs.map((doc) => (
+                   <button
+                     key={doc.id}
+                     onClick={() => handleDocumentDownload("payment_plan", doc.url)}
+                     className="flex items-center justify-between gap-3 rounded-xl border border-gold/30 bg-card p-4 hover:border-gold/60 transition-colors w-full text-left"
+                   >
+                     <div className="min-w-0">
+                       <p className="text-sm font-semibold text-foreground truncate">{doc.name || "Payment Plan"}</p>
+                       <p className="text-xs text-muted-foreground truncate">Click to download</p>
+                     </div>
+                     <Download className="w-5 h-5 text-gold flex-shrink-0" />
+                   </button>
+                 ))}
+               </div>
              )}
-            {project.payment_plan && (
-              <div className="mb-6 p-4 rounded-xl bg-gradient-to-br from-gold/10 to-gold/5 border border-gold/30">
-                <p className="text-lg font-semibold text-foreground text-center">{project.payment_plan}</p>
-              </div>
-            )}
-
-            {/* Payment Plan Documents */}
-            {paymentPlanDocs.length > 0 ? (
-              <div className="space-y-3">
-                {paymentPlanDocs.map((doc) => (
-                  <button
-                    key={doc.id}
-                    onClick={() => handleDocumentDownload("payment_plan", doc.url)}
-                    className="flex items-center justify-between gap-3 rounded-xl border border-gold/30 bg-card p-4 hover:border-gold/60 transition-colors w-full text-left"
-                  >
-                    <div className="min-w-0">
-                      <p className="text-sm font-semibold text-foreground truncate">{doc.name || "Payment Plan"}</p>
-                      <p className="text-xs text-muted-foreground truncate">Click to download</p>
-                    </div>
-                    <Download className="w-5 h-5 text-gold flex-shrink-0" />
-                  </button>
-                ))}
-              </div>
-            ) : (
-               <></>
-            )}
-
-             {/* Payment breakdown (milestones) - auto-calculate missing on_completion */}
-             {project.payment_breakdown && (() => {
-               const breakdown = project.payment_breakdown;
-               // Auto-calculate on_completion if missing but we have the other two
-               let onCompletion = breakdown.on_completion;
-               if (!onCompletion && breakdown.down_payment && breakdown.during_construction) {
-                 const dpPercent = parseInt(breakdown.down_payment) || 0;
-                 const dcPercent = parseInt(breakdown.during_construction) || 0;
-                 const remaining = 100 - dpPercent - dcPercent;
-                 if (remaining > 0) {
-                   onCompletion = `${remaining}%`;
-                 }
-               }
-               return (
-                 <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                   {breakdown.down_payment && (
-                     <div className="rounded-xl border border-gold/30 bg-card p-4">
-                       <p className="text-xs text-muted-foreground">Down Payment</p>
-                       <p className="mt-1 text-base font-semibold text-foreground">{breakdown.down_payment}</p>
-                     </div>
-                   )}
-                   {breakdown.during_construction && (
-                     <div className="rounded-xl border border-gold/30 bg-card p-4">
-                       <p className="text-xs text-muted-foreground">During Construction</p>
-                       <p className="mt-1 text-base font-semibold text-foreground">{breakdown.during_construction}</p>
-                     </div>
-                   )}
-                   {onCompletion && (
-                     <div className="rounded-xl border border-gold/30 bg-card p-4">
-                       <p className="text-xs text-muted-foreground">On Completion</p>
-                       <p className="mt-1 text-base font-semibold text-foreground">{onCompletion}</p>
-                     </div>
-                   )}
-                 </div>
-               );
-             })()}
-          </div>
+           </div>
            )}
 
            {/* INVESTMENT METRICS SECTION (Reelly-style) */}
