@@ -205,74 +205,9 @@ const Footer = () => {
       {/* Full-width footer content */}
       <div className="relative w-full pt-0 pb-8 sm:pb-12 md:pb-16 lg:pb-20 px-3 sm:px-4 md:px-6 lg:px-8 bg-black">
         
-        {/* Removed duplicate licensed section - keeping only the one in the 3D card below */}
-
-        {/* Logo + Company Name Section - NOW BELOW THE LICENSED LINE */}
-        <div className="flex flex-col items-center justify-center text-center w-full max-w-7xl mx-auto relative bg-black">
-          {/* Pure black background */}
-          <div className="absolute inset-0 bg-black pointer-events-none" />
-          
-          <Link to="/" className="inline-block group relative">
-            {/* 3D Logo with multi-layer shadow depth */}
-            <div className="relative transform-gpu transition-all duration-700 group-hover:scale-[1.03] group-hover:-translate-y-1">
-              {/* Deep shadow layer 3 - furthest */}
-              <img 
-                src={jbjMonogramLightTransparent} 
-                alt="" 
-                aria-hidden="true"
-                className="absolute h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto opacity-[0.08] blur-[3px] translate-y-4 translate-x-2 pointer-events-none"
-              />
-              {/* Shadow layer 2 */}
-              <img 
-                src={jbjMonogramLightTransparent} 
-                alt="" 
-                aria-hidden="true"
-                className="absolute h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto opacity-[0.12] blur-[2px] translate-y-2 translate-x-1 pointer-events-none"
-              />
-              {/* Shadow layer 1 - closest */}
-              <img 
-                src={jbjMonogramLightTransparent} 
-                alt="" 
-                aria-hidden="true"
-                className="absolute h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto opacity-[0.15] blur-[1px] translate-y-1 translate-x-0.5 pointer-events-none"
-              />
-              {/* Main logo with subtle lift */}
-              <img 
-                src={jbjMonogramLightTransparent} 
-                alt="JBJ Global Real Estate" 
-                className="relative h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto mb-4 sm:mb-6 drop-shadow-[0_6px_12px_rgba(0,0,0,0.8)] transition-all duration-500 group-hover:drop-shadow-[0_12px_24px_rgba(0,0,0,0.9)]"
-              />
-            </div>
-          </Link>
-          
-          {/* Company Name with Enhanced Readability */}
-          <h2 
-            className="relative text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold tracking-[0.08em] sm:tracking-[0.12em] md:tracking-[0.15em] lg:tracking-[0.18em] mb-2 sm:mb-3 md:mb-4 px-2 transition-all duration-500 hover:scale-[1.01]"
-            style={{
-              color: '#FFFFFF',
-              textShadow: '0 2px 4px rgba(0,0,0,0.9), 0 4px 8px rgba(0,0,0,0.7), 0 0 30px rgba(200,167,102,0.4)',
-              letterSpacing: '0.12em',
-            }}
-          >
-            JBJ GLOBAL REAL ESTATE
-          </h2>
-          
-          {/* Tagline with Premium Gold Styling */}
-          <p 
-            className="relative text-sm sm:text-base md:text-lg tracking-[0.15em] sm:tracking-[0.2em] uppercase font-semibold transition-all duration-500 px-4 py-2"
-            style={{
-              background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              filter: 'drop-shadow(0 2px 8px rgba(200,167,102,0.6))',
-            }}
-          >
-            Excellence in Real Estate
-          </p>
-        </div>
-
+        {/* 🔒 REORDERED: 3D Card (Licensed + Newsletter) NOW COMES FIRST - before monogram */}
         {/* ULTRA PREMIUM 3D Card - License + Newsletter + Social - on pure black background */}
-        <div className="relative bg-black pt-10 sm:pt-12 md:pt-14 pb-4">
+        <div className="relative bg-black pt-4 sm:pt-6 md:pt-8 pb-4">
           <div 
             className="w-full max-w-7xl mx-auto mb-8 sm:mb-10 md:mb-12 lg:mb-14 rounded-2xl sm:rounded-3xl relative overflow-hidden"
             style={{
@@ -425,6 +360,70 @@ const Footer = () => {
           {/* Bottom Radial Glow */}
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-gradient-to-t from-gold/8 to-transparent blur-2xl pointer-events-none" />
         </div>
+        </div>
+
+        {/* NOW BELOW THE 3D CARD: Logo + Company Name Section */}
+        <div className="flex flex-col items-center justify-center text-center w-full max-w-7xl mx-auto relative bg-black pt-4 pb-8">
+          {/* Pure black background */}
+          <div className="absolute inset-0 bg-black pointer-events-none" />
+          
+          <Link to="/" className="inline-block group relative">
+            {/* 3D Logo with multi-layer shadow depth */}
+            <div className="relative transform-gpu transition-all duration-700 group-hover:scale-[1.03] group-hover:-translate-y-1">
+              {/* Deep shadow layer 3 - furthest */}
+              <img 
+                src={jbjMonogramLightTransparent} 
+                alt="" 
+                aria-hidden="true"
+                className="absolute h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto opacity-[0.08] blur-[3px] translate-y-4 translate-x-2 pointer-events-none"
+              />
+              {/* Shadow layer 2 */}
+              <img 
+                src={jbjMonogramLightTransparent} 
+                alt="" 
+                aria-hidden="true"
+                className="absolute h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto opacity-[0.12] blur-[2px] translate-y-2 translate-x-1 pointer-events-none"
+              />
+              {/* Shadow layer 1 - closest */}
+              <img 
+                src={jbjMonogramLightTransparent} 
+                alt="" 
+                aria-hidden="true"
+                className="absolute h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto opacity-[0.15] blur-[1px] translate-y-1 translate-x-0.5 pointer-events-none"
+              />
+              {/* Main logo with subtle lift */}
+              <img 
+                src={jbjMonogramLightTransparent} 
+                alt="JBJ Global Real Estate" 
+                className="relative h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto mb-4 sm:mb-6 drop-shadow-[0_6px_12px_rgba(0,0,0,0.8)] transition-all duration-500 group-hover:drop-shadow-[0_12px_24px_rgba(0,0,0,0.9)]"
+              />
+            </div>
+          </Link>
+          
+          {/* Company Name with Enhanced Readability */}
+          <h2 
+            className="relative text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold tracking-[0.08em] sm:tracking-[0.12em] md:tracking-[0.15em] lg:tracking-[0.18em] mb-2 sm:mb-3 md:mb-4 px-2 transition-all duration-500 hover:scale-[1.01]"
+            style={{
+              color: '#FFFFFF',
+              textShadow: '0 2px 4px rgba(0,0,0,0.9), 0 4px 8px rgba(0,0,0,0.7), 0 0 30px rgba(200,167,102,0.4)',
+              letterSpacing: '0.12em',
+            }}
+          >
+            JBJ GLOBAL REAL ESTATE
+          </h2>
+          
+          {/* Tagline with Premium Gold Styling */}
+          <p 
+            className="relative text-sm sm:text-base md:text-lg tracking-[0.15em] sm:tracking-[0.2em] uppercase font-semibold transition-all duration-500 px-4 py-2"
+            style={{
+              background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              filter: 'drop-shadow(0 2px 8px rgba(200,167,102,0.6))',
+            }}
+          >
+            Excellence in Real Estate
+          </p>
         </div>
 
         {/* Premium Divider with glow - on pure black */}

@@ -380,9 +380,10 @@ const handler = async (req: Request): Promise<Response> => {
       : `New Website Inquiry: ${safeFullName}`;
 
     // Send to company email (best-effort)
+    // 🔒 EMAIL RULE: ALL EMAILS MUST BE FULL CAPITAL LETTERS
     let emailSent = false;
     try {
-      await sendEmail("contact@jbj.ae", subject, companyEmailHtml);
+      await sendEmail("CONTACT@JBJ.AE", subject, companyEmailHtml);
       emailSent = true;
       console.log("Inquiry email sent successfully for:", safeEmail);
     } catch (sendErr) {
