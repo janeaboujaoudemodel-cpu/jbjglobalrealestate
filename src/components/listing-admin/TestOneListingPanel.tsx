@@ -750,6 +750,137 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                   </Card>
                 )}
 
+                {/* ========== EXTRACTED DATA PREVIEW ========== */}
+                {testResult.project && (
+                  <Card className="bg-white border-zinc-200">
+                    <CardHeader className="py-2 px-3">
+                      <CardTitle className="text-sm">Extracted Data Preview</CardTitle>
+                    </CardHeader>
+                    <CardContent className="py-2 px-3 space-y-4">
+                      {/* FAQs */}
+                      {testResult.project.faqs && testResult.project.faqs.length > 0 && (
+                        <div>
+                          <div className="text-xs font-medium text-zinc-500 mb-2 flex items-center gap-1">
+                            <FileText className="w-3 h-3" />
+                            FAQs ({testResult.project.faqs.length})
+                          </div>
+                          <ScrollArea className="max-h-48">
+                            <div className="space-y-2">
+                              {testResult.project.faqs.map((faq, idx) => (
+                                <div key={idx} className="bg-zinc-50 rounded p-2 text-xs">
+                                  <div className="font-medium text-zinc-800">{faq.question}</div>
+                                  <div className="text-zinc-600 mt-1 line-clamp-2">{faq.answer}</div>
+                                </div>
+                              ))}
+                            </div>
+                          </ScrollArea>
+                        </div>
+                      )}
+
+                      {/* Location Distances */}
+                      {testResult.project.location_distances && testResult.project.location_distances.length > 0 && (
+                        <div>
+                          <div className="text-xs font-medium text-zinc-500 mb-2 flex items-center gap-1">
+                            <MapPin className="w-3 h-3" />
+                            Location Distances ({testResult.project.location_distances.length})
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {testResult.project.location_distances.map((dist, idx) => (
+                              <Badge key={idx} variant="outline" className="text-xs bg-blue-50 border-blue-200 text-blue-800">
+                                {dist.time} – {dist.label}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* USP Bullets */}
+                      {testResult.project.usp_bullets && testResult.project.usp_bullets.length > 0 && (
+                        <div>
+                          <div className="text-xs font-medium text-zinc-500 mb-2 flex items-center gap-1">
+                            <Award className="w-3 h-3" />
+                            USP Bullets ({testResult.project.usp_bullets.length})
+                          </div>
+                          <ul className="space-y-1">
+                            {testResult.project.usp_bullets.slice(0, 5).map((usp, idx) => (
+                              <li key={idx} className="text-xs text-zinc-700 flex items-start gap-1">
+                                <Check className="w-3 h-3 text-emerald-600 flex-shrink-0 mt-0.5" />
+                                {usp}
+                              </li>
+                            ))}
+                            {testResult.project.usp_bullets.length > 5 && (
+                              <li className="text-xs text-zinc-500">+{testResult.project.usp_bullets.length - 5} more</li>
+                            )}
+                          </ul>
+                        </div>
+                      )}
+
+                      {/* Amenities */}
+                      {testResult.project.amenities_list && testResult.project.amenities_list.length > 0 && (
+                        <div>
+                          <div className="text-xs font-medium text-zinc-500 mb-2 flex items-center gap-1">
+                            <Building2 className="w-3 h-3" />
+                            Amenities ({testResult.project.amenities_list.length})
+                          </div>
+                          <div className="flex flex-wrap gap-1">
+                            {testResult.project.amenities_list.slice(0, 10).map((amenity, idx) => (
+                              <Badge key={idx} variant="outline" className="text-xs bg-green-50 border-green-200 text-green-800">
+                                {amenity}
+                              </Badge>
+                            ))}
+                            {testResult.project.amenities_list.length > 10 && (
+                              <Badge variant="outline" className="text-xs bg-zinc-100 border-zinc-200 text-zinc-600">
+                                +{testResult.project.amenities_list.length - 10} more
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Payment Breakdown */}
+                      {testResult.project.payment_breakdown && 
+                       (testResult.project.payment_breakdown.down_payment || 
+                        testResult.project.payment_breakdown.during_construction || 
+                        testResult.project.payment_breakdown.on_completion) && (
+                        <div>
+                          <div className="text-xs font-medium text-zinc-500 mb-2 flex items-center gap-1">
+                            <DollarSign className="w-3 h-3" />
+                            Payment Breakdown
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {testResult.project.payment_breakdown.down_payment && (
+                              <Badge className="text-xs bg-gold/10 text-gold border border-gold/30">
+                                {testResult.project.payment_breakdown.down_payment} Down Payment
+                              </Badge>
+                            )}
+                            {testResult.project.payment_breakdown.during_construction && (
+                              <Badge className="text-xs bg-gold/10 text-gold border border-gold/30">
+                                {testResult.project.payment_breakdown.during_construction} During Construction
+                              </Badge>
+                            )}
+                            {testResult.project.payment_breakdown.on_completion && (
+                              <Badge className="text-xs bg-gold/10 text-gold border border-gold/30">
+                                {testResult.project.payment_breakdown.on_completion} On Completion
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Empty state for extended fields */}
+                      {(!testResult.project.faqs || testResult.project.faqs.length === 0) &&
+                       (!testResult.project.location_distances || testResult.project.location_distances.length === 0) &&
+                       (!testResult.project.usp_bullets || testResult.project.usp_bullets.length === 0) &&
+                       (!testResult.project.amenities_list || testResult.project.amenities_list.length === 0) && (
+                        <div className="text-center py-4 text-zinc-400 text-sm">
+                          <AlertTriangle className="w-5 h-5 mx-auto mb-2" />
+                          No extended data extracted (FAQs, Distances, USPs, Amenities)
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                )}
+
                 {/* IMAGE GALLERY PREVIEW */}
                 {testResult.project.images.length > 0 && (
                   <Card className="bg-white border-zinc-200">

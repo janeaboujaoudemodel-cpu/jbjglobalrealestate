@@ -446,21 +446,24 @@ export function extractProvidentProjectFromScrape(args: {
     }
     if (descLines.length) locationDescription = descLines.join("\n").trim();
 
-    // Distances - FIXED: Multiple patterns to handle Provident variations
+    // Distances - ENHANCED: Multiple patterns to handle all Provident variations
     // Pattern 1: "- N Minutes – Place" or "- N Minute – Place" (with en-dash, em-dash, or hyphen)
-    const distPattern1 = /^-\s+(\d+\s+Minutes?)\s+[–—\-]\s+(.+)/gim;
     // Pattern 2: "- N min drive to Place" or "- N mins to Place"
-    const distPattern2 = /^-\s+(\d+\s*(?:min|mins|minute|minutes?))\s+(?:drive\s+)?(?:to|from)\s+(.+)/gim;
     // Pattern 3: "N Minutes – Place" (without leading dash)
-    const distPattern3 = /^(\d+\s+Minutes?)\s+[–—\-]\s+(.+)/gim;
+    // Pattern 4: "Place - N minutes" (reversed order)
+    // Pattern 5: "N km to Place" or "N km from Place"
     
     const allDistLines = afterHeadline.split("\n").filter(l => l.trim());
     
     for (const dl of allDistLines) {
-      const trimmed = dl.trim();
+      const trimmed = dl.trim().replace(/^-\s+/, "");
       
-      // Try pattern 1
-      const m1 = trimmed.replace(/^-\s+/, "").match(/^(\d+\s+Minutes?)\s+[–—\-]\s+(.+)$/i);
+      // Skip non-distance lines
+      if (!trimmed || /^!\[/.test(trimmed) || /^###?\s*/.test(trimmed)) continue;
+      if (/^(Get more|Download|View All|Find out)/i.test(trimmed)) continue;
+      
+      // Pattern 1: "N Minutes – Place"
+      const m1 = trimmed.match(/^(\d+\s+Minutes?)\s+[–—\-]\s+(.+)$/i);
       if (m1) {
         locationDistances.push({ 
           time: m1[1].trim(), 
@@ -469,10 +472,9 @@ export function extractProvidentProjectFromScrape(args: {
         continue;
       }
       
-      // Try pattern 2
-      const m2 = trimmed.replace(/^-\s+/, "").match(/^(\d+\s*(?:min|mins|minute|minutes?))\s+(?:drive\s+)?(?:to|from)\s+(.+)$/i);
+      // Pattern 2: "N min drive to Place"
+      const m2 = trimmed.match(/^(\d+\s*(?:min|mins|minute|minutes?))\s+(?:drive\s+)?(?:to|from)\s+(.+)$/i);
       if (m2) {
-        // Normalize "5 min" to "5 Minutes"
         const timeNorm = m2[1].replace(/\b(min|mins)\b/i, "Minutes").replace(/\b(minute)\b/i, "Minutes");
         locationDistances.push({ 
           time: timeNorm.trim(), 
@@ -481,12 +483,33 @@ export function extractProvidentProjectFromScrape(args: {
         continue;
       }
       
-      // Try pattern 3 (no leading dash)
+      // Pattern 3: No leading dash "N Minutes – Place"
       const m3 = trimmed.match(/^(\d+\s+Minutes?)\s+[–—\-]\s+(.+)$/i);
       if (m3) {
         locationDistances.push({ 
           time: m3[1].trim(), 
           label: stripMarkdownLinks(m3[2]).trim() 
+        });
+        continue;
+      }
+      
+      // Pattern 4: Reversed "Place – N minutes" or "Place - N min"
+      const m4 = trimmed.match(/^([^–—\-\d]+?)\s*[–—\-]\s*(\d+\s*(?:Minutes?|mins?))$/i);
+      if (m4) {
+        const timeNorm = m4[2].replace(/\b(min|mins)\b/i, "Minutes");
+        locationDistances.push({ 
+          time: timeNorm.trim(), 
+          label: stripMarkdownLinks(m4[1]).trim() 
+        });
+        continue;
+      }
+      
+      // Pattern 5: "N km to/from Place"
+      const m5 = trimmed.match(/^(\d+\s*km)\s+(?:to|from)\s+(.+)$/i);
+      if (m5) {
+        locationDistances.push({ 
+          time: m5[1].trim(), 
+          label: stripMarkdownLinks(m5[2]).trim() 
         });
       }
     }
@@ -523,19 +546,29 @@ export function extractProvidentProjectFromScrape(args: {
   // FAQs - FIXED: Extended heading detection and flexible Q/A parsing
   const faqs: Array<{ question: string; answer: string }> = [];
   
-  // Try multiple FAQ section headings
-  const faqHeadings = ["Useful Information", "FAQ", "FAQs", "Frequently Asked Questions", "Q&A"];
+  // Try multiple FAQ section headings - ENHANCED: Added more variations
+  const faqHeadings = [
+    "Useful Information", 
+    "FAQ", 
+    "FAQs", 
+    "Frequently Asked Questions", 
+    "Q&A",
+    "Questions and Answers",
+    "Common Questions",
+    "Key Information"
+  ];
   let faqSection: string | null = null;
   
   for (const heading of faqHeadings) {
     faqSection = extractSection(markdown, heading);
     if (faqSection) break;
     
-    // Fallback: Direct regex scan
-    const faqRegex = new RegExp(`${heading}[\\s\\S]*?(?=\\n##\\s+[A-Z](?![\\s\\S]*${heading})|Stay in the loop|$)`, "i");
+    // Fallback: Direct regex scan with word boundaries
+    const escapedHeading = heading.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const faqRegex = new RegExp(`(?:^|\\n)(?:#{2,4}\\s*)?${escapedHeading}[\\s\\S]*?(?=\\n##\\s+[A-Z]|Stay in the loop|$)`, "i");
     const faqMatch = markdown.match(faqRegex);
     if (faqMatch) {
-      faqSection = faqMatch[0].replace(new RegExp(`^${heading}[^\\n]*\\n*`, "i"), "").trim();
+      faqSection = faqMatch[0].replace(new RegExp(`^(?:#{2,4}\\s*)?${escapedHeading}[^\\n]*\\n*`, "i"), "").trim();
       break;
     }
   }
