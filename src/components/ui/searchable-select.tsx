@@ -72,33 +72,33 @@ export function SearchableSelect({
           role="combobox"
           aria-expanded={open}
           className={cn(
-            "w-full justify-between h-12 bg-zinc-900/80 border-zinc-700/50 text-white hover:bg-zinc-800 hover:border-gold/50 hover:text-white rounded-lg",
+            "w-full justify-between h-12 bg-white border-gold/30 text-black hover:bg-white hover:border-gold/60 hover:text-black rounded-lg",
             !value && "text-zinc-500",
             triggerClassName
           )}
         >
           <span className="truncate">{value || placeholder}</span>
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 text-gold/60" />
         </Button>
       </PopoverTrigger>
       <PopoverContent 
         className={cn(
-          "w-[var(--radix-popover-trigger-width)] p-0 bg-zinc-900 border-zinc-700 shadow-xl shadow-black/50 z-[100]",
+          "w-[var(--radix-popover-trigger-width)] p-0 bg-white border-gold/30 shadow-xl shadow-gold/10 z-[100]",
           className
         )}
         align="start"
         sideOffset={4}
       >
         {/* Search Input */}
-        <div className="p-2 border-b border-zinc-800">
+        <div className="p-2 border-b border-gold/20">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gold/60" />
             <Input
               ref={inputRef}
               placeholder={searchPlaceholder}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-10 pl-9 bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold rounded-md"
+              className="h-10 pl-9 bg-white border-gold/30 text-black placeholder:text-zinc-500 focus:border-gold rounded-md"
             />
           </div>
         </div>
@@ -121,8 +121,8 @@ export function SearchableSelect({
                   className={cn(
                     "w-full flex items-center gap-2 px-3 py-2.5 text-sm rounded-md transition-colors text-left",
                     value === option
-                      ? "bg-gold/20 text-gold"
-                      : "text-white hover:bg-zinc-800"
+                      ? "bg-gold/10 text-gold"
+                      : "text-black hover:bg-gold/5"
                   )}
                 >
                   <Check

@@ -479,18 +479,18 @@ export default function ProjectDetailLayout({
                   </h3>
 
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  {/* USP Image */}
-                  {project.usp_image_url && (
+                  {/* USP Image - fallback to first gallery image if no USP image */}
+                  {(project.usp_image_url || images[0]?.url) && (
                     <div className="rounded-xl overflow-hidden border border-gold/30">
                       <SafeImage 
-                        src={project.usp_image_url} 
+                        src={project.usp_image_url || images[0]?.url || ""} 
                         alt={`${project.name} Highlights`} 
                         className="w-full h-[300px] object-cover"
                         fallbackSrc="/placeholder.svg"
                       />
                     </div>
                   )}
-                  <div className={project.usp_image_url ? "" : "lg:col-span-2"}>
+                  <div className={(project.usp_image_url || images[0]?.url) ? "" : "lg:col-span-2"}>
                     {project.usp_headline && (
                       <h4 className="text-lg font-semibold text-foreground mb-4">{project.usp_headline}</h4>
                     )}
@@ -754,29 +754,42 @@ export default function ProjectDetailLayout({
                <></>
             )}
 
-             {/* Payment breakdown (milestones) */}
-             {project.payment_breakdown && (
-               <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                 {project.payment_breakdown.down_payment && (
-                   <div className="rounded-xl border border-border bg-card p-4">
-                     <p className="text-xs text-muted-foreground">Down payment</p>
-                     <p className="mt-1 text-base font-semibold text-foreground">{project.payment_breakdown.down_payment}</p>
-                   </div>
-                 )}
-                 {project.payment_breakdown.during_construction && (
-                   <div className="rounded-xl border border-border bg-card p-4">
-                     <p className="text-xs text-muted-foreground">During construction</p>
-                     <p className="mt-1 text-base font-semibold text-foreground">{project.payment_breakdown.during_construction}</p>
-                   </div>
-                 )}
-                 {project.payment_breakdown.on_completion && (
-                   <div className="rounded-xl border border-border bg-card p-4">
-                     <p className="text-xs text-muted-foreground">On completion</p>
-                     <p className="mt-1 text-base font-semibold text-foreground">{project.payment_breakdown.on_completion}</p>
-                   </div>
-                 )}
-               </div>
-             )}
+             {/* Payment breakdown (milestones) - auto-calculate missing on_completion */}
+             {project.payment_breakdown && (() => {
+               const breakdown = project.payment_breakdown;
+               // Auto-calculate on_completion if missing but we have the other two
+               let onCompletion = breakdown.on_completion;
+               if (!onCompletion && breakdown.down_payment && breakdown.during_construction) {
+                 const dpPercent = parseInt(breakdown.down_payment) || 0;
+                 const dcPercent = parseInt(breakdown.during_construction) || 0;
+                 const remaining = 100 - dpPercent - dcPercent;
+                 if (remaining > 0) {
+                   onCompletion = `${remaining}%`;
+                 }
+               }
+               return (
+                 <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                   {breakdown.down_payment && (
+                     <div className="rounded-xl border border-gold/30 bg-card p-4">
+                       <p className="text-xs text-muted-foreground">Down Payment</p>
+                       <p className="mt-1 text-base font-semibold text-foreground">{breakdown.down_payment}</p>
+                     </div>
+                   )}
+                   {breakdown.during_construction && (
+                     <div className="rounded-xl border border-gold/30 bg-card p-4">
+                       <p className="text-xs text-muted-foreground">During Construction</p>
+                       <p className="mt-1 text-base font-semibold text-foreground">{breakdown.during_construction}</p>
+                     </div>
+                   )}
+                   {onCompletion && (
+                     <div className="rounded-xl border border-gold/30 bg-card p-4">
+                       <p className="text-xs text-muted-foreground">On Completion</p>
+                       <p className="mt-1 text-base font-semibold text-foreground">{onCompletion}</p>
+                     </div>
+                   )}
+                 </div>
+               );
+             })()}
           </div>
            )}
 
@@ -822,6 +835,8 @@ export default function ProjectDetailLayout({
               <ConsultationRequestForm
                 title={`Register Interest in ${project.name}`}
                 subtitle={`Get expert guidance on ${project.name}${project.location ? ` at ${project.location}` : ''}. Our specialists are ready to assist you.`}
+                projectId={project.id}
+                projectName={project.name}
               />
             </div>
           </div>

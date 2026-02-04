@@ -58,12 +58,16 @@ interface ConsultationRequestFormProps {
   className?: string;
   title?: string;
   subtitle?: string;
+  projectId?: string;
+  projectName?: string;
 }
 
 export const ConsultationRequestForm = ({
   className = "",
   title = "Request a Consultation",
   subtitle = "Connect with our expert team for personalized guidance on your property journey.",
+  projectId,
+  projectName,
 }: ConsultationRequestFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -85,28 +89,35 @@ export const ConsultationRequestForm = ({
   const onSubmit = async (data: ConsultationFormData) => {
     setIsSubmitting(true);
     try {
-      // Capture lead
+      // Build source with project context if available
+      const source = projectId 
+        ? `project-interest-${projectId}` 
+        : "properties-consultation";
+
+      // Capture lead with project context
       const leadCaptured = await captureLead({
         email: data.email,
         fullName: data.fullName,
         phone: data.phone,
-      }, "properties-consultation", "client");
+      }, source, "client");
 
       if (!leadCaptured) {
         throw new Error('Lead capture failed');
       }
 
-      // Best-effort notification
+      // Best-effort notification with project info
       try {
         await supabase.functions.invoke("send-inquiry-email", {
           body: {
             fullName: data.fullName,
             email: data.email,
             phone: data.phone,
-            source: "properties-consultation",
+            source: source,
             context: {
               serviceNeeded: data.serviceNeeded,
               timeline: data.timeline || "Not specified",
+              projectName: projectName || undefined,
+              projectId: projectId || undefined,
             },
             message: data.message,
           },
@@ -176,7 +187,7 @@ export const ConsultationRequestForm = ({
                   <Input
                     placeholder="Full Name *"
                     {...field}
-                    className="h-12 bg-white border-zinc-300 text-black"
+                    className="h-12 bg-white border-gold/30 focus:border-gold text-black rounded-lg"
                   />
                 </FormControl>
                 <FormMessage />
@@ -194,7 +205,7 @@ export const ConsultationRequestForm = ({
                     type="email"
                     placeholder="Email Address *"
                     {...field}
-                    className="h-12 bg-white border-zinc-300 text-black"
+                    className="h-12 bg-white border-gold/30 focus:border-gold text-black rounded-lg"
                   />
                 </FormControl>
                 <FormMessage />
@@ -212,7 +223,7 @@ export const ConsultationRequestForm = ({
                     placeholder="Phone Number *"
                     value={field.value}
                     onChange={field.onChange}
-                    className="h-12 bg-white border-zinc-300"
+                    className="h-12 bg-white border-gold/30 focus:border-gold rounded-lg [&_button]:rounded-l-lg [&_input]:rounded-r-lg"
                   />
                 </FormControl>
                 <FormMessage />
@@ -228,7 +239,7 @@ export const ConsultationRequestForm = ({
                 <FormItem>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
-                      <SelectTrigger className="h-12 bg-white border-zinc-300">
+                      <SelectTrigger className="h-12 bg-white border-gold/30 focus:border-gold rounded-lg">
                         <SelectValue placeholder="Service Needed *" />
                       </SelectTrigger>
                     </FormControl>
@@ -252,7 +263,7 @@ export const ConsultationRequestForm = ({
                 <FormItem>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
-                      <SelectTrigger className="h-12 bg-white border-zinc-300">
+                      <SelectTrigger className="h-12 bg-white border-gold/30 focus:border-gold rounded-lg">
                         <SelectValue placeholder="Timeline" />
                       </SelectTrigger>
                     </FormControl>
@@ -278,7 +289,7 @@ export const ConsultationRequestForm = ({
                   <Textarea
                     placeholder="Additional details (optional)"
                     {...field}
-                    className="min-h-[80px] bg-white border-zinc-300 text-black resize-none"
+                    className="min-h-[80px] bg-white border-gold/30 focus:border-gold text-black resize-none rounded-lg"
                   />
                 </FormControl>
                 <FormMessage />
