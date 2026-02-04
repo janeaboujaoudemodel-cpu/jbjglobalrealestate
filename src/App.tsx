@@ -125,6 +125,7 @@ import ReferralAdmin from "./pages/ReferralAdmin";
 import RedeemReferral from "./pages/RedeemReferral";
 import Spreadsheet from "./pages/Spreadsheet";
 import Documents from "./pages/Documents";
+import ContractForms from "./pages/ContractForms";
 import VideoMeeting from "./pages/VideoMeeting";
 import ExecutiveAssistant from "./pages/ExecutiveAssistant";
 import CallReview from "./pages/CallReview";
@@ -423,6 +424,7 @@ const App = () => (
                 <Route path="/signature-studio" element={<Navigate to="/document-scanner" replace />} />
                 <Route path="/spreadsheet" element={<Spreadsheet />} />
                 <Route path="/documents" element={<Documents />} />
+                <Route path="/contract-forms" element={<ContractForms />} />
                 <Route path="/video-meeting" element={<VideoMeeting />} />
                 <Route path="/executive-assistant" element={<ExecutiveAssistant />} />
                 <Route path="/call-review" element={<CallReview />} />

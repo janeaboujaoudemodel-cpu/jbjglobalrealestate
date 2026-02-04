@@ -78,6 +78,8 @@ export type ProjectDetailData = {
     founded_year?: number | null;
     completed_projects?: number | null;
     offplan_projects?: number | null;
+    description?: string | null;
+    headquarters?: string | null;
   } | null;
   price_from?: number | null;
   price_to?: number | null;

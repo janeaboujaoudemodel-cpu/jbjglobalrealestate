@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import { Building2, ExternalLink, Award, Calendar } from "lucide-react";
+import { Building2, ExternalLink, Award, MapPin, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 interface DeveloperInfoCardProps {
   developer: {
@@ -10,11 +11,17 @@ interface DeveloperInfoCardProps {
     founded_year?: number | null;
     completed_projects?: number | null;
     offplan_projects?: number | null;
+    description?: string | null;
+    headquarters?: string | null;
   } | null;
   projectName: string;
 }
 
+const DESCRIPTION_PREVIEW_LENGTH = 200;
+
 export default function DeveloperInfoCard({ developer, projectName }: DeveloperInfoCardProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  
   if (!developer) return null;
 
   const stats = [
@@ -22,6 +29,11 @@ export default function DeveloperInfoCard({ developer, projectName }: DeveloperI
     { label: "Completed Projects", value: developer.completed_projects ? `${developer.completed_projects}+` : null },
     { label: "Off-plan Projects", value: developer.offplan_projects ? `${developer.offplan_projects}+` : null },
   ].filter(s => s.value);
+
+  const hasLongDescription = (developer.description?.length ?? 0) > DESCRIPTION_PREVIEW_LENGTH;
+  const displayDescription = hasLongDescription && !isExpanded
+    ? developer.description?.slice(0, DESCRIPTION_PREVIEW_LENGTH) + "..."
+    : developer.description;
 
   return (
     <div className="jj-card-inner">
@@ -49,9 +61,13 @@ export default function DeveloperInfoCard({ developer, projectName }: DeveloperI
             <Award className="w-5 h-5 text-gold" />
           </div>
           
-          <p className="text-muted-foreground text-sm mb-4">
-            {projectName} is developed by {developer.name}, a trusted name in UAE real estate development.
-          </p>
+          {/* Headquarters */}
+          {developer.headquarters && (
+            <div className="flex items-center gap-1.5 text-muted-foreground text-sm mb-3">
+              <MapPin className="w-4 h-4 text-gold" />
+              <span>Headquarters: {developer.headquarters}</span>
+            </div>
+          )}
 
           {/* Developer Stats */}
           {stats.length > 0 && (
@@ -63,6 +79,40 @@ export default function DeveloperInfoCard({ developer, projectName }: DeveloperI
                 </div>
               ))}
             </div>
+          )}
+
+          {/* Developer Description */}
+          {developer.description && (
+            <div className="mb-4">
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                {displayDescription}
+              </p>
+              {hasLongDescription && (
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="flex items-center gap-1 text-gold text-sm font-medium mt-2 hover:underline"
+                >
+                  {isExpanded ? (
+                    <>
+                      <ChevronUp className="w-4 h-4" />
+                      Show Less
+                    </>
+                  ) : (
+                    <>
+                      <ChevronDown className="w-4 h-4" />
+                      Read More About {developer.name}
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* Fallback description if no API description */}
+          {!developer.description && (
+            <p className="text-muted-foreground text-sm mb-4">
+              {projectName} is developed by {developer.name}, a trusted name in UAE real estate development.
+            </p>
           )}
 
           {/* View Developer Button */}
