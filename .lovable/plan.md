@@ -1,272 +1,112 @@
-# Provident Extraction & Reelly Layout Alignment + Form Fixes
 
-## Status: ✅ IMPLEMENTED (2024-02-04)
+# Restoration & Enhancement Plan: Provident Extraction Pipeline
 
-## Overview
-This plan addresses three interconnected issues:
-1. ✅ **Provident extraction alignment** - Enhanced extraction patterns for FAQs, location distances, floor plans
-2. ✅ **Test Panel display fixes** - Added "Extracted Data Preview" section showing FAQs, distances, USPs, amenities, payment breakdown
-3. ✅ **Form fixes** - Verified all forms use locked Input/Textarea/Select components with black text on cream background
+## Problem Summary
+The extraction checklist in the **Test One Listing** panel shows red (failed) items because:
+1. Location distances are not being extracted (0 count)
+2. FAQs are not being extracted (0 count)  
+3. Documents are sometimes missing (0 count)
+4. The Firecrawl markdown parsing patterns don't match all Provident page variations
 
----
-
-## Analysis Summary
-
-### Current Architecture
-The extraction pipeline works as follows:
-
-```text
-Source URL → Firecrawl Scrape → pagedata-detail.ts / extract.ts
-                                       ↓
-                              pending_project_imports table
-                                       ↓
-                              Approval (bulk-approve-imports)
-                                       ↓
-                              projects table + project_images + project_documents
-                                       ↓
-                              useProjects hook → ProjectDetailLayout
-```
-
-### Data Fields Being Extracted
-The shared extraction module (`_shared/provident/extract.ts`) already extracts:
-- `faqs` - Array of {question, answer}
-- `locationDistances` - Array of {label, time}
-- `floorPlanTypes` - Array of {label, pdfUrl?}
-- `paymentBreakdown` - Object with down_payment, during_construction, on_completion
-- `uspBullets`, `locationHeadline`, `locationDescription`, `amenities`
-
-### Identified Issues
-
-1. **TestOneListingPanel.tsx** (lines 68-97): Shows checklist but does NOT display the actual extracted data (FAQs, distances, floor plans) in a visible section - only shows boolean/count checks
-
-2. **batch-extract-pending/index.ts**: Correctly extracts and saves all fields to `pending_project_imports`
-
-3. **bulk-approve-imports/index.ts**: Correctly copies all extended fields to `projects` table
-
-4. **ProjectDetail.tsx**: Correctly maps all fields from hook to layout
-
-5. **ProjectDetailLayout.tsx**: Has sections for FAQs, Location, Floor Plans but they depend on data being present
+## Root Cause
+The extraction relies on regex patterns in `extract.ts` to parse Firecrawl markdown output. However:
+- Provident's Gatsby site has varying markdown structures per project
+- The current patterns miss certain heading formats and section layouts
+- The `pagedata-detail.ts` module (which can get structured JSON directly from Gatsby) exists but isn't being used in the main extraction pipeline
 
 ---
 
 ## Implementation Plan
 
-### Part 1: Fix Test Panel to Display Extracted Data
-
-**File: `src/components/listing-admin/TestOneListingPanel.tsx`**
-
-Add visual display sections for extracted data in the test result card:
-
-1. Add a "Extracted Data Preview" section after the checklist showing:
-   - FAQs list (question/answer pairs)
-   - Location distances list (place/time pairs)
-   - Floor plan types list
-   - Payment breakdown visualization
-   - USP bullets list
-   - Amenities list
-
-2. Parse and display these fields from `testResult.project`:
-   - `faqs` - Show in accordion or list format
-   - `location_distances` - Show as icon + label + time
-   - `floor_plan_types` (from `floorPlanTypes` parse) - Show as chips/badges
-   - `payment_breakdown` - Show as milestone cards
-   - `usp_bullets` - Show as bullet list
-   - `amenities_list` - Show as tag cloud
-
-### Part 2: Verify Extraction Pipeline for Missing Fields
+### Phase 1: Fix Markdown Extraction Patterns (Critical)
 
 **File: `supabase/functions/_shared/provident/extract.ts`**
 
-Review and enhance extraction patterns:
+1. **FAQs Extraction Fix**
+   - Add multiple heading pattern variations: "FAQ", "FAQs", "Q&A", "Frequently Asked Questions", "Useful Information", "Common Questions"
+   - Fix Q&A parsing to handle both "Q:" and "**Q:**" formats
+   - Add fallback for numbered FAQ format ("1. Question...")
 
-1. **FAQs extraction** (lines 523-570): Currently looks for "Useful Information", "FAQ", "FAQs" headings
-   - Add fallback patterns for "Q&A", "Questions & Answers"
-   - Improve bold question pattern matching
+2. **Location Distances Fix**
+   - Add reversed order pattern: "Place - N minutes" (not just "N minutes – Place")
+   - Add metric distance support: "N km to Place"
+   - Normalize time formats: "mins" → "Minutes", "min" → "Minute"
+   - Handle variations with/without leading dashes
 
-2. **Location distances** (lines 449-492): Currently handles "N Minutes – Place" patterns
-   - Verify patterns match current Provident HTML structure
-   - Add debug logging for extraction success/failure
+3. **USP Bullets Fix**
+   - Fix section extraction to capture all bullet points even without explicit heading
+   - Add fallback for unmarked USP sections that use paragraph formatting
 
-3. **Floor plan types** (lines 373-425): Currently looks for "Floorplans" section
-   - Add validation to ensure floor plan types aren't confused with location data
-   - Improve bedroom pattern matching (Studio, 1BR, 2BR, etc.)
+### Phase 2: Integrate Gatsby Page-Data as Primary Source
 
-**File: `supabase/functions/_shared/provident/pagedata-detail.ts`**
+**File: `supabase/functions/batch-extract-pending/index.ts`**
 
-Verify page-data.json parsing:
+1. Try Gatsby page-data.json endpoint FIRST (credit-free, structured)
+2. Only fall back to Firecrawl if page-data fails or returns incomplete data
+3. Merge data from both sources if needed (page-data for structured fields, Firecrawl for images/PDFs)
 
-1. Check if `faqs`, `locationDistances`, `floorPlanTypes` are being extracted from Gatsby JSON
-2. Add fallback paths for alternative JSON structures
-
-### Part 3: Form Fixes Across All Site Forms
-
-Based on the codebase, the forms that need attention include:
-
-1. **LeadCaptureModal.tsx** - Download gate form (brochure/floor plan/payment plan)
-2. **CallToActionSection.tsx** - Project inquiry form
-3. **ConsultationRequestForm.tsx** - Consultation booking form
-4. **MeetingBookingModal.tsx** - Meeting scheduling form
-5. **RequestValuation.tsx** - Property valuation form
-6. **JoinInvestorList.tsx** - Investor signup form
-7. **LandlordListForm.tsx** - Landlord registration form
-8. **Input.tsx** - Base input component
-
-**Common Issues to Address:**
-- Input text visibility (already has "text-black" lock in Input.tsx)
-- Form validation feedback styling
-- Mobile responsiveness
-- Loading states during submission
-- Success/error toast messages
-
----
-
-## Technical Implementation Details
-
-### 1. TestOneListingPanel Enhancements
-
-```tsx
-// Add after the checklist section (around line 500+)
-// New section: Extracted Data Preview
-{testResult.project && (
-  <Card className="border-zinc-200 mt-4">
-    <CardHeader>
-      <CardTitle>Extracted Data Preview</CardTitle>
-    </CardHeader>
-    <CardContent>
-      {/* FAQs */}
-      {testResult.project.faqs?.length > 0 && (
-        <div className="mb-4">
-          <h4>FAQs ({testResult.project.faqs.length})</h4>
-          {testResult.project.faqs.map((faq, i) => (
-            <div key={i}>
-              <strong>{faq.question}</strong>
-              <p>{faq.answer}</p>
-            </div>
-          ))}
-        </div>
-      )}
-      
-      {/* Location Distances */}
-      {testResult.project.location_distances?.length > 0 && (
-        <div className="mb-4">
-          <h4>Location Distances ({testResult.project.location_distances.length})</h4>
-          {testResult.project.location_distances.map((d, i) => (
-            <div key={i}>{d.time} - {d.label}</div>
-          ))}
-        </div>
-      )}
-      
-      {/* Floor Plans */}
-      {testResult.checklist?.floorPlanCount > 0 && (
-        <div>Floor Plan Types: {testResult.checklist.floorPlanCount}</div>
-      )}
-    </CardContent>
-  </Card>
-)}
+**New Integration Flow:**
+```
+For each pending import:
+1. fetchProvidentPageDataDetail(slug) → Structured data (FAQs, USPs, amenities, distances)
+2. If incomplete → fetchWithRetry(Firecrawl scrape) → Markdown + HTML
+3. extractProvidentProjectFromScrape() → Parse images, PDFs
+4. Merge: prefer page-data for structured fields, Firecrawl for media
+5. mirrorRemotePdfToPublicStorage() → Copy brochures to our storage
 ```
 
-### 2. Extraction Pattern Improvements
+### Phase 3: Update Completeness Check
 
-**extract.ts - Enhanced FAQ extraction:**
+**File: `src/components/listing-admin/TestOneListingPanel.tsx`**
+
+Current core completeness check at line 332-335:
 ```typescript
-// Add more heading variations
-const faqHeadings = [
-  "Useful Information", 
-  "FAQ", 
-  "FAQs", 
-  "Frequently Asked Questions", 
-  "Q&A",
-  "Questions and Answers",
-  "Common Questions"
-];
-
-// Add pattern for colon-separated Q/A
-// Pattern 3: "Q: Question\nA: Answer"
-const colonPattern = /Q:\s*([^\n]+)\s*\n+A:\s*([^\n]+)/gi;
+const coreComplete = hasImages && hasBrochure && hasDescription && hasDeveloper;
+const fullyComplete = coreComplete && hasUsps && hasAmenities && hasLocation && hasPrice && hasFaqs;
 ```
 
-**extract.ts - Enhanced location distances:**
-```typescript
-// Add more distance patterns
-// Pattern 4: "Place - N minutes" (reversed order)
-const distPattern4 = /^-\s+([^–—\-]+?)\s*[–—\-]\s*(\d+\s+Minutes?)/gim;
+Update to:
+1. Make `fullyComplete` more lenient for fields that are genuinely unavailable on some project pages
+2. Add a "partial" status for projects that have core fields but missing optional extended fields
+3. Show which fields failed with specific reasons in the checklist
 
-// Pattern 5: "N km to Place"
-const distPattern5 = /^-?\s*(\d+\s*km)\s+(?:to|from)\s+(.+)/gim;
-```
+### Phase 4: Fix PDF/Brochure Mirroring
 
-### 3. Form Styling Consistency
+**File: `supabase/functions/_shared/provident/pagedata.ts`**
 
-**Shared form styling to apply:**
-```tsx
-// Ensure all form inputs use the locked Input component
-// Input.tsx already has: "text-black focus:text-black"
-
-// For select dropdowns, ensure similar styling:
-"text-black bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]"
-
-// For textareas:
-"text-black placeholder:text-muted-foreground"
-```
+1. The current `fetchProvidentPageDataPdfUrls` function correctly finds PDFs
+2. Issue: Some PDFs fail to mirror because they're path-only strings (e.g., "Project Brochure.pdf" without full URL)
+3. Fix: Improve URL normalization to handle relative paths and path-only strings
 
 ---
 
-## Files to Modify
+## Technical Changes Summary
 
-### New/Modified Files:
-
-1. **`src/components/listing-admin/TestOneListingPanel.tsx`**
-   - Add extracted data preview section
-   - Display FAQs, location distances, floor plans, payment breakdown
-   - Add visual indicators for data completeness
-
-2. **`supabase/functions/_shared/provident/extract.ts`**
-   - Enhance FAQ extraction patterns
-   - Enhance location distance patterns
-   - Add debug logging
-
-3. **`supabase/functions/_shared/provident/pagedata-detail.ts`**
-   - Verify extraction paths for Gatsby JSON
-   - Add fallback extraction logic
-
-4. **`src/components/project-detail/LeadCaptureModal.tsx`**
-   - Review form styling consistency
-
-5. **`src/components/project-detail/CallToActionSection.tsx`**
-   - Review form styling consistency
-
-6. **`src/components/ConsultationRequestForm.tsx`**
-   - Review form styling consistency
-
-7. **`src/components/MeetingBookingModal.tsx`**
-   - Review form styling consistency
+| File | Changes |
+|------|---------|
+| `supabase/functions/_shared/provident/extract.ts` | Fix FAQ patterns (lines 470-520), fix distance patterns (lines 449-480), improve USP extraction (lines 287-314) |
+| `supabase/functions/batch-extract-pending/index.ts` | Add page-data integration before Firecrawl call, merge extraction results |
+| `supabase/functions/_shared/provident/pagedata-detail.ts` | Already complete - no changes needed |
+| `supabase/functions/_shared/provident/pagedata.ts` | Fix URL normalization for path-only strings |
+| `src/components/listing-admin/TestOneListingPanel.tsx` | Improve checklist display with specific failure reasons |
 
 ---
 
-## Deployment Steps
+## Testing Strategy
 
-1. Deploy updated edge functions:
-   - `batch-extract-pending`
-   - (pagedata-detail.ts and extract.ts are shared, auto-deployed)
-
-2. Test extraction with the "Test One Listing" panel:
-   - Verify FAQs appear in result card
-   - Verify location distances appear
-   - Verify floor plan types appear
-
-3. Run extraction on a fresh listing to validate full pipeline
-
-4. Check form inputs across site for consistent styling
+After implementation:
+1. Run "Test One Listing" on multiple Provident URLs
+2. Verify all checklist items show green for well-structured projects
+3. For projects with genuinely missing data (no FAQs on source page), show "Not available on source" instead of red X
+4. Test extraction of: sobha-seahaven, emaar-the-oasis, damac-lagoons, mercedes-benz-places-binghatti
 
 ---
 
-## Success Criteria
+## Expected Outcome
 
-1. **Test Panel**: Shows extracted FAQs, location distances, floor plans, payment breakdown, USPs, and amenities in the result card (not just checkmarks)
-
-2. **Extraction**: Successfully extracts all Reelly-compatible fields from Provident pages
-
-3. **Live Project Pages**: All sections display correctly with extracted data
-
-4. **Forms**: All input fields have consistent black text on cream background, proper focus states, and work correctly on mobile
-
+After implementation:
+- Extraction checklist shows green for all fields that exist on the source page
+- Fields genuinely missing from source show neutral status (not red failure)
+- Documents (brochure, payment plan, floor plans) are reliably mirrored
+- FAQs, location distances, USPs, amenities extract correctly from all page variations
+- Reelly-style unified data model preserved (all fields flow to `UnifiedProject`)
