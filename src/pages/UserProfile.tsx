@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "@/components/MainLayout";
+import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +10,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -26,8 +35,10 @@ import {
   Settings,
   LogOut,
   ChevronRight,
-  Loader2
+  Loader2,
+  Pencil
 } from "lucide-react";
+import { PhoneInput } from "@/components/ui/phone-input";
 
 const UserProfile = () => {
   const navigate = useNavigate();
@@ -50,6 +61,11 @@ const UserProfile = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [changingPassword, setChangingPassword] = useState(false);
+  
+  // Email change state
+  const [newEmail, setNewEmail] = useState("");
+  const [changingEmail, setChangingEmail] = useState(false);
+  const [showEmailChangeDialog, setShowEmailChangeDialog] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -200,6 +216,36 @@ const UserProfile = () => {
     }
   };
 
+  const handleChangeEmail = async () => {
+    if (!newEmail || !newEmail.includes('@')) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    if (newEmail === user?.email) {
+      toast.error("New email is the same as current email");
+      return;
+    }
+
+    setChangingEmail(true);
+    try {
+      const { error } = await supabase.auth.updateUser({
+        email: newEmail
+      });
+
+      if (error) throw error;
+
+      toast.success("Verification email sent to both addresses. Please check your inbox.");
+      setShowEmailChangeDialog(false);
+      setNewEmail("");
+    } catch (error: any) {
+      console.error("Error changing email:", error);
+      toast.error(error.message || "Failed to change email");
+    } finally {
+      setChangingEmail(false);
+    }
+  };
+
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
@@ -331,24 +377,34 @@ const UserProfile = () => {
                         <Mail className="h-4 w-4 text-gold" />
                         Email Address
                       </Label>
-                      <Input
-                        id="email"
-                        value={user?.email || ""}
-                        disabled
-                        className="bg-muted"
-                      />
-                      <p className="text-xs text-muted-foreground">Email cannot be changed</p>
+                      <div className="flex gap-2">
+                        <Input
+                          id="email"
+                          value={user?.email || ""}
+                          disabled
+                          className="bg-muted flex-1"
+                        />
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => setShowEmailChangeDialog(true)}
+                          className="shrink-0"
+                        >
+                          <Pencil className="h-3 w-3 mr-1" />
+                          Change
+                        </Button>
+                      </div>
+                      <p className="text-xs text-muted-foreground">Click Change to update your email with verification</p>
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="phone" className="flex items-center gap-2 text-foreground font-medium">
                         <Phone className="h-4 w-4 text-gold" />
                         Phone Number
                       </Label>
-                      <Input
-                        id="phone"
+                      <PhoneInput
                         value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="+971 XX XXX XXXX"
+                        onChange={(value) => setPhone(value || '')}
+                        placeholder="Enter phone number"
                       />
                     </div>
                   </div>
@@ -475,6 +531,60 @@ const UserProfile = () => {
           </div>
         </div>
       </div>
+      <Footer />
+      
+      {/* Email Change Dialog */}
+      <Dialog open={showEmailChangeDialog} onOpenChange={setShowEmailChangeDialog}>
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+          <DialogHeader>
+            <DialogTitle className="text-foreground flex items-center gap-2">
+              <Mail className="h-5 w-5 text-gold" />
+              Change Email Address
+            </DialogTitle>
+            <DialogDescription className="text-muted-foreground">
+              A verification link will be sent to both your current and new email addresses.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label className="text-foreground">Current Email</Label>
+              <Input value={user?.email || ""} disabled className="bg-muted" />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-foreground">New Email Address</Label>
+              <Input
+                type="email"
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+                placeholder="Enter new email address"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                setShowEmailChangeDialog(false);
+                setNewEmail("");
+              }}
+            >
+              Cancel
+            </Button>
+            <Button 
+              variant="primary" 
+              onClick={handleChangeEmail} 
+              disabled={changingEmail || !newEmail}
+            >
+              {changingEmail ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <Mail className="h-4 w-4 mr-2" />
+              )}
+              Send Verification
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </MainLayout>
   );
 };

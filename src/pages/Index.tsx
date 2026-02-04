@@ -344,7 +344,7 @@ const Index = () => {
       {/* EXPLORE OUR SERVICES SLIDESHOW */}
       <ExploreServicesCard />
 
-      {/* AI HOME FINDER - Premium CTA Section - CENTERED, No background, Purple label only */}
+      {/* AI HOME FINDER - Premium CTA Section - CENTERED with background card */}
       <section className="py-10 md:py-16 bg-black">
         <div className="container mx-auto px-4">
           <div className="flex justify-center">
@@ -353,21 +353,27 @@ const Index = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="text-center"
+              className="text-center relative"
             >
-              <Link to="/quiz" className="inline-flex items-center gap-3 group">
-                <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-purple-500" />
-                <h2 
-                  className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide text-purple-500 group-hover:text-purple-400 transition-colors" 
-                  style={{ fontFamily: "Poppins, sans-serif" }}
-                >
-                  {t('hero.aiFinder')}
-                </h2>
-                <ArrowUpRight className="w-5 h-5 md:w-7 md:h-7 text-purple-500 group-hover:text-purple-400 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
-              </Link>
-              <p className="text-white/70 text-sm md:text-base mt-2 max-w-lg mx-auto">
-                {t('hero.aiFinderDesc')}
-              </p>
+              {/* Background card - restored and centered */}
+              <div className="absolute inset-0 -m-6 md:-m-8 rounded-2xl bg-gradient-to-r from-purple-500/10 via-purple-600/5 to-purple-500/10 border border-purple-400/20 blur-sm" />
+              <div className="relative z-10 px-6 md:px-10 py-4 md:py-6">
+                <Link to="/quiz" className="inline-flex items-center gap-3 group">
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-purple-500/30 to-purple-600/20 border border-purple-400/40 flex items-center justify-center shadow-[0_0_20px_rgba(147,51,234,0.3)] group-hover:shadow-[0_0_30px_rgba(147,51,234,0.5)] transition-all">
+                    <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-purple-400 group-hover:text-purple-300 transition-colors" />
+                  </div>
+                  <h2 
+                    className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide text-purple-400 group-hover:text-purple-300 transition-colors" 
+                    style={{ fontFamily: "Poppins, sans-serif" }}
+                  >
+                    {t('hero.aiFinder')}
+                  </h2>
+                  <ArrowUpRight className="w-5 h-5 md:w-7 md:h-7 text-purple-400 group-hover:text-purple-300 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
+                </Link>
+                <p className="text-white/70 text-sm md:text-base mt-2 max-w-lg mx-auto">
+                  {t('hero.aiFinderDesc')}
+                </p>
+              </div>
             </motion.div>
           </div>
         </div>

@@ -98,14 +98,14 @@ const UAE_EMIRATES = [
   { value: "Umm Al Quwain", label: "Umm Al Quwain" },
 ];
 
-// Sort options
+// Sort options - Premium labels
 const SORT_OPTIONS = [
-  { value: "newest", label: "Newest First" },
-  { value: "oldest", label: "Oldest First" },
-  { value: "price-low", label: "Cheapest First" },
-  { value: "price-high", label: "Most Expensive First" },
-  { value: "size-large", label: "Largest First" },
-  { value: "size-small", label: "Smallest First" },
+  { value: "newest", label: "Recently Added" },
+  { value: "oldest", label: "First Listed" },
+  { value: "price-low", label: "Price: Low to High" },
+  { value: "price-high", label: "Price: High to Low" },
+  { value: "size-large", label: "Size: Largest First" },
+  { value: "size-small", label: "Size: Smallest First" },
 ];
 
 // Comprehensive UAE Developer List - All major developers
@@ -483,10 +483,10 @@ const HeroSearchBar = () => {
         {/* Buy/Rent Dropdown - Same style as AED and sqft */}
         <Popover>
           <PopoverTrigger asChild>
-            <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 transition-all text-sm">
-              <Home className="w-3.5 h-3.5 text-gold" />
-              <span className="font-medium">{purpose === 'buy' ? 'Buy' : 'Rent'}</span>
-              <ChevronDown className="w-3 h-3 text-white/60" />
+            <button className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/20 backdrop-blur-md border border-white/40 text-white hover:bg-white/30 transition-all text-sm font-semibold shadow-lg">
+              <Home className="w-4 h-4 text-gold" />
+              <span className="font-semibold">{purpose === 'buy' ? 'Buy' : 'Rent'}</span>
+              <ChevronDown className="w-3.5 h-3.5 text-white/80" />
             </button>
           </PopoverTrigger>
           <PopoverContent 
@@ -494,6 +494,7 @@ const HeroSearchBar = () => {
             side="bottom"
             align="start"
             sideOffset={4}
+            avoidCollisions={false}
           >
             <div className="text-xs font-semibold text-black/60 px-3 py-1.5 uppercase tracking-wider">Purpose</div>
             {(['buy', 'rent'] as const).map((p) => (
@@ -521,7 +522,7 @@ const HeroSearchBar = () => {
           <PopoverTrigger asChild>
             <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 transition-all text-sm">
               <DollarSign className="w-3.5 h-3.5 text-gold" />
-              <span className="font-medium">{currentCurrency.flag} {currentCurrency.code}</span>
+              <span className="font-medium">{currentCurrency.code}</span>
               <ChevronDown className="w-3 h-3 text-white/60" />
             </button>
           </PopoverTrigger>
@@ -530,6 +531,7 @@ const HeroSearchBar = () => {
             side="bottom"
             align="start"
             sideOffset={4}
+            avoidCollisions={false}
           >
             <div className="text-xs font-semibold text-black/60 px-3 py-1.5 uppercase tracking-wider">Currency</div>
             {SUPPORTED_CURRENCIES.map((c) => (
@@ -568,6 +570,7 @@ const HeroSearchBar = () => {
             side="bottom"
             align="start"
             sideOffset={4}
+            avoidCollisions={false}
           >
             <div className="text-xs font-semibold text-black/60 px-3 py-1.5 uppercase tracking-wider">Size Unit</div>
             {(['sqft', 'sqm'] as const).map((u) => (
@@ -599,11 +602,12 @@ const HeroSearchBar = () => {
             <Search className="w-4 h-4 text-gold shrink-0" />
             <input
               type="text"
-              placeholder="Area, project or community"
+              placeholder="Area, project, or community"
               value={locationSearch}
               onChange={(e) => setLocationSearch(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/60 px-2 py-3 text-sm font-medium"
+              className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/60 px-3 py-3 text-sm font-medium min-w-0 w-full"
+              style={{ minWidth: '180px' }}
             />
           </div>
 
@@ -825,18 +829,18 @@ const HeroSearchBar = () => {
                   </Select>
                 </div>
 
-                {/* AI Home Finder Link */}
+                {/* AI Home Finder Link - Enhanced 3D visibility */}
                 <Link
                   to="/ai-hub"
-                  className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-purple-500/20 to-purple-600/10 border border-purple-400/40 hover:border-purple-400/60 transition-all group"
+                  className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-purple-500/25 to-purple-600/15 border-2 border-purple-400/50 hover:border-purple-400 transition-all group shadow-[0_4px_20px_rgba(147,51,234,0.25)] hover:shadow-[0_6px_30px_rgba(147,51,234,0.4)] hover:-translate-y-0.5"
                   onClick={() => setIsFiltersOpen(false)}
                 >
-                  <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
-                    <Sparkles className="w-5 h-5 text-purple-400" />
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-br from-purple-500/30 to-purple-600/20 border border-purple-400/40 flex items-center justify-center shadow-[0_0_15px_rgba(147,51,234,0.3)] group-hover:shadow-[0_0_25px_rgba(147,51,234,0.5)] transition-all">
+                    <Sparkles className="w-5 h-5 text-purple-400 group-hover:text-purple-300 transition-colors" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-black font-semibold text-sm">Not sure what you're looking for?</p>
-                    <p className="text-black/60 text-xs">Try our AI Home Finder for personalized recommendations</p>
+                    <p className="text-black font-bold text-sm">Not sure what you're looking for?</p>
+                    <p className="text-black/70 text-xs">Try our AI Home Finder for personalized recommendations</p>
                   </div>
                   <ChevronDown className="w-5 h-5 text-purple-400 -rotate-90 group-hover:translate-x-1 transition-transform" />
                 </Link>
