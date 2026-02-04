@@ -452,34 +452,76 @@ const BrokerCertification = () => {
               On-screen preview only — certificate is not downloadable publicly
             </motion.p>
             <motion.div variants={fadeInUp}>
-              <Card className="jj-card-inner border-2 border-gold/30">
-                <CardContent className="p-8 text-center">
-                  <Award className="w-16 h-16 text-gold mx-auto mb-6" />
-                  <h3 className="text-2xl font-bold text-black mb-2" style={{ fontFamily: "Playfair Display, serif" }}>
-                    Certificate of Completion
-                  </h3>
-                  <p className="text-zinc-500 mb-8">JBJ Broker Standards Program</p>
-                  
-                  <div className="border-t border-b border-gold/20 py-6 mb-6">
-                    <p className="text-lg text-zinc-400 italic">[Broker Full Name]</p>
-                    <p className="text-sm text-zinc-500 mt-2">has successfully completed all program requirements</p>
+              {/* Premium Certificate Design */}
+              <div className="relative">
+                {/* Premium Badge */}
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+                  <div className="bg-gradient-to-r from-gold via-amber-400 to-gold px-6 py-2 rounded-full shadow-lg border border-gold/50">
+                    <span className="text-black font-bold text-sm tracking-widest uppercase flex items-center gap-2">
+                      <Award className="w-4 h-4" />
+                      Certified Professional
+                      <Award className="w-4 h-4" />
+                    </span>
                   </div>
-                  
-                  <div className="flex items-center justify-center gap-8">
-                    <div className="text-left">
-                      <p className="text-sm text-zinc-500">Issue Date</p>
-                      <p className="text-black font-medium">[Auto-generated date]</p>
-                    </div>
-                    <div className="text-right">
-                      <div className="h-16 flex items-center justify-center">
-                        <p className="text-gold italic text-sm">[Signature Block]</p>
+                </div>
+
+                <Card className="jj-card-inner border-4 border-gold/50 pt-8 bg-gradient-to-br from-[#FDFBF7] via-[#F8F4EC] to-[#F0E8D8] shadow-2xl">
+                  <CardContent className="p-10 text-center relative overflow-hidden">
+                    {/* Decorative corner elements */}
+                    <div className="absolute top-4 left-4 w-16 h-16 border-l-4 border-t-4 border-gold/40" />
+                    <div className="absolute top-4 right-4 w-16 h-16 border-r-4 border-t-4 border-gold/40" />
+                    <div className="absolute bottom-4 left-4 w-16 h-16 border-l-4 border-b-4 border-gold/40" />
+                    <div className="absolute bottom-4 right-4 w-16 h-16 border-r-4 border-b-4 border-gold/40" />
+
+                    {/* Logo area */}
+                    <div className="mb-6">
+                      <div className="w-20 h-20 mx-auto rounded-full bg-black flex items-center justify-center border-4 border-gold shadow-xl">
+                        <Award className="w-10 h-10 text-gold" />
                       </div>
-                      <p className="text-black font-semibold">Jane Bou Jaoude (جاين بو جودة)</p>
-                      <p className="text-sm text-zinc-500">Founder & CEO</p>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+
+                    <h3 className="text-3xl font-bold text-black mb-1" style={{ fontFamily: "Playfair Display, serif" }}>
+                      Certificate of Completion
+                    </h3>
+                    <p className="text-gold font-semibold tracking-widest uppercase text-sm mb-8">JBJ Broker Standards Program</p>
+                    
+                    <p className="text-muted-foreground text-sm mb-2">This certifies that</p>
+                    
+                    <div className="border-b-2 border-gold/40 py-4 mb-6 mx-auto max-w-md">
+                      <p className="text-2xl font-bold text-black" style={{ fontFamily: "Playfair Display, serif" }}>[Broker Full Name]</p>
+                    </div>
+                    
+                    <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+                      has successfully completed all program requirements and demonstrated proficiency in the JBJ Global Real Estate professional standards curriculum.
+                    </p>
+                    
+                    <div className="flex items-center justify-between max-w-lg mx-auto pt-6 border-t border-gold/20">
+                      <div className="text-left">
+                        <p className="text-xs text-muted-foreground uppercase tracking-wider">Issue Date</p>
+                        <p className="text-black font-semibold">{new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                      </div>
+                      <div className="text-center">
+                        <div className="w-16 h-16 mx-auto rounded-full bg-black/5 border-2 border-gold/30 flex items-center justify-center">
+                          <Shield className="w-8 h-8 text-gold" />
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-1">Verified</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-black font-semibold">Jane Bou Jaoude</p>
+                        <p className="text-xs text-muted-foreground">Founder & CEO</p>
+                        <p className="text-gold italic text-xs mt-1">جاين بو جودة</p>
+                      </div>
+                    </div>
+
+                    {/* Certificate Number */}
+                    <div className="mt-8 pt-4 border-t border-dashed border-gold/30">
+                      <p className="text-xs text-muted-foreground">
+                        Certificate No: <span className="font-mono text-black">JBJ-CERT-[AUTO]</span>
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </motion.div>
           </motion.div>
         </div>

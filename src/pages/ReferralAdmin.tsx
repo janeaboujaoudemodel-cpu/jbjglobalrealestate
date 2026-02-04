@@ -18,12 +18,14 @@ import {
   Eye,
   Loader2,
   Trash2,
+  Sparkles,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import MainLayout from "@/components/MainLayout";
 import SignaturePad from "@/components/referral/SignaturePad";
+import AISignatureGenerator from "@/components/signature/AISignatureGenerator";
 import { format } from "date-fns";
 
 interface ReferralPartner {
@@ -393,7 +395,29 @@ export default function ReferralAdmin() {
 
             {/* Signature Tab */}
             <TabsContent value="signature" className="space-y-6">
-              <Card className="bg-white border-2 border-gold/40">
+              {/* AI Signature Generator */}
+              <Card className="bg-card border-2 border-gold/40">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-gold" />
+                    AI Signature Designer
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-6">
+                    Type your name and our AI will generate a professional signature for you.
+                  </p>
+                  <AISignatureGenerator
+                    onSignatureGenerated={(signature) => {
+                      setCompanySignature(signature);
+                      toast.success("AI signature set! Click 'Save Company Signature' to save it.");
+                    }}
+                    defaultName="Jane Bou Jaoude"
+                  />
+                </CardContent>
+              </Card>
+
+              <Card className="bg-card border-2 border-gold/40">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <FileSignature className="w-5 h-5 text-gold" />
@@ -402,14 +426,14 @@ export default function ReferralAdmin() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <p className="text-sm text-muted-foreground">
-                    This signature will automatically appear on all referral partner contracts.
+                    This signature will automatically appear on all referral partner contracts and certificates.
                   </p>
 
                   {/* Current Signature Preview */}
                   {companySignature && (
                     <div className="space-y-2">
                       <Label>Current Signature:</Label>
-                      <div className="p-4 bg-white border-2 border-dashed border-gold/40 rounded-xl">
+                      <div className="p-4 bg-card border-2 border-dashed border-gold/40 rounded-xl">
                         <img
                           src={companySignature}
                           alt="Company Signature"
@@ -428,9 +452,9 @@ export default function ReferralAdmin() {
                     </div>
                   )}
 
-                  {/* Signature Pad */}
+                  {/* Manual Signature Pad */}
                   <div className="space-y-2">
-                    <Label>{companySignature ? 'Draw New Signature:' : 'Draw Signature:'}</Label>
+                    <Label>{companySignature ? 'Or Draw Manually:' : 'Draw Signature Manually:'}</Label>
                     <SignaturePad
                       onSignatureChange={setCompanySignature}
                       requiredIdMatch={false}
