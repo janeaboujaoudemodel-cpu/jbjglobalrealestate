@@ -1,6 +1,15 @@
 // Centralized, reusable options for lead capture selects.
 // Keep lists comprehensive but UI-friendly.
 
+// Priority countries to show at top of country/nationality dropdowns
+export const PRIORITY_COUNTRIES = [
+  "United Arab Emirates",
+  "Cyprus",
+  "Indonesia",
+  "Oman",
+  "Thailand",
+];
+
 // Comprehensive global language list - all major world languages
 const ALL_LANGUAGES = [
   "Afrikaans",
@@ -180,9 +189,9 @@ export function getCountryList(locale: string = "en"): string[] {
     const supportedValuesOf = (Intl as any).supportedValuesOf as undefined | ((key: string) => string[]);
     const regionCodes = supportedValuesOf?.("region");
     if (!Array.isArray(regionCodes) || regionCodes.length === 0) {
-      // Return with UAE first, then alphabetical, no "Other"
-      const sorted = uniqSorted(FALLBACK_COUNTRIES.filter(c => c !== "United Arab Emirates"));
-      return ["United Arab Emirates", ...sorted];
+      // Return priority countries first, then alphabetical rest
+      const sorted = uniqSorted(FALLBACK_COUNTRIES.filter(c => !PRIORITY_COUNTRIES.includes(c)));
+      return [...PRIORITY_COUNTRIES, ...sorted];
     }
 
     const dn = new Intl.DisplayNames([locale], { type: "region" });
@@ -191,12 +200,12 @@ export function getCountryList(locale: string = "en"): string[] {
       .filter((v): v is string => typeof v === "string" && v.trim().length > 0)
       .map((name) => normalizeCountryName(name));
 
-    // Remove UAE from sorted list, add it first, no "Other" option
-    const sorted = uniqSorted(names.filter(n => n !== "United Arab Emirates"));
-    return ["United Arab Emirates", ...sorted];
+    // Remove priority countries from sorted list, add them first
+    const sorted = uniqSorted(names.filter(n => !PRIORITY_COUNTRIES.includes(n)));
+    return [...PRIORITY_COUNTRIES, ...sorted];
   } catch {
-    const sorted = uniqSorted(FALLBACK_COUNTRIES.filter(c => c !== "United Arab Emirates"));
-    return ["United Arab Emirates", ...sorted];
+    const sorted = uniqSorted(FALLBACK_COUNTRIES.filter(c => !PRIORITY_COUNTRIES.includes(c)));
+    return [...PRIORITY_COUNTRIES, ...sorted];
   }
 }
 

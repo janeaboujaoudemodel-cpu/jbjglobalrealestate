@@ -15,6 +15,11 @@ const ALL_EMIRATES = [
   "Ajman",
   "Fujairah",
   "Umm Al Quwain",
+  // International priority countries
+  "Cyprus",
+  "Indonesia",
+  "Oman",
+  "Thailand",
 ];
 
 const EmiratesTabs = ({ projects, selectedEmirate, onEmirateSelect }: EmiratesTabsProps) => {
@@ -50,7 +55,7 @@ const EmiratesTabs = ({ projects, selectedEmirate, onEmirateSelect }: EmiratesTa
               : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-foreground border-gold/40 hover:border-gold hover:shadow-[0_4px_12px_rgba(200,167,102,0.25)]"
           }`}
         >
-          All Emirates
+          All Locations
         </button>
         {activeEmirates.map((emirate) => {
           const projectCount = projects?.filter((p) => p.emirate === emirate).length || 0;

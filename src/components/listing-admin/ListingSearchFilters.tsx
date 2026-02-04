@@ -29,7 +29,7 @@ interface ListingSearchFiltersProps {
 }
 
 const EMIRATES = [
-  { value: "all", label: "All Emirates" },
+  { value: "all", label: "All Locations" },
   { value: "Dubai", label: "Dubai" },
   { value: "Abu Dhabi", label: "Abu Dhabi" },
   { value: "Sharjah", label: "Sharjah" },
@@ -37,6 +37,11 @@ const EMIRATES = [
   { value: "Ras Al Khaimah", label: "Ras Al Khaimah" },
   { value: "Fujairah", label: "Fujairah" },
   { value: "Umm Al Quwain", label: "Umm Al Quwain" },
+  // International priority countries
+  { value: "Cyprus", label: "Cyprus" },
+  { value: "Indonesia", label: "Indonesia" },
+  { value: "Oman", label: "Oman" },
+  { value: "Thailand", label: "Thailand" },
 ];
 
 const ListingSearchFilters = ({
