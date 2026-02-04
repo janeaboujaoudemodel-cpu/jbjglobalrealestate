@@ -32,6 +32,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { FounderContent } from "@/components/FounderContent";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -465,7 +466,19 @@ const BrokerCertification = () => {
                   </div>
                 </div>
 
-                <Card className="jj-card-inner border-4 border-gold/50 pt-8 bg-gradient-to-br from-[#FDFBF7] via-[#F8F4EC] to-[#F0E8D8] shadow-2xl">
+                <Card 
+                  className="jj-card-inner border-4 border-gold/60 pt-8"
+                  style={{
+                    background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 25%, #D4C4A8 50%, #E8DCC8 75%, #F5EBD7 100%)',
+                    boxShadow: `
+                      0 25px 50px rgba(200,167,102,0.4),
+                      0 15px 30px rgba(0,0,0,0.2),
+                      inset 0 2px 10px rgba(255,255,255,0.9),
+                      inset 0 -3px 10px rgba(200,167,102,0.25),
+                      0 0 40px rgba(200,167,102,0.2)
+                    `,
+                  }}
+                >
                   <CardContent className="p-10 text-center relative overflow-hidden">
                     {/* Decorative corner elements */}
                     <div className="absolute top-4 left-4 w-16 h-16 border-l-4 border-t-4 border-gold/40" />
@@ -507,16 +520,25 @@ const BrokerCertification = () => {
                         <p className="text-xs text-muted-foreground mt-1">Verified</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-black font-semibold">Jane Bou Jaoude</p>
-                        <p className="text-xs text-muted-foreground">Founder & CEO</p>
-                        <p className="text-gold italic text-xs mt-1">جاين بو جودة</p>
+                        <FounderContent
+                          fallback={
+                            <>
+                              <p className="text-black font-semibold">JBJ Global Real Estate</p>
+                              <p className="text-xs text-muted-foreground">Executive Leadership</p>
+                            </>
+                          }
+                        >
+                          <p className="text-black font-semibold">Jane Bou Jaoude</p>
+                          <p className="text-xs text-muted-foreground">Founder & CEO</p>
+                          <p className="text-gold italic text-xs mt-1">جاين بو جودة</p>
+                        </FounderContent>
                       </div>
                     </div>
 
                     {/* Certificate Number */}
                     <div className="mt-8 pt-4 border-t border-dashed border-gold/30">
                       <p className="text-xs text-muted-foreground">
-                        Certificate No: <span className="font-mono text-black">JBJ-CERT-[AUTO]</span>
+                        Certificate No: <span className="font-mono text-black">JBJ-CERT-2024-001</span>
                       </p>
                     </div>
                   </CardContent>
