@@ -12001,6 +12001,7 @@ export type Database = {
       projects: {
         Row: {
           amenities: string[] | null
+          amenities_list: Json | null
           bedrooms_max: number | null
           bedrooms_min: number | null
           community_id: string | null
@@ -12014,17 +12015,20 @@ export type Database = {
           floors: number | null
           furnished_status: string | null
           handover_date: string | null
+          highlights: Json | null
           id: string
           is_developer_direct: boolean | null
           is_featured: boolean | null
           is_offplan: boolean | null
           is_premium: boolean | null
           is_sold_out: boolean | null
+          latitude: number | null
           location: string | null
           location_description: string | null
           location_distances: Json | null
           location_headline: string | null
           location_image_url: string | null
+          longitude: number | null
           name: string
           payment_breakdown: Json | null
           payment_plan: string | null
@@ -12035,9 +12039,12 @@ export type Database = {
           size_max: number | null
           size_min: number | null
           slug: string
+          source: string | null
+          source_id: string | null
           source_url: string | null
           status: string | null
           status_label: string | null
+          units_data: Json | null
           updated_at: string
           usp_bullets: Json | null
           usp_headline: string | null
@@ -12046,6 +12053,7 @@ export type Database = {
         }
         Insert: {
           amenities?: string[] | null
+          amenities_list?: Json | null
           bedrooms_max?: number | null
           bedrooms_min?: number | null
           community_id?: string | null
@@ -12059,17 +12067,20 @@ export type Database = {
           floors?: number | null
           furnished_status?: string | null
           handover_date?: string | null
+          highlights?: Json | null
           id?: string
           is_developer_direct?: boolean | null
           is_featured?: boolean | null
           is_offplan?: boolean | null
           is_premium?: boolean | null
           is_sold_out?: boolean | null
+          latitude?: number | null
           location?: string | null
           location_description?: string | null
           location_distances?: Json | null
           location_headline?: string | null
           location_image_url?: string | null
+          longitude?: number | null
           name: string
           payment_breakdown?: Json | null
           payment_plan?: string | null
@@ -12080,9 +12091,12 @@ export type Database = {
           size_max?: number | null
           size_min?: number | null
           slug: string
+          source?: string | null
+          source_id?: string | null
           source_url?: string | null
           status?: string | null
           status_label?: string | null
+          units_data?: Json | null
           updated_at?: string
           usp_bullets?: Json | null
           usp_headline?: string | null
@@ -12091,6 +12105,7 @@ export type Database = {
         }
         Update: {
           amenities?: string[] | null
+          amenities_list?: Json | null
           bedrooms_max?: number | null
           bedrooms_min?: number | null
           community_id?: string | null
@@ -12104,17 +12119,20 @@ export type Database = {
           floors?: number | null
           furnished_status?: string | null
           handover_date?: string | null
+          highlights?: Json | null
           id?: string
           is_developer_direct?: boolean | null
           is_featured?: boolean | null
           is_offplan?: boolean | null
           is_premium?: boolean | null
           is_sold_out?: boolean | null
+          latitude?: number | null
           location?: string | null
           location_description?: string | null
           location_distances?: Json | null
           location_headline?: string | null
           location_image_url?: string | null
+          longitude?: number | null
           name?: string
           payment_breakdown?: Json | null
           payment_plan?: string | null
@@ -12125,9 +12143,12 @@ export type Database = {
           size_max?: number | null
           size_min?: number | null
           slug?: string
+          source?: string | null
+          source_id?: string | null
           source_url?: string | null
           status?: string | null
           status_label?: string | null
+          units_data?: Json | null
           updated_at?: string
           usp_bullets?: Json | null
           usp_headline?: string | null
@@ -12283,6 +12304,45 @@ export type Database = {
           identifier?: string
           request_count?: number | null
           window_start?: string | null
+        }
+        Relationships: []
+      }
+      reelly_sync_logs: {
+        Row: {
+          completed_at: string | null
+          created_by: string | null
+          errors: Json | null
+          id: string
+          projects_created: number | null
+          projects_processed: number | null
+          projects_updated: number | null
+          started_at: string | null
+          status: string | null
+          sync_type: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_by?: string | null
+          errors?: Json | null
+          id?: string
+          projects_created?: number | null
+          projects_processed?: number | null
+          projects_updated?: number | null
+          started_at?: string | null
+          status?: string | null
+          sync_type: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_by?: string | null
+          errors?: Json | null
+          id?: string
+          projects_created?: number | null
+          projects_processed?: number | null
+          projects_updated?: number | null
+          started_at?: string | null
+          status?: string | null
+          sync_type?: string
         }
         Relationships: []
       }
