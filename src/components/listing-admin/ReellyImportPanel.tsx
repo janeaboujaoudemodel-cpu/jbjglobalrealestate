@@ -644,7 +644,7 @@ export function ReellyImportPanel() {
           {devSyncResult && devSyncResult.success && devSyncResult.mode !== "test" && (
             <div className="bg-white/80 rounded-xl p-4 border border-purple-200">
               <h3 className="font-semibold text-zinc-900 mb-3">Developer Sync Results</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                 <div className="bg-purple-50 rounded-lg p-3 text-center">
                   <p className="text-xl font-bold text-purple-900">{devSyncResult.processed || 0}</p>
                   <p className="text-xs text-purple-600">Processed</p>
@@ -661,9 +661,22 @@ export function ReellyImportPanel() {
                   <p className="text-xl font-bold text-zinc-700">{devSyncResult.skipped || 0}</p>
                   <p className="text-xs text-zinc-600">Skipped</p>
                 </div>
+                <div className={`rounded-lg p-3 text-center ${devSyncResult.errors && devSyncResult.errors > 0 ? 'bg-red-50' : 'bg-zinc-50'}`}>
+                  <p className={`text-xl font-bold ${devSyncResult.errors && devSyncResult.errors > 0 ? 'text-red-600' : 'text-zinc-400'}`}>
+                    {devSyncResult.errors || 0}
+                  </p>
+                  <p className={`text-xs ${devSyncResult.errors && devSyncResult.errors > 0 ? 'text-red-500' : 'text-zinc-500'}`}>Errors</p>
+                </div>
               </div>
-              {devSyncResult.errors && devSyncResult.errors > 0 && (
-                <p className="text-sm text-red-600 mt-2">⚠ {devSyncResult.errors} errors occurred</p>
+              {devSyncResult.error_details && devSyncResult.error_details.length > 0 && (
+                <div className="mt-3">
+                  <p className="text-sm font-medium text-red-600 mb-2">Error Details:</p>
+                  <div className="max-h-32 overflow-y-auto bg-red-50 rounded-lg p-3 border border-red-200">
+                    {devSyncResult.error_details.map((err, i) => (
+                      <p key={i} className="text-xs text-red-700 py-0.5">{err}</p>
+                    ))}
+                  </div>
+                </div>
               )}
             </div>
           )}
