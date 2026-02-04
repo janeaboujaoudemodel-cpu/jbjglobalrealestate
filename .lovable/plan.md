@@ -1,249 +1,315 @@
 
-# Project Detail Page Multi-Issue Fix Plan
+# Comprehensive Project Detail & Listing Admin Fixes
 
 ## Overview
-This plan addresses 11 distinct issues on the Project Detail page (specifically the listing admin preview) affecting forms, brochure downloads, gallery display, USP section, floor plans, payment plan display, footer newsletter, and form styling.
+This plan addresses all remaining issues with the Project Detail page for Palmiera Collective and the Listing Admin interface, including brochure branding visibility, form styling, contact actions, floor plans checklist, card aspect ratio, and performance improvements.
 
 ---
 
-## Issues Identified
+## Issues to Fix
 
-### 1. Brochure Download Blocked (`ERR_BLOCKED_BY_CLIENT`)
-**Root Cause**: The brochure URL pointing to Supabase storage (`mdafrewypkkrildjgtey.supabase.co/storage/...`) is being blocked by ad-blockers/browser security as it looks like a tracking URL.
+### 1. Brochure Monogram Not Visible
+**Problem**: The current monogram (`jbj-monogram-transparent.png`) is black text on dark background, making it invisible.
 
-**Solution**: Implement a download proxy that fetches the file server-side and streams it to the client with proper headers, or use a direct download approach with proper CORS headers.
+**Solution**: Use `jbj-monogram-nobuffer.png` (the light/white version for dark backgrounds) instead.
 
-### 2. Register Interest Form - Missing Project Name Tracking
-**Current**: `ConsultationRequestForm` is used but doesn't track which specific project the user registered interest from.
-
-**Solution**: Update `ConsultationRequestForm` to accept and include `projectId` and `projectName` in the CRM lead data.
-
-### 3. Register Interest Form - Black Borders Instead of Gold
-**Current**: Form elements use black/zinc borders from `SearchableSelect` component.
-
-**Solution**: Update form styling to use gold borders (`border-gold/30` to `border-gold`) matching the champagne gradient theme.
-
-### 4. Contact Us Section - Needs Work
-**Current**: The Contact Us Directly section exists but may need styling polish.
-
-**Solution**: Verify and enhance the Contact Us section styling with consistent gold borders and champagne gradient backgrounds.
-
-### 5. Request a Callback Now Section - Inconsistent Form Styling
-**Current**: `CallToActionSection.tsx` has mixed border styling - some inputs gold, some black. Phone input shows square corners.
-
-**Solution**: Standardize all form inputs in `CallToActionSection.tsx` to use gold borders (`border-gold/30`) and consistent rounded corners.
-
-### 6. Footer Newsletter - "Stay in the Loop" Issue
-**Current**: Footer has the "Stay in the Loop" section but may need styling alignment.
-
-**Solution**: Verify footer newsletter section matches the specified design.
-
-### 7. Floor Plans Not Correct - Photos Not Showing
-**Root Cause**: `floor_plan_types` only has labels like "4 Bedroom Villas" but no `pdfUrl` or `imageUrl` attached. The FloorPlanGallery component shows "Floor plan preview not available" when no image exists.
-
-**Solution**: The extraction needs to be improved to capture floor plan PDFs. For UI, show a better placeholder and link to brochure download when floor plan PDFs are missing.
-
-### 8. Gallery Photos - Wide Gaps on Sides
-**Current**: `ImageCarousel` uses `object-contain` which shows gaps for vertical/non-16:9 images.
-
-**Solution**: Change to `object-cover` to fill the frame, potentially with zoom controls or different cropping strategies.
-
-### 9. USP Section - Not Matching Provident Style
-**Current**: USP section shows bullet points but the `usp_image_url` is null so no image is shown next to the USPs.
-
-**Solution**: 
-- When no USP image exists, use the first gallery image as fallback
-- Improve the USP section layout to better match Provident's style with image prominently displayed
-
-### 10. Payment Plan Display - Bad Messaging
-**Current**: Shows "Long headline until 2029 handover" which sounds negative.
-
-**Solution**: Reframe as positive messaging like "Benefit from extended payment terms" or "Attractive long-term payment plan".
-
-### 11. Payment Breakdown - Missing 20% On Completion
-**Current**: Shows 80/20 plan but breakdown only has `down_payment: 10%` and `during_construction: 70%` - missing the 20% on completion.
-
-**Solution**: The extraction regex needs to capture all three payment milestones. For display, if only two are captured, calculate the third from the payment plan ratio.
+**File**: `src/components/project-detail/PremiumBrochureCard.tsx`
+- Change import from `jbj-monogram-transparent.png` to `jbj-monogram-nobuffer.png`
+- This version has white/light colored letters visible on dark backgrounds
 
 ---
 
-## Technical Implementation
+### 2. Brochure Background Image
+**Problem**: Each brochure uses the project's image, but user wants a consistent Dubai downtown Burj Khalifa view.
 
-### Phase 1: Form Styling Fixes (Priority: High)
+**Solution**: Replace `projectImageUrl` usage with a hardcoded premium Dubai skyline image from assets.
 
-#### File: `src/components/ConsultationRequestForm.tsx`
-**Changes**:
-1. Add `projectId` and `projectName` props
-2. Include project context in CRM lead submission
-3. Ensure all form inputs use gold border styling
+**File**: `src/components/project-detail/PremiumBrochureCard.tsx`
+- Import a standard Burj Khalifa downtown image (use `menu-downtown-dubai-skyline.jpg` from assets)
+- Use this as the default background for all brochures
+- Keep project name/title for identification
 
-```typescript
-interface ConsultationRequestFormProps {
-  className?: string;
-  title?: string;
-  subtitle?: string;
-  projectId?: string;      // NEW
-  projectName?: string;    // NEW
+---
+
+### 3. Test Extraction - Remove "View Full Page" Button
+**Problem**: "View Full Page" button is confusing; user should click on card or "more" link instead.
+
+**Solution**: Remove the "View Full Page" button from the TestOneListingPanel.
+
+**File**: `src/components/listing-admin/TestOneListingPanel.tsx`
+- Remove lines 666-675 (the "View Full Page" button)
+
+---
+
+### 4. Add Floor Plans to Extraction Checklist
+**Problem**: Floor Plans extraction status is missing from the checklist.
+
+**Solution**: Add floor plan check to both the checklist interface and display.
+
+**File**: `src/components/listing-admin/TestOneListingPanel.tsx`
+- Add `hasFloorPlans` and `floorPlanCount` to the checklist interface
+- Parse `floor_plan_types` from the extracted data
+- Add ChecklistItem for "Floor Plans" in the checklist display
+
+---
+
+### 5. Listing Card Aspect Ratio - Vertical/Square
+**Problem**: Cards are rectangular, should match source portal's vertical/square layout.
+
+**Solution**: Change card image aspect ratio from `h-56` (rectangular) to `aspect-square` (1:1).
+
+**File**: `src/components/listing-admin/PendingImportCard.tsx`
+- Change `h-56` to `aspect-square` on the image container
+
+---
+
+### 6. Developer Name - Gold and Clickable
+**Problem**: Developer name should be gold colored and link to developer page.
+
+**Solution**: Make developer name a gold Link to `/developer/{slug}` page.
+
+**File**: `src/components/listing-admin/PendingImportCard.tsx`
+- Wrap developer name in Link component
+- Add gold styling and hover effect
+
+---
+
+### 7. Contact Section - Add Save Contact & Share Buttons
+**Problem**: Missing "Save Contact" and "Share" actions under the contact cards.
+
+**Solution**: Add two new action buttons below the existing contact cards.
+
+**File**: `src/components/project-detail/ProjectDetailLayout.tsx`
+- Add "Save Contact" button (generates vCard download)
+- Add "Share" button (uses Web Share API with fallback)
+
+---
+
+### 8. USP Section Image
+**Problem**: USP section uses first gallery image instead of the source portal's USP image.
+
+**Note**: This is already implemented correctly - fallback to first gallery image when `usp_image_url` is null. The extraction itself needs to capture the correct USP image from the source. This is an extraction issue, not a UI issue.
+
+---
+
+### 9. Performance - Listing Page Scrolling/Crashing
+**Problem**: Page reloads/crashes, slow scrolling due to real-time subscription overhead.
+
+**Solution**: Debounce the realtime subscription handler properly.
+
+**File**: `src/components/listing-admin/ProjectApprovalQueue.tsx`
+- Fix the debounce logic in the realtime subscription (current implementation doesn't properly clear timeout)
+
+---
+
+## Technical Implementation Details
+
+### File 1: `src/components/project-detail/PremiumBrochureCard.tsx`
+
+```tsx
+// Change import
+import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
+import downtownDubai from "@/assets/menu-downtown-dubai-skyline.jpg";
+
+// Use nobuffer monogram (visible on dark backgrounds)
+<img 
+  src={jbjMonogramNobuffer}  // Changed from jbjMonogramTransparent
+  alt="JBJ" 
+  className="w-full h-full object-contain"
+/>
+
+// Use consistent downtown Dubai background
+<div 
+  className="absolute inset-0 bg-cover bg-center"
+  style={{ backgroundImage: `url(${downtownDubai})` }}  // Changed from projectImageUrl
+/>
+```
+
+### File 2: `src/components/listing-admin/TestOneListingPanel.tsx`
+
+**Remove View Full Page button** (lines 666-675):
+```tsx
+// DELETE this block:
+<Link to={`/listing-admin/preview/${testResult.project.id}`}>
+  <Button
+    variant="outline"
+    size="sm"
+    className="gap-1"
+  >
+    <Eye className="w-4 h-4" />
+    View Full Page
+  </Button>
+</Link>
+```
+
+**Add Floor Plans to checklist interface**:
+```tsx
+interface TestResult {
+  // ... existing fields
+  checklist?: {
+    // ... existing fields
+    hasFloorPlans: boolean;
+    floorPlanCount: number;
+  };
 }
 ```
 
-Update the `captureLead` call to include project context.
-
-#### File: `src/components/project-detail/CallToActionSection.tsx`
-**Changes**:
-1. Standardize all Input/Select borders to gold
-2. Fix PhoneInput border radius consistency
-3. Add gold hover states
-
-Replace inconsistent styling:
+**Add floor plan parsing and checklist item**:
 ```tsx
-// Before
-<Input placeholder="..." {...field} />
+// After parsing other fields
+const floorPlanTypes: Array<{ label: string }> = parseJsonField(updatedProject.floor_plan_types, []);
+const hasFloorPlans = floorPlanTypes.length >= 1;
 
-// After  
-<Input 
-  placeholder="..." 
-  {...field} 
-  className="border-gold/30 focus:border-gold"
+// In checklist object
+const checklist = {
+  // ... existing fields
+  hasFloorPlans,
+  floorPlanCount: floorPlanTypes.length,
+};
+
+// In ChecklistItem display (after hasPaymentBreakdown)
+<ChecklistItem 
+  label="Floor Plans" 
+  passed={testResult.checklist.hasFloorPlans} 
+  detail={`${testResult.checklist.floorPlanCount} found`}
 />
 ```
 
-#### File: `src/components/ui/searchable-select.tsx`
-**Changes**:
-1. Change dark zinc styling to gold/champagne theme
-2. Update trigger button to use gold border instead of zinc
+### File 3: `src/components/listing-admin/PendingImportCard.tsx`
 
+**Square aspect ratio**:
 ```tsx
-// Before
-className="bg-zinc-900/80 border-zinc-700/50 text-white hover:bg-zinc-800"
+// Change from:
+<div className="relative h-56 bg-muted">
 
-// After
-className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-black hover:border-gold/60"
+// To:
+<div className="relative aspect-square bg-muted">
 ```
 
----
-
-### Phase 2: Gallery Image Display (Priority: High)
-
-#### File: `src/components/ImageCarousel.tsx`
-**Changes**:
-1. Change `object-contain` to `object-cover` for main image display
-2. Add proper aspect ratio handling to eliminate side gaps
-
+**Developer name as gold link**:
 ```tsx
-// Before (line ~87-91)
-<img
-  src={images[currentIndex].image_url}
-  className="max-w-full max-h-full w-full h-full object-contain"
-/>
+// Change from:
+{item.developer_name && <p className="text-sm text-gold truncate">by {item.developer_name}</p>}
 
-// After
-<img
-  src={images[currentIndex].image_url}
-  className="w-full h-full object-cover"
-/>
+// To:
+{item.developer_name && (
+  <Link 
+    to={`/developers`}  // Link to developers page (no slug available in pending imports)
+    onClick={(e) => e.stopPropagation()}
+    className="text-sm text-gold truncate hover:underline"
+  >
+    by {item.developer_name}
+  </Link>
+)}
 ```
 
----
+### File 4: `src/components/project-detail/ProjectDetailLayout.tsx`
 
-### Phase 3: USP Section Enhancement (Priority: Medium)
-
-#### File: `src/components/project-detail/ProjectDetailLayout.tsx`
-**Changes** (lines ~472-520):
-1. Use first gallery image as fallback when `usp_image_url` is null
-2. Improve layout to match Provident's style with image on left, bullets on right
-3. Add premium styling with gold accents
-
+**Add Save Contact & Share buttons** (after the 3 contact cards):
 ```tsx
-// Fallback image for USP section
-const uspImageUrl = project.usp_image_url || images[0]?.url;
-```
+import { Download, Share2, UserPlus } from "lucide-react";
 
----
-
-### Phase 4: Payment Plan Display Fix (Priority: Medium)
-
-#### File: `src/components/project-detail/ProjectDetailLayout.tsx`
-**Changes** (lines ~720-780):
-1. Improve payment plan headline messaging
-2. Auto-calculate missing payment milestone when only two are provided
-3. Reframe negative "long timeline" as positive "extended payment benefit"
-
-```tsx
-// Calculate missing on_completion if not present
-const paymentBreakdown = useMemo(() => {
-  const breakdown = project.payment_breakdown || {};
-  if (breakdown.down_payment && breakdown.during_construction && !breakdown.on_completion) {
-    // Extract percentages and calculate remainder
-    const dpPercent = parseInt(breakdown.down_payment) || 0;
-    const dcPercent = parseInt(breakdown.during_construction) || 0;
-    const remaining = 100 - dpPercent - dcPercent;
-    if (remaining > 0) {
-      return { ...breakdown, on_completion: `${remaining}%` };
-    }
-  }
-  return breakdown;
-}, [project.payment_breakdown]);
-```
-
----
-
-### Phase 5: Brochure Download Fix (Priority: High)
-
-#### File: `src/components/project-detail/PremiumBrochureCard.tsx`
-**Changes**:
-1. Implement a download handler that uses fetch + blob approach
-2. Add proper error handling for blocked URLs
-
-```tsx
-const handleDownload = async () => {
-  if (!brochureUrl) return;
+// Add utility functions
+const handleSaveContact = () => {
+  const vcard = `BEGIN:VCARD
+VERSION:3.0
+N:JBJ Global Real Estate
+FN:JBJ Global Real Estate
+ORG:JBJ Global Real Estate
+TEL;TYPE=WORK,VOICE:${CONTACT_INFO.phone}
+EMAIL:${CONTACT_INFO.email}
+URL:https://jbjglobalrealestate.lovable.app
+END:VCARD`;
   
-  try {
-    // Fetch the PDF and create blob URL
-    const response = await fetch(brochureUrl);
-    if (!response.ok) throw new Error('Download failed');
-    
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${projectName.replace(/\s+/g, '-')}-Brochure.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
-  } catch (error) {
-    // Fallback to window.open
-    window.open(brochureUrl, '_blank');
+  const blob = new Blob([vcard], { type: 'text/vcard' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'JBJ-Global-Real-Estate.vcf';
+  link.click();
+  URL.revokeObjectURL(url);
+};
+
+const handleShare = async () => {
+  const shareData = {
+    title: project.name,
+    text: `Check out ${project.name} - ${project.location || 'Dubai, UAE'}`,
+    url: window.location.href,
+  };
+  
+  if (navigator.share) {
+    try {
+      await navigator.share(shareData);
+    } catch (err) {
+      // User cancelled or error
+    }
+  } else {
+    // Fallback: copy to clipboard
+    navigator.clipboard.writeText(window.location.href);
+    toast.success("Link copied to clipboard!");
   }
 };
+
+// Add buttons row after contact cards grid
+<div className="flex justify-center gap-4 mt-6">
+  <Button
+    variant="secondary"
+    onClick={handleSaveContact}
+    className="gap-2"
+  >
+    <UserPlus className="w-4 h-4" />
+    Save Contact
+  </Button>
+  <Button
+    variant="secondary"
+    onClick={handleShare}
+    className="gap-2"
+  >
+    <Share2 className="w-4 h-4" />
+    Share
+  </Button>
+</div>
 ```
 
----
+### File 5: `src/components/listing-admin/ProjectApprovalQueue.tsx`
 
-### Phase 6: Floor Plan Section Enhancement (Priority: Medium)
-
-#### File: `src/components/project-detail/ProjectDetailLayout.tsx`
-**Changes** (lines ~522-563):
-1. When floor plan PDF is missing, show helpful message with brochure download option
-2. Improve floor plan card styling
-
----
-
-### Phase 7: Register Interest Form - Project Context (Priority: High)
-
-#### File: `src/components/project-detail/ProjectDetailLayout.tsx`
-**Changes** (lines ~819-827):
-1. Pass `projectId` and `projectName` to `ConsultationRequestForm`
-
+**Fix debounce in realtime subscription** (lines 277-303):
 ```tsx
-<ConsultationRequestForm
-  title={`Register Interest in ${project.name}`}
-  subtitle={...}
-  projectId={project.id}        // NEW
-  projectName={project.name}    // NEW
-/>
+// Fix the debounce - use useRef for timer
+const refreshTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+useEffect(() => {
+  const channel = supabase
+    .channel('pending_imports_realtime')
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'pending_project_imports',
+        filter: 'status=eq.pending'
+      },
+      () => {
+        // Clear previous timer
+        if (refreshTimerRef.current) {
+          clearTimeout(refreshTimerRef.current);
+        }
+        // Debounce rapid updates
+        refreshTimerRef.current = setTimeout(() => {
+          fetchPendingImports();
+          fetchInventoryStats();
+        }, 1500);
+      }
+    )
+    .subscribe();
+
+  return () => {
+    if (refreshTimerRef.current) {
+      clearTimeout(refreshTimerRef.current);
+    }
+    supabase.removeChannel(channel);
+  };
+}, [jobId, showAll]);
 ```
 
 ---
@@ -252,35 +318,21 @@ const handleDownload = async () => {
 
 | File | Changes |
 |------|---------|
-| `src/components/ConsultationRequestForm.tsx` | Add project context props, update CRM submission |
-| `src/components/project-detail/CallToActionSection.tsx` | Standardize gold form styling |
-| `src/components/ui/searchable-select.tsx` | Change to gold/champagne theme |
-| `src/components/ImageCarousel.tsx` | Change to `object-cover` for images |
-| `src/components/project-detail/ProjectDetailLayout.tsx` | USP fallback image, payment calculation, project context |
-| `src/components/project-detail/PremiumBrochureCard.tsx` | Blob download approach for brochure |
+| `src/components/project-detail/PremiumBrochureCard.tsx` | Use visible monogram + consistent Dubai background |
+| `src/components/listing-admin/TestOneListingPanel.tsx` | Remove "View Full Page", add Floor Plans checklist |
+| `src/components/listing-admin/PendingImportCard.tsx` | Square aspect ratio, gold developer link |
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Add Save Contact + Share buttons |
+| `src/components/listing-admin/ProjectApprovalQueue.tsx` | Fix debounce for performance |
 
 ---
 
-## Summary of Fixes
+## Summary
 
-1. **Brochure Download** → Use fetch+blob download to bypass ad-blocker
-2. **Register Interest Project Tracking** → Add projectId/projectName to CRM data
-3. **Form Gold Borders** → Update all form inputs to gold borders
-4. **Gallery Gaps** → Change object-contain to object-cover
-5. **USP Image Missing** → Use first gallery image as fallback
-6. **Payment Plan Messaging** → Reframe as positive benefits
-7. **Payment Breakdown Missing 20%** → Auto-calculate from 80/20 ratio
-8. **Floor Plans** → Better fallback when PDFs missing
-9. **SearchableSelect Styling** → Gold/champagne theme instead of zinc
-
----
-
-## Acceptance Criteria
-
-- Brochure downloads work without "ERR_BLOCKED_BY_CLIENT"
-- Register Interest form submissions include project name in CRM
-- All form inputs have consistent gold borders
-- Gallery images fill the frame without side gaps
-- USP section shows an image (fallback to gallery if needed)
-- Payment breakdown shows all three milestones (10% + 70% + 20%)
-- Floor plan section provides helpful guidance when PDFs are missing
+1. **Brochure Monogram** - Switch to `jbj-monogram-nobuffer.png` for visibility on dark backgrounds
+2. **Brochure Background** - Use consistent Dubai downtown skyline image
+3. **Remove View Full Page** - Clean up TestOneListingPanel UI
+4. **Floor Plans Checklist** - Add to extraction checklist
+5. **Card Aspect Ratio** - Change to square (1:1) like source portal
+6. **Developer Link** - Gold colored, clickable
+7. **Contact Actions** - Add Save Contact (vCard) + Share buttons
+8. **Performance** - Fix realtime subscription debounce
