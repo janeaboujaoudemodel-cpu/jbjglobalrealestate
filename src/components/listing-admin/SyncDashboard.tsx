@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -80,6 +81,7 @@ interface SyncDashboardProps {
 }
 
 export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
+  const [searchParams] = useSearchParams();
   // UI estimate only (the source website fluctuates)
   const [listingsEstimate, setListingsEstimate] = useState<number>(1336);
   const [isSyncing, setIsSyncing] = useState(false);
@@ -149,7 +151,19 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       return false;
     }
   });
-  const [activeTab, setActiveTab] = useState("sync");
+  const syncTabFromUrl = searchParams.get("syncTab");
+  const initialTab =
+    syncTabFromUrl && ["sync", "approvals", "developers", "test"].includes(syncTabFromUrl)
+      ? syncTabFromUrl
+      : "sync";
+
+  const [activeTab, setActiveTab] = useState(initialTab);
+
+  useEffect(() => {
+    if (initialTab) setActiveTab(initialTab);
+    // Only react to URL changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [syncTabFromUrl]);
   // Turbo removes UI delays and backend per-project throttling.
   const [turboMode, setTurboMode] = useState(true);
 
