@@ -51,7 +51,7 @@ export function ReellyImportPanel() {
 
     try {
       const { data, error } = await supabase.functions.invoke("reelly-scrape", {
-        body: { action: "authenticate" },
+        body: { action: "test-auth" },
       });
 
       if (error) throw error;
@@ -73,28 +73,10 @@ export function ReellyImportPanel() {
   };
 
   const handleDiscover = async () => {
-    setIsDiscovering(true);
-    setDiscoveredLinks([]);
-
-    try {
-      const { data, error } = await supabase.functions.invoke("reelly-scrape", {
-        body: { action: "discover" },
-      });
-
-      if (error) throw error;
-
-      if (data?.projectLinks) {
-        setDiscoveredLinks(data.projectLinks);
-        toast.success(`Found ${data.projectLinks.length} project links`);
-      } else {
-        toast.warning("No project links discovered");
-      }
-    } catch (err) {
-      console.error("Discovery error:", err);
-      toast.error("Failed to discover projects");
-    } finally {
-      setIsDiscovering(false);
-    }
+    // Note: Discovery is not yet implemented in the edge function
+    // For now, show the hardcoded target projects
+    toast.info("Discovery skipped - using pre-configured target projects");
+    setDiscoveredLinks(TARGET_PROJECTS.map(p => `https://reelly.ai/off-plan/${p.toLowerCase().replace(/\s+/g, '-')}`));
   };
 
   const handleImport = async () => {
