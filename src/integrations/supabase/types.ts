@@ -2743,6 +2743,42 @@ export type Database = {
           },
         ]
       }
+      crm_action_logs: {
+        Row: {
+          action_type: string
+          created_at: string
+          employee_id: string | null
+          id: string
+          lead_id: string | null
+          notes: string | null
+          target_contact: string | null
+          target_name: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_type: string
+          created_at?: string
+          employee_id?: string | null
+          id?: string
+          lead_id?: string | null
+          notes?: string | null
+          target_contact?: string | null
+          target_name?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          created_at?: string
+          employee_id?: string | null
+          id?: string
+          lead_id?: string | null
+          notes?: string | null
+          target_contact?: string | null
+          target_name?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       crm_activities: {
         Row: {
           activity_type: Database["public"]["Enums"]["crm_activity_type"]
@@ -3078,6 +3114,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      crm_chat_messages: {
+        Row: {
+          channel_id: string
+          created_at: string
+          id: string
+          is_from_current_user: boolean | null
+          message: string
+          sender_id: string
+          sender_name: string
+        }
+        Insert: {
+          channel_id: string
+          created_at?: string
+          id?: string
+          is_from_current_user?: boolean | null
+          message: string
+          sender_id: string
+          sender_name: string
+        }
+        Update: {
+          channel_id?: string
+          created_at?: string
+          id?: string
+          is_from_current_user?: boolean | null
+          message?: string
+          sender_id?: string
+          sender_name?: string
+        }
+        Relationships: []
       }
       crm_email_campaigns: {
         Row: {

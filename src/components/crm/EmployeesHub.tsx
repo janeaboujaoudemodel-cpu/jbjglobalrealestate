@@ -35,6 +35,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
+import { useCRMActionLog } from '@/hooks/useCRMActionLog';
 import CVCenter from './CVCenter';
 
 // Import team members from centralized config
@@ -263,6 +264,8 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
   const [cvFilter, setCvFilter] = useState<string>('all');
   const [cvCategoryFilter, setCvCategoryFilter] = useState<string>('all');
   const [cvGenderFilter, setCvGenderFilter] = useState<string>('all');
+  
+  const { logAction } = useCRMActionLog();
 
   const allBrokers = brokers.length > 0 ? brokers : SAMPLE_BROKERS;
   // Use team members from centralized config for accurate counts
@@ -449,6 +452,13 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
   const handleChat = (employee: Employee) => {
     // Open email chat for employees
     if (employee.email) {
+      logAction({
+        actionType: 'chat',
+        targetName: employee.name,
+        targetContact: employee.email,
+        employeeId: employee.id,
+        notes: `Initiated chat with ${employee.name}`,
+      });
       window.location.href = `mailto:${employee.email}?subject=Chat with ${employee.name}`;
     } else {
       toast.info(`${employee.name} doesn't have contact info listed`);
@@ -456,12 +466,25 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
   };
 
   const handleCall = (employee: Employee) => {
-    // Redirect to company number for all calls
+    logAction({
+      actionType: 'call',
+      targetName: employee.name,
+      targetContact: '+971565911000',
+      employeeId: employee.id,
+      notes: `Called company line for ${employee.name}`,
+    });
     window.location.href = `tel:+971565911000`;
   };
 
   const handleEmail = (employee: Employee) => {
     if (employee.email) {
+      logAction({
+        actionType: 'email',
+        targetName: employee.name,
+        targetContact: employee.email,
+        employeeId: employee.id,
+        notes: `Sent email to ${employee.name}`,
+      });
       window.location.href = `mailto:${employee.email}`;
     } else {
       toast.info(`${employee.name} doesn't have an email listed`);
@@ -469,8 +492,14 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
   };
 
   const handleVideoMeeting = (employee: Employee) => {
-    // Open video meeting link or calendar
     if (employee.email) {
+      logAction({
+        actionType: 'video',
+        targetName: employee.name,
+        targetContact: employee.email,
+        employeeId: employee.id,
+        notes: `Started video meeting with ${employee.name}`,
+      });
       window.open(`https://meet.google.com/new?authuser=${employee.email}`, '_blank');
     } else {
       toast.info('Video meeting requires an email address. Feature coming soon.');
