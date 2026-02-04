@@ -1,219 +1,272 @@
 
-# Enhanced Reelly-Style Project Detail Layout
+
+# Provident Extraction & Reelly Layout Alignment + Form Fixes
 
 ## Overview
-This plan enhances the project detail pages to fully replicate Reelly's project listing layout, optimized for investors (excluding commission and broker information). The implementation builds upon the existing hybrid design while adding missing Reelly-style sections.
+This plan addresses three interconnected issues:
+1. **Provident extraction alignment** - Ensure extracted data (FAQ, location distances, floor plans) flows correctly through the full pipeline and displays in the new Reelly-style layout sections
+2. **Test Panel display fixes** - Show FAQ, location distances, and floor plan data in the test extraction result card
+3. **Form fixes across all site forms** - Address any form styling/functionality issues
+
+---
 
 ## Analysis Summary
 
-### What Reelly Provides (from API Documentation)
-Based on the Reelly API documentation, their platform offers:
+### Current Architecture
+The extraction pipeline works as follows:
 
-**Volume of Information:**
-- Names of projects / developers
-- Photo / video / PDF presentations  
-- Typical layouts / floor plans / prices
-- Facilities / apartment filling (amenities)
-- Placement on the map / master plan
-- Payment Plan
-- Inventory overview
-- House details
-- Project Description
-- Date of project addition / update
+```text
+Source URL → Firecrawl Scrape → pagedata-detail.ts / extract.ts
+                                       ↓
+                              pending_project_imports table
+                                       ↓
+                              Approval (bulk-approve-imports)
+                                       ↓
+                              projects table + project_images + project_documents
+                                       ↓
+                              useProjects hook → ProjectDetailLayout
+```
 
-**For Investors (what we need):**
-- Unit-level inventory with sizes, prices, availability
-- Construction progress timeline with milestones
-- Project media (videos, virtual tours, 3D assets)
-- Investment metrics (ROI, rental yield estimates)
-- Payment plan breakdown
-- Floor plan types and PDFs
-- Location with distances to key places
+### Data Fields Being Extracted
+The shared extraction module (`_shared/provident/extract.ts`) already extracts:
+- `faqs` - Array of {question, answer}
+- `locationDistances` - Array of {label, time}
+- `floorPlanTypes` - Array of {label, pdfUrl?}
+- `paymentBreakdown` - Object with down_payment, during_construction, on_completion
+- `uspBullets`, `locationHeadline`, `locationDescription`, `amenities`
 
-### Already Implemented
-Your project detail pages already have:
-1. **UnitInventorySection** - Unit types with sizes, prices, availability badges
-2. **ConstructionTimelineSection** - Progress bar, milestones, visual timeline
-3. **ProjectMediaSection** - YouTube/Vimeo video embedding, virtual tour modals
-4. **InvestmentMetricsSection** - ROI, rental yield, estimated annual rental
+### Identified Issues
 
-### Missing/Enhancement Needed
-To fully match Reelly's layout, the following additions are needed:
+1. **TestOneListingPanel.tsx** (lines 68-97): Shows checklist but does NOT display the actual extracted data (FAQs, distances, floor plans) in a visible section - only shows boolean/count checks
+
+2. **batch-extract-pending/index.ts**: Correctly extracts and saves all fields to `pending_project_imports`
+
+3. **bulk-approve-imports/index.ts**: Correctly copies all extended fields to `projects` table
+
+4. **ProjectDetail.tsx**: Correctly maps all fields from hook to layout
+
+5. **ProjectDetailLayout.tsx**: Has sections for FAQs, Location, Floor Plans but they depend on data being present
 
 ---
 
 ## Implementation Plan
 
-### 1. Developer Information Section (New)
-Add a dedicated section highlighting developer information with:
-- Developer name and logo
-- Link to developer profile page
-- Number of projects by this developer
-- Trust indicators (established date, project count)
+### Part 1: Fix Test Panel to Display Extracted Data
 
-### 2. Project Key Facts Bar (Enhancement)
-Create a compact "quick facts" horizontal bar showing:
-- Property type (Apartments, Villas, Townhouses)
-- Total units count
-- Building floors
-- Availability status badge
-- Launch/update date
+**File: `src/components/listing-admin/TestOneListingPanel.tsx`**
 
-### 3. Enhanced Payment Plan Visualization (Enhancement)
-Improve the payment plan section with:
-- Visual pie chart or progress segments showing payment breakdown
-- Payment milestones timeline (e.g., 20% on booking, 40% during construction, 40% on handover)
-- Post-handover payment option indicator if available
+Add visual display sections for extracted data in the test result card:
 
-### 4. Master Plan Section (New)
-Add a master plan visualization section:
-- Display master plan image if available
-- Interactive markers for key facilities within the community
-- Community highlights and nearby developments
+1. Add a "Extracted Data Preview" section after the checklist showing:
+   - FAQs list (question/answer pairs)
+   - Location distances list (place/time pairs)
+   - Floor plan types list
+   - Payment breakdown visualization
+   - USP bullets list
+   - Amenities list
 
-### 5. 3D Assets/Renders Gallery (Enhancement)
-Enhance the gallery section to categorize images:
-- Exterior renders tab
-- Interior renders tab  
-- Amenities tab
-- Location/aerial views tab
-- 3D walkthrough link if available
+2. Parse and display these fields from `testResult.project`:
+   - `faqs` - Show in accordion or list format
+   - `location_distances` - Show as icon + label + time
+   - `floor_plan_types` (from `floorPlanTypes` parse) - Show as chips/badges
+   - `payment_breakdown` - Show as milestone cards
+   - `usp_bullets` - Show as bullet list
+   - `amenities_list` - Show as tag cloud
 
-### 6. Key Distances Display (Enhancement)
-Improve the location distances section with:
-- Icon-based display (airport, metro, mall, beach, school)
-- Driving time vs walking time
-- Map visualization with distance markers
+### Part 2: Verify Extraction Pipeline for Missing Fields
 
-### 7. House Details Section (New)
-Add a comprehensive "House Details" or "Project Specifications" section:
-- Building specifications (floors, total units)
-- Unit specifications (ceiling height, balcony sizes)
-- Finishing standards
-- Parking details
-- Service charges
+**File: `supabase/functions/_shared/provident/extract.ts`**
 
-### 8. Data Freshness Indicator (New)
-Add a subtle indicator showing:
-- Last updated date
-- Data source indicator
+Review and enhance extraction patterns:
+
+1. **FAQs extraction** (lines 523-570): Currently looks for "Useful Information", "FAQ", "FAQs" headings
+   - Add fallback patterns for "Q&A", "Questions & Answers"
+   - Improve bold question pattern matching
+
+2. **Location distances** (lines 449-492): Currently handles "N Minutes – Place" patterns
+   - Verify patterns match current Provident HTML structure
+   - Add debug logging for extraction success/failure
+
+3. **Floor plan types** (lines 373-425): Currently looks for "Floorplans" section
+   - Add validation to ensure floor plan types aren't confused with location data
+   - Improve bedroom pattern matching (Studio, 1BR, 2BR, etc.)
+
+**File: `supabase/functions/_shared/provident/pagedata-detail.ts`**
+
+Verify page-data.json parsing:
+
+1. Check if `faqs`, `locationDistances`, `floorPlanTypes` are being extracted from Gatsby JSON
+2. Add fallback paths for alternative JSON structures
+
+### Part 3: Form Fixes Across All Site Forms
+
+Based on the codebase, the forms that need attention include:
+
+1. **LeadCaptureModal.tsx** - Download gate form (brochure/floor plan/payment plan)
+2. **CallToActionSection.tsx** - Project inquiry form
+3. **ConsultationRequestForm.tsx** - Consultation booking form
+4. **MeetingBookingModal.tsx** - Meeting scheduling form
+5. **RequestValuation.tsx** - Property valuation form
+6. **JoinInvestorList.tsx** - Investor signup form
+7. **LandlordListForm.tsx** - Landlord registration form
+8. **Input.tsx** - Base input component
+
+**Common Issues to Address:**
+- Input text visibility (already has "text-black" lock in Input.tsx)
+- Form validation feedback styling
+- Mobile responsiveness
+- Loading states during submission
+- Success/error toast messages
 
 ---
 
-## Technical Implementation
+## Technical Implementation Details
 
-### Database Fields (Already Available)
-All required fields are already in the database:
-- `unit_types` (jsonb)
-- `construction_progress` (integer)
-- `construction_start_date`, `expected_completion` (text)
-- `video_url`, `virtual_tour_url` (text)
-- `roi_estimate`, `rental_yield_estimate` (numeric)
-- `total_units`, `available_units` (integer)
-- `import_source`, `external_id` (text)
+### 1. TestOneListingPanel Enhancements
 
-### New Components to Create
-1. `DeveloperInfoCard.tsx` - Compact developer information card
-2. `QuickFactsBar.tsx` - Horizontal quick facts display
-3. `PaymentPlanVisualization.tsx` - Visual payment breakdown
-4. `MasterPlanSection.tsx` - Master plan display
-5. `HouseDetailsSection.tsx` - Project specifications
-6. `DataFreshnessIndicator.tsx` - Update timestamp display
-
-### Component Updates
-1. `ProjectDetailLayout.tsx` - Integrate new sections
-2. `ProjectDetailData` type - Add any missing fields
-3. `useProjects.ts` - Ensure all fields are fetched
-
-### Files to Create
-```text
-src/components/project-detail/DeveloperInfoCard.tsx
-src/components/project-detail/QuickFactsBar.tsx
-src/components/project-detail/PaymentPlanVisualization.tsx
-src/components/project-detail/MasterPlanSection.tsx
-src/components/project-detail/HouseDetailsSection.tsx
-src/components/project-detail/DataFreshnessIndicator.tsx
+```tsx
+// Add after the checklist section (around line 500+)
+// New section: Extracted Data Preview
+{testResult.project && (
+  <Card className="border-zinc-200 mt-4">
+    <CardHeader>
+      <CardTitle>Extracted Data Preview</CardTitle>
+    </CardHeader>
+    <CardContent>
+      {/* FAQs */}
+      {testResult.project.faqs?.length > 0 && (
+        <div className="mb-4">
+          <h4>FAQs ({testResult.project.faqs.length})</h4>
+          {testResult.project.faqs.map((faq, i) => (
+            <div key={i}>
+              <strong>{faq.question}</strong>
+              <p>{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      )}
+      
+      {/* Location Distances */}
+      {testResult.project.location_distances?.length > 0 && (
+        <div className="mb-4">
+          <h4>Location Distances ({testResult.project.location_distances.length})</h4>
+          {testResult.project.location_distances.map((d, i) => (
+            <div key={i}>{d.time} - {d.label}</div>
+          ))}
+        </div>
+      )}
+      
+      {/* Floor Plans */}
+      {testResult.checklist?.floorPlanCount > 0 && (
+        <div>Floor Plan Types: {testResult.checklist.floorPlanCount}</div>
+      )}
+    </CardContent>
+  </Card>
+)}
 ```
 
-### Files to Update
-```text
-src/components/project-detail/ProjectDetailLayout.tsx
-src/pages/ProjectDetail.tsx
+### 2. Extraction Pattern Improvements
+
+**extract.ts - Enhanced FAQ extraction:**
+```typescript
+// Add more heading variations
+const faqHeadings = [
+  "Useful Information", 
+  "FAQ", 
+  "FAQs", 
+  "Frequently Asked Questions", 
+  "Q&A",
+  "Questions and Answers",
+  "Common Questions"
+];
+
+// Add pattern for colon-separated Q/A
+// Pattern 3: "Q: Question\nA: Answer"
+const colonPattern = /Q:\s*([^\n]+)\s*\n+A:\s*([^\n]+)/gi;
+```
+
+**extract.ts - Enhanced location distances:**
+```typescript
+// Add more distance patterns
+// Pattern 4: "Place - N minutes" (reversed order)
+const distPattern4 = /^-\s+([^–—\-]+?)\s*[–—\-]\s*(\d+\s+Minutes?)/gim;
+
+// Pattern 5: "N km to Place"
+const distPattern5 = /^-?\s*(\d+\s*km)\s+(?:to|from)\s+(.+)/gim;
+```
+
+### 3. Form Styling Consistency
+
+**Shared form styling to apply:**
+```tsx
+// Ensure all form inputs use the locked Input component
+// Input.tsx already has: "text-black focus:text-black"
+
+// For select dropdowns, ensure similar styling:
+"text-black bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]"
+
+// For textareas:
+"text-black placeholder:text-muted-foreground"
 ```
 
 ---
 
-## Section Order (Matching Reelly Flow)
+## Files to Modify
 
-1. **Hero** - Full-screen image with project name, price, developer
-2. **Quick Facts Bar** - Property type, units, status (NEW)
-3. **Details** - About section with description
-4. **Gallery** - Categorized image gallery
-5. **Units & Availability** - Unit types grid (existing)
-6. **Construction Progress** - Timeline and milestones (existing)
-7. **Developer Info** - Developer card (NEW)
-8. **USP Highlights** - Unique selling points
-9. **Floor Plans** - Floor plan types and downloads
-10. **House Details** - Specifications (NEW)
-11. **Amenities** - Facilities list
-12. **Media** - Video and virtual tour (existing)
-13. **Location** - Map and distances
-14. **Master Plan** - Community layout (NEW)
-15. **Brochure** - Document download
-16. **Payment Plan** - Visual breakdown (ENHANCED)
-17. **Investment Metrics** - ROI and yields (existing)
-18. **FAQ/Useful Info** - Common questions
-19. **AI Analyzer** - Market analysis
-20. **Mortgage Calculator** - Financing tool
-21. **Contact/Inquiry** - Lead capture
+### New/Modified Files:
 
----
+1. **`src/components/listing-admin/TestOneListingPanel.tsx`**
+   - Add extracted data preview section
+   - Display FAQs, location distances, floor plans, payment breakdown
+   - Add visual indicators for data completeness
 
-## Visual Design Guidelines
+2. **`supabase/functions/_shared/provident/extract.ts`**
+   - Enhance FAQ extraction patterns
+   - Enhance location distance patterns
+   - Add debug logging
 
-Following your existing premium design system:
-- **Layer 3 cards** (`jj-card-inner`) for all sections
-- **Gold accents** for icons and highlights
-- **Border styling**: `border-gold/30` with hover state `border-gold/60`
-- **Typography**: Consistent with existing `text-h3-sm` for section headers
-- **Spacing**: `mb-12` between major sections
+3. **`supabase/functions/_shared/provident/pagedata-detail.ts`**
+   - Verify extraction paths for Gatsby JSON
+   - Add fallback extraction logic
+
+4. **`src/components/project-detail/LeadCaptureModal.tsx`**
+   - Review form styling consistency
+
+5. **`src/components/project-detail/CallToActionSection.tsx`**
+   - Review form styling consistency
+
+6. **`src/components/ConsultationRequestForm.tsx`**
+   - Review form styling consistency
+
+7. **`src/components/MeetingBookingModal.tsx`**
+   - Review form styling consistency
 
 ---
 
-## Data Mapping for Future API Integration
+## Deployment Steps
 
-When Reelly API is connected, the following fields will be populated:
+1. Deploy updated edge functions:
+   - `batch-extract-pending`
+   - (pagedata-detail.ts and extract.ts are shared, auto-deployed)
 
-| Reelly API Field | Database Column | Component |
-|------------------|-----------------|-----------|
-| `project.name` | `name` | Hero |
-| `project.developer` | `developer_id` (join) | DeveloperInfoCard |
-| `project.units` | `unit_types` | UnitInventorySection |
-| `project.constructionProgress` | `construction_progress` | ConstructionTimelineSection |
-| `project.videos` | `video_url` | ProjectMediaSection |
-| `project.virtualTour` | `virtual_tour_url` | ProjectMediaSection |
-| `project.roi` | `roi_estimate` | InvestmentMetricsSection |
-| `project.rentalYield` | `rental_yield_estimate` | InvestmentMetricsSection |
-| `project.paymentPlan` | `payment_breakdown` | PaymentPlanVisualization |
+2. Test extraction with the "Test One Listing" panel:
+   - Verify FAQs appear in result card
+   - Verify location distances appear
+   - Verify floor plan types appear
 
----
+3. Run extraction on a fresh listing to validate full pipeline
 
-## Benefits for Investors
-
-This layout is optimized for investor needs:
-- **Quick unit availability** - See what's available at a glance
-- **Construction transparency** - Track project progress
-- **Investment potential** - ROI and yield estimates prominently displayed
-- **Payment flexibility** - Clear payment plan visualization
-- **Due diligence** - All specifications in one place
-- **No broker clutter** - Commission info excluded
+4. Check form inputs across site for consistent styling
 
 ---
 
-## Estimated Effort
+## Success Criteria
 
-- **New Components**: 6 components (~2-3 hours)
-- **Layout Integration**: Update ProjectDetailLayout (~1 hour)
-- **Testing & Polish**: Visual refinements (~1 hour)
+1. **Test Panel**: Shows extracted FAQs, location distances, floor plans, payment breakdown, USPs, and amenities in the result card (not just checkmarks)
 
-Total: ~4-5 hours of implementation work
+2. **Extraction**: Successfully extracts all Reelly-compatible fields from Provident pages
+
+3. **Live Project Pages**: All sections display correctly with extracted data
+
+4. **Forms**: All input fields have consistent black text on cream background, proper focus states, and work correctly on mobile
+
