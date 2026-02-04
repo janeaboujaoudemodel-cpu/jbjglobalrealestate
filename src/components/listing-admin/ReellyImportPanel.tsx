@@ -16,14 +16,20 @@ import { Link } from "react-router-dom";
 interface ApiSyncResult {
   success: boolean;
   total_available?: number;
+  // Aggregated totals (computed client-side during full sync)
   total_fetched?: number;
   total_published?: number;
+  // Per-page values returned by backend
+  page_fetched?: number;
+  page_published?: number;
   inserted?: number;
   updated?: number;
   skipped?: number;
   errors?: string[];
   message?: string;
   error?: string;
+  next_cursor?: string | null;
+  done?: boolean;
 }
 
 export function ReellyImportPanel() {
@@ -33,6 +39,7 @@ export function ReellyImportPanel() {
   const [apiConnected, setApiConnected] = useState<boolean | null>(null);
   const [syncResult, setSyncResult] = useState<ApiSyncResult | null>(null);
   const [totalProjects, setTotalProjects] = useState<number | null>(null);
+  const [syncProgress, setSyncProgress] = useState<{ fetched: number; total: number } | null>(null);
 
   // Test API Connection
   const handleTestApiConnection = async () => {
@@ -67,21 +74,71 @@ export function ReellyImportPanel() {
   const handleSyncProjects = async (fullSync: boolean = false) => {
     setIsSyncing(true);
     setSyncResult(null);
+    setSyncProgress(null);
 
     try {
-      const { data, error } = await supabase.functions.invoke("reelly-api-sync", {
-        body: { action: "sync", fullSync, limit: fullSync ? undefined : 100 },
-      });
+      // IMPORTANT: Full sync can take several minutes; do it in small pages to avoid browser timeouts.
+      const pageSize = fullSync ? 50 : 100;
+      let cursor: string | null = null;
+      let safety = 0;
 
-      if (error) throw error;
+      let aggregated: ApiSyncResult = {
+        success: true,
+        total_available: totalProjects ?? undefined,
+        total_fetched: 0,
+        total_published: 0,
+        inserted: 0,
+        updated: 0,
+        skipped: 0,
+        errors: [],
+      };
 
-      setSyncResult(data);
-      
-      if (data?.success) {
-        toast.success(data.message || "Sync completed!");
-      } else {
-        toast.error(data?.error || "Sync failed");
-      }
+      do {
+        const { data, error } = await supabase.functions.invoke("reelly-api-sync", {
+          body: {
+            action: "sync",
+            limit: pageSize,
+            cursor,
+            // legacy flag (ignored server-side but harmless)
+            fullSync,
+          },
+        });
+
+        if (error) throw error;
+        if (!data?.success) throw new Error(data?.error || "Sync failed");
+
+        aggregated = {
+          ...aggregated,
+          total_available: data.total_available ?? aggregated.total_available,
+          total_fetched: (aggregated.total_fetched || 0) + (data.page_fetched || 0),
+          total_published: (aggregated.total_published || 0) + (data.page_published || 0),
+          inserted: (aggregated.inserted || 0) + (data.inserted || 0),
+          updated: (aggregated.updated || 0) + (data.updated || 0),
+          skipped: (aggregated.skipped || 0) + (data.skipped || 0),
+          errors: [...(aggregated.errors || []), ...(data.errors || [])].slice(0, 10),
+          message: data.message,
+          next_cursor: data.next_cursor,
+          done: data.done,
+        };
+
+        setSyncResult(aggregated);
+
+        if (aggregated.total_available && aggregated.total_fetched != null) {
+          setSyncProgress({ fetched: aggregated.total_fetched, total: aggregated.total_available });
+        }
+
+        cursor = data.next_cursor ?? null;
+
+        // Quick sync = one page only
+        if (!fullSync) break;
+
+        safety++;
+        if (safety > 200) {
+          throw new Error("Sync aborted (too many pages). Please contact support.");
+        }
+      } while (cursor);
+
+      toast.success(fullSync ? "Full sync completed!" : (aggregated.message || "Sync completed!"));
     } catch (err: any) {
       console.error("Sync error:", err);
       toast.error(err.message || "Failed to sync projects");
@@ -90,6 +147,11 @@ export function ReellyImportPanel() {
       setIsSyncing(false);
     }
   };
+
+  const syncPercent =
+    syncProgress && syncProgress.total > 0
+      ? Math.min(100, Math.round((syncProgress.fetched / syncProgress.total) * 100))
+      : undefined;
 
   return (
     <div className="space-y-6">
@@ -202,8 +264,14 @@ export function ReellyImportPanel() {
                 <RefreshCw className="h-5 w-5 text-emerald-600 animate-spin" />
                 <span className="font-medium text-zinc-900">Syncing projects from Reelly API...</span>
               </div>
-              <Progress value={undefined} className="h-2" />
-              <p className="text-sm text-zinc-500 mt-2">This may take a few minutes for full sync</p>
+              <Progress value={syncPercent} className="h-2" />
+              {syncProgress ? (
+                <p className="text-sm text-zinc-500 mt-2">
+                  Fetched {syncProgress.fetched.toLocaleString()} / {syncProgress.total.toLocaleString()} ({syncPercent}%)
+                </p>
+              ) : (
+                <p className="text-sm text-zinc-500 mt-2">Starting sync…</p>
+              )}
             </div>
           )}
 
