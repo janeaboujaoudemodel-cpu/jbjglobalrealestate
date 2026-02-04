@@ -16,6 +16,7 @@ export const defaultFilters: FilterState = {
   emirate: null,
   trendingArea: null,
   furnishedStatus: null,
+  saleStatus: null,
   views: [],
   amenities: [],
   facilities: [],
@@ -183,6 +184,15 @@ export function useFilteredProjects(
       // Furnished status filter
       if (filters.furnishedStatus && project.furnished_status !== filters.furnishedStatus) {
         return false;
+      }
+
+      // Sale status filter (matches status_label column)
+      if (filters.saleStatus) {
+        const projectSaleStatus = project.status_label?.toLowerCase() || '';
+        const filterStatus = filters.saleStatus.toLowerCase();
+        if (!projectSaleStatus.includes(filterStatus)) {
+          return false;
+        }
       }
 
       // Views filter (any match)

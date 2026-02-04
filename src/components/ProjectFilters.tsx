@@ -39,6 +39,7 @@ export interface FilterState {
   emirate: string | null;
   trendingArea: string | null;
   furnishedStatus: string | null; // 'furnished' | 'semi-furnished' | 'unfurnished'
+  saleStatus: string | null; // 'Announced' | 'On Sale' | 'Out of Stock' | 'Presale (EOI)' | 'Start of Sales'
   views: string[];
   amenities: string[];
   facilities: string[];
@@ -250,6 +251,7 @@ const ProjectFilters = ({
       emirate: null,
       trendingArea: null,
       furnishedStatus: null,
+      saleStatus: null,
       views: [],
       amenities: [],
       facilities: [],

@@ -97,6 +97,7 @@ const defaultExtendedFilters: ExtendedFilterState = {
   bathroomsMin: null,
   completionStatus: null,
   investmentType: null,
+  saleStatus: null,
 };
 
 const PROPERTY_TYPES = [
@@ -114,6 +115,16 @@ const COMPLETION_STATUS = [
   { value: "ready", label: "Ready to Move" },
   { value: "off-plan", label: "Off-Plan" },
   { value: "under-construction", label: "Under Construction" },
+];
+
+// Sale status options from Reelly API
+const SALE_STATUS = [
+  { value: "all", label: "All Sale Statuses" },
+  { value: "Announced", label: "Announced" },
+  { value: "On Sale", label: "On Sale" },
+  { value: "Out of Stock", label: "Out of Stock" },
+  { value: "Presale (EOI)", label: "Presale (EOI)" },
+  { value: "Start of Sales", label: "Start of Sales" },
 ];
 
 const INVESTMENT_TYPES = [
@@ -322,6 +333,7 @@ const Properties = () => {
     filters.bathroomsMin !== null,
     filters.completionStatus !== null,
     filters.investmentType !== null,
+    filters.saleStatus !== null,
   ].filter(Boolean).length;
 
   // Dynamic SEO based on transaction type per Master Blueprint
@@ -817,6 +829,27 @@ const Properties = () => {
                           {INVESTMENT_TYPES.map((type) => (
                             <SelectItem key={type.value} value={type.value} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
                               {type.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Sale Status */}
+                    <div>
+                      <label className="text-sm text-gold font-medium mb-2 block">Sale Status</label>
+                      <Select
+                        value={filters.saleStatus || "all"}
+                        onValueChange={(value) => updateFilter("saleStatus", value === "all" ? null : value)}
+                      >
+                        <SelectTrigger className="w-full h-12 bg-[#F5F0E6] border-gold/30 text-black">
+                          <CheckCircle className="w-4 h-4 mr-2 text-gold" />
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white border-gold/30">
+                          {SALE_STATUS.map((status) => (
+                            <SelectItem key={status.value} value={status.value} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
+                              {status.label}
                             </SelectItem>
                           ))}
                         </SelectContent>

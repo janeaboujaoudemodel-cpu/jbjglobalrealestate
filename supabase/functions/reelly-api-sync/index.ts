@@ -86,14 +86,31 @@ function mapConstructionStatus(status: string): string {
   return statusMap[status] || status;
 }
 
+// Map sale status from API to normalized database value
 function mapSaleStatus(status: string): string | null {
+  if (!status) return null;
+  
   const statusMap: Record<string, string> = {
-    'out_of_stock': 'Sold Out',
-    'available': 'Available',
-    'coming_soon': 'Coming Soon',
-    'limited': 'Limited Units',
+    // Exact matches from Reelly API
+    "Announced": "Announced",
+    "On Sale": "On Sale",
+    "Out of Stock": "Out of Stock",
+    "Presale (EOI)": "Presale (EOI)",
+    "Start of Sales": "Start of Sales",
+    // Snake case variants
+    "announced": "Announced",
+    "on_sale": "On Sale",
+    "out_of_stock": "Out of Stock",
+    "presale_eoi": "Presale (EOI)",
+    "start_of_sales": "Start of Sales",
+    // Legacy mappings for backward compatibility
+    "available": "On Sale",
+    "coming_soon": "Announced",
+    "limited": "On Sale",
+    "sold_out": "Out of Stock",
   };
-  return statusMap[status] || null;
+  
+  return statusMap[status] || status;
 }
 
 function mapReellyToImport(project: ReellyProject) {
