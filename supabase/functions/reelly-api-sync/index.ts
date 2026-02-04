@@ -132,6 +132,27 @@ function mapReellyToImport(project: ReellyProject) {
   // Use external_id in source_url for tracking
   const externalId = `reelly_${project.id}`;
 
+  // Extract video URL from video_reviews if available
+  let videoUrl: string | null = null;
+  if (project.video_reviews && Array.isArray(project.video_reviews) && project.video_reviews.length > 0) {
+    const firstVideo = project.video_reviews[0];
+    if (typeof firstVideo === 'string') {
+      videoUrl = firstVideo;
+    } else if (firstVideo?.url) {
+      videoUrl = firstVideo.url;
+    }
+  }
+
+  // Map construction status to progress percentage estimate
+  let constructionProgress: number | null = null;
+  if (project.construction_status === 'completed' || project.construction_status === 'ready') {
+    constructionProgress = 100;
+  } else if (project.construction_status === 'under_construction') {
+    constructionProgress = 50; // Estimate mid-construction
+  } else if (project.construction_status === 'off_plan' || project.construction_status === 'pre_launch') {
+    constructionProgress = 0;
+  }
+
   return {
     name: project.name,
     slug: `${slug}-${project.id}`, // Ensure uniqueness with ID suffix
@@ -145,8 +166,15 @@ function mapReellyToImport(project: ReellyProject) {
     size_max: project.max_size > 0 ? project.max_size : null,
     floors: project.building_count > 0 ? project.building_count : null,
     handover_date: handoverDate,
+    handover_display: project.completion_date || null, // Human-readable like "DEC 2024"
     status_label: mapSaleStatus(project.sale_status) || mapConstructionStatus(project.construction_status),
     images: images.length > 0 ? images : null,
+    // Additional Reelly fields
+    total_units: project.units_count > 0 ? project.units_count : null,
+    construction_start_date: project.construction_start_date || null,
+    construction_progress: constructionProgress,
+    video_url: videoUrl,
+    managing_company: project.managing_company || null,
     // Use source_url to store external_id for deduplication
     source_url: `https://reelly.io/project/${project.id}#${externalId}`,
   };
