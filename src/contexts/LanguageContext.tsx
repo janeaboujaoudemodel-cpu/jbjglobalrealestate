@@ -12,6 +12,9 @@ import { tr } from '@/translations/tr';
 import { de } from '@/translations/de';
 import { it } from '@/translations/it';
 import { nl } from '@/translations/nl';
+import { he } from '@/translations/he';
+import { pl } from '@/translations/pl';
+import { ja } from '@/translations/ja';
 
 interface LanguageContextType {
   language: Language;
@@ -24,7 +27,7 @@ interface LanguageContextType {
 }
 
 const translations: Record<Language, Record<string, string>> = {
-  en, ar, es, fr, ru, zh, hi, fa, tr, de, it, nl
+  en, ar, es, fr, ru, zh, hi, fa, tr, de, it, nl, he, pl, ja
 };
 
 export const LanguageContext = createContext<LanguageContextType | undefined>(undefined);

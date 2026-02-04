@@ -452,6 +452,44 @@ export type Database = {
         }
         Relationships: []
       }
+      area_translations: {
+        Row: {
+          area_id: string
+          created_at: string
+          description: string | null
+          id: string
+          language_code: string
+          name: string | null
+          updated_at: string
+        }
+        Insert: {
+          area_id: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          language_code: string
+          name?: string | null
+          updated_at?: string
+        }
+        Update: {
+          area_id?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          language_code?: string
+          name?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "area_translations_area_id_fkey"
+            columns: ["area_id"]
+            isOneToOne: false
+            referencedRelation: "areas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       areas: {
         Row: {
           country: string | null
@@ -9791,6 +9829,45 @@ export type Database = {
           },
         ]
       }
+      languages: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          is_default: boolean | null
+          is_rtl: boolean | null
+          name: string
+          native_name: string | null
+          sort_order: number | null
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          is_rtl?: boolean | null
+          name: string
+          native_name?: string | null
+          sort_order?: number | null
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          is_rtl?: boolean | null
+          name?: string
+          native_name?: string | null
+          sort_order?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           age_range: string | null
@@ -12075,6 +12152,47 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "project_sync_status_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_translations: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          language_code: string
+          project_id: string
+          tagline: string | null
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          language_code: string
+          project_id: string
+          tagline?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          language_code?: string
+          project_id?: string
+          tagline?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_translations_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
