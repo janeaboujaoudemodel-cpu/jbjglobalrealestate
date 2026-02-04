@@ -5011,6 +5011,51 @@ export type Database = {
         }
         Relationships: []
       }
+      emirates: {
+        Row: {
+          country: string | null
+          created_at: string
+          id: string
+          is_active: boolean | null
+          name: string
+          ne_latitude: number | null
+          ne_longitude: number | null
+          reelly_id: number | null
+          slug: string
+          sw_latitude: number | null
+          sw_longitude: number | null
+          updated_at: string
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          name: string
+          ne_latitude?: number | null
+          ne_longitude?: number | null
+          reelly_id?: number | null
+          slug: string
+          sw_latitude?: number | null
+          sw_longitude?: number | null
+          updated_at?: string
+        }
+        Update: {
+          country?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          ne_latitude?: number | null
+          ne_longitude?: number | null
+          reelly_id?: number | null
+          slug?: string
+          sw_latitude?: number | null
+          sw_longitude?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       employee_activity_audit: {
         Row: {
           actions_performed: Json | null
