@@ -4,109 +4,90 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { RefreshCw, Download, CheckCircle, XCircle, AlertCircle, ExternalLink, Info } from "lucide-react";
+import { 
+  RefreshCw, Download, CheckCircle, XCircle, AlertCircle, 
+  ExternalLink, Info, Zap, Database, CloudDownload, Play
+} from "lucide-react";
 import { Link } from "react-router-dom";
 
-interface ImportResult {
-  name: string;
-  slug: string;
-  action: "created" | "updated";
-  id: string;
+interface ApiSyncResult {
+  success: boolean;
+  total_available?: number;
+  total_fetched?: number;
+  total_published?: number;
+  inserted?: number;
+  updated?: number;
+  skipped?: number;
+  errors?: string[];
+  message?: string;
+  error?: string;
 }
-
-interface ImportError {
-  url: string;
-  error: string;
-}
-
-interface ImportSummary {
-  processed: number;
-  created: number;
-  updated: number;
-  failed: number;
-}
-
-const TARGET_PROJECTS = [
-  "Divine Elements",
-  "The Meriva Collection",
-  "Al Hasin Residence Six",
-  "Confident Preston",
-];
 
 export function ReellyImportPanel() {
-  const [isAuthenticating, setIsAuthenticating] = useState(false);
-  const [isDiscovering, setIsDiscovering] = useState(false);
-  const [isImporting, setIsImporting] = useState(false);
-  const [authStatus, setAuthStatus] = useState<"unknown" | "success" | "failed">("unknown");
-  const [discoveredLinks, setDiscoveredLinks] = useState<string[]>([]);
-  const [importResults, setImportResults] = useState<ImportResult[]>([]);
-  const [importErrors, setImportErrors] = useState<ImportError[]>([]);
-  const [importSummary, setImportSummary] = useState<ImportSummary | null>(null);
+  // API Sync State
+  const [isTestingApi, setIsTestingApi] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [apiConnected, setApiConnected] = useState<boolean | null>(null);
+  const [syncResult, setSyncResult] = useState<ApiSyncResult | null>(null);
+  const [totalProjects, setTotalProjects] = useState<number | null>(null);
 
-  const handleTestAuth = async () => {
-    setIsAuthenticating(true);
-    setAuthStatus("unknown");
+  // Test API Connection
+  const handleTestApiConnection = async () => {
+    setIsTestingApi(true);
+    setApiConnected(null);
 
     try {
-      const { data, error } = await supabase.functions.invoke("reelly-scrape", {
-        body: { action: "test-auth" },
+      const { data, error } = await supabase.functions.invoke("reelly-api-sync", {
+        body: { action: "test" },
       });
 
       if (error) throw error;
 
       if (data?.success) {
-        setAuthStatus("success");
-        toast.success("Reelly authentication successful!");
+        setApiConnected(true);
+        setTotalProjects(data.total_available || null);
+        toast.success(`API connected! ${data.total_available} projects available`);
       } else {
-        setAuthStatus("failed");
-        toast.error("Reelly authentication failed. Check credentials.");
+        setApiConnected(false);
+        toast.error(data?.error || "API connection failed");
       }
-    } catch (err) {
-      console.error("Auth test error:", err);
-      setAuthStatus("failed");
-      toast.error("Failed to test authentication");
+    } catch (err: any) {
+      console.error("API test error:", err);
+      setApiConnected(false);
+      toast.error(err.message || "Failed to test API connection");
     } finally {
-      setIsAuthenticating(false);
+      setIsTestingApi(false);
     }
   };
 
-  const handleDiscover = async () => {
-    // Note: Discovery is not yet implemented in the edge function
-    // For now, show the hardcoded target projects
-    toast.info("Discovery skipped - using pre-configured target projects");
-    setDiscoveredLinks(TARGET_PROJECTS.map(p => `https://reelly.ai/off-plan/${p.toLowerCase().replace(/\s+/g, '-')}`));
-  };
-
-  const handleImport = async () => {
-    setIsImporting(true);
-    setImportResults([]);
-    setImportErrors([]);
-    setImportSummary(null);
+  // Sync projects from API
+  const handleSyncProjects = async (fullSync: boolean = false) => {
+    setIsSyncing(true);
+    setSyncResult(null);
 
     try {
-      const { data, error } = await supabase.functions.invoke("reelly-scrape", {
-        body: { action: "import", projectIds: discoveredLinks.length > 0 ? discoveredLinks : [] },
+      const { data, error } = await supabase.functions.invoke("reelly-api-sync", {
+        body: { action: "sync", fullSync, limit: fullSync ? undefined : 100 },
       });
 
       if (error) throw error;
 
-      if (data?.results) {
-        setImportResults(data.results);
+      setSyncResult(data);
+      
+      if (data?.success) {
+        toast.success(data.message || "Sync completed!");
+      } else {
+        toast.error(data?.error || "Sync failed");
       }
-      if (data?.errors) {
-        setImportErrors(data.errors);
-      }
-      if (data?.summary) {
-        setImportSummary(data.summary);
-        toast.success(`Import complete: ${data.summary.created} created, ${data.summary.updated} updated`);
-      }
-    } catch (err) {
-      console.error("Import error:", err);
-      toast.error("Import failed");
+    } catch (err: any) {
+      console.error("Sync error:", err);
+      toast.error(err.message || "Failed to sync projects");
+      setSyncResult({ success: false, error: err.message });
     } finally {
-      setIsImporting(false);
+      setIsSyncing(false);
     }
   };
 
@@ -114,260 +95,240 @@ export function ReellyImportPanel() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-zinc-900 mb-2">Reelly Import</h2>
+        <h2 className="text-2xl font-bold text-zinc-900 mb-2">Reelly Integration</h2>
         <p className="text-zinc-600">
-          Import projects from Reelly platform via web scraping
+          Import projects from Reelly via API or web scraping
         </p>
       </div>
 
-      {/* Solution: Get Free Reelly API Key */}
-      <Alert className="border-emerald-500 bg-emerald-50">
-        <CheckCircle className="h-4 w-4 text-emerald-600" />
-        <AlertTitle className="text-emerald-900">Solution: Get a FREE Reelly API Key</AlertTitle>
-        <AlertDescription className="text-emerald-700">
-          Reelly offers a <strong>free API key</strong> with access to 20 projects for testing.
-          <br /><br />
-          <strong>How to get started:</strong>
-          <ol className="list-decimal ml-4 mt-2 space-y-1">
-            <li>Click the link below to request your free API key</li>
-            <li>Fill out the Typeform (takes 2 minutes)</li>
-            <li>You'll receive API credentials and Swagger documentation</li>
-            <li>Come back here and we'll integrate the API</li>
-          </ol>
-          <div className="mt-4">
-            <a 
-              href="https://jtoq1zj8zqz.typeform.com/to/ztWlQc0l?plan=free" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-md font-medium hover:bg-emerald-700 transition-colors"
-            >
-              <ExternalLink className="h-4 w-4" />
-              Get Free Reelly API Key
-            </a>
+      {/* ===== API SYNC SECTION (NEW) ===== */}
+      <Card className="bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-200 shadow-lg">
+        <CardHeader>
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-emerald-500">
+              <Zap className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <CardTitle className="text-xl text-emerald-900 flex items-center gap-2">
+                Reelly API Sync
+                {apiConnected === true && <CheckCircle className="h-5 w-5 text-emerald-500" />}
+                {apiConnected === false && <XCircle className="h-5 w-5 text-red-500" />}
+              </CardTitle>
+              <CardDescription className="text-emerald-700">
+                Direct API integration — fast, reliable, complete data
+              </CardDescription>
+            </div>
           </div>
-        </AlertDescription>
-      </Alert>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* API Status */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Test Connection */}
+            <div className="bg-white/80 rounded-xl p-4 border border-emerald-200">
+              <h3 className="font-semibold text-zinc-900 mb-3 flex items-center gap-2">
+                <Database className="w-4 h-4 text-emerald-600" />
+                Step 1: Test Connection
+              </h3>
+              <Button 
+                onClick={handleTestApiConnection} 
+                disabled={isTestingApi}
+                className="w-full bg-emerald-600 hover:bg-emerald-700"
+              >
+                {isTestingApi ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                    Testing...
+                  </>
+                ) : (
+                  <>
+                    <Zap className="h-4 w-4 mr-2" />
+                    Test API Connection
+                  </>
+                )}
+              </Button>
+              {apiConnected === true && totalProjects && (
+                <div className="mt-3 p-3 bg-emerald-100 rounded-lg">
+                  <p className="text-emerald-800 text-sm font-medium">
+                    ✓ Connected to Reelly API
+                  </p>
+                  <p className="text-emerald-700 text-2xl font-bold">
+                    {totalProjects.toLocaleString()} projects available
+                  </p>
+                </div>
+              )}
+            </div>
 
-      {/* Scraping Info - deprecated */}
+            {/* Sync Projects */}
+            <div className="bg-white/80 rounded-xl p-4 border border-emerald-200">
+              <h3 className="font-semibold text-zinc-900 mb-3 flex items-center gap-2">
+                <CloudDownload className="w-4 h-4 text-emerald-600" />
+                Step 2: Sync Projects
+              </h3>
+              <div className="space-y-2">
+                <Button 
+                  onClick={() => handleSyncProjects(false)} 
+                  disabled={isSyncing || apiConnected !== true}
+                  className="w-full bg-emerald-600 hover:bg-emerald-700"
+                >
+                  {isSyncing ? (
+                    <>
+                      <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                      Syncing...
+                    </>
+                  ) : (
+                    <>
+                      <Play className="h-4 w-4 mr-2" />
+                      Quick Sync (100 projects)
+                    </>
+                  )}
+                </Button>
+                <Button 
+                  onClick={() => handleSyncProjects(true)} 
+                  disabled={isSyncing || apiConnected !== true}
+                  variant="outline"
+                  className="w-full border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Full Sync (All Projects)
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Sync Results */}
+          {isSyncing && (
+            <div className="bg-white/80 rounded-xl p-4 border border-emerald-200">
+              <div className="flex items-center gap-3 mb-3">
+                <RefreshCw className="h-5 w-5 text-emerald-600 animate-spin" />
+                <span className="font-medium text-zinc-900">Syncing projects from Reelly API...</span>
+              </div>
+              <Progress value={undefined} className="h-2" />
+              <p className="text-sm text-zinc-500 mt-2">This may take a few minutes for full sync</p>
+            </div>
+          )}
+
+          {syncResult && (
+            <div className="bg-white/80 rounded-xl p-4 border border-emerald-200">
+              <h3 className="font-semibold text-zinc-900 mb-3">Sync Results</h3>
+              
+              {syncResult.success ? (
+                <>
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+                    <div className="bg-zinc-100 rounded-lg p-3 text-center">
+                      <p className="text-xl font-bold text-zinc-900">{syncResult.total_available?.toLocaleString() || '-'}</p>
+                      <p className="text-xs text-zinc-500">Total Available</p>
+                    </div>
+                    <div className="bg-blue-50 rounded-lg p-3 text-center">
+                      <p className="text-xl font-bold text-blue-600">{syncResult.total_fetched?.toLocaleString() || '-'}</p>
+                      <p className="text-xs text-zinc-500">Fetched</p>
+                    </div>
+                    <div className="bg-emerald-50 rounded-lg p-3 text-center">
+                      <p className="text-xl font-bold text-emerald-600">{syncResult.inserted || 0}</p>
+                      <p className="text-xs text-zinc-500">New</p>
+                    </div>
+                    <div className="bg-amber-50 rounded-lg p-3 text-center">
+                      <p className="text-xl font-bold text-amber-600">{syncResult.updated || 0}</p>
+                      <p className="text-xs text-zinc-500">Updated</p>
+                    </div>
+                    <div className="bg-zinc-100 rounded-lg p-3 text-center">
+                      <p className="text-xl font-bold text-zinc-500">{syncResult.skipped || 0}</p>
+                      <p className="text-xs text-zinc-500">Skipped</p>
+                    </div>
+                  </div>
+                  
+                  <Alert className="border-emerald-300 bg-emerald-50">
+                    <CheckCircle className="h-4 w-4 text-emerald-600" />
+                    <AlertDescription className="text-emerald-700">
+                      {syncResult.message}
+                    </AlertDescription>
+                  </Alert>
+
+                  {syncResult.errors && syncResult.errors.length > 0 && (
+                    <div className="mt-4">
+                      <p className="text-sm font-medium text-amber-600 mb-2">
+                        {syncResult.errors.length} errors (showing first 10):
+                      </p>
+                      <div className="max-h-32 overflow-y-auto bg-amber-50 rounded-lg p-3 border border-amber-200">
+                        {syncResult.errors.slice(0, 10).map((err, i) => (
+                          <p key={i} className="text-xs text-amber-700 truncate">{err}</p>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <Alert className="border-red-300 bg-red-50">
+                  <XCircle className="h-4 w-4 text-red-600" />
+                  <AlertDescription className="text-red-700">
+                    {syncResult.error || "Sync failed"}
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+          )}
+
+          {/* Quick Link to Approval Queue */}
+          {syncResult?.success && (syncResult.inserted || 0) > 0 && (
+            <Alert className="border-blue-300 bg-blue-50">
+              <Info className="h-4 w-4 text-blue-600" />
+              <AlertTitle className="text-blue-900">Projects Ready for Review</AlertTitle>
+              <AlertDescription className="text-blue-700">
+                {syncResult.inserted} new projects have been added to the pending imports queue.
+                <Link 
+                  to="/listing-admin" 
+                  onClick={() => {
+                    // This will navigate to sync tab which has approval queue
+                  }}
+                  className="ml-2 font-semibold underline hover:no-underline"
+                >
+                  Go to Approval Queue →
+                </Link>
+              </AlertDescription>
+            </Alert>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Divider */}
+      <div className="relative py-4">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-zinc-300" />
+        </div>
+        <div className="relative flex justify-center">
+          <span className="bg-zinc-100 px-4 text-sm text-zinc-500">
+            Legacy Methods (Deprecated)
+          </span>
+        </div>
+      </div>
+
+      {/* ===== LEGACY SCRAPING SECTION ===== */}
       <Alert className="border-zinc-300 bg-zinc-50">
         <Info className="h-4 w-4 text-zinc-500" />
         <AlertTitle className="text-zinc-600">Web Scraping (Deprecated)</AlertTitle>
         <AlertDescription className="text-zinc-500">
-          The scraping approach below no longer works since Reelly moved to a new platform.
-          Use the official API instead for reliable data access.
+          The scraping approach no longer works since Reelly moved to a new platform.
+          Use the official API above for reliable data access.
         </AlertDescription>
       </Alert>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Target Projects */}
-        <Card className="bg-white border-zinc-200">
-          <CardHeader>
-            <CardTitle className="text-lg text-zinc-900">Target Projects</CardTitle>
-            <CardDescription>These 4 projects will be imported for testing</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-2">
-              {TARGET_PROJECTS.map((project) => (
-                <Badge key={project} variant="outline" className="text-sm border-zinc-300">
-                  {project}
-                </Badge>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Step 1: Authentication */}
-        <Card className="bg-white border-zinc-200">
-          <CardHeader>
-            <CardTitle className="text-lg text-zinc-900 flex items-center gap-2">
-              Step 1: Test Connection
-              {authStatus === "success" && <CheckCircle className="h-5 w-5 text-emerald-500" />}
-              {authStatus === "failed" && <XCircle className="h-5 w-5 text-red-500" />}
-            </CardTitle>
-            <CardDescription>
-              Verify that Firecrawl connection is working
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button 
-              onClick={handleTestAuth} 
-              disabled={isAuthenticating}
-              variant={authStatus === "success" ? "outline" : "default"}
-            >
-              {isAuthenticating ? (
-                <>
-                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                  Testing...
-                </>
-              ) : (
-                "Test Connection"
-              )}
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Step 2: Discover Projects */}
-      <Card className="bg-white border-zinc-200">
+      {/* Legacy Get API Key Card */}
+      <Card className="bg-white border-zinc-200 opacity-60">
         <CardHeader>
-          <CardTitle className="text-lg text-zinc-900">Step 2: Discover Projects</CardTitle>
-          <CardDescription>
-            Scan Reelly to find available project URLs
-          </CardDescription>
+          <CardTitle className="text-lg text-zinc-500">Need a Reelly API Key?</CardTitle>
+          <CardDescription>Get a free API key for testing (20 projects)</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <Button 
-            onClick={handleDiscover} 
-            disabled={isDiscovering}
-            variant="outline"
+        <CardContent>
+          <a 
+            href="https://jtoq1zj8zqz.typeform.com/to/ztWlQc0l?plan=free" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-zinc-600 text-white px-4 py-2 rounded-md font-medium hover:bg-zinc-700 transition-colors"
           >
-            {isDiscovering ? (
-              <>
-                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                Discovering...
-              </>
-            ) : (
-              "Discover Projects"
-            )}
-          </Button>
-
-          {discoveredLinks.length > 0 && (
-            <div className="mt-4">
-              <p className="text-sm text-zinc-600 mb-2">
-                Found {discoveredLinks.length} project links:
-              </p>
-              <div className="max-h-40 overflow-y-auto bg-zinc-50 rounded-lg p-3 border border-zinc-200">
-                {discoveredLinks.map((link, i) => (
-                  <p key={i} className="text-xs text-zinc-500 truncate">
-                    {link}
-                  </p>
-                ))}
-              </div>
-            </div>
-          )}
+            <ExternalLink className="h-4 w-4" />
+            Request Free API Key
+          </a>
         </CardContent>
       </Card>
-
-      {/* Step 3: Import */}
-      <Card className="bg-white border-zinc-200">
-        <CardHeader>
-          <CardTitle className="text-lg text-zinc-900 flex items-center gap-2">
-            Step 3: Import Projects
-            {importSummary && importSummary.failed === 0 && (
-              <CheckCircle className="h-5 w-5 text-emerald-500" />
-            )}
-            {importSummary && importSummary.failed > 0 && (
-              <AlertCircle className="h-5 w-5 text-amber-500" />
-            )}
-          </CardTitle>
-          <CardDescription>
-            Import the 4 target projects into the database
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Button 
-            onClick={handleImport} 
-            disabled={isImporting}
-          >
-            {isImporting ? (
-              <>
-                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                Importing...
-              </>
-            ) : (
-              <>
-                <Download className="h-4 w-4 mr-2" />
-                Import 4 Test Projects
-              </>
-            )}
-          </Button>
-
-          {isImporting && (
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-3/4" />
-              <Skeleton className="h-4 w-1/2" />
-            </div>
-          )}
-
-          {importSummary && (
-            <div className="grid grid-cols-4 gap-4 mt-4">
-              <div className="bg-zinc-100 rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold text-zinc-900">{importSummary.processed}</p>
-                <p className="text-xs text-zinc-500">Processed</p>
-              </div>
-              <div className="bg-emerald-50 rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold text-emerald-600">{importSummary.created}</p>
-                <p className="text-xs text-zinc-500">Created</p>
-              </div>
-              <div className="bg-blue-50 rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold text-blue-600">{importSummary.updated}</p>
-                <p className="text-xs text-zinc-500">Updated</p>
-              </div>
-              <div className="bg-red-50 rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold text-red-600">{importSummary.failed}</p>
-                <p className="text-xs text-zinc-500">Failed</p>
-              </div>
-            </div>
-          )}
-
-          {importResults.length > 0 && (
-            <div className="mt-4">
-              <p className="text-sm font-medium text-zinc-900 mb-2">Imported Projects:</p>
-              <div className="space-y-2">
-                {importResults.map((result, i) => (
-                  <div 
-                    key={i} 
-                    className="flex items-center justify-between bg-zinc-50 rounded-lg p-3 border border-zinc-200"
-                  >
-                    <div>
-                      <p className="font-medium text-zinc-900">{result.name}</p>
-                      <p className="text-xs text-zinc-500">/project/{result.slug}</p>
-                    </div>
-                    <Badge variant={result.action === "created" ? "default" : "secondary"}>
-                      {result.action}
-                    </Badge>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {importErrors.length > 0 && (
-            <div className="mt-4">
-              <p className="text-sm font-medium text-red-600 mb-2">Errors:</p>
-              <div className="space-y-2">
-                {importErrors.map((error, i) => (
-                  <div 
-                    key={i} 
-                    className="bg-red-50 rounded-lg p-3 border border-red-200"
-                  >
-                    <p className="text-xs text-zinc-500 truncate">{error.url}</p>
-                    <p className="text-sm text-red-600">{error.error}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Quick Links */}
-      {importResults.length > 0 && (
-        <Card className="bg-white border-zinc-200">
-          <CardHeader>
-            <CardTitle className="text-lg text-zinc-900">Quick Links</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-wrap gap-3">
-            <Link to="/properties">
-              <Button variant="outline" size="sm">
-                <ExternalLink className="h-4 w-4 mr-2" />
-                View Properties
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }
