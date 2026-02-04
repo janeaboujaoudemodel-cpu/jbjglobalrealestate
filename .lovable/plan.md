@@ -1,311 +1,203 @@
 
-# Sitemap Enhancement Plan: AI Tools, Careers Card, CTABand, UI Fixes & Premium Video
+# Homepage Hero Redesign & Listings Cleanup Plan
 
 ## Overview
-This plan addresses multiple enhancements to the Sitemap page including adding missing AI tools, a new Careers card, standardized CTA sections, chat support arrow removal, proper navigation arrow placement, and a premium hero video.
+This plan addresses the hero section layout refinements, color system corrections, currency/unit positioning, filter enhancements, and deletion of unapproved fake listings from the database.
 
 ---
 
-## Part 1: Add Missing AI Tools to Sitemap
+## Part 1: Hero Section Layout Adjustments
 
-### 1.1 Problem Analysis
+### 1.1 Text Order (My Recommendation)
+Based on marketing best practices, I recommend:
 
-The Sitemap's "AI & Professional Tools" section (id: "tools") currently lists only 10 tools:
-- AI Hub
-- AI Home Finder
-- Mortgage Calculator
-- Property Evaluator
-- Rental Index
-- AI Interior Design
-- Business Card Scanner
-- Documents & Spreadsheets
-- Video Meet
-- Calendar & Notes
+**Order: "Buy · Sell · Rent" FIRST (as the main headline), then "Luxury Licensed Real Estate Brokerage" below it**
 
-**Missing from `AI_TOOLS_CONFIG` (20 AI tools defined):**
-- Virtual Staging
-- Price Predictor
-- Neighborhood Insights
-- Lead Qualification
-- Follow-up Scheduler
-- Objection Handler
-- Market Report
-- Competitor Analysis
-- ROI Calculator
-- Meeting Summarizer
-- Translation Hub
-- Video Tour Script
-- Contract Reviewer
-- Document Generator
-- Property Analyzer
-- Client Matcher
-- Email Generator
-- Social Media Generator
-- Description Writer
-- Investment Report
+**Rationale:**
+- "Buy · Sell · Rent" immediately communicates what the user can DO on the platform
+- The action-oriented headline creates stronger engagement
+- "Luxury Licensed Real Estate Brokerage" serves as a credibility badge/subtitle
+- This matches patterns used by top-tier real estate portals
 
-### 1.2 Solution
+### 1.2 Layout Changes
 
-Update the "tools" hub section in `hubSections` array to include all AI tools from `AI_TOOLS_CONFIG`. Organize them logically:
-
-```typescript
-{
-  id: "tools",
-  title: "AI & Professional Tools",
-  icon: Sparkles,
-  links: [
-    // Hub Entry
-    { href: "/ai-hub", label: "AI Hub" },
-    
-    // Property Intelligence
-    { href: "/quiz", label: "AI Home Finder" },
-    { href: "/property-evaluator", label: "Property Evaluator" },
-    { href: "/mortgage-calculator", label: "Mortgage Calculator" },
-    { href: "/rental-index", label: "Rental Index" },
-    { href: "/interior-design-ai", label: "AI Interior Design" },
-    { href: "/ai-hub#virtual-staging", label: "AI Virtual Staging" },
-    { href: "/ai-hub#price-predictor", label: "AI Price Predictor" },
-    { href: "/ai-hub#neighborhood-insights", label: "AI Neighborhood Insights" },
-    { href: "/ai-hub#property-analyzer", label: "AI Property Analyzer" },
-    
-    // Lead & Sales
-    { href: "/ai-hub#lead-qualification", label: "AI Lead Qualification" },
-    { href: "/ai-hub#followup-scheduler", label: "AI Follow-up Scheduler" },
-    { href: "/ai-hub#objection-handler", label: "AI Objection Handler" },
-    { href: "/ai-hub#client-matcher", label: "AI Client Matcher" },
-    
-    // Analytics
-    { href: "/ai-hub#market-report", label: "AI Market Report" },
-    { href: "/ai-hub#competitor-analysis", label: "AI Competitor Analysis" },
-    { href: "/ai-hub#roi-calculator", label: "AI ROI Calculator" },
-    { href: "/ai-hub#investment-report", label: "AI Investment Report" },
-    
-    // Communication
-    { href: "/ai-hub#meeting-summarizer", label: "AI Meeting Summarizer" },
-    { href: "/ai-hub#translation-hub", label: "AI Translation Hub" },
-    { href: "/ai-hub#video-tour-script", label: "AI Video Tour Script" },
-    { href: "/ai-hub#email-generator", label: "AI Email Generator" },
-    { href: "/ai-hub#social-media", label: "AI Social Media" },
-    { href: "/ai-hub#description-writer", label: "AI Description Writer" },
-    
-    // Documents
-    { href: "/ai-hub#contract-reviewer", label: "AI Contract Reviewer" },
-    { href: "/ai-hub#document-generator", label: "AI Document Generator" },
-    
-    // Productivity Tools
-    { href: "/business-card-scanner", label: "Business Card Scanner" },
-    { href: "/documents", label: "Documents & Spreadsheets" },
-    { href: "/video-meeting", label: "Video Meet" },
-    { href: "/ai-calendar", label: "Calendar & Notes" },
-  ],
-},
+**Current Layout:**
 ```
+[Luxury Licensed Real Estate Brokerage] (subtitle)
+[Buy · Sell · Rent] (headline)
+[Delivered with Intelligence]
+[Search Bar]
+[Buy/Rent/Off Plan pills] (bottom-left)
+```
+
+**New Layout:**
+```
+[Buy · Sell · Rent ·] (main headline - with gold dot after Rent)
+[Luxury Licensed Real Estate Brokerage] (smaller subtitle)
+[Delivered with Intelligence]
+[Currency: AED/USD/EUR/GBP/INR/etc] [sqft/sqm] ← OUTSIDE search bar
+[Search Bar] ← pushed down slightly
+[Buy/Rent/Off Plan pills] (bottom-left, using WHITE/CHAMPAGNE active color, NOT gold)
+```
+
+### 1.3 Specific CSS/Layout Changes
+
+**File**: `src/pages/Index.tsx` (Hero content section)
+
+1. **Swap order**: Move "Buy · Sell · Rent" ABOVE "Luxury Licensed Real Estate Brokerage"
+2. **Add gold dot after Rent**: `Buy<dot>Sell<dot>Rent<dot>`
+3. **Make "Luxury Licensed Real Estate Brokerage" smaller**: Change from `text-xs sm:text-sm` to `text-[10px] sm:text-xs`
+4. **Align text left**: Change `text-center` to `text-left` on the content container
+5. **Push search bar down**: Add `mt-6 md:mt-8` margin before HeroSearchBar
+
+**File**: `src/components/home/HeroSearchBar.tsx`
+
+1. **Move Currency/Unit selectors OUTSIDE the filter bar** - Add them as pill buttons above the search bar, aligned left
+2. **Remove yellow/gold from Buy/Rent/Off Plan pills** - Use `bg-white/20 text-white` for inactive, `bg-white/90 text-black` for active (matching search bar glassmorphism)
+3. **Add more currencies**: Include GBP, INR, SAR, CNY, RUB, CAD, AUD in the currency options
+4. **Make filter more detailed**: Add property type dropdown directly in the main bar
 
 ---
 
-## Part 2: Add New "Careers" Hub Card
+## Part 2: Color System Correction
 
-### 2.1 Current State
+### 2.1 Problem
 
-A "Careers" card already exists in `hubSections` (id: "careers") with these links:
-- Join Our Team
-- Become a Broker
-- Apply as Agent
-- Marketing Positions
-- Technology Roles
-- Broker Resources
-- Training Programs
-- Meet Our Team
+The user has repeatedly stated that the "yellow gold" (`bg-gold`) is being used incorrectly for UI elements like:
+- Buy/Rent/Off Plan toggle pills
+- Currency selector active state
+- Square foot selector active state
 
-### 2.2 Enhancement
+The **correct "active color"** is the **champagne gradient** (`--jj-gradient-active`) or **primary HSL** (`--primary: 38 38% 85%`) which is a **muted champagne**, NOT bright yellow-gold.
 
-Add HR-focused messaging and CV submission emphasis. Update the links to highlight the CV submission process:
+### 2.2 Current Color Values
 
-```typescript
-{
-  id: "careers",
-  title: "Careers",
-  icon: Briefcase,
-  links: [
-    { href: "/join", label: "Submit Your CV" },  // Primary action
-    { href: "/join", label: "Join Our Team" },
-    { href: "/join?type=broker", label: "Become a Broker" },
-    { href: "/join?type=agent", label: "Apply as Agent" },
-    { href: "/join?type=marketing", label: "Marketing Positions" },
-    { href: "/join?type=tech", label: "Technology Roles" },
-    { href: "/join?type=admin", label: "Administrative Roles" },
-    { href: "/broker-toolkit", label: "Broker Resources" },
-    { href: "/broker-education", label: "Training Programs" },
-    { href: "/team", label: "Meet Our Team" },
-    { href: "/onboarding", label: "Onboarding Process" },
-  ],
-},
+```css
+/* Wrong - bright gold (yellow-ish) */
+--gold: 42 45% 59%;  /* #C8A766 - too yellow/saturated for UI toggles */
+
+/* Correct - champagne active color */
+--primary: 38 38% 85%;  /* Muted champagne - proper active state */
+--champagne-1: 39 52% 90%;
+--champagne-2: 38 38% 85%;
+--champagne-3: 38 28% 74%;
 ```
 
----
+### 2.3 Changes Required
 
-## Part 3: Add Support Ticket, Consultation Form & Contact Sections
+**File**: `src/components/home/HeroSearchBar.tsx`
 
-### 3.1 Current State
-
-The page has:
-- Legal & Support section with basic links
-- CTABand component ("Ready to Get Started?")
-
-### 3.2 Enhancement
-
-Add a new "Support & Contact" section BEFORE CTABand with three premium cards:
-
-```text
-┌─────────────────────────────────────────────────────────────────┐
-│                     SUPPORT & CONTACT                           │
-├─────────────────┬───────────────────┬───────────────────────────┤
-│ SUPPORT TICKET  │ FREE CONSULTATION │ CONTACT US               │
-│ [Headphones]    │ [Calendar]        │ [Phone]                   │
-│ Get help with   │ Book a free call  │ Reach our team           │
-│ any questions   │ with our experts  │ directly                 │
-│ [Submit Ticket] │ [Book Now]        │ [Contact]                │
-└─────────────────┴───────────────────┴───────────────────────────┘
-```
-
-**File**: `src/pages/Sitemap.tsx`
-
-Add this new section between Legal & Support and CTABand:
+Replace active states from `bg-gold` to use the glassmorphism/white-on-dark style matching the search bar:
 
 ```tsx
-{/* SUPPORT & CONTACT CARDS */}
-<section className="py-10 sm:py-12 bg-black">
-  <div className="jj-layer-2">
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className="text-center mb-8"
-    >
-      <h2 className="text-black text-xl sm:text-2xl font-bold mb-2">
-        Get <span className="text-gold">In Touch</span>
-      </h2>
-      <p className="text-zinc-600 text-sm">Choose your preferred way to connect with us</p>
-    </motion.div>
+// BEFORE (wrong)
+purpose === 'buy'
+  ? 'bg-gold text-black shadow-lg'
+  : 'bg-white/10 text-white ...'
 
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 max-w-4xl mx-auto">
-      {/* Support Ticket */}
-      <Link to="/contact?type=support">
-        <motion.div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all text-center group">
-          <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-            <Headphones className="w-7 h-7 text-gold" />
-          </div>
-          <h3 className="text-black font-bold text-lg mb-2">Support Ticket</h3>
-          <p className="text-zinc-600 text-sm mb-4">Get help with any questions or issues</p>
-          <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm">
-            Submit Ticket <ArrowRight className="w-4 h-4" />
-          </span>
-        </motion.div>
-      </Link>
+// AFTER (correct - matching search bar style)
+purpose === 'buy'
+  ? 'bg-white/90 text-black shadow-lg'  // White-on-dark, not gold
+  : 'bg-white/10 text-white hover:bg-white/20 ...'
+```
 
-      {/* Free Consultation */}
-      <Link to="/contact?type=consultation">
-        <motion.div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all text-center group">
-          <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-            <Calendar className="w-7 h-7 text-gold" />
-          </div>
-          <h3 className="text-black font-bold text-lg mb-2">Free Consultation</h3>
-          <p className="text-zinc-600 text-sm mb-4">Book a call with our expert advisors</p>
-          <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm">
-            Book Now <ArrowRight className="w-4 h-4" />
-          </span>
-        </motion.div>
-      </Link>
+**File**: `src/components/home/HeroSearchBar.tsx` (More Filters dialog)
 
-      {/* Contact Us */}
-      <Link to="/contact">
-        <motion.div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all text-center group">
-          <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-            <Phone className="w-7 h-7 text-gold" />
-          </div>
-          <h3 className="text-black font-bold text-lg mb-2">Contact Us</h3>
-          <p className="text-zinc-600 text-sm mb-4">Reach our team directly via phone or email</p>
-          <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm">
-            Get in Touch <ArrowRight className="w-4 h-4" />
-          </span>
-        </motion.div>
-      </Link>
-    </div>
-  </div>
-</section>
+Replace currency/unit button active states:
+
+```tsx
+// BEFORE (wrong)
+currency === c ? 'bg-gold text-black shadow-md' : '...'
+
+// AFTER (correct)
+currency === c ? 'bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] text-black border-2 border-gold/50 shadow-md' : '...'
 ```
 
 ---
 
-## Part 4: Remove Gold Arrow from Chat Support
+## Part 3: Currency & Unit Selectors Outside Filter
+
+### 3.1 New Layout
+
+Position currency and area unit selectors as small pills **above** the search bar, aligned left:
+
+```
+[AED] [USD] [EUR] [GBP] [INR]  |  [sqft] [sqm]
+
+[Area, project...] [Beds ▼] [Price ▼] [Filters] [SEARCH]
+
+[Buy] [Rent] [Off Plan]
+```
+
+### 3.2 Expanded Currency List
+
+Add all major currencies:
+- AED (UAE Dirham) 🇦🇪
+- USD (US Dollar) 🇺🇸
+- EUR (Euro) 🇪🇺
+- GBP (British Pound) 🇬🇧
+- INR (Indian Rupee) 🇮🇳
+- SAR (Saudi Riyal) 🇸🇦
+- CNY (Chinese Yuan) 🇨🇳
+- RUB (Russian Ruble) 🇷🇺
+- CAD (Canadian Dollar) 🇨🇦
+- AUD (Australian Dollar) 🇦🇺
+
+---
+
+## Part 4: Delete Fake Listings from Database
 
 ### 4.1 Current State
 
-The gold attention pulse arrow has ALREADY been removed from `CollapsedChatButton.tsx` (line 25 shows comment: "Removed gold attention pulse - cleaner UI").
+The database contains **6 listings** that were auto-imported without user approval:
+1. Manchester City Residence
+2. Inaura Hotels & Residences
+3. Grove Ridge
+4. Artistry One Residences
+5. Greencrest
+6. Capeside Marina Residences
 
-### 4.2 Verification
+**There is NO "Sunset Bay Grand" listing** in the database currently.
 
-No action needed - already implemented. The chat button now shows:
-- Medium box with pulse on first daily load
-- Small icon state otherwise
-- No gold arrow/pulse decoration
+### 4.2 Action Required
+
+**DELETE ALL 6 listings** from the `projects` table:
+
+```sql
+DELETE FROM projects WHERE id IN (
+  '826cc038-0947-42fb-bb6e-14e3086a3f91',  -- Manchester City Residence
+  'cdd71301-1039-4787-bbe3-cb276bd57788',  -- Inaura Hotels & Residences
+  '2204202c-44e5-4c72-9509-82291c810578',  -- Grove Ridge
+  '8acaa396-da48-4af3-9463-dc588bcd4095',  -- Artistry One Residences
+  'dfc0b970-5528-4b01-a95f-3324fda2e5f0',  -- Greencrest
+  'b48bfa08-49a8-4a3e-8519-b7e5cbad1fbb'   -- Capeside Marina Residences
+);
+```
+
+**Note**: The user mentioned keeping "Sunset Bay Grand" listings since they provided the brochures, but this listing does not currently exist in the database. If the user wants to add it, we'll need to create it manually with the correct data from the provided brochures.
 
 ---
 
-## Part 5: Move Navigation Arrows to Right Side
+## Part 5: Make Filter More Detailed
 
-### 5.1 Current State
+### 5.1 Enhanced Main Bar Components
 
-In `HubCard` component (line 275), the arrow is already positioned on the right with `ml-auto`:
-```tsx
-<ArrowRight className="... flex-shrink-0 ml-auto" />
-```
+Update the main search bar to include:
+1. **Location/Area input** (existing)
+2. **Property Type dropdown** (new - add to main bar)
+3. **Beds dropdown** (existing)
+4. **Price Range dropdown** (existing)
+5. **Size Range dropdown** (new - move from More Filters to main bar)
+6. **More Filters button** (existing)
+7. **Search button** (existing)
 
-### 5.2 Issue
+### 5.2 More Filters Dialog Enhancements
 
-The flex layout may not be properly ensuring arrows appear consistently on the right. Need to verify the link structure uses proper flex alignment.
-
-### 5.3 Solution
-
-Update the link structure to ensure proper right-side arrow placement:
-
-```tsx
-<Link
-  to={link.href}
-  className="group flex items-center justify-between gap-2 py-1.5 px-2 rounded-lg hover:bg-gold/10 transition-colors"
->
-  <span className="text-zinc-700 group-hover:text-black text-sm transition-colors">
-    {link.label}
-  </span>
-  <ArrowRight className="w-3.5 h-3.5 text-gold opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
-</Link>
-```
-
-Key changes:
-- Changed `gap-2` to `justify-between` for proper spacing
-- Arrow naturally falls to the right with no `ml-auto` needed
-
----
-
-## Part 6: Premium Hero Video for Sitemap
-
-### 6.1 Current State
-
-The sitemap page uses `sitemap-hero.mp4` which may not be premium quality.
-
-### 6.2 Solution
-
-Generate a new premium cinematic video for the sitemap hero:
-- 8-10 second seamless loop
-- Ultra-HD Dubai skyline establishing shot
-- Features: Burj Khalifa, Downtown Dubai, Marina
-- Slow cinematic pan or aerial movement
-- Golden hour or twilight lighting
-- No audio (will be muted anyway)
-
-The video should convey "comprehensive platform overview" - showing the breadth of Dubai real estate that JBJ covers.
-
-**File**: `src/assets/videos/sitemap-hero.mp4` (replace existing)
+Move currency and area unit to the pills above the search bar, keeping in More Filters:
+- Handover status (Ready/Off-Plan/Close to Handover)
+- Views (Sea View, Golf View, etc.)
+- Amenities
+- Furnishing status
 
 ---
 
@@ -313,108 +205,68 @@ The video should convey "comprehensive platform overview" - showing the breadth 
 
 | File | Changes |
 |------|---------|
-| `src/pages/Sitemap.tsx` | Add all AI tools to tools hub, enhance Careers links, add Support & Contact section with 3 cards, fix arrow positioning |
-| `src/assets/videos/sitemap-hero.mp4` | Replace with premium Dubai cinematic video |
+| `src/pages/Index.tsx` | Swap text order, make subtitle smaller, add gold dot after Rent, left-align, push search bar down |
+| `src/components/home/HeroSearchBar.tsx` | Move currency/unit outside filter, replace gold with white/champagne active states, add more currencies, enhance filter detail |
+| Database | Delete 6 fake listings |
 
 ---
 
-## Technical Implementation Details
+## Technical Implementation
 
-### Updated hubSections Array Structure
+### Hero Text Order Change (Index.tsx lines 123-143)
 
-```typescript
-const hubSections: HubSection[] = [
-  // ... existing sections (properties, services, guides, market-intelligence, investor-hub, broker-hub, company)
-  
-  {
-    id: "tools",
-    title: "AI & Professional Tools",
-    icon: Sparkles,
-    links: [
-      // Hub Entry
-      { href: "/ai-hub", label: "AI Hub" },
-      
-      // Property Intelligence (10 tools)
-      { href: "/quiz", label: "AI Home Finder" },
-      { href: "/property-evaluator", label: "Property Evaluator" },
-      { href: "/mortgage-calculator", label: "Mortgage Calculator" },
-      { href: "/rental-index", label: "Rental Index" },
-      { href: "/interior-design-ai", label: "AI Interior Design" },
-      { href: "/ai-hub#virtual-staging", label: "AI Virtual Staging" },
-      { href: "/ai-hub#price-predictor", label: "AI Price Predictor" },
-      { href: "/ai-hub#neighborhood-insights", label: "AI Neighborhood Insights" },
-      { href: "/ai-hub#property-analyzer", label: "AI Property Analyzer" },
-      
-      // Lead & Sales (4 tools)
-      { href: "/ai-hub#lead-qualification", label: "AI Lead Qualification" },
-      { href: "/ai-hub#followup-scheduler", label: "AI Follow-up Scheduler" },
-      { href: "/ai-hub#objection-handler", label: "AI Objection Handler" },
-      { href: "/ai-hub#client-matcher", label: "AI Client Matcher" },
-      
-      // Analytics (4 tools)
-      { href: "/ai-hub#market-report", label: "AI Market Report" },
-      { href: "/ai-hub#competitor-analysis", label: "AI Competitor Analysis" },
-      { href: "/ai-hub#roi-calculator", label: "AI ROI Calculator" },
-      { href: "/ai-hub#investment-report", label: "AI Investment Report" },
-      
-      // Communication (6 tools)
-      { href: "/ai-hub#meeting-summarizer", label: "AI Meeting Summarizer" },
-      { href: "/ai-hub#translation-hub", label: "AI Translation Hub" },
-      { href: "/ai-hub#video-tour-script", label: "AI Video Tour Script" },
-      { href: "/ai-hub#email-generator", label: "AI Email Generator" },
-      { href: "/ai-hub#social-media", label: "AI Social Media" },
-      { href: "/ai-hub#description-writer", label: "AI Description Writer" },
-      
-      // Documents (2 tools)
-      { href: "/ai-hub#contract-reviewer", label: "AI Contract Reviewer" },
-      { href: "/ai-hub#document-generator", label: "AI Document Generator" },
-      
-      // Productivity (4 tools)
-      { href: "/business-card-scanner", label: "Business Card Scanner" },
-      { href: "/documents", label: "Documents & Spreadsheets" },
-      { href: "/video-meeting", label: "Video Meet" },
-      { href: "/ai-calendar", label: "Calendar & Notes" },
-    ],
-  },
-  
-  {
-    id: "careers",
-    title: "Careers",
-    icon: Briefcase,
-    links: [
-      { href: "/join", label: "Submit Your CV" },
-      { href: "/join", label: "Join Our Team" },
-      { href: "/join?type=broker", label: "Become a Broker" },
-      { href: "/join?type=agent", label: "Apply as Agent" },
-      { href: "/join?type=marketing", label: "Marketing Positions" },
-      { href: "/join?type=tech", label: "Technology Roles" },
-      { href: "/join?type=admin", label: "Administrative Roles" },
-      { href: "/broker-toolkit", label: "Broker Resources" },
-      { href: "/broker-education", label: "Training Programs" },
-      { href: "/team", label: "Meet Our Team" },
-      { href: "/onboarding", label: "Onboarding Process" },
-    ],
-  },
-];
+```tsx
+<div className="max-w-4xl mx-auto pt-16 md:pt-20">
+  {/* Buy · Sell · Rent - NOW FIRST AND MAIN HEADLINE */}
+  <motion.h1 
+    variants={fadeInUp} 
+    className="text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold tracking-tight leading-[1.1] mb-2 md:mb-3 px-2 sm:px-0 text-left"
+  >
+    <span className="block whitespace-nowrap">
+      {t('hero.buy')}<span className="inline-block w-1.5 h-1.5 rounded-full mx-2 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+      {t('hero.sell')}<span className="inline-block w-1.5 h-1.5 rounded-full mx-2 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+      {t('hero.rent')}<span className="inline-block w-1.5 h-1.5 rounded-full mx-2 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+    </span>
+  </motion.h1>
+
+  {/* Luxury Licensed Real Estate Brokerage - NOW SECOND AND SMALLER */}
+  <motion.p 
+    variants={fadeInUp}
+    className="text-zinc-400 text-[10px] sm:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-medium mb-2 md:mb-3 text-left"
+  >
+    {t('hero.subtitle')}
+  </motion.p>
+
+  {/* Delivered with Intelligence */}
+  <motion.span ... className="... text-left">
+    {t('hero.deliveredWith')}
+  </motion.span>
+
+  {/* Currency & Unit Pills - NEW SECTION */}
+  <motion.div variants={fadeInUp} className="flex items-center gap-2 mt-4 mb-2 text-left">
+    {/* Currency pills */}
+    {/* Unit pills */}
+  </motion.div>
+
+  {/* Search Bar - pushed down */}
+  <motion.div variants={fadeInUp} className="w-full max-w-5xl mt-4 mb-4 md:mb-6">
+    <HeroSearchBar />
+  </motion.div>
+</div>
 ```
 
-### New Imports Required
+### Buy/Rent/Off Plan Pills Color Fix (HeroSearchBar.tsx lines 382-416)
 
-```typescript
-import { 
-  // existing imports...
-  Calendar,
-  Headphones,
-} from "lucide-react";
+```tsx
+<button
+  onClick={() => setPurpose('buy')}
+  className={cn(
+    "px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-300",
+    purpose === 'buy'
+      ? 'bg-white/90 text-black shadow-lg'  // WHITE active, not gold
+      : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm border border-white/20'
+  )}
+>
+  Buy
+</button>
 ```
-
-### Page Section Order (Updated)
-
-1. Hero Section (with premium video)
-2. Quick Links Strip
-3. Main Directory (Hub Grid)
-4. Legal & Support Section
-5. **NEW: Support & Contact Cards** (Support Ticket, Consultation, Contact Us)
-6. CTABand ("Ready to Get Started?")
-7. Back to Top Section
-8. Footer
