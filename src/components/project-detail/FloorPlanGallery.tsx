@@ -22,6 +22,8 @@ interface FloorPlanGalleryProps {
   floorPlanDocs?: FloorPlanDocument[];
   projectName: string;
   onDownload: (type: "floor_plan", url?: string) => void;
+  brochureUrl?: string;
+  onDownloadBrochure?: (url: string) => void;
 }
 
 /**
@@ -32,7 +34,9 @@ export function FloorPlanGallery({
   floorPlanTypes, 
   floorPlanDocs, 
   projectName,
-  onDownload 
+  onDownload,
+  brochureUrl,
+  onDownloadBrochure,
 }: FloorPlanGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   
@@ -101,9 +105,24 @@ export function FloorPlanGallery({
               <p className="text-muted-foreground text-sm">
                 {activePlan?.pdfUrl 
                   ? "Click download to view the floor plan PDF"
-                  : "Floor plan preview not available"
+                  : brochureUrl
+                    ? "Floor plans are available in the project brochure"
+                    : "Floor plan preview not available"
                 }
               </p>
+
+              {!activePlan?.pdfUrl && brochureUrl && onDownloadBrochure && (
+                <div className="mt-4">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => onDownloadBrochure(brochureUrl)}
+                  >
+                    <Download className="w-4 h-4" />
+                    Download Brochure
+                  </Button>
+                </div>
+              )}
             </div>
           )}
 

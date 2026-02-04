@@ -3,6 +3,7 @@ import { Download, Lock, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
+import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 interface PremiumBrochureCardProps {
   projectName: string;
   brochureUrl?: string;
@@ -34,7 +35,11 @@ const PremiumBrochureCard = ({
     
     setIsDownloading(true);
     try {
-      const response = await fetch(brochureUrl);
+      const safeUrl = maybeProxyStorageUrl(
+        brochureUrl,
+        `${projectName.replace(/\s+/g, "-")}-Brochure.pdf`,
+      );
+      const response = await fetch(safeUrl);
       if (!response.ok) throw new Error('Download failed');
       
       const blob = await response.blob();
@@ -49,7 +54,7 @@ const PremiumBrochureCard = ({
     } catch (error) {
       console.warn('Blob download failed, trying direct open:', error);
       // Fallback to window.open
-      window.open(brochureUrl, '_blank');
+      window.open(maybeProxyStorageUrl(brochureUrl), '_blank');
     } finally {
       setIsDownloading(false);
     }

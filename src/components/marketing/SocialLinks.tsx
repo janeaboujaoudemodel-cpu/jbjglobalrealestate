@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Facebook, Instagram, Linkedin, Youtube } from 'lucide-react';
 
 interface SocialLinksProps {
@@ -14,11 +15,11 @@ const SOCIAL_LINKS = {
   tiktok: 'https://www.tiktok.com/@jbj.ae',
 };
 
-export const SocialLinks = ({ 
-  className = '', 
+export const SocialLinks = React.forwardRef<HTMLDivElement, SocialLinksProps>(({
+  className = '',
   iconClassName = 'w-5 h-5',
-  variant = 'default' 
-}: SocialLinksProps) => {
+  variant = 'default'
+}, ref) => {
   const getColorClasses = () => {
     switch (variant) {
       case 'gold':
@@ -35,7 +36,7 @@ export const SocialLinks = ({
   const colorClasses = getColorClasses();
 
   return (
-    <div className={`flex items-center gap-4 ${className}`}>
+    <div ref={ref} className={`flex items-center gap-4 ${className}`}>
       <a
         href={SOCIAL_LINKS.facebook}
         target="_blank"
@@ -85,6 +86,8 @@ export const SocialLinks = ({
       </a>
     </div>
   );
-};
+});
+
+SocialLinks.displayName = "SocialLinks";
 
 export default SocialLinks;

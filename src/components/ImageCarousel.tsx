@@ -196,7 +196,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
             <img
               src={images[currentIndex].image_url}
               alt={images[currentIndex].alt_text || "Project image"}
-              className="max-w-full max-h-full object-contain"
+              className="w-full h-full max-w-none max-h-none object-cover"
             />
             
             {/* Close button */}
