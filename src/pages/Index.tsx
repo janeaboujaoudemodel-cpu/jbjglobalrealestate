@@ -113,53 +113,53 @@ const Index = () => {
           transition={{ duration: 1.5, delay: 0.7 }}
         />
         
-        {/* Content - Left-aligned with Search Bar on Hero */}
+        {/* Content - Left-aligned with Search Bar on Hero - Pushed down more, smaller content */}
         <motion.div 
-          className="relative z-10 w-full flex flex-col items-start justify-center px-4 sm:px-8 md:px-12 lg:px-16"
+          className="relative z-10 w-full flex flex-col items-start justify-end px-4 sm:px-8 md:px-12 lg:px-16 pb-16 md:pb-20"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
-          <div className="max-w-5xl pt-28 md:pt-36">
-            {/* Buy · Sell · Rent - MAIN HEADLINE FIRST with gold dot after Rent */}
+          <div className="max-w-4xl pt-40 md:pt-48 lg:pt-56">
+            {/* Buy · Sell · Rent - Smaller headline */}
             <motion.h1 
               variants={fadeInUp} 
-              className="text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight leading-[1.1] mb-2 md:mb-3"
+              className="text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold tracking-tight leading-[1.1] mb-1.5 md:mb-2"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
               <span className="block whitespace-nowrap">
-                {t('hero.buy')}<span className="inline-block w-1.5 h-1.5 rounded-full mx-2 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
-                {t('hero.sell')}<span className="inline-block w-1.5 h-1.5 rounded-full mx-2 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
-                {t('hero.rent')}<span className="inline-block w-1.5 h-1.5 rounded-full mx-2 align-middle bg-gold" style={{ boxShadow: '0 0 8px rgba(200,167,102,0.8)' }}></span>
+                {t('hero.buy')}<span className="inline-block w-1 h-1 rounded-full mx-1.5 align-middle bg-gold" style={{ boxShadow: '0 0 6px rgba(200,167,102,0.8)' }}></span>
+                {t('hero.sell')}<span className="inline-block w-1 h-1 rounded-full mx-1.5 align-middle bg-gold" style={{ boxShadow: '0 0 6px rgba(200,167,102,0.8)' }}></span>
+                {t('hero.rent')}<span className="inline-block w-1 h-1 rounded-full mx-1.5 align-middle bg-gold" style={{ boxShadow: '0 0 6px rgba(200,167,102,0.8)' }}></span>
               </span>
             </motion.h1>
 
-            {/* Licensed Real Estate Brokerage - SMALLER SUBTITLE SECOND */}
+            {/* Licensed Real Estate Brokerage - Smaller subtitle */}
             <motion.p 
               variants={fadeInUp}
-              className="text-zinc-400 text-[10px] sm:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-medium mb-2 md:mb-3"
+              className="text-zinc-400 text-[9px] sm:text-[10px] uppercase tracking-[0.12em] md:tracking-[0.15em] font-medium mb-1.5 md:mb-2"
             >
               {t('hero.subtitle')}
             </motion.p>
           
-            {/* Delivered with Intelligence - Subtle elegant gold */}
+            {/* Delivered with Intelligence - Smaller */}
             <motion.span 
               variants={fadeInUp}
-              className="block whitespace-nowrap text-xs sm:text-sm md:text-base lg:text-lg mb-6 md:mb-8 uppercase tracking-[0.15em] md:tracking-[0.2em] font-medium"
+              className="block whitespace-nowrap text-[10px] sm:text-xs md:text-sm lg:text-base mb-4 md:mb-5 uppercase tracking-[0.12em] md:tracking-[0.15em] font-medium"
               style={{ 
                 background: 'linear-gradient(90deg, #C8A766 0%, #E8D4A8 50%, #C8A766 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-                filter: 'drop-shadow(0 1px 4px rgba(200,167,102,0.4))',
+                filter: 'drop-shadow(0 1px 3px rgba(200,167,102,0.4))',
               }}
             >
               {t('hero.deliveredWith')}
             </motion.span>
 
-            {/* SEARCH BAR - Pushed down, left-aligned */}
+            {/* SEARCH BAR - Compact */}
             <motion.div 
               variants={fadeInUp}
-              className="w-full max-w-5xl mt-2 mb-4 md:mb-6"
+              className="w-full max-w-4xl"
             >
               <HeroSearchBar />
             </motion.div>
@@ -174,10 +174,17 @@ const Index = () => {
       </div>
 
       {/* DIVIDER - Separates Developer Partners from Trust Bar */}
-      <SectionDivider />
+      <SectionDivider compact />
 
-      {/* TRUST BAR (4 Cards) - Now with visual separation from Developer Partners */}
-      <div id="trust-bar" className="bg-black py-4 border-y border-gold/20">
+      {/* TRUST BAR (4 Cards) - Centered with proper divider alignment */}
+      <div id="trust-bar" className="bg-black py-3">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-center gap-4 mb-3">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/25 to-gold/40" />
+            <span className="text-gold/60 text-[10px] uppercase tracking-[0.2em] font-medium">Trusted By Thousands</span>
+            <div className="flex-1 h-px bg-gradient-to-l from-transparent via-gold/25 to-gold/40" />
+          </div>
+        </div>
         <TrustBar />
       </div>
 
@@ -185,10 +192,10 @@ const Index = () => {
       <FeaturedListings />
 
       {/* DIVIDER */}
-      <SectionDivider />
+      <SectionDivider compact />
 
       {/* FIND YOUR STARTING POINT - Clear Entry Points with Champagne Layer - ALL 11 CARDS RESTORED */}
-      <section className="py-8 md:py-16 bg-black">
+      <section className="py-6 md:py-12 bg-black">
         <div className="jj-layer-2">
           <div className="text-center mb-6 md:mb-10">
             <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-semibold shadow-md">
@@ -337,69 +344,60 @@ const Index = () => {
       {/* EXPLORE OUR SERVICES SLIDESHOW */}
       <ExploreServicesCard />
 
-      {/* AI HOME FINDER - Premium CTA Section - CENTERED */}
-      <section className="py-16 md:py-24 bg-black">
-        <div className="jj-layer-2">
+      {/* AI HOME FINDER - Premium CTA Section - CENTERED, No background, Purple label only */}
+      <section className="py-10 md:py-16 bg-black">
+        <div className="container mx-auto px-4">
           <div className="flex justify-center">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="w-full max-w-2xl"
+              transition={{ duration: 0.5 }}
+              className="text-center"
             >
-              <Link to="/quiz" className="block group">
-                <div
-                  className="relative bg-gradient-to-br from-purple-900/40 via-purple-800/30 to-purple-900/40 backdrop-blur-md rounded-xl md:rounded-2xl p-5 md:p-10 text-center transition-all duration-500 group-hover:translate-y-[-4px] group-hover:scale-[1.02]"
-                  style={{
-                    border: '2px solid rgba(147,51,234,0.5)',
-                    boxShadow: '0 0 12px rgba(255,255,255,0.2), 0 0 25px rgba(147,51,234,0.15), inset 0 1px 2px rgba(255,255,255,0.1)',
-                  }}
+              <Link to="/quiz" className="inline-flex items-center gap-3 group">
+                <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-purple-500" />
+                <h2 
+                  className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide text-purple-500 group-hover:text-purple-400 transition-colors" 
+                  style={{ fontFamily: "Poppins, sans-serif" }}
                 >
-                  <div className="relative z-10">
-                    <div className="flex items-center justify-center gap-2 md:gap-3 mb-3 md:mb-4">
-                      <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-purple-400 group-hover:text-purple-300 transition-colors" />
-                      <h2 className="text-white text-xl md:text-3xl lg:text-4xl font-bold tracking-wide" style={{ fontFamily: "Poppins, sans-serif" }}>
-                        {t('hero.aiFinder')}
-                      </h2>
-                      <ArrowUpRight className="w-5 h-5 md:w-7 md:h-7 text-purple-400 group-hover:text-purple-300 transition-all duration-300" />
-                    </div>
-                    <p className="text-white text-sm md:text-base lg:text-lg">
-                      {t('hero.aiFinderDesc')}
-                    </p>
-                  </div>
-                </div>
+                  {t('hero.aiFinder')}
+                </h2>
+                <ArrowUpRight className="w-5 h-5 md:w-7 md:h-7 text-purple-500 group-hover:text-purple-400 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
               </Link>
+              <p className="text-white/70 text-sm md:text-base mt-2 max-w-lg mx-auto">
+                {t('hero.aiFinderDesc')}
+              </p>
             </motion.div>
           </div>
         </div>
       </section>
 
       {/* DIVIDER */}
-      <SectionDivider />
+      <SectionDivider compact />
 
       {/* AI COMPARISON & ANALYZER PREVIEW */}
-      <section className="py-8 md:py-20 bg-black">
+      <section className="py-6 md:py-14 bg-black">
         <div className="jj-layer-2">
           <AIComparisonWidget />
         </div>
       </section>
 
       {/* DIVIDER */}
-      <SectionDivider />
+      <SectionDivider compact />
 
       {/* MARKET REPORT CTA - Active Champagne Layer */}
-      <section className="py-10 md:py-28 bg-black">
+      <section className="py-8 md:py-16 bg-black">
         <div className="jj-layer-2">
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 md:border-2 rounded-xl md:rounded-3xl p-4 md:p-12 shadow-xl">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 md:border-2 rounded-xl md:rounded-3xl p-4 md:p-10 shadow-xl">
             <motion.div
-              className="text-center mb-4 md:mb-10"
+              className="text-center mb-4 md:mb-8"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <span className="inline-block text-gold text-[10px] md:text-xs uppercase tracking-[0.2em] md:tracking-[0.3em] mb-2 md:mb-4">Exclusive Publication</span>
-              <h2 className="text-black text-xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <span className="inline-block text-gold text-[10px] md:text-xs uppercase tracking-[0.2em] md:tracking-[0.3em] mb-2 md:mb-3">Exclusive Publication</span>
+              <h2 className="text-black text-xl md:text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Free Market <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Intelligence Book</span>
               </h2>
             </motion.div>
@@ -409,10 +407,10 @@ const Index = () => {
       </section>
 
       {/* DIVIDER */}
-      <SectionDivider />
+      <SectionDivider compact />
 
       {/* MORTGAGE CALCULATOR SECTION - Compact on mobile */}
-      <section className="py-10 md:py-28 bg-black">
+      <section className="py-8 md:py-16 bg-black">
         <div className="jj-layer-2">
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 md:border-2 rounded-xl md:rounded-3xl p-4 md:p-12 shadow-xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 md:w-64 h-32 md:h-64 bg-gold/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
@@ -485,15 +483,15 @@ const Index = () => {
       </section>
 
       {/* DIVIDER - Before Why Dubai */}
-      <SectionDivider />
+      <SectionDivider compact />
 
       <WhyDubaiCapitalSection />
 
       {/* JBJ PODCAST SECTION - Admin-controlled visibility */}
       <PodcastVisibilityGate>
-        <SectionDivider />
+        <SectionDivider compact />
         <JBJPodcastSection />
-        <SectionDivider />
+        <SectionDivider compact />
       </PodcastVisibilityGate>
 
       {/* BEST IDEA AWARD */}
