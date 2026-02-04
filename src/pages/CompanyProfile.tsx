@@ -1,25 +1,21 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { motion } from "framer-motion";
 import { 
   Download, 
   FileText, 
   Building2, 
   Globe, 
-  Users, 
   Shield,
   Target,
   CheckCircle,
   Phone,
   MessageCircle,
-  ArrowRight,
   Clock,
   MapPin,
   Mail,
   Briefcase,
   Eye,
   Heart,
-  Zap,
-  ClipboardCheck,
   Home,
   TrendingUp,
   Key,
@@ -28,12 +24,27 @@ import {
   User
 } from "lucide-react";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import { toast } from "sonner";
 
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
+
+function SectionShell({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <section className={`py-20 bg-black ${className ?? ""}`.trim()}>
+      <div className="jj-layer-2">
+        <div className="w-full px-4 sm:px-6 lg:px-8">{children}</div>
+      </div>
+    </section>
+  );
+}
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -559,46 +570,42 @@ const CompanyProfile = () => {
     <div className="min-h-screen bg-black">
       {/* Sticky Actions (Desktop) */}
       <div className="hidden lg:flex fixed right-6 top-1/2 -translate-y-1/2 z-50 flex-col gap-3">
-        <button
+        <Button
           onClick={handleWhatsApp}
-          className="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform"
+          variant="primary"
+          size="icon"
+          className="rounded-full"
           aria-label="WhatsApp"
         >
           <MessageCircle className="w-5 h-5" />
-        </button>
-        <button
-          onClick={handleCall}
-          className="w-12 h-12 rounded-full bg-gold flex items-center justify-center text-black shadow-lg hover:scale-110 transition-transform"
-          aria-label="Call"
-        >
+        </Button>
+        <Button onClick={handleCall} variant="primary" size="icon" className="rounded-full" aria-label="Call">
           <Phone className="w-5 h-5" />
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={generatePDF}
           disabled={isGenerating}
-          className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-black shadow-lg hover:scale-110 transition-transform disabled:opacity-50"
-          aria-label="Download PDF"
+          variant="primary"
+          size="icon"
+          className="rounded-full"
+          aria-label="Download Company Profile (PDF)"
         >
           {isGenerating ? (
             <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
           ) : (
             <Download className="w-5 h-5" />
           )}
-        </button>
+        </Button>
       </div>
 
       {/* 1. Hero Section */}
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <img 
-            src={luxuryVillaHero} 
-            alt="JBJ Global Real Estate" 
-            className="w-full h-full object-cover"
-          />
+          <img src={luxuryVillaHero} alt="JBJ Global Real Estate" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black" />
         </div>
-        
-        <motion.div 
+
+        <motion.div
           className="relative z-10 text-center px-4 max-w-4xl mx-auto"
           initial="hidden"
           animate="visible"
@@ -610,7 +617,7 @@ const CompanyProfile = () => {
           >
             Company Profile
           </motion.span>
-          <motion.h1 
+          <motion.h1
             className="text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-4"
             style={{ fontFamily: "Poppins, sans-serif" }}
             variants={fadeInUp}
@@ -619,20 +626,12 @@ const CompanyProfile = () => {
               {PROFILE_CONTENT.coverPage.title}
             </span>
           </motion.h1>
-          <motion.p 
-            className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto mb-8"
-            variants={fadeInUp}
-          >
+          <motion.p className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto mb-8" variants={fadeInUp}>
             {PROFILE_CONTENT.coverPage.subtitle}
           </motion.p>
-          
+
           <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
-            <Button
-              onClick={generatePDF}
-              disabled={isGenerating}
-              variant="primary"
-              className="px-8 py-6 text-lg"
-            >
+            <Button onClick={generatePDF} disabled={isGenerating} variant="primary" size="lg">
               {isGenerating ? (
                 <div className="flex items-center gap-2">
                   <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
@@ -640,7 +639,7 @@ const CompanyProfile = () => {
                 </div>
               ) : (
                 <>
-                  <Download className="w-5 h-5 mr-2" />
+                  <Download className="w-5 h-5" />
                   Download Company Profile
                 </>
               )}
@@ -650,518 +649,502 @@ const CompanyProfile = () => {
       </section>
 
       {/* 2. Executive Summary */}
-      <section className="py-20 relative overflow-hidden">
-        <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-4xl mx-auto"
-          >
-            <div className="text-center mb-12">
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Overview</span>
-              <h2 className="text-white text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Executive Summary
-              </h2>
-            </div>
-            
-            <div className="space-y-6 text-zinc-400 leading-relaxed">
-              {PROFILE_CONTENT.executiveSummary.split('\n\n').map((para, i) => (
+      <SectionShell>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="max-w-5xl mx-auto"
+        >
+          <div className="text-center mb-12">
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Overview</span>
+            <h2 className="text-black text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Executive Summary
+            </h2>
+          </div>
+
+          <div className="jj-card-inner">
+            <div className="space-y-6 text-black/70 leading-relaxed">
+              {PROFILE_CONTENT.executiveSummary.split("\n\n").map((para, i) => (
                 <p key={i}>{para}</p>
               ))}
             </div>
-          </motion.div>
-        </div>
-      </section>
+          </div>
+        </motion.div>
+      </SectionShell>
 
       {/* 3. Brand Story */}
-      <section className="py-20 bg-zinc-900/30">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-4xl mx-auto"
-          >
-            <div className="text-center mb-12">
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Story</span>
-              <h2 className="text-white text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Brand Story
-              </h2>
-            </div>
-            
-            <div className="space-y-6 text-zinc-400 leading-relaxed">
-              {PROFILE_CONTENT.brandStory.split('\n\n').map((para, i) => (
+      <SectionShell>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="max-w-5xl mx-auto"
+        >
+          <div className="text-center mb-12">
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Story</span>
+            <h2 className="text-black text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Brand Story
+            </h2>
+          </div>
+
+          <div className="jj-card-inner">
+            <div className="space-y-6 text-black/70 leading-relaxed">
+              {PROFILE_CONTENT.brandStory.split("\n\n").map((para, i) => (
                 <p key={i}>{para}</p>
               ))}
             </div>
-          </motion.div>
-        </div>
-      </section>
+          </div>
+        </motion.div>
+      </SectionShell>
 
       {/* 4. Vision / Mission / Values */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            {/* Vision & Mission */}
-            <div className="grid md:grid-cols-2 gap-8 mb-16">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8"
-              >
-                <Eye className="w-12 h-12 text-gold mb-4" />
-                <h3 className="text-white text-xl font-bold mb-4">Vision</h3>
-                <p className="text-zinc-400 leading-relaxed">{PROFILE_CONTENT.vision}</p>
-              </motion.div>
-              
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8"
-              >
-                <Target className="w-12 h-12 text-gold mb-4" />
-                <h3 className="text-white text-xl font-bold mb-4">Mission</h3>
-                <p className="text-zinc-400 leading-relaxed">{PROFILE_CONTENT.mission}</p>
-              </motion.div>
-            </div>
-
-            {/* Values */}
-            <div className="text-center mb-12">
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Foundation</span>
-              <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Values
-              </h2>
-            </div>
-            
-            <motion.div 
-              className="grid md:grid-cols-5 gap-4"
-              initial="hidden"
-              whileInView="visible"
+      <SectionShell>
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-6 mb-16">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              variants={staggerContainer}
+              className="jj-card-inner"
             >
-              {PROFILE_CONTENT.values.map((value) => (
-                <motion.div 
-                  key={value.title}
-                  className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold/30 transition-colors"
-                  variants={fadeInUp}
-                >
-                  <Heart className="w-8 h-8 text-gold mx-auto mb-3" />
-                  <h3 className="text-white text-sm font-bold mb-2">{value.title}</h3>
-                  <p className="text-zinc-500 text-xs">{value.description}</p>
-                </motion.div>
-              ))}
+              <div className="flex items-start gap-4">
+                <div className="jj-icon-box-active w-12 h-12">
+                  <Eye className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-black text-xl font-bold mb-2">Vision</h3>
+                  <p className="text-black/70 leading-relaxed">{PROFILE_CONTENT.vision}</p>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="jj-card-inner"
+            >
+              <div className="flex items-start gap-4">
+                <div className="jj-icon-box-active w-12 h-12">
+                  <Target className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-black text-xl font-bold mb-2">Mission</h3>
+                  <p className="text-black/70 leading-relaxed">{PROFILE_CONTENT.mission}</p>
+                </div>
+              </div>
             </motion.div>
           </div>
+
+          <div className="text-center mb-12">
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Foundation</span>
+            <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Values
+            </h2>
+          </div>
+
+          <motion.div
+            className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
+            {PROFILE_CONTENT.values.map((value) => (
+              <motion.div key={value.title} className="jj-card-inner text-center" variants={fadeInUp}>
+                <div className="jj-icon-box-active w-12 h-12 mx-auto mb-3">
+                  <Heart className="w-6 h-6" />
+                </div>
+                <h3 className="text-black text-sm font-bold mb-2">{value.title}</h3>
+                <p className="text-black/70 text-xs">{value.description}</p>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
-      </section>
+      </SectionShell>
 
       {/* 5. Services (6-card grid) */}
-      <section className="py-20 bg-gradient-to-b from-zinc-900/50 to-black">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">What We Do</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Services
-            </h2>
-          </div>
-          
-          <motion.div 
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
-            {PROFILE_CONTENT.services.map((service) => {
-              const Icon = service.icon;
-              return (
-                <motion.div 
-                  key={service.title}
-                  className="p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold/30 transition-colors"
-                  variants={fadeInUp}
-                >
-                  <Icon className="w-10 h-10 text-gold mb-4" />
-                  <h3 className="text-white text-lg font-bold mb-2">{service.title}</h3>
-                  <p className="text-zinc-400 text-sm mb-3">{service.description}</p>
-                  <p className="text-zinc-500 text-xs mb-1"><strong className="text-zinc-400">Ideal for:</strong> {service.idealFor}</p>
-                  <p className="text-zinc-500 text-xs"><strong className="text-zinc-400">Deliverables:</strong> {service.deliverables}</p>
-                </motion.div>
-              );
-            })}
-          </motion.div>
+      <SectionShell>
+        <div className="text-center mb-12">
+          <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">What We Do</span>
+          <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+            Services
+          </h2>
         </div>
-      </section>
+
+        <motion.div
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+        >
+          {PROFILE_CONTENT.services.map((service) => {
+            const Icon = service.icon;
+            return (
+              <motion.div key={service.title} className="jj-card-inner" variants={fadeInUp}>
+                <div className="jj-icon-box-active w-12 h-12 mb-4">
+                  <Icon className="w-6 h-6" />
+                </div>
+                <h3 className="text-black text-lg font-bold mb-2">{service.title}</h3>
+                <p className="text-black/70 text-sm mb-3">{service.description}</p>
+                <div className="space-y-1 text-xs text-black/70">
+                  <p>
+                    <span className="font-semibold text-black">Ideal for:</span> {service.idealFor}
+                  </p>
+                  <p>
+                    <span className="font-semibold text-black">Deliverables:</span> {service.deliverables}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </motion.div>
+      </SectionShell>
 
       {/* 6. Process (timeline) */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">How We Work</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Our Process
-            </h2>
-          </div>
-          
-          <div className="max-w-4xl mx-auto">
-            <motion.div 
-              className="relative"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={staggerContainer}
-            >
-              {/* Timeline line */}
-              <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-gold via-gold/50 to-transparent hidden md:block" />
-              
-              {PROFILE_CONTENT.process.map((step, index) => (
-                <motion.div 
-                  key={step.step}
-                  className="flex items-start gap-6 mb-8 last:mb-0"
-                  variants={fadeInUp}
-                >
-                  <div className="w-16 h-16 rounded-full bg-gold/20 border-2 border-gold flex items-center justify-center flex-shrink-0">
-                    <span className="text-gold text-xl font-bold">{step.step}</span>
-                  </div>
-                  <div className="pt-3">
-                    <h3 className="text-white text-lg font-bold mb-1">{step.title}</h3>
-                    <p className="text-zinc-400">{step.description}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
+      <SectionShell>
+        <div className="text-center mb-12">
+          <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">How We Work</span>
+          <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+            Our Process
+          </h2>
         </div>
-      </section>
+
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            className="relative"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
+            <div className="absolute left-6 top-0 bottom-0 w-px bg-gold/30 hidden md:block" />
+
+            {PROFILE_CONTENT.process.map((step) => (
+              <motion.div key={step.step} className="flex items-start gap-6 mb-6 last:mb-0" variants={fadeInUp}>
+                <div className="jj-icon-box-active w-12 h-12 rounded-full border border-gold/40 flex items-center justify-center flex-shrink-0">
+                  <span className="text-black font-bold">{step.step}</span>
+                </div>
+                <div className="jj-card-inner flex-1">
+                  <h3 className="text-black text-lg font-bold mb-1">{step.title}</h3>
+                  <p className="text-black/70">{step.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </SectionShell>
 
       {/* 7. Differentiators */}
-      <section className="py-20 bg-zinc-900/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Edge</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Why JBJ
-            </h2>
-          </div>
-          
-          <motion.div 
-            className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
-            {PROFILE_CONTENT.differentiators.map((item) => (
-              <motion.div 
-                key={item}
-                className="flex items-center gap-3 p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold/30 transition-colors"
-                variants={fadeInUp}
-              >
-                <CheckCircle className="w-5 h-5 text-gold flex-shrink-0" />
-                <span className="text-white text-sm">{item}</span>
-              </motion.div>
-            ))}
-          </motion.div>
+      <SectionShell>
+        <div className="text-center mb-12">
+          <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Edge</span>
+          <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+            Why JBJ
+          </h2>
         </div>
-      </section>
+
+        <motion.div
+          className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+        >
+          {PROFILE_CONTENT.differentiators.map((item) => (
+            <motion.div key={item} className="jj-card-inner flex items-center gap-3" variants={fadeInUp}>
+              <div className="jj-icon-box-active w-10 h-10">
+                <CheckCircle className="w-5 h-5" />
+              </div>
+              <span className="text-black/80 text-sm">{item}</span>
+            </motion.div>
+          ))}
+        </motion.div>
+      </SectionShell>
 
       {/* 8. Areas of Focus */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Where We Operate</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Areas of Focus
-            </h2>
-          </div>
-          
-          <motion.div 
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-4xl mx-auto"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
-            {PROFILE_CONTENT.areas.map((area) => (
-              <motion.div 
-                key={area}
-                className="flex items-center gap-2 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg hover:border-gold/30 transition-colors"
-                variants={fadeInUp}
-              >
-                <MapPin className="w-4 h-4 text-gold flex-shrink-0" />
-                <span className="text-white text-sm">{area}</span>
-              </motion.div>
-            ))}
-          </motion.div>
+      <SectionShell>
+        <div className="text-center mb-12">
+          <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Where We Operate</span>
+          <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+            Areas of Focus
+          </h2>
         </div>
-      </section>
+
+        <motion.div
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-6xl mx-auto"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+        >
+          {PROFILE_CONTENT.areas.map((area) => (
+            <motion.div key={area} className="jj-card-inner p-4 flex items-center gap-3" variants={fadeInUp}>
+              <div className="jj-icon-box-active w-10 h-10">
+                <MapPin className="w-5 h-5" />
+              </div>
+              <span className="text-black/80 text-sm">{area}</span>
+            </motion.div>
+          ))}
+        </motion.div>
+      </SectionShell>
 
       {/* 9. Client Experience Standards */}
-      <section className="py-20 bg-zinc-900/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Commitment</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Client Experience Standards
-            </h2>
-          </div>
-          
-          <motion.div 
-            className="grid md:grid-cols-2 gap-4 max-w-3xl mx-auto"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
-            {PROFILE_CONTENT.clientExperience.map((item) => (
-              <motion.div 
-                key={item}
-                className="flex items-center gap-3 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg"
-                variants={fadeInUp}
-              >
-                <CheckCircle className="w-5 h-5 text-gold flex-shrink-0" />
-                <span className="text-zinc-300">{item}</span>
-              </motion.div>
-            ))}
-          </motion.div>
+      <SectionShell>
+        <div className="text-center mb-12">
+          <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Commitment</span>
+          <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+            Client Experience Standards
+          </h2>
         </div>
-      </section>
+
+        <motion.div
+          className="grid md:grid-cols-2 gap-4 max-w-5xl mx-auto"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+        >
+          {PROFILE_CONTENT.clientExperience.map((item) => (
+            <motion.div key={item} className="jj-card-inner flex items-center gap-3" variants={fadeInUp}>
+              <div className="jj-icon-box-active w-10 h-10">
+                <CheckCircle className="w-5 h-5" />
+              </div>
+              <span className="text-black/80">{item}</span>
+            </motion.div>
+          ))}
+        </motion.div>
+      </SectionShell>
 
       {/* 10. Trust & Compliance */}
-      <section className="py-12 bg-zinc-950">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto p-8 bg-amber-500/5 border border-amber-500/20 rounded-2xl">
+      <SectionShell className="py-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="jj-card-inner">
             <div className="flex items-start gap-4">
-              <Shield className="w-8 h-8 text-amber-500 flex-shrink-0 mt-1" />
+              <div className="jj-icon-box-active w-12 h-12">
+                <Shield className="w-6 h-6" />
+              </div>
               <div>
-                <h3 className="text-amber-400 font-bold text-lg mb-3">Trust & Compliance</h3>
-                <p className="text-zinc-400 text-sm leading-relaxed">
-                  {PROFILE_CONTENT.trustCompliance}
-                </p>
+                <h3 className="text-black font-bold text-lg mb-3">Trust & Compliance</h3>
+                <p className="text-black/70 text-sm leading-relaxed">{PROFILE_CONTENT.trustCompliance}</p>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </SectionShell>
 
       {/* 11. Founder Profile */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Leadership</span>
-              <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Founder Profile
-              </h2>
-            </div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-3xl p-8 md:p-12 border border-gold/20"
-            >
-              <div className="flex flex-col md:flex-row items-start gap-8">
-                <div className="w-24 h-24 rounded-full bg-gold/20 border-2 border-gold flex items-center justify-center flex-shrink-0">
-                  <User className="w-12 h-12 text-gold" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-white text-2xl font-bold mb-1">{PROFILE_CONTENT.founderProfile.name}</h3>
-                  <p className="text-gold mb-6">{PROFILE_CONTENT.founderProfile.title}</p>
-                  <div className="space-y-4 text-zinc-400 leading-relaxed mb-8">
-                    {PROFILE_CONTENT.founderProfile.bio.split('\n\n').map((para, i) => (
-                      <p key={i}>{para}</p>
-                    ))}
-                  </div>
-                  <blockquote className="border-l-4 border-gold pl-6 py-2">
-                    <p className="text-gold text-xl italic mb-2">"{PROFILE_CONTENT.founderProfile.quote}"</p>
-                    <cite className="text-zinc-500 text-sm">— {PROFILE_CONTENT.founderProfile.name}</cite>
-                  </blockquote>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* 12. Company Snapshot */}
-      <section className="py-20 bg-zinc-900/30">
-        <div className="container mx-auto px-4">
+      <SectionShell>
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">At a Glance</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Company Snapshot
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Leadership</span>
+            <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Founder Profile
             </h2>
           </div>
-          
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="max-w-2xl mx-auto bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8"
+            className="jj-card-inner"
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="flex items-center gap-4">
-                <Building2 className="w-5 h-5 text-gold" />
-                <div>
-                  <p className="text-zinc-500 text-xs uppercase">Headquarters</p>
-                  <p className="text-white">{PROFILE_CONTENT.companySnapshot.headquarters}</p>
-                </div>
+            <div className="flex flex-col md:flex-row items-start gap-8">
+              <div className="jj-icon-box-active w-20 h-20 rounded-full border border-gold/40 flex items-center justify-center flex-shrink-0">
+                <User className="w-10 h-10" />
               </div>
-              <div className="flex items-center gap-4">
-                <MapPin className="w-5 h-5 text-gold" />
-                <div>
-                  <p className="text-zinc-500 text-xs uppercase">Service Areas</p>
-                  <p className="text-white">{PROFILE_CONTENT.companySnapshot.serviceAreas}</p>
+              <div className="flex-1">
+                <h3 className="text-black text-2xl font-bold mb-1">{PROFILE_CONTENT.founderProfile.name}</h3>
+                <p className="text-black/70 mb-6">{PROFILE_CONTENT.founderProfile.title}</p>
+                <div className="space-y-4 text-black/70 leading-relaxed mb-8">
+                  {PROFILE_CONTENT.founderProfile.bio.split("\n\n").map((para, i) => (
+                    <p key={i}>{para}</p>
+                  ))}
                 </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <Globe className="w-5 h-5 text-gold" />
-                <div>
-                  <p className="text-zinc-500 text-xs uppercase">Languages</p>
-                  <p className="text-white">{PROFILE_CONTENT.companySnapshot.languages}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <Phone className="w-5 h-5 text-gold" />
-                <div>
-                  <p className="text-zinc-500 text-xs uppercase">Contact</p>
-                  <p className="text-white">{PROFILE_CONTENT.companySnapshot.contact}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <Mail className="w-5 h-5 text-gold" />
-                <div>
-                  <p className="text-zinc-500 text-xs uppercase">Email</p>
-                  <p className="text-white">{PROFILE_CONTENT.companySnapshot.email}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <Globe className="w-5 h-5 text-gold" />
-                <div>
-                  <p className="text-zinc-500 text-xs uppercase">Website</p>
-                  <p className="text-white">{PROFILE_CONTENT.companySnapshot.website}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4 md:col-span-2">
-                <Clock className="w-5 h-5 text-gold" />
-                <div>
-                  <p className="text-zinc-500 text-xs uppercase">Working Hours</p>
-                  <p className="text-white">{PROFILE_CONTENT.companySnapshot.workingHours}</p>
-                </div>
+                <blockquote className="border-l-4 border-gold pl-6 py-2">
+                  <p className="text-black text-xl italic mb-2">"{PROFILE_CONTENT.founderProfile.quote}"</p>
+                  <cite className="text-black/60 text-sm">— {PROFILE_CONTENT.founderProfile.name}</cite>
+                </blockquote>
               </div>
             </div>
           </motion.div>
         </div>
-      </section>
+      </SectionShell>
+
+      {/* 12. Company Snapshot */}
+      <SectionShell>
+        <div className="text-center mb-12">
+          <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">At a Glance</span>
+          <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+            Company Snapshot
+          </h2>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="max-w-3xl mx-auto jj-card-inner"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex items-center gap-4">
+              <div className="jj-icon-box-active w-10 h-10">
+                <Building2 className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-black/50 text-xs uppercase">Headquarters</p>
+                <p className="text-black">{PROFILE_CONTENT.companySnapshot.headquarters}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="jj-icon-box-active w-10 h-10">
+                <MapPin className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-black/50 text-xs uppercase">Service Areas</p>
+                <p className="text-black">{PROFILE_CONTENT.companySnapshot.serviceAreas}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="jj-icon-box-active w-10 h-10">
+                <Globe className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-black/50 text-xs uppercase">Languages</p>
+                <p className="text-black">{PROFILE_CONTENT.companySnapshot.languages}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="jj-icon-box-active w-10 h-10">
+                <Phone className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-black/50 text-xs uppercase">Contact</p>
+                <p className="text-black">{PROFILE_CONTENT.companySnapshot.contact}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="jj-icon-box-active w-10 h-10">
+                <Mail className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-black/50 text-xs uppercase">Email</p>
+                <p className="text-black">{PROFILE_CONTENT.companySnapshot.email}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="jj-icon-box-active w-10 h-10">
+                <Globe className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-black/50 text-xs uppercase">Website</p>
+                <p className="text-black">{PROFILE_CONTENT.companySnapshot.website}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 md:col-span-2">
+              <div className="jj-icon-box-active w-10 h-10">
+                <Clock className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-black/50 text-xs uppercase">Working Hours</p>
+                <p className="text-black">{PROFILE_CONTENT.companySnapshot.workingHours}</p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </SectionShell>
 
       {/* 13. Calls to Action */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Get Started</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Ready to Connect?
-            </h2>
-          </div>
-          
-          <motion.div 
-            className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
-            {PROFILE_CONTENT.ctas.map((cta) => (
-              <motion.div
-                key={cta.title}
-                variants={fadeInUp}
-                className="bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-2xl p-6 border border-gold/20 hover:border-gold/40 transition-colors group cursor-pointer"
-                onClick={handleWhatsApp}
-              >
-                <h3 className="text-white text-lg font-bold mb-2 group-hover:text-gold transition-colors">{cta.title}</h3>
-                <p className="text-zinc-400 text-sm mb-4">{cta.description}</p>
-                <div className="flex items-center text-gold text-sm">
-                  <span>Get Started</span>
-                  <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+      <SectionShell>
+        <div className="text-center mb-12">
+          <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Get Started</span>
+          <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+            Ready to Connect?
+          </h2>
         </div>
-      </section>
+
+        <motion.div
+          className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+        >
+          {PROFILE_CONTENT.ctas.map((cta) => (
+            <motion.div
+              key={cta.title}
+              variants={fadeInUp}
+              className="jj-card-inner group cursor-pointer"
+              onClick={handleWhatsApp}
+            >
+              <h3 className="text-black text-lg font-bold mb-2 group-hover:text-gold transition-colors">{cta.title}</h3>
+              <p className="text-black/70 text-sm mb-4">{cta.description}</p>
+              <div className="flex items-center text-gold text-sm font-semibold">
+                <span>Get Started</span>
+                <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </SectionShell>
 
       {/* 14. PDF Download Module */}
-      <section className="py-20 bg-gradient-to-b from-zinc-900/50 to-black">
-        <div className="container mx-auto px-4">
-          <motion.div 
-            className="max-w-3xl mx-auto text-center bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-3xl p-12 border border-gold/20"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <FileText className="w-16 h-16 text-gold mx-auto mb-6" />
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Download Company Profile
-            </h2>
-            <p className="text-zinc-400 text-lg mb-8">
-              Get our comprehensive company profile in PDF format
-            </p>
-            <Button
-              onClick={generatePDF}
-              disabled={isGenerating}
-              variant="primary"
-              className="px-10 py-6 text-lg"
-            >
-              {isGenerating ? (
-                <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-                  Generating...
-                </div>
-              ) : (
-                <>
-                  <Download className="w-5 h-5 mr-2" />
-                  Download Company Profile
-                </>
-              )}
-            </Button>
-            <p className="text-zinc-500 text-sm mt-4">
-              JBJ_Global_Real_Estate_Company_Profile.pdf
-            </p>
-          </motion.div>
-        </div>
-      </section>
+      <SectionShell>
+        <motion.div
+          className="max-w-4xl mx-auto text-center jj-card-inner"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <div className="jj-icon-box-active w-16 h-16 mx-auto mb-6">
+            <FileText className="w-8 h-8" />
+          </div>
+          <h2 className="text-black text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            Download Company Profile
+          </h2>
+          <p className="text-black/70 text-lg mb-8">JBJ_Global_Real_Estate_Company_Profile.pdf</p>
+          <Button onClick={generatePDF} disabled={isGenerating} variant="primary" size="lg">
+            {isGenerating ? (
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                Generating...
+              </div>
+            ) : (
+              <>
+                <Download className="w-5 h-5" />
+                Download Company Profile
+              </>
+            )}
+          </Button>
+        </motion.div>
+      </SectionShell>
 
       {/* Mobile Sticky Actions */}
       <div className="lg:hidden fixed bottom-4 left-4 right-4 z-50 flex gap-2">
-        <button
-          onClick={handleWhatsApp}
-          className="flex-1 py-3 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow-lg"
-        >
-          <MessageCircle className="w-5 h-5 mr-2" />
+        <Button onClick={handleWhatsApp} variant="primary" className="flex-1 rounded-full">
+          <MessageCircle className="w-5 h-5" />
           WhatsApp
-        </button>
-        <button
-          onClick={handleCall}
-          className="flex-1 py-3 rounded-full bg-gold flex items-center justify-center text-black shadow-lg"
-        >
-          <Phone className="w-5 h-5 mr-2" />
+        </Button>
+        <Button onClick={handleCall} variant="primary" className="flex-1 rounded-full">
+          <Phone className="w-5 h-5" />
           Call
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={generatePDF}
           disabled={isGenerating}
-          className="py-3 px-4 rounded-full bg-white flex items-center justify-center text-black shadow-lg disabled:opacity-50"
+          variant="primary"
+          size="icon"
+          className="rounded-full"
+          aria-label="Download Company Profile (PDF)"
         >
           {isGenerating ? (
             <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
           ) : (
             <Download className="w-5 h-5" />
           )}
-        </button>
+        </Button>
       </div>
     </div>
   );
