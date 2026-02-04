@@ -23,8 +23,16 @@ import {
   Crown,
   Mail,
   Sparkles,
-  HelpCircle
+  HelpCircle,
+  TrendingUp,
+  Briefcase,
+  Settings
 } from "lucide-react";
+import { SaleStatusSelect } from "@/components/filters/SaleStatusFilter";
+import { FilterToolbar } from "@/components/filters/FilterToolbar";
+import { DisplayModeToggle } from "@/components/filters/DisplayModeToggle";
+import { SettingsDropdown } from "@/components/filters/SettingsDropdown";
+import { getSaleStatusConfig, type DisplayMode, type CurrencyCode, type AreaUnit } from "@/constants/filterConfig";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -120,14 +128,14 @@ const COMPLETION_STATUS = [
   { value: "under-construction", label: "Under Construction" },
 ];
 
-// Sale status options from Reelly API
+// Sale status options from Reelly API - with color dots
 const SALE_STATUS = [
-  { value: "all", label: "All Sale Statuses" },
-  { value: "Announced", label: "Announced" },
-  { value: "On Sale", label: "On Sale" },
-  { value: "Sold Out", label: "Sold Out" },
-  { value: "Presale (EOI)", label: "Presale (EOI)" },
-  { value: "Start of Sales", label: "Start of Sales" },
+  { value: "all", label: "All Sale Statuses", dotClass: null },
+  { value: "Announced", label: "Announced", dotClass: "bg-pink-400" },
+  { value: "Presale (EOI)", label: "Pre-sale (EOI)", dotClass: "bg-green-400" },
+  { value: "Start of Sales", label: "Start of Sales", dotClass: "bg-yellow-400" },
+  { value: "On Sale", label: "On Sale", dotClass: "bg-blue-400" },
+  { value: "Sold Out", label: "Sold Out", dotClass: "bg-red-500" },
 ];
 
 const INVESTMENT_TYPES = [
@@ -167,6 +175,7 @@ const Properties = () => {
   const [sortBy, setSortBy] = useState<string>("newest");
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [isRequestFormOpen, setIsRequestFormOpen] = useState(false);
+  const [displayMode, setDisplayMode] = useState<DisplayMode>('investor');
   
   // Update filters when URL params change (including developer from homepage marquee)
   useEffect(() => {
@@ -646,8 +655,26 @@ const Properties = () => {
             </Select>
           </div>
 
-          {/* Third Row - Premium, Advanced Filters, Search */}
+          {/* Third Row - Display Mode, Sale Status, Premium, Advanced Filters */}
           <div className="flex items-center gap-3 mt-4 flex-wrap">
+            {/* Display Mode Toggle */}
+            <DisplayModeToggle
+              value={displayMode}
+              onChange={setDisplayMode}
+              variant="light"
+              size="sm"
+            />
+
+            {/* Sale Status with colored dots */}
+            <SaleStatusSelect
+              value={filters.saleStatus}
+              onChange={(val) => {
+                updateFilter("saleStatus", val);
+                setAppliedFilters(prev => ({ ...prev, saleStatus: val }));
+              }}
+              variant="light"
+            />
+
             {/* Premium Filter Toggle */}
             <Button
               variant={filters.premiumOnly ? "default" : "outline"}
