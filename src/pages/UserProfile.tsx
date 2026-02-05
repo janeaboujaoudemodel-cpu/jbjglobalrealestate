@@ -34,9 +34,12 @@ import {
   LogOut,
   ChevronRight,
   Loader2,
-  Pencil
+  Pencil,
+  ArrowLeft,
+  CheckCircle
 } from "lucide-react";
 import { PhoneInput } from "@/components/ui/phone-input";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 
 const UserProfile = () => {
   const navigate = useNavigate();
@@ -61,10 +64,13 @@ const UserProfile = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [changingPassword, setChangingPassword] = useState(false);
   
-  // Email change state
+  // Email change state - OTP based
   const [newEmail, setNewEmail] = useState("");
-  const [changingEmail, setChangingEmail] = useState(false);
   const [showEmailChangeDialog, setShowEmailChangeDialog] = useState(false);
+  const [emailChangeStep, setEmailChangeStep] = useState<'input' | 'verify'>('input');
+  const [otpCode, setOtpCode] = useState("");
+  const [sendingOtp, setSendingOtp] = useState(false);
+  const [verifyingEmail, setVerifyingEmail] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -215,34 +221,104 @@ const UserProfile = () => {
     }
   };
 
-  const handleChangeEmail = async () => {
+  // Send OTP to new email
+  const handleSendEmailOtp = async () => {
     if (!newEmail || !newEmail.includes('@')) {
       toast.error("Please enter a valid email address");
       return;
     }
 
-    if (newEmail === user?.email) {
+    if (newEmail.toLowerCase() === user?.email?.toLowerCase()) {
       toast.error("New email is the same as current email");
       return;
     }
 
-    setChangingEmail(true);
+    setSendingOtp(true);
     try {
-      const { error } = await supabase.auth.updateUser({
-        email: newEmail
+      const response = await supabase.functions.invoke('send-email-otp', {
+        body: { 
+          email: newEmail,
+          full_name: user?.user_metadata?.full_name || user?.email?.split('@')[0]
+        }
       });
 
-      if (error) throw error;
+      if (response.error) throw response.error;
+      
+      const data = response.data;
+      if (data?.error) throw new Error(data.error);
 
-      toast.success("Verification email sent to both addresses. Please check your inbox.");
-      setShowEmailChangeDialog(false);
-      setNewEmail("");
+      toast.success("Verification code sent to your new email");
+      setEmailChangeStep('verify');
     } catch (error: any) {
-      console.error("Error changing email:", error);
+      console.error("Error sending OTP:", error);
+      toast.error(error.message || "Failed to send verification code");
+    } finally {
+      setSendingOtp(false);
+    }
+  };
+
+  // Verify OTP and change email
+  const handleVerifyAndChangeEmail = async () => {
+    if (otpCode.length !== 6) {
+      toast.error("Please enter the complete 6-digit code");
+      return;
+    }
+
+    setVerifyingEmail(true);
+    try {
+      // Step 1: Verify the OTP
+      const verifyResponse = await supabase.functions.invoke('verify-email-otp', {
+        body: { 
+          email: newEmail,
+          otp_code: otpCode
+        }
+      });
+
+      if (verifyResponse.error) throw verifyResponse.error;
+      
+      const verifyData = verifyResponse.data;
+      if (verifyData?.error) throw new Error(verifyData.error);
+
+      // Step 2: Change the email using the new edge function
+      const changeResponse = await supabase.functions.invoke('change-user-email', {
+        body: { new_email: newEmail }
+      });
+
+      if (changeResponse.error) throw changeResponse.error;
+      
+      const changeData = changeResponse.data;
+      if (changeData?.error) throw new Error(changeData.error);
+
+      toast.success("Email changed successfully! Please sign in with your new email.");
+      
+      // Close dialog and reset state
+      setShowEmailChangeDialog(false);
+      resetEmailChangeState();
+      
+      // Sign out user so they can log in with new email
+      await signOut();
+      navigate('/auth');
+    } catch (error: any) {
+      console.error("Error verifying/changing email:", error);
       toast.error(error.message || "Failed to change email");
     } finally {
-      setChangingEmail(false);
+      setVerifyingEmail(false);
     }
+  };
+
+  // Reset email change state
+  const resetEmailChangeState = () => {
+    setNewEmail("");
+    setOtpCode("");
+    setEmailChangeStep('input');
+  };
+
+  // Handle dialog close
+  const handleEmailDialogClose = (open: boolean) => {
+    if (!open) {
+      resetEmailChangeState();
+    }
+    setShowEmailChangeDialog(open);
   };
 
   const handleSignOut = async () => {
@@ -535,58 +611,137 @@ const UserProfile = () => {
         </div>
       </div>
       
-      {/* Email Change Dialog */}
-      <Dialog open={showEmailChangeDialog} onOpenChange={setShowEmailChangeDialog}>
-        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+      {/* Email Change Dialog - OTP Based */}
+      <Dialog open={showEmailChangeDialog} onOpenChange={handleEmailDialogClose}>
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-foreground flex items-center gap-2">
               <Mail className="h-5 w-5 text-gold" />
               Change Email Address
             </DialogTitle>
             <DialogDescription className="text-muted-foreground">
-              A verification link will be sent to both your current and new email addresses.
+              {emailChangeStep === 'input' 
+                ? "Enter your new email address. We'll send a verification code to confirm ownership."
+                : `Enter the 6-digit code sent to ${newEmail}`
+              }
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label className="text-foreground">Current Email</Label>
-              <Input value={user?.email || ""} disabled className="bg-muted" />
+          
+          {emailChangeStep === 'input' ? (
+            // Step 1: Enter new email
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label className="text-foreground">Current Email</Label>
+                <Input value={user?.email || ""} disabled className="bg-muted" />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-foreground">New Email Address</Label>
+                <Input
+                  type="email"
+                  value={newEmail}
+                  onChange={(e) => setNewEmail(e.target.value)}
+                  placeholder="Enter new email address"
+                  disabled={sendingOtp}
+                />
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label className="text-foreground">New Email Address</Label>
-              <Input
-                type="email"
-                value={newEmail}
-                onChange={(e) => setNewEmail(e.target.value)}
-                placeholder="Enter new email address"
-              />
+          ) : (
+            // Step 2: Enter OTP code
+            <div className="space-y-4 py-4">
+              <div className="text-center">
+                <p className="text-sm text-muted-foreground mb-4">
+                  A 6-digit verification code has been sent to:
+                </p>
+                <p className="font-medium text-foreground mb-6">{newEmail}</p>
+                
+                <div className="flex justify-center mb-4">
+                  <InputOTP 
+                    maxLength={6} 
+                    value={otpCode} 
+                    onChange={setOtpCode}
+                    disabled={verifyingEmail}
+                  >
+                    <InputOTPGroup>
+                      <InputOTPSlot index={0} className="border-gold/50 text-foreground" />
+                      <InputOTPSlot index={1} className="border-gold/50 text-foreground" />
+                      <InputOTPSlot index={2} className="border-gold/50 text-foreground" />
+                      <InputOTPSlot index={3} className="border-gold/50 text-foreground" />
+                      <InputOTPSlot index={4} className="border-gold/50 text-foreground" />
+                      <InputOTPSlot index={5} className="border-gold/50 text-foreground" />
+                    </InputOTPGroup>
+                  </InputOTP>
+                </div>
+                
+                <p className="text-xs text-muted-foreground">
+                  Didn't receive the code?{" "}
+                  <button 
+                    type="button"
+                    onClick={() => {
+                      setOtpCode("");
+                      handleSendEmailOtp();
+                    }}
+                    className="text-gold hover:underline"
+                    disabled={sendingOtp}
+                  >
+                    {sendingOtp ? "Sending..." : "Resend"}
+                  </button>
+                </p>
+              </div>
             </div>
-          </div>
-          <DialogFooter>
+          )}
+          
+          <DialogFooter className="flex-col sm:flex-row gap-2">
+            {emailChangeStep === 'verify' && (
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setEmailChangeStep('input');
+                  setOtpCode("");
+                }}
+                disabled={verifyingEmail}
+                className="sm:mr-auto"
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back
+              </Button>
+            )}
             <Button 
               variant="outline" 
-              onClick={() => {
-                setShowEmailChangeDialog(false);
-                setNewEmail("");
-              }}
+              onClick={() => handleEmailDialogClose(false)}
+              disabled={sendingOtp || verifyingEmail}
             >
               Cancel
             </Button>
-            <Button 
-              variant="primary" 
-              onClick={handleChangeEmail} 
-              disabled={changingEmail || !newEmail}
-            >
-              {changingEmail ? (
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              ) : (
-                <Mail className="h-4 w-4 mr-2" />
-              )}
-              Send Verification
-            </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+            {emailChangeStep === 'input' ? (
+              <Button 
+                variant="primary" 
+                onClick={handleSendEmailOtp} 
+                disabled={sendingOtp || !newEmail}
+              >
+                {sendingOtp ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Mail className="h-4 w-4 mr-2" />
+                )}
+                Send Verification Code
+              </Button>
+            ) : (
+              <Button 
+                variant="primary" 
+                onClick={handleVerifyAndChangeEmail} 
+                disabled={verifyingEmail || otpCode.length !== 6}
+              >
+                {verifyingEmail ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <CheckCircle className="h-4 w-4 mr-2" />
+                )}
+                Verify & Change Email
+              </Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
