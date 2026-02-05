@@ -1,191 +1,173 @@
 
-# Implementation Plan: Premium Footer Navigation & Contact Section Upgrade
+
+# Implementation Plan: Footer Section Title & Divider Fixes
 
 ## Summary
-This plan updates the Footer's "Navigation Menu + Professional Tools + Get In Touch" block to match the premium champagne styling used in the Legal Disclaimer and "Stay in the Loop" sections, plus adds colored icon backgrounds for contact methods.
+This plan fixes the visibility of the "Get In Touch" divider, corrects the gradient text rendering issue on section titles (which shows as squares on some browsers), ensures all category titles are aligned on the same line, and standardizes colors (gold titles, black page links).
 
 ---
 
 ## Issues Identified
 
-### 1. Navigation/Tools/Contact Section - Missing Premium Champagne Layer
-**Current State (Line 503-508):**
+### 1. "Get In Touch" Divider Not Visible
+**Current State (Line 750):**
 ```tsx
-<div 
-  className="relative rounded-xl mx-4 sm:mx-6 md:mx-8 my-4 sm:my-6 overflow-hidden"
+<div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent mx-4" />
+```
+The `via-gold/40` (40% opacity) is too faint to be visible.
+
+**Fix:**
+Make the divider thicker and more visible with higher opacity:
+```tsx
+<div className="h-[2px] bg-gradient-to-r from-gold/20 via-gold/80 to-gold/20 mx-4" />
+```
+
+### 2. Section Titles Showing Squares (Gradient Text Bug)
+**Current State (Lines 510-516, 536-542, etc.):**
+```tsx
+<h4 
+  className="font-bold text-[10px] sm:text-xs md:text-sm uppercase..."
   style={{
-    background: 'linear-gradient(165deg, rgba(200,167,102,0.08) 0%, rgba(200,167,102,0.04) 50%, rgba(200,167,102,0.02) 100%)',
-    border: '1px solid rgba(200,167,102,0.2)',
+    background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
   }}
 >
 ```
-This is a very subtle, nearly invisible gold tint - NOT matching the Legal Disclaimer's visible champagne gradient.
+The `WebkitBackgroundClip: 'text'` and `WebkitTextFillColor: 'transparent'` cause rendering issues on some browsers, showing as colored squares instead of gradient text.
 
-**Required:**
-Match the Legal Disclaimer style (Line 880):
+**Fix:**
+Replace complex gradient with simple solid gold color using Tailwind:
 ```tsx
-className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)]"
+<h4 className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
 ```
 
-### 2. Professional Tools Section - Missing Champagne Background
-**Current State (Line 726):**
-The Professional Tools section has no champagne layer - it sits directly on black with individual dark buttons.
+### 3. Categories Not Aligned on Same Line
+**Current State:**
+- Column 1 uses `text-[10px] sm:text-xs md:text-sm` for titles
+- Columns 2-4 use `text-xs sm:text-sm md:text-base lg:text-lg` for titles
+- This inconsistency causes misalignment
 
-**Required:**
-Wrap Professional Tools in same champagne layer as navigation grid.
+**Fix:**
+Standardize ALL section titles to the same font size:
+```tsx
+className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold"
+```
 
-### 3. Get In Touch Section - Missing Champagne Background + Wrong Icon Colors
-**Current State (Lines 789-813):**
-- Phone icon (Line 793): `text-gold`
-- WhatsApp icon (Line 803): `text-gold`
-- Email icon (Line 811): `text-gold`
-
-**Required:**
-- WhatsApp icon: **Green** (`text-emerald-500` with green background circle)
-- Phone icon: **Blue** (`text-blue-500` with blue background circle)
-- Email icon: **Gold** (`text-gold` with gold background circle)
-
-Each icon should have a circular background layer to make them premium.
+### 4. Page Links Must Be Black
+**Current State (Lines 527, 551, etc.):**
+```tsx
+className="text-zinc-700 hover:text-gold..."
+```
+This is already correct - `text-zinc-700` is dark/black, and it hovers to gold.
 
 ---
 
-## Implementation Plan
+## Implementation Details
 
-### Phase 1: Wrap All Three Sections in One Continuous Champagne Layer
+### File to Modify
+`src/components/Footer.tsx`
 
-**File:** `src/components/Footer.tsx`
+### Phase 1: Fix All Section Title Styling (Lines 510-516, 536-542, 562-568, 588-594, 614-620, 640-646, 666-672, 692-698, 723-730, 754-760)
 
-**Change:** Restructure the interior of the ZONE 2 card (lines 454-817) to wrap Navigation Grid + Professional Tools + Get In Touch in a single premium champagne container.
+Replace ALL section titles from gradient style to solid gold:
 
-**Code Changes:**
-
-1. **Line 502-509 - Replace inner wrapper with premium champagne container:**
+**Before:**
 ```tsx
-{/* Premium Champagne Inner Layer - Wraps Navigation + Tools + Contact */}
-<div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] mx-4 sm:mx-6 md:mx-8 my-4 sm:my-6 overflow-hidden">
-```
-
-2. **Extend this container to wrap Professional Tools and Get In Touch sections (through line 815)**
-
-3. **Update all text colors inside to use dark text (text-zinc-700, text-black) instead of light (text-zinc-400, text-white) since background is now light**
-
-### Phase 2: Update Navigation Grid Text Colors for Light Background
-
-**Lines 526-717:**
-- Change link colors from `text-zinc-400 hover:text-gold` to `text-zinc-700 hover:text-gold`
-- Section headers already use gradient text which will work on champagne background
-
-### Phase 3: Update Professional Tools for Light Background
-
-**Lines 725-756:**
-- Change title from gold gradient (already works on champagne)
-- Change tool buttons from dark gradient to light pearl style:
-```tsx
-className="text-black hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-lg sm:rounded-xl group bg-white/80 border border-gold/30 shadow-sm hover:shadow-md"
-```
-
-### Phase 4: Update Get In Touch Contact Icons with Colored Backgrounds
-
-**Lines 789-813:**
-
-Replace simple icons with premium circle-background icons:
-
-**Phone (Blue):**
-```tsx
-<a
-  href={getCallUrl()}
-  className="flex items-center justify-center gap-2 sm:gap-3 text-zinc-700 hover:text-blue-600 transition-all duration-300 text-xs sm:text-sm md:text-base py-1"
+<h4 
+  className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
+  style={{
+    background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+  }}
 >
-  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
-    <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" />
-  </div>
-  <span>{CONTACT_INFO.phone}</span>
-</a>
 ```
 
-**WhatsApp (Green):**
+**After:**
 ```tsx
-<a
-  href={getWhatsAppUrl()}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="flex items-center justify-center gap-2 sm:gap-3 text-zinc-700 hover:text-emerald-600 transition-all duration-300 text-xs sm:text-sm md:text-base py-1"
+<h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
+```
+
+### Phase 2: Fix Dividers to Be More Visible (Lines 718 and 750)
+
+**Before:**
+```tsx
+<div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent mx-4" />
+```
+
+**After:**
+```tsx
+<div className="h-[2px] bg-gradient-to-r from-gold/20 via-gold/80 to-gold/20 mx-6" />
+```
+
+### Phase 3: Fix "Get In Touch" Title (Line 754-762)
+
+**Before:**
+```tsx
+<h4 
+  className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-3 sm:mb-4 md:mb-5"
+  style={{
+    background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+  }}
 >
-  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-emerald-500/20 flex items-center justify-center">
-    <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500" />
-  </div>
-  <span>WhatsApp Us</span>
-</a>
+  Get in Touch
+</h4>
 ```
 
-**Email (Gold):**
+**After:**
 ```tsx
-<a
-  href={getEmailUrl()}
-  className="flex items-center justify-center gap-2 sm:gap-3 text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base py-1"
+<h4 className="font-bold text-sm sm:text-base md:text-lg uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-3 sm:mb-4 md:mb-5 text-gold">
+  Get in Touch
+</h4>
+```
+
+### Phase 4: Fix "Professional Tools" Title (Lines 723-733)
+
+**Before:**
+```tsx
+<h4 
+  className="font-bold text-sm sm:text-base md:text-lg uppercase tracking-[0.12em] sm:tracking-[0.18em] md:tracking-[0.25em] mb-2"
+  style={{
+    background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    filter: 'drop-shadow(0 2px 6px rgba(200,167,102,0.3))',
+  }}
 >
-  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gold/20 flex items-center justify-center">
-    <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
-  </div>
-  <span className="break-all">{CONTACT_INFO.emailCapitalized}</span>
-</a>
+  ✦ Professional Tools ✦
+</h4>
 ```
 
-### Phase 5: Update Location Icon
-
-**Line 782-785:**
-Change MapPin icon to also have a background layer matching the premium style:
+**After:**
 ```tsx
-<div className="flex items-center justify-center gap-2 sm:gap-3 text-zinc-700 text-xs sm:text-sm md:text-base mb-3 sm:mb-4 md:mb-5 px-1">
-  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0">
-    <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
-  </div>
-  <span className="break-words text-center">{CONTACT_INFO.address}</span>
-</div>
+<h4 className="font-bold text-sm sm:text-base md:text-lg uppercase tracking-[0.12em] sm:tracking-[0.18em] md:tracking-[0.25em] mb-2 text-gold drop-shadow-[0_2px_6px_rgba(200,167,102,0.3)]">
+  ✦ Professional Tools ✦
+</h4>
 ```
 
 ---
 
-## Files to Modify
+## Summary of Changes
 
-| File | Changes |
-|------|---------|
-| `src/components/Footer.tsx` | Restructure ZONE 2 interior, add champagne layer, update text colors, add colored icon backgrounds |
-
----
-
-## Technical Details
-
-### Color Mapping
-- **Background**: `bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark`
-- **Border**: `border border-gold/30`
-- **Shadow**: `shadow-[0_0_40px_rgba(200,167,102,0.18)]`
-- **Text on champagne**: `text-zinc-700` (dark gray for readability)
-- **Headers on champagne**: Keep existing gold gradient text
-- **WhatsApp icon**: `bg-emerald-500/20` background + `text-emerald-500` icon
-- **Phone icon**: `bg-blue-500/20` background + `text-blue-500` icon
-- **Email/Location icon**: `bg-gold/20` background + `text-gold` icon
-
-### Structure After Changes
-```
-ZONE 2 Card (Black outer wrapper with gold border)
-└── Premium Champagne Inner Container (matching Legal Disclaimer style)
-    ├── Navigation Grid (4 columns: Properties/Services, Hubs, Guides/Intel, About/Careers)
-    ├── Gold Divider
-    ├── Professional Tools (Premium buttons on champagne)
-    ├── Gold Divider
-    └── Get In Touch (Colored icon circles + location)
-```
+| Element | Before | After |
+|---------|--------|-------|
+| Section titles (Properties, Services, etc.) | Complex gradient with `WebkitBackgroundClip` showing as squares | Simple `text-gold` |
+| Title font sizes | Inconsistent (some `text-[10px]`, some `text-lg`) | Unified `text-xs sm:text-sm md:text-base` |
+| Dividers | `h-px via-gold/40` (barely visible) | `h-[2px] via-gold/80` (clearly visible) |
+| Page links | `text-zinc-700` (already correct) | No change needed |
+| Get In Touch title | Gradient text | `text-gold text-sm sm:text-base md:text-lg` |
+| Professional Tools title | Gradient text with filter | `text-gold` with Tailwind drop-shadow |
 
 ---
 
 ## Deliverables
 
-1. Navigation menu section wrapped in visible champagne gradient layer
-2. Professional Tools section included in same champagne layer
-3. Get In Touch section included in same champagne layer
-4. WhatsApp icon with green circle background
-5. Phone icon with blue circle background
-6. Email icon with gold circle background
-7. All text updated for readability on light champagne background
-8. Consistent styling matching Legal Disclaimer and "Stay in the Loop" sections
+1. All section titles display in solid gold (no squares/boxes)
+2. All category titles aligned at the same size
+3. Dividers clearly visible with 80% gold opacity
+4. Page links remain black with gold hover
+5. "Get In Touch" and "Professional Tools" titles properly styled in gold
+
