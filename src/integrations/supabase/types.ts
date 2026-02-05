@@ -2507,6 +2507,7 @@ export type Database = {
           status: string
           updated_at: string
           user_email: string
+          user_id: string | null
           user_name: string | null
           user_phone: string | null
           was_helpful: boolean | null
@@ -2533,6 +2534,7 @@ export type Database = {
           status?: string
           updated_at?: string
           user_email: string
+          user_id?: string | null
           user_name?: string | null
           user_phone?: string | null
           was_helpful?: boolean | null
@@ -2559,6 +2561,7 @@ export type Database = {
           status?: string
           updated_at?: string
           user_email?: string
+          user_id?: string | null
           user_name?: string | null
           user_phone?: string | null
           was_helpful?: boolean | null
