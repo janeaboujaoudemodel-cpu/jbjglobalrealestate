@@ -499,22 +499,18 @@ const Footer = () => {
             <div className="absolute bottom-0 right-0 h-full w-[3px] bg-gradient-to-t from-gold via-gold/80 to-transparent rounded-br-2xl sm:rounded-br-3xl" />
           </div>
           
-          {/* Navigation Grid Section - Wrapped in champagne background layer */}
-          <div 
-            className="relative rounded-xl mx-4 sm:mx-6 md:mx-8 my-4 sm:my-6 overflow-hidden"
-            style={{
-              background: 'linear-gradient(165deg, rgba(200,167,102,0.08) 0%, rgba(200,167,102,0.04) 50%, rgba(200,167,102,0.02) 100%)',
-              border: '1px solid rgba(200,167,102,0.2)',
-            }}
-          >
-          <div className="grid grid-cols-2 lg:grid-cols-4">
+          {/* Premium Champagne Inner Layer - Wraps Navigation + Tools + Contact */}
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] mx-4 sm:mx-6 md:mx-8 my-4 sm:my-6 overflow-hidden">
+            
+            {/* Navigation Grid Section */}
+            <div className="grid grid-cols-2 lg:grid-cols-4">
             
             {/* Column 1: Properties + Services */}
-            <div className="p-2 sm:p-3 md:p-5 border-r border-b lg:border-b-0 border-gold/10">
+            <div className="p-2 sm:p-3 md:p-5 border-r border-b lg:border-b-0 border-gold/20">
               <h4 
                 className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
+                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                 }}
@@ -528,7 +524,7 @@ const Footer = () => {
                     <li key={link.href}>
                       <Link
                         to={link.href}
-                        className="text-zinc-400 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
+                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
                       >
                         {link.label}
                       </Link>
@@ -540,7 +536,7 @@ const Footer = () => {
               <h4 
                 className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
+                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                 }}
@@ -552,7 +548,7 @@ const Footer = () => {
                   <li key={link.href}>
                     <Link
                       to={link.href}
-                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
+                      className="text-zinc-700 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
                     >
                       {link.label}
                     </Link>
@@ -562,11 +558,11 @@ const Footer = () => {
             </div>
             
             {/* Column 2: Investor Hub + Broker Hub */}
-            <div className="p-2 sm:p-3 md:p-5 border-b lg:border-b-0 lg:border-r border-gold/10">
+            <div className="p-2 sm:p-3 md:p-5 border-b lg:border-b-0 lg:border-r border-gold/20">
               <h4 
                 className="font-bold text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
+                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                 }}
@@ -580,7 +576,7 @@ const Footer = () => {
                     <li key={link.href}>
                       <Link
                         to={link.href}
-                        className="text-zinc-400 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
+                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
                       >
                         {link.label}
                       </Link>
@@ -592,7 +588,7 @@ const Footer = () => {
               <h4 
                 className="font-bold text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
+                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                 }}
@@ -604,7 +600,7 @@ const Footer = () => {
                   <li key={link.href}>
                     <Link
                       to={link.href}
-                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
+                      className="text-zinc-700 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
                     >
                       {link.label}
                     </Link>
@@ -614,11 +610,11 @@ const Footer = () => {
             </div>
 
             {/* Column 3: Guides + Market Intelligence */}
-            <div className="p-2 sm:p-3 md:p-5 border-r border-gold/10">
+            <div className="p-2 sm:p-3 md:p-5 border-r border-gold/20">
               <h4 
                 className="font-bold text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
+                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                 }}
@@ -632,7 +628,7 @@ const Footer = () => {
                     <li key={link.href}>
                       <Link
                         to={link.href}
-                        className="text-zinc-400 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
+                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
                       >
                         {link.label}
                       </Link>
@@ -644,7 +640,7 @@ const Footer = () => {
               <h4 
                 className="font-bold text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
+                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                 }}
@@ -656,7 +652,7 @@ const Footer = () => {
                   <li key={link.href}>
                     <Link
                       to={link.href}
-                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
+                      className="text-zinc-700 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
                     >
                       {link.label}
                     </Link>
@@ -670,7 +666,7 @@ const Footer = () => {
               <h4 
                 className="font-bold text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
+                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                 }}
@@ -684,7 +680,7 @@ const Footer = () => {
                     <li key={link.href}>
                       <Link
                         to={link.href}
-                        className="text-zinc-400 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
+                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
                       >
                         {link.label}
                       </Link>
@@ -696,7 +692,7 @@ const Footer = () => {
               <h4 
                 className="font-bold text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
                 style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #E8D5A3 100%)',
+                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                 }}
@@ -708,7 +704,7 @@ const Footer = () => {
                   <li key={link.href}>
                     <Link
                       to={link.href}
-                      className="text-zinc-400 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
+                      className="text-zinc-700 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
                     >
                       {link.label}
                     </Link>
@@ -717,38 +713,32 @@ const Footer = () => {
               </ul>
             </div>
           </div>
-          </div>
 
           {/* Internal Divider */}
-          <div className="h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+          <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent mx-4" />
 
-          {/* Professional Tools Section - Premium Enhanced */}
+          {/* Professional Tools Section - Premium Enhanced on Champagne */}
           <div className="p-4 sm:p-6 md:p-10 text-center">
             <div className="mb-4 sm:mb-6">
               <h4 
                 className="font-bold text-sm sm:text-base md:text-lg uppercase tracking-[0.12em] sm:tracking-[0.18em] md:tracking-[0.25em] mb-2"
                 style={{
-                  background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
+                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
-                  filter: 'drop-shadow(0 2px 6px rgba(200,167,102,0.5))',
+                  filter: 'drop-shadow(0 2px 6px rgba(200,167,102,0.3))',
                 }}
               >
                 ✦ Professional Tools ✦
               </h4>
-              <p className="text-gold/70 text-xs sm:text-sm md:text-base font-medium tracking-wider">AI-Powered Assistants</p>
+              <p className="text-zinc-600 text-xs sm:text-sm md:text-base font-medium tracking-wider">AI-Powered Assistants</p>
             </div>
             <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4">
               {professionalTools.map((link) => (
                 <Link
                   key={link.href}
                   to={link.href}
-                  className="text-white hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-lg sm:rounded-xl group"
-                  style={{
-                    background: 'linear-gradient(145deg, rgba(30,30,35,0.95) 0%, rgba(15,15,20,0.98) 100%)',
-                    boxShadow: '0 4px 20px -3px rgba(0,0,0,0.5), inset 0 1px 0 rgba(200,167,102,0.15), inset 0 -1px 0 rgba(0,0,0,0.4)',
-                    border: '1px solid rgba(200,167,102,0.35)',
-                  }}
+                  className="text-black hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-lg sm:rounded-xl group bg-white/80 border border-gold/30 shadow-sm hover:shadow-md hover:bg-white"
                 >
                   <span className="group-hover:text-gold transition-colors">{link.label}</span>
                 </Link>
@@ -757,20 +747,14 @@ const Footer = () => {
           </div>
 
           {/* Internal Divider */}
-          <div className="h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+          <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent mx-4" />
 
-          {/* Contact Section - Connected */}
+          {/* Contact Section - Premium on Champagne */}
           <div className="p-3 sm:p-5 md:p-8 text-center relative">
-            {/* Corner accents */}
-            <div className="absolute top-2 left-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 border-t-2 border-l-2 border-gold/30 rounded-tl-lg" />
-            <div className="absolute top-2 right-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 border-t-2 border-r-2 border-gold/30 rounded-tr-lg" />
-            <div className="absolute bottom-2 left-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 border-b-2 border-l-2 border-gold/30 rounded-bl-lg" />
-            <div className="absolute bottom-2 right-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 border-b-2 border-r-2 border-gold/30 rounded-br-lg" />
-            
             <h4 
               className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-3 sm:mb-4 md:mb-5"
               style={{
-                background: 'linear-gradient(135deg, #FFFFFF 0%, #D4AF37 100%)',
+                background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
               }}
@@ -778,40 +762,54 @@ const Footer = () => {
               Get in Touch
             </h4>
             
-            {/* Location */}
-            <div className="flex items-center justify-center gap-1.5 sm:gap-2 md:gap-3 text-zinc-200 text-xs sm:text-sm md:text-base mb-3 sm:mb-4 md:mb-5 px-1">
-              <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-gold flex-shrink-0 drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
+            {/* Location with Gold Circle Background */}
+            <div className="flex items-center justify-center gap-2 sm:gap-3 text-zinc-700 text-xs sm:text-sm md:text-base mb-3 sm:mb-4 md:mb-5 px-1">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0">
+                <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
+              </div>
               <span className="break-words text-center">{CONTACT_INFO.address}</span>
             </div>
             
-            {/* Phone, WhatsApp, Email - Stack on mobile */}
-            <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4 md:gap-5">
+            {/* Phone, WhatsApp, Email - With Colored Circle Backgrounds */}
+            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-6 md:gap-8">
+              {/* Phone - Blue */}
               <a
                 href={getCallUrl()}
-                className="flex items-center justify-center gap-1.5 sm:gap-2 text-zinc-200 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base py-1"
+                className="flex items-center justify-center gap-2 sm:gap-3 text-zinc-700 hover:text-blue-600 transition-all duration-300 text-xs sm:text-sm md:text-base py-1"
               >
-                <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-gold flex-shrink-0 drop-shadow-[0_0_8px_rgba(200,167,102,0.35)]" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
+                  <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" />
+                </div>
                 <span>{CONTACT_INFO.phone}</span>
               </a>
-              <span className="text-gold/40 hidden sm:inline">|</span>
+              
+              {/* WhatsApp - Green */}
               <a
                 href={getWhatsAppUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-1.5 sm:gap-2 text-zinc-200 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base py-1"
+                className="flex items-center justify-center gap-2 sm:gap-3 text-zinc-700 hover:text-emerald-600 transition-all duration-300 text-xs sm:text-sm md:text-base py-1"
               >
-                <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-gold flex-shrink-0 drop-shadow-[0_0_8px_rgba(200,167,102,0.35)]" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                  <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500" />
+                </div>
                 <span>WhatsApp Us</span>
               </a>
-              <span className="text-gold/40 hidden sm:inline">|</span>
+              
+              {/* Email - Gold */}
               <a
                 href={getEmailUrl()}
-                className="flex items-center justify-center gap-1.5 sm:gap-2 text-zinc-200 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base py-1"
+                className="flex items-center justify-center gap-2 sm:gap-3 text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base py-1"
               >
-                <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-gold flex-shrink-0 drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gold/20 flex items-center justify-center">
+                  <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
+                </div>
                 <span className="break-all">{CONTACT_INFO.emailCapitalized}</span>
               </a>
             </div>
+          </div>
+          
+          {/* Close Premium Champagne Inner Layer */}
           </div>
         </div>
         </div>
