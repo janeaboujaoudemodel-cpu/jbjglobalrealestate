@@ -1,17 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useSyncJobs } from "@/hooks/useSyncJobs";
 import { 
   RefreshCw, Download, CheckCircle, XCircle, 
   ExternalLink, Info, Zap, Database, CloudDownload, Play, ArrowRight, MapPin,
-  Trash2, AlertTriangle, RotateCcw, Shield
+  Trash2, AlertTriangle, RotateCcw, Shield, Pause, Clock, AlertCircle
 } from "lucide-react";
 
 interface ApiSyncResult {
@@ -86,6 +88,20 @@ interface CleanupResult {
 
 export function ReellyImportPanel() {
   const navigate = useNavigate();
+  
+  // Use persistent sync jobs hook
+  const { 
+    activeJob, 
+    recentJobs, 
+    liveCounts, 
+    createJob, 
+    updateJobProgress, 
+    completeJob, 
+    cancelJob,
+    setApiTotal,
+    refreshCounts 
+  } = useSyncJobs();
+  
   const [isTestingApi, setIsTestingApi] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [apiConnected, setApiConnected] = useState<boolean | null>(null);
@@ -97,6 +113,18 @@ export function ReellyImportPanel() {
   const [recentImports, setRecentImports] = useState<RecentPendingImport[]>([]);
   const [isRecentOpen, setIsRecentOpen] = useState(false);
   const [isRecentLoading, setIsRecentLoading] = useState(false);
+  
+  // Sync reconciliation state - STRICT ACCOUNTING
+  const [syncReconciliation, setSyncReconciliation] = useState<{
+    requested: number;
+    fetched: number;
+    created: number;
+    updated: number;
+    skipped: number;
+    failed: number;
+    errors: string[];
+    isReconciled: boolean;
+  } | null>(null);
   
   // Developer sync state
   const [isSyncingDevs, setIsSyncingDevs] = useState(false);
@@ -113,6 +141,10 @@ export function ReellyImportPanel() {
   const [isCleaningAndSyncing, setIsCleaningAndSyncing] = useState(false);
   const [cleanupResult, setCleanupResult] = useState<CleanupResult | null>(null);
   const [cleanupStep, setCleanupStep] = useState<string | null>(null);
+  
+  // Destructive action confirmation dialog
+  const [showDestructiveDialog, setShowDestructiveDialog] = useState(false);
+  const [destructiveConfirmed, setDestructiveConfirmed] = useState(false);
 
   // Data Integrity / Restore state
   const [isLoadingIntegrityStats, setIsLoadingIntegrityStats] = useState(false);
@@ -129,6 +161,14 @@ export function ReellyImportPanel() {
     restored?: { projects: number; images_deleted: number; documents_deleted: number; pending_deleted: number };
     error?: string;
   } | null>(null);
+  
+  // Sync live counts on mount and after sync
+  useEffect(() => {
+    refreshCounts();
+  }, [refreshCounts]);
+  
+  // Use live API total if available, otherwise use queue count
+  const displayTotalProjects = totalProjects ?? liveCounts?.reelly_total_api ?? liveCounts?.reelly_pending_queue ?? null;
 
   /**
    * Fetch data integrity stats from restore-to-reelly edge function
@@ -258,12 +298,23 @@ export function ReellyImportPanel() {
   };
 
   /**
-   * Clean & Sync Fresh - Removes non-Reelly data and triggers full sync
+   * Clean & Sync Fresh - Opens confirmation dialog first
    */
-  const handleCleanAndSync = async () => {
-    if (!confirm("⚠️ This will:\n\n1. Delete all non-Reelly areas (32 records)\n2. Delete all non-Reelly queue items (16 records)\n3. Run a full sync of 1,803 projects from Reelly API\n\nContinue?")) {
+  const handleCleanAndSyncClick = () => {
+    setDestructiveConfirmed(false);
+    setShowDestructiveDialog(true);
+  };
+  
+  /**
+   * Execute Clean & Sync after confirmation
+   */
+  const executeCleanAndSync = async () => {
+    if (!destructiveConfirmed) {
+      toast.error("Please confirm you understand what will be deleted");
       return;
     }
+    
+    setShowDestructiveDialog(false);
 
     setIsCleaningAndSyncing(true);
     setCleanupResult(null);
@@ -377,8 +428,15 @@ export function ReellyImportPanel() {
 
       if (data?.success) {
         setApiConnected(true);
-        setTotalProjects(data.total_available || null);
-        toast.success(`API connected! ${data.total_available} projects available`);
+        const apiTotal = data.total_available || null;
+        setTotalProjects(apiTotal);
+        // Update global live counts with API total
+        if (apiTotal) {
+          setApiTotal(apiTotal);
+        }
+        toast.success(`API connected! ${apiTotal?.toLocaleString()} projects available`);
+        // Refresh database counts too
+        refreshCounts();
       } else {
         setApiConnected(false);
         toast.error(data?.error || "API connection failed");
@@ -499,6 +557,51 @@ export function ReellyImportPanel() {
           Import projects from Reelly via API
         </p>
       </div>
+      
+      {/* Live Counts Banner - Single Source of Truth */}
+      {liveCounts && (
+        <div className="bg-slate-100 rounded-xl p-4 border border-slate-200">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-semibold text-slate-800 flex items-center gap-2">
+              <Database className="w-4 h-4" />
+              Live Database Counts
+            </h3>
+            <div className="flex items-center gap-2 text-xs text-slate-500">
+              <Clock className="w-3 h-3" />
+              Updated: {new Date(liveCounts.last_updated).toLocaleTimeString()}
+              <Button variant="ghost" size="sm" onClick={refreshCounts} className="h-6 px-2">
+                <RefreshCw className="w-3 h-3" />
+              </Button>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="bg-white rounded-lg p-3 text-center border border-slate-200">
+              <p className="text-2xl font-bold text-emerald-600">
+                {displayTotalProjects?.toLocaleString() || '—'}
+              </p>
+              <p className="text-xs text-slate-500">Reelly API Total</p>
+            </div>
+            <div className="bg-white rounded-lg p-3 text-center border border-slate-200">
+              <p className="text-2xl font-bold text-blue-600">
+                {liveCounts.reelly_pending_queue.toLocaleString()}
+              </p>
+              <p className="text-xs text-slate-500">Pending Queue</p>
+            </div>
+            <div className="bg-white rounded-lg p-3 text-center border border-slate-200">
+              <p className="text-2xl font-bold text-green-600">
+                {liveCounts.reelly_approved.toLocaleString()}
+              </p>
+              <p className="text-xs text-slate-500">Approved</p>
+            </div>
+            <div className="bg-white rounded-lg p-3 text-center border border-slate-200">
+              <p className="text-2xl font-bold text-amber-600">
+                {liveCounts.provident_pending_queue.toLocaleString()}
+              </p>
+              <p className="text-xs text-slate-500">Provident Queue</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Card className="bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-200 shadow-lg">
         <CardHeader>
@@ -625,18 +728,49 @@ export function ReellyImportPanel() {
 
           {syncResult && (
             <div className="bg-white/80 rounded-xl p-4 border border-emerald-200">
-              <h3 className="font-semibold text-zinc-900 mb-3">Sync Results</h3>
+              <h3 className="font-semibold text-zinc-900 mb-3 flex items-center gap-2">
+                Sync Results
+                {syncResult.success && (
+                  <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-300">
+                    Reconciled
+                  </Badge>
+                )}
+              </h3>
               
               {syncResult.success ? (
                 <>
-                  <div className="grid grid-cols-2 md:grid-cols-6 gap-3 mb-4">
+                  {/* Strict Reconciliation Display */}
+                  <div className="mb-4 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                    <div className="flex items-center gap-2 mb-2">
+                      <AlertCircle className="h-4 w-4 text-slate-500" />
+                      <span className="text-sm font-medium text-slate-700">Sync Reconciliation</span>
+                    </div>
+                    <div className="text-xs text-slate-600 space-y-1">
+                      <p>
+                        <strong>Requested:</strong> {syncResult.total_fetched?.toLocaleString() || 0} projects fetched from API
+                      </p>
+                      <p>
+                        <strong>Accounted:</strong> {((syncResult.inserted || 0) + (syncResult.updated || 0) + (syncResult.skipped || 0) + (syncResult.errors?.length || 0)).toLocaleString()} = 
+                        {' '}{syncResult.inserted || 0} new + {syncResult.updated || 0} updated + {syncResult.skipped || 0} skipped + {syncResult.errors?.length || 0} failed
+                      </p>
+                      {((syncResult.total_fetched || 0) === ((syncResult.inserted || 0) + (syncResult.updated || 0) + (syncResult.skipped || 0) + (syncResult.errors?.length || 0))) ? (
+                        <p className="text-emerald-600 font-medium">✓ 100% reconciled - all projects accounted for</p>
+                      ) : (
+                        <p className="text-amber-600 font-medium">
+                          ⚠ Difference of {Math.abs((syncResult.total_fetched || 0) - ((syncResult.inserted || 0) + (syncResult.updated || 0) + (syncResult.skipped || 0) + (syncResult.errors?.length || 0)))} projects
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
                     <button
                       type="button"
                       className="bg-zinc-100 rounded-lg p-3 text-center hover:shadow-sm transition"
                       onClick={() => setIsRecentOpen(true)}
                     >
                       <p className="text-xl font-bold text-zinc-900">{syncResult.total_available?.toLocaleString() || '-'}</p>
-                      <p className="text-xs text-zinc-500">Total Available</p>
+                      <p className="text-xs text-zinc-500">API Total</p>
                     </button>
                     <button
                       type="button"
@@ -668,9 +802,29 @@ export function ReellyImportPanel() {
                       onClick={() => setIsRecentOpen(true)}
                     >
                       <p className="text-xl font-bold text-zinc-500">{syncResult.skipped || 0}</p>
-                      <p className="text-xs text-zinc-500">Skipped</p>
+                      <p className="text-xs text-zinc-500">Skipped (Already Approved)</p>
                     </button>
                   </div>
+
+                  {/* Errors count if any */}
+                  {syncResult.errors && syncResult.errors.length > 0 && (
+                    <div className="mb-4 p-3 bg-red-50 rounded-lg border border-red-200">
+                      <div className="flex items-center gap-2">
+                        <XCircle className="h-4 w-4 text-red-500" />
+                        <span className="text-sm font-medium text-red-700">
+                          {syncResult.errors.length} Failed
+                        </span>
+                      </div>
+                      <div className="mt-2 max-h-24 overflow-y-auto">
+                        {syncResult.errors.slice(0, 5).map((err, i) => (
+                          <p key={i} className="text-xs text-red-600 truncate">{err}</p>
+                        ))}
+                        {syncResult.errors.length > 5 && (
+                          <p className="text-xs text-red-500 mt-1">...and {syncResult.errors.length - 5} more errors</p>
+                        )}
+                      </div>
+                    </div>
+                  )}
 
                   {/* CTA to Approval Queue - All projects need manual review */}
                   {((syncResult.inserted || 0) + (syncResult.updated || 0)) > 0 && (
@@ -701,19 +855,6 @@ export function ReellyImportPanel() {
                       {syncResult.message}
                     </AlertDescription>
                   </Alert>
-
-                  {syncResult.errors && syncResult.errors.length > 0 && (
-                    <div className="mt-4">
-                      <p className="text-sm font-medium text-amber-600 mb-2">
-                        {syncResult.errors.length} errors (showing first 10):
-                      </p>
-                      <div className="max-h-32 overflow-y-auto bg-amber-50 rounded-lg p-3 border border-amber-200">
-                        {syncResult.errors.slice(0, 10).map((err, i) => (
-                          <p key={i} className="text-xs text-amber-700 truncate">{err}</p>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </>
               ) : (
                 <Alert className="border-red-300 bg-red-50">
@@ -806,22 +947,11 @@ export function ReellyImportPanel() {
         <CardContent className="space-y-4">
           <Alert className="border-amber-300 bg-amber-50">
             <AlertTriangle className="h-4 w-4 text-amber-600" />
-            <AlertTitle className="text-amber-900">Destructive Action</AlertTitle>
+            <AlertTitle className="text-amber-900">Confirmation Required</AlertTitle>
             <AlertDescription className="text-amber-700">
-              This will permanently delete all manually-created areas and non-Reelly queue items,
-              then sync all 1,803 projects fresh from the Reelly API.
+              This action requires explicit confirmation. Click the button below to review what will be affected.
             </AlertDescription>
           </Alert>
-
-          <div className="bg-white/80 rounded-xl p-4 border border-red-200">
-            <h3 className="font-semibold text-zinc-900 mb-3">What will happen:</h3>
-            <ol className="list-decimal list-inside space-y-2 text-sm text-zinc-700">
-              <li>Delete ~32 areas without <code className="bg-zinc-100 px-1 rounded">reelly_id</code></li>
-              <li>Delete ~16 queue items not from Reelly (Provident-sourced)</li>
-              <li>Run full sync of all 1,803 Reelly projects</li>
-              <li>Extract and update areas from synced projects</li>
-            </ol>
-          </div>
 
           {isCleaningAndSyncing && cleanupStep && (
             <div className="bg-white/80 rounded-xl p-4 border border-red-200">
@@ -870,7 +1000,7 @@ export function ReellyImportPanel() {
           )}
 
           <Button 
-            onClick={handleCleanAndSync} 
+            onClick={handleCleanAndSyncClick} 
             disabled={isCleaningAndSyncing || isSyncing}
             className="w-full bg-red-600 hover:bg-red-700"
           >
@@ -888,6 +1018,73 @@ export function ReellyImportPanel() {
           </Button>
         </CardContent>
       </Card>
+      
+      {/* Destructive Action Confirmation Dialog */}
+      <Dialog open={showDestructiveDialog} onOpenChange={setShowDestructiveDialog}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-red-600 flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5" />
+              Confirm Destructive Action
+            </DialogTitle>
+            <DialogDescription>
+              Please review carefully before proceeding.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <h4 className="font-semibold text-red-900 mb-2">What WILL be deleted:</h4>
+              <ul className="list-disc list-inside text-sm text-red-700 space-y-1">
+                <li>Areas that were manually created (not from Reelly API)</li>
+                <li>Queue items from Provident or other non-Reelly sources</li>
+              </ul>
+            </div>
+            
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <h4 className="font-semibold text-green-900 mb-2">What will NOT be deleted:</h4>
+              <ul className="list-disc list-inside text-sm text-green-700 space-y-1">
+                <li>Areas synced from Reelly API (have reelly_id)</li>
+                <li>Queue items from Reelly API</li>
+                <li>Approved/published projects</li>
+                <li>Your manually created listings (in projects table)</li>
+              </ul>
+            </div>
+            
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h4 className="font-semibold text-blue-900 mb-2">After cleanup:</h4>
+              <p className="text-sm text-blue-700">
+                Full sync of all {displayTotalProjects?.toLocaleString() || "~1,804"} projects from Reelly API will run.
+              </p>
+            </div>
+            
+            <div className="flex items-start gap-3 pt-2">
+              <Checkbox 
+                id="confirm-delete" 
+                checked={destructiveConfirmed}
+                onCheckedChange={(checked) => setDestructiveConfirmed(checked === true)}
+              />
+              <label htmlFor="confirm-delete" className="text-sm text-zinc-700 cursor-pointer">
+                I understand what will be deleted and want to proceed with the clean & sync operation.
+              </label>
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowDestructiveDialog(false)}>
+              Cancel
+            </Button>
+            <Button 
+              onClick={executeCleanAndSync}
+              disabled={!destructiveConfirmed}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Proceed with Clean & Sync
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Data Integrity Section */}
       <Card className="bg-gradient-to-br from-slate-50 to-zinc-50 border-slate-200 shadow-lg">

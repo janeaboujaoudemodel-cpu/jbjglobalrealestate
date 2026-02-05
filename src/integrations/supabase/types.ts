@@ -13432,38 +13432,53 @@ export type Database = {
         Row: {
           completed_at: string | null
           created_by: string | null
+          error_details: Json | null
           errors: Json | null
           id: string
+          is_reconciled: boolean | null
           projects_created: number | null
+          projects_failed: number | null
           projects_processed: number | null
+          projects_skipped: number | null
           projects_updated: number | null
           started_at: string | null
           status: string | null
           sync_type: string
+          total_available: number | null
         }
         Insert: {
           completed_at?: string | null
           created_by?: string | null
+          error_details?: Json | null
           errors?: Json | null
           id?: string
+          is_reconciled?: boolean | null
           projects_created?: number | null
+          projects_failed?: number | null
           projects_processed?: number | null
+          projects_skipped?: number | null
           projects_updated?: number | null
           started_at?: string | null
           status?: string | null
           sync_type: string
+          total_available?: number | null
         }
         Update: {
           completed_at?: string | null
           created_by?: string | null
+          error_details?: Json | null
           errors?: Json | null
           id?: string
+          is_reconciled?: boolean | null
           projects_created?: number | null
+          projects_failed?: number | null
           projects_processed?: number | null
+          projects_skipped?: number | null
           projects_updated?: number | null
           started_at?: string | null
           status?: string | null
           sync_type?: string
+          total_available?: number | null
         }
         Relationships: []
       }
@@ -15063,11 +15078,15 @@ export type Database = {
           created_at: string | null
           created_by: string | null
           current_page: number
+          error_log: Json | null
           id: string
           job_type: string
+          next_cursor: string | null
           paused_at: string | null
+          source: string | null
           started_at: string | null
           stats_created: number | null
+          stats_errors: number | null
           stats_extracted: number | null
           stats_images: number | null
           stats_skipped: number | null
@@ -15081,11 +15100,15 @@ export type Database = {
           created_at?: string | null
           created_by?: string | null
           current_page?: number
+          error_log?: Json | null
           id?: string
           job_type?: string
+          next_cursor?: string | null
           paused_at?: string | null
+          source?: string | null
           started_at?: string | null
           stats_created?: number | null
+          stats_errors?: number | null
           stats_extracted?: number | null
           stats_images?: number | null
           stats_skipped?: number | null
@@ -15099,11 +15122,15 @@ export type Database = {
           created_at?: string | null
           created_by?: string | null
           current_page?: number
+          error_log?: Json | null
           id?: string
           job_type?: string
+          next_cursor?: string | null
           paused_at?: string | null
+          source?: string | null
           started_at?: string | null
           stats_created?: number | null
+          stats_errors?: number | null
           stats_extracted?: number | null
           stats_images?: number | null
           stats_skipped?: number | null
