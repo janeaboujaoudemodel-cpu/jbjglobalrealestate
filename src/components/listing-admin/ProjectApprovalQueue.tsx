@@ -1012,11 +1012,38 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
 
           {/* Inventory status cards - CLICKABLE */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
-            <div className="rounded-lg border border-border bg-muted/50 p-3 text-center">
-              <div className="text-2xl font-bold text-foreground">
+            {/* Target Card - Different styling for API (Reelly) vs Scraping (Provident) */}
+            <div className={`rounded-lg border p-3 text-center ${
+              sourceFilter === "reelly" 
+                ? "border-emerald-300 bg-emerald-50" 
+                : sourceFilter === "provident"
+                  ? "border-blue-300 bg-blue-50"
+                  : "border-border bg-muted/50"
+            }`}>
+              <div className={`text-2xl font-bold ${
+                sourceFilter === "reelly" 
+                  ? "text-emerald-700" 
+                  : sourceFilter === "provident"
+                    ? "text-blue-700"
+                    : "text-foreground"
+              }`}>
                 {sourceFilter === "provident" ? "1,336" : sourceFilter === "reelly" ? "1,803" : totalCount ?? "..."}
               </div>
-              <div className="text-xs text-muted-foreground">Target</div>
+              <div className={`text-xs ${
+                sourceFilter === "reelly" 
+                  ? "text-emerald-600" 
+                  : sourceFilter === "provident"
+                    ? "text-blue-600"
+                    : "text-muted-foreground"
+              }`}>
+                {sourceFilter === "reelly" ? "API Total" : sourceFilter === "provident" ? "Target" : "Total"}
+              </div>
+              {/* Progress indicator for Reelly */}
+              {sourceFilter === "reelly" && totalCount !== null && (
+                <div className="mt-1 text-xs text-emerald-500">
+                  {totalCount.toLocaleString()} synced ({Math.round((totalCount / 1803) * 100)}%)
+                </div>
+              )}
             </div>
             <button
               onClick={() => setStatusFilter("all")}
@@ -1040,6 +1067,8 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
               <div className="text-2xl font-bold text-emerald-700">{totalCompleteCount ?? completeCount}</div>
               <div className="text-xs text-emerald-600">Complete ✓</div>
             </button>
+            {/* Needs Work card - hide for Reelly (API data is complete) */}
+            {sourceFilter !== "reelly" ? (
             <button
               onClick={() => setStatusFilter("needs_work")}
               className={`rounded-lg border p-3 text-center transition-all hover:scale-105 cursor-pointer ${
@@ -1051,6 +1080,12 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
               <div className="text-2xl font-bold text-amber-700">{totalNeedsWorkCount ?? needsWorkCount}</div>
               <div className="text-xs text-amber-600">Needs Work</div>
             </button>
+            ) : (
+            <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-center">
+              <div className="text-2xl font-bold text-emerald-700">✓</div>
+              <div className="text-xs text-emerald-600">API Ready</div>
+            </div>
+            )}
             <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 text-center">
               <div className="text-2xl font-bold text-blue-700">{selectedIds.size}</div>
               <div className="text-xs text-blue-600">Selected</div>
