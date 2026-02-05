@@ -10,27 +10,12 @@ interface MegaMenuAreasProps {
 }
 
 const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ onClose }, ref) => {
-  const { data: areas } = useAreas({ limit: 12 });
+  const { data: areas, isLoading } = useAreas({ limit: 12 });
 
-  // Fallback static areas if database is empty
-  const fallbackAreas = [
-    { name: 'Dubai Creek Harbour', slug: 'dubai-creek-harbour' },
-    { name: 'Business Bay', slug: 'business-bay' },
-    { name: 'Dubai Marina', slug: 'dubai-marina' },
-    { name: 'Palm Jumeirah', slug: 'palm-jumeirah' },
-    { name: 'Downtown Dubai', slug: 'downtown-dubai' },
-    { name: 'Jumeirah Village Circle', slug: 'jvc' },
-    { name: 'Dubai Hills Estate', slug: 'dubai-hills-estate' },
-    { name: 'Emaar Beachfront', slug: 'emaar-beachfront' },
-    { name: 'Sobha Hartland', slug: 'sobha-hartland' },
-    { name: 'Dubai Islands', slug: 'dubai-islands' },
-    { name: 'MBR City', slug: 'mbr-city' },
-    { name: 'Jumeirah Beach Residence', slug: 'jbr' },
-  ];
-
+  // Only show database areas - no static fallbacks
   const displayAreas = areas && areas.length > 0 
     ? areas.map(a => ({ name: a.name, slug: a.slug }))
-    : fallbackAreas;
+    : [];
 
   // Split into two columns
   const half = Math.ceil(displayAreas.length / 2);

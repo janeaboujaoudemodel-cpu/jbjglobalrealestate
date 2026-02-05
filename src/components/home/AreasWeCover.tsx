@@ -13,25 +13,15 @@ const AreasWeCover = () => {
   const { t } = useLanguage();
   const { data: areas, isLoading } = useAreas({ limit: 12 });
 
-  // Fallback static areas if database is empty
-  const fallbackAreas = [
-    { slug: "downtown-dubai", name: "Downtown Dubai" },
-    { slug: "dubai-marina", name: "Dubai Marina" },
-    { slug: "palm-jumeirah", name: "Palm Jumeirah" },
-    { slug: "business-bay", name: "Business Bay" },
-    { slug: "jbr", name: "JBR" },
-    { slug: "emirates-hills", name: "Emirates Hills" },
-    { slug: "dubai-hills", name: "Dubai Hills" },
-    { slug: "arabian-ranches", name: "Arabian Ranches" },
-    { slug: "jumeirah", name: "Jumeirah" },
-    { slug: "creek-harbour", name: "Creek Harbour" },
-    { slug: "mbr-city", name: "MBR City" },
-    { slug: "bluewaters", name: "Bluewaters Island" },
-  ];
-
+  // Only show areas if we have data from the database - no static fallbacks
   const displayAreas = areas && areas.length > 0 
     ? areas.map(a => ({ slug: a.slug, name: a.name, propertyCount: a.property_count }))
-    : fallbackAreas;
+    : [];
+
+  // Don't render anything if no database areas
+  if (isLoading || displayAreas.length === 0) {
+    return null;
+  }
 
   return (
     <section className="py-12 md:py-16 bg-black">

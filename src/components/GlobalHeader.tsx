@@ -367,11 +367,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
   // Mobile menu links - Areas section
   const mobileAreaLinks = [
-    { href: "/areas", label: "All Areas", icon: MapPin },
-    { href: "/area/downtown-dubai", label: "Downtown Dubai", icon: MapPin },
-    { href: "/area/dubai-marina", label: "Dubai Marina", icon: MapPin },
-    { href: "/area/palm-jumeirah", label: "Palm Jumeirah", icon: MapPin },
-    { href: "/area/business-bay", label: "Business Bay", icon: MapPin },
+    { href: "/areas", label: "Explore All Areas", icon: MapPin },
   ];
 
   // Mobile menu links - Developers section  
