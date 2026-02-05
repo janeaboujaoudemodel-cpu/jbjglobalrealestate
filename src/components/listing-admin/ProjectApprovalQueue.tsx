@@ -845,7 +845,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           <CardTitle className="flex items-center gap-2 text-foreground">
             <Building2 className="h-5 w-5 text-foreground" />
             Listing Inventory
-            <Badge variant="outline" className="text-xs">1,336 Target</Badge>
+            <Badge variant="outline" className="text-xs">
+              {sourceFilter === "reelly" ? "1,803" : sourceFilter === "provident" ? "1,336" : "All Sources"} Target
+            </Badge>
           </CardTitle>
         </CardHeader>
         <CardContent>
