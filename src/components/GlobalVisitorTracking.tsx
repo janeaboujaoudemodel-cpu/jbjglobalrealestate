@@ -73,7 +73,7 @@ export const GlobalVisitorTracking = () => {
   const scrollDepth = useRef(0);
   const pageEntryTime = useRef(Date.now());
 
-  // Initialize or update session
+  // Initialize or update session - using insert with error handling
   const initSession = useCallback(async () => {
     if (hasInitialized.current) return;
     hasInitialized.current = true;
@@ -93,13 +93,26 @@ export const GlobalVisitorTracking = () => {
         user_agent: navigator.userAgent,
       };
 
-      await supabase
+      // Try insert first, if it fails (duplicate), just update
+      const { error: insertError } = await supabase
         .from('visitor_sessions')
-        .upsert(sessionData as any, { onConflict: 'session_id' });
+        .insert(sessionData as any);
+
+      if (insertError) {
+        // Session already exists, update it instead
+        await supabase
+          .from('visitor_sessions')
+          .update({
+            last_activity_at: new Date().toISOString(),
+            user_id: user?.id || null,
+          })
+          .eq('session_id', sessionId);
+      }
 
       console.log('[Tracking] Session initialized:', sessionId);
     } catch (error) {
-      console.error('[Tracking] Session init error:', error);
+      // Silently fail for tracking - don't break the app
+      console.warn('[Tracking] Session init error:', error);
     }
   }, [location.pathname, user]);
 
@@ -208,22 +221,28 @@ export const GlobalVisitorTracking = () => {
     }
   }, [location.pathname]);
 
-  // Update session on exit
+  // Update session on exit - fire and forget (no await since beforeunload)
   const handleBeforeUnload = useCallback(() => {
     const sessionId = getSessionId();
     const sessionStartTime = parseInt(sessionStorage.getItem('session_start_time') || Date.now().toString());
     const totalTimeSpent = Math.floor((Date.now() - sessionStartTime) / 1000);
 
-    // Use sendBeacon for reliable exit tracking
-    const data = JSON.stringify({
-      total_time_spent: totalTimeSpent,
-      last_activity_at: new Date().toISOString(),
-    });
-
-    navigator.sendBeacon(
-      `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/visitor_sessions?session_id=eq.${sessionId}`,
-      new Blob([data], { type: 'application/json' })
-    );
+    // Best-effort update - fire and forget pattern
+    // Using void to explicitly ignore the promise result
+    void (async () => {
+      try {
+        await supabase
+          .from('visitor_sessions')
+          .update({
+            total_time_spent: totalTimeSpent,
+            last_activity_at: new Date().toISOString(),
+            scroll_depth_max: scrollDepth.current,
+          })
+          .eq('session_id', sessionId);
+      } catch {
+        // Silent fail - tracking shouldn't break UX
+      }
+    })();
   }, []);
 
   // Initialize on mount

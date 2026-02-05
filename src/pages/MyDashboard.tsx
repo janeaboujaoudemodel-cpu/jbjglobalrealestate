@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
+import { useUserModeContext } from "@/contexts/UserModeContext";
 import { SEOHead } from "@/components/SEOHead";
 import { Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -45,6 +46,15 @@ const MyDashboard = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const { role, isLoading: roleLoading } = useUserRole();
+  const { mode, isInvestorMode, isBrokerMode, isCombinedMode } = useUserModeContext();
+
+  // Listen for mode changes
+  const [, forceUpdate] = useState(0);
+  useEffect(() => {
+    const handleModeChange = () => forceUpdate(n => n + 1);
+    window.addEventListener('userModeChange', handleModeChange);
+    return () => window.removeEventListener('userModeChange', handleModeChange);
+  }, []);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -83,9 +93,19 @@ const MyDashboard = () => {
                 <Badge className={getRoleBadgeColor(role)}>
                   {getRoleLabel(role)}
                 </Badge>
+                {isCombinedMode && (
+                  <Badge className="bg-purple-500/20 text-purple-600 border-purple-500/30">
+                    Investor + Broker
+                  </Badge>
+                )}
               </div>
               <p className="text-muted-foreground">
-                Welcome back! Here's an overview of your activity and saved items.
+                {isCombinedMode 
+                  ? "Full access to investor tools and broker features."
+                  : isBrokerMode 
+                    ? "Access your broker tools and dashboard."
+                    : "Welcome back! Here's an overview of your activity and saved items."
+                }
               </p>
             </div>
 

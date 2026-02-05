@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Briefcase, User, ChevronDown, Check, Loader2, Users } from "lucide-react";
 import { useUserMode, UserMode } from "@/hooks/useUserMode";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -47,6 +48,7 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
   const { mode, isLoading, setMode } = useUserMode();
   const { role, hasSelectedRole } = useUserRole();
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   // Don't show mode switcher if user hasn't selected a role yet
   if (!hasSelectedRole) return null;
@@ -64,6 +66,12 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
     
     await setMode(newMode);
     setIsOpen(false);
+    
+    // Emit global event for immediate UI updates
+    window.dispatchEvent(new CustomEvent('userModeChange', { detail: newMode }));
+    
+    // Navigate to dashboard so user sees the change immediately
+    navigate('/my-dashboard', { replace: true });
     
     toast.success(`Switched to ${MODE_CONFIG[newMode].label}`, {
       description: MODE_CONFIG[newMode].description

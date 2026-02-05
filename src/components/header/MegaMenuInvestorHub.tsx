@@ -13,7 +13,7 @@ interface MegaMenuInvestorHubProps {
 
 const MegaMenuInvestorHub = React.forwardRef<HTMLDivElement, MegaMenuInvestorHubProps>(({ onClose }, ref) => {
   const dashboardLinks = [
-    { name: 'Investor Dashboard', href: '/my-account', icon: UserCircle, description: 'Your investment overview' },
+    { name: 'Investor Dashboard', href: '/my-dashboard', icon: UserCircle, description: 'Your investment overview' },
     { name: 'Portfolio Views', href: '/favorites', icon: Heart, description: 'Saved properties & shortlists' },
     { name: 'Investor Tools', href: '/ai-hub', icon: Briefcase, description: 'AI-powered analysis tools' },
   ];
@@ -31,7 +31,7 @@ const MegaMenuInvestorHub = React.forwardRef<HTMLDivElement, MegaMenuInvestorHub
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-6">
             <MegaMenuFeaturedCard
-              to="/my-account"
+              to="/my-dashboard"
               onClick={onClose}
               image={menuDubaiSkyline}
               video={dubaiInvestmentVideo}
@@ -85,7 +85,7 @@ const MegaMenuInvestorHub = React.forwardRef<HTMLDivElement, MegaMenuInvestorHub
             {/* Full-width CTA Button at bottom */}
             <div className="mt-6">
               <MegaMenuCTAButton
-                to="/my-account"
+                to="/my-dashboard"
                 onClick={onClose}
                 icon={UserCircle}
                 title="Go to Dashboard"

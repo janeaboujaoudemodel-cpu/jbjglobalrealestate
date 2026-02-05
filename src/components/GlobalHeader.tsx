@@ -321,7 +321,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
   // Investor Hub dropdown (tools + dashboard)
   const investorHubLinks = [
-    { href: "/my-account", label: t('header.investorDashboard') || "Investor Dashboard", icon: UserCircle },
+    { href: "/my-dashboard", label: t('header.investorDashboard') || "Investor Dashboard", icon: UserCircle },
     { href: "/ai-hub", label: t('header.investorTools') || "Investor Tools", icon: Briefcase },
     { href: "/favorites", label: t('header.portfolioViews') || "Portfolio Views", icon: Heart },
     { href: "/market-intelligence/reports", label: t('header.reportsAccess') || "Reports Access", icon: FileText },

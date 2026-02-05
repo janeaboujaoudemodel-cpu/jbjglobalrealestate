@@ -476,10 +476,12 @@ const ListingAdmin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-100 pt-20 lg:pt-24">
+    <div className="min-h-screen bg-black pt-20 lg:pt-24">
+      {/* Premium Dashboard Shell */}
+      <div className="mx-3 md:mx-4 lg:mx-6 my-6 rounded-2xl border border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
       {/* Header - Clean neutral style */}
-      <header className="border-b border-zinc-200 bg-white sticky top-20 lg:top-24 z-40 shadow-sm">
-        <div className="px-4 py-4">
+      <header className="border-b border-gold/30 bg-white/50 backdrop-blur-sm sticky top-20 lg:top-24 z-40 rounded-t-2xl">
+        <div className="max-w-[1200px] mx-auto px-4 py-4">
           {/* Row 1: Title and actions */}
           <div className="flex items-center justify-between gap-4 mb-4">
             <div className="flex items-center gap-4">
@@ -1146,6 +1148,7 @@ const ListingAdmin = () => {
           </div>
         )}
       </main>
+      </div>
     </div>
   );
 };
