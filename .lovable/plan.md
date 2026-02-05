@@ -1,469 +1,211 @@
 
-# JBJ AI Video Studio™ (Free) — Implementation Plan
+# JBJ Toolkit Integration & Audit Plan
 
 ## Overview
-Create a flagship CapCut-style professional web video editor at `/toolkit/ai-video-studio` with DaVinci Resolve/Final Cut Pro-inspired timeline UI. This tool will consolidate and elevate the existing video editing capabilities into a single, comprehensive platform.
+
+This plan covers three major tasks:
+1. Add all toolkit tools to the Header (organized by category in mega menus)
+2. Add all toolkit tools to the Footer
+3. Add a Toolkit showcase card on the Homepage
+4. Conduct a full audit of all tools to identify issues and improvements
 
 ---
 
-## Architecture Summary
+## Current State Analysis
+
+### All Toolkit Tools (9 total at /toolkit/*)
+
+| Tool | Route | Status | Backend |
+|------|-------|--------|---------|
+| AI Video Studio (Flagship) | /toolkit/ai-video-studio | UI Complete | Needs edge functions |
+| Video Resize + Smart Reframe | /toolkit/video-resize-pack | Working | video-resize-process |
+| Voice Studio | /toolkit/voice-studio | Working | voice-studio-tts, voice-to-text |
+| Photo to PDF | /toolkit/pdf-from-photos | Working | Client-side (pdf-lib) |
+| Image Resizer | /toolkit/image-resize | Working | Client-side (Canvas) |
+| Captions & Translation | /toolkit/captions-translate | UI Only | Simulated - needs real API |
+| Background AI | /toolkit/background-ai | UI Only | Simulated - needs real API |
+| Beauty Filters | /toolkit/beauty-filters | Working | Client-side (Canvas) |
+| Smart Reframe | /toolkit/smart-reframe | Alias | Points to video-resize-pack |
+
+### Related Studio/Creative Tools
+
+| Tool | Route | Status |
+|------|-------|--------|
+| Creative Suite Editor | /studio/editor/:projectId | Partial UI |
+| Toolkit Landing | /toolkit | Working |
+
+---
+
+## Implementation Plan
+
+### Part 1: Header Integration
+
+**Create new mega menu: MegaMenuToolkit.tsx**
+
+Organize tools into 3 logical categories:
 
 ```text
-┌────────────────────────────────────────────────────────────────────────────────┐
-│                              TOP BAR                                           │
-│  Logo • Project Name • Render Status • Export Button • Settings               │
-├──────────────┬─────────────────────────────────────────────┬───────────────────┤
-│              │                                             │                   │
-│   LEFT       │              CENTER                         │      RIGHT        │
-│   PANEL      │              PREVIEW                        │      PANEL        │
-│              │              PLAYER                         │                   │
-│  ┌────────┐  │         ┌─────────────┐                    │  ┌─────────────┐  │
-│  │ Media  │  │         │             │                    │  │ Inspector   │  │
-│  │ Library│  │         │   Video     │                    │  │             │  │
-│  │        │  │         │   Preview   │                    │  │ • Transform │  │
-│  │ Upload │  │         │             │                    │  │ • Crop      │  │
-│  │ Stock  │  │         └─────────────┘                    │  │ • Speed     │  │
-│  │ AI Gen │  │                                             │  │ • Color     │  │
-│  │ Templat│  │                                             │  │ • Audio     │  │
-│  └────────┘  │                                             │  │ • Captions  │  │
-│              │                                             │  │ • Export    │  │
-│              │                                             │  └─────────────┘  │
-├──────────────┴─────────────────────────────────────────────┴───────────────────┤
-│                              TIMELINE EDITOR                                   │
-│  ┌─ Tracks ────────────────────────────────────────────────────────────────┐  │
-│  │ 🎬 Video Track 1   [═══clip═══][═══clip═══][ clip ]                    │  │
-│  │ 🎬 Video Track 2   [    ][══overlay══]                                  │  │
-│  │ 🎵 Audio Track 1   [══════music══════]                                  │  │
-│  │ 🎤 Voiceover       [═══voiceover═══]                                    │  │
-│  │ 📝 Text/Captions   [sub][sub][sub][sub]                                 │  │
-│  │ ✨ Effects         [transition][filter]                                  │  │
-│  └──────────────────────────────────────────────────────────────────────────┘  │
-│  [0:00]─────────[0:30]─────────[1:00]─────────[1:30]─────────[2:00]           │
-├────────────────────────────────────────────────────────────────────────────────┤
-│  EXPORT BAR: [9:16 Reels] [16:9 YouTube] [1:1 Feed] [4:5 Portrait] [ZIP All] │
-└────────────────────────────────────────────────────────────────────────────────┘
+VIDEO & AUDIO           IMAGES & PDF           AI TOOLS
+- AI Video Studio       - Image Resizer        - Background AI
+- Video Resize Pack     - Photo to PDF         - Beauty Filters
+- Voice Studio          - Smart Reframe        - Captions & Translate
+- Captions & Translate
 ```
+
+**Update GlobalHeader.tsx:**
+- Add "Toolkit" as a new nav item between "Services" and "More"
+- Connect to MegaMenuToolkit component
+- Add mobile menu section for toolkit tools
 
 ---
 
-## File Structure
+### Part 2: Footer Integration
 
-```text
-src/pages/toolkit/
-  AIVideoStudio.tsx                      # Main page (orchestrator)
+**Update Footer.tsx:**
 
-src/components/ai-video-studio/
-  # Layout Components
-  AIVideoStudioLayout.tsx                # Main 4-panel layout
-  AIVideoStudioTopBar.tsx                # Header with project info + render status
-  AIVideoStudioExportBar.tsx             # Bottom export presets bar
-  
-  # Left Panel - Media Library
-  MediaLibraryPanel.tsx                  # Container for all media sources
-  MediaUploadSection.tsx                 # Upload MP4/MOV/WebM/images/audio
-  StockLibrarySection.tsx                # Free stock SFX/music browser
-  AIGenerateSection.tsx                  # AI scene generation panel
-  TemplatesSection.tsx                   # Lower-thirds, intros, outros
-  
-  # Center - Preview & Timeline
-  VideoPreviewCanvas.tsx                 # Main video preview with playback
-  TimelineEditor.tsx                     # Multi-track timeline component
-  TimelineTrack.tsx                      # Individual track (video/audio/text)
-  TimelineClip.tsx                       # Draggable clip with handles
-  TimelinePlayhead.tsx                   # Current time indicator
-  TimelineZoomControls.tsx               # Zoom in/out timeline
-  
-  # Right Panel - Inspector
-  InspectorPanel.tsx                     # Container for all inspectors
-  TransformInspector.tsx                 # Position, scale, rotation, opacity
-  CropInspector.tsx                      # Crop, rotate, blur
-  SpeedInspector.tsx                     # 0.5x-2x, reverse
-  ColorInspector.tsx                     # Brightness, contrast, saturation, LUTs
-  AudioInspector.tsx                     # Volume, normalize, fade, noise reduction
-  CaptionsInspector.tsx                  # Transcribe, translate, style, export SRT/VTT
-  EffectsInspector.tsx                   # Transitions, filters, overlays
-  
-  # Special Features
-  TeleprompterPanel.tsx                  # Script teleprompter with recording
-  VoiceoverRecorder.tsx                  # Record voiceover into timeline
-  AIAudioCommandBox.tsx                  # Natural language SFX placement
-  AISceneGenerator.tsx                   # Map animation, b-roll, storyboard
-  SmartReframePanel.tsx                  # Per-shot AI reframing
-  CaptionTranslator.tsx                  # Multi-language translation with RTL
-  
-  # Shared
-  KeyframeEditor.tsx                     # Position/scale/rotation/opacity keyframes
-  TransitionPicker.tsx                   # Fade, dissolve, wipe, zoom transitions
-  SubtitleStylePicker.tsx                # Premium Clean, Social Bold, Highlight
+Add a new "Creative Toolkit" section in the footer with all tools:
 
-supabase/functions/
-  ai-video-studio-transcribe/index.ts   # Speech-to-text for captions
-  ai-video-studio-translate/index.ts    # Multi-language translation
-  ai-video-studio-tts/index.ts          # AI voice generation
-  ai-video-studio-sfx/index.ts          # AI audio command processing
-  ai-video-studio-scene/index.ts        # AI scene/map generation
-  ai-video-studio-render/index.ts       # Final render queue processing
-```
-
----
-
-## Technical Implementation
-
-### Phase 1: Core Layout & Timeline (Days 1-2)
-
-**1. Main Page: `AIVideoStudio.tsx`**
-- State management for project, timeline, selection
-- Panel layout with resizable dividers
-- Autosave to localStorage + optional cloud sync
-- Keyboard shortcuts (space=play, cmd+s=save, del=delete)
-
-**2. Timeline Data Model**
 ```typescript
-interface VideoStudioProject {
-  id: string;
-  name: string;
-  duration: number;          // Total timeline duration in seconds
-  tracks: Track[];           // Multi-track array
-  settings: ProjectSettings;
-  createdAt: Date;
-  autoDeleteAt: Date;        // 2 hours from creation
-}
-
-interface Track {
-  id: string;
-  type: 'video' | 'audio' | 'voiceover' | 'text' | 'effects';
-  name: string;
-  locked: boolean;
-  muted: boolean;
-  clips: Clip[];
-}
-
-interface Clip {
-  id: string;
-  trackId: string;
-  type: 'video' | 'audio' | 'image' | 'text' | 'subtitle' | 'effect';
-  startTime: number;         // Position on timeline
-  duration: number;          // Clip length
-  source: {
-    url: string;
-    inPoint: number;         // Trim start in source
-    outPoint: number;        // Trim end in source
-  };
-  transform: {
-    x: number; y: number;
-    scaleX: number; scaleY: number;
-    rotation: number;
-    opacity: number;
-  };
-  keyframes: Keyframe[];     // Animation keyframes
-  effects: ClipEffect[];     // Applied effects
-}
-
-interface Keyframe {
-  time: number;              // Relative to clip start
-  property: 'x' | 'y' | 'scaleX' | 'scaleY' | 'rotation' | 'opacity';
-  value: number;
-  easing: 'linear' | 'easeIn' | 'easeOut' | 'easeInOut';
-}
-```
-
-**3. Timeline Component Features**
-- Multi-track display with collapsible rows
-- Drag-to-reorder clips
-- Split tool (cut at playhead)
-- Trim handles (adjust in/out points)
-- Ripple delete (close gaps automatically)
-- Snapping to playhead/other clips
-- Zoom slider (fit view, 1s, 5s, 30s per screen)
-
-### Phase 2: Media & Upload (Day 2)
-
-**1. Media Upload**
-- Accept: MP4, MOV, WebM, JPG, PNG, WebP, MP3, WAV
-- Generate thumbnails for video
-- Auto-detect duration
-- Drag from library to timeline
-
-**2. Stock Library Integration**
-- Query existing `studio_stock_library` table
-- Categories: Music (ambient, upbeat, cinematic), SFX (applause, cash, whoosh, camera click, UI sounds)
-- Search and filter by tags
-- Preview playback before adding
-
-### Phase 3: Inspector Panel (Day 3)
-
-**1. Transform Inspector**
-- Position X/Y with numeric input and visual gizmo
-- Scale (uniform or independent X/Y)
-- Rotation (degrees with slider)
-- Opacity (0-100%)
-- Add keyframe buttons per property
-
-**2. Crop Inspector**
-- Crop handles on preview
-- Presets: None, 16:9, 9:16, 1:1, 4:5
-- Rotation: 0°, 90°, 180°, 270°
-- Basic background blur toggle
-
-**3. Speed Inspector**
-- Speed slider: 0.5x, 0.75x, 1x, 1.25x, 1.5x, 2x
-- Reverse toggle (optional)
-- Duration preview update
-
-**4. Color Inspector**
-- Sliders: Brightness, Contrast, Saturation, Temperature
-- LUT dropdown (optional): None, Cinematic, Warm, Cool, Vintage, Luxury Gold
-
-**5. Audio Inspector**
-- Volume slider (0-200%)
-- Fade in/out duration
-- Normalize toggle (basic)
-- Noise reduction toggle (basic - uses ElevenLabs or AI)
-
-### Phase 4: Captions & Translation (Day 4)
-
-**1. Auto-Transcription**
-- Button: "Auto-transcribe" 
-- Uses existing `voice-to-text` edge function with ElevenLabs Scribe
-- Creates subtitle clips on Text track aligned to audio
-- Editable timeline segments
-
-**2. Translation**
-- Language selector: Global list from `SUPPORTED_LANGUAGES` + expanded
-- Multi-select: Translate to Arabic, Hindi, Russian, Chinese, etc.
-- RTL support: Arabic, Hebrew, Persian, Urdu
-- Uses `auto-translate` edge function
-
-**3. Subtitle Export**
-- Export formats: SRT, VTT, ASS
-- Burn-in toggle: Render subtitles into video
-
-**4. Subtitle Styles**
-- Premium Clean: White text, subtle shadow, bottom positioned
-- Social Bold: Large text, colored background, animated word highlight
-- Highlight: Karaoke-style word-by-word highlight
-
-### Phase 5: Voiceover & Teleprompter (Day 5)
-
-**1. Teleprompter Panel**
-- Script input textarea
-- Scroll speed slider (slow/medium/fast)
-- Font size slider
-- Mirror mode toggle (for recording setups)
-- Countdown before start
-
-**2. Voiceover Recording**
-- Record button using MediaRecorder API
-- Live waveform display
-- Auto-adds to Voiceover track at playhead position
-- Trim handles for recorded audio
-
-**3. AI Voice Generation**
-- Uses existing `voice-studio-tts` edge function
-- Voice library: Roger, Sarah, George, Laura, Charlie, Lily, Liam, Matilda
-- **Safety**: Consent checkbox required
-- Text input from script or manual entry
-
-### Phase 6: Audio Suite & AI Commands (Day 5-6)
-
-**1. Stock SFX Library**
-- Categories: Applause, Cash/Money, Whoosh, Camera Click, Notification, Success, Error, Nature, Urban
-- Preview with waveform
-- Drag to audio track
-
-**2. AI Audio Command Box**
-- Text input: "Add applause at 00:12" or "Add cash sound at this cut"
-- Natural language parsing using Lovable AI
-- Finds matching SFX from library
-- Auto-places on timeline at specified time
-- Confirmation toast with undo option
-
-### Phase 7: Effects & Overlays (Day 6)
-
-**1. Basic Filters**
-- None, Warm, Cool, Cinematic, Vintage, Luxury Gold
-- Apply per-clip via dropdown
-
-**2. Transitions**
-- Fade, Dissolve, Slide, Zoom, Wipe
-- Duration: 0.25s, 0.5s, 1s
-- Apply between adjacent clips
-
-**3. Overlays**
-- Logo overlay (upload or JBJ default)
-- Position: Top-left, Top-right, Bottom-left, Bottom-right, Center
-- Lower-thirds templates (JBJ luxury style: black/white + gold #C8A766)
-- Text overlays with font selection
-
-**4. Background Effects**
-- Background blur (for portrait in landscape)
-- Vignette overlay
-
-### Phase 8: AI Generate Scene Panel (Day 7)
-
-**1. Map Animation Clip**
-- Input: Location text or map pin selection
-- Generate: Animated zoom from Dubai overview to pin location
-- Highlight plot, show label
-- Uses Lovable AI image generation for frames
-- Clearly labeled "AI Generated"
-
-**2. AI B-roll / Drone Simulation**
-- Input: Text prompt (e.g., "Aerial view of Dubai Marina at sunset")
-- Optional: Uploaded reference photo
-- Generate: AI video clip using Lovable AI
-- **Watermark**: "AI Generated" badge
-
-**3. Script-to-Storyboard**
-- Input: Script text
-- Output: List of suggested shots
-- Generate: Placeholder clips or AI-generated clips
-- Each clip marked as AI-generated
-
-**Safety Requirements:**
-- Face upload consent checkbox: "I confirm I have rights to use this face"
-- Clear labeling: All AI content marked "AI Generated"
-- Policy banner: "AI-generated footage is for creative purposes. Do not claim as real."
-
-### Phase 9: Export System (Day 8)
-
-**1. Export Presets**
-- 9:16 1080x1920 (Reels/TikTok)
-- 16:9 1920x1080 (YouTube)
-- 1:1 1080x1080 (Instagram Feed)
-- 4:5 1080x1350 (Instagram Portrait)
-
-**2. Smart Reframing**
-- Auto-detect original orientation
-- Offer smart reframe with subject tracking (from VideoResizePack)
-- Per-shot crop adjustment
-
-**3. Download Options**
-- Single format download
-- "Download All as ZIP" (all presets)
-
-**4. Job Queue System**
-- Backend model for render jobs
-- Queue position indicator
-- Email notification when ready (optional)
-
-### Phase 10: Fair Usage & Limits (Throughout)
-
-**1. No Login Required**
-- Session-based project storage
-- LocalStorage for draft projects
-
-**2. Fair Usage Limits**
-- Max video length: 5 minutes per job
-- Max jobs: 3 per hour (tracked via session)
-- Max total storage: 500MB per session
-
-**3. Temporary Storage**
-- Auto-delete: 2 hours after creation
-- Warning banner: "Projects auto-delete after 2 hours"
-- Option to download before deletion
-
----
-
-## Edge Functions
-
-### New Edge Functions Required
-
-| Function | Purpose |
-|----------|---------|
-| `ai-video-studio-transcribe` | Transcribe audio to subtitle segments using ElevenLabs Scribe |
-| `ai-video-studio-translate` | Translate subtitles to multiple languages with RTL support |
-| `ai-video-studio-sfx` | Parse natural language audio commands and find matching SFX |
-| `ai-video-studio-scene` | Generate AI scenes (maps, b-roll, storyboards) |
-| `ai-video-studio-render` | Queue and process final video renders |
-
-### Reused Edge Functions
-- `voice-studio-tts` - AI voice generation
-- `voice-to-text` - Speech transcription (fallback)
-- `auto-translate` - Translation with caching
-- `elevenlabs-podcast-music` - AI music generation
-
----
-
-## Database Schema Updates
-
-### New Tables
-
-**`video_studio_jobs`**
-```sql
-CREATE TABLE video_studio_jobs (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  session_id TEXT NOT NULL,
-  user_id UUID REFERENCES auth.users(id),
-  project_data JSONB NOT NULL,
-  status TEXT DEFAULT 'queued',
-  progress INTEGER DEFAULT 0,
-  output_urls JSONB,
-  error TEXT,
-  created_at TIMESTAMPTZ DEFAULT now(),
-  expires_at TIMESTAMPTZ DEFAULT (now() + INTERVAL '2 hours')
-);
-
--- RLS: Session or user-based access
-ALTER TABLE video_studio_jobs ENABLE ROW LEVEL SECURITY;
-```
-
-**`video_studio_assets`**
-```sql
-CREATE TABLE video_studio_assets (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  session_id TEXT NOT NULL,
-  file_name TEXT NOT NULL,
-  file_path TEXT NOT NULL,
-  file_type TEXT NOT NULL,
-  file_size INTEGER,
-  duration_ms INTEGER,
-  thumbnail_path TEXT,
-  created_at TIMESTAMPTZ DEFAULT now(),
-  expires_at TIMESTAMPTZ DEFAULT (now() + INTERVAL '2 hours')
-);
+// New toolkit section
+const toolkitLinks = [
+  { href: "/toolkit", label: "Toolkit Hub" },
+  { href: "/toolkit/ai-video-studio", label: "AI Video Studio" },
+  { href: "/toolkit/video-resize-pack", label: "Video Resize Pack" },
+  { href: "/toolkit/voice-studio", label: "Voice Studio" },
+  { href: "/toolkit/pdf-from-photos", label: "Photo to PDF" },
+  { href: "/toolkit/image-resize", label: "Image Resizer" },
+  { href: "/toolkit/captions-translate", label: "Captions & Translate" },
+  { href: "/toolkit/background-ai", label: "AI Background" },
+  { href: "/toolkit/beauty-filters", label: "Beauty Filters" },
+  { href: "/studio", label: "Creative Suite" },
+];
 ```
 
 ---
 
-## UI Styling
+### Part 3: Homepage Toolkit Card
 
-- **Theme**: Dark mode (slate-950/900 background) with gold (#C8A766) accents
-- **Typography**: Inter font, clean hierarchy
-- **Cards**: Subtle glass-morphism (backdrop-blur, border-slate-700)
-- **Buttons**: Gold primary, ghost secondaries
-- **Timeline**: Dark track rows, colored clip backgrounds per type
-- **Consistent with existing toolkit pages** (VoiceStudio, VideoResizePack)
+**Add to Index.tsx (after Services Grid, before AI Comparison Widget):**
 
----
-
-## Implementation Order
-
-1. **Phase 1**: Core layout + timeline data model + basic playback
-2. **Phase 2**: Media upload + library integration
-3. **Phase 3**: Inspector panels (transform, crop, speed, color, audio)
-4. **Phase 4**: Captions (transcribe, translate, styles, export)
-5. **Phase 5**: Voiceover + teleprompter
-6. **Phase 6**: Audio suite + AI command box
-7. **Phase 7**: Effects + overlays + lower-thirds
-8. **Phase 8**: AI scene generation panel
-9. **Phase 9**: Export presets + render queue
-10. **Phase 10**: Fair usage limits + auto-cleanup
+Create a premium showcase card featuring:
+- Title: "JBJ RealEstate Toolkit"
+- Subtitle: "Free Professional Tools"
+- Description highlighting the 9 tools
+- Visual icons for main tool categories
+- CTA button linking to /toolkit
+- Premium gold/black styling consistent with page design
 
 ---
 
-## Technical Notes
+### Part 4: Full Tool Audit & Fixes
 
-- **Secrets Available**: `ELEVENLABS_API_KEY`, `LOVABLE_API_KEY` for AI features
-- **Existing Infrastructure**: `studio_stock_library` table, `studio_projects` table pattern
-- **Audio Handling**: Use `fetch().blob()` pattern for binary audio (not supabase.functions.invoke)
-- **Video Processing**: Client-side Canvas API for preview; server-side FFmpeg for final render
-- **RTL Languages**: Arabic, Hebrew, Persian, Urdu require `dir="rtl"` on text elements
-- **Keyboard Shortcuts**: Space (play/pause), Cmd+Z (undo), Cmd+S (save), Del (delete clip)
+#### Working Tools (No Changes Needed):
+1. **Photo to PDF** - Client-side, fully functional
+2. **Image Resizer** - Client-side, fully functional
+3. **Beauty Filters** - Client-side canvas filters work
+4. **Video Resize Pack** - Has backend edge function
 
+#### Tools Needing Fixes:
 
+**1. Captions & Translate (Critical)**
+- Issue: Only simulates processing, no actual transcription/translation
+- Fix: Connect to existing `voice-to-text` and `auto-translate` edge functions
+- Add proper file upload and processing pipeline
 
+**2. Background AI (Critical)**
+- Issue: Shows original image as "result" - no actual background removal
+- Fix: Integrate with AI image processing (Lovable AI or dedicated service)
+- Add real background replacement functionality
 
+**3. Voice Studio (Minor)**
+- Issue: Works but UI could improve error handling
+- Fix: Add better loading states and error messages
+- Ensure consent checkbox is mandatory before AI voice generation
 
+**4. AI Video Studio (Partial)**
+- Issue: Core UI exists but many features are stubs
+- Fix: Connect transcription, translation, and rendering to edge functions
+- Implement actual timeline export functionality
 
-merge all the current video and sound related tools into this tool to make sure all the tools are in one place including voice tuning and filters for sound and different voice over and accent and all languages to speak the text with a teleprompter and live video recording
+**5. Creative Suite Editor (Incomplete)**
+- Issue: Route exists but component is basic
+- Fix: Full integration with AI Video Studio engine
+
+---
+
+## File Changes Required
+
+### New Files:
+```
+src/components/header/MegaMenuToolkit.tsx
+src/components/home/ToolkitShowcaseCard.tsx
+```
+
+### Modified Files:
+```
+src/components/GlobalHeader.tsx - Add Toolkit menu
+src/components/Footer.tsx - Add Toolkit section
+src/pages/Index.tsx - Add Toolkit card
+src/pages/toolkit/CaptionsTranslate.tsx - Connect real APIs
+src/pages/toolkit/BackgroundAI.tsx - Connect real AI
+```
+
+---
+
+## Technical Implementation Notes
+
+### Header Menu Structure:
+- Use existing mega-menu-primitives for consistency
+- Follow the 4-column layout pattern from MegaMenuMore
+- Include the flagship AI Video Studio with special highlight
+
+### Footer Section:
+- Add between "Professional Tools" and "Careers" sections
+- Use same DivisionAccordion pattern for mobile
+
+### Homepage Card:
+- Position between Services and AI Comparison sections
+- Use dark gradient card style (from-zinc-900 to-zinc-800)
+- Include small icon grid showing tool categories
+- Gold accent button with hover effects
+
+### API Connections for Broken Tools:
+
+**Captions & Translate:**
+```typescript
+// Use existing edge functions
+const transcribe = await supabase.functions.invoke('voice-to-text', { body: { audio } });
+const translate = await supabase.functions.invoke('auto-translate', { body: { text, targetLang } });
+```
+
+**Background AI:**
+```typescript
+// Use Lovable AI for image processing
+const result = await supabase.functions.invoke('ai-background-remove', { body: { image } });
+// OR integrate with remove.bg API if available
+```
+
+---
+
+## Execution Order
+
+1. Create MegaMenuToolkit.tsx component
+2. Update GlobalHeader.tsx to include Toolkit menu
+3. Add Toolkit section to Footer.tsx
+4. Create ToolkitShowcaseCard and add to Index.tsx
+5. Fix CaptionsTranslate.tsx - connect to real APIs
+6. Fix BackgroundAI.tsx - implement real AI processing
+7. Test all tools end-to-end
+8. Verify mobile responsiveness
+
+---
+
+## Expected Outcome
+
+After implementation:
+- All 9 toolkit tools accessible from Header navigation
+- All toolkit tools listed in Footer
+- Homepage showcases the Toolkit with premium card
+- Captions & Translation actually works with voice-to-text
+- Background AI performs real background removal
+- All tools function correctly end-to-end
