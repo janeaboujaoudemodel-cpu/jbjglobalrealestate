@@ -71,7 +71,7 @@ const BadgesLevelCard = () => {
 
             {/* View Full Progress */}
             <Button variant="link" className="w-full text-gold mt-4 p-0" asChild>
-              <Link to="/broker-dashboard">
+              <Link to="/my-dashboard">
                 View Full Progress
                 <ChevronRight className="w-4 h-4 ml-1" />
               </Link>
