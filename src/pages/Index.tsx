@@ -520,7 +520,7 @@ const Index = () => {
                       <Sparkles className="w-6 h-6 md:w-7 md:h-7 text-purple-500 group-hover:text-purple-400 transition-colors" strokeWidth={1.5} />
                     </div>
                     <h2 
-                      className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide text-white group-hover:text-zinc-100 transition-colors" 
+                      className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide text-purple-500 group-hover:text-purple-400 transition-colors" 
                       style={{ fontFamily: "Poppins, sans-serif" }}
                     >
                       {t('hero.aiFinder')}
@@ -539,9 +539,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-
-      {/* DIVIDER */}
-      <SectionDivider />
 
       {/* AI COMPARISON & ANALYZER PREVIEW */}
       <section className="py-12 md:py-16 bg-black">

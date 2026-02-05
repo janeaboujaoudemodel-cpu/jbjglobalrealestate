@@ -23,7 +23,7 @@ import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigatio
 import { GuideHero } from "@/components/guides/GuideHero";
 import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
 import { GuideCTA } from "@/components/guides/GuideCTA";
-import Footer from "@/components/Footer";
+
 
 const InvestorEducation = () => {
   // Investment Basics - Three Primary Factors
@@ -481,8 +481,6 @@ const InvestorEducation = () => {
           </div>
         </section>
       </div>
-
-      <Footer />
     </div>
   );
 };

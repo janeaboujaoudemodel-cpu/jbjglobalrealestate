@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
-import Footer from "@/components/Footer";
+
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -186,9 +186,6 @@ const NotFound = () => {
           </div>
         </div>
       </div>
-    
-      {/* Footer Section */}
-      <Footer />
     </>
   );
 };

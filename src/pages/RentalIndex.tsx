@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
-import Footer from "@/components/Footer";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -462,8 +462,6 @@ const RentalIndex = () => {
           </div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 };

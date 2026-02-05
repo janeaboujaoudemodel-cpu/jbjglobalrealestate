@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Shield, Building2, Users, Bot, FileText, Lock } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import GlobalHeader from "@/components/GlobalHeader";
-import Footer from "@/components/Footer";
+
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -219,8 +219,6 @@ const Disclaimers = () => {
           </div>
         </section>
       </main>
-      
-      <Footer />
     </>
   );
 };

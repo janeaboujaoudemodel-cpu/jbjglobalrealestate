@@ -46,7 +46,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
 import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
 import { GuideSectionHeader } from "@/components/guides/GuideSectionHeader";
-import Footer from "@/components/Footer";
+
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -704,8 +704,6 @@ const SellerGuide = () => {
             <GuideNavigation current="/seller-guide" guides={GUIDE_LINKS} showStartHere={false} />
           </div>
         </section>
-
-        <Footer />
       </main>
     </>
   );

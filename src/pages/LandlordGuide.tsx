@@ -32,7 +32,7 @@ import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigatio
 import { GuideHero } from "@/components/guides/GuideHero";
 import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
 import { GuideCTA } from "@/components/guides/GuideCTA";
-import Footer from "@/components/Footer";
+
 
 const LandlordGuide = () => {
   // Section 1: Understanding the Rental Market
@@ -565,8 +565,6 @@ const LandlordGuide = () => {
           <GuideNavigation current="/landlord-guide" guides={GUIDE_LINKS} />
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };

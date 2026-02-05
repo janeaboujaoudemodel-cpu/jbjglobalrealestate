@@ -551,6 +551,54 @@ export function ReellyImportPanel() {
 
   return (
     <div className="space-y-6">
+      {/* API Diagnostics Card - Connection Status Dashboard */}
+      <Card className="border-2 border-gold/40 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-black flex items-center gap-2">
+            <Shield className="w-5 h-5 text-gold" />
+            API Connection Status
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {/* Status Indicator */}
+            <div className="text-center p-3 bg-white/50 rounded-lg border border-gold/20">
+              <p className="text-xs text-zinc-500 mb-1">Connection</p>
+              <Badge 
+                variant={apiConnected === true ? "default" : apiConnected === false ? "destructive" : "secondary"}
+                className={apiConnected === true ? "bg-green-500" : ""}
+              >
+                {apiConnected === null ? "Not Tested" : apiConnected ? "✓ Connected" : "✗ Failed"}
+              </Badge>
+            </div>
+            
+            {/* Projects Available */}
+            <div className="text-center p-3 bg-white/50 rounded-lg border border-gold/20">
+              <p className="text-xs text-zinc-500 mb-1">Projects Available</p>
+              <p className="text-2xl font-bold text-black">
+                {displayTotalProjects?.toLocaleString() || "—"}
+              </p>
+            </div>
+            
+            {/* Queue Count */}
+            <div className="text-center p-3 bg-white/50 rounded-lg border border-gold/20">
+              <p className="text-xs text-zinc-500 mb-1">Pending Queue</p>
+              <p className="text-2xl font-bold text-black">
+                {liveCounts?.reelly_pending_queue?.toLocaleString() || "0"}
+              </p>
+            </div>
+            
+            {/* Last Error */}
+            <div className="text-center p-3 bg-white/50 rounded-lg border border-gold/20">
+              <p className="text-xs text-zinc-500 mb-1">Last Error</p>
+              <p className="text-sm text-red-600 truncate">
+                {syncResult?.error || areasSyncResult?.error || devSyncResult?.error || "None"}
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       <div>
         <h2 className="text-2xl font-bold text-zinc-900 mb-2">Reelly Integration</h2>
         <p className="text-zinc-600">

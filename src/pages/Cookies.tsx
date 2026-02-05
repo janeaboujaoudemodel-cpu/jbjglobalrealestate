@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
-import Footer from "@/components/Footer";
+
 
 const Cookies = () => {
   return (
@@ -150,7 +150,6 @@ const Cookies = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </section>
   );
 };

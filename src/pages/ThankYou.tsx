@@ -4,7 +4,7 @@ import { CheckCircle, ArrowRight, MessageCircle, Home } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
 import GlobalHeader from "@/components/GlobalHeader";
-import Footer from "@/components/Footer";
+
 import { Button } from "@/components/ui/button";
 import { getWhatsAppUrl } from "@/constants/stats";
 
@@ -233,8 +233,6 @@ const ThankYou = () => {
           </div>
         </section>
       </main>
-      
-      <Footer />
     </>
   );
 };

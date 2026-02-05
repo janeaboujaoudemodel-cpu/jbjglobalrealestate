@@ -54,7 +54,7 @@ import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-import Footer from "@/components/Footer";
+
 import ProjectCard from "@/components/ProjectCard";
 import { useProjects, useCommunities, useDevelopers } from "@/hooks/useProjects";
 import { useAreas } from "@/hooks/useAreas";
@@ -68,7 +68,7 @@ import { FeaturedProjectAd, FEATURED_ADS } from "@/components/FeaturedProjectAd"
 import { blueprintPagesSEO, trackingEvents } from "@/types/blueprint";
 import PropertiesHeroVideo from "@/components/PropertiesHeroVideo";
 import ConsultationRequestForm from "@/components/ConsultationRequestForm";
-import DirectContactCTA from "@/components/DirectContactCTA";
+
 
 // Currency conversion rates - 10 unified currencies
 const CURRENCY_RATES: Record<string, number> = {
@@ -1226,11 +1226,6 @@ const Properties = () => {
           </div>
         </div>
       </section>
-
-      {/* Standardized Direct Contact CTA - Same as all pages */}
-      <DirectContactCTA />
-
-      <Footer />
       
       {/* Active Lead Banner for CRM linking */}
       <ActiveLeadBanner showAddToShortlist={false} />

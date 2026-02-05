@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { PDFDocument, StandardFonts } from "pdf-lib";
-import Footer from "@/components/Footer";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -1188,8 +1188,6 @@ const downloadPdf = async () => {
         source="Interior Design AI"
         propertyName={propertyName || "Interior Design Consultation"}
       />
-
-      <Footer />
     </section>
   );
 };

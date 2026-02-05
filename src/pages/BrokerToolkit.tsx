@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Footer from "@/components/Footer";
 import {
   BrokerToolkitHero,
   BrokerToolkitStats,
@@ -33,7 +32,6 @@ export default function BrokerToolkit() {
       <BrokerToolkitCRM />
       <BrokerToolkitGrowth />
       <BrokerToolkitCTA />
-      <Footer />
     </div>
   );
 }

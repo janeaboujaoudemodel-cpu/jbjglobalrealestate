@@ -26,8 +26,6 @@ import {
   Calendar,
   Play,
 } from "lucide-react";
-import Footer from "@/components/Footer";
-import DirectContactCTA from "@/components/DirectContactCTA";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
@@ -537,11 +535,6 @@ const Snagging = () => {
           </motion.div>
         </div>
       </section>
-
-      {/* Direct Contact CTA */}
-      <DirectContactCTA />
-
-      <Footer />
     </>
   );
 };

@@ -7,7 +7,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import Footer from "@/components/Footer";
+
 import { SEOHead } from "@/components/SEOHead";
 import sitemapHeroVideo from "@/assets/videos/sitemap-hero.mp4";
 import CTABand from "@/components/home/CTABand";
@@ -645,8 +645,6 @@ const Sitemap = () => {
             <ChevronUp className="w-6 h-6" />
           </motion.button>
         )}
-
-        <Footer />
       </div>
     </>
   );

@@ -18,8 +18,6 @@ import {
   HelpCircle,
   ArrowUpRight
 } from "lucide-react";
-import Footer from "@/components/Footer";
-import DirectContactCTA from "@/components/DirectContactCTA";
 import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import {
@@ -449,11 +447,6 @@ const RentalAdvisory = () => {
           </div>
         </div>
       </section>
-
-      {/* Standardized Direct Contact CTA */}
-      <DirectContactCTA />
-
-      <Footer />
     </>
   );
 };

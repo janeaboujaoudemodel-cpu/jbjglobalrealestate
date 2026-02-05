@@ -4,7 +4,7 @@ import { ArrowRight, Upload, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
 import GlobalHeader from "@/components/GlobalHeader";
-import Footer from "@/components/Footer";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -424,8 +424,6 @@ const RequestValuation = () => {
           </div>
         </section>
       </main>
-      
-      <Footer />
     </>
   );
 };
