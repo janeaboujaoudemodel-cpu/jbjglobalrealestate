@@ -28,7 +28,8 @@ const LeadContactActions = ({ lead, onGenerateReport }: LeadContactActionsProps)
     if (lead.email) {
       const subject = encodeURIComponent(`Follow-up from JBJ Global Real Estate`);
       const body = encodeURIComponent(`Dear ${lead.full_name || 'Valued Client'},\n\nThank you for your interest in JBJ Global Real Estate.\n\nBest regards,\nJBJ Global Real Estate Team`);
-      window.open(`mailto:${lead.email}?subject=${subject}&body=${body}`, '_blank');
+      // Use direct navigation to avoid popup blocking
+      window.location.href = `mailto:${lead.email}?subject=${subject}&body=${body}`;
       toast.success("Opening email client...");
     } else {
       toast.error("No email address available");
@@ -38,9 +39,10 @@ const LeadContactActions = ({ lead, onGenerateReport }: LeadContactActionsProps)
   const handleSendWhatsApp = () => {
     if (lead.phone) {
       // Clean the phone number
-      const cleanPhone = lead.phone.replace(/[^0-9+]/g, '');
+      const cleanPhone = lead.phone.replace(/[^0-9+]/g, '').replace('+', '');
       const message = encodeURIComponent(`Hello ${lead.full_name || ''}! Thank you for your interest in JBJ Global Real Estate. How can I assist you today?`);
-      window.open(`https://wa.me/${cleanPhone}?text=${message}`, '_blank');
+      // Use direct navigation to avoid popup blocking
+      window.location.href = `https://wa.me/${cleanPhone}?text=${message}`;
       toast.success("Opening WhatsApp...");
     } else {
       toast.error("No phone number available");

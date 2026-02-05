@@ -122,11 +122,9 @@ const DirectContactCTA = ({
 
         {/* Contact Buttons Grid - 3 columns */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto mb-6">
-          {/* WhatsApp */}
+          {/* WhatsApp - Using direct href without target="_blank" for iframe/mobile compatibility */}
           <a 
             href={getWhatsAppUrl()}
-            target="_blank"
-            rel="noopener noreferrer"
             className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
           >
             <div className="w-12 h-12 bg-green-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-green-500/30">
