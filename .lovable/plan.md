@@ -1,125 +1,142 @@
 
-# Fix Listing Admin Background UI Styling
+# Fix Email Change Flow: Custom OTP Verification
 
-## Current Issue
+## Problem Summary
 
-The Listing Admin page has inconsistent styling compared to other admin panels:
-- The outer shell uses the correct champagne gradient pattern
-- But internal cards, header, and content use `bg-white` and `bg-white/50` 
-- This creates a jarring mix of white elements on champagne background
-- Cards have `border-zinc-200` instead of `border-gold/30`
+The current email change uses Supabase's built-in `updateUser({ email })` which has two issues:
+1. **Sends verification to BOTH emails** - Supabase's security design sends confirmation to old + new email
+2. **Exposes Lovable URLs** - When clicking the confirmation link, users are redirected to `id-preview--*.lovable.app` which exposes Lovable branding
 
-## Target Styling (from MyDashboard & Admin patterns)
+This is unacceptable for your users who should never see Lovable references.
 
-All admin panels should use:
-- **Outer page**: `bg-black` 
-- **Shell**: Champagne gradient with gold border
-- **Header**: Champagne gradient (not white)
-- **Cards**: Champagne gradient with gold borders (not white with zinc borders)
-- **Text**: Black/foreground for titles, muted-foreground for descriptions
+---
 
-## Implementation Changes
+## Solution: Custom OTP-Based Email Change
 
-### File: `src/pages/ListingAdmin.tsx`
+Replace Supabase's default flow with a custom OTP verification that:
+- Sends OTP **only to the NEW email** (proving ownership)
+- Never shows any Lovable URLs
+- Uses your existing `send-email-otp` and `verify-email-otp` edge functions
+- Updates the email via admin API after successful OTP verification
 
-### 1. Fix Header Background (Line 483)
-**Before:**
-```jsx
-<header className="border-b border-gold/30 bg-white/50 backdrop-blur-sm sticky top-20 lg:top-24 z-40 rounded-t-2xl">
+---
+
+## Implementation Plan
+
+### 1. Create New Edge Function: `change-user-email`
+
+This backend function will:
+- Accept the user ID and new email
+- Verify an OTP was validated for that email
+- Update the user's email using Supabase Admin API
+- No redirect URLs involved - purely API-based
+
+**Location**: `supabase/functions/change-user-email/index.ts`
+
+```text
+Request Flow:
+┌─────────────────────────────────────────────────────────────┐
+│ 1. User enters new email in dialog                          │
+│ 2. Frontend calls send-email-otp with NEW email only        │
+│ 3. User enters 6-digit OTP from email                       │
+│ 4. Frontend calls verify-email-otp                          │
+│ 5. Frontend calls change-user-email (new edge function)     │
+│    → Validates OTP was verified                             │
+│    → Updates auth.users email via Admin API                 │
+│ 6. User is logged out and must re-login with new email      │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-**After:**
-```jsx
-<header className="border-b border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-20 lg:top-24 z-40 rounded-t-2xl">
+### 2. Modify UserProfile.tsx
+
+Replace the current `handleChangeEmail` flow with a multi-step process:
+
+**Step 1**: Enter new email → Send OTP
+**Step 2**: Enter OTP code → Verify OTP  
+**Step 3**: OTP verified → Execute email change via edge function
+
+**New UI Flow**:
+```text
+┌────────────────────────────────────────┐
+│ Change Email Address                   │
+├────────────────────────────────────────┤
+│ Current: jane@example.com              │
+│                                        │
+│ New Email: [___________________]       │
+│                                        │
+│ [Send Verification Code]               │
+├────────────────────────────────────────┤
+│ Enter the 6-digit code sent to         │
+│ your new email:                        │
+│                                        │
+│ [ 1 ][ 2 ][ 3 ][ 4 ][ 5 ][ 6 ]         │
+│                                        │
+│ [Verify & Change Email]                │
+└────────────────────────────────────────┘
 ```
 
-### 2. Fix Stats Badges (Lines 573-580)
-**Before:**
-```jsx
-<div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-lg border border-gold/20">
+---
+
+## Technical Details
+
+### New Edge Function: `change-user-email`
+
+```typescript
+// Validates:
+// 1. User is authenticated (JWT required)
+// 2. OTP was verified for the new email within last 10 minutes
+// 3. Updates email using supabase.auth.admin.updateUserById()
+
+Input: { new_email: string }
+Output: { success: true, message: "Email changed" } or { error: string }
 ```
 
-**After:**
-```jsx
-<div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] rounded-lg border-2 border-gold/30">
-```
+### UserProfile.tsx Changes
 
-### 3. Fix Search Filters Card (Lines 627-641)
-**Before:**
-```jsx
-<Card className="bg-white border-zinc-200 sticky top-44">
-```
+1. **Add state variables**:
+   - `emailChangeStep: 'input' | 'verify'`
+   - `otpCode: string`
+   - `sendingOtp: boolean`
+   - `verifyingOtp: boolean`
 
-**After:**
-```jsx
-<Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 sticky top-44">
-```
+2. **Add functions**:
+   - `handleSendEmailOtp()` - Calls `send-email-otp` with NEW email only
+   - `handleVerifyAndChangeEmail()` - Calls `verify-email-otp` then `change-user-email`
 
-### 4. Fix Project Grid Cards (Lines 648-668)
-**Before:**
-```jsx
-<Card
-  className={`bg-white border-zinc-200 cursor-pointer transition-all hover:shadow-lg hover:border-gold/50 ${...}`}
-```
+3. **Update Dialog UI**:
+   - Step 1: Email input + "Send Code" button
+   - Step 2: OTP input + "Verify & Change" button
+   - Success: Close dialog + sign user out to re-login
 
-**After:**
-```jsx
-<Card
-  className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 cursor-pointer transition-all hover:shadow-lg hover:border-gold ${...}`}
-```
+---
 
-### 5. Fix Editor View Card (Lines 685-686)
-**Before:**
-```jsx
-<Card className="bg-white border-zinc-200">
-  <CardHeader className="border-b border-zinc-200">
-```
+## Security Measures
 
-**After:**
-```jsx
-<Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
-  <CardHeader className="border-b border-gold/30">
-```
+| Security Check | Implementation |
+|---------------|----------------|
+| User authentication | JWT token required for `change-user-email` |
+| Email ownership | OTP sent only to new email |
+| OTP validation | Must be verified within 10 minutes |
+| Rate limiting | Existing 3 attempts per 10 minutes |
+| Force re-login | User signed out after email change |
 
-### 6. Fix Image Grid Container (Lines 1119)
-**Before:**
-```jsx
-className="relative aspect-video rounded-lg overflow-hidden bg-zinc-100 border border-zinc-200"
-```
+---
 
-**After:**
-```jsx
-className="relative aspect-video rounded-lg overflow-hidden bg-[#EDE4D3] border-2 border-gold/30"
-```
+## Files to Create/Modify
 
-### 7. Fix Loading State (Lines 140-143)
-**Before:**
-```jsx
-<div className="min-h-screen bg-zinc-100 flex items-center justify-center pt-28">
-```
+| File | Action |
+|------|--------|
+| `supabase/functions/change-user-email/index.ts` | **CREATE** - New edge function |
+| `supabase/config.toml` | **UPDATE** - Add function config |
+| `src/pages/UserProfile.tsx` | **UPDATE** - New OTP-based email change flow |
 
-**After:**
-```jsx
-<div className="min-h-screen bg-black flex items-center justify-center pt-28">
-  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
-```
-
-## Summary of Changes
-
-| Element | Before | After |
-|---------|--------|-------|
-| Loading state | `bg-zinc-100`, `border-zinc-900` | `bg-black`, `border-gold` |
-| Header | `bg-white/50` | Champagne gradient |
-| Stats badges | `bg-white border-gold/20` | Champagne gradient, `border-2 border-gold/30` |
-| Filter card | `bg-white border-zinc-200` | Champagne gradient, `border-2 border-gold/30` |
-| Project cards | `bg-white border-zinc-200` | Champagne gradient, `border-2 border-gold/30` |
-| Editor card | `bg-white border-zinc-200` | Champagne gradient, `border-2 border-gold/30` |
-| Image containers | `bg-zinc-100 border-zinc-200` | `bg-[#EDE4D3] border-2 border-gold/30` |
+---
 
 ## Result
 
-After these changes, the Listing Admin will have:
-- Consistent champagne/gold premium styling throughout
-- All cards match the platform's locked UI standard
-- No more jarring white elements breaking the visual flow
-- Aligns with MyDashboard, Admin, and BrokerDashboard styling
+After implementation:
+- OTP sent **only to the new email** (not both)
+- **Zero Lovable URLs** exposed to users
+- Users verify ownership via 6-digit code (no email links)
+- Proper email ownership verification before change
+- User forced to re-login with new email after change
