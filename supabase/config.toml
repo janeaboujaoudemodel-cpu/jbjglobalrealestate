@@ -152,3 +152,6 @@ verify_jwt = false
 
 [functions.reelly-fetch-details]
 verify_jwt = false
+
+[functions.change-user-email]
+verify_jwt = false
