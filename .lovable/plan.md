@@ -1,266 +1,469 @@
 
+# JBJ AI Video Studio™ (Free) — Implementation Plan
 
-# JBJ Global Real Estate - Incomplete Tasks Audit & Implementation Plan
-
-## Executive Summary
-
-After thoroughly analyzing the codebase against the original task requirements, I have identified specific tasks that are either incomplete or need improvements. The majority of features ARE implemented, but the following items require attention:
+## Overview
+Create a flagship CapCut-style professional web video editor at `/toolkit/ai-video-studio` with DaVinci Resolve/Final Cut Pro-inspired timeline UI. This tool will consolidate and elevate the existing video editing capabilities into a single, comprehensive platform.
 
 ---
 
-## INCOMPLETE TASKS IDENTIFIED
+## Architecture Summary
 
-### 1. First-Time Login Mode Selection (Task 3.3) ⚠️ NEEDS ENHANCEMENT
-
-**Original Requirement:**
-> "On first login/signup: User selects mode. User can change mode anytime from selector."
-
-**Current Status:** PARTIALLY DONE
-- ✅ `RoleSelectionModal.tsx` EXISTS - Shows on first visit to select role (broker/investor/visitor)
-- ✅ `ModeSwitcher.tsx` EXISTS - Allows switching Client/Broker modes
-- ⚠️ **ISSUE:** The RoleSelectionModal selects USER ROLE (broker/investor/visitor), but the ModeSwitcher switches between CLIENT MODE and BROKER MODE - these are two separate systems
-
-**Fix Required:** Clarify the flow:
-1. First visit → RoleSelectionModal asks: "Are you a Broker, Investor, or Visitor?"
-2. After login → If user selected Broker role, they can toggle Client Mode ↔ Broker Mode using ModeSwitcher
-3. The two systems are complementary, not duplicative
-
-**Status: ✅ WORKING AS DESIGNED** - The dual system is intentional
-
----
-
-### 2. Certificate PDF - Founder Signature Placeholder (Task 6.3) ⚠️ NEEDS FIX
-
-**Original Requirement:**
-> "Founder signature placeholder"
-
-**Current Status:** INCOMPLETE
-- ✅ `CertificateGenerator.tsx` generates PDF with:
-  - QR code for verification
-  - Certificate number
-  - Date
-  - Training scores
-- ❌ **MISSING:** The signature area shows "Authorized Signature" line but NO founder signature placeholder or image
-
-**File:** `src/components/onboarding/CertificateGenerator.tsx`
-
-**Fix Required:** Add a founder signature image/placeholder at lines 290-304:
-```typescript
-// Current: Just draws a line with "Authorized Signature" text
-// Need: Add founder name "Jane Bou Jaoude" text or signature image below the line
-page.drawText("Jane Bou Jaoude", {
-  x: 130,
-  y: 85,
-  size: 12,
-  font: helveticaBold,
-  color: black,
-});
-page.drawText("Founder & CEO", {
-  x: 145,
-  y: 70,
-  size: 9,
-  font: helvetica,
-  color: gray,
-});
+```text
+┌────────────────────────────────────────────────────────────────────────────────┐
+│                              TOP BAR                                           │
+│  Logo • Project Name • Render Status • Export Button • Settings               │
+├──────────────┬─────────────────────────────────────────────┬───────────────────┤
+│              │                                             │                   │
+│   LEFT       │              CENTER                         │      RIGHT        │
+│   PANEL      │              PREVIEW                        │      PANEL        │
+│              │              PLAYER                         │                   │
+│  ┌────────┐  │         ┌─────────────┐                    │  ┌─────────────┐  │
+│  │ Media  │  │         │             │                    │  │ Inspector   │  │
+│  │ Library│  │         │   Video     │                    │  │             │  │
+│  │        │  │         │   Preview   │                    │  │ • Transform │  │
+│  │ Upload │  │         │             │                    │  │ • Crop      │  │
+│  │ Stock  │  │         └─────────────┘                    │  │ • Speed     │  │
+│  │ AI Gen │  │                                             │  │ • Color     │  │
+│  │ Templat│  │                                             │  │ • Audio     │  │
+│  └────────┘  │                                             │  │ • Captions  │  │
+│              │                                             │  │ • Export    │  │
+│              │                                             │  └─────────────┘  │
+├──────────────┴─────────────────────────────────────────────┴───────────────────┤
+│                              TIMELINE EDITOR                                   │
+│  ┌─ Tracks ────────────────────────────────────────────────────────────────┐  │
+│  │ 🎬 Video Track 1   [═══clip═══][═══clip═══][ clip ]                    │  │
+│  │ 🎬 Video Track 2   [    ][══overlay══]                                  │  │
+│  │ 🎵 Audio Track 1   [══════music══════]                                  │  │
+│  │ 🎤 Voiceover       [═══voiceover═══]                                    │  │
+│  │ 📝 Text/Captions   [sub][sub][sub][sub]                                 │  │
+│  │ ✨ Effects         [transition][filter]                                  │  │
+│  └──────────────────────────────────────────────────────────────────────────┘  │
+│  [0:00]─────────[0:30]─────────[1:00]─────────[1:30]─────────[2:00]           │
+├────────────────────────────────────────────────────────────────────────────────┤
+│  EXPORT BAR: [9:16 Reels] [16:9 YouTube] [1:1 Feed] [4:5 Portrait] [ZIP All] │
+└────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-### 3. Books Same Size Enforcement (Task 6.1) ⚠️ NEEDS VERIFICATION
+## File Structure
 
-**Original Requirement:**
-> "All books same size"
+```text
+src/pages/toolkit/
+  AIVideoStudio.tsx                      # Main page (orchestrator)
 
-**Current Status:** IMPLEMENTED BUT NEEDS VERIFICATION
-- ✅ `Book3DCard.tsx` has `minHeight: '320px'` on line 125
-- ⚠️ **POTENTIAL ISSUE:** Using `minHeight` instead of fixed `height` means cards can still vary in size based on content
+src/components/ai-video-studio/
+  # Layout Components
+  AIVideoStudioLayout.tsx                # Main 4-panel layout
+  AIVideoStudioTopBar.tsx                # Header with project info + render status
+  AIVideoStudioExportBar.tsx             # Bottom export presets bar
+  
+  # Left Panel - Media Library
+  MediaLibraryPanel.tsx                  # Container for all media sources
+  MediaUploadSection.tsx                 # Upload MP4/MOV/WebM/images/audio
+  StockLibrarySection.tsx                # Free stock SFX/music browser
+  AIGenerateSection.tsx                  # AI scene generation panel
+  TemplatesSection.tsx                   # Lower-thirds, intros, outros
+  
+  # Center - Preview & Timeline
+  VideoPreviewCanvas.tsx                 # Main video preview with playback
+  TimelineEditor.tsx                     # Multi-track timeline component
+  TimelineTrack.tsx                      # Individual track (video/audio/text)
+  TimelineClip.tsx                       # Draggable clip with handles
+  TimelinePlayhead.tsx                   # Current time indicator
+  TimelineZoomControls.tsx               # Zoom in/out timeline
+  
+  # Right Panel - Inspector
+  InspectorPanel.tsx                     # Container for all inspectors
+  TransformInspector.tsx                 # Position, scale, rotation, opacity
+  CropInspector.tsx                      # Crop, rotate, blur
+  SpeedInspector.tsx                     # 0.5x-2x, reverse
+  ColorInspector.tsx                     # Brightness, contrast, saturation, LUTs
+  AudioInspector.tsx                     # Volume, normalize, fade, noise reduction
+  CaptionsInspector.tsx                  # Transcribe, translate, style, export SRT/VTT
+  EffectsInspector.tsx                   # Transitions, filters, overlays
+  
+  # Special Features
+  TeleprompterPanel.tsx                  # Script teleprompter with recording
+  VoiceoverRecorder.tsx                  # Record voiceover into timeline
+  AIAudioCommandBox.tsx                  # Natural language SFX placement
+  AISceneGenerator.tsx                   # Map animation, b-roll, storyboard
+  SmartReframePanel.tsx                  # Per-shot AI reframing
+  CaptionTranslator.tsx                  # Multi-language translation with RTL
+  
+  # Shared
+  KeyframeEditor.tsx                     # Position/scale/rotation/opacity keyframes
+  TransitionPicker.tsx                   # Fade, dissolve, wipe, zoom transitions
+  SubtitleStylePicker.tsx                # Premium Clean, Social Bold, Highlight
 
-**Fix Required:** Change from `minHeight` to fixed `height` for consistency:
-```typescript
-// Line 125: Change minHeight to height
-minHeight: '320px' → height: '320px'
+supabase/functions/
+  ai-video-studio-transcribe/index.ts   # Speech-to-text for captions
+  ai-video-studio-translate/index.ts    # Multi-language translation
+  ai-video-studio-tts/index.ts          # AI voice generation
+  ai-video-studio-sfx/index.ts          # AI audio command processing
+  ai-video-studio-scene/index.ts        # AI scene/map generation
+  ai-video-studio-render/index.ts       # Final render queue processing
 ```
 
 ---
 
-### 4. Test Module - Randomized Questions (Task 6.2) ⚠️ NEEDS VERIFICATION
+## Technical Implementation
 
-**Original Requirement:**
-> "Randomized questions"
+### Phase 1: Core Layout & Timeline (Days 1-2)
 
-**Current Status:** ✅ IMPLEMENTED
-- `useModuleTests.ts` line 114: `const shuffled = availableQuestions.sort(() => Math.random() - 0.5);`
-- Questions are shuffled before selection
-- Previously shown questions are tracked and avoided when possible (lines 100-111)
+**1. Main Page: `AIVideoStudio.tsx`**
+- State management for project, timeline, selection
+- Panel layout with resizable dividers
+- Autosave to localStorage + optional cloud sync
+- Keyboard shortcuts (space=play, cmd+s=save, del=delete)
 
-**Status: ✅ WORKING AS DESIGNED**
-
----
-
-### 5. 3 Failures → Show Answers Flow (Task 6.2) ⚠️ NEEDS VERIFICATION
-
-**Original Requirement:**
-> "3 failures → show answers → retake with new questions"
-
-**Current Status:** ✅ IMPLEMENTED
-- `useModuleTests.ts` line 151-153:
+**2. Timeline Data Model**
 ```typescript
-const failedAttempts = attempts.filter(a => !a.passed).length;
-const showAnswers = !passed && failedAttempts >= 2; // This will be the 3rd+ failure
-```
-- `getIncorrectAnswers()` function (lines 205-229) returns incorrect answers with `showCorrect: attempt.show_answers`
+interface VideoStudioProject {
+  id: string;
+  name: string;
+  duration: number;          // Total timeline duration in seconds
+  tracks: Track[];           // Multi-track array
+  settings: ProjectSettings;
+  createdAt: Date;
+  autoDeleteAt: Date;        // 2 hours from creation
+}
 
-**Status: ✅ WORKING AS DESIGNED**
+interface Track {
+  id: string;
+  type: 'video' | 'audio' | 'voiceover' | 'text' | 'effects';
+  name: string;
+  locked: boolean;
+  muted: boolean;
+  clips: Clip[];
+}
 
----
+interface Clip {
+  id: string;
+  trackId: string;
+  type: 'video' | 'audio' | 'image' | 'text' | 'subtitle' | 'effect';
+  startTime: number;         // Position on timeline
+  duration: number;          // Clip length
+  source: {
+    url: string;
+    inPoint: number;         // Trim start in source
+    outPoint: number;        // Trim end in source
+  };
+  transform: {
+    x: number; y: number;
+    scaleX: number; scaleY: number;
+    rotation: number;
+    opacity: number;
+  };
+  keyframes: Keyframe[];     // Animation keyframes
+  effects: ClipEffect[];     // Applied effects
+}
 
-### 6. Newsletter No-Reload Submit (Task 7.1) ⚠️ VERIFIED
-
-**Original Requirement:**
-> "No page reload on submit"
-
-**Current Status:** ✅ IMPLEMENTED
-- `NewsletterBrevo.tsx` line 28-29: `e.preventDefault()` in `handleSubmit`
-- Uses async/await for submission
-- Shows success state without reload
-
-**Status: ✅ WORKING AS DESIGNED**
-
----
-
-### 7. Notification Preferences - Granular On/Off (Task 7.2) ⚠️ VERIFIED
-
-**Original Requirement:**
-> "Email, Push, Pop-up. Allow granular on/off or global off."
-
-**Current Status:** ✅ IMPLEMENTED
-- `useNotificationPreferences.ts` has:
-  - `email_notifications` toggle
-  - `push_notifications` toggle  
-  - `browser_notifications` toggle
-  - `notification_frequency` (instant/daily/weekly)
-  - `all_notifications_off` global toggle
-  - `turnOffAll()` and `turnOnAll()` functions
-
-**Status: ✅ WORKING AS DESIGNED**
-
----
-
-### 8. Sarah Listing Admin Restrictions (Task 4.2) ⚠️ VERIFIED
-
-**Original Requirement:**
-> "Sarah cannot delete data, cannot change UI, can create drafts only"
-
-**Current Status:** ✅ IMPLEMENTED
-- `ListingAdminGuard.tsx` restricts `/listing-admin` to specific email
-- RLS policies on tables prevent unauthorized deletions
-- Projects go to `pending_project_imports` queue for approval
-
-**Status: ✅ WORKING AS DESIGNED**
-
----
-
-### 9. Image Repair System (Task 5.3) ⚠️ NEEDS RUNTIME VERIFICATION
-
-**Original Requirement:**
-> "'0 photos repaired' is invalid. Repair logic must actually restore images/brochures."
-
-**Current Status:** IMPLEMENTED - NEEDS RUNTIME TEST
-- `SyncDashboard.tsx` has multi-phase repair:
-  - Phase 1: Pending extraction
-  - Phase 2: Approved project repair (lines 1158-1173)
-  - Phase 3: Final image repair pass (lines 1176-1180)
-- Tracks: `imagesRepaired`, `documentsRepaired`, `metadataRepaired`
-
-**Action Required:** Runtime test to verify actual image restoration
-
----
-
-### 10. Profile Icon - First + Family Initial (Task 2.5) ⚠️ VERIFIED
-
-**Original Requirement:**
-> "Show first + family initial (e.g., JB)"
-
-**Current Status:** ✅ IMPLEMENTED
-- `MegaMenuAccount.tsx` lines 76-82:
-```typescript
-const getInitials = (name: string) => {
-  return name
-    .split(' ')
-    .map(n => n.charAt(0).toUpperCase())
-    .slice(0, 2)
-    .join('');
-};
+interface Keyframe {
+  time: number;              // Relative to clip start
+  property: 'x' | 'y' | 'scaleX' | 'scaleY' | 'rotation' | 'opacity';
+  value: number;
+  easing: 'linear' | 'easeIn' | 'easeOut' | 'easeInOut';
+}
 ```
 
-**Status: ✅ WORKING AS DESIGNED**
+**3. Timeline Component Features**
+- Multi-track display with collapsible rows
+- Drag-to-reorder clips
+- Split tool (cut at playhead)
+- Trim handles (adjust in/out points)
+- Ripple delete (close gaps automatically)
+- Snapping to playhead/other clips
+- Zoom slider (fit view, 1s, 5s, 30s per screen)
+
+### Phase 2: Media & Upload (Day 2)
+
+**1. Media Upload**
+- Accept: MP4, MOV, WebM, JPG, PNG, WebP, MP3, WAV
+- Generate thumbnails for video
+- Auto-detect duration
+- Drag from library to timeline
+
+**2. Stock Library Integration**
+- Query existing `studio_stock_library` table
+- Categories: Music (ambient, upbeat, cinematic), SFX (applause, cash, whoosh, camera click, UI sounds)
+- Search and filter by tags
+- Preview playback before adding
+
+### Phase 3: Inspector Panel (Day 3)
+
+**1. Transform Inspector**
+- Position X/Y with numeric input and visual gizmo
+- Scale (uniform or independent X/Y)
+- Rotation (degrees with slider)
+- Opacity (0-100%)
+- Add keyframe buttons per property
+
+**2. Crop Inspector**
+- Crop handles on preview
+- Presets: None, 16:9, 9:16, 1:1, 4:5
+- Rotation: 0°, 90°, 180°, 270°
+- Basic background blur toggle
+
+**3. Speed Inspector**
+- Speed slider: 0.5x, 0.75x, 1x, 1.25x, 1.5x, 2x
+- Reverse toggle (optional)
+- Duration preview update
+
+**4. Color Inspector**
+- Sliders: Brightness, Contrast, Saturation, Temperature
+- LUT dropdown (optional): None, Cinematic, Warm, Cool, Vintage, Luxury Gold
+
+**5. Audio Inspector**
+- Volume slider (0-200%)
+- Fade in/out duration
+- Normalize toggle (basic)
+- Noise reduction toggle (basic - uses ElevenLabs or AI)
+
+### Phase 4: Captions & Translation (Day 4)
+
+**1. Auto-Transcription**
+- Button: "Auto-transcribe" 
+- Uses existing `voice-to-text` edge function with ElevenLabs Scribe
+- Creates subtitle clips on Text track aligned to audio
+- Editable timeline segments
+
+**2. Translation**
+- Language selector: Global list from `SUPPORTED_LANGUAGES` + expanded
+- Multi-select: Translate to Arabic, Hindi, Russian, Chinese, etc.
+- RTL support: Arabic, Hebrew, Persian, Urdu
+- Uses `auto-translate` edge function
+
+**3. Subtitle Export**
+- Export formats: SRT, VTT, ASS
+- Burn-in toggle: Render subtitles into video
+
+**4. Subtitle Styles**
+- Premium Clean: White text, subtle shadow, bottom positioned
+- Social Bold: Large text, colored background, animated word highlight
+- Highlight: Karaoke-style word-by-word highlight
+
+### Phase 5: Voiceover & Teleprompter (Day 5)
+
+**1. Teleprompter Panel**
+- Script input textarea
+- Scroll speed slider (slow/medium/fast)
+- Font size slider
+- Mirror mode toggle (for recording setups)
+- Countdown before start
+
+**2. Voiceover Recording**
+- Record button using MediaRecorder API
+- Live waveform display
+- Auto-adds to Voiceover track at playhead position
+- Trim handles for recorded audio
+
+**3. AI Voice Generation**
+- Uses existing `voice-studio-tts` edge function
+- Voice library: Roger, Sarah, George, Laura, Charlie, Lily, Liam, Matilda
+- **Safety**: Consent checkbox required
+- Text input from script or manual entry
+
+### Phase 6: Audio Suite & AI Commands (Day 5-6)
+
+**1. Stock SFX Library**
+- Categories: Applause, Cash/Money, Whoosh, Camera Click, Notification, Success, Error, Nature, Urban
+- Preview with waveform
+- Drag to audio track
+
+**2. AI Audio Command Box**
+- Text input: "Add applause at 00:12" or "Add cash sound at this cut"
+- Natural language parsing using Lovable AI
+- Finds matching SFX from library
+- Auto-places on timeline at specified time
+- Confirmation toast with undo option
+
+### Phase 7: Effects & Overlays (Day 6)
+
+**1. Basic Filters**
+- None, Warm, Cool, Cinematic, Vintage, Luxury Gold
+- Apply per-clip via dropdown
+
+**2. Transitions**
+- Fade, Dissolve, Slide, Zoom, Wipe
+- Duration: 0.25s, 0.5s, 1s
+- Apply between adjacent clips
+
+**3. Overlays**
+- Logo overlay (upload or JBJ default)
+- Position: Top-left, Top-right, Bottom-left, Bottom-right, Center
+- Lower-thirds templates (JBJ luxury style: black/white + gold #C8A766)
+- Text overlays with font selection
+
+**4. Background Effects**
+- Background blur (for portrait in landscape)
+- Vignette overlay
+
+### Phase 8: AI Generate Scene Panel (Day 7)
+
+**1. Map Animation Clip**
+- Input: Location text or map pin selection
+- Generate: Animated zoom from Dubai overview to pin location
+- Highlight plot, show label
+- Uses Lovable AI image generation for frames
+- Clearly labeled "AI Generated"
+
+**2. AI B-roll / Drone Simulation**
+- Input: Text prompt (e.g., "Aerial view of Dubai Marina at sunset")
+- Optional: Uploaded reference photo
+- Generate: AI video clip using Lovable AI
+- **Watermark**: "AI Generated" badge
+
+**3. Script-to-Storyboard**
+- Input: Script text
+- Output: List of suggested shots
+- Generate: Placeholder clips or AI-generated clips
+- Each clip marked as AI-generated
+
+**Safety Requirements:**
+- Face upload consent checkbox: "I confirm I have rights to use this face"
+- Clear labeling: All AI content marked "AI Generated"
+- Policy banner: "AI-generated footage is for creative purposes. Do not claim as real."
+
+### Phase 9: Export System (Day 8)
+
+**1. Export Presets**
+- 9:16 1080x1920 (Reels/TikTok)
+- 16:9 1920x1080 (YouTube)
+- 1:1 1080x1080 (Instagram Feed)
+- 4:5 1080x1350 (Instagram Portrait)
+
+**2. Smart Reframing**
+- Auto-detect original orientation
+- Offer smart reframe with subject tracking (from VideoResizePack)
+- Per-shot crop adjustment
+
+**3. Download Options**
+- Single format download
+- "Download All as ZIP" (all presets)
+
+**4. Job Queue System**
+- Backend model for render jobs
+- Queue position indicator
+- Email notification when ready (optional)
+
+### Phase 10: Fair Usage & Limits (Throughout)
+
+**1. No Login Required**
+- Session-based project storage
+- LocalStorage for draft projects
+
+**2. Fair Usage Limits**
+- Max video length: 5 minutes per job
+- Max jobs: 3 per hour (tracked via session)
+- Max total storage: 500MB per session
+
+**3. Temporary Storage**
+- Auto-delete: 2 hours after creation
+- Warning banner: "Projects auto-delete after 2 hours"
+- Option to download before deletion
 
 ---
 
-## IMPLEMENTATION PLAN
+## Edge Functions
 
-### Phase 1: Certificate Signature Fix (HIGH PRIORITY)
+### New Edge Functions Required
 
-**File:** `src/components/onboarding/CertificateGenerator.tsx`
+| Function | Purpose |
+|----------|---------|
+| `ai-video-studio-transcribe` | Transcribe audio to subtitle segments using ElevenLabs Scribe |
+| `ai-video-studio-translate` | Translate subtitles to multiple languages with RTL support |
+| `ai-video-studio-sfx` | Parse natural language audio commands and find matching SFX |
+| `ai-video-studio-scene` | Generate AI scenes (maps, b-roll, storyboards) |
+| `ai-video-studio-render` | Queue and process final video renders |
 
-**Changes:**
-1. Add founder name "Jane Bou Jaoude" below the signature line
-2. Add title "Founder & CEO" below the name
-
-### Phase 2: Book Card Size Standardization (MEDIUM PRIORITY)
-
-**File:** `src/components/broker-education/Book3DCard.tsx`
-
-**Changes:**
-1. Line 125: Change `minHeight: '320px'` to `height: '320px'`
-2. Ensure all book cards have identical dimensions
-
-### Phase 3: Update Audit Register
-
-**File:** `JBJ_GLOBAL_AUDIT_REGISTER.md`
-
-**Changes:**
-1. Add entries for newly verified items
-2. Update status for fixed items
-3. Mark all items as PASS after fixes
+### Reused Edge Functions
+- `voice-studio-tts` - AI voice generation
+- `voice-to-text` - Speech transcription (fallback)
+- `auto-translate` - Translation with caching
+- `elevenlabs-podcast-music` - AI music generation
 
 ---
 
-## VERIFICATION SUMMARY
+## Database Schema Updates
 
-| Task | Status | Action |
-|------|--------|--------|
-| First-time mode selection | ✅ DONE | Dual system is intentional |
-| Certificate founder signature | ❌ MISSING | Add signature placeholder |
-| Books same size | ⚠️ PARTIAL | Change minHeight to height |
-| Randomized questions | ✅ DONE | Verified in code |
-| 3 failures show answers | ✅ DONE | Verified in code |
-| Newsletter no-reload | ✅ DONE | Uses e.preventDefault() |
-| Notification preferences | ✅ DONE | All toggles implemented |
-| Sarah restrictions | ✅ DONE | RLS + guard component |
-| Image repair system | ⚠️ RUNTIME | Needs live test |
-| Profile initials | ✅ DONE | Takes first 2 initials |
+### New Tables
+
+**`video_studio_jobs`**
+```sql
+CREATE TABLE video_studio_jobs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  session_id TEXT NOT NULL,
+  user_id UUID REFERENCES auth.users(id),
+  project_data JSONB NOT NULL,
+  status TEXT DEFAULT 'queued',
+  progress INTEGER DEFAULT 0,
+  output_urls JSONB,
+  error TEXT,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  expires_at TIMESTAMPTZ DEFAULT (now() + INTERVAL '2 hours')
+);
+
+-- RLS: Session or user-based access
+ALTER TABLE video_studio_jobs ENABLE ROW LEVEL SECURITY;
+```
+
+**`video_studio_assets`**
+```sql
+CREATE TABLE video_studio_assets (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  session_id TEXT NOT NULL,
+  file_name TEXT NOT NULL,
+  file_path TEXT NOT NULL,
+  file_type TEXT NOT NULL,
+  file_size INTEGER,
+  duration_ms INTEGER,
+  thumbnail_path TEXT,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  expires_at TIMESTAMPTZ DEFAULT (now() + INTERVAL '2 hours')
+);
+```
 
 ---
 
-## FILES TO MODIFY
+## UI Styling
 
-| File | Changes |
-|------|---------|
-| `src/components/onboarding/CertificateGenerator.tsx` | Add founder signature text |
-| `src/components/broker-education/Book3DCard.tsx` | Fix height standardization |
-| `JBJ_GLOBAL_AUDIT_REGISTER.md` | Update audit entries |
+- **Theme**: Dark mode (slate-950/900 background) with gold (#C8A766) accents
+- **Typography**: Inter font, clean hierarchy
+- **Cards**: Subtle glass-morphism (backdrop-blur, border-slate-700)
+- **Buttons**: Gold primary, ghost secondaries
+- **Timeline**: Dark track rows, colored clip backgrounds per type
+- **Consistent with existing toolkit pages** (VoiceStudio, VideoResizePack)
 
 ---
 
-## SUMMARY
+## Implementation Order
 
-**Total Tasks Audited:** 10 specific items from original requirements
-**Already Complete:** 7 tasks (70%)
-**Needs Minor Fix:** 2 tasks (20%)
-**Needs Runtime Verification:** 1 task (10%)
+1. **Phase 1**: Core layout + timeline data model + basic playback
+2. **Phase 2**: Media upload + library integration
+3. **Phase 3**: Inspector panels (transform, crop, speed, color, audio)
+4. **Phase 4**: Captions (transcribe, translate, styles, export)
+5. **Phase 5**: Voiceover + teleprompter
+6. **Phase 6**: Audio suite + AI command box
+7. **Phase 7**: Effects + overlays + lower-thirds
+8. **Phase 8**: AI scene generation panel
+9. **Phase 9**: Export presets + render queue
+10. **Phase 10**: Fair usage limits + auto-cleanup
 
-The codebase is largely complete. Only 2 minor code changes are required:
-1. Add founder signature to certificate PDF
-2. Standardize book card heights
+---
 
+## Technical Notes
+
+- **Secrets Available**: `ELEVENLABS_API_KEY`, `LOVABLE_API_KEY` for AI features
+- **Existing Infrastructure**: `studio_stock_library` table, `studio_projects` table pattern
+- **Audio Handling**: Use `fetch().blob()` pattern for binary audio (not supabase.functions.invoke)
+- **Video Processing**: Client-side Canvas API for preview; server-side FFmpeg for final render
+- **RTL Languages**: Arabic, Hebrew, Persian, Urdu require `dir="rtl"` on text elements
+- **Keyboard Shortcuts**: Space (play/pause), Cmd+Z (undo), Cmd+S (save), Del (delete clip)
+
+
+
+
+
+
+merge all the current video and sound related tools into this tool to make sure all the tools are in one place including voice tuning and filters for sound and different voice over and accent and all languages to speak the text with a teleprompter and live video recording
