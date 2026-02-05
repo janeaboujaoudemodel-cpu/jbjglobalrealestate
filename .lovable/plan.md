@@ -1,86 +1,192 @@
 
-## What happened (root cause)
-- **The Listing Admin page was not removed.** It still exists as `src/pages/ListingAdmin.tsx`, and the route still exists in `src/App.tsx`:
-  - `/listing-admin` → `<ListingAdminGuard><ListingAdmin /></ListingAdminGuard>`
-  - `/listing-admin/preview/:id` → also guarded
-- You are being redirected to the homepage because **`ListingAdminGuard` currently denies access and hard-redirects to `/`**:
-  - `src/components/ListingAdminGuard.tsx` only allows a single hard-coded email:
-    - `const ADMIN_EMAIL = "janeaboujaoudenails@gmail.com";`
-  - If you are **logged out** OR if your email is **no longer exactly that value** (very likely after the recent email-change flow), the guard returns:
-    - `<Navigate to="/" replace />`
-- So the redirect is not a “missing page” problem; it’s an **access gate mismatch** (email-based allowlist is now out of sync with your current authenticated email and/or session state).
+# Restoration & Fix Plan: Listing Admin Access + Email OTP + Mode Selection
 
-## Fix goals (what will change)
-1. **Restore Listing Admin access for you immediately** (robust to email changes).
-2. Stop “silent” redirects to the homepage when you’re simply not logged in.
-3. Keep Listing Admin strictly protected (no public exposure).
+## Executive Summary
 
-## Implementation plan (code changes)
-### A) Fix `ListingAdminGuard` to be role-based (not hard-coded email)
-**File:** `src/components/ListingAdminGuard.tsx`
+There are three interrelated issues affecting your account experience:
 
-Replace the single-email check with a layered access check:
-1. **If no authenticated session** → redirect to login with redirect-back:
-   - `Navigate to="/auth?redirect=/listing-admin"`
-2. If authenticated, allow access if **any** of these are true:
-   - Backend role check: `has_role(user_id, "owner")` is true
-   - Backend role check: `has_role(user_id, "admin")` is true
-   - User is an active listing admin: row exists in `listing_admins` with:
-     - `user_id = session.user.id`
-     - `is_active = true`
+1. **Listing Admin redirects to homepage** - You are already set up correctly in the database (both "owner" and "admin" roles, plus an active listing_admins entry for `janeaboujaoudenails@gmail.com`). The redirect is happening because **you changed your email** and either (a) you're still logged in with a different email, or (b) the OTP flow to change it back failed.
 
-Notes:
-- This aligns with patterns already used in your app (`ExecutiveAccessGate`, `BrokerCRMAccessGate`, etc.) where you already call `supabase.rpc("has_role", ...)`.
-- This also preserves the existing “Listing Admin team” feature you already have (`listing_admins` table + `useListingAdmin` hook).
-- Optional safety fallback (only if you want it): keep an allowlist of 1–2 “break glass” emails, but **the recommended primary method is Owner/Admin roles**, because emails can change.
+2. **Email OTP not received / UI broken** - The edge function is configured correctly and RESEND_API_KEY is present. However, the most recent OTP record in the database shows code `377855` was created for `janeaboujaoudenails@gmail.com` but never verified. The email may not have arrived due to sender domain configuration or spam filtering. The OTP input dialog may also have layout issues.
 
-### B) Make Listing Admin page’s *internal* access logic match the guard
-Right now, even if the guard lets you in, `src/pages/ListingAdmin.tsx` also gates access via:
-- `const hasAccess = isListingAdmin || isAdmin;`
-This may still block an **Owner** user who is not “admin” and not in `listing_admins`.
+3. **Mode selection dropdown closes on click** - The `ModeSwitcher` component uses a Radix `DropdownMenu`. Clicking an option triggers `handleModeChange()` which calls `setIsOpen(false)` + `navigate('/my-dashboard')`. This is working as designed, but if you're holding/long-pressing or if the menu closes before you can select, there's a touch event conflict. Additionally, "Broker" and "Investor + Broker" appear disabled because the `canAccessBrokerMode` check requires role = "broker", "broker_partner", or "broker_jbj", but your `user_role_selections` shows "investor" - not broker.
 
-**File:** `src/pages/ListingAdmin.tsx`
+4. **"Explorer" label showing instead of mode** - The tier badge shows "Explorer" because that's the tier name from `useTierProgress()`, not the user mode. The mode label shows separately via `ModeSwitcher`. These are two different concepts (tier vs mode).
 
-Update `hasAccess` to include Owner:
-- Add a small check on mount to call `has_role(..., "owner")` (or reuse a small helper hook).
-- Then:
-  - `hasAccess = isListingAdmin || isAdmin || isOwner`
+5. **Avatar flicker (JB → J)** - The `getInitials()` function splits the display name by space. If the name changes during loading (e.g., from CRM profile vs user metadata), the initials flash. Need to stabilize the avatar rendering.
 
-Also update the “Access denied” card styling to match the approved premium UI (right now it still uses `bg-white border-zinc-200` in that denied state).
+---
 
-### C) Ensure other guarded admin routes keep working
-`src/App.tsx` also uses `ListingAdminGuard` for:
-- `/admin/reelly-import-test`
-- `/listing-admin/preview/:id`
+## Root Cause Analysis
 
-Once the guard is fixed, these routes will automatically be restored too.
+### Listing Admin Access
 
-## Deep audit (to ensure nothing else was “removed” or silently blocked)
-I will perform a targeted audit focused on “unexpected redirects / blocked access”:
+| Check | Status | Details |
+|-------|--------|---------|
+| user_roles.admin | PASS | user_id `72ca2405-b4ca-48df-9b47-623ee260a3cc` has "admin" role |
+| user_roles.owner | PASS | same user_id has "owner" role |
+| listing_admins | PASS | email `janeaboujaoudenails@gmail.com` is active |
+| Current session email | UNKNOWN | If you changed email to something else and never changed back, your session is for a different user_id |
 
-1. **Route inventory check**
-   - Confirm `/listing-admin` and `/listing-admin/preview/:id` still exist (they do).
-   - Confirm Listing Admin entry points still exist (header/account menu links, admin dashboards).
-2. **Search for other hard-coded access gates**
-   - We already confirmed `ADMIN_EMAIL` only appears in `ListingAdminGuard.tsx`.
-3. **Manual regression flows**
-   - Logged out → open `/listing-admin` → should go to `/auth?redirect=/listing-admin` (not silently to `/`).
-   - Logged in as Owner → open `/listing-admin` → should load admin UI.
-   - Logged in as non-authorized user → should get a clear “Access denied” screen (or a safe redirect), but not break navigation.
-4. **Record results**
-   - Add a PASS/FAIL entry in `JBJ_GLOBAL_AUDIT_REGISTER.md` for:
-     - Listing Admin access restored
-     - Guard behavior correct (logged out vs unauthorized vs owner)
+**Conclusion**: The `ListingAdminGuard` is role-based and correct. The issue is that you may be logged in as a different email (not the one with admin privileges). You need to either:
+- Sign in again with `janeaboujaoudenails@gmail.com`, OR
+- Successfully complete the email change flow to switch back to that email
 
-## Emergency restore option (if you want immediate rollback before the fix lands)
-If you want to instantly revert the project to a previous “known working” state, you can use **History** to restore to the message/version before the Listing Admin guard changed. This is optional; the fix above should be clean and safer long-term.
+### Email OTP Not Received
 
-## Files that will be changed
-- `src/components/ListingAdminGuard.tsx` (core fix)
-- `src/pages/ListingAdmin.tsx` (align internal access + premium denied UI)
-- `JBJ_GLOBAL_AUDIT_REGISTER.md` (log verification)
+| Check | Status | Details |
+|-------|--------|---------|
+| RESEND_API_KEY secret | PASS | Secret is configured |
+| Domain verified | User said YES | But sender is `onboarding@resend.dev` (Resend's shared sandbox) |
+| Recent OTP record | FOUND | Code 377855 for janeaboujaoudenails@gmail.com, created ~1 hour ago, not verified |
+| Edge function logs | EMPTY | No recent calls logged (may have timed out or not been called) |
 
-## Expected result
-- `/listing-admin` will no longer bounce you to the homepage due to a stale email allowlist.
-- Owner access remains stable even after email changes.
-- Unauthorized users remain blocked, with clearer behavior and no “silent damage.”
+**Root cause options**:
+1. Email sent but went to spam (very common with `onboarding@resend.dev` sender)
+2. Edge function call failed before sending (network issue, function cold start)
+3. Resend API returned error but the fallback code path didn't surface it clearly
+
+**Solution**: Update the sender to use a verified domain (e.g., `noreply@jbj.ae` or `no-reply@jbjglobalrealestate.com`) and ensure the OTP is clearly shown in dev mode or logged to the console for testing.
+
+### OTP Dialog Layout Broken
+
+The `DialogContent` in `UserProfile.tsx` (lines 615-744) uses proper styling:
+- `className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 sm:max-w-md"`
+- `InputOTPGroup` with 6 slots
+
+But the `OTPVerificationModal.tsx` (used elsewhere) has a dark theme (`bg-zinc-900`). There may be a mismatch if the wrong modal is being triggered, or CSS conflicts with the input-otp component.
+
+### Mode Selection Closes on Click
+
+The `ModeSwitcher` component (lines 59-79) does:
+```typescript
+const handleModeChange = async (newMode: UserMode) => {
+  const requiresBroker = newMode === 'broker' || newMode === 'investor_broker';
+  if (requiresBroker && !canAccessBrokerMode) {
+    toast.error('You need a broker role to access Broker Mode');
+    return;  // <-- Exits but dropdown stays open
+  }
+  
+  await setMode(newMode);
+  setIsOpen(false);  // <-- Closes dropdown
+  navigate('/my-dashboard', { replace: true });  // <-- Navigates away
+  toast.success(`Switched to ${MODE_CONFIG[newMode].label}`);
+};
+```
+
+**Issues**:
+1. For Broker modes, if `canAccessBrokerMode` is false, it shows an error but doesn't close - this is correct
+2. The menu closes after successful selection - this is intentional
+3. The "disabled" appearance happens because you're not registered as a broker role
+
+**Your request**: "Make them selectable for everyone" means removing the broker role requirement. This will allow anyone to switch to Broker mode, but broker-only pages/tools will still be locked.
+
+---
+
+## Implementation Plan
+
+### Part 1: Fix Email OTP Delivery
+
+**File: `supabase/functions/send-email-otp/index.ts`**
+
+1. Update the sender address from `onboarding@resend.dev` to your verified domain
+2. Add fallback console logging of OTP for development
+3. Improve error messaging when Resend fails
+4. Ensure the function returns the dev_otp in development for testing
+
+### Part 2: Fix OTP Dialog Layout
+
+**File: `src/pages/UserProfile.tsx`**
+
+1. Ensure the OTP input slots have proper sizing and contrast
+2. Add minimum width to the dialog to prevent layout collapse
+3. Ensure the InputOTP component is properly styled for the champagne theme
+
+### Part 3: Enable All Modes for Everyone
+
+**File: `src/components/ModeSwitcher.tsx`**
+
+1. Remove the broker role requirement for mode selection
+2. Keep the `isDisabled` visual state but allow clicks
+3. Show a different message: "You're now in Broker Mode - some features may be limited"
+
+### Part 4: Fix Avatar Flicker
+
+**File: `src/components/header/MegaMenuAccount.tsx`**
+
+1. Stabilize the display name resolution with a memo/state that doesn't change mid-render
+2. Add a loading state for the avatar initials
+3. Set minimum dimensions on the avatar container to prevent layout shift
+
+### Part 5: Clarify Tier vs Mode Labels
+
+**File: `src/components/header/MegaMenuAccount.tsx`**
+
+1. Replace "Explorer" tier label with mode-aware labeling
+2. Change points display from "X pts" to "X pts earned"
+3. Ensure the mode label is prominently displayed
+
+### Part 6: Hide Admin Shortcuts for Non-Admins
+
+**Files: `src/components/header/MegaMenuAccount.tsx`, `src/components/GlobalHeader.tsx`**
+
+1. The Listing Admin link should only appear if the user has access (owner, admin, or listing_admin)
+2. Add a check similar to `ListingAdminGuard` before rendering the link
+3. This prevents showing a link that will just redirect away
+
+### Part 7: Fix Mode Click Behavior
+
+**File: `src/components/ModeSwitcher.tsx`**
+
+1. Add `e.stopPropagation()` to mode option clicks to prevent dropdown close race conditions
+2. Ensure the dropdown remains stable until selection is confirmed
+3. Fix any long-press conflicts on mobile
+
+---
+
+## Database Status (No Changes Needed)
+
+Your database is correctly configured:
+- `user_roles`: You have both "admin" and "owner" roles for user_id `72ca2405-b4ca-48df-9b47-623ee260a3cc`
+- `listing_admins`: Entry exists for `janeaboujaoudenails@gmail.com`, is_active = true
+- `email_verifications`: Most recent OTP code `377855` was never verified
+
+The issue is session/email mismatch, not database configuration.
+
+---
+
+## Files to Modify
+
+| File | Changes |
+|------|---------|
+| `supabase/functions/send-email-otp/index.ts` | Update sender domain, improve error handling, add dev logging |
+| `src/pages/UserProfile.tsx` | Fix OTP dialog layout, ensure proper styling |
+| `src/components/ModeSwitcher.tsx` | Remove broker role restriction, fix click behavior |
+| `src/components/header/MegaMenuAccount.tsx` | Stabilize avatar, fix labels, conditional admin links |
+| `src/components/GlobalHeader.tsx` | Conditional rendering of Listing Admin link in mobile menu |
+
+---
+
+## Immediate Workaround
+
+While these fixes are being implemented, you can regain Listing Admin access by:
+
+1. **Sign out completely** (clear the session)
+2. **Sign in with** `janeaboujaoudenails@gmail.com` (the email that has admin/owner roles)
+3. **Access /listing-admin directly** - it should work since that user_id has all required permissions
+
+If you forgot the password for that email, use the "Forgot Password" flow to reset it.
+
+---
+
+## Testing Checklist
+
+After implementation:
+- [ ] Email OTP arrives in Gmail inbox (not spam)
+- [ ] OTP dialog displays correctly on mobile and desktop
+- [ ] Can switch between all three modes (Investor, Broker, Investor+Broker)
+- [ ] Mode selection persists after refresh
+- [ ] Avatar initials don't flicker
+- [ ] Points label shows "X pts earned"
+- [ ] Listing Admin link only shows for authorized users
+- [ ] Listing Admin page loads correctly when accessed with correct email
