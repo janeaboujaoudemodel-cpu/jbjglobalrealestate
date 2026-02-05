@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom
 // Toolkit pages (lazy loaded)
 const VideoResizePack = lazy(() => import("./pages/toolkit/VideoResizePack"));
 const PdfFromPhotos = lazy(() => import("./pages/toolkit/PdfFromPhotos"));
+const ImageResize = lazy(() => import("./pages/toolkit/ImageResize"));
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
@@ -487,6 +488,11 @@ const App = () => (
                 <Route path="/toolkit/pdf-from-photos" element={
                   <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
                     <PdfFromPhotos />
+                  </Suspense>
+                } />
+                <Route path="/toolkit/image-resize" element={
+                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                    <ImageResize />
                   </Suspense>
                 } />
                 
