@@ -21,7 +21,7 @@ import GlobalSEO from "@/components/GlobalSEO";
 import GlobalVisitorTracking from "@/components/GlobalVisitorTracking";
 import GlobalTranslator from "@/components/GlobalTranslator";
 import Index from "./pages/Index";
-import Properties from "./pages/Properties";
+ import PropertiesReelly from "./pages/PropertiesReelly";
 import ProjectDetail from "./pages/ProjectDetail";
 import Communities from "./pages/Communities";
 import CommunityDetail from "./pages/CommunityDetail";
@@ -244,7 +244,7 @@ const App = () => (
               <Route element={<AdminBypass><MainLayoutWrapper /></AdminBypass>}>
                 <Route path="/vapi-prompt" element={<VapiPrompt />} />
                 <Route path="/" element={<Index />} />
-                <Route path="/properties" element={<Properties />} />
+                 <Route path="/properties" element={<PropertiesReelly />} />
                 <Route path="/project/:slug" element={<ProjectDetail />} />
                 <Route path="/communities" element={<Communities />} />
                 <Route path="/community/:slug" element={<CommunityDetail />} />
