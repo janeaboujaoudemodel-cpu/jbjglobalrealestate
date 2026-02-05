@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { useBrokerEducation, EducationBook } from "@/hooks/useBrokerEducation";
 import { Book3DCard, BookDetailModal } from "@/components/broker-education";
-import Footer from "@/components/Footer";
+
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -399,8 +399,6 @@ const BrokerEducation = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
       />
-
-      <Footer />
     </div>
   );
 };
