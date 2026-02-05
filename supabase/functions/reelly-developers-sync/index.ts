@@ -6,6 +6,25 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
+interface ReellyOffice {
+  id: number;
+  developer: number;
+  country: any;
+  region: string | null;
+  city: string | null;
+  address: string | null;
+  working_hours: any;
+  is_main: boolean;
+  email: string | null;
+  phone: string | null;
+  name: string | null;
+}
+
+interface ReellySocialLink {
+  type: string;
+  url: string;
+}
+
 interface ReellyDeveloper {
   id: number;
   name: string;
@@ -21,22 +40,17 @@ interface ReellyDeveloper {
     };
   } | null;
   status: string;
-  social_links: any[];
+  social_links: ReellySocialLink[] | any[];
   phone: string | null;
   email: string;
   working_hours: any;
-  offices: Array<{
-    id: number;
-    developer: number;
-    country: any;
-    region: string | null;
-    city: string | null;
-    address: string | null;
-    working_hours: any;
-    is_main: boolean;
-    email: string | null;
-    name: string | null;
-  }>;
+  offices: ReellyOffice[];
+  // Extended fields
+  founded_year?: number;
+  projects_count?: number;
+  total_units?: number;
+  country?: string;
+  region?: string;
 }
 
 // Response can be an array directly or paginated object
@@ -56,7 +70,66 @@ function generateSlug(name: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-function mapReellyDeveloperToDb(dev: ReellyDeveloper): ReturnType<typeof mapReellyDeveloperToDb> | null {
+function extractSocialLinks(socialLinks: ReellySocialLink[] | any[]): Record<string, string> | null {
+  if (!socialLinks || !Array.isArray(socialLinks) || socialLinks.length === 0) {
+    return null;
+  }
+
+  const links: Record<string, string> = {};
+  
+  for (const link of socialLinks) {
+    if (link.type && link.url) {
+      const type = String(link.type).toLowerCase();
+      links[type] = link.url;
+    }
+  }
+
+  return Object.keys(links).length > 0 ? links : null;
+}
+
+function formatWorkingHours(workingHours: any): string | null {
+  if (!workingHours) return null;
+  
+  if (typeof workingHours === 'string') {
+    return workingHours;
+  }
+  
+  if (typeof workingHours === 'object') {
+    // Try to format as "Mon-Fri: 9AM-6PM" style
+    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    const formatted: string[] = [];
+    
+    for (const day of days) {
+      if (workingHours[day]) {
+        const hours = workingHours[day];
+        if (hours.start && hours.end) {
+          formatted.push(`${day.slice(0, 3).toUpperCase()}: ${hours.start}-${hours.end}`);
+        }
+      }
+    }
+    
+    return formatted.length > 0 ? formatted.join(', ') : JSON.stringify(workingHours);
+  }
+  
+  return null;
+}
+
+function mapReellyDeveloperToDb(dev: ReellyDeveloper): {
+  name: string;
+  slug: string;
+  logo_url: string | null;
+  description: string | null;
+  headquarters: string | null;
+  website: string | null;
+  email: string | null;
+  phone: string | null;
+  social_links: Record<string, string> | null;
+  working_hours: string | null;
+  offices: ReellyOffice[] | null;
+  founded_year: number | null;
+  projects_count: number | null;
+  reelly_id: number;
+} | null {
   // Skip developers with null/empty names
   if (!dev.name || typeof dev.name !== 'string' || !dev.name.trim()) {
     return null;
@@ -64,7 +137,25 @@ function mapReellyDeveloperToDb(dev: ReellyDeveloper): ReturnType<typeof mapReel
 
   // Get main office or first office for headquarters
   const mainOffice = dev.offices?.find(o => o.is_main) || dev.offices?.[0];
-  const headquarters = mainOffice?.address || mainOffice?.region || null;
+  
+  // Build headquarters string from office data
+  let headquarters: string | null = null;
+  if (mainOffice) {
+    const parts: string[] = [];
+    if (mainOffice.address) parts.push(mainOffice.address);
+    if (mainOffice.city) parts.push(mainOffice.city);
+    if (mainOffice.region) parts.push(mainOffice.region);
+    headquarters = parts.length > 0 ? parts.join(', ') : null;
+  }
+
+  // Extract social links
+  const socialLinks = extractSocialLinks(dev.social_links);
+
+  // Format working hours
+  const workingHours = formatWorkingHours(dev.working_hours);
+
+  // Get phone from main office if not on developer
+  const phone = dev.phone || mainOffice?.phone || null;
 
   return {
     name: dev.name.trim(),
@@ -72,6 +163,15 @@ function mapReellyDeveloperToDb(dev: ReellyDeveloper): ReturnType<typeof mapReel
     logo_url: dev.logo?.url || null,
     description: dev.description || null,
     headquarters: headquarters,
+    website: dev.website || null,
+    email: dev.email || null,
+    phone: phone,
+    social_links: socialLinks,
+    working_hours: workingHours,
+    offices: dev.offices?.length > 0 ? dev.offices : null,
+    founded_year: dev.founded_year || null,
+    projects_count: dev.projects_count || null,
+    reelly_id: dev.id,
   };
 }
 
@@ -136,6 +236,8 @@ Deno.serve(async (req) => {
             name: d.name,
             has_logo: !!d.logo?.url,
             has_description: !!d.description,
+            has_website: !!d.website,
+            has_social_links: !!(d.social_links?.length),
             offices_count: d.offices?.length || 0,
           })),
         }),
@@ -212,13 +314,16 @@ Deno.serve(async (req) => {
     // Get existing developers for matching
     const { data: existingDevs } = await supabase
       .from("developers")
-      .select("id, name, slug");
+      .select("id, name, slug, reelly_id");
     
     const existingBySlug = new Map(
       (existingDevs || []).map(d => [d.slug, d])
     );
     const existingByName = new Map(
       (existingDevs || []).map(d => [d.name.toLowerCase().trim(), d])
+    );
+    const existingByReellyId = new Map(
+      (existingDevs || []).filter(d => d.reelly_id).map(d => [d.reelly_id, d])
     );
 
     for (const dev of developers) {
@@ -232,21 +337,35 @@ Deno.serve(async (req) => {
           continue;
         }
         
-        // Check if developer already exists by slug or name
+        // Check if developer already exists by Reelly ID, slug, or name
+        const existingByIdMatch = existingByReellyId.get(dev.id);
         const existingBySlugMatch = existingBySlug.get(mapped.slug);
         const existingByNameMatch = existingByName.get(mapped.name.toLowerCase().trim());
-        const existing = existingBySlugMatch || existingByNameMatch;
+        const existing = existingByIdMatch || existingBySlugMatch || existingByNameMatch;
 
         if (existing) {
-          // Update existing developer
+          // Update existing developer with enhanced data
+          const updateData: Record<string, any> = {
+            updated_at: new Date().toISOString(),
+          };
+
+          // Only update fields that have values (don't overwrite with null)
+          if (mapped.logo_url) updateData.logo_url = mapped.logo_url;
+          if (mapped.description) updateData.description = mapped.description;
+          if (mapped.headquarters) updateData.headquarters = mapped.headquarters;
+          if (mapped.website) updateData.website = mapped.website;
+          if (mapped.email) updateData.email = mapped.email;
+          if (mapped.phone) updateData.phone = mapped.phone;
+          if (mapped.social_links) updateData.social_links = mapped.social_links;
+          if (mapped.working_hours) updateData.working_hours = mapped.working_hours;
+          if (mapped.offices) updateData.offices = mapped.offices;
+          if (mapped.founded_year) updateData.founded_year = mapped.founded_year;
+          if (mapped.projects_count) updateData.projects_count = mapped.projects_count;
+          if (mapped.reelly_id) updateData.reelly_id = mapped.reelly_id;
+
           const { error: updateError } = await supabase
             .from("developers")
-            .update({
-              logo_url: mapped.logo_url || existing.logo_url,
-              description: mapped.description || existing.description,
-              headquarters: mapped.headquarters || existing.headquarters,
-              updated_at: new Date().toISOString(),
-            })
+            .update(updateData)
             .eq("id", existing.id);
 
           if (updateError) {
@@ -257,14 +376,30 @@ Deno.serve(async (req) => {
             updated++;
           }
         } else {
-          // Insert new developer
+          // Insert new developer with all data
+          const insertData = {
+            name: mapped.name,
+            slug: mapped.slug,
+            logo_url: mapped.logo_url,
+            description: mapped.description,
+            headquarters: mapped.headquarters,
+            website: mapped.website,
+            email: mapped.email,
+            phone: mapped.phone,
+            social_links: mapped.social_links,
+            working_hours: mapped.working_hours,
+            offices: mapped.offices,
+            founded_year: mapped.founded_year,
+            projects_count: mapped.projects_count,
+            reelly_id: mapped.reelly_id,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          };
+
           const { error: insertError } = await supabase
             .from("developers")
-            .insert({
-              ...mapped,
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString(),
-            });
+            .insert(insertData);
 
           if (insertError) {
             if (insertError.code === "23505") {
@@ -279,7 +414,7 @@ Deno.serve(async (req) => {
             inserted++;
           }
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error(`[ReellyDevSync] Error processing ${dev.name}:`, err);
         errors++;
         errorDetails.push(`${dev.name}: ${err.message}`);
@@ -303,7 +438,7 @@ Deno.serve(async (req) => {
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("[ReellyDevSync] Fatal error:", error);
     return new Response(
       JSON.stringify({ 
