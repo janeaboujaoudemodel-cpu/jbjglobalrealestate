@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Home, Key, Target, Wrench, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Button } from "@/components/ui/button";
 
 interface ServiceCard {
   id: string;
@@ -102,10 +103,10 @@ const ServicesGrid = () => {
                   </p>
 
                   {/* CTA */}
-                  <div className="flex items-center gap-1.5 text-gold text-sm font-medium group-hover:gap-2.5 transition-all">
-                    <span>{t('services.learnMore', 'Learn More')}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </div>
+                  <Button variant="primary" size="sm" className="mt-auto">
+                    {t('services.learnMore', 'Learn More')}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
                 </div>
               </Link>
             </motion.div>

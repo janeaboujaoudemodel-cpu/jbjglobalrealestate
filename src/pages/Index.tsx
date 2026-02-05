@@ -437,7 +437,7 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full">
             {/* JBJ Broker Hub */}
             <Link to="/broker-toolkit" className="group">
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/60 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_50px_rgba(200,167,102,0.6),0_25px_60px_rgba(0,0,0,0.4)] hover:-translate-y-2 shadow-[0_12px_40px_rgba(200,167,102,0.4),0_6px_20px_rgba(0,0,0,0.25)] transition-all duration-300 relative overflow-hidden h-full">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/60 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_50px_rgba(200,167,102,0.6),0_25px_60px_rgba(0,0,0,0.4)] hover:-translate-y-2 shadow-[0_12px_40px_rgba(200,167,102,0.4),0_6px_20px_rgba(0,0,0,0.25)] transition-all duration-300 relative overflow-hidden h-full">
                 {/* Premium glow effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/10 via-transparent to-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />
                 <div className="relative z-10 flex flex-col md:flex-row md:items-start gap-4">
@@ -459,7 +459,7 @@ const Index = () => {
 
             {/* JBJ Investor Hub */}
             <Link to="/ai-hub" className="group">
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/60 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_50px_rgba(200,167,102,0.6),0_25px_60px_rgba(0,0,0,0.4)] hover:-translate-y-2 shadow-[0_12px_40px_rgba(200,167,102,0.4),0_6px_20px_rgba(0,0,0,0.25)] transition-all duration-300 relative overflow-hidden h-full">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/60 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_50px_rgba(200,167,102,0.6),0_25px_60px_rgba(0,0,0,0.4)] hover:-translate-y-2 shadow-[0_12px_40px_rgba(200,167,102,0.4),0_6px_20px_rgba(0,0,0,0.25)] transition-all duration-300 relative overflow-hidden h-full">
                 {/* Premium glow effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/10 via-transparent to-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />
                 <div className="relative z-10 flex flex-col md:flex-row md:items-start gap-4">
@@ -486,7 +486,7 @@ const Index = () => {
       <ExploreServicesCard />
 
       {/* AI HOME FINDER - Premium CTA Section - CENTERED with WHITE background card + glow */}
-      <section className="py-12 md:py-20 bg-black">
+      <section className="py-12 md:py-16 bg-black">
         <div className="container mx-auto px-4">
           <div className="flex justify-center">
             <motion.div
@@ -500,13 +500,13 @@ const Index = () => {
               <div className="absolute inset-0 -m-4 md:-m-6 rounded-3xl bg-purple-500/20 blur-2xl animate-pulse" />
               {/* White background card with purple border glow */}
               <div 
-                className="relative z-10 bg-white rounded-2xl px-8 md:px-12 py-6 md:py-8 border-2 border-purple-400/40"
+                className="relative z-10 bg-gradient-to-br from-zinc-900 via-black to-zinc-800 rounded-2xl px-8 md:px-12 py-6 md:py-8 border-2 border-purple-400/40"
                 style={{
                   boxShadow: '0 0 40px rgba(147,51,234,0.3), 0 0 80px rgba(147,51,234,0.15), 0 20px 50px rgba(0,0,0,0.3)'
                 }}
               >
                 {/* Purple label badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-500/10 border border-purple-400/30 text-purple-600 text-xs uppercase tracking-[0.2em] mb-4">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-500/20 border border-purple-400/30 text-purple-400 text-xs uppercase tracking-[0.2em] mb-4">
                   <Sparkles className="w-3 h-3" />
                   AI-Powered
                 </div>
@@ -516,15 +516,18 @@ const Index = () => {
                       <Sparkles className="w-6 h-6 md:w-7 md:h-7 text-purple-500 group-hover:text-purple-400 transition-colors" strokeWidth={1.5} />
                     </div>
                     <h2 
-                      className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide text-purple-600 group-hover:text-purple-500 transition-colors" 
+                      className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide text-white group-hover:text-zinc-100 transition-colors" 
                       style={{ fontFamily: "Poppins, sans-serif" }}
                     >
                       {t('hero.aiFinder')}
                     </h2>
                     <ArrowUpRight className="w-6 h-6 md:w-8 md:h-8 text-purple-500 group-hover:text-purple-400 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
                   </div>
-                  <p className="text-zinc-600 text-sm md:text-base max-w-lg mx-auto">
+                  <p className="text-zinc-300 text-sm md:text-base max-w-lg mx-auto">
                     {t('hero.aiFinderDesc')}
+                  </p>
+                  <p className="text-zinc-500 text-xs mt-3">
+                    Powered by JBJ Global Real Estate
                   </p>
                 </Link>
               </div>

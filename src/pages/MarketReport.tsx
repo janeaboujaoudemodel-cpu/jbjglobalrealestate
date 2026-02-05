@@ -1779,7 +1779,7 @@ const MarketReport = () => {
       {/* Hero Section - with Active Champagne Layer */}
       <section className="jj-hero-fullscreen relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden bg-black">
         {/* Full Active Color Layer */}
-        <div className="absolute inset-0 mx-0.5 md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl md:rounded-3xl" />
+        <div className="absolute inset-x-0 bottom-0 top-20 md:top-24 mx-0.5 md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl md:rounded-3xl" />
         {/* Premium gold glow elements */}
         <div className="absolute top-20 right-0 w-[600px] h-[600px] bg-gold/15 rounded-full blur-[150px]" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gold/10 rounded-full blur-[100px]" />
@@ -1988,7 +1988,8 @@ const MarketReport = () => {
       </FounderContent>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-16">
+      <main className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+        <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-5 gap-10 items-start">
           {/* Form Section */}
           <motion.section 
@@ -2101,7 +2102,9 @@ const MarketReport = () => {
                   <Button
                     onClick={handleSubmit}
                     disabled={!isValid || isSubmitting}
-                    className="w-full h-14 bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-black font-semibold text-base rounded-xl transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
+                    variant="primary"
+                    size="lg"
+                    className="w-full h-14"
                   >
                     {isSubmitting ? (
                       <>
@@ -2164,6 +2167,7 @@ const MarketReport = () => {
               </p>
             </div>
           </motion.aside>
+        </div>
         </div>
       </main>
 
