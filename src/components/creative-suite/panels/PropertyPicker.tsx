@@ -1,0 +1,153 @@
+import React, { useState, useEffect } from 'react';
+import { Search, Building2, MapPin, DollarSign, Calendar, ImageIcon, Loader2, X, Check } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { usePropertyPicker } from '../hooks/usePropertyPicker';
+import type { PropertySnapshot } from '../types';
+
+interface PropertyPickerProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSelect: (propertyId: string, snapshot: PropertySnapshot) => void;
+  selectedPropertyId?: string | null;
+}
+
+export function PropertyPicker({ isOpen, onClose, onSelect, selectedPropertyId }: PropertyPickerProps) {
+  const {
+    properties,
+    isLoading,
+    searchTerm,
+    setSearchTerm,
+    searchProperties,
+    createPropertySnapshot,
+  } = usePropertyPicker();
+
+  useEffect(() => {
+    if (isOpen) {
+      searchProperties('');
+    }
+  }, [isOpen]);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    searchProperties();
+  };
+
+  const handleSelect = (property: any) => {
+    const snapshot = createPropertySnapshot(property);
+    onSelect(property.id, snapshot);
+    onClose();
+  };
+
+  const formatPrice = (price: number | null | undefined) => {
+    if (!price) return null;
+    if (price >= 1000000) return `AED ${(price / 1000000).toFixed(1)}M`;
+    if (price >= 1000) return `AED ${(price / 1000).toFixed(0)}K`;
+    return `AED ${price}`;
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-4xl max-h-[80vh] bg-slate-900 border-gold/30">
+        <DialogHeader>
+          <DialogTitle className="text-white flex items-center gap-2">
+            <Building2 className="w-5 h-5 text-gold" />
+            Select Property
+          </DialogTitle>
+        </DialogHeader>
+
+        <form onSubmit={handleSearch} className="flex gap-2">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Input
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search by name, developer, or area..."
+              className="pl-10 bg-slate-800 border-slate-700 text-white"
+            />
+          </div>
+          <Button type="submit" className="bg-gold hover:bg-gold/90 text-black">
+            Search
+          </Button>
+        </form>
+
+        <ScrollArea className="h-[500px] pr-4">
+          {isLoading ? (
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="w-8 h-8 text-gold animate-spin" />
+            </div>
+          ) : properties.length === 0 ? (
+            <div className="text-center py-20 text-slate-400">
+              <Building2 className="w-12 h-12 mx-auto mb-4 opacity-50" />
+              <p>No properties found. Try a different search.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {properties.map((property) => (
+                <button
+                  key={property.id}
+                  onClick={() => handleSelect(property)}
+                  className={`flex gap-4 p-4 rounded-xl border transition-all text-left ${
+                    selectedPropertyId === property.id
+                      ? 'bg-gold/10 border-gold'
+                      : 'bg-slate-800/50 border-slate-700 hover:border-gold/50'
+                  }`}
+                >
+                  <div className="w-24 h-24 rounded-lg bg-slate-700 flex-shrink-0 overflow-hidden">
+                    {property.cover_image_url ? (
+                      <img
+                        src={property.cover_image_url}
+                        alt={property.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <ImageIcon className="w-8 h-8 text-slate-500" />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-2">
+                      <h3 className="font-semibold text-white truncate">{property.name}</h3>
+                      {selectedPropertyId === property.id && (
+                        <Check className="w-5 h-5 text-gold flex-shrink-0" />
+                      )}
+                    </div>
+
+                    {property.developer_name && (
+                      <p className="text-sm text-gold truncate">by {property.developer_name}</p>
+                    )}
+
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-xs text-slate-400">
+                      {property.area_name && (
+                        <span className="flex items-center gap-1">
+                          <MapPin className="w-3 h-3" />
+                          {property.area_name}
+                        </span>
+                      )}
+                      {property.price_from && (
+                        <span className="flex items-center gap-1">
+                          <DollarSign className="w-3 h-3" />
+                          {formatPrice(property.price_from)}
+                        </span>
+                      )}
+                      {property.expected_completion && (
+                        <span className="flex items-center gap-1">
+                          <Calendar className="w-3 h-3" />
+                          {property.expected_completion}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+        </ScrollArea>
+      </DialogContent>
+    </Dialog>
+  );
+}
