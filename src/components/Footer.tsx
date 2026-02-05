@@ -498,8 +498,15 @@ const Footer = () => {
             <div className="absolute bottom-0 right-0 h-full w-[3px] bg-gradient-to-t from-gold via-gold/80 to-transparent rounded-br-2xl sm:rounded-br-3xl" />
           </div>
           
-          {/* Navigation Grid Section */}
-          <div className="relative grid grid-cols-2 lg:grid-cols-4">
+          {/* Navigation Grid Section - Wrapped in champagne background layer */}
+          <div 
+            className="relative rounded-xl mx-4 sm:mx-6 md:mx-8 my-4 sm:my-6 overflow-hidden"
+            style={{
+              background: 'linear-gradient(165deg, rgba(200,167,102,0.08) 0%, rgba(200,167,102,0.04) 50%, rgba(200,167,102,0.02) 100%)',
+              border: '1px solid rgba(200,167,102,0.2)',
+            }}
+          >
+          <div className="grid grid-cols-2 lg:grid-cols-4">
             
             {/* Column 1: Properties + Services */}
             <div className="p-2 sm:p-3 md:p-5 border-r border-b lg:border-b-0 border-gold/10">
@@ -708,6 +715,7 @@ const Footer = () => {
                 ))}
               </ul>
             </div>
+          </div>
           </div>
 
           {/* Internal Divider */}

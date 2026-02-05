@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
 import { useTierProgress } from "@/hooks/useTierProgress";
-import { Loader2, TrendingUp, TrendingDown, Award, Briefcase, BookOpen, MapPin, Calendar } from "lucide-react";
+import { Loader2, TrendingUp, TrendingDown, Award, Briefcase, BookOpen, MapPin, Calendar, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 
@@ -13,12 +14,24 @@ interface PointsActivityProps {
 const EVENT_ICONS: Record<string, typeof Award> = {
   'deal_closed': Briefcase,
   'deal_closed_premium': Briefcase,
+  'deal_closed_standard': Briefcase,
+  'deal_closed_premium_tier': Briefcase,
+  'deal_closed_ultra': Briefcase,
+  'deal_closed_elite': Briefcase,
   'training_module_complete': BookOpen,
   'certification_earned': Award,
   'developer_visit_checkin': MapPin,
   'daily_login': Calendar,
-  'referral_broker_signup': TrendingUp,
-  'referral_broker_first_deal': TrendingUp,
+  'referral_broker_signup': Users,
+  'referral_broker_first_deal': Users,
+};
+
+const CATEGORY_BADGES: Record<string, { label: string; className: string }> = {
+  'deal': { label: 'Deal', className: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' },
+  'training': { label: 'Training', className: 'bg-blue-500/20 text-blue-300 border-blue-500/30' },
+  'check_in': { label: 'Check-in', className: 'bg-purple-500/20 text-purple-300 border-purple-500/30' },
+  'referral': { label: 'Referral', className: 'bg-amber-500/20 text-amber-300 border-amber-500/30' },
+  'activity': { label: 'Activity', className: 'bg-zinc-500/20 text-zinc-300 border-zinc-500/30' },
 };
 
 export function PointsActivity({ className, limit = 10 }: PointsActivityProps) {
@@ -35,6 +48,17 @@ export function PointsActivity({ className, limit = 10 }: PointsActivityProps) {
   }
 
   const displayedPoints = recentPoints.slice(0, limit);
+
+  // Helper to determine category from event type
+  const getCategory = (eventType: string, category?: string | null): string => {
+    if (category) return category;
+    const type = eventType.toLowerCase();
+    if (type.includes('deal')) return 'deal';
+    if (type.includes('training') || type.includes('module')) return 'training';
+    if (type.includes('checkin') || type.includes('check_in') || type.includes('visit')) return 'check_in';
+    if (type.includes('referral')) return 'referral';
+    return 'activity';
+  };
 
   return (
     <Card className={cn("bg-black/40 border-white/10 backdrop-blur-sm", className)}>
@@ -57,6 +81,8 @@ export function PointsActivity({ className, limit = 10 }: PointsActivityProps) {
               {displayedPoints.map((entry) => {
                 const Icon = EVENT_ICONS[entry.event_type] || Award;
                 const isPositive = entry.points_delta > 0;
+                const category = getCategory(entry.event_type, (entry as any).category);
+                const categoryBadge = CATEGORY_BADGES[category] || CATEGORY_BADGES['activity'];
 
                 return (
                   <div
@@ -85,7 +111,11 @@ export function PointsActivity({ className, limit = 10 }: PointsActivityProps) {
                         </span>
                       </div>
                       <div className="flex items-center justify-between text-xs text-white/40 mt-0.5">
-                        <span>{formatEventType(entry.event_type)}</span>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline" className={cn("text-[10px] py-0 h-5", categoryBadge.className)}>
+                            {categoryBadge.label}
+                          </Badge>
+                        </div>
                         <span>{formatDistanceToNow(new Date(entry.created_at), { addSuffix: true })}</span>
                       </div>
                     </div>

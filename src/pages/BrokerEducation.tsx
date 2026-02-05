@@ -17,7 +17,8 @@ import {
   Briefcase,
 } from "lucide-react";
 import { useBrokerEducation, EducationBook } from "@/hooks/useBrokerEducation";
-import { Book3DCard, BookDetailModal } from "@/components/broker-education";
+import { Book3DCard, BookDetailModal, BookLanguageFilter } from "@/components/broker-education";
+import { CertificationSection } from "@/components/certification";
 
 
 const fadeInUp = {
@@ -45,6 +46,7 @@ const BrokerEducation = () => {
   const { books, loading, progressMap } = useBrokerEducation();
   const [selectedBook, setSelectedBook] = useState<EducationBook | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [bookLanguage, setBookLanguage] = useState('en');
 
   const handleOpenBook = (book: EducationBook) => {
     if (!book.is_restricted) {
@@ -232,9 +234,16 @@ const BrokerEducation = () => {
               <h2 className="text-3xl md:text-4xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Education <span className="text-gold">Library</span>
               </h2>
-              <p className="text-black/70 max-w-2xl mx-auto">
+              <p className="text-black/70 max-w-2xl mx-auto mb-6">
                 Structured learning paths covering every aspect of professional real estate brokerage in the UAE.
               </p>
+              {/* Book Language Filter */}
+              <div className="flex justify-center">
+                <BookLanguageFilter 
+                  value={bookLanguage} 
+                  onChange={setBookLanguage} 
+                />
+              </div>
             </div>
 
             {loading ? (
@@ -358,6 +367,9 @@ const BrokerEducation = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Certification Section - After Books */}
+      <CertificationSection className="bg-black" />
 
       {/* CTA Section - Layer 2 Active Champagne */}
       <section className="py-16 md:py-24">
