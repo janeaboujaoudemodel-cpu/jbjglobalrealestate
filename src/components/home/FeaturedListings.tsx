@@ -157,8 +157,8 @@ const FeaturedListings = () => {
             onClick={() => setActiveTab('buy')}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
               activeTab === 'buy'
-                ? 'bg-gold text-black shadow-lg'
-                : 'bg-black/5 text-black hover:bg-black/10'
+                ? 'bg-white/90 text-black shadow-lg border-2 border-gold/60 backdrop-blur-sm'
+                : 'bg-gradient-to-r from-[#F5EBD7]/40 via-[#E8DCC8]/40 to-[#D4C4A8]/40 text-black hover:bg-white/60 border border-gold/30'
             }`}
           >
             <Home className="w-4 h-4" />
@@ -168,8 +168,8 @@ const FeaturedListings = () => {
             onClick={() => setActiveTab('rent')}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
               activeTab === 'rent'
-                ? 'bg-gold text-black shadow-lg'
-                : 'bg-black/5 text-black hover:bg-black/10'
+                ? 'bg-white/90 text-black shadow-lg border-2 border-gold/60 backdrop-blur-sm'
+                : 'bg-gradient-to-r from-[#F5EBD7]/40 via-[#E8DCC8]/40 to-[#D4C4A8]/40 text-black hover:bg-white/60 border border-gold/30'
             }`}
           >
             <Key className="w-4 h-4" />
@@ -194,7 +194,7 @@ const FeaturedListings = () => {
             ) : (
               // Empty placeholder cards
               [1, 2, 3, 4].map((i) => (
-                <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl overflow-hidden border-2 border-gold/20 border-dashed">
+                <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl overflow-hidden border-2 border-gold/40 hover:border-gold transition-colors">
                   <div className="aspect-[4/3] bg-gradient-to-br from-gold/5 to-gold/10 flex items-center justify-center">
                     <Home className="w-10 h-10 text-gold/30" />
                   </div>
@@ -214,14 +214,28 @@ const FeaturedListings = () => {
           </motion.div>
         </AnimatePresence>
 
-        {/* View All CTA */}
+        {/* View All CTA - 3D Premium Button */}
         <div className="text-center mt-10">
           <Link
             to={activeTab === 'buy' ? '/properties?transaction=buy' : '/properties?transaction=rent'}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-black text-gold hover:bg-gold hover:text-black border-2 border-gold rounded-full font-medium transition-all duration-300"
+            className="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group"
+            style={{
+              boxShadow: `
+                0 10px 30px rgba(200,167,102,0.4),
+                0 6px 15px rgba(0,0,0,0.2),
+                inset 0 2px 4px rgba(255,255,255,0.9),
+                inset 0 -2px 4px rgba(200,167,102,0.2),
+                0 0 20px rgba(200,167,102,0.3)
+              `,
+            }}
           >
-            {t('featured.viewAll', 'View All Properties')}
-            <ArrowRight className="w-4 h-4" />
+            <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+            <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+            <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+            <span className="relative flex items-center gap-2">
+              <span className="text-black">{t('featured.viewAll', 'View All Properties')}</span>
+              <ArrowRight className="w-4 h-4 text-gold group-hover:translate-x-1 transition-transform" />
+            </span>
           </Link>
         </div>
       </div>

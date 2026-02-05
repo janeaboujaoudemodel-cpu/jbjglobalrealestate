@@ -20,6 +20,7 @@ import { GoogleMyBusinessLink } from "@/components/marketing/GoogleMyBusinessLin
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 import { FounderContent } from "@/components/FounderContent";
+import { ModeSwitcher } from "@/components/ModeSwitcher";
 
 const DivisionAccordion = ({
   title,
@@ -439,6 +440,10 @@ const Footer = () => {
 
             {/* Social Links with enhanced container */}
             <div className="relative flex flex-col items-center gap-4">
+              {/* Connect With Us Label */}
+              <p className="text-gold/80 text-sm uppercase tracking-[0.2em] font-medium">
+                Connect With Us
+              </p>
               <div 
                 className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl"
                 style={{
@@ -452,6 +457,12 @@ const Footer = () => {
               
               {/* Google My Business - Relocated here */}
               <GoogleMyBusinessLink />
+              
+              {/* Mode Switcher - Allow users to switch modes from footer */}
+              <div className="mt-4 flex flex-col items-center gap-2">
+                <p className="text-gold/60 text-xs uppercase tracking-[0.15em]">Your Mode</p>
+                <ModeSwitcher variant="header" />
+              </div>
             </div>
           </div>
           
