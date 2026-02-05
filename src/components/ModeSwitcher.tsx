@@ -53,25 +53,21 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
   // Don't show mode switcher if user hasn't selected a role yet
   if (!hasSelectedRole) return null;
 
-  const handleModeChange = async (newMode: UserMode, e?: React.MouseEvent) => {
-    // Prevent dropdown from closing immediately
-    e?.stopPropagation();
-    e?.preventDefault();
-    
+  const handleModeChange = async (newMode: UserMode) => {
     await setMode(newMode);
     
     // Emit global event for immediate UI updates
     window.dispatchEvent(new CustomEvent('userModeChange', { detail: newMode }));
     
-    // Show success toast immediately
+    // Show success toast
     toast.success(`Switched to ${MODE_CONFIG[newMode].label}`, {
       description: MODE_CONFIG[newMode].description
     });
     
-    // Small delay to show success state before closing
+    // Close dropdown after brief delay to show success state
     setTimeout(() => {
       setIsOpen(false);
-    }, 300);
+    }, 400);
   };
 
   const currentConfig = MODE_CONFIG[mode];
@@ -145,7 +141,11 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
           return (
             <DropdownMenuItem
               key={modeKey}
-              onClick={(e) => handleModeChange(modeKey as UserMode, e)}
+              onSelect={(e) => {
+                e.preventDefault(); // Prevent Radix from auto-closing
+                handleModeChange(modeKey as UserMode);
+              }}
+              onPointerDown={(e) => e.stopPropagation()} // Prevent touch conflicts
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200",
                 isActive 
