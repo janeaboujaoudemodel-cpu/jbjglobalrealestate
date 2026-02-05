@@ -31,7 +31,7 @@ const SUPPORT_TEAM = [
   },
   {
     role: "Training Coach",
-    name: "Sarah",
+    name: "Emily",  // Renamed from Sarah to avoid conflict with Listing Admin Sarah
     description: "Sales scripts, objection handling, roleplay",
     icon: BookOpen,
     link: "/broker-toolkit",

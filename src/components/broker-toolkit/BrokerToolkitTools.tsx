@@ -26,7 +26,7 @@ import {
   Briefcase,
   Camera,
   Ruler,
-  Newspaper,
+  Shield,
   LucideIcon,
 } from "lucide-react";
 
@@ -123,11 +123,12 @@ const CATEGORY_META: Record<
   },
 };
 
+// Updated order: Marketing → Documents → Design → Property → Productivity → Support/Operations
 const CATEGORY_ORDER: ToolCategory[] = [
-  "property",
   "marketing",
   "documents",
   "design",
+  "property",
   "productivity",
   "operations",
 ];
@@ -191,15 +192,7 @@ const TOOLS: ToolItem[] = [
     category: "property",
   },
 
-  // Marketing
-  {
-    name: "JBJ News Reporter",
-    description: "Latest UAE real estate news from government sources",
-    icon: Newspaper,
-    link: "/news",
-    tier: "free",
-    category: "marketing",
-  },
+  // Marketing - Removed JBJ News Reporter (internal automation, not user tool)
   {
     name: "JBJ Content Generator",
     description: "AI-powered marketing content creation",
@@ -239,7 +232,7 @@ const TOOLS: ToolItem[] = [
     description: "Digital document signing and scanning",
     icon: FileSignature,
     link: "/scan-sign-documents",
-    tier: "member",
+    tier: "free",
     category: "documents",
   },
 
@@ -285,7 +278,7 @@ const TOOLS: ToolItem[] = [
     category: "design",
   },
 
-  // Productivity
+  // Productivity - Calendar is NOT FREE per requirements
   {
     name: "JBJ Calendar & Notes",
     description: "Smart scheduling and reminders",
@@ -295,7 +288,7 @@ const TOOLS: ToolItem[] = [
     category: "productivity",
   },
 
-  // Operations & CRM
+  // Operations & CRM - Human personas moved to Support/Operations section
   {
     name: "JBJ CRM",
     description: "Complete lead management system",
@@ -304,6 +297,11 @@ const TOOLS: ToolItem[] = [
     tier: "member",
     category: "operations",
   },
+];
+
+// SUPPORT & OPERATIONS - Human Personas (NOT AI Tools)
+// These are human support roles, not automated AI tools
+export const SUPPORT_OPERATIONS: ToolItem[] = [
   {
     name: "Listing Admin (Sarah)",
     description: "Listing setup, docs, and developer coordination",
@@ -316,6 +314,22 @@ const TOOLS: ToolItem[] = [
     name: "Broker Admin Support",
     description: "Operational support and coordination",
     icon: Briefcase,
+    link: "/broker-admin-assistant",
+    tier: "member",
+    category: "operations",
+  },
+  {
+    name: "JBJ CRM Support",
+    description: "Lead management and CRM assistance",
+    icon: Users,
+    link: "/crm",
+    tier: "member",
+    category: "operations",
+  },
+  {
+    name: "Operations & Compliance",
+    description: "RERA compliance and operational support",
+    icon: Shield,
     link: "/broker-admin-assistant",
     tier: "member",
     category: "operations",
