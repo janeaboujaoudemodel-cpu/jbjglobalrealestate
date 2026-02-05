@@ -2,7 +2,7 @@ import { useState } from "react";
 import DeveloperPartnersMarquee from "@/components/DeveloperPartnersMarquee";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import Footer from "@/components/Footer";
+// Footer removed - handled by MainLayout
 import StatsCounter from "@/components/StatsCounter";
 import AIComparisonWidget from "@/components/AIComparisonWidget";
 import MarketReportCTA from "@/components/MarketReportCTA";
@@ -21,7 +21,7 @@ import ServicesGrid from "@/components/home/ServicesGrid";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import AreasWeCover from "@/components/home/AreasWeCover";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
-import CTABand from "@/components/home/CTABand";
+// CTABand removed - handled by MainLayout's CombinedContactNewsletter
 import HeroSearchBar from "@/components/home/HeroSearchBar";
 
 import JBJPodcastSection from "@/components/home/JBJPodcastSection";
@@ -684,17 +684,8 @@ const Index = () => {
       {/* DIVIDER */}
       <SectionDivider />
 
-      {/* CTA BAND - Master Blueprint: Section 8 (Ready to Get Started?) */}
-      <CTABand />
-
-      {/* DIVIDER */}
-      <SectionDivider />
-
-      {/* SUPPORT TICKET BOX - Always visible */}
+      {/* SUPPORT TICKET BOX - Always visible (last content before global CTA) */}
       <SupportTicketBox />
-
-      {/* FOOTER */}
-      <Footer />
 
       {/* Inquiry Modal */}
       <InquiryFormModal 

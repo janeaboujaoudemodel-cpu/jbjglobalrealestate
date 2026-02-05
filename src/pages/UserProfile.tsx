@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import MainLayout from "@/components/MainLayout";
-import Footer from "@/components/Footer";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,6 +40,7 @@ import { PhoneInput } from "@/components/ui/phone-input";
 
 const UserProfile = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user, signOut } = useAuth();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -251,18 +250,20 @@ const UserProfile = () => {
     navigate('/');
   };
 
+  // Handle tab from query params
+  const tabFromQuery = searchParams.get('tab');
+  const defaultTab = tabFromQuery === 'settings' ? 'settings' : 'profile';
+
   if (loading) {
     return (
-      <MainLayout>
-        <div className="min-h-screen flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
-      </MainLayout>
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
     );
   }
 
   return (
-    <MainLayout>
+    <>
       <div className="min-h-screen bg-black">
         <div className="mx-3 md:mx-4 lg:mx-6 my-6 rounded-2xl border border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
           <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -335,7 +336,7 @@ const UserProfile = () => {
           </Card>
 
           {/* Tabs */}
-          <Tabs defaultValue="profile" className="space-y-6">
+          <Tabs defaultValue={defaultTab} className="space-y-6">
               <TabsList className="grid w-full grid-cols-3 bg-card border border-border">
               <TabsTrigger value="profile" className="data-[state=active]:[background:var(--jj-gradient-active)] data-[state=active]:text-foreground">
                 <User className="h-4 w-4 mr-2" />
@@ -533,7 +534,6 @@ const UserProfile = () => {
           </div>
         </div>
       </div>
-      <Footer />
       
       {/* Email Change Dialog */}
       <Dialog open={showEmailChangeDialog} onOpenChange={setShowEmailChangeDialog}>
@@ -584,10 +584,10 @@ const UserProfile = () => {
               )}
               Send Verification
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </MainLayout>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+    </>
   );
 };
 
