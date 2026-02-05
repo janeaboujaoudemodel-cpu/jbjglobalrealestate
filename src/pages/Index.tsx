@@ -31,7 +31,7 @@ import { SectionDivider } from "@/components/ui/section-divider";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserRole } from "@/hooks/useUserRole";
-import { Sparkles, ArrowUpRight, ArrowRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award, PenTool, Users, Table2, Video, Home, Key, Globe } from "lucide-react";
+import { Sparkles, ArrowUpRight, ArrowRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award, PenTool, Users, Table2, Video, Home, Key, Globe, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
@@ -334,6 +334,143 @@ const Index = () => {
                     <GraduationCap className="w-4 h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
                   <h4 className="text-black group-hover:text-gold text-xs font-semibold transition-colors leading-tight">{t('hero.careers')}</h4>
+                </div>
+              </div>
+            </Link>
+          </div>
+
+          {/* ROW 2: Action Cards with Subtitles (7 cards) */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2 md:gap-3 w-full mb-6 md:mb-10">
+            {/* Explore Properties */}
+            <Link to="/properties" className="group">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-3 md:p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+                <div className="relative z-10">
+                  <div className="w-10 h-10 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
+                    <Home className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                  </div>
+                  <h4 className="text-black group-hover:text-gold text-xs md:text-sm font-semibold transition-colors leading-tight">{t('hero.exploreProperties')}</h4>
+                  <p className="text-black/60 text-[10px] md:text-xs mt-1">{t('hero.browseListings')}</p>
+                </div>
+              </div>
+            </Link>
+
+            {/* List Your Property */}
+            <Link to="/list-property" className="group">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-3 md:p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+                <div className="relative z-10">
+                  <div className="w-10 h-10 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
+                    <FileText className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                  </div>
+                  <h4 className="text-black group-hover:text-gold text-xs md:text-sm font-semibold transition-colors leading-tight">{t('hero.listYourProperty')}</h4>
+                  <p className="text-black/60 text-[10px] md:text-xs mt-1">{t('hero.sellOrRent')}</p>
+                </div>
+              </div>
+            </Link>
+
+            {/* Market Report */}
+            <Link to="/market-report" className="group">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-3 md:p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+                <div className="relative z-10">
+                  <div className="w-10 h-10 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
+                    <BarChart3 className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                  </div>
+                  <h4 className="text-black group-hover:text-gold text-xs md:text-sm font-semibold transition-colors leading-tight">{t('hero.marketReport')}</h4>
+                  <p className="text-black/60 text-[10px] md:text-xs mt-1">{t('hero.latestInsights')}</p>
+                </div>
+              </div>
+            </Link>
+
+            {/* Investor Hub */}
+            <Link to="/ai-hub" className="group">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-3 md:p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+                <div className="relative z-10">
+                  <div className="w-10 h-10 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
+                    <Layers className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                  </div>
+                  <h4 className="text-black group-hover:text-gold text-xs md:text-sm font-semibold transition-colors leading-tight">{t('hero.investorHub')}</h4>
+                  <p className="text-black/60 text-[10px] md:text-xs mt-1">{t('hero.aiTools')}</p>
+                </div>
+              </div>
+            </Link>
+
+            {/* Legal Partners */}
+            <Link to="/partners/legal" className="group">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-3 md:p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+                <div className="relative z-10">
+                  <div className="w-10 h-10 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
+                    <Scale className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                  </div>
+                  <h4 className="text-black group-hover:text-gold text-xs md:text-sm font-semibold transition-colors leading-tight">{t('hero.legalPartners')}</h4>
+                  <p className="text-black/60 text-[10px] md:text-xs mt-1">{t('hero.legalServices')}</p>
+                </div>
+              </div>
+            </Link>
+
+            {/* Mortgage Partners */}
+            <Link to="/partners/mortgage" className="group">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-3 md:p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+                <div className="relative z-10">
+                  <div className="w-10 h-10 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
+                    <Calculator className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                  </div>
+                  <h4 className="text-black group-hover:text-gold text-xs md:text-sm font-semibold transition-colors leading-tight">{t('hero.mortgagePartners')}</h4>
+                  <p className="text-black/60 text-[10px] md:text-xs mt-1">{t('hero.financingOptions')}</p>
+                </div>
+              </div>
+            </Link>
+
+            {/* Design & Build */}
+            <Link to="/services/design-build" className="group">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 rounded-lg p-3 md:p-4 text-center hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.5),0_20px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_4px_12px_rgba(200,167,102,0.25),0_2px_6px_rgba(0,0,0,0.15)] md:shadow-[0_8px_25px_rgba(200,167,102,0.35),0_4px_12px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+                <div className="relative z-10">
+                  <div className="w-10 h-10 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
+                    <Palette className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                  </div>
+                  <h4 className="text-black group-hover:text-gold text-xs md:text-sm font-semibold transition-colors leading-tight">{t('hero.designBuild')}</h4>
+                  <p className="text-black/60 text-[10px] md:text-xs mt-1">{t('hero.constructionFitout')}</p>
+                </div>
+              </div>
+            </Link>
+          </div>
+
+          {/* ROW 3: Large Feature Cards (2 cards) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full">
+            {/* JBJ Broker Hub */}
+            <Link to="/broker-toolkit" className="group">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/50 rounded-xl p-5 md:p-6 hover:border-gold hover:shadow-[0_0_40px_rgba(200,167,102,0.5),0_20px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+                <div className="relative z-10 flex flex-col md:flex-row md:items-start gap-4">
+                  <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Building2 className="w-7 h-7 text-gold" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-black group-hover:text-gold text-lg md:text-xl font-bold transition-colors leading-tight mb-1">{t('hero.jbjBrokerHub')}</h4>
+                    <p className="text-gold font-semibold text-sm mb-2">{t('hero.professionalTools')}</p>
+                    <p className="text-black/70 text-sm leading-relaxed mb-3">Access AI-powered broker tools, training modules, CRM, and marketing resources.</p>
+                    <span className="inline-flex items-center gap-1.5 text-black font-semibold text-sm group-hover:text-gold transition-colors">
+                      {t('hero.accessBrokerHub')}
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+
+            {/* JBJ Investor Hub */}
+            <Link to="/ai-hub" className="group">
+              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/50 rounded-xl p-5 md:p-6 hover:border-gold hover:shadow-[0_0_40px_rgba(200,167,102,0.5),0_20px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1 shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.2)] transition-all duration-300 relative overflow-hidden h-full">
+                <div className="relative z-10 flex flex-col md:flex-row md:items-start gap-4">
+                  <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Layers className="w-7 h-7 text-gold" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-black group-hover:text-gold text-lg md:text-xl font-bold transition-colors leading-tight mb-1">{t('hero.jbjInvestorHub')}</h4>
+                    <p className="text-gold font-semibold text-sm mb-2">{t('hero.freeAiTools')}</p>
+                    <p className="text-black/70 text-sm leading-relaxed mb-3">AI-powered property analysis, comparison, mortgage calculator, and productivity tools.</p>
+                    <span className="inline-flex items-center gap-1.5 text-black font-semibold text-sm group-hover:text-gold transition-colors">
+                      {t('hero.exploreInvestorHub')}
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  </div>
                 </div>
               </div>
             </Link>
