@@ -1,8 +1,6 @@
 import { Link, Navigate } from "react-router-dom";
 import { ArrowUpRight, Building2, Users, Award, Globe, Shield, Scale, Briefcase, FileCheck, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
-import Footer from "@/components/Footer";
-import DirectContactCTA from "@/components/DirectContactCTA";
 import { SafeImage } from "@/components/SafeImage";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
@@ -533,11 +531,6 @@ const Founder = () => {
           </div>
         </div>
       </section>
-
-      {/* Standardized Direct Contact CTA */}
-      <DirectContactCTA />
-
-      <Footer />
     </div>
   );
 };

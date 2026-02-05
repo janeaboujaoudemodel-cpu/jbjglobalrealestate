@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { Users, TrendingUp, TrendingDown, Lock, ArrowLeft, Target, DollarSign, Clock, AlertTriangle } from "lucide-react";
 import { Link, Navigate } from "react-router-dom";
-import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -181,8 +180,6 @@ const BrokerIntelligence = () => {
           </div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 };

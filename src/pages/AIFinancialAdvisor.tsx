@@ -12,7 +12,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
 
 interface FinancialData {
@@ -552,8 +551,6 @@ const AIFinancialAdvisor = () => {
           </div>
         </div>
       </div>
-
-      <Footer />
     </section>
   );
 };

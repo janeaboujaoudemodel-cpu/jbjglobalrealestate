@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
-import Footer from "@/components/Footer";
 
 const Privacy = () => {
   return (
@@ -168,7 +167,6 @@ const Privacy = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </section>
   );
 };

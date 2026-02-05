@@ -17,7 +17,6 @@ import { Badge } from "@/components/ui/badge";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import Footer from "@/components/Footer";
 import { FounderContent } from "@/components/FounderContent";
 import LegalDisclaimer from "@/components/LegalDisclaimer";
 
@@ -1180,8 +1179,6 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
         <LegalDisclaimer variant="ai-tools" className="mt-8" />
         <LegalDisclaimer variant="investment" className="mt-4" />
       </div>
-
-      <Footer />
     </section>
   );
 };

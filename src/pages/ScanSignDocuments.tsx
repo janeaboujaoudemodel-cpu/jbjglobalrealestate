@@ -13,7 +13,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import Footer from "@/components/Footer";
 import SignatureDesigner from "@/components/referral/SignatureDesigner";
 
 interface ScannedDocument {
@@ -942,8 +941,6 @@ const ScanSignDocuments = () => {
           </div>
         </div>
       </div>
-
-      <Footer />
     </section>
   );
 };

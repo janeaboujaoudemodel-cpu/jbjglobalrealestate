@@ -11,8 +11,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { PhoneInput, getPhoneValidation } from "@/components/ui/phone-input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import Footer from "@/components/Footer";
-import DirectContactCTA from "@/components/DirectContactCTA";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
 import { toast } from "sonner";
@@ -942,15 +940,6 @@ END:VCARD`;
         onOpenChange={setMeetingModalOpen} 
       />
 
-      {/* Standardized Direct Contact CTA */}
-      <DirectContactCTA 
-        title="Connect With Our Team"
-        subtitle="Get in touch for personalized guidance and expert support."
-        titleSize="premium"
-        showSaveShare={true}
-      />
-
-      <Footer />
       </div>
     </>
   );
