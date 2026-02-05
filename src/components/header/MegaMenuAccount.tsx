@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { User, Heart, Sparkles, Briefcase, Users, FolderOpen, Monitor, Settings, LogOut, ChevronRight, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -10,6 +10,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { MegaMenuShell, MegaMenuSectionDivider } from './mega-menu-primitives';
 import ModeSwitcher from '@/components/ModeSwitcher';
 import { useTierProgress } from '@/hooks/useTierProgress';
+import { useUserMode } from '@/hooks/useUserMode';
 
 interface MegaMenuAccountProps {
   onClose: () => void;
@@ -19,8 +20,9 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
   const { user, isAdmin, signOut } = useAuth();
   const { t } = useLanguage();
   const { tierProgress } = useTierProgress();
+  const { mode } = useUserMode();
   
-  const { data: crmProfile } = useQuery({
+  const { data: crmProfile, isLoading: crmLoading } = useQuery({
     queryKey: ['crm-profile-account-menu', user?.id],
     queryFn: async () => {
       if (!user?.id) return null;
@@ -33,23 +35,63 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
       return data;
     },
     enabled: !!user?.id,
+    staleTime: 60000, // Cache for 1 minute to prevent flicker
+  });
+
+  // Check if user has listing admin access (owner, admin role, or in listing_admins table)
+  const { data: hasListingAdminAccess } = useQuery({
+    queryKey: ['listing-admin-access', user?.id],
+    queryFn: async () => {
+      if (!user?.id) return false;
+      
+      // Check roles in parallel
+      const [ownerResult, adminResult, listingAdminResult] = await Promise.all([
+        supabase.rpc("has_role", { _user_id: user.id, _role: "owner" }),
+        supabase.rpc("has_role", { _user_id: user.id, _role: "admin" }),
+        supabase
+          .from("listing_admins")
+          .select("id")
+          .eq("user_id", user.id)
+          .eq("is_active", true)
+          .maybeSingle(),
+      ]);
+
+      return ownerResult.data === true || adminResult.data === true || !!listingAdminResult.data;
+    },
+    enabled: !!user?.id,
+    staleTime: 60000,
   });
 
   const hasCRMAccess = crmProfile?.is_active && 
     ['owner_admin', 'broker_member', 'sales_director', 'admin', 'founder'].includes(crmProfile?.crm_role || '');
 
   const userMeta = (user?.user_metadata ?? {}) as Record<string, unknown>;
-  const accountDisplayName =
-    (crmProfile as any)?.display_name ||
-    (typeof userMeta.full_name === "string" ? userMeta.full_name : null) ||
-    (typeof userMeta.name === "string" ? userMeta.name : null) ||
-    (user?.email ? user.email.split("@")[0] : null) ||
-    "My Account";
-  const accountPhotoUrl =
-    (crmProfile as any)?.photo_url ||
-    (typeof (userMeta as any).avatar_url === "string" ? (userMeta as any).avatar_url : null) ||
-    (typeof (userMeta as any).picture === "string" ? (userMeta as any).picture : null) ||
-    null;
+  
+  // Memoize display name and photo to prevent flicker
+  const accountDisplayName = useMemo(() => {
+    return (crmProfile as any)?.display_name ||
+      (typeof userMeta.full_name === "string" ? userMeta.full_name : null) ||
+      (typeof userMeta.name === "string" ? userMeta.name : null) ||
+      (user?.email ? user.email.split("@")[0] : null) ||
+      "My Account";
+  }, [crmProfile, userMeta.full_name, userMeta.name, user?.email]);
+  
+  const accountPhotoUrl = useMemo(() => {
+    return (crmProfile as any)?.photo_url ||
+      (typeof (userMeta as any).avatar_url === "string" ? (userMeta as any).avatar_url : null) ||
+      (typeof (userMeta as any).picture === "string" ? (userMeta as any).picture : null) ||
+      null;
+  }, [crmProfile, userMeta]);
+
+  // Memoize initials to prevent flicker
+  const avatarInitials = useMemo(() => {
+    const name = String(accountDisplayName);
+    return name
+      .split(' ')
+      .map(n => n.charAt(0).toUpperCase())
+      .slice(0, 2)
+      .join('');
+  }, [accountDisplayName]);
 
   const authHref = '/auth';
 
@@ -64,21 +106,31 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     { href: '/favorites', label: 'Favorites', icon: Heart, description: 'Your saved properties' },
   ];
 
-  const adminLinks = [
-    { href: '/founder-assistant', label: 'My Assistant', icon: Sparkles },
-    { href: '/employee-hub', label: 'Employee Hub', icon: Briefcase },
-    { href: '/hr-dashboard', label: 'HR Hub', icon: Users },
-    { href: '/listing-admin', label: 'Listing Admin', icon: FolderOpen },
-    { href: '/it-department', label: 'IT Department', icon: Monitor },
-  ];
+  // Filter admin links based on actual access
+  const adminLinks = useMemo(() => {
+    const links = [
+      { href: '/founder-assistant', label: 'My Assistant', icon: Sparkles, requiresAdmin: true },
+      { href: '/employee-hub', label: 'Employee Hub', icon: Briefcase, requiresAdmin: true },
+      { href: '/hr-dashboard', label: 'HR Hub', icon: Users, requiresAdmin: true },
+      { href: '/listing-admin', label: 'Listing Admin', icon: FolderOpen, requiresListingAdmin: true },
+      { href: '/it-department', label: 'IT Department', icon: Monitor, requiresAdmin: true },
+    ];
+    
+    return links.filter(link => {
+      if (link.requiresListingAdmin) {
+        return hasListingAdminAccess;
+      }
+      return isAdmin || hasCRMAccess;
+    });
+  }, [isAdmin, hasCRMAccess, hasListingAdminAccess]);
 
-  // Get initials for avatar fallback
-  const getInitials = (name: string) => {
-    return name
-      .split(' ')
-      .map(n => n.charAt(0).toUpperCase())
-      .slice(0, 2)
-      .join('');
+  // Get mode label for display
+  const getModeLabel = () => {
+    switch (mode) {
+      case 'broker': return 'Broker';
+      case 'investor_broker': return 'Investor + Broker';
+      default: return 'Investor';
+    }
   };
 
   return (
@@ -93,29 +145,26 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
           <>
             {/* Premium User Header - Horizontal Layout */}
             <div className="flex items-center gap-5 pb-5 mb-5 border-b-2 border-gold/40">
-              <Avatar className="h-16 w-16 border-2 border-gold/60">
-                <AvatarImage src={accountPhotoUrl ?? ""} alt={`${accountDisplayName} profile photo`} className="object-cover" />
-                <AvatarFallback className="bg-transparent border-2 border-gold text-gold text-xl font-bold">
-                  {getInitials(String(accountDisplayName))}
-                </AvatarFallback>
-              </Avatar>
+              {/* Fixed-size avatar container to prevent layout shift */}
+              <div className="w-16 h-16 flex-shrink-0">
+                <Avatar className="h-16 w-16 border-2 border-gold/60">
+                  <AvatarImage src={accountPhotoUrl ?? ""} alt={`${accountDisplayName} profile photo`} className="object-cover" />
+                  <AvatarFallback className="bg-transparent border-2 border-gold text-gold text-xl font-bold">
+                    {avatarInitials}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
               <div className="min-w-0 flex-1">
                 <p className="text-black font-bold text-lg truncate" style={{ fontFamily: 'Poppins, sans-serif' }}>
                   {accountDisplayName}
                 </p>
                 <p className="text-black/60 text-sm truncate">{user.email}</p>
-                {tierProgress?.currentTier && (
-                  <Badge 
-                    className="mt-1.5 text-xs font-semibold border-gold/40"
-                    style={{ 
-                      backgroundColor: `${tierProgress.currentTier.badge_color}20`,
-                      color: tierProgress.currentTier.badge_color,
-                      borderColor: `${tierProgress.currentTier.badge_color}60`
-                    }}
-                  >
-                    {tierProgress.currentTier.tier_name} • {tierProgress.totalPoints.toLocaleString()} pts
-                  </Badge>
-                )}
+                {/* Show mode + points instead of tier name */}
+                <Badge 
+                  className="mt-1.5 text-xs font-semibold border-gold/40 bg-gold/10 text-gold"
+                >
+                  {getModeLabel()} • {tierProgress?.totalPoints?.toLocaleString() || 0} pts earned
+                </Badge>
               </div>
               <div className="flex flex-col items-end gap-2 shrink-0">
                 <ModeSwitcher variant="header" />
@@ -178,9 +227,9 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                 </div>
               </div>
 
-              {/* Right Column - Admin Links */}
+              {/* Right Column - Admin Links (only show if user has any admin access) */}
               <div>
-                {(isAdmin || hasCRMAccess) && (
+                {(isAdmin || hasCRMAccess || hasListingAdminAccess) && adminLinks.length > 0 && (
                   <>
                     <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold px-2 py-1.5 mb-2">
                       Admin Shortcuts
