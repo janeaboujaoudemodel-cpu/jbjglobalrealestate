@@ -9,6 +9,7 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
 import { PopupCoordinatorProvider } from "@/contexts/PopupCoordinatorContext";
 import { FounderVisibilityProvider } from "@/contexts/FounderVisibilityContext";
+import { UserModeProvider } from "@/contexts/UserModeContext";
 import { PodcastVisibilityProvider } from "@/contexts/PodcastVisibilityContext";
 import { ScrollToTopOnMount } from "@/components/ScrollToTop";
 import AdminBypass from "@/components/AdminBypass";
@@ -229,6 +230,7 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <AuthProvider>
+              <UserModeProvider>
               <FounderVisibilityProvider>
                 <PodcastVisibilityProvider>
                   <ActiveLeadProvider>
@@ -480,6 +482,7 @@ const App = () => (
                 </ActiveLeadProvider>
               </PodcastVisibilityProvider>
             </FounderVisibilityProvider>
+            </UserModeProvider>
             </AuthProvider>
           </BrowserRouter>
         </LanguageProvider>
