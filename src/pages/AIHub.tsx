@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import Footer from "@/components/Footer";
 import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -1233,8 +1232,6 @@ const AIHub = () => {
             </div>
           </div>
         </section>
-
-        <Footer />
       </section>
     </>
   );

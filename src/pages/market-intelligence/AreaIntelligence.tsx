@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { MapPin, TrendingUp, TrendingDown, Database, Shield, ArrowRight, Search, FileText, Building2, BarChart3, AlertTriangle, CheckCircle2, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
-import Footer from "@/components/Footer";
 import PreFooterSeparator from "@/components/PreFooterSeparator";
 import { SEOHead } from "@/components/SEOHead";
 import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSchema";
@@ -528,7 +527,6 @@ const AreaIntelligence = () => {
         secondaryLink="/market-intelligence/reports"
         secondaryText="Market Reports"
       />
-      <Footer />
     </div>
   );
 };

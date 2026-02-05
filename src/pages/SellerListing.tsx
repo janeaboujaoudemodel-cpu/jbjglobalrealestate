@@ -24,7 +24,6 @@ import {
 } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import SellerAssistant from "@/components/seller/SellerAssistant";
-import Footer from "@/components/Footer";
 import {
   Dialog,
   DialogContent,
@@ -1524,9 +1523,6 @@ Requirements:
           </div>
         </DialogContent>
       </Dialog>
-      
-      {/* Footer */}
-      <Footer />
     </>
   );
 };

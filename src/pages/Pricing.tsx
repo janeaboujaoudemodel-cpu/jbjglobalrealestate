@@ -27,7 +27,6 @@ import { useSubscription, formatSubscriptionPrice, calculateYearlySavings } from
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import SEOHead from "@/components/SEOHead";
-import Footer from "@/components/Footer";
 
 const TIER_ICONS: Record<string, React.ReactNode> = {
   starter: <Zap className="w-6 h-6" />,
@@ -333,8 +332,6 @@ export default function Pricing() {
             </div>
           </div>
         </section>
-
-        <Footer />
       </div>
     </>
   );

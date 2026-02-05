@@ -37,7 +37,6 @@ import {
   MessageCircle
 } from "lucide-react";
 import { toast } from "sonner";
-import Footer from "@/components/Footer";
 import { ProvidentSyncButton } from "@/components/admin/ProvidentSyncButton";
 
 interface Developer {
@@ -586,8 +585,6 @@ const AdminDevelopers = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
-      <Footer />
     </div>
   );
 };

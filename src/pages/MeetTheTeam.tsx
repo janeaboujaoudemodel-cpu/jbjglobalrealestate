@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -595,8 +594,6 @@ const MeetTheTeam: React.FC = () => {
             </div>
           </div>
         </section>
-
-        <Footer />
       </div>
 
       {/* Contact Form Modal */}

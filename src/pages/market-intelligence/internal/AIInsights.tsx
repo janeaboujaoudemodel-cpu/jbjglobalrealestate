@@ -5,7 +5,6 @@ import {
   RefreshCw, Brain, MapPin, AlertTriangle
 } from "lucide-react";
 import { Link, Navigate } from "react-router-dom";
-import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -287,8 +286,6 @@ const AIInsights = () => {
           </div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 };

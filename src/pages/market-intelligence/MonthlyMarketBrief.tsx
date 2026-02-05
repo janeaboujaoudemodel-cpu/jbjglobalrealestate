@@ -1,7 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import SEOHead from "@/components/SEOHead";
-import Footer from "@/components/Footer";
 import { 
   ArrowLeft,
   Download,
@@ -303,8 +302,6 @@ const MonthlyMarketBrief = () => {
           </motion.div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };

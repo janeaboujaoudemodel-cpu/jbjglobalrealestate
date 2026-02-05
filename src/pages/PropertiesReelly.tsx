@@ -32,7 +32,6 @@
  import { ScrollArea } from "@/components/ui/scroll-area";
  import { useLanguage } from "@/contexts/LanguageContext";
  
- import Footer from "@/components/Footer";
  import ReellyProjectCard from "@/components/ReellyProjectCard";
  import { ProjectGridSkeleton } from "@/components/ProjectCardSkeleton";
  import { useReellyProjects, flattenReellyProjects, getReellyProjectsTotal } from "@/hooks/useReellyProjects";
@@ -588,8 +587,6 @@ type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 
            </div>
          </div>
        </section>
- 
-       <Footer />
        </div>
      </>
    );

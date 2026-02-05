@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { MapPin, TrendingUp, TrendingDown, BarChart3, Database, Shield, ArrowLeft, Info, Building2, Users, Home, ArrowRight } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
-import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSchema";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -297,8 +296,6 @@ const MarketAreaDetail = () => {
           </div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 };

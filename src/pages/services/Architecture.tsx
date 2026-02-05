@@ -4,7 +4,6 @@ import {
   PenTool, Building2, Compass, Layers, Award,
   ChevronLeft, ArrowRight, CheckCircle, MapPin
 } from "lucide-react";
-import Footer from "@/components/Footer";
 import DirectContactCTA from "@/components/DirectContactCTA";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
@@ -296,8 +295,6 @@ const Architecture = () => {
 
       {/* Standardized Direct Contact CTA */}
       <DirectContactCTA />
-
-      <Footer />
     </div>
   );
 };

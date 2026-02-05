@@ -23,7 +23,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SEOHead } from "@/components/SEOHead";
-import Footer from "@/components/Footer";
 
 interface ContractTemplate {
   id: string;
@@ -302,8 +301,6 @@ export default function ContractForms() {
           </div>
         </div>
       </section>
-
-      <Footer />
     </>
   );
 }

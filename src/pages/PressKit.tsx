@@ -14,7 +14,6 @@ import {
   UserPlus,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -568,8 +567,6 @@ const PressKit = () => {
           </motion.div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 };

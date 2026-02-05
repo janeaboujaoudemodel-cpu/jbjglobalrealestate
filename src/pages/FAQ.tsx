@@ -24,7 +24,6 @@ import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigatio
 import { FAQHero } from "@/components/faq/FAQHero";
 import { FAQTableOfContents } from "@/components/faq/FAQTableOfContents";
 import { FAQFloatingSidebar } from "@/components/faq/FAQFloatingSidebar";
-import Footer from "@/components/Footer";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -288,8 +287,6 @@ const FAQ = () => {
           </div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 };

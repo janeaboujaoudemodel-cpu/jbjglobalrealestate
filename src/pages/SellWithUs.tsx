@@ -3,7 +3,6 @@ import { ArrowRight, FileText, Camera, Globe, Calendar, Handshake, MessageCircle
 import { Link } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
 import GlobalHeader from "@/components/GlobalHeader";
-import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import LegalDisclaimer from "@/components/LegalDisclaimer";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
@@ -341,8 +340,6 @@ const SellWithUs = () => {
           </div>
         </section>
       </main>
-      
-      <Footer />
     </>
   );
 };

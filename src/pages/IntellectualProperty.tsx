@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, Shield, Lock, FileText, Scale, Eye, AlertTriangle, Copyright, Fingerprint } from "lucide-react";
-import Footer from "@/components/Footer";
 
 const IntellectualProperty = () => {
   const currentYear = new Date().getFullYear();
@@ -262,8 +261,6 @@ const IntellectualProperty = () => {
           </div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 };

@@ -3,7 +3,6 @@ import { Star, Quote, MessageCircle, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
 import GlobalHeader from "@/components/GlobalHeader";
-import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 
@@ -294,8 +293,6 @@ const Reviews = () => {
           </div>
         </section>
       </main>
-      
-      <Footer />
     </>
   );
 };
