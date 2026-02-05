@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import SubscriptionSuccessModal from '@/components/marketing/SubscriptionSuccessModal';
 
 interface NewsletterBrevoProps {
   className?: string;
@@ -22,6 +23,7 @@ export const NewsletterBrevo = ({
   const [name, setName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,9 +72,7 @@ export const NewsletterBrevo = ({
       }
 
       setIsSuccess(true);
-      toast.success('Welcome to the JBJ Global Real Estate inner circle!', {
-        description: "You'll receive exclusive updates and insights.",
-      });
+      setShowSuccessModal(true);
       setEmail('');
       setName('');
 
@@ -186,6 +186,10 @@ export const NewsletterBrevo = ({
         )}
         {isSubmitting ? 'Subscribing...' : 'Subscribe'}
       </Button>
+      <SubscriptionSuccessModal 
+        isOpen={showSuccessModal} 
+        onClose={() => setShowSuccessModal(false)} 
+      />
     </form>
   );
 };

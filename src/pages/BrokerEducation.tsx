@@ -174,14 +174,16 @@ const BrokerEducation = () => {
         </motion.div>
       </section>
 
-      {/* Page Intro Section - Layer 2 Active Champagne */}
+      {/* Page Intro + Education Library - Connected Flow */}
       <section className="py-12 md:py-16">
         <div className="jj-layer-2">
+          {/* About This Program */}
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
+            className="mb-8"
           >
             <Card className="jj-card-inner">
               <CardContent className="p-8">
@@ -190,7 +192,7 @@ const BrokerEducation = () => {
                     <Info className="w-6 h-6" />
                   </div>
                   <div>
-                    <h2 className="text-xl font-semibold text-black mb-3">About This Program</h2>
+                    <h2 className="text-xl font-semibold text-black mb-3">Step 1: About This Program</h2>
                     <ul className="space-y-2 text-black/70">
                       <li className="flex items-start gap-2">
                         <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
@@ -214,17 +216,26 @@ const BrokerEducation = () => {
               </CardContent>
             </Card>
           </motion.div>
-        </div>
-      </section>
 
-      {/* Education Library Section - Layer 2 Active Champagne */}
-      <section id="library" className="py-12 md:py-16 scroll-mt-20">
-        <div className="jj-layer-2">
+          {/* Bridge Connector */}
+          <div className="flex items-center justify-center gap-3 py-4 mb-8">
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/40 to-gold/60" />
+            <div className="flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-full">
+              <ArrowDown className="w-4 h-4 text-gold" />
+              <span className="text-sm text-gold font-medium uppercase tracking-wider">Now explore your resources</span>
+              <ArrowDown className="w-4 h-4 text-gold" />
+            </div>
+            <div className="h-px flex-1 bg-gradient-to-l from-transparent via-gold/40 to-gold/60" />
+          </div>
+
+          {/* Education Library Content */}
           <motion.div
+            id="library"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
+            className="scroll-mt-20"
           >
             <div className="text-center mb-12">
               <Badge className="bg-gold/20 text-gold border-gold/30 mb-4">
@@ -232,7 +243,7 @@ const BrokerEducation = () => {
                   {loading ? "Loading…" : `${books.length} Books • ${groupedBooks.length} Learning Paths`}
               </Badge>
               <h2 className="text-3xl md:text-4xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Education <span className="text-gold">Library</span>
+                Step 2: Education <span className="text-gold">Library</span>
               </h2>
               <p className="text-black/70 max-w-2xl mx-auto mb-6">
                 Structured learning paths covering every aspect of professional real estate brokerage in the UAE.

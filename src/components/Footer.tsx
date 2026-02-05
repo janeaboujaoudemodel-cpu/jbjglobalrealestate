@@ -105,6 +105,7 @@ const Footer = () => {
     { label: t('footer.investorEducation') || "Investor Education", href: "/investor-education" },
     { label: t('footer.investorFaqs') || "Investor FAQs", href: "/investor-faq" },
     { label: t('footer.investorTools') || "Investor Tools", href: "/ai-hub" },
+    { label: "My Dashboard", href: "/my-dashboard" },
   ];
 
   // Broker Hub

@@ -951,8 +951,29 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                       <>
                         <div className="px-4 py-3 bg-gold/5 rounded-lg mb-2">
                           <p className="text-xs text-zinc-500 uppercase tracking-wider">Signed in as</p>
-                          <p className="text-sm font-medium text-black truncate">{user.email}</p>
+                          <p className="text-sm font-medium text-black truncate">{accountDisplayName}</p>
                         </div>
+                        
+                        {/* My Dashboard - Always visible for logged in users */}
+                        <Link
+                          to="/my-dashboard"
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                        >
+                          <Home className="w-4 h-4 text-gold" />
+                          My Dashboard
+                        </Link>
+                        
+                        <Link
+                          to="/profile"
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                        >
+                          <User className="w-4 h-4 text-gold" />
+                          My Profile
+                        </Link>
+                        
+                        <div className="h-px bg-gold/20 my-2" />
                         
                         {/* Admin Shortcuts - Same as desktop dropdown */}
                         {(isAdmin || hasCRMAccess) && (

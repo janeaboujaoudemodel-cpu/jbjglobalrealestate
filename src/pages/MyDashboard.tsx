@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import MainLayout from "@/components/MainLayout";
 import { SEOHead } from "@/components/SEOHead";
 import { Loader2 } from "lucide-react";
 
@@ -26,11 +25,9 @@ const MyDashboard = () => {
 
   if (authLoading) {
     return (
-      <MainLayout>
-        <div className="min-h-screen bg-black flex items-center justify-center">
-          <Loader2 className="w-8 h-8 text-gold animate-spin" />
-        </div>
-      </MainLayout>
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-gold animate-spin" />
+      </div>
     );
   }
 
@@ -39,7 +36,7 @@ const MyDashboard = () => {
   }
 
   return (
-    <MainLayout>
+    <>
       <SEOHead 
         title="My Dashboard | JBJ Global Real Estate"
         description="Your personalized dashboard with favorites, shortlists, progress, and notifications."
@@ -86,7 +83,7 @@ const MyDashboard = () => {
           </div>
         </div>
       </div>
-    </MainLayout>
+    </>
   );
 };
 

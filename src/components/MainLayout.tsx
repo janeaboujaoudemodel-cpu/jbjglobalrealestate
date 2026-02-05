@@ -11,6 +11,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import NewsletterBand from "@/components/NewsletterBand";
 import Footer from "@/components/Footer";
 import DirectContactCTA from "@/components/DirectContactCTA";
+import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useOnboardingTour } from "@/hooks/use-onboarding-tour";
 
@@ -202,10 +203,17 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       <main className={needsHeaderSpacing ? "pt-24 sm:pt-28 lg:pt-32" : "pt-0"}>
         {children}
       </main>
-      {/* Global Contact Section - Above newsletter on all public pages */}
-      {!isAdminRoute && <DirectContactCTA />}
-      {/* Global Newsletter Band - Above footer on all public pages */}
-      {!isAdminRoute && <NewsletterBand />}
+      {/* Global Contact + Newsletter Section - homepage uses combined, others use separate */}
+      {!isAdminRoute && (
+        isHomePage ? (
+          <CombinedContactNewsletter />
+        ) : (
+          <>
+            <DirectContactCTA />
+            <NewsletterBand />
+          </>
+        )
+      )}
       {/* Global Footer - rendered centrally */}
       {!isAdminRoute && <Footer />}
       {/* All popups rendered centrally - only when ready */}
