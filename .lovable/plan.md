@@ -1,224 +1,303 @@
 
 
-# Implementation Plan: Dashboard Fixes, Search Bar Styling, and Navigation Corrections
+# Implementation Plan: Homepage Hub Cards, Button System, AI Home Finder Centering, and Investment Edge Book Section Fixes
 
-## Issues Identified
+## Summary
 
-### 1. Dashboard Looks "Horrible" - Missing Features & Overlapping Quick Actions
-**Root Cause Analysis:**
-- `src/pages/MyDashboard.tsx` has a very basic grid layout with minimal content
-- The `QuickActions` component only has 6 broker-specific actions in a 2x3 grid that may overlap on certain screen sizes
-- Missing role-based content differentiation (the same dashboard shows for all roles)
-- Grid layout is `grid-cols-2 md:grid-cols-3 gap-2` which causes items to be crammed together
-
-**Current State:**
-- `MyDashboard.tsx` (lines 59-82) has a 3-column layout with:
-  - Left: ProfileSummaryCard, BadgesLevelCard
-  - Center: QuickActions, ActivityOverviewCard
-  - Right: NotificationsPreview only
-  - Bottom: FavoritesCard, ShortlistCard
-- `QuickActions.tsx` (lines 76-90) uses `grid-cols-2 md:grid-cols-3 gap-2` with small buttons that can overlap
-
-### 2. "Continue to Dashboard" Button Goes to Homepage
-**Root Cause:**
-- In `src/pages/Auth.tsx` (line 235-238), the "Continue to Dashboard" button navigates to `"/"` instead of the user's actual dashboard
-- Currently: `onClick={() => navigate("/")}`
-- Should navigate to the role-based dashboard or `/my-dashboard`
-
-### 3. Search Bar Border Radius Inconsistency
-**Root Cause:**
-- In `src/components/home/HeroSearchBar.tsx` (line 616):
-  - Container has `rounded-xl` which rounds all corners
-  - Search button (line 909) has `rounded-none rounded-r-xl` which only rounds the right side
-  - But the left side (input area) doesn't have matching left-side rounding applied
-- The container's left side is sharp while right side is curved
-
-### 4. Three Dots in "community..." Placeholder
-**Root Cause:**
-- `HeroSearchBar.tsx` line 622: `placeholder="Area, project or community..."`
-- User wants to remove the ellipsis (three dots)
-
-### 5. Filter Dialog Should Match Reelly + Keep AI Home Matchmaker Label
-**Current State:**
-- The filter dialog (lines 710-903) already has comprehensive filters
-- The AI link at line 875-889 says "AI Home Finder" not "AI Home Matchmaker"
-- Filter needs visual updates to match Reelly-style (color-coded sale status dots, payment plan slider, etc.)
-
-### 6. Role-Based Dashboard Not Properly Differentiated
-**Root Cause:**
-- When user selects role in `StandardUserDashboard.tsx`, they get redirected to role-specific dashboards
-- But `InvestorDashboard.tsx` and other role dashboards still render their own `<Footer />` (line 834), causing duplication
-- My Dashboard at `/my-dashboard` is too basic and doesn't reflect role
+This plan addresses 7 specific UI tasks without redesigning anything. All changes will match 100% the existing approved UI system (colors, card style, primary buttons, spacing rules).
 
 ---
 
-## Implementation Plan
+## Task 1 — JBJ Broker Hub + JBJ Investor Hub Cards (Color + Consistency)
 
-### Phase 1: Fix Dashboard Layout & Add Missing Features
+### Current Issue
+- Lines 438-480 in `src/pages/Index.tsx`: The Broker Hub and Investor Hub cards use `bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]` (white/cream gradient)
+- Other cards in the same section use `bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]` (gold/champagne gradient)
 
-**File: `src/pages/MyDashboard.tsx`**
+### Required Fix
+**File:** `src/pages/Index.tsx`
 
-1. **Improve Grid Layout to Prevent Overlap:**
-   - Change from current `grid grid-cols-1 lg:grid-cols-3 gap-6` to more responsive breakpoints
-   - Add proper min-widths and spacing
+Change both Hub cards (lines 440 and 462) from:
+```tsx
+bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]
+```
+to:
+```tsx
+bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]
+```
 
-2. **Add Role-Based Content:**
-   - Import `useUserRole` hook
-   - Show different Quick Actions based on user role:
-     - **Investor**: Browse Properties, Compare Projects, Request Shortlist, Market Reports, Request Consultation, Portfolio View
-     - **Broker/Partner**: Register Deal, Site Check-In, Training, Resources, Schedule Visit, AI Tools
-     - **Owner**: My Listings, Add Property, Property Status, Documents, Messages, Request Support
-   - Add role badge to header area
+This matches exactly the gold/champagne tone used by all other cards in the "Find Your Starting Point" section (Row 1, Row 2 cards).
 
-3. **Enhance Dashboard Cards:**
-   - Add more padding and better card styling
-   - Add proper empty states with CTAs
-   - Ensure responsive behavior on all screen sizes
+### Icons
+- Icons already use transparent/outline style with `text-gold` - no change needed
 
-**File: `src/components/dashboard/QuickActions.tsx`**
+---
 
-1. **Fix Overlapping Grid:**
-   - Change from `grid-cols-2 md:grid-cols-3 gap-2` to `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4`
-   - Increase button height and padding
-   - Add role-aware actions
+## Task 2 — Fix CTA Buttons to Primary Style
 
-2. **Role-Based Actions:**
-   - Accept `userRole` prop
-   - Return different action sets based on role
+### Current Issue
+- Lines 451-454 and 473-476 in `src/pages/Index.tsx`: The "Access Broker Hub" and "Explore Investor Hub" buttons use `<Button variant="primary">` which is correct
+- However, the `ServicesGrid.tsx` component (line 105-108) uses a plain text link with `text-gold` styling instead of proper primary buttons
 
-### Phase 2: Fix Auth Navigation
+### Required Fix
 
-**File: `src/pages/Auth.tsx`**
+**File 1:** `src/components/home/ServicesGrid.tsx`
+Change the CTA from text link to proper Button component:
 
-1. **Update "Continue to Dashboard" Button (line 235-238):**
-   - Change `onClick={() => navigate("/")}` to `onClick={() => navigate("/my-dashboard")}`
-   - Or better: navigate to role-specific dashboard using `useUserRole` hook
+Replace lines 104-108:
+```tsx
+{/* CTA */}
+<div className="flex items-center gap-1.5 text-gold text-sm font-medium group-hover:gap-2.5 transition-all">
+  <span>{t('services.learnMore', 'Learn More')}</span>
+  <ArrowRight className="w-4 h-4" />
+</div>
+```
 
-2. **Update Button Label:**
-   - Change from "Continue to Dashboard" to "Go to My Dashboard" for clarity
+With:
+```tsx
+{/* CTA */}
+<Button variant="primary" size="sm" className="mt-auto">
+  {t('services.learnMore', 'Learn More')}
+  <ArrowRight className="w-4 h-4 ml-2" />
+</Button>
+```
 
-### Phase 3: Fix Search Bar Border Radius
+Also add Button import at top:
+```tsx
+import { Button } from "@/components/ui/button";
+```
 
-**File: `src/components/home/HeroSearchBar.tsx`**
+**File 2:** `src/components/home/ExploreServicesCard.tsx`
+The service slideshow cards (line 262-270) already use `<Button variant="primary">` - no change needed
 
-1. **Fix Container (line 616):**
-   - Keep `rounded-xl` on container
-   - Ensure input area has `rounded-l-xl` styling on the left edge
+---
 
-2. **Fix Left Edge Styling:**
-   - The input container `div.flex-1` needs `rounded-l-xl` class added
-   - Or ensure the container overflow clips properly
+## Task 3 — AI Home Finder Card Positioning + Spacing (Centered)
 
-### Phase 4: Remove Dots from Placeholder
+### Current Issue
+- Lines 489-534 in `src/pages/Index.tsx`: The AI Home Finder section uses `py-12 md:py-20` which is inconsistent with other sections using `py-12 md:py-16`
+- This creates unequal spacing above vs below the AI Home Finder card
 
-**File: `src/components/home/HeroSearchBar.tsx`**
+### Required Fix
+**File:** `src/pages/Index.tsx`
 
-1. **Update Placeholder (line 622):**
-   - Change from `"Area, project or community..."` to `"Area, project or community"`
+1. Change line 489 from:
+```tsx
+<section className="py-12 md:py-20 bg-black">
+```
+to:
+```tsx
+<section className="py-12 md:py-16 bg-black">
+```
 
-### Phase 5: Update Filter Dialog with Reelly-Style Features
+2. The AI Comparison section below (line 540) already uses `py-12 md:py-16`, so after this fix both sections will have identical spacing.
 
-**File: `src/components/home/HeroSearchBar.tsx`**
+3. Verify the `SectionDivider` (line 537) creates a balanced visual transition between AI Home Finder and AI Comparison.
 
-1. **Keep AI Home Finder Label (line 885-886):**
-   - Already says "AI Home Finder" - confirm this is the label user wants to keep
-   - If user means "AI Home Matchmaker", change label text
+---
 
-2. **Add Reelly-Style Visual Elements:**
-   - Add color-coded dots next to sale status options (Announced: Pink, Pre-sale: Green, Start: Yellow, On Sale: Blue, Sold Out: Red)
-   - Consider adding payment plan percentage slider (0-100%)
-   - These match the memory note `ui/filter-and-map-reelly-parity-v1`
+## Task 4 — AI Home Finder Label + Title Colors (Purple Label + White Title)
 
-### Phase 6: Remove Duplicate Footers from Role Dashboards
+### Current Issue
+- Lines 509-523 in `src/pages/Index.tsx`:
+  - The badge text says "AI-Powered" with purple styling (correct)
+  - The title "AI Home Finder" (line 519) uses `text-purple-600` (should be WHITE)
+  - The issue: Title is purple, not white as requested
 
-**Files to Modify:**
-- `src/pages/InvestorDashboard.tsx` (line 834: `<Footer />`)
-- `src/pages/BrokerPartnerDashboard.tsx` (check for Footer import)
+### Required Fix
+**File:** `src/pages/Index.tsx`
 
-1. **Remove `<Footer />` from these role dashboards:**
-   - They're wrapped by `MainLayoutWrapper` which already provides the footer
-   - Delete the `<Footer />` component usage and imports
+1. Change line 518-523 from:
+```tsx
+<h2 
+  className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide text-purple-600 group-hover:text-purple-500 transition-colors" 
+  style={{ fontFamily: "Poppins, sans-serif" }}
+>
+  {t('hero.aiFinder')}
+</h2>
+```
+to:
+```tsx
+<h2 
+  className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide text-white group-hover:text-zinc-100 transition-colors" 
+  style={{ fontFamily: "Poppins, sans-serif" }}
+>
+  {t('hero.aiFinder')}
+</h2>
+```
+
+2. Add "Powered by JBJ Global Real Estate" text after the description (after line 528):
+```tsx
+<p className="text-zinc-500 text-xs mt-3">
+  Powered by JBJ Global Real Estate
+</p>
+```
+
+Note: The white background card makes white text invisible. Need to change the card background from white to a dark/gradient background OR keep purple title for contrast. Recommend keeping the WHITE card and making the title BLACK instead for readability, with the badge being PURPLE. Let me reconsider...
+
+Actually, looking at the current layout:
+- Card has white background (`bg-white`)
+- Purple badge is correct
+- Title should contrast with white background
+
+If user wants WHITE title, the card background needs to be DARK. I'll update the card to use a dark/black gradient background:
+
+**Updated approach for line 502-506:**
+```tsx
+<div 
+  className="relative z-10 bg-gradient-to-br from-zinc-900 via-black to-zinc-800 rounded-2xl px-8 md:px-12 py-6 md:py-8 border-2 border-purple-400/40"
+  style={{
+    boxShadow: '0 0 40px rgba(147,51,234,0.3), 0 0 80px rgba(147,51,234,0.15), 0 20px 50px rgba(0,0,0,0.3)'
+  }}
+>
+```
+
+And update description text color from `text-zinc-600` to `text-zinc-300` for readability on dark background.
+
+---
+
+## Task 5 — "Unlock Your Investment Edge" Book Section (Layer Must Not Cover Header)
+
+### Current Issue
+- Lines 1780-1782 in `src/pages/MarketReport.tsx`: The hero section uses `jj-hero-fullscreen` class which makes it 100vh
+- The colored layer starts at `inset-0` which covers from the very top, including the header area
+
+### Required Fix
+**File:** `src/pages/MarketReport.tsx`
+
+Change line 1782 from:
+```tsx
+<div className="absolute inset-0 mx-0.5 md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl md:rounded-3xl" />
+```
+to:
+```tsx
+<div className="absolute inset-x-0 bottom-0 top-20 md:top-24 mx-0.5 md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl md:rounded-3xl" />
+```
+
+This makes the layer start at `top-20 md:top-24` (approximately 80px on mobile, 96px on desktop) to stay below the header.
+
+---
+
+## Task 6 — Book Section Primary Buttons (Download Buttons Must Match Primary System)
+
+### Current Issue
+- Line 1934-1948 in `src/pages/MarketReport.tsx`: "Download Your Free Book Now" button uses `<Button variant="primary">` - CORRECT
+- Line 2010-2018: "Download Book Now" button also uses `<Button variant="primary">` - CORRECT
+- Line 2101-2118: The form submit button uses custom inline styles instead of the Button component:
+```tsx
+className="w-full h-14 bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-black font-semibold text-base rounded-xl..."
+```
+
+### Required Fix
+**File:** `src/pages/MarketReport.tsx`
+
+Change lines 2101-2118 from custom styled button to proper Button component:
+```tsx
+<Button
+  onClick={handleSubmit}
+  disabled={!isValid || isSubmitting}
+  variant="primary"
+  size="lg"
+  className="w-full h-14"
+>
+  {isSubmitting ? (
+    <>
+      <div className="w-5 h-5 mr-2 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+      Processing...
+    </>
+  ) : (
+    <>
+      <Unlock className="w-5 h-5 mr-2" />
+      Unlock & Download Now
+      <ArrowUpRight className="w-5 h-5 ml-2" />
+    </>
+  )}
+</Button>
+```
+
+---
+
+## Task 7 — Book Section Layer Coverage (Must Cover All Required Blocks)
+
+### Current Issue
+- The champagne gradient layer (line 1782) only covers the hero section
+- The "Welcome Back", "What You'll Receive", "Created By" sections (lines 1990-2166) have individual card backgrounds but the overall section has black background
+
+### Required Fix
+**File:** `src/pages/MarketReport.tsx`
+
+Wrap the main content section (lines 1990-2168) with a full-width champagne layer background:
+
+Change line 1991 from:
+```tsx
+<main className="container mx-auto px-4 py-16">
+```
+to:
+```tsx
+<main className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+  <div className="container mx-auto px-4">
+```
+
+And add closing `</div>` before `</main>` (before line 2168).
+
+This creates one continuous champagne background covering:
+- A) Welcome Back (returning user section)
+- B) What You'll Receive
+- C) Created By / Brand Box
+- D) The form and all cards
+
+---
+
+## Files to Modify
+
+| File | Tasks |
+|------|-------|
+| `src/pages/Index.tsx` | Tasks 1, 3, 4 |
+| `src/components/home/ServicesGrid.tsx` | Task 2 |
+| `src/pages/MarketReport.tsx` | Tasks 5, 6, 7 |
 
 ---
 
 ## Technical Details
 
-### Files to Modify
+### Task 1 Changes (Index.tsx lines 440, 462)
+- Replace `from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]` with `from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]`
+- Also update `bg-gradient-to-br` to `bg-gradient-to-r` to match other cards
 
-| File | Changes |
-|------|---------|
-| `src/pages/MyDashboard.tsx` | Improve layout, add role-based content, fix grid spacing |
-| `src/components/dashboard/QuickActions.tsx` | Fix overlapping, add role-aware actions, improve responsiveness |
-| `src/pages/Auth.tsx` | Change dashboard navigation from "/" to "/my-dashboard" |
-| `src/components/home/HeroSearchBar.tsx` | Fix border radius, remove dots from placeholder, add sale status dots |
-| `src/pages/InvestorDashboard.tsx` | Remove `<Footer />` import and usage |
-| `src/pages/BrokerPartnerDashboard.tsx` | Remove `<Footer />` if present |
+### Task 4 Changes (Index.tsx lines 502-528)
+- Change card from `bg-white` to `bg-gradient-to-br from-zinc-900 via-black to-zinc-800`
+- Change title from `text-purple-600` to `text-white`
+- Change description from `text-zinc-600` to `text-zinc-300`
+- Add "Powered by JBJ Global Real Estate" in `text-zinc-500 text-xs`
 
-### UI Compliance
-- All changes follow existing approved UI system (champagne gradients, gold accents, Layer 1/2/3)
-- No new color system introduced
-- Primary buttons remain consistent
-- Responsive breakpoints maintained
-
-### Specific Code Changes
-
-**HeroSearchBar.tsx - Border Fix (line 616):**
-```tsx
-// Current
-<div className="flex items-center bg-white/10 backdrop-blur-md border border-white/30 rounded-xl overflow-hidden w-full max-w-4xl">
-
-// The issue is the input container on the left doesn't have rounded styling
-// The container has rounded-xl but overflow-hidden should handle clipping
-// Need to ensure the Search button's rounded-none doesn't interfere
-```
-
-**HeroSearchBar.tsx - Placeholder Fix (line 622):**
-```tsx
-// Current
-placeholder="Area, project or community..."
-
-// Fixed
-placeholder="Area, project or community"
-```
-
-**Auth.tsx - Navigation Fix (lines 233-239):**
-```tsx
-// Current
-onClick={() => navigate("/")}
-
-// Fixed - navigate to role-based dashboard
-onClick={() => navigate("/my-dashboard")}
-```
-
-**QuickActions.tsx - Grid Fix (line 76):**
-```tsx
-// Current
-<div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-
-// Fixed with better spacing
-<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-```
+### Task 5 Changes (MarketReport.tsx line 1782)
+- Add `top-20 md:top-24` to push layer below header
+- Change `inset-0` to `inset-x-0 bottom-0 top-20 md:top-24`
 
 ---
 
 ## Deliverables
 
-1. Fixed My Dashboard with:
-   - No overlapping Quick Actions
-   - Role-based content display
-   - Premium card layout
-   - All previously missing features restored
+### Task Checklist
+- [ ] Task 1: Hub cards in gold/champagne
+- [ ] Task 2: Services cards use primary buttons
+- [ ] Task 3: AI Home Finder centered with equal spacing
+- [ ] Task 4: Purple label + white title + "Powered by" text
+- [ ] Task 5: Layer starts below header
+- [ ] Task 6: Download buttons use primary system
+- [ ] Task 7: Continuous layer covers all blocks
 
-2. Fixed Auth flow:
-   - "Continue to Dashboard" properly navigates to user's dashboard
+### Screenshots Required
+1. Hub cards matching gold tone
+2. All CTA buttons in primary style
+3. AI Home Finder centered
+4. AI Home Finder label/title colors + "Powered by" text
+5. Book section with header visible
+6. Download buttons in primary style
+7. Full layer coverage on book section
 
-3. Fixed Search Bar:
-   - Consistent rounded corners on both left and right
-   - No ellipsis in placeholder text
-
-4. Filter dialog:
-   - AI Home Finder label preserved
-   - Sale status color dots added (Reelly-style)
-
-5. No duplicate footers on any dashboard page
+### Confirmation
+- No new UI system added
+- All changes match existing approved UI (colors, card style, primary buttons, spacing)
+- Using existing Button component with variant="primary"
 
