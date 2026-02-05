@@ -6141,8 +6141,6 @@ export type Database = {
       employee_salaries: {
         Row: {
           bank_account_encrypted: string | null
-          bank_account_number: string | null
-          bank_iban: string | null
           bank_iban_encrypted: string | null
           bank_name: string | null
           base_salary: number
@@ -6161,8 +6159,6 @@ export type Database = {
         }
         Insert: {
           bank_account_encrypted?: string | null
-          bank_account_number?: string | null
-          bank_iban?: string | null
           bank_iban_encrypted?: string | null
           bank_name?: string | null
           base_salary?: number
@@ -6181,8 +6177,6 @@ export type Database = {
         }
         Update: {
           bank_account_encrypted?: string | null
-          bank_account_number?: string | null
-          bank_iban?: string | null
           bank_iban_encrypted?: string | null
           bank_name?: string | null
           base_salary?: number
