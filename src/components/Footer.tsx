@@ -458,7 +458,7 @@ const Footer = () => {
           <div 
             className="w-full max-w-7xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden relative"
             style={{
-              background: 'linear-gradient(165deg, rgba(12,12,14,0.99) 0%, rgba(8,8,10,1) 40%, rgba(4,4,6,1) 100%)',
+              background: 'linear-gradient(165deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,1) 100%)',
               boxShadow: `
                 0 50px 100px -30px rgba(0,0,0,0.98),
                 0 30px 60px -20px rgba(0,0,0,0.9),
@@ -823,7 +823,7 @@ const Footer = () => {
           <div 
             className="w-full max-w-7xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden relative"
             style={{
-              background: 'linear-gradient(165deg, rgba(12,12,14,0.99) 0%, rgba(8,8,10,1) 40%, rgba(4,4,6,1) 100%)',
+              background: 'linear-gradient(165deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,1) 100%)',
               boxShadow: `
                 0 50px 100px -30px rgba(0,0,0,0.98),
                 0 30px 60px -20px rgba(0,0,0,0.9),
@@ -871,50 +871,26 @@ const Footer = () => {
 
           <div className="relative p-5 sm:p-8 md:p-10 lg:p-12">
             {/* Legal Disclaimer Section */}
-            <div className="text-center mb-6 sm:mb-8">
-              {/* Decorative Legal Emblem */}
-              <div className="flex justify-center mb-4 sm:mb-6">
-                <div 
-                  className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center relative"
-                  style={{
-                    background: 'linear-gradient(145deg, rgba(200,167,102,0.2) 0%, rgba(200,167,102,0.08) 100%)',
-                    boxShadow: '0 8px 32px -8px rgba(200,167,102,0.4), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.2)',
-                    border: '1px solid rgba(200,167,102,0.4)',
-                  }}
-                >
-                  <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
-                  <span 
-                    className="text-2xl sm:text-3xl md:text-4xl font-bold relative"
-                    style={{
-                      background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 40%, #D4AF37 60%, #C8A766 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      filter: 'drop-shadow(0 2px 4px rgba(200,167,102,0.5))',
-                    }}
-                  >©</span>
-                </div>
-              </div>
-              
+            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8 text-center mb-6 sm:mb-8">
               <h4 
                 className="font-bold text-base sm:text-lg md:text-xl uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-5"
                 style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #F5E6C8 30%, #D4AF37 50%, #F5E6C8 70%, #FFFFFF 100%)',
+                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
-                  filter: 'drop-shadow(0 2px 10px rgba(200,167,102,0.4))',
                 }}
               >
-                Legal Disclaimer
+                ✦ Legal Disclaimer ✦
               </h4>
               
-              <p className="text-zinc-300 text-xs sm:text-sm md:text-base leading-relaxed mb-4 sm:mb-5 px-2 max-w-3xl mx-auto">
-                <span className="text-white font-semibold">JBJ Global Real Estate</span> is a Dubai mainland real estate brokerage licensed for Buy, Sell, and Rent transactions across the UAE. 
+              <p className="text-zinc-700 text-xs sm:text-sm md:text-base leading-relaxed mb-4 sm:mb-5 max-w-3xl mx-auto">
+                <span className="text-zinc-900 font-semibold">JBJ Global Real Estate</span> is a Dubai mainland real estate brokerage licensed for Buy, Sell, and Rent transactions across the UAE. 
                 For legal, mortgage, visa, and corporate support, we can introduce you to independent, licensed partners. 
                 Clients contract directly with partners under the partner's own terms and licence.
               </p>
               
               {/* English Legal Line */}
-              <p className="text-zinc-200 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 font-medium px-2 max-w-3xl mx-auto">
+              <p className="text-zinc-600 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 font-medium max-w-3xl mx-auto">
                 Licensed Real Estate Brokerage — Buy, Sell, Rent (Dubai Mainland). Operated by <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate L.L.C S.O.C.</Link>
                 <FounderContent fallback={null}>
                   {" "}Owned & led by <Link to="/founder" className="text-gold hover:underline font-semibold">Jane Bou Jaoude (جاين بو جودة)</Link>, Founder & CEO.
@@ -922,51 +898,42 @@ const Footer = () => {
               </p>
               
               {/* Arabic Disclaimer */}
-              <p className="text-zinc-400 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 px-2 max-w-3xl mx-auto" dir="rtl">
+              <p className="text-zinc-500 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 max-w-3xl mx-auto" dir="rtl">
                 جي بي جي للعقارات هي وساطة عقارية مرخصة في دبي للبيع والشراء والإيجار. للخدمات القانونية أو التمويل العقاري أو التأشيرات أو الخدمات المؤسسية، يمكننا ربطك بشركاء مستقلين ومرخصين. يتم التعاقد مباشرة بين العميل والشريك وفق ترخيصه وشروطه الخاصة.
               </p>
               
               {/* Arabic Legal Line */}
-              <p className="text-zinc-400 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 px-2 max-w-3xl mx-auto" dir="rtl">
+              <p className="text-zinc-500 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 max-w-3xl mx-auto" dir="rtl">
                 وساطة عقارية مرخصة للبيع والشراء والإيجار في دبي (البر الرئيسي). يتم تشغيل الموقع من قبل JBJ Global Real Estate L.L.C S.O.C.
               </p>
               
-              <p className="text-zinc-400 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-5 sm:mb-6 px-2 max-w-3xl mx-auto">
+              <p className="text-zinc-500 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-5 sm:mb-6 max-w-3xl mx-auto">
                 All website content, branding, designs, and software are protected intellectual property of 
                 <FounderContent fallback={<Link to="/about" className="text-gold hover:underline font-semibold"> JBJ Global Real Estate</Link>}>
                   <Link to="/founder" className="text-gold hover:underline font-semibold"> Jane Bou Jaoude (جاين بو جودة)</Link> and <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link>
                 </FounderContent>. Unauthorized copying, reuse, mirroring, or reproduction is prohibited.
               </p>
               
-              {/* Premium unified legal badge - ONE BOX with all info */}
+              {/* Premium unified legal badge */}
               <div className="flex items-center justify-center">
                 <div 
-                  className="px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-xl sm:rounded-2xl relative overflow-hidden"
+                  className="px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 rounded-xl relative overflow-hidden bg-zinc-900/90 border border-gold/40"
                   style={{
-                    background: 'linear-gradient(145deg, rgba(45,45,48,0.95) 0%, rgba(28,28,31,0.98) 100%)',
-                    boxShadow: '0 12px 35px -10px rgba(0,0,0,0.7), 0 0 0 1px rgba(200,167,102,0.35), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.3)',
+                    boxShadow: '0 8px 25px -8px rgba(0,0,0,0.5)',
                   }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-b from-gold/5 to-transparent rounded-xl sm:rounded-2xl pointer-events-none" />
                   <span 
-                    className="font-bold tracking-wider relative z-10 text-sm sm:text-base md:text-lg"
+                    className="font-bold tracking-wider relative z-10 text-xs sm:text-sm md:text-base"
                     style={{
                       background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
                       WebkitBackgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
-                      filter: 'drop-shadow(0 0 15px rgba(200,167,102,0.4))',
                     }}
                   >
                     JBJ Global Real Estate &nbsp;|&nbsp; All Rights Reserved &nbsp;|&nbsp; © {currentYear}
                   </span>
                 </div>
               </div>
-            </div>
-
-            {/* Divider between Legal and Google Review */}
-            <div className="relative h-[2px] mb-6 sm:mb-8 max-w-lg mx-auto">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent blur-sm" />
             </div>
 
             {/* Google My Business Link */}
