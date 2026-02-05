@@ -17,7 +17,7 @@ import {
   Briefcase,
 } from "lucide-react";
 import { useBrokerEducation, EducationBook } from "@/hooks/useBrokerEducation";
-import { BookCard, BookDetailModal } from "@/components/broker-education";
+import { Book3DCard, BookDetailModal } from "@/components/broker-education";
 import Footer from "@/components/Footer";
 
 const fadeInUp = {
@@ -261,10 +261,10 @@ const BrokerEducation = () => {
                       </div>
                     </div>
 
-                    {/* Books Grid */}
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {/* Books Grid - 3D Cards */}
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                       {path.bookData.map((book, bookIndex) => (
-                        <BookCard
+                        <Book3DCard
                           key={book.id}
                           book={book}
                           progress={progressMap[book.id]}
