@@ -31,6 +31,70 @@ interface ReellyCoverImage {
   };
 }
 
+// Extended image type for gallery
+interface ReellyImage {
+  url: string;
+  alt_text?: string;
+  type?: string;
+  metadata?: {
+    mime?: string;
+    size?: number;
+    width?: number;
+    height?: number;
+  };
+}
+
+// Video review type
+interface ReellyVideoReview {
+  url: string;
+  title?: string;
+  thumbnail_url?: string;
+}
+
+// Document type for brochures, floor plans, etc.
+interface ReellyDocument {
+  url: string;
+  name?: string;
+  type?: string;
+  file_type?: string;
+}
+
+// Unit type with pricing
+interface ReellyUnit {
+  id?: number;
+  type?: string;
+  name?: string;
+  bedrooms?: number;
+  bathrooms?: number;
+  size_min?: number;
+  size_max?: number;
+  size?: number;
+  price_from?: number;
+  price_to?: number;
+  price?: number;
+  available?: number;
+  count?: number;
+}
+
+// Floor plan type
+interface ReellyFloorPlan {
+  id?: number;
+  type?: string;
+  name?: string;
+  url: string;
+  image_url?: string;
+  label?: string;
+  bedrooms?: number;
+}
+
+// Amenity type
+interface ReellyAmenity {
+  id?: number;
+  name: string;
+  icon?: string;
+  category?: string;
+}
+
 interface ReellyProject {
   id: number;
   name: string;
@@ -55,10 +119,32 @@ interface ReellyProject {
   max_size: number;
   price_currency: string;
   area_unit: string;
-  video_reviews: any[];
+  video_reviews: ReellyVideoReview[];
   is_published: boolean;
   cover_image: ReellyCoverImage | null;
   updated_at: string;
+  // NEW: Extended fields from detail endpoint
+  images?: ReellyImage[];
+  gallery?: ReellyImage[];
+  documents?: ReellyDocument[];
+  brochures?: ReellyDocument[];
+  floor_plans?: ReellyFloorPlan[];
+  units?: ReellyUnit[];
+  unit_types?: ReellyUnit[];
+  amenities?: (ReellyAmenity | string)[];
+  facilities?: (ReellyAmenity | string)[];
+  features?: string[];
+  highlights?: string[];
+  faqs?: Array<{ question: string; answer: string }>;
+  payment_plan?: {
+    name?: string;
+    description?: string;
+    milestones?: Array<{ percentage: number; description: string; date?: string }>;
+  };
+  // ROI/Investment data
+  roi_estimate?: number;
+  rental_yield_estimate?: number;
+  service_charge?: number;
 }
 
 interface ReellyResponse {
@@ -66,6 +152,11 @@ interface ReellyResponse {
   next: string | null;
   previous: string | null;
   results: ReellyProject[];
+}
+
+// Detailed project response (single project endpoint)
+interface ReellyDetailResponse extends ReellyProject {
+  // All extended fields included
 }
 
 function generateSlug(name: string, developer: string): string {
@@ -149,12 +240,43 @@ function getEmirateFromRegion(region: string): string {
 }
 
 // ============================================================
-// NEW: Extract payment plan from description/overview text
+// NEW: Extract payment plan from description/overview or API data
 // ============================================================
-function extractPaymentPlanFromOverview(overview: string | null): {
+function extractPaymentPlanFromOverview(overview: string | null, apiPaymentPlan?: ReellyProject['payment_plan']): {
   payment_plan: string | null;
   payment_breakdown: Record<string, string> | null;
 } {
+  // First check if API provides payment plan data
+  if (apiPaymentPlan?.milestones && apiPaymentPlan.milestones.length > 0) {
+    const breakdown: Record<string, string> = {};
+    let planSummary = '';
+    
+    for (const milestone of apiPaymentPlan.milestones) {
+      const desc = milestone.description?.toLowerCase() || '';
+      if (desc.includes('booking') || desc.includes('down') || desc.includes('initial')) {
+        breakdown.down_payment = `${milestone.percentage}%`;
+      } else if (desc.includes('construction') || desc.includes('during')) {
+        breakdown.during_construction = `${milestone.percentage}%`;
+      } else if (desc.includes('handover') || desc.includes('completion')) {
+        breakdown.on_completion = `${milestone.percentage}%`;
+      } else if (desc.includes('post')) {
+        breakdown.post_handover = `${milestone.percentage}%`;
+      }
+    }
+    
+    // Build plan summary
+    const downPayment = parseInt(breakdown.down_payment || '0');
+    const onCompletion = parseInt(breakdown.on_completion || '0');
+    if (downPayment && onCompletion) {
+      planSummary = `${100 - onCompletion}/${onCompletion}`;
+    }
+    
+    return {
+      payment_plan: planSummary || apiPaymentPlan.name || null,
+      payment_breakdown: Object.keys(breakdown).length > 0 ? breakdown : null,
+    };
+  }
+
   if (!overview) return { payment_plan: null, payment_breakdown: null };
   
   // Pattern 1: "60/40", "70/30", "80/20" payment plan
@@ -207,6 +329,179 @@ function extractPaymentPlanFromOverview(overview: string | null): {
   }
   
   return { payment_plan: null, payment_breakdown: null };
+}
+
+// ============================================================
+// NEW: Extract all gallery images from project
+// ============================================================
+function extractGalleryImages(project: ReellyProject): Array<{ url: string; alt_text: string; display_order: number }> {
+  const images: Array<{ url: string; alt_text: string; display_order: number }> = [];
+  const seenUrls = new Set<string>();
+  let order = 0;
+
+  // Add cover image first
+  if (project.cover_image?.url && !seenUrls.has(project.cover_image.url)) {
+    images.push({
+      url: project.cover_image.url,
+      alt_text: `${project.name} - Cover Image`,
+      display_order: order++,
+    });
+    seenUrls.add(project.cover_image.url);
+  }
+
+  // Add gallery images
+  const galleryImages = project.images || project.gallery || [];
+  for (const img of galleryImages) {
+    const url = typeof img === 'string' ? img : img.url;
+    if (url && !seenUrls.has(url)) {
+      images.push({
+        url,
+        alt_text: (typeof img === 'object' && img.alt_text) || `${project.name} - Gallery Image ${order}`,
+        display_order: order++,
+      });
+      seenUrls.add(url);
+    }
+  }
+
+  return images;
+}
+
+// ============================================================
+// NEW: Extract video URLs
+// ============================================================
+function extractVideos(project: ReellyProject): { video_url: string | null; video_urls: string[] } {
+  const videoUrls: string[] = [];
+  
+  if (project.video_reviews && Array.isArray(project.video_reviews)) {
+    for (const video of project.video_reviews) {
+      const url = typeof video === 'string' ? video : video?.url;
+      if (url && !videoUrls.includes(url)) {
+        videoUrls.push(url);
+      }
+    }
+  }
+
+  return {
+    video_url: videoUrls[0] || null,
+    video_urls: videoUrls,
+  };
+}
+
+// ============================================================
+// NEW: Extract documents (brochures, floor plans PDFs, etc.)
+// ============================================================
+function extractDocuments(project: ReellyProject): Array<{ url: string; name: string; type: string }> {
+  const docs: Array<{ url: string; name: string; type: string }> = [];
+  const seenUrls = new Set<string>();
+
+  // Add documents array
+  const documents = project.documents || project.brochures || [];
+  for (const doc of documents) {
+    const url = typeof doc === 'string' ? doc : doc.url;
+    const name = typeof doc === 'object' ? (doc.name || doc.type || 'Document') : 'Brochure';
+    const type = typeof doc === 'object' ? (doc.type || doc.file_type || 'brochure') : 'brochure';
+    
+    if (url && !seenUrls.has(url)) {
+      docs.push({ url, name, type });
+      seenUrls.add(url);
+    }
+  }
+
+  return docs;
+}
+
+// ============================================================
+// NEW: Extract floor plans
+// ============================================================
+function extractFloorPlans(project: ReellyProject): Array<{ type: string; url: string; label: string; bedrooms?: number }> {
+  const plans: Array<{ type: string; url: string; label: string; bedrooms?: number }> = [];
+  const seenUrls = new Set<string>();
+
+  const floorPlans = project.floor_plans || [];
+  for (const plan of floorPlans) {
+    const url = plan.url || plan.image_url;
+    if (url && !seenUrls.has(url)) {
+      plans.push({
+        type: plan.type || plan.name || 'floor_plan',
+        url,
+        label: plan.label || plan.name || `Floor Plan`,
+        bedrooms: plan.bedrooms,
+      });
+      seenUrls.add(url);
+    }
+  }
+
+  return plans;
+}
+
+// ============================================================
+// NEW: Extract amenities list
+// ============================================================
+function extractAmenities(project: ReellyProject): string[] {
+  const amenities: string[] = [];
+  const seenNames = new Set<string>();
+
+  // Get amenities from multiple possible fields
+  const sources = [
+    project.amenities,
+    project.facilities,
+    project.features,
+  ];
+
+  for (const source of sources) {
+    if (!source) continue;
+    
+    for (const item of source) {
+      const name = typeof item === 'string' ? item : item?.name;
+      if (name && !seenNames.has(name.toLowerCase())) {
+        amenities.push(name);
+        seenNames.add(name.toLowerCase());
+      }
+    }
+  }
+
+  return amenities;
+}
+
+// ============================================================
+// NEW: Extract unit types with pricing
+// ============================================================
+function extractUnitTypes(project: ReellyProject): Array<{
+  type: string;
+  bedrooms?: number;
+  bathrooms?: number;
+  size_min?: number;
+  size_max?: number;
+  price_from?: number;
+  price_to?: number;
+  available?: number;
+}> {
+  const units: Array<{
+    type: string;
+    bedrooms?: number;
+    bathrooms?: number;
+    size_min?: number;
+    size_max?: number;
+    price_from?: number;
+    price_to?: number;
+    available?: number;
+  }> = [];
+
+  const unitData = project.units || project.unit_types || [];
+  for (const unit of unitData) {
+    units.push({
+      type: unit.type || unit.name || 'Unit',
+      bedrooms: unit.bedrooms,
+      bathrooms: unit.bathrooms,
+      size_min: unit.size_min || unit.size,
+      size_max: unit.size_max || unit.size,
+      price_from: unit.price_from || unit.price,
+      price_to: unit.price_to || unit.price,
+      available: unit.available || unit.count,
+    });
+  }
+
+  return units;
 }
 
 // ============================================================
@@ -272,8 +567,7 @@ async function getOrCreateDeveloper(
   return newDev?.id || null;
 }
 
-// Auto-approval removed - all projects require manual review
-
+// Enhanced mapping function with full data extraction
 function mapReellyToImport(project: ReellyProject, areaId: string | null, developerId: string | null) {
   const slug = generateSlug(project.name, project.developer);
   
@@ -289,15 +583,23 @@ function mapReellyToImport(project: ReellyProject, areaId: string | null, develo
     handoverDate = project.completion_date;
   }
 
-  // Extract images as JSONB array matching table schema
-  const images: Array<{ url: string; alt_text: string; display_order: number }> = [];
-  if (project.cover_image?.url) {
-    images.push({
-      url: project.cover_image.url,
-      alt_text: `${project.name} - Cover Image`,
-      display_order: 0,
-    });
-  }
+  // Extract all gallery images
+  const images = extractGalleryImages(project);
+
+  // Extract videos
+  const { video_url, video_urls } = extractVideos(project);
+
+  // Extract documents
+  const documents = extractDocuments(project);
+
+  // Extract floor plans
+  const floorPlans = extractFloorPlans(project);
+
+  // Extract amenities
+  const amenities = extractAmenities(project);
+
+  // Extract unit types
+  const unitTypes = extractUnitTypes(project);
 
   // Build location string
   const locationParts: string[] = [];
@@ -309,17 +611,6 @@ function mapReellyToImport(project: ReellyProject, areaId: string | null, develo
 
   // Use external_id in source_url for tracking
   const externalId = `reelly_${project.id}`;
-
-  // Extract video URL from video_reviews if available
-  let videoUrl: string | null = null;
-  if (project.video_reviews && Array.isArray(project.video_reviews) && project.video_reviews.length > 0) {
-    const firstVideo = project.video_reviews[0];
-    if (typeof firstVideo === 'string') {
-      videoUrl = firstVideo;
-    } else if (firstVideo?.url) {
-      videoUrl = firstVideo.url;
-    }
-  }
 
   // Map construction status to progress percentage estimate
   let constructionProgress: number | null = null;
@@ -334,18 +625,31 @@ function mapReellyToImport(project: ReellyProject, areaId: string | null, develo
   // Get area name from district
   const areaName = project.location?.district || null;
 
-  // Extract payment plan from overview/description
+  // Extract payment plan from overview/description or API data
   const overview = project.overview || project.short_description || '';
-  const { payment_plan, payment_breakdown } = extractPaymentPlanFromOverview(overview);
+  const { payment_plan, payment_breakdown } = extractPaymentPlanFromOverview(overview, project.payment_plan);
+
+  // Build highlights from various sources
+  const highlights: string[] = [];
+  if (project.highlights) {
+    highlights.push(...project.highlights);
+  }
+  if (project.features && project.features.length > 0) {
+    // Take first 5 features as highlights if no explicit highlights
+    if (highlights.length === 0) {
+      highlights.push(...project.features.slice(0, 5));
+    }
+  }
 
   return {
     name: project.name,
     slug: `${slug}-${project.id}`, // Ensure uniqueness with ID suffix
     developer_name: project.developer,
-    developer_id: developerId, // NEW: Link to developers table
+    developer_id: developerId, // Link to developers table
     location: locationStr,
     emirate: getEmirateFromRegion(project.location?.region),
     description: project.overview || project.short_description || null,
+    short_description: project.short_description || null,
     price_from: project.min_price > 0 ? project.min_price : null,
     price_to: project.max_price > 0 ? project.max_price : null,
     size_min: project.min_size > 0 ? project.min_size : null,
@@ -354,25 +658,54 @@ function mapReellyToImport(project: ReellyProject, areaId: string | null, develo
     handover_date: handoverDate,
     handover_display: project.completion_date || null, // Human-readable like "DEC 2024"
     status_label: mapSaleStatus(project.sale_status) || mapConstructionStatus(project.construction_status),
+    construction_status: mapConstructionStatus(project.construction_status),
+    sale_status: mapSaleStatus(project.sale_status),
+    
+    // Enhanced images array with full gallery
     images: images.length > 0 ? images : null,
+    
     // Geo coordinates for map display
     latitude: project.location?.latitude || null,
     longitude: project.location?.longitude || null,
-    // Additional Reelly fields
+    
+    // Unit and building information
     total_units: project.units_count > 0 ? project.units_count : null,
+    building_count: project.building_count > 0 ? project.building_count : null,
     construction_start_date: project.construction_start_date || null,
     construction_progress: constructionProgress,
-    video_url: videoUrl,
-    // Payment plan extracted from overview
+    
+    // Enhanced video support
+    video_url: video_url,
+    video_urls: video_urls.length > 0 ? video_urls : null,
+    
+    // Payment plan extracted from overview or API
     payment_plan: payment_plan,
     payment_breakdown: payment_breakdown,
+    
     // Area reference
     area_id: areaId,
     area_name: areaName,
-    // Use source_url to store external_id for deduplication
+    
+    // NEW: Enhanced data fields
+    documents: documents.length > 0 ? documents : null,
+    floor_plan_types: floorPlans.length > 0 ? floorPlans : null,
+    amenities: amenities.length > 0 ? amenities : null,
+    unit_types: unitTypes.length > 0 ? unitTypes : null,
+    highlights: highlights.length > 0 ? highlights : null,
+    faqs: project.faqs && project.faqs.length > 0 ? project.faqs : null,
+    
+    // Investment data
+    roi_estimate: project.roi_estimate || null,
+    rental_yield_estimate: project.rental_yield_estimate || null,
+    service_charge: project.service_charge || null,
+    
+    // Source tracking
     source_url: `https://reelly.io/project/${project.id}#${externalId}`,
-    // Clear review notes since Reelly data is structured
     review_notes: null,
+    
+    // Reelly-specific metadata
+    reelly_id: project.id,
+    source_updated_at: project.updated_at || null,
   };
 }
 
@@ -399,6 +732,32 @@ async function fetchProjectsPage(apiKey: string, url: string): Promise<ReellyRes
   }
 
   return await response.json();
+}
+
+// Fetch single project details
+async function fetchProjectDetail(apiKey: string, projectId: number): Promise<ReellyDetailResponse | null> {
+  const url = `https://api-reelly.up.railway.app/api/v2/clients/projects/${projectId}`;
+  console.log(`[Reelly API] Fetching detail: ${url}`);
+  
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "X-API-Key": apiKey,
+        "Accept": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      console.warn(`[Reelly API] Detail fetch failed for project ${projectId}: ${response.status}`);
+      return null;
+    }
+
+    return await response.json();
+  } catch (err) {
+    console.warn(`[Reelly API] Detail fetch error for project ${projectId}:`, err);
+    return null;
+  }
 }
 
 function assertValidCursorUrl(url: string) {
@@ -478,7 +837,7 @@ async function upsertArea(
 }
 
 // ============================================================
-// NEW: Bulk get or create developers - single query approach
+// Bulk get or create developers - single query approach
 // ============================================================
 async function bulkGetOrCreateDevelopers(
   supabase: ReturnType<typeof createClient>,
@@ -572,15 +931,18 @@ Deno.serve(async (req) => {
 
     // Parse request body for options
     let options: {
-      action?: "test" | "sync";
+      action?: "test" | "sync" | "fetch_details";
       limit?: number;
       cursor?: string | null;
+      project_ids?: number[];
+      fetch_details?: boolean;
       // legacy
       fullSync?: boolean;
     } = {
       action: "sync",
       limit: 100, // Increased default batch size for faster sync
       cursor: null,
+      fetch_details: false,
     };
     try {
       const body = await req.json();
@@ -604,8 +966,58 @@ Deno.serve(async (req) => {
             name: p.name,
             developer: p.developer,
             location: p.location?.district,
+            has_images: !!(p.images || p.gallery),
+            has_videos: !!(p.video_reviews?.length),
           })),
         }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Fetch details for specific projects
+    if (options.action === 'fetch_details' && options.project_ids?.length) {
+      const results = {
+        success: true,
+        processed: 0,
+        updated: 0,
+        errors: [] as string[],
+      };
+
+      for (const projectId of options.project_ids.slice(0, 50)) {
+        try {
+          const detail = await fetchProjectDetail(apiKey, projectId);
+          if (detail) {
+            // Update the project with detailed data
+            const { error } = await supabase
+              .from("pending_project_imports")
+              .update({
+                images: extractGalleryImages(detail),
+                documents: extractDocuments(detail),
+                floor_plan_types: extractFloorPlans(detail),
+                amenities: extractAmenities(detail),
+                unit_types: extractUnitTypes(detail),
+                video_urls: extractVideos(detail).video_urls,
+                updated_at: new Date().toISOString(),
+              })
+              .ilike("source_url", `%reelly_${projectId}%`);
+            
+            if (error) {
+              results.errors.push(`Project ${projectId}: ${error.message}`);
+            } else {
+              results.updated++;
+            }
+          }
+          results.processed++;
+          
+          // Rate limiting - 200ms delay between requests
+          await new Promise(resolve => setTimeout(resolve, 200));
+        } catch (err) {
+          results.errors.push(`Project ${projectId}: ${String(err)}`);
+        }
+      }
+
+      return new Response(
+        JSON.stringify(results),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -613,6 +1025,7 @@ Deno.serve(async (req) => {
     // Fetch ONE page per request to avoid timeouts; UI can loop using next_cursor.
     const limit = Math.min(Math.max(Number(options.limit ?? 100), 1), 200);
     const cursor = options.cursor ? String(options.cursor) : null;
+    const fetchDetails = options.fetch_details === true;
 
     const pageUrl = cursor ?? `${REELLY_API_BASE}?limit=${limit}`;
     assertValidCursorUrl(pageUrl);
@@ -626,6 +1039,19 @@ Deno.serve(async (req) => {
     // Process ALL projects (removed is_published filter to get full 1803)
     const projectsToProcess = projects;
     console.log(`[Reelly API] ${projectsToProcess.length} projects to process (all projects, no filter)`);
+
+    // If fetch_details is enabled, fetch detailed data for each project
+    let detailedProjects: ReellyProject[] = projectsToProcess;
+    if (fetchDetails) {
+      console.log(`[Reelly API] Fetching detailed data for ${projectsToProcess.length} projects...`);
+      detailedProjects = [];
+      for (const project of projectsToProcess) {
+        const detail = await fetchProjectDetail(apiKey, project.id);
+        detailedProjects.push(detail || project);
+        // Rate limiting
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+    }
 
     // Pre-fetch existing source_urls for O(1) lookup (optimization)
     const { data: existingRecords } = await supabase
@@ -643,13 +1069,13 @@ Deno.serve(async (req) => {
     console.log(`[Reelly API] Pre-fetched ${existingMap.size} existing Reelly records for dedup`);
 
     // PRE-FETCH: Get unique developer names and bulk create/get
-    const developerNames = projectsToProcess.map(p => p.developer).filter(Boolean);
+    const developerNames = detailedProjects.map(p => p.developer).filter(Boolean);
     const developerMap = await bulkGetOrCreateDevelopers(supabase, developerNames);
     console.log(`[Reelly API] Pre-fetched/created ${developerMap.size} developers`);
     
     // PRE-FETCH: Get unique areas and cache them
     const areaCache = new Map<string, string>();
-    const uniqueAreaSlugs = [...new Set(projectsToProcess.map(p => p.location?.district).filter(Boolean).map(d => generateAreaSlug(d!)))];
+    const uniqueAreaSlugs = [...new Set(detailedProjects.map(p => p.location?.district).filter(Boolean).map(d => generateAreaSlug(d!)))];
     if (uniqueAreaSlugs.length > 0) {
       const { data: existingAreas } = await supabase
         .from("areas")
@@ -669,7 +1095,7 @@ Deno.serve(async (req) => {
     let developersCreated = 0;
     const errors: string[] = [];
 
-    for (const project of projectsToProcess) {
+    for (const project of detailedProjects) {
       try {
         // Upsert area first and get its ID (uses cache)
         const areaId = await upsertArea(supabase, project.location, areaCache);
@@ -782,12 +1208,13 @@ Deno.serve(async (req) => {
         success: true,
         total_available: totalAvailable,
         page_fetched: projects.length,
-        page_processed: projectsToProcess.length,
+        page_processed: detailedProjects.length,
+        fetch_details_enabled: fetchDetails,
         inserted,
         updated,
         skipped,
         areas_created: areasCreated,
-        developers_linked: projectsToProcess.length - errors.length,
+        developers_linked: detailedProjects.length - errors.length,
         errors: errors.slice(0, 10),
         next_cursor: nextCursor,
         done: !nextCursor,

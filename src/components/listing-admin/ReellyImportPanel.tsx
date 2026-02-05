@@ -126,6 +126,23 @@ export function ReellyImportPanel() {
     isReconciled: boolean;
   } | null>(null);
   
+  // Fetch missing details state
+  const [isFetchingDetails, setIsFetchingDetails] = useState(false);
+  const [detailsFetchResult, setDetailsFetchResult] = useState<{
+    success: boolean;
+    processed?: number;
+    updated?: number;
+    remaining?: number;
+    failed?: number;
+    errors?: string[];
+    message?: string;
+    error?: string;
+  } | null>(null);
+  
+  // Full extraction state
+  const [isFullExtracting, setIsFullExtracting] = useState(false);
+  const [fullExtractionStep, setFullExtractionStep] = useState<string | null>(null);
+  
   // Developer sync state
   const [isSyncingDevs, setIsSyncingDevs] = useState(false);
   const [devSyncResult, setDevSyncResult] = useState<DevSyncResult | null>(null);
@@ -423,6 +440,144 @@ export function ReellyImportPanel() {
       toast.error(err.message || "Failed to sync areas");
     } finally {
       setIsSyncingAreas(false);
+    }
+  };
+
+  /**
+   * Fetch Missing Details - batch fetch gallery, docs, amenities for projects in queue
+   */
+  const handleFetchMissingDetails = async () => {
+    setIsFetchingDetails(true);
+    setDetailsFetchResult(null);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("reelly-fetch-details", {
+        body: { mode: "batch", batch_size: 50 },
+      });
+
+      if (error) throw error;
+
+      if (data?.success) {
+        setDetailsFetchResult(data);
+        if (data.updated > 0) {
+          toast.success(`Updated ${data.updated} projects with detailed data`);
+        } else if (data.remaining === 0) {
+          toast.success("All projects already have complete details!");
+        } else {
+          toast.info(data.message || "Fetch completed");
+        }
+      } else {
+        setDetailsFetchResult({ success: false, error: data?.error });
+        toast.error(data?.error || "Failed to fetch details");
+      }
+    } catch (err: any) {
+      console.error("Fetch details error:", err);
+      setDetailsFetchResult({ success: false, error: err.message });
+      toast.error(err.message || "Failed to fetch details");
+    } finally {
+      setIsFetchingDetails(false);
+    }
+  };
+
+  /**
+   * Test Details API - check if detail endpoint returns extra data
+   */
+  const handleTestDetailsApi = async () => {
+    setIsFetchingDetails(true);
+    setDetailsFetchResult(null);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("reelly-fetch-details", {
+        body: { mode: "test" },
+      });
+
+      if (error) throw error;
+
+      if (data?.success) {
+        setDetailsFetchResult(data);
+        if (data.has_detail) {
+          toast.success(`Detail API works! Test project has ${data.detail_fields?.images_count || 0} images, ${data.detail_fields?.amenities_count || 0} amenities`);
+        } else {
+          toast.info("Detail endpoint accessible but returned no extra data");
+        }
+      } else {
+        setDetailsFetchResult({ success: false, error: data?.error });
+        toast.error(data?.error || "Details API test failed");
+      }
+    } catch (err: any) {
+      console.error("Details API test error:", err);
+      setDetailsFetchResult({ success: false, error: err.message });
+      toast.error(err.message || "Failed to test details API");
+    } finally {
+      setIsFetchingDetails(false);
+    }
+  };
+
+  /**
+   * FULL EXTRACTION - Run all sync steps in sequence
+   */
+  const handleFullExtraction = async () => {
+    if (!confirm("🚀 FULL EXTRACTION\n\nThis will run all sync steps:\n1. Test API Connection\n2. Sync All Projects (1,805)\n3. Sync All Developers (549)\n4. Fetch Missing Details (gallery, docs, amenities)\n5. Extract Areas\n\nThis may take 5-10 minutes. Continue?")) {
+      return;
+    }
+
+    setIsFullExtracting(true);
+    setFullExtractionStep("testing");
+
+    try {
+      // Step 1: Test API
+      setFullExtractionStep("Step 1/5: Testing API connection...");
+      await handleTestApiConnection();
+      
+      if (apiConnected !== true) {
+        throw new Error("API connection failed. Please check your API key.");
+      }
+
+      // Step 2: Sync All Projects
+      setFullExtractionStep("Step 2/5: Syncing all projects...");
+      await handleSyncProjects(true);
+
+      // Step 3: Sync All Developers
+      setFullExtractionStep("Step 3/5: Syncing all developers...");
+      await handleSyncDevelopers("full");
+
+      // Step 4: Fetch Missing Details (run multiple batches)
+      setFullExtractionStep("Step 4/5: Fetching missing details...");
+      let remainingDetails = 999;
+      let detailBatches = 0;
+      const maxDetailBatches = 50; // Safety limit
+      
+      while (remainingDetails > 0 && detailBatches < maxDetailBatches) {
+        const { data } = await supabase.functions.invoke("reelly-fetch-details", {
+          body: { mode: "batch", batch_size: 50 },
+        });
+        
+        if (!data?.success) break;
+        remainingDetails = data.remaining || 0;
+        detailBatches++;
+        
+        setFullExtractionStep(`Step 4/5: Fetching details (batch ${detailBatches}, ${remainingDetails} remaining)...`);
+        
+        // Small delay between batches
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+
+      // Step 5: Extract Areas
+      setFullExtractionStep("Step 5/5: Extracting areas...");
+      await handleSyncAreas("extract_from_projects");
+
+      setFullExtractionStep("✅ Full extraction complete!");
+      toast.success("🎉 Full extraction complete! All 1,805 projects synced with complete data.");
+      
+      // Refresh counts
+      refreshCounts();
+
+    } catch (err: any) {
+      console.error("Full extraction error:", err);
+      setFullExtractionStep(`❌ Failed: ${err.message}`);
+      toast.error(err.message || "Full extraction failed");
+    } finally {
+      setIsFullExtracting(false);
     }
   };
 
@@ -1525,6 +1680,171 @@ export function ReellyImportPanel() {
               </AlertDescription>
             </Alert>
           )}
+        </CardContent>
+      </Card>
+
+      {/* Fetch Missing Details Section */}
+      <Card className="bg-gradient-to-br from-orange-50 to-amber-50 border-orange-200 shadow-lg">
+        <CardHeader>
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-orange-500">
+              <CloudDownload className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <CardTitle className="text-xl text-orange-900 flex items-center gap-2">
+                Fetch Missing Details
+                {detailsFetchResult?.remaining === 0 && <CheckCircle className="h-5 w-5 text-orange-500" />}
+              </CardTitle>
+              <CardDescription className="text-orange-700">
+                Fetch gallery images, documents, amenities, floor plans for existing projects
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Alert className="border-orange-300 bg-orange-50">
+            <Info className="h-4 w-4 text-orange-600" />
+            <AlertDescription className="text-orange-700">
+              After syncing projects, use this to fetch complete data from the detail endpoint 
+              (gallery images, videos, brochures, floor plans, amenities, unit types).
+            </AlertDescription>
+          </Alert>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <Button 
+              onClick={handleTestDetailsApi} 
+              disabled={isFetchingDetails}
+              variant="outline"
+              className="border-orange-300 text-orange-700 hover:bg-orange-50"
+            >
+              {isFetchingDetails ? (
+                <>
+                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                  Testing...
+                </>
+              ) : (
+                <>
+                  <Zap className="h-4 w-4 mr-2" />
+                  Test Details API
+                </>
+              )}
+            </Button>
+            <Button 
+              onClick={handleFetchMissingDetails} 
+              disabled={isFetchingDetails || apiConnected !== true}
+              className="bg-orange-600 hover:bg-orange-700"
+            >
+              {isFetchingDetails ? (
+                <>
+                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                  Fetching Details...
+                </>
+              ) : (
+                <>
+                  <Download className="h-4 w-4 mr-2" />
+                  Fetch Missing Details (Batch 50)
+                </>
+              )}
+            </Button>
+          </div>
+
+          {detailsFetchResult && detailsFetchResult.success && (
+            <div className="bg-white/80 rounded-xl p-4 border border-orange-200">
+              <h3 className="font-semibold text-zinc-900 mb-3">Details Fetch Results</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="bg-orange-50 rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-orange-900">{detailsFetchResult.processed || 0}</p>
+                  <p className="text-xs text-orange-600">Processed</p>
+                </div>
+                <div className="bg-emerald-50 rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-emerald-700">{detailsFetchResult.updated || 0}</p>
+                  <p className="text-xs text-emerald-600">Updated</p>
+                </div>
+                <div className="bg-red-50 rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-red-600">{detailsFetchResult.failed || 0}</p>
+                  <p className="text-xs text-red-500">Failed</p>
+                </div>
+                <div className="bg-blue-50 rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-blue-700">{detailsFetchResult.remaining || 0}</p>
+                  <p className="text-xs text-blue-600">Remaining</p>
+                </div>
+              </div>
+              {detailsFetchResult.remaining && detailsFetchResult.remaining > 0 && (
+                <p className="text-sm text-orange-700 mt-3">
+                  Click "Fetch Missing Details" again to process the next batch of {Math.min(50, detailsFetchResult.remaining)} projects.
+                </p>
+              )}
+            </div>
+          )}
+
+          {detailsFetchResult && !detailsFetchResult.success && (
+            <Alert className="border-red-300 bg-red-50">
+              <XCircle className="h-4 w-4 text-red-600" />
+              <AlertDescription className="text-red-700">
+                {detailsFetchResult.error || "Details fetch failed"}
+              </AlertDescription>
+            </Alert>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* FULL EXTRACTION - One Click to Rule Them All */}
+      <Card className="bg-gradient-to-br from-gold/30 to-champagne border-gold shadow-xl">
+        <CardHeader>
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-gold">
+              <Zap className="w-5 h-5 text-black" />
+            </div>
+            <div>
+              <CardTitle className="text-xl text-black flex items-center gap-2">
+                🚀 FULL EXTRACTION
+                {fullExtractionStep === "✅ Full extraction complete!" && <CheckCircle className="h-5 w-5 text-emerald-500" />}
+              </CardTitle>
+              <CardDescription className="text-zinc-700">
+                One-click to sync ALL 1,805 projects with complete data
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="bg-white/80 rounded-xl p-4 border border-gold/50">
+            <h4 className="font-semibold text-zinc-900 mb-2">This will run:</h4>
+            <ol className="list-decimal list-inside text-sm text-zinc-700 space-y-1">
+              <li>Test API Connection</li>
+              <li>Sync All Projects (~1,805)</li>
+              <li>Sync All Developers (~549)</li>
+              <li>Fetch Missing Details (gallery, docs, amenities)</li>
+              <li>Extract Areas from Projects</li>
+            </ol>
+            <p className="text-xs text-zinc-500 mt-3">Estimated time: 5-10 minutes</p>
+          </div>
+
+          {isFullExtracting && fullExtractionStep && (
+            <div className="bg-white/80 rounded-xl p-4 border border-gold">
+              <div className="flex items-center gap-3">
+                <RefreshCw className="h-5 w-5 text-gold animate-spin" />
+                <span className="font-medium text-zinc-900">{fullExtractionStep}</span>
+              </div>
+            </div>
+          )}
+
+          <Button 
+            onClick={handleFullExtraction} 
+            disabled={isFullExtracting || isSyncing || isSyncingDevs || isFetchingDetails || isSyncingAreas}
+            className="w-full bg-gold hover:bg-gold/90 text-black font-bold text-lg py-6"
+          >
+            {isFullExtracting ? (
+              <>
+                <RefreshCw className="h-5 w-5 mr-2 animate-spin" />
+                Full Extraction in Progress...
+              </>
+            ) : (
+              <>
+                <Zap className="h-5 w-5 mr-2" />
+                Start Full Extraction
+              </>
+            )}
+          </Button>
         </CardContent>
       </Card>
 

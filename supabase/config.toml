@@ -149,3 +149,6 @@ verify_jwt = false
 
 [functions.reelly-areas-sync]
 verify_jwt = false
+
+[functions.reelly-fetch-details]
+verify_jwt = false
