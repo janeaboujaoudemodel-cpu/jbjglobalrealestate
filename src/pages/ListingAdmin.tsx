@@ -137,8 +137,8 @@ const ListingAdmin = () => {
 
   if (checkingAdmin) {
     return (
-      <div className="min-h-screen bg-zinc-100 flex items-center justify-center pt-28">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-zinc-900" />
+      <div className="min-h-screen bg-black flex items-center justify-center pt-28">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
       </div>
     );
   }
@@ -480,7 +480,7 @@ const ListingAdmin = () => {
       {/* Premium Dashboard Shell */}
       <div className="mx-3 md:mx-4 lg:mx-6 my-6 rounded-2xl border border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
       {/* Header - Clean neutral style */}
-      <header className="border-b border-gold/30 bg-white/50 backdrop-blur-sm sticky top-20 lg:top-24 z-40 rounded-t-2xl">
+      <header className="border-b border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-20 lg:top-24 z-40 rounded-t-2xl">
         <div className="max-w-[1200px] mx-auto px-4 py-4">
           {/* Row 1: Title and actions */}
           <div className="flex items-center justify-between gap-4 mb-4">
@@ -570,11 +570,11 @@ const ListingAdmin = () => {
               </Button>
             </div>
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-lg border border-gold/20">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] rounded-lg border-2 border-gold/30">
                 <Building2 className="w-4 h-4 text-gold" />
                 <span className="text-sm text-black font-medium">{projects?.length || 0} {t('listingAdmin.projects')}</span>
               </div>
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-lg border border-gold/20">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] rounded-lg border-2 border-gold/30">
                 <Crown className="w-4 h-4 text-gold" />
                 <span className="text-sm text-black font-medium">{projects?.filter((p) => p.is_premium).length || 0} {t('listingAdmin.premium')}</span>
               </div>
@@ -624,7 +624,7 @@ const ListingAdmin = () => {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
               {/* Search Filters */}
               <div className="lg:col-span-1">
-                <Card className="bg-white border-zinc-200 sticky top-44">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 sticky top-44">
                   <CardContent className="p-4">
                     <ListingSearchFilters
                       developers={developers || []}
@@ -647,7 +647,7 @@ const ListingAdmin = () => {
                   {filteredProjects?.map((project) => (
                     <Card
                       key={project.id}
-                      className={`bg-white border-zinc-200 cursor-pointer transition-all hover:shadow-lg hover:border-gold/50 ${
+                      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 cursor-pointer transition-all hover:shadow-lg hover:border-gold ${
                         selectedProject?.id === project.id ? "border-gold ring-2 ring-gold/20" : ""
                       }`}
                       onClick={() => handleEditProjectWithView(project)}
@@ -682,8 +682,8 @@ const ListingAdmin = () => {
         {/* Editor View */}
         {activeView === 'editor' && (isEditing || isCreating) && (
           <div className="container mx-auto px-4 py-6">
-            <Card className="bg-white border-zinc-200">
-              <CardHeader className="border-b border-zinc-200">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
+              <CardHeader className="border-b border-gold/30">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-black">
                     {isCreating ? t('listingAdmin.createNewProject') : `${t('listingAdmin.editProject')}: ${selectedProject?.name}`}
@@ -1116,7 +1116,7 @@ const ListingAdmin = () => {
                       {selectedProject?.images?.map((img: any) => (
                         <div
                           key={img.id}
-                          className="relative aspect-video rounded-lg overflow-hidden bg-zinc-100 border border-zinc-200"
+                          className="relative aspect-video rounded-lg overflow-hidden bg-[#EDE4D3] border-2 border-gold/30"
                         >
                           <img
                             src={img.image_url}
