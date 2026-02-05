@@ -17240,6 +17240,105 @@ export type Database = {
         }
         Relationships: []
       }
+      video_studio_assets: {
+        Row: {
+          created_at: string | null
+          duration_ms: number | null
+          expires_at: string | null
+          file_name: string
+          file_path: string
+          file_size: number | null
+          file_type: string
+          height: number | null
+          id: string
+          metadata: Json | null
+          mime_type: string | null
+          session_id: string
+          thumbnail_path: string | null
+          user_id: string | null
+          width: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          duration_ms?: number | null
+          expires_at?: string | null
+          file_name: string
+          file_path: string
+          file_size?: number | null
+          file_type: string
+          height?: number | null
+          id?: string
+          metadata?: Json | null
+          mime_type?: string | null
+          session_id: string
+          thumbnail_path?: string | null
+          user_id?: string | null
+          width?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          duration_ms?: number | null
+          expires_at?: string | null
+          file_name?: string
+          file_path?: string
+          file_size?: number | null
+          file_type?: string
+          height?: number | null
+          id?: string
+          metadata?: Json | null
+          mime_type?: string | null
+          session_id?: string
+          thumbnail_path?: string | null
+          user_id?: string | null
+          width?: number | null
+        }
+        Relationships: []
+      }
+      video_studio_jobs: {
+        Row: {
+          created_at: string | null
+          error: string | null
+          expires_at: string | null
+          id: string
+          output_urls: Json | null
+          progress: number | null
+          project_data: Json
+          project_name: string
+          session_id: string
+          status: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          error?: string | null
+          expires_at?: string | null
+          id?: string
+          output_urls?: Json | null
+          progress?: number | null
+          project_data?: Json
+          project_name?: string
+          session_id: string
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          error?: string | null
+          expires_at?: string | null
+          id?: string
+          output_urls?: Json | null
+          progress?: number | null
+          project_data?: Json
+          project_name?: string
+          session_id?: string
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       vip_clients: {
         Row: {
           assigned_relationship_manager: string | null
