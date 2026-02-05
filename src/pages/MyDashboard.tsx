@@ -1,8 +1,10 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUserRole } from "@/hooks/useUserRole";
 import { SEOHead } from "@/components/SEOHead";
 import { Loader2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 // Dashboard modules
 import FavoritesCard from "@/components/dashboard/FavoritesCard";
@@ -13,9 +15,35 @@ import ActivityOverviewCard from "@/components/dashboard/ActivityOverviewCard";
 import NotificationsPreview from "@/components/dashboard/NotificationsPreview";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 
+// Role label mapping
+function getRoleLabel(role: string | null): string {
+  switch (role) {
+    case 'investor': return 'Investor';
+    case 'owner': return 'Property Owner';
+    case 'broker': return 'Broker';
+    case 'broker_jbj': return 'JBJ Broker';
+    case 'broker_partner': return 'Partner Broker';
+    case 'client': return 'Client';
+    case 'visitor': return 'Explorer';
+    default: return 'Member';
+  }
+}
+
+function getRoleBadgeColor(role: string | null): string {
+  switch (role) {
+    case 'investor': return 'bg-blue-500/20 text-blue-600 border-blue-500/30';
+    case 'owner': return 'bg-emerald-500/20 text-emerald-600 border-emerald-500/30';
+    case 'broker':
+    case 'broker_jbj':
+    case 'broker_partner': return 'bg-purple-500/20 text-purple-600 border-purple-500/30';
+    default: return 'bg-gold/20 text-gold border-gold/30';
+  }
+}
+
 const MyDashboard = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
+  const { role, isLoading: roleLoading } = useUserRole();
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -23,7 +51,7 @@ const MyDashboard = () => {
     }
   }, [user, authLoading, navigate]);
 
-  if (authLoading) {
+  if (authLoading || roleLoading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-gold animate-spin" />
@@ -47,16 +75,21 @@ const MyDashboard = () => {
           <div className="container mx-auto px-4 py-8 max-w-7xl">
             {/* Header */}
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-foreground mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                My <span className="text-gold">Dashboard</span>
-              </h1>
+              <div className="flex flex-wrap items-center gap-3 mb-2">
+                <h1 className="text-3xl font-bold text-foreground" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  My <span className="text-gold">Dashboard</span>
+                </h1>
+                <Badge className={getRoleBadgeColor(role)}>
+                  {getRoleLabel(role)}
+                </Badge>
+              </div>
               <p className="text-muted-foreground">
                 Welcome back! Here's an overview of your activity and saved items.
               </p>
             </div>
 
-            {/* Main Grid Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Main Grid Layout - Improved responsive behavior */}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {/* Left Column - Profile & Level */}
               <div className="space-y-6">
                 <ProfileSummaryCard />
@@ -70,7 +103,7 @@ const MyDashboard = () => {
               </div>
 
               {/* Right Column - Notifications */}
-              <div className="space-y-6">
+              <div className="space-y-6 md:col-span-2 xl:col-span-1">
                 <NotificationsPreview />
               </div>
             </div>

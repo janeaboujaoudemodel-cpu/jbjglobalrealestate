@@ -86,14 +86,14 @@ const PROPERTY_STATUS = [
   { value: "off-plan", label: "Off-Plan" },
 ];
 
-// Sale status options from Reelly API
+// Sale status options from Reelly API with color-coded dots
 const SALE_STATUS_OPTIONS = [
-  { value: "all", label: "All Sale Statuses" },
-  { value: "Announced", label: "Announced" },
-  { value: "On Sale", label: "On Sale" },
-  { value: "Sold Out", label: "Sold Out" },
-  { value: "Presale (EOI)", label: "Presale (EOI)" },
-  { value: "Start of Sales", label: "Start of Sales" },
+  { value: "all", label: "All Sale Statuses", color: "" },
+  { value: "Announced", label: "Announced", color: "bg-pink-500" },
+  { value: "Presale (EOI)", label: "Presale (EOI)", color: "bg-emerald-500" },
+  { value: "Start of Sales", label: "Start of Sales", color: "bg-yellow-500" },
+  { value: "On Sale", label: "On Sale", color: "bg-blue-500" },
+  { value: "Sold Out", label: "Sold Out", color: "bg-red-500" },
 ];
 
 // UAE Emirates + International priority countries
@@ -617,9 +617,9 @@ const HeroSearchBar = () => {
           {/* Location Search Input */}
           <div className="flex-1 flex items-center px-3">
             <Search className="w-4 h-4 text-gold shrink-0" />
-            <input
+          <input
               type="text"
-              placeholder="Area, project or community..."
+              placeholder="Area, project or community"
               value={locationSearch}
               onChange={(e) => setLocationSearch(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
@@ -748,7 +748,7 @@ const HeroSearchBar = () => {
                   </div>
                 </div>
 
-                {/* Row 2: Sale Status */}
+                {/* Row 2: Sale Status with Reelly-style color dots */}
                 <div>
                   <label className="text-sm font-semibold text-black/80 mb-2 block">Sale Status</label>
                   <Select value={saleStatus} onValueChange={setSaleStatus}>
@@ -758,7 +758,12 @@ const HeroSearchBar = () => {
                     <SelectContent className="z-[10000]">
                       {SALE_STATUS_OPTIONS.map((item) => (
                         <SelectItem key={item.value} value={item.value}>
-                          {item.label}
+                          <div className="flex items-center gap-2">
+                            {item.color && (
+                              <span className={`w-2.5 h-2.5 rounded-full ${item.color}`} />
+                            )}
+                            <span>{item.label}</span>
+                          </div>
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -883,7 +888,7 @@ const HeroSearchBar = () => {
                   </div>
                   <div className="flex-1">
                     <p className="text-black font-bold text-sm">Not sure what you're looking for?</p>
-                    <p className="text-black/70 text-xs">Try our AI Home Finder for personalized recommendations</p>
+                    <p className="text-black/70 text-xs">Try our AI Home Matchmaker for personalized recommendations</p>
                   </div>
                   <ChevronDown className="w-5 h-5 text-purple-400 -rotate-90 group-hover:translate-x-1 transition-transform" />
                 </Link>

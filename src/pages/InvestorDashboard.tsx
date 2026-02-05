@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Footer from "@/components/Footer";
+
 import InvestorDocumentVault from "@/components/investor/InvestorDocumentVault";
 import CTABand from "@/components/home/CTABand";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
@@ -830,8 +830,6 @@ export default function InvestorDashboard() {
 
         </motion.div>
       </div>
-
-      <Footer />
     </div>
   );
 }

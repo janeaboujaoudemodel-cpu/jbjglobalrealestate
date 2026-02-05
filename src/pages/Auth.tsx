@@ -232,10 +232,10 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             <div className="space-y-4">
               <Button
                 type="button"
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/my-dashboard")}
                 className="w-full h-12 bg-gradient-to-r from-gold to-gold-dark hover:opacity-90 text-black font-semibold rounded-xl shadow-lg shadow-gold/20 transition-all duration-300 hover:shadow-gold/40 hover:scale-[1.02]"
               >
-                Continue to Dashboard
+                Go to My Dashboard
               </Button>
               <Button
                 type="button"
