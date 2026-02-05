@@ -8,6 +8,7 @@ import PopupLayer from "@/components/PopupLayer";
 import CommandPaletteRoot from "@/components/ui/command-palette-root";
 import GuidedTour from "@/components/GuidedTour";
 import { useLanguage } from "@/contexts/LanguageContext";
+import NewsletterBand from "@/components/NewsletterBand";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useOnboardingTour } from "@/hooks/use-onboarding-tour";
 
@@ -194,6 +195,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       {/* Content spacing: dark hero pages sit behind header, bright pages pushed below */}
       <main className={needsHeaderSpacing ? "pt-24 sm:pt-28 lg:pt-32" : "pt-0"}>
         {children}
+        {/* Global Newsletter Band - Above footer on all public pages */}
+        {!isAdminRoute && <NewsletterBand />}
       </main>
       {/* All popups rendered centrally - only when ready */}
       {popupsReady && <PopupLayer />}
