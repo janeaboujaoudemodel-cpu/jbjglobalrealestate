@@ -6,11 +6,15 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 
 // Toolkit pages (lazy loaded)
+const ToolkitLanding = lazy(() => import("./pages/toolkit/ToolkitLanding"));
 const VideoResizePack = lazy(() => import("./pages/toolkit/VideoResizePack"));
 const PdfFromPhotos = lazy(() => import("./pages/toolkit/PdfFromPhotos"));
 const ImageResize = lazy(() => import("./pages/toolkit/ImageResize"));
 const VoiceStudio = lazy(() => import("./pages/toolkit/VoiceStudio"));
 const AIVideoStudioPage = lazy(() => import("./pages/toolkit/AIVideoStudioPage"));
+const CaptionsTranslate = lazy(() => import("./pages/toolkit/CaptionsTranslate"));
+const BackgroundAI = lazy(() => import("./pages/toolkit/BackgroundAI"));
+const BeautyFilters = lazy(() => import("./pages/toolkit/BeautyFilters"));
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
@@ -481,8 +485,18 @@ const App = () => (
                 <Route path="/studio" element={<Studio />} />
                 <Route path="/studio/editor/:projectId" element={<StudioEditor />} />
                 
-                {/* Toolkit Routes */}
+{/* Toolkit Routes */}
+                <Route path="/toolkit" element={
+                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                    <ToolkitLanding />
+                  </Suspense>
+                } />
                 <Route path="/toolkit/video-resize-pack" element={
+                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                    <VideoResizePack />
+                  </Suspense>
+                } />
+                <Route path="/toolkit/smart-reframe" element={
                   <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
                     <VideoResizePack />
                   </Suspense>
@@ -505,6 +519,21 @@ const App = () => (
                 <Route path="/toolkit/ai-video-studio" element={
                   <Suspense fallback={<div className="min-h-screen bg-slate-950 flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
                     <AIVideoStudioPage />
+                  </Suspense>
+                } />
+                <Route path="/toolkit/captions-translate" element={
+                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                    <CaptionsTranslate />
+                  </Suspense>
+                } />
+                <Route path="/toolkit/background-ai" element={
+                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                    <BackgroundAI />
+                  </Suspense>
+                } />
+                <Route path="/toolkit/beauty-filters" element={
+                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                    <BeautyFilters />
                   </Suspense>
                 } />
                 
