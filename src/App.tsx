@@ -153,6 +153,7 @@ import ReportAccess from "./pages/investor/ReportAccess";
 import OwnerDashboard from "./pages/OwnerDashboard";
 import BrokerPartnerDashboard from "./pages/BrokerPartnerDashboard";
 import Dashboard from "./pages/Dashboard";
+import MyDashboard from "./pages/MyDashboard";
 import BrokerEducation from "./pages/BrokerEducation";
 import BrokerFAQ from "./pages/BrokerFAQ";
 import JBJAnalyticsDashboard from "./pages/JBJAnalyticsDashboard";
@@ -277,6 +278,7 @@ const App = () => (
                 <Route path="/investor-education" element={<InvestorEducation />} />
                 <Route path="/investor-faq" element={<InvestorFAQ />} />
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/my-dashboard" element={<MyDashboard />} />
                 <Route path="/investor-dashboard" element={<InvestorDashboard />} />
                 <Route path="/investor-dashboard/portfolio" element={<PortfolioViews />} />
                 <Route path="/investor-dashboard/reports" element={<ReportAccess />} />
