@@ -24,7 +24,7 @@ import { GuideHero } from "@/components/guides/GuideHero";
 import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
 import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
 import { GuideCTA } from "@/components/guides/GuideCTA";
-import Footer from "@/components/Footer";
+
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -426,8 +426,6 @@ const GoldenVisaGuide = () => {
           </div>
         </section>
       </div>
-
-      <Footer />
     </div>
   );
 };

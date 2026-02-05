@@ -5,8 +5,6 @@ import {
   ArrowRight, CheckCircle, ChevronRight, MessageSquare, AlertCircle,
   ClipboardCheck, Calendar, Coins, FileText, Calculator, Award
 } from "lucide-react";
-import Footer from "@/components/Footer";
-import DirectContactCTA from "@/components/DirectContactCTA";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
@@ -470,11 +468,6 @@ const Services = () => {
           </p>
         </div>
       </section>
-
-      {/* Standardized Direct Contact CTA */}
-      <DirectContactCTA />
-
-      <Footer />
     </div>
   );
 };

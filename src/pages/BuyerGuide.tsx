@@ -36,8 +36,6 @@ import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigatio
 import { GuideHero } from "@/components/guides/GuideHero";
 import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
 import { GuideSectionHeader } from "@/components/guides/GuideSectionHeader";
-import Footer from "@/components/Footer";
-import DirectContactCTA from "@/components/DirectContactCTA";
 import { SectionDivider } from "@/components/ui/section-divider";
 import {
   Accordion,
@@ -790,11 +788,6 @@ const BuyerGuide = () => {
           <GuideNavigation current="/buyer-guide" guides={GUIDE_LINKS} showStartHere={false} />
         </div>
       </section>
-
-      {/* Standardized Direct Contact CTA */}
-      <DirectContactCTA />
-
-      <Footer />
     </div>
   );
 };

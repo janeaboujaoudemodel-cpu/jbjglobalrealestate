@@ -15,7 +15,7 @@ import {
   Briefcase,
   Globe
 } from "lucide-react";
-import Footer from "@/components/Footer";
+
 import { Button } from "@/components/ui/button";
 import { GuideSectionHeader } from "@/components/guides/GuideSectionHeader";
 import brokerResourcesHeroVideo from "@/assets/videos/broker-resources-hero.mp4";
@@ -394,8 +394,6 @@ const BrokerResources = () => {
           </motion.div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 };

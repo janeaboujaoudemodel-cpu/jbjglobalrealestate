@@ -16,8 +16,6 @@ import {
   Users,
   ArrowUpCircle,
 } from "lucide-react";
-import Footer from "@/components/Footer";
-import DirectContactCTA from "@/components/DirectContactCTA";
 import { SEOHead } from "@/components/SEOHead";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import {
@@ -356,9 +354,6 @@ const CustomerHappinessCenter = () => {
           </motion.div>
         </div>
       </section>
-
-      <DirectContactCTA />
-      <Footer />
     </>
   );
 };

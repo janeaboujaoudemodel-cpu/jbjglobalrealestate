@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import Footer from "@/components/Footer";
+
 import EmployeeChatPanel from "@/components/employee-hub/EmployeeChatPanel";
 import { CommandPalette } from "@/components/ui/command-palette";
 import { FloatingActionBar } from "@/components/ui/floating-action-bar";
@@ -478,8 +478,6 @@ const EmployeeHub = () => {
             onClose={handleCloseChat}
           />
         )}
-
-        <Footer />
       </div>
     </>
   );

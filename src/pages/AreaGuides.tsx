@@ -9,7 +9,7 @@
  import { motion } from "framer-motion";
  import { MapPin, Building2, TrendingUp, Search, X, Flame, ArrowRight, Loader2 } from "lucide-react";
  import { Input } from "@/components/ui/input";
- import Footer from "@/components/Footer";
+ 
  import { SEOHead } from "@/components/SEOHead";
  import { useAreas, useEmiratesWithAreas, Area } from "@/hooks/useAreas";
  
@@ -301,8 +301,6 @@
            </Link>
          </div>
        </section>
- 
-       <Footer />
      </div>
    );
  };

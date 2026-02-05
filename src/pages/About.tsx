@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Shield, Users, TrendingUp, Building2, BarChart3, FileCheck, Scale, Heart, Target, Sparkles } from "lucide-react";
-import Footer from "@/components/Footer";
+
 import { Button } from "@/components/ui/button";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { PortraitImage } from "@/components/ui/portrait-image";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { FounderContent } from "@/components/FounderContent";
-import DirectContactCTA from "@/components/DirectContactCTA";
+
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import luxuryVilla1 from "@/assets/luxury-villa-1.jpeg";
@@ -631,11 +631,6 @@ const About = () => {
             </div>
           </div>
         </section>
-
-        {/* Standardized Direct Contact CTA */}
-        <DirectContactCTA />
-
-        <Footer />
       </div>
     </>
   );

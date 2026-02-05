@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import Footer from "@/components/Footer";
+
 import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -242,8 +242,6 @@ const OurBrokers = () => {
             </motion.div>
           </div>
         </section>
-
-        <Footer />
       </div>
     </>
   );

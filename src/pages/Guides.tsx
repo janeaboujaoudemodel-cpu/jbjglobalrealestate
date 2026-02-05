@@ -3,8 +3,6 @@ import { motion } from "framer-motion";
 import { 
   BookOpen, ArrowRight, HelpCircle, FileText, DollarSign, Shield, BarChart3, CheckCircle, MessageCircle
 } from "lucide-react";
-import Footer from "@/components/Footer";
-import DirectContactCTA from "@/components/DirectContactCTA";
 import { SEOHead } from "@/components/SEOHead";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -425,11 +423,6 @@ const Guides = () => {
           </motion.div>
         </div>
       </section>
-
-      {/* Standardized Direct Contact CTA */}
-      <DirectContactCTA />
-
-      <Footer />
     </div>
   );
 };

@@ -21,8 +21,6 @@ import {
   Signature,
   Download,
 } from "lucide-react";
-import Footer from "@/components/Footer";
-import DirectContactCTA from "@/components/DirectContactCTA";
 import { SEOHead } from "@/components/SEOHead";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -658,9 +656,6 @@ const BrokerCertification = () => {
           </motion.div>
         </div>
       </section>
-
-      <DirectContactCTA />
-      <Footer />
     </>
   );
 };

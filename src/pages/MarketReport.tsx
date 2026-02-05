@@ -1,5 +1,4 @@
 import { useMemo, useState, useEffect, useRef } from "react";
-import Footer from "@/components/Footer";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -2170,8 +2169,6 @@ const MarketReport = () => {
         </div>
         </div>
       </main>
-
-      <Footer />
 
       {/* CTA Modal after download */}
       <MarketReportCTAModal
