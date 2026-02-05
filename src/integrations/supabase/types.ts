@@ -5992,6 +5992,13 @@ export type Database = {
             referencedRelation: "employee_salaries_secure"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "employee_payment_history_related_salary_id_fkey"
+            columns: ["related_salary_id"]
+            isOneToOne: false
+            referencedRelation: "employee_salaries_self_service"
+            referencedColumns: ["id"]
+          },
         ]
       }
       employee_performance_summary: {
@@ -18269,6 +18276,54 @@ export type Database = {
         }
         Relationships: []
       }
+      employee_salaries_self_service: {
+        Row: {
+          bank_name_masked: string | null
+          base_salary: number | null
+          created_at: string | null
+          currency: string | null
+          department: string | null
+          effective_date: string | null
+          employee_name: string | null
+          end_date: string | null
+          id: string | null
+          notes: string | null
+          salary_type: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          bank_name_masked?: never
+          base_salary?: never
+          created_at?: string | null
+          currency?: string | null
+          department?: string | null
+          effective_date?: string | null
+          employee_name?: string | null
+          end_date?: string | null
+          id?: string | null
+          notes?: never
+          salary_type?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          bank_name_masked?: never
+          base_salary?: never
+          created_at?: string | null
+          currency?: string | null
+          department?: string | null
+          effective_date?: string | null
+          employee_name?: string | null
+          end_date?: string | null
+          id?: string | null
+          notes?: never
+          salary_type?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       executive_communications_audit: {
         Row: {
           channel: string | null
@@ -19351,6 +19406,7 @@ export type Database = {
         }[]
       }
       has_finance_access: { Args: { user_uuid: string }; Returns: boolean }
+      has_finance_hr_access: { Args: { _user_id: string }; Returns: boolean }
       has_first_deal_verified: { Args: { p_user_id: string }; Returns: boolean }
       has_full_lead_pii_access: {
         Args: { _lead_id: string; _user_id: string }
