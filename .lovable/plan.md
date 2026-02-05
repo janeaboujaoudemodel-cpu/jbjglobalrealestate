@@ -1,303 +1,191 @@
 
-
-# Implementation Plan: Homepage Hub Cards, Button System, AI Home Finder Centering, and Investment Edge Book Section Fixes
+# Implementation Plan: Premium Footer Navigation & Contact Section Upgrade
 
 ## Summary
-
-This plan addresses 7 specific UI tasks without redesigning anything. All changes will match 100% the existing approved UI system (colors, card style, primary buttons, spacing rules).
-
----
-
-## Task 1 — JBJ Broker Hub + JBJ Investor Hub Cards (Color + Consistency)
-
-### Current Issue
-- Lines 438-480 in `src/pages/Index.tsx`: The Broker Hub and Investor Hub cards use `bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]` (white/cream gradient)
-- Other cards in the same section use `bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]` (gold/champagne gradient)
-
-### Required Fix
-**File:** `src/pages/Index.tsx`
-
-Change both Hub cards (lines 440 and 462) from:
-```tsx
-bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]
-```
-to:
-```tsx
-bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]
-```
-
-This matches exactly the gold/champagne tone used by all other cards in the "Find Your Starting Point" section (Row 1, Row 2 cards).
-
-### Icons
-- Icons already use transparent/outline style with `text-gold` - no change needed
+This plan updates the Footer's "Navigation Menu + Professional Tools + Get In Touch" block to match the premium champagne styling used in the Legal Disclaimer and "Stay in the Loop" sections, plus adds colored icon backgrounds for contact methods.
 
 ---
 
-## Task 2 — Fix CTA Buttons to Primary Style
+## Issues Identified
 
-### Current Issue
-- Lines 451-454 and 473-476 in `src/pages/Index.tsx`: The "Access Broker Hub" and "Explore Investor Hub" buttons use `<Button variant="primary">` which is correct
-- However, the `ServicesGrid.tsx` component (line 105-108) uses a plain text link with `text-gold` styling instead of proper primary buttons
-
-### Required Fix
-
-**File 1:** `src/components/home/ServicesGrid.tsx`
-Change the CTA from text link to proper Button component:
-
-Replace lines 104-108:
-```tsx
-{/* CTA */}
-<div className="flex items-center gap-1.5 text-gold text-sm font-medium group-hover:gap-2.5 transition-all">
-  <span>{t('services.learnMore', 'Learn More')}</span>
-  <ArrowRight className="w-4 h-4" />
-</div>
-```
-
-With:
-```tsx
-{/* CTA */}
-<Button variant="primary" size="sm" className="mt-auto">
-  {t('services.learnMore', 'Learn More')}
-  <ArrowRight className="w-4 h-4 ml-2" />
-</Button>
-```
-
-Also add Button import at top:
-```tsx
-import { Button } from "@/components/ui/button";
-```
-
-**File 2:** `src/components/home/ExploreServicesCard.tsx`
-The service slideshow cards (line 262-270) already use `<Button variant="primary">` - no change needed
-
----
-
-## Task 3 — AI Home Finder Card Positioning + Spacing (Centered)
-
-### Current Issue
-- Lines 489-534 in `src/pages/Index.tsx`: The AI Home Finder section uses `py-12 md:py-20` which is inconsistent with other sections using `py-12 md:py-16`
-- This creates unequal spacing above vs below the AI Home Finder card
-
-### Required Fix
-**File:** `src/pages/Index.tsx`
-
-1. Change line 489 from:
-```tsx
-<section className="py-12 md:py-20 bg-black">
-```
-to:
-```tsx
-<section className="py-12 md:py-16 bg-black">
-```
-
-2. The AI Comparison section below (line 540) already uses `py-12 md:py-16`, so after this fix both sections will have identical spacing.
-
-3. Verify the `SectionDivider` (line 537) creates a balanced visual transition between AI Home Finder and AI Comparison.
-
----
-
-## Task 4 — AI Home Finder Label + Title Colors (Purple Label + White Title)
-
-### Current Issue
-- Lines 509-523 in `src/pages/Index.tsx`:
-  - The badge text says "AI-Powered" with purple styling (correct)
-  - The title "AI Home Finder" (line 519) uses `text-purple-600` (should be WHITE)
-  - The issue: Title is purple, not white as requested
-
-### Required Fix
-**File:** `src/pages/Index.tsx`
-
-1. Change line 518-523 from:
-```tsx
-<h2 
-  className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide text-purple-600 group-hover:text-purple-500 transition-colors" 
-  style={{ fontFamily: "Poppins, sans-serif" }}
->
-  {t('hero.aiFinder')}
-</h2>
-```
-to:
-```tsx
-<h2 
-  className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide text-white group-hover:text-zinc-100 transition-colors" 
-  style={{ fontFamily: "Poppins, sans-serif" }}
->
-  {t('hero.aiFinder')}
-</h2>
-```
-
-2. Add "Powered by JBJ Global Real Estate" text after the description (after line 528):
-```tsx
-<p className="text-zinc-500 text-xs mt-3">
-  Powered by JBJ Global Real Estate
-</p>
-```
-
-Note: The white background card makes white text invisible. Need to change the card background from white to a dark/gradient background OR keep purple title for contrast. Recommend keeping the WHITE card and making the title BLACK instead for readability, with the badge being PURPLE. Let me reconsider...
-
-Actually, looking at the current layout:
-- Card has white background (`bg-white`)
-- Purple badge is correct
-- Title should contrast with white background
-
-If user wants WHITE title, the card background needs to be DARK. I'll update the card to use a dark/black gradient background:
-
-**Updated approach for line 502-506:**
+### 1. Navigation/Tools/Contact Section - Missing Premium Champagne Layer
+**Current State (Line 503-508):**
 ```tsx
 <div 
-  className="relative z-10 bg-gradient-to-br from-zinc-900 via-black to-zinc-800 rounded-2xl px-8 md:px-12 py-6 md:py-8 border-2 border-purple-400/40"
+  className="relative rounded-xl mx-4 sm:mx-6 md:mx-8 my-4 sm:my-6 overflow-hidden"
   style={{
-    boxShadow: '0 0 40px rgba(147,51,234,0.3), 0 0 80px rgba(147,51,234,0.15), 0 20px 50px rgba(0,0,0,0.3)'
+    background: 'linear-gradient(165deg, rgba(200,167,102,0.08) 0%, rgba(200,167,102,0.04) 50%, rgba(200,167,102,0.02) 100%)',
+    border: '1px solid rgba(200,167,102,0.2)',
   }}
 >
 ```
+This is a very subtle, nearly invisible gold tint - NOT matching the Legal Disclaimer's visible champagne gradient.
 
-And update description text color from `text-zinc-600` to `text-zinc-300` for readability on dark background.
+**Required:**
+Match the Legal Disclaimer style (Line 880):
+```tsx
+className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)]"
+```
+
+### 2. Professional Tools Section - Missing Champagne Background
+**Current State (Line 726):**
+The Professional Tools section has no champagne layer - it sits directly on black with individual dark buttons.
+
+**Required:**
+Wrap Professional Tools in same champagne layer as navigation grid.
+
+### 3. Get In Touch Section - Missing Champagne Background + Wrong Icon Colors
+**Current State (Lines 789-813):**
+- Phone icon (Line 793): `text-gold`
+- WhatsApp icon (Line 803): `text-gold`
+- Email icon (Line 811): `text-gold`
+
+**Required:**
+- WhatsApp icon: **Green** (`text-emerald-500` with green background circle)
+- Phone icon: **Blue** (`text-blue-500` with blue background circle)
+- Email icon: **Gold** (`text-gold` with gold background circle)
+
+Each icon should have a circular background layer to make them premium.
 
 ---
 
-## Task 5 — "Unlock Your Investment Edge" Book Section (Layer Must Not Cover Header)
+## Implementation Plan
 
-### Current Issue
-- Lines 1780-1782 in `src/pages/MarketReport.tsx`: The hero section uses `jj-hero-fullscreen` class which makes it 100vh
-- The colored layer starts at `inset-0` which covers from the very top, including the header area
+### Phase 1: Wrap All Three Sections in One Continuous Champagne Layer
 
-### Required Fix
-**File:** `src/pages/MarketReport.tsx`
+**File:** `src/components/Footer.tsx`
 
-Change line 1782 from:
+**Change:** Restructure the interior of the ZONE 2 card (lines 454-817) to wrap Navigation Grid + Professional Tools + Get In Touch in a single premium champagne container.
+
+**Code Changes:**
+
+1. **Line 502-509 - Replace inner wrapper with premium champagne container:**
 ```tsx
-<div className="absolute inset-0 mx-0.5 md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl md:rounded-3xl" />
-```
-to:
-```tsx
-<div className="absolute inset-x-0 bottom-0 top-20 md:top-24 mx-0.5 md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl md:rounded-3xl" />
+{/* Premium Champagne Inner Layer - Wraps Navigation + Tools + Contact */}
+<div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] mx-4 sm:mx-6 md:mx-8 my-4 sm:my-6 overflow-hidden">
 ```
 
-This makes the layer start at `top-20 md:top-24` (approximately 80px on mobile, 96px on desktop) to stay below the header.
+2. **Extend this container to wrap Professional Tools and Get In Touch sections (through line 815)**
 
----
+3. **Update all text colors inside to use dark text (text-zinc-700, text-black) instead of light (text-zinc-400, text-white) since background is now light**
 
-## Task 6 — Book Section Primary Buttons (Download Buttons Must Match Primary System)
+### Phase 2: Update Navigation Grid Text Colors for Light Background
 
-### Current Issue
-- Line 1934-1948 in `src/pages/MarketReport.tsx`: "Download Your Free Book Now" button uses `<Button variant="primary">` - CORRECT
-- Line 2010-2018: "Download Book Now" button also uses `<Button variant="primary">` - CORRECT
-- Line 2101-2118: The form submit button uses custom inline styles instead of the Button component:
+**Lines 526-717:**
+- Change link colors from `text-zinc-400 hover:text-gold` to `text-zinc-700 hover:text-gold`
+- Section headers already use gradient text which will work on champagne background
+
+### Phase 3: Update Professional Tools for Light Background
+
+**Lines 725-756:**
+- Change title from gold gradient (already works on champagne)
+- Change tool buttons from dark gradient to light pearl style:
 ```tsx
-className="w-full h-14 bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-black font-semibold text-base rounded-xl..."
+className="text-black hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-lg sm:rounded-xl group bg-white/80 border border-gold/30 shadow-sm hover:shadow-md"
 ```
 
-### Required Fix
-**File:** `src/pages/MarketReport.tsx`
+### Phase 4: Update Get In Touch Contact Icons with Colored Backgrounds
 
-Change lines 2101-2118 from custom styled button to proper Button component:
+**Lines 789-813:**
+
+Replace simple icons with premium circle-background icons:
+
+**Phone (Blue):**
 ```tsx
-<Button
-  onClick={handleSubmit}
-  disabled={!isValid || isSubmitting}
-  variant="primary"
-  size="lg"
-  className="w-full h-14"
+<a
+  href={getCallUrl()}
+  className="flex items-center justify-center gap-2 sm:gap-3 text-zinc-700 hover:text-blue-600 transition-all duration-300 text-xs sm:text-sm md:text-base py-1"
 >
-  {isSubmitting ? (
-    <>
-      <div className="w-5 h-5 mr-2 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-      Processing...
-    </>
-  ) : (
-    <>
-      <Unlock className="w-5 h-5 mr-2" />
-      Unlock & Download Now
-      <ArrowUpRight className="w-5 h-5 ml-2" />
-    </>
-  )}
-</Button>
+  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
+    <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" />
+  </div>
+  <span>{CONTACT_INFO.phone}</span>
+</a>
 ```
 
----
-
-## Task 7 — Book Section Layer Coverage (Must Cover All Required Blocks)
-
-### Current Issue
-- The champagne gradient layer (line 1782) only covers the hero section
-- The "Welcome Back", "What You'll Receive", "Created By" sections (lines 1990-2166) have individual card backgrounds but the overall section has black background
-
-### Required Fix
-**File:** `src/pages/MarketReport.tsx`
-
-Wrap the main content section (lines 1990-2168) with a full-width champagne layer background:
-
-Change line 1991 from:
+**WhatsApp (Green):**
 ```tsx
-<main className="container mx-auto px-4 py-16">
+<a
+  href={getWhatsAppUrl()}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="flex items-center justify-center gap-2 sm:gap-3 text-zinc-700 hover:text-emerald-600 transition-all duration-300 text-xs sm:text-sm md:text-base py-1"
+>
+  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-emerald-500/20 flex items-center justify-center">
+    <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500" />
+  </div>
+  <span>WhatsApp Us</span>
+</a>
 ```
-to:
+
+**Email (Gold):**
 ```tsx
-<main className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-  <div className="container mx-auto px-4">
+<a
+  href={getEmailUrl()}
+  className="flex items-center justify-center gap-2 sm:gap-3 text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base py-1"
+>
+  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gold/20 flex items-center justify-center">
+    <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
+  </div>
+  <span className="break-all">{CONTACT_INFO.emailCapitalized}</span>
+</a>
 ```
 
-And add closing `</div>` before `</main>` (before line 2168).
+### Phase 5: Update Location Icon
 
-This creates one continuous champagne background covering:
-- A) Welcome Back (returning user section)
-- B) What You'll Receive
-- C) Created By / Brand Box
-- D) The form and all cards
+**Line 782-785:**
+Change MapPin icon to also have a background layer matching the premium style:
+```tsx
+<div className="flex items-center justify-center gap-2 sm:gap-3 text-zinc-700 text-xs sm:text-sm md:text-base mb-3 sm:mb-4 md:mb-5 px-1">
+  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0">
+    <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
+  </div>
+  <span className="break-words text-center">{CONTACT_INFO.address}</span>
+</div>
+```
 
 ---
 
 ## Files to Modify
 
-| File | Tasks |
-|------|-------|
-| `src/pages/Index.tsx` | Tasks 1, 3, 4 |
-| `src/components/home/ServicesGrid.tsx` | Task 2 |
-| `src/pages/MarketReport.tsx` | Tasks 5, 6, 7 |
+| File | Changes |
+|------|---------|
+| `src/components/Footer.tsx` | Restructure ZONE 2 interior, add champagne layer, update text colors, add colored icon backgrounds |
 
 ---
 
 ## Technical Details
 
-### Task 1 Changes (Index.tsx lines 440, 462)
-- Replace `from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]` with `from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]`
-- Also update `bg-gradient-to-br` to `bg-gradient-to-r` to match other cards
+### Color Mapping
+- **Background**: `bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark`
+- **Border**: `border border-gold/30`
+- **Shadow**: `shadow-[0_0_40px_rgba(200,167,102,0.18)]`
+- **Text on champagne**: `text-zinc-700` (dark gray for readability)
+- **Headers on champagne**: Keep existing gold gradient text
+- **WhatsApp icon**: `bg-emerald-500/20` background + `text-emerald-500` icon
+- **Phone icon**: `bg-blue-500/20` background + `text-blue-500` icon
+- **Email/Location icon**: `bg-gold/20` background + `text-gold` icon
 
-### Task 4 Changes (Index.tsx lines 502-528)
-- Change card from `bg-white` to `bg-gradient-to-br from-zinc-900 via-black to-zinc-800`
-- Change title from `text-purple-600` to `text-white`
-- Change description from `text-zinc-600` to `text-zinc-300`
-- Add "Powered by JBJ Global Real Estate" in `text-zinc-500 text-xs`
-
-### Task 5 Changes (MarketReport.tsx line 1782)
-- Add `top-20 md:top-24` to push layer below header
-- Change `inset-0` to `inset-x-0 bottom-0 top-20 md:top-24`
+### Structure After Changes
+```
+ZONE 2 Card (Black outer wrapper with gold border)
+└── Premium Champagne Inner Container (matching Legal Disclaimer style)
+    ├── Navigation Grid (4 columns: Properties/Services, Hubs, Guides/Intel, About/Careers)
+    ├── Gold Divider
+    ├── Professional Tools (Premium buttons on champagne)
+    ├── Gold Divider
+    └── Get In Touch (Colored icon circles + location)
+```
 
 ---
 
 ## Deliverables
 
-### Task Checklist
-- [ ] Task 1: Hub cards in gold/champagne
-- [ ] Task 2: Services cards use primary buttons
-- [ ] Task 3: AI Home Finder centered with equal spacing
-- [ ] Task 4: Purple label + white title + "Powered by" text
-- [ ] Task 5: Layer starts below header
-- [ ] Task 6: Download buttons use primary system
-- [ ] Task 7: Continuous layer covers all blocks
-
-### Screenshots Required
-1. Hub cards matching gold tone
-2. All CTA buttons in primary style
-3. AI Home Finder centered
-4. AI Home Finder label/title colors + "Powered by" text
-5. Book section with header visible
-6. Download buttons in primary style
-7. Full layer coverage on book section
-
-### Confirmation
-- No new UI system added
-- All changes match existing approved UI (colors, card style, primary buttons, spacing)
-- Using existing Button component with variant="primary"
-
+1. Navigation menu section wrapped in visible champagne gradient layer
+2. Professional Tools section included in same champagne layer
+3. Get In Touch section included in same champagne layer
+4. WhatsApp icon with green circle background
+5. Phone icon with blue circle background
+6. Email icon with gold circle background
+7. All text updated for readability on light champagne background
+8. Consistent styling matching Legal Disclaimer and "Stay in the Loop" sections
