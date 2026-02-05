@@ -353,7 +353,10 @@ export function ReellyImportPanel() {
 
   const handleSyncDevelopers = async (mode: "test" | "quick" | "full") => {
     setIsSyncingDevs(true);
-    setDevSyncResult(null);
+    // Only reset result for non-test mode to preserve previous results
+    if (mode !== "test") {
+      setDevSyncResult(null);
+    }
 
     try {
       const { data, error } = await supabase.functions.invoke("reelly-developers-sync", {
@@ -366,11 +369,19 @@ export function ReellyImportPanel() {
         setDevSyncResult(data);
         if (data.total_available) {
           setTotalDevelopers(data.total_available);
+          // Update cache with developer count
+          const cached = localStorage.getItem('reelly-api-cache');
+          const cacheData = cached ? JSON.parse(cached) : {};
+          localStorage.setItem('reelly-api-cache', JSON.stringify({
+            ...cacheData,
+            totalDevelopers: data.total_available,
+            lastTested: Date.now()
+          }));
         }
         if (mode === "test") {
           toast.success(`Developer API connected! ${data.total_available} developers available`);
         } else {
-          toast.success(`Synced ${data.inserted} new, ${data.updated} updated developers`);
+          toast.success(`Synced ${data.inserted} new, ${data.updated} updated developers (processed ${data.processed} of ${data.total_available})`);
         }
       } else {
         setDevSyncResult({ success: false, error: data?.error });
@@ -415,9 +426,27 @@ export function ReellyImportPanel() {
     }
   };
 
+  // Load cached API results on mount
+  useEffect(() => {
+    const cached = localStorage.getItem('reelly-api-cache');
+    if (cached) {
+      try {
+        const { totalProjects: cachedProjects, totalDevelopers: cachedDevs, apiConnected: cachedConnected, lastTested } = JSON.parse(cached);
+        // Use cache if less than 1 hour old
+        if (lastTested && Date.now() - lastTested < 3600000) {
+          if (cachedProjects) setTotalProjects(cachedProjects);
+          if (cachedDevs) setTotalDevelopers(cachedDevs);
+          if (cachedConnected !== undefined) setApiConnected(cachedConnected);
+        }
+      } catch (e) {
+        console.warn("Failed to parse cached API results:", e);
+      }
+    }
+  }, []);
+
   const handleTestApiConnection = async () => {
     setIsTestingApi(true);
-    setApiConnected(null);
+    // Don't reset apiConnected here - keep previous result visible
 
     try {
       const { data, error } = await supabase.functions.invoke("reelly-api-sync", {
@@ -434,6 +463,13 @@ export function ReellyImportPanel() {
         if (apiTotal) {
           setApiTotal(apiTotal);
         }
+        // Cache results
+        localStorage.setItem('reelly-api-cache', JSON.stringify({
+          totalProjects: apiTotal,
+          totalDevelopers: totalDevelopers,
+          apiConnected: true,
+          lastTested: Date.now()
+        }));
         toast.success(`API connected! ${apiTotal?.toLocaleString()} projects available`);
         // Refresh database counts too
         refreshCounts();

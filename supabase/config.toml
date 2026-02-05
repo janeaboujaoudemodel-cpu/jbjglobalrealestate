@@ -140,3 +140,12 @@ verify_jwt = false
 
 [functions.ai-background-remove]
 verify_jwt = false
+
+[functions.reelly-api-sync]
+verify_jwt = false
+
+[functions.reelly-developers-sync]
+verify_jwt = false
+
+[functions.reelly-areas-sync]
+verify_jwt = false

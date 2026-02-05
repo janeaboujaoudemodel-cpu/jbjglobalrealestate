@@ -1,4 +1,4 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "@supabase/supabase-js";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -95,50 +95,43 @@ Deno.serve(async (req) => {
 
     const body = await req.json().catch(() => ({}));
     const mode = body.mode || "test"; // "test", "quick", "full"
-    const limit = mode === "quick" ? 50 : mode === "full" ? 1000 : 20;
 
-    console.log(`[ReellyDevSync] Mode: ${mode}, Limit: ${limit}`);
+    console.log(`[ReellyDevSync] Mode: ${mode}`);
 
-    // Fetch developers from Reelly API
-    const apiUrl = `https://api-reelly.up.railway.app/api/v2/clients/developers?limit=${limit}&offset=0`;
-    
-    const response = await fetch(apiUrl, {
-      headers: {
-        "X-API-Key": apiKey,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`[ReellyDevSync] API Error: ${response.status} - ${errorText}`);
-      return new Response(
-        JSON.stringify({ 
-          success: false, 
-          error: `Reelly API error: ${response.status}`,
-          details: errorText.substring(0, 500)
-        }),
-        { status: response.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    const rawData = await response.json();
-    
-    // Handle both array and paginated response formats
-    const developers: ReellyDeveloper[] = Array.isArray(rawData) ? rawData : rawData.results || [];
-    const totalCount = Array.isArray(rawData) ? rawData.length : rawData.count || developers.length;
-    
-    console.log(`[ReellyDevSync] Fetched ${developers.length} developers (total: ${totalCount})`);
-
+    // For test mode, just fetch one page to get the count
     if (mode === "test") {
-      // Just return stats for test mode
+      const apiUrl = `https://api-reelly.up.railway.app/api/v2/clients/developers?limit=5&offset=0`;
+      const response = await fetch(apiUrl, {
+        headers: {
+          "X-API-Key": apiKey,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`[ReellyDevSync] API Error: ${response.status} - ${errorText}`);
+        return new Response(
+          JSON.stringify({ 
+            success: false, 
+            error: `Reelly API error: ${response.status}`,
+            details: errorText.substring(0, 500)
+          }),
+          { status: response.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      const rawData = await response.json();
+      const developers = Array.isArray(rawData) ? rawData : rawData.results || [];
+      const totalCount = Array.isArray(rawData) ? rawData.length : rawData.count || developers.length;
+
       return new Response(
         JSON.stringify({
           success: true,
           mode: "test",
           total_available: totalCount,
           sample_count: developers.length,
-          sample_developers: developers.slice(0, 5).map(d => ({
+          sample_developers: developers.slice(0, 5).map((d: ReellyDeveloper) => ({
             id: d.id,
             name: d.name,
             has_logo: !!d.logo?.url,
@@ -149,6 +142,65 @@ Deno.serve(async (req) => {
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+
+    // For quick/full sync: paginate through ALL developers
+    const pageSize = mode === "quick" ? 50 : 100;
+    const maxPages = mode === "quick" ? 1 : 100; // Quick = 1 page (50), Full = up to 100 pages (10,000 max)
+    
+    let allDevelopers: ReellyDeveloper[] = [];
+    let offset = 0;
+    let totalCount = 0;
+    let pagesFetched = 0;
+
+    while (pagesFetched < maxPages) {
+      const apiUrl = `https://api-reelly.up.railway.app/api/v2/clients/developers?limit=${pageSize}&offset=${offset}`;
+      console.log(`[ReellyDevSync] Fetching page ${pagesFetched + 1}: ${apiUrl}`);
+      
+      const response = await fetch(apiUrl, {
+        headers: {
+          "X-API-Key": apiKey,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`[ReellyDevSync] API Error on page ${pagesFetched + 1}: ${response.status} - ${errorText}`);
+        // If we already have some data, continue with what we have
+        if (allDevelopers.length > 0) {
+          console.log(`[ReellyDevSync] Continuing with ${allDevelopers.length} developers already fetched`);
+          break;
+        }
+        return new Response(
+          JSON.stringify({ 
+            success: false, 
+            error: `Reelly API error: ${response.status}`,
+            details: errorText.substring(0, 500)
+          }),
+          { status: response.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      const rawData = await response.json();
+      const developers = Array.isArray(rawData) ? rawData : rawData.results || [];
+      totalCount = Array.isArray(rawData) ? rawData.length : rawData.count || totalCount;
+      
+      allDevelopers = [...allDevelopers, ...developers];
+      pagesFetched++;
+      
+      console.log(`[ReellyDevSync] Page ${pagesFetched}: fetched ${developers.length} developers (total so far: ${allDevelopers.length}/${totalCount})`);
+
+      // Check if we've fetched all developers
+      if (developers.length < pageSize || !rawData.next) {
+        console.log(`[ReellyDevSync] No more pages - reached end of results`);
+        break;
+      }
+      
+      offset += pageSize;
+    }
+
+    const developers = allDevelopers;
+    console.log(`[ReellyDevSync] Total fetched: ${developers.length} developers across ${pagesFetched} pages`);
 
     // Sync mode - process developers
     let inserted = 0;
