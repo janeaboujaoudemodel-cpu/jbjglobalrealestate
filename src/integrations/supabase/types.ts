@@ -15781,12 +15781,15 @@ export type Database = {
       }
       user_preferences: {
         Row: {
+          browser_notifications: boolean | null
           created_at: string
+          dashboard_config: Json | null
           email_notifications: boolean | null
           first_deal_unlocked: boolean | null
           first_deal_unlocked_at: string | null
           id: string
           marketing_opt_in: boolean | null
+          notification_frequency: string | null
           preferred_books_language: string | null
           preferred_language: string | null
           push_notifications: boolean | null
@@ -15795,12 +15798,15 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          browser_notifications?: boolean | null
           created_at?: string
+          dashboard_config?: Json | null
           email_notifications?: boolean | null
           first_deal_unlocked?: boolean | null
           first_deal_unlocked_at?: string | null
           id?: string
           marketing_opt_in?: boolean | null
+          notification_frequency?: string | null
           preferred_books_language?: string | null
           preferred_language?: string | null
           push_notifications?: boolean | null
@@ -15809,12 +15815,15 @@ export type Database = {
           user_id: string
         }
         Update: {
+          browser_notifications?: boolean | null
           created_at?: string
+          dashboard_config?: Json | null
           email_notifications?: boolean | null
           first_deal_unlocked?: boolean | null
           first_deal_unlocked_at?: string | null
           id?: string
           marketing_opt_in?: boolean | null
+          notification_frequency?: string | null
           preferred_books_language?: string | null
           preferred_language?: string | null
           push_notifications?: boolean | null

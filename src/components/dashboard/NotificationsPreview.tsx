@@ -1,0 +1,135 @@
+import { Link } from "react-router-dom";
+import { Bell, ChevronRight, Settings, Check, AlertCircle, Info } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/contexts/AuthContext";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Skeleton } from "@/components/ui/skeleton";
+import { formatDistanceToNow } from "date-fns";
+
+interface Notification {
+  id: string;
+  title: string;
+  body: string | null;
+  notification_type: string;
+  is_read: boolean;
+  created_at: string;
+}
+
+const typeIcons: Record<string, React.ReactNode> = {
+  info: <Info className="w-4 h-4 text-primary" />,
+  success: <Check className="w-4 h-4 text-primary" />,
+  warning: <AlertCircle className="w-4 h-4 text-gold" />,
+  alert: <AlertCircle className="w-4 h-4 text-destructive" />,
+  system: <Info className="w-4 h-4 text-muted-foreground" />,
+};
+
+const NotificationsPreview = () => {
+  const { user } = useAuth();
+
+  const { data: notifications, isLoading } = useQuery({
+    queryKey: ['notifications-preview', user?.id],
+    queryFn: async () => {
+      if (!user?.id) return [];
+      const { data, error } = await supabase
+        .from('notifications')
+        .select('id, title, body, notification_type, is_read, created_at')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(5);
+      if (error) throw error;
+      return (data || []) as Notification[];
+    },
+    enabled: !!user?.id,
+  });
+
+  const unreadCount = notifications?.filter(n => !n.is_read).length || 0;
+
+  return (
+    <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
+        <CardTitle className="flex items-center gap-2 text-lg">
+          <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center relative">
+            <Bell className="w-4 h-4 text-gold" />
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                {unreadCount}
+              </span>
+            )}
+          </div>
+          Notifications
+        </CardTitle>
+        <Button variant="ghost" size="icon" asChild className="h-8 w-8">
+          <Link to="/profile?tab=settings">
+            <Settings className="w-4 h-4 text-muted-foreground" />
+          </Link>
+        </Button>
+      </CardHeader>
+      <CardContent>
+        {isLoading ? (
+          <div className="space-y-3">
+            {[1, 2, 3].map(i => (
+              <Skeleton key={i} className="h-14 w-full" />
+            ))}
+          </div>
+        ) : !notifications || notifications.length === 0 ? (
+          <div className="text-center py-6">
+            <Bell className="w-10 h-10 text-muted-foreground/30 mx-auto mb-2" />
+            <p className="text-sm text-muted-foreground">No notifications yet</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              You'll see updates about your properties here
+            </p>
+          </div>
+        ) : (
+          <>
+            <div className="space-y-3">
+              {notifications.map(notification => (
+                <div 
+                  key={notification.id}
+                  className={`flex items-start gap-3 p-3 rounded-lg border transition-all ${
+                    notification.is_read 
+                      ? 'border-border/50 bg-transparent' 
+                      : 'border-gold/30 bg-gold/5'
+                  }`}
+                >
+                  <div className="mt-0.5">
+                    {typeIcons[notification.notification_type] || typeIcons.info}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-medium text-foreground truncate">
+                        {notification.title}
+                      </p>
+                      {!notification.is_read && (
+                        <Badge className="bg-gold/20 text-gold border-gold/40 text-[10px] px-1 py-0">
+                          New
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">
+                      {notification.body}
+                    </p>
+                    <p className="text-[10px] text-muted-foreground/70 mt-1">
+                      {formatDistanceToNow(new Date(notification.created_at), { addSuffix: true })}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <Button variant="link" className="w-full text-gold mt-4 p-0" asChild>
+              <Link to="/profile?tab=settings">
+                Manage Notifications
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </Link>
+            </Button>
+          </>
+        )}
+      </CardContent>
+    </Card>
+  );
+};
+
+export default NotificationsPreview;

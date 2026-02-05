@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { User, Heart, Sparkles, Briefcase, Users, FolderOpen, Monitor, Settings, LogOut, ChevronRight, ToggleLeft } from 'lucide-react';
+import { User, Heart, Sparkles, Briefcase, Users, FolderOpen, Monitor, Settings, LogOut, ChevronRight, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -56,6 +56,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
   };
 
   const accountLinks = [
+    { href: '/my-dashboard', label: 'My Dashboard', icon: LayoutDashboard, description: 'Your personalized dashboard' },
     { href: '/profile', label: 'My Profile', icon: User, description: 'View and edit your profile' },
     { href: '/favorites', label: 'Favorites', icon: Heart, description: 'Your saved properties' },
   ];
