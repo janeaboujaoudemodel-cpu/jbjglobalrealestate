@@ -513,8 +513,8 @@ const Footer = () => {
             <div className="absolute bottom-0 right-0 h-full w-[3px] bg-gradient-to-t from-gold via-gold/80 to-transparent rounded-br-2xl sm:rounded-br-3xl" />
           </div>
           
-          {/* Premium Champagne Inner Layer - Wraps Navigation + Tools + Contact */}
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] mx-4 sm:mx-6 md:mx-8 my-4 sm:my-6 overflow-hidden">
+          {/* Premium Champagne Inner Layer - Wraps Navigation + Tools + Contact - Fills to gold border */}
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] m-1 overflow-hidden">
             
             {/* Navigation Grid Section */}
             <div className="grid grid-cols-2 lg:grid-cols-4">

@@ -8,7 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Mail, Loader2, CheckCircle } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const newsletterSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -19,10 +19,12 @@ type NewsletterFormData = z.infer<typeof newsletterSchema>;
 /**
  * Newsletter subscription section matching Provident's "Stay in the loop" section.
  * Appears before the footer on project detail pages.
+ * Uses backend edge function for secure lead capture.
  */
 export function NewsletterSection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const location = useLocation();
 
   const form = useForm<NewsletterFormData>({
     resolver: zodResolver(newsletterSchema),
@@ -34,17 +36,45 @@ export function NewsletterSection() {
   const onSubmit = async (data: NewsletterFormData) => {
     setIsSubmitting(true);
     try {
-      // Save to leads table for newsletter subscriptions
-      const { error } = await supabase
-        .from("leads")
-        .insert({
-          email: data.email,
-          source: "newsletter-project-detail",
-          lead_type: "newsletter",
-        });
+      const normalizedEmail = data.email.toLowerCase().trim();
+      
+      // Use backend edge function to capture lead (bypasses RLS)
+      const { data: result, error } = await supabase.functions.invoke('capture-lead', {
+        body: {
+          email: normalizedEmail,
+          source: 'newsletter',
+          subSource: 'Project Detail',
+          pageSource: location.pathname,
+          contactType: 'client',
+        },
+      });
 
-      if (error && error.code !== "23505") { // Ignore duplicate email error
-        throw error;
+      if (error) {
+        console.error("Newsletter subscription failed:", error);
+        toast.error("Something went wrong. Please try again.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      if ((result as any)?.error) {
+        console.error("Newsletter subscription failed:", (result as any).error);
+        toast.error("Something went wrong. Please try again.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Also try to sync with Brevo (best effort - don't block on failure)
+      try {
+        await supabase.functions.invoke('newsletter-subscribe', {
+          body: {
+            email: normalizedEmail,
+            source: 'project_detail',
+            source_page: location.pathname,
+          },
+        });
+      } catch (brevoError) {
+        console.warn('Brevo sync warning:', brevoError);
+        // Don't fail the overall flow if Brevo sync fails
       }
 
       setIsSuccess(true);
