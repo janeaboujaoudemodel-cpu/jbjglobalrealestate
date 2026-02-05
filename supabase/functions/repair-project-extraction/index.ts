@@ -250,6 +250,30 @@ Return JSON:
     const hasDocs = documentsPayload.length > 0;
     const stillIncomplete = !hasMinimal || !hasDocs;
 
+    // CRITICAL FIX: Never overwrite existing images/documents with empty arrays
+    // This prevents the "repair deleted my photos" bug
+    const existingImages = Array.isArray(item.images) ? item.images : [];
+    const existingDocs = Array.isArray(item.documents) ? item.documents : [];
+    
+    // Only use new images if we found more than existing, or existing is empty
+    const finalImages = validImages.length > existingImages.length 
+      ? imagesPayload 
+      : (validImages.length > 0 ? imagesPayload : existingImages);
+    
+    // Only use new documents if we found any and existing is empty or we found more
+    const finalDocuments = documentsPayload.length > existingDocs.length 
+      ? documentsPayload 
+      : (documentsPayload.length > 0 ? documentsPayload : existingDocs);
+    
+    // Recalculate completeness with final values
+    const finalHasMinimal = Boolean(
+      updatedDescription && 
+      updatedDevName && 
+      updatedDevName.toLowerCase() !== "unknown" && 
+      finalImages.length >= 1 // Accept 1+ images (Reelly only provides cover)
+    );
+    const finalStillIncomplete = !finalHasMinimal;
+
     const { error: updateErr } = await supabase
       .from("pending_project_imports")
       .update({
@@ -261,9 +285,9 @@ Return JSON:
         property_type_label: (extracted.property_type_label as string) ?? item.property_type_label,
         status_label: (extracted.status_label as string) ?? item.status_label,
         amenities: Array.isArray(extracted.amenities) ? extracted.amenities : item.amenities,
-        images: imagesPayload,
-        documents: documentsPayload,
-        review_notes: stillIncomplete ? "INCOMPLETE: Re-scrape recommended" : null,
+        images: finalImages,
+        documents: finalDocuments,
+        review_notes: finalStillIncomplete ? "INCOMPLETE: Re-scrape recommended" : null,
         updated_at: new Date().toISOString(),
       })
       .eq("id", pendingImportId);
@@ -278,10 +302,12 @@ Return JSON:
     return new Response(JSON.stringify({
       success: true,
       name: item.name,
-      images: imagesPayload.length,
-      documents: documentsPayload.length,
-      stillIncomplete,
+      images: finalImages.length,
+      documents: finalDocuments.length,
+      stillIncomplete: finalStillIncomplete,
     }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err) {

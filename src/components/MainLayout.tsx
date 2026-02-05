@@ -46,7 +46,11 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const { isRTL } = useLanguage();
   const isMobile = useIsMobile();
   const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith("/admin");
+  // Recognize ALL back-office routes (admin, listing-admin, broker dashboards, etc.)
+  const isAdminRoute = 
+    location.pathname.startsWith("/admin") || 
+    location.pathname.startsWith("/listing-admin") ||
+    location.pathname.startsWith("/broker-dashboard");
   const isHomePage = location.pathname === "/";
 
   // Onboarding tour for tablets

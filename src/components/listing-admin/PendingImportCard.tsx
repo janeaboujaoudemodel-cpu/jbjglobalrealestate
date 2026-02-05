@@ -77,13 +77,18 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
   const hasMultipleImages = images.length > 1;
 
   // Determine if extraction is incomplete
+  // UPDATED COMPLETENESS CRITERIA:
+  // - description is required
+  // - valid developer (not "unknown") is required  
+  // - at least 1 image is required (Reelly only provides cover image - accept 1+)
+  // - documents are NOT required (especially for Reelly API imports)
   const isIncomplete = Boolean(
     item.review_notes?.includes("INCOMPLETE") ||
     item.review_notes?.includes("PENDING_SCRAPE") ||
     !item.description ||
     (item.developer_name?.toLowerCase() === "unknown") ||
-    images.length === 0 ||
-    documents.length === 0
+    images.length === 0
+    // documents.length === 0 - REMOVED: documents no longer mandatory for Reelly imports
   );
 
   const handleCardClick = () => {
