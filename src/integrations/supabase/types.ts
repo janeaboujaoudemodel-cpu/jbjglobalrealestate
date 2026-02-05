@@ -2068,6 +2068,7 @@ export type Database = {
           bio: string | null
           broker_type: string | null
           created_at: string
+          current_tier: string | null
           display_name: string
           email: string | null
           id: string
@@ -2077,7 +2078,9 @@ export type Database = {
           phone: string | null
           photo_url: string | null
           specializations: string[] | null
+          tier_updated_at: string | null
           title: string | null
+          total_points: number | null
           updated_at: string
           user_id: string
           years_experience: number | null
@@ -2086,6 +2089,7 @@ export type Database = {
           bio?: string | null
           broker_type?: string | null
           created_at?: string
+          current_tier?: string | null
           display_name: string
           email?: string | null
           id?: string
@@ -2095,7 +2099,9 @@ export type Database = {
           phone?: string | null
           photo_url?: string | null
           specializations?: string[] | null
+          tier_updated_at?: string | null
           title?: string | null
+          total_points?: number | null
           updated_at?: string
           user_id: string
           years_experience?: number | null
@@ -2104,6 +2110,7 @@ export type Database = {
           bio?: string | null
           broker_type?: string | null
           created_at?: string
+          current_tier?: string | null
           display_name?: string
           email?: string | null
           id?: string
@@ -2113,7 +2120,9 @@ export type Database = {
           phone?: string | null
           photo_url?: string | null
           specializations?: string[] | null
+          tier_updated_at?: string | null
           title?: string | null
+          total_points?: number | null
           updated_at?: string
           user_id?: string
           years_experience?: number | null
@@ -12271,6 +12280,42 @@ export type Database = {
         }
         Relationships: []
       }
+      points_config: {
+        Row: {
+          created_at: string
+          description: string | null
+          event_type: string
+          id: string
+          is_active: boolean | null
+          max_daily: number | null
+          max_monthly: number | null
+          points_value: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          event_type: string
+          id?: string
+          is_active?: boolean | null
+          max_daily?: number | null
+          max_monthly?: number | null
+          points_value: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          event_type?: string
+          id?: string
+          is_active?: boolean | null
+          max_daily?: number | null
+          max_monthly?: number | null
+          points_value?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       points_ledger: {
         Row: {
           created_at: string
@@ -14868,6 +14913,48 @@ export type Database = {
         }
         Relationships: []
       }
+      tier_definitions: {
+        Row: {
+          badge_color: string | null
+          benefits: Json | null
+          created_at: string
+          id: string
+          is_active: boolean | null
+          max_points: number | null
+          min_points: number
+          tier_name: string
+          tier_order: number
+          tier_type: string
+          updated_at: string
+        }
+        Insert: {
+          badge_color?: string | null
+          benefits?: Json | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          max_points?: number | null
+          min_points?: number
+          tier_name: string
+          tier_order: number
+          tier_type: string
+          updated_at?: string
+        }
+        Update: {
+          badge_color?: string | null
+          benefits?: Json | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          max_points?: number | null
+          min_points?: number
+          tier_name?: string
+          tier_order?: number
+          tier_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       training_completions: {
         Row: {
           completed_at: string
@@ -15507,6 +15594,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_tier_history: {
+        Row: {
+          changed_at: string
+          id: string
+          new_tier: string
+          old_tier: string | null
+          points_at_change: number
+          tier_type: string
+          user_id: string
+        }
+        Insert: {
+          changed_at?: string
+          id?: string
+          new_tier: string
+          old_tier?: string | null
+          points_at_change: number
+          tier_type: string
+          user_id: string
+        }
+        Update: {
+          changed_at?: string
+          id?: string
+          new_tier?: string
+          old_tier?: string | null
+          points_at_change?: number
+          tier_type?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       user_uploads: {
         Row: {
@@ -17550,6 +17667,15 @@ export type Database = {
         Args: { p_lead_id: string }
         Returns: string
       }
+      award_points: {
+        Args: {
+          p_description?: string
+          p_event_ref_id?: string
+          p_event_type: string
+          p_user_id: string
+        }
+        Returns: number
+      }
       bulk_assign_leads: {
         Args: {
           p_assigned_by_user_id: string
@@ -17571,6 +17697,10 @@ export type Database = {
         }[]
       }
       calculate_security_score: { Args: never; Returns: number }
+      calculate_user_tier: {
+        Args: { p_tier_type: string; p_user_id: string }
+        Returns: string
+      }
       can_access_crm_lead: {
         Args: { _lead_id: string; _user_id: string }
         Returns: boolean
@@ -17579,6 +17709,10 @@ export type Database = {
       can_access_payment_vault: { Args: { _user_id: string }; Returns: boolean }
       can_access_salary_data: { Args: { _user_id: string }; Returns: boolean }
       can_access_salary_vault: { Args: { _user_id: string }; Returns: boolean }
+      can_earn_points: {
+        Args: { p_event_type: string; p_user_id: string }
+        Returns: boolean
+      }
       check_chat_rate_limit: {
         Args: { p_session_id: string }
         Returns: boolean
@@ -17849,6 +17983,7 @@ export type Database = {
         Args: { _mode?: string; _user_id: string }
         Returns: string
       }
+      get_user_total_points: { Args: { p_user_id: string }; Returns: number }
       get_vapi_call_decrypted_pii: {
         Args: { p_call_id: string }
         Returns: {
