@@ -143,6 +143,20 @@ const Footer = () => {
     { label: t('footer.newsInsights') || "News & Insights", href: "/news" },
   ];
 
+  // Creative Toolkit - All 9 toolkit tools
+  const creativeToolkitLinks = [
+    { href: "/toolkit", label: "Toolkit Hub" },
+    { href: "/toolkit/ai-video-studio", label: "AI Video Studio" },
+    { href: "/toolkit/video-resize-pack", label: "Video Resize Pack" },
+    { href: "/toolkit/voice-studio", label: "Voice Studio" },
+    { href: "/toolkit/pdf-from-photos", label: "Photo to PDF" },
+    { href: "/toolkit/image-resize", label: "Image Resizer" },
+    { href: "/toolkit/captions-translate", label: "Captions & Translate" },
+    { href: "/toolkit/background-ai", label: "AI Background" },
+    { href: "/toolkit/beauty-filters", label: "Beauty Filters" },
+    { href: "/studio", label: "Creative Suite" },
+  ];
+
   // Professional Tools - Complete list
   const professionalTools = [
     // Property Tools
@@ -655,6 +669,30 @@ const Footer = () => {
                   </li>
                 ))}
               </ul>
+            </div>
+          </div>
+
+          {/* Internal Divider */}
+          <div className="h-[2px] bg-gradient-to-r from-gold/20 via-gold/80 to-gold/20 mx-6" />
+
+          {/* Creative Toolkit Section - NEW */}
+          <div className="p-4 sm:p-6 md:p-10 text-center">
+            <div className="mb-4 sm:mb-6">
+              <h4 className="font-bold text-sm sm:text-base md:text-lg uppercase tracking-[0.12em] sm:tracking-[0.18em] md:tracking-[0.25em] mb-2 text-gold drop-shadow-[0_2px_6px_rgba(200,167,102,0.3)]">
+                ✦ Creative Toolkit ✦
+              </h4>
+              <p className="text-zinc-600 text-xs sm:text-sm md:text-base font-medium tracking-wider">Free Professional Tools</p>
+            </div>
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4">
+              {creativeToolkitLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className="text-black hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-lg sm:rounded-xl group bg-white/80 border border-gold/30 shadow-sm hover:shadow-md hover:bg-white"
+                >
+                  <span className="group-hover:text-gold transition-colors">{link.label}</span>
+                </Link>
+              ))}
             </div>
           </div>
 

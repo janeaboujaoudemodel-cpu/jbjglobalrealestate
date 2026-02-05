@@ -13,6 +13,7 @@ import BestIdeaAward from "@/components/BestIdeaAward";
 import SupportTicketBox from "@/components/SupportTicketBox";
 import ExploreServicesCard from "@/components/home/ExploreServicesCard";
 import WhyDubaiCapitalSection from "@/components/home/WhyDubaiCapitalSection";
+import { ToolkitShowcaseCard } from "@/components/home/ToolkitShowcaseCard";
 
 // Master Blueprint Components
 import TrustBar from "@/components/home/TrustBar";
@@ -484,6 +485,9 @@ const Index = () => {
 
       {/* EXPLORE OUR SERVICES SLIDESHOW */}
       <ExploreServicesCard />
+
+      {/* TOOLKIT SHOWCASE CARD - Free Professional Tools */}
+      <ToolkitShowcaseCard />
 
       {/* AI HOME FINDER - Premium CTA Section - CENTERED with WHITE background card + glow */}
       <section className="py-12 md:py-16 bg-black">

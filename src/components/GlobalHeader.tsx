@@ -52,6 +52,7 @@ import MegaMenuServices from "@/components/header/MegaMenuServices";
 import MegaMenuMore from "@/components/header/MegaMenuMore";
 import MegaMenuInvestorHub from "@/components/header/MegaMenuInvestorHub";
 import MegaMenuBrokerHub from "@/components/header/MegaMenuBrokerHub";
+import MegaMenuToolkit from "@/components/header/MegaMenuToolkit";
 // Utility Mega Menus
 import MegaMenuSearch from "@/components/header/MegaMenuSearch";
 import MegaMenuLanguage from "@/components/header/MegaMenuLanguage";
@@ -415,6 +416,19 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/compare", label: "Compare Properties", icon: ClipboardCheck },
     { href: "/landlord-portal", label: "Landlord Portal", icon: Building2 },
     { href: "/seller-listing", label: "Sell Your Property", icon: ClipboardCheck },
+  ];
+
+  // Mobile menu - Creative Toolkit
+  const mobileToolkitLinks = [
+    { href: "/toolkit", label: "Toolkit Hub", icon: Sparkles },
+    { href: "/toolkit/ai-video-studio", label: "AI Video Studio", icon: Building2 },
+    { href: "/toolkit/video-resize-pack", label: "Video Resize Pack", icon: Building2 },
+    { href: "/toolkit/voice-studio", label: "Voice Studio", icon: Building2 },
+    { href: "/toolkit/pdf-from-photos", label: "Photo to PDF", icon: FileText },
+    { href: "/toolkit/image-resize", label: "Image Resizer", icon: Building2 },
+    { href: "/toolkit/captions-translate", label: "Captions & Translate", icon: Building2 },
+    { href: "/toolkit/background-ai", label: "AI Background", icon: Sparkles },
+    { href: "/toolkit/beauty-filters", label: "Beauty Filters", icon: Building2 },
   ];
 
   // Mobile menu - Legal & Trust
@@ -814,7 +828,32 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                     <div className="h-px bg-gold/20 my-2" />
 
-                    {/* 7. About & Company - Collapsible */}
+                    {/* 7. Creative Toolkit - Collapsible */}
+                    <Collapsible>
+                      <CollapsibleTrigger className="w-full flex items-center justify-between px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                        <span>Creative Toolkit</span>
+                        <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <div className="pl-2">
+                          {mobileToolkitLinks.map((link) => (
+                            <Link
+                              key={link.href}
+                              to={link.href}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                            >
+                              <link.icon className="w-4 h-4 text-gold" />
+                              {link.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
+
+                    <div className="h-px bg-gold/20 my-2" />
+
+                    {/* 8. About & Company - Collapsible */}
                     <Collapsible>
                       <CollapsibleTrigger className="w-full flex items-center justify-between px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold hover:bg-gold/5 rounded-lg transition-colors">
                         <span>About & Company</span>
@@ -1285,6 +1324,21 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 </button>
                 {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
 
+                {/* Toolkit */}
+                <button
+                  onPointerEnter={() => handleMegaMenuEnter('toolkit')}
+                  onClick={() => handleMegaMenuClick('toolkit')}
+                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
+                    isFullyTransparent
+                      ? activeMegaMenu === 'toolkit' ? 'text-gold' : 'text-white hover:text-gold'
+                      : activeMegaMenu === 'toolkit' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
+                  }`}
+                >
+                  Toolkit
+                  <ChevronDown className={`w-3 h-3 transition-transform ${activeMegaMenu === 'toolkit' ? 'rotate-180' : ''}`} />
+                </button>
+                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
+
                 {/* Investor Hub */}
                 <button
                   onPointerEnter={() => handleMegaMenuEnter('investor')}
@@ -1351,6 +1405,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     {activeMegaMenu === 'developers' && <MegaMenuDevelopers onClose={closeMegaMenu} />}
                     {activeMegaMenu === 'areas' && <MegaMenuAreas onClose={closeMegaMenu} />}
                     {activeMegaMenu === 'services' && <MegaMenuServices onClose={closeMegaMenu} />}
+                    {activeMegaMenu === 'toolkit' && <MegaMenuToolkit onClose={closeMegaMenu} />}
                     {activeMegaMenu === 'investor' && <MegaMenuInvestorHub onClose={closeMegaMenu} />}
                     {activeMegaMenu === 'broker' && <MegaMenuBrokerHub onClose={closeMegaMenu} />}
                     {activeMegaMenu === 'more' && <MegaMenuMore onClose={closeMegaMenu} />}
