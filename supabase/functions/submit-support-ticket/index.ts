@@ -209,11 +209,24 @@ const handler = async (req: Request): Promise<Response> => {
       // Continue - don't fail the whole request
     }
 
-    // Calculate SLA due date (24-48 hours)
+    // Calculate SLA based on priority
     const now = new Date();
-    const slaDueDate = new Date(now.getTime() + 48 * 60 * 60 * 1000);
+    const priorityConfig: Record<string, { hours: number; label: string; color: string; bgColor: string }> = {
+      critical: { hours: 4, label: "2-4 hours", color: "#dc2626", bgColor: "#fef2f2" },
+      high: { hours: 12, label: "8-12 hours", color: "#ea580c", bgColor: "#fff7ed" },
+      normal: { hours: 48, label: "24-48 hours", color: "#2563eb", bgColor: "#eff6ff" },
+      low: { hours: 72, label: "48-72 hours", color: "#6b7280", bgColor: "#f9fafb" }
+    };
+    const priorityInfo = priorityConfig[aiAnalyzedPriority] || priorityConfig.normal;
+    const slaDueDate = new Date(now.getTime() + priorityInfo.hours * 60 * 60 * 1000);
     const formattedDate = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const formattedTime = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
     const formattedSlaDate = slaDueDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const formattedSlaTime = slaDueDate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+    
+    // WhatsApp link with pre-filled message
+    const whatsappMessage = encodeURIComponent(`Hi JBJ Support Team, I'm following up on my ticket ${ticket.ticket_number}. My issue: ${subject}`);
+    const whatsappLink = `https://wa.me/971565911000?text=${whatsappMessage}`;
 
     // Send confirmation email to customer with enhanced design
     const customerEmailHtml = `
@@ -233,6 +246,16 @@ const handler = async (req: Request): Promise<Response> => {
           .hero-contact-item a { color: #C8A766; text-decoration: none; font-size: 14px; }
           .hero-contact-item a:hover { text-decoration: underline; }
           .content { padding: 30px; background: #fff; }
+          .progress-tracker { display: table; width: 100%; margin: 25px 0; }
+          .progress-step { display: table-cell; text-align: center; position: relative; width: 33.33%; }
+          .progress-step .circle { width: 40px; height: 40px; border-radius: 50%; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+          .progress-step.active .circle { background: linear-gradient(135deg, #C8A766, #B8956E); color: #fff; }
+          .progress-step.pending .circle { background: #e5e5e5; color: #999; }
+          .progress-step .label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+          .progress-step.active .label { color: #C8A766; font-weight: 600; }
+          .progress-line { position: absolute; top: 20px; left: 50%; width: 100%; height: 2px; background: #e5e5e5; z-index: 0; }
+          .progress-step:last-child .progress-line { display: none; }
+          .priority-badge { display: inline-block; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
           .ticket-summary { background: linear-gradient(135deg, #fdfbf7, #f5f0e6); border: 2px solid #C8A766; border-radius: 12px; padding: 25px; margin: 20px 0; }
           .ticket-summary h3 { color: #1a1a1a; margin: 0 0 20px 0; font-size: 18px; border-bottom: 1px solid #C8A766; padding-bottom: 10px; }
           .summary-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e8e8e8; }
@@ -242,13 +265,18 @@ const handler = async (req: Request): Promise<Response> => {
           .ticket-box { background: linear-gradient(135deg, #fdfbf7, #f5f0e6); border: 2px solid #C8A766; border-radius: 12px; padding: 25px; margin: 25px 0; }
           .ticket-box h3 { color: #1a1a1a; margin: 0 0 20px 0; font-size: 18px; border-bottom: 1px solid #C8A766; padding-bottom: 10px; }
           .ticket-number-row { display: flex; align-items: center; justify-content: space-between; }
-          .ticket-number { font-size: 20px; font-weight: bold; color: #C8A766; letter-spacing: 2px; font-family: 'Courier New', monospace; }
-          .copy-btn { background: linear-gradient(135deg, #C8A766, #B8956E); border: none; color: #fff; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 12px; display: inline-flex; align-items: center; gap: 6px; }
+          .ticket-number { font-size: 24px; font-weight: bold; color: #C8A766; letter-spacing: 3px; font-family: 'Courier New', monospace; }
+          .copy-btn { background: linear-gradient(135deg, #C8A766, #B8956E); border: none; color: #fff; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
           .copy-btn:hover { opacity: 0.9; }
-          .sla-badge { background: #000; color: #C8A766; padding: 8px 20px; border-radius: 20px; display: inline-block; margin-top: 15px; font-size: 12px; font-weight: 600; }
+          .sla-badge { background: #000; color: #C8A766; padding: 10px 24px; border-radius: 25px; display: inline-block; margin-top: 15px; font-size: 13px; font-weight: 600; }
           .message { background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0; }
           .warning-box { background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; padding: 15px; margin: 20px 0; }
           .warning-box strong { color: #856404; }
+          .action-buttons { display: table; width: 100%; margin: 25px 0; }
+          .action-btn { display: table-cell; width: 50%; padding: 5px; text-align: center; }
+          .action-btn a { display: block; padding: 14px 20px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 14px; }
+          .btn-whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); color: #fff; }
+          .btn-call { background: linear-gradient(135deg, #000, #1a1a1a); color: #C8A766; border: 2px solid #C8A766; }
           .contact-hero { background: linear-gradient(135deg, #000, #1a1a1a); padding: 30px; text-align: center; margin: 25px 0; border-radius: 12px; }
           .contact-hero h3 { color: #C8A766; margin: 0 0 20px 0; font-size: 18px; }
           .contact-grid { display: table; width: 100%; }
@@ -269,7 +297,10 @@ const handler = async (req: Request): Promise<Response> => {
           .footer-tagline { color: #666; font-size: 11px; margin-bottom: 15px; }
           .footer p { margin: 5px 0; }
           .gold { color: #C8A766; }
+          .rating-stars { margin: 15px 0; }
+          .rating-stars span { font-size: 18px; color: #C8A766; }
         </style>
+      </head>
       </head>
       <body>
         <div class="container">
@@ -294,7 +325,25 @@ const handler = async (req: Request): Promise<Response> => {
             <p>Dear <strong>${fullName}</strong>,</p>
             <p>We have received your support request and are sorry to hear you're experiencing an issue. Our team is committed to resolving this as quickly as possible.</p>
             
-            <!-- Ticket Number Box - Matching Ticket Summary Style -->
+            <!-- Visual Progress Tracker -->
+            <div class="progress-tracker">
+              <div class="progress-step active">
+                <div class="progress-line"></div>
+                <div class="circle">✓</div>
+                <div class="label">Received</div>
+              </div>
+              <div class="progress-step pending">
+                <div class="progress-line"></div>
+                <div class="circle">2</div>
+                <div class="label">In Review</div>
+              </div>
+              <div class="progress-step pending">
+                <div class="circle">3</div>
+                <div class="label">Resolved</div>
+              </div>
+            </div>
+            
+            <!-- Ticket Number Box -->
             <div class="ticket-box">
               <h3>🎫 Your Ticket Number</h3>
               <div class="ticket-number-row">
@@ -303,10 +352,22 @@ const handler = async (req: Request): Promise<Response> => {
                   📋 Copy
                 </button>
               </div>
+              <div style="margin-top: 15px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <span class="priority-badge" style="background: ${priorityInfo.bgColor}; color: ${priorityInfo.color}; border: 1px solid ${priorityInfo.color};">
+                  ${aiAnalyzedPriority.toUpperCase()} PRIORITY
+                </span>
+                <span class="sla-badge">⏱️ Response within ${priorityInfo.label}</span>
+              </div>
             </div>
-            
-            <div style="text-align: center; margin: 15px 0;">
-              <div class="sla-badge">⏱️ Response within 24-48 hours</div>
+
+            <!-- Quick Action Buttons -->
+            <div class="action-buttons">
+              <div class="action-btn">
+                <a href="${whatsappLink}" class="btn-whatsapp">💬 WhatsApp Follow-up</a>
+              </div>
+              <div class="action-btn">
+                <a href="tel:+971565911000" class="btn-call">📞 Call Support</a>
+              </div>
             </div>
 
             <!-- Ticket Summary -->
@@ -318,6 +379,10 @@ const handler = async (req: Request): Promise<Response> => {
                   <td style="padding: 10px 0; color: #1a1a1a; font-weight: 600; font-size: 13px; text-align: right;">${ticket.ticket_number}</td>
                 </tr>
                 <tr style="border-bottom: 1px solid #e8e8e8;">
+                  <td style="padding: 10px 0; color: #666; font-size: 13px;">Priority Level</td>
+                  <td style="padding: 10px 0; font-weight: 600; font-size: 13px; text-align: right; color: ${priorityInfo.color};">${aiAnalyzedPriority.charAt(0).toUpperCase() + aiAnalyzedPriority.slice(1)}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e8e8e8;">
                   <td style="padding: 10px 0; color: #666; font-size: 13px;">Request Type</td>
                   <td style="padding: 10px 0; color: #1a1a1a; font-weight: 600; font-size: 13px; text-align: right;">${serviceCategory}</td>
                 </tr>
@@ -326,12 +391,12 @@ const handler = async (req: Request): Promise<Response> => {
                   <td style="padding: 10px 0; color: #1a1a1a; font-weight: 600; font-size: 13px; text-align: right;">${subject}</td>
                 </tr>
                 <tr style="border-bottom: 1px solid #e8e8e8;">
-                  <td style="padding: 10px 0; color: #666; font-size: 13px;">Request Date</td>
-                  <td style="padding: 10px 0; color: #1a1a1a; font-weight: 600; font-size: 13px; text-align: right;">${formattedDate}</td>
+                  <td style="padding: 10px 0; color: #666; font-size: 13px;">Submitted</td>
+                  <td style="padding: 10px 0; color: #1a1a1a; font-weight: 600; font-size: 13px; text-align: right;">${formattedDate} at ${formattedTime}</td>
                 </tr>
                 <tr>
-                  <td style="padding: 10px 0; color: #666; font-size: 13px;">SLA Due Date</td>
-                  <td style="padding: 10px 0; color: #C8A766; font-weight: 600; font-size: 13px; text-align: right;">${formattedSlaDate} (24-48 hrs)</td>
+                  <td style="padding: 10px 0; color: #666; font-size: 13px;">Expected Response</td>
+                  <td style="padding: 10px 0; color: #C8A766; font-weight: 600; font-size: 13px; text-align: right;">By ${formattedSlaDate} ${formattedSlaTime}</td>
                 </tr>
               </table>
             </div>
@@ -339,9 +404,10 @@ const handler = async (req: Request): Promise<Response> => {
             <div class="message">
               <p><strong>What happens next?</strong></p>
               <ul>
-                <li>Our support team will review your ticket within 24-48 hours</li>
-                <li>You'll receive updates via email</li>
-                <li>Please keep your ticket number for reference</li>
+                <li>Our support team will review your ticket within <strong>${priorityInfo.label}</strong></li>
+                <li>You'll receive updates via email as we progress</li>
+                <li>Use WhatsApp for urgent follow-ups (include your ticket number)</li>
+                <li>Rate your experience once resolved - your feedback matters!</li>
               </ul>
             </div>
 
