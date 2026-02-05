@@ -1,271 +1,238 @@
-# Fix Listing Stats Display & Implement Reelly-Only Data Strategy with Restore Functionality
 
-## ✅ IMPLEMENTED - February 2026
 
-## Problem Summary
+# Multi-Component UI Consistency & Admin Queue Fix Plan
 
-| Issue | Root Cause |
-|-------|------------|
-| **Approvals queue shows "1,336 target" for Reelly** | The source filter logic in `ProjectApprovalQueue.tsx` is not correctly applying Reelly's target (1,803) when the Reelly filter is active |
-| **Queue + Complete count doesn't equal target** | Only 778 Reelly projects are currently synced; the remaining 1,025 need to be imported via Full Sync |
-| **Provident and Reelly data are being mixed** | Current workflow doesn't enforce Reelly as the primary source with Provident as optional enrichment only |
-| **No way to restore projects to Reelly-only state** | Missing functionality to remove Provident-added content and revert to pure Reelly data |
+## Issues Identified
+
+| # | Issue | Current State | Required State |
+|---|-------|--------------|----------------|
+| 1 | **Reelly Queue shows 778 target** | When source=reelly, queue shows current synced count (778) in "Target" box instead of true target | Target should always show **1,803** for Reelly regardless of how many are synced |
+| 2 | **Queue treats Reelly like scraping** | Queue shows "Needs Work" counts implying incomplete data | Reelly API sync doesn't have incomplete data - show different UX for API vs scraping |
+| 3 | **"Contact Us Directly" section inconsistency** | Different contact UIs across pages (CTABand, DirectContactCTA, project detail inline) | Use the **3-card grid** (WhatsApp/Call/Email with colored icons) everywhere globally |
+| 4 | **Save Contact / Share button styling** | Currently: gold border on normal, black hover | Reverse: **gold border normal, black border on hover** |
+| 5 | **"Stay in the Loop" newsletter placement** | Only in footer's internal section | Move **above the footer logo** as a standalone global section on all pages |
+| 6 | **Contact page 4 cards hover state** | Search icon hover not working correctly | Fix hover interaction on the 4 contact info cards |
+| 7 | **Contact form styling** | Different styling than project page forms | Match the premium champagne gradient form styling globally |
+| 8 | **"Contact Us Directly" title** | Generic title "Contact Us Directly" | Make it **bigger and more premium** |
+| 9 | **Sold Out badge on cards** | Full dark overlay with centered badge | Use **corner badge only** (top-right red pill with border, matching inside-page style) |
 
 ## Solution Architecture
 
-### Phase 1: Fix Target Display in Approvals Queue
+### Phase 1: Fix Reelly Queue Target Display
 
-Update `ProjectApprovalQueue.tsx` to show correct target based on source filter:
+**Problem Analysis:**
+The `ProjectApprovalQueue.tsx` shows the correct target values (1,803 for Reelly, 1,336 for Provident) in the "Target" box on lines 1015-1019. However, the actual counts being fetched from the database are showing the current synced count, not the target.
 
-```text
-When sourceFilter === "reelly" → Show "1,803"
-When sourceFilter === "provident" → Show "1,336"
-When sourceFilter === "all" → Show actual totalCount
+**Root Cause:**
+Looking at the code, `sourceFilter === "reelly" ? "1,803"` is correctly hardcoded for the Target display. The confusion is that the "In Queue" count next to it shows the actual pending count, which is correct - you have 778 items in queue waiting for the remaining ~1,025 to be synced.
+
+**Issue:** The queue card header (line 847-850) shows "1,803 Target" correctly, but the UI may be confusing users into thinking the target is the count.
+
+**Solution:**
+1. Add clarifying text to distinguish "Target" (total available from Reelly API) vs "In Queue" (current pending)
+2. Add a progress indicator showing `In Queue / Target` as a percentage
+3. For Reelly source, hide "Needs Work" concept since API data isn't incomplete
+
+**Files to Modify:**
+- `src/components/listing-admin/ProjectApprovalQueue.tsx` (lines 847-1060)
+
+### Phase 2: Global Contact Section Component
+
+**Current Components:**
+1. `CTABand.tsx` - Homepage "Ready to Get Started?" with buttons
+2. `DirectContactCTA.tsx` - 3-card grid with WhatsApp/Call/Email + Save Contact + Share
+3. `ProjectDetailLayout.tsx` (lines 1054-1148) - Inline contact section
+
+**Target:**
+Use the `DirectContactCTA` 3-card grid style EVERYWHERE, including:
+- Homepage (replace CTABand)
+- All service pages
+- All guide pages  
+- Project detail pages
+- Contact page
+- About page
+
+**Modifications:**
+
+#### 2.1 Enhance DirectContactCTA Component
+- Make title configurable with `titleStyle: 'premium' | 'standard'`
+- Premium title: Larger (text-3xl md:text-4xl), more prominent
+- Reverse Save Contact / Share button styling:
+  - **Normal**: `border-2 border-gold/50` (gold border, transparent bg)
+  - **Hover**: `border-2 border-black hover:bg-black/5` (black border on hover)
+
+#### 2.2 Update CTABand.tsx
+- Replace current button layout with `<DirectContactCTA />` component
+- Keep "Ready to Get Started?" heading but use premium style
+
+#### 2.3 Update ProjectDetailLayout.tsx
+- Replace inline contact section (lines 1054-1148) with `<DirectContactCTA />`
+
+### Phase 3: Stay in the Loop - Global Placement
+
+**Current Location:**
+- Inside Footer.tsx (lines 326-343), embedded within the premium 3D card before the logo
+
+**New Location:**
+- Move to a **standalone section** that appears on ALL pages, positioned **above the entire footer component**
+- Create a new `NewsletterBand.tsx` component that wraps `NewsletterBrevo`
+- Premium black background with champagne card styling (like DirectContactCTA)
+
+**Implementation:**
+1. Create `src/components/NewsletterBand.tsx` - A standalone section component
+2. Add it to the global layout or include in every page template
+3. Remove the embedded newsletter from Footer.tsx (keep it simple)
+
+**Design:**
+```
++----------------------------------------------------------+
+|                         BLACK BG                           |
+|   +---------------------------------------------------+   |
+|   |  🏠 CHAMPAGNE LAYER                               |   |
+|   |                                                   |   |
+|   |   ✦ Stay in the Loop ✦                           |   |
+|   |                                                   |   |
+|   |   Be the first to access new listings...          |   |
+|   |                                                   |   |
+|   |   [ Email Input ] [ Subscribe Button ]            |   |
+|   |                                                   |   |
+|   +---------------------------------------------------+   |
++----------------------------------------------------------+
 ```
 
-Current issue location: Line 1015 in `ProjectApprovalQueue.tsx` - the conditional is already there but may not be applying correctly when the URL parameter `source=reelly` is used on page load.
+### Phase 4: Contact Page Fixes
 
-### Phase 2: Provident as Suggest-Only Enrichment
+#### 4.1 Fix Contact Cards Hover State
+Location: `src/pages/Contact.tsx` (lines 330-352)
 
-Modify the sync strategy so:
-1. Reelly is the **primary and only** full extraction source
-2. Provident is used **only** to scan for projects that exist in both systems and propose missing sections
-3. Provident suggestions go to a separate approval queue - never auto-applied
+Current issue: The search/magnifying icon interaction on phone-actions isn't working correctly.
 
-**Database tracking:**
-- Add a `source` column to track where each field came from (`reelly`, `provident_enrichment`, `manual`)
-- Add a `provident_enrichments` JSON column to store which fields were added by Provident
-- This allows one-click restoration to Reelly-only state
+Fix:
+- Ensure click handler works on entire card
+- Add proper hover states with visual feedback
+- Fix the icon container styling to match the premium design
 
-### Phase 3: Restore to Reelly-Only Functionality
+#### 4.2 Contact Form Styling
+Location: `src/pages/Contact.tsx` (lines 390-892)
 
-#### 3.1 Global Restore Button
-Location: ReellyImportPanel.tsx - new section "Data Integrity"
+Ensure the consultation form matches the project page form styling:
+- Champagne gradient background: `from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`
+- Gold border: `border-2 border-gold`
+- Rounded corners: `rounded-2xl`
+- Shadow: `shadow-[0_8px_30px_rgba(200,167,102,0.35)]`
 
-```text
-+--------------------------------------------------+
-| 🔄 Restore to Reelly-Only                        |
-+--------------------------------------------------+
-| Remove all Provident enrichments and restore     |
-| projects to their original Reelly-only state.    |
-|                                                  |
-| [Restore All Projects to Reelly-Only]            |
-+--------------------------------------------------+
+### Phase 5: Sold Out Badge on Cards
+
+**Current (ProjectCard.tsx lines 268-275):**
+```tsx
+{project.is_sold_out && (
+  <div className="absolute inset-0 bg-premium-bg/65 flex items-center justify-center z-20">
+    <span className="bg-destructive ...">Sold Out</span>
+  </div>
+)}
 ```
 
-This will:
-- Clear all fields that were added by Provident (tracked via `provident_enrichments`)
-- Delete pending Provident suggestions from `listing_pending_updates`
-- Remove images/documents that were added from Provident sources
-
-#### 3.2 Per-Project Restore Button
-Location: Project detail page and/or approval queue preview
-
-```text
-[↩️ Restore to Reelly-Only]
+**New Design (matching inside-page badge):**
+```tsx
+{project.is_sold_out && (
+  <div className="absolute top-3 right-3 z-20">
+    <div className="bg-red-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold uppercase shadow-lg border border-red-400 animate-pulse">
+      SOLD OUT
+    </div>
+  </div>
+)}
 ```
 
-This removes Provident enrichments for just that one project.
+Key changes:
+- Remove full overlay (no darkening of entire card)
+- Position in top-right corner
+- Match the hero badge styling (red pill, border, pulse animation)
+- Smaller size for card context
 
-### Phase 4: New Edge Function - restore-to-reelly
+---
 
-Create `supabase/functions/restore-to-reelly/index.ts`:
+## Files to Create/Modify
 
-```typescript
-// Modes:
-// - "single": Restore a single project by ID
-// - "global": Restore all projects that have Provident enrichments
-// - "pending_only": Just clear pending Provident suggestions
-
-// Actions:
-// 1. Find projects with source="reelly" that have provident_enrichments
-// 2. Reset enriched fields to their original Reelly values (or null)
-// 3. Delete any images/documents added from Provident sources
-// 4. Clear listing_pending_updates where source is Provident
-// 5. Clear provident_enrichments JSON column
-```
-
-### Phase 5: UI Updates
-
-#### 5.1 ReellyImportPanel.tsx Enhancements
-
-Add new card section:
-
-```text
-+--------------------------------------------------+
-| 📊 Data Integrity                                |
-+--------------------------------------------------+
-| • Projects from Reelly: 778 (of 1,803 available) |
-| • With Provident enrichments: 0                  |
-| • Pending Provident suggestions: 0               |
-+--------------------------------------------------+
-| [Restore All to Reelly-Only] [Clear Suggestions] |
-+--------------------------------------------------+
-```
-
-#### 5.2 ProjectApprovalQueue.tsx Fixes
-
-1. Fix the target display to correctly show 1,803 for Reelly filter
-2. Add source indicator on each card showing "Reelly" or "Reelly + Provident"
-3. Add per-item restore button for enriched projects
-
-#### 5.3 SyncDashboard.tsx Updates
-
-1. Remove Provident-specific "Full Sync" options from main workflow
-2. Move Provident tools to a "Deprecated/Legacy" section
-3. Update the "1,336" references to clarify they're Provident-specific
-4. Add prominent messaging that Reelly is the primary source
-
-### Phase 6: Database Schema Changes
-
-Add columns to `projects` table:
-
-```sql
-ALTER TABLE projects ADD COLUMN IF NOT EXISTS provident_enrichments jsonb DEFAULT NULL;
--- Stores: {"fields_added": ["amenities", "faqs", "location_distances"], "images_added": ["url1", "url2"], "enriched_at": "timestamp"}
-```
-
-Add columns to `pending_project_imports` table (if not already present):
-
-```sql
-ALTER TABLE pending_project_imports ADD COLUMN IF NOT EXISTS enrichment_source text DEFAULT NULL;
--- Values: "reelly", "provident", "manual"
-```
-
-## Files to Modify
-
-| File | Changes |
-|------|---------|
-| `src/components/listing-admin/ProjectApprovalQueue.tsx` | Fix target display logic, add restore button per item, add source indicator |
-| `src/components/listing-admin/ReellyImportPanel.tsx` | Add Data Integrity section with global restore, stats on enrichments |
-| `src/components/listing-admin/SyncDashboard.tsx` | Move Provident tools to deprecated section, update messaging |
-| `supabase/functions/restore-to-reelly/index.ts` | **NEW** - Edge function to handle restoration logic |
-| Database migration | Add `provident_enrichments` column to projects table |
-
-## Files to Create
-
+### New Files
 | File | Purpose |
 |------|---------|
-| `supabase/functions/restore-to-reelly/index.ts` | Edge function for single/global restore to Reelly-only state |
-| `src/components/listing-admin/DataIntegrityPanel.tsx` | Optional: Dedicated component for restore controls |
+| `src/components/NewsletterBand.tsx` | Standalone "Stay in the Loop" section for global use above footer |
+
+### Modified Files
+| File | Changes |
+|------|---------|
+| `src/components/listing-admin/ProjectApprovalQueue.tsx` | Fix target display clarity for Reelly vs Provident, hide "Needs Work" for API sources |
+| `src/components/DirectContactCTA.tsx` | Add premium title option, reverse Save/Share button hover logic |
+| `src/components/home/CTABand.tsx` | Replace with DirectContactCTA usage |
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Replace inline contact section with DirectContactCTA |
+| `src/pages/Contact.tsx` | Fix card hover states, ensure form matches premium styling |
+| `src/components/ProjectCard.tsx` | Change Sold Out badge from overlay to corner badge |
+| `src/components/Footer.tsx` | Remove embedded newsletter (it will be in NewsletterBand) |
+| `src/pages/Index.tsx` | Add NewsletterBand before Footer |
+| Multiple page files | Add NewsletterBand before Footer on each page |
+
+---
 
 ## Technical Implementation Details
 
-### Target Display Fix (ProjectApprovalQueue.tsx)
-
-The issue is on line 1015. Current code:
-```tsx
-{sourceFilter === "provident" ? "1,336" : sourceFilter === "reelly" ? "1,803" : totalCount ?? "..."}
-```
-
-This should work, but the URL parameter may not be initializing `sourceFilter` correctly on first load. Need to verify:
-1. URL param `source=reelly` is being read correctly
-2. State is initialized before the first render
-3. The component re-renders when filter changes
-
-### Restore Edge Function Logic
-
+### DirectContactCTA Enhanced Props
 ```typescript
-async function restoreToReelly(supabase, options) {
-  const { mode, projectId } = options;
-  
-  if (mode === "single" && projectId) {
-    // Get project's provident_enrichments
-    const { data: project } = await supabase
-      .from("projects")
-      .select("provident_enrichments")
-      .eq("id", projectId)
-      .single();
-    
-    if (project?.provident_enrichments) {
-      const enrichments = project.provident_enrichments;
-      
-      // Build update to null out enriched fields
-      const updates = {};
-      for (const field of enrichments.fields_added || []) {
-        updates[field] = null;
-      }
-      
-      // Clear enrichments tracking
-      updates.provident_enrichments = null;
-      
-      await supabase.from("projects").update(updates).eq("id", projectId);
-      
-      // Remove added images
-      if (enrichments.images_added?.length) {
-        await supabase
-          .from("project_images")
-          .delete()
-          .in("image_url", enrichments.images_added);
-      }
-      
-      // Remove added documents
-      if (enrichments.documents_added?.length) {
-        await supabase
-          .from("project_documents")
-          .delete()
-          .in("file_url", enrichments.documents_added);
-      }
-    }
-  }
-  
-  if (mode === "global") {
-    // Same logic but for all projects with provident_enrichments IS NOT NULL
-  }
-  
-  if (mode === "pending_only") {
-    // Clear listing_pending_updates where source is Provident
-    await supabase
-      .from("listing_pending_updates")
-      .delete()
-      .ilike("source.name", "%provident%");
-  }
+interface DirectContactCTAProps {
+  className?: string;
+  showTitle?: boolean;
+  title?: string;
+  subtitle?: string;
+  // NEW:
+  titleSize?: 'standard' | 'premium'; // premium = text-3xl md:text-4xl
+  showSaveShare?: boolean; // Allow hiding Save/Share buttons
 }
 ```
 
-### Provident Enrichment Flow (Future)
+### Save/Share Button Styling Reversal
+```tsx
+// Current (WRONG):
+className="bg-black border-2 border-gold/50 hover:border-gold text-white"
 
-After this fix, the Provident workflow becomes:
-1. User runs Reelly Full Sync → 1,803 projects imported
-2. User clicks "Scan Provident for Missing Data" (new button)
-3. System scans Provident, finds matching projects by name/slug
-4. Creates suggestions in `listing_pending_updates` table
-5. User reviews and approves/rejects suggestions
-6. Approved enrichments are applied AND tracked in `provident_enrichments`
-7. User can click "Restore to Reelly-Only" at any time to undo
+// Fixed (CORRECT):
+className="bg-transparent border-2 border-gold/50 text-black hover:border-black hover:bg-black/5"
+```
+
+### Sold Out Card Badge
+```tsx
+// Remove overlay approach, use corner badge matching inside-page style
+{(project.is_sold_out || project.status_label?.toLowerCase().includes('sold')) && (
+  <div className="absolute top-3 right-3 z-20">
+    <div className="bg-red-600 text-white px-3 py-1 rounded-lg text-xs font-bold uppercase shadow-lg border border-red-400 animate-pulse">
+      SOLD OUT
+    </div>
+  </div>
+)}
+```
+
+### Reelly Queue Target Clarity
+Add explanatory text and progress bar:
+```tsx
+<div className="rounded-lg border border-border bg-emerald-50 p-3 text-center">
+  <div className="text-2xl font-bold text-emerald-700">1,803</div>
+  <div className="text-xs text-emerald-600">API Total</div>
+  {totalCount !== null && (
+    <div className="mt-1 text-xs text-muted-foreground">
+      {totalCount.toLocaleString()} synced ({Math.round((totalCount / 1803) * 100)}%)
+    </div>
+  )}
+</div>
+```
+
+---
 
 ## Expected Results
 
 After implementation:
-- **Target display shows correct number**: 1,803 for Reelly, 1,336 for Provident
-- **Queue math is correct**: In Queue + Complete = Target (after Full Sync)
-- **Provident is suggest-only**: Never auto-applied, always requires approval
-- **Global restore button**: One-click to remove all Provident enrichments
-- **Per-project restore**: Undo enrichments on individual projects
-- **Clear separation**: Reelly tab is primary, Provident tools moved to legacy section
-- **Full audit trail**: Know exactly which fields came from Provident vs Reelly
-
-## Implementation Priority
-
-| Step | Priority | Complexity |
-|------|----------|------------|
-| 1. Fix target display in ProjectApprovalQueue | ✅ DONE | Low |
-| 2. Add provident_enrichments column | ✅ DONE | Low |
-| 3. Create restore-to-reelly edge function | ✅ DONE | Medium |
-| 4. Add Data Integrity panel with restore buttons | ✅ DONE | Medium |
-| 5. Move Provident tools to deprecated section | Medium | Low |
-| 6. Add per-project restore buttons | Medium | Medium |
-| 7. Implement Provident suggest-only workflow | Low | High |
-
-## Implementation Summary
-
-### Completed:
-1. **Database Migration**: Added `provident_enrichments` column to projects, `enrichment_source` to pending_project_imports, `data_source` to project_images and project_documents
-2. **Edge Function**: Created `restore-to-reelly` with modes: stats, single, global, pending_only
-3. **ProjectApprovalQueue.tsx**: Fixed target display to show 1,803 for Reelly, 1,336 for Provident
-4. **ReellyImportPanel.tsx**: Added Data Integrity section with:
-   - Load Integrity Stats button
-   - Stats display (Reelly projects, Provident enrichments, images, docs, pending suggestions)
-   - Restore All to Reelly-Only button
-   - Clear Pending Suggestions Only button
+- **Reelly queue** clearly shows 1,803 as the API total with sync progress
+- **Contact sections** use consistent 3-card grid (WhatsApp green / Call blue / Email gold) everywhere
+- **Save Contact / Share** buttons have reversed hover logic (gold normal → black hover)
+- **"Stay in the Loop"** newsletter appears as a global section above the footer on all pages
+- **Contact page** cards have proper hover states and form uses premium champagne styling
+- **"Contact Us Directly"** title is larger and more premium (text-3xl md:text-4xl)
+- **Sold Out badge** on cards uses corner positioning without overlay (matches inside-page style)
 
