@@ -1,22 +1,23 @@
 import { useEffect, useState, ReactNode } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-
-/**
- * ADMIN_EMAIL - the ONLY email allowed to access /listing-admin.
- * Change this if ownership is transferred.
- */
-const ADMIN_EMAIL = "janeaboujaoudenails@gmail.com";
 
 interface ListingAdminGuardProps {
   children: ReactNode;
 }
 
 /**
- * ListingAdminGuard - Restricts /listing-admin to the designated owner email.
+ * ListingAdminGuard - Restricts /listing-admin to users with:
+ * 1. "owner" role
+ * 2. "admin" role
+ * 3. Active entry in listing_admins table
+ * 
+ * If not authenticated → redirect to /auth with redirect-back
+ * If authenticated but unauthorized → redirect to /
  */
 const ListingAdminGuard = ({ children }: ListingAdminGuardProps) => {
-  const [status, setStatus] = useState<"checking" | "allowed" | "denied">("checking");
+  const [status, setStatus] = useState<"checking" | "allowed" | "denied" | "unauthenticated">("checking");
+  const location = useLocation();
 
   useEffect(() => {
     let cancelled = false;
@@ -24,16 +25,38 @@ const ListingAdminGuard = ({ children }: ListingAdminGuardProps) => {
     const verify = async (sessionOverride?: any) => {
       const session = sessionOverride || (await supabase.auth.getSession()).data.session;
 
+      // No session = redirect to login
       if (!session?.user) {
-        if (!cancelled) setStatus("denied");
+        if (!cancelled) setStatus("unauthenticated");
         return;
       }
 
-      const email = session.user.email?.toLowerCase().trim();
+      const userId = session.user.id;
 
-      if (email === ADMIN_EMAIL.toLowerCase().trim()) {
-        if (!cancelled) setStatus("allowed");
-      } else {
+      try {
+        // Check roles in parallel: owner, admin, and listing_admins table
+        const [ownerResult, adminResult, listingAdminResult] = await Promise.all([
+          supabase.rpc("has_role", { _user_id: userId, _role: "owner" }),
+          supabase.rpc("has_role", { _user_id: userId, _role: "admin" }),
+          supabase
+            .from("listing_admins")
+            .select("id")
+            .eq("user_id", userId)
+            .eq("is_active", true)
+            .maybeSingle(),
+        ]);
+
+        const isOwner = ownerResult.data === true;
+        const isAdmin = adminResult.data === true;
+        const isListingAdmin = !!listingAdminResult.data;
+
+        if (isOwner || isAdmin || isListingAdmin) {
+          if (!cancelled) setStatus("allowed");
+        } else {
+          if (!cancelled) setStatus("denied");
+        }
+      } catch (error) {
+        console.error("ListingAdminGuard: Error checking access", error);
         if (!cancelled) setStatus("denied");
       }
     };
@@ -56,6 +79,12 @@ const ListingAdminGuard = ({ children }: ListingAdminGuardProps) => {
         <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
       </div>
     );
+  }
+
+  if (status === "unauthenticated") {
+    // Redirect to auth with redirect-back to current path
+    const redirectPath = encodeURIComponent(location.pathname + location.search);
+    return <Navigate to={`/auth?redirect=${redirectPath}`} replace />;
   }
 
   if (status === "denied") {

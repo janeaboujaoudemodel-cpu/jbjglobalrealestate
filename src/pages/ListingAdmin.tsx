@@ -66,6 +66,27 @@ const ListingAdmin = () => {
   const { user, signOut, isAdmin } = useAuth();
   const { t } = useLanguage();
   const { isListingAdmin, adminData, isLoading: checkingAdmin } = useListingAdmin();
+  const [isOwner, setIsOwner] = useState(false);
+  const [checkingOwner, setCheckingOwner] = useState(true);
+
+  // Check if user has "owner" role
+  useEffect(() => {
+    const checkOwnerRole = async () => {
+      if (!user) {
+        setCheckingOwner(false);
+        return;
+      }
+      try {
+        const { data } = await supabase.rpc("has_role", { _user_id: user.id, _role: "owner" });
+        setIsOwner(data === true);
+      } catch (error) {
+        console.error("Error checking owner role:", error);
+      } finally {
+        setCheckingOwner(false);
+      }
+    };
+    checkOwnerRole();
+  }, [user]);
   const { data: projects, refetch: refetchProjects } = useProjects();
   const { data: developers } = useDevelopers();
   const { data: communities } = useCommunities();
@@ -127,15 +148,15 @@ const ListingAdmin = () => {
   });
 
   useEffect(() => {
-    if (!checkingAdmin && !user) {
+    if (!checkingAdmin && !checkingOwner && !user) {
       navigate("/auth?redirect=/listing-admin");
     }
-  }, [user, checkingAdmin, navigate]);
+  }, [user, checkingAdmin, checkingOwner, navigate]);
 
-  // Allow access if user is listing admin OR full admin
-  const hasAccess = isListingAdmin || isAdmin;
+  // Allow access if user is listing admin OR full admin OR owner
+  const hasAccess = isListingAdmin || isAdmin || isOwner;
 
-  if (checkingAdmin) {
+  if (checkingAdmin || checkingOwner) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center pt-28">
         <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
@@ -146,13 +167,13 @@ const ListingAdmin = () => {
   if (!hasAccess) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center pt-28">
-        <Card className="bg-white border-zinc-200 max-w-md mx-4">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 max-w-md mx-4">
           <CardContent className="p-8 text-center">
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <X className="w-8 h-8 text-red-500" />
             </div>
-            <h2 className="text-black text-xl font-semibold mb-2">{t('listingAdmin.accessDenied')}</h2>
-            <p className="text-zinc-600 mb-6">
+            <h2 className="text-foreground text-xl font-semibold mb-2">{t('listingAdmin.accessDenied')}</h2>
+            <p className="text-muted-foreground mb-6">
               {t('listingAdmin.noPermission')}
             </p>
             <Button onClick={() => navigate("/")} variant="primary">

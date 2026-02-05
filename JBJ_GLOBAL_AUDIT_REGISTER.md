@@ -6,6 +6,21 @@
 
 ---
 
+## CRITICAL FIX: Listing Admin Access Restored (2026-02-05)
+
+| Issue | Root Cause | Fix Applied | Status |
+|-------|------------|-------------|--------|
+| `/listing-admin` redirecting to homepage | Hard-coded `ADMIN_EMAIL` in `ListingAdminGuard.tsx` no longer matched current authenticated email | Replaced email-based check with role-based access: owner OR admin OR active listing_admin | ✅ FIXED |
+| Guard silent redirect | Guard redirected to `/` when user was logged out instead of `/auth` | Now redirects to `/auth?redirect=/listing-admin` when unauthenticated | ✅ FIXED |
+| ListingAdmin internal access | `hasAccess` only checked `isListingAdmin \|\| isAdmin`, missing Owner role | Added `isOwner` state with `has_role` RPC check; `hasAccess = isListingAdmin \|\| isAdmin \|\| isOwner` | ✅ FIXED |
+| Access denied UI styling | Used old `bg-white border-zinc-200` instead of premium champagne theme | Updated to `bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30` | ✅ FIXED |
+
+**Files Changed:**
+- `src/components/ListingAdminGuard.tsx` - Complete rewrite to role-based access
+- `src/pages/ListingAdmin.tsx` - Added isOwner check and premium denied UI
+
+---
+
 ## Audit Summary
 
 | Category | Total | Pass | Fail | Pending | Status |
