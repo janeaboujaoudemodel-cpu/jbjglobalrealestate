@@ -10,6 +10,7 @@ const VideoResizePack = lazy(() => import("./pages/toolkit/VideoResizePack"));
 const PdfFromPhotos = lazy(() => import("./pages/toolkit/PdfFromPhotos"));
 const ImageResize = lazy(() => import("./pages/toolkit/ImageResize"));
 const VoiceStudio = lazy(() => import("./pages/toolkit/VoiceStudio"));
+const AIVideoStudioPage = lazy(() => import("./pages/toolkit/AIVideoStudioPage"));
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
@@ -499,6 +500,11 @@ const App = () => (
                 <Route path="/toolkit/voice-studio" element={
                   <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
                     <VoiceStudio />
+                  </Suspense>
+                } />
+                <Route path="/toolkit/ai-video-studio" element={
+                  <Suspense fallback={<div className="min-h-screen bg-slate-950 flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                    <AIVideoStudioPage />
                   </Suspense>
                 } />
                 
