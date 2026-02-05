@@ -20,7 +20,6 @@ import { GoogleMyBusinessLink } from "@/components/marketing/GoogleMyBusinessLin
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 import { FounderContent } from "@/components/FounderContent";
-import NewsletterBand from "@/components/NewsletterBand";
 
 const DivisionAccordion = ({
   title,
@@ -195,8 +194,6 @@ const Footer = () => {
 
   return (
     <>
-      {/* NewsletterBand moved inside footer's Licensed 3D card */}
-      
       <footer id="site-footer" className="relative overflow-x-hidden bg-black">
       {/* Pure black background - no gradients */}
       <div className="absolute inset-0 bg-black" />
