@@ -497,7 +497,7 @@ const HeroSearchBar = () => {
     <div className="w-full">
       {/* Top Row: Buy/Rent, Currency, Area Unit - All as dropdown boxes in same style */}
       <div className="flex flex-wrap items-center gap-2 mb-3">
-        {/* Buy/Rent Dropdown - Same style as AED and sqft */}
+        {/* Buy/Rent Dropdown - Opens upward */}
         <Popover>
           <PopoverTrigger asChild>
             <button className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/20 backdrop-blur-md border border-white/40 text-white hover:bg-white/30 transition-all text-sm font-semibold shadow-lg">
@@ -508,7 +508,7 @@ const HeroSearchBar = () => {
           </PopoverTrigger>
           <PopoverContent 
             className="w-32 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[9999]"
-            side="bottom"
+            side="top"
             align="start"
             sideOffset={4}
             avoidCollisions={false}
@@ -534,7 +534,7 @@ const HeroSearchBar = () => {
           </PopoverContent>
         </Popover>
 
-        {/* Currency Dropdown */}
+        {/* Currency Dropdown - Opens upward with scroll */}
         <Popover>
           <PopoverTrigger asChild>
             <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 transition-all text-sm">
@@ -544,11 +544,12 @@ const HeroSearchBar = () => {
             </button>
           </PopoverTrigger>
           <PopoverContent 
-            className="w-48 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[9999]"
-            side="bottom"
+            className="w-48 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[9999] max-h-64 overflow-y-auto overscroll-contain"
+            side="top"
             align="start"
             sideOffset={4}
             avoidCollisions={false}
+            onWheelCapture={(e) => e.stopPropagation()}
           >
             <div className="text-xs font-semibold text-black/60 px-3 py-1.5 uppercase tracking-wider">Currency</div>
             {SUPPORTED_CURRENCIES.map((c) => (
@@ -573,7 +574,7 @@ const HeroSearchBar = () => {
           </PopoverContent>
         </Popover>
 
-        {/* Area Unit Dropdown */}
+        {/* Area Unit Dropdown - Opens upward */}
         <Popover>
           <PopoverTrigger asChild>
             <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 transition-all text-sm">
@@ -584,7 +585,7 @@ const HeroSearchBar = () => {
           </PopoverTrigger>
           <PopoverContent 
             className="w-44 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[9999]"
-            side="bottom"
+            side="top"
             align="start"
             sideOffset={4}
             avoidCollisions={false}
@@ -908,14 +909,16 @@ const HeroSearchBar = () => {
             </DialogContent>
           </Dialog>
 
-          {/* Search Button */}
-          <Button
-            onClick={handleSearch}
-            className="h-full px-5 py-3 bg-gold hover:bg-gold-dark text-black font-bold text-sm rounded-none rounded-r-xl transition-all duration-300"
-          >
-            <Search className="w-4 h-4 mr-1.5" />
-            Search
-          </Button>
+          {/* Search Button - Rounded on both sides with small gap */}
+          <div className="p-1">
+            <Button
+              onClick={handleSearch}
+              className="h-10 px-5 py-2.5 bg-gold hover:bg-gold-dark text-black font-bold text-sm rounded-xl transition-all duration-300"
+            >
+              <Search className="w-4 h-4 mr-1.5" />
+              Search
+            </Button>
+          </div>
         </div>
       </div>
     </div>
