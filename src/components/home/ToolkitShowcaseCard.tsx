@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
-  Video, Image, FileText, Mic, Wand2, Palette, 
-  ArrowRight, Sparkles, Languages, Film
+  Calculator, Layers, Home, TrendingUp, Palette, 
+  Film, Mic, ArrowRight, Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -11,18 +11,76 @@ const fadeInUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } }
 };
 
-const toolCategories = [
-  { icon: Video, label: "Video" },
-  { icon: Mic, label: "Audio" },
-  { icon: Image, label: "Images" },
-  { icon: FileText, label: "PDF" },
-  { icon: Wand2, label: "AI" },
-  { icon: Palette, label: "Filters" },
+const royalTools = [
+  { 
+    id: "property-evaluator",
+    name: "Property Evaluator", 
+    description: "AI-powered property valuation",
+    icon: Calculator, 
+    href: "/property-evaluator",
+    cta: "Get Evaluation"
+  },
+  { 
+    id: "property-comparison",
+    name: "Property Comparison", 
+    description: "Compare properties side-by-side",
+    icon: Layers, 
+    href: "/compare",
+    cta: "Start Comparing"
+  },
+  { 
+    id: "mortgage-calculator",
+    name: "Mortgage Calculator", 
+    description: "Calculate your monthly payments",
+    icon: Calculator, 
+    href: "/mortgage-calculator",
+    cta: "Calculate Now"
+  },
+  { 
+    id: "ai-home-finder",
+    name: "AI Home Finder", 
+    description: "Find your perfect home with AI",
+    icon: Home, 
+    href: "/quiz",
+    cta: "Find My Home"
+  },
+  { 
+    id: "rental-index",
+    name: "Rental Index", 
+    description: "Check current rental rates",
+    icon: TrendingUp, 
+    href: "/rental-index",
+    cta: "Check Rates"
+  },
+  { 
+    id: "interior-design-ai",
+    name: "AI Interior Design", 
+    description: "Visualize your dream space",
+    icon: Palette, 
+    href: "/interior-design-ai",
+    cta: "Design Space"
+  },
+  { 
+    id: "ai-video-studio",
+    name: "AI Video Studio", 
+    description: "Create professional videos",
+    icon: Film, 
+    href: "/toolkit/ai-video-studio",
+    cta: "Create Video"
+  },
+  { 
+    id: "voice-studio",
+    name: "Voice Studio", 
+    description: "AI text-to-speech synthesis",
+    icon: Mic, 
+    href: "/toolkit/voice-studio",
+    cta: "Generate Voice"
+  },
 ];
 
 export function ToolkitShowcaseCard() {
   return (
-    <section className="py-12 md:py-16 bg-black">
+    <section className="py-12 md:py-16 jj-layer-2">
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
@@ -31,113 +89,74 @@ export function ToolkitShowcaseCard() {
           variants={fadeInUp}
           className="relative"
         >
-          {/* Gold glow effect behind card */}
-          <div className="absolute inset-0 -m-4 md:-m-6 rounded-3xl bg-gold/10 blur-2xl" />
-          
           {/* Main Card */}
           <div 
-            className="relative z-10 bg-gradient-to-br from-zinc-900 via-black to-zinc-800 rounded-2xl md:rounded-3xl p-6 md:p-10 lg:p-12 border-2 border-gold/40 overflow-hidden"
+            className="relative z-10 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl md:rounded-3xl border-2 border-gold/50 overflow-hidden"
             style={{
-              boxShadow: '0 0 60px rgba(200,167,102,0.2), 0 25px 60px rgba(0,0,0,0.4)'
+              boxShadow: '0 12px 40px rgba(200,167,102,0.25)'
             }}
           >
-            {/* Corner accents */}
-            <div className="absolute top-0 left-0 w-16 h-16 md:w-24 md:h-24">
-              <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-gold via-gold/80 to-transparent rounded-tl-2xl" />
-              <div className="absolute top-0 left-0 h-full w-[3px] bg-gradient-to-b from-gold via-gold/80 to-transparent rounded-tl-2xl" />
-            </div>
-            <div className="absolute top-0 right-0 w-16 h-16 md:w-24 md:h-24">
-              <div className="absolute top-0 right-0 w-full h-[3px] bg-gradient-to-l from-gold via-gold/80 to-transparent rounded-tr-2xl" />
-              <div className="absolute top-0 right-0 h-full w-[3px] bg-gradient-to-b from-gold via-gold/80 to-transparent rounded-tr-2xl" />
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-6 md:gap-10 items-center">
-              {/* Left: Content */}
-              <div className="relative z-10">
-                {/* Badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-xs uppercase tracking-[0.2em] mb-4">
+            {/* Header Section */}
+            <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] p-6 md:p-8 border-b border-gold/30">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-xs uppercase tracking-[0.2em]">
                   <Sparkles className="w-3 h-3" />
                   Free Professional Tools
                 </div>
-                
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  JBJ RealEstate Toolkit™
-                </h2>
-                
-                <p className="text-zinc-300 text-sm md:text-base mb-4 max-w-md">
-                  9 powerful tools for video editing, image resizing, PDF creation, voice synthesis, and AI-powered enhancements — all completely free to use.
-                </p>
-                
-                {/* Tool icons grid */}
-                <div className="grid grid-cols-6 gap-2 mb-6">
-                  {toolCategories.map((tool, idx) => (
-                    <div 
-                      key={idx}
-                      className="flex flex-col items-center gap-1 group"
-                    >
-                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg bg-zinc-800/80 border border-gold/30 flex items-center justify-center group-hover:border-gold/60 group-hover:bg-zinc-800 transition-all">
-                        <tool.icon className="w-4 h-4 md:w-5 md:h-5 text-gold" />
-                      </div>
-                      <span className="text-zinc-400 text-[8px] md:text-[9px] uppercase tracking-wider">{tool.label}</span>
-                    </div>
-                  ))}
-                </div>
-                
-                <Link to="/toolkit">
-                  <Button 
-                    className="bg-gradient-to-r from-gold via-gold/90 to-gold text-black font-bold px-6 py-3 rounded-xl hover:shadow-[0_0_30px_rgba(200,167,102,0.5)] transition-all group"
-                  >
-                    Explore All Tools
-                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
               </div>
               
-              {/* Right: Featured tools preview */}
-              <div className="relative z-10 grid grid-cols-2 gap-3">
-                {/* Tool Card 1: AI Video Studio */}
-                <Link to="/toolkit/ai-video-studio" className="group">
-                  <div className="bg-zinc-800/60 border border-gold/20 rounded-xl p-4 hover:border-gold/50 hover:bg-zinc-800/80 transition-all">
-                    <div className="w-10 h-10 rounded-lg bg-gold/20 flex items-center justify-center mb-3">
-                      <Film className="w-5 h-5 text-gold" />
-                    </div>
-                    <h4 className="text-white font-semibold text-sm mb-1">AI Video Studio</h4>
-                    <p className="text-zinc-400 text-xs">Full editing suite</p>
-                  </div>
-                </Link>
-                
-                {/* Tool Card 2: Voice Studio */}
-                <Link to="/toolkit/voice-studio" className="group">
-                  <div className="bg-zinc-800/60 border border-gold/20 rounded-xl p-4 hover:border-gold/50 hover:bg-zinc-800/80 transition-all">
-                    <div className="w-10 h-10 rounded-lg bg-gold/20 flex items-center justify-center mb-3">
-                      <Mic className="w-5 h-5 text-gold" />
-                    </div>
-                    <h4 className="text-white font-semibold text-sm mb-1">Voice Studio</h4>
-                    <p className="text-zinc-400 text-xs">AI text-to-speech</p>
-                  </div>
-                </Link>
-                
-                {/* Tool Card 3: Background AI */}
-                <Link to="/toolkit/background-ai" className="group">
-                  <div className="bg-zinc-800/60 border border-gold/20 rounded-xl p-4 hover:border-gold/50 hover:bg-zinc-800/80 transition-all">
-                    <div className="w-10 h-10 rounded-lg bg-gold/20 flex items-center justify-center mb-3">
-                      <Wand2 className="w-5 h-5 text-gold" />
-                    </div>
-                    <h4 className="text-white font-semibold text-sm mb-1">Background AI</h4>
-                    <p className="text-zinc-400 text-xs">Remove & replace</p>
-                  </div>
-                </Link>
-                
-                {/* Tool Card 4: Captions */}
-                <Link to="/toolkit/captions-translate" className="group">
-                  <div className="bg-zinc-800/60 border border-gold/20 rounded-xl p-4 hover:border-gold/50 hover:bg-zinc-800/80 transition-all">
-                    <div className="w-10 h-10 rounded-lg bg-gold/20 flex items-center justify-center mb-3">
-                      <Languages className="w-5 h-5 text-gold" />
-                    </div>
-                    <h4 className="text-white font-semibold text-sm mb-1">Captions</h4>
-                    <p className="text-zinc-400 text-xs">Auto-translate</p>
-                  </div>
-                </Link>
+              <h2 
+                className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-2"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                JBJ Royal Tools Hub
+              </h2>
+              
+              <p className="text-zinc-600 text-sm md:text-base max-w-2xl">
+                Powerful real estate tools for property valuation, comparison, mortgage calculation, and AI-powered enhancements — all completely free to use.
+              </p>
+            </div>
+            
+            {/* Tools Grid */}
+            <div className="p-6 md:p-8">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                {royalTools.map((tool, index) => (
+                  <motion.div
+                    key={tool.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: index * 0.05 }}
+                  >
+                    <Link to={tool.href} className="group block h-full">
+                      <div className="h-full bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl border-2 border-gold/30 hover:border-gold p-5 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
+                        {/* Icon */}
+                        <div className="w-12 h-12 rounded-xl border-2 border-gold/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                          <tool.icon className="w-6 h-6 text-black" />
+                        </div>
+
+                        {/* Title */}
+                        <h4 
+                          className="text-base font-bold text-black mb-2 group-hover:text-gold transition-colors"
+                          style={{ fontFamily: "Poppins, sans-serif" }}
+                        >
+                          {tool.name}
+                        </h4>
+
+                        {/* Description */}
+                        <p className="text-sm text-zinc-600 mb-4 leading-relaxed">
+                          {tool.description}
+                        </p>
+
+                        {/* CTA */}
+                        <Button variant="primary" size="sm" className="mt-auto">
+                          {tool.cta}
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
               </div>
             </div>
           </div>
