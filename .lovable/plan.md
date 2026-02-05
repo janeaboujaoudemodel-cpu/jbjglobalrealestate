@@ -1,212 +1,209 @@
 
-
-# Fix Dashboard Investor Mode Crash and Ensure All Sections Work
-
-## Summary of Findings
-
-After extensive exploration of the codebase and browser testing, I identified the following issues:
-
-### Current Status
-The dashboard pages (`/investor-dashboard`, `/my-dashboard`, `/dashboard`) are **loading correctly** - they are not crashing. However, there are several issues that need to be addressed:
-
-### Issue 1: Visitor Session Tracking Fails with 400 Error
-**Root Cause:** The `GlobalVisitorTracking.tsx` component sends session data with columns that don't exist in the `visitor_sessions` table.
-
-**Code sends these fields (that don't exist):**
-- `screen_resolution`
-- `viewport_size`
-- `timezone`
-- `languages`
-
-**Table only has:**
-- `id`, `session_id`, `visitor_fingerprint`, `first_visit_at`, `last_activity_at`, `ip_address`, `user_agent`, `device_type`, `browser`, `os`, `country`, `city`, `referrer`, `landing_page`, `pages_visited`, `total_time_spent`, `scroll_depth_max`, `is_bounced`, `is_converted`, `user_id`, `contact_details`, `created_at`
-
-**Impact:** Console shows recurring 400 errors, but doesn't crash the dashboard.
-
-### Issue 2: Quick Actions Grid Text Overflow
-**Location:** `src/components/dashboard/QuickActions.tsx`
-
-**Problem:** The Quick Actions buttons in the My Dashboard page have text that overlaps/clips when displayed in the grid. The grid sizing doesn't provide enough room for the text content.
-
-### Issue 3: Activity Overview Links to Wrong Dashboard
-**Location:** `src/components/dashboard/ActivityOverviewCard.tsx` (line 112)
-
-**Problem:** The "View Full Activity" link points to `/broker-dashboard` regardless of user role, which doesn't exist for investors.
-
-### Issue 4: Badges Level Card Links to Wrong Dashboard
-**Location:** `src/components/dashboard/BadgesLevelCard.tsx` (line 74)
-
-**Problem:** The "View Full Progress" link points to `/broker-dashboard` regardless of user role.
+## Goals (what “fixed” means)
+1) Clicking the account icon → switching **Investor / Broker / Investor+Broker** does not break the UI and visibly switches what the user sees.
+2) Clicking **My Dashboard** always opens a working dashboard page (no broken UI).
+3) Listing Admin page is no longer “too wide” and matches the premium dashboard shell width.
+4) Homepage Hero Search Bar:
+   - “Search” button has rounded corners on both sides (no sharp square on the left edge)
+   - Currency dropdown is scrollable (dropdown scrolls, not the page)
+   - Buy / Currency / sqft popovers open upward like the other controls
+   - “Filters” behaves like the Reelly filters experience (same UI/logic, not a separate inconsistent filter)
 
 ---
 
-## Technical Solution
+## What I found (root causes)
+### A) Mode switcher does not actually control the dashboard experience
+- The **Account Mode Switcher** (`src/components/ModeSwitcher.tsx`) is the only place that reads/writes `user_preferences.selected_mode`.
+- Nothing else consumes that mode (`useUserMode()` is only used in ModeSwitcher), so switching mode does not re-route or change the dashboard content. This is perceived as “bug/crash”.
 
-### Phase 1: Fix Visitor Session Tracking (Silent Errors)
+### B) “My Dashboard” vs “Investor Dashboard” routing is inconsistent
+- “My Dashboard” link exists and points to `/my-dashboard` (good).
+- The “Investor Hub” mega menu (`src/components/header/MegaMenuInvestorHub.tsx`) routes “Investor Dashboard” and CTA buttons to `/my-account` (not `/my-dashboard`).
+- `/my-account` is currently wired to `BrokerAccount` (`src/App.tsx`), which can show broker/training UI and query broker tables. That can look like the wrong dashboard or broken for the selected mode.
 
-Modify `src/components/GlobalVisitorTracking.tsx` to only send columns that exist in the table:
+### C) Visitor tracking is spamming errors (and can make pages feel broken)
+`src/components/GlobalVisitorTracking.tsx` calls:
+- `POST /visitor_sessions?on_conflict=session_id` with `prefer: resolution=merge-duplicates`
+But the response is:
+- `42P10: there is no unique or exclusion constraint matching the ON CONFLICT specification`
 
-```typescript
-// Before (broken):
-const sessionData = {
-  session_id: sessionId,
-  device_type: getDeviceType(),
-  browser: getBrowserInfo(),
-  os: getOS(),
-  screen_resolution: getScreenResolution(), // Column doesn't exist
-  viewport_size: getViewportSize(),         // Column doesn't exist
-  timezone: getTimezone(),                   // Column doesn't exist
-  languages: getLanguages(),                 // Column doesn't exist
-  ...
-};
+Meaning: `visitor_sessions.session_id` is not unique in the database, so upsert fails. This floods the console and can degrade perceived stability.
 
-// After (fixed):
-const sessionData = {
-  session_id: sessionId,
-  device_type: getDeviceType(),
-  browser: getBrowserInfo(),
-  os: getOS(),
-  referrer: document.referrer || null,
-  landing_page: location.pathname,
-  pages_visited: 1,
-  user_id: user?.id || null,
-  user_agent: navigator.userAgent,
-};
-```
+### D) Homepage Hero currency popover is not scroll-contained and opens downward
+`src/components/home/HeroSearchBar.tsx`:
+- Currency popover has no `max-height`/`overflow-y-auto`, so it expands and the page scrolls instead of the dropdown content.
+- Purpose/Currency/Area Unit popovers are configured with `side="bottom"` even though they are long lists and the user wants “open up”.
 
-### Phase 2: Fix Quick Actions Grid Layout
+### E) “Search” button left edge is intentionally square today
+Hero Search button uses:
+- `rounded-none rounded-r-xl`
+So the left edge is square. User wants it rounded like the right edge.
 
-Modify `src/components/dashboard/QuickActions.tsx` to improve grid sizing and prevent text overflow:
-
-```typescript
-// In the grid container:
-<div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-
-// Each button needs minimum sizing:
-<Button
-  variant="outline"
-  className="h-auto p-4 flex flex-col items-start gap-2 min-h-[100px] w-full"
->
-  <div className="flex items-center gap-2 w-full">
-    <action.icon className={`h-5 w-5 ${action.color} shrink-0`} />
-    <span className="text-sm font-medium text-foreground truncate">{action.label}</span>
-  </div>
-  <span className="text-xs text-muted-foreground text-left line-clamp-2">{action.description}</span>
-</Button>
-```
-
-### Phase 3: Fix Activity and Progress Links
-
-**ActivityOverviewCard.tsx (line 112):**
-```typescript
-// Before:
-<Link to="/broker-dashboard">
-
-// After (role-aware):
-<Link to="/my-dashboard">
-```
-
-**BadgesLevelCard.tsx (line 74):**
-```typescript
-// Before:
-<Link to="/broker-dashboard">
-
-// After (role-aware):
-<Link to="/my-dashboard">
-```
-
-### Phase 4: Add Error Boundaries for Dashboard Components
-
-Create a reusable error boundary wrapper for dashboard cards to prevent one failing component from crashing the entire page:
-
-```typescript
-// src/components/dashboard/DashboardCardErrorBoundary.tsx
-import { Component, ErrorInfo, ReactNode } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { AlertCircle } from 'lucide-react';
-
-interface Props {
-  children: ReactNode;
-  fallbackTitle?: string;
-}
-
-interface State {
-  hasError: boolean;
-}
-
-class DashboardCardErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError(): State {
-    return { hasError: true };
-  }
-
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Dashboard card error:', error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <Card className="border border-border">
-          <CardContent className="p-6 text-center">
-            <AlertCircle className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-            <p className="text-sm text-muted-foreground">
-              {this.props.fallbackTitle || 'Unable to load this section'}
-            </p>
-          </CardContent>
-        </Card>
-      );
-    }
-    return this.props.children;
-  }
-}
-
-export default DashboardCardErrorBoundary;
-```
-
-Then wrap each dashboard card in MyDashboard:
-```typescript
-<DashboardCardErrorBoundary fallbackTitle="Profile unavailable">
-  <ProfileSummaryCard />
-</DashboardCardErrorBoundary>
-```
+### F) Hero “Filters” is a separate system from Reelly filters
+- Home hero “Filters” opens its own dialog in `HeroSearchBar.tsx`
+- Reelly filters live in `/properties` page (`src/pages/PropertiesReelly.tsx`) with its own “Filters” dialog and UI.
+This creates mismatch.
 
 ---
 
-## Files to Modify
+## Implementation plan (sequenced to stop breakage first)
 
-| File | Change |
-|------|--------|
-| `src/components/GlobalVisitorTracking.tsx` | Remove non-existent columns from session data |
-| `src/components/dashboard/QuickActions.tsx` | Fix grid layout and prevent text overflow |
-| `src/components/dashboard/ActivityOverviewCard.tsx` | Change link to `/my-dashboard` |
-| `src/components/dashboard/BadgesLevelCard.tsx` | Change link to `/my-dashboard` |
-| `src/components/dashboard/DashboardCardErrorBoundary.tsx` | Create new error boundary component |
-| `src/pages/MyDashboard.tsx` | Wrap cards with error boundaries |
+### Phase 1 — Make Mode Switcher actually switch the dashboard (no more “bug/crash” perception)
+**1.1 Add a single “source of truth” for mode-aware navigation**
+Create a small utility (or function colocated in ModeSwitcher) that maps mode → dashboard route:
+- investor → `/my-dashboard` (default entry)
+- broker → `/my-dashboard` (same entry; dashboard content changes)
+- investor_broker → `/my-dashboard`
+
+Rationale: the “/my-dashboard” route already exists and is meant to be the unified entry point (per your requirements). We will make it mode-aware.
+
+**1.2 Update `ModeSwitcher` to do 3 things on change**
+File: `src/components/ModeSwitcher.tsx`
+- After `await setMode(newMode)`:
+  - close dropdown
+  - navigate to `/my-dashboard` (replace: true)
+  - emit a global event so pages can respond immediately without reload (ex: `window.dispatchEvent(new CustomEvent('userModeChange', {detail: newMode}))`)
+
+This makes the switcher feel instant and prevents “I clicked investor mode and it broke / did nothing.”
+
+**1.3 Make `/my-dashboard` mode-aware (minimal but real changes)**
+File: `src/pages/MyDashboard.tsx`
+- Read mode via `useUserModeContext()` (already provided at App root).
+- Adjust “Quick Actions” and visible modules:
+  - investor: show investor actions and hide broker-only actions
+  - broker: show broker actions (Listing Admin, Broker Toolkit, etc.)
+  - investor_broker: show both grouped (Investor section + Broker section)
+
+Keep all cards wrapped in `DashboardCardErrorBoundary` so one card never blanks the whole dashboard.
+
+**1.4 Fix the account menu + investor hub links to stop routing to `/my-account` for dashboards**
+Files:
+- `src/components/header/MegaMenuInvestorHub.tsx`
+- `src/components/GlobalHeader.tsx` (investorHubLinks)
+Change:
+- Any “Investor Dashboard / Go to Dashboard” links should go to `/my-dashboard` (not `/my-account`)
+Keep `/my-account` for “Profile/Settings” only.
+
+Result: user always lands in the unified dashboard that respects mode.
+
+**Verification (Phase 1)**
+- Open account icon → switch Investor → lands on `/my-dashboard` and shows investor section
+- Switch Broker → lands on `/my-dashboard` and shows broker section
+- Switch Investor+Broker → shows both sections
+- Click account icon → “My Dashboard” → works with no broken UI
 
 ---
 
-## Expected Results After Implementation
+### Phase 2 — Remove tracking errors that flood dashboards (stability hardening)
+**2.1 Fix `visitor_sessions` upsert properly**
+We have two safe options; we will choose based on existing data:
 
-1. No more 400 errors in console from visitor session tracking
-2. Quick Actions grid displays properly without text overflow
-3. Activity and Progress links navigate to the correct dashboard
-4. Individual card failures won't crash the entire dashboard
-5. Better error visibility when a section fails to load
+Option A (preferred): Add a UNIQUE constraint/index in the backend:
+- `visitor_sessions(session_id)` unique
+
+But first we must check for duplicates; if duplicates exist, we must dedupe before adding the constraint.
+
+Option B: Stop using `upsert(... onConflict: 'session_id')` and switch to:
+- `insert` on first load, then `update` afterwards
+
+**2.2 Remove/replace `sendBeacon` direct REST call**
+File: `src/components/GlobalVisitorTracking.tsx`
+- The current `sendBeacon` hits REST directly and has CORS/auth edge cases.
+- Replace with:
+  - a best-effort `supabase.from('visitor_sessions').update(...)` (no beacon), OR
+  - a lightweight backend function “track-session-exit” that accepts session_id + totals and updates server-side (more reliable).
+
+**Verification (Phase 2)**
+- Reload `/my-dashboard` and `/my-account`:
+  - No more `42P10` errors in console
+  - No repeated visitor_sessions failures
 
 ---
 
-## Verification Checklist
+### Phase 3 — Listing Admin width + premium shell alignment (stop “wide UI” issue)
+File: `src/pages/ListingAdmin.tsx`
+**3.1 Apply the same dashboard shell pattern used in `/my-dashboard`**
+- outer page: `bg-black`
+- inner shell: `mx-3 md:mx-4 lg:mx-6 my-6 rounded-2xl border ... champagne gradient`
+- content max width: `max-w-[1200px] mx-auto` (matches your design system)
 
-After implementation:
-- [ ] Navigate to `/my-dashboard` as investor - no crashes
-- [ ] Navigate to `/investor-dashboard` - no crashes
-- [ ] Quick Actions buttons display correctly with no text overlap
-- [ ] "View Full Activity" and "View Full Progress" buttons navigate correctly
-- [ ] Console shows no 400 errors on visitor_sessions
-- [ ] All dashboard cards load their data correctly
+**3.2 Ensure each view respects max width**
+- Header wrapper: move `px-4 py-4` into a max-width container
+- Views (`data-sources`, `sync`, `reelly`, `projects`, `editor`):
+  - keep `container` but also clamp with `max-w-[1200px]`
+
+**Verification (Phase 3)**
+- Open `/listing-admin` on large desktop: content no longer stretches too wide
+- Tabs/header align with the max width shell
+- No horizontal overflow
+
+---
+
+### Phase 4 — Homepage Hero Search Bar: rounding + dropdown scroll/up behavior + “Filters like Reelly”
+File: `src/components/home/HeroSearchBar.tsx`
+
+**4.1 Fix the “Search” button left edge rounding**
+- Change button classes from `rounded-none rounded-r-xl` to a fully rounded look:
+  - Use `rounded-xl` (both sides)
+  - Add a small gap between the bar and button (or a wrapper) so the rounded-left edge is visible and doesn’t look “cut” by the bar.
+
+**4.2 Make Currency (and other top controls) open upward + scroll inside dropdown**
+For Purpose/Currency/Area Unit Popovers:
+- Set `side="top"` and `avoidCollisions={false}` (consistent with your dropdown standards)
+- Add a scroll container:
+  - `max-h-64 overflow-y-auto overscroll-contain`
+- Add `onWheelCapture={(e) => e.stopPropagation()}` to prevent the page from scrolling while the dropdown is open.
+
+**4.3 Apply the same up-opening behavior to Beds/Price popovers (main bar)**
+- Change their PopoverContent to `side="top"` as well to avoid dropdowns extending down the page on shorter viewports.
+
+**4.4 Make Hero “Filters” match Reelly filters (avoid duplication)**
+Most stable approach:
+- When user clicks “Filters” on the homepage hero:
+  - navigate to `/properties?...` with the current selections
+  - include `openFilters=1`
+- In `src/pages/PropertiesReelly.tsx`:
+  - on mount, if `openFilters=1`, open the Reelly “Advanced Filters” dialog automatically, then remove that param.
+
+This guarantees the homepage uses the exact same Reelly filters UI and logic.
+
+**Verification (Phase 4)**
+- On homepage:
+  - Search button has rounded left + right
+  - Currency dropdown scrolls inside the dropdown (page does not scroll)
+  - Popovers open upward
+  - Clicking Filters brings you to /properties with the Reelly filters dialog open
+
+---
+
+## Files involved (expected edits)
+- Dashboard/mode:
+  - `src/components/ModeSwitcher.tsx`
+  - `src/pages/MyDashboard.tsx`
+  - `src/components/header/MegaMenuInvestorHub.tsx`
+  - `src/components/GlobalHeader.tsx`
+- Tracking stability:
+  - `src/components/GlobalVisitorTracking.tsx`
+  - Backend migration for `visitor_sessions` uniqueness (and optional backend function for session exit)
+- Listing Admin width:
+  - `src/pages/ListingAdmin.tsx`
+- Hero search/dropdowns/filters:
+  - `src/components/home/HeroSearchBar.tsx`
+  - `src/pages/PropertiesReelly.tsx` (auto-open filters via param)
+
+---
+
+## Regression checklist (to prevent “fix 1 thing, break 1 thing”)
+1) Account icon:
+   - Switch mode (Investor/Broker/Both) → no broken UI, lands on /my-dashboard
+2) My Dashboard:
+   - Loads with all cards; missing data does not break the page
+3) Listing Admin:
+   - Max width clamped; no horizontal scroll
+4) Homepage Hero:
+   - Search button rounded both sides
+   - Currency dropdown scroll contained
+   - Dropdowns open upward
+   - Filters opens Reelly filters experience
+5) Ensure Support Ticket submit still works (no regressions from global changes)
 
