@@ -13713,8 +13713,6 @@ export type Database = {
       referral_partner_bank_vault: {
         Row: {
           bank_account_encrypted: string | null
-          bank_account_number: string | null
-          bank_iban: string | null
           bank_iban_encrypted: string | null
           bank_name: string | null
           created_at: string | null
@@ -13726,8 +13724,6 @@ export type Database = {
         }
         Insert: {
           bank_account_encrypted?: string | null
-          bank_account_number?: string | null
-          bank_iban?: string | null
           bank_iban_encrypted?: string | null
           bank_name?: string | null
           created_at?: string | null
@@ -13739,8 +13735,6 @@ export type Database = {
         }
         Update: {
           bank_account_encrypted?: string | null
-          bank_account_number?: string | null
-          bank_iban?: string | null
           bank_iban_encrypted?: string | null
           bank_name?: string | null
           created_at?: string | null
