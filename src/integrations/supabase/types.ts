@@ -19005,6 +19005,7 @@ export type Database = {
       cleanup_expired_vapi_recordings: { Args: never; Returns: number }
       cleanup_expired_verifications: { Args: never; Returns: undefined }
       cleanup_rate_limit_records: { Args: never; Returns: number }
+      cleanup_temp_video_files: { Args: never; Returns: undefined }
       crm_hard_delete_import: {
         Args: { p_import_batch_id?: string; p_source_id?: string }
         Returns: Json

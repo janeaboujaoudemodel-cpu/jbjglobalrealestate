@@ -1,9 +1,12 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
+
+// Toolkit pages (lazy loaded)
+const VideoResizePack = lazy(() => import("./pages/toolkit/VideoResizePack"));
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
@@ -473,6 +476,13 @@ const App = () => (
                 {/* Creative Suite */}
                 <Route path="/studio" element={<Studio />} />
                 <Route path="/studio/editor/:projectId" element={<StudioEditor />} />
+                
+                {/* Toolkit Routes */}
+                <Route path="/toolkit/video-resize-pack" element={
+                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                    <VideoResizePack />
+                  </Suspense>
+                } />
                 
                 {/* Admin & System Tools */}
                 <Route path="/customer-happiness" element={<CustomerHappiness />} />
