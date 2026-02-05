@@ -615,23 +615,26 @@ const HeroSearchBar = () => {
       <div className="flex items-center justify-start">
         <div className="flex items-center bg-white/10 backdrop-blur-md border border-white/30 rounded-xl overflow-hidden w-full max-w-4xl">
           {/* Location Search Input */}
-          <div className="flex-1 flex items-center px-3 border-r border-white/20">
+          <div className="flex-1 flex items-center px-3">
             <Search className="w-4 h-4 text-gold shrink-0" />
             <input
               type="text"
-              placeholder="Area, project, or community"
+              placeholder="Area, project or community..."
               value={locationSearch}
               onChange={(e) => setLocationSearch(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
               className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/60 px-3 py-3 text-sm font-medium min-w-0 w-full"
-              style={{ minWidth: '180px' }}
+              style={{ minWidth: '220px' }}
             />
           </div>
+
+          {/* Premium Gradient Divider */}
+          <div className="h-8 w-px bg-gradient-to-b from-transparent via-white/40 to-transparent" />
 
           {/* Beds Dropdown */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-1 px-3 py-3 text-white font-medium text-sm hover:bg-white/10 transition-colors border-r border-white/20 whitespace-nowrap">
+              <button className="flex items-center gap-1 px-3 py-3 text-white font-medium text-sm hover:bg-white/10 transition-colors whitespace-nowrap">
                 {getBedsLabel()}
                 <ChevronDown className="w-3.5 h-3.5 text-gold" />
               </button>
@@ -659,10 +662,13 @@ const HeroSearchBar = () => {
             </PopoverContent>
           </Popover>
 
+          {/* Premium Gradient Divider */}
+          <div className="h-8 w-px bg-gradient-to-b from-transparent via-white/40 to-transparent" />
+
           {/* Price Range Dropdown */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-1 px-3 py-3 text-white font-medium text-sm hover:bg-white/10 transition-colors border-r border-white/20 whitespace-nowrap">
+              <button className="flex items-center gap-1 px-3 py-3 text-white font-medium text-sm hover:bg-white/10 transition-colors whitespace-nowrap">
                 {getPriceLabel()}
                 <ChevronDown className="w-3.5 h-3.5 text-gold" />
               </button>
@@ -690,10 +696,13 @@ const HeroSearchBar = () => {
             </PopoverContent>
           </Popover>
 
+          {/* Premium Gradient Divider */}
+          <div className="h-8 w-px bg-gradient-to-b from-transparent via-white/40 to-transparent" />
+
           {/* More Filters Button */}
           <Dialog open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
             <DialogTrigger asChild>
-              <button className="flex items-center gap-1 px-3 py-3 text-white font-medium text-sm hover:bg-white/10 transition-colors border-r border-white/20">
+              <button className="flex items-center gap-1 px-3 py-3 text-white font-medium text-sm hover:bg-white/10 transition-colors">
                 <SlidersHorizontal className="w-3.5 h-3.5 text-gold" />
                 <span className="hidden sm:inline">Filters</span>
               </button>
