@@ -1,217 +1,196 @@
 
-## What I found (so we fix the real causes)
+# Phase B, D, E Implementation Plan
 
-### 1) Some links truly are broken (not “you doing it wrong”)
-- **`/studio/editor/new` is currently broken by design**: the route exists in the browser, but `StudioEditor` expects a real `:projectId` in the database. When you go to `/studio/editor/new`, it tries to load a project with id `"new"` → **“Project not found / Failed to load project”** (I reproduced this in the preview).
-- **Many Footer “Professional Tools” links point to routes that do not exist** in `src/App.tsx` → these will 404 / feel like “links not working.”
-
-### 2) Footer / CTA / Newsletter duplication is real (and currently inevitable)
-- `MainLayout.tsx` renders global:
-  - `<CombinedContactNewsletter />`
-  - `<Footer />`
-- But **many pages also still render `<Footer />` and/or `<DirectContactCTA />`** (I found matches in **116 files**), which creates duplication.
-- Additionally, **Footer itself also contains newsletter UI**, while `CombinedContactNewsletter` includes “Stay in the Loop” too → this can produce **two “Stay in the Loop” blocks** even when a page is “correct.”
-
-### 3) Mode switcher “not working” has at least one clear bug
-- `ModeSwitcher.tsx` only allows broker mode when role is `broker` or `broker_partner`
-- Your system uses `broker_jbj` too, but it’s **not included**, so the broker mode option can be disabled incorrectly.
+## Overview
+Completing the remaining phases to remove duplications, fix UI issues, and add Reelly diagnostics.
 
 ---
 
-## Implementation Plan (grouped, minimal surprises, fixes first)
+## Phase B: Remove Footer & CTA Duplication (107 pages)
 
-### Phase A — Fix navigation so links actually work everywhere (Header + Footer + Hub)
+### Problem
+- `MainLayout.tsx` already renders global `<CombinedContactNewsletter />` and `<Footer />`
+- **107 pages** still import and render `<Footer />` locally → causing duplication
+- **30 pages** also render `<DirectContactCTA />` locally → additional duplication
 
-#### A1) Create a single source of truth for tools (prevents future broken links)
-- Create a config file (e.g. `src/config/royalToolsRegistry.ts`) that defines:
-  - Toolkit tools (the 9 `/toolkit/*`)
-  - Creative Suite (Studio)
-  - “Professional tools” (only those that exist, or explicitly marked “Coming Soon”)
-- Update **Header Toolkit menu** + **Footer Creative Toolkit section** to render from this registry.
-- Update Footer “Professional Tools” to:
-  - show only implemented routes OR
-  - route missing items to a **single** “Coming Soon” page (not 404).
+### Solution
+Remove from ALL pages in `src/pages/**`:
+1. `import Footer from "@/components/Footer";` 
+2. `<Footer />` JSX usage
+3. `import DirectContactCTA from "@/components/DirectContactCTA";`
+4. `<DirectContactCTA />` JSX usage
+5. Any `NewsletterBand` or `CTABand` imports/usages
 
-#### A2) Fix Studio “New” link properly
-- Add a real route handler so **`/studio/editor/new` works**:
-  - Option 1 (best UX): create a new project automatically and redirect to `/studio/editor/:id`
-  - Option 2: redirect to `/studio` and auto-open “New Project” modal
-- Ensure this flow works logged-in and logged-out (Studio already supports a session_id fallback).
+### Files to Modify (Priority Order)
+**Batch 1 - High-visibility pages (14 files):**
+| File | Remove |
+|------|--------|
+| `MarketReport.tsx` | Footer (line 2, 2174) |
+| `Properties.tsx` | Footer + DirectContactCTA |
+| `BuyerGuide.tsx` | Footer + DirectContactCTA |
+| `Guides.tsx` | Footer + DirectContactCTA |
+| `Services.tsx` | Footer + DirectContactCTA |
+| `About.tsx` | Footer |
+| `Sitemap.tsx` | Footer |
+| `OurBrokers.tsx` | Footer |
+| `BrokerResources.tsx` | Footer |
+| `InvestorEducation.tsx` | Footer |
+| `RentalIndex.tsx` | Footer |
+| `RequestValuation.tsx` | Footer |
+| `InteriorDesignAI.tsx` | Footer |
+| `EmployeeHub.tsx` | Footer |
 
-#### A3) Build the “JBJ Royal Tools Hub” page (one page with everything)
-- Create a new page (or repurpose `/toolkit`) as:
-  - Title: **JBJ Royal Tools Hub**
-  - Includes BOTH:
-    - Toolkit tools (media tools)
-    - Professional tools / AI tools / calculators / CRM tools (as categories)
-  - Features:
-    - Search
-    - Category filters
-    - “Working / Coming soon” badge per tool
-    - Each tool card: champagne background, gold border, black titles, outline icons (no filled black squares)
+**Batch 2 - Service pages (12 files):**
+All files in `src/pages/services/`:
+- `Snagging.tsx`, `FitOut.tsx`, `SellingAdvisory.tsx`, `CurrencyExchange.tsx`
+- `InteriorDesign.tsx`, `LawFirm.tsx`, `BrokerCertification.tsx`, `SignatureCollection.tsx`
+- `Testimonials.tsx`, `RentalAdvisory.tsx`, etc.
 
-**Routing decision (implementation):**
-- Keep `/toolkit` but rename it visually and functionally to **JBJ Royal Tools Hub**, and keep existing tool routes (`/toolkit/video-resize-pack`, etc.).
-- Add alias route `/royal-tools` → redirects to `/toolkit` (optional, but nice for branding).
+**Batch 3 - Guide pages:**
+All files in `src/pages/guides/`:
+- `GoldenVisaGuide.tsx`, etc.
 
-**Acceptance checks**
-- Every Header/Footer link either:
-  - opens a real working page, OR
-  - opens the hub section for that tool, OR
-  - opens a “Coming Soon” page with explanation (no 404s)
-
----
-
-### Phase B — Remove duplication (Footer + “Ready to Get Started” + Newsletter) across the whole website
-
-#### B1) Make the global layout the only place that renders footer/cta blocks
-- Keep this pattern:
-  - `MainLayout.tsx` renders:
-    - one global **CombinedContactNewsletter** (the “Ready to Get Started” + “Stay in the Loop” block)
-    - one global **Footer**
-- Then remove duplicates by:
-  1) Removing `<Footer />`, `<NewsletterBand />`, `<DirectContactCTA />`, `<CTABand />` usage from **all page components** under `src/pages/**` (except explicitly excluded back-office routes if needed).
-  2) Ensure Toolkit pages do NOT add their own contact/newsletter blocks.
-  3) Remove newsletter signup UI from `Footer.tsx` so footer becomes navigation/legal only (since the newsletter will be above it globally).
-
-#### B2) Fix “some pages duplicated, some not”
-- Do a repo-wide pass (mechanical refactor) targeting the 116 offending files found via search:
-  - Remove `import Footer from "@/components/Footer";`
-  - Remove `<Footer />` in JSX
-  - Same for DirectContactCTA/NewsletterBand/CTABand where present
-- Special note: `MarketReport.tsx` currently imports and renders `Footer` → must be removed.
-
-**Acceptance checks**
-- On any public page you only ever see:
-  1) page content
-  2) one CombinedContactNewsletter section
-  3) one Footer navigation section
+**Batch 4 - Remaining ~80 pages:**
+Mechanical removal from all remaining pages with Footer/DirectContactCTA imports.
 
 ---
 
-### Phase C — Mode system overhaul (Investor / Broker / Investor+Broker) and dashboards
+## Phase D: Homepage AI Home Finder + Market Report UI
 
-#### C1) Expand “mode” from 2 states to 3 states
-- Current: `UserMode = 'client' | 'broker'`
-- New: `UserMode = 'investor' | 'broker' | 'investor_broker'`
-- Update:
-  - `src/hooks/useUserMode.ts`
-  - `src/contexts/UserModeContext.tsx`
-  - `user_preferences.selected_mode` usage (it’s a text field; we’ll migrate behavior safely without schema change if possible)
+### D1: Homepage AI Home Finder Fixes (Index.tsx)
 
-#### C2) Fix ModeSwitcher so it works for all broker roles (and new combined mode)
-- Update `ModeSwitcher.tsx`:
-  - Broker access check must include:
-    - `broker`, `broker_partner`, **`broker_jbj`**
-  - Add 3 menu items:
-    - Investor
-    - Broker
-    - Investor + Broker
-- Ensure ModeSwitcher appears:
-  - In the header account dropdown (already present)
-  - On **My Dashboard**
-  - On **My Profile** page (so you can change anytime)
+**Current Issues (lines 492-544):**
+1. Title "AI Home Finder" uses `text-white` → user wants ALL PURPLE
+2. `<SectionDivider />` exists at line 544 → user wants it REMOVED
+3. Spacing needs to match standard `py-12 md:py-16`
 
-#### C3) Merge “Professional Control Center” (BrokerDashboard) into the broker view of the dashboard
-- Create a unified dashboard shell so it stays in one place:
-  - `/my-dashboard` becomes the main entry point
-  - When mode = broker → show broker control center sections + existing MyDashboard cards
-  - When mode = investor → show investor dashboard experience
-  - When mode = investor_broker → show both, grouped by category (Broker section + Investor section)
-- Preserve:
-  - Broker hero video and hero section (“Your Professional Control Center”)
-- Apply your design rules:
-  - No white background pages
-  - Use active layer background (`jj-layer-2`)
-  - Cards: champagne gradient with gold borders
-  - Icons: outline/transparent container, black stroke icons
-  - Titles: black
+**Changes:**
+```tsx
+// Line 523: Change text-white to text-purple-500
+className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide text-purple-500 group-hover:text-purple-400 transition-colors"
 
-**Acceptance checks**
-- Switching mode immediately changes:
-  - Dashboard content
-  - Visible hubs/shortcuts where applicable
-- Mode persists after refresh (DB + localStorage)
-- ModeSwitcher never shows disabled incorrectly for JBJ brokers
+// Line 544: DELETE this line entirely
+<SectionDivider />
+```
+
+### D2: Market Report Layout Unification
+
+**Current Issues:**
+1. Footer rendered locally at line 2174 → causing duplication
+2. Form card and sidebar are in separate containers
+3. Some titles have low contrast
+
+**Changes:**
+1. Remove `import Footer` (line 2) and `<Footer />` (line 2174)
+2. Wrap the entire content area in one unified champagne gradient container
+3. Ensure "Unlock Your Investment Edge" title is BLACK with strong contrast
+4. Structure all cards (Welcome Back, What You'll Receive, Created By) in one continuous flow
 
 ---
 
-### Phase D — Homepage + Market Report UI fixes you listed
+## Phase E: Reelly Sync Diagnostics Panel
 
-#### D1) Home: AI Home Finder spacing + divider + purple title
-- In `Index.tsx`:
-  - Remove the `SectionDivider` directly under the AI Home Finder block
-  - Adjust vertical spacing to match the global spacing spec
-  - Make “AI Home Finder” label fully purple (currently it’s white)
+### Current State
+`ReellyImportPanel.tsx` already has:
+- `apiConnected` state (boolean)
+- `syncResult` with error messages
+- `totalProjects` count
+- `handleTestApiConnection()` function
 
-#### D2) Market Report: unify the “book + unlock + welcome back + what you’ll receive + created by” into one continuous layer
-- In `MarketReport.tsx`:
-  - Remove Footer rendering (Phase B)
-  - Change the layout so:
-    - The form card + the sidebar cards sit inside **one shared champagne container**
-    - No “separate edge-to-edge card” behind the sidebar
-  - Ensure titles like “Unlock Your …” in the *internal form section* are black and readable (avoid faded/low-contrast text)
-  - The global CombinedContactNewsletter (“Ready to Get Started”) will naturally appear after these sections once footer duplication is removed
+### Enhancement
+Add a prominent **Connection & Diagnostics Card** at the top of the panel:
 
-**Acceptance checks**
-- The whole unlock area looks like one connected premium card system
-- Text contrast is strong and readable
-
----
-
-### Phase E — Reelly sync/extraction not working (admin listing)
-This will be handled as a focused repair after the UI/duplication fixes (so we can trust navigation + reduce noise).
-
-Steps:
-1) Add a diagnostic “Connection & Permissions” box in `ReellyImportPanel.tsx` that shows:
-   - API test success/failure
-   - last error message (if any)
-   - whether a sync job record can be created
-2) Verify backend function calls from the panel:
-   - `reelly-api-sync` “test”
-   - `reelly-api-sync` “sync”
-   - `reelly-areas-sync`
-   - `reelly-developers-sync`
-3) Confirm database permissions (RLS) allow the authenticated admin/broker to:
-   - insert/update into `pending_project_imports`
-   - create/update `sync_jobs`
-
-**Acceptance checks**
-- “Test API Connection” shows a real result (not silent fail)
-- “Sync Projects” creates pending queue items and the approval queue updates
-
----
-
-### Phase F — Fix the “Bundle generation timed out” edge function deployment issue
-This error is a deployment/bundling issue, not a UI issue.
-
-Actions:
-1) Refactor `supabase/functions/ai-background-remove/index.ts` to minimize bundling work:
-   - Remove the remote std `serve` import and use `Deno.serve(...)` directly
-   - Keep code in a single file
-   - Ensure CORS headers match the platform-required header list
-2) Reduce payload sizes:
-   - Validate image input size and reject huge base64 payloads with a clear error
-3) Add simple, deterministic response parsing and logging
-4) Re-test Background AI end-to-end from the UI
-
-**Acceptance checks**
-- Function deploys without timeout
-- BackgroundAI tool processes images successfully and returns output reliably
-
----
-
-## High-confidence “why links don’t work” summary
-- `/studio/editor/new` is currently guaranteed to fail (loads a non-existent project id).
-- A large number of Footer links point to routes that don’t exist.
-- Footer/contact/newsletter duplication is caused by global rendering + local page rendering + footer newsletter content.
+```tsx
+{/* API Diagnostics Card - NEW */}
+<Card className="border-2 border-gold/40 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark mb-6">
+  <CardHeader className="pb-2">
+    <CardTitle className="text-black flex items-center gap-2">
+      <Shield className="w-5 h-5 text-gold" />
+      API Connection Status
+    </CardTitle>
+  </CardHeader>
+  <CardContent>
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      {/* Status Indicator */}
+      <div className="text-center p-3 bg-white/50 rounded-lg border border-gold/20">
+        <p className="text-xs text-zinc-500 mb-1">Connection</p>
+        <Badge 
+          variant={apiConnected === true ? "default" : apiConnected === false ? "destructive" : "secondary"}
+          className={apiConnected === true ? "bg-green-500" : ""}
+        >
+          {apiConnected === null ? "Not Tested" : apiConnected ? "✓ Connected" : "✗ Failed"}
+        </Badge>
+      </div>
+      
+      {/* Projects Available */}
+      <div className="text-center p-3 bg-white/50 rounded-lg border border-gold/20">
+        <p className="text-xs text-zinc-500 mb-1">Projects Available</p>
+        <p className="text-2xl font-bold text-black">
+          {displayTotalProjects?.toLocaleString() || "—"}
+        </p>
+      </div>
+      
+      {/* Queue Count */}
+      <div className="text-center p-3 bg-white/50 rounded-lg border border-gold/20">
+        <p className="text-xs text-zinc-500 mb-1">Pending Queue</p>
+        <p className="text-2xl font-bold text-black">
+          {liveCounts?.reelly_pending_queue?.toLocaleString() || "0"}
+        </p>
+      </div>
+      
+      {/* Last Error */}
+      <div className="text-center p-3 bg-white/50 rounded-lg border border-gold/20">
+        <p className="text-xs text-zinc-500 mb-1">Last Error</p>
+        <p className="text-sm text-red-600 truncate">
+          {syncResult?.error || areasSyncResult?.error || devSyncResult?.error || "None"}
+        </p>
+      </div>
+    </div>
+  </CardContent>
+</Card>
+```
 
 ---
 
-## Execution order (fastest path to “everything feels fixed”)
-1) Phase A2 (fix `/studio/editor/new`) + Phase A1/A3 (registry + Royal Tools Hub)
-2) Phase B (remove all duplicates globally; make Footer nav-only)
-3) Phase C (3-mode system + dashboard merge + styling compliance)
-4) Phase D (Home AI Home Finder + Market Report layout)
-5) Phase F (bundle timeout fix) + Phase E (Reelly diagnostics & repair)
+## Execution Order
 
+1. **Phase D1** - Fix AI Home Finder (purple title, remove divider) - 1 file
+2. **Phase B Batch 1** - Remove duplicates from 14 high-visibility pages
+3. **Phase D2** - Fix Market Report layout - 1 file (already in batch 1)
+4. **Phase E** - Add Reelly diagnostics card - 1 file
+5. **Phase B Batch 2-4** - Remove duplicates from remaining ~93 pages
+
+---
+
+## Technical Details
+
+### Files Modified Per Batch
+
+| Phase | Files | Changes |
+|-------|-------|---------|
+| D1 | 1 | `Index.tsx` - purple text, remove divider |
+| B1 | 14 | High-visibility pages - remove Footer/CTA |
+| D2 | 1 | `MarketReport.tsx` - layout unification |
+| E | 1 | `ReellyImportPanel.tsx` - add diagnostics |
+| B2 | 12 | `src/pages/services/*` - remove Footer/CTA |
+| B3 | 5+ | `src/pages/guides/*` - remove Footer/CTA |
+| B4 | ~70 | Remaining pages - mechanical removal |
+
+### Styling Rules Applied
+- **Background**: Active champagne layer (`jj-layer-2`) or champagne gradients
+- **Cards**: Gold borders (`border-2 border-gold/40`)
+- **Titles**: Black text (`text-black`)
+- **Icons**: Outline/transparent containers, no solid fills
+- **Text contrast**: Strong black on light backgrounds
+
+---
+
+## Expected Outcomes
+
+After implementation:
+- ✅ No duplicate Footer/CTA sections anywhere on the site
+- ✅ "AI Home Finder" title is fully purple
+- ✅ No SectionDivider below AI Home Finder
+- ✅ Market Report has unified champagne container with readable text
+- ✅ Reelly panel shows clear connection status at top
+- ✅ All 107 pages use global footer only
