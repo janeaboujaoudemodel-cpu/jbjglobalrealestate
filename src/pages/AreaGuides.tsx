@@ -1,1103 +1,310 @@
-import { useState, useMemo } from "react";
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { 
-  MapPin, 
-  ArrowUpRight, 
-  ArrowDown,
-  Compass, 
-  Building2, 
-  Users, 
-  Home, 
-  TrendingUp, 
-  Search, 
-  X, 
-  Flame, 
-  SortAsc, 
-  Clock, 
-  Star,
-  Target,
-  Scale,
-  Heart,
-  Shield,
-  FileText,
-  DollarSign,
-  Map,
-  CheckCircle2,
-  HelpCircle,
-  Phone
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import Footer from "@/components/Footer";
-import DirectContactCTA from "@/components/DirectContactCTA";
-import { SEOHead } from "@/components/SEOHead";
-import { AREA_GUIDES, UAE_EMIRATES as EMIRATES_DATA } from "@/constants/areaGuides";
-import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
-import { GuideHero } from "@/components/guides/GuideHero";
-import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
-import { GuideCTA } from "@/components/guides/GuideCTA";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } }
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.1 }
-  }
-};
-
-// UAE Emirates for filter
-const UAE_EMIRATES = [
-  { id: "all", name: "All Emirates" },
-  { id: "dubai", name: "Dubai" },
-  { id: "abu-dhabi", name: "Abu Dhabi" },
-  { id: "sharjah", name: "Sharjah" },
-  { id: "ajman", name: "Ajman" },
-  { id: "ras-al-khaimah", name: "Ras Al Khaimah" },
-  { id: "fujairah", name: "Fujairah" },
-  { id: "umm-al-quwain", name: "Umm Al Quwain" },
-];
-
-// Trending communities (based on market activity from DLD reports)
-const TRENDING_COMMUNITIES = [
-  "downtown-dubai",
-  "dubai-marina", 
-  "palm-jumeirah",
-  "dubai-hills-estate",
-  "dubai-creek-harbour",
-  "business-bay",
-  "jumeirah-village-circle",
-  "mbr-city",
-  "emaar-beachfront",
-  "al-marjan-island"
-];
-
-// Sort options
-type SortOption = "featured" | "newest" | "trending" | "alphabetical";
-
-const AreaGuides = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedEmirate, setSelectedEmirate] = useState("all");
-  const [sortBy, setSortBy] = useState<SortOption>("featured");
-
-  // Section 1: How to Choose the Right Area
-  const chooseAreaFactors = [
-    "Purpose (living vs investment)",
-    "Budget and financing structure",
-    "Commute and accessibility",
-    "Community maturity vs growth phase",
-    "Rental demand and tenant profile"
-  ];
-
-  // Section 2: Established vs Emerging Areas
-  const establishedAreaTraits = [
-    "Stable prices",
-    "Immediate rental demand",
-    "Completed infrastructure",
-    "Lower volatility"
-  ];
-
-  const emergingAreaTraits = [
-    "Lower entry prices",
-    "Higher growth potential",
-    "Longer holding horizons",
-    "Infrastructure still developing"
-  ];
-
-  // Section 3: Lifestyle-Driven Communities
-  const lifestyleCharacteristics = [
-    "Waterfront or skyline views",
-    "Walkability and retail access",
-    "Dining, leisure, and entertainment",
-    "Premium building amenities"
-  ];
-
-  // Section 4: Family-Oriented Communities
-  const familyFeatures = [
-    "Villas or large apartments",
-    "Schools and nurseries nearby",
-    "Parks and community facilities",
-    "Lower turnover, longer leases"
-  ];
-
-  // Section 5: Investment-Focused Areas
-  const investmentTraits = [
-    "High rental turnover",
-    "Studio and one-bedroom dominance",
-    "Competitive pricing",
-    "Strong tenant demand"
-  ];
-
-  // Section 6: Infrastructure & Future Development
-  const infrastructureConsiderations = [
-    "Road and transport expansions",
-    "Proximity to employment hubs",
-    "Major infrastructure projects",
-    "Community master plans"
-  ];
-
-  // Section 7: Freehold vs Non-Freehold
-  const freeholdPoints = [
-    "Freehold areas allow full ownership by foreign nationals",
-    "Non-freehold areas restrict ownership rights",
-    "Most investor-focused communities are freehold"
-  ];
-
-  // Section 8: Price Ranges & Market Behavior
-  const priceInfluences = [
-    "Building age and quality",
-    "Developer reputation",
-    "Unit size and layout",
-    "View, floor level, and amenities"
-  ];
-
-  // Section 9: Rental Demand by Area
-  const rentalDemandFactors = [
-    "Tenant profile (single, family, corporate)",
-    "Cheque flexibility",
-    "Unit mix availability",
-    "Proximity to work zones"
-  ];
-
-  // Section 10: Matching Areas to Objectives
-  const objectiveExamples = [
-    { goal: "End-user living", match: "Lifestyle & family communities" },
-    { goal: "Long-term investment", match: "Emerging but planned areas" },
-    { goal: "Short-term yield", match: "High-turnover zones" }
-  ];
-
-  // JBJ Support
-  const jbjSupport = [
-    "Objective area comparison",
-    "Pricing and rental behavior analysis",
-    "Matching areas to client goals",
-    "Risk awareness and planning"
-  ];
-
-  // FAQs
-  const faqs = [
-    {
-      question: "Is a popular area always a good investment?",
-      answer: "No. Popularity does not always equal long-term performance."
-    },
-    {
-      question: "Are emerging areas risky?",
-      answer: "They carry higher uncertainty but also higher potential when selected correctly."
-    },
-    {
-      question: "Can I live and invest in the same area?",
-      answer: "Yes, depending on budget and lifestyle preferences."
-    },
-    {
-      question: "Do all areas allow short-term rentals?",
-      answer: "No. Regulations and building rules vary."
-    },
-    {
-      question: "Should I choose an area based on price only?",
-      answer: "No. Price must be assessed alongside demand and infrastructure."
-    },
-    {
-      question: "How do I compare two areas objectively?",
-      answer: "By analyzing price per square foot, rental yield, vacancy, and tenant demand."
-    },
-    {
-      question: "Can JBJ advise which area suits my goal?",
-      answer: "Yes. Area selection is a core part of our advisory process."
-    }
-  ];
-
-  // TOC items
-  const tocItems = [
-    { id: "overview", title: "Overview", icon: Compass },
-    { id: "choosing-area", title: "Choosing the Right Area", icon: Target },
-    { id: "established-emerging", title: "Established vs Emerging", icon: Scale },
-    { id: "lifestyle", title: "Lifestyle Communities", icon: Heart },
-    { id: "family", title: "Family Communities", icon: Users },
-    { id: "investment", title: "Investment Areas", icon: TrendingUp },
-    { id: "infrastructure", title: "Infrastructure", icon: Building2 },
-    { id: "freehold", title: "Freehold vs Non-Freehold", icon: Shield },
-    { id: "pricing", title: "Price Ranges", icon: DollarSign },
-    { id: "rental-demand", title: "Rental Demand", icon: Home },
-    { id: "matching-objectives", title: "Match Your Objective", icon: Target },
-    { id: "jbj-support", title: "How JBJ Helps", icon: CheckCircle2 },
-    { id: "explore-areas", title: "Explore All Areas", icon: Map },
-    { id: "faq", title: "FAQ", icon: HelpCircle }
-  ];
-
-  // Source: Dubai Land Department 2025-2026 Reports, DXBinteract.com
-  const highlights = [
-    { icon: Building2, value: "90+", label: "Communities", source: "JBJ Database 2026" },
-    { icon: Users, value: "200+", label: "Nationalities", source: "Dubai Statistics Center 2026" },
-    { icon: Home, value: "180K+", label: "Transactions (2025)", source: "DLD Annual Report 2025" },
-    { icon: TrendingUp, value: "5-7%", label: "Avg. Gross Yield", source: "DXBinteract Q4 2025" },
-  ];
-
-  // Filter and sort guides
-  const filteredGuides = useMemo(() => {
-    let filtered = AREA_GUIDES.filter((area) => {
-      const q = searchQuery.trim().toLowerCase();
-      const matchesSearch =
-        q === "" ||
-        (area.name ?? "").toLowerCase().includes(q) ||
-        (area.shortDescription ?? "").toLowerCase().includes(q);
-      
-      // Check emirate filter using the EMIRATES_DATA
-      if (selectedEmirate === "all") {
-        return matchesSearch;
-      }
-      
-      const emirate = EMIRATES_DATA.find(e => e.id === selectedEmirate);
-      const matchesEmirate = emirate ? emirate.areas.includes(area.slug) : false;
-      
-      return matchesSearch && matchesEmirate;
-    });
-
-    // Apply sorting
-    switch (sortBy) {
-      case "trending":
-        filtered = [...filtered].sort((a, b) => {
-          const aIsTrending = TRENDING_COMMUNITIES.includes(a.slug) ? 0 : 1;
-          const bIsTrending = TRENDING_COMMUNITIES.includes(b.slug) ? 0 : 1;
-          return aIsTrending - bIsTrending;
-        });
-        break;
-      case "alphabetical":
-        filtered = [...filtered].sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case "newest":
-        // Reverse order (newest added last in array)
-        filtered = [...filtered].reverse();
-        break;
-      case "featured":
-      default:
-        // Keep original order
-        break;
-    }
-
-    return filtered;
-  }, [searchQuery, selectedEmirate, sortBy]);
-
-  return (
-    <div className="min-h-screen bg-black">
-      <SEOHead 
-        title="Dubai Area Guides — Lifestyle, Pricing & Investment Dynamics | JBJ"
-        description="Understand Dubai communities beyond marketing names. Expert area selection guidance for buyers, tenants, and investors based on real market factors."
-        keywords="Dubai area guides, Dubai neighborhoods, Dubai communities, where to live in Dubai, Downtown Dubai guide, Dubai Marina guide, Business Bay guide, Palm Jumeirah"
-        canonicalPath="/areas"
-      />
-
-      {/* Table of Contents - Fixed Right Sidebar */}
-      <GuideTableOfContents 
-        items={tocItems} 
-        ctaAction={{
-          label: "Browse Properties",
-          href: "/properties",
-          icon: Building2
-        }}
-      />
-
-      {/* Premium Hero Section */}
-      <GuideHero
-        badge="Area Guides"
-        badgeIcon={Compass}
-        title={
-          <>
-            Understanding Dubai Communities <br className="hidden md:block" />
-            <span className="text-gold">Lifestyle, Pricing & Investment Dynamics</span>
-          </>
-        }
-        description="Dubai is a city of distinct communities, each offering a different lifestyle, price range, and investment profile. This guide helps buyers, tenants, and investors understand how to evaluate areas correctly — beyond marketing names — using real market factors."
-        backgroundImage="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=2000&q=80"
-        actions={
-          <>
-            <button 
-              onClick={() => document.getElementById('overview')?.scrollIntoView({ behavior: 'smooth' })}
-              className="group relative inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 text-sm md:text-base font-bold rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
-              style={{
-                border: '2px solid rgba(255,255,255,0.8)',
-                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-              }}
-            >
-              <ArrowDown className="w-4 h-4 text-gold group-hover:text-black transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-              <span className="text-white group-hover:text-black transition-colors">Read the Full Guide</span>
-              <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
-            </button>
-            <Link to="/properties">
-              <button 
-                className="group relative inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 text-sm md:text-base font-bold rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
-                style={{
-                  border: '2px solid rgba(255,255,255,0.8)',
-                  boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-                }}
-              >
-                <span className="text-white group-hover:text-black transition-colors">Browse Properties by Area</span>
-                <ArrowUpRight className="w-4 h-4 text-gold group-hover:text-black transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
-              </button>
-            </Link>
-          </>
-        }
-      />
-
-      {/* Main Content with Right Padding for TOC */}
-      <div className="lg:pr-80">
-        {/* Overview Section - Edge to Edge */}
-        <section id="overview" className="jj-section-champagne py-20 relative scroll-mt-24">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            >
-              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
-                    <Compass className="w-6 h-6 text-gold" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-black">
-                    <span className="text-gold">Overview</span>
-                  </h2>
-                </div>
-                <p className="text-zinc-700 text-lg leading-relaxed">
-                  Dubai is a city of distinct communities, each offering a different lifestyle, price range, and investment profile. This guide helps buyers, tenants, and investors understand how to evaluate areas correctly — beyond marketing names — using real market factors.
-                </p>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Section 1: Choosing the Right Area - Edge to Edge */}
-        <section id="choosing-area" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            >
-              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
-                    <Target className="w-6 h-6 text-gold" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-black">
-                    <span className="text-gold">How to</span> Choose the Right Area
-                  </h2>
-                </div>
-                <p className="text-zinc-700 mb-6">
-                  Choosing an area should be based on objectives, not trends.
-                </p>
-                <div className="space-y-3">
-                  {chooseAreaFactors.map((factor, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                      <span className="text-zinc-700">{factor}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
-                  <p className="text-amber-800 text-sm">
-                    <strong>Important:</strong> An area suitable for end-users may not suit investors, and vice versa.
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Section 2: Established vs Emerging Areas - Edge to Edge */}
-        <section id="established-emerging" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            >
-              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
-                    <Scale className="w-6 h-6 text-gold" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-black">
-                    <span className="text-gold">Established</span> vs Emerging Areas
-                  </h2>
-                </div>
-                <p className="text-zinc-700 mb-6">
-                  Dubai offers both mature and developing communities.
-                </p>
-                
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="p-6 jj-box-active rounded-xl">
-                    <h3 className="text-lg font-semibold text-black mb-4">Established Areas</h3>
-                    <div className="space-y-3">
-                      {establishedAreaTraits.map((trait, index) => (
-                        <div key={index} className="flex items-start gap-3">
-                          <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                          <span className="text-zinc-700">{trait}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div className="p-6 jj-box-active rounded-xl">
-                    <h3 className="text-lg font-semibold text-black mb-4">Emerging Areas</h3>
-                    <div className="space-y-3">
-                      {emergingAreaTraits.map((trait, index) => (
-                        <div key={index} className="flex items-start gap-3">
-                          <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                          <span className="text-zinc-700">{trait}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                
-                <p className="text-zinc-600 text-sm mt-6">
-                  Area selection should align with time horizon and risk tolerance.
-                </p>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Section 3: Lifestyle-Driven Communities - Edge to Edge */}
-        <section id="lifestyle" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            >
-              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
-                    <Heart className="w-6 h-6 text-gold" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-black">
-                    <span className="text-gold">Lifestyle-Driven</span> Communities
-                  </h2>
-                </div>
-                <p className="text-zinc-700 mb-6">
-                  Some areas are designed primarily for lifestyle.
-                </p>
-                <div className="space-y-3">
-                  {lifestyleCharacteristics.map((item, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                      <span className="text-zinc-700">{item}</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-zinc-600 text-sm mt-6">
-                  These areas attract end-users and short-term tenants but often carry higher entry prices.
-                </p>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Section 4: Family-Oriented Communities - Edge to Edge */}
-        <section id="family" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            >
-              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
-                    <Users className="w-6 h-6 text-gold" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-black">
-                    <span className="text-gold">Family-Oriented</span> Communities
-                  </h2>
-                </div>
-                <p className="text-zinc-700 mb-6">
-                  Family communities focus on space and long-term living.
-                </p>
-                <div className="space-y-3">
-                  {familyFeatures.map((item, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                      <span className="text-zinc-700">{item}</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-zinc-600 text-sm mt-6">
-                  These areas are favored by long-term tenants and homeowners.
-                </p>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Section 5: Investment-Focused Areas - Edge to Edge */}
-        <section id="investment" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            >
-              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
-                    <TrendingUp className="w-6 h-6 text-gold" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-black">
-                    <span className="text-gold">Investment-Focused</span> Areas
-                  </h2>
-                </div>
-                <p className="text-zinc-700 mb-6">
-                  Some locations are driven primarily by yield and demand.
-                </p>
-                <div className="space-y-3">
-                  {investmentTraits.map((item, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                      <span className="text-zinc-700">{item}</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-zinc-600 text-sm mt-6">
-                  These areas suit investors prioritizing cash flow.
-                </p>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Section 6: Infrastructure & Future Development - Edge to Edge */}
-        <section id="infrastructure" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            >
-              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
-                    <Building2 className="w-6 h-6 text-gold" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-black">
-                    <span className="text-gold">Infrastructure</span> & Future Development
-                  </h2>
-                </div>
-                <p className="text-zinc-700 mb-6">
-                  Area performance is closely tied to government planning.
-                </p>
-                <div className="space-y-3">
-                  {infrastructureConsiderations.map((item, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                      <span className="text-zinc-700">{item}</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-zinc-600 text-sm mt-6">
-                  Long-term growth is influenced by future connectivity, not current hype.
-                </p>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Section 7: Freehold vs Non-Freehold - Edge to Edge */}
-        <section id="freehold" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            >
-              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
-                    <Shield className="w-6 h-6 text-gold" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-black">
-                    <span className="text-gold">Freehold</span> vs Non-Freehold Zones
-                  </h2>
-                </div>
-                <p className="text-zinc-700 mb-6">
-                  Ownership rules vary by location.
-                </p>
-                <div className="space-y-3">
-                  {freeholdPoints.map((item, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                      <span className="text-zinc-700">{item}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
-                  <p className="text-amber-800 text-sm">
-                    <strong>Important:</strong> Always verify ownership status before committing.
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Section 8: Price Ranges & Market Behavior - Edge to Edge */}
-        <section id="pricing" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            >
-              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
-                    <DollarSign className="w-6 h-6 text-gold" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-black">
-                    <span className="text-gold">Price Ranges</span> & Market Behavior
-                  </h2>
-                </div>
-                <p className="text-zinc-700 mb-6">
-                  Prices vary significantly across Dubai. Area pricing is influenced by:
-                </p>
-                <div className="space-y-3">
-                  {priceInfluences.map((item, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                      <span className="text-zinc-700">{item}</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-zinc-600 text-sm mt-6">
-                  Comparing areas requires looking at price per square foot, not just headline prices.
-                </p>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Section 9: Rental Demand by Area - Edge to Edge */}
-        <section id="rental-demand" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            >
-              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
-                    <Home className="w-6 h-6 text-gold" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-black">
-                    <span className="text-gold">Rental Demand</span> by Area
-                  </h2>
-                </div>
-                <p className="text-zinc-700 mb-6">
-                  Not all areas rent equally. Rental demand depends on:
-                </p>
-                <div className="space-y-3">
-                  {rentalDemandFactors.map((item, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                      <span className="text-zinc-700">{item}</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-zinc-600 text-sm mt-6">
-                  Understanding tenant behavior is critical for rental success.
-                </p>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Section 10: Matching Areas to Objectives - Edge to Edge */}
-        <section id="matching-objectives" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            >
-              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
-                    <Target className="w-6 h-6 text-gold" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-black">
-                    <span className="text-gold">Matching Areas</span> to Your Objective
-                  </h2>
-                </div>
-                <p className="text-zinc-700 mb-6">
-                  Area selection should always be goal-driven.
-                </p>
-                <div className="space-y-4">
-                  {objectiveExamples.map((item, index) => (
-                    <div key={index} className="flex items-center gap-4 p-4 jj-box-active rounded-xl">
-                      <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
-                        <span className="text-gold font-bold">{index + 1}</span>
-                      </div>
-                      <div>
-                        <span className="font-semibold text-black">{item.goal}</span>
-                        <span className="text-zinc-500 mx-2">→</span>
-                        <span className="text-gold">{item.match}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-6 p-4 bg-black/5 border border-gold/30 rounded-xl">
-                  <p className="text-zinc-700 text-sm">
-                    <strong>Note:</strong> There is no "best area" — only the best area for your objective.
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Section 11: How JBJ Supports - Edge to Edge */}
-        <section id="jbj-support" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            >
-              <div className="jj-box-active rounded-2xl p-8 md:p-12 shadow-lg">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
-                    <CheckCircle2 className="w-6 h-6 text-gold" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-black">
-                    <span className="text-gold">How JBJ</span> Global Real Estate Guides Area Selection
-                  </h2>
-                </div>
-                <p className="text-zinc-700 mb-6">
-                  We do not promote areas based on developer preference or commissions.
-                </p>
-                <div className="space-y-3">
-                  {jbjSupport.map((item, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                      <span className="text-zinc-700">{item}</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-zinc-600 text-sm mt-6 italic">
-                  We guide clients as if selecting for our own capital.
-                </p>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Stats Bar - Edge to Edge Champagne */}
-        <section className="jj-section-champagne py-10 border-y border-gold/20">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {highlights.map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1, duration: 0.4, ease: "easeOut" }}
-                  className="text-center"
-                >
-                  <div className="inline-flex items-center justify-center w-12 h-12 bg-black border border-gold/30 rounded-xl mb-3 shadow-md">
-                    <item.icon className="w-6 h-6 text-gold" />
-                  </div>
-                  <div className="text-2xl md:text-3xl font-bold text-black">{item.value}</div>
-                  <div className="text-sm text-zinc-600">{item.label}</div>
-                </motion.div>
-              ))}
-            </div>
-            <p className="text-center text-xs text-zinc-500 mt-4">Source: Dubai Land Department Annual Report 2025-2026</p>
-          </div>
-        </section>
-
-        {/* Area Cards Grid - 3-Layer System: Black > Active Champagne Section > Pearl Cards */}
-        <section id="explore-areas" className="py-20 bg-black relative scroll-mt-24">
-          <div className="container mx-auto px-4">
-            {/* Section Header */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-              className="text-center mb-12"
-            >
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                <span className="text-gold">Explore</span> Featured Communities
-              </h2>
-              <p className="text-zinc-400 max-w-2xl mx-auto mb-8">
-                Each area offers a unique lifestyle. Click to explore detailed guides with pricing, amenities, and local insights.
-              </p>
-
-              {/* Search & Filter Bar - Active Champagne Layer with Pearl Filter Boxes */}
-              <div className="max-w-5xl mx-auto">
-                <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl p-4 md:p-6 border border-gold/30 shadow-lg">
-                  {/* Search Input - Pearl Box Style */}
-                  <div className="relative mb-4">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold pointer-events-none" />
-                    <Input
-                      type="text"
-                      placeholder="Search by community name..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-12 pr-10 h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 focus:border-gold text-black placeholder:text-zinc-500 w-full shadow-sm"
-                    />
-                    {searchQuery && (
-                      <button
-                        onClick={() => setSearchQuery("")}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-gold/20 hover:bg-gold/30 flex items-center justify-center transition-colors"
-                      >
-                        <X className="w-3 h-3 text-black" />
-                      </button>
-                    )}
-                  </div>
-
-                  {/* Emirate Filter - Pearl Buttons */}
-                  <div className="flex flex-wrap gap-2 justify-center">
-                    {UAE_EMIRATES.map((emirate) => (
-                      <button
-                        key={emirate.id}
-                        onClick={() => setSelectedEmirate(emirate.id)}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
-                          selectedEmirate === emirate.id
-                            ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-2 border-gold shadow-sm"
-                            : "bg-white/50 text-black border-2 border-gold/30 hover:border-gold"
-                        }`}
-                      >
-                        {emirate.name}
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Sort Options - Pearl Buttons */}
-                  <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-                    <span className="text-sm text-black/70 mr-2 font-medium">Sort by:</span>
-                    {[
-                      { id: "featured" as SortOption, label: "Featured", icon: Star },
-                      { id: "trending" as SortOption, label: "Trending", icon: Flame },
-                      { id: "newest" as SortOption, label: "Newest", icon: Clock },
-                      { id: "alphabetical" as SortOption, label: "A-Z", icon: SortAsc },
-                    ].map((option) => (
-                      <button
-                        key={option.id}
-                        onClick={() => setSortBy(option.id)}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                          sortBy === option.id
-                            ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-2 border-gold shadow-sm"
-                            : "bg-white/50 text-black border-2 border-gold/30 hover:border-gold"
-                        }`}
-                      >
-                        <option.icon className={`w-3 h-3 ${sortBy === option.id ? "text-gold" : ""}`} />
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Results Count */}
-                  <div className="mt-4 text-sm text-black/70 text-center font-medium">
-                    Showing <span className="font-semibold text-gold">{filteredGuides.length}</span> communities
-                    {selectedEmirate !== "all" && (
-                      <span> in <span className="font-semibold text-black">{UAE_EMIRATES.find(e => e.id === selectedEmirate)?.name}</span></span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div 
-              key={`${selectedEmirate}-${sortBy}-${searchQuery}`}
-              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-              initial="hidden"
-              animate="visible"
-              variants={staggerContainer}
-            >
-              {filteredGuides.map((area) => (
-                <motion.div key={area.slug} variants={fadeInUp}>
-                  <Link 
-                    to={`/area/${area.slug}`}
-                    className="group block relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold transition-all duration-500 hover:shadow-xl hover:shadow-gold/20 h-full flex flex-col shadow-sm"
-                  >
-                    {/* Image - Fixed Height */}
-                    <div className="relative h-48 overflow-hidden flex-shrink-0">
-                      <img 
-                        src={area.heroImage} 
-                        alt={area.name}
-                        loading="lazy"
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
-                      
-                      {/* Trending Badge */}
-                      {TRENDING_COMMUNITIES.includes(area.slug) && (
-                        <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-orange-500 to-red-500 rounded-full shadow-lg">
-                          <Flame className="w-3.5 h-3.5 text-white" />
-                          <span className="text-xs font-bold text-white uppercase tracking-wide">Trending</span>
-                        </div>
-                      )}
-                      
-                      {/* Hover Arrow */}
-                      <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 shadow-lg">
-                        <ArrowUpRight className="w-5 h-5 text-gold" />
-                      </div>
-
-                      {/* Premium Badge */}
-                      <div className="absolute bottom-4 left-4">
-                        <span className="px-3 py-1 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-full text-xs text-black font-medium shadow-md">
-                          Premium Community
-                        </span>
-                      </div>
-                    </div>
-                    
-                    {/* Content - Flex Grow for Equal Height */}
-                    <div className="p-6 flex flex-col flex-grow">
-                      <div className="flex items-center gap-2 mb-3">
-                        <MapPin className="w-4 h-4 text-gold" />
-                        <span className="text-gold text-sm uppercase tracking-wider font-medium">Dubai, UAE</span>
-                      </div>
-                      
-                      <h3 className="text-black text-xl font-bold mb-3 group-hover:text-gold transition-colors line-clamp-1">
-                        {area.name}
-                      </h3>
-                      
-                      <p className="text-zinc-600 text-sm leading-relaxed line-clamp-2 mb-4 flex-grow">
-                        {area.shortDescription}
-                      </p>
-                      
-                      <div className="flex items-center justify-between pt-4 border-t border-gold/20 mt-auto">
-                        <span className="text-gold text-sm font-medium flex items-center gap-2 group-hover:gap-3 transition-all">
-                          Read Full Guide
-                          <ArrowUpRight className="w-4 h-4" />
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            {/* No Results */}
-            {filteredGuides.length === 0 && (
-              <motion.div 
-                className="text-center py-16"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-zinc-900 border border-zinc-700 rounded-2xl mb-4">
-                  <Search className="w-8 h-8 text-zinc-500" />
-                </div>
-                <h3 className="text-xl text-white mb-2">No communities found</h3>
-                <p className="text-zinc-400 mb-4">Try adjusting your search or filter criteria</p>
-                <button
-                  onClick={() => {
-                    setSearchQuery("");
-                    setSelectedEmirate("all");
-                  }}
-                  className="text-gold hover:underline"
-                >
-                  Clear all filters
-                </button>
-              </motion.div>
-            )}
-          </div>
-        </section>
-
-        {/* FAQ Section - Edge to Edge */}
-        <section id="faq" className="jj-section-champagne py-20 relative scroll-mt-24 border-t border-gold/20">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            >
-              <div className="text-center mb-12">
-                <div className="inline-flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-black border border-gold/30 flex items-center justify-center">
-                    <HelpCircle className="w-6 h-6 text-gold" />
-                  </div>
-                </div>
-                <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
-                  <span className="text-gold">Area Guide</span> FAQ
-                </h2>
-              </div>
-
-              <div className="jj-box-active rounded-2xl p-6 md:p-8 shadow-lg">
-                <Accordion type="single" collapsible className="space-y-4">
-                  {faqs.map((faq, index) => (
-                    <AccordionItem 
-                      key={index} 
-                      value={`item-${index}`}
-                      className="border border-gold/30 rounded-xl px-6 jj-box-active"
-                    >
-                      <AccordionTrigger className="text-left font-semibold text-black hover:text-gold py-4">
-                        {faq.question}
-                      </AccordionTrigger>
-                      <AccordionContent className="text-zinc-700 pb-4">
-                        {faq.answer}
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="py-16 px-4">
-          <div className="container mx-auto max-w-4xl">
-            <GuideCTA
-              title="Ready to Find Your Perfect Community?"
-              description="Our team specializes in matching clients with their ideal Dubai neighborhood. Get personalized recommendations based on your goals and requirements."
-              icon={Home}
-              primaryAction={{
-                label: "Browse Properties",
-                href: "/properties",
-                icon: Building2
-              }}
-            />
-          </div>
-        </section>
-
-        {/* Guide Navigation - Edge to Edge */}
-        <section className="jj-section-champagne py-12 border-t border-gold/20">
-          <div className="container mx-auto px-4">
-            <GuideNavigation current="/areas" guides={GUIDE_LINKS} showStartHere />
-          </div>
-        </section>
-      </div>
-
-      {/* Standardized Direct Contact CTA */}
-      <DirectContactCTA />
-
-      <Footer />
-    </div>
-  );
-};
-
-export default AreaGuides;
+ /**
+  * AreaGuides Component - Database-Driven Areas Index
+  * Displays only REAL areas from the database (Reelly-synced)
+  * No static/fake data - all areas come from useAreas() hook
+  */
+ 
+ import { useState, useMemo } from "react";
+ import { Link } from "react-router-dom";
+ import { motion } from "framer-motion";
+ import { MapPin, Building2, TrendingUp, Search, X, Flame, ArrowRight, Loader2 } from "lucide-react";
+ import { Input } from "@/components/ui/input";
+ import Footer from "@/components/Footer";
+ import { SEOHead } from "@/components/SEOHead";
+ import { useAreas, useEmiratesWithAreas, Area } from "@/hooks/useAreas";
+ 
+ const fadeInUp = {
+   hidden: { opacity: 0, y: 20 },
+   visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } }
+ };
+ 
+ const staggerContainer = {
+   hidden: { opacity: 0 },
+   visible: {
+     opacity: 1,
+     transition: { staggerChildren: 0.06, delayChildren: 0.1 }
+   }
+ };
+ 
+ type SortOption = "property_count" | "trending" | "alphabetical";
+ 
+ const AreaGuides = () => {
+   const [searchQuery, setSearchQuery] = useState("");
+   const [selectedEmirate, setSelectedEmirate] = useState("all");
+   const [sortBy, setSortBy] = useState<SortOption>("property_count");
+ 
+   // Fetch REAL areas from database
+   const { data: areas, isLoading, error } = useAreas();
+   const { data: emirates } = useEmiratesWithAreas();
+ 
+   // Filter and sort areas from database
+   const filteredAreas = useMemo(() => {
+     if (!areas) return [];
+     
+     let filtered = areas.filter((area) => {
+       const q = searchQuery.trim().toLowerCase();
+       const matchesSearch =
+         q === "" ||
+         area.name.toLowerCase().includes(q) ||
+         (area.description ?? "").toLowerCase().includes(q);
+       
+       const matchesEmirate = 
+         selectedEmirate === "all" || 
+         area.emirate.toLowerCase() === selectedEmirate.toLowerCase();
+       
+       return matchesSearch && matchesEmirate;
+     });
+ 
+     switch (sortBy) {
+       case "trending":
+         filtered = [...filtered].sort((a, b) => {
+           const aIsTrending = a.is_trending ? 0 : 1;
+           const bIsTrending = b.is_trending ? 0 : 1;
+           return aIsTrending - bIsTrending || (b.property_count ?? 0) - (a.property_count ?? 0);
+         });
+         break;
+       case "alphabetical":
+         filtered = [...filtered].sort((a, b) => a.name.localeCompare(b.name));
+         break;
+       case "property_count":
+       default:
+         filtered = [...filtered].sort((a, b) => (b.property_count ?? 0) - (a.property_count ?? 0));
+         break;
+     }
+ 
+     return filtered;
+   }, [areas, searchQuery, selectedEmirate, sortBy]);
+ 
+   return (
+     <div className="min-h-screen bg-black">
+       <SEOHead 
+         title="Areas in Dubai & UAE | JBJ Global Real Estate"
+         description="Explore real estate areas across Dubai and the UAE. Browse properties by neighborhood with verified data."
+         keywords="Dubai areas, Dubai neighborhoods, UAE property areas, Dubai real estate locations"
+         canonicalPath="/areas"
+       />
+ 
+       {/* Premium Hero Section */}
+       <section className="relative bg-gradient-to-br from-black via-zinc-900 to-black py-20 md:py-28 overflow-hidden">
+         <div className="absolute inset-0 opacity-10">
+           <div className="absolute top-0 left-0 w-full h-full" style={{
+             backgroundImage: `radial-gradient(circle at 25% 25%, rgba(200,167,102,0.3) 0%, transparent 50%),
+                               radial-gradient(circle at 75% 75%, rgba(200,167,102,0.2) 0%, transparent 50%)`
+           }} />
+         </div>
+ 
+         <div className="container mx-auto px-4 relative z-10">
+           <motion.div
+             initial={{ opacity: 0, y: 30 }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ duration: 0.6 }}
+             className="text-center max-w-4xl mx-auto"
+           >
+             <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gold/20 to-gold/10 border border-gold/40 rounded-full mb-6">
+               <MapPin className="w-4 h-4 text-gold" />
+               <span className="text-gold text-sm font-medium uppercase tracking-wider">Browse by Location</span>
+             </div>
+ 
+             <h1 
+               className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
+               style={{ fontFamily: "Poppins, sans-serif" }}
+             >
+               Explore <span className="text-gold">Areas</span> in the UAE
+             </h1>
+ 
+             <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto mb-8">
+               Discover properties across {areas?.length || 0}+ verified neighborhoods
+             </p>
+ 
+             <div className="flex flex-wrap justify-center gap-6 md:gap-10">
+               <div className="text-center">
+                 <div className="text-3xl md:text-4xl font-bold text-gold">{areas?.length || 0}</div>
+                 <div className="text-zinc-500 text-sm">Areas</div>
+               </div>
+               <div className="text-center">
+                 <div className="text-3xl md:text-4xl font-bold text-gold">{emirates?.length || 0}</div>
+                 <div className="text-zinc-500 text-sm">Emirates</div>
+               </div>
+               <div className="text-center">
+                 <div className="text-3xl md:text-4xl font-bold text-gold">
+                   {areas?.reduce((sum, a) => sum + (a.property_count ?? 0), 0).toLocaleString() || 0}
+                 </div>
+                 <div className="text-zinc-500 text-sm">Properties</div>
+               </div>
+             </div>
+           </motion.div>
+         </div>
+       </section>
+ 
+       {/* Filters & Search */}
+       <section className="py-8 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border-b border-gold/20">
+         <div className="container mx-auto px-4">
+           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+             <div className="relative w-full md:w-96">
+               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
+               <Input
+                 placeholder="Search areas..."
+                 value={searchQuery}
+                 onChange={(e) => setSearchQuery(e.target.value)}
+                 className="pl-10 pr-10 bg-white border-gold/30 focus:border-gold"
+               />
+               {searchQuery && (
+                 <button
+                   onClick={() => setSearchQuery("")}
+                   className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+                 >
+                   <X className="w-4 h-4" />
+                 </button>
+               )}
+             </div>
+ 
+             <div className="flex flex-wrap gap-2 justify-center">
+               <button
+                 onClick={() => setSelectedEmirate("all")}
+                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                   selectedEmirate === "all"
+                     ? "bg-black text-gold border border-gold"
+                     : "bg-white border border-gold/30 text-zinc-700 hover:border-gold"
+                 }`}
+               >
+                 All Emirates
+               </button>
+               {emirates?.map((emirate) => (
+                 <button
+                   key={emirate}
+                   onClick={() => setSelectedEmirate(emirate)}
+                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                     selectedEmirate === emirate
+                       ? "bg-black text-gold border border-gold"
+                       : "bg-white border border-gold/30 text-zinc-700 hover:border-gold"
+                   }`}
+                 >
+                   {emirate}
+                 </button>
+               ))}
+             </div>
+ 
+             <div className="flex gap-2">
+               <button
+                 onClick={() => setSortBy("property_count")}
+                 className={`px-3 py-2 rounded-lg text-sm transition-all ${
+                   sortBy === "property_count" ? "bg-gold text-black" : "bg-white border border-gold/30 text-zinc-700"
+                 }`}
+               >
+                 <Building2 className="w-4 h-4" />
+               </button>
+               <button
+                 onClick={() => setSortBy("trending")}
+                 className={`px-3 py-2 rounded-lg text-sm transition-all ${
+                   sortBy === "trending" ? "bg-gold text-black" : "bg-white border border-gold/30 text-zinc-700"
+                 }`}
+               >
+                 <Flame className="w-4 h-4" />
+               </button>
+               <button
+                 onClick={() => setSortBy("alphabetical")}
+                 className={`px-3 py-2 rounded-lg text-sm transition-all ${
+                   sortBy === "alphabetical" ? "bg-gold text-black" : "bg-white border border-gold/30 text-zinc-700"
+                 }`}
+               >
+                 A-Z
+               </button>
+             </div>
+           </div>
+         </div>
+       </section>
+ 
+       {/* Areas Grid */}
+       <section className="py-16 bg-black">
+         <div className="container mx-auto px-4">
+           {isLoading ? (
+             <div className="flex items-center justify-center py-20">
+               <Loader2 className="w-8 h-8 text-gold animate-spin" />
+               <span className="ml-3 text-zinc-400">Loading areas...</span>
+             </div>
+           ) : error ? (
+             <div className="text-center py-20">
+               <p className="text-red-400">Failed to load areas. Please try again.</p>
+             </div>
+           ) : filteredAreas.length === 0 ? (
+             <div className="text-center py-20">
+               <MapPin className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
+               <p className="text-zinc-400 text-lg">No areas found matching your criteria.</p>
+               {searchQuery && (
+                 <button
+                   onClick={() => setSearchQuery("")}
+                   className="mt-4 text-gold hover:underline"
+                 >
+                   Clear search
+                 </button>
+               )}
+             </div>
+           ) : (
+             <motion.div
+               variants={staggerContainer}
+               initial="hidden"
+               animate="visible"
+               className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
+             >
+               {filteredAreas.map((area) => (
+                 <motion.div key={area.id} variants={fadeInUp}>
+                   <Link
+                     to={`/area/${area.slug}`}
+                     className="group block p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl border-2 border-gold/20 hover:border-gold transition-all duration-300 hover:shadow-[0_4px_20px_rgba(200,167,102,0.3)] hover:-translate-y-1"
+                   >
+                     <div className="flex items-start justify-between gap-2 mb-2">
+                       <h3 className="text-black font-semibold text-sm group-hover:text-gold transition-colors line-clamp-2">
+                         {area.name}
+                       </h3>
+                       {area.is_trending && (
+                         <TrendingUp className="w-3.5 h-3.5 text-amber-500 flex-shrink-0" />
+                       )}
+                     </div>
+                     <div className="flex items-center gap-1.5 text-xs text-zinc-500">
+                       <MapPin className="w-3 h-3" />
+                       <span>{area.emirate}</span>
+                     </div>
+                     {(area.property_count ?? 0) > 0 && (
+                       <div className="mt-2 text-xs text-gold font-medium">
+                         {area.property_count} properties
+                       </div>
+                     )}
+                   </Link>
+                 </motion.div>
+               ))}
+             </motion.div>
+           )}
+ 
+           {!isLoading && filteredAreas.length > 0 && (
+             <div className="text-center mt-8 text-zinc-500 text-sm">
+               Showing {filteredAreas.length} of {areas?.length || 0} areas
+             </div>
+           )}
+         </div>
+       </section>
+ 
+       {/* CTA Section */}
+       <section className="py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+         <div className="container mx-auto px-4 text-center">
+           <h2 className="text-2xl md:text-3xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+             Can't Find What You're Looking For?
+           </h2>
+           <p className="text-zinc-600 mb-6 max-w-xl mx-auto">
+             Our team can help you discover the perfect area based on your lifestyle and investment goals.
+           </p>
+           <Link
+             to="/contact"
+             className="inline-flex items-center gap-2 px-6 py-3 bg-black text-gold font-semibold rounded-xl border-2 border-gold hover:bg-gold hover:text-black transition-all"
+           >
+             Contact Our Team
+             <ArrowRight className="w-4 h-4" />
+           </Link>
+         </div>
+       </section>
+ 
+       <Footer />
+     </div>
+   );
+ };
+ 
+ export default AreaGuides;

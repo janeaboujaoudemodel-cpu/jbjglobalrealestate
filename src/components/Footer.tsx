@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import {
   MapPin,
@@ -71,6 +71,10 @@ const Footer = () => {
   const { t } = useLanguage();
   const { isFounderVisible } = useFounderVisibility();
   const currentYear = new Date().getFullYear();
+  const location = useLocation();
+
+  // Hide NewsletterBand in admin contexts
+  const isAdminContext = location.pathname.startsWith('/listing-admin') || location.pathname.startsWith('/admin');
 
   // Properties
   const propertiesLinks = [
@@ -190,7 +194,11 @@ const Footer = () => {
   ];
 
   return (
-    <footer id="site-footer" className="relative overflow-x-hidden bg-black">
+    <>
+      {/* Newsletter Band - Only on public pages */}
+      {!isAdminContext && <NewsletterBand />}
+      
+      <footer id="site-footer" className="relative overflow-x-hidden bg-black">
       {/* Pure black background - no gradients */}
       <div className="absolute inset-0 bg-black" />
       
