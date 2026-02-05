@@ -263,7 +263,7 @@ export function MegaMenuIconLink({
           "transition-colors duration-300",
           emphasis
             ? "text-gold w-5 h-5"
-            : "text-black group-hover:text-gold",
+            : "text-gold group-hover:text-black",
           !emphasis && compact ? "w-3.5 h-3.5" : !emphasis ? "w-5 h-5" : ""
         )} />
       </div>

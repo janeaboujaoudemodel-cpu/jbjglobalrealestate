@@ -726,8 +726,8 @@ const CustomerHappiness = () => {
         canonicalPath="/customer-happiness"
       />
 
-      <div className="min-h-screen bg-[#0D0D0D]">
-        {/* Hero Section */}
+      <div className="min-h-screen bg-black">
+        {/* Hero Section - Premium Champagne */}
         <section className="relative py-20 md:py-28 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gold/10 rounded-full blur-[120px]" />
@@ -788,35 +788,35 @@ const CustomerHappiness = () => {
         <section className="py-16">
           <div className="container mx-auto px-4">
             <Tabs defaultValue="support" className="max-w-4xl mx-auto">
-              <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-zinc-900/50 p-2 rounded-xl mb-8 h-auto">
-                <TabsTrigger value="support" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-black py-3">
+              <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 p-2 rounded-xl mb-8 h-auto">
+                <TabsTrigger value="support" className="flex items-center gap-2 data-[state=active]:bg-white/80 data-[state=active]:text-black data-[state=active]:border-gold data-[state=active]:border-2 text-black py-3">
                   <TicketCheck className="w-4 h-4" />
                   <span className="hidden sm:inline">Support</span> Ticket
                 </TabsTrigger>
-                <TabsTrigger value="feedback" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-black py-3">
+                <TabsTrigger value="feedback" className="flex items-center gap-2 data-[state=active]:bg-white/80 data-[state=active]:text-black data-[state=active]:border-gold data-[state=active]:border-2 text-black py-3">
                   <MessageSquareHeart className="w-4 h-4" />
                   <span className="hidden sm:inline">Write a</span> Review
                 </TabsTrigger>
-                <TabsTrigger value="issue" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-black py-3">
+                <TabsTrigger value="issue" className="flex items-center gap-2 data-[state=active]:bg-white/80 data-[state=active]:text-black data-[state=active]:border-gold data-[state=active]:border-2 text-black py-3">
                   <AlertCircle className="w-4 h-4" />
                   Report <span className="hidden sm:inline">Issue</span>
                 </TabsTrigger>
-                <TabsTrigger value="idea" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-black py-3">
+                <TabsTrigger value="idea" className="flex items-center gap-2 data-[state=active]:bg-white/80 data-[state=active]:text-black data-[state=active]:border-gold data-[state=active]:border-2 text-black py-3">
                   <Lightbulb className="w-4 h-4" />
                   Idea <span className="hidden sm:inline">Box</span>
                 </TabsTrigger>
               </TabsList>
 
               <TabsContent value="support">
-                <Card className="bg-zinc-900/60 border-zinc-800">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
                   <CardHeader>
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center">
-                        <TicketCheck className="w-6 h-6 text-blue-400" />
+                      <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center border border-blue-500/40">
+                        <TicketCheck className="w-6 h-6 text-blue-600" />
                       </div>
                       <div>
-                        <CardTitle className="text-white">Create Support Ticket</CardTitle>
-                        <CardDescription className="text-zinc-400">
+                        <CardTitle className="text-black">Create Support Ticket</CardTitle>
+                        <CardDescription className="text-zinc-600">
                           Need help? Our team typically responds within 24 hours.
                         </CardDescription>
                       </div>
@@ -829,15 +829,15 @@ const CustomerHappiness = () => {
               </TabsContent>
 
               <TabsContent value="feedback">
-                <Card className="bg-zinc-900/60 border-zinc-800">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
                   <CardHeader>
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-pink-500/10 rounded-xl flex items-center justify-center">
-                        <MessageSquareHeart className="w-6 h-6 text-pink-400" />
+                      <div className="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center border border-pink-500/40">
+                        <MessageSquareHeart className="w-6 h-6 text-pink-600" />
                       </div>
                       <div>
-                        <CardTitle className="text-white">Write a Review</CardTitle>
-                        <CardDescription className="text-zinc-400">
+                        <CardTitle className="text-black">Write a Review</CardTitle>
+                        <CardDescription className="text-zinc-600">
                           Share your experience! Approved reviews will be featured on our website.
                         </CardDescription>
                       </div>
@@ -850,15 +850,15 @@ const CustomerHappiness = () => {
               </TabsContent>
 
               <TabsContent value="issue">
-                <Card className="bg-zinc-900/60 border-zinc-800">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
                   <CardHeader>
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-red-500/10 rounded-xl flex items-center justify-center">
-                        <AlertCircle className="w-6 h-6 text-red-400" />
+                      <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center border border-red-500/40">
+                        <AlertCircle className="w-6 h-6 text-red-600" />
                       </div>
                       <div>
-                        <CardTitle className="text-white">Report an Issue</CardTitle>
-                        <CardDescription className="text-zinc-400">
+                        <CardTitle className="text-black">Report an Issue</CardTitle>
+                        <CardDescription className="text-zinc-600">
                           Found a bug or something not working? Help us fix it!
                         </CardDescription>
                       </div>
@@ -871,15 +871,15 @@ const CustomerHappiness = () => {
               </TabsContent>
 
               <TabsContent value="idea">
-                <Card className="bg-zinc-900/60 border-zinc-800">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
                   <CardHeader>
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center">
-                        <Lightbulb className="w-6 h-6 text-purple-400" />
+                      <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center border border-purple-500/40">
+                        <Lightbulb className="w-6 h-6 text-purple-600" />
                       </div>
                       <div>
-                        <CardTitle className="text-white">Idea Box — We Value Your Creativity!</CardTitle>
-                        <CardDescription className="text-zinc-400">
+                        <CardTitle className="text-black">Idea Box — We Value Your Creativity!</CardTitle>
+                        <CardDescription className="text-zinc-600">
                           Share your innovative ideas and win amazing prizes!
                         </CardDescription>
                       </div>
@@ -895,7 +895,7 @@ const CustomerHappiness = () => {
         </section>
 
         {/* Quick Contact */}
-        <section className="py-16 border-t border-zinc-800">
+        <section className="py-16 border-t border-gold/30">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -907,29 +907,29 @@ const CustomerHappiness = () => {
                 Need Immediate Assistance?
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Card className="bg-zinc-900/60 border-zinc-800 hover:border-gold/30 transition-colors">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-blue-500/40 hover:border-blue-500 transition-colors">
                   <CardContent className="p-6 text-center">
-                    <Phone className="w-8 h-8 text-gold mx-auto mb-3" />
-                    <p className="text-white font-medium mb-1">Call Us</p>
-                    <a href="tel:+971565911000" className="text-zinc-400 hover:text-gold">
+                    <Phone className="w-8 h-8 text-blue-500 mx-auto mb-3" />
+                    <p className="text-black font-medium mb-1">Call Us</p>
+                    <a href="tel:+971565911000" className="text-zinc-600 hover:text-gold">
                       +971 56 591 1000
                     </a>
                   </CardContent>
                 </Card>
-                <Card className="bg-zinc-900/60 border-zinc-800 hover:border-gold/30 transition-colors">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-black/40 hover:border-black transition-colors">
                   <CardContent className="p-6 text-center">
-                    <Mail className="w-8 h-8 text-gold mx-auto mb-3" />
-                    <p className="text-white font-medium mb-1">Email Us</p>
-                    <a href="mailto:CONTACT@JBJ.AE" className="text-zinc-400 hover:text-gold">
+                    <Mail className="w-8 h-8 text-black mx-auto mb-3" />
+                    <p className="text-black font-medium mb-1">Email Us</p>
+                    <a href="mailto:CONTACT@JBJ.AE" className="text-zinc-600 hover:text-gold">
                       CONTACT@JBJ.AE
                     </a>
                   </CardContent>
                 </Card>
-                <Card className="bg-zinc-900/60 border-zinc-800 hover:border-gold/30 transition-colors">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold transition-colors">
                   <CardContent className="p-6 text-center">
                     <Calendar className="w-8 h-8 text-gold mx-auto mb-3" />
-                    <p className="text-white font-medium mb-1">Office Hours</p>
-                    <p className="text-zinc-400">Mon–Sun: 9AM–9PM</p>
+                    <p className="text-black font-medium mb-1">Office Hours</p>
+                    <p className="text-zinc-600">Mon–Sun: 9AM–9PM</p>
                   </CardContent>
                 </Card>
               </div>
