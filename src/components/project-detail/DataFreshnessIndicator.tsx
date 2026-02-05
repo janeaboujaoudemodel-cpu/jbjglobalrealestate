@@ -77,12 +77,7 @@ export default function DataFreshnessIndicator({
         </Badge>
       )}
 
-      {/* External Reference (for debugging/tracking) */}
-      {externalId && (
-        <span className="text-[10px] text-muted-foreground/50 font-mono">
-          #{externalId.slice(0, 8)}
-        </span>
-      )}
+      {/* External Reference removed from public UI - was showing hashtags */}
     </div>
   );
 }

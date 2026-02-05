@@ -48,7 +48,7 @@ import InvestmentMetricsSection from "@/components/project-detail/InvestmentMetr
 import DeveloperInfoCard from "@/components/project-detail/DeveloperInfoCard";
 import QuickFactsBar from "@/components/project-detail/QuickFactsBar";
 import PaymentPlanVisualization from "@/components/project-detail/PaymentPlanVisualization";
-import DirectContactCTA from "@/components/DirectContactCTA";
+// DirectContactCTA is now rendered globally in MainLayout - do not import here
 import MasterPlanSection from "@/components/project-detail/MasterPlanSection";
 import HouseDetailsSection from "@/components/project-detail/HouseDetailsSection";
 import DataFreshnessIndicator from "@/components/project-detail/DataFreshnessIndicator";
@@ -56,7 +56,8 @@ import RecommendedProjects from "@/components/project-detail/RecommendedProjects
 import ReportIssueButton from "@/components/project-detail/ReportIssueButton";
 import AmenitiesWithPhotos from "@/components/project-detail/AmenitiesWithPhotos";
 import PointsOfInterest from "@/components/project-detail/PointsOfInterest";
-import Footer from "@/components/Footer";
+import ProjectLocationMap from "@/components/project-detail/ProjectLocationMap";
+// Footer is now rendered globally in MainLayout - do not import here
 import { CONTACT_INFO, getCallUrl, getEmailUrl, getWhatsAppUrl } from "@/constants/stats";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { SafeImage } from "@/components/SafeImage";
@@ -151,12 +152,13 @@ interface ProjectDetailLayoutProps {
   project: ProjectDetailData;
   adminBar?: React.ReactNode;
   onRequestReport?: () => void;
+  // showFooter is deprecated - footer is now rendered globally in MainLayout
   showFooter?: boolean;
 }
 
 const MIN_REASONABLE_PRICE_AED = 50_000;
 
-const MAPS_API_KEY = "AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8";
+// Google Maps API key removed - now using Leaflet with open tiles
 
 // Sticky sub-nav tabs config - Reelly-style sections added
 const SUB_NAV_TABS = [
@@ -869,18 +871,13 @@ export default function ProjectDetailLayout({
                 </div>
               )}
 
-              <div className="rounded-xl overflow-hidden border border-gold/30">
-                <iframe
-                  src={`https://www.google.com/maps/embed/v1/place?key=${MAPS_API_KEY}&q=${encodeURIComponent(mapQuery)}&maptype=satellite`}
-                  width="100%"
-                  height="450"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title={`${project.name} Location Map`}
-                />
-              </div>
+              {/* Leaflet Map with satellite view, navigation, and view toggle */}
+              <ProjectLocationMap
+                projectName={project.name}
+                location={project.location}
+                latitude={null}
+                longitude={null}
+              />
             </div>
           </div>
 
@@ -1058,13 +1055,7 @@ export default function ProjectDetailLayout({
         </div>
       </section>
 
-      {/* CONTACT US DIRECTLY - Standardized 3-card grid */}
-      <DirectContactCTA 
-        title="Connect With Our Team"
-        subtitle="Get in touch for personalized guidance on this property."
-        titleSize="premium"
-        showSaveShare={true}
-      />
+      {/* DirectContactCTA is now rendered globally in MainLayout - removed duplicate */}
 
       {/* Lead Capture Modal */}
       <LeadCaptureModal
@@ -1076,7 +1067,7 @@ export default function ProjectDetailLayout({
         documentUrl={captureDocUrl}
       />
 
-      {showFooter && <Footer />}
+      {/* Footer is now rendered globally in MainLayout - removed duplicate */}
     </>
   );
 }

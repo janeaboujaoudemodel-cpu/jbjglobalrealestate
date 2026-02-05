@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Download, Image as ImageIcon, FileText, MapPin, Layers, Home, CreditCard } from "lucide-react";
 import type { Project } from "@/hooks/useProjects";
+import ProjectLocationMap from "@/components/project-detail/ProjectLocationMap";
 
 interface ProjectDetailTabsProps {
   project: Project;
@@ -214,15 +215,11 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
             <p className="text-zinc-600">{project.location}, Dubai, UAE</p>
           )}
           <div className="rounded-xl overflow-hidden border border-zinc-200">
-            <iframe
-              src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${encodeURIComponent(project.name + (project.location ? ", " + project.location : "") + ", Dubai, UAE")}&maptype=satellite`}
-              width="100%"
-              height="400"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title={`${project.name} Location Map`}
+            <ProjectLocationMap
+              projectName={project.name}
+              location={project.location}
+              latitude={null}
+              longitude={null}
             />
           </div>
         </div>
