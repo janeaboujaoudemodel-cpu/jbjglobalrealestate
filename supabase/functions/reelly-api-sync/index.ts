@@ -415,12 +415,19 @@ function assertValidCursorUrl(url: string) {
 // Upsert an area and return its ID
 async function upsertArea(
   supabase: ReturnType<typeof createClient>,
-  location: ReellyLocation | null
+   location: ReellyLocation | null,
+   areaCache: Map<string, string>
 ): Promise<string | null> {
   if (!location?.district) return null;
   
   const areaName = location.district;
   const areaSlug = generateAreaSlug(areaName);
+   
+   // Check cache first
+   if (areaCache.has(areaSlug)) {
+     return areaCache.get(areaSlug)!;
+   }
+   
   const emirate = getEmirateFromRegion(location.region);
   
   // Try to find existing area
@@ -431,16 +438,18 @@ async function upsertArea(
     .maybeSingle();
   
   if (existing) {
+     areaCache.set(areaSlug, existing.id);
     return existing.id;
   }
   
-  // Insert new area
+   // Insert new area with reelly_id
   const { data: newArea, error } = await supabase
     .from("areas")
     .insert({
       name: areaName,
       slug: areaSlug,
       emirate: emirate,
+       reelly_id: location.id || null,
       latitude: location.latitude || null,
       longitude: location.longitude || null,
       is_active: true,
@@ -457,13 +466,90 @@ async function upsertArea(
         .select("id")
         .eq("slug", areaSlug)
         .maybeSingle();
+       if (retried) areaCache.set(areaSlug, retried.id);
       return retried?.id || null;
     }
     console.error(`[Reelly API] Error inserting area ${areaName}:`, error);
     return null;
   }
   
+   if (newArea?.id) areaCache.set(areaSlug, newArea.id);
   return newArea?.id || null;
+}
+
+// ============================================================
+// NEW: Bulk get or create developers - single query approach
+// ============================================================
+async function bulkGetOrCreateDevelopers(
+  supabase: ReturnType<typeof createClient>,
+  developerNames: string[]
+): Promise<Map<string, string>> {
+  const result = new Map<string, string>();
+  const uniqueNames = [...new Set(developerNames.filter(n => n && n.trim()))];
+  
+  if (uniqueNames.length === 0) return result;
+  
+  // Fetch all existing developers in one query
+  const slugs = uniqueNames.map(n => generateDeveloperSlug(n.trim()));
+  const { data: existing } = await supabase
+    .from("developers")
+    .select("id, name, slug")
+    .in("slug", slugs);
+  
+  // Build map of existing developers
+  const existingBySlug = new Map<string, string>();
+  const existingByName = new Map<string, string>();
+  for (const dev of existing || []) {
+    existingBySlug.set(dev.slug, dev.id);
+    existingByName.set(dev.name.toLowerCase(), dev.id);
+  }
+  
+  // Map results for names we found
+  const toCreate: Array<{ name: string; slug: string }> = [];
+  for (const name of uniqueNames) {
+    const slug = generateDeveloperSlug(name.trim());
+    const id = existingBySlug.get(slug) || existingByName.get(name.toLowerCase());
+    if (id) {
+      result.set(name, id);
+    } else {
+      toCreate.push({ name: name.trim(), slug });
+    }
+  }
+  
+  // Bulk insert new developers
+  if (toCreate.length > 0) {
+    const { data: inserted, error } = await supabase
+      .from("developers")
+      .upsert(
+        toCreate.map(d => ({
+          name: d.name,
+          slug: d.slug,
+          is_active: true,
+        })),
+        { onConflict: "slug", ignoreDuplicates: true }
+      )
+      .select("id, name, slug");
+    
+    if (!error && inserted) {
+      for (const dev of inserted) {
+        result.set(dev.name, dev.id);
+      }
+    }
+    
+    // Re-fetch any that were duplicates
+    const stillMissing = toCreate.filter(d => !result.has(d.name));
+    if (stillMissing.length > 0) {
+      const { data: refetched } = await supabase
+        .from("developers")
+        .select("id, name, slug")
+        .in("slug", stillMissing.map(d => d.slug));
+      for (const dev of refetched || []) {
+        result.set(dev.name, dev.id);
+      }
+    }
+  }
+  
+  return result;
 }
 
 Deno.serve(async (req) => {
@@ -556,6 +642,25 @@ Deno.serve(async (req) => {
     }
     console.log(`[Reelly API] Pre-fetched ${existingMap.size} existing Reelly records for dedup`);
 
+    // PRE-FETCH: Get unique developer names and bulk create/get
+    const developerNames = projectsToProcess.map(p => p.developer).filter(Boolean);
+    const developerMap = await bulkGetOrCreateDevelopers(supabase, developerNames);
+    console.log(`[Reelly API] Pre-fetched/created ${developerMap.size} developers`);
+    
+    // PRE-FETCH: Get unique areas and cache them
+    const areaCache = new Map<string, string>();
+    const uniqueAreaSlugs = [...new Set(projectsToProcess.map(p => p.location?.district).filter(Boolean).map(d => generateAreaSlug(d!)))];
+    if (uniqueAreaSlugs.length > 0) {
+      const { data: existingAreas } = await supabase
+        .from("areas")
+        .select("id, slug")
+        .in("slug", uniqueAreaSlugs);
+      for (const area of existingAreas || []) {
+        areaCache.set(area.slug, area.id);
+      }
+    }
+    console.log(`[Reelly API] Pre-fetched ${areaCache.size} existing areas`);
+
     // Process and upsert projects
     let inserted = 0;
     let updated = 0;
@@ -566,34 +671,36 @@ Deno.serve(async (req) => {
 
     for (const project of projectsToProcess) {
       try {
-        // Upsert area first and get its ID
-        const areaId = await upsertArea(supabase, project.location);
-        if (areaId && !await areaExisted(supabase, project.location?.district)) {
-          areasCreated++;
-        }
+        // Upsert area first and get its ID (uses cache)
+        const areaId = await upsertArea(supabase, project.location, areaCache);
         
-        // Get or create developer and get its UUID
-        const developerId = await getOrCreateDeveloper(supabase, project.developer);
-        if (developerId) {
-          // Track new developers (optional - could add a check here)
-        }
+        // Get developer ID from pre-fetched map
+        const developerId = developerMap.get(project.developer) || null;
         
         const mappedProject = mapReellyToImport(project, areaId, developerId);
 
-        // Check if exists by source_url pattern (contains reelly_ID)
+        // Check if exists using pre-fetched map first
         const externalId = `reelly_${project.id}`;
-        const { data: existing } = await supabase
-          .from("pending_project_imports")
-          .select("id, status")
-          .like("source_url", `%${externalId}%`)
-          .maybeSingle();
+        const cachedExisting = existingMap.get(externalId);
 
         let pendingImportId: string | null = null;
 
-        if (existing) {
-          // Only update if not already approved
-          if (existing.status === 'approved') {
+        if (cachedExisting) {
+          // Check if already approved
+          if (cachedExisting.status === 'approved') {
             skipped++;
+            continue;
+          }
+          
+          // Need to fetch actual ID for update
+          const { data: existing } = await supabase
+            .from("pending_project_imports")
+            .select("id")
+            .like("source_url", `%${externalId}%`)
+            .maybeSingle();
+          
+          if (!existing) {
+            // Race condition - was deleted, insert instead
             continue;
           }
           
@@ -684,7 +791,7 @@ Deno.serve(async (req) => {
         errors: errors.slice(0, 10),
         next_cursor: nextCursor,
         done: !nextCursor,
-        message: `Processed ${projects.length} projects (${inserted} new, ${updated} updated, ${skipped} skipped, ${areasCreated} new areas)`,
+  message: `Processed ${projects.length} projects (${inserted} new, ${updated} updated, ${skipped} skipped)`,
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
@@ -700,21 +807,3 @@ Deno.serve(async (req) => {
     );
   }
 });
-
-// Helper to check if area already existed before this sync
-async function areaExisted(supabase: ReturnType<typeof createClient>, areaName: string | undefined): Promise<boolean> {
-  if (!areaName) return true;
-  const slug = generateAreaSlug(areaName);
-  const { data } = await supabase
-    .from("areas")
-    .select("created_at")
-    .eq("slug", slug)
-    .maybeSingle();
-  
-  if (!data) return false;
-  
-  // If created more than 1 minute ago, it existed before
-  const createdAt = new Date(data.created_at);
-  const now = new Date();
-  return (now.getTime() - createdAt.getTime()) > 60000;
-}
