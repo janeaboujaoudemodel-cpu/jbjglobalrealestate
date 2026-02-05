@@ -189,14 +189,7 @@ const investorTools = [
     link: "/property-measurement",
     category: "property" as ToolCategory,
   },
-  {
-    id: "news-reporter",
-    title: "JBJ News Reporter",
-    description: "Latest UAE real estate news from government sources.",
-    icon: Newspaper,
-    link: "/news",
-    category: "marketing" as ToolCategory,
-  },
+  // Removed JBJ News Reporter - it's internal automation, not a user tool
   {
     id: "property-coach",
     title: "JBJ Property Coach",
@@ -243,22 +236,41 @@ const productivityTools = [
   },
 ];
 
-// BROKER-ONLY TOOLS (shown as preview to encourage joining)
-const brokerOnlyTools = [
+// SUPPORT & OPERATIONS - Human Personas (shown in Broker Hub preview)
+// These are human support roles, NOT AI tools - moved to Support/Operations section
+const supportOperationsTools = [
   {
     id: "listing-admin",
     title: "Listing Admin (Sarah)",
-    description: "Smart property listing, document parsing, auto-categorization.",
+    description: "Listing setup, docs, and developer coordination.",
     icon: FolderOpen,
-    link: "/broker-toolkit",
+    link: "/listing-admin",
   },
   {
     id: "broker-admin-support",
-    title: "Sarah — Broker Admin",
-    description: "RERA compliance and broker operational support.",
-    icon: User,
-    link: "/broker-toolkit",
+    title: "Broker Admin Support",
+    description: "Operational support and coordination.",
+    icon: Briefcase,
+    link: "/broker-admin-assistant",
   },
+  {
+    id: "operations-compliance",
+    title: "Operations & Compliance",
+    description: "RERA compliance and operational support.",
+    icon: Shield,
+    link: "/broker-admin-assistant",
+  },
+  {
+    id: "crm-support",
+    title: "JBJ CRM Support",
+    description: "Lead management and CRM assistance.",
+    icon: Users,
+    link: "/crm",
+  },
+];
+
+// BROKER-ONLY AI TOOLS (shown as preview to encourage joining)
+const brokerOnlyTools = [
   {
     id: "hr-manager",
     title: "HR Manager (Jessica)",
@@ -768,6 +780,37 @@ const AIHub = () => {
                 </p>
               </motion.div>
 
+              {/* AI Tools Grid */}
+              <motion.div 
+                className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={staggerContainer}
+              >
+                {brokerOnlyTools.map((tool) => renderLockedCard(tool))}
+              </motion.div>
+
+              {/* SUPPORT & OPERATIONS SECTION */}
+              <motion.div
+                className="mt-10 mb-8"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                <Badge className="bg-cyan-500/30 text-cyan-200 border-cyan-400/50 mb-4">
+                  <Headphones className="w-3 h-3 mr-1" />
+                  Support & Operations
+                </Badge>
+                <h3 className="text-xl font-bold mb-2">
+                  <span className="text-white">Human Personas & </span>
+                  <span className="text-cyan-300">Operations Support</span>
+                </h3>
+                <p className="text-cyan-100/70 max-w-2xl text-sm mb-6">
+                  These are human support roles (not AI tools) providing operational assistance, coordination, and compliance support.
+                </p>
+              </motion.div>
+
               <motion.div 
                 className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12"
                 initial="hidden"
@@ -775,7 +818,34 @@ const AIHub = () => {
                 viewport={{ once: true }}
                 variants={staggerContainer}
               >
-                {brokerOnlyTools.map((tool) => renderLockedCard(tool))}
+                {supportOperationsTools.map((tool) => (
+                  <motion.div key={tool.id} variants={fadeInUp}>
+                    <div 
+                      className="block group h-full cursor-pointer" 
+                      onClick={() => navigate(user ? tool.link : "/join")}
+                    >
+                      <Card className="bg-cyan-900/80 border-2 border-cyan-500/50 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] shadow-[0_0_20px_rgba(6,182,212,0.3)] h-full relative overflow-hidden transition-all duration-300">
+                        <CardContent className="p-5 relative z-10">
+                          <div className="flex items-start gap-4">
+                            <div className="w-12 h-12 bg-cyan-500/30 border border-cyan-400/40 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                              <tool.icon className="w-6 h-6 text-cyan-300" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-start gap-2 mb-1 flex-wrap">
+                                <h3 className="text-white font-semibold text-sm leading-tight">{tool.title}</h3>
+                                <Badge className="bg-cyan-500/30 text-cyan-200 border-cyan-400/50 text-[10px] px-1.5 py-0 flex-shrink-0">
+                                  SUPPORT
+                                </Badge>
+                              </div>
+                              <p className="text-cyan-100/80 text-sm line-clamp-2">{tool.description}</p>
+                            </div>
+                            <ArrowUpRight className="w-5 h-5 text-cyan-300 opacity-0 group-hover:opacity-100 group-hover:text-gold transition-all flex-shrink-0" />
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </motion.div>
+                ))}
               </motion.div>
 
               {/* CTA to Join Broker Hub - with breathing room */}
