@@ -1260,6 +1260,53 @@ export type Database = {
           },
         ]
       }
+      broker_bonus_claims: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          bonus_status: string | null
+          created_at: string | null
+          deal_points_at_claim: number
+          id: string
+          paid_at: string | null
+          rejection_reason: string | null
+          threshold_id: string | null
+          user_id: string
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          bonus_status?: string | null
+          created_at?: string | null
+          deal_points_at_claim: number
+          id?: string
+          paid_at?: string | null
+          rejection_reason?: string | null
+          threshold_id?: string | null
+          user_id: string
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          bonus_status?: string | null
+          created_at?: string | null
+          deal_points_at_claim?: number
+          id?: string
+          paid_at?: string | null
+          rejection_reason?: string | null
+          threshold_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_bonus_claims_threshold_id_fkey"
+            columns: ["threshold_id"]
+            isOneToOne: false
+            referencedRelation: "deal_bonus_thresholds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       broker_call_logs: {
         Row: {
           call_status: string | null
@@ -1629,6 +1676,7 @@ export type Database = {
           learning_path: string
           sort_order: number | null
           title: string
+          unlock_requirements: Json | null
           updated_at: string | null
         }
         Insert: {
@@ -1642,6 +1690,7 @@ export type Database = {
           learning_path: string
           sort_order?: number | null
           title: string
+          unlock_requirements?: Json | null
           updated_at?: string | null
         }
         Update: {
@@ -1655,9 +1704,48 @@ export type Database = {
           learning_path?: string
           sort_order?: number | null
           title?: string
+          unlock_requirements?: Json | null
           updated_at?: string | null
         }
         Relationships: []
+      }
+      broker_education_books_translations: {
+        Row: {
+          book_id: string
+          created_at: string | null
+          description: string | null
+          id: string
+          language_code: string
+          learning_objective: string | null
+          title: string
+        }
+        Insert: {
+          book_id: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          language_code: string
+          learning_objective?: string | null
+          title: string
+        }
+        Update: {
+          book_id?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          language_code?: string
+          learning_objective?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_education_books_translations_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "broker_education_books"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       broker_education_modules: {
         Row: {
@@ -2359,6 +2447,42 @@ export type Database = {
           template_name?: string
           template_type?: string
           variables?: string[] | null
+        }
+        Relationships: []
+      }
+      certification_phases: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          pass_threshold_percent: number | null
+          phase_number: number
+          required_book_ids: string[] | null
+          sort_order: number | null
+          title: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          pass_threshold_percent?: number | null
+          phase_number: number
+          required_book_ids?: string[] | null
+          sort_order?: number | null
+          title: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          pass_threshold_percent?: number | null
+          phase_number?: number
+          required_book_ids?: string[] | null
+          sort_order?: number | null
+          title?: string
         }
         Relationships: []
       }
@@ -4153,6 +4277,45 @@ export type Database = {
         }
         Relationships: []
       }
+      deal_bonus_thresholds: {
+        Row: {
+          bonus_description: string | null
+          bonus_type: string
+          bonus_value_aed: number | null
+          created_at: string | null
+          hardware_item: string | null
+          id: string
+          is_active: boolean | null
+          required_deal_points: number
+          sort_order: number | null
+          threshold_name: string
+        }
+        Insert: {
+          bonus_description?: string | null
+          bonus_type: string
+          bonus_value_aed?: number | null
+          created_at?: string | null
+          hardware_item?: string | null
+          id?: string
+          is_active?: boolean | null
+          required_deal_points: number
+          sort_order?: number | null
+          threshold_name: string
+        }
+        Update: {
+          bonus_description?: string | null
+          bonus_type?: string
+          bonus_value_aed?: number | null
+          created_at?: string | null
+          hardware_item?: string | null
+          id?: string
+          is_active?: boolean | null
+          required_deal_points?: number
+          sort_order?: number | null
+          threshold_name?: string
+        }
+        Relationships: []
+      }
       deals: {
         Row: {
           broker_user_id: string
@@ -5137,6 +5300,41 @@ export type Database = {
           valid_until?: string | null
         }
         Relationships: []
+      }
+      draw_entries: {
+        Row: {
+          activity_points_at_entry: number
+          draw_id: string
+          entered_at: string | null
+          entry_source: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          activity_points_at_entry: number
+          draw_id: string
+          entered_at?: string | null
+          entry_source: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          activity_points_at_entry?: number
+          draw_id?: string
+          entered_at?: string | null
+          entry_source?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "draw_entries_draw_id_fkey"
+            columns: ["draw_id"]
+            isOneToOne: false
+            referencedRelation: "monthly_draws"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       economic_indicators: {
         Row: {
@@ -11384,6 +11582,83 @@ export type Database = {
         }
         Relationships: []
       }
+      module_questions: {
+        Row: {
+          correct_index: number
+          created_at: string | null
+          explanation: string | null
+          id: string
+          is_active: boolean | null
+          module_id: string
+          options: Json
+          question_text: string
+        }
+        Insert: {
+          correct_index: number
+          created_at?: string | null
+          explanation?: string | null
+          id?: string
+          is_active?: boolean | null
+          module_id: string
+          options: Json
+          question_text: string
+        }
+        Update: {
+          correct_index?: number
+          created_at?: string | null
+          explanation?: string | null
+          id?: string
+          is_active?: boolean | null
+          module_id?: string
+          options?: Json
+          question_text?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "module_questions_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "broker_education_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      monthly_draws: {
+        Row: {
+          created_at: string | null
+          draw_month: number
+          draw_year: number
+          drawn_at: string | null
+          id: string
+          min_activity_points: number | null
+          prize_description: string
+          status: string | null
+          winner_user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          draw_month: number
+          draw_year: number
+          drawn_at?: string | null
+          id?: string
+          min_activity_points?: number | null
+          prize_description: string
+          status?: string | null
+          winner_user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          draw_month?: number
+          draw_year?: number
+          drawn_at?: string | null
+          id?: string
+          min_activity_points?: number | null
+          prize_description?: string
+          status?: string | null
+          winner_user_id?: string | null
+        }
+        Relationships: []
+      }
       new_joiner_applications: {
         Row: {
           approved_at: string | null
@@ -12283,34 +12558,43 @@ export type Database = {
       points_config: {
         Row: {
           created_at: string
+          deal_value_max: number | null
+          deal_value_min: number | null
           description: string | null
           event_type: string
           id: string
           is_active: boolean | null
           max_daily: number | null
           max_monthly: number | null
+          max_weekly: number | null
           points_value: number
           updated_at: string
         }
         Insert: {
           created_at?: string
+          deal_value_max?: number | null
+          deal_value_min?: number | null
           description?: string | null
           event_type: string
           id?: string
           is_active?: boolean | null
           max_daily?: number | null
           max_monthly?: number | null
+          max_weekly?: number | null
           points_value: number
           updated_at?: string
         }
         Update: {
           created_at?: string
+          deal_value_max?: number | null
+          deal_value_min?: number | null
           description?: string | null
           event_type?: string
           id?: string
           is_active?: boolean | null
           max_daily?: number | null
           max_monthly?: number | null
+          max_weekly?: number | null
           points_value?: number
           updated_at?: string
         }
@@ -12318,37 +12602,55 @@ export type Database = {
       }
       points_ledger: {
         Row: {
+          category: string | null
           created_at: string
           created_by: string | null
           event_description: string | null
           event_ref_id: string | null
           event_type: string
           id: string
+          notes: string | null
           points_balance_after: number
           points_delta: number
+          role: string | null
+          running_total: number | null
+          source_name: string | null
           user_id: string
+          user_mode: string | null
         }
         Insert: {
+          category?: string | null
           created_at?: string
           created_by?: string | null
           event_description?: string | null
           event_ref_id?: string | null
           event_type: string
           id?: string
+          notes?: string | null
           points_balance_after: number
           points_delta: number
+          role?: string | null
+          running_total?: number | null
+          source_name?: string | null
           user_id: string
+          user_mode?: string | null
         }
         Update: {
+          category?: string | null
           created_at?: string
           created_by?: string | null
           event_description?: string | null
           event_ref_id?: string | null
           event_type?: string
           id?: string
+          notes?: string | null
           points_balance_after?: number
           points_delta?: number
+          role?: string | null
+          running_total?: number | null
+          source_name?: string | null
           user_id?: string
+          user_mode?: string | null
         }
         Relationships: []
       }
@@ -14913,6 +15215,53 @@ export type Database = {
         }
         Relationships: []
       }
+      test_attempts: {
+        Row: {
+          answers_given: Json | null
+          attempt_number: number
+          completed_at: string | null
+          id: string
+          module_id: string
+          passed: boolean | null
+          questions_shown: string[] | null
+          score_percent: number | null
+          show_answers: boolean | null
+          user_id: string
+        }
+        Insert: {
+          answers_given?: Json | null
+          attempt_number?: number
+          completed_at?: string | null
+          id?: string
+          module_id: string
+          passed?: boolean | null
+          questions_shown?: string[] | null
+          score_percent?: number | null
+          show_answers?: boolean | null
+          user_id: string
+        }
+        Update: {
+          answers_given?: Json | null
+          attempt_number?: number
+          completed_at?: string | null
+          id?: string
+          module_id?: string
+          passed?: boolean | null
+          questions_shown?: string[] | null
+          score_percent?: number | null
+          show_answers?: boolean | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "test_attempts_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "broker_education_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tier_definitions: {
         Row: {
           badge_color: string | null
@@ -15278,6 +15627,44 @@ export type Database = {
         }
         Relationships: []
       }
+      user_certification_progress: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          id: string
+          phase_id: string
+          started_at: string | null
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          phase_id: string
+          started_at?: string | null
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          phase_id?: string
+          started_at?: string | null
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_certification_progress_phase_id_fkey"
+            columns: ["phase_id"]
+            isOneToOne: false
+            referencedRelation: "certification_phases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_chat_logs: {
         Row: {
           chat_type: string | null
@@ -15400,6 +15787,7 @@ export type Database = {
           first_deal_unlocked_at: string | null
           id: string
           marketing_opt_in: boolean | null
+          preferred_books_language: string | null
           preferred_language: string | null
           push_notifications: boolean | null
           selected_mode: string | null
@@ -15413,6 +15801,7 @@ export type Database = {
           first_deal_unlocked_at?: string | null
           id?: string
           marketing_opt_in?: boolean | null
+          preferred_books_language?: string | null
           preferred_language?: string | null
           push_notifications?: boolean | null
           selected_mode?: string | null
@@ -15426,6 +15815,7 @@ export type Database = {
           first_deal_unlocked_at?: string | null
           id?: string
           marketing_opt_in?: boolean | null
+          preferred_books_language?: string | null
           preferred_language?: string | null
           push_notifications?: boolean | null
           selected_mode?: string | null
