@@ -1,224 +1,237 @@
 
+# Reelly API Integration - Complete Fix & Performance Overhaul
 
-# JBJ Royal Tools Hub - Homepage Card Redesign
+## Issues Identified
 
-## Overview
+### Critical Issue 1: Edge Functions Not Deployed
+**Root Cause:** The edge functions `reelly-api-sync` and `reelly-developers-sync` exist in the codebase but are NOT deployed to Supabase. Testing confirms both return HTTP 404 "Requested function was not found".
 
-Redesign the `ToolkitShowcaseCard` component to match the premium champagne styling of `ExploreServicesCard` and `ServicesGrid`, rename it to "JBJ Royal Tools Hub", and display individual tools with unique CTAs instead of a single "Explore All Tools" button.
+**Missing from `supabase/config.toml`:**
+- `reelly-api-sync`
+- `reelly-developers-sync`
+- `reelly-areas-sync`
 
----
+### Critical Issue 2: Test API Results Disappear
+The `apiConnected` and `totalProjects` states are reset when clicking "Test API Connection" before the response returns, causing results to vanish.
 
-## Current State
+### Critical Issue 3: Developer Sync Shows Count But Doesn't Extract
+When clicking "Quick Sync" or "Full Sync" for developers, only the count is shown because:
+1. Edge function not deployed (404 error)
+2. Results UI section only appears for `mode !== "test"` but errors clear the result
 
-**File:** `src/components/home/ToolkitShowcaseCard.tsx`
-
-**Issues:**
-1. Uses dark theme (`bg-black`, `bg-zinc-900`) instead of champagne gradient
-2. Title says "JBJ RealEstate Toolkit" - should be "JBJ Royal Tools Hub"
-3. Has a generic "Explore All Tools" button instead of individual tool CTAs
-4. Only shows 4 tool cards in a 2x2 grid on the right side
-5. Card styling doesn't match ServicesGrid champagne cards
-
----
-
-## Proposed Changes
-
-### 1. Rename Title
-- Change "JBJ RealEstate Toolkit™" to "JBJ Royal Tools Hub"
-
-### 2. Match Champagne Card Styling
-Following `ServicesGrid` and `ExploreServicesCard` patterns:
-
-```
-Background: bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]
-Border: border-2 border-gold/50
-Shadow: shadow-[0_12px_40px_rgba(200,167,102,0.45)]
-Header: bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]
-Text: text-black (titles), text-zinc-600 (descriptions)
-```
-
-### 3. Individual Tool Cards with Unique CTAs
-
-Display tools as a grid of cards, each with:
-- Icon in gold-bordered container
-- Tool name (bold, black)
-- Short description
-- Individual CTA button with tool-specific text
-
-**Tool CTA Mapping:**
-
-| Tool | CTA Text |
-|------|----------|
-| Property Evaluator | Get Evaluation |
-| Property Comparison | Start Comparing |
-| Mortgage Calculator | Calculate Now |
-| AI Home Finder | Find My Home |
-| Rental Index | Check Rates |
-| AI Video Studio | Create Video |
-| Voice Studio | Generate Voice |
-| Background AI | Remove Background |
-| Interior Design AI | Design Space |
-| Business Card Scanner | Scan Card |
-
-### 4. New Layout Structure
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ HEADER: JBJ Royal Tools Hub + subtitle                      │
-│ bg-gradient champagne, border-b border-gold/30              │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐           │
-│  │  Icon   │ │  Icon   │ │  Icon   │ │  Icon   │           │
-│  │ Title   │ │ Title   │ │ Title   │ │ Title   │           │
-│  │ Desc    │ │ Desc    │ │ Desc    │ │ Desc    │           │
-│  │ [CTA]   │ │ [CTA]   │ │ [CTA]   │ │ [CTA]   │           │
-│  └─────────┘ └─────────┘ └─────────┘ └─────────┘           │
-│                                                             │
-│  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐           │
-│  │  Icon   │ │  Icon   │ │  Icon   │ │  Icon   │           │
-│  │ Title   │ │ Title   │ │ Title   │ │ Title   │           │
-│  │ Desc    │ │ Desc    │ │ Desc    │ │ Desc    │           │
-│  │ [CTA]   │ │ [CTA]   │ │ [CTA]   │ │ [CTA]   │           │
-│  └─────────┘ └─────────┘ └─────────┘ └─────────┘           │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-```
-
-- Grid: `grid-cols-2 sm:grid-cols-3 lg:grid-cols-4`
-- Each card is a Link to the tool's page
-- Cards match ServicesGrid styling (champagne bg, gold border, hover effects)
+### Critical Issue 4: Slow Admin Panel Scrolling
+Multiple performance issues in ListingAdmin:
+- No virtualization for large project lists
+- No lazy loading for images
+- Multiple inline map components
+- Heavy re-renders on scroll
 
 ---
 
-## Tools to Display (Priority Selection)
+## Technical Implementation Plan
 
-From `royalToolsRegistry.ts`, select the most valuable active tools:
+### Phase 1: Deploy Missing Edge Functions
 
-1. **Property Evaluator** - `/property-evaluator` - "Get Evaluation"
-2. **Property Comparison** - `/compare` - "Start Comparing"
-3. **Mortgage Calculator** - `/mortgage-calculator` - "Calculate Now"
-4. **AI Home Finder** - `/quiz` - "Find My Home"
-5. **Rental Index** - `/rental-index` - "Check Rates"
-6. **AI Interior Design** - `/interior-design-ai` - "Design Space"
-7. **AI Video Studio** - `/toolkit/ai-video-studio` - "Create Video"
-8. **Voice Studio** - `/toolkit/voice-studio` - "Generate Voice"
+**File:** `supabase/config.toml`
+
+Add configuration for all Reelly functions:
+```toml
+[functions.reelly-api-sync]
+verify_jwt = false
+
+[functions.reelly-developers-sync]
+verify_jwt = false
+
+[functions.reelly-areas-sync]
+verify_jwt = false
+```
+
+### Phase 2: Fix Developer Sync API Limit Issue
+
+**File:** `supabase/functions/reelly-developers-sync/index.ts`
+
+The current code limits to 1000 developers max but the API returns paginated results. Need to:
+1. Implement proper pagination loop for full sync
+2. Handle `next` cursor from API response
+3. Process all 549 developers across multiple pages
+
+Current (line 98):
+```typescript
+const limit = mode === "quick" ? 50 : mode === "full" ? 1000 : 20;
+```
+
+Fix:
+```typescript
+// For full sync, iterate through all pages
+// API returns: { count, next, previous, results }
+// Loop until next === null to get all developers
+```
+
+### Phase 3: Fix Test Results Persistence
+
+**File:** `src/components/listing-admin/ReellyImportPanel.tsx`
+
+Current problem (lines 419-421):
+```typescript
+const handleTestApiConnection = async () => {
+  setIsTestingApi(true);
+  setApiConnected(null);  // ← This clears the result prematurely
+```
+
+Fix:
+```typescript
+const handleTestApiConnection = async () => {
+  setIsTestingApi(true);
+  // Don't reset apiConnected here - only on failure
+```
+
+Also fix developer sync (lines 354-357):
+```typescript
+const handleSyncDevelopers = async (mode) => {
+  setIsSyncingDevs(true);
+  // Don't reset devSyncResult for test mode
+  if (mode !== "test") setDevSyncResult(null);
+```
+
+### Phase 4: Persist Results in State
+
+Add state persistence so results survive between sync operations:
+
+```typescript
+// Add localStorage persistence for key results
+useEffect(() => {
+  const cached = localStorage.getItem('reelly-api-cache');
+  if (cached) {
+    const { totalProjects, totalDevelopers, lastTested } = JSON.parse(cached);
+    if (Date.now() - lastTested < 3600000) { // 1 hour cache
+      setTotalProjects(totalProjects);
+      setTotalDevelopers(totalDevelopers);
+      setApiConnected(true);
+    }
+  }
+}, []);
+
+// Save on successful test
+if (data?.success) {
+  localStorage.setItem('reelly-api-cache', JSON.stringify({
+    totalProjects: data.total_available,
+    totalDevelopers: totalDevelopers,
+    lastTested: Date.now()
+  }));
+}
+```
+
+### Phase 5: Performance Optimization
+
+**File:** `src/components/listing-admin/ReellyImportPanel.tsx`
+
+1. **Add virtual scrolling for results dialog:**
+```typescript
+import { useVirtualizer } from '@tanstack/react-virtual';
+// Replace the simple map with virtualized list
+```
+
+2. **Lazy load sync result cards:**
+```typescript
+const [isDetailsExpanded, setIsDetailsExpanded] = useState(false);
+// Only render detailed stats when expanded
+```
+
+3. **Debounce database count queries:**
+```typescript
+// In useSyncJobs.ts, add debounce to prevent rapid re-queries
+const debouncedFetchCounts = useMemo(
+  () => debounce(fetchLiveCounts, 1000),
+  [fetchLiveCounts]
+);
+```
+
+**File:** `src/pages/ListingAdmin.tsx`
+
+1. **Virtual scroll for project grid:**
+```typescript
+// Use window virtualization for large project lists
+const rowVirtualizer = useWindowVirtualizer({
+  count: filteredProjects?.length || 0,
+  estimateSize: () => 120,
+  overscan: 5,
+});
+```
+
+2. **Lazy image loading:**
+```typescript
+<img loading="lazy" src={project.thumbnail} />
+```
+
+3. **Memoize filtered projects:**
+```typescript
+const filteredProjects = useMemo(() => {
+  return projects?.filter(p => /* filters */) || [];
+}, [projects, searchQuery, filterDeveloper, filterEmirate]);
+```
+
+### Phase 6: Developer Full Sync with Pagination
+
+**File:** `supabase/functions/reelly-developers-sync/index.ts`
+
+Complete rewrite of sync logic:
+
+```typescript
+// Full sync: paginate through all developers
+if (mode === "full") {
+  let allDevelopers: ReellyDeveloper[] = [];
+  let offset = 0;
+  const pageSize = 100;
+  
+  while (true) {
+    const apiUrl = `https://api-reelly.up.railway.app/api/v2/clients/developers?limit=${pageSize}&offset=${offset}`;
+    const response = await fetch(apiUrl, { headers: { "X-API-Key": apiKey } });
+    const data = await response.json();
+    
+    const devs = Array.isArray(data) ? data : data.results || [];
+    allDevelopers = [...allDevelopers, ...devs];
+    
+    // Check if more pages
+    if (!data.next || devs.length < pageSize) break;
+    offset += pageSize;
+    
+    // Safety limit
+    if (offset > 10000) break;
+  }
+  
+  developers = allDevelopers;
+}
+```
 
 ---
 
-## Technical Implementation
-
-### File to Modify
-`src/components/home/ToolkitShowcaseCard.tsx`
-
-### Key Code Changes
-
-**1. Update container styling:**
-```tsx
-// OLD (dark theme)
-<section className="py-12 md:py-16 bg-black">
-  <div className="... bg-gradient-to-br from-zinc-900 via-black to-zinc-800 ...">
-
-// NEW (champagne theme)
-<section className="py-12 md:py-16 jj-layer-2">
-  <div className="... bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] ...">
-```
-
-**2. Update title:**
-```tsx
-// OLD
-<h2>JBJ RealEstate Toolkit™</h2>
-
-// NEW
-<h2>JBJ Royal Tools Hub</h2>
-```
-
-**3. Update text colors:**
-```tsx
-// OLD
-text-white, text-zinc-300, text-zinc-400
-
-// NEW  
-text-black, text-zinc-600, text-zinc-700
-```
-
-**4. New tools array with CTAs:**
-```tsx
-const royalTools = [
-  { 
-    id: "property-evaluator",
-    name: "Property Evaluator", 
-    description: "AI-powered property valuation",
-    icon: Calculator, 
-    href: "/property-evaluator",
-    cta: "Get Evaluation"
-  },
-  { 
-    id: "property-comparison",
-    name: "Property Comparison", 
-    description: "Compare properties side-by-side",
-    icon: Layers, 
-    href: "/compare",
-    cta: "Start Comparing"
-  },
-  // ... 6 more tools
-];
-```
-
-**5. Replace 2-column layout with full-width grid:**
-```tsx
-<div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-  {royalTools.map((tool) => (
-    <Link to={tool.href} key={tool.id} className="group block">
-      <div className="h-full bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl border-2 border-gold/30 hover:border-gold p-5 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
-        <div className="w-12 h-12 rounded-xl border-2 border-gold/50 flex items-center justify-center mb-4">
-          <tool.icon className="w-6 h-6 text-black" />
-        </div>
-        <h4 className="text-base font-bold text-black mb-2">{tool.name}</h4>
-        <p className="text-sm text-zinc-600 mb-4">{tool.description}</p>
-        <Button variant="primary" size="sm">
-          {tool.cta}
-          <ArrowRight className="w-4 h-4 ml-2" />
-        </Button>
-      </div>
-    </Link>
-  ))}
-</div>
-```
-
----
-
-## Visual Comparison
-
-**Before:**
-- Dark zinc/black background
-- "JBJ RealEstate Toolkit™" title
-- 2-column layout (content left, 4 tools right)
-- Single "Explore All Tools" button
-- Tool cards have zinc/dark styling
-
-**After:**
-- Champagne gradient background matching ServicesGrid
-- "JBJ Royal Tools Hub" title in black
-- Full-width responsive grid (2/3/4 columns)
-- 8 individual tool cards with unique CTAs
-- Consistent hover effects and gold borders
-
----
-
-## Files Modified
+## Files to Modify
 
 | File | Changes |
 |------|---------|
-| `src/components/home/ToolkitShowcaseCard.tsx` | Complete redesign with champagne styling, new title, individual tool CTAs |
+| `supabase/config.toml` | Add 3 missing function configurations |
+| `supabase/functions/reelly-developers-sync/index.ts` | Implement pagination for full sync |
+| `supabase/functions/reelly-api-sync/index.ts` | Minor error handling improvements |
+| `src/components/listing-admin/ReellyImportPanel.tsx` | Fix result persistence, add caching, optimize rendering |
+| `src/hooks/useSyncJobs.ts` | Add debouncing for count queries |
+| `src/pages/ListingAdmin.tsx` | Add virtual scrolling and memoization |
 
 ---
 
-## Expected Outcome
+## Expected Outcomes
 
-- ToolkitShowcaseCard matches ServicesGrid and ExploreServicesCard styling
-- Title correctly shows "JBJ Royal Tools Hub"
-- 8 tools displayed in responsive grid
-- Each tool has its own descriptive CTA button
-- Consistent champagne/gold premium theme throughout homepage
+1. **Edge functions deployed:** All Reelly API calls will work (no more 404 errors)
+2. **Developer sync works:** All 549 developers extracted with pagination
+3. **Results persist:** Test API connection results stay visible
+4. **Fast scrolling:** Virtual scrolling and lazy loading for smooth performance
+5. **Cached state:** API totals cached for 1 hour to prevent redundant calls
 
+---
+
+## Deployment Steps
+
+After code changes:
+1. Edge functions will auto-deploy with updated config.toml
+2. Verify deployment with test API call
+3. Run full developer sync to extract all 549 developers
+4. Run full project sync to extract all 1,803 projects
