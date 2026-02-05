@@ -544,12 +544,14 @@ const HeroSearchBar = () => {
             </button>
           </PopoverTrigger>
           <PopoverContent 
-            className="w-48 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[9999] max-h-64 overflow-y-auto overscroll-contain"
+            className="w-48 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[9999] max-h-60 overflow-y-auto overscroll-contain"
             side="top"
             align="start"
-            sideOffset={4}
+            sideOffset={8}
             avoidCollisions={false}
+            collisionPadding={0}
             onWheelCapture={(e) => e.stopPropagation()}
+            onPointerDownOutside={(e) => e.preventDefault()}
           >
             <div className="text-xs font-semibold text-black/60 px-3 py-1.5 uppercase tracking-wider">Currency</div>
             {SUPPORTED_CURRENCIES.map((c) => (
@@ -909,11 +911,11 @@ const HeroSearchBar = () => {
             </DialogContent>
           </Dialog>
 
-          {/* Search Button - Rounded on both sides with small gap */}
-          <div className="p-1">
+          {/* Search Button - Fully rounded pill shape */}
+          <div className="p-1.5">
             <Button
               onClick={handleSearch}
-              className="h-10 px-5 py-2.5 bg-gold hover:bg-gold-dark text-black font-bold text-sm rounded-xl transition-all duration-300"
+              className="h-10 px-6 py-2.5 bg-gold hover:bg-gold-dark text-black font-bold text-sm rounded-full transition-all duration-300 shadow-lg hover:shadow-gold/30"
             >
               <Search className="w-4 h-4 mr-1.5" />
               Search
