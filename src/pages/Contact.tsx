@@ -336,16 +336,13 @@ END:VCARD`;
                     else if (card.action === "meeting") setMeetingModalOpen(true);
                     else if (card.action && card.clickable) window.location.href = card.action;
                   }}
-                  className={
-                    `group bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl p-5 transition-all hover:border-black hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_18px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1 ` +
-                    (card.clickable ? "cursor-pointer" : "")
-                  }
+                  className={`group bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl p-5 transition-all duration-300 hover:border-black hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_18px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1 hover:scale-[1.02] ${card.clickable ? "cursor-pointer" : ""}`}
                 >
-                  <div className="w-10 h-10 bg-transparent border-2 border-black rounded-lg flex items-center justify-center mb-3 transition-colors">
-                    <card.icon className="w-5 h-5 text-gold transition-colors" />
+                  <div className="w-10 h-10 bg-transparent border-2 border-gold/50 rounded-lg flex items-center justify-center mb-3 transition-all duration-300 group-hover:border-black group-hover:bg-gold/10 group-hover:scale-110">
+                    <card.icon className="w-5 h-5 text-gold transition-all duration-300 group-hover:text-black" />
                   </div>
                   <h3 className="font-semibold text-sm mb-1 text-black transition-colors">{card.title}</h3>
-                  <p className="text-sm text-gold transition-colors">{card.value}</p>
+                  <p className="text-sm text-gold transition-colors group-hover:text-black/80">{card.value}</p>
                 </div>
               ))}
             </div>
@@ -946,7 +943,12 @@ END:VCARD`;
       />
 
       {/* Standardized Direct Contact CTA */}
-      <DirectContactCTA showTitle={false} />
+      <DirectContactCTA 
+        title="Connect With Our Team"
+        subtitle="Get in touch for personalized guidance and expert support."
+        titleSize="premium"
+        showSaveShare={true}
+      />
 
       <Footer />
       </div>

@@ -9,9 +9,9 @@
 
 import { motion } from "framer-motion";
 import { MessageCircle, Phone, Mail, Download, Share2 } from "lucide-react";
-import { FaLinkedinIn, FaInstagram, FaGlobe, FaTiktok } from "react-icons/fa";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { toast } from "sonner";
+import { FaLinkedinIn, FaInstagram, FaGlobe, FaTiktok } from "react-icons/fa";
 
 // Social links
 const SOCIAL_LINKS = {
@@ -85,13 +85,17 @@ interface DirectContactCTAProps {
   showTitle?: boolean;
   title?: string;
   subtitle?: string;
+  titleSize?: 'standard' | 'premium';
+  showSaveShare?: boolean;
 }
 
 const DirectContactCTA = ({
   className = "",
   showTitle = true,
-  title = "Prefer to Reach Us Directly?",
-  subtitle = "For general inquiries, consultations, or non-technical requests, you may contact us through the channels below.",
+  title = "Connect With Our Team",
+  subtitle = "Get in touch for inquiries, consultations, or personalized guidance.",
+  titleSize = 'premium',
+  showSaveShare = true,
 }: DirectContactCTAProps) => {
   return (
     <section className={`py-12 bg-black ${className}`}>
@@ -99,11 +103,18 @@ const DirectContactCTA = ({
         
         {showTitle && (
           <>
-            <h2 className="text-center text-2xl md:text-3xl font-bold mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 
+              className={`text-center font-bold mb-3 ${
+                titleSize === 'premium' 
+                  ? 'text-3xl md:text-4xl lg:text-5xl' 
+                  : 'text-2xl md:text-3xl'
+              }`} 
+              style={{ fontFamily: "Poppins, sans-serif" }}
+            >
               <span className="text-black">{title.split(' ').slice(0, -1).join(' ')}</span>{" "}
               <span className="text-gold">{title.split(' ').slice(-1)[0]}</span>
             </h2>
-            <p className="text-center text-zinc-600 text-sm mb-6 max-w-2xl mx-auto">
+            <p className="text-center text-zinc-600 text-sm md:text-base mb-8 max-w-2xl mx-auto">
               {subtitle}
             </p>
           </>
@@ -162,15 +173,16 @@ const DirectContactCTA = ({
           </a>
         </div>
 
-        {/* Save Contact Button - Below the 3 buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+        {/* Save Contact & Share Buttons - Below the 3 buttons */}
+        {showSaveShare && (
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-6">
           <motion.button
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.3 }}
             onClick={downloadVCard}
-            className="flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 hover:scale-105 shadow-lg min-w-[220px] bg-black border-2 border-gold/50 hover:border-gold text-white hover:bg-zinc-900"
+            className="flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 hover:scale-105 shadow-lg min-w-[220px] bg-transparent border-2 border-gold/50 hover:border-black hover:bg-black/5 text-black"
           >
             <Download className="w-5 h-5 text-gold" />
             <span>Save Contact</span>
@@ -182,12 +194,13 @@ const DirectContactCTA = ({
             viewport={{ once: true }}
             transition={{ duration: 0.3, delay: 0.1 }}
             onClick={shareContact}
-            className="flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 hover:scale-105 shadow-lg min-w-[180px] bg-transparent border-2 border-gold/30 hover:border-gold text-black hover:bg-gold/5"
+            className="flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 hover:scale-105 shadow-lg min-w-[180px] bg-transparent border-2 border-gold/50 hover:border-black hover:bg-black/5 text-black"
           >
             <Share2 className="w-5 h-5 text-gold" />
             <span>Share</span>
           </motion.button>
         </div>
+        )}
 
         {/* Social Links Display */}
         <div className="flex items-center justify-center gap-4 mt-6 pt-4 border-t border-gold/20">

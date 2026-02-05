@@ -48,6 +48,7 @@ import InvestmentMetricsSection from "@/components/project-detail/InvestmentMetr
 import DeveloperInfoCard from "@/components/project-detail/DeveloperInfoCard";
 import QuickFactsBar from "@/components/project-detail/QuickFactsBar";
 import PaymentPlanVisualization from "@/components/project-detail/PaymentPlanVisualization";
+import DirectContactCTA from "@/components/DirectContactCTA";
 import MasterPlanSection from "@/components/project-detail/MasterPlanSection";
 import HouseDetailsSection from "@/components/project-detail/HouseDetailsSection";
 import DataFreshnessIndicator from "@/components/project-detail/DataFreshnessIndicator";
@@ -1051,109 +1052,19 @@ export default function ProjectDetailLayout({
             </div>
           </div>
 
-          {/* CONTACT DETAILS - Separated Section with Colored Icons */}
-          <div className="mb-8">
-            <div className="jj-card-inner p-6 md:p-10">
-              <h3 className="text-h3-sm font-medium text-foreground mb-8 text-center">Contact Us Directly</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-3xl mx-auto">
-                {/* WhatsApp - Green */}
-                <a 
-                  href={getWhatsAppUrl(whatsappMessage)} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="flex flex-col items-center gap-4 p-6 rounded-2xl border-2 border-emerald-500/50 bg-gradient-to-br from-card via-card to-emerald-500/5 hover:border-emerald-500 hover:shadow-lg hover:shadow-emerald-500/20 transition-all group"
-                >
-                  <div className="w-14 h-14 rounded-full bg-emerald-500/20 border-2 border-emerald-500/40 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <MessageCircle className="w-7 h-7 text-emerald-500" />
-                  </div>
-                  <span className="text-base font-semibold text-foreground">WhatsApp</span>
-                  <span className="text-sm text-muted-foreground">{CONTACT_INFO.phone}</span>
-                </a>
-                {/* Call - Blue */}
-                <a 
-                  href={getCallUrl()}
-                  className="flex flex-col items-center gap-4 p-6 rounded-2xl border-2 border-blue-500/50 bg-gradient-to-br from-card via-card to-blue-500/5 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/20 transition-all group"
-                >
-                  <div className="w-14 h-14 rounded-full bg-blue-500/20 border-2 border-blue-500/40 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Phone className="w-7 h-7 text-blue-500" />
-                  </div>
-                  <span className="text-base font-semibold text-foreground">Call Us</span>
-                  <span className="text-sm text-muted-foreground">{CONTACT_INFO.phone}</span>
-                </a>
-                {/* Email - Gold */}
-                <a 
-                  href={getEmailUrl()}
-                  className="flex flex-col items-center gap-4 p-6 rounded-2xl border-2 border-gold/50 bg-gradient-to-br from-card via-card to-gold/5 hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all group"
-                >
-                  <div className="w-14 h-14 rounded-full bg-gold/20 border-2 border-gold/40 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Mail className="w-7 h-7 text-gold" />
-                  </div>
-                  <span className="text-base font-semibold text-foreground">Email</span>
-                  <span className="text-sm text-muted-foreground">{CONTACT_INFO.email}</span>
-                </a>
-              </div>
-              
-              {/* Save Contact & Share Buttons */}
-              <div className="flex justify-center gap-4 mt-8">
-                <Button
-                  variant="secondary"
-                  onClick={() => {
-                    const vcard = `BEGIN:VCARD
-VERSION:3.0
-N:JBJ Global Real Estate
-FN:JBJ Global Real Estate
-ORG:JBJ Global Real Estate
-TEL;TYPE=WORK,VOICE:${CONTACT_INFO.phone}
-EMAIL:${CONTACT_INFO.email}
-URL:https://jbjglobalrealestate.lovable.app
-END:VCARD`;
-                    const blob = new Blob([vcard], { type: 'text/vcard' });
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = 'JBJ-Global-Real-Estate.vcf';
-                    link.click();
-                    URL.revokeObjectURL(url);
-                  }}
-                  className="gap-2"
-                >
-                  <UserPlus className="w-4 h-4" />
-                  Save Contact
-                </Button>
-                <Button
-                  variant="secondary"
-                  onClick={async () => {
-                    const shareData = {
-                      title: project.name,
-                      text: `Check out ${project.name} - ${project.location || 'Dubai, UAE'}`,
-                      url: window.location.href,
-                    };
-                    if (navigator.share) {
-                      try {
-                        await navigator.share(shareData);
-                      } catch {
-                        // User cancelled or error
-                      }
-                    } else {
-                      navigator.clipboard.writeText(window.location.href);
-                      // Note: toast would need to be imported
-                    }
-                  }}
-                  className="gap-2"
-                >
-                  <Share2 className="w-4 h-4" />
-                  Share
-                </Button>
-              </div>
-            </div>
-          </div>
 
           {/* CTA Section - Request a call back */}
           <CallToActionSection projectName={project.name} projectId={project.id} />
         </div>
       </section>
 
-      {/* NOTE: Newsletter section removed - handled by Footer's built-in newsletter */}
+      {/* CONTACT US DIRECTLY - Standardized 3-card grid */}
+      <DirectContactCTA 
+        title="Connect With Our Team"
+        subtitle="Get in touch for personalized guidance on this property."
+        titleSize="premium"
+        showSaveShare={true}
+      />
 
       {/* Lead Capture Modal */}
       <LeadCaptureModal

@@ -20,6 +20,7 @@ import { GoogleMyBusinessLink } from "@/components/marketing/GoogleMyBusinessLin
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 import { FounderContent } from "@/components/FounderContent";
+import NewsletterBand from "@/components/NewsletterBand";
 
 const DivisionAccordion = ({
   title,
@@ -323,25 +324,6 @@ const Footer = () => {
               <div className="absolute -inset-1 bg-gradient-to-r from-transparent via-gold/20 to-transparent blur-xl" />
             </div>
 
-            {/* Stay in the Loop - ULTRA Enhanced */}
-            <h4 
-              className="relative font-bold text-base sm:text-lg md:text-xl lg:text-2xl uppercase tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.3em] mb-3 sm:mb-4 text-center"
-              style={{
-                background: 'linear-gradient(135deg, #FFFFFF 0%, #F5E6C8 30%, #D4AF37 50%, #F5E6C8 70%, #FFFFFF 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                filter: 'drop-shadow(0 2px 10px rgba(200,167,102,0.4))',
-              }}
-            >
-              Stay in the Loop
-            </h4>
-            <p className="relative text-zinc-300 text-xs sm:text-sm md:text-base mb-5 sm:mb-6 md:mb-8 text-center px-2 max-w-xl mx-auto">
-              Be the first to access new listings, market updates, and personalized brokerage guidance.
-            </p>
-            <div className="relative max-w-lg mx-auto mb-6 sm:mb-8 md:mb-10 px-2">
-              <NewsletterBrevo variant="compact" source="footer" />
-            </div>
-
             {/* Social Links with enhanced container */}
             <div className="relative flex justify-center">
               <div 
@@ -361,6 +343,9 @@ const Footer = () => {
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-gradient-to-t from-gold/8 to-transparent blur-2xl pointer-events-none" />
         </div>
         </div>
+
+        {/* NEWSLETTER BAND - Stay in the Loop - Separate champagne section above logo */}
+        <NewsletterBand />
 
         {/* NOW BELOW THE 3D CARD: Logo + Company Name Section */}
         <div className="flex flex-col items-center justify-center text-center w-full max-w-7xl mx-auto relative bg-black pt-4 pb-8">
