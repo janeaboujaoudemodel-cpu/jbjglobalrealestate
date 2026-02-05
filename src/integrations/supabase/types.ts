@@ -11645,6 +11645,7 @@ export type Database = {
           developer_name: string | null
           documents: Json | null
           emirate: string | null
+          enrichment_source: string | null
           faqs: Json | null
           floor_plan_types: Json | null
           floors: number | null
@@ -11705,6 +11706,7 @@ export type Database = {
           developer_name?: string | null
           documents?: Json | null
           emirate?: string | null
+          enrichment_source?: string | null
           faqs?: Json | null
           floor_plan_types?: Json | null
           floors?: number | null
@@ -11765,6 +11767,7 @@ export type Database = {
           developer_name?: string | null
           documents?: Json | null
           emirate?: string | null
+          enrichment_source?: string | null
           faqs?: Json | null
           floor_plan_types?: Json | null
           floors?: number | null
@@ -12090,6 +12093,7 @@ export type Database = {
       project_documents: {
         Row: {
           created_at: string
+          data_source: string | null
           display_order: number | null
           document_type: string
           file_name: string
@@ -12100,6 +12104,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          data_source?: string | null
           display_order?: number | null
           document_type: string
           file_name: string
@@ -12110,6 +12115,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          data_source?: string | null
           display_order?: number | null
           document_type?: string
           file_name?: string
@@ -12132,6 +12138,7 @@ export type Database = {
         Row: {
           alt_text: string | null
           created_at: string
+          data_source: string | null
           display_order: number | null
           id: string
           image_url: string
@@ -12140,6 +12147,7 @@ export type Database = {
         Insert: {
           alt_text?: string | null
           created_at?: string
+          data_source?: string | null
           display_order?: number | null
           id?: string
           image_url: string
@@ -12148,6 +12156,7 @@ export type Database = {
         Update: {
           alt_text?: string | null
           created_at?: string
+          data_source?: string | null
           display_order?: number | null
           id?: string
           image_url?: string
@@ -12303,6 +12312,7 @@ export type Database = {
           price_from: number | null
           price_to: number | null
           property_type_label: string | null
+          provident_enrichments: Json | null
           reelly_developer_id: number | null
           reelly_id: number | null
           rental_yield_estimate: number | null
@@ -12385,6 +12395,7 @@ export type Database = {
           price_from?: number | null
           price_to?: number | null
           property_type_label?: string | null
+          provident_enrichments?: Json | null
           reelly_developer_id?: number | null
           reelly_id?: number | null
           rental_yield_estimate?: number | null
@@ -12467,6 +12478,7 @@ export type Database = {
           price_from?: number | null
           price_to?: number | null
           property_type_label?: string | null
+          provident_enrichments?: Json | null
           reelly_developer_id?: number | null
           reelly_id?: number | null
           rental_yield_estimate?: number | null

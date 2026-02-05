@@ -11,7 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { 
   RefreshCw, Download, CheckCircle, XCircle, 
   ExternalLink, Info, Zap, Database, CloudDownload, Play, ArrowRight, MapPin,
-  Trash2, AlertTriangle
+  Trash2, AlertTriangle, RotateCcw, Shield
 } from "lucide-react";
 
 interface ApiSyncResult {
@@ -113,6 +113,140 @@ export function ReellyImportPanel() {
   const [isCleaningAndSyncing, setIsCleaningAndSyncing] = useState(false);
   const [cleanupResult, setCleanupResult] = useState<CleanupResult | null>(null);
   const [cleanupStep, setCleanupStep] = useState<string | null>(null);
+
+  // Data Integrity / Restore state
+  const [isLoadingIntegrityStats, setIsLoadingIntegrityStats] = useState(false);
+  const [integrityStats, setIntegrityStats] = useState<{
+    projects_from_reelly: number;
+    projects_with_provident_enrichments: number;
+    provident_images: number;
+    provident_documents: number;
+    pending_provident_suggestions: number;
+  } | null>(null);
+  const [isRestoring, setIsRestoring] = useState(false);
+  const [restoreResult, setRestoreResult] = useState<{
+    success: boolean;
+    restored?: { projects: number; images_deleted: number; documents_deleted: number; pending_deleted: number };
+    error?: string;
+  } | null>(null);
+
+  /**
+   * Fetch data integrity stats from restore-to-reelly edge function
+   */
+  const handleLoadIntegrityStats = async () => {
+    setIsLoadingIntegrityStats(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("restore-to-reelly", {
+        body: { mode: "stats" },
+      });
+
+      if (error) throw error;
+
+      if (data?.success) {
+        setIntegrityStats(data.stats);
+      } else {
+        toast.error(data?.error || "Failed to load integrity stats");
+      }
+    } catch (err: any) {
+      console.error("Integrity stats error:", err);
+      toast.error(err.message || "Failed to load integrity stats");
+    } finally {
+      setIsLoadingIntegrityStats(false);
+    }
+  };
+
+  /**
+   * Restore all projects to Reelly-only state
+   */
+  const handleGlobalRestore = async () => {
+    // First, preview what will be affected
+    const { data: preview } = await supabase.functions.invoke("restore-to-reelly", {
+      body: { mode: "global", confirm: false },
+    });
+
+    if (!preview?.preview) {
+      toast.error("Failed to preview restore operation");
+      return;
+    }
+
+    const confirmMsg = 
+      `⚠️ RESTORE TO REELLY-ONLY\n\n` +
+      `This will:\n` +
+      `• Restore ${preview.projects_to_restore} projects to Reelly-only state\n` +
+      `• Delete ${preview.images_to_delete} Provident-added images\n` +
+      `• Delete ${preview.documents_to_delete} Provident-added documents\n` +
+      `• Delete ${preview.pending_to_delete} pending Provident suggestions\n\n` +
+      `Continue?`;
+
+    if (!confirm(confirmMsg)) return;
+
+    setIsRestoring(true);
+    setRestoreResult(null);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("restore-to-reelly", {
+        body: { mode: "global", confirm: true },
+      });
+
+      if (error) throw error;
+
+      if (data?.success) {
+        setRestoreResult(data);
+        toast.success(`Restored ${data.restored?.projects || 0} projects to Reelly-only state`);
+        // Refresh stats
+        handleLoadIntegrityStats();
+      } else {
+        setRestoreResult({ success: false, error: data?.error });
+        toast.error(data?.error || "Restore failed");
+      }
+    } catch (err: any) {
+      console.error("Restore error:", err);
+      setRestoreResult({ success: false, error: err.message });
+      toast.error(err.message || "Failed to restore");
+    } finally {
+      setIsRestoring(false);
+    }
+  };
+
+  /**
+   * Clear only pending Provident suggestions
+   */
+  const handleClearPendingSuggestions = async () => {
+    // First, preview what will be affected
+    const { data: preview } = await supabase.functions.invoke("restore-to-reelly", {
+      body: { mode: "pending_only", confirm: false },
+    });
+
+    if (!preview?.preview) {
+      toast.error("Failed to preview operation");
+      return;
+    }
+
+    if (preview.pending_to_delete === 0) {
+      toast.info("No pending Provident suggestions to delete");
+      return;
+    }
+
+    if (!confirm(`Delete ${preview.pending_to_delete} pending Provident suggestions?`)) return;
+
+    try {
+      const { data, error } = await supabase.functions.invoke("restore-to-reelly", {
+        body: { mode: "pending_only", confirm: true },
+      });
+
+      if (error) throw error;
+
+      if (data?.success) {
+        toast.success(`Deleted ${data.deleted_pending} pending Provident suggestions`);
+        handleLoadIntegrityStats();
+      } else {
+        toast.error(data?.error || "Failed to clear suggestions");
+      }
+    } catch (err: any) {
+      console.error("Clear suggestions error:", err);
+      toast.error(err.message || "Failed to clear suggestions");
+    }
+  };
 
   const goToApprovalQueue = () => {
     // Navigate to Reelly-filtered queue
@@ -752,6 +886,162 @@ export function ReellyImportPanel() {
               </>
             )}
           </Button>
+        </CardContent>
+      </Card>
+
+      {/* Data Integrity Section */}
+      <Card className="bg-gradient-to-br from-slate-50 to-zinc-50 border-slate-200 shadow-lg">
+        <CardHeader>
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-slate-600">
+              <Shield className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <CardTitle className="text-xl text-slate-900 flex items-center gap-2">
+                Data Integrity
+                {integrityStats && integrityStats.projects_with_provident_enrichments === 0 && (
+                  <CheckCircle className="h-5 w-5 text-emerald-500" />
+                )}
+              </CardTitle>
+              <CardDescription className="text-slate-700">
+                Reelly is the primary source. Restore to Reelly-only state anytime.
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Alert className="border-slate-300 bg-slate-100">
+            <Info className="h-4 w-4 text-slate-600" />
+            <AlertDescription className="text-slate-700">
+              <strong>Reelly = Primary Source.</strong> Provident data is optional enrichment only.
+              Use "Restore to Reelly-Only" to remove any Provident additions.
+            </AlertDescription>
+          </Alert>
+
+          <Button
+            onClick={handleLoadIntegrityStats}
+            disabled={isLoadingIntegrityStats}
+            variant="outline"
+            className="w-full border-slate-300 text-slate-700 hover:bg-slate-100"
+          >
+            {isLoadingIntegrityStats ? (
+              <>
+                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                Loading Stats...
+              </>
+            ) : (
+              <>
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Load Integrity Stats
+              </>
+            )}
+          </Button>
+
+          {integrityStats && (
+            <div className="bg-white/80 rounded-xl p-4 border border-slate-200">
+              <h3 className="font-semibold text-zinc-900 mb-3">Current State</h3>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                <div className="bg-emerald-50 rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-emerald-700">{integrityStats.projects_from_reelly.toLocaleString()}</p>
+                  <p className="text-xs text-emerald-600">From Reelly</p>
+                </div>
+                <div className={`rounded-lg p-3 text-center ${integrityStats.projects_with_provident_enrichments > 0 ? 'bg-amber-50' : 'bg-slate-50'}`}>
+                  <p className={`text-xl font-bold ${integrityStats.projects_with_provident_enrichments > 0 ? 'text-amber-700' : 'text-slate-500'}`}>
+                    {integrityStats.projects_with_provident_enrichments}
+                  </p>
+                  <p className={`text-xs ${integrityStats.projects_with_provident_enrichments > 0 ? 'text-amber-600' : 'text-slate-500'}`}>
+                    Provident Enriched
+                  </p>
+                </div>
+                <div className={`rounded-lg p-3 text-center ${integrityStats.provident_images > 0 ? 'bg-amber-50' : 'bg-slate-50'}`}>
+                  <p className={`text-xl font-bold ${integrityStats.provident_images > 0 ? 'text-amber-700' : 'text-slate-500'}`}>
+                    {integrityStats.provident_images}
+                  </p>
+                  <p className={`text-xs ${integrityStats.provident_images > 0 ? 'text-amber-600' : 'text-slate-500'}`}>
+                    Provident Images
+                  </p>
+                </div>
+                <div className={`rounded-lg p-3 text-center ${integrityStats.provident_documents > 0 ? 'bg-amber-50' : 'bg-slate-50'}`}>
+                  <p className={`text-xl font-bold ${integrityStats.provident_documents > 0 ? 'text-amber-700' : 'text-slate-500'}`}>
+                    {integrityStats.provident_documents}
+                  </p>
+                  <p className={`text-xs ${integrityStats.provident_documents > 0 ? 'text-amber-600' : 'text-slate-500'}`}>
+                    Provident Docs
+                  </p>
+                </div>
+                <div className={`rounded-lg p-3 text-center ${integrityStats.pending_provident_suggestions > 0 ? 'bg-blue-50' : 'bg-slate-50'}`}>
+                  <p className={`text-xl font-bold ${integrityStats.pending_provident_suggestions > 0 ? 'text-blue-700' : 'text-slate-500'}`}>
+                    {integrityStats.pending_provident_suggestions}
+                  </p>
+                  <p className={`text-xs ${integrityStats.pending_provident_suggestions > 0 ? 'text-blue-600' : 'text-slate-500'}`}>
+                    Pending Suggestions
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {restoreResult && restoreResult.success && restoreResult.restored && (
+            <div className="bg-emerald-50 rounded-xl p-4 border border-emerald-200">
+              <h3 className="font-semibold text-emerald-900 mb-3">✅ Restore Complete</h3>
+              <div className="grid grid-cols-4 gap-3">
+                <div className="bg-white rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-emerald-700">{restoreResult.restored.projects}</p>
+                  <p className="text-xs text-emerald-600">Projects Restored</p>
+                </div>
+                <div className="bg-white rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-red-600">{restoreResult.restored.images_deleted}</p>
+                  <p className="text-xs text-red-500">Images Deleted</p>
+                </div>
+                <div className="bg-white rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-red-600">{restoreResult.restored.documents_deleted}</p>
+                  <p className="text-xs text-red-500">Docs Deleted</p>
+                </div>
+                <div className="bg-white rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-red-600">{restoreResult.restored.pending_deleted}</p>
+                  <p className="text-xs text-red-500">Pending Deleted</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {restoreResult && !restoreResult.success && (
+            <Alert className="border-red-300 bg-red-50">
+              <XCircle className="h-4 w-4 text-red-600" />
+              <AlertDescription className="text-red-700">
+                {restoreResult.error || "Restore failed"}
+              </AlertDescription>
+            </Alert>
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <Button
+              onClick={handleGlobalRestore}
+              disabled={isRestoring || isLoadingIntegrityStats}
+              className="bg-amber-600 hover:bg-amber-700 text-white"
+            >
+              {isRestoring ? (
+                <>
+                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                  Restoring...
+                </>
+              ) : (
+                <>
+                  <RotateCcw className="h-4 w-4 mr-2" />
+                  Restore All to Reelly-Only
+                </>
+              )}
+            </Button>
+            <Button
+              onClick={handleClearPendingSuggestions}
+              disabled={isRestoring || isLoadingIntegrityStats}
+              variant="outline"
+              className="border-slate-300 text-slate-700 hover:bg-slate-100"
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Clear Pending Suggestions Only
+            </Button>
+          </div>
         </CardContent>
       </Card>
 
