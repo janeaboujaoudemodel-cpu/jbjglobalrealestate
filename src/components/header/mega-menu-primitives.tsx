@@ -8,6 +8,8 @@ type MegaMenuShellProps = {
   className?: string;
   /** When true, removes max-height and overflow-y to prevent scrolling */
   noScroll?: boolean;
+  /** Optional inline styles for fixed dimensions to prevent layout shift */
+  style?: React.CSSProperties;
 };
 
 /**
@@ -17,7 +19,7 @@ type MegaMenuShellProps = {
  * - Champagne gradient background (design token classes)
  */
 export const MegaMenuShell = React.forwardRef<HTMLDivElement, MegaMenuShellProps>(
-  ({ children, className, noScroll = false }, ref) => {
+  ({ children, className, noScroll = false, style }, ref) => {
     return (
       <div
         ref={ref}
@@ -39,6 +41,8 @@ export const MegaMenuShell = React.forwardRef<HTMLDivElement, MegaMenuShellProps
           }),
           // Solid gradient background - prevents any transparency issues
           background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
+          // Merge any custom styles passed in
+          ...style,
         }}
       >
         {/* Rounded gold border */}

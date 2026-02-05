@@ -67,31 +67,44 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
 
   const userMeta = (user?.user_metadata ?? {}) as Record<string, unknown>;
   
-  // Memoize display name and photo to prevent flicker
+  // Use STABLE fallback immediately from user_metadata (available sync)
+  // Only use CRM profile if it's already loaded to prevent flicker
+  const stableDisplayName = useMemo(() => {
+    const metaName = (typeof userMeta.full_name === "string" ? userMeta.full_name : null) ||
+                     (typeof userMeta.name === "string" ? userMeta.name : null) ||
+                     (user?.email ? user.email.split("@")[0] : null) ||
+                     "My Account";
+    return metaName;
+  }, [userMeta.full_name, userMeta.name, user?.email]);
+
+  // Only update display name from CRM if loaded and different
   const accountDisplayName = useMemo(() => {
-    return (crmProfile as any)?.display_name ||
-      (typeof userMeta.full_name === "string" ? userMeta.full_name : null) ||
-      (typeof userMeta.name === "string" ? userMeta.name : null) ||
-      (user?.email ? user.email.split("@")[0] : null) ||
-      "My Account";
-  }, [crmProfile, userMeta.full_name, userMeta.name, user?.email]);
+    if (!crmLoading && (crmProfile as any)?.display_name) {
+      return (crmProfile as any).display_name;
+    }
+    return stableDisplayName;
+  }, [crmProfile, crmLoading, stableDisplayName]);
   
   const accountPhotoUrl = useMemo(() => {
-    return (crmProfile as any)?.photo_url ||
-      (typeof (userMeta as any).avatar_url === "string" ? (userMeta as any).avatar_url : null) ||
-      (typeof (userMeta as any).picture === "string" ? (userMeta as any).picture : null) ||
-      null;
-  }, [crmProfile, userMeta]);
+    // Prioritize immediate user_metadata, then CRM if loaded
+    const metaPhoto = (typeof (userMeta as any).avatar_url === "string" ? (userMeta as any).avatar_url : null) ||
+                      (typeof (userMeta as any).picture === "string" ? (userMeta as any).picture : null);
+    if (!crmLoading && (crmProfile as any)?.photo_url) {
+      return (crmProfile as any).photo_url;
+    }
+    return metaPhoto;
+  }, [crmProfile, crmLoading, userMeta]);
 
-  // Memoize initials to prevent flicker
+  // Compute initials from STABLE name to prevent JB→J flicker
   const avatarInitials = useMemo(() => {
-    const name = String(accountDisplayName);
+    // Always use the stable name for initials to prevent flicker
+    const name = String(stableDisplayName);
     return name
       .split(' ')
       .map(n => n.charAt(0).toUpperCase())
       .slice(0, 2)
       .join('');
-  }, [accountDisplayName]);
+  }, [stableDisplayName]);
 
   const authHref = '/auth';
 
@@ -138,9 +151,10 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
       ref={ref}
       className="!left-auto !right-6 !w-[640px]"
       noScroll
+      style={{ minHeight: '440px' }}
     >
-      {/* Fixed height container to prevent jitter */}
-      <div className="p-6" style={{ minHeight: '420px' }}>
+      {/* Fixed dimensions container to prevent layout shift */}
+      <div className="p-6" style={{ minHeight: '420px', minWidth: '600px' }}>
         {user ? (
           <>
             {/* Premium User Header - Horizontal Layout */}
