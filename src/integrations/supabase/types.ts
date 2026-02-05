@@ -925,8 +925,11 @@ export type Database = {
           created_at: string
           description: string
           details: Json | null
+          entity_id: string | null
+          entity_type: string | null
           id: string
           ip_address: unknown
+          metadata: Json | null
           resource_id: string | null
           resource_type: Database["public"]["Enums"]["audit_resource_type"]
           user_agent: string | null
@@ -938,8 +941,11 @@ export type Database = {
           created_at?: string
           description: string
           details?: Json | null
+          entity_id?: string | null
+          entity_type?: string | null
           id?: string
           ip_address?: unknown
+          metadata?: Json | null
           resource_id?: string | null
           resource_type: Database["public"]["Enums"]["audit_resource_type"]
           user_agent?: string | null
@@ -951,8 +957,11 @@ export type Database = {
           created_at?: string
           description?: string
           details?: Json | null
+          entity_id?: string | null
+          entity_type?: string | null
           id?: string
           ip_address?: unknown
+          metadata?: Json | null
           resource_id?: string | null
           resource_type?: Database["public"]["Enums"]["audit_resource_type"]
           user_agent?: string | null
@@ -1099,6 +1108,54 @@ export type Database = {
           domain?: string
           id?: string
           reason?: string | null
+        }
+        Relationships: []
+      }
+      books_catalog: {
+        Row: {
+          access_level: string | null
+          chapters_json: Json | null
+          cover_asset_url: string | null
+          created_at: string
+          id: string
+          is_active: boolean | null
+          is_downloadable: boolean | null
+          is_readable: boolean | null
+          pages_count: number | null
+          sort_order: number | null
+          synopsis: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          access_level?: string | null
+          chapters_json?: Json | null
+          cover_asset_url?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          is_downloadable?: boolean | null
+          is_readable?: boolean | null
+          pages_count?: number | null
+          sort_order?: number | null
+          synopsis?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          access_level?: string | null
+          chapters_json?: Json | null
+          cover_asset_url?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          is_downloadable?: boolean | null
+          is_readable?: boolean | null
+          pages_count?: number | null
+          sort_order?: number | null
+          synopsis?: string | null
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -4087,6 +4144,77 @@ export type Database = {
         }
         Relationships: []
       }
+      deals: {
+        Row: {
+          broker_user_id: string
+          client_email: string | null
+          client_name: string
+          client_phone: string | null
+          created_at: string
+          deal_status: string | null
+          deal_value_aed: number
+          developer_id: string | null
+          developer_name: string | null
+          id: string
+          notes: string | null
+          points_awarded: number | null
+          rejected_reason: string | null
+          submitted_at: string
+          unit_number: string
+          updated_at: string
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          broker_user_id: string
+          client_email?: string | null
+          client_name: string
+          client_phone?: string | null
+          created_at?: string
+          deal_status?: string | null
+          deal_value_aed: number
+          developer_id?: string | null
+          developer_name?: string | null
+          id?: string
+          notes?: string | null
+          points_awarded?: number | null
+          rejected_reason?: string | null
+          submitted_at?: string
+          unit_number: string
+          updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          broker_user_id?: string
+          client_email?: string | null
+          client_name?: string
+          client_phone?: string | null
+          created_at?: string
+          deal_status?: string | null
+          deal_value_aed?: number
+          developer_id?: string | null
+          developer_name?: string | null
+          id?: string
+          notes?: string | null
+          points_awarded?: number | null
+          rejected_reason?: string | null
+          submitted_at?: string
+          unit_number?: string
+          updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deals_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       decision_records: {
         Row: {
           audit_log: Json | null
@@ -4639,14 +4767,20 @@ export type Database = {
           check_out_longitude: number | null
           check_out_photo_url: string | null
           check_out_time: string | null
+          checkin_type: string | null
           confirmation_statement: boolean | null
           created_at: string | null
           developer_id: string
+          feedback_json: Json | null
           id: string
+          location_accuracy_m: number | null
           notes: string | null
+          points_awarded: number | null
+          selfie_url: string | null
           signature_data: string | null
           task_id: string | null
           user_id: string
+          visit_request_id: string | null
         }
         Insert: {
           check_in_latitude?: number | null
@@ -4657,14 +4791,20 @@ export type Database = {
           check_out_longitude?: number | null
           check_out_photo_url?: string | null
           check_out_time?: string | null
+          checkin_type?: string | null
           confirmation_statement?: boolean | null
           created_at?: string | null
           developer_id: string
+          feedback_json?: Json | null
           id?: string
+          location_accuracy_m?: number | null
           notes?: string | null
+          points_awarded?: number | null
+          selfie_url?: string | null
           signature_data?: string | null
           task_id?: string | null
           user_id: string
+          visit_request_id?: string | null
         }
         Update: {
           check_in_latitude?: number | null
@@ -4675,14 +4815,20 @@ export type Database = {
           check_out_longitude?: number | null
           check_out_photo_url?: string | null
           check_out_time?: string | null
+          checkin_type?: string | null
           confirmation_statement?: boolean | null
           created_at?: string | null
           developer_id?: string
+          feedback_json?: Json | null
           id?: string
+          location_accuracy_m?: number | null
           notes?: string | null
+          points_awarded?: number | null
+          selfie_url?: string | null
           signature_data?: string | null
           task_id?: string | null
           user_id?: string
+          visit_request_id?: string | null
         }
         Relationships: [
           {
@@ -4697,6 +4843,72 @@ export type Database = {
             columns: ["developer_id"]
             isOneToOne: false
             referencedRelation: "uae_developers_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "developer_visit_checkins_visit_request_id_fkey"
+            columns: ["visit_request_id"]
+            isOneToOne: false
+            referencedRelation: "developer_visit_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      developer_visit_requests: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          contact_revealed: boolean | null
+          created_at: string
+          developer_id: string
+          id: string
+          notes: string | null
+          purpose: string | null
+          rejection_reason: string | null
+          requested_date: string
+          requested_time: string | null
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          contact_revealed?: boolean | null
+          created_at?: string
+          developer_id: string
+          id?: string
+          notes?: string | null
+          purpose?: string | null
+          rejection_reason?: string | null
+          requested_date: string
+          requested_time?: string | null
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          contact_revealed?: boolean | null
+          created_at?: string
+          developer_id?: string
+          id?: string
+          notes?: string | null
+          purpose?: string | null
+          rejection_reason?: string | null
+          requested_date?: string
+          requested_time?: string | null
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_visit_requests_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
             referencedColumns: ["id"]
           },
         ]
@@ -11023,6 +11235,51 @@ export type Database = {
           },
         ]
       }
+      membership_cards: {
+        Row: {
+          card_number: string
+          card_status: string | null
+          card_type: string | null
+          created_at: string
+          id: string
+          issued_at: string
+          issued_by: string | null
+          qr_payload: string
+          suspended_at: string | null
+          suspended_reason: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          card_number: string
+          card_status?: string | null
+          card_type?: string | null
+          created_at?: string
+          id?: string
+          issued_at?: string
+          issued_by?: string | null
+          qr_payload: string
+          suspended_at?: string | null
+          suspended_reason?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          card_number?: string
+          card_status?: string | null
+          card_type?: string | null
+          created_at?: string
+          id?: string
+          issued_at?: string
+          issued_by?: string | null
+          qr_payload?: string
+          suspended_at?: string | null
+          suspended_reason?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       memberships: {
         Row: {
           created_at: string
@@ -11297,6 +11554,45 @@ export type Database = {
           id?: string
           name?: string
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          action_url: string | null
+          body: string | null
+          created_at: string
+          id: string
+          is_read: boolean | null
+          metadata: Json | null
+          notification_type: string | null
+          read_at: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          action_url?: string | null
+          body?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          metadata?: Json | null
+          notification_type?: string | null
+          read_at?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          action_url?: string | null
+          body?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          metadata?: Json | null
+          notification_type?: string | null
+          read_at?: string | null
+          title?: string
           user_id?: string
         }
         Relationships: []
@@ -11931,6 +12227,42 @@ export type Database = {
         }
         Relationships: []
       }
+      points_ledger: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          event_description: string | null
+          event_ref_id: string | null
+          event_type: string
+          id: string
+          points_balance_after: number
+          points_delta: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          event_description?: string | null
+          event_ref_id?: string | null
+          event_type: string
+          id?: string
+          points_balance_after: number
+          points_delta: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          event_description?: string | null
+          event_ref_id?: string | null
+          event_type?: string
+          id?: string
+          points_balance_after?: number
+          points_delta?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       points_transactions: {
         Row: {
           created_at: string | null
@@ -11996,40 +12328,79 @@ export type Database = {
       }
       profiles: {
         Row: {
+          avatar_initials: string | null
+          broker_tier: string | null
+          client_tier: string | null
           consent_timestamp: string | null
           created_at: string
           email: string | null
+          first_deal_verified: boolean | null
+          first_deal_verified_at: string | null
+          first_name: string | null
           full_name: string | null
           id: string
+          last_login_at: string | null
+          last_name: string | null
+          login_streak: number | null
           marketing_consent: boolean | null
+          mode_default: string | null
           phone_number: string | null
           phone_verified: boolean | null
+          tier_updated_at: string | null
+          total_login_days: number | null
           updated_at: string
           user_role: string | null
+          user_type: string | null
         }
         Insert: {
+          avatar_initials?: string | null
+          broker_tier?: string | null
+          client_tier?: string | null
           consent_timestamp?: string | null
           created_at?: string
           email?: string | null
+          first_deal_verified?: boolean | null
+          first_deal_verified_at?: string | null
+          first_name?: string | null
           full_name?: string | null
           id: string
+          last_login_at?: string | null
+          last_name?: string | null
+          login_streak?: number | null
           marketing_consent?: boolean | null
+          mode_default?: string | null
           phone_number?: string | null
           phone_verified?: boolean | null
+          tier_updated_at?: string | null
+          total_login_days?: number | null
           updated_at?: string
           user_role?: string | null
+          user_type?: string | null
         }
         Update: {
+          avatar_initials?: string | null
+          broker_tier?: string | null
+          client_tier?: string | null
           consent_timestamp?: string | null
           created_at?: string
           email?: string | null
+          first_deal_verified?: boolean | null
+          first_deal_verified_at?: string | null
+          first_name?: string | null
           full_name?: string | null
           id?: string
+          last_login_at?: string | null
+          last_name?: string | null
+          login_streak?: number | null
           marketing_consent?: boolean | null
+          mode_default?: string | null
           phone_number?: string | null
           phone_verified?: boolean | null
+          tier_updated_at?: string | null
+          total_login_days?: number | null
           updated_at?: string
           user_role?: string | null
+          user_type?: string | null
         }
         Relationships: []
       }
@@ -13156,6 +13527,39 @@ export type Database = {
         }
         Relationships: []
       }
+      referrals: {
+        Row: {
+          created_at: string
+          id: string
+          referral_code: string | null
+          referral_type: string | null
+          referred_user_id: string
+          referrer_user_id: string
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          referral_code?: string | null
+          referral_type?: string | null
+          referred_user_id: string
+          referrer_user_id: string
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          referral_code?: string | null
+          referral_type?: string | null
+          referred_user_id?: string
+          referrer_user_id?: string
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       rental_listing_approvals: {
         Row: {
           approved_at: string | null
@@ -13472,6 +13876,59 @@ export type Database = {
           reward_type?: Database["public"]["Enums"]["reward_type"] | null
         }
         Relationships: []
+      }
+      rewards_redemptions: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string
+          delivered_at: string | null
+          id: string
+          notes: string | null
+          points_spent: number
+          requested_at: string
+          reward_id: string | null
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          delivered_at?: string | null
+          id?: string
+          notes?: string | null
+          points_spent: number
+          requested_at?: string
+          reward_id?: string | null
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          delivered_at?: string | null
+          id?: string
+          notes?: string | null
+          points_spent?: number
+          requested_at?: string
+          reward_id?: string | null
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rewards_redemptions_reward_id_fkey"
+            columns: ["reward_id"]
+            isOneToOne: false
+            referencedRelation: "rewards_catalog"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       salary_access_logs: {
         Row: {
@@ -14724,6 +15181,42 @@ export type Database = {
           referrer?: string | null
           session_id?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      user_preferences: {
+        Row: {
+          created_at: string
+          email_notifications: boolean | null
+          id: string
+          marketing_opt_in: boolean | null
+          preferred_language: string | null
+          push_notifications: boolean | null
+          selected_mode: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email_notifications?: boolean | null
+          id?: string
+          marketing_opt_in?: boolean | null
+          preferred_language?: string | null
+          push_notifications?: boolean | null
+          selected_mode?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email_notifications?: boolean | null
+          id?: string
+          marketing_opt_in?: boolean | null
+          preferred_language?: string | null
+          push_notifications?: boolean | null
+          selected_mode?: string | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -16915,6 +17408,17 @@ export type Database = {
       }
     }
     Functions: {
+      add_points: {
+        Args: {
+          _created_by?: string
+          _event_description?: string
+          _event_ref_id?: string
+          _event_type: string
+          _points_delta: number
+          _user_id: string
+        }
+        Returns: string
+      }
       auto_assign_lead_to_available_broker: {
         Args: { p_lead_id: string }
         Returns: string
@@ -17109,6 +17613,7 @@ export type Database = {
         Args: { plain_text: string; salt_id: string }
         Returns: string
       }
+      generate_card_number: { Args: never; Returns: string }
       generate_company_id: { Args: never; Returns: string }
       generate_referral_code: { Args: never; Returns: string }
       get_all_subscriptions_admin: {
@@ -17211,6 +17716,11 @@ export type Database = {
           price_usd: number
         }[]
       }
+      get_user_points_balance: { Args: { _user_id: string }; Returns: number }
+      get_user_tier: {
+        Args: { _mode?: string; _user_id: string }
+        Returns: string
+      }
       get_vapi_call_decrypted_pii: {
         Args: { p_call_id: string }
         Returns: {
@@ -17235,6 +17745,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      has_verified_first_deal: { Args: { _user_id: string }; Returns: boolean }
       is_active_crm_member: { Args: { _user_id: string }; Returns: boolean }
       is_authorized_staff: { Args: never; Returns: boolean }
       is_crm_admin: { Args: { _user_id: string }; Returns: boolean }
@@ -17369,6 +17880,10 @@ export type Database = {
         | "broker"
         | "listing_admin"
         | "hr_admin"
+        | "broker_jbj"
+        | "broker_partner"
+        | "client"
+        | "support_ops"
       approval_type:
         | "leave_request"
         | "expense_claim"
@@ -17400,6 +17915,11 @@ export type Database = {
         | "document"
         | "settings"
         | "role"
+      book_access_level:
+        | "broker_only"
+        | "broker_jbj_only"
+        | "locked_until_first_deal"
+        | "public"
       broker_channel: "whatsapp" | "email" | "sms" | "call" | "video"
       broker_conversation_status:
         | "active"
@@ -17415,6 +17935,10 @@ export type Database = {
         | "call"
         | "meeting"
         | "other"
+      broker_tier: "starter" | "rising" | "performer" | "elite" | "legend"
+      card_status: "active" | "suspended" | "expired"
+      checkin_type: "gps_selfie" | "manual_register" | "qr_scan"
+      client_tier: "bronze" | "silver" | "gold" | "platinum" | "diamond"
       comm_category:
         | "important"
         | "routine"
@@ -17475,6 +17999,12 @@ export type Database = {
         | "news"
         | "global"
         | "internal"
+      deal_status:
+        | "submitted"
+        | "pending_verification"
+        | "verified"
+        | "rejected"
+        | "cancelled"
       hr_application_status: "pending" | "approved" | "rejected"
       hr_module_track: "company_knowledge" | "real_estate_basics"
       hr_question_type: "mcq" | "true_false" | "short_answer"
@@ -17507,13 +18037,33 @@ export type Database = {
         | "bereavement"
         | "public_holiday"
       market_trend: "rising" | "falling" | "stable" | "volatile"
+      notification_type:
+        | "system"
+        | "event"
+        | "approval"
+        | "reminder"
+        | "reward"
+        | "deal"
+        | "visit"
       opportunity_status:
         | "new"
         | "under_review"
         | "approved"
         | "rejected"
         | "expired"
+      points_event_type:
+        | "training_complete"
+        | "daily_checkin"
+        | "developer_visit_checkin"
+        | "deal_closed"
+        | "referral_bonus"
+        | "admin_adjustment"
+        | "reward_redeem"
+        | "module_complete"
+        | "login_streak"
+        | "first_deal_bonus"
       prediction_confidence: "low" | "medium" | "high" | "very_high"
+      redemption_status: "requested" | "approved" | "delivered" | "rejected"
       reward_type: "points" | "gift" | "badge" | "certificate"
       risk_level: "low" | "medium" | "high" | "critical"
       security_event_type:
@@ -17533,6 +18083,7 @@ export type Database = {
         | "policy_violation"
         | "lockdown_triggered"
       security_severity: "info" | "low" | "medium" | "high" | "critical"
+      user_mode: "client" | "broker"
       vip_category:
         | "government_official"
         | "doctor"
@@ -17544,6 +18095,17 @@ export type Database = {
         | "investor"
         | "existing_buyer"
         | "loyal_customer"
+      visit_purpose:
+        | "briefing"
+        | "general_visit"
+        | "client_tour"
+        | "deal_closing"
+      visit_request_status:
+        | "submitted"
+        | "approved"
+        | "rejected"
+        | "completed"
+        | "cancelled"
       visitor_role:
         | "broker"
         | "referral_partner"
@@ -17695,6 +18257,10 @@ export const Constants = {
         "broker",
         "listing_admin",
         "hr_admin",
+        "broker_jbj",
+        "broker_partner",
+        "client",
+        "support_ops",
       ],
       approval_type: [
         "leave_request",
@@ -17730,6 +18296,12 @@ export const Constants = {
         "settings",
         "role",
       ],
+      book_access_level: [
+        "broker_only",
+        "broker_jbj_only",
+        "locked_until_first_deal",
+        "public",
+      ],
       broker_channel: ["whatsapp", "email", "sms", "call", "video"],
       broker_conversation_status: [
         "active",
@@ -17747,6 +18319,10 @@ export const Constants = {
         "meeting",
         "other",
       ],
+      broker_tier: ["starter", "rising", "performer", "elite", "legend"],
+      card_status: ["active", "suspended", "expired"],
+      checkin_type: ["gps_selfie", "manual_register", "qr_scan"],
+      client_tier: ["bronze", "silver", "gold", "platinum", "diamond"],
       comm_category: ["important", "routine", "recruitment", "flagged", "spam"],
       comm_channel: [
         "email",
@@ -17808,6 +18384,13 @@ export const Constants = {
         "global",
         "internal",
       ],
+      deal_status: [
+        "submitted",
+        "pending_verification",
+        "verified",
+        "rejected",
+        "cancelled",
+      ],
       hr_application_status: ["pending", "approved", "rejected"],
       hr_module_track: ["company_knowledge", "real_estate_basics"],
       hr_question_type: ["mcq", "true_false", "short_answer"],
@@ -17843,6 +18426,15 @@ export const Constants = {
         "public_holiday",
       ],
       market_trend: ["rising", "falling", "stable", "volatile"],
+      notification_type: [
+        "system",
+        "event",
+        "approval",
+        "reminder",
+        "reward",
+        "deal",
+        "visit",
+      ],
       opportunity_status: [
         "new",
         "under_review",
@@ -17850,7 +18442,20 @@ export const Constants = {
         "rejected",
         "expired",
       ],
+      points_event_type: [
+        "training_complete",
+        "daily_checkin",
+        "developer_visit_checkin",
+        "deal_closed",
+        "referral_bonus",
+        "admin_adjustment",
+        "reward_redeem",
+        "module_complete",
+        "login_streak",
+        "first_deal_bonus",
+      ],
       prediction_confidence: ["low", "medium", "high", "very_high"],
+      redemption_status: ["requested", "approved", "delivered", "rejected"],
       reward_type: ["points", "gift", "badge", "certificate"],
       risk_level: ["low", "medium", "high", "critical"],
       security_event_type: [
@@ -17871,6 +18476,7 @@ export const Constants = {
         "lockdown_triggered",
       ],
       security_severity: ["info", "low", "medium", "high", "critical"],
+      user_mode: ["client", "broker"],
       vip_category: [
         "government_official",
         "doctor",
@@ -17882,6 +18488,19 @@ export const Constants = {
         "investor",
         "existing_buyer",
         "loyal_customer",
+      ],
+      visit_purpose: [
+        "briefing",
+        "general_visit",
+        "client_tour",
+        "deal_closing",
+      ],
+      visit_request_status: [
+        "submitted",
+        "approved",
+        "rejected",
+        "completed",
+        "cancelled",
       ],
       visitor_role: [
         "broker",
