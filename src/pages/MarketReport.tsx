@@ -1776,11 +1776,12 @@ const MarketReport = () => {
         </div>
       )}
 
-      {/* Hero Section */}
+      {/* Hero Section - with Active Champagne Layer */}
       <section className="jj-hero-fullscreen relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden bg-black">
-        {/* Background Elements */}
-        <div className="absolute inset-0 bg-gradient-to-b from-gold/10 via-transparent to-transparent" />
-        <div className="absolute top-20 right-0 w-[600px] h-[600px] bg-gold/10 rounded-full blur-[150px]" />
+        {/* Full Active Color Layer */}
+        <div className="absolute inset-0 mx-0.5 md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl md:rounded-3xl" />
+        {/* Premium gold glow elements */}
+        <div className="absolute top-20 right-0 w-[600px] h-[600px] bg-gold/15 rounded-full blur-[150px]" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gold/10 rounded-full blur-[100px]" />
         
         <div className="container mx-auto px-4 relative z-10">
@@ -1929,12 +1930,22 @@ const MarketReport = () => {
                 ))}
               </div>
               
-              {/* Scroll Indicator */}
-              <a href="#unlock-form" className="inline-flex items-center gap-2 text-gold hover:text-gold-light transition-colors">
-                <Download className="w-5 h-5" />
-                <span className="font-medium">Download Your Free Book Now</span>
-                <ArrowUpRight className="w-4 h-4" />
-              </a>
+              {/* Scroll CTA - PRIMARY BUTTON */}
+              <Button 
+                variant="primary" 
+                size="lg"
+                onClick={() => {
+                  const el = document.getElementById('unlock-form');
+                  if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  }
+                }}
+                className="shadow-[0_10px_30px_rgba(200,167,102,0.4)] hover:shadow-[0_15px_40px_rgba(200,167,102,0.5)] transition-all"
+              >
+                <Download className="w-5 h-5 mr-2" />
+                Download Your Free Book Now
+                <ArrowUpRight className="w-5 h-5 ml-2" />
+              </Button>
             </motion.div>
           </div>
         </div>
@@ -1996,29 +2007,16 @@ const MarketReport = () => {
                 </div>
                 <h2 className="text-black text-2xl font-bold mb-2">Welcome back, <span className="text-gold">{leadData?.fullName || leadData?.email}</span></h2>
                 <p className="text-zinc-500 text-sm mb-8">Click below to instantly access your Market Intelligence book.</p>
-                <button
+                <Button
+                  variant="primary"
+                  size="lg"
                   onClick={handleDirectDownload}
-                  className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group w-full"
-                  style={{
-                    boxShadow: `
-                      0 10px 30px rgba(200,167,102,0.4),
-                      0 6px 15px rgba(0,0,0,0.2),
-                      inset 0 2px 4px rgba(255,255,255,0.9),
-                      inset 0 -2px 4px rgba(200,167,102,0.2),
-                      0 0 20px rgba(200,167,102,0.3)
-                    `,
-                  }}
+                  className="w-full h-14 text-base shadow-[0_10px_30px_rgba(200,167,102,0.4)] hover:shadow-[0_15px_40px_rgba(200,167,102,0.5)] transition-all"
                 >
-                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                  <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
-                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-                  <span className="relative flex items-center justify-center gap-2">
-                    <Download className="w-5 h-5 text-gold" />
-                    <span className="text-gold">Download</span>
-                    <span className="text-black">Book Now</span>
-                    <ArrowUpRight className="w-5 h-5 text-black" />
-                  </span>
-                </button>
+                  <Download className="w-5 h-5 mr-2" />
+                  Download Book Now
+                  <ArrowUpRight className="w-5 h-5 ml-2" />
+                </Button>
               </div>
             ) : (
               <>

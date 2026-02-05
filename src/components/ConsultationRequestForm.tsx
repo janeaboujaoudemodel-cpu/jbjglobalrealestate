@@ -187,7 +187,7 @@ export const ConsultationRequestForm = ({
                   <Input
                     placeholder="Full Name *"
                     {...field}
-                    className="h-12 bg-white border-gold/30 focus:border-gold text-black rounded-lg"
+                    className="h-12 bg-white border-2 border-gold/50 hover:border-gold focus:border-gold text-black rounded-lg"
                   />
                 </FormControl>
                 <FormMessage />
@@ -205,7 +205,7 @@ export const ConsultationRequestForm = ({
                     type="email"
                     placeholder="Email Address *"
                     {...field}
-                    className="h-12 bg-white border-gold/30 focus:border-gold text-black rounded-lg"
+                    className="h-12 bg-white border-2 border-gold/50 hover:border-gold focus:border-gold text-black rounded-lg"
                   />
                 </FormControl>
                 <FormMessage />
@@ -223,7 +223,7 @@ export const ConsultationRequestForm = ({
                     placeholder="Phone Number *"
                     value={field.value}
                     onChange={field.onChange}
-                    className="h-12 bg-white border-gold/30 focus:border-gold rounded-lg [&_button]:rounded-l-lg [&_input]:rounded-r-lg"
+                    variant="light"
                   />
                 </FormControl>
                 <FormMessage />
@@ -239,11 +239,11 @@ export const ConsultationRequestForm = ({
                 <FormItem>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
-                      <SelectTrigger className="h-12 bg-white border-gold/30 focus:border-gold rounded-lg">
+                      <SelectTrigger className="h-12 bg-white border-2 border-gold/50 hover:border-gold focus:border-gold rounded-lg">
                         <SelectValue placeholder="Service Needed *" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent className="bg-white">
+                    <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50">
                       {SERVICE_OPTIONS.map((opt) => (
                         <SelectItem key={opt.value} value={opt.value}>
                           {opt.label}
