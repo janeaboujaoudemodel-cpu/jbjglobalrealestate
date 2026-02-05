@@ -90,7 +90,7 @@ const CombinedContactNewsletter = ({
         {/* Divider */}
         <div className="flex items-center gap-4 max-w-2xl mx-auto mb-8">
           <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-          <span className="text-gold/80 text-xs uppercase tracking-widest font-medium">or</span>
+          <span className="text-gold/60 text-sm">✦</span>
           <div className="flex-1 h-px bg-gradient-to-l from-transparent via-gold/40 to-transparent" />
         </div>
 

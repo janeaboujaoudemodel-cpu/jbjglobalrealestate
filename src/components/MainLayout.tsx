@@ -203,16 +203,9 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       <main className={needsHeaderSpacing ? "pt-24 sm:pt-28 lg:pt-32" : "pt-0"}>
         {children}
       </main>
-      {/* Global Contact + Newsletter Section - homepage uses combined, others use separate */}
+      {/* Global Contact + Newsletter Section - combined for all public pages */}
       {!isAdminRoute && (
-        isHomePage ? (
-          <CombinedContactNewsletter />
-        ) : (
-          <>
-            <DirectContactCTA />
-            <NewsletterBand />
-          </>
-        )
+        <CombinedContactNewsletter />
       )}
       {/* Global Footer - rendered centrally */}
       {!isAdminRoute && <Footer />}
