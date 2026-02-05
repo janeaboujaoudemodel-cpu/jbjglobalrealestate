@@ -2,7 +2,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { BookOpen, Clock, Target, Play, CheckCircle } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { BookOpen, Clock, Target, Play, CheckCircle, Circle, Sparkles } from "lucide-react";
 import type { EducationBook, EducationModule } from "@/hooks/useBrokerEducation";
 import { useBookModules } from "@/hooks/useBrokerEducation";
 
@@ -12,45 +13,71 @@ interface BookDetailModalProps {
   onClose: () => void;
 }
 
-const LEARNING_PATH_COLORS: Record<string, string> = {
-  'Foundations': 'bg-blue-500/20 text-blue-700 border-blue-500/30',
-  'Buyer & Investor Advisory': 'bg-emerald-500/20 text-emerald-700 border-emerald-500/30',
-  'Seller & Landlord Advisory': 'bg-amber-500/20 text-amber-700 border-amber-500/30',
-  'Market Intelligence': 'bg-purple-500/20 text-purple-700 border-purple-500/30',
-  'Advanced (Restricted)': 'bg-red-500/20 text-red-700 border-red-500/30',
+const LEARNING_PATH_COLORS: Record<string, { badge: string; accent: string }> = {
+  'Foundations': { badge: 'bg-blue-500/20 text-blue-700 border-blue-500/30', accent: 'text-blue-600' },
+  'Buyer & Investor Advisory': { badge: 'bg-emerald-500/20 text-emerald-700 border-emerald-500/30', accent: 'text-emerald-600' },
+  'Seller & Landlord Advisory': { badge: 'bg-amber-500/20 text-amber-700 border-amber-500/30', accent: 'text-amber-600' },
+  'Market Intelligence': { badge: 'bg-purple-500/20 text-purple-700 border-purple-500/30', accent: 'text-purple-600' },
+  'Advanced (Restricted)': { badge: 'bg-red-500/20 text-red-700 border-red-500/30', accent: 'text-red-600' },
 };
+
+const DEFAULT_PATH_COLORS = { badge: 'bg-zinc-500/20 text-zinc-700 border-zinc-500/30', accent: 'text-zinc-600' };
 
 export function BookDetailModal({ book, isOpen, onClose }: BookDetailModalProps) {
   const { modules, loading } = useBookModules(book?.id || null);
   
   if (!book) return null;
 
-  const pathColor = LEARNING_PATH_COLORS[book.learning_path] || 'bg-black/10 text-black border-black/20';
+  const pathColors = LEARNING_PATH_COLORS[book.learning_path] || DEFAULT_PATH_COLORS;
   const totalMinutes = modules.reduce((sum, m) => sum + m.estimated_minutes, 0);
+  
+  // Mock progress for now (would come from user progress tracking)
+  const completedModules = 0;
+  const progressPercent = modules.length > 0 ? (completedModules / modules.length) * 100 : 0;
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
         <DialogHeader>
-          <div className="flex items-start gap-4">
-            {/* Book Cover */}
+          <div className="flex items-start gap-5">
+            {/* 3D Mini Book Cover */}
             <div 
-              className="w-24 h-32 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 flex items-center justify-center flex-shrink-0"
-              style={{
-                boxShadow: '4px 4px 10px rgba(0,0,0,0.15)',
-              }}
+              className="relative flex-shrink-0"
+              style={{ perspective: '500px' }}
             >
-              <BookOpen className="w-8 h-8 text-gold/60" />
+              <div 
+                className="w-28 h-36 rounded-lg bg-gradient-to-br from-zinc-900 via-black to-zinc-900 border border-gold/40 flex items-center justify-center relative overflow-hidden"
+                style={{
+                  transform: 'rotateY(-8deg) rotateX(3deg)',
+                  boxShadow: '8px 8px 25px rgba(0,0,0,0.4), -2px -2px 10px rgba(200,167,102,0.15)',
+                }}
+              >
+                {/* Spine effect */}
+                <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-gold/30 via-gold/15 to-transparent" />
+                
+                {/* Book number */}
+                <div className="w-12 h-12 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
+                  <span className="text-gold text-xl font-bold">{book.book_number}</span>
+                </div>
+                
+                {/* Page edges */}
+                <div className="absolute right-0 top-0 bottom-0 w-2">
+                  <div className="h-full bg-gradient-to-l from-zinc-200/15 to-transparent" />
+                </div>
+              </div>
             </div>
             
-            <div className="flex-1">
-              <Badge className={`${pathColor} mb-2 text-xs`}>
-                Book {book.book_number} • {book.learning_path}
-              </Badge>
-              <DialogTitle className="text-2xl text-black mb-2">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-2">
+                <Badge className={`${pathColors.badge} text-xs`}>
+                  <Sparkles className="w-3 h-3 mr-1" />
+                  Book {book.book_number} • {book.learning_path}
+                </Badge>
+              </div>
+              <DialogTitle className="text-2xl text-foreground mb-2 leading-tight">
                 {book.title}
               </DialogTitle>
-              <p className="text-black/60 text-sm">
+              <p className="text-muted-foreground text-sm">
                 {book.description}
               </p>
             </div>
@@ -64,12 +91,21 @@ export function BookDetailModal({ book, isOpen, onClose }: BookDetailModalProps)
               <Target className="w-4 h-4 text-gold" />
               <span className="text-gold font-medium text-sm">Learning Objective</span>
             </div>
-            <p className="text-black/70 text-sm">{book.learning_objective}</p>
+            <p className="text-foreground/70 text-sm">{book.learning_objective}</p>
           </div>
         )}
 
+        {/* Progress Bar */}
+        <div className="mt-4 p-4 bg-white/50 rounded-lg border border-gold/20">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-foreground">Your Progress</span>
+            <span className="text-xs text-muted-foreground">{completedModules} of {modules.length} modules completed</span>
+          </div>
+          <Progress value={progressPercent} className="h-2" />
+        </div>
+
         {/* Stats */}
-        <div className="flex items-center gap-6 mt-4 text-sm text-black/60">
+        <div className="flex items-center gap-6 mt-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             <BookOpen className="w-4 h-4" />
             <span>{modules.length} Modules</span>
@@ -82,7 +118,10 @@ export function BookDetailModal({ book, isOpen, onClose }: BookDetailModalProps)
 
         {/* Modules List */}
         <div className="mt-6">
-          <h4 className="text-black font-semibold mb-4">Modules</h4>
+          <h4 className="text-foreground font-semibold mb-4 flex items-center gap-2">
+            <BookOpen className="w-4 h-4 text-gold" />
+            Training Modules
+          </h4>
           
           {loading ? (
             <div className="flex items-center justify-center py-8">
@@ -90,49 +129,73 @@ export function BookDetailModal({ book, isOpen, onClose }: BookDetailModalProps)
             </div>
           ) : (
             <Accordion type="single" collapsible className="space-y-2">
-              {modules.map((module, index) => (
-                <AccordionItem 
-                  key={module.id} 
-                  value={module.id}
-                  className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] overflow-hidden"
-                >
-                  <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-gold/10">
-                    <div className="flex items-center gap-3 text-left">
-                      <div className="w-8 h-8 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center flex-shrink-0">
-                        <span className="text-gold text-sm font-medium">{module.module_number}</span>
-                      </div>
-                      <div>
-                        <div className="text-black font-medium">{module.title}</div>
-                        <div className="text-black/50 text-xs flex items-center gap-2 mt-0.5">
-                          <Clock className="w-3 h-3" />
-                          {module.estimated_minutes} min
+              {modules.map((module, index) => {
+                // Mock: none completed yet
+                const isCompleted = false;
+                const isCurrentModule = index === 0;
+                
+                return (
+                  <AccordionItem 
+                    key={module.id} 
+                    value={module.id}
+                    className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-white/80 via-[#F5EBD7]/50 to-[#E8DCC8]/30 overflow-hidden"
+                  >
+                    <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-gold/10">
+                      <div className="flex items-center gap-3 text-left w-full">
+                        {/* Status Icon */}
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                          isCompleted 
+                            ? 'bg-emerald-500 text-white' 
+                            : isCurrentModule 
+                              ? 'bg-gold/20 border-2 border-gold text-gold' 
+                              : 'bg-muted border border-border text-muted-foreground'
+                        }`}>
+                          {isCompleted ? (
+                            <CheckCircle className="w-4 h-4" />
+                          ) : (
+                            <span className="text-sm font-medium">{module.module_number}</span>
+                          )}
+                        </div>
+                        
+                        <div className="flex-1 min-w-0">
+                          <div className="text-foreground font-medium truncate">{module.title}</div>
+                          <div className="text-muted-foreground text-xs flex items-center gap-2 mt-0.5">
+                            <Clock className="w-3 h-3" />
+                            {module.estimated_minutes} min
+                            {isCurrentModule && !isCompleted && (
+                              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-gold text-gold">
+                                Continue
+                              </Badge>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent className="px-4 pb-4">
-                    <p className="text-black/60 text-sm mb-4 pl-11">
-                      {module.description}
-                    </p>
-                    <div className="pl-11">
-                      <Button 
-                        size="sm"
-                        variant="secondary"
-                      >
-                        <Play className="w-3 h-3 mr-2" />
-                        Start Module
-                      </Button>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
+                    </AccordionTrigger>
+                    <AccordionContent className="px-4 pb-4">
+                      <div className="pl-11 space-y-4">
+                        <p className="text-muted-foreground text-sm">
+                          {module.description || "Complete this module to learn key concepts and best practices."}
+                        </p>
+                        <Button 
+                          size="sm"
+                          variant="secondary"
+                          className="bg-gold hover:bg-gold-dark text-black"
+                        >
+                          <Play className="w-3 h-3 mr-2" />
+                          {isCompleted ? 'Review Module' : 'Start Module'}
+                        </Button>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                );
+              })}
             </Accordion>
           )}
         </div>
 
         {/* Internal Notice */}
         <div className="mt-6 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-lg p-4">
-          <p className="text-black/50 text-xs text-center">
+          <p className="text-muted-foreground text-xs text-center">
             This content is proprietary to JBJ Global Real Estate. Internal recognition only — not for external certification.
           </p>
         </div>
