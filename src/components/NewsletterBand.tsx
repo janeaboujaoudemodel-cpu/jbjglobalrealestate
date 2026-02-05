@@ -11,8 +11,8 @@
  
  const NewsletterBand = ({ className = "" }: NewsletterBandProps) => {
    return (
-     <section className={`py-12 md:py-16 bg-black ${className}`}>
-       <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8">
+      <section className={`py-12 md:py-16 bg-black ${className}`}>
+        <div className="mx-0.5 md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8">
          {/* Premium Title */}
          <h3 
            className="text-center text-2xl md:text-3xl font-bold mb-3 uppercase tracking-[0.15em]"

@@ -14,17 +14,22 @@ interface ProjectCardProps {
   project: Project & { is_sold_out?: boolean | null };
   showFavorite?: boolean;
   showBadgeButton?: boolean;
-  currency?: 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR';
+  currency?: 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 'RUB' | 'CAD' | 'AUD';
   sizeUnit?: 'sqft' | 'sqm';
 }
 
-// Currency conversion rates
+// Currency conversion rates - 10 unified currencies
 const CURRENCY_RATES: Record<string, number> = {
   AED: 1,
   USD: 0.27,
   EUR: 0.25,
   GBP: 0.21,
   INR: 22.5,
+  SAR: 1.02,
+  CNY: 1.98,
+  RUB: 24.5,
+  CAD: 0.37,
+  AUD: 0.42,
 };
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
@@ -33,6 +38,11 @@ const CURRENCY_SYMBOLS: Record<string, string> = {
   EUR: '€',
   GBP: '£',
   INR: '₹',
+  SAR: 'SAR',
+  CNY: '¥',
+  RUB: '₽',
+  CAD: 'C$',
+  AUD: 'A$',
 };
 
 // Helper to format price with currency conversion

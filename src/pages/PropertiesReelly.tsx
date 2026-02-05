@@ -42,24 +42,34 @@
  import { blueprintPagesSEO } from "@/types/blueprint";
  import PropertiesHeroVideo from "@/components/PropertiesHeroVideo";
  
- // Currency conversion rates
- const CURRENCY_RATES: Record<string, number> = {
-   AED: 1,
-   USD: 0.27,
-   EUR: 0.25,
-   GBP: 0.21,
-   INR: 22.5,
- };
- 
- const CURRENCY_SYMBOLS: Record<string, string> = {
-   AED: 'AED',
-   USD: '$',
-   EUR: '€',
-   GBP: '£',
-   INR: '₹',
- };
- 
- type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR';
+// Currency conversion rates - 10 unified currencies
+const CURRENCY_RATES: Record<string, number> = {
+  AED: 1,
+  USD: 0.27,
+  EUR: 0.25,
+  GBP: 0.21,
+  INR: 22.5,
+  SAR: 1.02,
+  CNY: 1.98,
+  RUB: 24.5,
+  CAD: 0.37,
+  AUD: 0.42,
+};
+
+const CURRENCY_SYMBOLS: Record<string, string> = {
+  AED: 'AED',
+  USD: '$',
+  EUR: '€',
+  GBP: '£',
+  INR: '₹',
+  SAR: 'SAR',
+  CNY: '¥',
+  RUB: '₽',
+  CAD: 'C$',
+  AUD: 'A$',
+};
+
+type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 'RUB' | 'CAD' | 'AUD';
  
  interface FilterState {
    search: string;
