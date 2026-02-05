@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Briefcase, User, ChevronDown, Check, Loader2 } from "lucide-react";
+import { Briefcase, User, ChevronDown, Check, Loader2, Users } from "lucide-react";
 import { useUserMode, UserMode } from "@/hooks/useUserMode";
 import { useUserRole } from "@/hooks/useUserRole";
 import { cn } from "@/lib/utils";
@@ -17,18 +16,30 @@ interface ModeSwitcherProps {
   className?: string;
 }
 
-const MODE_CONFIG: Record<UserMode, { label: string; icon: typeof User; color: string; bgColor: string }> = {
-  client: {
-    label: 'Client Mode',
+const MODE_CONFIG: Record<UserMode, { label: string; shortLabel: string; icon: typeof User; color: string; bgColor: string; description: string }> = {
+  investor: {
+    label: 'Investor Mode',
+    shortLabel: 'I',
     icon: User,
     color: 'text-emerald-500',
-    bgColor: 'bg-emerald-500/10 border-emerald-500/30'
+    bgColor: 'bg-emerald-500/10 border-emerald-500/30',
+    description: 'Browse properties & invest'
   },
   broker: {
     label: 'Broker Mode',
+    shortLabel: 'B',
     icon: Briefcase,
     color: 'text-gold',
-    bgColor: 'bg-gold/10 border-gold/30'
+    bgColor: 'bg-gold/10 border-gold/30',
+    description: 'Access broker tools & dashboard'
+  },
+  investor_broker: {
+    label: 'Investor + Broker',
+    shortLabel: 'I+B',
+    icon: Users,
+    color: 'text-purple-500',
+    bgColor: 'bg-purple-500/10 border-purple-500/30',
+    description: 'Full access to both modes'
   }
 };
 
@@ -40,11 +51,13 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
   // Don't show mode switcher if user hasn't selected a role yet
   if (!hasSelectedRole) return null;
 
-  // Only show broker mode option if user has broker-related role
-  const canAccessBrokerMode = role === 'broker' || role === 'broker_partner';
+  // Check if user can access broker mode - now includes broker_jbj
+  const canAccessBrokerMode = role === 'broker' || role === 'broker_partner' || role === 'broker_jbj';
 
   const handleModeChange = async (newMode: UserMode) => {
-    if (newMode === 'broker' && !canAccessBrokerMode) {
+    // Check if mode requires broker access
+    const requiresBroker = newMode === 'broker' || newMode === 'investor_broker';
+    if (requiresBroker && !canAccessBrokerMode) {
       toast.error('You need a broker role to access Broker Mode');
       return;
     }
@@ -53,9 +66,7 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
     setIsOpen(false);
     
     toast.success(`Switched to ${MODE_CONFIG[newMode].label}`, {
-      description: newMode === 'broker' 
-        ? 'Broker tools and features are now visible' 
-        : 'Client features are now visible'
+      description: MODE_CONFIG[newMode].description
     });
   };
 
@@ -65,12 +76,11 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
   if (variant === 'compact') {
     return (
       <button
-        onClick={() => canAccessBrokerMode && handleModeChange(mode === 'client' ? 'broker' : 'client')}
-        disabled={isLoading || !canAccessBrokerMode}
+        onClick={() => setIsOpen(true)}
+        disabled={isLoading}
         className={cn(
           "flex items-center gap-1.5 px-2 py-1 rounded-full border transition-all duration-300",
           currentConfig.bgColor,
-          !canAccessBrokerMode && "opacity-50 cursor-not-allowed",
           className
         )}
       >
@@ -80,7 +90,7 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
           <CurrentIcon className={cn("w-3.5 h-3.5", currentConfig.color)} />
         )}
         <span className={cn("text-xs font-medium", currentConfig.color)}>
-          {mode === 'broker' ? 'B' : 'C'}
+          {currentConfig.shortLabel}
         </span>
       </button>
     );
@@ -116,7 +126,7 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
       
       <DropdownMenuContent 
         align="end" 
-        className="w-56 bg-white border border-zinc-200 shadow-xl rounded-xl p-1"
+        className="w-64 bg-white border border-zinc-200 shadow-xl rounded-xl p-1"
       >
         <div className="px-3 py-2 border-b border-zinc-100 mb-1">
           <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
@@ -127,7 +137,8 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
         {Object.entries(MODE_CONFIG).map(([modeKey, config]) => {
           const Icon = config.icon;
           const isActive = mode === modeKey;
-          const isDisabled = modeKey === 'broker' && !canAccessBrokerMode;
+          const requiresBroker = modeKey === 'broker' || modeKey === 'investor_broker';
+          const isDisabled = requiresBroker && !canAccessBrokerMode;
           
           return (
             <DropdownMenuItem
@@ -156,9 +167,7 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
                   {config.label}
                 </p>
                 <p className="text-xs text-zinc-500">
-                  {modeKey === 'broker' 
-                    ? 'Access broker tools & dashboard' 
-                    : 'Browse properties & invest'}
+                  {config.description}
                 </p>
               </div>
               {isActive && (
