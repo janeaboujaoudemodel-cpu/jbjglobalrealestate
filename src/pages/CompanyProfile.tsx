@@ -30,7 +30,6 @@ import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import { toast } from "sonner";
 import { FounderContent } from "@/components/FounderContent";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
-import Footer from "@/components/Footer";
 
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import founderCompanyProfile from "@/assets/founder-company-profile.jpg";
@@ -1289,9 +1288,6 @@ const CompanyProfile = () => {
           </div>
         </motion.div>
       </SectionShell>
-
-      {/* Footer */}
-      <Footer />
 
       {/* Mobile Sticky Actions */}
       <div className="lg:hidden fixed bottom-4 left-4 right-4 z-50 flex gap-2">

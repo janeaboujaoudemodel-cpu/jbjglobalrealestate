@@ -1,5 +1,4 @@
 import { Trophy, Star, Award, Medal } from "lucide-react";
-import Footer from "@/components/Footer";
 import { useCountUp } from "@/hooks/useCountUp";
 import { COMPANY_STATS, CONTACT_INFO } from "@/constants/stats";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
@@ -177,8 +176,6 @@ const Awards = () => {
             </div>
           </div>
         </section>
-
-        <Footer />
       </div>
     </>
   );

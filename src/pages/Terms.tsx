@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
-import Footer from "@/components/Footer";
 import { FounderContent } from "@/components/FounderContent";
 
 
@@ -185,7 +184,6 @@ const Terms = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </section>
   );
 };

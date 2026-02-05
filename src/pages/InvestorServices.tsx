@@ -3,7 +3,6 @@ import { ArrowRight, TrendingUp, Search, BarChart3, FileText, Shield, PieChart, 
 import { Link } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
 import GlobalHeader from "@/components/GlobalHeader";
-import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { type ReactNode } from "react";
@@ -607,8 +606,6 @@ const InvestorServices = () => {
           </motion.div>
         </SectionShell>
       </main>
-      
-      <Footer />
     </>
   );
 };

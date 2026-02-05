@@ -1,7 +1,6 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
-import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -912,8 +911,6 @@ jbj.ae
           </motion.div>
         )}
       </div>
-
-      <Footer />
     </section>
   );
 };

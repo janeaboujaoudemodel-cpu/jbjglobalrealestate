@@ -13,7 +13,6 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Footer from "@/components/Footer";
 import ComplianceDisclaimer from "@/components/ComplianceDisclaimer";
 
 const PARTNER_SERVICES = [
@@ -267,8 +266,6 @@ const Partners = () => {
           </div>
         </section>
       </main>
-
-      <Footer />
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { Heart, Users, Globe, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { PreFooterSeparator } from "@/components/PreFooterSeparator";
@@ -117,7 +116,6 @@ const Philanthropy = () => {
         secondaryText="About Us"
       />
 
-      <Footer />
     </div>
   );
 };
