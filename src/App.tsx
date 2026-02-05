@@ -188,6 +188,10 @@ import GovernmentMethodology from "./pages/governance/GovernmentMethodology";
 
 // Communication & Productivity Tools
 import CompanyComm from "./pages/CompanyComm";
+
+// Creative Suite
+import Studio from "./pages/Studio";
+import StudioEditor from "./pages/StudioEditor";
 import EmailClient from "./pages/EmailClient";
 import TeamChat from "./pages/TeamChat";
 import KanbanBoard from "./pages/KanbanBoard";
@@ -465,6 +469,10 @@ const App = () => (
                 <Route path="/mindmap" element={<MindMap />} />
                 <Route path="/presentations" element={<Presentations />} />
                 <Route path="/form-builder" element={<FormBuilder />} />
+                
+                {/* Creative Suite */}
+                <Route path="/studio" element={<Studio />} />
+                <Route path="/studio/editor/:projectId" element={<StudioEditor />} />
                 
                 {/* Admin & System Tools */}
                 <Route path="/customer-happiness" element={<CustomerHappiness />} />
