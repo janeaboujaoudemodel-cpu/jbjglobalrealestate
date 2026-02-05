@@ -1,309 +1,444 @@
 
-## What’s happening (root causes found)
+# Implementation Plan: Dashboard Completion, Program/Library Connection, CTA Sections, Subscription UX & Notification Settings
 
-### 1) Listing Admin overlap with “Connect With Our Team” / newsletter
-- `MainLayout.tsx` currently treats “admin” as only routes starting with `/admin`.
-- The Listing Admin lives at `/listing-admin`, so it is incorrectly treated as a public page.
-- Result: `DirectContactCTA`, `NewsletterBand`, and the global `Footer` render under Listing Admin, and because Listing Admin uses its own sticky headers / internal scroll areas, these global sections can appear to “overlay” or visually collide with the admin extraction panels.
-
-**File involved:** `src/components/MainLayout.tsx`  
-**Current logic:** `const isAdminRoute = location.pathname.startsWith("/admin");` (missing `/listing-admin`)
+## Overview
+This plan addresses 9 tasks to complete the user dashboard experience, connect program sections, improve subscription UX, and implement comprehensive notification settings. All changes will use the approved UI system (black base, champagne/gold active layer, gold borders).
 
 ---
 
-### 2) Duplicate footer / duplicated “Connect With Our Team” + “Stay in the Loop”
-- `MainLayout.tsx` now renders these globally for most pages:
-  - `<DirectContactCTA />`
-  - `<NewsletterBand />`
-  - `<Footer />`
-- But a very large number of pages/components still render their own `<Footer />` (and sometimes their own CTAs).
-- Result: users see two footers, and the “global” pre-footer sections appear “under” the first footer, which feels like duplicated/incorrect layout.
+## Task 1 — Connect "About This Program" + "Education Library" Sections
 
-**Files involved (examples):**
-- `src/components/MainLayout.tsx` (global footer/CTA/newsletter)
-- Many pages under `src/pages/**` still import & render `<Footer />` (your repo search shows 1000+ matches)
+### Current State
+- `src/pages/BrokerEducation.tsx` has separate sections:
+  - "About This Program" (lines 178-218)
+  - "Education Library" (lines 220-297)
+- They are styled consistently but feel disconnected
 
----
+### Implementation
 
-### 3) “All 1,804 are Incomplete” in the approval queue
-This is happening for two separate reasons:
+1. **Add a transitional bridge element** between the two sections:
+   - Insert a "bridge" subheading/connector below "About This Program"
+   - Text: "Now that you understand the program, explore your learning resources below"
+   - Use a visual connector (arrow or line) pointing downward
+   - Apply same `jj-layer-2` background treatment for continuity
 
-#### (a) Reelly sync provides only 1 image per project
-- In `pending_project_imports`, Reelly items typically have only the cover image.
-- Your database confirms: all 1,804 pending Reelly imports have `< 2` images.
-  - `pending_lt2_images = 1804`
+2. **Adjust spacing rhythm**:
+   - Remove `py-12 md:py-16` gap between sections
+   - Use a shared container or reduce bottom padding on "About" and top padding on "Library"
+   - Keep both in a single visual flow using consistent background
 
-#### (b) The UI still treats “documents missing” as “incomplete”
-- `PendingImportCard.tsx` currently marks an item incomplete if `documents.length === 0`.
-- Reelly API imports often don’t include documents. Per your own completeness spec, documents are no longer mandatory for “Complete”.
+3. **Update section headings for journey logic**:
+   - "About This Program" → "Step 1: Understand the Program"
+   - "Education Library" → "Step 2: Explore Your Learning Resources"
+   - (optional) Add breadcrumb-style numbering for continuity
 
-**Files involved:**
-- `src/components/listing-admin/PendingImportCard.tsx` (incorrect completeness rule)
-- `src/components/listing-admin/ProjectApprovalQueue.tsx` (queue logic is closer to correct)
-- `supabase/functions/reelly-api-sync/index.ts` (only cover image mapped)
+### Files to Modify
+- `src/pages/BrokerEducation.tsx`
 
 ---
 
-### 4) Clicking “Repair Project” removes images
-- `repair-project-extraction` currently overwrites `pending_project_imports.images` with whatever it finds.
-- If the repair scrape fails to find valid images, it writes an empty array (or a very reduced set), wiping the previously-existing cover image.
-- This explains: “repair → photos disappeared”.
+## Task 2 — Fix "My Dashboard" to Include All Required Features
 
-**File involved:** `supabase/functions/repair-project-extraction/index.ts`  
-**Bug:** updates `images` unconditionally, even if new image extraction is empty/invalid.
+### Current State
+- `src/pages/Dashboard.tsx` is a router that redirects to role-specific dashboards
+- `StandardUserDashboard.tsx` only shows role selection cards
+- There is no unified "My Dashboard" page with all modules
 
----
+### Implementation
 
-### 5) Project hero empty / cropped / zoomed
-There are likely two different scenarios:
-1) **Empty hero**: the project has no usable `project_images` rows (or they were never inserted / got wiped by repair logic cascading).
-2) **Cropped / zoomed**: hero uses `object-cover`, which can heavily crop certain images. This is amplified if the stored images are small/odd aspect ratios.
+1. **Create a complete user dashboard page** (`src/pages/MyDashboard.tsx`):
+   - Must contain all required modules
 
-**Files involved (primary):**
-- `src/pages/ProjectDetail.tsx` (maps DB → UI)
-- `src/components/project-detail/ProjectDetailLayout.tsx` (hero rendering / image carousel usage)
+2. **Required Dashboard Modules**:
 
----
+   **A) My Favorites Card**
+   - Use `useFavorites()` hook to fetch saved projects
+   - Display count + preview of latest 3 projects
+   - Link to `/favorites`
 
-### 6) Hashtags shown (e.g., “#…”) where you asked to remove them
-- `DataFreshnessIndicator.tsx` explicitly renders `#{externalId.slice(0, 8)}`.
-- This is a literal hashtag display and should not be shown on public UI.
+   **B) My Shortlists Card**
+   - Use `useShortlist()` hook
+   - Display count + preview cards
+   - Link to `/favorites?tab=shortlist`
 
-**File involved:** `src/components/project-detail/DataFreshnessIndicator.tsx`
+   **C) My Badges / Level Card**
+   - Use `useTierProgress()` hook for tier data
+   - Display current level: Starter/Rising/Performer/Elite/Legend
+   - Show badge icons and progress bar to next level
 
----
+   **D) My Profile Summary Card**
+   - Fetch from `user_metadata` + `crm_users_profile`
+   - Show: name, role label, level label, points summary
+   - Photo/initials avatar
 
-### 7) Map requirements not met + “maps.google.com refused to connect”
-- Project detail currently uses Google embed with an API key hardcoded in the frontend (`MAPS_API_KEY`).
-- Hardcoded keys and embed restrictions can lead to intermittent “refused to connect” / “blocked” experiences depending on browser / iframe / referrer restrictions.
-- You also require:
-  - Satellite view
-  - Navigation controls
-  - Ability to change view (satellite/terrain)
-  - Reelly-like behavior
+   **E) Quick Actions Grid**
+   - Buttons/links to:
+     - Broker Hub (`/broker-toolkit`)
+     - Investor Hub (`/ai-hub`)
+     - Developer Visits (`/developer-visits`)
+     - Register Deal (`/register-deal`)
+     - Request Support (`/contact`)
+     - View Progress (`/broker-education`)
 
-**File involved:** `src/components/project-detail/ProjectDetailLayout.tsx`  
-**Related:** `src/constants/filterConfig.ts` already contains satellite tile URLs (good foundation to use Leaflet instead of Google embeds).
+   **F) Activity Overview Card**
+   - Fetch from `points_ledger` / activity tracking
+   - Show: days logged in, streak, skipped days
+   - Use `usePointsLedger()` for data
 
----
+   **G) Notifications Panel Preview**
+   - Show latest 5 notifications from `notifications` table
+   - "Manage Notifications" link → `/profile?tab=settings`
 
-## Goals (what I will deliver)
+3. **Route Registration**:
+   - Add `/my-dashboard` route in `App.tsx`
+   - Import and render `MyDashboard` component
 
-1) Listing Admin never shows public footer/CTA/newsletter and never overlaps content.
-2) One footer only (no duplicates anywhere).
-3) Reelly pending imports stop being “all incomplete”:
-   - remove “documents required” from completeness
-   - ensure Reelly imports have at least 2 real images (or adjust Reelly-specific rule if you confirm that’s acceptable)
-4) Repair actions never delete/blank-out existing images.
-5) Project detail hero always has a valid image and is not “over-zoomed”.
-6) Remove all hashtag displays from public UI.
-7) Replace the project map implementation so:
-   - it uses satellite tiles by default
-   - supports view toggling + navigation controls
-   - “Open in Maps/WhatsApp/Email/Call” never opens blocked iframes; always opens correctly as external actions
-8) Bring Reelly detail completeness closer to Reelly portal: floor plans, amenities, payment breakdown, etc., using API first and fallback extraction only where needed.
+4. **Data Behavior**:
+   - All data fetched from backend (favorites, shortlists, badges, points)
+   - Persisted and retrieved on login
 
----
+### Files to Create
+- `src/pages/MyDashboard.tsx`
+- `src/components/dashboard/FavoritesCard.tsx`
+- `src/components/dashboard/ShortlistCard.tsx`
+- `src/components/dashboard/BadgesLevelCard.tsx`
+- `src/components/dashboard/ProfileSummaryCard.tsx`
+- `src/components/dashboard/ActivityOverviewCard.tsx`
+- `src/components/dashboard/NotificationsPreview.tsx`
 
-## Implementation plan (sequenced, minimal-risk)
-
-### Phase 1 — Immediate layout stability (fix admin overlap + remove duplicate footer)
-#### 1.1 Fix Listing Admin being treated like a public route
-- Update `MainLayout.tsx` to use a single “back-office route” boolean:
-  - true for `/admin/*` AND `/listing-admin/*` AND any internal dashboards you consider back-office.
-- When in back-office:
-  - do not render global `DirectContactCTA`, `NewsletterBand`, or global `Footer`.
-
-**Change:** `src/components/MainLayout.tsx`
-
-#### 1.2 Remove duplicate footers (single source of truth)
-- Decide and enforce: footer is rendered centrally (in `MainLayout`) for public pages only.
-- Remove `<Footer />` from:
-  - pages that still include it
-  - components that include it (critical: `ProjectDetailLayout.tsx` currently imports `Footer`)
-- Same for any duplicated `DirectContactCTA` / `NewsletterBand` calls on pages where global rendering already exists.
-
-**Changes (high priority first):**
-- `src/components/project-detail/ProjectDetailLayout.tsx` (remove internal footer rendering; rely on layout)
-- `src/pages/PropertiesReelly.tsx` (remove internal footer rendering; rely on layout)
-- Then run a repo-wide sweep for pages that still import/render `Footer`
-
-**Acceptance criteria:**
-- On any public page, scrolling to bottom shows exactly one footer.
-- On Listing Admin, there is no “Connect With Our Team” and no public footer at all.
-
-**Screenshot proof to provide after implementation:**
-- Listing Admin page with extraction section visible (no overlap)
-- A public page bottom showing single footer
+### Files to Modify
+- `src/App.tsx` (add route)
+- `src/components/dashboard/index.ts` (exports)
 
 ---
 
-### Phase 2 — Fix “Incomplete everywhere” + stop “Repair” from wiping media
-#### 2.1 Fix completeness logic in the card UI (documents not mandatory)
-- Update `PendingImportCard.tsx` to align with the approved completeness criteria:
-  - “Complete” requires description + valid developer + at least 2 unique images
-  - documents are not required (especially for Reelly)
-- Also ensure badges/counts don’t contradict the queue filters.
+## Task 3 — Fix Profile Icon + Account Menu Display
 
-**Change:** `src/components/listing-admin/PendingImportCard.tsx`
+### Current State
+- `src/components/header/MegaMenuAccount.tsx` has `getInitials()` function (lines 72-78)
+- Currently extracts initials from account display name correctly
+- Account dropdown shows display name and email
 
-#### 2.2 Ensure Reelly sync brings 2+ images per project into pending imports
-- Enhance `reelly-api-sync` mapping:
-  - Use `cover_image.url` as image 1
-  - Add additional images if available in API payload (e.g., video thumbnails if present)
-  - If API does not provide more images, trigger a controlled “fill missing assets” step for items with <2 images:
-    - use existing `reelly-fill-missing-assets` as the fallback to scrape *only for assets* (gallery, floor plans, docs), not as the primary source
+### Implementation
 
-**Change:** `supabase/functions/reelly-api-sync/index.ts`  
-**Potential enhancement:** extend `reelly-fill-missing-assets` to also add gallery images (not just floorplans/docs)
+1. **Ensure two-letter initials (First + Family)**:
+   - Current `getInitials()` already splits by space and takes first 2 letters
+   - Verify it works with full names like "Jane Bou Jaoude" → "JB"
+   - If user has only first name, show single letter
 
-#### 2.3 Make “Repair project” safe (never deletes existing images/documents)
-- Update `repair-project-extraction`:
-  - If it extracts **0 valid images**, do not overwrite `pending_project_imports.images`
-  - Same for documents
-  - Add source-aware handling:
-    - If `source_url` indicates Reelly, do Reelly-safe repair strategy (API + fill-missing-assets fallback), not a generic scrape that can return empty
+2. **Update hover menu to show**:
+   - Full first + family name (already showing `accountDisplayName`)
+   - Add role label badge (Client/Partner Broker/JBJ Employee Broker)
+   - Add level label badge (Starter/Rising/Performer/Elite/Legend)
+   
+3. **Role/Level badge implementation**:
+   - Fetch user role from `user_role_selections` table
+   - Fetch tier/level from `useTierProgress()` hook
+   - Display as `<Badge>` components below name
 
-**Change:** `supabase/functions/repair-project-extraction/index.ts`
+4. **Text contrast compliance**:
+   - Verify all text has proper contrast (black on champagne)
+   - No white text on light backgrounds
+   - Phone numbers in black
 
-**Acceptance criteria:**
-- Clicking Repair never reduces images from 1 → 0.
-- Reelly queue starts showing “Complete” items once images >=2 (and the UI no longer requires documents).
-
-**Screenshot proof:**
-- Pending import card before repair (with image)
-- After repair (still has image, ideally improved with more images)
-- Approval queue filter counts showing some “Complete”
+### Files to Modify
+- `src/components/header/MegaMenuAccount.tsx`
+- `src/components/GlobalHeader.tsx` (avatar fallback for two initials)
 
 ---
 
-### Phase 3 — Project detail fixes (hero images, hashtags removal, developer readability)
-#### 3.1 Fix empty hero + reduce aggressive cropping
-- Ensure the hero uses the best available image and never renders “empty” if images exist.
-- Implement “smart-fit”:
-  - default to `object-cover`
-  - if an image is too portrait / too small or causes extreme crop, switch to `object-contain` within the hero frame (no zoomed-in feeling)
+## Task 4 — Add "My Dashboard" Shortcut in 3 Places
 
-**Likely changes:**
-- `src/components/ImageCarousel.tsx` and/or the hero section inside `src/components/project-detail/ProjectDetailLayout.tsx`
+### Implementation
 
-#### 3.2 Remove hashtags from public UI
-- Remove the `#` external id display from `DataFreshnessIndicator` (or hide it behind an admin-only toggle).
+1. **Under My Account icon (hover dropdown)**:
+   - Add to `accountLinks` array in `MegaMenuAccount.tsx`:
+   ```tsx
+   { href: '/my-dashboard', label: 'My Dashboard', icon: LayoutDashboard, description: 'Your personalized dashboard' }
+   ```
 
-**Change:** `src/components/project-detail/DataFreshnessIndicator.tsx`
+2. **In the footer navigation**:
+   - Add to `investorHubLinks` or create new section in `Footer.tsx`:
+   ```tsx
+   { label: "My Dashboard", href: "/my-dashboard" }
+   ```
 
-#### 3.3 Developer section styling fixes (no black-on-active-layer “double black”)
-- Adjust `DeveloperInfoCard` so inner stat cards and description blocks use the approved champagne card system (no extra black slabs under active layer).
-- Ensure developer fields display properly:
-  - founded year
-  - headquarters
-  - description
-  - portfolio stats when available
+3. **Under "Your Account" area**:
+   - Already covered by #1 above (same dropdown)
+   - Ensure only one label: "My Dashboard" (no duplicates)
 
-**Change:** `src/components/project-detail/DeveloperInfoCard.tsx`
+4. **Verify routing**:
+   - Confirm `/my-dashboard` route exists and doesn't 404
 
-**Screenshot proof:**
-- A project detail hero before/after (showing correct fit)
-- Developer section before/after (readable, champagne cards, no extra black layer)
-- A view showing no hashtags anywhere
+### Files to Modify
+- `src/components/header/MegaMenuAccount.tsx`
+- `src/components/Footer.tsx`
+- `src/components/GlobalHeader.tsx` (mobile menu)
 
 ---
 
-### Phase 4 — Map overhaul (satellite + navigation + view toggle + no blocked embeds)
-#### 4.1 Replace Google iframe embed on project detail with Leaflet tiles
-- Use the existing tile definitions in `src/constants/filterConfig.ts` (already includes a satellite tile provider).
-- Provide:
-  - Satellite by default
-  - Toggle to “Terrain/Street”
-  - Zoom controls + pan (navigation)
-- Keep “Open in Maps” as an external link (new tab), but do not embed `maps.google.com`.
+## Task 5 — Connect "Connect With Our Team" + "Stay in the Loop" (Broker Books Page)
 
-**Change:** `src/components/project-detail/ProjectDetailLayout.tsx` (location section)  
-**Potential new component:** `ProjectLocationMap.tsx` (Leaflet-based, reused in other pages)
+### Current State
+- `DirectContactCTA` and `NewsletterBand` are separate components
+- Rendered globally via `MainLayout.tsx`
+- Both have champagne backgrounds but are separate blocks
 
-#### 4.2 Standardize external action opening (WhatsApp / Email / Call / Maps)
-- Add a shared helper so external actions always open correctly and never attempt to load inside an iframe.
-- Ensure all these actions use `target="_blank" rel="noopener noreferrer"` where applicable.
+### Implementation
 
-**Acceptance criteria:**
-- No more “refused to connect” for maps in the site UI.
-- Map view is switchable and matches your Reelly-style requirement.
+1. **Create a combined CTA section** for the broker education page:
+   - New component: `src/components/CombinedContactNewsletter.tsx`
+   - Single container with shared background layer
+   - Structure:
+     - "Connect With Our Team" section (3 contact cards)
+     - Subtle divider (gold line)
+     - "Stay in the Loop" section (newsletter form)
 
-**Screenshot proof:**
-- Map section showing satellite view + toggle
-- “Open in Maps” click result (opens externally, not embedded)
+2. **Visual continuity**:
+   - Single rounded container with champagne gradient
+   - Shared border treatment
+   - Consistent padding and alignment
 
----
+3. **Implementation approach**:
+   - Create new component that combines both
+   - For broker education page specifically, use this combined version
+   - Keep global separate components for other pages
 
-### Phase 5 — Reelly “missing details” extraction parity (floor plans, amenities, payment breakdown, etc.)
-#### 5.1 Parse Reelly API `overview` into structured fields
-- Implement a parser that extracts:
-  - FAQs
-  - location distances
-  - payment breakdown
-  - USP bullets
-  - amenities list
-  - construction progress/expected completion (when present)
-- Store these in `pending_project_imports`, and ensure approval copies them into `projects`.
+### Files to Create
+- `src/components/CombinedContactNewsletter.tsx`
 
-**Changes:**
-- `supabase/functions/reelly-api-sync/index.ts` (populate more fields during import)
-- Approval pipeline code (where pending import is copied to projects) to ensure all extended fields are mapped
-
-#### 5.2 Use `reelly-fill-missing-assets` as fallback only
-- For records still missing floor plans/docs/gallery after API parsing:
-  - run fill-missing-assets in batches on the missing subset
-- Strictly keep “floor plan isolation” (no mixing images/sections).
-
-**Screenshot proof:**
-- A project detail page showing floor plans + amenities + payment plan populated (not placeholders)
+### Files to Modify
+- `src/pages/BrokerEducation.tsx` (use combined component if approved)
 
 ---
 
-### Phase 6 — Mortgage + AI reliability + logging (requested, but will be done after stability fixes)
-Because this touches both UI and backend data storage, I’ll implement it after the layout/data fixes above so we don’t compound failures:
+## Task 6 — Make All Contact Detail Cards Clickable + Verify Correct Destinations
 
-#### 6.1 Mortgage section ordering
-- Move “Request mortgage partner introduction” to the bottom of the mortgage section, and ensure it sits before the AI assistant exactly as you specified.
+### Current State
+- `DirectContactCTA.tsx` already has clickable cards (lines 124-174):
+  - WhatsApp → `getWhatsAppUrl()` (opens WhatsApp)
+  - Call → `getCallUrl()` (initiates tel:)
+  - Email → `mailto:${CONTACT_INFO.email}`
 
-#### 6.2 Faster AI Mortgage Assistant responses
-- Switch to a faster supported model (and tune prompt for brevity + structured outputs).
-- Add “government sources only” behavior via retrieval:
-  - restricted search/scrape from official domains
-  - include citations in responses
+### Implementation
 
-#### 6.3 Persist AI interactions (Mortgage Assistant + Market Analyzer)
-- Add a backend table to store:
-  - user_id
-  - question
-  - answer
-  - tool name (mortgage / analyzer)
-  - project context
-  - timestamps
-  - (optional) sources/citations
+1. **Verify all cards are properly clickable**:
+   - WhatsApp: `target="_blank" rel="noopener noreferrer"`
+   - Call: `href="tel:+971..."` (no target needed)
+   - Email: `href="mailto:..."` (no target needed)
 
-**Screenshot proof:**
-- UI showing a saved interaction
-- Admin/back-office view showing saved logs
+2. **Add Location card if missing**:
+   - Opens Google Maps or contact page section
+   - Use external link to maps with coordinates
 
----
+3. **Stay in the Loop functionality**:
+   - Newsletter form is already functional
+   - Verify it saves to backend via `capture-lead` edge function
 
-## Critical clarifications I need from you (to avoid doing the wrong thing)
-1) For Reelly “Complete” status: do you still require **2 images minimum**, or should Reelly be considered complete with **1 cover image** (since the API may not provide full galleries)?
-2) When you click a listing from `/properties`, should it show:
-   - the full project detail immediately (even if not manually approved), or
-   - only after it’s approved in Listing Admin?
+4. **Connect with Our Team behavior**:
+   - Cards already link to actions (WhatsApp/Call/Email)
+   - Add optional scroll to form section if needed
 
-(Your message suggests you want full API-driven detail visible on the website without waiting for manual approval, which affects the architecture.)
+### Files to Verify/Modify
+- `src/components/DirectContactCTA.tsx`
+- `src/constants/stats.ts` (verify URLs)
 
 ---
 
-## QA + screenshot proof pack (what I will deliver after implementation)
-- Listing Admin: no overlap, no public pre-footer sections
-- Public page: exactly one footer
-- Approval queue: incomplete logic corrected + visible “Complete” counts once images fixed
-- Repair action: before/after showing images preserved
-- Project detail: hero not empty and not over-cropped
-- Project detail: no hashtag IDs shown
-- Map: satellite + view toggle + open externally
+## Task 7 — "Stay in the Loop" Subscribe UX (No Page Reload, Popup Confirmation)
 
+### Current State
+- `NewsletterBrevo.tsx` uses `toast.success()` after subscription (line 73)
+- Shows inline success message, no page reload
+- Current toast: "Welcome to the JBJ Global Real Estate inner circle!"
+
+### Implementation
+
+1. **Replace toast with premium modal/dialog**:
+   - Create new component: `SubscriptionSuccessModal.tsx`
+   - Content:
+     - Title: "You're in."
+     - Message: "Thank you for subscribing to JBJ Global Real Estate updates."
+     - Secondary microcopy: "You can manage notifications anytime from My Profile → Settings."
+     - Visual arrow/path indicator showing: "My Account icon → My Profile → Settings"
+     - Close button
+
+2. **Ensure no page reload**:
+   - Already handled by async form submit in `NewsletterBrevo.tsx`
+   - `e.preventDefault()` is in place
+
+3. **Data handling**:
+   - Already saves to backend via `capture-lead` edge function
+   - Add `source_page` field for admin tracking (already included as `pageSource`)
+
+### Files to Create
+- `src/components/marketing/SubscriptionSuccessModal.tsx`
+
+### Files to Modify
+- `src/components/marketing/NewsletterBrevo.tsx` (use modal instead of toast)
+
+---
+
+## Task 8 — Build Notification Preferences (Settings) + "Receive Updates About Your Properties"
+
+### Current State
+- `src/pages/UserProfile.tsx` has Settings tab (lines 487-531)
+- Only has email notifications toggle
+- `user_preferences` table already has columns:
+  - `email_notifications` (boolean)
+  - `push_notifications` (boolean)
+  - `notification_preferences` (JSONB)
+
+### Implementation
+
+1. **Expand Settings tab with full notification controls**:
+
+   **A) Email Notifications Toggle**
+   - Already exists (line 503-508)
+   - Label: "Receive updates about your properties"
+
+   **B) Pop-up/In-app Notifications Toggle**
+   - New toggle for in-app alerts
+   - Save to `user_preferences.push_notifications`
+
+   **C) Browser Notifications Toggle**
+   - Use `Notification.requestPermission()` API
+   - Store preference in `user_preferences.notification_preferences.browser_enabled`
+
+   **D) Master Toggle - Turn Off All**
+   - Single toggle to disable all notification types
+   - When enabled, sets all individual toggles to false
+
+2. **"Receive updates about your properties" feature**:
+   - When enabled, user receives:
+     - News highlights (daily/weekly)
+     - Property updates/alerts
+     - Login reminders
+   - Delivery channels follow enabled toggles
+
+3. **UX Guidance after subscription**:
+   - After newsletter subscription, show path to settings:
+   - Arrow/hint: "My Profile → Settings"
+
+4. **Backend persistence**:
+   - Create/update `user_preferences` row on toggle change
+   - Use JSONB for granular notification type settings
+   - Add audit trail by updating `updated_at` timestamp
+
+5. **Create new hook** `useNotificationPreferences.ts`:
+   - Fetch user preferences
+   - Update preferences with optimistic updates
+   - Handle browser notification permission
+
+### Files to Create
+- `src/hooks/useNotificationPreferences.ts`
+
+### Files to Modify
+- `src/pages/UserProfile.tsx` (expand Settings tab)
+- `src/components/marketing/SubscriptionSuccessModal.tsx` (add settings path hint)
+
+---
+
+## Task 9 — Backend Save Requirement (Mandatory Persistence)
+
+### Current State
+- Favorites/Shortlists: Already saved to `favorites`/`shortlists` tables via hooks
+- Subscription emails: Saved via `capture-lead` edge function to `crm_leads`
+- Notification preferences: Partially implemented in `user_preferences`
+
+### Implementation
+
+1. **Verify all data persistence**:
+
+   | Data | Table | Status |
+   |------|-------|--------|
+   | Favorites | `favorites` | ✅ Already persisted |
+   | Shortlists | `shortlists` | ✅ Already persisted |
+   | Subscription emails | `crm_leads` / `newsletter_subscribers` | ✅ Already persisted |
+   | Notification preferences | `user_preferences` | 🔧 Needs expansion |
+   | Dashboard progress widgets | New table or use `user_preferences.dashboard_config` | 🆕 To implement |
+
+2. **Enhance `user_preferences` for dashboard state**:
+   - Add `dashboard_widgets_config` JSONB column (if not using existing `display_preferences`)
+   - Store: collapsed/expanded widgets, widget order, etc.
+
+3. **Ensure logout/login persistence**:
+   - All hooks should query by `user_id` on load
+   - No localStorage-only storage for critical data
+
+4. **Database migration** (if needed):
+   - Add `browser_notifications` column to `user_preferences`
+   - Add `notification_frequency` column (daily/weekly/instant)
+
+### Files to Modify
+- `src/hooks/useNotificationPreferences.ts` (new hook with backend sync)
+- Database migration for any new columns
+
+---
+
+## Database Schema Changes
+
+### Migration: Enhance user_preferences
+
+```sql
+-- Add notification-related columns if not present
+ALTER TABLE user_preferences 
+ADD COLUMN IF NOT EXISTS browser_notifications boolean DEFAULT false,
+ADD COLUMN IF NOT EXISTS notification_frequency text DEFAULT 'instant',
+ADD COLUMN IF NOT EXISTS dashboard_config jsonb DEFAULT '{}';
+
+-- Add index for performance
+CREATE INDEX IF NOT EXISTS idx_user_preferences_user_id ON user_preferences(user_id);
+```
+
+---
+
+## Files Summary
+
+### Files to Create
+1. `src/pages/MyDashboard.tsx` - Main dashboard page
+2. `src/components/dashboard/FavoritesCard.tsx` - Favorites widget
+3. `src/components/dashboard/ShortlistCard.tsx` - Shortlist widget
+4. `src/components/dashboard/BadgesLevelCard.tsx` - Level/tier widget
+5. `src/components/dashboard/ProfileSummaryCard.tsx` - Profile widget
+6. `src/components/dashboard/ActivityOverviewCard.tsx` - Activity widget
+7. `src/components/dashboard/NotificationsPreview.tsx` - Notifications widget
+8. `src/components/CombinedContactNewsletter.tsx` - Combined CTA section
+9. `src/components/marketing/SubscriptionSuccessModal.tsx` - Premium modal
+10. `src/hooks/useNotificationPreferences.ts` - Notification settings hook
+
+### Files to Modify
+1. `src/pages/BrokerEducation.tsx` - Connect sections (Task 1)
+2. `src/components/header/MegaMenuAccount.tsx` - Profile icon, initials, dashboard link (Tasks 3, 4)
+3. `src/components/GlobalHeader.tsx` - Two-letter initials, role/level badges (Tasks 3, 4)
+4. `src/components/Footer.tsx` - Dashboard link (Task 4)
+5. `src/components/DirectContactCTA.tsx` - Verify clickable cards (Task 6)
+6. `src/components/marketing/NewsletterBrevo.tsx` - Use modal instead of toast (Task 7)
+7. `src/pages/UserProfile.tsx` - Expand notification settings (Task 8)
+8. `src/App.tsx` - Add `/my-dashboard` route (Task 2)
+9. `src/components/dashboard/index.ts` - Export new components
+
+---
+
+## UI Compliance
+
+All new components will follow the approved UI system:
+- Black base background (`bg-black`)
+- Champagne/gold active layer (`jj-layer-2`, `[background:var(--jj-gradient-active)]`)
+- Pearl cards (`jj-card-inner`)
+- Gold borders for inputs (`border-2 border-gold/50`)
+- Primary buttons for main CTAs (`variant="primary"`)
+- No white active states
+- Text contrast compliant (black text on light backgrounds)
+
+---
+
+## Implementation Order
+
+1. **Phase 1**: Database migration + Task 9 (backend foundations)
+2. **Phase 2**: Task 2 (My Dashboard page with all modules)
+3. **Phase 3**: Tasks 3-4 (Profile icon fixes + dashboard shortcuts)
+4. **Phase 4**: Tasks 7-8 (Subscription UX + notification settings)
+5. **Phase 5**: Tasks 1, 5-6 (Section connections + contact card verification)
+
+Each task will include screenshot proof upon completion.
