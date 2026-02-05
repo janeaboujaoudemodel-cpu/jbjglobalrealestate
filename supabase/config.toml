@@ -132,5 +132,8 @@ verify_jwt = false
  [functions.restore-to-reelly]
  verify_jwt = false
  
- [functions.reelly-projects]
- verify_jwt = false
+[functions.reelly-projects]
+verify_jwt = false
+
+[functions.video-resize-process]
+verify_jwt = false
