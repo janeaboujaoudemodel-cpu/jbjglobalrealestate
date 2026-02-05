@@ -53,22 +53,18 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
   // Don't show mode switcher if user hasn't selected a role yet
   if (!hasSelectedRole) return null;
 
-  // Check if user can access broker mode - now includes broker_jbj
-  const canAccessBrokerMode = role === 'broker' || role === 'broker_partner' || role === 'broker_jbj';
-
-  const handleModeChange = async (newMode: UserMode) => {
-    // Check if mode requires broker access
-    const requiresBroker = newMode === 'broker' || newMode === 'investor_broker';
-    if (requiresBroker && !canAccessBrokerMode) {
-      toast.error('You need a broker role to access Broker Mode');
-      return;
-    }
+  const handleModeChange = async (newMode: UserMode, e?: React.MouseEvent) => {
+    // Prevent dropdown from closing immediately
+    e?.stopPropagation();
+    e?.preventDefault();
     
     await setMode(newMode);
-    setIsOpen(false);
     
     // Emit global event for immediate UI updates
     window.dispatchEvent(new CustomEvent('userModeChange', { detail: newMode }));
+    
+    // Close dropdown after successful mode change
+    setIsOpen(false);
     
     // Navigate to dashboard so user sees the change immediately
     navigate('/my-dashboard', { replace: true });
@@ -145,20 +141,16 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
         {Object.entries(MODE_CONFIG).map(([modeKey, config]) => {
           const Icon = config.icon;
           const isActive = mode === modeKey;
-          const requiresBroker = modeKey === 'broker' || modeKey === 'investor_broker';
-          const isDisabled = requiresBroker && !canAccessBrokerMode;
           
           return (
             <DropdownMenuItem
               key={modeKey}
-              onClick={() => !isDisabled && handleModeChange(modeKey as UserMode)}
-              disabled={isDisabled}
+              onClick={(e) => handleModeChange(modeKey as UserMode, e)}
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200",
                 isActive 
                   ? "bg-gradient-to-r from-gold/10 to-gold/5 border border-gold/20" 
-                  : "hover:bg-zinc-50",
-                isDisabled && "opacity-50 cursor-not-allowed"
+                  : "hover:bg-zinc-50"
               )}
             >
               <div className={cn(
@@ -184,17 +176,6 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
             </DropdownMenuItem>
           );
         })}
-        
-        {!canAccessBrokerMode && (
-          <div className="px-3 py-2 mt-1 border-t border-zinc-100">
-            <p className="text-xs text-zinc-400">
-              Broker Mode requires a broker role. 
-              <a href="/broker-toolkit" className="text-gold hover:underline ml-1">
-                Learn more
-              </a>
-            </p>
-          </div>
-        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

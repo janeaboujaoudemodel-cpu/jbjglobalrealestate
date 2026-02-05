@@ -613,7 +613,7 @@ const UserProfile = () => {
       
       {/* Email Change Dialog - OTP Based */}
       <Dialog open={showEmailChangeDialog} onOpenChange={handleEmailDialogClose}>
-        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 sm:max-w-md">
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 w-[95vw] max-w-md mx-auto">
           <DialogHeader>
             <DialogTitle className="text-foreground flex items-center gap-2">
               <Mail className="h-5 w-5 text-gold" />
@@ -661,13 +661,13 @@ const UserProfile = () => {
                     onChange={setOtpCode}
                     disabled={verifyingEmail}
                   >
-                    <InputOTPGroup>
-                      <InputOTPSlot index={0} className="border-gold/50 text-foreground" />
-                      <InputOTPSlot index={1} className="border-gold/50 text-foreground" />
-                      <InputOTPSlot index={2} className="border-gold/50 text-foreground" />
-                      <InputOTPSlot index={3} className="border-gold/50 text-foreground" />
-                      <InputOTPSlot index={4} className="border-gold/50 text-foreground" />
-                      <InputOTPSlot index={5} className="border-gold/50 text-foreground" />
+                    <InputOTPGroup className="gap-2">
+                      <InputOTPSlot index={0} className="w-12 h-14 border-2 border-gold/50 text-foreground text-xl font-bold bg-white rounded-lg" />
+                      <InputOTPSlot index={1} className="w-12 h-14 border-2 border-gold/50 text-foreground text-xl font-bold bg-white rounded-lg" />
+                      <InputOTPSlot index={2} className="w-12 h-14 border-2 border-gold/50 text-foreground text-xl font-bold bg-white rounded-lg" />
+                      <InputOTPSlot index={3} className="w-12 h-14 border-2 border-gold/50 text-foreground text-xl font-bold bg-white rounded-lg" />
+                      <InputOTPSlot index={4} className="w-12 h-14 border-2 border-gold/50 text-foreground text-xl font-bold bg-white rounded-lg" />
+                      <InputOTPSlot index={5} className="w-12 h-14 border-2 border-gold/50 text-foreground text-xl font-bold bg-white rounded-lg" />
                     </InputOTPGroup>
                   </InputOTP>
                 </div>
