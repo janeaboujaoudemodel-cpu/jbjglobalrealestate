@@ -4656,6 +4656,50 @@ export type Database = {
         }
         Relationships: []
       }
+      developer_sales_contacts: {
+        Row: {
+          created_at: string
+          developer_id: string
+          email: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          phone: string | null
+          photo_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          developer_id: string
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          phone?: string | null
+          photo_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          developer_id?: string
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          phone?: string | null
+          photo_url?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_sales_contacts_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       developer_sales_reps: {
         Row: {
           created_at: string
@@ -14824,6 +14868,83 @@ export type Database = {
         }
         Relationships: []
       }
+      training_completions: {
+        Row: {
+          completed_at: string
+          created_at: string
+          evidence_json: Json | null
+          id: string
+          module_id: string
+          points_awarded: number | null
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string
+          created_at?: string
+          evidence_json?: Json | null
+          id?: string
+          module_id: string
+          points_awarded?: number | null
+          user_id: string
+        }
+        Update: {
+          completed_at?: string
+          created_at?: string
+          evidence_json?: Json | null
+          id?: string
+          module_id?: string
+          points_awarded?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "training_completions_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "training_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      training_modules: {
+        Row: {
+          created_at: string
+          description: string | null
+          estimated_minutes: number | null
+          id: string
+          is_active: boolean | null
+          learning_path: string | null
+          module_order: number
+          points_awarded: number | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          estimated_minutes?: number | null
+          id?: string
+          is_active?: boolean | null
+          learning_path?: string | null
+          module_order?: number
+          points_awarded?: number | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          estimated_minutes?: number | null
+          id?: string
+          is_active?: boolean | null
+          learning_path?: string | null
+          module_order?: number
+          points_awarded?: number | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       translation_cache: {
         Row: {
           created_at: string
@@ -15188,6 +15309,8 @@ export type Database = {
         Row: {
           created_at: string
           email_notifications: boolean | null
+          first_deal_unlocked: boolean | null
+          first_deal_unlocked_at: string | null
           id: string
           marketing_opt_in: boolean | null
           preferred_language: string | null
@@ -15199,6 +15322,8 @@ export type Database = {
         Insert: {
           created_at?: string
           email_notifications?: boolean | null
+          first_deal_unlocked?: boolean | null
+          first_deal_unlocked_at?: string | null
           id?: string
           marketing_opt_in?: boolean | null
           preferred_language?: string | null
@@ -15210,6 +15335,8 @@ export type Database = {
         Update: {
           created_at?: string
           email_notifications?: boolean | null
+          first_deal_unlocked?: boolean | null
+          first_deal_unlocked_at?: string | null
           id?: string
           marketing_opt_in?: boolean | null
           preferred_language?: string | null
@@ -17716,6 +17843,7 @@ export type Database = {
           price_usd: number
         }[]
       }
+      get_user_access_level: { Args: { p_user_id: string }; Returns: string }
       get_user_points_balance: { Args: { _user_id: string }; Returns: number }
       get_user_tier: {
         Args: { _mode?: string; _user_id: string }
@@ -17733,6 +17861,7 @@ export type Database = {
           transcript: string
         }[]
       }
+      has_first_deal_verified: { Args: { p_user_id: string }; Returns: boolean }
       has_full_lead_pii_access: {
         Args: { _lead_id: string; _user_id: string }
         Returns: boolean
