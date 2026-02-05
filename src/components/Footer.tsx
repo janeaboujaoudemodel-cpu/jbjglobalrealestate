@@ -507,14 +507,7 @@ const Footer = () => {
             
             {/* Column 1: Properties + Services */}
             <div className="p-2 sm:p-3 md:p-5 border-r border-b lg:border-b-0 border-gold/20">
-              <h4 
-                className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
-                style={{
-                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
+              <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
                 {t('footer.properties') || 'Properties'}
               </h4>
               {/* ALIGNED: Same min-height as Column 2's Investor Hub section */}
@@ -533,14 +526,7 @@ const Footer = () => {
                 </ul>
               </div>
               
-              <h4 
-                className="font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
-                style={{
-                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
+              <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
                 {t('footer.servicesSection') || 'Services'}
               </h4>
               <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
@@ -559,14 +545,7 @@ const Footer = () => {
             
             {/* Column 2: Investor Hub + Broker Hub */}
             <div className="p-2 sm:p-3 md:p-5 border-b lg:border-b-0 lg:border-r border-gold/20">
-              <h4 
-                className="font-bold text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
-                style={{
-                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
+              <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
                 {t('footer.investorHub') || 'Investor Hub'}
               </h4>
               {/* ALIGNED: Same min-height as Column 1's Properties section */}
@@ -585,14 +564,7 @@ const Footer = () => {
                 </ul>
               </div>
               
-              <h4 
-                className="font-bold text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
-                style={{
-                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
+              <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
                 {t('footer.brokerHub') || 'Broker Hub'}
               </h4>
               <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
@@ -611,14 +583,7 @@ const Footer = () => {
 
             {/* Column 3: Guides + Market Intelligence */}
             <div className="p-2 sm:p-3 md:p-5 border-r border-gold/20">
-              <h4 
-                className="font-bold text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
-                style={{
-                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
+              <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
                 {t('footer.guides') || 'Guides'}
               </h4>
               {/* ALIGNED: Same min-height as Column 4's About section */}
@@ -637,14 +602,7 @@ const Footer = () => {
                 </ul>
               </div>
               
-              <h4 
-                className="font-bold text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
-                style={{
-                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
+              <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
                 Market Intelligence
               </h4>
               <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
@@ -663,14 +621,7 @@ const Footer = () => {
 
             {/* Column 4: About + Careers */}
             <div className="p-2 sm:p-3 md:p-5">
-              <h4 
-                className="font-bold text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
-                style={{
-                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
+              <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
                 About
               </h4>
               {/* ALIGNED: Same min-height as Column 3's Guides section */}
@@ -689,14 +640,7 @@ const Footer = () => {
                 </ul>
               </div>
               
-              <h4 
-                className="font-bold text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-[0.08em] sm:tracking-[0.15em] mb-1.5 sm:mb-2 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30"
-                style={{
-                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
+              <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
                 Careers
               </h4>
               <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
@@ -715,20 +659,12 @@ const Footer = () => {
           </div>
 
           {/* Internal Divider */}
-          <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent mx-4" />
+          <div className="h-[2px] bg-gradient-to-r from-gold/20 via-gold/80 to-gold/20 mx-6" />
 
           {/* Professional Tools Section - Premium Enhanced on Champagne */}
           <div className="p-4 sm:p-6 md:p-10 text-center">
             <div className="mb-4 sm:mb-6">
-              <h4 
-                className="font-bold text-sm sm:text-base md:text-lg uppercase tracking-[0.12em] sm:tracking-[0.18em] md:tracking-[0.25em] mb-2"
-                style={{
-                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  filter: 'drop-shadow(0 2px 6px rgba(200,167,102,0.3))',
-                }}
-              >
+              <h4 className="font-bold text-sm sm:text-base md:text-lg uppercase tracking-[0.12em] sm:tracking-[0.18em] md:tracking-[0.25em] mb-2 text-gold drop-shadow-[0_2px_6px_rgba(200,167,102,0.3)]">
                 ✦ Professional Tools ✦
               </h4>
               <p className="text-zinc-600 text-xs sm:text-sm md:text-base font-medium tracking-wider">AI-Powered Assistants</p>
@@ -747,18 +683,11 @@ const Footer = () => {
           </div>
 
           {/* Internal Divider */}
-          <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent mx-4" />
+          <div className="h-[2px] bg-gradient-to-r from-gold/20 via-gold/80 to-gold/20 mx-6" />
 
           {/* Contact Section - Premium on Champagne */}
           <div className="p-3 sm:p-5 md:p-8 text-center relative">
-            <h4 
-              className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-3 sm:mb-4 md:mb-5"
-              style={{
-                background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
+            <h4 className="font-bold text-sm sm:text-base md:text-lg uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-3 sm:mb-4 md:mb-5 text-gold">
               Get in Touch
             </h4>
             
