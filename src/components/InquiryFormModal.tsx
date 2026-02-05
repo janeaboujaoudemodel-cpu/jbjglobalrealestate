@@ -465,7 +465,7 @@ const InquiryFormModal = ({
                         <FormControl>
                           <Input 
                             {...field} 
-                            className="h-12 bg-white border-zinc-200 text-black placeholder:text-zinc-400 focus:border-gold rounded-lg"
+                            className="h-12 bg-white border-2 border-gold/50 hover:border-gold text-black placeholder:text-zinc-400 focus:border-gold rounded-lg"
                             placeholder="John Doe"
                           />
                         </FormControl>
@@ -496,10 +496,10 @@ const InquiryFormModal = ({
                               // Reset verification if email changes
                               if (emailVerified) setEmailVerified(false);
                             }}
-                            className={`h-12 bg-white text-black placeholder:text-zinc-400 rounded-lg w-full ${
-                              emailStatus === 'valid' ? 'border-green-500/50 focus:border-green-500' :
-                              emailStatus === 'invalid' ? 'border-red-500/50 focus:border-red-500' :
-                              'border-zinc-200 focus:border-gold'
+                            className={`h-12 bg-white text-black placeholder:text-zinc-400 rounded-lg w-full border-2 ${
+                              emailStatus === 'valid' ? 'border-green-500/60 focus:border-green-500' :
+                              emailStatus === 'invalid' ? 'border-red-500/60 focus:border-red-500' :
+                              'border-gold/50 hover:border-gold focus:border-gold'
                             }`}
                             placeholder="email@example.com"
                           />

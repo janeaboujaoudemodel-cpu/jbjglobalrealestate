@@ -370,6 +370,7 @@ const UserProfile = () => {
                         value={displayName}
                         onChange={(e) => setDisplayName(e.target.value)}
                         placeholder="Your name"
+                        className="border-2 border-gold/50 focus:border-gold hover:border-gold transition-colors"
                       />
                     </div>
                     <div className="space-y-2">
@@ -382,13 +383,13 @@ const UserProfile = () => {
                           id="email"
                           value={user?.email || ""}
                           disabled
-                          className="bg-muted flex-1"
+                          className="bg-muted flex-1 border-2 border-gold/30"
                         />
                         <Button 
                           variant="outline" 
                           size="sm"
                           onClick={() => setShowEmailChangeDialog(true)}
-                          className="shrink-0"
+                          className="shrink-0 border-gold/50 hover:border-gold"
                         >
                           <Pencil className="h-3 w-3 mr-1" />
                           Change
@@ -405,6 +406,7 @@ const UserProfile = () => {
                         value={phone}
                         onChange={(value) => setPhone(value || '')}
                         placeholder="Enter phone number"
+                        variant="light"
                       />
                     </div>
                   </div>
