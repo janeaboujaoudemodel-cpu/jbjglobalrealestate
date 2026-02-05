@@ -4,10 +4,12 @@ import { User, Heart, Sparkles, Briefcase, Users, FolderOpen, Monitor, Settings,
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { MegaMenuShell, MegaMenuSectionDivider } from './mega-menu-primitives';
 import ModeSwitcher from '@/components/ModeSwitcher';
+import { useTierProgress } from '@/hooks/useTierProgress';
 
 interface MegaMenuAccountProps {
   onClose: () => void;
@@ -16,6 +18,7 @@ interface MegaMenuAccountProps {
 const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>(({ onClose }, ref) => {
   const { user, isAdmin, signOut } = useAuth();
   const { t } = useLanguage();
+  const { tierProgress } = useTierProgress();
   
   const { data: crmProfile } = useQuery({
     queryKey: ['crm-profile-account-menu', user?.id],
@@ -101,6 +104,18 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                   {accountDisplayName}
                 </p>
                 <p className="text-black/60 text-sm truncate">{user.email}</p>
+                {tierProgress?.currentTier && (
+                  <Badge 
+                    className="mt-1.5 text-xs font-semibold border-gold/40"
+                    style={{ 
+                      backgroundColor: `${tierProgress.currentTier.badge_color}20`,
+                      color: tierProgress.currentTier.badge_color,
+                      borderColor: `${tierProgress.currentTier.badge_color}60`
+                    }}
+                  >
+                    {tierProgress.currentTier.tier_name} • {tierProgress.totalPoints.toLocaleString()} pts
+                  </Badge>
+                )}
               </div>
               <div className="flex flex-col items-end gap-2 shrink-0">
                 <ModeSwitcher variant="header" />
