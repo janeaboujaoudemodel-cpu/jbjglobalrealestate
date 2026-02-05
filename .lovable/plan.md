@@ -1,192 +1,396 @@
 
-# Restoration & Fix Plan: Listing Admin Access + Email OTP + Mode Selection
+# JBJ Global Real Estate — Master Task Implementation Plan
 
 ## Executive Summary
 
-There are three interrelated issues affecting your account experience:
-
-1. **Listing Admin redirects to homepage** - You are already set up correctly in the database (both "owner" and "admin" roles, plus an active listing_admins entry for `janeaboujaoudenails@gmail.com`). The redirect is happening because **you changed your email** and either (a) you're still logged in with a different email, or (b) the OTP flow to change it back failed.
-
-2. **Email OTP not received / UI broken** - The edge function is configured correctly and RESEND_API_KEY is present. However, the most recent OTP record in the database shows code `377855` was created for `janeaboujaoudenails@gmail.com` but never verified. The email may not have arrived due to sender domain configuration or spam filtering. The OTP input dialog may also have layout issues.
-
-3. **Mode selection dropdown closes on click** - The `ModeSwitcher` component uses a Radix `DropdownMenu`. Clicking an option triggers `handleModeChange()` which calls `setIsOpen(false)` + `navigate('/my-dashboard')`. This is working as designed, but if you're holding/long-pressing or if the menu closes before you can select, there's a touch event conflict. Additionally, "Broker" and "Investor + Broker" appear disabled because the `canAccessBrokerMode` check requires role = "broker", "broker_partner", or "broker_jbj", but your `user_role_selections` shows "investor" - not broker.
-
-4. **"Explorer" label showing instead of mode** - The tier badge shows "Explorer" because that's the tier name from `useTierProgress()`, not the user mode. The mode label shows separately via `ModeSwitcher`. These are two different concepts (tier vs mode).
-
-5. **Avatar flicker (JB → J)** - The `getInitials()` function splits the display name by space. If the name changes during loading (e.g., from CRM profile vs user metadata), the initials flash. Need to stabilize the avatar rendering.
+This plan addresses 13 major requirement areas from Jane's comprehensive specification. Based on codebase analysis and Jane's answers, the implementation is organized into prioritized phases.
 
 ---
 
-## Root Cause Analysis
+## SECTION A: Account Mode Dropdown Fixes (P0 - Critical)
 
-### Listing Admin Access
+### Current State Analysis
+- **ModeSwitcher.tsx** (lines 56-75): Mode selection works but navigates to `/my-dashboard` on every change
+- **MegaMenuAccount.tsx**: Avatar uses `useMemo` for stability; badge shows mode + points correctly
+- The "Explorer" label issue was already fixed - now shows mode name + points
 
-| Check | Status | Details |
-|-------|--------|---------|
-| user_roles.admin | PASS | user_id `72ca2405-b4ca-48df-9b47-623ee260a3cc` has "admin" role |
-| user_roles.owner | PASS | same user_id has "owner" role |
-| listing_admins | PASS | email `janeaboujaoudenails@gmail.com` is active |
-| Current session email | UNKNOWN | If you changed email to something else and never changed back, your session is for a different user_id |
+### Issues to Fix
+1. **Dropdown closes on click** - Already has `e.stopPropagation()` but Radix DropdownMenu behavior may override
+2. **Long-press disables modes** - No disabled logic exists; this is a CSS/touch event issue
+3. **Avatar flicker (JB → J)** - `accountDisplayName` memo depends on `crmProfile` which loads async
 
-**Conclusion**: The `ListingAdminGuard` is role-based and correct. The issue is that you may be logged in as a different email (not the one with admin privileges). You need to either:
-- Sign in again with `janeaboujaoudenails@gmail.com`, OR
-- Successfully complete the email change flow to switch back to that email
+### Implementation
 
-### Email OTP Not Received
+#### A1. Fix Mode Switcher Click Behavior
+**File: `src/components/ModeSwitcher.tsx`**
+- Remove navigation on mode change (let user stay on current page)
+- Use `DropdownMenuItem` with `onSelect` instead of `onClick` to prevent auto-close
+- Add explicit close control with small delay to show success state
 
-| Check | Status | Details |
-|-------|--------|---------|
-| RESEND_API_KEY secret | PASS | Secret is configured |
-| Domain verified | User said YES | But sender is `onboarding@resend.dev` (Resend's shared sandbox) |
-| Recent OTP record | FOUND | Code 377855 for janeaboujaoudenails@gmail.com, created ~1 hour ago, not verified |
-| Edge function logs | EMPTY | No recent calls logged (may have timed out or not been called) |
+#### A2. Stabilize Avatar Initials
+**File: `src/components/header/MegaMenuAccount.tsx`**
+- Add loading skeleton state while CRM profile loads
+- Use initial fallback from `user_metadata` immediately, only update if CRM profile differs
+- Lock avatar container dimensions with CSS
 
-**Root cause options**:
-1. Email sent but went to spam (very common with `onboarding@resend.dev` sender)
-2. Edge function call failed before sending (network issue, function cold start)
-3. Resend API returned error but the fallback code path didn't surface it clearly
+#### A3. Prevent Dropdown Layout Shift
+**File: `src/components/header/MegaMenuAccount.tsx`**
+- Add `min-width: 640px` and `min-height: 420px` to MegaMenuShell wrapper
+- Use CSS `transform` for open animation instead of height/width changes
 
-**Solution**: Update the sender to use a verified domain (e.g., `noreply@jbj.ae` or `no-reply@jbjglobalrealestate.com`) and ensure the OTP is clearly shown in dev mode or logged to the console for testing.
+#### A4. Add Mode Selector to Footer
+**File: `src/components/Footer.tsx`**
+- Import `ModeSwitcher` component
+- Add a new section in the footer navigation area showing current mode with ability to switch
+- Use same styling as header (champagne gradient + gold border)
 
-### OTP Dialog Layout Broken
+---
 
-The `DialogContent` in `UserProfile.tsx` (lines 615-744) uses proper styling:
-- `className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 sm:max-w-md"`
-- `InputOTPGroup` with 6 slots
+## SECTION B: Homepage UI Fixes (P0 - Critical)
 
-But the `OTPVerificationModal.tsx` (used elsewhere) has a dark theme (`bg-zinc-900`). There may be a mismatch if the wrong modal is being triggered, or CSS conflicts with the input-otp component.
+### B1. Fix Active Tab Color (Buy/Rent Button)
+**Current Issue:** Uses `bg-gold` which Jane identifies as "yellow"
+**Approved Style:** White/champagne glassmorphism for active states
 
-### Mode Selection Closes on Click
+**File: `src/components/home/FeaturedListings.tsx`** (lines 156-178)
 
-The `ModeSwitcher` component (lines 59-79) does:
-```typescript
-const handleModeChange = async (newMode: UserMode) => {
-  const requiresBroker = newMode === 'broker' || newMode === 'investor_broker';
-  if (requiresBroker && !canAccessBrokerMode) {
-    toast.error('You need a broker role to access Broker Mode');
-    return;  // <-- Exits but dropdown stays open
-  }
-  
-  await setMode(newMode);
-  setIsOpen(false);  // <-- Closes dropdown
-  navigate('/my-dashboard', { replace: true });  // <-- Navigates away
-  toast.success(`Switched to ${MODE_CONFIG[newMode].label}`);
-};
+Replace:
+```tsx
+activeTab === 'buy'
+  ? 'bg-gold text-black shadow-lg'
+  : 'bg-black/5 text-black hover:bg-black/10'
 ```
 
-**Issues**:
-1. For Broker modes, if `canAccessBrokerMode` is false, it shows an error but doesn't close - this is correct
-2. The menu closes after successful selection - this is intentional
-3. The "disabled" appearance happens because you're not registered as a broker role
+With approved active style:
+```tsx
+activeTab === 'buy'
+  ? 'bg-white/90 text-black shadow-lg border-2 border-gold/60 backdrop-blur-sm'
+  : 'bg-gradient-to-r from-[#F5EBD7]/40 via-[#E8DCC8]/40 to-[#D4C4A8]/40 text-black hover:bg-white/60 border border-gold/30'
+```
 
-**Your request**: "Make them selectable for everyone" means removing the broker role requirement. This will allow anyone to switch to Broker mode, but broker-only pages/tools will still be locked.
+### B2. Add Gold Borders to Listing Cards
+**File: `src/components/home/FeaturedListings.tsx`** (line 197)
 
----
+Current empty state cards already have `border-2 border-gold/20 border-dashed` - change to solid gold border:
+```tsx
+border-2 border-gold/40 hover:border-gold
+```
 
-## Implementation Plan
+### B3. Make "View All Properties" Button 3D Premium
+**File: `src/components/home/FeaturedListings.tsx`** (lines 218-226)
 
-### Part 1: Fix Email OTP Delivery
-
-**File: `supabase/functions/send-email-otp/index.ts`**
-
-1. Update the sender address from `onboarding@resend.dev` to your verified domain
-2. Add fallback console logging of OTP for development
-3. Improve error messaging when Resend fails
-4. Ensure the function returns the dev_otp in development for testing
-
-### Part 2: Fix OTP Dialog Layout
-
-**File: `src/pages/UserProfile.tsx`**
-
-1. Ensure the OTP input slots have proper sizing and contrast
-2. Add minimum width to the dialog to prevent layout collapse
-3. Ensure the InputOTP component is properly styled for the champagne theme
-
-### Part 3: Enable All Modes for Everyone
-
-**File: `src/components/ModeSwitcher.tsx`**
-
-1. Remove the broker role requirement for mode selection
-2. Keep the `isDisabled` visual state but allow clicks
-3. Show a different message: "You're now in Broker Mode - some features may be limited"
-
-### Part 4: Fix Avatar Flicker
-
-**File: `src/components/header/MegaMenuAccount.tsx`**
-
-1. Stabilize the display name resolution with a memo/state that doesn't change mid-render
-2. Add a loading state for the avatar initials
-3. Set minimum dimensions on the avatar container to prevent layout shift
-
-### Part 5: Clarify Tier vs Mode Labels
-
-**File: `src/components/header/MegaMenuAccount.tsx`**
-
-1. Replace "Explorer" tier label with mode-aware labeling
-2. Change points display from "X pts" to "X pts earned"
-3. Ensure the mode label is prominently displayed
-
-### Part 6: Hide Admin Shortcuts for Non-Admins
-
-**Files: `src/components/header/MegaMenuAccount.tsx`, `src/components/GlobalHeader.tsx`**
-
-1. The Listing Admin link should only appear if the user has access (owner, admin, or listing_admin)
-2. Add a check similar to `ListingAdminGuard` before rendering the link
-3. This prevents showing a link that will just redirect away
-
-### Part 7: Fix Mode Click Behavior
-
-**File: `src/components/ModeSwitcher.tsx`**
-
-1. Add `e.stopPropagation()` to mode option clicks to prevent dropdown close race conditions
-2. Ensure the dropdown remains stable until selection is confirmed
-3. Fix any long-press conflicts on mobile
+Replace current flat button with approved 3D premium button style:
+```tsx
+<Link
+  to={activeTab === 'buy' ? '/properties?transaction=buy' : '/properties?transaction=rent'}
+  className="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group"
+  style={{
+    boxShadow: `
+      0 10px 30px rgba(200,167,102,0.4),
+      0 6px 15px rgba(0,0,0,0.2),
+      inset 0 2px 4px rgba(255,255,255,0.9),
+      inset 0 -2px 4px rgba(200,167,102,0.2),
+      0 0 20px rgba(200,167,102,0.3)
+    `,
+  }}
+>
+  ...
+</Link>
+```
 
 ---
 
-## Database Status (No Changes Needed)
+## SECTION C: Toolkit Branding (P0 - Critical)
 
-Your database is correctly configured:
-- `user_roles`: You have both "admin" and "owner" roles for user_id `72ca2405-b4ca-48df-9b47-623ee260a3cc`
-- `listing_admins`: Entry exists for `janeaboujaoudenails@gmail.com`, is_active = true
-- `email_verifications`: Most recent OTP code `377855` was never verified
+### C1. Confirm Title Is Correct
+**Already done:** Search shows "JBJ Royal Tools Hub" in:
+- `src/components/home/ToolkitShowcaseCard.tsx` (line 112)
+- `src/pages/toolkit/RoyalToolsHub.tsx` (lines 1-4, 118)
+- `src/config/royalToolsRegistry.ts` (line 2)
 
-The issue is session/email mismatch, not database configuration.
+**No changes needed** - the title is already correct.
+
+### C2. Verify UI Is Approved Style
+The `ToolkitShowcaseCard.tsx` uses approved champagne gradient styling:
+- `bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`
+- `border-2 border-gold/50`
+- Premium shadow
+
+**Current code is correct.** If there's regression, need to check if a different component is rendering on homepage.
 
 ---
 
-## Files to Modify
+## SECTION D: Section Sizing Consistency (P0 - Critical)
+
+### Current Issue
+"Explore Our Services should not touch corners" - needs to match container sizing of other sections.
+
+**File: `src/pages/Index.tsx`** (around line 487)
+
+The `ExploreServicesCard` is rendered inside a section but may lack proper container wrapping.
+
+### Fix
+Wrap `ExploreServicesCard` in the standard `jj-layer-2` container:
+```tsx
+<section className="py-12 md:py-16 bg-black">
+  <div className="jj-layer-2">
+    <ExploreServicesCard />
+  </div>
+</section>
+```
+
+This matches the pattern used by other sections like FeaturedListings and WhyChooseUs.
+
+---
+
+## SECTION E: Mortgage Calculator Audit (P1 - High)
+
+### Current Math Analysis
+The calculator at `src/components/MortgageCalculator.tsx` uses standard amortization formula:
+```
+M = P[r(1+r)^n]/[(1+r)^n-1]
+```
+
+Default values: AED 2,000,000 property, 20% down, 4.5% rate, 25 years
+
+**Calculation verification:**
+- Down payment: AED 400,000 (20%)
+- Loan amount: AED 1,600,000
+- Monthly payment: AED 8,882 (correct)
+- Total payment: AED 2,664,600 (correct)
+- Total interest: AED 1,064,600 (correct)
+
+**The math is correct.** The issue may be that example values shown in the compact view don't match these calculations.
+
+### Required Enhancements
+
+#### E1. Add Down Payment % and AED to Compact View
+**File: `src/components/MortgageCalculator.tsx`** (lines 88-131)
+
+Add a fourth card showing:
+- "Down Payment: 20% | AED 400,000"
+
+#### E2. Update Example Disclaimer
+Change the disclaimer to clearly show all assumptions:
+```tsx
+*Estimates based on {formatCurrency(propertyPrice)} property, {downPaymentPercent}% down ({formatCurrency(calculations.downPayment)}), {interestRate}% rate, {loanTermYears} years
+```
+
+#### E3. Add Percentage Labels to Breakdown Cards
+For each card, add percentage context where applicable:
+- Loan Amount: "80% of property value"
+- Total Interest: "X% of loan"
+
+---
+
+## SECTION F: Section Divider (P1 - High)
+
+### Jane's Answer: Use premium gold sparkle divider
+
+### Current State
+The `SectionDivider` component already exists and is used throughout the homepage.
+
+**Current Issue:** Missing divider between "Why Choose Us" and "Best Idea Award"
+
+### Fix
+**File: `src/pages/Index.tsx`** (around line 644)
+
+Looking at the current order:
+```tsx
+{/* BEST IDEA AWARD */}
+<BestIdeaAward />
+
+{/* DIVIDER */}
+<SectionDivider />
+
+{/* WHY CHOOSE US */}
+<WhyChooseUs />
+```
+
+The divider IS already between sections. However, the order is: BestIdeaAward → Divider → WhyChooseUs. Jane may want divider BEFORE BestIdeaAward.
+
+Add:
+```tsx
+{/* DIVIDER - Before Best Idea Award */}
+<SectionDivider />
+
+{/* BEST IDEA AWARD */}
+<BestIdeaAward />
+```
+
+---
+
+## SECTION G: Footer Social Icons (P1 - High)
+
+### Current State Analysis
+**File: `src/components/marketing/SocialLinks.tsx`**
+
+Current `glow` variant:
+```tsx
+case 'glow':
+  return 'text-gold hover:text-black drop-shadow-[0_0_8px_rgba(200,167,102,0.8)] hover:drop-shadow-none';
+```
+
+**Issue:** Hover shows `text-black` which Jane says is wrong.
+
+### Fix
+**File: `src/components/marketing/SocialLinks.tsx`** (line 29-30)
+
+Replace hover behavior:
+```tsx
+case 'glow':
+  return 'text-gold hover:text-gold-light drop-shadow-[0_0_8px_rgba(200,167,102,0.8)] hover:drop-shadow-[0_0_16px_rgba(200,167,102,1)] hover:scale-110 transition-all duration-300';
+```
+
+### Add "Connect With Us" Label
+**File: `src/components/Footer.tsx`** (around line 441)
+
+Add label above social links:
+```tsx
+<div className="relative flex flex-col items-center gap-4">
+  <p className="text-gold/80 text-sm uppercase tracking-[0.2em] font-medium">
+    Connect With Us
+  </p>
+  <div 
+    className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl"
+    ...
+  >
+    <SocialLinks variant="glow" ... />
+  </div>
+</div>
+```
+
+---
+
+## SECTION H: AI Video Tool Integration (P2 - Medium)
+
+### Current State
+- `AIVideoStudio.tsx` is a standalone timeline editor
+- Separate tools exist: VoiceStudio, BeautyFilters, CaptionsTranslate, VideoResizePack
+
+### Integration Approach
+Keep all standalone tool pages, but add them as **embedded modules** within the AI Video Studio.
+
+**File: `src/components/ai-video-studio/AIVideoStudio.tsx`**
+
+Add a new panel/tab system in the right panel (`InspectorPanel`) area:
+1. **Voice Tab** - Embedded VoiceStudio component
+2. **Captions Tab** - Embedded CaptionsTranslate component
+3. **Beauty Tab** - Embedded BeautyFilters component
+4. **Resize Tab** - Embedded VideoResizePack (export presets)
+
+Each module will be imported and rendered within tabs, sharing the timeline context.
+
+---
+
+## SECTION I: File Retention Policy (P2 - Medium)
+
+### Current Behavior Analysis
+Need to check if files have auto-delete logic.
+
+### Implementation
+1. **Remove auto-delete timers** from any processing functions
+2. **Add autosave** to IndexedDB/localStorage for drafts
+3. **Persist final exports** to user's Supabase storage bucket
+
+---
+
+## SECTION J: ROI Tool Naming (P1 - High)
+
+### Current State
+Tool is already named "Property Evaluator" in:
+- `ToolkitShowcaseCard.tsx` - "Property Evaluator"
+- Route: `/property-evaluator`
+
+### Verify Global Consistency
+Search for any remaining "ROI" references and update to "Property Evaluator"
+
+---
+
+## SECTION K: PDF Tool Phase 1 (P2 - Medium)
+
+### Jane's Answer: Start with core PDF + signatures
+
+### Phase 1 Features
+1. **Page extraction** - Select pages to extract as new PDF
+2. **Page reordering** - Drag-drop to rearrange
+3. **Merge PDFs** - Combine multiple files
+4. **Basic signatures** - Draw/upload signature, place on document
+5. **Save options** - Save as new PDF, save individual pages
+
+### Technical Approach
+- Use `pdf-lib` (already installed) for PDF manipulation
+- Create new page: `src/pages/toolkit/PDFEditor.tsx`
+- Add signature canvas component
+- Store signatures in localStorage for reuse
+
+---
+
+## SECTION L: Admin Presentation Generator (P3 - Future)
+
+### Depends on
+- Phase 1 PDF tool completion
+- Property listing data structure
+
+### Implementation Notes
+- Add "Generate Presentation" button to listing admin
+- Auto-compile: property images, floor plans, developer info
+- Include agent business card (from profile)
+- Output as branded PDF presentation
+
+---
+
+## Implementation Priority Order
+
+| Phase | Tasks | Files |
+|-------|-------|-------|
+| **Phase 1: Critical Fixes** | A1-A4, B1-B3, C2, D, F, G | ModeSwitcher, MegaMenuAccount, FeaturedListings, Footer, Index |
+| **Phase 2: Calculator + Naming** | E1-E3, J | MortgageCalculator, search/replace for ROI refs |
+| **Phase 3: Video Integration** | H, I | AIVideoStudio, new embedded modules |
+| **Phase 4: PDF Tool** | K | New PDFEditor page |
+| **Phase 5: Presentation Gen** | L | Listing admin enhancement |
+
+---
+
+## QA Acceptance Criteria
+
+### Mode Switcher
+- [ ] Clicking mode option does not close dropdown prematurely
+- [ ] Long-press does not disable any modes
+- [ ] Avatar initials remain stable during load
+- [ ] Badge shows "Investor • 0 pts earned" format
+- [ ] Mode selector visible in footer
+- [ ] Mode persists across refresh
+
+### Homepage UI
+- [ ] Active Buy/Rent tab uses white/champagne glassmorphism (not yellow-gold)
+- [ ] Listing cards have solid gold borders
+- [ ] "View All Properties" button has 3D premium styling
+- [ ] "Explore Our Services" section matches container sizing of other sections
+
+### Footer
+- [ ] Social icons hover shows gold glow (not black)
+- [ ] "Connect With Us" label displayed above icons
+- [ ] All social links working and opening correct URLs
+
+### Mortgage Calculator
+- [ ] Down payment shows % AND AED amount
+- [ ] Example disclaimer shows all parameters
+- [ ] Math verified against Dubai market standards
+
+---
+
+## Files to Modify (Summary)
 
 | File | Changes |
 |------|---------|
-| `supabase/functions/send-email-otp/index.ts` | Update sender domain, improve error handling, add dev logging |
-| `src/pages/UserProfile.tsx` | Fix OTP dialog layout, ensure proper styling |
-| `src/components/ModeSwitcher.tsx` | Remove broker role restriction, fix click behavior |
-| `src/components/header/MegaMenuAccount.tsx` | Stabilize avatar, fix labels, conditional admin links |
-| `src/components/GlobalHeader.tsx` | Conditional rendering of Listing Admin link in mobile menu |
+| `src/components/ModeSwitcher.tsx` | Fix click behavior, remove auto-navigation |
+| `src/components/header/MegaMenuAccount.tsx` | Stabilize avatar, fix layout shift |
+| `src/components/home/FeaturedListings.tsx` | Active tab style, gold borders, 3D button |
+| `src/components/Footer.tsx` | Add mode selector, "Connect With Us" label |
+| `src/components/marketing/SocialLinks.tsx` | Fix hover state (no black) |
+| `src/components/MortgageCalculator.tsx` | Add down payment card, percentage labels |
+| `src/pages/Index.tsx` | Add divider before BestIdeaAward, wrap ExploreServices in container |
+| `src/components/ai-video-studio/AIVideoStudio.tsx` | Add integrated tool tabs |
+| New: `src/pages/toolkit/PDFEditor.tsx` | Phase 1 PDF tool |
 
----
-
-## Immediate Workaround
-
-While these fixes are being implemented, you can regain Listing Admin access by:
-
-1. **Sign out completely** (clear the session)
-2. **Sign in with** `janeaboujaoudenails@gmail.com` (the email that has admin/owner roles)
-3. **Access /listing-admin directly** - it should work since that user_id has all required permissions
-
-If you forgot the password for that email, use the "Forgot Password" flow to reset it.
-
----
-
-## Testing Checklist
-
-After implementation:
-- [ ] Email OTP arrives in Gmail inbox (not spam)
-- [ ] OTP dialog displays correctly on mobile and desktop
-- [ ] Can switch between all three modes (Investor, Broker, Investor+Broker)
-- [ ] Mode selection persists after refresh
-- [ ] Avatar initials don't flicker
-- [ ] Points label shows "X pts earned"
-- [ ] Listing Admin link only shows for authorized users
-- [ ] Listing Admin page loads correctly when accessed with correct email
