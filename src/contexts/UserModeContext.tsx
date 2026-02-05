@@ -4,24 +4,33 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const MODE_KEY = "jj_user_mode";
 
-export type UserMode = 'client' | 'broker';
+// Expanded to 3 modes: investor, broker, or both
+export type UserMode = 'investor' | 'broker' | 'investor_broker';
 
 interface UserModeContextType {
   mode: UserMode;
   isLoading: boolean;
   setMode: (mode: UserMode) => Promise<void>;
-  toggleMode: () => Promise<void>;
+  isInvestorMode: boolean;
   isBrokerMode: boolean;
-  isClientMode: boolean;
+  isCombinedMode: boolean;
 }
 
 const UserModeContext = createContext<UserModeContextType | undefined>(undefined);
 
+// Map legacy 'client' value to 'investor'
+const normalizeMode = (value: string | null): UserMode => {
+  if (value === 'broker') return 'broker';
+  if (value === 'investor_broker') return 'investor_broker';
+  // 'client' or anything else defaults to 'investor'
+  return 'investor';
+};
+
 export function UserModeProvider({ children }: { children: ReactNode }) {
   const [mode, setModeState] = useState<UserMode>(() => {
-    if (typeof window === 'undefined') return 'client';
-    const stored = localStorage.getItem(MODE_KEY) as UserMode | null;
-    return stored === 'broker' ? 'broker' : 'client';
+    if (typeof window === 'undefined') return 'investor';
+    const stored = localStorage.getItem(MODE_KEY);
+    return normalizeMode(stored);
   });
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
@@ -32,9 +41,9 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
       setIsLoading(true);
       
       // First check localStorage
-      const storedMode = localStorage.getItem(MODE_KEY) as UserMode | null;
+      const storedMode = localStorage.getItem(MODE_KEY);
       if (storedMode) {
-        setModeState(storedMode === 'broker' ? 'broker' : 'client');
+        setModeState(normalizeMode(storedMode));
       }
 
       // If logged in, sync with database
@@ -47,12 +56,12 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
             .maybeSingle();
 
           if (data?.selected_mode) {
-            const dbMode = data.selected_mode === 'broker' ? 'broker' : 'client';
+            const dbMode = normalizeMode(data.selected_mode);
             setModeState(dbMode);
             localStorage.setItem(MODE_KEY, dbMode);
           } else if (!error) {
             // No preferences record yet, create one with current mode
-            const currentMode = storedMode || 'client';
+            const currentMode = normalizeMode(storedMode);
             await supabase
               .from('user_preferences')
               .insert({
@@ -98,20 +107,15 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
     }
   }, [user?.id]);
 
-  const toggleMode = useCallback(async () => {
-    const newMode = mode === 'client' ? 'broker' : 'client';
-    await setMode(newMode);
-  }, [mode, setMode]);
-
   return (
     <UserModeContext.Provider
       value={{
         mode,
         isLoading,
         setMode,
-        toggleMode,
-        isBrokerMode: mode === 'broker',
-        isClientMode: mode === 'client'
+        isInvestorMode: mode === 'investor' || mode === 'investor_broker',
+        isBrokerMode: mode === 'broker' || mode === 'investor_broker',
+        isCombinedMode: mode === 'investor_broker',
       }}
     >
       {children}

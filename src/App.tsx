@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 
 // Toolkit pages (lazy loaded)
+const RoyalToolsHub = lazy(() => import("./pages/toolkit/RoyalToolsHub"));
 const ToolkitLanding = lazy(() => import("./pages/toolkit/ToolkitLanding"));
 const VideoResizePack = lazy(() => import("./pages/toolkit/VideoResizePack"));
 const PdfFromPhotos = lazy(() => import("./pages/toolkit/PdfFromPhotos"));
@@ -488,9 +489,10 @@ const App = () => (
 {/* Toolkit Routes */}
                 <Route path="/toolkit" element={
                   <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <ToolkitLanding />
+                    <RoyalToolsHub />
                   </Suspense>
                 } />
+                <Route path="/royal-tools" element={<Navigate to="/toolkit" replace />} />
                 <Route path="/toolkit/video-resize-pack" element={
                   <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
                     <VideoResizePack />
