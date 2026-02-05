@@ -483,8 +483,12 @@ const Index = () => {
         </div>
       </section>
 
-      {/* EXPLORE OUR SERVICES SLIDESHOW */}
-      <ExploreServicesCard />
+      {/* EXPLORE OUR SERVICES SLIDESHOW - Wrapped in container for consistent sizing */}
+      <section className="py-12 md:py-16 bg-black">
+        <div className="jj-layer-2">
+          <ExploreServicesCard />
+        </div>
+      </section>
 
       {/* TOOLKIT SHOWCASE CARD - Free Professional Tools */}
       <ToolkitShowcaseCard />
@@ -639,6 +643,9 @@ const Index = () => {
         <JBJPodcastSection />
         <SectionDivider />
       </PodcastVisibilityGate>
+
+      {/* DIVIDER - Before Best Idea Award */}
+      <SectionDivider />
 
       {/* BEST IDEA AWARD */}
       <BestIdeaAward />

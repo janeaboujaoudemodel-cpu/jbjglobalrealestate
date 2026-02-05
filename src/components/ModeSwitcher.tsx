@@ -63,15 +63,15 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
     // Emit global event for immediate UI updates
     window.dispatchEvent(new CustomEvent('userModeChange', { detail: newMode }));
     
-    // Close dropdown after successful mode change
-    setIsOpen(false);
-    
-    // Navigate to dashboard so user sees the change immediately
-    navigate('/my-dashboard', { replace: true });
-    
+    // Show success toast immediately
     toast.success(`Switched to ${MODE_CONFIG[newMode].label}`, {
       description: MODE_CONFIG[newMode].description
     });
+    
+    // Small delay to show success state before closing
+    setTimeout(() => {
+      setIsOpen(false);
+    }, 300);
   };
 
   const currentConfig = MODE_CONFIG[mode];
