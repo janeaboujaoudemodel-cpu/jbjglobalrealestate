@@ -15197,13 +15197,17 @@ export type Database = {
       }
       studio_project_assets: {
         Row: {
+          asset_category: string | null
           asset_type: string
           created_at: string
           duration_ms: number | null
           expires_at: string | null
+          export_platform: string | null
+          export_preset: string | null
           file_size_bytes: number | null
           height: number | null
           id: string
+          is_temporary: boolean | null
           mime_type: string | null
           name: string
           processing_job_id: string | null
@@ -15217,13 +15221,17 @@ export type Database = {
           width: number | null
         }
         Insert: {
+          asset_category?: string | null
           asset_type: string
           created_at?: string
           duration_ms?: number | null
           expires_at?: string | null
+          export_platform?: string | null
+          export_preset?: string | null
           file_size_bytes?: number | null
           height?: number | null
           id?: string
+          is_temporary?: boolean | null
           mime_type?: string | null
           name: string
           processing_job_id?: string | null
@@ -15237,13 +15245,17 @@ export type Database = {
           width?: number | null
         }
         Update: {
+          asset_category?: string | null
           asset_type?: string
           created_at?: string
           duration_ms?: number | null
           expires_at?: string | null
+          export_platform?: string | null
+          export_preset?: string | null
           file_size_bytes?: number | null
           height?: number | null
           id?: string
+          is_temporary?: boolean | null
           mime_type?: string | null
           name?: string
           processing_job_id?: string | null
@@ -15268,14 +15280,19 @@ export type Database = {
       }
       studio_projects: {
         Row: {
+          ai_prompts_history: Json | null
           ai_settings: Json | null
           autosave_version: number | null
+          brand_strictness: string | null
           canvas_settings: Json | null
           created_at: string
+          creativity_level: string | null
           description: string | null
           id: string
           is_shared: boolean | null
           last_autosave_at: string | null
+          last_edited_at: string | null
+          linked_property_id: string | null
           name: string
           project_type: string | null
           property_id: string | null
@@ -15285,20 +15302,26 @@ export type Database = {
           share_token: string | null
           status: string
           tags: string[] | null
+          target_audience: string | null
           thumbnail_url: string | null
           timeline_state: Json | null
           updated_at: string
           user_id: string | null
         }
         Insert: {
+          ai_prompts_history?: Json | null
           ai_settings?: Json | null
           autosave_version?: number | null
+          brand_strictness?: string | null
           canvas_settings?: Json | null
           created_at?: string
+          creativity_level?: string | null
           description?: string | null
           id?: string
           is_shared?: boolean | null
           last_autosave_at?: string | null
+          last_edited_at?: string | null
+          linked_property_id?: string | null
           name?: string
           project_type?: string | null
           property_id?: string | null
@@ -15308,20 +15331,26 @@ export type Database = {
           share_token?: string | null
           status?: string
           tags?: string[] | null
+          target_audience?: string | null
           thumbnail_url?: string | null
           timeline_state?: Json | null
           updated_at?: string
           user_id?: string | null
         }
         Update: {
+          ai_prompts_history?: Json | null
           ai_settings?: Json | null
           autosave_version?: number | null
+          brand_strictness?: string | null
           canvas_settings?: Json | null
           created_at?: string
+          creativity_level?: string | null
           description?: string | null
           id?: string
           is_shared?: boolean | null
           last_autosave_at?: string | null
+          last_edited_at?: string | null
+          linked_property_id?: string | null
           name?: string
           project_type?: string | null
           property_id?: string | null
@@ -15331,6 +15360,7 @@ export type Database = {
           share_token?: string | null
           status?: string
           tags?: string[] | null
+          target_audience?: string | null
           thumbnail_url?: string | null
           timeline_state?: Json | null
           updated_at?: string
@@ -15452,6 +15482,68 @@ export type Database = {
             columns: ["social_account_id"]
             isOneToOne: false
             referencedRelation: "studio_social_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      studio_scheduled_posts: {
+        Row: {
+          caption: string | null
+          content_url: string | null
+          created_at: string | null
+          error_message: string | null
+          hashtags: string[] | null
+          id: string
+          platform: string
+          platform_post_id: string | null
+          post_type: string
+          posted_at: string | null
+          project_id: string | null
+          scheduled_for: string
+          status: string | null
+          timezone: string | null
+          user_id: string | null
+        }
+        Insert: {
+          caption?: string | null
+          content_url?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          hashtags?: string[] | null
+          id?: string
+          platform: string
+          platform_post_id?: string | null
+          post_type: string
+          posted_at?: string | null
+          project_id?: string | null
+          scheduled_for: string
+          status?: string | null
+          timezone?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          caption?: string | null
+          content_url?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          hashtags?: string[] | null
+          id?: string
+          platform?: string
+          platform_post_id?: string | null
+          post_type?: string
+          posted_at?: string | null
+          project_id?: string | null
+          scheduled_for?: string
+          status?: string | null
+          timezone?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "studio_scheduled_posts_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "studio_projects"
             referencedColumns: ["id"]
           },
         ]
@@ -15656,6 +15748,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      studio_trending_audio: {
+        Row: {
+          audio_artist: string | null
+          audio_title: string
+          audio_url: string | null
+          category: string | null
+          expires_at: string | null
+          fetched_at: string | null
+          id: string
+          metadata: Json | null
+          platform: string
+          preview_url: string | null
+          region: string | null
+          trend_score: number | null
+          usage_count: number | null
+        }
+        Insert: {
+          audio_artist?: string | null
+          audio_title: string
+          audio_url?: string | null
+          category?: string | null
+          expires_at?: string | null
+          fetched_at?: string | null
+          id?: string
+          metadata?: Json | null
+          platform: string
+          preview_url?: string | null
+          region?: string | null
+          trend_score?: number | null
+          usage_count?: number | null
+        }
+        Update: {
+          audio_artist?: string | null
+          audio_title?: string
+          audio_url?: string | null
+          category?: string | null
+          expires_at?: string | null
+          fetched_at?: string | null
+          id?: string
+          metadata?: Json | null
+          platform?: string
+          preview_url?: string | null
+          region?: string | null
+          trend_score?: number | null
+          usage_count?: number | null
+        }
+        Relationships: []
       }
       subscription_tiers: {
         Row: {
@@ -19379,6 +19519,7 @@ export type Database = {
       generate_card_number: { Args: never; Returns: string }
       generate_company_id: { Args: never; Returns: string }
       generate_referral_code: { Args: never; Returns: string }
+      generate_share_token: { Args: never; Returns: string }
       get_all_subscriptions_admin: {
         Args: never
         Returns: {
