@@ -14,6 +14,7 @@ import ProfileSummaryCard from "@/components/dashboard/ProfileSummaryCard";
 import ActivityOverviewCard from "@/components/dashboard/ActivityOverviewCard";
 import NotificationsPreview from "@/components/dashboard/NotificationsPreview";
 import { QuickActions } from "@/components/dashboard/QuickActions";
+import DashboardCardErrorBoundary from "@/components/dashboard/DashboardCardErrorBoundary";
 
 // Role label mapping
 function getRoleLabel(role: string | null): string {
@@ -92,26 +93,40 @@ const MyDashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {/* Left Column - Profile & Level */}
               <div className="space-y-6">
-                <ProfileSummaryCard />
-                <BadgesLevelCard />
+                <DashboardCardErrorBoundary fallbackTitle="Profile unavailable">
+                  <ProfileSummaryCard />
+                </DashboardCardErrorBoundary>
+                <DashboardCardErrorBoundary fallbackTitle="Badges unavailable">
+                  <BadgesLevelCard />
+                </DashboardCardErrorBoundary>
               </div>
 
               {/* Center Column - Quick Actions & Activity */}
               <div className="space-y-6">
-                <QuickActions />
-                <ActivityOverviewCard />
+                <DashboardCardErrorBoundary fallbackTitle="Quick Actions unavailable">
+                  <QuickActions />
+                </DashboardCardErrorBoundary>
+                <DashboardCardErrorBoundary fallbackTitle="Activity unavailable">
+                  <ActivityOverviewCard />
+                </DashboardCardErrorBoundary>
               </div>
 
               {/* Right Column - Notifications */}
               <div className="space-y-6 md:col-span-2 xl:col-span-1">
-                <NotificationsPreview />
+                <DashboardCardErrorBoundary fallbackTitle="Notifications unavailable">
+                  <NotificationsPreview />
+                </DashboardCardErrorBoundary>
               </div>
             </div>
 
             {/* Bottom Row - Favorites & Shortlists */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-              <FavoritesCard />
-              <ShortlistCard />
+              <DashboardCardErrorBoundary fallbackTitle="Favorites unavailable">
+                <FavoritesCard />
+              </DashboardCardErrorBoundary>
+              <DashboardCardErrorBoundary fallbackTitle="Shortlist unavailable">
+                <ShortlistCard />
+              </DashboardCardErrorBoundary>
             </div>
           </div>
         </div>
