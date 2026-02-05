@@ -1,428 +1,259 @@
 
-# Comprehensive Filter System Overhaul - Reelly-Style with Premium UI
 
-## Executive Summary
+# Fix Listing Stats Display & Implement Reelly-Only Data Strategy with Restore Functionality
 
-This plan merges the Reelly filter system features with your existing JBJ Global filter infrastructure while maintaining your premium gold/champagne UI design. The result will be a professional-grade filter experience that matches Reelly's functionality but with your distinctive branding.
+## Problem Summary
 
-## Current State Analysis
+| Issue | Root Cause |
+|-------|------------|
+| **Approvals queue shows "1,336 target" for Reelly** | The source filter logic in `ProjectApprovalQueue.tsx` is not correctly applying Reelly's target (1,803) when the Reelly filter is active |
+| **Queue + Complete count doesn't equal target** | Only 778 Reelly projects are currently synced; the remaining 1,025 need to be imported via Full Sync |
+| **Provident and Reelly data are being mixed** | Current workflow doesn't enforce Reelly as the primary source with Provident as optional enrichment only |
+| **No way to restore projects to Reelly-only state** | Missing functionality to remove Provident-added content and revert to pure Reelly data |
 
-### What You Already Have
-- **HeroSearchBar**: Comprehensive filter with 10 currencies, bedrooms up to 7+, property types including commercial
-- **Properties Page**: Sticky filter bar, advanced filters dialog, Buy/Rent/All/Ready/Off-Plan quick toggles
-- **PropertyMap Page**: Leaflet-based map with price markers and filter panel
-- **Favorites/Shortlist**: Full implementation with guest and authenticated user support
-- **ProjectFilters**: Extensive filter options including views, amenities, facilities
+## Solution Architecture
 
-### What's Missing (From Reelly)
-1. **Sale Status with colored dots** (Announced-pink, Pre-sale-green, Start of Sale-yellow, On Sale-blue, Sold Out-red)
-2. **Payment Plan slider** (0-100% pre-handover/post-handover)
-3. **Multi-select Emirates with checkboxes**
-4. **Handover date range picker** (from/to year)
-5. **Broker Mode vs Investor Mode toggle**
-6. **Settings dropdown** (units, currency, display mode)
-7. **3D Map with satellite view and developer logos**
-8. **Save Filter functionality**
-9. **Project count badge in filter**
-10. **Escape key to exit map**
+### Phase 1: Fix Target Display in Approvals Queue
 
----
-
-## Implementation Architecture
-
-### Phase 1: Unified Filter State & Constants
-
-**New Constants File: `src/constants/filterConfig.ts`**
-```text
-Central configuration for all filter options with consistent values across Homepage, Properties, and Map pages:
-
-SALE_STATUS_CONFIG:
-- Announced: { color: "bg-pink-400", dotClass: "bg-pink-400" }
-- Pre-sale (EOI): { color: "bg-green-400", dotClass: "bg-green-400" }
-- Start of Sales: { color: "bg-yellow-400", dotClass: "bg-yellow-400" }
-- On Sale: { color: "bg-blue-400", dotClass: "bg-blue-400" }
-- Sold Out: { color: "bg-red-500", dotClass: "bg-red-500" }
-
-PROPERTY_TYPES (Extended):
-- Apartments, Villa, Townhouse, Penthouse, Duplex, Simplex, Sky Villas
-- Plot, Land, Retail, Offices, Commercial
-
-BEDROOMS: Studio, 1, 2, 3, 4, 5, 6, 7+
-
-EMIRATES (Checkbox-enabled):
-- Dubai, Abu Dhabi, Sharjah, Ras Al Khaimah, Ajman, Fujairah, Umm Al Quwain
-- International: Cyprus, Indonesia, Oman, Thailand
-```
-
-### Phase 2: Enhanced FilterState Interface
-
-**Updated `FilterState` in `src/components/ProjectFilters.tsx`**
-```text
-New fields to add:
-- saleStatus: string[] (multi-select with colored dots)
-- paymentPlanMin: number (0-100)
-- paymentPlanMax: number (0-100)
-- hasPostHandover: boolean
-- handoverYearFrom: number | null
-- handoverYearTo: number | null
-- selectedEmirates: string[] (multi-select)
-- displayMode: 'broker' | 'investor'
-```
-
-### Phase 3: UI Components
-
-#### 3.1 Sale Status Dropdown with Colored Dots
-**Location**: Both HeroSearchBar and Properties filters
+Update `ProjectApprovalQueue.tsx` to show correct target based on source filter:
 
 ```text
-Visual Design:
-+----------------------------------+
-| Status                      [v]  |
-+----------------------------------+
-|  ● Announced         [x]         |  <- Pink dot
-|  ● Pre-sale (EOI)    [x]         |  <- Green dot
-|  ● Start of Sales    [ ]         |  <- Yellow dot
-|  ● On Sale           [x]         |  <- Light blue dot
-|  ● Sold Out          [ ]         |  <- Red dot
-+----------------------------------+
-| Selected: 3                      |
-+----------------------------------+
+When sourceFilter === "reelly" → Show "1,803"
+When sourceFilter === "provident" → Show "1,336"
+When sourceFilter === "all" → Show actual totalCount
 ```
 
-#### 3.2 Payment Plan Slider
-**New Component: `src/components/filters/PaymentPlanSlider.tsx`**
+Current issue location: Line 1015 in `ProjectApprovalQueue.tsx` - the conditional is already there but may not be applying correctly when the URL parameter `source=reelly` is used on page load.
+
+### Phase 2: Provident as Suggest-Only Enrichment
+
+Modify the sync strategy so:
+1. Reelly is the **primary and only** full extraction source
+2. Provident is used **only** to scan for projects that exist in both systems and propose missing sections
+3. Provident suggestions go to a separate approval queue - never auto-applied
+
+**Database tracking:**
+- Add a `source` column to track where each field came from (`reelly`, `provident_enrichment`, `manual`)
+- Add a `provident_enrichments` JSON column to store which fields were added by Provident
+- This allows one-click restoration to Reelly-only state
+
+### Phase 3: Restore to Reelly-Only Functionality
+
+#### 3.1 Global Restore Button
+Location: ReellyImportPanel.tsx - new section "Data Integrity"
 
 ```text
-Visual Design:
-+------------------------------------------+
-| Payment Plan                             |
-+------------------------------------------+
-|     Pre-Handover        Post-Handover    |
-|  [====●==========|============●====]     |
-|   20%                           80%      |
-+------------------------------------------+
-| [ ] Post-handover payments only          |
-+------------------------------------------+
-| [Reset]                                  |
-+------------------------------------------+
++--------------------------------------------------+
+| 🔄 Restore to Reelly-Only                        |
++--------------------------------------------------+
+| Remove all Provident enrichments and restore     |
+| projects to their original Reelly-only state.    |
+|                                                  |
+| [Restore All Projects to Reelly-Only]            |
++--------------------------------------------------+
 ```
 
-#### 3.3 Emirates Multi-Select with Checkboxes
-**Enhanced Dropdown**
+This will:
+- Clear all fields that were added by Provident (tracked via `provident_enrichments`)
+- Delete pending Provident suggestions from `listing_pending_updates`
+- Remove images/documents that were added from Provident sources
+
+#### 3.2 Per-Project Restore Button
+Location: Project detail page and/or approval queue preview
 
 ```text
-+----------------------------------+
-| Emirates                    [v]  |
-+----------------------------------+
-|  [x] Dubai                       |
-|  [x] Abu Dhabi                   |
-|  [ ] Sharjah                     |
-|  [ ] Ras Al Khaimah              |
-|  [ ] Ajman                       |
-|  [ ] Fujairah                    |
-|  [ ] Umm Al Quwain               |
-|  --- International ---           |
-|  [ ] Cyprus                      |
-|  [ ] Indonesia                   |
-|  [ ] Oman                        |
-|  [ ] Thailand                    |
-+----------------------------------+
-| Selected: 2 | [Clear]            |
-+----------------------------------+
+[↩️ Restore to Reelly-Only]
 ```
 
-#### 3.4 Handover Date Range
-**New Filter Section**
+This removes Provident enrichments for just that one project.
 
-```text
-+------------------------------------------+
-| Project Handover By                      |
-+------------------------------------------+
-| From: [2024 v]    To: [2028 v]          |
-+------------------------------------------+
-```
+### Phase 4: New Edge Function - restore-to-reelly
 
-#### 3.5 Broker/Investor Mode Toggle
-**Top Bar Addition**
-
-```text
-+------------------------------------------+
-| [🏢 Broker Mode] | [📈 Investor Mode]    |
-+------------------------------------------+
-```
-
-- **Broker Mode**: Shows commission info, developer contacts, quick share buttons
-- **Investor Mode**: Shows ROI metrics, rental yield, payment structure focus
-
-#### 3.6 Settings Dropdown (Top Right)
-**New Component: `src/components/filters/SettingsDropdown.tsx`**
-
-```text
-+----------------------------------+
-| ⚙️ Settings                [v]  |
-+----------------------------------+
-| Measure Unit                     |
-|  ( ) Square Feet                 |
-|  (●) Square Meters               |
-+----------------------------------+
-| Currency                         |
-|  [AED v] (10 currencies)         |
-+----------------------------------+
-| Display Mode                     |
-|  [Investor Mode v]               |
-+----------------------------------+
-| [Apply Settings]                 |
-+----------------------------------+
-```
-
-#### 3.7 Filter Toolbar Enhancement
-**Add to Properties Page Filter Bar**
-
-```text
-+-----------------------------------------------------------------------+
-| [Save Filter 💾] | [Favorites ❤️ (5)] | [Shortlist 📋 (3)] | [Map 🗺️] |
-+-----------------------------------------------------------------------+
-```
-
-### Phase 4: Enhanced Map View
-
-#### 4.1 Map Tile Provider Update
-**Switch to Satellite View**
+Create `supabase/functions/restore-to-reelly/index.ts`:
 
 ```typescript
-// Current: OpenStreetMap standard
-<TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+// Modes:
+// - "single": Restore a single project by ID
+// - "global": Restore all projects that have Provident enrichments
+// - "pending_only": Just clear pending Provident suggestions
 
-// New: Satellite view with terrain (shows beach colors)
-<TileLayer 
-  url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-  attribution="Tiles &copy; Esri"
-/>
+// Actions:
+// 1. Find projects with source="reelly" that have provident_enrichments
+// 2. Reset enriched fields to their original Reelly values (or null)
+// 3. Delete any images/documents added from Provident sources
+// 4. Clear listing_pending_updates where source is Provident
+// 5. Clear provident_enrichments JSON column
 ```
 
-#### 4.2 Developer Logo Markers
-**Enhanced Marker Component**
+### Phase 5: UI Updates
 
-```text
-Map Display:
-- Each project shows developer logo (40x40px circle)
-- Hover reveals tooltip with:
-  - Project name
-  - Developer name
-  - Location
-  - "Learn More →" link
-- Click opens project detail card
-```
+#### 5.1 ReellyImportPanel.tsx Enhancements
 
-#### 4.3 3D Map Toggle
-**Add 3D View Option**
-
-```text
-Map Controls (Bottom Right):
-+--------+
-| [+]    |  <- Zoom in
-| [-]    |  <- Zoom out
-+--------+
-| [2D]   |  <- Toggle 2D/3D
-| [3D]   |
-+--------+
-| [🛰️]   |  <- Satellite toggle
-+--------+
-```
-
-#### 4.4 Escape Key Handler
-```typescript
-useEffect(() => {
-  const handleEscape = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      if (isMapFullscreen) closeMap();
-      if (selectedProject) setSelectedProject(null);
-    }
-  };
-  window.addEventListener('keydown', handleEscape);
-  return () => window.removeEventListener('keydown', handleEscape);
-}, [isMapFullscreen, selectedProject]);
-```
-
-### Phase 5: Sticky Filter Behavior
-
-**Current**: Filter bar is sticky at `top-16`
-**Enhancement**: Add fixed filter + cards in same scrolling section
-
-```text
-Page Layout:
-+------------------------------------------+
-| Global Header (fixed)                    |
-+------------------------------------------+
-| Hero Section (scrolls away)              |
-+------------------------------------------+
-| Filter Bar (becomes sticky)              | <- Sticks on scroll
-+------------------------------------------+
-| Project Cards Grid                       |
-| (scrolls within viewport)                |
-+------------------------------------------+
-```
-
-### Phase 6: Full Filter Dialog Enhancement
-
-**Updated Advanced Filters Dialog**
+Add new card section:
 
 ```text
 +--------------------------------------------------+
-| Search & Filter                    [X]           |
+| 📊 Data Integrity                                |
 +--------------------------------------------------+
-| 🔍 Type a project, developer, or district...    |
+| • Projects from Reelly: 778 (of 1,803 available) |
+| • With Provident enrichments: 0                  |
+| • Pending Provident suggestions: 0               |
 +--------------------------------------------------+
-| Emirates                           [Multi ▼]     |
-| (Shows selected count)                           |
-+--------------------------------------------------+
-| Payment Plan                                     |
-| [====●==========|============●====]              |
-|  20%            |            80%                 |
-| [ ] Post-handover payments only                  |
-+--------------------------------------------------+
-| Price Range                                      |
-| Min: [______]  Max: [______]                     |
-+--------------------------------------------------+
-| Size Range (sqft)                                |
-| Min: [______]  Max: [______]                     |
-+--------------------------------------------------+
-| Development Status                               |
-| [Ready] [Off-Plan] [Under Construction]          |
-+--------------------------------------------------+
-| Sale Status                                      |
-| ● Announced  ● Pre-sale  ● Start  ● On Sale     |
-+--------------------------------------------------+
-| Unit Type                                        |
-| [All Types ▼]                                    |
-| Apartments, Villa, Townhouse, Penthouse,         |
-| Duplex, Simplex, Sky Villas, Plot, Land,        |
-| Retail, Offices, Commercial                      |
-+--------------------------------------------------+
-| Bedrooms                                         |
-| [Studio] [1] [2] [3] [4] [5] [6] [7+]           |
-+--------------------------------------------------+
-| Handover By                                      |
-| From: [2024]  To: [2028]                        |
-+--------------------------------------------------+
-| [Clear All]        [Show 1,803 Projects]        |
+| [Restore All to Reelly-Only] [Clear Suggestions] |
 +--------------------------------------------------+
 ```
 
----
+#### 5.2 ProjectApprovalQueue.tsx Fixes
 
-## Files to Create/Modify
+1. Fix the target display to correctly show 1,803 for Reelly filter
+2. Add source indicator on each card showing "Reelly" or "Reelly + Provident"
+3. Add per-item restore button for enriched projects
 
-### New Files
-| File | Purpose |
-|------|---------|
-| `src/constants/filterConfig.ts` | Centralized filter configuration with colors, options |
-| `src/components/filters/SaleStatusFilter.tsx` | Sale status multi-select with colored dots |
-| `src/components/filters/PaymentPlanSlider.tsx` | Dual-handle slider for payment plan % |
-| `src/components/filters/EmiratesMultiSelect.tsx` | Checkbox-based multi-select for emirates |
-| `src/components/filters/HandoverDateRange.tsx` | From/To year pickers |
-| `src/components/filters/SettingsDropdown.tsx` | Unit, currency, display mode settings |
-| `src/components/filters/DisplayModeToggle.tsx` | Broker vs Investor mode switcher |
-| `src/components/filters/SavedFiltersManager.tsx` | Save/load filter presets |
-| `src/components/map/DeveloperLogoMarker.tsx` | Custom map marker with developer logo |
-| `src/components/map/MapControls.tsx` | Zoom, 2D/3D, satellite toggle controls |
-| `src/hooks/useSavedFilters.ts` | Hook for saving/loading filter presets |
+#### 5.3 SyncDashboard.tsx Updates
 
-### Modified Files
+1. Remove Provident-specific "Full Sync" options from main workflow
+2. Move Provident tools to a "Deprecated/Legacy" section
+3. Update the "1,336" references to clarify they're Provident-specific
+4. Add prominent messaging that Reelly is the primary source
+
+### Phase 6: Database Schema Changes
+
+Add columns to `projects` table:
+
+```sql
+ALTER TABLE projects ADD COLUMN IF NOT EXISTS provident_enrichments jsonb DEFAULT NULL;
+-- Stores: {"fields_added": ["amenities", "faqs", "location_distances"], "images_added": ["url1", "url2"], "enriched_at": "timestamp"}
+```
+
+Add columns to `pending_project_imports` table (if not already present):
+
+```sql
+ALTER TABLE pending_project_imports ADD COLUMN IF NOT EXISTS enrichment_source text DEFAULT NULL;
+-- Values: "reelly", "provident", "manual"
+```
+
+## Files to Modify
+
 | File | Changes |
 |------|---------|
-| `src/components/ProjectFilters.tsx` | Add new filter fields to FilterState, integrate new filter components |
-| `src/components/home/HeroSearchBar.tsx` | Add sale status filter, settings dropdown, display mode toggle |
-| `src/pages/Properties.tsx` | Add favorites/shortlist badges to toolbar, integrate new filters |
-| `src/pages/PropertyMap.tsx` | Satellite tiles, developer logos, 3D toggle, escape handler |
-| `src/constants/saleStatus.ts` | Add color configuration for each status |
-| `src/constants/propertyTypes.ts` | Add Simplex, Sky Villas to options |
+| `src/components/listing-admin/ProjectApprovalQueue.tsx` | Fix target display logic, add restore button per item, add source indicator |
+| `src/components/listing-admin/ReellyImportPanel.tsx` | Add Data Integrity section with global restore, stats on enrichments |
+| `src/components/listing-admin/SyncDashboard.tsx` | Move Provident tools to deprecated section, update messaging |
+| `supabase/functions/restore-to-reelly/index.ts` | **NEW** - Edge function to handle restoration logic |
+| Database migration | Add `provident_enrichments` column to projects table |
 
----
+## Files to Create
 
-## Technical Details
+| File | Purpose |
+|------|---------|
+| `supabase/functions/restore-to-reelly/index.ts` | Edge function for single/global restore to Reelly-only state |
+| `src/components/listing-admin/DataIntegrityPanel.tsx` | Optional: Dedicated component for restore controls |
 
-### Sale Status Colors (Matching Reelly)
-```typescript
-export const SALE_STATUS_COLORS = {
-  "Announced": { bg: "bg-pink-400", text: "text-pink-400", dot: "bg-pink-400" },
-  "Presale (EOI)": { bg: "bg-green-400", text: "text-green-400", dot: "bg-green-400" },
-  "Start of Sales": { bg: "bg-yellow-400", text: "text-yellow-400", dot: "bg-yellow-400" },
-  "On Sale": { bg: "bg-blue-400", text: "text-blue-400", dot: "bg-blue-400" },
-  "Sold Out": { bg: "bg-red-500", text: "text-red-500", dot: "bg-red-500" },
-};
+## Technical Implementation Details
+
+### Target Display Fix (ProjectApprovalQueue.tsx)
+
+The issue is on line 1015. Current code:
+```tsx
+{sourceFilter === "provident" ? "1,336" : sourceFilter === "reelly" ? "1,803" : totalCount ?? "..."}
 ```
 
-### Payment Plan Filter Logic
-```typescript
-// Filter projects by payment plan percentage
-const filterByPaymentPlan = (project: Project, min: number, max: number) => {
-  const downPayment = project.down_payment_percent || 20;
-  const preHandover = 100 - downPayment;
-  return preHandover >= min && preHandover <= max;
-};
-```
+This should work, but the URL parameter may not be initializing `sourceFilter` correctly on first load. Need to verify:
+1. URL param `source=reelly` is being read correctly
+2. State is initialized before the first render
+3. The component re-renders when filter changes
 
-### Extended Unit Types
-```typescript
-export const EXTENDED_PROPERTY_TYPES = [
-  { value: "apartments", label: "Apartments" },
-  { value: "villa", label: "Villa" },
-  { value: "townhouse", label: "Townhouse" },
-  { value: "penthouse", label: "Penthouse" },
-  { value: "duplex", label: "Duplex" },
-  { value: "simplex", label: "Simplex" },  // NEW
-  { value: "sky-villas", label: "Sky Villas" },  // NEW
-  { value: "mansion", label: "Mansion" },
-  { value: "plot", label: "Plot" },
-  { value: "land", label: "Land" },
-  { value: "retail", label: "Retail" },
-  { value: "offices", label: "Offices" },
-  { value: "commercial", label: "Commercial" },
-];
-```
+### Restore Edge Function Logic
 
-### Saved Filters Schema
 ```typescript
-interface SavedFilter {
-  id: string;
-  name: string;
-  filters: FilterState;
-  createdAt: Date;
-  isDefault?: boolean;
+async function restoreToReelly(supabase, options) {
+  const { mode, projectId } = options;
+  
+  if (mode === "single" && projectId) {
+    // Get project's provident_enrichments
+    const { data: project } = await supabase
+      .from("projects")
+      .select("provident_enrichments")
+      .eq("id", projectId)
+      .single();
+    
+    if (project?.provident_enrichments) {
+      const enrichments = project.provident_enrichments;
+      
+      // Build update to null out enriched fields
+      const updates = {};
+      for (const field of enrichments.fields_added || []) {
+        updates[field] = null;
+      }
+      
+      // Clear enrichments tracking
+      updates.provident_enrichments = null;
+      
+      await supabase.from("projects").update(updates).eq("id", projectId);
+      
+      // Remove added images
+      if (enrichments.images_added?.length) {
+        await supabase
+          .from("project_images")
+          .delete()
+          .in("image_url", enrichments.images_added);
+      }
+      
+      // Remove added documents
+      if (enrichments.documents_added?.length) {
+        await supabase
+          .from("project_documents")
+          .delete()
+          .in("file_url", enrichments.documents_added);
+      }
+    }
+  }
+  
+  if (mode === "global") {
+    // Same logic but for all projects with provident_enrichments IS NOT NULL
+  }
+  
+  if (mode === "pending_only") {
+    // Clear listing_pending_updates where source is Provident
+    await supabase
+      .from("listing_pending_updates")
+      .delete()
+      .ilike("source.name", "%provident%");
+  }
 }
-// Store in localStorage for guests, database for authenticated users
 ```
 
----
+### Provident Enrichment Flow (Future)
 
-## Implementation Priority
-
-| Priority | Component | Complexity | Impact |
-|----------|-----------|------------|--------|
-| 1 | Sale Status with colored dots | Low | High |
-| 2 | Emirates multi-select | Medium | High |
-| 3 | Favorites/Shortlist badges in toolbar | Low | High |
-| 4 | Settings dropdown | Low | Medium |
-| 5 | Payment Plan slider | Medium | Medium |
-| 6 | Handover date range | Low | Medium |
-| 7 | Display Mode toggle | Low | Medium |
-| 8 | Save Filter functionality | Medium | Medium |
-| 9 | Satellite map with logos | High | High |
-| 10 | 3D map toggle | High | Low |
-
----
+After this fix, the Provident workflow becomes:
+1. User runs Reelly Full Sync → 1,803 projects imported
+2. User clicks "Scan Provident for Missing Data" (new button)
+3. System scans Provident, finds matching projects by name/slug
+4. Creates suggestions in `listing_pending_updates` table
+5. User reviews and approves/rejects suggestions
+6. Approved enrichments are applied AND tracked in `provident_enrichments`
+7. User can click "Restore to Reelly-Only" at any time to undo
 
 ## Expected Results
 
 After implementation:
-- **Filter parity with Reelly** while maintaining your premium gold/champagne design
-- **Colored sale status dots** for instant visual recognition
-- **Payment plan filtering** for investor-focused browsing
-- **Multi-select emirates** with checkbox UI
-- **Broker/Investor mode** for role-specific information display
-- **Satellite map** with developer logos and 3D capabilities
-- **Save filters** for returning users
-- **Consistent experience** across Homepage, Properties, and Map pages
-- **Project count badge** showing "1,803 Projects" in filter
-- **Escape key** to quickly exit map view
+- **Target display shows correct number**: 1,803 for Reelly, 1,336 for Provident
+- **Queue math is correct**: In Queue + Complete = Target (after Full Sync)
+- **Provident is suggest-only**: Never auto-applied, always requires approval
+- **Global restore button**: One-click to remove all Provident enrichments
+- **Per-project restore**: Undo enrichments on individual projects
+- **Clear separation**: Reelly tab is primary, Provident tools moved to legacy section
+- **Full audit trail**: Know exactly which fields came from Provident vs Reelly
+
+## Implementation Priority
+
+| Step | Priority | Complexity |
+|------|----------|------------|
+| 1. Fix target display in ProjectApprovalQueue | HIGH | Low |
+| 2. Add provident_enrichments column | HIGH | Low |
+| 3. Create restore-to-reelly edge function | HIGH | Medium |
+| 4. Add Data Integrity panel with restore buttons | HIGH | Medium |
+| 5. Move Provident tools to deprecated section | Medium | Low |
+| 6. Add per-project restore buttons | Medium | Medium |
+| 7. Implement Provident suggest-only workflow | Low | High |
+
