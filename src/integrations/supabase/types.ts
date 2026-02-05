@@ -15325,6 +15325,95 @@ export type Database = {
         }
         Relationships: []
       }
+      toolkit_jobs: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          expires_at: string
+          id: string
+          input_files: Json
+          job_type: string
+          output_files: Json | null
+          progress: number | null
+          session_id: string
+          settings: Json | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          expires_at?: string
+          id?: string
+          input_files?: Json
+          job_type: string
+          output_files?: Json | null
+          progress?: number | null
+          session_id: string
+          settings?: Json | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          expires_at?: string
+          id?: string
+          input_files?: Json
+          job_type?: string
+          output_files?: Json | null
+          progress?: number | null
+          session_id?: string
+          settings?: Json | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      toolkit_temp_files: {
+        Row: {
+          created_at: string
+          expires_at: string
+          file_path: string
+          file_size_bytes: number | null
+          file_type: string
+          id: string
+          job_id: string | null
+          original_name: string | null
+          session_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string
+          file_path: string
+          file_size_bytes?: number | null
+          file_type: string
+          id?: string
+          job_id?: string | null
+          original_name?: string | null
+          session_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          file_path?: string
+          file_size_bytes?: number | null
+          file_type?: string
+          id?: string
+          job_id?: string | null
+          original_name?: string | null
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "toolkit_temp_files_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "toolkit_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       training_completions: {
         Row: {
           completed_at: string
@@ -18200,6 +18289,7 @@ export type Database = {
         Returns: boolean
       }
       cleanup_device_tracking_data: { Args: never; Returns: number }
+      cleanup_expired_toolkit_data: { Args: never; Returns: undefined }
       cleanup_expired_vapi_calls: { Args: never; Returns: number }
       cleanup_expired_vapi_recordings: { Args: never; Returns: number }
       cleanup_expired_verifications: { Args: never; Returns: undefined }
