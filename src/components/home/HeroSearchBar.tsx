@@ -911,11 +911,11 @@ const HeroSearchBar = () => {
             </DialogContent>
           </Dialog>
 
-          {/* Search Button - Fully rounded pill shape */}
+          {/* Search Button - Subtle rounded corners */}
           <div className="p-1.5">
             <Button
               onClick={handleSearch}
-              className="h-10 px-6 py-2.5 bg-gold hover:bg-gold-dark text-black font-bold text-sm rounded-full transition-all duration-300 shadow-lg hover:shadow-gold/30"
+              className="h-10 px-6 py-2.5 bg-gold hover:bg-gold-dark text-black font-bold text-sm rounded-xl transition-all duration-300 shadow-lg hover:shadow-gold/30"
             >
               <Search className="w-4 h-4 mr-1.5" />
               Search
