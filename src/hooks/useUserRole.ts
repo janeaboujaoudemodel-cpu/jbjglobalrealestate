@@ -1,21 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
 const ROLE_SELECTION_KEY = "jj_role_selected";
 
-export type VisitorRole = 'broker' | 'investor' | 'visitor' | 'owner' | 'broker_partner' | null;
+export type VisitorRole = 'broker' | 'investor' | 'visitor' | 'owner' | 'broker_partner' | 'broker_jbj' | 'client' | null;
 
 export const useUserRole = () => {
   const [role, setRole] = useState<VisitorRole>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
 
-  useEffect(() => {
-    loadRole();
-  }, [user]);
-
-  const loadRole = async () => {
+  const loadRole = useCallback(async () => {
     setIsLoading(true);
     
     // Check localStorage first
@@ -29,26 +25,69 @@ export const useUserRole = () => {
     // Check database if logged in
     if (user) {
       try {
-        const { data } = await supabase
+        // First check user_role_selections table
+        const { data: roleSelection } = await supabase
           .from('user_role_selections')
           .select('selected_role')
           .eq('user_id', user.id)
-          .single();
+          .maybeSingle();
 
-        if (data?.selected_role) {
-          setRole(data.selected_role as VisitorRole);
-          localStorage.setItem(ROLE_SELECTION_KEY, data.selected_role);
+        if (roleSelection?.selected_role) {
+          setRole(roleSelection.selected_role as VisitorRole);
+          localStorage.setItem(ROLE_SELECTION_KEY, roleSelection.selected_role);
+          setIsLoading(false);
+          return;
+        }
+
+        // Check if user is a JBJ employee (has crm_users_profile)
+        const { data: crmProfile } = await supabase
+          .from('crm_users_profile')
+          .select('crm_role, is_active')
+          .eq('user_id', user.id)
+          .eq('is_active', true)
+          .maybeSingle();
+
+        if (crmProfile) {
+          // Employee - set as broker_jbj
+          setRole('broker_jbj');
+          localStorage.setItem(ROLE_SELECTION_KEY, 'broker_jbj');
+          setIsLoading(false);
+          return;
+        }
+
+        // Check broker_profiles for partner brokers
+        const { data: brokerProfile } = await supabase
+          .from('broker_profiles')
+          .select('broker_type')
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        if (brokerProfile) {
+          const brokerRole = brokerProfile.broker_type === 'internal' ? 'broker_jbj' : 'broker_partner';
+          setRole(brokerRole);
+          localStorage.setItem(ROLE_SELECTION_KEY, brokerRole);
+          setIsLoading(false);
+          return;
         }
       } catch (err) {
-        console.log('No role found in database');
+        console.log('Error loading role from database:', err);
       }
     }
 
     setIsLoading(false);
-  };
+  }, [user]);
 
-  const isBroker = role === 'broker';
+  useEffect(() => {
+    loadRole();
+  }, [loadRole]);
+
+  // Helper flags
+  const isBroker = role === 'broker' || role === 'broker_jbj' || role === 'broker_partner';
+  const isJBJBroker = role === 'broker_jbj';
+  const isPartnerBroker = role === 'broker_partner';
   const isInvestor = role === 'investor';
+  const isOwner = role === 'owner';
+  const isClient = role === 'client' || role === 'investor' || role === 'owner';
   const isVisitor = role === 'visitor';
 
   const clearRole = () => {
@@ -56,14 +95,44 @@ export const useUserRole = () => {
     setRole(null);
   };
 
+  const setUserRole = useCallback(async (newRole: VisitorRole) => {
+    if (!newRole) return;
+    
+    // Optimistic update
+    setRole(newRole);
+    localStorage.setItem(ROLE_SELECTION_KEY, newRole);
+
+    // Persist to database if logged in
+    if (user?.id) {
+      try {
+        await supabase
+          .from('user_role_selections')
+          .upsert({
+            user_id: user.id,
+            selected_role: newRole as any,
+            confirmed_accurate: true
+          }, {
+            onConflict: 'user_id'
+          });
+      } catch (err) {
+        console.error('Error saving role:', err);
+      }
+    }
+  }, [user?.id]);
+
   return {
     role,
     isLoading,
     isBroker,
+    isJBJBroker,
+    isPartnerBroker,
     isInvestor,
+    isOwner,
+    isClient,
     isVisitor,
     hasSelectedRole: role !== null,
     clearRole,
+    setRole: setUserRole,
     refreshRole: loadRole
   };
 };

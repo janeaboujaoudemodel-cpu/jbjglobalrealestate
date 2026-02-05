@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { User, Heart, Sparkles, Briefcase, Users, FolderOpen, Monitor, Settings, LogOut, ChevronRight } from 'lucide-react';
+import { User, Heart, Sparkles, Briefcase, Users, FolderOpen, Monitor, Settings, LogOut, ChevronRight, ToggleLeft } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { MegaMenuShell, MegaMenuSectionDivider } from './mega-menu-primitives';
+import ModeSwitcher from '@/components/ModeSwitcher';
 
 interface MegaMenuAccountProps {
   onClose: () => void;
@@ -100,14 +101,17 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                 </p>
                 <p className="text-black/60 text-sm truncate">{user.email}</p>
               </div>
-              <Link 
-                to="/profile" 
-                onClick={onClose} 
-                className="flex items-center gap-1.5 text-gold text-sm font-semibold hover:underline transition-colors shrink-0"
-              >
-                Edit Profile
-                <ChevronRight className="w-3.5 h-3.5" />
-              </Link>
+              <div className="flex flex-col items-end gap-2 shrink-0">
+                <ModeSwitcher variant="header" />
+                <Link 
+                  to="/profile" 
+                  onClick={onClose} 
+                  className="flex items-center gap-1.5 text-gold text-sm font-semibold hover:underline transition-colors"
+                >
+                  Edit Profile
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
             </div>
 
             {/* Two-Column Layout for Links */}
