@@ -14896,6 +14896,717 @@ export type Database = {
         }
         Relationships: []
       }
+      studio_ai_sessions: {
+        Row: {
+          brand_strictness: string | null
+          created_at: string
+          creativity_level: string | null
+          generated_captions: Json | null
+          generated_overlays: Json | null
+          id: string
+          media_context: Json | null
+          project_id: string
+          prompt: string
+          property_context: Json | null
+          status: string | null
+          storyboard: Json | null
+          suggested_clips: Json | null
+          target_audience: string | null
+        }
+        Insert: {
+          brand_strictness?: string | null
+          created_at?: string
+          creativity_level?: string | null
+          generated_captions?: Json | null
+          generated_overlays?: Json | null
+          id?: string
+          media_context?: Json | null
+          project_id: string
+          prompt: string
+          property_context?: Json | null
+          status?: string | null
+          storyboard?: Json | null
+          suggested_clips?: Json | null
+          target_audience?: string | null
+        }
+        Update: {
+          brand_strictness?: string | null
+          created_at?: string
+          creativity_level?: string | null
+          generated_captions?: Json | null
+          generated_overlays?: Json | null
+          id?: string
+          media_context?: Json | null
+          project_id?: string
+          prompt?: string
+          property_context?: Json | null
+          status?: string | null
+          storyboard?: Json | null
+          suggested_clips?: Json | null
+          target_audience?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "studio_ai_sessions_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "studio_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      studio_captions: {
+        Row: {
+          confidence: number | null
+          created_at: string
+          custom_style: Json | null
+          end_time_ms: number
+          id: string
+          original_language: string | null
+          original_text: string
+          project_id: string
+          source: string | null
+          start_time_ms: number
+          style_preset: string | null
+          translations: Json | null
+        }
+        Insert: {
+          confidence?: number | null
+          created_at?: string
+          custom_style?: Json | null
+          end_time_ms: number
+          id?: string
+          original_language?: string | null
+          original_text: string
+          project_id: string
+          source?: string | null
+          start_time_ms: number
+          style_preset?: string | null
+          translations?: Json | null
+        }
+        Update: {
+          confidence?: number | null
+          created_at?: string
+          custom_style?: Json | null
+          end_time_ms?: number
+          id?: string
+          original_language?: string | null
+          original_text?: string
+          project_id?: string
+          source?: string | null
+          start_time_ms?: number
+          style_preset?: string | null
+          translations?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "studio_captions_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "studio_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      studio_exports: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          export_type: string
+          file_path: string | null
+          file_size_bytes: number | null
+          format: string
+          id: string
+          job_id: string | null
+          pack_contents: Json | null
+          preset: string | null
+          project_id: string
+          resolution: string | null
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          export_type: string
+          file_path?: string | null
+          file_size_bytes?: number | null
+          format: string
+          id?: string
+          job_id?: string | null
+          pack_contents?: Json | null
+          preset?: string | null
+          project_id: string
+          resolution?: string | null
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          export_type?: string
+          file_path?: string | null
+          file_size_bytes?: number | null
+          format?: string
+          id?: string
+          job_id?: string | null
+          pack_contents?: Json | null
+          preset?: string | null
+          project_id?: string
+          resolution?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "studio_exports_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "studio_jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "studio_exports_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "studio_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      studio_jobs: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          error_message: string | null
+          id: string
+          input_data: Json
+          job_type: string
+          max_retries: number | null
+          output_asset_ids: string[] | null
+          output_data: Json | null
+          priority: number | null
+          progress: number | null
+          progress_message: string | null
+          project_id: string | null
+          retry_count: number | null
+          session_id: string | null
+          started_at: string | null
+          status: string
+          updated_at: string
+          user_id: string | null
+          worker_id: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          input_data?: Json
+          job_type: string
+          max_retries?: number | null
+          output_asset_ids?: string[] | null
+          output_data?: Json | null
+          priority?: number | null
+          progress?: number | null
+          progress_message?: string | null
+          project_id?: string | null
+          retry_count?: number | null
+          session_id?: string | null
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+          worker_id?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          input_data?: Json
+          job_type?: string
+          max_retries?: number | null
+          output_asset_ids?: string[] | null
+          output_data?: Json | null
+          priority?: number | null
+          progress?: number | null
+          progress_message?: string | null
+          project_id?: string | null
+          retry_count?: number | null
+          session_id?: string | null
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+          worker_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "studio_jobs_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "studio_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      studio_project_assets: {
+        Row: {
+          asset_type: string
+          created_at: string
+          duration_ms: number | null
+          expires_at: string | null
+          file_size_bytes: number | null
+          height: number | null
+          id: string
+          mime_type: string | null
+          name: string
+          processing_job_id: string | null
+          processing_status: string | null
+          project_id: string
+          source_property_id: string | null
+          source_type: string | null
+          storage_bucket: string | null
+          storage_path: string
+          thumbnail_path: string | null
+          width: number | null
+        }
+        Insert: {
+          asset_type: string
+          created_at?: string
+          duration_ms?: number | null
+          expires_at?: string | null
+          file_size_bytes?: number | null
+          height?: number | null
+          id?: string
+          mime_type?: string | null
+          name: string
+          processing_job_id?: string | null
+          processing_status?: string | null
+          project_id: string
+          source_property_id?: string | null
+          source_type?: string | null
+          storage_bucket?: string | null
+          storage_path: string
+          thumbnail_path?: string | null
+          width?: number | null
+        }
+        Update: {
+          asset_type?: string
+          created_at?: string
+          duration_ms?: number | null
+          expires_at?: string | null
+          file_size_bytes?: number | null
+          height?: number | null
+          id?: string
+          mime_type?: string | null
+          name?: string
+          processing_job_id?: string | null
+          processing_status?: string | null
+          project_id?: string
+          source_property_id?: string | null
+          source_type?: string | null
+          storage_bucket?: string | null
+          storage_path?: string
+          thumbnail_path?: string | null
+          width?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "studio_project_assets_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "studio_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      studio_projects: {
+        Row: {
+          ai_settings: Json | null
+          autosave_version: number | null
+          canvas_settings: Json | null
+          created_at: string
+          description: string | null
+          id: string
+          is_shared: boolean | null
+          last_autosave_at: string | null
+          name: string
+          project_type: string | null
+          property_id: string | null
+          property_snapshot: Json | null
+          session_id: string | null
+          share_mode: string | null
+          share_token: string | null
+          status: string
+          tags: string[] | null
+          thumbnail_url: string | null
+          timeline_state: Json | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          ai_settings?: Json | null
+          autosave_version?: number | null
+          canvas_settings?: Json | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_shared?: boolean | null
+          last_autosave_at?: string | null
+          name?: string
+          project_type?: string | null
+          property_id?: string | null
+          property_snapshot?: Json | null
+          session_id?: string | null
+          share_mode?: string | null
+          share_token?: string | null
+          status?: string
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          timeline_state?: Json | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          ai_settings?: Json | null
+          autosave_version?: number | null
+          canvas_settings?: Json | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_shared?: boolean | null
+          last_autosave_at?: string | null
+          name?: string
+          project_type?: string | null
+          property_id?: string | null
+          property_snapshot?: Json | null
+          session_id?: string | null
+          share_mode?: string | null
+          share_token?: string | null
+          status?: string
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          timeline_state?: Json | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      studio_publish_presets: {
+        Row: {
+          caption_template: string | null
+          contact_info: Json | null
+          created_at: string
+          cta_text: string | null
+          hashtag_sets: Json | null
+          id: string
+          is_default: boolean | null
+          name: string
+          platform: string | null
+          tone: string | null
+          user_id: string
+        }
+        Insert: {
+          caption_template?: string | null
+          contact_info?: Json | null
+          created_at?: string
+          cta_text?: string | null
+          hashtag_sets?: Json | null
+          id?: string
+          is_default?: boolean | null
+          name: string
+          platform?: string | null
+          tone?: string | null
+          user_id: string
+        }
+        Update: {
+          caption_template?: string | null
+          contact_info?: Json | null
+          created_at?: string
+          cta_text?: string | null
+          hashtag_sets?: Json | null
+          id?: string
+          is_default?: boolean | null
+          name?: string
+          platform?: string | null
+          tone?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      studio_publish_queue: {
+        Row: {
+          caption: string | null
+          created_at: string
+          error_message: string | null
+          export_id: string | null
+          hashtags: string[] | null
+          id: string
+          platform: string
+          platform_post_id: string | null
+          platform_url: string | null
+          post_type: string
+          project_id: string | null
+          published_at: string | null
+          scheduled_at: string | null
+          social_account_id: string | null
+          status: string | null
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          error_message?: string | null
+          export_id?: string | null
+          hashtags?: string[] | null
+          id?: string
+          platform: string
+          platform_post_id?: string | null
+          platform_url?: string | null
+          post_type: string
+          project_id?: string | null
+          published_at?: string | null
+          scheduled_at?: string | null
+          social_account_id?: string | null
+          status?: string | null
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          error_message?: string | null
+          export_id?: string | null
+          hashtags?: string[] | null
+          id?: string
+          platform?: string
+          platform_post_id?: string | null
+          platform_url?: string | null
+          post_type?: string
+          project_id?: string | null
+          published_at?: string | null
+          scheduled_at?: string | null
+          social_account_id?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "studio_publish_queue_export_id_fkey"
+            columns: ["export_id"]
+            isOneToOne: false
+            referencedRelation: "studio_exports"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "studio_publish_queue_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "studio_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "studio_publish_queue_social_account_id_fkey"
+            columns: ["social_account_id"]
+            isOneToOne: false
+            referencedRelation: "studio_social_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      studio_social_accounts: {
+        Row: {
+          access_token_encrypted: string | null
+          account_id: string | null
+          account_name: string | null
+          created_at: string
+          id: string
+          is_connected: boolean | null
+          last_used_at: string | null
+          platform: string
+          refresh_token_encrypted: string | null
+          token_expires_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_token_encrypted?: string | null
+          account_id?: string | null
+          account_name?: string | null
+          created_at?: string
+          id?: string
+          is_connected?: boolean | null
+          last_used_at?: string | null
+          platform: string
+          refresh_token_encrypted?: string | null
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_token_encrypted?: string | null
+          account_id?: string | null
+          account_name?: string | null
+          created_at?: string
+          id?: string
+          is_connected?: boolean | null
+          last_used_at?: string | null
+          platform?: string
+          refresh_token_encrypted?: string | null
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      studio_stock_library: {
+        Row: {
+          asset_type: string
+          attribution: string | null
+          category: string | null
+          created_at: string
+          description: string | null
+          duration_ms: number | null
+          file_path: string
+          id: string
+          is_trending: boolean | null
+          license: string | null
+          name: string
+          platforms: string[] | null
+          preview_path: string | null
+          tags: string[] | null
+          thumbnail_path: string | null
+          trend_score: number | null
+          usage_count: number | null
+        }
+        Insert: {
+          asset_type: string
+          attribution?: string | null
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          duration_ms?: number | null
+          file_path: string
+          id?: string
+          is_trending?: boolean | null
+          license?: string | null
+          name: string
+          platforms?: string[] | null
+          preview_path?: string | null
+          tags?: string[] | null
+          thumbnail_path?: string | null
+          trend_score?: number | null
+          usage_count?: number | null
+        }
+        Update: {
+          asset_type?: string
+          attribution?: string | null
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          duration_ms?: number | null
+          file_path?: string
+          id?: string
+          is_trending?: boolean | null
+          license?: string | null
+          name?: string
+          platforms?: string[] | null
+          preview_path?: string | null
+          tags?: string[] | null
+          thumbnail_path?: string | null
+          trend_score?: number | null
+          usage_count?: number | null
+        }
+        Relationships: []
+      }
+      studio_timeline_clips: {
+        Row: {
+          asset_id: string | null
+          caption_style: Json | null
+          caption_text: string | null
+          created_at: string
+          duration_ms: number | null
+          effects: Json | null
+          end_time_ms: number
+          id: string
+          keyframes: Json | null
+          media_end_ms: number | null
+          media_start_ms: number | null
+          opacity: number | null
+          overlay_data: Json | null
+          playback_speed: number | null
+          position_x: number | null
+          position_y: number | null
+          project_id: string
+          rotation: number | null
+          scale: number | null
+          start_time_ms: number
+          track_index: number
+          track_type: string
+          transitions: Json | null
+          updated_at: string
+        }
+        Insert: {
+          asset_id?: string | null
+          caption_style?: Json | null
+          caption_text?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          effects?: Json | null
+          end_time_ms: number
+          id?: string
+          keyframes?: Json | null
+          media_end_ms?: number | null
+          media_start_ms?: number | null
+          opacity?: number | null
+          overlay_data?: Json | null
+          playback_speed?: number | null
+          position_x?: number | null
+          position_y?: number | null
+          project_id: string
+          rotation?: number | null
+          scale?: number | null
+          start_time_ms?: number
+          track_index?: number
+          track_type: string
+          transitions?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          asset_id?: string | null
+          caption_style?: Json | null
+          caption_text?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          effects?: Json | null
+          end_time_ms?: number
+          id?: string
+          keyframes?: Json | null
+          media_end_ms?: number | null
+          media_start_ms?: number | null
+          opacity?: number | null
+          overlay_data?: Json | null
+          playback_speed?: number | null
+          position_x?: number | null
+          position_y?: number | null
+          project_id?: string
+          rotation?: number | null
+          scale?: number | null
+          start_time_ms?: number
+          track_index?: number
+          track_type?: string
+          transitions?: Json | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "studio_timeline_clips_asset_id_fkey"
+            columns: ["asset_id"]
+            isOneToOne: false
+            referencedRelation: "studio_project_assets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "studio_timeline_clips_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "studio_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscription_tiers: {
         Row: {
           created_at: string | null
