@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 const BACKGROUND_PRESETS = [
   { id: 'transparent', label: 'Transparent', color: 'transparent' },
@@ -25,6 +26,16 @@ const BACKGROUND_PRESETS = [
   { id: 'gradient-gold', label: 'Gold Gradient', color: 'gradient' },
 ];
 
+// Helper to convert file to base64 data URL
+const fileToDataUrl = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+};
+
 export default function BackgroundAI() {
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -33,12 +44,16 @@ export default function BackgroundAI() {
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<string | null>(null);
   const [selectedBackground, setSelectedBackground] = useState('transparent');
-  const [customBackground, setCustomBackground] = useState<File | null>(null);
 
   const handleFileDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     const droppedFile = e.dataTransfer.files[0];
     if (droppedFile && droppedFile.type.startsWith('image/')) {
+      // Check file size (10MB max)
+      if (droppedFile.size > 10 * 1024 * 1024) {
+        toast.error('File too large. Maximum size is 10MB.');
+        return;
+      }
       setImage(droppedFile);
       setImagePreview(URL.createObjectURL(droppedFile));
       setResult(null);
@@ -50,6 +65,11 @@ export default function BackgroundAI() {
   const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
+      // Check file size (10MB max)
+      if (selectedFile.size > 10 * 1024 * 1024) {
+        toast.error('File too large. Maximum size is 10MB.');
+        return;
+      }
       setImage(selectedFile);
       setImagePreview(URL.createObjectURL(selectedFile));
       setResult(null);
@@ -63,21 +83,53 @@ export default function BackgroundAI() {
     }
 
     setIsProcessing(true);
-    setProgress(0);
+    setProgress(10);
 
     try {
-      // Simulate AI processing
-      for (let i = 0; i <= 100; i += 5) {
-        await new Promise(r => setTimeout(r, 100));
-        setProgress(i);
+      // Convert image to base64 data URL
+      const imageDataUrl = await fileToDataUrl(image);
+      setProgress(30);
+
+      // Call AI background removal edge function
+      const { data, error } = await supabase.functions.invoke('ai-background-remove', {
+        body: { 
+          image: imageDataUrl,
+          backgroundColor: selectedBackground 
+        }
+      });
+
+      setProgress(80);
+
+      if (error) {
+        throw new Error(error.message || 'Processing failed');
       }
 
-      // For demo, use the original image as result
-      // In production, this would call an AI background removal API
-      setResult(imagePreview);
-      toast.success('Background removed successfully!');
+      if (data?.error) {
+        throw new Error(data.error);
+      }
+
+      if (!data?.success || !data?.processedImage) {
+        // Use original if AI couldn't process
+        toast.warning('AI could not process this image. Please try a different photo.');
+        setResult(imagePreview);
+      } else {
+        setResult(data.processedImage);
+        toast.success('Background removed successfully!');
+      }
+      
+      setProgress(100);
     } catch (error) {
-      toast.error('Processing failed. Please try again.');
+      console.error('Background removal error:', error);
+      const message = error instanceof Error ? error.message : 'Processing failed. Please try again.';
+      
+      // Handle rate limit errors
+      if (message.includes('Rate limit') || message.includes('429')) {
+        toast.error('Rate limit reached. Please wait a moment and try again.');
+      } else if (message.includes('credits') || message.includes('402')) {
+        toast.error('AI service temporarily unavailable. Please try again later.');
+      } else {
+        toast.error(message);
+      }
     } finally {
       setIsProcessing(false);
     }
@@ -86,11 +138,24 @@ export default function BackgroundAI() {
   const handleDownload = () => {
     if (!result) return;
     
+    // Create download link
     const a = document.createElement('a');
     a.href = result;
     a.download = `background-removed-${Date.now()}.png`;
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
     toast.success('Image downloaded!');
+  };
+
+  const resetAll = () => {
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
+    setImage(null);
+    setImagePreview(null);
+    setResult(null);
+    setProgress(0);
   };
 
   return (
@@ -175,11 +240,7 @@ export default function BackgroundAI() {
                   <Button 
                     variant="secondary" 
                     size="sm"
-                    onClick={() => {
-                      setImage(null);
-                      setImagePreview(null);
-                      setResult(null);
-                    }}
+                    onClick={resetAll}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -274,7 +335,7 @@ export default function BackgroundAI() {
                 {isProcessing ? (
                   <>
                     <Loader2 className="h-5 w-5 animate-spin mr-2" />
-                    Processing... {progress}%
+                    Processing... {Math.round(progress)}%
                   </>
                 ) : (
                   <>
@@ -302,7 +363,10 @@ export default function BackgroundAI() {
                     <Download className="h-4 w-4 mr-2" />
                     Download PNG
                   </Button>
-                  <Button variant="secondary" onClick={handleProcess}>
+                  <Button variant="secondary" onClick={() => {
+                    setResult(null);
+                    setProgress(0);
+                  }}>
                     <Wand2 className="h-4 w-4 mr-2" />
                     Process Again
                   </Button>

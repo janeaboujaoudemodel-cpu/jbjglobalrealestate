@@ -4,7 +4,6 @@ import {
   ArrowLeft, 
   Upload, 
   Languages, 
-  FileText, 
   Download,
   Play,
   Loader2,
@@ -16,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 const SUPPORTED_LANGUAGES = [
   { code: 'ar', name: 'Arabic', rtl: true },
@@ -24,23 +24,31 @@ const SUPPORTED_LANGUAGES = [
   { code: 'en', name: 'English', rtl: false },
   { code: 'fr', name: 'French', rtl: false },
   { code: 'de', name: 'German', rtl: false },
-  { code: 'he', name: 'Hebrew', rtl: true },
   { code: 'hi', name: 'Hindi', rtl: false },
-  { code: 'id', name: 'Indonesian', rtl: false },
   { code: 'it', name: 'Italian', rtl: false },
   { code: 'ja', name: 'Japanese', rtl: false },
   { code: 'ko', name: 'Korean', rtl: false },
   { code: 'fa', name: 'Persian', rtl: true },
-  { code: 'pl', name: 'Polish', rtl: false },
   { code: 'pt', name: 'Portuguese', rtl: false },
   { code: 'ru', name: 'Russian', rtl: false },
   { code: 'es', name: 'Spanish', rtl: false },
-  { code: 'th', name: 'Thai', rtl: false },
   { code: 'tr', name: 'Turkish', rtl: false },
-  { code: 'uk', name: 'Ukrainian', rtl: false },
-  { code: 'ur', name: 'Urdu', rtl: true },
-  { code: 'vi', name: 'Vietnamese', rtl: false },
 ];
+
+// Helper to convert file to base64
+const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const result = reader.result as string;
+      // Extract base64 from data URL
+      const base64 = result.split(',')[1];
+      resolve(base64);
+    };
+    reader.onerror = (error) => reject(error);
+  });
+};
 
 export default function CaptionsTranslate() {
   const [file, setFile] = useState<File | null>(null);
@@ -89,25 +97,47 @@ export default function CaptionsTranslate() {
     }
 
     setIsProcessing(true);
-    setProgress(0);
+    setProgress(10);
 
     try {
-      // Simulate transcription progress
-      for (let i = 0; i <= 100; i += 10) {
-        await new Promise(r => setTimeout(r, 300));
-        setProgress(i);
+      // Convert audio/video to base64
+      const base64Audio = await fileToBase64(file);
+      setProgress(30);
+
+      // Call voice-to-text edge function
+      const { data, error } = await supabase.functions.invoke('voice-to-text', {
+        body: { audio: base64Audio, language: 'en' }
+      });
+
+      setProgress(80);
+
+      if (error) {
+        throw new Error(error.message || 'Transcription failed');
       }
 
-      // Mock transcription result
-      setTranscription(`[00:00:00] Welcome to this property tour.
-[00:00:05] Today we're exploring a stunning villa in Dubai Marina.
-[00:00:12] The living space features floor-to-ceiling windows.
-[00:00:18] Notice the premium marble flooring throughout.
-[00:00:25] The kitchen includes top-of-the-line appliances.`);
+      if (data?.error) {
+        throw new Error(data.error);
+      }
 
+      if (!data?.text) {
+        throw new Error('No transcription returned');
+      }
+
+      // Format transcription with timestamps (simulated for now)
+      const lines = data.text.split('. ').filter((s: string) => s.trim());
+      const formattedTranscription = lines.map((line: string, i: number) => {
+        const seconds = i * 5;
+        const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+        const secs = (seconds % 60).toString().padStart(2, '0');
+        return `[00:${mins}:${secs}] ${line.trim()}${line.endsWith('.') ? '' : '.'}`;
+      }).join('\n');
+
+      setTranscription(formattedTranscription);
+      setProgress(100);
       toast.success('Transcription complete!');
     } catch (error) {
-      toast.error('Failed to transcribe. Please try again.');
+      console.error('Transcription error:', error);
+      toast.error(error instanceof Error ? error.message : 'Failed to transcribe. Please try again.');
     } finally {
       setIsProcessing(false);
     }
@@ -125,18 +155,47 @@ export default function CaptionsTranslate() {
     try {
       const newTranslations: Record<string, string> = {};
       
+      // Extract just the text content (without timestamps) for translation
+      const textLines = transcription.split('\n').map(line => {
+        const match = line.match(/\[\d{2}:\d{2}:\d{2}\]\s*(.*)/);
+        return match ? match[1] : line;
+      });
+
       for (let i = 0; i < selectedLanguages.length; i++) {
         const lang = selectedLanguages[i];
-        await new Promise(r => setTimeout(r, 500));
-        setProgress(((i + 1) / selectedLanguages.length) * 100);
+        setProgress(((i) / selectedLanguages.length) * 100);
         
-        // Mock translation
-        newTranslations[lang] = `[Translated to ${SUPPORTED_LANGUAGES.find(l => l.code === lang)?.name}]\n${transcription}`;
+        // Call auto-translate edge function
+        const { data, error } = await supabase.functions.invoke('auto-translate', {
+          body: { texts: textLines, targetLang: lang }
+        });
+
+        if (error) {
+          console.error(`Translation error for ${lang}:`, error);
+          newTranslations[lang] = `[Translation to ${SUPPORTED_LANGUAGES.find(l => l.code === lang)?.name} failed]\n${transcription}`;
+          continue;
+        }
+
+        if (data?.translations) {
+          // Reconstruct with timestamps
+          const translatedWithTimestamps = data.translations.map((text: string, idx: number) => {
+            const originalLine = transcription.split('\n')[idx];
+            const timestampMatch = originalLine?.match(/\[(\d{2}:\d{2}:\d{2})\]/);
+            const timestamp = timestampMatch ? timestampMatch[0] : `[00:00:${(idx * 5).toString().padStart(2, '0')}]`;
+            return `${timestamp} ${text}`;
+          }).join('\n');
+          
+          newTranslations[lang] = translatedWithTimestamps;
+        } else {
+          newTranslations[lang] = `[Translation to ${SUPPORTED_LANGUAGES.find(l => l.code === lang)?.name}]\n${transcription}`;
+        }
       }
 
+      setProgress(100);
       setTranslations(newTranslations);
       toast.success(`Translated to ${selectedLanguages.length} language(s)!`);
     } catch (error) {
+      console.error('Translation error:', error);
       toast.error('Translation failed. Please try again.');
     } finally {
       setIsProcessing(false);
@@ -144,13 +203,18 @@ export default function CaptionsTranslate() {
   };
 
   const downloadSRT = (content: string, lang: string) => {
-    const srtContent = content.split('\n').map((line, i) => {
+    const lines = content.split('\n');
+    const srtContent = lines.map((line, i) => {
       const match = line.match(/\[(\d{2}:\d{2}:\d{2})\]\s*(.*)/);
       if (match) {
-        return `${i + 1}\n${match[1]},000 --> ${match[1]},999\n${match[2]}\n`;
+        const startTime = match[1];
+        const nextLine = lines[i + 1];
+        const nextMatch = nextLine?.match(/\[(\d{2}:\d{2}:\d{2})\]/);
+        const endTime = nextMatch ? nextMatch[1] : `${startTime.slice(0, -2)}${(parseInt(startTime.slice(-2)) + 5).toString().padStart(2, '0')}`;
+        return `${i + 1}\n${startTime},000 --> ${endTime},000\n${match[2]}\n`;
       }
       return '';
-    }).join('\n');
+    }).filter(Boolean).join('\n');
 
     const blob = new Blob([srtContent], { type: 'text/srt' });
     const url = URL.createObjectURL(blob);
@@ -159,6 +223,7 @@ export default function CaptionsTranslate() {
     a.download = `captions_${lang}.srt`;
     a.click();
     URL.revokeObjectURL(url);
+    toast.success(`Downloaded ${lang.toUpperCase()} subtitles`);
   };
 
   return (
@@ -186,7 +251,7 @@ export default function CaptionsTranslate() {
             Captions & Translation
           </h1>
           <p className="text-slate-400 max-w-xl mx-auto">
-            Auto-transcribe your videos and translate captions to 100+ languages with full RTL support.
+            Auto-transcribe your videos and translate captions to 15+ languages with full RTL support.
           </p>
         </div>
 
@@ -196,7 +261,7 @@ export default function CaptionsTranslate() {
             { step: 1, label: 'Upload Video', icon: Upload },
             { step: 2, label: 'Transcribe', icon: Subtitles },
             { step: 3, label: 'Translate & Export', icon: Globe },
-          ].map(({ step, label, icon: Icon }) => (
+          ].map(({ step, label }) => (
             <div key={step} className="text-center">
               <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-slate-800 text-gold font-bold mb-2">
                 {step}
@@ -283,7 +348,7 @@ export default function CaptionsTranslate() {
                 {isProcessing ? (
                   <>
                     <Loader2 className="h-5 w-5 animate-spin mr-2" />
-                    Transcribing... {progress}%
+                    Transcribing... {Math.round(progress)}%
                   </>
                 ) : (
                   <>
