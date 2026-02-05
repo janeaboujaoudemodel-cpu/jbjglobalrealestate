@@ -12021,6 +12021,13 @@ export type Database = {
             foreignKeyName: "partner_vault_access_logs_partner_id_fkey"
             columns: ["partner_id"]
             isOneToOne: false
+            referencedRelation: "referral_partners_finance_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "partner_vault_access_logs_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
             referencedRelation: "referral_partners_safe"
             referencedColumns: ["id"]
           },
@@ -13534,6 +13541,13 @@ export type Database = {
             foreignKeyName: "referral_code_usages_referral_partner_id_fkey"
             columns: ["referral_partner_id"]
             isOneToOne: false
+            referencedRelation: "referral_partners_finance_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_code_usages_referral_partner_id_fkey"
+            columns: ["referral_partner_id"]
+            isOneToOne: false
             referencedRelation: "referral_partners_safe"
             referencedColumns: ["id"]
           },
@@ -13610,6 +13624,13 @@ export type Database = {
             foreignKeyName: "referral_commissions_referral_partner_id_fkey"
             columns: ["referral_partner_id"]
             isOneToOne: false
+            referencedRelation: "referral_partners_finance_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_commissions_referral_partner_id_fkey"
+            columns: ["referral_partner_id"]
+            isOneToOne: false
             referencedRelation: "referral_partners_safe"
             referencedColumns: ["id"]
           },
@@ -13664,6 +13685,13 @@ export type Database = {
             columns: ["referral_partner_id"]
             isOneToOne: false
             referencedRelation: "referral_partners"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_leads_referral_partner_id_fkey"
+            columns: ["referral_partner_id"]
+            isOneToOne: false
+            referencedRelation: "referral_partners_finance_secure"
             referencedColumns: ["id"]
           },
           {
@@ -13727,6 +13755,13 @@ export type Database = {
             foreignKeyName: "referral_partner_bank_vault_partner_id_fkey"
             columns: ["partner_id"]
             isOneToOne: true
+            referencedRelation: "referral_partners_finance_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_partner_bank_vault_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: true
             referencedRelation: "referral_partners_safe"
             referencedColumns: ["id"]
           },
@@ -13781,6 +13816,13 @@ export type Database = {
             foreignKeyName: "referral_partner_banking_partner_id_fkey"
             columns: ["partner_id"]
             isOneToOne: true
+            referencedRelation: "referral_partners_finance_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_partner_banking_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: true
             referencedRelation: "referral_partners_safe"
             referencedColumns: ["id"]
           },
@@ -13820,6 +13862,13 @@ export type Database = {
             columns: ["partner_id"]
             isOneToOne: false
             referencedRelation: "referral_partners"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_partner_banking_access_logs_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "referral_partners_finance_secure"
             referencedColumns: ["id"]
           },
           {
@@ -18418,6 +18467,13 @@ export type Database = {
             foreignKeyName: "referral_partner_bank_vault_partner_id_fkey"
             columns: ["partner_id"]
             isOneToOne: true
+            referencedRelation: "referral_partners_finance_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_partner_bank_vault_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: true
             referencedRelation: "referral_partners_safe"
             referencedColumns: ["id"]
           },
@@ -18475,10 +18531,86 @@ export type Database = {
             foreignKeyName: "referral_partner_bank_vault_partner_id_fkey"
             columns: ["partner_id"]
             isOneToOne: true
+            referencedRelation: "referral_partners_finance_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_partner_bank_vault_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: true
             referencedRelation: "referral_partners_safe"
             referencedColumns: ["id"]
           },
         ]
+      }
+      referral_partners_finance_secure: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          commission_rate: number | null
+          contract_signed_at: string | null
+          created_at: string | null
+          email: string | null
+          full_name: string | null
+          id: string | null
+          nationality: string | null
+          notes: string | null
+          partner_type: string | null
+          passport_number: string | null
+          phone_e164: string | null
+          referral_code: string | null
+          status: string | null
+          total_conversions: number | null
+          total_earnings_aed: number | null
+          total_referrals: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          commission_rate?: never
+          contract_signed_at?: string | null
+          created_at?: string | null
+          email?: never
+          full_name?: string | null
+          id?: string | null
+          nationality?: string | null
+          notes?: string | null
+          partner_type?: string | null
+          passport_number?: never
+          phone_e164?: never
+          referral_code?: string | null
+          status?: string | null
+          total_conversions?: number | null
+          total_earnings_aed?: never
+          total_referrals?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          commission_rate?: never
+          contract_signed_at?: string | null
+          created_at?: string | null
+          email?: never
+          full_name?: string | null
+          id?: string | null
+          nationality?: string | null
+          notes?: string | null
+          partner_type?: string | null
+          passport_number?: never
+          phone_e164?: never
+          referral_code?: string | null
+          status?: string | null
+          total_conversions?: number | null
+          total_earnings_aed?: never
+          total_referrals?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       referral_partners_safe: {
         Row: {
@@ -19218,6 +19350,7 @@ export type Database = {
           transcript: string
         }[]
       }
+      has_finance_access: { Args: { user_uuid: string }; Returns: boolean }
       has_first_deal_verified: { Args: { p_user_id: string }; Returns: boolean }
       has_full_lead_pii_access: {
         Args: { _lead_id: string; _user_id: string }
