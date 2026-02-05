@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { BarChart3, TrendingUp, TrendingDown, Minus, Database, Shield, Search, Building2, FileText, Landmark, Scale, ExternalLink, Users, Clock } from "lucide-react";
-import Footer from "@/components/Footer";
 import PreFooterSeparator from "@/components/PreFooterSeparator";
 import { SEOHead } from "@/components/SEOHead";
 import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSchema";
@@ -471,7 +470,6 @@ const MarketOverview = () => {
         secondaryLink="/market-intelligence/reports"
         secondaryText="Browse Reports"
       />
-      <Footer />
     </div>
   );
 };

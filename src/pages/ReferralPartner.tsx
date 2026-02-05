@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Handshake, Users, Building2, ArrowRight, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Footer from "@/components/Footer";
 import { CONTACT_INFO } from "@/constants/stats";
 
 const fadeInUp = {
@@ -117,8 +116,6 @@ const ReferralPartner = () => {
           </motion.div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 };

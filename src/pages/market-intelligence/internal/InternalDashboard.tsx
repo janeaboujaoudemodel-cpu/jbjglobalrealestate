@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { BarChart3, TrendingUp, TrendingDown, AlertTriangle, Lock, ArrowLeft, Activity, Target, Zap } from "lucide-react";
 import { Link, Navigate } from "react-router-dom";
-import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -216,8 +215,6 @@ const InternalDashboard = () => {
           </div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 };

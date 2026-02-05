@@ -1,7 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import SEOHead from "@/components/SEOHead";
-import Footer from "@/components/Footer";
 import { FounderContent } from "@/components/FounderContent";
 import { 
   ArrowLeft,
@@ -406,8 +405,6 @@ const QuarterlyMarketReview = () => {
           </motion.div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };

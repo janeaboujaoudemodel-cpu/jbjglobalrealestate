@@ -6,7 +6,6 @@
  import { useParams, Link, Navigate } from "react-router-dom";
  import { motion } from "framer-motion";
  import { MapPin, ArrowUpRight, Building2, ChevronRight, Phone, Loader2, ArrowRight, TrendingUp } from "lucide-react";
- import Footer from "@/components/Footer";
  import { SEOHead } from "@/components/SEOHead";
  import { Button } from "@/components/ui/button";
  import { useAreaBySlug, useAreas } from "@/hooks/useAreas";
@@ -209,8 +208,6 @@
            </div>
          </section>
        )}
- 
-       <Footer />
      </div>
    );
  };

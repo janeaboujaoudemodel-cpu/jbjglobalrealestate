@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Shield, CheckCircle, Building2, Users, ArrowUpRight } from "lucide-react";
 import MortgageCalculator from "@/components/MortgageCalculator";
 import InquiryFormModal from "@/components/InquiryFormModal";
-import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
@@ -161,8 +160,6 @@ const MortgageCalculatorPage = () => {
           </div>
         </div>
       </div>
-
-      <Footer />
 
       {/* Inquiry Form Modal */}
       <InquiryFormModal 

@@ -16,7 +16,6 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 
 interface TripPlan {
@@ -551,8 +550,6 @@ const AIPersonalShopper = () => {
           </div>
         </div>
       </div>
-
-      <Footer />
     </section>
   );
 };

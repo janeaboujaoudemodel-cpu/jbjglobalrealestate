@@ -17,7 +17,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import GlobalHeader from "@/components/GlobalHeader";
-import Footer from "@/components/Footer";
 import ComplianceDisclaimer from "@/components/ComplianceDisclaimer";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -307,8 +306,6 @@ const PartnerCompanySetup = () => {
           </div>
         </section>
       </main>
-
-      <Footer />
     </div>
   );
 };

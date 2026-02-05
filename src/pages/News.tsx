@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Newspaper, ChevronRight, ArrowLeft, Calendar, ExternalLink, TrendingUp, Loader2, RefreshCw, Bot, Landmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Footer from "@/components/Footer";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
@@ -497,8 +496,6 @@ const News = () => {
           </div>
         </div>
       )}
-
-      <Footer />
       </section>
     </>
   );

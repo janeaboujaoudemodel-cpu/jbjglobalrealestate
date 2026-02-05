@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import Footer from "@/components/Footer";
 import { Briefcase, Download, MessageCircle, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -358,8 +357,6 @@ export default function PortfolioViews() {
         </motion.div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 }

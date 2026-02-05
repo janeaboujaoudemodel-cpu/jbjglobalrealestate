@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { ArrowUpRight, BarChart3, Database, Shield, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { FounderPhilosophySection } from "@/components/FounderPhilosophySection";
@@ -242,8 +241,6 @@ const MarketIntelligence = () => {
         secondaryLink="/quiz"
         secondaryText="AI Home Finder"
       />
-
-      <Footer />
     </div>
   );
 };

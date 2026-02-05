@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -937,8 +936,6 @@ const CustomerHappiness = () => {
             </motion.div>
           </div>
         </section>
-
-        <Footer />
       </div>
     </>
   );

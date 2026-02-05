@@ -16,7 +16,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import Footer from "@/components/Footer";
 import ComplianceDisclaimer from "@/components/ComplianceDisclaimer";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -330,8 +329,6 @@ const PartnerVisaServices = () => {
           </div>
         </section>
       </main>
-
-      <Footer />
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import Footer from "@/components/Footer";
 import DirectContactCTA from "@/components/DirectContactCTA";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -394,8 +393,6 @@ const DesignBuild = () => {
 
       {/* Standardized Direct Contact CTA */}
       <DirectContactCTA />
-
-      <Footer />
     </section>
   );
 };

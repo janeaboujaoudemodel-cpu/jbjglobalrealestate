@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { CertificateGenerator } from "@/components/onboarding/CertificateGenerator";
-import Footer from "@/components/Footer";
 
 interface Application {
   id: string;
@@ -235,7 +234,6 @@ export default function Onboarding() {
             </div>
           </div>
         </div>
-        <Footer />
       </div>
     );
   }
@@ -289,7 +287,6 @@ export default function Onboarding() {
             </div>
           </div>
         </div>
-        <Footer />
       </div>
     );
   }
@@ -492,7 +489,6 @@ export default function Onboarding() {
           </div>
         )}
       </div>
-      <Footer />
     </div>
   );
 }

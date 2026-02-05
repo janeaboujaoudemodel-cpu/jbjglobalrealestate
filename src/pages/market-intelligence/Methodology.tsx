@@ -8,7 +8,6 @@
 
 import { motion } from "framer-motion";
 import { Database, Shield, FileCheck, Clock, AlertTriangle, Scale, Bot, Search } from "lucide-react";
-import Footer from "@/components/Footer";
 import PreFooterSeparator from "@/components/PreFooterSeparator";
 import { SEOHead } from "@/components/SEOHead";
 import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSchema";
@@ -457,7 +456,6 @@ const Methodology = () => {
         secondaryLink="/market-intelligence/areas"
         secondaryText="Area Intelligence"
       />
-      <Footer />
     </div>
   );
 };

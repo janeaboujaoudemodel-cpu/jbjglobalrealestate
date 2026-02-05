@@ -2,7 +2,6 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { FileText, Download, Calendar, Database, Shield, ExternalLink, Search } from "lucide-react";
 import { Link } from "react-router-dom";
-import Footer from "@/components/Footer";
 import PreFooterSeparator from "@/components/PreFooterSeparator";
 import { SEOHead } from "@/components/SEOHead";
 import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSchema";
@@ -587,7 +586,6 @@ const MarketReportsPage = () => {
         secondaryLink="/market-intelligence/areas"
         secondaryText="Area Intelligence"
       />
-      <Footer />
     </div>
   );
 };
