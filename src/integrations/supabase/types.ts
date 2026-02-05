@@ -12270,10 +12270,12 @@ export type Database = {
           bedroom_types: Json | null
           bedrooms_max: number | null
           bedrooms_min: number | null
+          building_count: number | null
           community_id: string | null
           community_name: string | null
           construction_progress: number | null
           construction_start_date: string | null
+          construction_status: string | null
           created_at: string
           description: string | null
           developer_id: string | null
@@ -12286,6 +12288,7 @@ export type Database = {
           floors: number | null
           handover_date: string | null
           handover_display: string | null
+          highlights: Json | null
           id: string
           images: Json | null
           is_new_project: boolean | null
@@ -12305,23 +12308,29 @@ export type Database = {
           price_from: number | null
           price_to: number | null
           property_type_label: string | null
+          reelly_id: number | null
           review_notes: string | null
           reviewed_at: string | null
           reviewed_by: string | null
+          sale_status: string | null
           service_charge: string | null
+          short_description: string | null
           size_max: number | null
           size_min: number | null
           slug: string
           source_id: string | null
+          source_updated_at: string | null
           source_url: string
           status: string | null
           status_label: string | null
           total_units: number | null
+          unit_types: Json | null
           updated_at: string
           usp_bullets: Json | null
           usp_headline: string | null
           usp_image_url: string | null
           video_url: string | null
+          video_urls: Json | null
         }
         Insert: {
           amenities?: string[] | null
@@ -12331,10 +12340,12 @@ export type Database = {
           bedroom_types?: Json | null
           bedrooms_max?: number | null
           bedrooms_min?: number | null
+          building_count?: number | null
           community_id?: string | null
           community_name?: string | null
           construction_progress?: number | null
           construction_start_date?: string | null
+          construction_status?: string | null
           created_at?: string
           description?: string | null
           developer_id?: string | null
@@ -12347,6 +12358,7 @@ export type Database = {
           floors?: number | null
           handover_date?: string | null
           handover_display?: string | null
+          highlights?: Json | null
           id?: string
           images?: Json | null
           is_new_project?: boolean | null
@@ -12366,23 +12378,29 @@ export type Database = {
           price_from?: number | null
           price_to?: number | null
           property_type_label?: string | null
+          reelly_id?: number | null
           review_notes?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
+          sale_status?: string | null
           service_charge?: string | null
+          short_description?: string | null
           size_max?: number | null
           size_min?: number | null
           slug: string
           source_id?: string | null
+          source_updated_at?: string | null
           source_url: string
           status?: string | null
           status_label?: string | null
           total_units?: number | null
+          unit_types?: Json | null
           updated_at?: string
           usp_bullets?: Json | null
           usp_headline?: string | null
           usp_image_url?: string | null
           video_url?: string | null
+          video_urls?: Json | null
         }
         Update: {
           amenities?: string[] | null
@@ -12392,10 +12410,12 @@ export type Database = {
           bedroom_types?: Json | null
           bedrooms_max?: number | null
           bedrooms_min?: number | null
+          building_count?: number | null
           community_id?: string | null
           community_name?: string | null
           construction_progress?: number | null
           construction_start_date?: string | null
+          construction_status?: string | null
           created_at?: string
           description?: string | null
           developer_id?: string | null
@@ -12408,6 +12428,7 @@ export type Database = {
           floors?: number | null
           handover_date?: string | null
           handover_display?: string | null
+          highlights?: Json | null
           id?: string
           images?: Json | null
           is_new_project?: boolean | null
@@ -12427,23 +12448,29 @@ export type Database = {
           price_from?: number | null
           price_to?: number | null
           property_type_label?: string | null
+          reelly_id?: number | null
           review_notes?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
+          sale_status?: string | null
           service_charge?: string | null
+          short_description?: string | null
           size_max?: number | null
           size_min?: number | null
           slug?: string
           source_id?: string | null
+          source_updated_at?: string | null
           source_url?: string
           status?: string | null
           status_label?: string | null
           total_units?: number | null
+          unit_types?: Json | null
           updated_at?: string
           usp_bullets?: Json | null
           usp_headline?: string | null
           usp_image_url?: string | null
           video_url?: string | null
+          video_urls?: Json | null
         }
         Relationships: [
           {
