@@ -1777,11 +1777,11 @@ const MarketReport = () => {
       )}
 
       {/* Hero Section */}
-      <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden bg-white">
+      <section className="jj-hero-fullscreen relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden bg-black">
         {/* Background Elements */}
-        <div className="absolute inset-0 bg-gradient-to-b from-gold/5 via-transparent to-transparent" />
-        <div className="absolute top-20 right-0 w-[600px] h-[600px] bg-gold/5 rounded-full blur-[150px]" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gold/5 rounded-full blur-[100px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-gold/10 via-transparent to-transparent" />
+        <div className="absolute top-20 right-0 w-[600px] h-[600px] bg-gold/10 rounded-full blur-[150px]" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gold/10 rounded-full blur-[100px]" />
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -1903,12 +1903,12 @@ const MarketReport = () => {
                 Exclusive Market Report
               </div>
               
-              <h1 className="text-black text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h1 className="text-white text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Unlock Your
                 <span className="block text-gold">Investment Edge</span>
               </h1>
               
-              <p className="text-zinc-600 text-lg md:text-xl leading-relaxed mb-8">
+              <p className="text-zinc-300 text-lg md:text-xl leading-relaxed mb-8">
                 An educational, founder-led overview designed around government-led sources and structured decision frameworks—created exclusively for clients of JBJ Global Real Estate.
               </p>
               
@@ -1921,10 +1921,10 @@ const MarketReport = () => {
                   { icon: BookOpen, text: "Expert Insights" },
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3 text-zinc-700 text-sm">
-                    <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-lg bg-gold/20 border border-gold/30 flex items-center justify-center">
                       <item.icon className="w-4 h-4 text-gold" />
                     </div>
-                    <span>{item.text}</span>
+                    <span className="text-zinc-200">{item.text}</span>
                   </div>
                 ))}
               </div>
@@ -1986,7 +1986,7 @@ const MarketReport = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:col-span-3 bg-white border border-zinc-200 rounded-3xl p-8 md:p-10 shadow-xl"
+            className="lg:col-span-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-3xl p-8 md:p-10 shadow-xl"
           >
             {/* Show streamlined view for returning users */}
             {canDirectDownload ? (
@@ -1994,13 +1994,8 @@ const MarketReport = () => {
                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center mx-auto mb-6">
                   <CheckCircle className="w-10 h-10 text-gold" />
                 </div>
-                <h2 className="text-black text-2xl font-bold mb-3">Welcome Back!</h2>
-                <p className="text-zinc-600 mb-2">
-                  We recognize you, <span className="text-gold font-medium">{leadData?.fullName || leadData?.email}</span>
-                </p>
-                <p className="text-zinc-500 text-sm mb-8">
-                  Click below to instantly access your Market Intelligence book.
-                </p>
+                <h2 className="text-black text-2xl font-bold mb-2">Welcome back, <span className="text-gold">{leadData?.fullName || leadData?.email}</span></h2>
+                <p className="text-zinc-500 text-sm mb-8">Click below to instantly access your Market Intelligence book.</p>
                 <button
                   onClick={handleDirectDownload}
                   className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group w-full"
