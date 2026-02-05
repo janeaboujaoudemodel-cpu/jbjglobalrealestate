@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Quote, ChevronLeft, ChevronRight, Star, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Button } from "@/components/ui/button";
 
 interface Testimonial {
   id: string;
@@ -157,15 +158,11 @@ const TestimonialsSection = () => {
 
           {/* CTA to Testimonials Page */}
           <div className="text-center mt-8">
-            <Link
-              to="/services/testimonials"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white font-semibold text-sm rounded-xl hover:bg-gold hover:text-black transition-all duration-300 group"
-              style={{
-                boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
-              }}
-            >
-              <span>Read All Testimonials</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <Link to="/services/testimonials">
+              <Button variant="tertiary" size="lg" className="group">
+                <span>Read All Testimonials</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
             </Link>
           </div>
         </div>

@@ -214,7 +214,7 @@ const Footer = () => {
       <div className="absolute inset-0 bg-black" />
       
       {/* Premium Gold Divider at top - 3D layered effect with symmetric spacing */}
-      <div className="relative pt-8 sm:pt-10 md:pt-12 pb-10 sm:pb-12 md:pb-14">
+      <div className="relative py-8 sm:py-10 md:py-12">
         <div className="w-full max-w-4xl mx-auto px-8">
           <div className="h-[3px] bg-gradient-to-r from-transparent via-gold to-transparent" />
           <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent mt-[1px]" />
@@ -438,7 +438,7 @@ const Footer = () => {
             </div>
 
             {/* Social Links with enhanced container */}
-            <div className="relative flex justify-center">
+            <div className="relative flex flex-col items-center gap-4">
               <div 
                 className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl"
                 style={{
@@ -449,6 +449,9 @@ const Footer = () => {
               >
                 <SocialLinks variant="glow" iconClassName="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
               </div>
+              
+              {/* Google My Business - Relocated here */}
+              <GoogleMyBusinessLink />
             </div>
           </div>
           
@@ -907,10 +910,7 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* Google My Business Link */}
-            <div className="text-center">
-              <GoogleMyBusinessLink />
-            </div>
+            {/* Google My Business Link - Relocated to Social Links section */}
           </div>
           
           {/* Bottom Radial Glow */}

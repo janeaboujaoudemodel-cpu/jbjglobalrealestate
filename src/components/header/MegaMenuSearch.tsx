@@ -59,14 +59,16 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
     label: string;
     icon: ContactIcon;
     iconClassName?: string;
+    borderClassName?: string;
     external?: boolean;
   }> = [
-    { href: getCallUrl(), label: 'Call Now', icon: Phone, iconClassName: 'text-gold', external: true },
+    { href: getCallUrl(), label: 'Call Now', icon: Phone, iconClassName: 'text-blue-500', borderClassName: 'border-blue-500/40 hover:border-blue-500', external: true },
     {
       href: getWhatsAppUrl('Hi, I have a question.'),
       label: 'WhatsApp',
       icon: FaWhatsapp,
       iconClassName: 'text-[#25D366]',
+      borderClassName: 'border-emerald-500/40 hover:border-emerald-500',
       external: true,
     },
     {
@@ -74,9 +76,10 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
       label: 'Email',
       icon: Mail,
       iconClassName: 'text-black',
+      borderClassName: 'border-black/40 hover:border-black',
       external: true,
     },
-    { href: '/contact', label: 'Contact Form', icon: FileText, iconClassName: 'text-gold' },
+    { href: '/contact', label: 'Contact Form', icon: FileText, iconClassName: 'text-gold', borderClassName: 'border-gold/40 hover:border-gold' },
   ];
 
   // Quick Links with Guides Library and Market Intelligence
@@ -105,14 +108,14 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
             onKeyDown={(e) => {
               if (e.key === 'Enter') openGlobalSearch();
             }}
-            placeholder="Search pages, tools, or anything…"
-            className="h-12 rounded-xl text-base placeholder:text-base"
+            placeholder="Search pages, tools & guides"
+            className="h-12 rounded-xl text-lg placeholder:text-lg tracking-wide"
             aria-label="Search"
           />
           <button
             type="button"
             onClick={openGlobalSearch}
-            className="h-12 px-5 rounded-xl border border-gold/40 bg-black/10 hover:bg-black/15 text-black text-base font-semibold transition-colors"
+            className="h-12 px-6 rounded-xl border-2 border-gold bg-transparent text-black text-base font-bold transition-all duration-300 hover:text-gold hover:shadow-[0_4px_15px_rgba(200,167,102,0.4)] hover:-translate-y-0.5"
           >
             Search
           </button>
@@ -138,8 +141,13 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
+          {/* Vertical Divider */}
+          <div className="hidden md:flex items-stretch justify-center">
+            <div className="w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+          </div>
+
+          {/* Quick Links - Takes col span on mobile, normal on desktop */}
+          <div className="md:col-start-2 md:col-end-3">
             <p className="text-[10px] uppercase tracking-wider text-gold font-medium mb-2">Quick Links</p>
             <div className="space-y-0">
               {navigationLinks.map((link) => (
@@ -156,7 +164,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
           </div>
 
           {/* Contact - Larger cards to fill space */}
-          <div className="flex flex-col">
+          <div className="flex flex-col md:col-start-3">
             <p className="text-[10px] uppercase tracking-wider text-gold font-medium mb-3">Contact</p>
             <div className="grid grid-cols-2 gap-3 flex-1">
               {contactLinks.map((link) =>
@@ -167,9 +175,15 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
                     onClick={(e) => {
                       e.preventDefault();
                       onClose();
-                      window.location.href = link.href;
+                      // Use window.open for external links to prevent iframe blocking
+                      setTimeout(() => {
+                        window.open(link.href, '_blank', 'noopener,noreferrer');
+                      }, 100);
                     }}
-                    className="flex flex-col items-center justify-center gap-2 py-4 px-4 rounded-xl bg-gradient-to-br from-black/10 to-black/5 border-2 border-gold/40 hover:border-gold hover:bg-black/15 hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)] transition-all duration-300"
+                    className={cn(
+                      "flex flex-col items-center justify-center gap-2 py-4 px-4 rounded-xl bg-gradient-to-br from-black/10 to-black/5 border-2 hover:bg-black/15 hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)] transition-all duration-300",
+                      link.borderClassName ?? "border-gold/40 hover:border-gold"
+                    )}
                   >
                     <link.icon className={cn("w-6 h-6", link.iconClassName ?? "text-black")} />
                     <span className="text-black text-sm font-bold">{link.label}</span>
@@ -179,7 +193,10 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
                     key={link.href}
                     to={link.href}
                     onClick={onClose}
-                    className="flex flex-col items-center justify-center gap-2 py-4 px-4 rounded-xl bg-gradient-to-br from-black/10 to-black/5 border-2 border-gold/40 hover:border-gold hover:bg-black/15 hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)] transition-all duration-300"
+                    className={cn(
+                      "flex flex-col items-center justify-center gap-2 py-4 px-4 rounded-xl bg-gradient-to-br from-black/10 to-black/5 border-2 hover:bg-black/15 hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)] transition-all duration-300",
+                      link.borderClassName ?? "border-gold/40 hover:border-gold"
+                    )}
                   >
                     <link.icon className={cn("w-6 h-6", link.iconClassName ?? "text-black")} />
                     <span className="text-black text-sm font-bold">{link.label}</span>
@@ -187,9 +204,6 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
                 )
               )}
             </div>
-            <p className="mt-4 text-sm text-black/80 font-semibold text-center">
-              CONTACT@JBJ.AE
-            </p>
           </div>
         </div>
       </div>
