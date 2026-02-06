@@ -247,7 +247,16 @@ const UserProfile = () => {
       const data = response.data;
       if (data?.error) throw new Error(data.error);
 
-      toast.success("Verification code sent to your new email");
+      // Show OTP fallback if provided (domain not verified)
+      if (data?.dev_otp) {
+        toast.info(`Verification code: ${data.dev_otp}`, {
+          description: "Email delivery may be delayed. Use this code to proceed.",
+          duration: 30000
+        });
+      } else {
+        toast.success("Verification code sent to your new email");
+      }
+      
       setEmailChangeStep('verify');
     } catch (error: any) {
       console.error("Error sending OTP:", error);
@@ -613,7 +622,7 @@ const UserProfile = () => {
       
       {/* Email Change Dialog - OTP Based */}
       <Dialog open={showEmailChangeDialog} onOpenChange={handleEmailDialogClose}>
-        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 w-[95vw] max-w-md mx-auto">
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 w-full max-w-[calc(100vw-2rem)] sm:max-w-md mx-auto overflow-visible">
           <DialogHeader>
             <DialogTitle className="text-foreground flex items-center gap-2">
               <Mail className="h-5 w-5 text-gold" />
@@ -661,13 +670,13 @@ const UserProfile = () => {
                     onChange={setOtpCode}
                     disabled={verifyingEmail}
                   >
-                    <InputOTPGroup className="gap-2">
-                      <InputOTPSlot index={0} className="w-12 h-14 border-2 border-gold/50 text-foreground text-xl font-bold bg-white rounded-lg" />
-                      <InputOTPSlot index={1} className="w-12 h-14 border-2 border-gold/50 text-foreground text-xl font-bold bg-white rounded-lg" />
-                      <InputOTPSlot index={2} className="w-12 h-14 border-2 border-gold/50 text-foreground text-xl font-bold bg-white rounded-lg" />
-                      <InputOTPSlot index={3} className="w-12 h-14 border-2 border-gold/50 text-foreground text-xl font-bold bg-white rounded-lg" />
-                      <InputOTPSlot index={4} className="w-12 h-14 border-2 border-gold/50 text-foreground text-xl font-bold bg-white rounded-lg" />
-                      <InputOTPSlot index={5} className="w-12 h-14 border-2 border-gold/50 text-foreground text-xl font-bold bg-white rounded-lg" />
+                    <InputOTPGroup className="gap-1.5 sm:gap-2 flex-wrap justify-center">
+                      <InputOTPSlot index={0} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-white rounded-lg" />
+                      <InputOTPSlot index={1} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-white rounded-lg" />
+                      <InputOTPSlot index={2} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-white rounded-lg" />
+                      <InputOTPSlot index={3} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-white rounded-lg" />
+                      <InputOTPSlot index={4} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-white rounded-lg" />
+                      <InputOTPSlot index={5} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-white rounded-lg" />
                     </InputOTPGroup>
                   </InputOTP>
                 </div>
