@@ -119,3 +119,19 @@ The following RLS warnings are **intentional anonymous analytics** and remain un
 - 3 tables audited (2 required migrations, 1 pre-hardened)
 - 3 visitor tracking exceptions marked intentional (finding ID: `SUPA_rls_policy_always_true`)
 - All proof functions executed successfully
+
+---
+
+## G) Remaining Active Findings (Post-Phase 4)
+
+Per `security--get_security_scan_results` (2026-02-06T21:12:31Z):
+
+| Scanner | Finding ID | internal_id | Severity | Object | Status |
+|---------|------------|-------------|----------|--------|--------|
+| supabase | `SUPA_function_search_path_mutable` | `SUPA_function_search_path_mutable` | warn | Functions without `SET search_path` | Active |
+| supabase_lov | `EXPOSED_SENSITIVE_DATA` | `hr_candidates_personal_data` | error | `hr_candidates` table | Active |
+| supabase_lov | `MISSING_RLS_PROTECTION` | `chat_conversations_admin_only` | warn | `chat_conversations` table | Active |
+
+**Ignored findings (intentional):**
+- `SUPA_rls_policy_always_true` — visitor_events/visitor_sessions analytics
+- `leads_table_public_exposure` — rate-limited lead capture form
