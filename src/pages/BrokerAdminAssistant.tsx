@@ -130,7 +130,7 @@ export default function BrokerAdminAssistant() {
                   onClick={() => navigate("/jbj-broker-admin")}
                 >
                   <Settings className="h-4 w-4 mr-2" />
-                  Broker Admin Panel
+                  Broker Owner Panel
                 </Button>
                 <button className="relative p-3 rounded-full bg-[#1A1A1A] border border-emerald-500/20 hover:border-emerald-500/40 transition-all">
                   <Bell className="h-5 w-5 text-emerald-400" />

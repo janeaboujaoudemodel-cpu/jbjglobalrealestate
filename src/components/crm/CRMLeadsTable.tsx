@@ -131,10 +131,10 @@ interface CRMLeadsTableProps {
   onRefresh: () => void;
   statusFilters?: string[];
   sourceFilter?: string;
-  isAdmin?: boolean;
+  hasOwnerAccess?: boolean;
 }
 
-const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sourceFilter, isAdmin = false }: CRMLeadsTableProps) => {
+const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sourceFilter, hasOwnerAccess = false }: CRMLeadsTableProps) => {
   const navigate = useNavigate();
   const { setActiveLead } = useActiveLead();
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -560,7 +560,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                           value={lead.nationality}
                           placeholder="—"
                           onSuccess={fetchLeads}
-                          isAdmin={isAdmin}
+                          hasOwnerAccess={hasOwnerAccess}
                         />
                         <span>·</span>
                         <InlineEditCell
@@ -569,7 +569,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                           value={lead.preferred_language?.toUpperCase() || null}
                           placeholder="—"
                           onSuccess={fetchLeads}
-                          isAdmin={isAdmin}
+                          hasOwnerAccess={hasOwnerAccess}
                         />
                       </div>
                     </div>
@@ -611,7 +611,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                                 value={null}
                                 placeholder="Add email"
                                 onSuccess={fetchLeads}
-                                isAdmin={isAdmin}
+                                hasOwnerAccess={hasOwnerAccess}
                               />
                             </div>
                           )}
@@ -656,7 +656,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                                 value={null}
                                 placeholder="Add phone"
                                 onSuccess={fetchLeads}
-                                isAdmin={isAdmin}
+                                hasOwnerAccess={hasOwnerAccess}
                               />
                             </div>
                           )}
@@ -671,7 +671,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                       value={lead.current_location_country}
                       placeholder="—"
                       onSuccess={fetchLeads}
-                      isAdmin={isAdmin}
+                      hasOwnerAccess={hasOwnerAccess}
                       className="text-sm text-foreground"
                     />
                   </TableCell>

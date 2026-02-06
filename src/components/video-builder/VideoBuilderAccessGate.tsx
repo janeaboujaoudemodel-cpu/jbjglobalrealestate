@@ -32,13 +32,13 @@ const VideoBuilderAccessGate = ({ children }: VideoBuilderAccessGateProps) => {
       }
 
       try {
-        // Check if user is admin, owner, or founder
-        const { data: isAdmin } = await supabase.rpc("has_role", {
+        // Check if user has owner-level access
+        const { data: hasOwnerRole } = await supabase.rpc("has_role", {
           _user_id: user.id,
           _role: "admin",
         });
 
-        if (isAdmin) {
+        if (hasOwnerRole) {
           setHasAccess(true);
           setIsChecking(false);
           return;

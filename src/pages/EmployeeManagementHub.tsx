@@ -63,10 +63,10 @@ const EmployeeManagementHub: React.FC = () => {
         .single();
 
       if (profile && profile.is_active) {
-        const isAdmin = ['admin', 'owner_admin', 'founder'].includes(profile.crm_role);
+        const hasOwnerRole = ['owner_admin', 'founder'].includes(profile.crm_role);
         const isHR = profile.department === 'Human Resources';
         const isIT = profile.department === 'IT';
-        setIsAuthorized(isAdmin || isHR || isIT);
+        setIsAuthorized(hasOwnerRole || isHR || isIT);
       }
     } catch (error) {
       console.error('Authorization check error:', error);

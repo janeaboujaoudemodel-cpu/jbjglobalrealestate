@@ -431,7 +431,7 @@ const CRM = () => {
           <DealValueTracker userId={user?.id || ""} />
 
           {/* Enhanced Dashboard with Charts */}
-          <CRMEnhancedDashboard userId={user?.id || ""} isAdmin={isCRMOwner} />
+          <CRMEnhancedDashboard userId={user?.id || ""} hasOwnerAccess={isCRMOwner} />
 
             {/* Main CRM Layout - Team Communication Full Width + Leads Update */}
             <div className="space-y-6">
@@ -544,7 +544,7 @@ const CRM = () => {
                     </Button>
                     {isCRMOwner && <VIPExportButton />}
                     {isCRMOwner && (
-                      <DeleteImportButton userId={user?.id || ""} onSuccess={handleRefresh} isAdmin={isCRMOwner} />
+                      <DeleteImportButton userId={user?.id || ""} onSuccess={handleRefresh} hasOwnerAccess={isCRMOwner} />
                     )}
                   </div>
                 </CardContent>
