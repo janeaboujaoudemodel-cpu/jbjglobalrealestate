@@ -15349,7 +15349,7 @@ export type Database = {
           thumbnail_url: string | null
           timeline_state: Json | null
           updated_at: string
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           ai_prompts_history?: Json | null
@@ -15378,7 +15378,7 @@ export type Database = {
           thumbnail_url?: string | null
           timeline_state?: Json | null
           updated_at?: string
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           ai_prompts_history?: Json | null
@@ -15407,7 +15407,7 @@ export type Database = {
           thumbnail_url?: string | null
           timeline_state?: Json | null
           updated_at?: string
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: []
       }
