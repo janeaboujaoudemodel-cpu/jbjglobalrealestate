@@ -1,174 +1,177 @@
 
-# Fix Plan: Mode Switcher Dropdown & Email Change Dialog Issues
+<context>
+Reported issues:
+1) Mode Switcher inside the header “My Account” mega menu still closes the entire account dropdown immediately when you click a mode.
+2) Email change flow: OTP email not arriving, and the email-change dialog/OTP step is visually broken/cropped on small screens.
 
-## Problem Analysis
+Constraints:
+- Fix must be stable on desktop + mobile.
+- Keep dropdowns opaque with correct z-index.
+</context>
 
-### Issue 1: Mode Switcher Closes Immediately in Header Account Menu
+<diagnosis>
+A) Why the Mode Switcher still closes the account dropdown
+- GlobalHeader adds a document-level “click outside” listener when a mega menu is pinned open:
+  - It closes the mega menu if the click target is not inside headerViewportRef.
+- Radix DropdownMenuContent renders in a Portal attached to document.body.
+  - That Portal is NOT inside headerViewportRef.
+  - So when you click an item in ModeSwitcher, the document click-outside handler interprets it as “outside” and closes the entire account mega menu.
 
-**Root Cause Identified:**
-The ModeSwitcher uses Radix UI's `DropdownMenuContent`, which renders via a portal to `document.body`. When this portal content is clicked:
-1. The click event propagates through the DOM
-2. The GlobalHeader backdrop (`onClick={closeMegaMenu}`) at line 1488 receives the click
-3. The entire MegaMenuAccount closes before the mode change completes
+This is a different closing path than the backdrop click / mouseleave logic we previously adjusted, which is why the issue persists.
 
-**Why Previous Fix Failed:**
-The `stopPropagation()` handlers in ModeSwitcher only prevent React synthetic event propagation within the dropdown component tree. They don't prevent native DOM clicks from reaching the backdrop because the portal renders OUTSIDE the MegaMenuShell container.
+B) Why “Switch Mode” shows a loading spinner in the account menu
+- ModeSwitcher uses src/hooks/useUserMode.ts which sets isLoading=true on mount and does a DB sync.
+- The account mega menu content mounts/unmounts when opened/closed, so ModeSwitcher remounts and briefly shows loading each time.
+- There is already a global UserModeProvider (src/contexts/UserModeContext.tsx) mounted in App.tsx, but ModeSwitcher is not using it.
 
-**Z-Index Layers:**
-- Backdrop: `z-[9998]` (absolute inset-0)
-- MegaMenuShell: `z-[9999]`
-- Radix Portal: Renders to body, no specific z-index relationship to backdrop
+C) Why the email change dialog is cropped / “coming out of the screen”
+- In UserProfile.tsx, DialogContent adds `overflow-visible`.
+- The base DialogContent already enforces `max-h-[90vh] overflow-y-auto`.
+- `overflow-visible` overrides that behavior, which can allow content/footer to overflow off-screen on small devices and appear “broken”.
 
-### Issue 2: Email Change Dialog Not Opening
+D) Why OTP “not received”
+- Backend function send-email-otp currently can succeed even if delivery fails, and the UI relies on a toast fallback when `dev_otp` is present.
+- If toasts/dialogs are behind the mega menu layering (z-index), the user may never see the fallback code or status messages.
+- Additionally, send-email-otp / verify-email-otp CORS allow-headers is minimal; to harden reliability across browsers, we should include the standard extra client headers.
+</diagnosis>
 
-**Assessment:**
-After code review, the dialog implementation appears correct:
-- Button at line 477 correctly calls `setShowEmailChangeDialog(true)`
-- Dialog component at line 624 correctly uses `open={showEmailChangeDialog}`
+<plan>
+<step number="1" title="Stop the account mega menu from closing when interacting with Radix Portals (ModeSwitcher dropdown)">
+Change: src/components/GlobalHeader.tsx
+- Update the “click outside” handler (the document.addEventListener("click", handleClickOutside)) so it DOES NOT close the mega menu when the click originates inside a Radix portal.
 
-The issue may be related to the browser testing environment or a rendering timing issue. I'll verify and add console logging to diagnose.
+Implementation detail:
+- In handleClickOutside(e):
+  - `const target = e.target as HTMLElement`
+  - if `target.closest('[data-radix-portal]')` then return (do not close mega menu)
+  - else keep existing “outside headerViewportRef” logic.
 
----
+Why this works:
+- ModeSwitcher’s dropdown content lives in a Radix portal. Treating portal clicks as “inside” prevents the immediate ejection.
 
-## Solution Architecture
+Optional hardening (if needed after testing):
+- Swap the listener from `"click"` to `"pointerdown"` (more consistent on mobile/touch + prevents intermediate focus changes).
+- Also ignore elements with `[data-state="open"]` triggers if Radix uses them, but portal check should be sufficient.
 
-### Phase 1: Fix Mode Switcher Backdrop Conflict
+</step>
 
-**Approach A: Controlled Backdrop Click Handling**
+<step number="2" title="Eliminate the Mode Switcher spinner/flicker by using the global UserModeProvider state">
+Change: src/components/ModeSwitcher.tsx
+Change: src/components/header/MegaMenuAccount.tsx
+- Replace usage of `useUserMode()` (hook) with `useUserModeContext()` (context) so ModeSwitcher uses the already-mounted global state and doesn’t re-enter a loading phase on each mega menu open.
 
-Modify the backdrop `onClick` handler in GlobalHeader.tsx to check if the click target is within a dropdown portal before closing:
+Implementation detail:
+- ModeSwitcher:
+  - `import { useUserModeContext } from "@/contexts/UserModeContext";`
+  - Use `{ mode, isLoading, setMode }` from context.
+  - Remove unused imports: `useNavigate`, and unused `role` variable from useUserRole.
+- MegaMenuAccount:
+  - Replace `const { mode } = useUserMode();` with context too (keeps labels stable).
 
-```typescript
-// Line 1486-1489 in GlobalHeader.tsx
-<div 
-  className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-  onClick={(e) => {
-    // Check if click originated from a Radix portal (dropdown/popover)
-    const target = e.target as HTMLElement;
-    const isInsideRadixPortal = target.closest('[data-radix-portal]');
-    if (!isInsideRadixPortal) {
-      closeMegaMenu();
-    }
-  }}
-/>
-```
+Result:
+- The “Switch Mode” label should no longer show the spinning loader every time you open the account menu, unless the app is genuinely initializing.
 
-**Approach B: ModeSwitcher with Portal Container Override**
+</step>
 
-Configure Radix DropdownMenu to render into a specific container rather than document.body:
+<step number="3" title="Fix email-change dialog cropping on mobile by restoring scroll constraints and safe sizing">
+Change: src/pages/UserProfile.tsx
+- Update the email change DialogContent classes:
+  - Remove `overflow-visible`.
+  - Explicitly enforce a mobile-safe max height and scrolling:
+    - `max-h-[calc(100dvh-2rem)] overflow-y-auto`
+  - Ensure padding is mobile-friendly:
+    - `p-4 sm:p-6` (so content doesn’t push footer off-screen)
+  - Keep width rule:
+    - `w-full max-w-[calc(100vw-2rem)] sm:max-w-md`
 
-```typescript
-// In ModeSwitcher.tsx
-<DropdownMenuContent 
-  container={document.getElementById('mega-menu-portal-container')}
-  ...
->
-```
+Also adjust OTP section layout (only if needed after visual check):
+- Ensure the OTP group cannot overflow horizontally:
+  - Add `max-w-full` and keep `flex-wrap justify-center`.
+- Keep slot sizing already present:
+  - `w-10 h-12` on mobile, `sm:w-12 sm:h-14` on larger.
 
-Then add a container div inside MegaMenuShell that has higher z-index.
+Expected outcome:
+- “Verify & Change Email” button remains reachable on small screens via scrolling; no cropped footer.
 
-**Recommended: Approach A** - Less invasive, single file change, addresses root cause at the event handling level.
+</step>
 
-### Phase 2: Verify Email Change Dialog
+<step number="4" title="Make dialogs and toasts always appear above the mega menu (z-index layering fix)">
+Change: src/components/ui/dialog.tsx
+Change: src/components/ui/sonner.tsx
+- Dialog currently uses z-50; mega menu uses z-[9998]/z-[9999]. That can cause dialogs opened from within mega menus (or while a menu is open) to appear behind overlays.
+- Raise Dialog overlay + content z-index to be above the mega menu:
+  - Overlay: z-[10050]
+  - Content: z-[10050]
+- Raise Sonner toaster container z-index above mega menu:
+  - Add a class or inline style to ensure it renders at e.g. z-[11000].
 
-Add diagnostic console logging to confirm the button click is triggering state updates:
+Expected outcome:
+- OTP status toasts (and any fallback) are always visible.
+- Any dialog opened while a mega menu is open will not be obscured.
 
-```typescript
-// In UserProfile.tsx, line 477
-onClick={() => {
-  console.log('Email change dialog triggered');
-  setShowEmailChangeDialog(true);
-}}
-```
+</step>
 
-If the dialog state is updating but not rendering, investigate potential CSS conflicts or z-index issues with the Dialog component.
+<step number="5" title="Improve OTP email reliability and debugging without breaking security">
+Change: supabase/functions/send-email-otp/index.ts
+Change: supabase/functions/verify-email-otp/index.ts (CORS only)
+- Expand CORS allow-headers to include common client headers (prevents browser-specific preflight failures):
+  - authorization, x-client-info, apikey, content-type,
+  - x-supabase-client-platform, x-supabase-client-platform-version,
+  - x-supabase-client-runtime, x-supabase-client-runtime-version
 
----
+- Adjust send-email-otp response behavior:
+  - If Resend returns a non-OK response:
+    - Return `{ error: "Email could not be delivered. Please try again." }` with an appropriate status (e.g., 502)
+    - Log the response text for backend diagnostics.
+  - Keep success messages accurate.
 
-## Implementation Changes
+Important security note:
+- Returning `dev_otp` to the frontend defeats “prove new email ownership”.
+- If you still need a temporary fallback in Preview only, we will gate it behind an explicit backend flag (secret), and keep it disabled in production. (We will not expose OTP by default.)
 
-### File 1: `src/components/GlobalHeader.tsx`
+</step>
 
-**Change:** Modify backdrop onClick handler to ignore clicks from Radix portals
+<step number="6" title="Verification checklist (end-to-end)">
+Desktop (header account mega menu):
+1) Open account icon menu.
+2) Open “Switch Mode” dropdown.
+3) Select Investor / Broker / Investor+Broker.
+4) Confirm:
+   - The account mega menu stays open (no immediate close/eject).
+   - A success toast shows.
+   - Mode label updates correctly.
+   - No persistent spinner on “Switch Mode”.
 
-**Location:** Lines 1486-1489
+Mobile (email change dialog):
+1) Go to /profile.
+2) Tap Change next to email.
+3) Confirm:
+   - Dialog fits the viewport; content scrolls instead of cropping.
+4) Tap Send Verification Code.
+5) Confirm:
+   - A visible success/error toast appears (not behind overlays).
+6) Enter OTP and Verify & Change Email.
 
-**Before:**
-```tsx
-<div 
-  className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-  onClick={closeMegaMenu}
-/>
-```
+</step>
 
-**After:**
-```tsx
-<div 
-  className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-  onClick={(e) => {
-    // Don't close if click came from a Radix portal (dropdowns, popovers, etc.)
-    const target = e.target as HTMLElement;
-    if (target.closest('[data-radix-portal]')) return;
-    closeMegaMenu();
-  }}
-/>
-```
+</plan>
 
-### File 2: `src/components/ModeSwitcher.tsx`
+<files-to-change>
+- src/components/GlobalHeader.tsx
+- src/components/ModeSwitcher.tsx
+- src/components/header/MegaMenuAccount.tsx
+- src/pages/UserProfile.tsx
+- src/components/ui/dialog.tsx
+- src/components/ui/sonner.tsx
+- supabase/functions/send-email-otp/index.ts
+- supabase/functions/verify-email-otp/index.ts
+</files-to-change>
 
-**Change:** Add higher z-index to DropdownMenuContent to ensure visibility
-
-**Location:** Line 131-133
-
-**Before:**
-```tsx
-<DropdownMenuContent 
-  align="end" 
-  className="w-64 bg-white border border-zinc-200 shadow-xl rounded-xl p-1 z-50"
->
-```
-
-**After:**
-```tsx
-<DropdownMenuContent 
-  align="end" 
-  className="w-64 bg-white border border-zinc-200 shadow-xl rounded-xl p-1 z-[10001]"
-  sideOffset={5}
->
-```
-
-### File 3: `src/pages/UserProfile.tsx`
-
-**Change:** Add console logging for dialog trigger debugging (temporary)
-
-**Location:** Line 477
-
-This will help verify the button click is registering. If the issue is confirmed as a rendering problem, further investigation into Dialog z-index may be needed.
-
----
-
-## Technical Details
-
-### Radix Portal Behavior
-Radix UI renders dropdown content to `document.body` by default via a portal. This means:
-- The content is NOT a DOM child of the trigger element
-- Click events don't propagate through the React component tree as expected
-- Native DOM event bubbling can reach elements "behind" the portal
-
-### Z-Index Stack
-After fixes:
-- Backdrop: `z-[9998]`
-- MegaMenuShell: `z-[9999]`
-- ModeSwitcher Dropdown: `z-[10001]` (above backdrop, properly layered)
-
----
-
-## Testing Checklist
-
-After implementation:
-1. Open Header Account Menu → Click "Investor Mode" → Dropdown should open
-2. Click "Broker Mode" → Mode should change, dropdown stays visible briefly, then closes with success toast
-3. Repeat from footer mode switcher → Should continue working
-4. Open Profile page → Click "Change" next to email → Dialog should open
-5. Test dialog on mobile viewport → Verify no cropping
-6. Test complete email change flow with OTP
+<risk-and-mitigation>
+- Raising dialog/toast z-index affects all dialogs/toasts:
+  - Mitigation: keep values only slightly above mega menu (10050/11000) and below any potential future system overlays if needed.
+- Ignoring portal clicks in click-outside logic could keep menus open when clicking certain portal-based widgets:
+  - Mitigation: we restrict the exception to `[data-radix-portal]` only; clicking elsewhere still closes normally.
+- OTP security:
+  - Mitigation: do not expose dev_otp in production; gate any debug behavior behind an explicit secret for Preview only.
+</risk-and-rollback>
