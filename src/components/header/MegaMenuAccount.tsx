@@ -17,7 +17,7 @@ interface MegaMenuAccountProps {
 }
 
 const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>(({ onClose }, ref) => {
-  const { user, isAdmin, signOut } = useAuth();
+  const { user, isOwner, signOut } = useAuth();
   const { t } = useLanguage();
   const { tierProgress } = useTierProgress();
   const { mode } = useUserModeContext();
@@ -133,9 +133,9 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
       if (link.requiresListingAdmin) {
         return hasListingAdminAccess;
       }
-      return isAdmin || hasCRMAccess;
+      return isOwner || hasCRMAccess;
     });
-  }, [isAdmin, hasCRMAccess, hasListingAdminAccess]);
+  }, [isOwner, hasCRMAccess, hasListingAdminAccess]);
 
   // Get mode label for display
   const getModeLabel = () => {
@@ -241,12 +241,12 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                 </div>
               </div>
 
-              {/* Right Column - Admin Links (only show if user has any admin access) */}
+              {/* Right Column - Owner Links (only show if user has Owner access) */}
               <div>
-                {(isAdmin || hasCRMAccess || hasListingAdminAccess) && adminLinks.length > 0 && (
+                {(isOwner || hasCRMAccess || hasListingAdminAccess) && adminLinks.length > 0 && (
                   <>
                     <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold px-2 py-1.5 mb-2">
-                      Admin Shortcuts
+                      Owner Shortcuts
                     </p>
                     <div className="space-y-1">
                       {adminLinks.map((link) => (
@@ -278,7 +278,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           </span>
                         </Link>
                       )}
-                      {isAdmin && (
+                      {isOwner && (
                         <Link 
                           to="/admin" 
                           onClick={onClose} 

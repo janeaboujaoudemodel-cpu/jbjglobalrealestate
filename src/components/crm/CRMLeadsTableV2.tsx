@@ -50,7 +50,7 @@ interface CRMLeadsTableV2Props {
   onRefresh: () => void;
   statusFilters?: string[];
   sourceFilter?: string;
-  isAdmin?: boolean;
+  isOwner?: boolean;
 }
 
 // Removed unused tokenStyle
@@ -61,7 +61,7 @@ export default function CRMLeadsTableV2({
   onRefresh,
   statusFilters = [],
   sourceFilter,
-  isAdmin = false,
+  isOwner = false,
 }: CRMLeadsTableV2Props) {
   const navigate = useNavigate();
 
@@ -436,7 +436,7 @@ ${signature}`);
 
       <CRMLeadsBulkBar
         userId={userId}
-        isAdmin={isAdmin}
+        isOwner={isOwner}
         selectedIds={selectedIds}
         onClear={() => setSelected(new Set())}
         onSuccess={() => {
@@ -590,7 +590,7 @@ ${signature}`);
                         ) : (
                           <span className="text-muted-foreground italic">Unassigned</span>
                         )}
-                        {isAdmin && (
+                        {isOwner && (
                           <Button
                             type="button"
                             size="sm"

@@ -46,11 +46,12 @@ const ListingAdminGuard = ({ children }: ListingAdminGuardProps) => {
             .maybeSingle(),
         ]);
 
-        const isOwner = ownerResult.data === true;
-        const isAdmin = adminResult.data === true;
+        const hasOwnerRole = ownerResult.data === true;
+        const hasAdminRole = adminResult.data === true;
         const isListingAdmin = !!listingAdminResult.data;
 
-        if (isOwner || isAdmin || isListingAdmin) {
+        // Owner role (via has_role) or listing admin access
+        if (hasOwnerRole || hasAdminRole || isListingAdmin) {
           if (!cancelled) setStatus("allowed");
         } else {
           if (!cancelled) setStatus("denied");

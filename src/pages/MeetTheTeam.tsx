@@ -211,10 +211,10 @@ const MeetTheTeam: React.FC = () => {
           supabase.rpc("has_role", { _user_id: user.id, _role: "owner" }),
         ]);
 
-        const isAdmin = Boolean(adminResult.data) || Boolean(ownerResult.data);
+        const isOwnerRole = Boolean(adminResult.data) || Boolean(ownerResult.data);
         const hasHrRole = hrRole?.is_active;
 
-        setIsInternalUser(isAdmin || hasHrRole);
+        setIsInternalUser(isOwnerRole || hasHrRole);
       } catch (error) {
         console.error("Error checking internal user status:", error);
         setIsInternalUser(false);

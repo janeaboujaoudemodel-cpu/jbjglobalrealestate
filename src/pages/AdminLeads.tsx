@@ -95,7 +95,7 @@ interface ChatConversation {
 
 const AdminLeads = () => {
   const navigate = useNavigate();
-  const { user, isAdmin, loading } = useAuth();
+  const { user, isOwner, loading } = useAuth();
 
   const [leads, setLeads] = useState<Lead[]>([]);
   const [conversations, setConversations] = useState<ChatConversation[]>([]);
@@ -143,17 +143,17 @@ const AdminLeads = () => {
   useEffect(() => {
     if (!loading && !user) {
       navigate("/auth");
-    } else if (!loading && user && !isAdmin) {
-      toast.error("You don't have admin access");
+    } else if (!loading && user && !isOwner) {
+      toast.error("You don't have Owner access");
       navigate("/");
     }
-  }, [user, isAdmin, loading, navigate]);
+  }, [user, isOwner, loading, navigate]);
 
   useEffect(() => {
-    if (isAdmin) {
+    if (isOwner) {
       fetchData();
     }
-  }, [isAdmin]);
+  }, [isOwner]);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -284,7 +284,7 @@ const AdminLeads = () => {
     );
   }
 
-  if (!isAdmin) {
+  if (!isOwner) {
     return null;
   }
 

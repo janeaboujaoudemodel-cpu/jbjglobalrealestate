@@ -162,8 +162,8 @@ const wrapText = (text: string, maxChars: number) => {
 
 const InteriorDesignAI = () => {
   const navigate = useNavigate();
-  const { user, isAdmin } = useAuth();
-  const canBypassPayment = isAdmin;
+  const { user, isOwner } = useAuth();
+  const canBypassPayment = isOwner;
   
   // Load saved state from sessionStorage
   const getSavedState = <T,>(key: string, defaultValue: T): T => {

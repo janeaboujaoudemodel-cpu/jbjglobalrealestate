@@ -72,7 +72,7 @@ const AVAILABLE_ROLES = [
 
 const AdminRoleManagement = () => {
   const navigate = useNavigate();
-  const { user, isAdmin } = useAuth();
+  const { user, isOwner } = useAuth();
   const { t } = useLanguage();
   const [isLoading, setIsLoading] = useState(true);
   const [userRoles, setUserRoles] = useState<UserRole[]>([]);
@@ -86,12 +86,12 @@ const AdminRoleManagement = () => {
       navigate("/auth?redirect=/admin-role-management");
       return;
     }
-    if (!isAdmin) {
+    if (!isOwner) {
       navigate("/");
       return;
     }
     fetchData();
-  }, [user, isAdmin, navigate]);
+  }, [user, isOwner, navigate]);
 
   const fetchData = async () => {
     setIsLoading(true);

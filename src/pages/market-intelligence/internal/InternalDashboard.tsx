@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { DUBAI_AREAS_MARKET_DATA } from "@/config/open-data-config";
 
 const InternalDashboard = () => {
-  const { user, isAdmin } = useAuth();
+  const { user } = useAuth();
 
   // Require authentication
   if (!user) {

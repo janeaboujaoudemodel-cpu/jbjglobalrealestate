@@ -65,7 +65,7 @@ interface PassThresholds {
 }
 
 export default function AdminOnboarding() {
-  const { user, loading: authLoading, isAdmin } = useAuth();
+  const { user, loading: authLoading, isOwner } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [applications, setApplications] = useState<Application[]>([]);
@@ -117,15 +117,15 @@ export default function AdminOnboarding() {
       navigate("/auth?redirect=/admin/onboarding");
       return;
     }
-    if (!authLoading && user && !isAdmin) {
-      toast.error("Access denied. Admin only.");
+    if (!authLoading && user && !isOwner) {
+      toast.error("Access denied. Owner only.");
       navigate("/");
       return;
     }
-    if (user && isAdmin) {
+    if (user && isOwner) {
       loadData();
     }
-  }, [user, authLoading, isAdmin]);
+  }, [user, authLoading, isOwner]);
 
   const loadData = async () => {
     setLoading(true);

@@ -47,7 +47,7 @@ export interface IntelligenceTierAccessResult {
 }
 
 export function useIntelligenceTierAccess(): IntelligenceTierAccessResult {
-  const { user, isAdmin } = useAuth();
+  const { user, isOwner } = useAuth();
   
   // Build user context from auth state
   const userContext = useMemo<UserAccessContext>(() => {
@@ -68,12 +68,12 @@ export function useIntelligenceTierAccess(): IntelligenceTierAccessResult {
     return {
       is_authenticated: true,
       is_active_client: userRole === 'investor' || userRole === 'client',
-      is_admin: isAdmin || userRole === 'admin',
+      is_admin: isOwner || userRole === 'admin',
       is_executive: userRole === 'executive',
-      is_owner: userRole === 'owner',
+      is_owner: isOwner || userRole === 'owner',
       role: userRole as any,
     };
-  }, [user, isAdmin]);
+  }, [user, isOwner]);
   
   // Get current user's maximum tier
   const currentTier = useMemo(() => {

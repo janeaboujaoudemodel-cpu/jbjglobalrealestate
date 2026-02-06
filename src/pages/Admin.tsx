@@ -82,7 +82,7 @@ interface ProjectDocument {
 
 const Admin = () => {
   const navigate = useNavigate();
-  const { user, isAdmin, loading, signOut } = useAuth();
+  const { user, isOwner, loading, signOut } = useAuth();
   const { data: projects, refetch: refetchProjects } = useProjects();
   const { data: developers } = useDevelopers();
   const { data: communities } = useCommunities();
@@ -122,11 +122,11 @@ const Admin = () => {
   useEffect(() => {
     if (!loading && !user) {
       navigate("/auth");
-    } else if (!loading && user && !isAdmin) {
-      toast.error("You don't have admin access");
+    } else if (!loading && user && !isOwner) {
+      toast.error("You don't have Owner access");
       navigate("/");
     }
-  }, [user, isAdmin, loading, navigate]);
+  }, [user, isOwner, loading, navigate]);
 
   // Keyboard shortcut for command palette
   useEffect(() => {
@@ -330,7 +330,7 @@ const Admin = () => {
     );
   }
 
-  if (!isAdmin) {
+  if (!isOwner) {
     return null;
   }
 

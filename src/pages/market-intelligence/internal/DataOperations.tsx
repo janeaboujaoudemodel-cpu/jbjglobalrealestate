@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { OPEN_DATA_SOURCES } from "@/config/open-data-config";
 
 const DataOperations = () => {
-  const { user, isAdmin } = useAuth();
+  const { user } = useAuth();
 
   if (!user) {
     return <Navigate to="/auth" replace />;

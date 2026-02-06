@@ -63,7 +63,7 @@ interface ProjectDocument {
 const ListingAdmin = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, signOut, isAdmin } = useAuth();
+  const { user, signOut, isOwner: isOwnerEmail } = useAuth();
   const { t } = useLanguage();
   const { isListingAdmin, adminData, isLoading: checkingAdmin } = useListingAdmin();
   const [isOwner, setIsOwner] = useState(false);
@@ -153,8 +153,8 @@ const ListingAdmin = () => {
     }
   }, [user, checkingAdmin, checkingOwner, navigate]);
 
-  // Allow access if user is listing admin OR full admin OR owner
-  const hasAccess = isListingAdmin || isAdmin || isOwner;
+  // Allow access if user is listing admin OR Owner (email-verified)
+  const hasAccess = isListingAdmin || isOwnerEmail || isOwner;
 
   if (checkingAdmin || checkingOwner) {
     return (

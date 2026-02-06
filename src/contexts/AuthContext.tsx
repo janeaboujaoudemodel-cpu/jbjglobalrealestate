@@ -12,8 +12,6 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
-  /** @deprecated Use isOwner instead. This is kept for backward compatibility. */
-  isAdmin: boolean;
   /** True if authenticated user's email matches OWNER_EMAIL */
   isOwner: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
@@ -149,16 +147,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // Backward compatibility: isAdmin maps to isOwner
-  const isAdmin = isOwner;
-
   return (
     <AuthContext.Provider
       value={{
         user,
         session,
         loading,
-        isAdmin,
         isOwner,
         signIn,
         signUp,
