@@ -10,7 +10,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { MegaMenuShell, MegaMenuSectionDivider } from './mega-menu-primitives';
 import ModeSwitcher from '@/components/ModeSwitcher';
 import { useTierProgress } from '@/hooks/useTierProgress';
-import { useUserMode } from '@/hooks/useUserMode';
+import { useUserModeContext } from '@/contexts/UserModeContext';
 
 interface MegaMenuAccountProps {
   onClose: () => void;
@@ -20,7 +20,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
   const { user, isAdmin, signOut } = useAuth();
   const { t } = useLanguage();
   const { tierProgress } = useTierProgress();
-  const { mode } = useUserMode();
+  const { mode } = useUserModeContext();
   
   const { data: crmProfile, isLoading: crmLoading } = useQuery({
     queryKey: ['crm-profile-account-menu', user?.id],

@@ -166,6 +166,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     if (!pinnedMenu) return;
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
+      // IMPORTANT: Radix portals render outside headerViewportRef but should NOT close the mega menu
+      // Check if click is inside a Radix portal (dropdowns, popovers, dialogs within the mega menu)
+      if (target.closest('[data-radix-portal]')) return;
       // Close if click is outside the entire header (includes utility icon triggers + panels)
       // This prevents a pinned utility menu from immediately closing on the same click.
       if (headerViewportRef.current && !headerViewportRef.current.contains(target)) closeMegaMenu();
