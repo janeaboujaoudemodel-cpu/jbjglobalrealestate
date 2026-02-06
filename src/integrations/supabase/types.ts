@@ -17444,7 +17444,7 @@ export type Database = {
           mime_type: string | null
           session_id: string
           thumbnail_path: string | null
-          user_id: string | null
+          user_id: string
           width: number | null
         }
         Insert: {
@@ -17461,7 +17461,7 @@ export type Database = {
           mime_type?: string | null
           session_id: string
           thumbnail_path?: string | null
-          user_id?: string | null
+          user_id: string
           width?: number | null
         }
         Update: {
@@ -17478,7 +17478,7 @@ export type Database = {
           mime_type?: string | null
           session_id?: string
           thumbnail_path?: string | null
-          user_id?: string | null
+          user_id?: string
           width?: number | null
         }
         Relationships: []
