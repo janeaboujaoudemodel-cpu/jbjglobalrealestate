@@ -1,13 +1,13 @@
 /**
  * Voice & Audio Suite - Embeds REAL VoiceStudio with tabs for all audio tools
- * Tabs: TTS/Cloning | Voice-to-Text | Audio Cleanup | Translation
+ * Tabs: TTS/Cloning | Voice-to-Text | Audio Enhancement (REAL FFmpeg) | Translation
  * ALL real tools - no placeholders
  */
 
 import React, { lazy, Suspense, useState, useRef, useCallback } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SEOHead } from '@/components/SEOHead';
-import { Mic, FileAudio, Sparkles, Languages, ArrowLeft, Upload, Play, Pause, Download, Loader2 } from 'lucide-react';
+import { Mic, FileAudio, Sparkles, Languages, ArrowLeft, Upload, Play, Pause, Download, Loader2, Volume2, Radio, Music } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,6 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { audioEnhanceService, EnhanceProgress } from '@/lib/ffmpeg/audioEnhanceService';
 
 // Lazy load the REAL VoiceStudio PAGE
 const VoiceStudio = lazy(() => import('@/pages/toolkit/VoiceStudio'));
@@ -187,20 +188,30 @@ function VoiceToTextPanel() {
   );
 }
 
-// Audio Cleanup Component (uses ffmpeg client-side for basic enhancement)
+// REAL Audio Enhancement Component using FFmpeg WASM
 function AudioCleanupPanel() {
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
+  const [progress, setProgress] = useState<EnhanceProgress | null>(null);
+  const [enhancedBlob, setEnhancedBlob] = useState<Blob | null>(null);
   const [enhancedUrl, setEnhancedUrl] = useState<string | null>(null);
+  const [enhanceMode, setEnhanceMode] = useState<'quick' | 'voice' | 'music'>('quick');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && file.type.startsWith('audio/')) {
+      // Validate file size (max 100MB for client-side processing)
+      if (file.size > 100 * 1024 * 1024) {
+        toast.error('File too large. Maximum 100MB for audio enhancement.');
+        return;
+      }
       setAudioFile(file);
       setAudioUrl(URL.createObjectURL(file));
       setEnhancedUrl(null);
+      setEnhancedBlob(null);
+      setProgress(null);
     }
   }, []);
 
@@ -208,14 +219,51 @@ function AudioCleanupPanel() {
     if (!audioFile) return;
     
     setProcessing(true);
-    // For now, we provide the original audio as "enhanced" since full audio processing
-    // would require backend integration or heavy client-side processing
-    // This is a real functional tool - just with basic processing
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setEnhancedUrl(audioUrl);
-    setProcessing(false);
-    toast.success('Audio processing complete! (Basic enhancement applied)');
-  }, [audioFile, audioUrl]);
+    setProgress({ percent: 0, stage: 'loading', message: 'Initializing...' });
+    
+    try {
+      let resultBlob: Blob;
+      
+      // Use the appropriate enhancement preset based on mode
+      switch (enhanceMode) {
+        case 'voice':
+          resultBlob = await audioEnhanceService.optimizeVoice(audioFile, setProgress);
+          break;
+        case 'music':
+          resultBlob = await audioEnhanceService.masterMusic(audioFile, setProgress);
+          break;
+        case 'quick':
+        default:
+          resultBlob = await audioEnhanceService.quickCleanup(audioFile, setProgress);
+          break;
+      }
+      
+      // Clean up previous URL
+      if (enhancedUrl) {
+        URL.revokeObjectURL(enhancedUrl);
+      }
+      
+      setEnhancedBlob(resultBlob);
+      setEnhancedUrl(URL.createObjectURL(resultBlob));
+      toast.success('Audio enhanced successfully with real FFmpeg processing!');
+    } catch (error) {
+      console.error('Audio enhancement failed:', error);
+      toast.error(error instanceof Error ? error.message : 'Audio enhancement failed');
+    } finally {
+      setProcessing(false);
+    }
+  }, [audioFile, enhanceMode, enhancedUrl]);
+
+  const downloadEnhanced = useCallback(() => {
+    if (!enhancedUrl || !enhancedBlob) return;
+    
+    const a = document.createElement('a');
+    a.href = enhancedUrl;
+    const originalName = audioFile?.name.replace(/\.[^/.]+$/, '') || 'audio';
+    a.download = `${originalName}_enhanced.mp3`;
+    a.click();
+    toast.success('Enhanced audio downloaded!');
+  }, [enhancedUrl, enhancedBlob, audioFile]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-6">
@@ -224,48 +272,146 @@ function AudioCleanupPanel() {
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-gold" />
-              Audio Enhancement
-              <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs ml-2">FREE</Badge>
+              Real Audio Enhancement
+              <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs ml-2">FFmpeg WASM</Badge>
             </CardTitle>
+            <p className="text-sm text-slate-400 mt-2">
+              Real audio processing with noise reduction, EQ, compression, and normalization
+            </p>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Button variant="outline" onClick={() => fileInputRef.current?.click()} className="border-slate-600 text-slate-300">
+            {/* Enhancement Mode Selection */}
+            <div className="space-y-2">
+              <Label className="text-slate-300">Enhancement Mode</Label>
+              <div className="grid grid-cols-3 gap-2">
+                <Button
+                  variant={enhanceMode === 'quick' ? 'default' : 'outline'}
+                  onClick={() => setEnhanceMode('quick')}
+                  className={enhanceMode === 'quick' ? 'bg-gold text-black' : 'border-slate-600'}
+                  disabled={processing}
+                >
+                  <Volume2 className="w-4 h-4 mr-2" />
+                  Quick Clean
+                </Button>
+                <Button
+                  variant={enhanceMode === 'voice' ? 'default' : 'outline'}
+                  onClick={() => setEnhanceMode('voice')}
+                  className={enhanceMode === 'voice' ? 'bg-gold text-black' : 'border-slate-600'}
+                  disabled={processing}
+                >
+                  <Radio className="w-4 h-4 mr-2" />
+                  Voice/Podcast
+                </Button>
+                <Button
+                  variant={enhanceMode === 'music' ? 'default' : 'outline'}
+                  onClick={() => setEnhanceMode('music')}
+                  className={enhanceMode === 'music' ? 'bg-gold text-black' : 'border-slate-600'}
+                  disabled={processing}
+                >
+                  <Music className="w-4 h-4 mr-2" />
+                  Music Master
+                </Button>
+              </div>
+              <p className="text-xs text-slate-500">
+                {enhanceMode === 'quick' && 'Basic cleanup: removes background noise and normalizes volume'}
+                {enhanceMode === 'voice' && 'Optimized for speech: compression, de-essing, voice EQ'}
+                {enhanceMode === 'music' && 'Music mastering: wide frequency range, gentle limiting'}
+              </p>
+            </div>
+
+            {/* File Upload */}
+            <Button 
+              variant="outline" 
+              onClick={() => fileInputRef.current?.click()} 
+              className="border-slate-600 text-slate-300"
+              disabled={processing}
+            >
               <Upload className="w-4 h-4 mr-2" />
-              Upload Audio File
+              Upload Audio File (max 100MB)
             </Button>
-            <input ref={fileInputRef} type="file" accept="audio/*" className="hidden" onChange={handleFileUpload} />
+            <input 
+              ref={fileInputRef} 
+              type="file" 
+              accept="audio/*" 
+              className="hidden" 
+              onChange={handleFileUpload} 
+            />
 
             {audioUrl && (
               <div className="space-y-4">
+                {/* Original Audio */}
                 <div className="p-3 bg-slate-800 rounded-lg">
-                  <p className="text-slate-400 text-sm mb-2">Original Audio</p>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-slate-400 text-sm">Original Audio</p>
+                    <span className="text-xs text-slate-500">
+                      {audioFile && `${(audioFile.size / 1024 / 1024).toFixed(1)}MB`}
+                    </span>
+                  </div>
                   <audio controls src={audioUrl} className="w-full" />
                 </div>
 
-                <Button onClick={enhanceAudio} disabled={processing} className="w-full bg-gold text-black hover:bg-gold/90">
-                  {processing ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Processing...</> : 'Enhance Audio'}
+                {/* Progress */}
+                {processing && progress && (
+                  <div className="p-3 bg-slate-800/50 rounded-lg space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="w-4 h-4 text-gold animate-spin" />
+                      <span className="text-sm text-white">{progress.message}</span>
+                    </div>
+                    <Progress value={progress.percent} className="h-2" />
+                    <p className="text-xs text-slate-500">
+                      Stage: {progress.stage} • {progress.percent}%
+                    </p>
+                  </div>
+                )}
+
+                {/* Enhance Button */}
+                <Button 
+                  onClick={enhanceAudio} 
+                  disabled={processing} 
+                  className="w-full bg-gold text-black hover:bg-gold/90"
+                >
+                  {processing ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Processing with FFmpeg...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      Enhance Audio (Real Processing)
+                    </>
+                  )}
                 </Button>
 
+                {/* Enhanced Result */}
                 {enhancedUrl && (
-                  <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
-                    <p className="text-emerald-400 text-sm mb-2">Enhanced Audio</p>
+                  <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg space-y-3">
+                    <div className="flex items-center justify-between">
+                      <p className="text-emerald-400 text-sm font-medium">✓ Enhanced Audio</p>
+                      <Badge className="bg-emerald-500/20 text-emerald-300 text-xs">
+                        {enhancedBlob && `${(enhancedBlob.size / 1024 / 1024).toFixed(1)}MB`}
+                      </Badge>
+                    </div>
                     <audio controls src={enhancedUrl} className="w-full" />
                     <Button
-                      className="mt-2 bg-emerald-600 hover:bg-emerald-700"
-                      onClick={() => {
-                        const a = document.createElement('a');
-                        a.href = enhancedUrl;
-                        a.download = 'enhanced_audio.mp3';
-                        a.click();
-                      }}
+                      className="w-full bg-emerald-600 hover:bg-emerald-700"
+                      onClick={downloadEnhanced}
                     >
                       <Download className="w-4 h-4 mr-2" />
-                      Download Enhanced
+                      Download Enhanced Audio
                     </Button>
                   </div>
                 )}
               </div>
             )}
+
+            {/* Info */}
+            <div className="p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+              <p className="text-xs text-blue-300">
+                <strong>Real FFmpeg Processing:</strong> Uses WebAssembly FFmpeg for actual audio filtering including 
+                high-pass/low-pass EQ, noise reduction (afftdn), dynamic compression, and EBU R128 loudness normalization.
+              </p>
+            </div>
           </CardContent>
         </Card>
       </div>

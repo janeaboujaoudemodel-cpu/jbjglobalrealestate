@@ -71,7 +71,7 @@ export function useVideoProcessor() {
     }
   }, []);
 
-  // Backend processing for heavy exports
+  // Backend processing - now returns transform params for client-side encoding
   const exportVideoBackend = useCallback(async (
     file: File,
     presets: string[],
@@ -106,14 +106,16 @@ export function useVideoProcessor() {
           .from('video-processing-temp')
           .getPublicUrl(fileName);
 
-        // Call backend for heavy processing
+        // Call backend for transformation parameters (NOT actual processing)
         setExportJobs(prev => prev.map(j => 
-          j.id === jobId ? { ...j, status: 'processing', progress: 30 } : j
+          j.id === jobId ? { ...j, status: 'processing', progress: 20 } : j
         ));
 
         const metadata = await ffmpegService.getVideoMetadata(file);
-
         const presetConfig = getPresetConfig(preset);
+
+        // Get auth session for the request
+        const { data: { session } } = await supabase.auth.getSession();
 
         const response = await supabase.functions.invoke('video-resize-process', {
           body: {
@@ -131,19 +133,68 @@ export function useVideoProcessor() {
 
         if (response.error) throw response.error;
 
-        setExportJobs(prev => prev.map(j => 
-          j.id === jobId ? { 
-            ...j, 
-            status: 'completed', 
-            progress: 100,
-            outputUrl: response.data.outputUrl,
-          } : j
-        ));
+        const responseData = response.data;
 
-        urls.push(response.data.outputUrl);
+        // Check if backend returned requires_client_processing
+        if (responseData.status === 'requires_client_processing') {
+          // Backend gave us transform params - now do REAL client-side encoding
+          setExportJobs(prev => prev.map(j => 
+            j.id === jobId ? { 
+              ...j, 
+              status: 'processing', 
+              progress: 30,
+            } : j
+          ));
+
+          // Perform actual FFmpeg.wasm encoding
+          const outputBlob = await ffmpegService.resizeVideo(
+            {
+              sourceFile: file,
+              targetWidth: presetConfig.width,
+              targetHeight: presetConfig.height,
+              aspectRatio: presetConfig.aspectRatio,
+              smartFraming: true,
+              format: 'mp4',
+              quality: 'medium',
+            },
+            (progress) => {
+              setExportJobs(prev => prev.map(j => 
+                j.id === jobId ? { ...j, progress: 30 + (progress.percent * 0.6) } : j
+              ));
+            }
+          );
+
+          // Create object URL for the processed video
+          const outputUrl = URL.createObjectURL(outputBlob);
+
+          setExportJobs(prev => prev.map(j => 
+            j.id === jobId ? { 
+              ...j, 
+              status: 'completed', 
+              progress: 100,
+              outputUrl,
+            } : j
+          ));
+
+          urls.push(outputUrl);
+        } else if (responseData.outputUrl) {
+          // Backend actually processed it (future: when using Mux/MediaConvert)
+          setExportJobs(prev => prev.map(j => 
+            j.id === jobId ? { 
+              ...j, 
+              status: 'completed', 
+              progress: 100,
+              outputUrl: responseData.outputUrl,
+            } : j
+          ));
+
+          urls.push(responseData.outputUrl);
+        } else {
+          throw new Error('Invalid response from processing service');
+        }
 
       } catch (error) {
-        console.error('Backend export failed:', error);
+        console.error('Export failed:', error);
         setExportJobs(prev => prev.map(j => 
           j.id === jobId ? { 
             ...j, 
