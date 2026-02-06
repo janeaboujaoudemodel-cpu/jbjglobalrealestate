@@ -47,8 +47,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const { isRTL } = useLanguage();
   const isMobile = useIsMobile();
   const location = useLocation();
-  // Recognize ALL back-office routes (admin, listing-admin, broker dashboards, etc.)
-  const isAdminRoute = 
+  // Recognize ALL back-office routes (owner panel, listing management, broker dashboards, etc.)
+  const isBackOfficeRoute = 
     location.pathname.startsWith("/admin") || 
     location.pathname.startsWith("/listing-admin") ||
     location.pathname.startsWith("/broker-dashboard");
@@ -66,7 +66,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
   // On homepage: wait for user to scroll past hero section, then delay 3.5s before showing popups/pulse
   useEffect(() => {
-    if (isAdminRoute) return;
+    if (isBackOfficeRoute) return;
     
     // Not on homepage - show immediately
     if (!isHomePage) {
@@ -105,7 +105,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       window.removeEventListener('scroll', handleScroll);
       if (scrollTimer) window.clearTimeout(scrollTimer);
     };
-  }, [isHomePage, isAdminRoute]);
+  }, [isHomePage, isBackOfficeRoute]);
 
   // When user interacts with chat, mark daily shown and clear the pulse immediately
   const handleToggleChat = () => {
@@ -123,7 +123,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   };
 
   // Chat is always an overlay – no content pushing
-  const effectiveCollapsed = isAdminRoute ? true : isChatCollapsed;
+  const effectiveCollapsed = isBackOfficeRoute ? true : isChatCollapsed;
 
   // Determine if page has a dark hero that can use transparent header
   // These pages have full-screen dark heroes where content should sit behind header
@@ -182,13 +182,13 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const [hasDarkHero, setHasDarkHero] = useState<boolean>(routeSuggestsDarkHero);
 
   useLayoutEffect(() => {
-    if (isAdminRoute) {
+    if (isBackOfficeRoute) {
       setHasDarkHero(false);
       return;
     }
     const hasHero = !!document.querySelector('.jj-hero-fullscreen');
     setHasDarkHero(hasHero);
-  }, [location.pathname, isAdminRoute]);
+  }, [location.pathname, isBackOfficeRoute]);
   
   // Pages with bright backgrounds need content pushed below header
   const needsHeaderSpacing = !hasDarkHero;
@@ -204,14 +204,14 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         {children}
       </main>
       {/* Global Contact + Newsletter Section - combined for all public pages */}
-      {!isAdminRoute && (
+      {!isBackOfficeRoute && (
         <CombinedContactNewsletter />
       )}
       {/* Global Footer - rendered centrally */}
-      {!isAdminRoute && <Footer />}
+      {!isBackOfficeRoute && <Footer />}
       {/* All popups rendered centrally - only when ready */}
       {popupsReady && <PopupLayer />}
-      {!isAdminRoute && popupsReady && (
+      {!isBackOfficeRoute && popupsReady && (
         <AIChatWidget
           isCollapsed={effectiveCollapsed}
           onToggleCollapse={handleToggleChat}

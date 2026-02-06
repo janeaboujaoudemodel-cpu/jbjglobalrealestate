@@ -3,7 +3,7 @@
  * Ultra-comprehensive AI executive assistant with full system integration
  * 
  * CAPABILITIES:
- * - Full website/CRM/Admin panel integration
+ * - Full website/CRM/Owner dashboard integration
  * - Personal & Business account management
  * - Social media management (Instagram, LinkedIn, etc.)
  * - Competitor monitoring & market intelligence
@@ -122,7 +122,7 @@ export const FOUNDER_KNOWLEDGE = {
 export const SYSTEM_ACCESS = {
   fullAccess: [
     'CRM - All leads, clients, deals',
-    'Admin Panel - Full dashboard access',
+    'Owner Dashboard - Full dashboard access',
     'Employee Hub - All team data',
     'Finance Dashboard - All transactions',
     'Analytics - Website & business metrics',

@@ -73,8 +73,8 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
   const location = useLocation();
 
-  // Hide NewsletterBand in admin contexts
-  const isAdminContext = location.pathname.startsWith('/listing-admin') || location.pathname.startsWith('/admin');
+  // Hide NewsletterBand in back-office contexts
+  const isBackOfficeContext = location.pathname.startsWith('/listing-admin') || location.pathname.startsWith('/admin');
 
   // Properties
   const propertiesLinks = [
@@ -407,7 +407,7 @@ const Footer = () => {
             </div>
 
             {/* Stay in the Loop - Newsletter inside the 3D card */}
-            {!isAdminContext && (
+            {!isBackOfficeContext && (
               <div className="relative mb-6 sm:mb-8 md:mb-10 px-2 sm:px-4">
                 <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8">
                   {/* Premium Title */}

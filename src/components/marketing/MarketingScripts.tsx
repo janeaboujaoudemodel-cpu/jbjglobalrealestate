@@ -10,7 +10,7 @@ interface MarketingConfig {
   tiktokPixelId?: string;
 }
 
-// Get config from localStorage (set via Admin panel)
+// Get config from localStorage (set via Owner settings)
 const getMarketingConfig = (): MarketingConfig => {
   try {
     const stored = localStorage.getItem('jj_marketing_config');
