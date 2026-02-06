@@ -2850,6 +2850,7 @@ export type Database = {
           created_at: string
           email: string
           email_encrypted: string | null
+          email_hash: string | null
           email_verified: boolean | null
           full_name: string
           full_name_encrypted: string | null
@@ -2868,6 +2869,7 @@ export type Database = {
           created_at?: string
           email: string
           email_encrypted?: string | null
+          email_hash?: string | null
           email_verified?: boolean | null
           full_name: string
           full_name_encrypted?: string | null
@@ -2886,6 +2888,7 @@ export type Database = {
           created_at?: string
           email?: string
           email_encrypted?: string | null
+          email_hash?: string | null
           email_verified?: boolean | null
           full_name?: string
           full_name_encrypted?: string | null
