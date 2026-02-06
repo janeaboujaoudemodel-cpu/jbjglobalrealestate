@@ -278,7 +278,7 @@ const CRM = () => {
     );
   }
 
-  const isAdmin = profile.crm_role === 'owner_admin' || profile.crm_role === 'founder' || profile.crm_role === 'admin';
+  const isCRMOwner = profile.crm_role === 'owner_admin' || profile.crm_role === 'founder';
   const isFounder = profile.crm_role === 'owner_admin' || profile.crm_role === 'founder';
 
   const { isFounderVisible } = useFounderVisibility();
@@ -358,9 +358,9 @@ const CRM = () => {
             </div>
             
             <div className="flex items-center gap-2">
-              {isAdmin && (
+              {isCRMOwner && (
                 <Button variant="secondary" size="sm" onClick={() => navigate("/admin/crm")} className="font-semibold">
-                  Admin Dashboard
+                  Owner Dashboard
                 </Button>
               )}
               <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-black hover:text-gold hover:bg-gold/10">
@@ -412,7 +412,7 @@ const CRM = () => {
                   <Users className="h-4 w-4 mr-1" />
                   Team
                 </Button>
-                {isAdmin && (
+                {isCRMOwner && (
                   <Button variant="ghost" size="sm" onClick={() => navigate("/automations")} className="text-gold hover:text-black hover:bg-gold/20 text-xs font-semibold">
                     <Zap className="h-4 w-4 mr-1" />
                     Automations
@@ -431,7 +431,7 @@ const CRM = () => {
           <DealValueTracker userId={user?.id || ""} />
 
           {/* Enhanced Dashboard with Charts */}
-          <CRMEnhancedDashboard userId={user?.id || ""} isAdmin={isAdmin} />
+          <CRMEnhancedDashboard userId={user?.id || ""} isAdmin={isCRMOwner} />
 
             {/* Main CRM Layout - Team Communication Full Width + Leads Update */}
             <div className="space-y-6">
@@ -472,7 +472,7 @@ const CRM = () => {
                   </CardHeader>
                   <CardContent className="p-0">
                     <div className="max-h-[220px] overflow-y-auto">
-                      <AutomationRules userId={user?.id || ""} isAdmin={isAdmin} />
+                      <AutomationRules userId={user?.id || ""} isOwner={isCRMOwner} />
                     </div>
                   </CardContent>
                 </Card>
@@ -524,7 +524,7 @@ const CRM = () => {
                       <Download className="h-4 w-4 mr-1.5" />
                       Export CSV
                     </Button>
-                    {isAdmin && (
+                    {isCRMOwner && (
                       <Button
                         variant="secondary"
                         onClick={() => setShowBulkAssignModal(true)}
@@ -542,9 +542,9 @@ const CRM = () => {
                       <Users className="h-4 w-4 mr-1.5" />
                       Assistant
                     </Button>
-                    {isAdmin && <VIPExportButton />}
-                    {isAdmin && (
-                      <DeleteImportButton userId={user?.id || ""} onSuccess={handleRefresh} isAdmin={isAdmin} />
+                    {isCRMOwner && <VIPExportButton />}
+                    {isCRMOwner && (
+                      <DeleteImportButton userId={user?.id || ""} onSuccess={handleRefresh} isAdmin={isCRMOwner} />
                     )}
                   </div>
                 </CardContent>

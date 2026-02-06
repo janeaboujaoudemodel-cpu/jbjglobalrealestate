@@ -5,21 +5,35 @@ The system implements a strict binary identity model:
 ## Identity States
 
 1. **Owner**: The sole privileged identity, verified exclusively by an authenticated email match (`auth.email === OWNER_EMAIL`).
-2. **Visitor**: Any unauthenticated user (anonymous).
+2. **Visitor**: Any unauthenticated user (anonymous/no auth token).
 
 ## Blocked State
 
-- **Authenticated but not Owner**: Any logged-in user where `auth.email !== OWNER_EMAIL` must be hard-blocked (403) server-side.
-- No alternative authenticated states are permitted.
+- **Authenticated but not Owner**: Any logged-in user where `auth.email !== OWNER_EMAIL` must be hard-blocked (403) server-side and redirected to `/403` (AccessDenied page).
 
 ## Deprecated Terms
 
-Terms like "Admin", "Staff", "Moderator", or "User" are deprecated. Use:
+Terms like "Admin", "Staff", "Moderator", or "User" are **completely removed** from the codebase. Use:
 - "Owner" for the single privileged identity
 - "Visitor" for anonymous/unauthenticated users
+- "Owner-only access" instead of "admin-only"
+
+## Auth Context
+
+- `isOwner` is the only privilege flag in `AuthContext`
+- `isAdmin` has been **removed entirely** (not aliased)
+- `OwnerGuard` component protects routes requiring Owner access
 
 ## Enforcement
 
-- All authorization is enforced at the API/RLS level
-- UI must only reflect permissions, never decide them
+- All authorization is enforced at the API/RLS level (server-side)
+- UI only reflects permissions, never decides them
 - Never use "admin-only" — always say "Owner-only access"
+
+## Implementation Status (Complete)
+
+- ✅ `isAdmin` removed from `AuthContext`
+- ✅ All components use `isOwner` from auth context
+- ✅ `OwnerGuard` component created for route protection
+- ✅ `/403` AccessDenied page created
+- ✅ Terminology updated across UI

@@ -30,10 +30,10 @@ import {
 
 const AdminTrainingGuide = () => {
   const navigate = useNavigate();
-  const { user, isAdmin } = useAuth();
+  const { user, isOwner } = useAuth();
   const { isListingAdmin, isLoading } = useListingAdmin();
 
-  const hasAccess = isListingAdmin || isAdmin;
+  const hasAccess = isListingAdmin || isOwner;
 
   if (isLoading) {
     return (

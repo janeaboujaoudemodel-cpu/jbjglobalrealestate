@@ -14,7 +14,7 @@ const CRMEmployees = () => {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isCRMOwner, setIsCRMOwner] = useState(false);
 
   useEffect(() => {
     if (authLoading) return;
@@ -49,8 +49,8 @@ const CRMEmployees = () => {
         return;
       }
 
-      const adminRoles = ['owner_admin', 'founder', 'admin'];
-      setIsAdmin(adminRoles.includes(data.crm_role));
+      const ownerRoles = ['owner_admin', 'founder'];
+      setIsCRMOwner(ownerRoles.includes(data.crm_role));
     } catch (err) {
       console.error("Access check failed:", err);
       navigate("/crm");
@@ -106,8 +106,8 @@ const CRMEmployees = () => {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-6">
-        {/* Listing Admin Manager - Only for admins */}
-        {isAdmin && <ListingAdminManager />}
+        {/* Listing Admin Manager - Only for Owner */}
+        {isCRMOwner && <ListingAdminManager />}
 
         <Card className="border-zinc-200 bg-white">
           <CardContent className="p-6">

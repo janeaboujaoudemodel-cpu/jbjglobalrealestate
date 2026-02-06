@@ -63,7 +63,7 @@ interface GlobalHeaderProps {
 }
 
 const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
-  const { user, isAdmin, signOut } = useAuth();
+  const { user, isOwner, signOut } = useAuth();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -1031,10 +1031,10 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                         
                         <div className="h-px bg-gold/20 my-2" />
                         
-                        {/* Admin Shortcuts - Same as desktop dropdown */}
-                        {(isAdmin || hasCRMAccess) && (
+                        {/* Owner Shortcuts - Same as desktop dropdown */}
+                        {(isOwner || hasCRMAccess) && (
                           <>
-                            <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Admin Shortcuts</p>
+                            <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Owner Shortcuts</p>
                             
                             {/* My Assistant */}
                             <Link
@@ -1108,15 +1108,15 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                               </Link>
                             )}
                             
-                            {/* Admin Panel */}
-                            {isAdmin && (
+                            {/* Owner Panel */}
+                            {isOwner && (
                               <Link
                                 to="/admin"
                                 onClick={() => setMobileMenuOpen(false)}
                                 className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
                               >
                                 <Settings className="w-4 h-4 text-gold" />
-                                Admin Panel
+                                Owner Panel
                               </Link>
                             )}
                             

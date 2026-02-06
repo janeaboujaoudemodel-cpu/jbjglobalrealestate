@@ -55,7 +55,7 @@ interface ToolUsage {
 }
 
 const JBJAnalyticsDashboard: React.FC = () => {
-  const { user, isAdmin, loading } = useAuth();
+  const { user, isOwner, loading } = useAuth();
   const navigate = useNavigate();
   const [stats, setStats] = useState<AnalyticsStat[]>([]);
   const [issueReports, setIssueReports] = useState<IssueReport[]>([]);
@@ -66,17 +66,17 @@ const JBJAnalyticsDashboard: React.FC = () => {
   useEffect(() => {
     if (!loading && !user) {
       navigate('/auth');
-    } else if (!loading && user && !isAdmin) {
+    } else if (!loading && user && !isOwner) {
       toast.error("You don't have access to this dashboard");
       navigate('/');
     }
-  }, [user, isAdmin, loading, navigate]);
+  }, [user, isOwner, loading, navigate]);
 
   useEffect(() => {
-    if (isAdmin) {
+    if (isOwner) {
       fetchAnalytics();
     }
-  }, [isAdmin, dateRange]);
+  }, [isOwner, dateRange]);
 
   const getDateRange = () => {
     const now = new Date();
@@ -309,7 +309,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
     );
   }
 
-  if (!isAdmin) return null;
+  if (!isOwner) return null;
 
   return (
     <div className="min-h-screen bg-black">

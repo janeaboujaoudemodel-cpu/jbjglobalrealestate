@@ -83,14 +83,14 @@ const parseJsonObject = (json: Json | null): Record<string, unknown> | null => {
 const PendingImportPreview = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { user, isAdmin } = useAuth();
+  const { user, isOwner } = useAuth();
   const { isListingAdmin, isLoading: checkingAdmin } = useListingAdmin();
   const [pendingImport, setPendingImport] = useState<PendingImport | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();
 
-  const hasAccess = isListingAdmin || isAdmin;
+  const hasAccess = isListingAdmin || isOwner;
 
   useEffect(() => {
     if (!checkingAdmin && !user) {

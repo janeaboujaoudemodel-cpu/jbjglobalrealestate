@@ -15,7 +15,7 @@ interface BrokerOption {
 
 interface CRMLeadsBulkBarProps {
   userId: string;
-  isAdmin: boolean;
+  isOwner: boolean;
   selectedIds: string[];
   onClear: () => void;
   onSuccess: () => void;
@@ -23,7 +23,7 @@ interface CRMLeadsBulkBarProps {
 
 export default function CRMLeadsBulkBar({
   userId,
-  isAdmin,
+  isOwner,
   selectedIds,
   onClear,
   onSuccess,
@@ -47,12 +47,12 @@ export default function CRMLeadsBulkBar({
       if (!error && data) setBrokers(data as BrokerOption[]);
     };
 
-    if (isAdmin) load();
+    if (isOwner) load();
 
     return () => {
       cancelled = true;
     };
-  }, [isAdmin]);
+  }, [isOwner]);
 
   const count = selectedIds.length;
 
@@ -90,8 +90,8 @@ export default function CRMLeadsBulkBar({
   };
 
   const handleAssign = async () => {
-    if (!isAdmin) {
-      toast.error("Admin access required");
+    if (!isOwner) {
+      toast.error("Owner access required");
       return;
     }
     if (!assigneeId) {
@@ -192,7 +192,7 @@ export default function CRMLeadsBulkBar({
             Delete
           </Button>
 
-          {isAdmin && (
+          {isOwner && (
             <>
               <select
                 value={assigneeId}

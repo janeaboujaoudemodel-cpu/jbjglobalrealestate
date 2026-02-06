@@ -108,10 +108,10 @@ const defaultRules: AutomationRule[] = [
 
 interface AutomationRulesProps {
   userId: string;
-  isAdmin?: boolean;
+  isOwner?: boolean;
 }
 
-const AutomationRules = ({ userId, isAdmin = false }: AutomationRulesProps) => {
+const AutomationRules = ({ userId, isOwner = false }: AutomationRulesProps) => {
   const [rules, setRules] = useState<AutomationRule[]>(defaultRules);
   const [syncing, setSyncing] = useState(false);
 
@@ -128,8 +128,8 @@ const AutomationRules = ({ userId, isAdmin = false }: AutomationRulesProps) => {
 
   const toggleRule = async (ruleId: string) => {
     const rule = rules.find(r => r.id === ruleId);
-    if (rule?.adminOnly && !isAdmin) {
-      toast.error("Only administrators can modify this rule");
+    if (rule?.adminOnly && !isOwner) {
+      toast.error("Only the Owner can modify this rule");
       return;
     }
 
@@ -169,7 +169,7 @@ const AutomationRules = ({ userId, isAdmin = false }: AutomationRulesProps) => {
               rule.isActive 
                 ? "bg-white border-gold/30 shadow-sm" 
                 : "bg-zinc-50 border-zinc-200 opacity-60"
-            } ${rule.adminOnly && !isAdmin ? "opacity-50" : ""}`}
+            } ${rule.adminOnly && !isOwner ? "opacity-50" : ""}`}
           >
             <div className="p-2 rounded-lg bg-zinc-100 border border-zinc-200">
               {rule.icon}
@@ -200,7 +200,7 @@ const AutomationRules = ({ userId, isAdmin = false }: AutomationRulesProps) => {
             <Switch
               checked={rule.isActive}
               onCheckedChange={() => toggleRule(rule.id)}
-              disabled={syncing || (rule.adminOnly && !isAdmin)}
+              disabled={syncing || (rule.adminOnly && !isOwner)}
               className="data-[state=checked]:bg-emerald-500"
             />
           </div>
@@ -210,7 +210,7 @@ const AutomationRules = ({ userId, isAdmin = false }: AutomationRulesProps) => {
       <Button 
         variant="outline" 
         className="w-full border-dashed border-zinc-300 text-zinc-600 hover:bg-zinc-50 text-xs"
-        disabled={!isAdmin}
+        disabled={!isOwner}
       >
         <Settings className="h-3 w-3 mr-2" />
         Create Custom Rule
