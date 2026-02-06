@@ -167,40 +167,54 @@ const ContactGatingModal = ({ isOpen, onClose, onComplete, triggerSource }: Cont
     try {
       const sessionId = sessionStorage.getItem('visitor_session_id') || `session_${Date.now()}`;
       
-      // Save to database
-      const { error } = await supabase
-        .from('contact_gating_submissions')
-        .insert({
-          session_id: sessionId,
-          full_name: formData.fullName,
-          email: formData.email,
-          phone: formData.phone,
-          nationality: formData.nationality || null,
-          location: formData.location || null,
-          preferred_language: formData.preferredLanguage || null,
-          service_interest: formData.interestedService || null,
-          email_verified: true,
-        });
+      // Use edge function for secure encrypted storage - NO PLAINTEXT PII
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/submit-contact-gating`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+          },
+          body: JSON.stringify({
+            session_id: sessionId,
+            full_name: formData.fullName,
+            email: formData.email,
+            phone: formData.phone,
+            nationality: formData.nationality || undefined,
+            location: formData.location || undefined,
+            preferred_language: formData.preferredLanguage || undefined,
+            service_interest: formData.interestedService || undefined,
+          }),
+        }
+      );
 
-      if (error) throw error;
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Submission failed');
+      }
 
-      // Update visitor session with contact info
+      // Update visitor session with masked contact info (no PII in client-side storage)
       await supabase
         .from('visitor_sessions')
         .update({
           contact_details: {
-            name: formData.fullName,
-            email: formData.email,
-            phone: formData.phone,
+            name: formData.fullName.split(' ')[0] + ' ***', // Partially masked
+            email: formData.email.replace(/(.{2})(.*)(@.*)/, '$1***$3'), // Masked email
+            hasPhone: true,
             nationality: formData.nationality,
           },
           is_converted: true,
         })
         .eq('session_id', sessionId);
 
-      // Mark as completed in localStorage
+      // Mark as completed in localStorage (no full PII stored client-side)
       localStorage.setItem('contact_gating_completed', 'true');
-      localStorage.setItem('contact_gating_data', JSON.stringify(formData));
+      localStorage.setItem('contact_gating_data', JSON.stringify({
+        ...formData,
+        email: formData.email.replace(/(.{2})(.*)(@.*)/, '$1***$3'),
+        phone: formData.phone.slice(0, 4) + '****' + formData.phone.slice(-2),
+      }));
 
       setStep('complete');
       
