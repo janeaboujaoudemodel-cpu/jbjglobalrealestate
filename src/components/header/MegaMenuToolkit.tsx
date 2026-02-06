@@ -1,7 +1,6 @@
 import React from 'react';
 import { 
-  Video, Image, FileText, Mic, Wand2, Scissors, Sparkles, 
-  ImageIcon, Languages, Film, Palette, Play
+  Video, Image, FileText, Mic, Home, Sparkles
 } from 'lucide-react';
 import {
   MegaMenuIconLink,
@@ -14,115 +13,92 @@ interface MegaMenuToolkitProps {
 }
 
 const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>(({ onClose }, ref) => {
-  // Column 1: Video & Audio
-  const videoAudioLinks = [
-    { label: 'AI Video Studio', href: '/toolkit/ai-video-studio', icon: Play, flagship: true },
-    { label: 'Video Resize Pack', href: '/toolkit/video-resize-pack', icon: Film },
-    { label: 'Voice Studio', href: '/toolkit/voice-studio', icon: Mic },
-    { label: 'Captions & Translate', href: '/toolkit/captions-translate', icon: Languages },
+  // 5 Master Suites - grouped by output type
+  const suites = [
+    {
+      icon: Video,
+      title: 'Video Suite',
+      href: '/toolkit/video-suite',
+      description: 'Edit, resize, captions & export',
+      flagship: true,
+    },
+    {
+      icon: Mic,
+      title: 'Voice & Audio Suite',
+      href: '/toolkit/voice-suite',
+      description: 'TTS, STT, cleanup & translate',
+    },
+    {
+      icon: Image,
+      title: 'Photo & Image Suite',
+      href: '/toolkit/photo-suite',
+      description: 'Background, beauty, resize & design',
+    },
+    {
+      icon: FileText,
+      title: 'PDF & Documents Suite',
+      href: '/toolkit/pdf-suite',
+      description: 'Edit, convert, scan & sign',
+    },
+    {
+      icon: Home,
+      title: 'Property Intelligence',
+      href: '/toolkit/property-suite',
+      description: 'Home finder, valuations & analytics',
+    },
   ];
-
-  // Column 2: Images & PDF
-  const imagesPdfLinks = [
-    { label: 'Image Resizer', href: '/toolkit/image-resize', icon: ImageIcon },
-    { label: 'Photo to PDF', href: '/toolkit/pdf-from-photos', icon: FileText },
-    { label: 'Smart Reframe', href: '/toolkit/smart-reframe', icon: Scissors },
-  ];
-
-  // Column 3: AI Tools
-  const aiToolsLinks = [
-    { label: 'Background AI', href: '/toolkit/background-ai', icon: Wand2 },
-    { label: 'Beauty Filters', href: '/toolkit/beauty-filters', icon: Palette },
-  ];
-
-  // Column 4: Toolkit Hub CTA
-  const hubLink = { label: 'Toolkit Hub', href: '/toolkit', icon: Sparkles };
 
   return (
     <MegaMenuShell ref={ref} noScroll>
-      <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-4 lg:py-5">
-        {/* 4 Equal Columns - Tool Categories */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Column 1: Video & Audio */}
-          <div className="relative">
-            <MegaMenuSectionTitle icon={Video} title="Video & Audio" />
-            <div className="space-y-0">
-              {videoAudioLinks.map((item) => (
-                <MegaMenuIconLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
-              ))}
-            </div>
-            {/* Vertical divider */}
-            <div className="hidden lg:block absolute top-0 -right-2 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+      <div className="max-w-[1200px] mx-auto px-4 lg:px-8 py-5">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <Sparkles className="w-5 h-5 text-gold" />
+            <h3 className="text-lg font-semibold text-white">JBJ Royal Tools Hub</h3>
           </div>
+          <a 
+            href="/toolkit" 
+            onClick={onClose}
+            className="text-sm text-gold hover:underline"
+          >
+            View All Tools →
+          </a>
+        </div>
 
-          {/* Column 2: Images & PDF */}
-          <div className="relative">
-            <MegaMenuSectionTitle icon={Image} title="Images & PDF" />
-            <div className="space-y-0">
-              {imagesPdfLinks.map((item) => (
-                <MegaMenuIconLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
-              ))}
-            </div>
-            {/* Vertical divider */}
-            <div className="hidden lg:block absolute top-0 -right-2 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
-          </div>
+        {/* 5 Suite Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          {suites.map((suite) => (
+            <MegaMenuIconLink
+              key={suite.href}
+              to={suite.href}
+              onClick={onClose}
+              icon={suite.icon}
+              title={suite.title}
+              description={suite.description}
+              emphasis={suite.flagship}
+            />
+          ))}
+        </div>
 
-          {/* Column 3: AI Tools */}
-          <div className="relative">
-            <MegaMenuSectionTitle icon={Wand2} title="AI Tools" />
-            <div className="space-y-0">
-              {aiToolsLinks.map((item) => (
-                <MegaMenuIconLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
-              ))}
+        {/* Bottom CTA */}
+        <div className="mt-4 p-4 bg-gradient-to-br from-zinc-900 via-black to-zinc-800 rounded-xl border border-gold/40">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div>
+              <p className="text-gold text-[10px] font-bold tracking-[0.2em] uppercase">
+                FREE PROFESSIONAL TOOLS
+              </p>
+              <p className="text-white text-sm font-semibold mt-1">
+                5 complete suites for video, audio, images, PDFs & property intelligence
+              </p>
             </div>
-            {/* Vertical divider */}
-            <div className="hidden lg:block absolute top-0 -right-2 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
-          </div>
-
-          {/* Column 4: Toolkit Hub CTA */}
-          <div>
-            <MegaMenuSectionTitle icon={Sparkles} title="Explore All Tools" />
-            <div className="space-y-0">
-              <MegaMenuIconLink
-                to={hubLink.href}
-                onClick={onClose}
-                icon={hubLink.icon}
-                title="View All Toolkit Tools"
-                emphasis
-              />
-              <div className="mt-4 p-4 bg-gradient-to-br from-zinc-900 via-black to-zinc-800 rounded-xl border border-gold/40">
-                <p className="text-gold text-[10px] font-bold tracking-[0.2em] uppercase mb-2">
-                  FREE TOOLS
-                </p>
-                <p className="text-white text-sm font-semibold mb-1">
-                  JBJ Royal Tools Hub
-                </p>
-                <p className="text-white/70 text-xs">
-                  9 professional tools for video, image, and PDF manipulation — completely free.
-                </p>
-              </div>
-            </div>
+            <a 
+              href="/toolkit"
+              onClick={onClose}
+              className="px-4 py-2 bg-gold text-black text-sm font-semibold rounded-lg hover:bg-gold/90 transition-colors"
+            >
+              Explore All
+            </a>
           </div>
         </div>
       </div>
