@@ -17,11 +17,12 @@ interface CompleteJobRequest {
   errorMessage?: string;
 }
 
-// Helper type for job input_data
-interface JobInputData {
-  userId?: string;
-  [key: string]: unknown;
-}
+// Legacy input_data ownership fallback removed (user_id is authoritative).
+
+
+
+
+
 
 serve(async (req) => {
   // Handle CORS preflight
@@ -116,7 +117,7 @@ serve(async (req) => {
     // Fetch the job to verify ownership
     const { data: job, error: fetchError } = await supabaseAuth
       .from("studio_jobs")
-      .select("id, user_id, input_data, status, progress")
+      .select("id, user_id, status, progress")
       .eq("id", jobId)
       .single();
 
@@ -127,12 +128,21 @@ serve(async (req) => {
       );
     }
 
-    // Check ownership - job must belong to this user
-    // Check both user_id column and input_data.userId for backward compatibility
-    const inputData = job.input_data as JobInputData | null;
-    const jobUserId = job.user_id || inputData?.userId;
-    if (jobUserId !== userId) {
-      console.warn(`[SECURITY] User ${userId} attempted to complete job ${jobId} owned by ${jobUserId}`);
+    // Strict ownership: user_id is the ONLY ownership key.
+    if (!job.user_id) {
+      console.error(
+        `[SECURITY INCIDENT] Job ${jobId} has null user_id (data integrity violation)`
+      );
+      return new Response(
+        JSON.stringify({ error: "Internal error - job data integrity violation" }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    if (job.user_id !== userId) {
+      console.warn(
+        `[SECURITY] User ${userId} attempted to complete job ${jobId} owned by ${job.user_id}`
+      );
       return new Response(
         JSON.stringify({ error: "Access denied - Cannot update jobs you don't own" }),
         { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }

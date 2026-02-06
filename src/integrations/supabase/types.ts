@@ -15162,7 +15162,6 @@ export type Database = {
           priority: number | null
           progress: number | null
           progress_message: string | null
-          project_id: string | null
           retry_count: number | null
           session_id: string | null
           started_at: string | null
@@ -15184,7 +15183,6 @@ export type Database = {
           priority?: number | null
           progress?: number | null
           progress_message?: string | null
-          project_id?: string | null
           retry_count?: number | null
           session_id?: string | null
           started_at?: string | null
@@ -15206,7 +15204,6 @@ export type Database = {
           priority?: number | null
           progress?: number | null
           progress_message?: string | null
-          project_id?: string | null
           retry_count?: number | null
           session_id?: string | null
           started_at?: string | null
@@ -15215,15 +15212,7 @@ export type Database = {
           user_id?: string
           worker_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "studio_jobs_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "studio_projects"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       studio_project_assets: {
         Row: {
@@ -16266,7 +16255,7 @@ export type Database = {
           job_type: string
           output_files: Json | null
           progress: number | null
-          session_id: string
+          session_id: string | null
           settings: Json | null
           status: string
           updated_at: string
@@ -16281,7 +16270,7 @@ export type Database = {
           job_type: string
           output_files?: Json | null
           progress?: number | null
-          session_id: string
+          session_id?: string | null
           settings?: Json | null
           status?: string
           updated_at?: string
@@ -16296,7 +16285,7 @@ export type Database = {
           job_type?: string
           output_files?: Json | null
           progress?: number | null
-          session_id?: string
+          session_id?: string | null
           settings?: Json | null
           status?: string
           updated_at?: string
