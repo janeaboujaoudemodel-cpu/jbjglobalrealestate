@@ -4,7 +4,7 @@
  * ALL real tools - no placeholders
  */
 
-import React, { lazy, Suspense, useState, useRef, useCallback } from 'react';
+import React, { lazy, Suspense, useState, useRef, useCallback, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SEOHead } from '@/components/SEOHead';
 import { Mic, FileAudio, Sparkles, Languages, ArrowLeft, Upload, Play, Pause, Download, Loader2, Volume2, Radio, Music } from 'lucide-react';
@@ -199,6 +199,14 @@ function AudioCleanupPanel() {
   const [enhanceMode, setEnhanceMode] = useState<'quick' | 'voice' | 'music'>('quick');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Memory cleanup: revoke object URLs on unmount or when they change
+  useEffect(() => {
+    return () => {
+      if (audioUrl) URL.revokeObjectURL(audioUrl);
+      if (enhancedUrl) URL.revokeObjectURL(enhancedUrl);
+    };
+  }, [audioUrl, enhancedUrl]);
+
   const handleFileUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && file.type.startsWith('audio/')) {
@@ -207,13 +215,17 @@ function AudioCleanupPanel() {
         toast.error('File too large. Maximum 100MB for audio enhancement.');
         return;
       }
+      // Revoke previous URLs to prevent memory leaks
+      if (audioUrl) URL.revokeObjectURL(audioUrl);
+      if (enhancedUrl) URL.revokeObjectURL(enhancedUrl);
+      
       setAudioFile(file);
       setAudioUrl(URL.createObjectURL(file));
       setEnhancedUrl(null);
       setEnhancedBlob(null);
       setProgress(null);
     }
-  }, []);
+  }, [audioUrl, enhancedUrl]);
 
   const enhanceAudio = useCallback(async () => {
     if (!audioFile) return;

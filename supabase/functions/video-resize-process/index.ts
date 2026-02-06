@@ -120,26 +120,33 @@ serve(async (req) => {
     }
 
     // ========================================
-    // PATH OWNERSHIP VALIDATION
-    // Ensure user can only process their own files
+    // PATH OWNERSHIP VALIDATION (STRICT PREFIX MATCHING)
+    // Bucket-relative paths only - bucket name is NOT part of sourcePath
     // ========================================
-    // Expected path format: video-uploads/{userId}/filename.mp4
-    // or video-processing/{userId}/filename.mp4
-    const pathParts = sourcePath.split('/');
-    if (pathParts.length < 2) {
+    // Allowed patterns:
+    // 1. video-export/{jobId}/... - shared temp folder for processing jobs
+    // 2. temp/... - temporary uploads
+    // 3. video-uploads/{userId}/... - user's own uploads
+    // 4. video-processing/{userId}/... - user's own processing folder
+    
+    // Sanitize path - remove any leading slashes and prevent path traversal
+    const sanitizedPath = sourcePath.replace(/^\/+/, '').replace(/\.\./g, '');
+    if (sanitizedPath !== sourcePath) {
       return new Response(
-        JSON.stringify({ error: "Invalid source path format" }),
+        JSON.stringify({ error: "Invalid path - path traversal not allowed" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // For user-uploaded files, validate ownership
-    // Allow processing if path contains user's ID or is in a shared temp folder
-    const isOwnedByUser = sourcePath.includes(userId);
-    const isInTempFolder = sourcePath.startsWith('video-processing-temp/') || sourcePath.startsWith('temp/');
+    // Check ownership with EXACT prefix matching (no substring matching!)
+    const isInTempFolder = sanitizedPath.startsWith("video-export/") || sanitizedPath.startsWith("temp/");
+    const isOwnedByUser = 
+      sanitizedPath.startsWith(`video-uploads/${userId}/`) || 
+      sanitizedPath.startsWith(`video-processing/${userId}/`) ||
+      sanitizedPath.startsWith(`${userId}/`);
     
-    if (!isOwnedByUser && !isInTempFolder) {
-      console.warn(`[SECURITY] User ${userId} attempted to access path: ${sourcePath}`);
+    if (!isInTempFolder && !isOwnedByUser) {
+      console.warn(`[SECURITY] User ${userId} attempted to access unauthorized path: ${sanitizedPath}`);
       return new Response(
         JSON.stringify({ error: "Access denied - Cannot process files you don't own" }),
         { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }

@@ -59,12 +59,32 @@ class FFmpegService {
         console.log('[FFmpeg]', message);
       });
 
-      // Load FFmpeg with WASM from CDN
-      const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd';
-      await this.ffmpeg.load({
-        coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
-        wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
-      });
+      // Load FFmpeg with WASM from CDN - with fallback
+      const cdnUrls = [
+        'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd',
+        'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd',
+      ];
+
+      let loadError: Error | null = null;
+      
+      for (const baseURL of cdnUrls) {
+        try {
+          console.log(`[FFmpeg] Trying CDN: ${baseURL}`);
+          await this.ffmpeg.load({
+            coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
+            wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
+          });
+          loadError = null;
+          break; // Success
+        } catch (cdnError) {
+          console.warn(`[FFmpeg] CDN failed: ${baseURL}`, cdnError);
+          loadError = cdnError instanceof Error ? cdnError : new Error('CDN load failed');
+        }
+      }
+
+      if (loadError) {
+        throw loadError;
+      }
 
       this.loaded = true;
       onProgress?.({ percent: 100, stage: 'loading', message: 'FFmpeg loaded!' });
