@@ -1,13 +1,13 @@
 /**
  * Photo & Image Suite - Embeds REAL existing tool pages
- * Tabs: Background (BackgroundAI) | Beauty (BeautyFilters) | Resize (ImageResize) | Interior (InteriorDesignAI)
- * ONLY real tool pages - no placeholders
+ * Tabs: Background (BackgroundAI) | Beauty (BeautyFilters) | Resize (ImageResize) | Interior (InteriorDesignAI) | Staging (VirtualStaging)
+ * ALL real tool pages - no placeholders
  */
 
 import React, { lazy, Suspense } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SEOHead } from '@/components/SEOHead';
-import { Wand2, Sparkles, Image as ImageIcon, Palette, ArrowLeft } from 'lucide-react';
+import { Wand2, Sparkles, Image as ImageIcon, Palette, Home, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
@@ -16,6 +16,7 @@ const BackgroundAI = lazy(() => import('@/pages/toolkit/BackgroundAI'));
 const BeautyFilters = lazy(() => import('@/pages/toolkit/BeautyFilters'));
 const ImageResize = lazy(() => import('@/pages/toolkit/ImageResize'));
 const InteriorDesignAI = lazy(() => import('@/pages/InteriorDesignAI'));
+const VirtualStagingPage = lazy(() => import('@/pages/toolkit/VirtualStagingPage'));
 
 const LoadingSpinner = () => (
   <div className="min-h-[60vh] flex items-center justify-center">
@@ -28,7 +29,7 @@ export default function PhotoSuite() {
     <>
       <SEOHead 
         title="Photo & Image Suite | JBJ Royal Tools"
-        description="AI background removal, beauty filters, image resizing, and interior design tools."
+        description="AI background removal, beauty filters, image resizing, interior design, and virtual staging tools."
       />
       
       <div className="min-h-screen bg-black">
@@ -52,13 +53,13 @@ export default function PhotoSuite() {
                 <h1 className="text-2xl md:text-3xl font-bold text-white">
                   Photo & Image <span className="text-gold">Suite</span>
                 </h1>
-                <p className="text-zinc-400 text-sm">Background removal, beauty, resize & AI design</p>
+                <p className="text-zinc-400 text-sm">Background removal, beauty, resize, AI design & staging</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Tabs - 4 tabs with REAL tools */}
+        {/* Tabs - 5 tabs with REAL tools */}
         <Tabs defaultValue="background" className="flex flex-col">
           <div className="border-b border-gold/20 bg-zinc-900/50">
             <div className="max-w-7xl mx-auto px-4">
@@ -91,6 +92,13 @@ export default function PhotoSuite() {
                   <Palette className="w-4 h-4" />
                   <span className="hidden sm:inline">Interior Design</span>
                 </TabsTrigger>
+                <TabsTrigger
+                  value="staging"
+                  className="relative px-4 md:px-6 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-400 hover:text-white transition-colors flex items-center gap-2 whitespace-nowrap"
+                >
+                  <Home className="w-4 h-4" />
+                  <span className="hidden sm:inline">Virtual Staging</span>
+                </TabsTrigger>
               </TabsList>
             </div>
           </div>
@@ -118,6 +126,12 @@ export default function PhotoSuite() {
             <TabsContent value="interior" className="mt-0">
               <Suspense fallback={<LoadingSpinner />}>
                 <InteriorDesignAI />
+              </Suspense>
+            </TabsContent>
+
+            <TabsContent value="staging" className="mt-0">
+              <Suspense fallback={<LoadingSpinner />}>
+                <VirtualStagingPage />
               </Suspense>
             </TabsContent>
           </div>
