@@ -6,6 +6,7 @@ import { MediaLibraryPanel } from './panels/MediaLibraryPanel';
 import { InspectorPanel } from './panels/InspectorPanel';
 import { VideoPreviewCanvas } from './preview/VideoPreviewCanvas';
 import { TimelineEditor } from './timeline/TimelineEditor';
+import { IntegratedToolsPanel } from './features/IntegratedToolsPanel';
 import { useVideoStudioProject } from './hooks/useVideoStudioProject';
 import { useMediaLibrary } from './hooks/useMediaLibrary';
 import { MediaAsset, StockAsset, Clip, ExportPreset, RenderJob } from './types';
@@ -252,6 +253,16 @@ export function AIVideoStudio() {
         <InspectorPanel
           selectedClip={selectedClip}
           onUpdateClip={(updates) => selectedClip && updateClip(selectedClip.id, updates)}
+        />
+      }
+      toolsPanel={
+        <IntegratedToolsPanel
+          onAddVoiceover={(blob, duration) => {
+            toast.success('Voiceover ready to add');
+          }}
+          onAddAIVoice={(url, duration) => {
+            toast.success('AI voice generated');
+          }}
         />
       }
       timeline={

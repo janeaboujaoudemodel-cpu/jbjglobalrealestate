@@ -16,6 +16,7 @@ const AIVideoStudioPage = lazy(() => import("./pages/toolkit/AIVideoStudioPage")
 const CaptionsTranslate = lazy(() => import("./pages/toolkit/CaptionsTranslate"));
 const BackgroundAI = lazy(() => import("./pages/toolkit/BackgroundAI"));
 const BeautyFilters = lazy(() => import("./pages/toolkit/BeautyFilters"));
+const PDFEditor = lazy(() => import("./pages/toolkit/PDFEditor"));
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
@@ -506,6 +507,11 @@ const App = () => (
                 <Route path="/toolkit/pdf-from-photos" element={
                   <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
                     <PdfFromPhotos />
+                  </Suspense>
+                } />
+                <Route path="/toolkit/pdf-editor" element={
+                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                    <PDFEditor />
                   </Suspense>
                 } />
                 <Route path="/toolkit/image-resize" element={

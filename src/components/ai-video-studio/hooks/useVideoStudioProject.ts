@@ -33,7 +33,7 @@ const createNewProject = (): VideoStudioProject => ({
   tracks: createDefaultTracks(),
   settings: defaultSettings,
   createdAt: new Date(),
-  autoDeleteAt: new Date(Date.now() + 2 * 60 * 60 * 1000), // 2 hours
+  // NOTE: No auto-delete - permanent storage per user requirement
 });
 
 const defaultTimelineState: TimelineState = {

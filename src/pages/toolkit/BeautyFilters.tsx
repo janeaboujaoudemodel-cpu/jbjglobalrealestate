@@ -166,7 +166,7 @@ export default function BeautyFilters() {
             <span>Back to Toolkit</span>
           </Link>
           <div className="text-sm text-slate-500">
-            Files auto-delete after 2 hours
+            Projects are saved automatically
           </div>
         </div>
       </header>

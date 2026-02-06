@@ -6,6 +6,7 @@ interface AIVideoStudioLayoutProps {
   leftPanel: ReactNode;
   centerPanel: ReactNode;
   rightPanel: ReactNode;
+  toolsPanel?: ReactNode;
   timeline: ReactNode;
   exportBar: ReactNode;
 }
@@ -15,6 +16,7 @@ export function AIVideoStudioLayout({
   leftPanel,
   centerPanel,
   rightPanel,
+  toolsPanel,
   timeline,
   exportBar,
 }: AIVideoStudioLayoutProps) {
@@ -32,7 +34,7 @@ export function AIVideoStudioLayout({
           <ResizablePanel defaultSize={65} minSize={40}>
             <ResizablePanelGroup direction="horizontal" className="h-full">
               {/* Left Panel - Media Library */}
-              <ResizablePanel defaultSize={20} minSize={15} maxSize={35}>
+              <ResizablePanel defaultSize={18} minSize={12} maxSize={30}>
                 <div className="h-full overflow-hidden border-r border-slate-800 bg-slate-900/50">
                   {leftPanel}
                 </div>
@@ -41,7 +43,7 @@ export function AIVideoStudioLayout({
               <ResizableHandle withHandle className="bg-slate-800 hover:bg-gold/50 transition-colors" />
 
               {/* Center Panel - Preview */}
-              <ResizablePanel defaultSize={55} minSize={30}>
+              <ResizablePanel defaultSize={44} minSize={25}>
                 <div className="h-full overflow-hidden bg-slate-950">
                   {centerPanel}
                 </div>
@@ -50,11 +52,23 @@ export function AIVideoStudioLayout({
               <ResizableHandle withHandle className="bg-slate-800 hover:bg-gold/50 transition-colors" />
 
               {/* Right Panel - Inspector */}
-              <ResizablePanel defaultSize={25} minSize={15} maxSize={40}>
+              <ResizablePanel defaultSize={20} minSize={12} maxSize={30}>
                 <div className="h-full overflow-hidden border-l border-slate-800 bg-slate-900/50">
                   {rightPanel}
                 </div>
               </ResizablePanel>
+
+              {/* Tools Panel (integrated video tools) */}
+              {toolsPanel && (
+                <>
+                  <ResizableHandle withHandle className="bg-slate-800 hover:bg-gold/50 transition-colors" />
+                  <ResizablePanel defaultSize={18} minSize={12} maxSize={28}>
+                    <div className="h-full overflow-hidden border-l border-slate-800 bg-slate-900/50">
+                      {toolsPanel}
+                    </div>
+                  </ResizablePanel>
+                </>
+              )}
             </ResizablePanelGroup>
           </ResizablePanel>
 

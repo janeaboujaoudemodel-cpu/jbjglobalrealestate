@@ -138,16 +138,19 @@ Based on my deep audit using browser screenshots and code verification, here is 
 
 ## SECTION H: AI Video Tool Integration
 
-### ❌ NOT STARTED
-- Tools are still separate: AIVideoStudio, BeautyFilters, VoiceStudio, VideoResizePack
-- Need to merge all into single integrated video editor
+### ✅ COMPLETED
+- **Code Proof:** `IntegratedToolsPanel.tsx` now merges Voice Studio, Captions/Translate, Beauty Filters, and Video Resize into tabbed panels
+- **Code Proof:** `AIVideoStudioLayout.tsx` updated with `toolsPanel` prop for integrated tools
+- **Code Proof:** `AIVideoStudio.tsx` now includes the integrated tools panel
 
 ---
 
 ## SECTION I: File Retention Policy
 
-### ❌ NOT STARTED
-- No auto-delete logic review or autosave implementation yet
+### ✅ COMPLETED
+- **Code Proof:** `types.ts` - removed `autoDeleteAt` field, added zero auto-deletion comment
+- **Code Proof:** `useVideoStudioProject.ts` - removed auto-delete timer
+- **Code Proof:** `CaptionsTranslate.tsx`, `BackgroundAI.tsx`, `BeautyFilters.tsx`, `ToolkitLanding.tsx` - changed "auto-delete" to "auto-save" messaging
 
 ---
 
@@ -162,16 +165,18 @@ Based on my deep audit using browser screenshots and code verification, here is 
 
 ## SECTION K: PDF Tool Phase 1
 
-### ❌ NOT STARTED
-- PDF editor page not yet created
-- Features: page extraction, reordering, merge, signatures not implemented
+### ✅ COMPLETED
+- **Code Proof:** Created `PDFEditor.tsx` at `/toolkit/pdf-editor`
+- Features: Page extraction, reordering, merge, rotation, basic signature canvas
+- Route added to `App.tsx`
 
 ---
 
 ## SECTION L: Admin Presentation Generator
 
-### ❌ NOT STARTED
-- Depends on PDF tool completion
+### ⏳ PHASE 2
+- Depends on PDF tool completion (now done)
+- Will add property presentation generation in next iteration
 
 ---
 
