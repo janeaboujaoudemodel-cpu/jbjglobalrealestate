@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Briefcase, User, ChevronDown, Check, Loader2, Users } from "lucide-react";
-import { useUserMode, UserMode } from "@/hooks/useUserMode";
+import { useUserModeContext, UserMode } from "@/contexts/UserModeContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { cn } from "@/lib/utils";
 import {
@@ -45,10 +44,9 @@ const MODE_CONFIG: Record<UserMode, { label: string; shortLabel: string; icon: t
 };
 
 export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProps) => {
-  const { mode, isLoading, setMode } = useUserMode();
-  const { role, hasSelectedRole } = useUserRole();
+  const { mode, isLoading, setMode } = useUserModeContext();
+  const { hasSelectedRole } = useUserRole();
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
 
   // Don't show mode switcher if user hasn't selected a role yet
   if (!hasSelectedRole) return null;
