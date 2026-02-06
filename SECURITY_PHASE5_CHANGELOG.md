@@ -112,9 +112,17 @@
 
 ---
 
-## F) Status
+## F) Testing Note (Important for Future Maintainers)
 
-**Phase 5 Complete** — Both active findings resolved and verified.
+> **Anon INSERT proof must not chain `.select()`** because anon has no SELECT privilege by design.
+> Using `insert().select()` will fail with 42501 even though the INSERT itself succeeds.
+> Test INSERT-only operations without chaining `.select()`.
+
+---
+
+## G) Status
+
+**Phase 5 Complete and Frozen** — Both active findings resolved and verified.
 
 - `hr_candidates`: Anonymous access blocked at privilege layer
 - `chat_conversations`: Consolidated to 6 policies, minimal anon privileges (INSERT only)
