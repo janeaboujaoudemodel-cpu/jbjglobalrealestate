@@ -18668,39 +18668,74 @@ export type Database = {
       }
       hr_employees_secure: {
         Row: {
+          candidate_id: string | null
+          certifications: string[] | null
           created_at: string | null
+          created_by: string | null
+          cv_url: string | null
           department: string | null
+          email: string | null
+          email_hash: string | null
           employee_status: string | null
           full_name: string | null
           id: string | null
+          phone: string | null
+          phone_hash: string | null
           position: string | null
+          skills: string[] | null
           start_date: string | null
           updated_at: string | null
           user_id: string | null
         }
         Insert: {
+          candidate_id?: string | null
+          certifications?: string[] | null
           created_at?: string | null
+          created_by?: string | null
+          cv_url?: string | null
           department?: string | null
+          email?: string | null
+          email_hash?: string | null
           employee_status?: string | null
           full_name?: string | null
           id?: string | null
+          phone?: string | null
+          phone_hash?: string | null
           position?: string | null
+          skills?: string[] | null
           start_date?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
         Update: {
+          candidate_id?: string | null
+          certifications?: string[] | null
           created_at?: string | null
+          created_by?: string | null
+          cv_url?: string | null
           department?: string | null
+          email?: string | null
+          email_hash?: string | null
           employee_status?: string | null
           full_name?: string | null
           id?: string | null
+          phone?: string | null
+          phone_hash?: string | null
           position?: string | null
+          skills?: string[] | null
           start_date?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "hr_employees_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "hr_candidates"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       jbj_leads_secure: {
         Row: {
