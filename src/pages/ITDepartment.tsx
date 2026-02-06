@@ -68,9 +68,9 @@ const ITDepartment: React.FC = () => {
         .single();
 
       if (profile && profile.is_active) {
-        const isAdmin = ['admin', 'owner_admin', 'founder'].includes(profile.crm_role);
+        const hasOwnerRole = ['owner_admin', 'founder'].includes(profile.crm_role);
         const isIT = profile.department === 'IT';
-        setIsAuthorized(isAdmin || isIT);
+        setIsAuthorized(hasOwnerRole || isIT);
       }
     } catch (error) {
       console.error('Authorization check error:', error);

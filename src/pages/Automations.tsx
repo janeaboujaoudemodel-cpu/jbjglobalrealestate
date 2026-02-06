@@ -116,7 +116,7 @@ const Automations = () => {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [hasFullAccess, setHasFullAccess] = useState(false);
   const [rules, setRules] = useState<AutomationRule[]>(defaultRules);
 
   useEffect(() => {
@@ -146,12 +146,12 @@ const Automations = () => {
         return;
       }
 
-      const adminRoles = ['owner_admin', 'founder', 'admin'];
-      const userIsAdmin = adminRoles.includes(data.crm_role);
-      setIsAdmin(userIsAdmin);
+      const ownerRoles = ['owner_admin', 'founder'];
+      const userHasAccess = ownerRoles.includes(data.crm_role);
+      setHasFullAccess(userHasAccess);
 
-      if (!userIsAdmin) {
-        toast.error("Automations are restricted to Admins and Owners.");
+      if (!userHasAccess) {
+        toast.error("Automations are restricted to the Owner.");
         navigate("/crm");
         return;
       }

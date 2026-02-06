@@ -59,7 +59,7 @@ const AdminCRM = () => {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [hasOwnerAccess, setHasOwnerAccess] = useState(false);
   const [brokers, setBrokers] = useState<Broker[]>([]);
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
   const [allLeads, setAllLeads] = useState<any[]>([]);
@@ -73,7 +73,7 @@ const AdminCRM = () => {
       return;
     }
 
-    checkAdminAccess();
+    checkOwnerAccess();
   }, [user, authLoading, navigate]);
 
   // Keyboard shortcut for command palette
@@ -88,7 +88,7 @@ const AdminCRM = () => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const checkAdminAccess = async () => {
+  const checkOwnerAccess = async () => {
     if (!user) return;
 
     try {
@@ -99,12 +99,12 @@ const AdminCRM = () => {
         .single();
 
       if (error || !data || data.crm_role !== "owner_admin") {
-        toast.error("Admin access required");
+        toast.error("Owner access required");
         navigate("/crm");
         return;
       }
 
-      setIsAdmin(true);
+      setHasOwnerAccess(true);
       await Promise.all([
         fetchBrokers(),
         fetchAuditLogs(),
@@ -272,7 +272,7 @@ const AdminCRM = () => {
     );
   }
 
-  if (!isAdmin) return null;
+  if (!hasOwnerAccess) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
@@ -311,7 +311,7 @@ const AdminCRM = () => {
 
       <main className="max-w-7xl mx-auto px-4 py-6 space-y-6 pb-24">
         {/* Global Stats */}
-        <CRMDashboardCards userId={user?.id || ""} isAdmin={true} />
+        <CRMDashboardCards userId={user?.id || ""} hasOwnerAccess={true} />
 
         {/* Admin Actions */}
         <div className="flex gap-3">

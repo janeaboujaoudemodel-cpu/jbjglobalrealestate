@@ -21,19 +21,19 @@ interface InactiveBroker {
 }
 
 interface BrokerInactivityMonitorProps {
-  isAdmin: boolean;
+  hasOwnerAccess: boolean;
 }
 
-const BrokerInactivityMonitor = ({ isAdmin }: BrokerInactivityMonitorProps) => {
+const BrokerInactivityMonitor = ({ hasOwnerAccess }: BrokerInactivityMonitorProps) => {
   const [inactiveBrokers, setInactiveBrokers] = useState<InactiveBroker[]>([]);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
 
   useEffect(() => {
-    if (isAdmin) {
+    if (hasOwnerAccess) {
       checkBrokerInactivity();
     }
-  }, [isAdmin]);
+  }, [hasOwnerAccess]);
 
   const checkBrokerInactivity = async () => {
     setLoading(true);
@@ -182,7 +182,7 @@ const BrokerInactivityMonitor = ({ isAdmin }: BrokerInactivityMonitorProps) => {
     }
   };
 
-  if (!isAdmin) return null;
+  if (!hasOwnerAccess) return null;
 
   if (loading) {
     return (

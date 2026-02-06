@@ -12,7 +12,7 @@ interface InlineEditCellProps {
   placeholder?: string;
   onSuccess?: () => void;
   className?: string;
-  isAdmin?: boolean;
+  hasOwnerAccess?: boolean;
 }
 
 const InlineEditCell = ({
@@ -22,7 +22,7 @@ const InlineEditCell = ({
   placeholder = "—",
   onSuccess,
   className,
-  isAdmin = false,
+  hasOwnerAccess = false,
 }: InlineEditCellProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(value || "");
@@ -95,7 +95,7 @@ const InlineEditCell = ({
     }
   };
 
-  if (!isAdmin) {
+  if (!hasOwnerAccess) {
     return (
       <span className={cn("text-sm", className)}>
         {value || <span className="text-muted-foreground">{placeholder}</span>}

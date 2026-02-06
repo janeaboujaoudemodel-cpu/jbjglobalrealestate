@@ -128,7 +128,7 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
           className="w-full justify-start gap-3 text-black/70 hover:text-black hover:bg-gold/10"
         >
           <Settings className="h-5 w-5" />
-          Admin Panel
+          Owner Panel
         </Button>
         <Button
           variant="ghost"

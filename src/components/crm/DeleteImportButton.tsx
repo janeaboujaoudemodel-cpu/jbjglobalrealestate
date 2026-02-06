@@ -37,10 +37,10 @@ interface ImportSource {
 interface DeleteImportButtonProps {
   userId: string;
   onSuccess: () => void;
-  isAdmin: boolean;
+  hasOwnerAccess: boolean;
 }
 
-const DeleteImportButton = ({ userId, onSuccess, isAdmin }: DeleteImportButtonProps) => {
+const DeleteImportButton = ({ userId, onSuccess, hasOwnerAccess }: DeleteImportButtonProps) => {
   const [open, setOpen] = useState(false);
   const [sources, setSources] = useState<ImportSource[]>([]);
   const [loading, setLoading] = useState(false);
@@ -209,8 +209,8 @@ const DeleteImportButton = ({ userId, onSuccess, isAdmin }: DeleteImportButtonPr
     handleDeleteByBatch();
   };
 
-  // Only show to admins
-  if (!isAdmin) return null;
+  // Only show to owner
+  if (!hasOwnerAccess) return null;
 
   const canDelete = deleteMode === "source" ? !!selectedSource : (batchLeadCount !== null && batchLeadCount > 0);
   const deleteCount = deleteMode === "source" ? leadCount : (batchLeadCount || 0);

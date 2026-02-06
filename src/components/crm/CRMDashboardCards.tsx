@@ -6,7 +6,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 
 interface CRMDashboardCardsProps {
   userId: string;
-  isAdmin: boolean;
+  hasOwnerAccess: boolean;
 }
 
 interface Stats {
@@ -27,7 +27,7 @@ interface Stats {
   pipelineCounts: Record<string, number>;
 }
 
-const CRMDashboardCards = ({ userId, isAdmin }: CRMDashboardCardsProps) => {
+const CRMDashboardCards = ({ userId, hasOwnerAccess }: CRMDashboardCardsProps) => {
   const [stats, setStats] = useState<Stats>({
     callsToday: 0,
     callsWeek: 0,
@@ -49,7 +49,7 @@ const CRMDashboardCards = ({ userId, isAdmin }: CRMDashboardCardsProps) => {
 
   useEffect(() => {
     fetchStats();
-  }, [userId, isAdmin]);
+  }, [userId, hasOwnerAccess]);
 
   const fetchStats = async () => {
     try {
@@ -64,7 +64,7 @@ const CRMDashboardCards = ({ userId, isAdmin }: CRMDashboardCardsProps) => {
       let activitiesQuery = supabase.from("crm_activities").select("id, activity_type, created_at, metadata");
       let statesQuery = supabase.from("crm_lead_state_per_user").select("pipeline_status, last_touch_at");
 
-      if (!isAdmin) {
+      if (!hasOwnerAccess) {
         callsQuery = callsQuery.eq("user_id", userId);
         activitiesQuery = activitiesQuery.eq("user_id", userId);
         statesQuery = statesQuery.eq("user_id", userId);

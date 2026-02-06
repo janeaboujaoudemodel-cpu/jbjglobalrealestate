@@ -5,6 +5,7 @@ The system implements a strict binary identity model:
 ## Identity States
 
 1. **Owner**: The sole privileged identity, verified exclusively by an authenticated email match (`auth.email === OWNER_EMAIL`).
+   - OWNER_EMAIL: `janeaboujaoudenails@gmail.com`
 2. **Visitor**: Any unauthenticated user (anonymous/no auth token).
 
 ## Blocked State
@@ -32,8 +33,9 @@ Terms like "Admin", "Staff", "Moderator", or "User" are **completely removed** f
 
 ## Implementation Status (Complete - February 2026)
 
-- ✅ `isAdmin` removed from `AuthContext`
+- ✅ `isAdmin` removed from `AuthContext` and all global contexts
 - ✅ All components use `isOwner` from auth context
+- ✅ Domain-specific flags renamed: `isAdmin` → `hasOwnerAccess` or `isCRMOwner`
 - ✅ `OwnerGuard` component created for route protection
 - ✅ `/403` AccessDenied page created
 - ✅ All Owner-only routes wrapped with `OwnerGuard` in App.tsx
@@ -42,8 +44,8 @@ Terms like "Admin", "Staff", "Moderator", or "User" are **completely removed** f
 
 ## Protected Routes (via OwnerGuard)
 
-All `/admin/*`, `/crm/*`, `/internal/*`, `/jbj-*`, `/founder-assistant`, `/employee-hub`, 
-`/hr-dashboard`, `/it-department`, `/security-console`, and other management routes
+All `/admin/*`, `/crm/*`, `/internal/*`, `/owner/*`, `/jbj-*`, `/founder-assistant`, `/employee-hub`, 
+`/hr-dashboard`, `/it-department`, `/security-console`, `/automations`, `/studio`, and other management routes
 are now wrapped with `OwnerGuard` for UI-layer protection.
 
 Server-side enforcement via Edge Functions + RLS remains authoritative.

@@ -21,7 +21,7 @@ import {
 
 interface EnhancedDashboardProps {
   userId: string;
-  isAdmin: boolean;
+  hasOwnerAccess: boolean;
 }
 
 interface Stats {
@@ -52,7 +52,7 @@ const PIPELINE_COLORS: Record<string, string> = {
   junk: "#6B7280"
 };
 
-const CRMEnhancedDashboard = ({ userId, isAdmin }: EnhancedDashboardProps) => {
+const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps) => {
   const [stats, setStats] = useState<Stats>({
     callsToday: 0,
     callsWeek: 0,
@@ -73,7 +73,7 @@ const CRMEnhancedDashboard = ({ userId, isAdmin }: EnhancedDashboardProps) => {
 
   useEffect(() => {
     fetchStats();
-  }, [userId, isAdmin]);
+  }, [userId, hasOwnerAccess]);
 
   const fetchStats = async () => {
     try {
@@ -86,7 +86,7 @@ const CRMEnhancedDashboard = ({ userId, isAdmin }: EnhancedDashboardProps) => {
       let activitiesQuery = supabase.from("crm_activities").select("id, activity_type, created_at");
       let statesQuery = supabase.from("crm_lead_state_per_user").select("pipeline_status");
 
-      if (!isAdmin) {
+      if (!hasOwnerAccess) {
         callsQuery = callsQuery.eq("user_id", userId);
         activitiesQuery = activitiesQuery.eq("user_id", userId);
         statesQuery = statesQuery.eq("user_id", userId);
@@ -96,7 +96,7 @@ const CRMEnhancedDashboard = ({ userId, isAdmin }: EnhancedDashboardProps) => {
         callsQuery,
         activitiesQuery,
         statesQuery,
-        isAdmin
+        hasOwnerAccess
           ? supabase.from("crm_leads").select("id", { count: "exact", head: true })
           : Promise.resolve({ count: 0 } as any),
       ]);
@@ -126,7 +126,7 @@ const CRMEnhancedDashboard = ({ userId, isAdmin }: EnhancedDashboardProps) => {
       });
 
       // Total leads (no placeholders)
-      const totalLeads = isAdmin ? (leadsCountRes.count || 0) : states.length;
+      const totalLeads = hasOwnerAccess ? (leadsCountRes.count || 0) : states.length;
 
       // Calculate conversion rate
       const totalClosed = (pipelineCounts['closed_won'] || 0) + (pipelineCounts['closed_lost'] || 0);
