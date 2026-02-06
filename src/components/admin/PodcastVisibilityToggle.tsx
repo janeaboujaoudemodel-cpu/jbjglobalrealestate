@@ -100,12 +100,12 @@ export const PodcastVisibilityToggle = () => {
               )}
               <div>
                 <p className="font-medium text-black">
-                  {isPodcastVisible ? "Visible to Public" : "Hidden - Admin Only"}
+                  {isPodcastVisible ? "Visible to Public" : "Hidden - Owner Only"}
                 </p>
                 <p className="text-sm text-zinc-500">
                   {isPodcastVisible 
                     ? "All visitors can see the JBJ Podcast section" 
-                    : "Only admins and owners can see the podcast section"
+                    : "Only the Owner can see the podcast section"
                   }
                 </p>
               </div>
