@@ -17,6 +17,12 @@ interface CompleteJobRequest {
   errorMessage?: string;
 }
 
+// Helper type for job input_data
+interface JobInputData {
+  userId?: string;
+  [key: string]: unknown;
+}
+
 serve(async (req) => {
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
@@ -84,12 +90,12 @@ serve(async (req) => {
         );
       }
 
-      // SECURITY: Only allow expected prefix - must match the job ID
-      const expectedPrefix = `video-export/${jobId}/`;
+      // SECURITY: Only allow expected prefix - must match the userId AND job ID
+      const expectedPrefix = `video-export/${userId}/${jobId}/`;
       if (!outputPath.startsWith(expectedPrefix)) {
         console.warn(`[SECURITY] Invalid outputPath: ${outputPath} - expected prefix: ${expectedPrefix}`);
         return new Response(
-          JSON.stringify({ error: "Invalid outputPath - must be in job's export folder" }),
+          JSON.stringify({ error: "Invalid outputPath - must be in user's job export folder" }),
           { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
@@ -123,7 +129,7 @@ serve(async (req) => {
 
     // Check ownership - job must belong to this user
     // Check both user_id column and input_data.userId for backward compatibility
-    const inputData = job.input_data as Record<string, unknown> | null;
+    const inputData = job.input_data as JobInputData | null;
     const jobUserId = job.user_id || inputData?.userId;
     if (jobUserId !== userId) {
       console.warn(`[SECURITY] User ${userId} attempted to complete job ${jobId} owned by ${jobUserId}`);
