@@ -321,7 +321,7 @@ const TrustAndAuditCenter = () => {
                       "Encrypted data storage at rest",
                       "Row-Level Security (RLS) on all databases",
                       "Regular security audits and penetration testing",
-                      "Multi-factor authentication for admin access",
+                      "Multi-factor authentication for owner access",
                       "Automated threat detection and monitoring",
                     ].map((measure) => (
                       <div key={measure} className="flex items-center gap-2 text-zinc-600 text-sm">

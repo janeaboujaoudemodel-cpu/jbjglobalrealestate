@@ -38,7 +38,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     staleTime: 60000, // Cache for 1 minute to prevent flicker
   });
 
-  // Check if user has listing admin access (owner, admin role, or in listing_admins table)
+  // Check if user has listing manager access (owner, admin role, or in listing_admins table)
   const { data: hasListingAdminAccess } = useQuery({
     queryKey: ['listing-admin-access', user?.id],
     queryFn: async () => {

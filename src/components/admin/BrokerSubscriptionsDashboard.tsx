@@ -152,7 +152,7 @@ export default function BrokerSubscriptionsDashboard() {
         await logAction({
           actionType: "read",
           resourceType: "subscription",
-          description: `Admin accessed broker subscriptions dashboard (${data.length} records)`,
+          description: `Owner accessed broker subscriptions dashboard (${data.length} records)`,
           details: {
             recordCount: data.length,
             accessType: "list_view",
