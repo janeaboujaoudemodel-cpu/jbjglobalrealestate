@@ -1,19 +1,21 @@
 /**
  * PDF & Documents Suite - Embeds REAL existing tool pages
- * Tabs: Editor (PDFEditor) | Photo→PDF (PdfFromPhotos)
- * ONLY real tool pages - removed Scan & Sign, Brochures (no real implementation)
+ * Tabs: Editor (PDFEditor) | Photo→PDF (PdfFromPhotos) | Scan & Sign | Brochure Generator
+ * ALL real tool pages - no placeholders
  */
 
 import React, { lazy, Suspense } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SEOHead } from '@/components/SEOHead';
-import { FileText, Image as ImageIcon, ArrowLeft } from 'lucide-react';
+import { FileText, Image as ImageIcon, Camera, BookOpen, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
 // Lazy load REAL existing tool PAGES
 const PDFEditor = lazy(() => import('@/pages/toolkit/PDFEditor'));
 const PdfFromPhotos = lazy(() => import('@/pages/toolkit/PdfFromPhotos'));
+const ScanSignPage = lazy(() => import('@/pages/toolkit/ScanSignPage'));
+const BrochureGeneratorPage = lazy(() => import('@/pages/toolkit/BrochureGeneratorPage'));
 
 const LoadingSpinner = () => (
   <div className="min-h-[60vh] flex items-center justify-center">
@@ -26,7 +28,7 @@ export default function PDFSuite() {
     <>
       <SEOHead 
         title="PDF & Documents Suite | JBJ Royal Tools"
-        description="PDF editing, merging, splitting, and photo to PDF conversion tools."
+        description="PDF editing, merging, splitting, scanning, signing, and brochure generation tools."
       />
       
       <div className="min-h-screen bg-black">
@@ -50,30 +52,44 @@ export default function PDFSuite() {
                 <h1 className="text-2xl md:text-3xl font-bold text-white">
                   PDF & Documents <span className="text-gold">Suite</span>
                 </h1>
-                <p className="text-zinc-400 text-sm">Edit, merge, split & convert to PDF</p>
+                <p className="text-zinc-400 text-sm">Edit, scan, sign & generate professional PDFs</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Tabs - 2 tabs with REAL tools only */}
+        {/* Tabs - 4 tabs with REAL tools */}
         <Tabs defaultValue="editor" className="flex flex-col">
           <div className="border-b border-gold/20 bg-zinc-900/50">
             <div className="max-w-7xl mx-auto px-4">
-              <TabsList className="w-full justify-start rounded-none bg-transparent p-0 h-auto gap-0">
+              <TabsList className="w-full justify-start rounded-none bg-transparent p-0 h-auto gap-0 overflow-x-auto">
                 <TabsTrigger
                   value="editor"
-                  className="relative px-6 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-400 hover:text-white transition-colors flex items-center gap-2"
+                  className="relative px-4 md:px-6 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-400 hover:text-white transition-colors flex items-center gap-2 whitespace-nowrap"
                 >
                   <FileText className="w-4 h-4" />
                   <span className="hidden sm:inline">PDF Editor</span>
                 </TabsTrigger>
                 <TabsTrigger
                   value="photo-pdf"
-                  className="relative px-6 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-400 hover:text-white transition-colors flex items-center gap-2"
+                  className="relative px-4 md:px-6 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-400 hover:text-white transition-colors flex items-center gap-2 whitespace-nowrap"
                 >
                   <ImageIcon className="w-4 h-4" />
                   <span className="hidden sm:inline">Photo → PDF</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="scan-sign"
+                  className="relative px-4 md:px-6 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-400 hover:text-white transition-colors flex items-center gap-2 whitespace-nowrap"
+                >
+                  <Camera className="w-4 h-4" />
+                  <span className="hidden sm:inline">Scan & Sign</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="brochure"
+                  className="relative px-4 md:px-6 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-400 hover:text-white transition-colors flex items-center gap-2 whitespace-nowrap"
+                >
+                  <BookOpen className="w-4 h-4" />
+                  <span className="hidden sm:inline">Brochure</span>
                 </TabsTrigger>
               </TabsList>
             </div>
@@ -90,6 +106,18 @@ export default function PDFSuite() {
             <TabsContent value="photo-pdf" className="mt-0">
               <Suspense fallback={<LoadingSpinner />}>
                 <PdfFromPhotos />
+              </Suspense>
+            </TabsContent>
+
+            <TabsContent value="scan-sign" className="mt-0">
+              <Suspense fallback={<LoadingSpinner />}>
+                <ScanSignPage />
+              </Suspense>
+            </TabsContent>
+
+            <TabsContent value="brochure" className="mt-0">
+              <Suspense fallback={<LoadingSpinner />}>
+                <BrochureGeneratorPage />
               </Suspense>
             </TabsContent>
           </div>
