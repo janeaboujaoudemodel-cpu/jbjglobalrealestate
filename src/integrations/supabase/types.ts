@@ -7934,11 +7934,13 @@ export type Database = {
           department: string | null
           email: string
           email_encrypted: string | null
+          email_hash: string | null
           employee_status: string | null
           full_name: string
           id: string
           phone: string | null
           phone_encrypted: string | null
+          phone_hash: string | null
           position: string
           skills: string[] | null
           start_date: string | null
@@ -7955,11 +7957,13 @@ export type Database = {
           department?: string | null
           email: string
           email_encrypted?: string | null
+          email_hash?: string | null
           employee_status?: string | null
           full_name: string
           id?: string
           phone?: string | null
           phone_encrypted?: string | null
+          phone_hash?: string | null
           position: string
           skills?: string[] | null
           start_date?: string | null
@@ -7976,11 +7980,13 @@ export type Database = {
           department?: string | null
           email?: string
           email_encrypted?: string | null
+          email_hash?: string | null
           employee_status?: string | null
           full_name?: string
           id?: string
           phone?: string | null
           phone_encrypted?: string | null
+          phone_hash?: string | null
           position?: string
           skills?: string[] | null
           start_date?: string | null
