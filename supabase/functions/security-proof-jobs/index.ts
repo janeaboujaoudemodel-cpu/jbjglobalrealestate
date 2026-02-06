@@ -1,8 +1,4 @@
-// Security Proof Jobs - executes real RLS tests for studio_jobs using two REAL user JWTs.
-//
-// tokenA/tokenB are session access_tokens from two real test accounts.
-// They can be obtained by signing in in the app and reading the session access_token,
-// or by using auth.signInWithPassword in a local script.
+// Security Proof Jobs - executes real RLS tests for studio_jobs (user A vs user B vs anon)
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 
@@ -23,182 +19,208 @@ function serializeError(err: any) {
   };
 }
 
-type ProofBody = {
-  tokenA?: string;
-  tokenB?: string;
-  projectId?: string;
-};
-
 serve(async (req) => {
   // CORS preflight
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-  const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
-
-  let body: ProofBody | null = null;
   try {
-    body = (await req.json()) as ProofBody;
-  } catch {
-    body = null;
-  }
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
-  const tokenA = body?.tokenA;
-  const tokenB = body?.tokenB;
-  const projectId = typeof body?.projectId === "string" && body.projectId.trim()
-    ? body.projectId.trim()
-    : "proof-project";
+    // ========================================
+    // AUTH GATE (caller must be authenticated)
+    // ========================================
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(JSON.stringify({ error: "Unauthorized - Missing auth token" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
-  if (!tokenA || typeof tokenA !== "string") {
-    return new Response(
-      JSON.stringify({ error: "tokenA_missing" }),
-      { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
-    );
-  }
+    const supabaseAuth = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
 
-  const runId = crypto.randomUUID();
+    const {
+      data: { user: caller },
+      error: callerErr,
+    } = await supabaseAuth.auth.getUser();
 
-  const clientA = createClient(supabaseUrl, supabaseAnonKey, {
-    auth: { persistSession: false },
-    global: { headers: { Authorization: `Bearer ${tokenA}` } },
-  });
+    if (callerErr || !caller) {
+      return new Response(JSON.stringify({ error: "Unauthorized - Invalid token" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
-  const clientB = tokenB
-    ? createClient(supabaseUrl, supabaseAnonKey, {
+    // Admin client (bypasses RLS)
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
       auth: { persistSession: false },
-      global: { headers: { Authorization: `Bearer ${tokenB}` } },
-    })
-    : null;
+    });
 
-  const anonClient = createClient(supabaseUrl, supabaseAnonKey, {
-    auth: { persistSession: false },
-  });
+    // Create two ephemeral test users
+    const runId = crypto.randomUUID();
+    const password = `Tmp!${crypto.randomUUID()}Aa1`;
+    const emailA = `proof-a-${runId}@example.com`;
+    const emailB = `proof-b-${runId}@example.com`;
 
-  const userARes = await clientA.auth.getUser();
-  const userBRes = clientB ? await clientB.auth.getUser() : null;
+    const { data: createdA, error: createAErr } = await supabaseAdmin.auth.admin.createUser({
+      email: emailA,
+      password,
+      email_confirm: true,
+    });
 
-  const userAId = userARes.data?.user?.id ?? null;
-  const userBId = userBRes?.data?.user?.id ?? null;
+    const { data: createdB, error: createBErr } = await supabaseAdmin.auth.admin.createUser({
+      email: emailB,
+      password,
+      email_confirm: true,
+    });
 
-  // A) Authenticated insert (User A)
-  const insertARes = userAId
-    ? await clientA
+    const userAId = createdA?.user?.id ?? null;
+    const userBId = createdB?.user?.id ?? null;
+
+    // Sign in to obtain real JWTs
+    const supabasePublic = createClient(supabaseUrl, supabaseAnonKey, {
+      auth: { persistSession: false },
+    });
+
+    const { data: signInA, error: signInAErr } = await supabasePublic.auth.signInWithPassword({
+      email: emailA,
+      password,
+    });
+
+    const { data: signInB, error: signInBErr } = await supabasePublic.auth.signInWithPassword({
+      email: emailB,
+      password,
+    });
+
+    const tokenA = signInA?.session?.access_token ?? null;
+    const tokenB = signInB?.session?.access_token ?? null;
+
+    const clientA = tokenA
+      ? createClient(supabaseUrl, supabaseAnonKey, {
+          auth: { persistSession: false },
+          global: { headers: { Authorization: `Bearer ${tokenA}` } },
+        })
+      : null;
+
+    const clientB = tokenB
+      ? createClient(supabaseUrl, supabaseAnonKey, {
+          auth: { persistSession: false },
+          global: { headers: { Authorization: `Bearer ${tokenB}` } },
+        })
+      : null;
+
+    // ========================================
+    // TEST A: Authenticated insert (User A)
+    // ========================================
+    const proofProjectId = crypto.randomUUID(); // valid UUID
+    const insertARes = clientA
+      ? await clientA
+          .from("studio_jobs")
+          .insert({
+            user_id: userAId,
+            project_id: proofProjectId,
+            job_type: "ai_generate",
+            status: "pending",
+            progress: 0,
+            input_data: {
+              projectId: proofProjectId,
+              note: "RLS proof run",
+              runId,
+            },
+          })
+          .select("id,user_id,project_id")
+          .single()
+      : ({ data: null, error: { message: "clientA not created" } } as any);
+
+    const jobId = insertARes?.data?.id ?? null;
+
+    // User A SELECT should see 1 row
+    const selectARes = clientA
+      ? await clientA.from("studio_jobs").select("id,user_id,project_id").eq("id", jobId)
+      : ({ data: null, error: { message: "clientA not created" } } as any);
+
+    // ========================================
+    // TEST B: Cross-user SELECT (User B) - should see 0 rows
+    // ========================================
+    const selectBRes = clientB
+      ? await clientB.from("studio_jobs").select("id,user_id,project_id")
+      : ({ data: null, error: { message: "clientB not created" } } as any);
+
+    // ========================================
+    // TEST C: Cross-user UPDATE attempt (User B) - should fail via RLS
+    // Force an error by requiring .single()
+    // ========================================
+    const updateBRes = clientB
+      ? await clientB
+          .from("studio_jobs")
+          .update({ status: "failed" })
+          .eq("id", jobId)
+          .select("id,status")
+          .single()
+      : ({ data: null, error: { message: "clientB not created" } } as any);
+
+    // ========================================
+    // TEST D: Logged-out insert attempt - should fail (RLS)
+    // ========================================
+    const anonInsertRes = await supabasePublic
       .from("studio_jobs")
       .insert({
         user_id: userAId,
-        project_id: projectId,
-        job_type: "proof_test",
+        project_id: proofProjectId,
+        job_type: "ai_generate",
         status: "pending",
         progress: 0,
-        input_data: {
-          projectId,
-          note: "RLS proof run",
-          runId,
-        },
+        input_data: { projectId: proofProjectId, runId },
       })
-      .select("id,user_id,project_id")
-      .single()
-    : ({ data: null, error: userARes.error } as any);
-
-  const jobId = insertARes?.data?.id ?? null;
-
-  // A) Select back as User A
-  const selectARes = jobId
-    ? await clientA
-      .from("studio_jobs")
-      .select("id,user_id,project_id")
-      .eq("id", jobId)
-      .single()
-    : ({ data: null, error: insertARes?.error } as any);
-
-  // B) Cross-user select (User B)
-  const selectBRes = !tokenB
-    ? ({ data: null, error: { message: "tokenB_missing" } } as any)
-    : !jobId
-    ? ({ data: null, error: insertARes?.error } as any)
-    : await clientB!
-      .from("studio_jobs")
-      .select("id,user_id,project_id")
-      .eq("id", jobId);
-
-  // C) Cross-user update attempt (User B) - force error by requiring .single()
-  const updateBRes = !tokenB
-    ? ({ data: null, error: { message: "tokenB_missing" } } as any)
-    : !jobId
-    ? ({ data: null, error: insertARes?.error } as any)
-    : await clientB!
-      .from("studio_jobs")
-      .update({ status: "failed" })
-      .eq("id", jobId)
-      .select("id,status")
+      .select("id")
       .single();
 
-  // D) Anonymous insert attempt (no auth)
-  const anonInsertRes = await anonClient
-    .from("studio_jobs")
-    .insert({
-      user_id: userAId ?? crypto.randomUUID(),
-      project_id: projectId,
-      job_type: "proof_test_anon",
-      status: "pending",
-      progress: 0,
-      input_data: { projectId, runId },
-    })
-    .select("id")
-    .single();
+    // Cleanup (best effort)
+    if (jobId) {
+      await supabaseAdmin.from("studio_jobs").delete().eq("id", jobId);
+    }
+    if (userAId) {
+      await supabaseAdmin.auth.admin.deleteUser(userAId);
+    }
+    if (userBId) {
+      await supabaseAdmin.auth.admin.deleteUser(userBId);
+    }
 
-  // Cleanup: delete inserted job as User A (no service role)
-  const cleanupDeleteRes = jobId
-    ? await clientA
-      .from("studio_jobs")
-      .delete()
-      .eq("id", jobId)
-      .select("id")
-      .single()
-    : ({ data: null, error: insertARes?.error } as any);
-
-  return new Response(
-    JSON.stringify(
-      {
-        runId,
-        users: {
-          A: { id: userAId, error: serializeError(userARes.error) },
-          B: { id: userBId, error: serializeError(userBRes?.error) },
-        },
-        tests: {
-          A_insert_userA: {
-            data: insertARes?.data ?? null,
-            error: serializeError(insertARes?.error),
+    return new Response(
+      JSON.stringify(
+        {
+          runId,
+          caller: { id: caller.id },
+          users: {
+            userA: { id: userAId, createError: serializeError(createAErr), signInError: serializeError(signInAErr) },
+            userB: { id: userBId, createError: serializeError(createBErr), signInError: serializeError(signInBErr) },
           },
-          A_select_userA: {
-            data: selectARes?.data ?? null,
-            error: serializeError(selectARes?.error),
-          },
-          B_select_userB_on_userA_job: {
-            data: selectBRes?.data ?? null,
-            error: serializeError(selectBRes?.error),
-          },
-          C_update_userB_on_userA_job: {
-            data: updateBRes?.data ?? null,
-            error: serializeError(updateBRes?.error),
-          },
-          D_anon_insert: {
-            data: anonInsertRes?.data ?? null,
-            error: serializeError(anonInsertRes?.error),
+          tests: {
+            A_authenticated_insert_userA: { data: insertARes?.data ?? null, error: serializeError(insertARes?.error) },
+            A_select_userA: { data: selectARes?.data ?? null, error: serializeError(selectARes?.error) },
+            B_select_userB: { data: selectBRes?.data ?? null, error: serializeError(selectBRes?.error) },
+            C_update_userB_on_userA_job: { data: updateBRes?.data ?? null, error: serializeError(updateBRes?.error) },
+            D_anon_insert: { data: anonInsertRes?.data ?? null, error: serializeError(anonInsertRes?.error) },
           },
         },
-        cleanup: {
-          delete_job_as_userA: {
-            data: cleanupDeleteRes?.data ?? null,
-            error: serializeError(cleanupDeleteRes?.error),
-          },
-        },
-      },
-      null,
-      2,
-    ),
-    { headers: { ...corsHeaders, "Content-Type": "application/json" } },
-  );
+        null,
+        2
+      ),
+      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  } catch (error) {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error",
+      }),
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
 });
