@@ -1986,19 +1986,19 @@ const MarketReport = () => {
         </section>
       </FounderContent>
 
-      {/* Main Content */}
-      <main className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-        <div className="container mx-auto px-4">
-        <div className="grid lg:grid-cols-5 gap-10 items-start">
-          {/* Form Section */}
-          <motion.section 
-            id="unlock-form"
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:col-span-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-3xl p-8 md:p-10 shadow-xl"
-          >
+      {/* Download Book Section - Uses jj-layer-2 styling to match "Unlock Your Investment Edge" */}
+      <section className="py-12 md:py-16 bg-black">
+        <div className="jj-layer-2">
+          <div className="grid lg:grid-cols-5 gap-10 items-start">
+            {/* Form Section */}
+            <motion.section 
+              id="unlock-form"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="lg:col-span-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-3xl p-8 md:p-10 shadow-xl"
+            >
             {/* Show streamlined view for returning users */}
             {canDirectDownload ? (
               <div className="text-center py-8">
@@ -2168,7 +2168,7 @@ const MarketReport = () => {
           </motion.aside>
         </div>
         </div>
-      </main>
+      </section>
 
       {/* CTA Modal after download */}
       <MarketReportCTAModal

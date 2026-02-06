@@ -195,17 +195,17 @@ const handler = async (req: Request): Promise<Response> => {
       </html>
     `;
 
-    // Send to support team
+    // Send to support team using verified domain
     try {
       await resend.emails.send({
-        from: "JBJ Support <onboarding@resend.dev>",
+        from: "JBJ Support <NOREPLY@JBJGLOBALREALESTATE.COM>",
         to: [OFFICIAL_EMAILS.support],
         subject: `[${ticket.ticket_number}] New Support Ticket: ${subject}`,
         html: supportEmailHtml,
       });
-      console.log("Support email sent");
+      console.log("Support email sent to team");
     } catch (emailError) {
-      console.error("Failed to send support email:", emailError);
+      console.error("Failed to send support email to team:", emailError);
       // Continue - don't fail the whole request
     }
 
