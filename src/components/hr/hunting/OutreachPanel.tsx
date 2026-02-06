@@ -184,7 +184,7 @@ export function OutreachPanel({ targetType }: OutreachPanelProps) {
               Compose Message
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="sm:max-w-2xl">
             <DialogHeader>
               <DialogTitle>Compose Outreach Message</DialogTitle>
             </DialogHeader>

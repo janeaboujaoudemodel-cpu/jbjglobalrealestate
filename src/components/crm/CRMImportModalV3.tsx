@@ -985,7 +985,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-card border-border">
+      <DialogContent className="sm:max-w-2xl bg-card border-border">
         <DialogHeader>
           <DialogTitle className="text-white flex items-center gap-2">
             <Upload className="h-5 w-5 text-gold" />

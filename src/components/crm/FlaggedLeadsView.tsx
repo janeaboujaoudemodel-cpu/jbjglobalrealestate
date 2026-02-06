@@ -466,7 +466,7 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
 
       {/* Lead Detail Modal */}
       <Dialog open={!!selectedLead && !editingLead} onOpenChange={() => setSelectedLead(null)}>
-        <DialogContent className="max-w-lg bg-card border-border">
+        <DialogContent className="sm:max-w-lg bg-card border-border">
           <DialogHeader>
             <DialogTitle className="text-white flex items-center gap-2">
               <Flag className="h-5 w-5 text-amber-400" />
@@ -567,7 +567,7 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
 
       {/* Edit Modal */}
       <Dialog open={!!editingLead} onOpenChange={() => setEditingLead(null)}>
-        <DialogContent className="max-w-md bg-card border-border">
+        <DialogContent className="sm:max-w-md bg-card border-border">
           <DialogHeader>
             <DialogTitle className="text-white flex items-center gap-2">
               <Edit className="h-5 w-5 text-gold" />

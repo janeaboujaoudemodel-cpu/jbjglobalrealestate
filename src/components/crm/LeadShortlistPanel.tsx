@@ -202,7 +202,7 @@ ${COMPANY_INFO.website}`;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-lg max-h-[80vh] bg-card border-border">
+      <DialogContent className="sm:max-w-lg bg-card border-border">
         <DialogHeader>
           <DialogTitle className="text-white flex items-center gap-2">
             <Building2 className="h-5 w-5 text-gold" />

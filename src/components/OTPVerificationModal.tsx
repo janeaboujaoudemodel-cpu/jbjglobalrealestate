@@ -164,7 +164,7 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="bg-zinc-900 border border-zinc-800 text-white max-w-md">
+      <DialogContent className="bg-zinc-900 border border-zinc-800 text-white sm:max-w-md">
         {/* Gold accent line */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
 

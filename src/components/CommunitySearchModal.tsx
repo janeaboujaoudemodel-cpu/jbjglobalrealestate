@@ -22,7 +22,7 @@ const CommunitySearchModal = ({ isOpen, onClose }: CommunitySearchModalProps) =>
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-zinc-950 border-zinc-800 text-white max-w-2xl max-h-[85vh]">
+      <DialogContent className="bg-zinc-950 border-zinc-800 text-white sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold flex items-center gap-3" style={{ fontFamily: "Poppins, sans-serif" }}>
             <MapPin className="w-6 h-6 text-gold" />

@@ -472,7 +472,7 @@ ${COMPANY_CONTACTS.email}`;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[80vh] bg-white border-2 border-gold/30 shadow-[0_10px_40px_rgba(200,167,102,0.2)]">
+      <DialogContent className="sm:max-w-2xl bg-white border-2 border-gold/30 shadow-[0_10px_40px_rgba(200,167,102,0.2)]">
         <DialogHeader>
           <DialogTitle className="text-black flex items-center gap-3">
             <div className="relative">
@@ -814,7 +814,7 @@ ${COMPANY_CONTACTS.email}`;
 
         {/* Draft Review Modal */}
         <Dialog open={!!selectedDraft} onOpenChange={() => setSelectedDraft(null)}>
-          <DialogContent className="max-w-lg bg-card border-border">
+          <DialogContent className="sm:max-w-lg bg-card border-border">
             <DialogHeader>
               <DialogTitle className="text-white flex items-center gap-2">
                 <Shield className="h-5 w-5 text-gold" />

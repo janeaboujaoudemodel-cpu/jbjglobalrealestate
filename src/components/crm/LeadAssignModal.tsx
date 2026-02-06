@@ -185,7 +185,7 @@ export default function LeadAssignModal({
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="bg-card border-border max-w-md">
+      <DialogContent className="bg-card border-border sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-foreground flex items-center gap-2">
             {step !== "choose" && (

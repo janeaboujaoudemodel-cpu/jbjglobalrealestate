@@ -168,7 +168,7 @@ const CVViewer = ({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-5xl h-[90vh] p-0 bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7] border-2 border-gold/30">
+      <DialogContent className="sm:max-w-5xl h-[90dvh] p-0 bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7] border-2 border-gold/30">
         <DialogHeader className="p-4 border-b border-gold/20">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
