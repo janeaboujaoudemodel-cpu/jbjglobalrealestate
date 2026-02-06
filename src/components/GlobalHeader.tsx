@@ -1485,7 +1485,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               {/* Backdrop */}
               <div 
                 className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-                onClick={closeMegaMenu}
+                onClick={(e) => {
+                  // Don't close if click came from a Radix portal (dropdowns, popovers, etc.)
+                  const target = e.target as HTMLElement;
+                  if (target.closest('[data-radix-portal]')) return;
+                  closeMegaMenu();
+                }}
               />
               {/* Panel container - positioned on the right */}
               <div className="absolute top-0 right-6">
