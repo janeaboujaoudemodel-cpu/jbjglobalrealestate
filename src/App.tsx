@@ -17,6 +17,12 @@ const CaptionsTranslate = lazy(() => import("./pages/toolkit/CaptionsTranslate")
 const BackgroundAI = lazy(() => import("./pages/toolkit/BackgroundAI"));
 const BeautyFilters = lazy(() => import("./pages/toolkit/BeautyFilters"));
 const PDFEditor = lazy(() => import("./pages/toolkit/PDFEditor"));
+// NEW: Master Suite Pages
+const VideoSuite = lazy(() => import("./pages/toolkit/VideoSuite"));
+const VoiceSuite = lazy(() => import("./pages/toolkit/VoiceSuite"));
+const PhotoSuite = lazy(() => import("./pages/toolkit/PhotoSuite"));
+const PDFSuite = lazy(() => import("./pages/toolkit/PDFSuite"));
+const PropertySuite = lazy(() => import("./pages/toolkit/PropertySuite"));
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
@@ -494,6 +500,32 @@ const App = () => (
                   </Suspense>
                 } />
                 <Route path="/royal-tools" element={<Navigate to="/toolkit" replace />} />
+                {/* NEW: Master Suite Routes */}
+                <Route path="/toolkit/video-suite" element={
+                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                    <VideoSuite />
+                  </Suspense>
+                } />
+                <Route path="/toolkit/voice-suite" element={
+                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                    <VoiceSuite />
+                  </Suspense>
+                } />
+                <Route path="/toolkit/photo-suite" element={
+                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                    <PhotoSuite />
+                  </Suspense>
+                } />
+                <Route path="/toolkit/pdf-suite" element={
+                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                    <PDFSuite />
+                  </Suspense>
+                } />
+                <Route path="/toolkit/property-suite" element={
+                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                    <PropertySuite />
+                  </Suspense>
+                } />
                 <Route path="/toolkit/video-resize-pack" element={
                   <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
                     <VideoResizePack />
