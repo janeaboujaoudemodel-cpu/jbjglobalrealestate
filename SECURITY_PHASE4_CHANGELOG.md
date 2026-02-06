@@ -17,39 +17,47 @@
 
 ### Fix #1: `studio_projects`
 
-| Before | After |
-|--------|-------|
-| INSERT policy `WITH CHECK (true)` | `WITH CHECK (user_id = auth.uid())` |
-| Policies granted to `{public}` role | All policies scoped to `{authenticated}` only |
-| `anon` had full table privileges | `REVOKE ALL FROM anon` executed |
-| `relforcerowsecurity = false` | `FORCE ROW LEVEL SECURITY` enabled |
-| `user_id` nullable | `user_id NOT NULL` enforced |
+**Migration**: `20260206200623_906d0db7-7210-402c-89a1-608debef077e.sql`
 
-**Migration**: `20260206195549_d1f2e3a4-b5c6-7d8e-9f0a-1b2c3d4e5f6a.sql`
+**Policy Deltas:**
+- **INSERT**: Changed from `WITH CHECK (true)` → `WITH CHECK (user_id = auth.uid())`
+- **Roles**: All policies changed from `{public}` → `{authenticated}` only
+- **FORCE RLS**: Enabled via `ALTER TABLE public.studio_projects FORCE ROW LEVEL SECURITY`
+- **Privileges**: `REVOKE ALL ON TABLE public.studio_projects FROM anon; REVOKE ALL FROM public;`
+- **user_id**: Set `NOT NULL` (table was empty, safe to alter)
+
+**Final relacl**: `{authenticated=arwdD/postgres,service_role=arwdD/postgres}` (anon/public removed)
+
+---
 
 ### Fix #2: `video_studio_assets`
 
-**Status**: Already hardened (no changes required)
+**Status**: No migration executed for `video_studio_assets` in Phase 4; table already met requirements.
 
-Pre-audit confirmed:
-- `user_id NOT NULL` ✅
-- `relrowsecurity = true`, `relforcerowsecurity = true` ✅
-- All policies scoped to `authenticated` role ✅
-- `anon` role excluded from `relacl` ✅
+**Pre-audit confirmed:**
+- Policies: All scoped to `{authenticated}` role only ✅
+- FORCE RLS: `relforcerowsecurity = true` ✅
+- user_id: `NOT NULL` constraint present ✅
+- Privileges: `anon` role excluded from `relacl` ✅
+
+**Verification**: Edge function `rls-proof-anon-video-assets` confirmed 42501 permission denied for anon access and cross-user isolation.
+
+---
 
 ### Fix #3: `video_studio_jobs`
 
-| Before | After |
-|--------|-------|
-| INSERT policy `WITH CHECK (true)` | `WITH CHECK (user_id = auth.uid())` |
-| SELECT/UPDATE/DELETE policies granted to `{public}` | All policies scoped to `{authenticated}` only |
-| `anon` had full table privileges | `REVOKE ALL FROM anon` executed |
-| `relforcerowsecurity = false` | `FORCE ROW LEVEL SECURITY` enabled |
-| `user_id` nullable | `user_id NOT NULL` enforced |
+**Migration**: `20260206203029_795a4a65-06b6-419d-96fe-91ca38e46169.sql`
+
+**Policy Deltas:**
+- **INSERT**: Changed from `WITH CHECK (true)` → `WITH CHECK (user_id = auth.uid())`
+- **Roles**: SELECT/UPDATE/DELETE policies changed from `{public}` → `{authenticated}` only
+- **FORCE RLS**: Enabled via `ALTER TABLE public.video_studio_jobs FORCE ROW LEVEL SECURITY`
+- **Privileges**: `REVOKE ALL ON TABLE public.video_studio_jobs FROM anon; REVOKE ALL FROM public;`
+- **user_id**: Set `NOT NULL` (table was empty, safe to alter)
 
 **Session-based access logic preserved**: `(user_id = auth.uid() OR session_id = current_setting('request.headers'::text)::json->>'x-session-id')`
 
-**Migration**: `20260206203029_795a4a65-06b6-419d-96fe-91ca38e46169.sql`
+**Final relacl**: `{authenticated=arwdD/postgres,service_role=arwdD/postgres}` (anon/public removed)
 
 ---
 
@@ -83,7 +91,7 @@ The following RLS warnings are **intentional anonymous analytics** and remain un
 | `visitor_sessions` | `allow_visitor_session_insert` | Anonymous session creation |
 | `visitor_sessions` | `allow_visitor_session_update` | Anonymous session updates (time spent) |
 
-These are marked as **"intentional/ignored"** in security findings.
+**Ignore artifact reference**: Security finding `SUPA_rls_policy_always_true` (internal_id: `SUPA_rls_policy_always_true`) with `ignore: true` and `ignore_reason`: "These are service_role policies ... plus visitor_events and visitor_sessions for anonymous analytics tracking. All are intentional by design."
 
 ---
 
@@ -91,8 +99,8 @@ These are marked as **"intentional/ignored"** in security findings.
 
 | Migration File | Purpose |
 |----------------|---------|
-| `20260206195549_*.sql` | studio_projects: Policy + privilege hardening |
-| `20260206203029_*.sql` | video_studio_jobs: Policy + privilege hardening |
+| `20260206200623_906d0db7-7210-402c-89a1-608debef077e.sql` | studio_projects: Policy + privilege hardening |
+| `20260206203029_795a4a65-06b6-419d-96fe-91ca38e46169.sql` | video_studio_jobs: Policy + privilege hardening |
 
 | Edge Function | Purpose |
 |---------------|---------|
@@ -104,8 +112,8 @@ These are marked as **"intentional/ignored"** in security findings.
 
 ## F) Status
 
-**Phase 4 Complete** — All P0 "Always True" RLS findings resolved.
+**Phase 4 Complete** — Resolved for user-owned tables; visitor tracking warnings remain intentionally permissive and are ignored.
 
-- 3 tables hardened (2 required changes, 1 pre-hardened)
-- 3 visitor tracking exceptions marked intentional
+- 3 tables audited (2 required migrations, 1 pre-hardened)
+- 3 visitor tracking exceptions marked intentional (finding ID: `SUPA_rls_policy_always_true`)
 - All proof functions executed successfully
