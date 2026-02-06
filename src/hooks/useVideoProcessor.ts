@@ -134,7 +134,12 @@ export function useVideoProcessor() {
         if (response.error) throw response.error;
 
         const responseData = response.data;
-        const backendJobId = responseData.jobId;
+
+        // REQUIRE jobId - treat missing as error
+        if (!responseData?.jobId) {
+          throw new Error('Missing jobId from video-resize-process - cannot track job');
+        }
+        const backendJobId: string = responseData.jobId;
 
         // Check if backend returned requires_client_processing
         if (responseData.status === 'requires_client_processing') {
@@ -167,12 +172,14 @@ export function useVideoProcessor() {
 
           // ========================================
           // UPLOAD OUTPUT TO STORAGE (PERSISTENT)
+          // Always use backendJobId for consistent path
           // ========================================
           setExportJobs(prev => prev.map(j => 
             j.id === jobId ? { ...j, status: 'uploading', progress: 85 } : j
           ));
 
-          const outputPath = `video-export/${backendJobId || jobId}/output_${preset}.mp4`;
+          // Path MUST use backendJobId to match validation in studio-job-complete
+          const outputPath = `video-export/${backendJobId}/output_${preset}.mp4`;
           
           const { error: outputUploadError } = await supabase.storage
             .from('video-processing-temp')
@@ -183,47 +190,47 @@ export function useVideoProcessor() {
 
           if (outputUploadError) {
             console.error('Failed to upload output:', outputUploadError);
-            // Still create object URL as fallback
+            throw new Error(`Failed to upload processed video: ${outputUploadError.message}`);
           }
-
-          // Get public URL for the uploaded output
-          const { data: outputUrlData } = supabase.storage
-            .from('video-processing-temp')
-            .getPublicUrl(outputPath);
-
-          const persistentUrl = outputUrlData?.publicUrl;
 
           // ========================================
           // MARK JOB AS COMPLETED IN DATABASE
+          // Always call - backendJobId is guaranteed to exist
           // ========================================
-          if (backendJobId) {
-            try {
-              await supabase.functions.invoke('studio-job-complete', {
-                body: {
-                  jobId: backendJobId,
-                  outputPath,
-                  status: 'completed',
-                },
-              });
-            } catch (completeError) {
-              console.warn('Failed to mark job as complete:', completeError);
-              // Non-fatal - output is still available
+          let signedUrl: string | null = null;
+          try {
+            const completeResponse = await supabase.functions.invoke('studio-job-complete', {
+              body: {
+                jobId: backendJobId,
+                outputPath,
+                status: 'completed',
+              },
+            });
+
+            if (completeResponse.error) {
+              console.warn('Failed to mark job as complete:', completeResponse.error);
+            } else if (completeResponse.data?.outputUrl) {
+              signedUrl = completeResponse.data.outputUrl;
             }
+          } catch (completeError) {
+            console.warn('Failed to mark job as complete:', completeError);
+            // Non-fatal - output is still available
           }
 
-          // Create object URL as immediate preview, but store persistent URL
+          // Create object URL as immediate preview fallback
           const objectUrl = URL.createObjectURL(outputBlob);
+          const finalUrl = signedUrl || objectUrl;
 
           setExportJobs(prev => prev.map(j => 
             j.id === jobId ? { 
               ...j, 
               status: 'completed', 
               progress: 100,
-              outputUrl: persistentUrl || objectUrl,
+              outputUrl: finalUrl,
             } : j
           ));
 
-          urls.push(persistentUrl || objectUrl);
+          urls.push(finalUrl);
         } else if (responseData.outputUrl) {
           // Backend actually processed it (future: when using Mux/MediaConvert)
           setExportJobs(prev => prev.map(j => 
