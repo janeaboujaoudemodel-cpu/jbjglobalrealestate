@@ -97,87 +97,94 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
   }
 
   return (
-    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-      <DropdownMenuTrigger asChild>
-        <button
-          disabled={isLoading}
-          className={cn(
-            "flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all duration-300 hover:shadow-md",
-            currentConfig.bgColor,
-            "focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50",
-            className
-          )}
-        >
-          {isLoading ? (
-            <Loader2 className="w-4 h-4 animate-spin text-zinc-400" />
-          ) : (
-            <CurrentIcon className={cn("w-4 h-4", currentConfig.color)} />
-          )}
-          <span className={cn("text-sm font-medium hidden sm:block", currentConfig.color)}>
-            {currentConfig.label}
-          </span>
-          <ChevronDown className={cn(
-            "w-3.5 h-3.5 transition-transform duration-200",
-            currentConfig.color,
-            isOpen && "rotate-180"
-          )} />
-        </button>
-      </DropdownMenuTrigger>
-      
-      <DropdownMenuContent 
-        align="end" 
-        className="w-64 bg-white border border-zinc-200 shadow-xl rounded-xl p-1"
-      >
-        <div className="px-3 py-2 border-b border-zinc-100 mb-1">
-          <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
-            Switch Mode
-          </p>
-        </div>
+    <div 
+      onClick={(e) => e.stopPropagation()} 
+      onPointerDown={(e) => e.stopPropagation()}
+    >
+      <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+        <DropdownMenuTrigger asChild>
+          <button
+            disabled={isLoading}
+            className={cn(
+              "flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all duration-300 hover:shadow-md",
+              currentConfig.bgColor,
+              "focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50",
+              className
+            )}
+          >
+            {isLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin text-zinc-400" />
+            ) : (
+              <CurrentIcon className={cn("w-4 h-4", currentConfig.color)} />
+            )}
+            <span className={cn("text-sm font-medium hidden sm:block", currentConfig.color)}>
+              {currentConfig.label}
+            </span>
+            <ChevronDown className={cn(
+              "w-3.5 h-3.5 transition-transform duration-200",
+              currentConfig.color,
+              isOpen && "rotate-180"
+            )} />
+          </button>
+        </DropdownMenuTrigger>
         
-        {Object.entries(MODE_CONFIG).map(([modeKey, config]) => {
-          const Icon = config.icon;
-          const isActive = mode === modeKey;
+        <DropdownMenuContent 
+          align="end" 
+          className="w-64 bg-white border border-zinc-200 shadow-xl rounded-xl p-1 z-50"
+        >
+          <div className="px-3 py-2 border-b border-zinc-100 mb-1">
+            <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
+              Switch Mode
+            </p>
+          </div>
           
-          return (
-            <DropdownMenuItem
-              key={modeKey}
-              onSelect={(e) => {
-                e.preventDefault(); // Prevent Radix from auto-closing
-                handleModeChange(modeKey as UserMode);
-              }}
-              onPointerDown={(e) => e.stopPropagation()} // Prevent touch conflicts
-              className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200",
-                isActive 
-                  ? "bg-gradient-to-r from-gold/10 to-gold/5 border border-gold/20" 
-                  : "hover:bg-zinc-50"
-              )}
-            >
-              <div className={cn(
-                "w-8 h-8 rounded-lg flex items-center justify-center border",
-                isActive ? config.bgColor : "bg-zinc-100 border-zinc-200"
-              )}>
-                <Icon className={cn("w-4 h-4", isActive ? config.color : "text-zinc-500")} />
-              </div>
-              <div className="flex-1">
-                <p className={cn(
-                  "text-sm font-medium",
-                  isActive ? "text-zinc-900" : "text-zinc-700"
+          {Object.entries(MODE_CONFIG).map(([modeKey, config]) => {
+            const Icon = config.icon;
+            const isActive = mode === modeKey;
+            
+            return (
+              <DropdownMenuItem
+                key={modeKey}
+                onSelect={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleModeChange(modeKey as UserMode);
+                }}
+                onClick={(e) => e.stopPropagation()}
+                onPointerDown={(e) => e.stopPropagation()}
+                className={cn(
+                  "flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200",
+                  isActive 
+                    ? "bg-gradient-to-r from-gold/10 to-gold/5 border border-gold/20" 
+                    : "hover:bg-zinc-50"
+                )}
+              >
+                <div className={cn(
+                  "w-8 h-8 rounded-lg flex items-center justify-center border",
+                  isActive ? config.bgColor : "bg-zinc-100 border-zinc-200"
                 )}>
-                  {config.label}
-                </p>
-                <p className="text-xs text-zinc-500">
-                  {config.description}
-                </p>
-              </div>
-              {isActive && (
-                <Check className="w-4 h-4 text-gold" />
-              )}
-            </DropdownMenuItem>
-          );
-        })}
-      </DropdownMenuContent>
-    </DropdownMenu>
+                  <Icon className={cn("w-4 h-4", isActive ? config.color : "text-zinc-500")} />
+                </div>
+                <div className="flex-1">
+                  <p className={cn(
+                    "text-sm font-medium",
+                    isActive ? "text-zinc-900" : "text-zinc-700"
+                  )}>
+                    {config.label}
+                  </p>
+                  <p className="text-xs text-zinc-500">
+                    {config.description}
+                  </p>
+                </div>
+                {isActive && (
+                  <Check className="w-4 h-4 text-gold" />
+                )}
+              </DropdownMenuItem>
+            );
+          })}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 };
 
