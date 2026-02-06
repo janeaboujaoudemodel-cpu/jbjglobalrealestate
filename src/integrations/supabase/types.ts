@@ -6156,6 +6156,7 @@ export type Database = {
           bank_account_encrypted: string | null
           bank_iban_encrypted: string | null
           bank_name: string | null
+          bank_name_encrypted: string | null
           base_salary: number
           created_at: string | null
           created_by: string | null
@@ -6174,6 +6175,7 @@ export type Database = {
           bank_account_encrypted?: string | null
           bank_iban_encrypted?: string | null
           bank_name?: string | null
+          bank_name_encrypted?: string | null
           base_salary?: number
           created_at?: string | null
           created_by?: string | null
@@ -6192,6 +6194,7 @@ export type Database = {
           bank_account_encrypted?: string | null
           bank_iban_encrypted?: string | null
           bank_name?: string | null
+          bank_name_encrypted?: string | null
           base_salary?: number
           created_at?: string | null
           created_by?: string | null
@@ -18452,6 +18455,7 @@ export type Database = {
           bank_account_masked: string | null
           bank_iban_masked: string | null
           bank_name: string | null
+          bank_name_masked: string | null
           base_salary: number | null
           created_at: string | null
           created_by: string | null
@@ -18470,6 +18474,7 @@ export type Database = {
           bank_account_masked?: never
           bank_iban_masked?: never
           bank_name?: string | null
+          bank_name_masked?: never
           base_salary?: number | null
           created_at?: string | null
           created_by?: string | null
@@ -18488,6 +18493,7 @@ export type Database = {
           bank_account_masked?: never
           bank_iban_masked?: never
           bank_name?: string | null
+          bank_name_masked?: never
           base_salary?: number | null
           created_at?: string | null
           created_by?: string | null
@@ -18506,6 +18512,8 @@ export type Database = {
       }
       employee_salaries_secure: {
         Row: {
+          bank_account: string | null
+          bank_iban: string | null
           bank_name: string | null
           base_salary: number | null
           created_at: string | null
@@ -18522,7 +18530,9 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
-          bank_name?: string | null
+          bank_account?: never
+          bank_iban?: never
+          bank_name?: never
           base_salary?: number | null
           created_at?: string | null
           created_by?: string | null
@@ -18538,7 +18548,9 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
-          bank_name?: string | null
+          bank_account?: never
+          bank_iban?: never
+          bank_name?: never
           base_salary?: number | null
           created_at?: string | null
           created_by?: string | null
@@ -18557,7 +18569,7 @@ export type Database = {
       }
       employee_salaries_self_service: {
         Row: {
-          bank_name_masked: string | null
+          bank_name_display: string | null
           base_salary: number | null
           created_at: string | null
           currency: string | null
@@ -18572,7 +18584,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
-          bank_name_masked?: never
+          bank_name_display?: never
           base_salary?: never
           created_at?: string | null
           currency?: string | null
@@ -18587,7 +18599,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
-          bank_name_masked?: never
+          bank_name_display?: never
           base_salary?: never
           created_at?: string | null
           currency?: string | null
