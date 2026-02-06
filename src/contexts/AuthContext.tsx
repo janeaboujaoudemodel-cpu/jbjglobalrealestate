@@ -2,11 +2,20 @@ import { createContext, useContext, useEffect, useState, ReactNode } from "react
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
+/**
+ * OWNER_EMAIL - The single privileged identity
+ * Set via environment variable or fallback to hardcoded owner email
+ */
+const OWNER_EMAIL = (import.meta.env.VITE_OWNER_EMAIL || "janeaboujaoudenails@gmail.com").toLowerCase();
+
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  /** @deprecated Use isOwner instead. This is kept for backward compatibility. */
   isAdmin: boolean;
+  /** True if authenticated user's email matches OWNER_EMAIL */
+  isOwner: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
   signInWithGoogle: () => Promise<{ error: Error | null }>;
@@ -21,7 +30,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -33,10 +42,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(nextSession);
       setUser(nextSession?.user ?? null);
 
-      if (nextSession?.user) {
-        await checkAdminRole(nextSession.user.id);
+      // Check if user is Owner by email match
+      if (nextSession?.user?.email) {
+        const userEmail = nextSession.user.email.toLowerCase();
+        setIsOwner(userEmail === OWNER_EMAIL);
       } else {
-        setIsAdmin(false);
+        setIsOwner(false);
       }
 
       if (mounted) setLoading(false);
@@ -69,25 +80,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       subscription.unsubscribe();
     };
   }, []);
-
-  const checkAdminRole = async (userId: string) => {
-    try {
-      // Use backend role check to avoid client-side RLS/permission issues.
-      const { data, error } = await supabase.rpc("has_role", {
-        _user_id: userId,
-        _role: "admin",
-      });
-
-      if (error) throw error;
-
-      setIsAdmin(Boolean(data));
-      return Boolean(data);
-    } catch (error) {
-      console.error("Error checking admin role:", error);
-      setIsAdmin(false);
-      return false;
-    }
-  };
 
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({
@@ -143,7 +135,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Clear local state first to ensure UI updates immediately
       setUser(null);
       setSession(null);
-      setIsAdmin(false);
+      setIsOwner(false);
       
       // Clear any role selection from localStorage
       localStorage.removeItem('jj_role_selected');
@@ -157,6 +149,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Backward compatibility: isAdmin maps to isOwner
+  const isAdmin = isOwner;
+
   return (
     <AuthContext.Provider
       value={{
@@ -164,6 +159,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         session,
         loading,
         isAdmin,
+        isOwner,
         signIn,
         signUp,
         signInWithGoogle,

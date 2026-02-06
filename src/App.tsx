@@ -71,6 +71,7 @@ import DataOperations from "./pages/market-intelligence/internal/DataOperations"
 import Favorites from "./pages/Favorites";
 import Compare from "./pages/Compare";
 import Auth from "./pages/Auth";
+import AccessDenied from "./pages/AccessDenied";
 import Admin from "./pages/Admin";
 import AdminLeads from "./pages/AdminLeads";
 import AdminRoleManagement from "./pages/AdminRoleManagement";
@@ -262,9 +263,11 @@ const App = () => (
                     <ScrollToTopOnMount />
                   <GlobalVisitorTracking />
                   <GlobalTranslator />
-            {/* Auth route is always accessible for admin login */}
+            {/* Auth route is always accessible for login */}
             <Routes>
               <Route path="/auth" element={<Auth />} />
+              {/* Access Denied page for auth-non-owner */}
+              <Route path="/403" element={<AccessDenied />} />
               {/* Hidden standalone pages - no header/footer */}
               <Route path="/card" element={<DigitalCard />} />
               <Route element={<AdminBypass><MainLayoutWrapper /></AdminBypass>}>
