@@ -7,7 +7,8 @@ export interface VideoStudioProject {
   tracks: Track[];
   settings: ProjectSettings;
   createdAt: Date;
-  autoDeleteAt: Date;
+  // NOTE: autoDeleteAt removed - zero auto-deletion policy per user requirement
+  // All projects are saved permanently until user explicitly deletes
 }
 
 export interface ProjectSettings {

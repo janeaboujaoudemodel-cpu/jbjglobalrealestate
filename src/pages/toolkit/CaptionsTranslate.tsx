@@ -236,7 +236,7 @@ export default function CaptionsTranslate() {
             <span>Back to Toolkit</span>
           </Link>
           <div className="text-sm text-slate-500">
-            Files auto-delete after 2 hours
+            Projects are saved automatically
           </div>
         </div>
       </header>
@@ -332,7 +332,7 @@ export default function CaptionsTranslate() {
                 className="mt-0.5"
               />
               <label htmlFor="consent" className="text-sm text-slate-400 cursor-pointer">
-                I own this content or have permission to edit it. I understand files are processed securely and auto-deleted after 2 hours.
+                I own this content or have permission to edit it. Projects are saved automatically.
               </label>
             </div>
 

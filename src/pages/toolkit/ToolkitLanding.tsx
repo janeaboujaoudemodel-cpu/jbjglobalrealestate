@@ -195,7 +195,7 @@ export default function ToolkitLanding() {
             </div>
             <div className="flex items-center gap-2 text-slate-300">
               <Clock className="h-5 w-5 text-gold" />
-              <span>Auto-Delete After 2 Hours</span>
+              <span>Auto-Save Always</span>
             </div>
           </div>
         </div>
