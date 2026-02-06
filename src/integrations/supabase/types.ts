@@ -15162,6 +15162,7 @@ export type Database = {
           priority: number | null
           progress: number | null
           progress_message: string | null
+          project_id: string | null
           retry_count: number | null
           session_id: string | null
           started_at: string | null
@@ -15183,6 +15184,7 @@ export type Database = {
           priority?: number | null
           progress?: number | null
           progress_message?: string | null
+          project_id?: string | null
           retry_count?: number | null
           session_id?: string | null
           started_at?: string | null
@@ -15204,6 +15206,7 @@ export type Database = {
           priority?: number | null
           progress?: number | null
           progress_message?: string | null
+          project_id?: string | null
           retry_count?: number | null
           session_id?: string | null
           started_at?: string | null
