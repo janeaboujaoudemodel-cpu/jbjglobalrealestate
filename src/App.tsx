@@ -130,6 +130,8 @@ import CRMCalendar from "./pages/CRMCalendar";
 import CRMNotes from "./pages/CRMNotes";
 import CRMReminders from "./pages/CRMReminders";
 import CRMEmployees from "./pages/CRMEmployees";
+import OwnerHub from "./pages/OwnerHub";
+import CRMLeadsInbox from "./pages/CRMLeadsInbox";
 
 import AdminCRM from "./pages/AdminCRM";
 import JoinApplication from "./pages/JoinApplication";
@@ -429,6 +431,8 @@ const App = () => (
                   </OwnerGuard>
                 )} />
                 <Route path="/crm/leads/:id" element={<OwnerGuard><CRMLeadDetail /></OwnerGuard>} />
+                <Route path="/crm/leads" element={<OwnerGuard><CRMLeadsInbox /></OwnerGuard>} />
+                <Route path="/owner" element={<OwnerGuard><OwnerHub /></OwnerGuard>} />
                 <Route path="/crm/tasks" element={<OwnerGuard><CRMTasks /></OwnerGuard>} />
                 <Route path="/crm/calendar" element={<OwnerGuard><CRMCalendar /></OwnerGuard>} />
                 <Route path="/crm/notes" element={<OwnerGuard><CRMNotes /></OwnerGuard>} />
