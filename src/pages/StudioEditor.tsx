@@ -80,6 +80,7 @@ interface StudioProject {
 interface StudioJob {
   id: string;
   user_id: string;
+  project_id?: string | null;
   job_type: string;
   status: string;
   progress: number;
@@ -159,10 +160,9 @@ export default function StudioEditor() {
       const { data, error } = await (supabase as any)
         .from("studio_jobs")
         .select(
-          "id,user_id,job_type,status,progress,created_at,completed_at,error_message,progress_message,input_data"
+          "id,user_id,project_id,job_type,status,progress,created_at,completed_at,error_message,progress_message,input_data"
         )
-        // studio_jobs no longer has a project_id column; linkage is stored in input_data.projectId
-        .contains("input_data", { projectId })
+        .eq("project_id", projectId)
         .order("created_at", { ascending: false })
         .limit(20);
 
@@ -172,6 +172,7 @@ export default function StudioEditor() {
       console.error("Failed to load jobs:", err);
     }
   };
+
 
   // Save project with debounce
   const saveProject = useCallback(async (updates: Partial<StudioProject>) => {
@@ -216,6 +217,7 @@ export default function StudioEditor() {
       
       const { error } = await supabase.from("studio_jobs").insert({
         user_id: user.id,
+        project_id: projectId,
         job_type: "ai_creative",
         status: "pending",
         progress: 0,
