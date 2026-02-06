@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -11,6 +12,40 @@ serve(async (req) => {
   }
 
   try {
+    // ========================================
+    // AUTHENTICATION REQUIRED
+    // ========================================
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized - missing authentication" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+
+    // Verify the JWT and get user
+    const token = authHeader.replace("Bearer ", "");
+    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
+    
+    if (claimsError || !claimsData?.claims?.sub) {
+      console.error("Auth verification failed:", claimsError);
+      return new Response(
+        JSON.stringify({ error: "Unauthorized - invalid token" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const userId = claimsData.claims.sub;
+    console.log(`AI Market Chat request from user: ${userId}`);
+    // ========================================
+
     const { question, context } = await req.json();
 
     if (!question) {
@@ -28,17 +63,17 @@ serve(async (req) => {
     const systemPrompt = `You are an expert Dubai real estate market analyst assistant. You provide helpful, accurate information about Dubai's property market, areas, developers, and investment opportunities.
 
 Current Context:
-- Property: ${context.propertyName || 'Not specified'}
-- Location: ${context.location || 'Not specified'}
-- Price: ${context.totalPrice ? `AED ${context.totalPrice.toLocaleString()}` : 'Not specified'}
-- Price per sqft: ${context.pricePerSqft ? `AED ${context.pricePerSqft}` : 'Not specified'}
-- Size: ${context.size ? `${context.size} sqft` : 'Not specified'}
-- Bedrooms: ${context.bedrooms || 'Not specified'}
-- Developer: ${context.developer || 'Not specified'}
-- Handover: ${context.handoverDate || 'Not specified'}
-- Amenities: ${context.amenities?.join(', ') || 'Not specified'}
+- Property: ${context?.propertyName || 'Not specified'}
+- Location: ${context?.location || 'Not specified'}
+- Price: ${context?.totalPrice ? `AED ${context.totalPrice.toLocaleString()}` : 'Not specified'}
+- Price per sqft: ${context?.pricePerSqft ? `AED ${context.pricePerSqft}` : 'Not specified'}
+- Size: ${context?.size ? `${context.size} sqft` : 'Not specified'}
+- Bedrooms: ${context?.bedrooms || 'Not specified'}
+- Developer: ${context?.developer || 'Not specified'}
+- Handover: ${context?.handoverDate || 'Not specified'}
+- Amenities: ${context?.amenities?.join(', ') || 'Not specified'}
 
-${context.insights ? `
+${context?.insights ? `
 AI Analysis Results:
 - Investment Rating: ${context.insights.investmentRating}
 - Supply/Demand Score: ${context.insights.supplyDemandScore}/10 (${context.insights.supplyDemandLabel})

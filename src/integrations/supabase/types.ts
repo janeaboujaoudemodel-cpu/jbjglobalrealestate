@@ -16270,6 +16270,7 @@ export type Database = {
           settings: Json | null
           status: string
           updated_at: string
+          user_id: string
         }
         Insert: {
           created_at?: string
@@ -16284,6 +16285,7 @@ export type Database = {
           settings?: Json | null
           status?: string
           updated_at?: string
+          user_id: string
         }
         Update: {
           created_at?: string
@@ -16298,6 +16300,7 @@ export type Database = {
           settings?: Json | null
           status?: string
           updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -19716,6 +19719,20 @@ export type Database = {
       is_team_member: {
         Args: { _team_id: string; _user_id: string }
         Returns: boolean
+      }
+      log_chat_message: {
+        Args: {
+          p_message: string
+          p_metadata?: Json
+          p_role: string
+          p_session_id: string
+          p_source: string
+          p_source_page?: string
+          p_user_email?: string
+          p_user_name?: string
+          p_user_phone?: string
+        }
+        Returns: string
       }
       log_contact_gating_access: {
         Args: { _access_type: string; _submission_id?: string }

@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import type { Json } from '@/integrations/supabase/types';
 
 export interface ChatLogEntry {
   session_id: string;
@@ -11,7 +12,7 @@ export interface ChatLogEntry {
   user_name?: string;
   user_email?: string;
   user_phone?: string;
-  metadata?: Record<string, any>;
+  metadata?: Json;
 }
 
 export function useChatHistoryLogger() {
@@ -19,23 +20,43 @@ export function useChatHistoryLogger() {
 
   const logChat = useCallback(async (entry: ChatLogEntry) => {
     try {
-      const { error } = await supabase
-        .from('chat_history')
-        .insert({
-          session_id: entry.session_id,
-          role: entry.role,
-          message: entry.message,
-          source: entry.source,
-          source_page: entry.source_page || window.location.pathname,
-          user_id: user?.id || null,
-          user_name: entry.user_name,
-          user_email: entry.user_email || user?.email,
-          user_phone: entry.user_phone,
-          metadata: entry.metadata || {}
+      // Use secure RPC function for authenticated users
+      if (user) {
+        const { error } = await supabase.rpc('log_chat_message', {
+          p_session_id: entry.session_id,
+          p_role: entry.role,
+          p_message: entry.message,
+          p_source: entry.source,
+          p_source_page: entry.source_page || window.location.pathname,
+          p_user_name: entry.user_name || null,
+          p_user_email: entry.user_email || user.email || null,
+          p_user_phone: entry.user_phone || null,
+          p_metadata: (entry.metadata || {}) as Json
         });
 
-      if (error) {
-        console.error('Error logging chat:', error);
+        if (error) {
+          console.error('Error logging chat via RPC:', error);
+        }
+      } else {
+        // Fallback for anonymous users (rate-limited by RLS policy)
+        const { error } = await supabase
+          .from('chat_history')
+          .insert([{
+            session_id: entry.session_id,
+            role: entry.role,
+            message: entry.message,
+            source: entry.source,
+            source_page: entry.source_page || window.location.pathname,
+            user_id: null, // Anonymous
+            user_name: entry.user_name,
+            user_email: entry.user_email,
+            user_phone: entry.user_phone,
+            metadata: (entry.metadata || {}) as Json
+          }]);
+
+        if (error) {
+          console.error('Error logging anonymous chat:', error);
+        }
       }
     } catch (err) {
       console.error('Chat logging failed:', err);
@@ -59,7 +80,7 @@ export function useChatHistoryLogger() {
         user_name: userInfo?.name,
         user_email: userInfo?.email || user?.email,
         user_phone: userInfo?.phone,
-        metadata: {}
+        metadata: {} as Json
       }));
 
       const { error } = await supabase

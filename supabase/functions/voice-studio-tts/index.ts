@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -12,6 +13,40 @@ serve(async (req) => {
   }
 
   try {
+    // ========================================
+    // AUTHENTICATION REQUIRED
+    // ========================================
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized - missing authentication" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+
+    // Verify the JWT and get user
+    const token = authHeader.replace("Bearer ", "");
+    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
+    
+    if (claimsError || !claimsData?.claims?.sub) {
+      console.error("Auth verification failed:", claimsError);
+      return new Response(
+        JSON.stringify({ error: "Unauthorized - invalid token" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const userId = claimsData.claims.sub;
+    console.log(`Voice Studio TTS request from user: ${userId}`);
+    // ========================================
+
     const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
     if (!ELEVENLABS_API_KEY) {
       throw new Error("ELEVENLABS_API_KEY not configured");
@@ -39,7 +74,7 @@ serve(async (req) => {
     // Determine output format
     const outputFormat = format === "wav" ? "pcm_44100" : "mp3_44100_128";
 
-    console.log(`Generating TTS for ${sanitizedText.length} characters with voice ${voiceId}`);
+    console.log(`Generating TTS for ${sanitizedText.length} characters with voice ${voiceId} for user ${userId}`);
 
     // Call ElevenLabs TTS API
     const response = await fetch(
@@ -70,7 +105,7 @@ serve(async (req) => {
     }
 
     const audioBuffer = await response.arrayBuffer();
-    console.log(`Generated audio: ${audioBuffer.byteLength} bytes`);
+    console.log(`Generated audio: ${audioBuffer.byteLength} bytes for user ${userId}`);
 
     // Determine content type
     const contentType = format === "wav" ? "audio/wav" : "audio/mpeg";
