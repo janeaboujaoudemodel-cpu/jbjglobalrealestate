@@ -77,13 +77,14 @@ const Index = () => {
             alt="Luxury Dubai Real Estate" 
             className="absolute inset-0 w-full h-full object-cover"
           />
-          {/* Video overlays the image when it loads/plays */}
+          {/* Video overlays the image when it loads/plays - optimized for faster loading */}
           <video 
             autoPlay 
             loop 
             muted 
             playsInline
-            preload="auto"
+            preload="metadata"
+            poster={luxuryVillaHero}
             webkit-playsinline="true"
             x-webkit-airplay="allow"
             className="absolute inset-0 w-full h-full object-cover z-[1]"
@@ -490,11 +491,17 @@ const Index = () => {
         </div>
       </section>
 
+      {/* DIVIDER - Between Explore Services and Toolkit Showcase */}
+      <SectionDivider />
+
       {/* TOOLKIT SHOWCASE CARD - Free Professional Tools */}
       <ToolkitShowcaseCard />
 
-      {/* AI HOME FINDER - Premium CTA Section - CENTERED with WHITE background card + glow */}
-      <section className="py-12 md:py-16 bg-black">
+      {/* DIVIDER - Between Toolkit Showcase and AI Home Finder */}
+      <SectionDivider />
+
+      {/* AI HOME FINDER - Premium CTA Section - CENTERED vertically and horizontally */}
+      <section className="py-12 md:py-16 bg-black flex items-center justify-center min-h-[300px]">
         <div className="container mx-auto px-4">
           <div className="flex justify-center">
             <motion.div
@@ -543,6 +550,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* DIVIDER - Between AI Home Finder and AI Comparison */}
+      <SectionDivider />
 
       {/* AI COMPARISON & ANALYZER PREVIEW */}
       <section className="py-12 md:py-16 bg-black">

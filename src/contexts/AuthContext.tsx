@@ -25,6 +25,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let mounted = true;
+    let timeoutId: ReturnType<typeof setTimeout>;
 
     const applySession = async (nextSession: Session | null) => {
       if (!mounted) return;
@@ -41,6 +42,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (mounted) setLoading(false);
     };
 
+    // Safety timeout - force loading to false after 5 seconds to prevent infinite loading
+    timeoutId = setTimeout(() => {
+      if (mounted && loading) {
+        console.warn('Auth loading timeout - forcing completion');
+        setLoading(false);
+      }
+    }, 5000);
+
     // Set up auth state listener FIRST
     const {
       data: { subscription },
@@ -56,6 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     return () => {
       mounted = false;
+      clearTimeout(timeoutId);
       subscription.unsubscribe();
     };
   }, []);

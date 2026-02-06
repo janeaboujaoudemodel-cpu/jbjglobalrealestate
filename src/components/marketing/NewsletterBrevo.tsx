@@ -34,20 +34,39 @@ export const NewsletterBrevo = ({
     try {
       const normalizedEmail = email.toLowerCase().trim();
       
-      // Use backend edge function to save lead (bypasses RLS)
-      const { data: captureResult, error: captureError } = await supabase.functions.invoke('capture-lead', {
-        body: {
-          email: normalizedEmail,
-          fullName: name || null,
-          source: 'newsletter',
-          subSource: source.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-          pageSource: window.location.pathname,
-          contactType: 'client',
-        },
-      });
+      // Use backend edge function to save lead (bypasses RLS) with retry logic
+      let retryCount = 0;
+      const maxRetries = 2;
+      let success = false;
 
-      if (captureError || (captureResult as any)?.error) {
-        console.error('Lead capture error:', captureError || (captureResult as any)?.error);
+      while (retryCount <= maxRetries && !success) {
+        try {
+          const { data: captureResult, error: captureError } = await supabase.functions.invoke('capture-lead', {
+            body: {
+              email: normalizedEmail,
+              fullName: name || null,
+              source: 'newsletter',
+              subSource: source.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+              pageSource: window.location.pathname,
+              contactType: 'client',
+            },
+          });
+
+          if (!captureError && !(captureResult as any)?.error) {
+            success = true;
+          } else {
+            throw captureError || new Error((captureResult as any)?.error);
+          }
+        } catch (err) {
+          retryCount++;
+          console.warn(`Lead capture attempt ${retryCount} failed:`, err);
+          if (retryCount <= maxRetries) {
+            await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+          }
+        }
+      }
+
+      if (!success) {
         toast.error('Something went wrong. Please try again.');
         setIsSubmitting(false);
         return;

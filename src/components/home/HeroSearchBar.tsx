@@ -911,16 +911,14 @@ const HeroSearchBar = () => {
             </DialogContent>
           </Dialog>
 
-          {/* Search Button - Subtle rounded corners */}
-          <div className="p-1.5">
-            <Button
-              onClick={handleSearch}
-              className="h-10 px-6 py-2.5 bg-gold hover:bg-gold-dark text-black font-bold text-sm rounded-xl transition-all duration-300 shadow-lg hover:shadow-gold/30"
-            >
-              <Search className="w-4 h-4 mr-1.5" />
-              Search
-            </Button>
-          </div>
+          {/* Search Button - Fills to edge, no gap */}
+          <Button
+            onClick={handleSearch}
+            className="h-full px-6 py-3.5 bg-gold hover:bg-gold-dark text-black font-bold text-sm rounded-r-xl transition-all duration-300 shadow-lg hover:shadow-gold/30"
+          >
+            <Search className="w-4 h-4 mr-1.5" />
+            Search
+          </Button>
         </div>
       </div>
     </div>
