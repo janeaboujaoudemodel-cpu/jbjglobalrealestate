@@ -203,12 +203,16 @@ export default function StudioEditor() {
     
     setIsGenerating(true);
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
+      
       const { error } = await supabase.from("studio_jobs").insert({
-        project_id: projectId,
+        user_id: user.id,
         job_type: "ai_creative",
         status: "pending",
         progress: 0,
         input_data: {
+          projectId,
           prompt: aiPrompt,
           settings: { creativityLevel, brandStrictness, audience },
           propertySnapshot: selectedProperty,
