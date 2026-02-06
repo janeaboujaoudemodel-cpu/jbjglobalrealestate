@@ -172,7 +172,7 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+      <DialogContent className="sm:max-w-lg bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-black">
             <UserPlus className="h-5 w-5 text-gold" />

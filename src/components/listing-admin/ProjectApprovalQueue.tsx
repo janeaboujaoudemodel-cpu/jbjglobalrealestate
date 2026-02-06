@@ -1206,7 +1206,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
 
       {/* Detail Modal */}
       <Dialog open={!!selectedImport} onOpenChange={() => setSelectedImport(null)}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-4xl">
           {selectedImport && (
             <>
               <DialogHeader>

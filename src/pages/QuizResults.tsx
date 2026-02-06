@@ -520,7 +520,7 @@ Best regards`);
 
       {/* Share Modal */}
       <Dialog open={shareModalOpen} onOpenChange={setShareModalOpen}>
-        <DialogContent className="bg-zinc-900 border-purple-900/30 text-white">
+        <DialogContent className="bg-zinc-900 border-purple-900/30 text-white sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Share2 className="w-5 h-5 text-purple-400" />

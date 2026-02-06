@@ -78,7 +78,7 @@ export default function MarketReportCTAModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-gradient-to-b from-white via-zinc-50 to-white border-gold/30 text-zinc-900 max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-gradient-to-b from-white via-zinc-50 to-white border-gold/30 text-zinc-900 sm:max-w-2xl">
         <DialogHeader className="text-center pb-4">
           <div className="flex items-center justify-center mb-4">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold via-gold to-gold-dark flex items-center justify-center shadow-lg">

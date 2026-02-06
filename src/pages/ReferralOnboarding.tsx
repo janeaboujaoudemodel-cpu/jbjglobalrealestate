@@ -581,7 +581,7 @@ export default function ReferralOnboarding() {
 
         {/* Success Modal */}
         <Dialog open={showSuccess} onOpenChange={() => {}}>
-          <DialogContent className="bg-card border-border max-w-md">
+          <DialogContent className="bg-card border-border sm:max-w-md">
             <VisuallyHidden.Root>
               <DialogTitle>Application Submitted</DialogTitle>
             </VisuallyHidden.Root>

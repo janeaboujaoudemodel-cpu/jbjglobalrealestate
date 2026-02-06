@@ -141,7 +141,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl p-0 gap-0 bg-white border border-gold/20 shadow-2xl shadow-gold/10 overflow-hidden">
+      <DialogContent className="sm:max-w-2xl p-0 gap-0 bg-white border border-gold/20 shadow-2xl shadow-gold/10">
         {/* Search Header */}
         <div className="flex items-center gap-3 px-4 py-3 border-b border-gold/10 bg-gradient-to-r from-white to-[#FDFBF7]">
           <Search className="w-5 h-5 text-gold" />

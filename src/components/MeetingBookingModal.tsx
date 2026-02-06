@@ -172,7 +172,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 shadow-2xl shadow-gold/20">
+      <DialogContent className="sm:max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 shadow-2xl shadow-gold/20">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3 text-black text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
             <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">

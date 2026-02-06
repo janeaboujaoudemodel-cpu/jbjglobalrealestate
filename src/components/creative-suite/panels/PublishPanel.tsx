@@ -97,7 +97,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl bg-slate-900 border-gold/30">
+      <DialogContent className="sm:max-w-3xl bg-slate-900 border-gold/30">
         <DialogHeader>
           <DialogTitle className="text-white flex items-center gap-2">
             <Share2 className="w-5 h-5 text-gold" />
