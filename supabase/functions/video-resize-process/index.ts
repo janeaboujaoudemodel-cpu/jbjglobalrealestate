@@ -18,6 +18,23 @@ interface ProcessRequest {
   originalHeight: number;
 }
 
+// Validate dimensions are reasonable
+function validateDimensions(width: number, height: number): boolean {
+  return (
+    Number.isInteger(width) &&
+    Number.isInteger(height) &&
+    width >= 16 &&
+    width <= 7680 &&
+    height >= 16 &&
+    height <= 4320
+  );
+}
+
+// Validate aspect ratio string
+function validateAspectRatio(aspect: string): boolean {
+  return /^\d+:\d+$/.test(aspect);
+}
+
 serve(async (req) => {
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
@@ -26,12 +43,41 @@ serve(async (req) => {
 
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+
+    // ========================================
+    // AUTHENTICATION CHECK - Required
+    // ========================================
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized - Missing auth token" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Create client with user's auth token to validate JWT
+    const supabaseAuth = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+
+    const { data: { user }, error: userError } = await supabaseAuth.auth.getUser();
+    if (userError || !user) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized - Invalid token" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const userId = user.id;
+    console.log(`[AUTH] User authenticated: ${userId}`);
+
+    // Service role client for admin operations
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     const body: ProcessRequest = await req.json();
     const {
-      sourceUrl,
       sourcePath,
       targetWidth,
       targetHeight,
@@ -42,7 +88,65 @@ serve(async (req) => {
       originalHeight,
     } = body;
 
-    console.log(`[REAL PROCESSING] Video resize started`);
+    // ========================================
+    // INPUT VALIDATION
+    // ========================================
+    if (!sourcePath || typeof sourcePath !== 'string') {
+      return new Response(
+        JSON.stringify({ error: "Invalid sourcePath" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    if (!validateDimensions(targetWidth, targetHeight)) {
+      return new Response(
+        JSON.stringify({ error: "Invalid target dimensions (16-7680 allowed)" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    if (!validateDimensions(originalWidth, originalHeight)) {
+      return new Response(
+        JSON.stringify({ error: "Invalid original dimensions" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    if (!validateAspectRatio(targetAspect)) {
+      return new Response(
+        JSON.stringify({ error: "Invalid aspect ratio format (expected N:M)" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // ========================================
+    // PATH OWNERSHIP VALIDATION
+    // Ensure user can only process their own files
+    // ========================================
+    // Expected path format: video-uploads/{userId}/filename.mp4
+    // or video-processing/{userId}/filename.mp4
+    const pathParts = sourcePath.split('/');
+    if (pathParts.length < 2) {
+      return new Response(
+        JSON.stringify({ error: "Invalid source path format" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // For user-uploaded files, validate ownership
+    // Allow processing if path contains user's ID or is in a shared temp folder
+    const isOwnedByUser = sourcePath.includes(userId);
+    const isInTempFolder = sourcePath.startsWith('video-processing-temp/') || sourcePath.startsWith('temp/');
+    
+    if (!isOwnedByUser && !isInTempFolder) {
+      console.warn(`[SECURITY] User ${userId} attempted to access path: ${sourcePath}`);
+      return new Response(
+        JSON.stringify({ error: "Access denied - Cannot process files you don't own" }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    console.log(`[PROCESS] Video resize job started for user ${userId}`);
     console.log(`Source: ${sourcePath}`);
     console.log(`Target: ${targetWidth}x${targetHeight} (${targetAspect})`);
     console.log(`Smart framing: ${smartFraming}, Output mode: ${targetOutput}`);
@@ -75,182 +179,90 @@ serve(async (req) => {
       console.log(`Smart framing crop: x=${cropParams.x}, y=${cropParams.y}, w=${cropParams.width}, h=${cropParams.height}`);
     }
 
-    // Generate output filename
-    const outputFileName = `output_${crypto.randomUUID()}_${targetWidth}x${targetHeight}.mp4`;
-    const outputPath = `video-exports/${outputFileName}`;
-    
-    // Create job record for tracking
+    // Build FFmpeg filter string for the transformation
+    const filterComplex = smartFraming
+      ? `crop=${cropParams.width}:${cropParams.height}:${cropParams.x}:${cropParams.y},scale=${targetWidth}:${targetHeight}:flags=lanczos`
+      : `scale=${targetWidth}:${targetHeight}:force_original_aspect_ratio=decrease,pad=${targetWidth}:${targetHeight}:(ow-iw)/2:(oh-ih)/2:black`;
+
+    console.log(`FFmpeg filter: ${filterComplex}`);
+
+    // ========================================
+    // CREATE JOB RECORD
+    // ========================================
     const { data: job, error: jobError } = await supabase
       .from("studio_jobs")
       .insert({
         job_type: "video_resize",
-        status: "processing",
+        status: "requires_client_processing", // HONEST STATUS - not completed
         input_data: {
           sourcePath,
-          sourceUrl,
+          userId, // Track which user owns this job
           targetWidth,
           targetHeight,
           targetAspect,
           targetOutput,
           smartFraming,
           cropParams,
+          filterComplex,
         },
-        output_data: null,
+        output_data: null, // NO FAKE OUTPUT
         progress: 0,
-        progress_message: "Starting video processing..."
+        progress_message: "Awaiting client-side processing"
       })
       .select()
       .single();
 
     if (jobError) {
       console.error("Failed to create job record:", jobError);
-    }
-
-    // =====================================================
-    // REAL VIDEO PROCESSING USING FFMPEG
-    // =====================================================
-    // For server-side FFmpeg processing, we use Deno's subprocess
-    // to execute FFmpeg commands on videos stored in Supabase Storage
-    
-    try {
-      // Update job progress
-      if (job) {
-        await supabase
-          .from("studio_jobs")
-          .update({ progress: 10, progress_message: "Downloading source video..." })
-          .eq("id", job.id);
-      }
-
-      // Download the source video from storage
-      const { data: videoData, error: downloadError } = await supabase.storage
-        .from("video-processing-temp")
-        .download(sourcePath);
-
-      if (downloadError) {
-        throw new Error(`Failed to download source video: ${downloadError.message}`);
-      }
-
-      if (!videoData) {
-        throw new Error("No video data received from storage");
-      }
-
-      // Update progress
-      if (job) {
-        await supabase
-          .from("studio_jobs")
-          .update({ progress: 30, progress_message: "Processing video with FFmpeg..." })
-          .eq("id", job.id);
-      }
-
-      // For Deno edge functions, we process the video using ffmpeg.wasm approach
-      // or call an external video processing API
-      // Since FFmpeg binary isn't available in Deno Deploy, we use a cloud-based approach
-      
-      // Build FFmpeg filter string for the transformation
-      const filterComplex = smartFraming
-        ? `crop=${cropParams.width}:${cropParams.height}:${cropParams.x}:${cropParams.y},scale=${targetWidth}:${targetHeight}:flags=lanczos`
-        : `scale=${targetWidth}:${targetHeight}:force_original_aspect_ratio=decrease,pad=${targetWidth}:${targetHeight}:(ow-iw)/2:(oh-ih)/2:black`;
-
-      console.log(`FFmpeg filter: ${filterComplex}`);
-
-      // For production: Use a video processing service (Cloudflare Stream, Mux, AWS MediaConvert)
-      // For now, we apply a lightweight transformation approach:
-      // 1. Store the transformation parameters
-      // 2. Return the original video with metadata about how it should be transformed
-      // 3. Client-side applies the transformation for preview
-      
-      // Since actual FFmpeg processing requires a different runtime,
-      // we store the job with processing parameters and the client handles the actual resize
-      // This is the hybrid approach: heavy processing happens client-side with FFmpeg.wasm
-      
-      // Update progress
-      if (job) {
-        await supabase
-          .from("studio_jobs")
-          .update({ progress: 70, progress_message: "Finalizing output..." })
-          .eq("id", job.id);
-      }
-
-      // For files that are too large for client-side processing,
-      // we would integrate with a cloud video service here.
-      // The architecture supports this - just add the API integration.
-
-      // Store transformation metadata for the video
-      const transformationResult = {
-        success: true,
-        processingMethod: "hybrid",
-        transformParams: {
-          filter: filterComplex,
-          targetWidth,
-          targetHeight,
-          crop: cropParams,
-          smartFraming
-        },
-        // The actual processing happens client-side with ffmpeg.wasm
-        // or can be offloaded to a cloud video service for very large files
-        message: "Transformation parameters calculated. Client-side FFmpeg.wasm will process the video."
-      };
-
-      // Update job as completed
-      if (job) {
-        await supabase
-          .from("studio_jobs")
-          .update({
-            status: "completed",
-            progress: 100,
-            progress_message: "Processing complete",
-            output_data: { 
-              sourceUrl,
-              outputPath,
-              cropParams,
-              filterComplex,
-              processingMethod: "hybrid",
-              targetWidth,
-              targetHeight,
-            },
-            completed_at: new Date().toISOString(),
-          })
-          .eq("id", job.id);
-      }
-
-      console.log(`[REAL PROCESSING] Video resize completed - hybrid mode`);
-
       return new Response(
-        JSON.stringify({
-          success: true,
-          sourceUrl,
-          outputPath,
-          jobId: job?.id,
-          cropParams,
+        JSON.stringify({ 
+          error: "Failed to create processing job",
+          details: jobError.message 
+        }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // ========================================
+    // RETURN TRANSFORMATION PARAMETERS
+    // Client must do the actual encoding with FFmpeg.wasm
+    // ========================================
+    // NOTE: Deno Deploy does NOT support FFmpeg binary execution.
+    // For real server-side video processing, you would need:
+    // - AWS MediaConvert
+    // - Mux
+    // - Cloudflare Stream
+    // - A dedicated server with FFmpeg installed
+    //
+    // This function returns the transformation parameters for:
+    // 1. Client-side FFmpeg.wasm processing (for files <100MB)
+    // 2. Future integration with a video processing service
+
+    console.log(`[PROCESS] Job ${job.id} created - awaiting client processing`);
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        jobId: job.id,
+        status: "requires_client_processing",
+        message: "Processing parameters calculated. Client must encode with FFmpeg.wasm.",
+        processingMethod: "client",
+        transformParams: {
           filterComplex,
-          processingMethod: "hybrid",
           targetWidth,
           targetHeight,
-          message: "Video processing parameters ready. Client-side FFmpeg.wasm handles the actual encoding.",
-        }),
-        {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
-      );
-
-    } catch (processingError) {
-      console.error("Video processing error:", processingError);
-      
-      // Update job as failed
-      if (job) {
-        await supabase
-          .from("studio_jobs")
-          .update({
-            status: "failed",
-            error_message: processingError instanceof Error ? processingError.message : "Unknown processing error",
-            progress: 0,
-            progress_message: "Processing failed"
-          })
-          .eq("id", job.id);
+          cropParams,
+          smartFraming,
+          codec: "libx264",
+          preset: "medium",
+          crf: 23,
+        },
+        // NO outputUrl or outputPath - nothing was created
+      }),
+      {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       }
-
-      throw processingError;
-    }
+    );
 
   } catch (error) {
     console.error("Video resize processing error:", error);
