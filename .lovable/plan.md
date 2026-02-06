@@ -1,344 +1,296 @@
 
-# JBJ Global Real Estate | AI Tools Restructure, Audit & Completion
+# Fix Plan: Critical Post-Publish Issues
 
-## Executive Summary
-
-This plan addresses a comprehensive restructure of AI tools, dashboards, permissions, and backend synchronization across the platform. Based on my deep audit, the current state shows a solid foundation with scattered tool organization. This plan consolidates everything into the mandated structure.
+Based on my thorough investigation, here are all the issues identified and the proposed solutions:
 
 ---
 
-## Current State Analysis
+## Issue Summary
 
-### AI Tools Distribution (Current)
-| Location | Tools Count | Status |
-|----------|-------------|--------|
-| `/toolkit/*` (RoyalToolsHub) | 8 media tools | Active, working |
-| `/ai-hub` (AIHub page) | 13 investor tools | Active, mixed categories |
-| `src/components/ai-tools/` | 17 AI tool components | Some unused |
-| `src/config/royalToolsRegistry.ts` | 37 tool definitions | Registry exists |
-
-### Key Issues Identified
-1. **Tools are scattered** across multiple pages instead of grouped by output type
-2. **Internal ops tools appear in public AI sections** (Listing Admin Sarah, CRM Support)
-3. **Mode switcher exists** but needs visibility improvements
-4. **Dashboard is functional** but missing some sections (Stay in the Loop, Badges)
-5. **Developer visits system exists** with GPS check-in but needs polish
-6. **Points system exists** (`points_ledger` table) but tier logic needs verification
+| # | Issue | Root Cause | Priority |
+|---|-------|------------|----------|
+| 1 | Sign In/Sign Up infinite loading | Auth loading state not completing properly | Critical |
+| 2 | Newsletter "Stay in the Loop" not working | `capture-lead` edge function call failing | Critical |
+| 3 | Support ticket not saving/sending emails | Edge function not being triggered properly | Critical |
+| 4 | Hero search bar gap around search button | Search button has padding wrapper causing visual gap | Medium |
+| 5 | Website slowness/video loading | Video preload optimization needed | Medium |
+| 6 | Homepage divider inconsistency | Missing dividers between some sections | Medium |
+| 7 | AI Home Finder not centered vertically | Section padding asymmetry | Low |
+| 8 | E-book page broken title/text | Content rendering issues in MarketReport.tsx | Medium |
+| 9 | Download Book section styling | Section not using consistent layer styling | Medium |
 
 ---
 
-## TASK 1: AI Tools Restructure
+## Detailed Fixes
 
-### New Architecture (5 Master Suites)
+### 1. Fix Auth Sign In/Sign Up Infinite Loading
 
-```text
-/toolkit
-├── /video-suite          ← NEW master page with tabs
-│   ├── Tab: Edit         → AI Video Studio
-│   ├── Tab: Resize       → Video Resize + Smart Reframe  
-│   ├── Tab: Captions     → Captions & Translation
-│   ├── Tab: Export       → Export Presets (Reels, YouTube, Stories)
-│   └── Tab: Templates    → Future-ready placeholder
-│
-├── /voice-suite          ← NEW master page with tabs
-│   ├── Tab: Voice Studio → TTS, enhance, clone
-│   ├── Tab: Voice-to-Text→ STT (Speech recognition)
-│   ├── Tab: Audio Cleanup→ Noise removal, enhancement
-│   └── Tab: Translation  → Audio translation
-│
-├── /photo-suite          ← NEW master page with tabs
-│   ├── Tab: Background   → AI Background Remover
-│   ├── Tab: Beauty       → Beauty Filters
-│   ├── Tab: Resize       → Image Resize + Social Sizes
-│   ├── Tab: Interior     → AI Interior Design
-│   └── Tab: Staging      → AI Virtual Staging (future)
-│
-├── /pdf-suite            ← NEW master page with tabs
-│   ├── Tab: Editor       → PDF Editor (merge, split, sign)
-│   ├── Tab: Photo→PDF    → Photo to PDF Generator
-│   ├── Tab: Scan & Sign  → Document scanning + signature
-│   └── Tab: Brochures    → Brochure generators
-│
-└── /property-suite       ← NEW master page with tabs
-    ├── Tab: Home Finder  → AI Home Finder Quiz
-    ├── Tab: Evaluator    → Property Evaluator
-    ├── Tab: Compare      → Property Comparison
-    ├── Tab: Rental Index → Rental Index Evaluator
-    └── Tab: Mortgage     → Mortgage Calculator
+**Problem**: The Auth.tsx loading state shows a spinner when `loading` is true from AuthContext, but the loading state may not resolve properly on the published site.
+
+**Location**: `src/contexts/AuthContext.tsx` and `src/pages/Auth.tsx`
+
+**Fix**:
+- Add a timeout safety mechanism to the auth loading state
+- Ensure the loading state completes even if session check fails
+- Add error boundary handling for auth initialization
+
+```typescript
+// In AuthContext.tsx - add timeout to prevent infinite loading
+useEffect(() => {
+  let mounted = true;
+  let timeoutId: NodeJS.Timeout;
+
+  const applySession = async (nextSession: Session | null) => {
+    if (!mounted) return;
+    // ... existing logic
+    if (mounted) setLoading(false);
+  };
+
+  // Safety timeout - force loading to false after 5 seconds
+  timeoutId = setTimeout(() => {
+    if (mounted && loading) {
+      console.warn('Auth loading timeout - forcing completion');
+      setLoading(false);
+    }
+  }, 5000);
+
+  // ... rest of existing logic
+
+  return () => {
+    mounted = false;
+    clearTimeout(timeoutId);
+    subscription.unsubscribe();
+  };
+}, []);
 ```
 
-### Internal Ops (REMOVED from Public AI)
+---
 
-The following will be moved to Admin/Operations sections only:
-- JBJ News Reporter → `/admin/news-automation`
-- Listing Admin Sarah → `/listing-admin`
-- CRM/Calendar utilities → `/crm`
-- Provident/Reelly sync → `/listing-admin`
+### 2. Fix Newsletter "Stay in the Loop" Functionality
 
-### Files to Create
-- `src/pages/toolkit/VideoSuite.tsx` - Master video page with tabs
-- `src/pages/toolkit/VoiceSuite.tsx` - Master voice/audio page with tabs
-- `src/pages/toolkit/PhotoSuite.tsx` - Master photo/image page with tabs
-- `src/pages/toolkit/PDFSuite.tsx` - Master PDF page with tabs
-- `src/pages/toolkit/PropertySuite.tsx` - Master property intelligence page with tabs
+**Problem**: Network request shows `capture-lead` edge function call failing with "Failed to fetch" error. The edge function exists and has proper code, but the call is failing on the published site.
 
-### Files to Modify
-- `src/config/royalToolsRegistry.ts` - Reorganize by output type
-- `src/components/header/MegaMenuToolkit.tsx` - Update navigation
-- `src/pages/toolkit/RoyalToolsHub.tsx` - Update to show 5 suites
-- `src/App.tsx` - Add new routes
+**Location**: `src/components/marketing/NewsletterBrevo.tsx` and `supabase/functions/capture-lead/index.ts`
+
+**Fix**:
+- Add better error handling and retry logic
+- Ensure the Supabase client is properly initialized before making calls
+- Add fallback mechanism if capture-lead fails
+- Check if the issue is related to CORS or network timeouts
+
+```typescript
+// In NewsletterBrevo.tsx - add retry logic and better error handling
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  if (!email) return;
+
+  setIsSubmitting(true);
+
+  try {
+    const normalizedEmail = email.toLowerCase().trim();
+    
+    // Try capture-lead with retry
+    let retryCount = 0;
+    const maxRetries = 2;
+    let success = false;
+
+    while (retryCount <= maxRetries && !success) {
+      try {
+        const { data: captureResult, error: captureError } = await supabase.functions.invoke('capture-lead', {
+          body: {
+            email: normalizedEmail,
+            fullName: name || null,
+            source: 'newsletter',
+            subSource: source.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+            pageSource: window.location.pathname,
+            contactType: 'client',
+          },
+        });
+
+        if (!captureError && !(captureResult as any)?.error) {
+          success = true;
+        } else {
+          throw captureError || new Error((captureResult as any)?.error);
+        }
+      } catch (err) {
+        retryCount++;
+        if (retryCount <= maxRetries) {
+          await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+        }
+      }
+    }
+
+    if (!success) {
+      toast.error('Something went wrong. Please try again.');
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Continue with Brevo sync...
+    // ... rest of existing code
+  } catch (error) {
+    console.error('Newsletter subscription error:', error);
+    toast.error('Something went wrong. Please try again.');
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+```
 
 ---
 
-## TASK 2: Broker Mode / Client Mode Fix
+### 3. Fix Support Ticket System
 
-### Current State
-- ModeSwitcher exists at `src/components/ModeSwitcher.tsx`
-- Uses `useUserMode` hook with localStorage + database sync
-- Supports 3 modes: investor, broker, investor_broker
+**Problem**: Support tickets not being saved to database or sending confirmation emails. The edge function `submit-support-ticket` exists but may not be deployed or is failing silently.
 
-### Issues to Fix
-1. Mode selector not prominently visible in header
-2. Dropdown closes on selection (should stay for confirmation)
+**Location**: `src/components/SupportTicketBox.tsx` and `supabase/functions/submit-support-ticket/index.ts`
 
-### Implementation
-1. Add ModeSwitcher to main header next to account/language
-2. Modify `ModeSwitcher.tsx` to use `onSelect` with `e.preventDefault()` pattern (already done)
-3. Ensure mode persists across sessions (already working)
-4. Mode controls:
-   - Visible tools (filter by mode in RoyalToolsHub)
-   - Dashboard sections (show broker-only sections)
-   - Education access (books/certification)
+**Fix**:
+- Verify edge function is deployed
+- Add better error handling and user feedback
+- Ensure the email sender configuration is correct (using `onboarding@resend.dev` which is only for testing)
 
-### Files to Modify
-- `src/components/header/Header.tsx` - Add ModeSwitcher visibility
-- `src/pages/toolkit/RoyalToolsHub.tsx` - Filter tools by mode
+```typescript
+// In submit-support-ticket/index.ts - fix email sender
+// Change from:
+from: "JBJ Support <onboarding@resend.dev>",
+// To verified domain:
+from: "JBJ Support <NOREPLY@JBJGLOBALREALESTATE.COM>",
+```
 
 ---
 
-## TASK 3: Broker Hub & Investor Hub UI Fixes
+### 4. Fix Hero Search Bar Gap
 
-### Required Fixes
-1. Cards use champagne gradients (already using `from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]`)
-2. Icons with transparent backgrounds, gold borders (no black fill)
-3. AI Home Finder card: purple label, white title, glow effect
+**Problem**: Visual gap around the search button/icon in the hero section. The search button is wrapped in a padding container creating unwanted spacing.
 
-### Files to Modify
-- `src/pages/AIHub.tsx` - Verify card styling matches spec
-- `src/pages/BrokerDashboard.tsx` - Verify champagne card styling
-- Ensure consistent spacing/padding
+**Location**: `src/components/home/HeroSearchBar.tsx` (lines 914-923)
 
----
+**Fix**:
+```typescript
+// Current (with gap):
+<div className="p-1.5">
+  <Button onClick={handleSearch} className="h-10 px-6 py-2.5 bg-gold hover:bg-gold-dark text-black font-bold text-sm rounded-xl transition-all duration-300 shadow-lg hover:shadow-gold/30">
+    <Search className="w-4 h-4 mr-1.5" />
+    Search
+  </Button>
+</div>
 
-## TASK 4: Dashboard Completion
-
-### Current Dashboard Sections (BrokerDashboard.tsx)
-- Profile card with avatar and badges
-- Quick Actions grid
-- Performance Overview
-- Tasks & Reminders
-- Notifications
-- Broker Hub Links
-
-### Missing Elements to Add
-- Favorites section
-- Shortlisted properties
-- Badges earned display
-- Books progress summary
-- Stay in the Loop section (newsletter inside page)
-
-### Files to Create
-- `src/components/dashboard/FavoritesPreview.tsx`
-- `src/components/dashboard/BadgesDisplay.tsx`
-- `src/components/dashboard/StayInTheLoop.tsx`
-
-### Files to Modify
-- `src/pages/BrokerDashboard.tsx` - Add missing sections
-- `src/pages/UserProfile.tsx` - Ensure profile data syncs
+// Fixed (no gap, button fills to edge):
+<Button
+  onClick={handleSearch}
+  className="h-full px-6 py-3.5 bg-gold hover:bg-gold-dark text-black font-bold text-sm rounded-r-xl transition-all duration-300 shadow-lg hover:shadow-gold/30"
+>
+  <Search className="w-4 h-4 mr-1.5" />
+  Search
+</Button>
+```
 
 ---
 
-## TASK 5: Books, Training & Certification
+### 5. Improve Website Speed and Video Loading
 
-### Current State
-- Books system exists via `useBrokerEducation` hook
-- `Book3DCard` component for 3D covers
-- `BookLanguageFilter` for language selection
-- `CertificationSection` exists
-- Training progress tracked in `broker_training_progress` table
+**Problem**: Website feels slow, videos not loading fast.
 
-### Required Enhancements
-1. Sequential module unlock logic
-2. Test system: 70% pass threshold, 3 failures reveal answers
-3. New questions on retry (randomization)
-4. Certificate auto-generation with name, date, signature
+**Location**: `src/pages/Index.tsx` (video element)
 
-### Database Tables Already Exist
-- `education_books` - Book metadata
-- `education_book_chapters` - Chapter content
-- `broker_training_progress` - Progress tracking
-- `broker_certifications` - Issued certificates
+**Fix**:
+- Add `preload="metadata"` instead of `preload="auto"` for faster initial load
+- Add loading priority hints
+- Consider lazy loading non-critical videos
 
-### Files to Create
-- `src/components/training/ModuleTest.tsx` - Test component with pass logic
-- `src/components/training/QuestionRandomizer.tsx` - Random question selection
-
-### Files to Modify
-- `src/pages/BrokerEducation.tsx` - Add test integration
-- `src/hooks/useBrokerEducation.ts` - Add test progress tracking
+```html
+<video 
+  autoPlay 
+  loop 
+  muted 
+  playsInline
+  preload="metadata"  <!-- Changed from "auto" -->
+  poster={luxuryVillaHero}  <!-- Add poster for immediate visual -->
+  webkit-playsinline="true"
+  className="absolute inset-0 w-full h-full object-cover z-[1]"
+>
+```
 
 ---
 
-## TASK 6: Points, Tiers & Rewards
+### 6. Fix Homepage Divider Consistency
 
-### Current State
-- `points_ledger` table exists with event tracking
-- `broker_points` table exists
-- `useTierProgress` hook loads points
-- Tiers: Starter → Advanced → Elite → Legend
+**Problem**: Some sections have two dividers, some have none. The spacing between sections is inconsistent.
 
-### Points Logic (Per Requirements)
-| Action | Points | Cap |
-|--------|--------|-----|
-| Deal Closed | ~3000+ (scaled) | None |
-| Training Module | 50 | None |
-| Site Visit | 30 | 15/month |
-| Daily Login | 5 | 1/day |
-| Referral Signup | 100 | None |
+**Location**: `src/pages/Index.tsx`
 
-### Files to Modify
-- `src/hooks/useTierProgress.ts` - Add scaling logic
-- `src/components/tier/PointsActivity.tsx` - Verify display
+**Current State Analysis**:
+- Developer Partners → Trust Bar: Has divider ✓
+- Featured Listings → Find Your Starting Point: Missing divider
+- Explore Services → Toolkit Showcase: Missing divider
+- AI Home Finder → AI Comparison: Missing divider
 
-### Files to Create
-- `src/pages/broker/RewardsStore.tsx` - Rewards catalog page
-- `src/components/tier/RewardsCatalog.tsx` - Display available rewards
+**Fix**: Add missing `<SectionDivider />` components between all major sections for consistent rhythm.
 
 ---
 
-## TASK 7: Developer Visits System
+### 7. Center AI Home Finder Vertically
 
-### Current State (Functional)
-- `developer_visit_requests` table - Request workflow
-- `developer_visit_checkins` table - GPS + selfie check-in
-- Components exist in `src/components/developer-visits/`
-- Components exist in `src/components/visits/`
+**Problem**: The AI Home Finder card is not centered vertically within its section.
 
-### Existing Components
-- `DeveloperList.tsx` - List of developers
-- `VisitRequestForm.tsx` - Request submission
-- `MyVisitRequests.tsx` - Request tracking
-- `SiteCheckIn.tsx` - GPS + photo check-in
-- `SalespersonContact.tsx` - Contact reveal after approval
+**Location**: `src/pages/Index.tsx` (lines 496-544)
 
-### Files to Create
-- `src/pages/broker/DeveloperVisits.tsx` - Master visits page
-- Add calendar sync integration
+**Fix**:
+```typescript
+// Current:
+<section className="py-12 md:py-16 bg-black">
 
-### Files to Modify
-- `src/App.tsx` - Add `/broker-dashboard/visits` route
-- `src/pages/BrokerDashboard.tsx` - Add visits quick action
+// Fixed with equal padding and flex centering:
+<section className="py-12 md:py-16 bg-black flex items-center justify-center">
+```
 
 ---
 
-## TASK 8: API & Synchronization
+### 8. Fix E-book/Market Report Page
 
-### Current State
-- Reelly API sync via `reelly-api-sync` edge function
-- Provident extraction via `provident-process` edge function
-- `pending_project_imports` table for approval queue
-- `sync_jobs` table for persistent queue
+**Problem**: The "Download your free book now" page has broken title and text.
 
-### Issues to Verify
-1. Counts must match source (no 1,804 ≠ 1,803 bugs)
-2. Quick Sync must sync ALL visible items
-3. Queue persists on refresh
+**Location**: `src/pages/MarketReport.tsx`
 
-### Files to Audit
-- `supabase/functions/reelly-api-sync/index.ts`
-- `supabase/functions/provident-process/index.ts`
-- `src/hooks/useSyncJobs.ts`
+**Fix**: Review and fix the content rendering, ensure proper text styling and readability.
 
 ---
 
-## TASK 9: UI Consistency
+### 9. Fix Download Book Section Styling
 
-### Checklist
-- No white text on white backgrounds
-- Gold borders only (border-gold/40)
-- Readable dropdowns with proper theming
-- Complete country selector
-- Consistent card styling
+**Problem**: The Download Book section cards (Welcome Back, What You Will Receive, Created by JBJ) should match the "Unlock Your Investment Edge" section styling.
 
-### Files to Audit & Fix
-- All toolkit pages for border consistency
-- Form components for dropdown styling
-- `PhoneInput` component for country selector
+**Location**: `src/pages/MarketReport.tsx`
 
----
-
-## TASK 10: Full Audit Reporting
-
-### After Implementation, Deliver:
-1. Screenshot proof of each suite working
-2. Feature parity checklist
-3. Backend schema summary
-4. Permission model documentation
-5. Release readiness status
+**Fix**: Apply consistent `jj-layer-2` wrapper and champagne gradient styling to match other premium sections.
 
 ---
 
 ## Implementation Order
 
-### Phase 1: Tool Suites (Priority: HIGH)
-1. Create 5 master suite pages with tabs
-2. Update registry and navigation
-3. Remove internal tools from public AI
-
-### Phase 2: Mode & Dashboard (Priority: HIGH)
-1. Fix mode switcher visibility
-2. Complete dashboard sections
-3. Fix card styling
-
-### Phase 3: Education & Points (Priority: MEDIUM)
-1. Implement test system
-2. Verify points logic
-3. Add rewards catalog
-
-### Phase 4: Visits & Sync (Priority: MEDIUM)
-1. Polish developer visits page
-2. Verify sync counts
-3. Test queue persistence
-
-### Phase 5: UI Polish & Audit (Priority: LOW)
-1. Fix UI inconsistencies
-2. Generate screenshots
-3. Create documentation
+1. **Critical** - Fix Auth loading (unblocks user access)
+2. **Critical** - Fix Newsletter edge function calls
+3. **Critical** - Fix Support Ticket system
+4. **High** - Fix Search bar visual gap
+5. **Medium** - Add missing homepage dividers
+6. **Medium** - Optimize video loading
+7. **Medium** - Fix AI Home Finder centering
+8. **Medium** - Fix MarketReport page styling
+9. **Low** - Fine-tune other visual polish
 
 ---
 
-## Technical Summary
+## Technical Notes
 
-### New Routes to Add
-```typescript
-/toolkit/video-suite    → VideoSuite.tsx
-/toolkit/voice-suite    → VoiceSuite.tsx
-/toolkit/photo-suite    → PhotoSuite.tsx
-/toolkit/pdf-suite      → PDFSuite.tsx
-/toolkit/property-suite → PropertySuite.tsx
-/broker-dashboard/visits → DeveloperVisits.tsx
-/broker-dashboard/rewards → RewardsStore.tsx
-```
+### Edge Function Deployment
+The edge functions exist but may need redeployment. Will deploy:
+- `capture-lead`
+- `newsletter-subscribe`
+- `submit-support-ticket`
 
-### Files Count
-- **Create:** ~12 new files
-- **Modify:** ~15 existing files
-- **Delete:** 0 (preserve backward compatibility)
+### RESEND_API_KEY Configuration
+The `RESEND_API_KEY` secret is configured, but the email sender in `submit-support-ticket` uses `onboarding@resend.dev` which only works for test emails. This needs to be changed to the verified domain sender.
 
-### Design System
-- Background: Black (`bg-black`) or slate-900
-- Cards: Champagne gradient (`from-[#F5EBD7]`)
-- Borders: Gold (`border-gold/40`, `border-2`)
-- Icons: Transparent with gold borders
-- Accents: JBJ Gold (`#C8A766`, `#D4AF37`)
-
+### Auth Context Race Condition
+The auth loading issue may be caused by a race condition between `getSession()` and `onAuthStateChange`. Adding a timeout safety net prevents infinite loading states.
