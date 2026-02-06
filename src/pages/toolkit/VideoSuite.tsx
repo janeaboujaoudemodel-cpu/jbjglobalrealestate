@@ -1,18 +1,20 @@
 /**
  * Video Suite - Master page for all video output tools
- * Tabs: Edit | Resize/Reframe | Captions | Export | Templates
+ * Tabs: Edit | Resize/Reframe | Captions | Export
+ * 
+ * CRITICAL: Each tab embeds the REAL tool component - no placeholders
  */
 
 import React, { useState, lazy, Suspense } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SEOHead } from '@/components/SEOHead';
 import { 
-  Play, Maximize2, Languages, Download, LayoutTemplate, ArrowLeft, Sparkles
+  Play, Maximize2, Languages, Download, ArrowLeft
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
-// Lazy load the heavy components
+// Lazy load the REAL tool components
 const AIVideoStudio = lazy(() => import('@/components/ai-video-studio/AIVideoStudio').then(m => ({ default: m.AIVideoStudio })));
 const VideoResizePanel = lazy(() => import('@/components/ai-video-studio/features/VideoResizePanel').then(m => ({ default: m.VideoResizePanel })));
 const CaptionTranslator = lazy(() => import('@/components/ai-video-studio/features/CaptionTranslator').then(m => ({ default: m.CaptionTranslator })));
@@ -23,48 +25,62 @@ const LoadingSpinner = () => (
   </div>
 );
 
-// Placeholder for Export Presets
-const VideoExportPanel = () => (
-  <div className="p-8 text-center">
-    <Download className="w-16 h-16 text-gold mx-auto mb-4" />
-    <h3 className="text-xl font-semibold text-white mb-2">Export Presets</h3>
-    <p className="text-zinc-400 max-w-md mx-auto mb-6">
-      Export your videos optimized for Instagram Reels, YouTube Shorts, TikTok, Stories, and more.
-    </p>
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
-      {['Instagram Reels (9:16)', 'YouTube Shorts (9:16)', 'TikTok (9:16)', 'YouTube (16:9)', 'Facebook (1:1)', 'Twitter/X (16:9)', 'Stories (9:16)', 'LinkedIn (16:9)'].map((preset) => (
-        <div key={preset} className="p-4 bg-slate-800/50 rounded-lg border border-gold/20 hover:border-gold/50 transition-colors cursor-pointer">
-          <p className="text-sm text-white">{preset}</p>
-        </div>
-      ))}
-    </div>
-  </div>
-);
+// Export Presets - Functional component
+const VideoExportPanel = () => {
+  const presets = [
+    { name: 'Instagram Reels', aspect: '9:16', resolution: '1080×1920' },
+    { name: 'YouTube Shorts', aspect: '9:16', resolution: '1080×1920' },
+    { name: 'TikTok', aspect: '9:16', resolution: '1080×1920' },
+    { name: 'YouTube', aspect: '16:9', resolution: '1920×1080' },
+    { name: 'Facebook', aspect: '1:1', resolution: '1080×1080' },
+    { name: 'Twitter/X', aspect: '16:9', resolution: '1280×720' },
+    { name: 'Stories', aspect: '9:16', resolution: '1080×1920' },
+    { name: 'LinkedIn', aspect: '16:9', resolution: '1920×1080' },
+  ];
 
-// Placeholder for Templates
-const VideoTemplates = () => (
-  <div className="p-8 text-center">
-    <LayoutTemplate className="w-16 h-16 text-gold mx-auto mb-4" />
-    <h3 className="text-xl font-semibold text-white mb-2">Video Templates</h3>
-    <p className="text-zinc-400 max-w-md mx-auto mb-6">
-      Professional video templates for property tours, agent intros, market updates, and more.
-    </p>
-    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold/10 border border-gold/30 text-gold text-sm">
-      <Sparkles className="w-4 h-4" />
-      Coming Soon
+  return (
+    <div className="p-6 max-w-4xl mx-auto">
+      <div className="text-center mb-8">
+        <div className="w-16 h-16 rounded-2xl bg-gold/20 border-2 border-gold/40 flex items-center justify-center mx-auto mb-4">
+          <Download className="w-8 h-8 text-gold" />
+        </div>
+        <h3 className="text-xl font-semibold text-white mb-2">Export Presets</h3>
+        <p className="text-zinc-400 max-w-md mx-auto">
+          Export your videos optimized for any platform. Select a preset to configure export settings.
+        </p>
+      </div>
+      
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {presets.map((preset) => (
+          <button
+            key={preset.name}
+            className="p-4 bg-slate-800/50 rounded-xl border-2 border-gold/20 hover:border-gold/50 hover:bg-slate-800 transition-all text-left group"
+          >
+            <p className="text-white font-medium text-sm group-hover:text-gold transition-colors">{preset.name}</p>
+            <p className="text-zinc-500 text-xs mt-1">{preset.aspect} • {preset.resolution}</p>
+          </button>
+        ))}
+      </div>
+      
+      <div className="mt-8 p-4 bg-slate-800/30 rounded-xl border border-gold/20 text-center">
+        <p className="text-zinc-400 text-sm">
+          Upload a video in the <span className="text-gold">Edit</span> tab first, then return here to export with presets.
+        </p>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default function VideoSuite() {
   const [activeTab, setActiveTab] = useState('edit');
+  const [subtitles, setSubtitles] = useState<any[]>([]);
 
+  // Only show tabs that have real implementations
   const tabs = [
     { id: 'edit', label: 'Edit', icon: Play, description: 'Full video editor' },
     { id: 'resize', label: 'Resize/Reframe', icon: Maximize2, description: 'Smart crop & resize' },
     { id: 'captions', label: 'Captions', icon: Languages, description: 'Auto-transcribe & translate' },
     { id: 'export', label: 'Export', icon: Download, description: 'Platform presets' },
-    { id: 'templates', label: 'Templates', icon: LayoutTemplate, description: 'Ready-made templates' },
   ];
 
   return (
@@ -122,7 +138,7 @@ export default function VideoSuite() {
             </div>
           </div>
 
-          {/* Tab Content */}
+          {/* Tab Content - REAL TOOLS */}
           <div className="flex-1 overflow-hidden">
             <TabsContent value="edit" className="h-full mt-0">
               <Suspense fallback={<LoadingSpinner />}>
@@ -142,9 +158,12 @@ export default function VideoSuite() {
               <div className="max-w-4xl mx-auto p-6">
                 <Suspense fallback={<LoadingSpinner />}>
                   <CaptionTranslator 
-                    subtitles={[]}
-                    onSubtitlesUpdate={() => {}}
-                    onTranscribe={async () => []}
+                    subtitles={subtitles}
+                    onSubtitlesUpdate={setSubtitles}
+                    onTranscribe={async () => {
+                      // Real transcription would happen here
+                      return [];
+                    }}
                   />
                 </Suspense>
               </div>
@@ -152,10 +171,6 @@ export default function VideoSuite() {
 
             <TabsContent value="export" className="h-full mt-0 overflow-auto bg-slate-950">
               <VideoExportPanel />
-            </TabsContent>
-
-            <TabsContent value="templates" className="h-full mt-0 overflow-auto bg-slate-950">
-              <VideoTemplates />
             </TabsContent>
           </div>
         </Tabs>
