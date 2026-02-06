@@ -192,10 +192,10 @@ export const pageGuides: Record<string, GuideContent> = {
   
   'audit-logs': {
     title: 'Audit Logs',
-    description: 'Track all administrative actions and system events. See who did what and when for security and compliance.',
-    whatIs: 'Audit Logs record every significant action taken in the admin panel and system. This creates an unalterable record of who made changes, what was changed, and when - essential for security, debugging, and compliance.',
+    description: 'Track all actions and system events. See who did what and when for security and compliance.',
+    whatIs: 'Audit Logs record every significant action taken in the Owner dashboard and system. This creates an unalterable record of who made changes, what was changed, and when - essential for security, debugging, and compliance.',
     benefits: [
-      'Track all admin user actions',
+      'Track all user actions',
       'Detect unauthorized access attempts',
       'Debug issues by seeing recent changes',
       'Meet compliance requirements (GDPR, etc.)',

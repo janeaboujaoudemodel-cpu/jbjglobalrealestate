@@ -7,7 +7,7 @@ interface ZapierWebhookData {
   data: Record<string, any>;
 }
 
-// Get webhook URL from localStorage (set via Admin panel)
+// Get webhook URL from localStorage (set via Owner settings)
 const getZapierWebhookUrl = (): string | null => {
   try {
     const config = localStorage.getItem('jj_marketing_config');

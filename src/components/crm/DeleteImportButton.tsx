@@ -233,7 +233,7 @@ const DeleteImportButton = ({ userId, onSuccess, hasOwnerAccess }: DeleteImportB
           <DialogHeader>
             <DialogTitle className="text-foreground flex items-center gap-2">
               <Database className="h-5 w-5 text-red-400" />
-              Delete Import (Admin Only)
+              Delete Import (Owner Only)
             </DialogTitle>
             <DialogDescription className="text-muted-foreground">
               Permanently delete all leads from an import source or batch.
@@ -241,10 +241,10 @@ const DeleteImportButton = ({ userId, onSuccess, hasOwnerAccess }: DeleteImportB
             </DialogDescription>
           </DialogHeader>
 
-          {/* Admin Badge */}
+          {/* Owner Badge */}
           <div className="flex items-center gap-2 p-2 bg-amber-500/10 border border-amber-500/30 rounded-lg">
             <Shield className="h-4 w-4 text-amber-500" />
-            <span className="text-xs text-amber-400">Admin-only action: Hard delete with cascading removal</span>
+            <span className="text-xs text-amber-400">Owner-only action: Hard delete with cascading removal</span>
           </div>
 
           <Tabs value={deleteMode} onValueChange={(v) => setDeleteMode(v as "source" | "batch")}>

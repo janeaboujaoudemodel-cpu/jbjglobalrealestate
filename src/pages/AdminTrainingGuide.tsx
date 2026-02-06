@@ -73,7 +73,7 @@ const AdminTrainingGuide = () => {
             </Button>
             <div>
               <h1 className="text-white text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Admin Training Guide
+                Listing Training Guide
               </h1>
               <p className="text-zinc-500 text-sm">Complete property listing & verification guide</p>
             </div>
@@ -166,7 +166,7 @@ const AdminTrainingGuide = () => {
                 >
                   <div className="flex items-center gap-2 text-gold">
                     <Home className="w-5 h-5" />
-                    <span className="font-semibold">Listing Admin Panel</span>
+                    <span className="font-semibold">Listing Management</span>
                   </div>
                   <span className="text-zinc-400 text-sm text-left">Add and manage property listings</span>
                 </Button>
@@ -202,7 +202,7 @@ const AdminTrainingGuide = () => {
                       1
                     </div>
                     <div>
-                      <h4 className="text-white font-semibold mb-1">Go to Listing Admin Panel</h4>
+                      <h4 className="text-white font-semibold mb-1">Go to Listing Management</h4>
                       <p className="text-zinc-400 text-sm">
                         Navigate to <code className="bg-zinc-800 px-2 py-0.5 rounded">/listing-admin</code> and click 
                         "Add New Project" button.
@@ -607,7 +607,7 @@ const AdminTrainingGuide = () => {
                   <div>
                     <h3 className="text-white font-semibold mb-1">Ready to Start?</h3>
                     <p className="text-zinc-400 text-sm">
-                      Go to the Listing Admin panel to begin adding and managing property listings.
+                      Go to Listing Management to begin adding and managing property listings.
                     </p>
                   </div>
                   <Button

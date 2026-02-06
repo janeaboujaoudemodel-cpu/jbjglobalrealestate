@@ -298,7 +298,7 @@ const ListingAdminManager = () => {
                     size="sm"
                     onClick={() => window.open("/listing-admin", "_blank")}
                     className="text-zinc-400 hover:text-white"
-                    title="Open Listing Admin Panel"
+                    title="Open Listing Management"
                   >
                     <ExternalLink className="w-4 h-4" />
                   </Button>
