@@ -90,10 +90,24 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     }
   };
 
-  const handleMegaMenuLeave = () => {
+  const handleMegaMenuLeave = (e?: React.MouseEvent) => {
     // If a menu is pinned, keep it open; otherwise close after delay
     if (pinnedMenu) return;
+    
+    // Don't close if mouse moved to a Radix portal (dropdowns, popovers, dialogs)
+    if (e?.relatedTarget instanceof HTMLElement) {
+      const isMovingToPortal = e.relatedTarget.closest('[data-radix-portal]');
+      if (isMovingToPortal) return;
+    }
+    
+    // Also check if any Radix portal is currently open
+    const openRadixPortal = document.querySelector('[data-radix-portal]');
+    if (openRadixPortal) return;
+    
     megaMenuTimeoutRef.current = setTimeout(() => {
+      // Double-check portal isn't open when timeout fires
+      const portalStillOpen = document.querySelector('[data-radix-portal]');
+      if (portalStillOpen) return;
       setActiveMegaMenu(null);
     }, 450); // Increased timeout for more forgiving hover transitions
   };
@@ -1490,6 +1504,13 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   const target = e.target as HTMLElement;
                   if (target.closest('[data-radix-portal]')) return;
                   closeMegaMenu();
+                }}
+                onPointerDown={(e) => {
+                  // Prevent pointer events from closing when interacting with Radix portals
+                  const target = e.target as HTMLElement;
+                  if (target.closest('[data-radix-portal]')) {
+                    e.stopPropagation();
+                  }
                 }}
               />
               {/* Panel container - positioned on the right */}
