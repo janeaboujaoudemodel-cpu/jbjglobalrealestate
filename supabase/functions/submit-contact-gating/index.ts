@@ -1,0 +1,173 @@
+import { createClient } from "npm:@supabase/supabase-js@2";
+import { getCorsHeaders, handleCorsPreflightWithValidation } from "../_shared/auth-utils.ts";
+
+/**
+ * Secure Contact Gating Submission
+ * 
+ * This edge function handles contact form submissions with:
+ * 1. Server-side encryption of all PII
+ * 2. Rate limiting validation
+ * 3. Honeypot field detection
+ * 4. No plaintext PII storage
+ */
+
+interface ContactSubmission {
+  session_id: string;
+  full_name: string;
+  email: string;
+  phone: string;
+  nationality?: string;
+  location?: string;
+  preferred_language?: string;
+  service_interest?: string;
+  honeypot?: string; // Should be empty - bots fill this
+}
+
+// Simple XOR-based encryption (production should use proper crypto)
+function encryptPII(value: string, key: string): Uint8Array {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(value);
+  const keyBytes = encoder.encode(key);
+  const encrypted = new Uint8Array(data.length);
+  
+  for (let i = 0; i < data.length; i++) {
+    encrypted[i] = data[i] ^ keyBytes[i % keyBytes.length];
+  }
+  
+  return encrypted;
+}
+
+// Hash for de-duplication without exposing actual values
+async function hashValue(value: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(value.toLowerCase().trim());
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+Deno.serve(async (req) => {
+  // Handle CORS preflight
+  const corsResponse = handleCorsPreflightWithValidation(req);
+  if (corsResponse) return corsResponse;
+
+  const origin = req.headers.get('origin');
+  const headers = getCorsHeaders(origin);
+
+  if (req.method !== 'POST') {
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+      status: 405,
+      headers: { ...headers, 'Content-Type': 'application/json' },
+    });
+  }
+
+  try {
+    const body: ContactSubmission = await req.json();
+
+    // Honeypot check - bots will fill this field
+    if (body.honeypot && body.honeypot.trim() !== '') {
+      console.log('[Security] Honeypot triggered - blocking bot submission');
+      // Return success to not alert the bot, but don't store anything
+      return new Response(JSON.stringify({ success: true }), {
+        status: 200,
+        headers: { ...headers, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Validate required fields
+    if (!body.session_id || !body.full_name || !body.email || !body.phone) {
+      return new Response(JSON.stringify({ error: 'Missing required fields' }), {
+        status: 400,
+        headers: { ...headers, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(body.email)) {
+      return new Response(JSON.stringify({ error: 'Invalid email format' }), {
+        status: 400,
+        headers: { ...headers, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Get encryption key from environment
+    const encryptionKey = Deno.env.get('PII_ENCRYPTION_KEY') || 'jbj-secure-pii-key-2024';
+
+    // Create Supabase client with service role for secure storage
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Get client IP for rate limiting
+    const clientIP = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
+                     req.headers.get('x-real-ip') || 
+                     'unknown';
+
+    // Check rate limits (5 submissions per email in 60 seconds)
+    const emailHash = await hashValue(body.email);
+    const { count: emailCount } = await supabase
+      .from('contact_gating_submissions')
+      .select('*', { count: 'exact', head: true })
+      .eq('email_hash', emailHash)
+      .gte('created_at', new Date(Date.now() - 60000).toISOString());
+
+    if (emailCount && emailCount >= 5) {
+      console.log(`[Security] Rate limit exceeded for email hash: ${emailHash.substring(0, 8)}...`);
+      return new Response(JSON.stringify({ error: 'Too many submissions. Please wait.' }), {
+        status: 429,
+        headers: { ...headers, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Encrypt all PII
+    const encryptedName = encryptPII(body.full_name, encryptionKey);
+    const encryptedEmail = encryptPII(body.email, encryptionKey);
+    const encryptedPhone = encryptPII(body.phone, encryptionKey);
+
+    // Store with ONLY encrypted values - no plaintext PII
+    const { error: insertError } = await supabase
+      .from('contact_gating_submissions')
+      .insert({
+        session_id: body.session_id,
+        // Store ONLY encrypted versions
+        full_name_encrypted: encryptedName,
+        email_encrypted: encryptedEmail,
+        phone_encrypted: encryptedPhone,
+        // Non-PII fields can remain plaintext
+        nationality: body.nationality || null,
+        location: body.location || null,
+        preferred_language: body.preferred_language || null,
+        service_interest: body.service_interest || null,
+        email_verified: true,
+        // Store hashes for de-duplication/lookup
+        email_hash: emailHash,
+        // Legacy plaintext fields set to masked values
+        full_name: '[ENCRYPTED]',
+        email: '[ENCRYPTED]',
+        phone: '[ENCRYPTED]',
+      });
+
+    if (insertError) {
+      console.error('[Error] Failed to insert contact submission:', insertError);
+      return new Response(JSON.stringify({ error: 'Failed to save submission' }), {
+        status: 500,
+        headers: { ...headers, 'Content-Type': 'application/json' },
+      });
+    }
+
+    console.log(`[Success] Contact submission stored securely for session: ${body.session_id}`);
+
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+      headers: { ...headers, 'Content-Type': 'application/json' },
+    });
+
+  } catch (error) {
+    console.error('[Error] Contact submission failed:', error);
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+      status: 500,
+      headers: { ...headers, 'Content-Type': 'application/json' },
+    });
+  }
+});
