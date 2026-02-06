@@ -50,7 +50,7 @@ const ListingAdminGuard = ({ children }: ListingAdminGuardProps) => {
         const hasAdminRole = adminResult.data === true;
         const isListingAdmin = !!listingAdminResult.data;
 
-        // Owner role (via has_role) or listing admin access
+        // Owner role (via has_role) or listing manager access
         if (hasOwnerRole || hasAdminRole || isListingAdmin) {
           if (!cancelled) setStatus("allowed");
         } else {
