@@ -842,7 +842,7 @@ const VideoResizePack = () => {
                               <p className="text-white font-medium">
                                 {selectedFormats.length} format{selectedFormats.length !== 1 ? "s" : ""} selected
                               </p>
-                              <p className="text-sm text-white/50">Files auto-delete after 2 hours</p>
+                              <p className="text-sm text-white/50">Projects save automatically</p>
                             </div>
                             <Button 
                               size="lg"
@@ -1384,7 +1384,7 @@ const VideoResizePack = () => {
                                 Ready to export {reframeSettings.targetRatio} version
                               </p>
                               <p className="text-sm text-white/50">
-                                {detectedShots.length} shots with AI tracking • Files auto-delete after 2 hours
+                                {detectedShots.length} shots with AI tracking • Projects save automatically
                               </p>
                             </div>
                             <div className="flex gap-3">

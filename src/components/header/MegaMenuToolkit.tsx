@@ -116,7 +116,7 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
                   FREE TOOLS
                 </p>
                 <p className="text-white text-sm font-semibold mb-1">
-                  JBJ RealEstate Toolkit™
+                  JBJ Royal Tools Hub
                 </p>
                 <p className="text-white/70 text-xs">
                   9 professional tools for video, image, and PDF manipulation — completely free.

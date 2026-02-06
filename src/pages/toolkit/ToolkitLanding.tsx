@@ -174,7 +174,7 @@ export default function ToolkitLanding() {
           
           {/* Title */}
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-            JBJ RealEstate Toolkit™
+            JBJ Royal Tools Hub
             <span className="block text-gold mt-2">(Free)</span>
           </h1>
           
@@ -239,7 +239,7 @@ export default function ToolkitLanding() {
                   <li>• Max 5 minutes per video job</li>
                   <li>• Max 3 jobs per hour</li>
                   <li>• Max 500MB storage per session</li>
-                  <li>• Files auto-delete after 2 hours</li>
+                  <li>• Projects save automatically</li>
                 </ul>
               </div>
               
@@ -247,7 +247,7 @@ export default function ToolkitLanding() {
                 <h4 className="text-white font-medium mb-2">Your Privacy</h4>
                 <ul className="space-y-1">
                   <li>• Files processed securely</li>
-                  <li>• No permanent storage</li>
+                  <li>• Secure auto-save storage</li>
                   <li>• No data sold or shared</li>
                   <li>• GDPR compliant processing</li>
                 </ul>
