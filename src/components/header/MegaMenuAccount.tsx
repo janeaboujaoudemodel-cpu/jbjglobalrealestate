@@ -288,7 +288,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                             <Settings className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
                           </div>
                           <span className="text-black font-medium text-xs group-hover:text-gold transition-colors truncate">
-                            Admin Panel
+                            Owner Panel
                           </span>
                         </Link>
                       )}

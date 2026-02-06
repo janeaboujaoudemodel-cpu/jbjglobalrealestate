@@ -33,6 +33,7 @@ import { PodcastVisibilityProvider } from "@/contexts/PodcastVisibilityContext";
 import { ScrollToTopOnMount } from "@/components/ScrollToTop";
 import AdminBypass from "@/components/AdminBypass";
 import ListingAdminGuard from "@/components/ListingAdminGuard";
+import OwnerGuard from "@/components/OwnerGuard";
 import MainLayoutWrapper from "@/components/MainLayoutWrapper";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
 import { RedirectWithParams } from "@/components/RedirectWithParams";
@@ -330,16 +331,16 @@ const App = () => (
                 <Route path="/market-intelligence/reports/quarterly/:period" element={<QuarterlyMarketReview />} />
                 <Route path="/market-intelligence/reports/annual/:year" element={<AnnualMarketSummary />} />
                 <Route path="/market-intelligence/methodology" element={<Methodology />} />
-                <Route path="/internal/market-intelligence/dashboard" element={<InternalDashboard />} />
-                <Route path="/internal/market-intelligence/brokers" element={<BrokerIntelligence />} />
-                <Route path="/internal/market-intelligence/ai-insights" element={<AIInsights />} />
-                <Route path="/internal/market-intelligence/data-ops" element={<DataOperations />} />
+                <Route path="/internal/market-intelligence/dashboard" element={<OwnerGuard><InternalDashboard /></OwnerGuard>} />
+                <Route path="/internal/market-intelligence/brokers" element={<OwnerGuard><BrokerIntelligence /></OwnerGuard>} />
+                <Route path="/internal/market-intelligence/ai-insights" element={<OwnerGuard><AIInsights /></OwnerGuard>} />
+                <Route path="/internal/market-intelligence/data-ops" element={<OwnerGuard><DataOperations /></OwnerGuard>} />
                 <Route path="/insights" element={<MarketIntelligence />} />
                 <Route path="/client-portal" element={<ClientPortal />} />
                 <Route path="/favorites" element={<Favorites />} />
                 <Route path="/compare" element={<Compare />} />
-                <Route path="/admin" element={<Admin />} />
-                <Route path="/admin/leads" element={<AdminLeads />} />
+                <Route path="/admin" element={<OwnerGuard><Admin /></OwnerGuard>} />
+                <Route path="/admin/leads" element={<OwnerGuard><AdminLeads /></OwnerGuard>} />
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/cookies" element={<Cookies />} />
@@ -421,80 +422,82 @@ const App = () => (
                 <Route path="/referral" element={<Navigate to="/referral-onboarding" replace />} />
                 {/* Install page removed - PWA disabled */}
                 <Route path="/crm" element={(
-                  <RouteErrorBoundary routeName="CRM">
-                    <CRM />
-                  </RouteErrorBoundary>
+                  <OwnerGuard>
+                    <RouteErrorBoundary routeName="CRM">
+                      <CRM />
+                    </RouteErrorBoundary>
+                  </OwnerGuard>
                 )} />
-                <Route path="/crm/leads/:id" element={<CRMLeadDetail />} />
-                <Route path="/crm/tasks" element={<CRMTasks />} />
-                <Route path="/crm/calendar" element={<CRMCalendar />} />
-                <Route path="/crm/notes" element={<CRMNotes />} />
-                <Route path="/crm/reminders" element={<CRMReminders />} />
-                <Route path="/crm/employees" element={<CRMEmployees />} />
+                <Route path="/crm/leads/:id" element={<OwnerGuard><CRMLeadDetail /></OwnerGuard>} />
+                <Route path="/crm/tasks" element={<OwnerGuard><CRMTasks /></OwnerGuard>} />
+                <Route path="/crm/calendar" element={<OwnerGuard><CRMCalendar /></OwnerGuard>} />
+                <Route path="/crm/notes" element={<OwnerGuard><CRMNotes /></OwnerGuard>} />
+                <Route path="/crm/reminders" element={<OwnerGuard><CRMReminders /></OwnerGuard>} />
+                <Route path="/crm/employees" element={<OwnerGuard><CRMEmployees /></OwnerGuard>} />
                 
-                <Route path="/admin/crm" element={<AdminCRM />} />
+                <Route path="/admin/crm" element={<OwnerGuard><AdminCRM /></OwnerGuard>} />
                 <Route path="/join" element={<JoinApplication />} />
                 <Route path="/onboarding" element={<Onboarding />} />
                 <Route path="/onboarding/module/:moduleId" element={<OnboardingModule />} />
-                <Route path="/admin/onboarding" element={<AdminOnboarding />} />
-                <Route path="/admin/roles" element={<AdminRoleManagement />} />
+                <Route path="/admin/onboarding" element={<OwnerGuard><AdminOnboarding /></OwnerGuard>} />
+                <Route path="/admin/roles" element={<OwnerGuard><AdminRoleManagement /></OwnerGuard>} />
                 <Route path="/verify-certificate/:token" element={<VerifyCertificate />} />
                 <Route path="/map" element={<PropertyMap />} />
-                <Route path="/admin/developers" element={<AdminDevelopers />} />
-                <Route path="/admin/marketing-hub" element={<MarketingHub />} />
-                <Route path="/admin/reelly-import-test" element={<ListingAdminGuard><ReellyImportTest /></ListingAdminGuard>} />
+                <Route path="/admin/developers" element={<OwnerGuard><AdminDevelopers /></OwnerGuard>} />
+                <Route path="/admin/marketing-hub" element={<OwnerGuard><MarketingHub /></OwnerGuard>} />
+                <Route path="/admin/reelly-import-test" element={<OwnerGuard><ListingAdminGuard><ReellyImportTest /></ListingAdminGuard></OwnerGuard>} />
                 <Route path="/my-account" element={<BrokerAccount />} />
                 <Route path="/profile" element={<UserProfile />} />
                 {/* Alias: older links pointing to /account */}
                 <Route path="/account" element={<Navigate to="/my-account" replace />} />
-                <Route path="/hr-agent" element={<HRAgent />} />
+                <Route path="/hr-agent" element={<OwnerGuard><HRAgent /></OwnerGuard>} />
                 <Route path="/referral-onboarding" element={<ReferralOnboarding />} />
-                <Route path="/referral-admin" element={<ReferralAdmin />} />
+                <Route path="/referral-admin" element={<OwnerGuard><ReferralAdmin /></OwnerGuard>} />
                 <Route path="/redeem-referral" element={<RedeemReferral />} />
                 <Route path="/signature-studio" element={<Navigate to="/document-scanner" replace />} />
                 <Route path="/spreadsheet" element={<Spreadsheet />} />
                 <Route path="/documents" element={<Documents />} />
                 <Route path="/contract-forms" element={<ContractForms />} />
                 <Route path="/video-meeting" element={<VideoMeeting />} />
-                <Route path="/executive-assistant" element={<ExecutiveAssistant />} />
-                <Route path="/call-review" element={<CallReview />} />
-                <Route path="/video-builder" element={<VideoBuilder />} />
-                <Route path="/business-card-scanner" element={<BusinessCardScanner />} />
-                <Route path="/jbj-analytics" element={<JBJAnalyticsDashboard />} />
-                <Route path="/jbj-design-studio" element={<JBJDesignStudio />} />
-                <Route path="/design-studio" element={<JBJDesignStudio />} />
-                <Route path="/jbj-broker-admin" element={<JBJBrokerAdmin />} />
-                <Route path="/jbj-broker-dashboard" element={<JBJBrokerDashboard />} />
-                <Route path="/jbj-broker-messages" element={<JBJBrokerMessages />} />
-                <Route path="/jbj-broker-reports" element={<JBJBrokerReports />} />
-                <Route path="/founder-assistant" element={<FoundersAssistant />} />
-                <Route path="/broker-admin-assistant" element={<BrokerAdminAssistant />} />
-                <Route path="/listing-admin" element={<ListingAdminGuard><ListingAdmin /></ListingAdminGuard>} />
-                <Route path="/listing-admin/preview/:id" element={<ListingAdminGuard><PendingImportPreview /></ListingAdminGuard>} />
-                <Route path="/admin/training-guide" element={<AdminTrainingGuide />} />
+                <Route path="/executive-assistant" element={<OwnerGuard><ExecutiveAssistant /></OwnerGuard>} />
+                <Route path="/call-review" element={<OwnerGuard><CallReview /></OwnerGuard>} />
+                <Route path="/video-builder" element={<OwnerGuard><VideoBuilder /></OwnerGuard>} />
+                <Route path="/business-card-scanner" element={<OwnerGuard><BusinessCardScanner /></OwnerGuard>} />
+                <Route path="/jbj-analytics" element={<OwnerGuard><JBJAnalyticsDashboard /></OwnerGuard>} />
+                <Route path="/jbj-design-studio" element={<OwnerGuard><JBJDesignStudio /></OwnerGuard>} />
+                <Route path="/design-studio" element={<OwnerGuard><JBJDesignStudio /></OwnerGuard>} />
+                <Route path="/jbj-broker-admin" element={<OwnerGuard><JBJBrokerAdmin /></OwnerGuard>} />
+                <Route path="/jbj-broker-dashboard" element={<OwnerGuard><JBJBrokerDashboard /></OwnerGuard>} />
+                <Route path="/jbj-broker-messages" element={<OwnerGuard><JBJBrokerMessages /></OwnerGuard>} />
+                <Route path="/jbj-broker-reports" element={<OwnerGuard><JBJBrokerReports /></OwnerGuard>} />
+                <Route path="/founder-assistant" element={<OwnerGuard><FoundersAssistant /></OwnerGuard>} />
+                <Route path="/broker-admin-assistant" element={<OwnerGuard><BrokerAdminAssistant /></OwnerGuard>} />
+                <Route path="/listing-admin" element={<OwnerGuard><ListingAdminGuard><ListingAdmin /></ListingAdminGuard></OwnerGuard>} />
+                <Route path="/listing-admin/preview/:id" element={<OwnerGuard><ListingAdminGuard><PendingImportPreview /></ListingAdminGuard></OwnerGuard>} />
+                <Route path="/admin/training-guide" element={<OwnerGuard><AdminTrainingGuide /></OwnerGuard>} />
                 <Route path="/team" element={<MeetTheTeam />} />
                 <Route path="/meet-the-team" element={<Navigate to="/team" replace />} />
                 <Route path="/brokers" element={<OurBrokers />} />
-                <Route path="/employee-hub" element={<EmployeeHub />} />
-                <Route path="/employee-chat" element={<EmployeeChatPage />} />
-                <Route path="/governance/ai" element={<AIGovernance />} />
-                <Route path="/governance/institutional-lock" element={<InstitutionalLock />} />
-                <Route path="/governance/methodology" element={<GovernmentMethodology />} />
+                <Route path="/employee-hub" element={<OwnerGuard><EmployeeHub /></OwnerGuard>} />
+                <Route path="/employee-chat" element={<OwnerGuard><EmployeeChatPage /></OwnerGuard>} />
+                <Route path="/governance/ai" element={<OwnerGuard><AIGovernance /></OwnerGuard>} />
+                <Route path="/governance/institutional-lock" element={<OwnerGuard><InstitutionalLock /></OwnerGuard>} />
+                <Route path="/governance/methodology" element={<OwnerGuard><GovernmentMethodology /></OwnerGuard>} />
                 
-                {/* Communication & Productivity Tools */}
-                <Route path="/automations" element={<Automations />} />
-                <Route path="/company-comm" element={<CompanyComm />} />
-                <Route path="/email-client" element={<EmailClient />} />
-                <Route path="/team-chat" element={<TeamChat />} />
-                <Route path="/kanban" element={<KanbanBoard />} />
-                <Route path="/whiteboard" element={<Whiteboard />} />
-                <Route path="/mindmap" element={<MindMap />} />
-                <Route path="/presentations" element={<Presentations />} />
-                <Route path="/form-builder" element={<FormBuilder />} />
+                {/* Communication & Productivity Tools - Owner-only */}
+                <Route path="/automations" element={<OwnerGuard><Automations /></OwnerGuard>} />
+                <Route path="/company-comm" element={<OwnerGuard><CompanyComm /></OwnerGuard>} />
+                <Route path="/email-client" element={<OwnerGuard><EmailClient /></OwnerGuard>} />
+                <Route path="/team-chat" element={<OwnerGuard><TeamChat /></OwnerGuard>} />
+                <Route path="/kanban" element={<OwnerGuard><KanbanBoard /></OwnerGuard>} />
+                <Route path="/whiteboard" element={<OwnerGuard><Whiteboard /></OwnerGuard>} />
+                <Route path="/mindmap" element={<OwnerGuard><MindMap /></OwnerGuard>} />
+                <Route path="/presentations" element={<OwnerGuard><Presentations /></OwnerGuard>} />
+                <Route path="/form-builder" element={<OwnerGuard><FormBuilder /></OwnerGuard>} />
                 
-                {/* Creative Suite */}
-                <Route path="/studio" element={<Studio />} />
-                <Route path="/studio/editor/:projectId" element={<StudioEditor />} />
+                {/* Creative Suite - Owner-only */}
+                <Route path="/studio" element={<OwnerGuard><Studio /></OwnerGuard>} />
+                <Route path="/studio/editor/:projectId" element={<OwnerGuard><StudioEditor /></OwnerGuard>} />
                 
 {/* Toolkit Routes */}
                 <Route path="/toolkit" element={
@@ -580,14 +583,14 @@ const App = () => (
                   </Suspense>
                 } />
                 
-                {/* Admin & System Tools */}
-                <Route path="/customer-happiness" element={<CustomerHappiness />} />
+                {/* Owner-only System Tools */}
+                <Route path="/customer-happiness" element={<OwnerGuard><CustomerHappiness /></OwnerGuard>} />
                 <Route path="/sitemap" element={<Sitemap />} />
                 <Route path="/pricing" element={<Pricing />} />
-                <Route path="/security-console" element={<SecurityConsole />} />
-                <Route path="/it-department" element={<EmployeeManagementHub />} />
-                <Route path="/employee-management" element={<EmployeeManagementHub />} />
-                <Route path="/hr-dashboard" element={<HRDashboard />} />
+                <Route path="/security-console" element={<OwnerGuard><SecurityConsole /></OwnerGuard>} />
+                <Route path="/it-department" element={<OwnerGuard><EmployeeManagementHub /></OwnerGuard>} />
+                <Route path="/employee-management" element={<OwnerGuard><EmployeeManagementHub /></OwnerGuard>} />
+                <Route path="/hr-dashboard" element={<OwnerGuard><HRDashboard /></OwnerGuard>} />
                 <Route path="/hr-hub" element={<Navigate to="/employee-management" replace />} />
                 <Route path="/interior-design-studio" element={<Navigate to="/interior-design-ai" replace />} />
                 

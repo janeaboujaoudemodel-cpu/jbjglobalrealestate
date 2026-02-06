@@ -30,10 +30,20 @@ Terms like "Admin", "Staff", "Moderator", or "User" are **completely removed** f
 - UI only reflects permissions, never decides them
 - Never use "admin-only" — always say "Owner-only access"
 
-## Implementation Status (Complete)
+## Implementation Status (Complete - February 2026)
 
 - ✅ `isAdmin` removed from `AuthContext`
 - ✅ All components use `isOwner` from auth context
 - ✅ `OwnerGuard` component created for route protection
 - ✅ `/403` AccessDenied page created
-- ✅ Terminology updated across UI
+- ✅ All Owner-only routes wrapped with `OwnerGuard` in App.tsx
+- ✅ Terminology updated across UI ("Admin Panel" → "Owner Panel")
+- ✅ Translation strings updated (en.ts)
+
+## Protected Routes (via OwnerGuard)
+
+All `/admin/*`, `/crm/*`, `/internal/*`, `/jbj-*`, `/founder-assistant`, `/employee-hub`, 
+`/hr-dashboard`, `/it-department`, `/security-console`, and other management routes
+are now wrapped with `OwnerGuard` for UI-layer protection.
+
+Server-side enforcement via Edge Functions + RLS remains authoritative.
