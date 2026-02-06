@@ -72,6 +72,29 @@ Disallow: /*?*
 # Digital Business Card - Private/Unlisted (noindex)
 Disallow: /card
 
+# ========================================
+# HONEYPOT TRAP PATHS FOR MALICIOUS BOTS
+# These paths do not exist - any bot accessing them is malicious
+# ========================================
+Disallow: /api/v1/internal/
+Disallow: /api/v1/export/
+Disallow: /data/export/
+Disallow: /data/dump/
+Disallow: /database/backup/
+Disallow: /admin/export-all/
+Disallow: /system/data/
+Disallow: /internal/listings/
+Disallow: /private/api/
+Disallow: /hidden/data/
+Disallow: /.env
+Disallow: /.git
+Disallow: /wp-admin
+Disallow: /wp-content
+Disallow: /xmlrpc.php
+Disallow: /backup/
+Disallow: /sql/
+Disallow: /db/
+
 # Allow important resources
 Allow: /og-image.jpg
 Allow: /favicon.png

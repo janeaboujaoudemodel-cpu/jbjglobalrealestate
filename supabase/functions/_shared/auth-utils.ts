@@ -1,8 +1,60 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "npm:@supabase/supabase-js@2";
 
+// Allowed origins for CORS
+const ALLOWED_ORIGINS = [
+  'https://jbj.ae',
+  'https://www.jbj.ae',
+  'https://jbjglobalrealestate.lovable.app',
+  'https://id-preview--357981e3-cd4c-4c0d-ad5b-a1a379078f50.lovable.app',
+];
+
+const ALLOWED_ORIGIN_PATTERNS = [
+  /^https:\/\/.*\.lovable\.app$/,
+  /^https:\/\/.*\.lovable\.dev$/,
+  /^http:\/\/localhost:\d+$/,
+  /^http:\/\/127\.0\.0\.1:\d+$/,
+];
+
+/**
+ * Validates if the request origin is allowed
+ */
+export function isOriginAllowed(origin: string | null): boolean {
+  if (!origin) return false;
+  if (ALLOWED_ORIGINS.includes(origin)) return true;
+  for (const pattern of ALLOWED_ORIGIN_PATTERNS) {
+    if (pattern.test(origin)) return true;
+  }
+  return false;
+}
+
+/**
+ * Get CORS headers with validated origin
+ */
+export function getCorsHeaders(origin: string | null): Record<string, string> {
+  const baseHeaders = {
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  };
+
+  if (isOriginAllowed(origin)) {
+    return {
+      ...baseHeaders,
+      "Access-Control-Allow-Origin": origin!,
+      "Access-Control-Allow-Credentials": "true",
+    };
+  }
+
+  // Fallback for development
+  return {
+    ...baseHeaders,
+    "Access-Control-Allow-Origin": "*",
+  };
+}
+
+// Legacy corsHeaders for backward compatibility
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 export interface AuthResult {
@@ -83,19 +135,35 @@ export async function validateEmployeeAuth(req: Request): Promise<AuthResult> {
 /**
  * Returns a 401 Unauthorized response with CORS headers
  */
-export function unauthorizedResponse(message: string = "Unauthorized"): Response {
+export function unauthorizedResponse(message: string = "Unauthorized", origin?: string | null): Response {
+  const headers = origin ? getCorsHeaders(origin) : corsHeaders;
   return new Response(
     JSON.stringify({ error: message }),
-    { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    { status: 401, headers: { ...headers, "Content-Type": "application/json" } }
   );
 }
 
 /**
  * Returns a 403 Forbidden response with CORS headers
  */
-export function forbiddenResponse(message: string = "Access denied"): Response {
+export function forbiddenResponse(message: string = "Access denied", origin?: string | null): Response {
+  const headers = origin ? getCorsHeaders(origin) : corsHeaders;
   return new Response(
     JSON.stringify({ error: message }),
-    { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    { status: 403, headers: { ...headers, "Content-Type": "application/json" } }
   );
+}
+
+/**
+ * Handle CORS preflight request
+ */
+export function handleCorsPreflightWithValidation(req: Request): Response | null {
+  if (req.method === 'OPTIONS') {
+    const origin = req.headers.get('origin');
+    return new Response(null, {
+      status: 204,
+      headers: getCorsHeaders(origin),
+    });
+  }
+  return null;
 }
