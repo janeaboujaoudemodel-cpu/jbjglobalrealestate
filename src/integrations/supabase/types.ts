@@ -7185,14 +7185,17 @@ export type Database = {
           city: string | null
           country: string | null
           created_at: string
+          email_hash: string | null
           exact_location: Json | null
           form_name: string
           form_type: string
           id: string
           ip_address: string | null
+          ip_hash: string | null
           is_processed: boolean | null
           notes: string | null
           page_source: string | null
+          phone_hash: string | null
           processed_at: string | null
           processed_by: string | null
           session_id: string | null
@@ -7206,14 +7209,17 @@ export type Database = {
           city?: string | null
           country?: string | null
           created_at?: string
+          email_hash?: string | null
           exact_location?: Json | null
           form_name: string
           form_type: string
           id?: string
           ip_address?: string | null
+          ip_hash?: string | null
           is_processed?: boolean | null
           notes?: string | null
           page_source?: string | null
+          phone_hash?: string | null
           processed_at?: string | null
           processed_by?: string | null
           session_id?: string | null
@@ -7227,14 +7233,17 @@ export type Database = {
           city?: string | null
           country?: string | null
           created_at?: string
+          email_hash?: string | null
           exact_location?: Json | null
           form_name?: string
           form_type?: string
           id?: string
           ip_address?: string | null
+          ip_hash?: string | null
           is_processed?: boolean | null
           notes?: string | null
           page_source?: string | null
+          phone_hash?: string | null
           processed_at?: string | null
           processed_by?: string | null
           session_id?: string | null
@@ -19328,6 +19337,7 @@ export type Database = {
         }
         Returns: string
       }
+      anonymize_old_form_submissions: { Args: never; Returns: number }
       auto_assign_lead_to_available_broker: {
         Args: { p_lead_id: string }
         Returns: string
