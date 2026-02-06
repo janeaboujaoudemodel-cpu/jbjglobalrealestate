@@ -348,7 +348,7 @@ const Admin = () => {
             </div>
             <div>
               <h1 className="text-black text-2xl font-bold">
-                Admin Panel
+                Owner Panel
               </h1>
               <p className="text-gold text-sm font-medium">{user?.email}</p>
             </div>
