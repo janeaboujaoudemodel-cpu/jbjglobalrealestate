@@ -16328,7 +16328,7 @@ export type Database = {
           job_id: string | null
           original_name: string | null
           session_id: string
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           created_at?: string
@@ -16340,7 +16340,7 @@ export type Database = {
           job_id?: string | null
           original_name?: string | null
           session_id: string
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           created_at?: string
@@ -16352,7 +16352,7 @@ export type Database = {
           job_id?: string | null
           original_name?: string | null
           session_id?: string
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: [
           {
