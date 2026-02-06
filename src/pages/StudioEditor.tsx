@@ -79,13 +79,15 @@ interface StudioProject {
 
 interface StudioJob {
   id: string;
-  project_id: string;
+  user_id: string;
   job_type: string;
   status: string;
   progress: number;
   created_at: string;
-  completed_at?: string;
-  error_message?: string;
+  completed_at?: string | null;
+  error_message?: string | null;
+  progress_message?: string | null;
+  input_data?: Record<string, unknown> | null;
 }
 
 export default function StudioEditor() {
@@ -152,13 +154,19 @@ export default function StudioEditor() {
   const loadJobs = async () => {
     if (!projectId) return;
     try {
-      const { data } = await supabase
+      // NOTE: We intentionally cast to `any` here to avoid deep type instantiation issues
+      // from the generated DB types when selecting from large tables.
+      const { data, error } = await (supabase as any)
         .from("studio_jobs")
-        .select("*")
-        .eq("project_id", projectId)
+        .select(
+          "id,user_id,job_type,status,progress,created_at,completed_at,error_message,progress_message,input_data"
+        )
+        // studio_jobs no longer has a project_id column; linkage is stored in input_data.projectId
+        .contains("input_data", { projectId })
         .order("created_at", { ascending: false })
         .limit(20);
-      
+
+      if (error) throw error;
       setJobs((data || []) as StudioJob[]);
     } catch (err) {
       console.error("Failed to load jobs:", err);
