@@ -7,9 +7,12 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Allowed status values - strict whitelist
+const ALLOWED_STATUSES = new Set(["completed", "failed"]);
+
 interface CompleteJobRequest {
   jobId: string;
-  outputPath: string;
+  outputPath?: string;
   status: "completed" | "failed";
   errorMessage?: string;
 }
@@ -53,7 +56,7 @@ serve(async (req) => {
     const { jobId, outputPath, status, errorMessage } = body;
 
     // ========================================
-    // VALIDATE JOB OWNERSHIP
+    // INPUT VALIDATION
     // ========================================
     if (!jobId || typeof jobId !== 'string') {
       return new Response(
@@ -62,10 +65,52 @@ serve(async (req) => {
       );
     }
 
+    // Validate status is in allowed list
+    if (!ALLOWED_STATUSES.has(status)) {
+      return new Response(
+        JSON.stringify({ error: "Invalid status - must be 'completed' or 'failed'" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // ========================================
+    // VALIDATE OUTPUT PATH (for completed jobs)
+    // ========================================
+    if (status === "completed") {
+      if (!outputPath || typeof outputPath !== "string") {
+        return new Response(
+          JSON.stringify({ error: "Missing outputPath for completed job" }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      // SECURITY: Only allow expected prefix - must match the job ID
+      const expectedPrefix = `video-export/${jobId}/`;
+      if (!outputPath.startsWith(expectedPrefix)) {
+        console.warn(`[SECURITY] Invalid outputPath: ${outputPath} - expected prefix: ${expectedPrefix}`);
+        return new Response(
+          JSON.stringify({ error: "Invalid outputPath - must be in job's export folder" }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      // Prevent path traversal attacks
+      if (outputPath.includes("..") || outputPath.includes("\\") || outputPath.startsWith("/")) {
+        console.warn(`[SECURITY] Path traversal attempt: ${outputPath}`);
+        return new Response(
+          JSON.stringify({ error: "Invalid outputPath - path traversal not allowed" }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+    }
+
+    // ========================================
+    // VALIDATE JOB OWNERSHIP
+    // ========================================
     // Fetch the job to verify ownership
     const { data: job, error: fetchError } = await supabaseAuth
       .from("studio_jobs")
-      .select("id, user_id, input_data, status")
+      .select("id, user_id, input_data, status, progress")
       .eq("id", jobId)
       .single();
 
@@ -77,8 +122,9 @@ serve(async (req) => {
     }
 
     // Check ownership - job must belong to this user
-    // Check both user_id column and input_data.userId for compatibility
-    const jobUserId = job.user_id || (job.input_data as any)?.userId;
+    // Check both user_id column and input_data.userId for backward compatibility
+    const inputData = job.input_data as Record<string, unknown> | null;
+    const jobUserId = job.user_id || inputData?.userId;
     if (jobUserId !== userId) {
       console.warn(`[SECURITY] User ${userId} attempted to complete job ${jobId} owned by ${jobUserId}`);
       return new Response(
@@ -100,8 +146,9 @@ serve(async (req) => {
     // ========================================
     const updateData: Record<string, unknown> = {
       status: status,
-      progress: status === "completed" ? 100 : job.input_data?.progress || 0,
-      progress_message: status === "completed" ? "Processing complete" : errorMessage || "Failed",
+      // For completed: 100, for failed: keep last known progress or 0
+      progress: status === "completed" ? 100 : (job.progress ?? 0),
+      progress_message: status === "completed" ? "Processing complete" : (errorMessage || "Failed"),
       updated_at: new Date().toISOString(),
     };
 
@@ -129,13 +176,21 @@ serve(async (req) => {
       );
     }
 
-    // Generate public URL for the output if completed
-    let publicUrl: string | null = null;
+    // ========================================
+    // GENERATE SIGNED URL (not public - 1 hour TTL)
+    // ========================================
+    let signedUrl: string | null = null;
     if (status === "completed" && outputPath) {
-      const { data: urlData } = supabaseAuth.storage
+      const { data: signed, error: signErr } = await supabaseAuth.storage
         .from("video-processing-temp")
-        .getPublicUrl(outputPath);
-      publicUrl = urlData?.publicUrl || null;
+        .createSignedUrl(outputPath, 60 * 60); // 1 hour TTL
+
+      if (signErr) {
+        console.warn("Failed to create signed URL:", signErr);
+        // Non-fatal - job is still marked complete
+      } else {
+        signedUrl = signed?.signedUrl ?? null;
+      }
     }
 
     console.log(`[JOB] Job ${jobId} marked as ${status} by user ${userId}`);
@@ -145,7 +200,7 @@ serve(async (req) => {
         success: true,
         jobId,
         status,
-        outputUrl: publicUrl,
+        outputUrl: signedUrl,
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );

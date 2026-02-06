@@ -195,15 +195,17 @@ serve(async (req) => {
 
     // ========================================
     // CREATE JOB RECORD
+    // RLS requires user_id = auth.uid(), so we must set it explicitly
     // ========================================
     const { data: job, error: jobError } = await supabase
       .from("studio_jobs")
       .insert({
+        user_id: userId, // REQUIRED by RLS policy - must match auth.uid()
         job_type: "video_resize",
         status: "requires_client_processing", // HONEST STATUS - not completed
         input_data: {
           sourcePath,
-          userId, // Track which user owns this job
+          userId, // Also keep in input_data for backward compatibility
           targetWidth,
           targetHeight,
           targetAspect,
