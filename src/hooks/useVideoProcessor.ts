@@ -92,8 +92,15 @@ export function useVideoProcessor() {
       }]);
 
       try {
-        // Upload source file to storage
-        const fileName = `video-export/${jobId}/source${file.name.substring(file.name.lastIndexOf('.'))}`;
+        // Get current user for ownership path
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session?.user?.id) {
+          throw new Error('Authentication required for video processing');
+        }
+        const userId = session.user.id;
+
+        // Upload source file to storage - path includes userId for ownership
+        const fileName = `video-export/${userId}/${jobId}/source${file.name.substring(file.name.lastIndexOf('.'))}`;
         
         const { error: uploadError } = await supabase.storage
           .from('video-processing-temp')
@@ -113,9 +120,6 @@ export function useVideoProcessor() {
 
         const metadata = await ffmpegService.getVideoMetadata(file);
         const presetConfig = getPresetConfig(preset);
-
-        // Get auth session for the request
-        const { data: { session } } = await supabase.auth.getSession();
 
         const response = await supabase.functions.invoke('video-resize-process', {
           body: {
@@ -178,8 +182,8 @@ export function useVideoProcessor() {
             j.id === jobId ? { ...j, status: 'uploading', progress: 85 } : j
           ));
 
-          // Path MUST use backendJobId to match validation in studio-job-complete
-          const outputPath = `video-export/${backendJobId}/output_${preset}.mp4`;
+          // Path MUST include userId AND backendJobId for ownership validation
+          const outputPath = `video-export/${userId}/${backendJobId}/output_${preset}.mp4`;
           
           const { error: outputUploadError } = await supabase.storage
             .from('video-processing-temp')

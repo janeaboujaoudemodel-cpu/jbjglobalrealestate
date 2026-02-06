@@ -123,11 +123,11 @@ serve(async (req) => {
     // PATH OWNERSHIP VALIDATION (STRICT PREFIX MATCHING)
     // Bucket-relative paths only - bucket name is NOT part of sourcePath
     // ========================================
-    // Allowed patterns:
-    // 1. video-export/{jobId}/... - shared temp folder for processing jobs
-    // 2. temp/... - temporary uploads
-    // 3. video-uploads/{userId}/... - user's own uploads
-    // 4. video-processing/{userId}/... - user's own processing folder
+    // Allowed patterns (ALL user-scoped):
+    // 1. video-export/{userId}/{jobId}/... - user's export processing jobs
+    // 2. video-uploads/{userId}/... - user's own uploads
+    // 3. video-processing/{userId}/... - user's own processing folder
+    // 4. temp/{userId}/... - user's temp uploads
     
     // Sanitize path - remove any leading slashes and prevent path traversal
     const sanitizedPath = sourcePath.replace(/^\/+/, '').replace(/\.\./g, '');
@@ -139,13 +139,15 @@ serve(async (req) => {
     }
 
     // Check ownership with EXACT prefix matching (no substring matching!)
-    const isInTempFolder = sanitizedPath.startsWith("video-export/") || sanitizedPath.startsWith("temp/");
+    // All paths MUST include the userId for proper ownership
     const isOwnedByUser = 
+      sanitizedPath.startsWith(`video-export/${userId}/`) || 
       sanitizedPath.startsWith(`video-uploads/${userId}/`) || 
       sanitizedPath.startsWith(`video-processing/${userId}/`) ||
+      sanitizedPath.startsWith(`temp/${userId}/`) ||
       sanitizedPath.startsWith(`${userId}/`);
     
-    if (!isInTempFolder && !isOwnedByUser) {
+    if (!isOwnedByUser) {
       console.warn(`[SECURITY] User ${userId} attempted to access unauthorized path: ${sanitizedPath}`);
       return new Response(
         JSON.stringify({ error: "Access denied - Cannot process files you don't own" }),
