@@ -26,7 +26,7 @@
 - **Privileges**: `REVOKE ALL ON TABLE public.studio_projects FROM anon; REVOKE ALL FROM public;`
 - **user_id**: Set `NOT NULL` (table was empty, safe to alter)
 
-**Final relacl**: `{authenticated=arwdD/postgres,service_role=arwdD/postgres}` (anon/public removed)
+**Final relacl**: `{postgres=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}` (anon/public removed)
 
 ---
 
@@ -39,6 +39,8 @@
 - FORCE RLS: `relforcerowsecurity = true` ✅
 - user_id: `NOT NULL` constraint present ✅
 - Privileges: `anon` role excluded from `relacl` ✅
+
+**Final relacl**: `{postgres=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}` (anon/public removed)
 
 **Verification**: Edge function `rls-proof-anon-video-assets` confirmed 42501 permission denied for anon access and cross-user isolation.
 
@@ -57,7 +59,7 @@
 
 **Session-based access logic preserved**: `(user_id = auth.uid() OR session_id = current_setting('request.headers'::text)::json->>'x-session-id')`
 
-**Final relacl**: `{authenticated=arwdD/postgres,service_role=arwdD/postgres}` (anon/public removed)
+**Final relacl**: `{postgres=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}` (anon/public removed)
 
 ---
 
@@ -65,7 +67,7 @@
 
 | Table | Edge Function | Result |
 |-------|---------------|--------|
-| `studio_projects` | `rls-proof-anon-studio-projects` | ✅ All tests passed |
+| `studio_projects` | `security-proof-studio-projects` | ✅ All tests passed |
 | `video_studio_assets` | `rls-proof-anon-video-assets` | ✅ All tests passed |
 | `video_studio_jobs` | `rls-proof-anon-video-studio-jobs` | ✅ All tests passed |
 
@@ -104,7 +106,7 @@ The following RLS warnings are **intentional anonymous analytics** and remain un
 
 | Edge Function | Purpose |
 |---------------|---------|
-| `rls-proof-anon-studio-projects` | Proof: studio_projects isolation |
+| `security-proof-studio-projects` | Proof: studio_projects isolation |
 | `rls-proof-anon-video-assets` | Proof: video_studio_assets isolation |
 | `rls-proof-anon-video-studio-jobs` | Proof: video_studio_jobs isolation |
 
