@@ -55,11 +55,11 @@ export interface AIToolEntry {
  * - Working: 26
  * - Partial: 5
  * - 404: 3
- * - API Missing: 1
- * - Component Only: 9
+ * - API Missing: 0 (FIXED - ai-property-analyzer edge function created)
+ * - Component Only: 10
  * - Coming Soon: 1
  * 
- * Math verification: 26 + 5 + 3 + 1 + 9 + 1 = 45 ✓
+ * Math verification: 26 + 5 + 3 + 0 + 10 + 1 = 45 ✓
  */
 export const AI_TOOLS_INVENTORY_VERIFIED: AIToolEntry[] = [
   // ============================================
@@ -738,24 +738,24 @@ export const AI_TOOLS_INVENTORY_VERIFIED: AIToolEntry[] = [
     route: null,
     navPath: 'Component only (src/components/ai-tools/)',
     visibility: 'Public',
-    status: 'api_missing',
-    edgeFunction: null,
-    fixNeeded: 'Create edge function ai-property-analyzer + route + page',
+    status: 'component_only',
+    edgeFunction: 'ai-property-analyzer',
+    fixNeeded: 'Create route + page wrapper to expose component',
     proofPack: {
       routeFile: null,
-      routeSnippet: 'NO ROUTE - not in App.tsx',
+      routeSnippet: 'NO ROUTE - not in App.tsx (component only)',
       navFile: null,
       navSnippet: 'NO NAV LINK',
       apiWiringFile: 'src/components/ai-tools/AIPropertyAnalyzer.tsx',
       apiWiringSnippet: `await supabase.functions.invoke('ai-property-analyzer', { body: { area, propertyType, ... } })`,
-      statusJustification: 'Component exists with API call to ai-property-analyzer edge function, but function does NOT exist in supabase/functions/.',
+      statusJustification: 'Component exists with API wiring, edge function NOW EXISTS at supabase/functions/ai-property-analyzer/. Needs route wrapper.',
     },
     buildSpec: {
       usersPermissions: 'Public',
       uxFlow: ['1. Select area and property type', '2. Click Analyze', '3. AI fetches market data', '4. Results display with sections', '5. Download report'],
       backend: { edgeFunctionName: 'ai-property-analyzer', requestShape: '{ area, propertyType, compareWith[], measurementUnit, currency, language }', responseShape: '{ success, area, propertyType, fullAnalysis, sections, sources[], disclaimer }', envKeys: ['LOVABLE_API_KEY'] },
       loggingStorage: null,
-      acceptanceTests: ['1. Edge function created', '2. Route created', '3. Form works', '4. AI analyzes', '5. Results display'],
+      acceptanceTests: ['1. Edge function works', '2. Route created', '3. Form works', '4. AI analyzes', '5. Results display'],
       accentColor: 'TBD (await owner screenshots)',
     },
   },
@@ -1273,6 +1273,7 @@ export const VERIFIED_EDGE_FUNCTIONS = [
   'ai-mortgage-advisor',
   'ai-news-collector',
   'ai-outfit-changer',
+  'ai-property-analyzer', // NEW - created for AI Property Analyzer component
   'ai-signature-generator',
   'ai-travel-concierge',
   'auto-translate',
