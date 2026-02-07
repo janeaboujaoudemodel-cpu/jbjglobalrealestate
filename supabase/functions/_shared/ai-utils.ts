@@ -100,9 +100,10 @@ export function sanitizeContactInfo(text: string): string {
 /**
  * Sanitizes string for use in AI prompts (prevents injection)
  */
-export function sanitizeForPrompt(str: string | null | undefined, maxLength = 500): string {
-  if (!str) return "";
-  return str
+export function sanitizeForPrompt(str: string | number | null | undefined, maxLength = 500): string {
+  if (str === null || str === undefined) return "";
+  const strValue = String(str);
+  return strValue
     .replace(/[<>]/g, "")
     .replace(/```/g, "")
     .replace(/\${/g, "")
@@ -362,12 +363,27 @@ export interface AIResponse {
 
 /**
  * Calls Lovable AI Gateway with standardized error handling
+ * Supports both old signature (systemPrompt, userPrompt) and new (options object)
  */
-export async function callLovableAI(options: AIRequestOptions): Promise<AIResponse> {
+export async function callLovableAI(
+  systemPromptOrOptions: string | AIRequestOptions,
+  userPrompt?: string
+): Promise<string> {
   const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
   if (!LOVABLE_API_KEY) {
-    return { success: false, error: "AI service not configured", status: 500 };
+    throw new Error("AI service not configured");
+  }
+
+  // Handle both old and new signatures
+  let options: AIRequestOptions;
+  if (typeof systemPromptOrOptions === "string") {
+    options = {
+      systemPrompt: systemPromptOrOptions,
+      userPrompt: userPrompt || "",
+    };
+  } else {
+    options = systemPromptOrOptions;
   }
 
   try {
@@ -391,41 +407,28 @@ export async function callLovableAI(options: AIRequestOptions): Promise<AIRespon
 
     if (!response.ok) {
       if (response.status === 429) {
-        return {
-          success: false,
-          error: "Rate limits exceeded, please try again later.",
-          status: 429,
-        };
+        throw new Error("Rate limits exceeded, please try again later.");
       }
       if (response.status === 402) {
-        return {
-          success: false,
-          error: "AI service temporarily unavailable.",
-          status: 402,
-        };
+        throw new Error("AI service temporarily unavailable.");
       }
 
       const errorText = await response.text();
       console.error("AI Gateway error:", response.status, errorText);
-      return { success: false, error: "AI gateway error", status: response.status };
-    }
-
-    if (options.stream) {
-      // Return the response body for streaming
-      return { success: true, content: "", status: 200 };
+      throw new Error("AI gateway error");
     }
 
     const data = await response.json();
     const content = data.choices?.[0]?.message?.content;
 
     if (!content) {
-      return { success: false, error: "No response generated", status: 500 };
+      throw new Error("No response generated");
     }
 
-    return { success: true, content: sanitizeContactInfo(content), status: 200 };
+    return sanitizeContactInfo(content);
   } catch (err) {
     console.error("AI call error:", err);
-    return { success: false, error: "Failed to process AI request", status: 500 };
+    throw err;
   }
 }
 
@@ -437,12 +440,13 @@ export interface AIUsageRecord {
   functionName: string;
   userId?: string;
   clientIp: string;
-  model: string;
+  model?: string;
   promptTokens?: number;
   completionTokens?: number;
   success: boolean;
   errorType?: string;
-  responseTimeMs: number;
+  responseTimeMs?: number;
+  processingTimeMs?: number; // alias for responseTimeMs
 }
 
 export async function trackAIUsage(
@@ -454,12 +458,12 @@ export async function trackAIUsage(
       function_name: usage.functionName,
       user_id: usage.userId,
       client_ip_hash: hashIP(usage.clientIp),
-      model: usage.model,
+      model: usage.model || "google/gemini-2.5-flash",
       prompt_tokens: usage.promptTokens,
       completion_tokens: usage.completionTokens,
       success: usage.success,
       error_type: usage.errorType,
-      response_time_ms: usage.responseTimeMs,
+      response_time_ms: usage.responseTimeMs || usage.processingTimeMs,
       created_at: new Date().toISOString(),
     });
   } catch (err) {

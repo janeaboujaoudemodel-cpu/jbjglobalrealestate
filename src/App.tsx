@@ -103,6 +103,16 @@ import AIPropertyAnalyzerPage from "./pages/AIPropertyAnalyzerPage";
 import AILeadQualificationPage from "./pages/AILeadQualificationPage";
 import AIPricePredictorPage from "./pages/AIPricePredictorPage";
 import AINeighborhoodInsightsPage from "./pages/AINeighborhoodInsightsPage";
+import AIROICalculatorPage from "./pages/AIROICalculatorPage";
+import AICompetitorAnalysisPage from "./pages/AICompetitorAnalysisPage";
+import AIMarketReportPage from "./pages/AIMarketReportPage";
+import AIObjectionHandlerPage from "./pages/AIObjectionHandlerPage";
+import AIFollowupSchedulerPage from "./pages/AIFollowupSchedulerPage";
+import AIMeetingSummarizerPage from "./pages/AIMeetingSummarizerPage";
+import AITranslationHubPage from "./pages/AITranslationHubPage";
+import AIVideoTourScriptPage from "./pages/AIVideoTourScriptPage";
+import AIContractReviewerPage from "./pages/AIContractReviewerPage";
+import AIDocumentGeneratorPage from "./pages/AIDocumentGeneratorPage";
 import MyAIHistory from "./pages/MyAIHistory";
 import IntellectualProperty from "./pages/IntellectualProperty";
 import Architecture from "./pages/services/Architecture";
@@ -427,6 +437,17 @@ const App = () => (
                 <Route path="/ai-lead-qualification" element={<BrokerGuard><AILeadQualificationPage /></BrokerGuard>} />
                 <Route path="/ai-price-predictor" element={<AIPricePredictorPage />} />
                 <Route path="/ai-neighborhood-insights" element={<AINeighborhoodInsightsPage />} />
+                <Route path="/ai-roi-calculator" element={<AIROICalculatorPage />} />
+                <Route path="/ai-competitor-analysis" element={<AICompetitorAnalysisPage />} />
+                <Route path="/ai-market-report" element={<AIMarketReportPage />} />
+                <Route path="/ai-objection-handler" element={<BrokerGuard><AIObjectionHandlerPage /></BrokerGuard>} />
+                <Route path="/ai-followup-scheduler" element={<BrokerGuard><AIFollowupSchedulerPage /></BrokerGuard>} />
+                <Route path="/ai-follow-up-scheduler" element={<Navigate to="/ai-followup-scheduler" replace />} />
+                <Route path="/ai-meeting-summarizer" element={<BrokerGuard><AIMeetingSummarizerPage /></BrokerGuard>} />
+                <Route path="/ai-translation-hub" element={<AITranslationHubPage />} />
+                <Route path="/ai-video-tour-script" element={<AIVideoTourScriptPage />} />
+                <Route path="/ai-contract-reviewer" element={<BrokerGuard><AIContractReviewerPage /></BrokerGuard>} />
+                <Route path="/ai-document-generator" element={<AIDocumentGeneratorPage />} />
                 <Route path="/document-scanner" element={<ScanSignDocuments />} />
                 <Route path="/scan-sign" element={<Navigate to="/document-scanner" replace />} />
                 <Route path="/scan-sign-documents" element={<Navigate to="/document-scanner" replace />} />
