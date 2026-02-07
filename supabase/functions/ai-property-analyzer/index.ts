@@ -96,21 +96,16 @@ Structure your analysis with these sections:
 Provide specific numbers, percentages, and data points wherever possible.`;
 
     // Call Lovable AI Gateway using shared utility
-    const aiResponse = await callLovableAI({
-      model: "google/gemini-2.5-flash",
-      systemPrompt,
-      userPrompt,
-    });
-
-    if (!aiResponse.success) {
-      const status = aiResponse.status || 500;
+    let fullAnalysis: string;
+    try {
+      fullAnalysis = await callLovableAI(systemPrompt, userPrompt);
+    } catch (aiError) {
+      console.error("AI error:", aiError);
       return new Response(
-        JSON.stringify({ success: false, error: aiResponse.error }),
-        { status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ success: false, error: "AI processing failed" }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
-
-    const fullAnalysis = aiResponse.content || "";
 
     // Parse sections from the analysis
     const sections = {

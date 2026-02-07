@@ -149,34 +149,29 @@ SCORING CRITERIA:
 Include all category scores, demographic analysis, hidden gems, and future development projects.`;
 
     // 5. Call AI
-    const aiResponse = await callLovableAI({
-      model: "google/gemini-2.5-flash",
-      systemPrompt,
-      userPrompt,
-      temperature: 0.5,
-    });
-
+    let aiContent: string;
     const processingTimeMs = Date.now() - startTime;
-
-    if (!aiResponse.success) {
+    
+    try {
+      aiContent = await callLovableAI(systemPrompt, userPrompt);
+    } catch (aiError) {
       await trackAIUsage(supabaseAdmin, {
         functionName: "ai-neighborhood-insights",
         userId,
         clientIp,
         model: "google/gemini-2.5-flash",
         success: false,
-        errorType: aiResponse.error,
+        errorType: aiError instanceof Error ? aiError.message : "AI error",
         responseTimeMs: processingTimeMs,
       });
-      return errorResponse(corsHeaders, aiResponse.error || "AI processing failed", aiResponse.status || 500);
+      return errorResponse(corsHeaders, "AI processing failed", 500);
     }
 
     // 6. Parse response
-    const content = aiResponse.content || "";
     let insightsData;
 
     try {
-      const jsonMatch = content.match(/```json\n?([\s\S]*?)\n?```/) || content.match(/\{[\s\S]*\}/);
+      const jsonMatch = aiContent.match(/```json\n?([\s\S]*?)\n?```/) || aiContent.match(/\{[\s\S]*\}/);
       const jsonStr = jsonMatch ? (jsonMatch[1] || jsonMatch[0]) : content;
       insightsData = JSON.parse(jsonStr);
     } catch (parseError) {
@@ -199,7 +194,7 @@ Include all category scores, demographic analysis, hidden gems, and future devel
           shopping: "Multiple shopping centers",
           transport: "Good connectivity",
         },
-        insights: sanitizeContactInfo(content),
+        insights: sanitizeContactInfo(aiContent),
       };
     }
 
