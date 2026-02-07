@@ -54,11 +54,12 @@ export interface AIToolEntry {
  * Total: 45 tools
  * - Working: 26
  * - Partial: 5
- * - 404: 4
+ * - 404: 3
+ * - API Missing: 1
  * - Component Only: 9
  * - Coming Soon: 1
  * 
- * Math verification: 26 + 5 + 4 + 9 + 1 = 45 ✓
+ * Math verification: 26 + 5 + 3 + 1 + 9 + 1 = 45 ✓
  */
 export const AI_TOOLS_INVENTORY_VERIFIED: AIToolEntry[] = [
   // ============================================
@@ -734,27 +735,27 @@ export const AI_TOOLS_INVENTORY_VERIFIED: AIToolEntry[] = [
   // ============================================
   {
     name: 'AI Property Analyzer',
-    route: '/ai-property-analyzer',
-    navPath: 'Footer, AI Hub (link)',
+    route: null,
+    navPath: 'Component only (src/components/ai-tools/)',
     visibility: 'Public',
-    status: '404',
-    edgeFunction: 'smart-ai-analysis',
-    fixNeeded: 'Create route + page',
+    status: 'api_missing',
+    edgeFunction: null,
+    fixNeeded: 'Create edge function ai-property-analyzer + route + page',
     proofPack: {
       routeFile: null,
       routeSnippet: 'NO ROUTE - not in App.tsx',
-      navFile: 'src/components/footer/FooterLinks.tsx',
-      navSnippet: 'Link exists in Footer',
-      apiWiringFile: null,
-      apiWiringSnippet: 'NO API WIRING',
-      statusJustification: 'Nav link exists but route not registered in App.tsx.',
+      navFile: null,
+      navSnippet: 'NO NAV LINK',
+      apiWiringFile: 'src/components/ai-tools/AIPropertyAnalyzer.tsx',
+      apiWiringSnippet: `await supabase.functions.invoke('ai-property-analyzer', { body: { area, propertyType, ... } })`,
+      statusJustification: 'Component exists with API call to ai-property-analyzer edge function, but function does NOT exist in supabase/functions/.',
     },
     buildSpec: {
       usersPermissions: 'Public',
-      uxFlow: ['1. User clicks link', '2. Property analyzer page loads', '3. Enter property details', '4. AI analyzes', '5. Results display'],
-      backend: { edgeFunctionName: 'smart-ai-analysis', requestShape: '{ property }', responseShape: '{ analysis }', envKeys: ['LOVABLE_API_KEY'] },
+      uxFlow: ['1. Select area and property type', '2. Click Analyze', '3. AI fetches market data', '4. Results display with sections', '5. Download report'],
+      backend: { edgeFunctionName: 'ai-property-analyzer', requestShape: '{ area, propertyType, compareWith[], measurementUnit, currency, language }', responseShape: '{ success, area, propertyType, fullAnalysis, sections, sources[], disclaimer }', envKeys: ['LOVABLE_API_KEY'] },
       loggingStorage: null,
-      acceptanceTests: ['1. Route exists', '2. Page loads', '3. Form works', '4. AI analyzes', '5. Results display'],
+      acceptanceTests: ['1. Edge function created', '2. Route created', '3. Form works', '4. AI analyzes', '5. Results display'],
       accentColor: 'TBD (await owner screenshots)',
     },
   },
@@ -1247,17 +1248,18 @@ export const computeAIToolsStats = () => {
   const working = AI_TOOLS_INVENTORY_VERIFIED.filter(t => t.status === 'working').length;
   const partial = AI_TOOLS_INVENTORY_VERIFIED.filter(t => t.status === 'partial').length;
   const missing = AI_TOOLS_INVENTORY_VERIFIED.filter(t => t.status === '404').length;
+  const apiMissing = AI_TOOLS_INVENTORY_VERIFIED.filter(t => t.status === 'api_missing').length;
   const componentOnly = AI_TOOLS_INVENTORY_VERIFIED.filter(t => t.status === 'component_only').length;
   const comingSoon = AI_TOOLS_INVENTORY_VERIFIED.filter(t => t.status === 'coming_soon').length;
   const withEdgeFunction = AI_TOOLS_INVENTORY_VERIFIED.filter(t => t.edgeFunction).length;
 
   // Verification: counts must sum to total
-  const sum = working + partial + missing + componentOnly + comingSoon;
+  const sum = working + partial + missing + apiMissing + componentOnly + comingSoon;
   if (sum !== total) {
     console.error(`AI Tools count mismatch: ${sum} ≠ ${total}`);
   }
 
-  return { total, working, partial, missing, componentOnly, comingSoon, withEdgeFunction, verified: sum === total };
+  return { total, working, partial, missing, apiMissing, componentOnly, comingSoon, withEdgeFunction, verified: sum === total };
 };
 
 // Edge functions verified in supabase/functions/
