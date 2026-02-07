@@ -4,7 +4,7 @@
  * Enhanced with: sqm/sqft toggle, currency selector (AED/USD/EUR), full-width
  */
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, Home, Key, MapPin, Building2, Bed, DollarSign, Ruler } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAreas } from "@/hooks/useAreas";
 import { cn } from "@/lib/utils";
 
 const propertyTypes = [
@@ -111,17 +112,6 @@ const areaRanges = {
   ],
 };
 
-const topAreas = [
-  { value: "any", label: "All Areas" },
-  { value: "downtown-dubai", label: "Downtown Dubai" },
-  { value: "dubai-marina", label: "Dubai Marina" },
-  { value: "palm-jumeirah", label: "Palm Jumeirah" },
-  { value: "business-bay", label: "Business Bay" },
-  { value: "jbr", label: "JBR" },
-  { value: "dubai-hills", label: "Dubai Hills" },
-  { value: "emirates-hills", label: "Emirates Hills" },
-];
-
 interface SearchModuleProps {
   variant?: 'hero' | 'compact';
   className?: string;
@@ -139,6 +129,20 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
   
   const navigate = useNavigate();
   const { t } = useLanguage();
+  
+  // Fetch areas from database (top 20 by property count)
+  const { data: dbAreas } = useAreas({ limit: 20 });
+  
+  // Build area options from database areas
+  const areaOptions = useMemo(() => {
+    const options = [{ value: "any", label: "All Areas" }];
+    if (dbAreas && dbAreas.length > 0) {
+      dbAreas.forEach((a) => {
+        options.push({ value: a.slug, label: a.name });
+      });
+    }
+    return options;
+  }, [dbAreas]);
 
   const handleSearch = () => {
     const params = new URLSearchParams();
@@ -277,8 +281,8 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
               <SelectTrigger className={cn("h-12 text-base", isHero ? 'bg-white/10 border-white/20 text-white' : 'bg-white border-gold/30')}>
                 <SelectValue placeholder="Select area" />
               </SelectTrigger>
-              <SelectContent>
-                {topAreas.map((item) => (
+              <SelectContent className="max-h-64 overflow-y-auto">
+                {areaOptions.map((item) => (
                   <SelectItem key={item.value} value={item.value}>
                     {item.label}
                   </SelectItem>
