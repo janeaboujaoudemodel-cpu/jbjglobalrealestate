@@ -36,31 +36,31 @@ const MortgageCalculatorPage = () => {
 
   return (
     <section className="min-h-screen bg-black">
-      {/* Hero Section - Dark with gold accents */}
-      <div className="relative py-16 md:py-24">
+      {/* Hero Section - Champagne Layer */}
+      <div className="relative py-16 md:py-24 bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
         {/* Background effects */}
         <div className="absolute inset-0">
-          <div className="absolute top-0 right-1/4 w-96 h-96 bg-gold/10 rounded-full blur-[120px] pointer-events-none" />
-          <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-gold/20 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-gold/10 rounded-full blur-[120px] pointer-events-none" />
         </div>
         
         <div className="container mx-auto px-4 relative z-10">
-          <Link to="/" className="inline-flex items-center gap-2 text-white/70 hover:text-gold mb-8 transition-colors group">
+          <Link to="/" className="inline-flex items-center gap-2 text-black/70 hover:text-gold mb-8 transition-colors group">
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Back to Home
           </Link>
           
           <div className="max-w-3xl mb-12">
-            <span className="inline-block px-4 py-1.5 bg-gradient-to-r from-[#F5EBD7]/20 to-[#D4C4A8]/20 border border-gold/40 rounded-full text-gold text-sm font-medium mb-6">
+            <span className="inline-block px-4 py-1.5 bg-black/10 border border-gold/40 rounded-full text-black/80 text-sm font-medium mb-6">
               AI-Powered Financial Planning
             </span>
             <h1 
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
+              className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              Dubai <span className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] bg-clip-text text-transparent">{t('mortgage.title')}</span>
+              Dubai <span className="text-gold">{t('mortgage.title')}</span>
             </h1>
-            <p className="text-white/80 text-lg md:text-xl leading-relaxed">
+            <p className="text-black/70 text-lg md:text-xl leading-relaxed">
               {t('mortgage.subtitle')}. Plan your property investment with our advanced mortgage calculator. Get accurate estimates for monthly payments, total interest, and find the perfect financing option for your UAE property purchase.
             </p>
           </div>
