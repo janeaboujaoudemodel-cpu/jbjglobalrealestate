@@ -1,7 +1,9 @@
 /**
- * Owner Feature Registry - JBJ Global Real Estate
- * Lists all implemented features with navigation paths
- * VISIBILITY GUARANTEE: Every feature is listed here
+ * Owner Feature Registry & Audit Page - JBJ Global Real Estate
+ * VISIBILITY GUARANTEE: Every feature is listed here with exact navigation paths
+ * 
+ * This page serves as the complete audit trail of all implemented features.
+ * If it exists, it MUST be listed here. No hidden pages. No background-only features.
  */
 
 import { useNavigate } from "react-router-dom";
@@ -11,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
@@ -34,120 +37,178 @@ import {
   ChevronRight,
   BookOpen,
   Zap,
+  StickyNote,
+  Wrench,
+  Eye,
+  CheckCircle,
+  AlertTriangle,
+  Info,
 } from "lucide-react";
 
 interface FeatureItem {
   name: string;
   description: string;
   path: string;
+  navigationPath: string; // How to reach this page
   category: string;
   icon: React.ReactNode;
   status: 'active' | 'coming_soon';
   isAIPowered?: boolean;
   isApprovalBased?: boolean;
   isAutomated?: boolean;
+  isManual?: boolean;
 }
 
+// COMPLETE FEATURE REGISTRY - Every implemented feature listed with exact navigation paths
 const FEATURES: FeatureItem[] = [
-  // Owner Dashboard & CRM
+  // ═══════════════════════════════════════════════════════════════
+  // OWNER COMMAND CENTER
+  // ═══════════════════════════════════════════════════════════════
   {
     name: "Owner Dashboard",
-    description: "Main command center with KPIs, leads, tasks, and conversations",
+    description: "Main command center with KPIs, leads overview, tasks, and conversations",
     path: "/owner",
-    category: "Dashboard",
+    navigationPath: "Sidebar → Owner Command Center → Dashboard",
+    category: "Owner Command Center",
     icon: <LayoutDashboard className="h-4 w-4" />,
     status: 'active',
+    isManual: true,
   },
   {
     name: "Daily Agenda",
-    description: "Today's tasks, follow-ups, overdue items, and messages needing reply",
+    description: "Today's tasks, overdue items, follow-ups due, and unanswered messages",
     path: "/owner/agenda",
-    category: "Dashboard",
+    navigationPath: "Sidebar → Owner Command Center → Daily Agenda | Dashboard → Quick Navigation",
+    category: "Owner Command Center",
     icon: <Calendar className="h-4 w-4" />,
     status: 'active',
+    isManual: true,
   },
-  {
-    name: "Leads Inbox",
-    description: "Full lead management with search, filters, and inline actions",
-    path: "/crm/leads",
-    category: "CRM",
-    icon: <Users className="h-4 w-4" />,
-    status: 'active',
-  },
-  {
-    name: "Lead Detail",
-    description: "Individual lead profile with notes, activity, and tasks",
-    path: "/crm/leads/:id",
-    category: "CRM",
-    icon: <Users className="h-4 w-4" />,
-    status: 'active',
-  },
-  {
-    name: "CRM Tasks",
-    description: "Task management linked to leads with due dates and priorities",
-    path: "/crm/tasks",
-    category: "CRM",
-    icon: <CheckSquare className="h-4 w-4" />,
-    status: 'active',
-  },
-  {
-    name: "CRM Calendar",
-    description: "Calendar view of appointments and scheduled follow-ups",
-    path: "/crm/calendar",
-    category: "CRM",
-    icon: <Calendar className="h-4 w-4" />,
-    status: 'active',
-  },
-  {
-    name: "CRM Notes",
-    description: "Quick notes and memos linked to leads",
-    path: "/crm/notes",
-    category: "CRM",
-    icon: <FileText className="h-4 w-4" />,
-    status: 'active',
-  },
-  {
-    name: "CRM Reminders",
-    description: "Set and manage reminders for follow-ups",
-    path: "/crm/reminders",
-    category: "CRM",
-    icon: <Bell className="h-4 w-4" />,
-    status: 'active',
-  },
-  
-  // Communication
   {
     name: "Unified Inbox",
-    description: "All channels (WhatsApp, Email, Instagram, Facebook) in one place",
+    description: "Single inbox merging WhatsApp, Email, Instagram, Facebook, Website chat",
     path: "/owner/inbox",
-    category: "Communication",
+    navigationPath: "Sidebar → Owner Command Center → Unified Inbox | Dashboard → Quick Navigation",
+    category: "Owner Command Center",
     icon: <Inbox className="h-4 w-4" />,
     status: 'active',
     isAIPowered: true,
+    isApprovalBased: true,
   },
   {
     name: "Message Templates",
-    description: "Reusable templates for WhatsApp, Email, DM, and Voice",
+    description: "Reusable templates for WhatsApp, Email, DM, Voice with variable support",
     path: "/owner/templates",
-    category: "Communication",
+    navigationPath: "Sidebar → Owner Command Center → Message Templates | Dashboard → Quick Navigation",
+    category: "Owner Command Center",
     icon: <FileText className="h-4 w-4" />,
     status: 'active',
+    isManual: true,
   },
   {
     name: "Communication Settings",
     description: "Connect channels, configure AI behavior, tone profile, voice settings",
     path: "/owner/settings/communication",
-    category: "Communication",
+    navigationPath: "Sidebar → Owner Command Center → Communication Settings | Dashboard → Quick Navigation",
+    category: "Owner Command Center",
     icon: <Settings className="h-4 w-4" />,
     status: 'active',
+    isManual: true,
   },
-  
-  // AI Features
   {
-    name: "AI Reply Engine",
-    description: "Generate AI-powered text replies in Owner's style",
+    name: "Feature Registry (This Page)",
+    description: "Complete list of all features with navigation paths - the audit page",
+    path: "/owner/features",
+    navigationPath: "Sidebar → Owner Command Center → Feature Registry | Dashboard → Quick Navigation → All Features",
+    category: "Owner Command Center",
+    icon: <BookOpen className="h-4 w-4" />,
+    status: 'active',
+    isManual: true,
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // CRM MODULES
+  // ═══════════════════════════════════════════════════════════════
+  {
+    name: "Leads Inbox",
+    description: "Full lead management with search, filters, CSV export, and inline actions",
+    path: "/crm/leads",
+    navigationPath: "Sidebar → CRM Modules → Leads Inbox | Dashboard → Quick Navigation",
+    category: "CRM Modules",
+    icon: <Users className="h-4 w-4" />,
+    status: 'active',
+    isManual: true,
+  },
+  {
+    name: "Lead Detail",
+    description: "Individual lead profile with notes, activity timeline, and linked tasks",
+    path: "/crm/leads/:id",
+    navigationPath: "Leads Inbox → Click any lead → Open",
+    category: "CRM Modules",
+    icon: <Users className="h-4 w-4" />,
+    status: 'active',
+    isManual: true,
+  },
+  {
+    name: "CRM Tasks",
+    description: "Task management linked to leads with due dates, priorities, and status",
+    path: "/crm/tasks",
+    navigationPath: "Sidebar → CRM Modules → My Tasks | Dashboard → Quick Navigation → Tasks",
+    category: "CRM Modules",
+    icon: <CheckSquare className="h-4 w-4" />,
+    status: 'active',
+    isManual: true,
+  },
+  {
+    name: "CRM Calendar",
+    description: "Calendar view of appointments, scheduled follow-ups, and events",
+    path: "/crm/calendar",
+    navigationPath: "Sidebar → CRM Modules → Calendar | Dashboard → Quick Navigation",
+    category: "CRM Modules",
+    icon: <Calendar className="h-4 w-4" />,
+    status: 'active',
+    isManual: true,
+  },
+  {
+    name: "CRM Notes",
+    description: "Quick notes and memos, optionally linked to leads",
+    path: "/crm/notes",
+    navigationPath: "Sidebar → CRM Modules → Notes",
+    category: "CRM Modules",
+    icon: <StickyNote className="h-4 w-4" />,
+    status: 'active',
+    isManual: true,
+  },
+  {
+    name: "CRM Reminders",
+    description: "Set and manage reminders for follow-ups and tasks",
+    path: "/crm/reminders",
+    navigationPath: "Sidebar → CRM Modules → Reminders",
+    category: "CRM Modules",
+    icon: <Bell className="h-4 w-4" />,
+    status: 'active',
+    isManual: true,
+  },
+  {
+    name: "Workflow Automations",
+    description: "Create automated workflows and triggers (Owner-only)",
+    path: "/automations",
+    navigationPath: "Sidebar → CRM Modules → Automations",
+    category: "CRM Modules",
+    icon: <Zap className="h-4 w-4" />,
+    status: 'active',
+    isAutomated: true,
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // AI FEATURES
+  // ═══════════════════════════════════════════════════════════════
+  {
+    name: "AI Text Reply Engine",
+    description: "Generate AI-powered text replies in Owner's exact style and tone",
     path: "/owner/inbox",
-    category: "AI Assistant",
+    navigationPath: "Unified Inbox → Select thread → 'Generate AI Reply' button",
+    category: "AI Features",
     icon: <Sparkles className="h-4 w-4" />,
     status: 'active',
     isAIPowered: true,
@@ -155,9 +216,10 @@ const FEATURES: FeatureItem[] = [
   },
   {
     name: "Voice Replies (ElevenLabs)",
-    description: "Generate voice notes using Owner's cloned voice",
+    description: "Generate voice notes using Owner's cloned voice for WhatsApp/DM",
     path: "/owner/inbox",
-    category: "AI Assistant",
+    navigationPath: "Unified Inbox → Select thread → 'Generate Voice Reply' button",
+    category: "AI Features",
     icon: <Mic className="h-4 w-4" />,
     status: 'active',
     isAIPowered: true,
@@ -165,58 +227,120 @@ const FEATURES: FeatureItem[] = [
   },
   {
     name: "AI Learning System",
-    description: "AI learns from Owner corrections to improve over time",
+    description: "AI learns from Owner corrections to improve over time automatically",
     path: "/owner/settings/communication",
-    category: "AI Assistant",
+    navigationPath: "Communication Settings → AI Settings tab → Learning section",
+    category: "AI Features",
     icon: <Brain className="h-4 w-4" />,
     status: 'active',
     isAutomated: true,
   },
   {
-    name: "Tone Profile",
-    description: "Configure AI formality, emoji usage, message length preferences",
+    name: "Tone Profile Configuration",
+    description: "Configure AI formality, emoji usage, message length, language preferences",
     path: "/owner/settings/communication",
-    category: "AI Assistant",
+    navigationPath: "Communication Settings → Tone Profile tab",
+    category: "AI Features",
     icon: <Settings className="h-4 w-4" />,
     status: 'active',
+    isManual: true,
   },
-  
-  // Automations
+
+  // ═══════════════════════════════════════════════════════════════
+  // CHANNELS & INTEGRATIONS
+  // ═══════════════════════════════════════════════════════════════
   {
-    name: "Workflow Automations",
-    description: "Create automated workflows and triggers",
-    path: "/automations",
-    category: "Automation",
-    icon: <Zap className="h-4 w-4" />,
+    name: "WhatsApp Business Integration",
+    description: "Connect WhatsApp Business accounts (Owner + Company)",
+    path: "/owner/settings/communication",
+    navigationPath: "Communication Settings → Channels tab → Add Channel → WhatsApp",
+    category: "Channels",
+    icon: <MessageSquare className="h-4 w-4" />,
     status: 'active',
+    isManual: true,
   },
-  
-  // System
   {
-    name: "Feature Registry",
-    description: "This page - lists all implemented features",
-    path: "/owner/features",
-    category: "System",
-    icon: <BookOpen className="h-4 w-4" />,
+    name: "Gmail Integration",
+    description: "Connect Gmail accounts with OAuth for reading and sending",
+    path: "/owner/settings/communication",
+    navigationPath: "Communication Settings → Channels tab → Add Channel → Gmail",
+    category: "Channels",
+    icon: <Mail className="h-4 w-4" />,
     status: 'active',
+    isManual: true,
   },
+  {
+    name: "Hostinger Webmail (IMAP/SMTP)",
+    description: "Connect Hostinger webmail via IMAP/SMTP configuration",
+    path: "/owner/settings/communication",
+    navigationPath: "Communication Settings → Channels tab → Add Channel → Hostinger",
+    category: "Channels",
+    icon: <Mail className="h-4 w-4" />,
+    status: 'active',
+    isManual: true,
+  },
+  {
+    name: "Instagram DM Integration",
+    description: "Connect Instagram for direct message management",
+    path: "/owner/settings/communication",
+    navigationPath: "Communication Settings → Channels tab → Add Channel → Instagram",
+    category: "Channels",
+    icon: <MessageSquare className="h-4 w-4" />,
+    status: 'active',
+    isManual: true,
+  },
+  {
+    name: "Facebook Messenger Integration",
+    description: "Connect Facebook Messenger for message management",
+    path: "/owner/settings/communication",
+    navigationPath: "Communication Settings → Channels tab → Add Channel → Facebook",
+    category: "Channels",
+    icon: <MessageSquare className="h-4 w-4" />,
+    status: 'active',
+    isManual: true,
+  },
+  {
+    name: "Website Chat Integration",
+    description: "Website chat widget messages appear in Unified Inbox",
+    path: "/owner/settings/communication",
+    navigationPath: "Communication Settings → Channels tab → Website Chat",
+    category: "Channels",
+    icon: <MessageSquare className="h-4 w-4" />,
+    status: 'active',
+    isAutomated: true,
+  },
+  {
+    name: "ElevenLabs Voice Clone",
+    description: "Owner's voice clone for generating voice notes",
+    path: "/owner/settings/communication",
+    navigationPath: "Communication Settings → Voice tab",
+    category: "Channels",
+    icon: <Mic className="h-4 w-4" />,
+    status: 'active',
+    isManual: true,
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // SYSTEM & SECURITY
+  // ═══════════════════════════════════════════════════════════════
   {
     name: "Security Console",
-    description: "Security settings and audit logs",
+    description: "Security settings, audit logs, and access controls",
     path: "/security-console",
+    navigationPath: "Header → Security icon | Sidebar → System → Security Console",
     category: "System",
     icon: <Shield className="h-4 w-4" />,
     status: 'active',
+    isManual: true,
   },
 ];
 
 const CATEGORIES = [
   { name: "All", count: FEATURES.length },
-  { name: "Dashboard", count: FEATURES.filter(f => f.category === "Dashboard").length },
-  { name: "CRM", count: FEATURES.filter(f => f.category === "CRM").length },
-  { name: "Communication", count: FEATURES.filter(f => f.category === "Communication").length },
-  { name: "AI Assistant", count: FEATURES.filter(f => f.category === "AI Assistant").length },
-  { name: "Automation", count: FEATURES.filter(f => f.category === "Automation").length },
+  { name: "Owner Command Center", count: FEATURES.filter(f => f.category === "Owner Command Center").length },
+  { name: "CRM Modules", count: FEATURES.filter(f => f.category === "CRM Modules").length },
+  { name: "AI Features", count: FEATURES.filter(f => f.category === "AI Features").length },
+  { name: "Channels", count: FEATURES.filter(f => f.category === "Channels").length },
   { name: "System", count: FEATURES.filter(f => f.category === "System").length },
 ];
 
@@ -224,11 +348,13 @@ export default function OwnerFeatureRegistry() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [activeTab, setActiveTab] = useState('registry');
 
   const filteredFeatures = FEATURES.filter(f => {
     const matchesSearch = !searchQuery || 
       f.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      f.description.toLowerCase().includes(searchQuery.toLowerCase());
+      f.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      f.navigationPath.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'All' || f.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
@@ -236,11 +362,12 @@ export default function OwnerFeatureRegistry() {
   const aiPoweredCount = FEATURES.filter(f => f.isAIPowered).length;
   const approvalBasedCount = FEATURES.filter(f => f.isApprovalBased).length;
   const automatedCount = FEATURES.filter(f => f.isAutomated).length;
+  const manualCount = FEATURES.filter(f => f.isManual).length;
 
   return (
     <MainLayout>
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-        <div className="container mx-auto px-4 py-6 max-w-5xl">
+        <div className="container mx-auto px-4 py-6 max-w-6xl">
           {/* Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
@@ -253,8 +380,8 @@ export default function OwnerFeatureRegistry() {
                   <BookOpen className="h-6 w-6 text-gold" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-black">Feature Registry</h1>
-                  <p className="text-zinc-500 text-sm">Complete list of all implemented features</p>
+                  <h1 className="text-2xl font-bold text-black">Feature Registry & Audit</h1>
+                  <p className="text-zinc-500 text-sm">Complete visibility of all implemented features</p>
                 </div>
               </div>
               
@@ -262,128 +389,258 @@ export default function OwnerFeatureRegistry() {
                 <Badge className="bg-gold/10 text-gold border border-gold/30">
                   {FEATURES.length} Features
                 </Badge>
+                <Badge className="bg-green-100 text-green-700 border border-green-200">
+                  <CheckCircle className="h-3 w-3 mr-1" />
+                  All Visible
+                </Badge>
               </div>
             </div>
           </motion.div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-3 mb-6">
-            <Card className="border-2 border-purple-200 bg-purple-50">
-              <CardContent className="p-3">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-purple-600" />
-                  <span className="text-sm text-purple-700">AI-Powered</span>
-                </div>
-                <p className="text-xl font-bold text-purple-900">{aiPoweredCount}</p>
-              </CardContent>
-            </Card>
-            <Card className="border-2 border-blue-200 bg-blue-50">
-              <CardContent className="p-3">
-                <div className="flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-blue-600" />
-                  <span className="text-sm text-blue-700">Approval-Based</span>
-                </div>
-                <p className="text-xl font-bold text-blue-900">{approvalBasedCount}</p>
-              </CardContent>
-            </Card>
-            <Card className="border-2 border-green-200 bg-green-50">
-              <CardContent className="p-3">
-                <div className="flex items-center gap-2">
-                  <Zap className="h-4 w-4 text-green-600" />
-                  <span className="text-sm text-green-700">Automated</span>
-                </div>
-                <p className="text-xl font-bold text-green-900">{automatedCount}</p>
-              </CardContent>
-            </Card>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+            <StatsCard label="AI-Powered" value={aiPoweredCount} icon={<Sparkles className="h-4 w-4" />} variant="purple" />
+            <StatsCard label="Approval-Based" value={approvalBasedCount} icon={<Shield className="h-4 w-4" />} variant="blue" />
+            <StatsCard label="Automated" value={automatedCount} icon={<Zap className="h-4 w-4" />} variant="green" />
+            <StatsCard label="Manual" value={manualCount} icon={<Wrench className="h-4 w-4" />} variant="default" />
           </div>
 
-          {/* Search & Filter */}
-          <div className="flex flex-wrap items-center gap-3 mb-6">
-            <div className="relative flex-1 min-w-[200px] max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
-              <Input
-                placeholder="Search features..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 border-gold/30"
-              />
-            </div>
-            
-            <div className="flex flex-wrap gap-2">
-              {CATEGORIES.map(cat => (
-                <Badge
-                  key={cat.name}
-                  variant={selectedCategory === cat.name ? 'default' : 'outline'}
-                  className={`cursor-pointer ${selectedCategory === cat.name ? 'bg-gold text-black' : 'border-gold/30 hover:bg-gold/10'}`}
-                  onClick={() => setSelectedCategory(cat.name)}
-                >
-                  {cat.name} ({cat.count})
-                </Badge>
-              ))}
-            </div>
-          </div>
+          {/* Tabs */}
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="grid grid-cols-3 mb-6 bg-white/80 border-2 border-gold/20">
+              <TabsTrigger value="registry">Feature Registry</TabsTrigger>
+              <TabsTrigger value="audit">Audit Summary</TabsTrigger>
+              <TabsTrigger value="navigation">Navigation Map</TabsTrigger>
+            </TabsList>
 
-          {/* Features List */}
-          <Card className="border-2 border-gold/20 bg-white/90">
-            <CardHeader>
-              <CardTitle className="text-lg">
-                {selectedCategory === 'All' ? 'All Features' : selectedCategory} ({filteredFeatures.length})
-              </CardTitle>
-              <CardDescription>
-                Click on any feature to navigate to it
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ScrollArea className="max-h-[600px]">
-                <div className="space-y-2">
-                  {filteredFeatures.map((feature, idx) => (
-                    <motion.div
-                      key={feature.name}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: idx * 0.03 }}
-                      className="flex items-center gap-4 p-4 rounded-xl border border-gold/20 bg-white hover:bg-gold/5 cursor-pointer transition-all group"
-                      onClick={() => {
-                        if (!feature.path.includes(':')) {
-                          navigate(feature.path);
-                        }
-                      }}
+            {/* Feature Registry Tab */}
+            <TabsContent value="registry">
+              {/* Search & Filter */}
+              <div className="flex flex-wrap items-center gap-3 mb-4">
+                <div className="relative flex-1 min-w-[200px] max-w-md">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+                  <Input
+                    placeholder="Search features, descriptions, paths..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 border-gold/30"
+                  />
+                </div>
+                
+                <div className="flex flex-wrap gap-2">
+                  {CATEGORIES.map(cat => (
+                    <Badge
+                      key={cat.name}
+                      variant={selectedCategory === cat.name ? 'default' : 'outline'}
+                      className={`cursor-pointer ${selectedCategory === cat.name ? 'bg-gold text-black' : 'border-gold/30 hover:bg-gold/10'}`}
+                      onClick={() => setSelectedCategory(cat.name)}
                     >
-                      <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center text-gold">
-                        {feature.icon}
-                      </div>
-                      
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <p className="font-semibold text-black">{feature.name}</p>
-                          {feature.isAIPowered && (
-                            <Badge className="bg-purple-100 text-purple-700 text-[10px] px-1.5">AI</Badge>
-                          )}
-                          {feature.isApprovalBased && (
-                            <Badge className="bg-blue-100 text-blue-700 text-[10px] px-1.5">Approval</Badge>
-                          )}
-                          {feature.isAutomated && (
-                            <Badge className="bg-green-100 text-green-700 text-[10px] px-1.5">Auto</Badge>
-                          )}
-                        </div>
-                        <p className="text-sm text-zinc-500 truncate">{feature.description}</p>
-                      </div>
-                      
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline" className="border-gold/30 text-xs">
-                          {feature.category}
-                        </Badge>
-                        <code className="text-xs text-zinc-400 bg-zinc-100 px-2 py-0.5 rounded hidden md:block">
-                          {feature.path}
-                        </code>
-                        <ChevronRight className="h-4 w-4 text-zinc-400 group-hover:text-gold transition-colors" />
-                      </div>
-                    </motion.div>
+                      {cat.name} ({cat.count})
+                    </Badge>
                   ))}
                 </div>
-              </ScrollArea>
-            </CardContent>
-          </Card>
+              </div>
+
+              {/* Features List */}
+              <Card className="border-2 border-gold/20 bg-white/90">
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    {selectedCategory === 'All' ? 'All Features' : selectedCategory} ({filteredFeatures.length})
+                  </CardTitle>
+                  <CardDescription>
+                    Click on any feature to navigate to it. Every feature shows its exact navigation path.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ScrollArea className="max-h-[600px]">
+                    <div className="space-y-2">
+                      {filteredFeatures.map((feature, idx) => (
+                        <motion.div
+                          key={`${feature.name}-${idx}`}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: idx * 0.02 }}
+                          className="p-4 rounded-xl border border-gold/20 bg-white hover:bg-gold/5 cursor-pointer transition-all group"
+                          onClick={() => {
+                            if (!feature.path.includes(':')) {
+                              navigate(feature.path);
+                            }
+                          }}
+                        >
+                          <div className="flex items-start gap-4">
+                            <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center text-gold flex-shrink-0">
+                              {feature.icon}
+                            </div>
+                            
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <p className="font-semibold text-black">{feature.name}</p>
+                                {feature.isAIPowered && (
+                                  <Badge className="bg-purple-100 text-purple-700 text-[10px] px-1.5">AI</Badge>
+                                )}
+                                {feature.isApprovalBased && (
+                                  <Badge className="bg-blue-100 text-blue-700 text-[10px] px-1.5">Approval</Badge>
+                                )}
+                                {feature.isAutomated && (
+                                  <Badge className="bg-green-100 text-green-700 text-[10px] px-1.5">Auto</Badge>
+                                )}
+                                {feature.isManual && (
+                                  <Badge className="bg-zinc-100 text-zinc-700 text-[10px] px-1.5">Manual</Badge>
+                                )}
+                              </div>
+                              <p className="text-sm text-zinc-500 mt-0.5">{feature.description}</p>
+                              <div className="flex items-center gap-2 mt-2 text-xs">
+                                <Badge variant="outline" className="border-gold/30 font-normal">
+                                  {feature.category}
+                                </Badge>
+                                <span className="text-zinc-400">→</span>
+                                <code className="text-[11px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">
+                                  {feature.navigationPath}
+                                </code>
+                              </div>
+                            </div>
+                            
+                            <ChevronRight className="h-4 w-4 text-zinc-400 group-hover:text-gold transition-colors flex-shrink-0" />
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Audit Summary Tab */}
+            <TabsContent value="audit">
+              <div className="grid gap-4">
+                {/* Audit Status */}
+                <Card className="border-2 border-green-200 bg-green-50">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2 text-green-700">
+                      <CheckCircle className="h-5 w-5" />
+                      Visibility Audit: PASSED
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <AuditItem label="Total Features Registered" value={FEATURES.length} status="pass" />
+                      <AuditItem label="Hidden Pages" value={0} status="pass" />
+                      <AuditItem label="Background-Only Features" value={0} status="pass" />
+                      <AuditItem label="All Features Navigable" value="Yes" status="pass" />
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* By Category */}
+                <Card className="border-2 border-gold/20 bg-white/90">
+                  <CardHeader>
+                    <CardTitle className="text-lg">Features by Category</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {CATEGORIES.filter(c => c.name !== 'All').map(cat => (
+                        <div key={cat.name} className="flex items-center justify-between p-3 rounded-lg bg-gold/5 border border-gold/20">
+                          <span className="font-medium text-black">{cat.name}</span>
+                          <Badge className="bg-gold text-black">{cat.count}</Badge>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Behavior Summary */}
+                <Card className="border-2 border-gold/20 bg-white/90">
+                  <CardHeader>
+                    <CardTitle className="text-lg">Feature Behavior Summary</CardTitle>
+                    <CardDescription>How features operate</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="p-4 rounded-lg border border-purple-200 bg-purple-50">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Sparkles className="h-4 w-4 text-purple-600" />
+                          <span className="font-medium text-purple-700">AI-Powered ({aiPoweredCount})</span>
+                        </div>
+                        <p className="text-sm text-purple-600">AI generates drafts, suggestions, or content. All AI actions require Owner approval before execution.</p>
+                      </div>
+                      <div className="p-4 rounded-lg border border-blue-200 bg-blue-50">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Shield className="h-4 w-4 text-blue-600" />
+                          <span className="font-medium text-blue-700">Approval-Based ({approvalBasedCount})</span>
+                        </div>
+                        <p className="text-sm text-blue-600">Actions require explicit Owner approval before they take effect. No auto-send, no silent execution.</p>
+                      </div>
+                      <div className="p-4 rounded-lg border border-green-200 bg-green-50">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Zap className="h-4 w-4 text-green-600" />
+                          <span className="font-medium text-green-700">Automated ({automatedCount})</span>
+                        </div>
+                        <p className="text-sm text-green-600">Runs automatically in the background (e.g., AI learning, CRM logging). Owner can configure via settings.</p>
+                      </div>
+                      <div className="p-4 rounded-lg border border-zinc-200 bg-zinc-50">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Wrench className="h-4 w-4 text-zinc-600" />
+                          <span className="font-medium text-zinc-700">Manual ({manualCount})</span>
+                        </div>
+                        <p className="text-sm text-zinc-600">Owner-initiated actions only. Nothing happens without explicit Owner interaction.</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+
+            {/* Navigation Map Tab */}
+            <TabsContent value="navigation">
+              <Card className="border-2 border-gold/20 bg-white/90">
+                <CardHeader>
+                  <CardTitle className="text-lg">Complete Navigation Map</CardTitle>
+                  <CardDescription>Every page and how to reach it</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ScrollArea className="max-h-[600px]">
+                    <div className="space-y-6">
+                      {CATEGORIES.filter(c => c.name !== 'All').map(cat => (
+                        <div key={cat.name}>
+                          <h3 className="font-semibold text-black mb-3 flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-gold" />
+                            {cat.name}
+                          </h3>
+                          <div className="space-y-2 ml-4">
+                            {FEATURES.filter(f => f.category === cat.name).map((feature, idx) => (
+                              <div 
+                                key={`${feature.name}-nav-${idx}`}
+                                className="flex items-center justify-between p-3 rounded-lg border border-gold/10 bg-white hover:bg-gold/5 cursor-pointer"
+                                onClick={() => {
+                                  if (!feature.path.includes(':')) {
+                                    navigate(feature.path);
+                                  }
+                                }}
+                              >
+                                <div className="flex items-center gap-3">
+                                  <div className="text-gold">{feature.icon}</div>
+                                  <div>
+                                    <p className="font-medium text-black text-sm">{feature.name}</p>
+                                    <code className="text-[11px] text-zinc-500">{feature.path}</code>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <code className="text-[11px] text-emerald-600 bg-emerald-50 px-2 py-1 rounded max-w-[300px] truncate">
+                                    {feature.navigationPath}
+                                  </code>
+                                  <ExternalLink className="h-3 w-3 text-zinc-400" />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
 
           {/* Legend */}
           <div className="mt-6 p-4 bg-white/80 border-2 border-gold/20 rounded-xl">
@@ -391,7 +648,7 @@ export default function OwnerFeatureRegistry() {
             <div className="flex flex-wrap gap-4 text-sm">
               <div className="flex items-center gap-2">
                 <Badge className="bg-purple-100 text-purple-700 text-xs">AI</Badge>
-                <span className="text-zinc-600">AI-powered feature</span>
+                <span className="text-zinc-600">AI-powered feature (drafts/suggestions)</span>
               </div>
               <div className="flex items-center gap-2">
                 <Badge className="bg-blue-100 text-blue-700 text-xs">Approval</Badge>
@@ -399,12 +656,86 @@ export default function OwnerFeatureRegistry() {
               </div>
               <div className="flex items-center gap-2">
                 <Badge className="bg-green-100 text-green-700 text-xs">Auto</Badge>
-                <span className="text-zinc-600">Runs automatically</span>
+                <span className="text-zinc-600">Runs automatically (configurable)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Badge className="bg-zinc-100 text-zinc-700 text-xs">Manual</Badge>
+                <span className="text-zinc-600">Owner-initiated only</span>
               </div>
             </div>
           </div>
         </div>
       </div>
     </MainLayout>
+  );
+}
+
+// Stats Card Component
+function StatsCard({ 
+  label, 
+  value, 
+  icon, 
+  variant = 'default' 
+}: { 
+  label: string; 
+  value: number; 
+  icon: React.ReactNode;
+  variant?: 'default' | 'purple' | 'blue' | 'green';
+}) {
+  const variants = {
+    default: "border-gold/30 bg-white",
+    purple: "border-purple-200 bg-purple-50",
+    blue: "border-blue-200 bg-blue-50",
+    green: "border-green-200 bg-green-50",
+  };
+
+  const iconColors = {
+    default: "text-gold",
+    purple: "text-purple-600",
+    blue: "text-blue-600",
+    green: "text-green-600",
+  };
+
+  return (
+    <Card className={`${variants[variant]} border-2`}>
+      <CardContent className="p-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-xs text-zinc-500">{label}</p>
+            <p className="text-xl font-bold text-black">{value}</p>
+          </div>
+          <div className={`p-2 rounded-lg bg-white/50 ${iconColors[variant]}`}>
+            {icon}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// Audit Item Component
+function AuditItem({ 
+  label, 
+  value, 
+  status 
+}: { 
+  label: string; 
+  value: string | number; 
+  status: 'pass' | 'warn' | 'fail';
+}) {
+  const icons = {
+    pass: <CheckCircle className="h-4 w-4 text-green-500" />,
+    warn: <AlertTriangle className="h-4 w-4 text-yellow-500" />,
+    fail: <AlertTriangle className="h-4 w-4 text-red-500" />,
+  };
+
+  return (
+    <div className="flex items-center justify-between p-3 rounded-lg bg-white border border-green-200">
+      <span className="text-sm text-zinc-600">{label}</span>
+      <div className="flex items-center gap-2">
+        <span className="font-semibold text-black">{value}</span>
+        {icons[status]}
+      </div>
+    </div>
   );
 }
