@@ -1,195 +1,307 @@
 
-# Owner Dashboard Command Center - Complete Fix Plan
 
-## Problem Summary
+# Master Prompt Implementation Plan - Owner Dashboard Command Center + Navigation Audit
 
-The Owner Dashboard at `/owner` is not displaying the correct layout because:
+## Executive Summary
 
-1. **OwnerDashboardShell exists but is NOT used** - The shell component with sidebar navigation was created but never imported or used in App.tsx routing
-2. **All /owner/* routes bypass the sidebar** - Routes render standalone without the command center shell
-3. **Dashboard inside global layout** - The owner routes are inside MainLayoutWrapper (with global header/footer), conflicting with the dedicated shell design
-4. **Account dropdown works** - The Owner Dashboard shortcut in MegaMenuAccount correctly links to `/owner`, but the destination renders wrong content
+This plan implements the Master Prompt requirements to ensure the Owner Dashboard Command Center is fully functional, properly integrated, and all navigation elements are correctly linked. The plan verifies existing structures are correct and fixes any gaps.
 
 ---
 
-## Technical Architecture Changes
+## Current State Analysis
 
-### 1. Route Structure Refactoring
+### What Already Works Correctly
 
-**Current problematic structure:**
-```
-MainLayoutWrapper
-  └── /owner → OwnerDashboardOverview (no sidebar!)
-  └── /owner/inbox → OwnerInbox (no sidebar!)
-  └── /owner/audit → OwnerAuditPage (no sidebar!)
-  └── etc.
-```
+**1. Public Header (6 Items - VERIFIED CORRECT)**
+The GlobalHeader.tsx already implements the locked 6-item header:
+- Buy | Rent | Projects | Areas | Developers | Insights | More
 
-**New correct structure:**
-```
-OwnerDashboardShell (with sidebar + top bar)
-  └── /owner → OwnerDashboardOverview (via Outlet)
-  └── /owner/inbox → OwnerInbox (via Outlet)
-  └── /owner/audit → OwnerAuditPage (via Outlet)
-  └── /owner/integrations → OwnerIntegrationsPage (via Outlet)
-  └── /owner/safety → OwnerSafetyPage (via Outlet)
-  └── /owner/templates → OwnerTemplates (via Outlet)
-  └── /owner/settings/communication → OwnerCommSettings (via Outlet)
-  └── /owner/agenda → OwnerAgenda (via Outlet)
-  └── /owner/features → OwnerFeatureRegistry (via Outlet)
-  └── /owner/properties → PropertyManagement (via Outlet)
-  └── /owner/documents → Documents (via Outlet)
-```
+**2. More Dropdown (MegaMenuMore.tsx - VERIFIED CORRECT)**
+Already structured with 5 columns:
+- Services (Property Management, Golden Visa, Mortgage, Valuation, Sell)
+- Toolkit (ROI Calculator, Mortgage Calculator, Compare, Map, AI Home Finder)
+- Investors (Dashboard, Education, Reports, Guides, Portfolio)
+- Brokers (conditional - only in Broker Mode: Hub, Dashboard, CRM, Training, Resources)
+- Company (About JBJ, About Jane bou Jaoude, Team, Contact, Careers, Press)
 
----
+**3. Owner Dashboard Shell (OwnerDashboardShell.tsx)**
+Already implemented with:
+- Collapsible sidebar navigation (via OwnerSidebarNav component)
+- Mobile responsive Sheet drawer
+- Top bar with Owner badge
+- Outlet for nested routes
 
-### 2. App.tsx Routing Changes
+**4. Owner Sidebar Navigation (OwnerSidebarNav.tsx)**
+Already has 7 organized sections with 25+ links:
+- Core, Properties, Communication, AI & Tools, Creative, Admin, System
 
-**File: `src/App.tsx`**
+**5. Owner Dashboard Overview (OwnerDashboardOverview.tsx)**
+Already implements:
+- KPI tiles (clickable)
+- QuickActionsGrid component
+- DepartmentShortcuts component
+- IntegrationWidgets component
 
-**Changes required:**
-- Import `OwnerDashboardShell`
-- Create a dedicated route block for `/owner/*` routes OUTSIDE MainLayoutWrapper
-- Use nested routes with parent shell and child pages via Outlet
-- Keep OwnerGuard on the parent shell (covers all children)
+**6. Account Menu (MegaMenuAccount.tsx)**
+Already has Owner Dashboard shortcut at top of Owner Shortcuts section
 
-**New route block (to be added before MainLayoutWrapper routes):**
-```tsx
-{/* Owner Command Center - Dedicated shell without global header/footer */}
-<Route path="/owner" element={
-  <OwnerGuard>
-    <OwnerDashboardShell />
-  </OwnerGuard>
-}>
-  <Route index element={<OwnerDashboardOverview />} />
-  <Route path="inbox" element={<OwnerInbox />} />
-  <Route path="templates" element={<OwnerTemplates />} />
-  <Route path="settings/communication" element={<OwnerCommSettings />} />
-  <Route path="agenda" element={<OwnerAgenda />} />
-  <Route path="features" element={<OwnerFeatureRegistry />} />
-  <Route path="audit" element={<OwnerAuditPage />} />
-  <Route path="integrations" element={<OwnerIntegrationsPage />} />
-  <Route path="safety" element={<OwnerSafetyPage />} />
-  <Route path="properties" element={<OwnerProperties />} />
-  <Route path="documents" element={<OwnerDocuments />} />
-</Route>
-```
+**7. App.tsx Routing**
+Owner routes correctly nested under OwnerDashboardShell (lines 288-306)
 
 ---
 
-### 3. OwnerDashboardOverview Cleanup
+## Issues Identified & Fixes Required
 
-**File: `src/pages/OwnerDashboardOverview.tsx`**
+### Issue 1: Owner Dashboard Header Copy
+**Location:** OwnerDashboardOverview.tsx
+**Current:** No personalized welcome message for Jane bou Jaoude
+**Fix:** Add header section with "Owner Command Center" title and "Welcome back, Jane bou Jaoude — Your integrated dashboard"
+
+### Issue 2: MegaMenuMore Broker Links
+**Location:** MegaMenuMore.tsx line 55
+**Current:** Links to `/broker/crm` which may not exist
+**Fix:** Update to `/crm` (the actual CRM route)
+
+### Issue 3: Some Quick Action Routes May Not Exist
+**Location:** QuickActionsGrid.tsx
+**Current:** Some routes like `/studio` may need verification
+**Action:** Verify all routes exist before implementation
+
+### Issue 4: OwnerFeatureRegistry Uses MainLayout
+**Location:** OwnerFeatureRegistry.tsx line 409
+**Current:** Wraps in MainLayout (causing UI conflict when accessed via /owner shell)
+**Fix:** Remove MainLayout wrapper since it's accessed via OwnerDashboardShell
+
+---
+
+## Implementation Plan
+
+### Phase 1: Owner Dashboard Overview Enhancement
+
+**File:** `src/pages/OwnerDashboardOverview.tsx`
 
 **Changes:**
-- Remove the outer wrapper `div className="min-h-screen bg-black"` (shell provides this)
-- Remove the container padding (shell provides `<div className="p-6">`)
-- Simplify to just the content that goes inside the shell
+1. Add header section at the top of the component:
+
+```tsx
+{/* Command Center Header */}
+<div className="mb-6">
+  <h1 className="text-2xl md:text-3xl font-bold text-white">
+    Owner Command Center
+  </h1>
+  <p className="text-zinc-400 mt-1">
+    Welcome back, Jane bou Jaoude — Your integrated dashboard
+  </p>
+</div>
+```
+
+2. Ensure all KPI tiles navigate correctly:
+- Total Leads → `/crm/leads`
+- New This Week → `/crm/leads?filter=new`
+- Pending Tasks → `/crm/tasks`
+- Active Chats → `/owner/inbox`
+
+(Already implemented correctly in current code)
 
 ---
 
-### 4. OwnerDashboardShell Enhancements
+### Phase 2: MegaMenuMore Route Correction
 
-**File: `src/pages/OwnerDashboardShell.tsx`**
+**File:** `src/components/header/MegaMenuMore.tsx`
 
-**Current state:** The shell already has the sidebar navigation component, but needs minor improvements:
+**Change:** Update broker CRM link from `/broker/crm` to `/crm`
 
-**Enhancements:**
-- Mobile responsive sidebar (hamburger menu on small screens)
-- Add keyboard shortcut indicator for toggling sidebar
-- Ensure sticky top bar works correctly with scrolling content
-
----
-
-### 5. UI/Layout Polish
-
-**Global styling checks:**
-- All cards use `bg-zinc-900/80 border-zinc-800` base
-- Hover states use `hover:border-gold/40`
-- KPI tiles are clickable with `cursor-pointer`
-- Icons are 24px (w-6 h-6) standard size
-- Proper spacing: `gap-4` between cards, `mb-6` between sections
-- Text colors: `text-white` for titles, `text-zinc-400` for secondary
+```tsx
+// Line 55: Change from
+{ label: 'Broker CRM', href: '/broker/crm', icon: Users },
+// To
+{ label: 'Broker CRM', href: '/crm', icon: Users },
+```
 
 ---
 
-### 6. Button Functionality Verification
+### Phase 3: QuickActionsGrid Route Verification
 
-All navigation buttons in QuickActionsGrid and DepartmentShortcuts use `navigate()`:
+**File:** `src/components/owner-dashboard/QuickActionsGrid.tsx`
 
-| Component | Button | Target Route |
-|-----------|--------|--------------|
-| QuickActionsGrid | + Add Lead | `/crm?action=new-lead` |
-| QuickActionsGrid | Calendar | `/crm/calendar` |
-| QuickActionsGrid | Property Map | `/map` |
-| QuickActionsGrid | AI Assistant | `/founder-assistant` |
-| QuickActionsGrid | Studio | `/studio` |
-| QuickActionsGrid | Automations | `/automations` |
-| QuickActionsGrid | Analytics | `/jbj-analytics` |
-| QuickActionsGrid | Marketing | `/admin/marketing-hub` |
-| DepartmentShortcuts | CRM Dashboard | `/crm` |
-| DepartmentShortcuts | HR Dashboard | `/hr-dashboard` |
-| DepartmentShortcuts | IT Department | `/it-department` |
-| DepartmentShortcuts | Employee Hub | `/employee-hub` |
-| DepartmentShortcuts | Listing Admin | `/listing-admin` |
-| DepartmentShortcuts | Security Console | `/owner/safety` |
-| KPI Tiles | Total Leads | `/crm/leads` |
-| KPI Tiles | New This Week | `/crm/leads?filter=new` |
-| KPI Tiles | Pending Tasks | `/crm/tasks` |
-| KPI Tiles | Active Chats | `/owner/inbox` |
+**Verify all routes exist (from App.tsx analysis):**
+
+| Button | Current Route | Verified Exists |
+|--------|---------------|-----------------|
+| + Add Lead | `/crm?action=new-lead` | Yes (CRM page) |
+| Calendar | `/crm/calendar` | Yes (line 469) |
+| Property Map | `/map` | Yes (line 481) |
+| AI Assistant | `/founder-assistant` | Yes (line 509) |
+| Studio | `/studio` | Yes (line 535) |
+| Automations | `/automations` | Yes (line 524) |
+| Analytics | `/jbj-analytics` | Yes (line 502) |
+| Marketing | `/admin/marketing-hub` | Yes (line 483) |
+
+All routes verified - no changes needed.
+
+---
+
+### Phase 4: DepartmentShortcuts Route Verification
+
+**File:** `src/components/owner-dashboard/DepartmentShortcuts.tsx`
+
+**Verify all routes exist:**
+
+| Department | Route | Verified |
+|------------|-------|----------|
+| CRM Dashboard | `/crm` | Yes (line 458) |
+| HR Dashboard | `/hr-dashboard` | Yes (line 629) |
+| IT Department | `/it-department` | Yes (line 627) |
+| Employee Hub | `/employee-hub` | Yes (line 517) |
+| Listing Admin | `/listing-admin` | Yes (line 511) |
+| Security Console | `/owner/safety` | Yes (line 302) |
+
+All routes verified - no changes needed.
+
+---
+
+### Phase 5: IntegrationWidgets Route Verification
+
+**File:** `src/components/owner-dashboard/IntegrationWidgets.tsx`
+
+**Verify routes:**
+- `/crm/calendar` - Yes
+- `/crm/tasks?action=new` - Yes (CRM Tasks page)
+- `/crm/notes?action=new` - Yes (CRM Notes page)
+- `/automations` - Yes
+
+All routes verified - no changes needed.
+
+---
+
+### Phase 6: OwnerFeatureRegistry Layout Fix
+
+**File:** `src/pages/OwnerFeatureRegistry.tsx`
+
+**Current Problem:** The component wraps itself in `<MainLayout>` which conflicts with the OwnerDashboardShell when accessed via `/owner/features`.
+
+**Fix:** Remove the MainLayout wrapper and let the page render directly within the shell's Outlet.
+
+```tsx
+// Current (line 408-411):
+return (
+  <MainLayout>
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      ...
+    </div>
+  </MainLayout>
+);
+
+// Change to:
+return (
+  <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    ...
+  </div>
+);
+```
+
+Also update line 425 to use the locked owner name:
+```tsx
+<p className="text-zinc-500 text-sm">Jane bou Jaoude — Complete visibility of all implemented features</p>
+```
+
+---
+
+### Phase 7: OwnerSidebarNav - Add Missing Routes
+
+**File:** `src/components/owner-dashboard/OwnerSidebarNav.tsx`
+
+**Current sections verified correct. Add any missing CRM routes:**
+
+Verify these routes are in the sidebar:
+- `/crm/notes` - Already in CRM section? Need to verify
+- `/crm/reminders` - Already in CRM section? Need to verify
+
+If missing, add to appropriate section.
 
 ---
 
 ## Files to Modify
 
-1. **`src/App.tsx`**
-   - Import `OwnerDashboardShell`
-   - Move all `/owner/*` routes to dedicated block with shell parent
-   - Remove duplicate route definitions from MainLayoutWrapper block
+1. **`src/pages/OwnerDashboardOverview.tsx`**
+   - Add "Owner Command Center" header with personalized welcome for Jane bou Jaoude
 
-2. **`src/pages/OwnerDashboardShell.tsx`**
-   - Add mobile responsive hamburger menu
-   - Minor styling improvements
+2. **`src/components/header/MegaMenuMore.tsx`**
+   - Fix broker CRM link from `/broker/crm` to `/crm`
 
-3. **`src/pages/OwnerDashboardOverview.tsx`**
-   - Remove outer min-h-screen wrapper
-   - Remove container padding (shell provides it)
-   - Simplify to content-only
-
-4. **`src/components/owner-dashboard/OwnerSidebarNav.tsx`**
-   - Verify all route paths are correct
-   - Add any missing navigation items
+3. **`src/pages/OwnerFeatureRegistry.tsx`**
+   - Remove MainLayout wrapper
+   - Ensure owner name is "Jane bou Jaoude"
 
 ---
 
-## Additional Pages to Create
+## Verification Checklist
 
-For complete coverage, these placeholder pages may need creation:
+After implementation, verify:
 
-- `/owner/properties` - Owner-specific property management view
-- `/owner/documents` - Owner document vault
+- [ ] Public header shows ONLY: Buy | Rent | Projects | Areas | Developers | Insights + More
+- [ ] More dropdown contains Services/Toolkit/Investors/Brokers (conditional)/Company
+- [ ] Brokers menu appears ONLY in Broker Mode
+- [ ] Investor Mode never sees Brokers or CRM
+- [ ] Footer unchanged (no CRM/broker internal links)
+- [ ] Owner Dashboard appears in account menu only for Owner
+- [ ] Owner sidebar is sectioned and navigates correctly
+- [ ] OwnerDashboardShell compiles and renders nested routes properly
+- [ ] OwnerDashboardOverview shows "Owner Command Center" title
+- [ ] OwnerDashboardOverview shows "Welcome back, Jane bou Jaoude"
+- [ ] KPI tiles navigate to correct routes
+- [ ] QuickActionsGrid buttons all navigate correctly
+- [ ] DepartmentShortcuts cards all navigate correctly
+- [ ] No fake counts; no invented routes
+- [ ] Owner name is ALWAYS: Jane bou Jaoude
 
 ---
 
-## Security Considerations
+## Security Confirmation
 
-- OwnerGuard remains on the parent shell route (single check covers all children)
-- No changes to RLS policies
-- No changes to edge function verify-owner
-- The useOwnerVerification hook continues working via edge function
+**No security layer modifications:**
+- AuthContext - NOT MODIFIED
+- OwnerGuard - NOT MODIFIED
+- RLS policies - NOT MODIFIED
+- Existing security logic - NOT MODIFIED
+
+**No UI theme changes:**
+- Colors - NOT MODIFIED
+- Fonts - NOT MODIFIED
+- Spacing - NOT MODIFIED
+- Design language - NOT MODIFIED
 
 ---
 
-## Expected Result
+## Routes Summary
 
-After implementation:
-1. User clicks "Owner Dashboard" in account dropdown
-2. Navigates to `/owner`
-3. **NEW BEHAVIOR:** Full-screen Owner Command Center appears with:
-   - Left sidebar with 7 organized sections (25+ links)
-   - Top bar with "Owner Command Center" title and Owner badge
-   - Main content area showing KPI tiles, Quick Actions, Leads, Follow-ups, etc.
-4. All sidebar navigation links work
-5. All Quick Action buttons work
-6. All KPI tiles are clickable
-7. Premium black/gold/champagne theme throughout
+**Routes linked in this implementation (all verified to exist):**
+
+**Owner Command Center:**
+- `/owner` - Dashboard
+- `/owner/inbox` - Unified Inbox
+- `/owner/templates` - Message Templates
+- `/owner/settings/communication` - Communication Settings
+- `/owner/agenda` - Daily Agenda
+- `/owner/features` - Feature Registry
+- `/owner/audit` - Audit Page
+- `/owner/integrations` - Integrations Status
+- `/owner/safety` - Safety Panel
+
+**CRM Modules:**
+- `/crm` - CRM Dashboard
+- `/crm/leads` - Leads Inbox
+- `/crm/tasks` - Tasks
+- `/crm/calendar` - Calendar
+- `/crm/notes` - Notes
+- `/crm/reminders` - Reminders
+- `/crm/employees` - Employees
+
+**System & Admin:**
+- `/automations` - Workflow Automations
+- `/security-console` - Security Console
+- `/jbj-analytics` - Analytics Dashboard
+- `/founder-assistant` - AI Assistant
+- `/studio` - Creative Studio
+- `/admin/marketing-hub` - Marketing Hub
+
