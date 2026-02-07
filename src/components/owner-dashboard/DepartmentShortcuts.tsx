@@ -1,0 +1,104 @@
+import { useNavigate } from "react-router-dom";
+import { 
+  Users, 
+  UserCog, 
+  Server, 
+  Briefcase, 
+  ClipboardList, 
+  ShieldAlert,
+  ChevronRight,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+
+interface DepartmentCard {
+  label: string;
+  description: string;
+  icon: React.ElementType;
+  path: string;
+  color: string;
+}
+
+const DEPARTMENTS: DepartmentCard[] = [
+  { 
+    label: "CRM Dashboard", 
+    description: "Manage leads & deals", 
+    icon: Users, 
+    path: "/crm", 
+    color: "text-gold" 
+  },
+  { 
+    label: "HR Dashboard", 
+    description: "Team management", 
+    icon: UserCog, 
+    path: "/hr-dashboard", 
+    color: "text-emerald-400" 
+  },
+  { 
+    label: "IT Department", 
+    description: "Systems & security", 
+    icon: Server, 
+    path: "/it-department", 
+    color: "text-blue-400" 
+  },
+  { 
+    label: "Employee Hub", 
+    description: "Staff directory", 
+    icon: Briefcase, 
+    path: "/employee-hub", 
+    color: "text-purple-400" 
+  },
+  { 
+    label: "Listing Admin", 
+    description: "Property listings", 
+    icon: ClipboardList, 
+    path: "/listing-admin", 
+    color: "text-amber-400" 
+  },
+  { 
+    label: "Security Console", 
+    description: "Access & audit", 
+    icon: ShieldAlert, 
+    path: "/owner/safety", 
+    color: "text-red-400" 
+  },
+];
+
+export default function DepartmentShortcuts() {
+  const navigate = useNavigate();
+
+  return (
+    <div className="bg-zinc-900/80 border border-zinc-800 rounded-xl p-5">
+      <h3 className="text-sm font-semibold text-white mb-4">Departments & Admin</h3>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        {DEPARTMENTS.map((dept) => (
+          <button
+            key={dept.path}
+            onClick={() => navigate(dept.path)}
+            className={cn(
+              "flex items-center gap-3 p-4 rounded-xl text-left",
+              "bg-zinc-800/50 border border-zinc-700",
+              "hover:border-gold/50 hover:bg-gold/5",
+              "transition-all duration-200 cursor-pointer group"
+            )}
+          >
+            <div className={cn(
+              "w-10 h-10 rounded-lg bg-zinc-700/50 flex items-center justify-center",
+              "group-hover:bg-gold/10 transition-colors"
+            )}>
+              <dept.icon className={cn("h-5 w-5", dept.color)} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-white group-hover:text-gold transition-colors truncate">
+                {dept.label}
+              </p>
+              <p className="text-xs text-zinc-500 truncate">
+                {dept.description}
+              </p>
+            </div>
+            <ChevronRight className="h-4 w-4 text-zinc-600 group-hover:text-gold transition-colors flex-shrink-0" />
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
