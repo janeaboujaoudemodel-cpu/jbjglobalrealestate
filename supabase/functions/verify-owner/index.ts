@@ -1,0 +1,61 @@
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
+
+serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  try {
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ isOwner: false, reason: "no_auth" }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_ANON_KEY") ?? "",
+      { global: { headers: { Authorization: authHeader } } }
+    );
+
+    const { data: { user }, error } = await supabaseClient.auth.getUser();
+    
+    if (error || !user) {
+      return new Response(
+        JSON.stringify({ isOwner: false, reason: "no_user" }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const ownerEmail = Deno.env.get("VITE_OWNER_EMAIL");
+    
+    if (!ownerEmail) {
+      console.error("VITE_OWNER_EMAIL not configured");
+      return new Response(
+        JSON.stringify({ isOwner: false, reason: "no_config" }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const isOwner = user.email?.toLowerCase() === ownerEmail.toLowerCase();
+
+    return new Response(
+      JSON.stringify({ isOwner, email: user.email }),
+      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  } catch (error) {
+    console.error("Error verifying owner:", error);
+    return new Response(
+      JSON.stringify({ isOwner: false, reason: "error" }),
+      { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 500 }
+    );
+  }
+});
