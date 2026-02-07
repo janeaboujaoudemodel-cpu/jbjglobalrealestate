@@ -1,4 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -10,7 +11,22 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const startTime = Date.now();
+  let userId: string | null = null;
+
   try {
+    // Get user from auth header
+    const authHeader = req.headers.get("Authorization");
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+
+    if (authHeader) {
+      const token = authHeader.replace("Bearer ", "");
+      const { data: { user } } = await supabaseAdmin.auth.getUser(token);
+      userId = user?.id || null;
+    }
+
     const { clientName, callNotes, hasAudio } = await req.json();
 
     // Build prompt for call summarization
@@ -74,6 +90,30 @@ Return ONLY valid JSON, no markdown formatting.`;
         sentiment: 'neutral',
         keyTopics: [],
       };
+    }
+
+    const processingTime = Date.now() - startTime;
+
+    // Log to ai_job_master for history persistence
+    if (userId) {
+      await supabaseAdmin.from('ai_job_master').insert({
+        user_id: userId,
+        tool_name: 'ai-call-summarizer',
+        status: 'completed',
+        input_payload: { 
+          clientName: clientName || 'Unknown',
+          hasAudio: !!hasAudio,
+          notesLength: callNotes?.length || 0,
+        },
+        output_payload: summary,
+        processing_time_ms: processingTime,
+        intelligence_features: {
+          summaryGeneration: true,
+          actionItemsExtraction: true,
+          sentimentAnalysis: true,
+          clientNeedsDetection: true,
+        },
+      });
     }
 
     return new Response(
