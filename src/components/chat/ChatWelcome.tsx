@@ -12,16 +12,7 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
   
   return (
     <div className="flex-1 p-4 flex flex-col items-center justify-start text-center overflow-y-auto">
-      {/* Tip at TOP - more visible, not cropped */}
-      <div className="w-full px-4 py-3 bg-white/80 rounded-lg border border-gold/30 mb-4">
-        <p className="text-sm flex flex-wrap items-center justify-center gap-1">
-          <span className="text-gold">💡</span>
-          <span className="text-black font-bold">{t('chat.tip', 'Tip:')}</span>
-          <span className="text-zinc-700">{t('chat.tipText', "Most of your questions can be answered through the chat with our team section for faster response.")}</span>
-        </p>
-      </div>
-
-      {/* Logo - centered, smaller to fit better */}
+      {/* Logo - at TOP now */}
       <div className="mb-4">
         <img
           src={jbjMonogramLightBg}
@@ -75,6 +66,15 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
             </div>
           </div>
         </a>
+      </div>
+
+      {/* Tip at BOTTOM now */}
+      <div className="w-full px-4 py-3 bg-white/80 rounded-lg border border-gold/30">
+        <p className="text-sm flex flex-wrap items-center justify-center gap-1">
+          <span className="text-gold">💡</span>
+          <span className="text-black font-bold">{t('chat.tip', 'Tip:')}</span>
+          <span className="text-zinc-700">{t('chat.tipText', "Most of your questions can be answered through the chat with our team section for faster response.")}</span>
+        </p>
       </div>
     </div>
   );
