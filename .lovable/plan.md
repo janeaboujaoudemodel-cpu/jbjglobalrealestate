@@ -1,147 +1,174 @@
 
-# AI Tools Premium Upgrade Plan
+# AI Tools Premium Fix & Enhancement Plan
 
-## Current Issues Identified
+## Issues Identified
 
-### 1. Frontend-Backend Field Mismatch (Why Generate Doesn't Work)
-The AI tools are broken because of field name mismatches:
-- **ROI Calculator**: Sends `purchasePrice` but backend expects `propertyPrice`
-- Similar issues exist across other tools
+### 1. Faded Buttons (Critical)
+The global `Button` component in `button.tsx` has a `sanitizeButtonClassName` function that strips color classes like `bg-gradient-to-r`, `from-cyan-600`, `text-white`. This makes all buttons appear faded/invisible on dark backgrounds.
 
-### 2. Basic UI Design (Not Premium)
-Current tools use simple white cards with minimal styling. You want the **premium full-page design** like:
-- Property Evaluator (Blue theme)
-- Scan & Sign Documents (Green theme)
+**Solution**: Add a new `variant="ai-tool"` to the button system that bypasses sanitization and provides tool-specific colored buttons.
 
-### 3. Lack of Intelligence Features
-Current tools return plain text. Need structured intelligence with:
-- Confidence scores
-- Risk assessments
-- Visual indicators
-- Actionable insights
+### 2. White Text on White Background
+Some components still use default light-themed cards. All AI tools need dark-themed inputs and cards with proper contrast.
 
-### 4. User Behavior Tracking Not Complete
-Need to log ALL document/tool usage for analytics so you can monitor user behavior.
+### 3. Missing Premium Components (6 tools)
+These tools still use old basic UI:
+- Translation Hub (Amber theme)
+- Market Report (Indigo theme)
+- Document Generator (Lime theme)
+- Video Tour Script (Pink theme)
+- Contract Reviewer (Red theme)
+- Property Analyzer (Sky theme)
 
----
-
-## Solution: Complete AI Tools Premium Redesign
-
-### Color Scheme Per Tool
-
-Each tool gets a unique accent color:
-
-| Tool | Theme Color | Gradient |
-|------|-------------|----------|
-| ROI Calculator | Emerald/Green | `from-emerald-900/30` |
-| Lead Qualification | Purple | `from-purple-900/30` |
-| Price Predictor | Blue | `from-blue-900/30` |
-| Neighborhood Insights | Teal | `from-teal-900/30` |
-| Competitor Analysis | Orange | `from-orange-900/30` |
-| Market Report | Indigo | `from-indigo-900/30` |
-| Objection Handler | Rose | `from-rose-900/30` |
-| Follow-up Scheduler | Cyan | `from-cyan-900/30` |
-| Meeting Summarizer | Violet | `from-violet-900/30` |
-| Translation Hub | Amber | `from-amber-900/30` |
-| Video Tour Script | Pink | `from-pink-900/30` |
-| Contract Reviewer | Red | `from-red-900/30` |
-| Document Generator | Lime | `from-lime-900/30` |
-| Property Analyzer | Sky | `from-sky-900/30` |
-
-### Implementation Per Tool
-
-Each AI tool will be upgraded to:
-
-1. **Full-Page Premium Layout**
-   - Dark gradient background
-   - Colored header banner with tool name
-   - Motion animations on load
-   - Sparkles badge indicating AI-powered
-
-2. **Input Form Section**
-   - Dark-themed cards (`bg-zinc-900/50`)
-   - Color-coded required field indicators
-   - Helper text for each field
-   - Tabs for complex tools (if needed)
-
-3. **Intelligence Features**
-   - Confidence Score (visual meter)
-   - Risk Assessment (color-coded badges)
-   - Structured sections (not walls of text)
-   - Action recommendations with icons
-
-4. **Results Section**
-   - Visual cards for key metrics
-   - Copy to clipboard buttons
-   - Download/Export options
-   - Color-coded insights
+### 4. No Tool Guides
+Each tool needs an inline guide explaining:
+- What the tool does (2-line description)
+- How to use it (step-by-step)
+- Benefits and use cases
 
 ---
 
-## Technical Changes Required
+## Implementation Plan
 
-### Phase 1: Fix Broken Tools (Field Mapping)
-Fix frontend-backend field mismatches in all 14 tools.
+### Phase 1: Fix Button System
+Add AI tool button variants that work on dark backgrounds:
 
-### Phase 2: Premium UI Redesign
-Upgrade each tool component to full-page premium layout following Property Evaluator pattern.
+**File**: `src/components/ui/button.tsx`
+- Add `ai-emerald`, `ai-purple`, `ai-blue`, `ai-cyan`, etc. variants
+- These variants use explicit color classes that are NOT sanitized
+- Format: `bg-{color}-600 hover:bg-{color}-500 text-white border-{color}-700`
 
-### Phase 3: Enhanced Intelligence
-Update edge functions to return:
-- Structured JSON with scores
-- Confidence levels
-- Risk factors
-- Actionable recommendations
+### Phase 2: Create Tool Guide Component
+Create a reusable inline guide component:
 
-### Phase 4: User Analytics
-Log all tool usage to `visitor_events` table:
-- Tool name
-- Input parameters (safe fields only)
-- Completion status
-- Processing time
+**New File**: `src/components/ai-tools/AIToolGuide.tsx`
+```
+interface AIToolGuideProps {
+  title: string;
+  description: string;
+  steps: string[];
+  benefits: string[];
+  color: string;
+}
+```
+- Collapsible by default
+- Dark-themed card with colored accents
+- Shows in the header area under subtitle
+
+### Phase 3: Upgrade Remaining 6 Tools to Premium
+
+#### 3.1 Translation Hub (Amber)
+**New File**: `src/components/ai-tools/premium/AITranslationHubPremium.tsx`
+- Language swap animation
+- Side-by-side source/target display
+- Cultural context tips
+- Quick copy buttons for both languages
+
+#### 3.2 Market Report (Indigo)
+**New File**: `src/components/ai-tools/premium/AIMarketReportPremium.tsx`
+- Visual trend indicators
+- Key metrics dashboard
+- Downloadable report format
+- Market outlook badges
+
+#### 3.3 Document Generator (Lime)
+**New File**: `src/components/ai-tools/premium/AIDocumentGeneratorPremium.tsx`
+- Template preview
+- Tone selector with examples
+- Multiple output formats
+- Save to drafts option
+
+#### 3.4 Video Tour Script (Pink)
+**New File**: `src/components/ai-tools/premium/AIVideoTourScriptPremium.tsx`
+- Scene-by-scene breakdown
+- Timing indicators
+- Voice style selector
+- Download script option
+
+#### 3.5 Contract Reviewer (Red - High Alert Color)
+**New File**: `src/components/ai-tools/premium/AIContractReviewerPremium.tsx`
+- Risk highlighting with severity levels
+- Clause-by-clause analysis
+- Comparison against standard terms
+- Legal disclaimer prominent
+
+#### 3.6 Property Analyzer (Sky)
+**New File**: `src/components/ai-tools/premium/AIPropertyAnalyzerPremium.tsx`
+- Multi-metric dashboard
+- Comparable properties cards
+- Investment score gauge
+- Area insights map preview
+
+### Phase 4: Update All Page Components
+Update all 14 page files in `src/pages/AI*.tsx` to:
+- Use the new premium components
+- Remove old wrapper styling
+- Consistent SEO metadata
+
+### Phase 5: Add Inline Guides to All Tools
+Add guide data to each premium component:
+- 2-line description visible on load
+- Expandable "How to Use" section
+- Benefits list with icons
 
 ---
 
-## Files to Modify
+## Technical Changes Summary
 
-### Frontend Components (14 files)
-- `src/components/ai-tools/AIROICalculator.tsx`
-- `src/components/ai-tools/AILeadQualification.tsx`
-- `src/components/ai-tools/AIPricePredictor.tsx`
-- `src/components/ai-tools/AINeighborhoodInsights.tsx`
-- `src/components/ai-tools/AICompetitorAnalysis.tsx`
-- `src/components/ai-tools/AIMarketReport.tsx`
-- `src/components/ai-tools/AIObjectionHandler.tsx`
-- `src/components/ai-tools/AIFollowupScheduler.tsx`
-- `src/components/ai-tools/AIMeetingSummarizer.tsx`
-- `src/components/ai-tools/AITranslationHub.tsx`
-- `src/components/ai-tools/AIVideoTourScript.tsx`
-- `src/components/ai-tools/AIContractReviewer.tsx`
-- `src/components/ai-tools/AIDocumentGenerator.tsx`
-- `src/components/ai-tools/AIPropertyAnalyzer.tsx`
+### Files to Create (7 new files)
+1. `src/components/ai-tools/AIToolGuide.tsx` - Reusable guide component
+2. `src/components/ai-tools/premium/AITranslationHubPremium.tsx`
+3. `src/components/ai-tools/premium/AIMarketReportPremium.tsx`
+4. `src/components/ai-tools/premium/AIDocumentGeneratorPremium.tsx`
+5. `src/components/ai-tools/premium/AIVideoTourScriptPremium.tsx`
+6. `src/components/ai-tools/premium/AIContractReviewerPremium.tsx`
+7. `src/components/ai-tools/premium/AIPropertyAnalyzerPremium.tsx`
 
-### Page Components (Update to use new layout)
-All corresponding page files in `src/pages/AI*.tsx`
+### Files to Modify (16 files)
+1. `src/components/ui/button.tsx` - Add AI tool button variants
+2. `src/components/ai-tools/AIToolPremiumLayout.tsx` - Add guide slot
+3. `src/components/ai-tools/premium/index.ts` - Export new components
+4. `src/components/ai-tools/premium/AIROICalculatorPremium.tsx` - Fix button + add guide
+5. `src/components/ai-tools/premium/AILeadQualificationPremium.tsx` - Fix button + add guide
+6. `src/components/ai-tools/premium/AIPricePredictorPremium.tsx` - Fix button + add guide
+7. `src/components/ai-tools/premium/AIFollowupSchedulerPremium.tsx` - Fix button + add guide
+8. `src/components/ai-tools/premium/AICompetitorAnalysisPremium.tsx` - Fix button + add guide
+9. `src/components/ai-tools/premium/AINeighborhoodInsightsPremium.tsx` - Fix button + add guide
+10. `src/components/ai-tools/premium/AIObjectionHandlerPremium.tsx` - Fix button + add guide
+11. `src/components/ai-tools/premium/AIMeetingSummarizerPremium.tsx` - Fix button + add guide
+12. `src/pages/AITranslationHubPage.tsx` - Use premium component
+13. `src/pages/AIMarketReportPage.tsx` - Use premium component
+14. `src/pages/AIDocumentGeneratorPage.tsx` - Use premium component
+15. `src/pages/AIVideoTourScriptPage.tsx` - Use premium component
+16. `src/pages/AIContractReviewerPage.tsx` - Use premium component
 
-### Edge Functions (Already exist, may need minor updates)
-Ensure all return structured intelligence data.
+---
+
+## Color Scheme (Final)
+
+| Tool | Theme | Button Class |
+|------|-------|--------------|
+| ROI Calculator | Emerald | `ai-emerald` |
+| Lead Qualification | Purple | `ai-purple` |
+| Price Predictor | Blue | `ai-blue` |
+| Neighborhood Insights | Teal | `ai-teal` |
+| Competitor Analysis | Orange | `ai-orange` |
+| Market Report | Indigo | `ai-indigo` |
+| Objection Handler | Rose | `ai-rose` |
+| Follow-up Scheduler | Cyan | `ai-cyan` |
+| Meeting Summarizer | Violet | `ai-violet` |
+| Translation Hub | Amber | `ai-amber` |
+| Video Tour Script | Pink | `ai-pink` |
+| Contract Reviewer | Red | `ai-red` |
+| Document Generator | Lime | `ai-lime` |
+| Property Analyzer | Sky | `ai-sky` |
 
 ---
 
 ## Expected Outcome
-
-After implementation:
-- All 14 AI tools will have premium full-page UI
-- Each tool has its own unique color identity
-- All tools work end-to-end (Generate button functional)
-- Results show structured intelligence (scores, insights, recommendations)
-- All usage tracked in backend for analytics
-- Consistent with Property Evaluator and Scan & Sign quality
-
----
-
-## Estimated Scope
-- 14 frontend component redesigns
-- 14 field mapping fixes
-- Analytics integration
-- Testing and verification
+- All 14 tools have premium dark-themed UI
+- Buttons are vibrant and visible (not faded)
+- Each tool has inline guide with description + how-to-use
+- Text is readable (white on dark, not white on white)
+- All tools work end-to-end with proper field mapping
+- Consistent UX across all AI tools
