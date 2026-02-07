@@ -186,11 +186,13 @@ const AIPersonalShopper = () => {
       try {
         await supabase.functions.invoke('send-inquiry-email', {
           body: {
-            name: inquiryForm.name,
+            fullName: inquiryForm.name || 'Guest',
             email: inquiryForm.email,
-            phone: inquiryForm.phone,
+            phone: inquiryForm.phone?.replace(/[\s\-\(\)]/g, '') || '+971000000000',
+            nationality: 'Not specified',
+            language: 'English',
+            message: fullPlan,
             source: 'AI Travel Concierge',
-            context: fullPlan
           }
         });
       } catch (notifyErr) {

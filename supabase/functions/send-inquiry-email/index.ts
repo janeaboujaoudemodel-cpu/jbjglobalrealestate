@@ -139,7 +139,7 @@ async function autoBlockIP(supabaseAdmin: any, clientIp: string, functionName: s
   }
 }
 
-// Input validation schema
+// Input validation schema - nationality and language are optional with defaults
 const InquiryRequestSchema = z.object({
   fullName: z.string()
     .min(1, "Full name is required")
@@ -157,13 +157,15 @@ const InquiryRequestSchema = z.object({
     // E.164 (+ and 7-15 digits)
     .regex(/^\+[1-9]\d{6,14}$/, "Invalid phone number. Include country code (e.g., +971...)"),
   nationality: z.string()
-    .min(1, "Nationality is required")
     .max(100, "Nationality must be less than 100 characters")
-    .trim(),
+    .trim()
+    .optional()
+    .default("Not specified"),
   language: z.string()
-    .min(1, "Language is required")
     .max(50, "Language must be less than 50 characters")
-    .trim(),
+    .trim()
+    .optional()
+    .default("English"),
   message: z.string()
     .max(1000, "Message must be less than 1000 characters")
     .trim()

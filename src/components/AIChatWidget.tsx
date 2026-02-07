@@ -434,11 +434,12 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
       try {
         await supabase.functions.invoke('send-inquiry-email', {
           body: {
-            name: `${userInfo.firstName} ${userInfo.lastName}`,
+            fullName: `${userInfo.firstName} ${userInfo.lastName}`,
             email: userInfo.email,
-            phone: userInfo.phone,
+            phone: userInfo.phone?.replace(/[\s\-\(\)]/g, '') || '+971000000000',
+            nationality: userInfo.nationality || 'Not specified',
+            language: userInfo.language || 'English',
             message: `Chat inquiry from ${userInfo.nationality} - ${userInfo.currentLocation}\nService: ${selectedService}\nLanguage: ${userInfo.language}\n\nConversation transcript attached.`,
-            subject: `[Chat Lead] ${userInfo.firstName} ${userInfo.lastName} - ${selectedService}`,
             source: 'ai_chat_widget',
           },
         });

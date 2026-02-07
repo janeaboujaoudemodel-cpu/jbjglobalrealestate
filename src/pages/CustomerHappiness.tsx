@@ -63,24 +63,56 @@ const SupportTicketForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate submission
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    toast({
-      title: "Ticket Submitted Successfully! 🎫",
-      description: "Your support ticket has been created. We'll get back to you within 24 hours.",
-    });
+    try {
+      const { data, error } = await supabase.functions.invoke('submit-support-ticket', {
+        body: {
+          fullName: formData.fullName,
+          email: formData.email,
+          phone: formData.phone || null,
+          subject: formData.subject,
+          category: formData.category,
+          priority: formData.priority,
+          description: formData.description,
+        },
+      });
 
-    setFormData({
-      fullName: "",
-      email: "",
-      phone: "",
-      subject: "",
-      category: "",
-      priority: "medium",
-      description: "",
-    });
-    setIsSubmitting(false);
+      if (error) {
+        console.error('Support ticket error:', error);
+        toast({
+          title: "Submission Failed",
+          description: "Unable to submit your ticket. Please try again or contact us directly.",
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      const ticketNumber = data?.ticketNumber || 'pending';
+      
+      toast({
+        title: "Ticket Submitted Successfully! 🎫",
+        description: `Your support ticket #${ticketNumber} has been created. We'll get back to you within 24 hours.`,
+      });
+
+      setFormData({
+        fullName: "",
+        email: "",
+        phone: "",
+        subject: "",
+        category: "",
+        priority: "medium",
+        description: "",
+      });
+    } catch (err) {
+      console.error('Support ticket submission failed:', err);
+      toast({
+        title: "Submission Failed",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
