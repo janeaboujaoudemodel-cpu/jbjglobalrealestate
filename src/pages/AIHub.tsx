@@ -46,7 +46,10 @@ import {
   Handshake,
   ArrowRight,
   Ruler,
-  Newspaper
+  Newspaper,
+  TrendingUp,
+  MapPin,
+  UserCheck
 } from "lucide-react";
 
 const fadeInUp = {
@@ -171,6 +174,30 @@ const investorTools = [
     icon: Brain,
     link: "/ai-property-analyzer",
     category: "property" as ToolCategory,
+  },
+  {
+    id: "ai-price-predictor",
+    title: "JBJ AI Price Predictor",
+    description: "AI-powered price predictions with confidence bands and comparables.",
+    icon: TrendingUp,
+    link: "/ai-price-predictor",
+    category: "property" as ToolCategory,
+  },
+  {
+    id: "ai-neighborhood-insights",
+    title: "JBJ AI Neighborhood Insights",
+    description: "Comprehensive area analysis with livability scores and demographics.",
+    icon: MapPin,
+    link: "/ai-neighborhood-insights",
+    category: "property" as ToolCategory,
+  },
+  {
+    id: "ai-lead-qualification",
+    title: "JBJ AI Lead Qualification",
+    description: "Score leads with AI: confidence, objections, and next actions.",
+    icon: UserCheck,
+    link: "/ai-lead-qualification",
+    category: "marketing" as ToolCategory,
   },
   {
     id: "interior-design",
