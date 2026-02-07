@@ -736,7 +736,7 @@ export const AI_TOOLS_INVENTORY_VERIFIED: AIToolEntry[] = [
   {
     name: 'AI Property Analyzer',
     route: '/ai-property-analyzer',
-    navPath: 'AI Hub > Property Intelligence, Sitemap',
+    navPath: 'AI Hub > Property Tools, Sitemap',
     visibility: 'Public',
     status: 'working',
     edgeFunction: 'ai-property-analyzer',
@@ -744,11 +744,11 @@ export const AI_TOOLS_INVENTORY_VERIFIED: AIToolEntry[] = [
     proofPack: {
       routeFile: 'src/App.tsx',
       routeSnippet: `<Route path="/ai-property-analyzer" element={<AIPropertyAnalyzerPage />} />`,
-      navFile: 'src/pages/Sitemap.tsx',
-      navSnippet: `{ href: "/ai-hub#property-analyzer", label: "AI Property Analyzer" }`,
+      navFile: 'src/pages/AIHub.tsx',
+      navSnippet: `{ id: "ai-property-analyzer", title: "JBJ AI Property Analyzer", link: "/ai-property-analyzer" }`,
       apiWiringFile: 'src/components/ai-tools/AIPropertyAnalyzer.tsx',
       apiWiringSnippet: `await supabase.functions.invoke('ai-property-analyzer', { body: { area, propertyType, ... } })`,
-      statusJustification: 'Route created, edge function exists and tested working, component embedded and standalone page available.',
+      statusJustification: 'Route verified, listed in AI Hub, edge function tested working with 200 response, full UI wiring complete.',
     },
     buildSpec: {
       usersPermissions: 'Public',

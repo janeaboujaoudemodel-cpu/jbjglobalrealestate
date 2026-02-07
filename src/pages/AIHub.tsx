@@ -165,6 +165,14 @@ const investorTools = [
     category: "property" as ToolCategory,
   },
   {
+    id: "ai-property-analyzer",
+    title: "JBJ AI Property Analyzer",
+    description: "Deep market analysis with price trends and investment metrics.",
+    icon: Brain,
+    link: "/ai-property-analyzer",
+    category: "property" as ToolCategory,
+  },
+  {
     id: "interior-design",
     title: "JBJ AI Interior Design",
     description: "Visualize spaces with AI-generated designs.",
