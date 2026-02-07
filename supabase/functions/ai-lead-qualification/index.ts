@@ -48,16 +48,39 @@ interface QualificationRequest {
 }
 
 /**
- * Create a SHA-256 hash of PII for lead_ref storage
+ * Create HMAC-SHA256 hash of PII for lead_ref storage
+ * Uses keyed hashing to prevent dictionary attacks
  * This allows correlation without storing raw PII
  */
 async function hashPII(value: string | undefined): Promise<string | null> {
   if (!value) return null;
+  
+  const hmacKey = Deno.env.get("LEAD_REF_HMAC_KEY");
+  if (!hmacKey) {
+    console.warn("LEAD_REF_HMAC_KEY not configured - lead_ref will be null");
+    return null;
+  }
+  
   const normalized = value.toLowerCase().trim();
   const encoder = new TextEncoder();
-  const data = encoder.encode(normalized);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  
+  // Import key for HMAC-SHA256
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(hmacKey),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+  
+  // Create HMAC signature
+  const signature = await crypto.subtle.sign(
+    "HMAC",
+    key,
+    encoder.encode(normalized)
+  );
+  
+  const hashArray = Array.from(new Uint8Array(signature));
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
@@ -70,7 +93,8 @@ async function verifyBrokerAccess(
   userId: string,
   userEmail: string | undefined
 ): Promise<{ allowed: boolean; reason?: string }> {
-  const ownerEmail = Deno.env.get("VITE_OWNER_EMAIL");
+  // Use OWNER_EMAIL secret (NOT VITE_ prefix for edge functions)
+  const ownerEmail = Deno.env.get("OWNER_EMAIL");
   
   // 1. Check if user is Owner (always has broker access)
   if (ownerEmail && userEmail?.toLowerCase() === ownerEmail.toLowerCase()) {
