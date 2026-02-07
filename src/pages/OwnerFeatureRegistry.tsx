@@ -60,15 +60,16 @@ interface FeatureItem {
 }
 
 // COMPLETE FEATURE REGISTRY - Every implemented feature listed with exact navigation paths
+// Owner: Jane bou Jaoude — LOCKED NAME
 const FEATURES: FeatureItem[] = [
   // ═══════════════════════════════════════════════════════════════
   // OWNER COMMAND CENTER
   // ═══════════════════════════════════════════════════════════════
   {
     name: "Owner Dashboard",
-    description: "Main command center with KPIs, leads overview, tasks, and conversations",
+    description: "Main command center with KPIs, leads overview, tasks, and conversations — Jane bou Jaoude's hub",
     path: "/owner",
-    navigationPath: "Sidebar → Owner Command Center → Dashboard",
+    navigationPath: "Sidebar → Owner Command Center → Dashboard | Direct: /owner",
     category: "Owner Command Center",
     icon: <LayoutDashboard className="h-4 w-4" />,
     status: 'active',
@@ -78,7 +79,7 @@ const FEATURES: FeatureItem[] = [
     name: "Daily Agenda",
     description: "Today's tasks, overdue items, follow-ups due, and unanswered messages",
     path: "/owner/agenda",
-    navigationPath: "Sidebar → Owner Command Center → Daily Agenda | Dashboard → Quick Navigation",
+    navigationPath: "Sidebar → Owner Command Center → Daily Agenda | Dashboard Quick Nav",
     category: "Owner Command Center",
     icon: <Calendar className="h-4 w-4" />,
     status: 'active',
@@ -88,7 +89,7 @@ const FEATURES: FeatureItem[] = [
     name: "Unified Inbox",
     description: "Single inbox merging WhatsApp, Email, Instagram, Facebook, Website chat",
     path: "/owner/inbox",
-    navigationPath: "Sidebar → Owner Command Center → Unified Inbox | Dashboard → Quick Navigation",
+    navigationPath: "Sidebar → Owner Command Center → Unified Inbox | Dashboard Quick Nav",
     category: "Owner Command Center",
     icon: <Inbox className="h-4 w-4" />,
     status: 'active',
@@ -99,7 +100,7 @@ const FEATURES: FeatureItem[] = [
     name: "Message Templates",
     description: "Reusable templates for WhatsApp, Email, DM, Voice with variable support",
     path: "/owner/templates",
-    navigationPath: "Sidebar → Owner Command Center → Message Templates | Dashboard → Quick Navigation",
+    navigationPath: "Sidebar → Owner Command Center → Message Templates | Dashboard Quick Nav",
     category: "Owner Command Center",
     icon: <FileText className="h-4 w-4" />,
     status: 'active',
@@ -107,9 +108,9 @@ const FEATURES: FeatureItem[] = [
   },
   {
     name: "Communication Settings",
-    description: "Connect channels, configure AI behavior, tone profile, voice settings",
+    description: "Connect channels, configure AI behavior, tone profile, voice settings for Jane bou Jaoude",
     path: "/owner/settings/communication",
-    navigationPath: "Sidebar → Owner Command Center → Communication Settings | Dashboard → Quick Navigation",
+    navigationPath: "Sidebar → Owner Command Center → Communication Settings | Dashboard Quick Nav",
     category: "Owner Command Center",
     icon: <Settings className="h-4 w-4" />,
     status: 'active',
@@ -117,9 +118,9 @@ const FEATURES: FeatureItem[] = [
   },
   {
     name: "Feature Registry (This Page)",
-    description: "Complete list of all features with navigation paths - the audit page",
+    description: "Complete audit of all features with navigation paths — visibility guarantee",
     path: "/owner/features",
-    navigationPath: "Sidebar → Owner Command Center → Feature Registry | Dashboard → Quick Navigation → All Features",
+    navigationPath: "Sidebar → Owner Command Center → Feature Registry | Dashboard → All Features",
     category: "Owner Command Center",
     icon: <BookOpen className="h-4 w-4" />,
     status: 'active',
@@ -133,7 +134,7 @@ const FEATURES: FeatureItem[] = [
     name: "Leads Inbox",
     description: "Full lead management with search, filters, CSV export, and inline actions",
     path: "/crm/leads",
-    navigationPath: "Sidebar → CRM Modules → Leads Inbox | Dashboard → Quick Navigation",
+    navigationPath: "Sidebar → CRM Modules → Leads Inbox | Dashboard Quick Nav",
     category: "CRM Modules",
     icon: <Users className="h-4 w-4" />,
     status: 'active',
@@ -143,7 +144,7 @@ const FEATURES: FeatureItem[] = [
     name: "Lead Detail",
     description: "Individual lead profile with notes, activity timeline, and linked tasks",
     path: "/crm/leads/:id",
-    navigationPath: "Leads Inbox → Click any lead → Open",
+    navigationPath: "Leads Inbox → Click any lead row → Open button",
     category: "CRM Modules",
     icon: <Users className="h-4 w-4" />,
     status: 'active',
@@ -153,7 +154,7 @@ const FEATURES: FeatureItem[] = [
     name: "CRM Tasks",
     description: "Task management linked to leads with due dates, priorities, and status",
     path: "/crm/tasks",
-    navigationPath: "Sidebar → CRM Modules → My Tasks | Dashboard → Quick Navigation → Tasks",
+    navigationPath: "Sidebar → CRM Modules → My Tasks | Dashboard Quick Nav → Tasks",
     category: "CRM Modules",
     icon: <CheckSquare className="h-4 w-4" />,
     status: 'active',
@@ -163,7 +164,7 @@ const FEATURES: FeatureItem[] = [
     name: "CRM Calendar",
     description: "Calendar view of appointments, scheduled follow-ups, and events",
     path: "/crm/calendar",
-    navigationPath: "Sidebar → CRM Modules → Calendar | Dashboard → Quick Navigation",
+    navigationPath: "Sidebar → CRM Modules → Calendar | Dashboard Quick Nav",
     category: "CRM Modules",
     icon: <Calendar className="h-4 w-4" />,
     status: 'active',
@@ -173,7 +174,7 @@ const FEATURES: FeatureItem[] = [
     name: "CRM Notes",
     description: "Quick notes and memos, optionally linked to leads",
     path: "/crm/notes",
-    navigationPath: "Sidebar → CRM Modules → Notes",
+    navigationPath: "Sidebar → CRM Modules → Notes | Dashboard Quick Nav",
     category: "CRM Modules",
     icon: <StickyNote className="h-4 w-4" />,
     status: 'active',
@@ -183,17 +184,27 @@ const FEATURES: FeatureItem[] = [
     name: "CRM Reminders",
     description: "Set and manage reminders for follow-ups and tasks",
     path: "/crm/reminders",
-    navigationPath: "Sidebar → CRM Modules → Reminders",
+    navigationPath: "Sidebar → CRM Modules → Reminders | Dashboard Quick Nav",
     category: "CRM Modules",
     icon: <Bell className="h-4 w-4" />,
     status: 'active',
     isManual: true,
   },
   {
+    name: "Employees Hub",
+    description: "Team management and CRM user profiles",
+    path: "/crm/employees",
+    navigationPath: "Sidebar → CRM Modules → Employees Hub | Dashboard Quick Nav",
+    category: "CRM Modules",
+    icon: <Users className="h-4 w-4" />,
+    status: 'active',
+    isManual: true,
+  },
+  {
     name: "Workflow Automations",
-    description: "Create automated workflows and triggers (Owner-only)",
+    description: "Automated workflows and triggers for lead management (Owner-only)",
     path: "/automations",
-    navigationPath: "Sidebar → CRM Modules → Automations",
+    navigationPath: "Sidebar → CRM Modules → Automations | Dashboard Quick Nav",
     category: "CRM Modules",
     icon: <Zap className="h-4 w-4" />,
     status: 'active',
@@ -205,9 +216,9 @@ const FEATURES: FeatureItem[] = [
   // ═══════════════════════════════════════════════════════════════
   {
     name: "AI Text Reply Engine",
-    description: "Generate AI-powered text replies in Owner's exact style and tone",
+    description: "Generate AI-powered text replies in Jane bou Jaoude's exact style and tone",
     path: "/owner/inbox",
-    navigationPath: "Unified Inbox → Select thread → 'Generate AI Reply' button",
+    navigationPath: "Unified Inbox → Select thread → 'Generate AI Reply' button (Sparkles icon)",
     category: "AI Features",
     icon: <Sparkles className="h-4 w-4" />,
     status: 'active',
@@ -216,9 +227,9 @@ const FEATURES: FeatureItem[] = [
   },
   {
     name: "Voice Replies (ElevenLabs)",
-    description: "Generate voice notes using Owner's cloned voice for WhatsApp/DM",
+    description: "Generate voice notes using Jane bou Jaoude's cloned voice for WhatsApp/DM",
     path: "/owner/inbox",
-    navigationPath: "Unified Inbox → Select thread → 'Generate Voice Reply' button",
+    navigationPath: "Unified Inbox → Select thread → AI Draft → 'Voice Reply' button",
     category: "AI Features",
     icon: <Mic className="h-4 w-4" />,
     status: 'active',
@@ -227,7 +238,7 @@ const FEATURES: FeatureItem[] = [
   },
   {
     name: "AI Learning System",
-    description: "AI learns from Owner corrections to improve over time automatically",
+    description: "AI learns from Owner corrections to improve replies over time",
     path: "/owner/settings/communication",
     navigationPath: "Communication Settings → AI Settings tab → Learning section",
     category: "AI Features",
@@ -245,13 +256,33 @@ const FEATURES: FeatureItem[] = [
     status: 'active',
     isManual: true,
   },
+  {
+    name: "AI Hub",
+    description: "Central AI tools dashboard with all JBJ AI capabilities",
+    path: "/ai-hub",
+    navigationPath: "Dashboard Quick Nav → AI Hub | Sidebar → Hub & Assistants → JBJ Broker Hub",
+    category: "AI Features",
+    icon: <Brain className="h-4 w-4" />,
+    status: 'active',
+    isAIPowered: true,
+  },
+  {
+    name: "Executive Assistant",
+    description: "AI-powered executive assistant for task management and scheduling",
+    path: "/executive-assistant",
+    navigationPath: "Dashboard Quick Nav → Assistant | Sidebar → Hub & Assistants",
+    category: "AI Features",
+    icon: <Target className="h-4 w-4" />,
+    status: 'active',
+    isAIPowered: true,
+  },
 
   // ═══════════════════════════════════════════════════════════════
   // CHANNELS & INTEGRATIONS
   // ═══════════════════════════════════════════════════════════════
   {
     name: "WhatsApp Business Integration",
-    description: "Connect WhatsApp Business accounts (Owner + Company)",
+    description: "Connect WhatsApp Business accounts (Owner Personal + Company)",
     path: "/owner/settings/communication",
     navigationPath: "Communication Settings → Channels tab → Add Channel → WhatsApp",
     category: "Channels",
@@ -311,7 +342,7 @@ const FEATURES: FeatureItem[] = [
   },
   {
     name: "ElevenLabs Voice Clone",
-    description: "Owner's voice clone for generating voice notes",
+    description: "Jane bou Jaoude's verified voice clone for generating voice notes",
     path: "/owner/settings/communication",
     navigationPath: "Communication Settings → Voice tab",
     category: "Channels",
@@ -327,9 +358,19 @@ const FEATURES: FeatureItem[] = [
     name: "Security Console",
     description: "Security settings, audit logs, and access controls",
     path: "/security-console",
-    navigationPath: "Header → Security icon | Sidebar → System → Security Console",
+    navigationPath: "Dashboard Quick Nav → Security | Direct: /security-console",
     category: "System",
     icon: <Shield className="h-4 w-4" />,
+    status: 'active',
+    isManual: true,
+  },
+  {
+    name: "JBJ Analytics Dashboard",
+    description: "Business analytics and performance metrics",
+    path: "/jbj-analytics",
+    navigationPath: "Dashboard Quick Nav → Analytics | Direct: /jbj-analytics",
+    category: "System",
+    icon: <Eye className="h-4 w-4" />,
     status: 'active',
     isManual: true,
   },
@@ -381,7 +422,7 @@ export default function OwnerFeatureRegistry() {
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-black">Feature Registry & Audit</h1>
-                  <p className="text-zinc-500 text-sm">Complete visibility of all implemented features</p>
+                  <p className="text-zinc-500 text-sm">Jane bou Jaoude — Complete visibility of all implemented features</p>
                 </div>
               </div>
               

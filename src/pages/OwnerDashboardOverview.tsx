@@ -412,7 +412,7 @@ export default function OwnerDashboardOverview() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">Owner Dashboard</h1>
           <p className="text-zinc-400">
-            Your command center for leads, tasks, and conversations
+            Welcome back, <span className="text-gold font-medium">Jane bou Jaoude</span> — Your command center
           </p>
         </div>
 
@@ -569,22 +569,16 @@ export default function OwnerDashboardOverview() {
           </CardContent>
         </Card>
 
-        {/* Quick Actions - Full Navigation */}
+        {/* Quick Actions - COMPLETE Navigation Grid */}
         <Card className="bg-zinc-900/80 border-zinc-800 mt-6">
           <CardHeader>
             <CardTitle className="text-lg text-white">Quick Navigation</CardTitle>
-            <CardDescription className="text-zinc-400">Access all Owner features</CardDescription>
+            <CardDescription className="text-zinc-400">Access all Owner features — Jane bou Jaoude's Command Center</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              <Button 
-                variant="outline"
-                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
-                onClick={() => navigate('/crm/leads')} 
-              >
-                <Users className="h-5 w-5 text-gold" />
-                <span className="text-sm">Leads Inbox</span>
-              </Button>
+            {/* Primary Owner Actions */}
+            <p className="text-xs text-zinc-500 uppercase tracking-wider mb-3">Owner Command Center</p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
               <Button 
                 variant="outline"
                 className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
@@ -612,10 +606,31 @@ export default function OwnerDashboardOverview() {
               <Button 
                 variant="outline"
                 className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
+                onClick={() => navigate('/owner/settings/communication')}
+              >
+                <Settings className="h-5 w-5 text-zinc-400" />
+                <span className="text-sm">Comm Settings</span>
+              </Button>
+            </div>
+
+            {/* CRM Modules */}
+            <p className="text-xs text-zinc-500 uppercase tracking-wider mb-3">CRM Modules</p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+              <Button 
+                variant="outline"
+                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
+                onClick={() => navigate('/crm/leads')} 
+              >
+                <Users className="h-5 w-5 text-gold" />
+                <span className="text-sm">Leads Inbox</span>
+              </Button>
+              <Button 
+                variant="outline"
+                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
                 onClick={() => navigate('/crm/tasks')}
               >
                 <CheckSquare className="h-5 w-5 text-amber-400" />
-                <span className="text-sm">Tasks</span>
+                <span className="text-sm">My Tasks</span>
               </Button>
               <Button 
                 variant="outline"
@@ -628,10 +643,34 @@ export default function OwnerDashboardOverview() {
               <Button 
                 variant="outline"
                 className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
-                onClick={() => navigate('/owner/settings/communication')}
+                onClick={() => navigate('/crm/reminders')}
               >
-                <Settings className="h-5 w-5 text-zinc-400" />
-                <span className="text-sm">Settings</span>
+                <Clock className="h-5 w-5 text-rose-400" />
+                <span className="text-sm">Reminders</span>
+              </Button>
+              <Button 
+                variant="outline"
+                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
+                onClick={() => navigate('/crm/notes')}
+              >
+                <FileText className="h-5 w-5 text-violet-400" />
+                <span className="text-sm">Notes</span>
+              </Button>
+              <Button 
+                variant="outline"
+                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
+                onClick={() => navigate('/automations')}
+              >
+                <AlertCircle className="h-5 w-5 text-amber-500" />
+                <span className="text-sm">Automations</span>
+              </Button>
+              <Button 
+                variant="outline"
+                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
+                onClick={() => navigate('/crm/employees')}
+              >
+                <Users className="h-5 w-5 text-teal-400" />
+                <span className="text-sm">Employees</span>
               </Button>
               <Button 
                 variant="outline"
@@ -640,6 +679,43 @@ export default function OwnerDashboardOverview() {
               >
                 <BookOpen className="h-5 w-5 text-pink-400" />
                 <span className="text-sm">All Features</span>
+              </Button>
+            </div>
+
+            {/* Quick Tools */}
+            <p className="text-xs text-zinc-500 uppercase tracking-wider mb-3">Quick Tools</p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <Button 
+                variant="outline"
+                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
+                onClick={() => navigate('/ai-hub')}
+              >
+                <Activity className="h-5 w-5 text-fuchsia-400" />
+                <span className="text-sm">AI Hub</span>
+              </Button>
+              <Button 
+                variant="outline"
+                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
+                onClick={() => navigate('/executive-assistant')}
+              >
+                <ExternalLink className="h-5 w-5 text-sky-400" />
+                <span className="text-sm">Assistant</span>
+              </Button>
+              <Button 
+                variant="outline"
+                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
+                onClick={() => navigate('/security-console')}
+              >
+                <AlertCircle className="h-5 w-5 text-red-400" />
+                <span className="text-sm">Security</span>
+              </Button>
+              <Button 
+                variant="outline"
+                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
+                onClick={() => navigate('/jbj-analytics')}
+              >
+                <TrendingUp className="h-5 w-5 text-emerald-400" />
+                <span className="text-sm">Analytics</span>
               </Button>
             </div>
           </CardContent>
