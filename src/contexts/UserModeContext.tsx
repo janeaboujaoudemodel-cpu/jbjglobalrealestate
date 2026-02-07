@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
 const MODE_KEY = "jj_user_mode";
+const MODE_SELECTED_KEY = "jj_mode_selected";
 
 // Expanded to 3 modes: investor, broker, or both
 export type UserMode = 'investor' | 'broker' | 'investor_broker';
@@ -14,6 +15,7 @@ interface UserModeContextType {
   isInvestorMode: boolean;
   isBrokerMode: boolean;
   isCombinedMode: boolean;
+  hasMadeInitialSelection: boolean;
 }
 
 const UserModeContext = createContext<UserModeContextType | undefined>(undefined);
@@ -33,6 +35,10 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
     return normalizeMode(stored);
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [hasMadeInitialSelection, setHasMadeInitialSelection] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem(MODE_SELECTED_KEY) === 'true';
+  });
   const { user } = useAuth();
 
   // Load mode from database on mount and when user changes
@@ -42,8 +48,13 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
       
       // First check localStorage
       const storedMode = localStorage.getItem(MODE_KEY);
+      const storedSelection = localStorage.getItem(MODE_SELECTED_KEY);
+      
       if (storedMode) {
         setModeState(normalizeMode(storedMode));
+      }
+      if (storedSelection === 'true') {
+        setHasMadeInitialSelection(true);
       }
 
       // If logged in, sync with database
@@ -59,6 +70,9 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
             const dbMode = normalizeMode(data.selected_mode);
             setModeState(dbMode);
             localStorage.setItem(MODE_KEY, dbMode);
+            // If we have a mode in DB, user has made a selection
+            setHasMadeInitialSelection(true);
+            localStorage.setItem(MODE_SELECTED_KEY, 'true');
           } else if (!error) {
             // No preferences record yet, create one with current mode
             const currentMode = normalizeMode(storedMode);
@@ -84,6 +98,10 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
     // Optimistic update
     setModeState(newMode);
     localStorage.setItem(MODE_KEY, newMode);
+    
+    // Mark as explicitly selected
+    setHasMadeInitialSelection(true);
+    localStorage.setItem(MODE_SELECTED_KEY, 'true');
 
     // Persist to database if logged in
     if (user?.id) {
@@ -116,6 +134,7 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
         isInvestorMode: mode === 'investor' || mode === 'investor_broker',
         isBrokerMode: mode === 'broker' || mode === 'investor_broker',
         isCombinedMode: mode === 'investor_broker',
+        hasMadeInitialSelection,
       }}
     >
       {children}

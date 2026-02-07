@@ -16,21 +16,23 @@ interface ModeSwitcherProps {
   className?: string;
 }
 
-const MODE_CONFIG: Record<UserMode, { label: string; shortLabel: string; icon: typeof User; color: string; bgColor: string; description: string }> = {
+const MODE_CONFIG: Record<UserMode, { label: string; shortLabel: string; icon: typeof User; color: string; bgColor: string; borderColor: string; description: string }> = {
   investor: {
     label: 'Investor Mode',
     shortLabel: 'I',
     icon: User,
     color: 'text-emerald-500',
     bgColor: 'bg-emerald-500/10 border-emerald-500/30',
+    borderColor: 'border-emerald-500/40',
     description: 'Browse properties & invest'
   },
   broker: {
     label: 'Broker Mode',
     shortLabel: 'B',
     icon: Briefcase,
-    color: 'text-gold',
-    bgColor: 'bg-gold/10 border-gold/30',
+    color: 'text-blue-500',
+    bgColor: 'bg-blue-500/10 border-blue-500/30',
+    borderColor: 'border-blue-500/40',
     description: 'Access broker tools & dashboard'
   },
   investor_broker: {
@@ -39,6 +41,7 @@ const MODE_CONFIG: Record<UserMode, { label: string; shortLabel: string; icon: t
     icon: Users,
     color: 'text-purple-500',
     bgColor: 'bg-purple-500/10 border-purple-500/30',
+    borderColor: 'border-purple-500/40',
     description: 'Full access to both modes'
   }
 };
@@ -158,20 +161,20 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
                 className={cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200",
                   isActive 
-                    ? "bg-gradient-to-r from-gold/10 to-gold/5 border border-gold/20" 
+                    ? `${config.bgColor} ${config.borderColor} border` 
                     : "hover:bg-zinc-50"
                 )}
               >
                 <div className={cn(
                   "w-8 h-8 rounded-lg flex items-center justify-center border",
-                  isActive ? config.bgColor : "bg-zinc-100 border-zinc-200"
+                  isActive ? `${config.bgColor} ${config.borderColor}` : "bg-zinc-100 border-zinc-200"
                 )}>
                   <Icon className={cn("w-4 h-4", isActive ? config.color : "text-zinc-500")} />
                 </div>
                 <div className="flex-1">
                   <p className={cn(
                     "text-sm font-medium",
-                    isActive ? "text-zinc-900" : "text-zinc-700"
+                    isActive ? config.color : "text-zinc-700"
                   )}>
                     {config.label}
                   </p>
@@ -180,7 +183,7 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
                   </p>
                 </div>
                 {isActive && (
-                  <Check className="w-4 h-4 text-gold" />
+                  <Check className={cn("w-4 h-4", config.color)} />
                 )}
               </DropdownMenuItem>
             );

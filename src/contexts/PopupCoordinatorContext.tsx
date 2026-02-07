@@ -9,6 +9,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 export type PopupId = 
   | 'welcome-modal'
   | 'role-selection-modal'
+  | 'mode-selection-modal'
   | 'lead-intent-modal'
   | 'app-download-popup'
   | 'free-tools-banner'
@@ -24,10 +25,11 @@ interface PopupPriority {
 const POPUP_PRIORITIES: PopupPriority[] = [
   { id: 'welcome-modal', priority: 1 },
   { id: 'role-selection-modal', priority: 2 },
-  { id: 'lead-intent-modal', priority: 3 },
-  { id: 'cookies-consent', priority: 4 },
-  { id: 'app-download-popup', priority: 5 },
-  { id: 'free-tools-banner', priority: 6 },
+  { id: 'mode-selection-modal', priority: 3 },
+  { id: 'lead-intent-modal', priority: 4 },
+  { id: 'cookies-consent', priority: 5 },
+  { id: 'app-download-popup', priority: 6 },
+  { id: 'free-tools-banner', priority: 7 },
   { id: 'install-app-button', priority: 10 }, // Lowest priority - floating button
 ];
 

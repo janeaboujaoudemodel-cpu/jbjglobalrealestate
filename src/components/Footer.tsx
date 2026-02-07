@@ -471,10 +471,12 @@ const Footer = () => {
               {/* Google My Business - Relocated here */}
               <GoogleMyBusinessLink />
               
-              {/* Mode Switcher - Allow users to switch modes from footer */}
+              {/* Mode Switcher - Allow users to switch modes from footer with themed styling */}
               <div className="mt-4 flex flex-col items-center gap-2">
                 <p className="text-gold/60 text-xs uppercase tracking-[0.15em]">Your Mode</p>
-                <ModeSwitcher variant="header" />
+                <div className="p-1 rounded-xl bg-black/40 border border-gold/30">
+                  <ModeSwitcher variant="header" />
+                </div>
               </div>
             </div>
           </div>

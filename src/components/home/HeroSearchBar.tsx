@@ -9,8 +9,9 @@
 
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Search, ChevronDown, SlidersHorizontal, Sparkles, DollarSign, Ruler, Home, MapPin } from "lucide-react";
+import { Search, ChevronDown, SlidersHorizontal, Sparkles, DollarSign, Ruler, Home, MapPin, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
 import {
   Select,
   SelectContent,
@@ -399,6 +400,9 @@ const HeroSearchBar = () => {
   const [communityId, setCommunityId] = useState('all');
   const [emirate, setEmirate] = useState('all');
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  // NEW: Reelly parity filters
+  const [paymentPlan, setPaymentPlan] = useState(0);
+  const [handoverYear, setHandoverYear] = useState('all');
 
   const { data: developers } = useDevelopers();
   const { data: communities } = useCommunities();
@@ -614,23 +618,23 @@ const HeroSearchBar = () => {
         </Popover>
       </div>
 
-      {/* Main Search Bar - Compact Single Line */}
-      <div className="flex items-center justify-start">
-        <div className="flex items-center bg-white/10 backdrop-blur-md border border-white/30 rounded-xl overflow-hidden w-full max-w-4xl">
-          {/* Location Search Input */}
-          <div className="flex-1 flex items-center px-3">
-            <Search className="w-4 h-4 text-gold shrink-0" />
+      {/* Main Search Bar - Responsive: Stack on mobile, single line on desktop */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-0 w-full max-w-4xl">
+        {/* Location Search Input - Full width on mobile */}
+        <div className="flex items-center bg-white/10 backdrop-blur-md border border-white/30 rounded-xl sm:rounded-l-xl sm:rounded-r-none px-3 py-3 flex-1 min-h-[48px]">
+          <Search className="w-5 h-5 text-gold shrink-0" />
           <input
-              type="text"
-              placeholder="Area, project or community"
-              value={locationSearch}
-              onChange={(e) => setLocationSearch(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/60 px-3 py-3 text-sm font-medium min-w-0 w-full"
-              style={{ minWidth: '220px' }}
-            />
-          </div>
+            type="text"
+            placeholder="Area, project or community"
+            value={locationSearch}
+            onChange={(e) => setLocationSearch(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+            className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/60 px-3 text-sm font-medium min-w-0 w-full"
+          />
+        </div>
 
+        {/* Desktop-only controls */}
+        <div className="hidden sm:flex items-center bg-white/10 backdrop-blur-md border-y border-r border-white/30 overflow-hidden">
           {/* Premium Gradient Divider */}
           <div className="h-8 w-px bg-gradient-to-b from-transparent via-white/40 to-transparent" />
 
@@ -793,6 +797,52 @@ const HeroSearchBar = () => {
                   </Select>
                 </div>
 
+                {/* NEW: Payment Plan Slider (Reelly Parity) */}
+                <div>
+                  <label className="text-sm font-semibold text-black/80 mb-2 block">
+                    Down Payment (Min %)
+                  </label>
+                  <div className="flex items-center gap-4 px-1">
+                    <Slider
+                      value={[paymentPlan]}
+                      onValueChange={(v) => setPaymentPlan(v[0])}
+                      min={0}
+                      max={100}
+                      step={5}
+                      className="flex-1"
+                    />
+                    <span className="text-sm font-bold text-black min-w-[3.5rem] text-right bg-white/80 px-2 py-1 rounded-lg border border-gold/30">
+                      {paymentPlan}%
+                    </span>
+                  </div>
+                  <p className="text-xs text-black/50 mt-1.5">
+                    Filter projects by minimum down payment requirement
+                  </p>
+                </div>
+
+                {/* NEW: Handover Year (Reelly Parity) */}
+                <div>
+                  <label className="text-sm font-semibold text-black/80 mb-2 block flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-gold" />
+                    Handover Year
+                  </label>
+                  <Select value={handoverYear} onValueChange={setHandoverYear}>
+                    <SelectTrigger className="h-11 bg-white border-gold/30">
+                      <SelectValue placeholder="Any Year" />
+                    </SelectTrigger>
+                    <SelectContent className="z-[10000]">
+                      <SelectItem value="all">Any Year</SelectItem>
+                      <SelectItem value="2024">2024</SelectItem>
+                      <SelectItem value="2025">2025</SelectItem>
+                      <SelectItem value="2026">2026</SelectItem>
+                      <SelectItem value="2027">2027</SelectItem>
+                      <SelectItem value="2028">2028</SelectItem>
+                      <SelectItem value="2029">2029</SelectItem>
+                      <SelectItem value="2030+">2030+</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 {/* Row 3: Price Range (From - To) & Size Range (From - To) & Sort */}
                 <div className="grid grid-cols-1 gap-4">
                   <div className="grid grid-cols-3 gap-3">
@@ -911,12 +961,30 @@ const HeroSearchBar = () => {
             </DialogContent>
           </Dialog>
 
-          {/* Search Button - Fills to edge, no gap */}
+          {/* Search Button - Desktop only in this row */}
           <Button
             onClick={handleSearch}
             className="h-full px-6 py-3.5 bg-gold hover:bg-gold-dark text-black font-bold text-sm rounded-r-xl transition-all duration-300 shadow-lg hover:shadow-gold/30"
           >
             <Search className="w-4 h-4 mr-1.5" />
+            Search
+          </Button>
+        </div>
+
+        {/* Mobile-only: Filters + Search buttons side by side */}
+        <div className="flex sm:hidden items-center gap-2 w-full">
+          <button
+            onClick={() => setIsFiltersOpen(true)}
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3.5 min-h-[48px] bg-white/10 backdrop-blur-md border border-white/30 rounded-xl text-white text-sm font-medium hover:bg-white/20 transition-colors"
+          >
+            <SlidersHorizontal className="w-4 h-4 text-gold" />
+            Filters
+          </button>
+          <Button
+            onClick={handleSearch}
+            className="flex-1 min-h-[48px] bg-gold hover:bg-gold-dark text-black font-bold rounded-xl shadow-lg"
+          >
+            <Search className="w-4 h-4 mr-2" />
             Search
           </Button>
         </div>
