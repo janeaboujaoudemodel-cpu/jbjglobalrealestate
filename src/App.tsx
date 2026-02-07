@@ -98,6 +98,7 @@ import RentalIndex from "./pages/RentalIndex";
 import AICalendar from "./pages/AICalendar";
 import AIFinancialAdvisor from "./pages/AIFinancialAdvisor";
 import AIPersonalShopper from "./pages/AIPersonalShopper";
+import AIPropertyAnalyzerPage from "./pages/AIPropertyAnalyzerPage";
 import IntellectualProperty from "./pages/IntellectualProperty";
 import Architecture from "./pages/services/Architecture";
 import InteriorDesign from "./pages/services/InteriorDesign";
@@ -417,6 +418,7 @@ const App = () => (
                 <Route path="/assistant-hub" element={<Navigate to="/ai-hub" replace />} />
                 <Route path="/interior-design-ai" element={<InteriorDesignAI />} />
                 <Route path="/property-evaluator" element={<PropertyEvaluator />} />
+                <Route path="/ai-property-analyzer" element={<AIPropertyAnalyzerPage />} />
                 <Route path="/document-scanner" element={<ScanSignDocuments />} />
                 <Route path="/scan-sign" element={<Navigate to="/document-scanner" replace />} />
                 <Route path="/scan-sign-documents" element={<Navigate to="/document-scanner" replace />} />
