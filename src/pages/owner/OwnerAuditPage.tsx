@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 import { 
   Shield, ExternalLink, Check, X, AlertTriangle, 
   Eye, EyeOff, Layout, Menu, FileText, Search,
-  Filter, RefreshCw
+  Filter, RefreshCw, Brain, Sparkles, Zap, AlertCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Select,
   SelectContent,
@@ -18,6 +19,66 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import OwnerGuard from '@/components/OwnerGuard';
+
+// AI Tools Inventory
+type AIToolStatus = 'working' | 'partial' | '404' | 'component_only' | 'coming_soon';
+
+interface AIToolEntry {
+  name: string;
+  route: string | null;
+  navPath: string;
+  visibility: string;
+  status: AIToolStatus;
+  edgeFunction: string | null;
+  fixNeeded: string | null;
+}
+
+const AI_TOOLS_INVENTORY: AIToolEntry[] = [
+  { name: 'AI Hub', route: '/ai-hub', navPath: 'Header > More > AI Hub', visibility: 'Public', status: 'working', edgeFunction: null, fixNeeded: null },
+  { name: 'Executive Assistant', route: '/executive-assistant', navPath: 'Owner sidebar', visibility: 'Owner Only', status: 'working', edgeFunction: 'executive-assistant', fixNeeded: null },
+  { name: "Founder's Assistant", route: '/founder-assistant', navPath: 'Owner sidebar', visibility: 'Owner Only', status: 'working', edgeFunction: 'listing-admin-chat', fixNeeded: null },
+  { name: 'Owner AI Reply', route: '/owner/inbox', navPath: 'Owner sidebar (Inbox)', visibility: 'Owner Only', status: 'partial', edgeFunction: 'owner-ai-reply', fixNeeded: 'Verify draft generation' },
+  { name: 'Owner Voice Generate', route: '/owner/inbox', navPath: 'Owner sidebar (Inbox)', visibility: 'Owner Only', status: 'partial', edgeFunction: 'owner-voice-generate', fixNeeded: 'Add UI button, verify ElevenLabs keys' },
+  { name: 'Owner Templates AI', route: '/owner/templates', navPath: 'Owner sidebar', visibility: 'Owner Only', status: 'working', edgeFunction: null, fixNeeded: null },
+  { name: 'AI Safety Panel', route: '/owner/safety', navPath: 'Owner sidebar', visibility: 'Owner Only', status: 'working', edgeFunction: null, fixNeeded: null },
+  { name: 'Listing Admin Chat', route: '/listing-admin', navPath: 'Owner sidebar', visibility: 'Owner Only', status: 'working', edgeFunction: 'listing-admin-chat', fixNeeded: null },
+  { name: 'Interior Design AI', route: '/interior-design-ai', navPath: 'AI Hub, More menu', visibility: 'Public', status: 'working', edgeFunction: 'interior-design-generate', fixNeeded: null },
+  { name: 'Property Evaluator', route: '/property-evaluator', navPath: 'AI Hub, More menu', visibility: 'Public', status: 'working', edgeFunction: 'property-evaluation', fixNeeded: null },
+  { name: 'AI Home Finder (Quiz)', route: '/quiz', navPath: 'Header, AI Hub, Footer', visibility: 'Public', status: 'working', edgeFunction: null, fixNeeded: null },
+  { name: 'AI Calendar', route: '/ai-calendar', navPath: 'AI Hub', visibility: 'Broker/Premium', status: 'coming_soon', edgeFunction: null, fixNeeded: 'Backend scheduling logic' },
+  { name: 'AI Budget Planner', route: '/ai-budget-planner', navPath: 'AI Hub', visibility: 'Public', status: 'working', edgeFunction: null, fixNeeded: null },
+  { name: 'AI Personal Shopper', route: '/ai-personal-shopper', navPath: 'AI Hub', visibility: 'Premium', status: 'partial', edgeFunction: null, fixNeeded: 'AI recommendation engine' },
+  { name: 'Rental Index AI', route: '/rental-index', navPath: 'AI Hub, More menu', visibility: 'Public', status: 'working', edgeFunction: 'rental-index-analysis', fixNeeded: null },
+  { name: 'Property Measurement', route: '/property-measurement', navPath: 'AI Hub', visibility: 'Public', status: 'working', edgeFunction: 'property-measurement', fixNeeded: null },
+  { name: 'AI Broker Workspace', route: '/ai-broker-workspace', navPath: 'Admin (internal)', visibility: 'Owner Only', status: 'working', edgeFunction: null, fixNeeded: null },
+  { name: 'Voice Studio', route: '/toolkit/voice-studio', navPath: 'Toolkit Hub', visibility: 'Public', status: 'working', edgeFunction: 'voice-studio-tts', fixNeeded: null },
+  { name: 'AI Video Studio', route: '/toolkit/ai-video-studio', navPath: 'Toolkit Hub', visibility: 'Public', status: 'partial', edgeFunction: null, fixNeeded: 'Video processing backend' },
+  { name: 'Background AI', route: '/toolkit/background-ai', navPath: 'Toolkit Hub', visibility: 'Public', status: 'working', edgeFunction: 'ai-background-remove', fixNeeded: null },
+  { name: 'Captions Translate', route: '/toolkit/captions-translate', navPath: 'Toolkit Hub', visibility: 'Public', status: 'partial', edgeFunction: 'auto-translate', fixNeeded: 'Caption translation backend' },
+  { name: 'AI Market Insights', route: '/internal/executive/ai-insights', navPath: 'Executive Dashboard', visibility: 'Owner Only', status: 'working', edgeFunction: 'ai-market-narratives', fixNeeded: null },
+  { name: 'AI Governance', route: '/governance/ai', navPath: 'Governance section', visibility: 'Owner Only', status: 'working', edgeFunction: null, fixNeeded: null },
+  { name: 'Smart AI Analysis', route: null, navPath: 'Compare page (embedded)', visibility: 'Public', status: 'working', edgeFunction: 'smart-ai-analysis', fixNeeded: null },
+  { name: 'HR AI Agent', route: '/hr-agent', navPath: 'Owner sidebar', visibility: 'Owner Only', status: 'working', edgeFunction: 'hr-ai-agent', fixNeeded: null },
+  { name: 'CRM Assistant Panel', route: null, navPath: 'CRM page (sidebar)', visibility: 'Owner Only', status: 'working', edgeFunction: 'executive-assistant', fixNeeded: null },
+  { name: 'Broker Admin Assistant', route: '/broker-admin-assistant', navPath: 'Owner sidebar', visibility: 'Owner Only', status: 'working', edgeFunction: null, fixNeeded: null },
+  { name: 'AI Property Analyzer', route: '/ai-property-analyzer', navPath: 'Footer, AI Hub (link)', visibility: 'Public', status: '404', edgeFunction: 'smart-ai-analysis', fixNeeded: 'Create route + page' },
+  { name: 'AI Lead Qualification', route: '/ai-lead-qualification', navPath: 'Footer, AI Hub (link)', visibility: 'Broker', status: '404', edgeFunction: null, fixNeeded: 'Create route + page' },
+  { name: 'AI Price Predictor', route: '/ai-price-predictor', navPath: 'Footer (link)', visibility: 'Public', status: '404', edgeFunction: null, fixNeeded: 'Create route + page' },
+  { name: 'AI Neighborhood Insights', route: '/ai-neighborhood-insights', navPath: 'Footer (link)', visibility: 'Public', status: '404', edgeFunction: null, fixNeeded: 'Create route + page' },
+  { name: 'AI Objection Handler', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
+  { name: 'AI Follow-up Scheduler', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
+  { name: 'AI Video Tour Script', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
+  { name: 'AI Virtual Staging', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
+  { name: 'AI ROI Calculator', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
+  { name: 'AI Market Report', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
+  { name: 'AI Translation Hub', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
+  { name: 'AI Meeting Summarizer', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
+  { name: 'AI Document Generator', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
+  { name: 'AI Contract Reviewer', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
+  { name: 'AI Competitor Analysis', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
+  { name: 'Voice Concierge', route: null, navPath: 'Global widget', visibility: 'Public', status: 'working', edgeFunction: 'elevenlabs-conversation-token', fixNeeded: null },
+  { name: 'Chat Support AI', route: null, navPath: 'Global chat widget', visibility: 'Public', status: 'working', edgeFunction: 'ai-chat-support', fixNeeded: null },
+];
 
 // Route Inventory - Comprehensive list of all application routes
 const ROUTE_INVENTORY = [
@@ -189,6 +250,34 @@ const OwnerAuditPage = () => {
     }
   };
 
+  // AI Tools stats
+  const aiStats = useMemo(() => {
+    const total = AI_TOOLS_INVENTORY.length;
+    const working = AI_TOOLS_INVENTORY.filter(t => t.status === 'working').length;
+    const partial = AI_TOOLS_INVENTORY.filter(t => t.status === 'partial').length;
+    const missing = AI_TOOLS_INVENTORY.filter(t => t.status === '404').length;
+    const componentOnly = AI_TOOLS_INVENTORY.filter(t => t.status === 'component_only').length;
+    const comingSoon = AI_TOOLS_INVENTORY.filter(t => t.status === 'coming_soon').length;
+    const withEdgeFunction = AI_TOOLS_INVENTORY.filter(t => t.edgeFunction).length;
+    
+    return { total, working, partial, missing, componentOnly, comingSoon, withEdgeFunction };
+  }, []);
+
+  const getAIStatusBadge = (status: AIToolStatus) => {
+    switch (status) {
+      case 'working':
+        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">✅ Working</Badge>;
+      case 'partial':
+        return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">⚠️ Partial</Badge>;
+      case '404':
+        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">❌ 404</Badge>;
+      case 'component_only':
+        return <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30">📦 Component Only</Badge>;
+      case 'coming_soon':
+        return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">🕒 Coming Soon</Badge>;
+    }
+  };
+
   return (
     <OwnerGuard>
       <div className="min-h-screen bg-black">
@@ -208,7 +297,20 @@ const OwnerAuditPage = () => {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Stats Cards */}
+          <Tabs defaultValue="routes" className="w-full">
+            <TabsList className="bg-zinc-900/50 border border-gold/20 mb-6">
+              <TabsTrigger value="routes" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
+                <FileText className="w-4 h-4 mr-2" />
+                Route Inventory
+              </TabsTrigger>
+              <TabsTrigger value="ai-tools" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
+                <Brain className="w-4 h-4 mr-2" />
+                AI Tools Audit
+              </TabsTrigger>
+            </TabsList>
+
+            {/* Routes Tab */}
+            <TabsContent value="routes">
           <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
             <Card className="bg-zinc-900/50 border-gold/20">
               <CardContent className="p-4 text-center">
@@ -401,6 +503,177 @@ const OwnerAuditPage = () => {
               </div>
             </div>
           </div>
+            </TabsContent>
+
+            {/* AI Tools Tab */}
+            <TabsContent value="ai-tools">
+              {/* AI Stats Cards */}
+              <div className="grid grid-cols-2 md:grid-cols-7 gap-4 mb-8">
+                <Card className="bg-zinc-900/50 border-gold/20">
+                  <CardContent className="p-4 text-center">
+                    <div className="text-2xl font-bold text-white">{aiStats.total}</div>
+                    <div className="text-xs text-zinc-400">Total AI Tools</div>
+                  </CardContent>
+                </Card>
+                <Card className="bg-zinc-900/50 border-gold/20">
+                  <CardContent className="p-4 text-center">
+                    <div className="text-2xl font-bold text-green-400">{aiStats.working}</div>
+                    <div className="text-xs text-zinc-400">Working</div>
+                  </CardContent>
+                </Card>
+                <Card className="bg-zinc-900/50 border-gold/20">
+                  <CardContent className="p-4 text-center">
+                    <div className="text-2xl font-bold text-yellow-400">{aiStats.partial}</div>
+                    <div className="text-xs text-zinc-400">Partial</div>
+                  </CardContent>
+                </Card>
+                <Card className="bg-zinc-900/50 border-gold/20">
+                  <CardContent className="p-4 text-center">
+                    <div className="text-2xl font-bold text-red-400">{aiStats.missing}</div>
+                    <div className="text-xs text-zinc-400">404 Missing</div>
+                  </CardContent>
+                </Card>
+                <Card className="bg-zinc-900/50 border-gold/20">
+                  <CardContent className="p-4 text-center">
+                    <div className="text-2xl font-bold text-orange-400">{aiStats.componentOnly}</div>
+                    <div className="text-xs text-zinc-400">Component Only</div>
+                  </CardContent>
+                </Card>
+                <Card className="bg-zinc-900/50 border-gold/20">
+                  <CardContent className="p-4 text-center">
+                    <div className="text-2xl font-bold text-blue-400">{aiStats.comingSoon}</div>
+                    <div className="text-xs text-zinc-400">Coming Soon</div>
+                  </CardContent>
+                </Card>
+                <Card className="bg-zinc-900/50 border-gold/20">
+                  <CardContent className="p-4 text-center">
+                    <div className="text-2xl font-bold text-purple-400">{aiStats.withEdgeFunction}</div>
+                    <div className="text-xs text-zinc-400">Edge Functions</div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* AI Tools Table */}
+              <Card className="bg-zinc-900/50 border-gold/20">
+                <CardHeader className="border-b border-gold/20">
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <Brain className="w-5 h-5 text-gold" />
+                    AI Tools Inventory ({AI_TOOLS_INVENTORY.length} tools)
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <ScrollArea className="h-[600px]">
+                    <table className="w-full">
+                      <thead className="sticky top-0 bg-zinc-900 border-b border-gold/20">
+                        <tr>
+                          <th className="text-left p-4 text-xs font-semibold text-zinc-400 uppercase">Tool Name</th>
+                          <th className="text-left p-4 text-xs font-semibold text-zinc-400 uppercase">Route</th>
+                          <th className="text-left p-4 text-xs font-semibold text-zinc-400 uppercase">Navigation</th>
+                          <th className="text-left p-4 text-xs font-semibold text-zinc-400 uppercase">Status</th>
+                          <th className="text-left p-4 text-xs font-semibold text-zinc-400 uppercase">Edge Function</th>
+                          <th className="text-left p-4 text-xs font-semibold text-zinc-400 uppercase">Fix Needed</th>
+                          <th className="text-right p-4 text-xs font-semibold text-zinc-400 uppercase">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {AI_TOOLS_INVENTORY.map((tool) => (
+                          <tr 
+                            key={tool.name} 
+                            className={`border-b border-gold/10 hover:bg-gold/5 transition-colors ${tool.status === '404' ? 'bg-red-500/5' : tool.status === 'component_only' ? 'bg-orange-500/5' : ''}`}
+                          >
+                            <td className="p-4">
+                              <div className="font-medium text-white flex items-center gap-2">
+                                <Sparkles className="w-4 h-4 text-gold" />
+                                {tool.name}
+                              </div>
+                            </td>
+                            <td className="p-4">
+                              {tool.route ? (
+                                <span className="text-xs text-zinc-500 font-mono">{tool.route}</span>
+                              ) : (
+                                <span className="text-xs text-zinc-600 italic">N/A</span>
+                              )}
+                            </td>
+                            <td className="p-4">
+                              <span className="text-xs text-zinc-400">{tool.navPath}</span>
+                            </td>
+                            <td className="p-4">
+                              {getAIStatusBadge(tool.status)}
+                            </td>
+                            <td className="p-4">
+                              {tool.edgeFunction ? (
+                                <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 font-mono text-xs">
+                                  {tool.edgeFunction}
+                                </Badge>
+                              ) : (
+                                <span className="text-xs text-zinc-600">—</span>
+                              )}
+                            </td>
+                            <td className="p-4">
+                              {tool.fixNeeded ? (
+                                <div className="flex items-center gap-1">
+                                  <AlertCircle className="w-3 h-3 text-yellow-400" />
+                                  <span className="text-xs text-yellow-400">{tool.fixNeeded}</span>
+                                </div>
+                              ) : (
+                                <span className="text-xs text-green-400">None</span>
+                              )}
+                            </td>
+                            <td className="p-4 text-right">
+                              {tool.route && tool.status !== '404' ? (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  asChild
+                                  className="text-gold hover:text-gold hover:bg-gold/10"
+                                >
+                                  <Link to={tool.route} target="_blank">
+                                    <ExternalLink className="w-4 h-4 mr-1" />
+                                    Open
+                                  </Link>
+                                </Button>
+                              ) : tool.status === '404' ? (
+                                <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Route Missing</Badge>
+                              ) : (
+                                <span className="text-xs text-zinc-600">—</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+
+              {/* AI Legend */}
+              <div className="mt-6 p-4 rounded-lg bg-zinc-900/50 border border-gold/20">
+                <h3 className="text-sm font-semibold text-white mb-3">AI Tools Status Legend</h3>
+                <div className="flex flex-wrap gap-4 text-sm">
+                  <div className="flex items-center gap-2">
+                    <Badge className="bg-green-500/20 text-green-400 border-green-500/30">✅ Working</Badge>
+                    <span className="text-zinc-400">Fully functional</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">⚠️ Partial</Badge>
+                    <span className="text-zinc-400">Missing features</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge className="bg-red-500/20 text-red-400 border-red-500/30">❌ 404</Badge>
+                    <span className="text-zinc-400">Route not registered</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30">📦 Component Only</Badge>
+                    <span className="text-zinc-400">No route, needs embedding</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">🕒 Coming Soon</Badge>
+                    <span className="text-zinc-400">Placeholder UI</span>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </OwnerGuard>
