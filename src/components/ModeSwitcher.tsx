@@ -99,7 +99,7 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
       onClick={(e) => e.stopPropagation()} 
       onPointerDown={(e) => e.stopPropagation()}
     >
-      <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+      <DropdownMenu open={isOpen} onOpenChange={setIsOpen} modal={false}>
         <DropdownMenuTrigger asChild>
           <button
             disabled={isLoading}
@@ -128,12 +128,16 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
         
         <DropdownMenuContent 
           align="end" 
-          className="w-64 bg-white border border-zinc-200 shadow-xl rounded-xl p-1 z-[10001]"
+          className="w-72 bg-white border border-zinc-200 shadow-xl rounded-xl p-2 z-[10001]"
           sideOffset={5}
+          onCloseAutoFocus={(e) => e.preventDefault()}
         >
-          <div className="px-3 py-2 border-b border-zinc-100 mb-1">
-            <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
-              Switch Mode
+          <div className="px-3 py-2.5 border-b border-zinc-100 mb-2">
+            <p className="text-sm font-semibold text-zinc-700">
+              Select your mode
+            </p>
+            <p className="text-xs text-zinc-500 mt-0.5">
+              Choose how you want to use the platform
             </p>
           </div>
           

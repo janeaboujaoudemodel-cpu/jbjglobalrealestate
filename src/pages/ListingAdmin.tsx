@@ -158,8 +158,16 @@ const ListingAdmin = () => {
 
   if (checkingAdmin || checkingOwner) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center pt-28">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center pt-28 gap-6">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-10 h-10 animate-spin text-gold" />
+          <p className="text-zinc-400 text-sm">Verifying access permissions...</p>
+        </div>
+        <div className="w-80 space-y-3">
+          <div className="h-2 bg-zinc-800 rounded-full animate-pulse" />
+          <div className="h-2 bg-zinc-800 rounded-full animate-pulse w-3/4" />
+          <div className="h-2 bg-zinc-800 rounded-full animate-pulse w-1/2" />
+        </div>
       </div>
     );
   }
