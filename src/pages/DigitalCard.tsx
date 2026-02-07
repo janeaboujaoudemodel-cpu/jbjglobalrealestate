@@ -23,7 +23,7 @@ import jbjMonogramLightTransparent from '@/assets/jbj-monogram-light-transparent
 // CASING RULE: JBJ.AE, Contact@JBJ.AE - EXACTLY as specified
 const CONTACT_INFO = {
   // LOCKED: English name
-  name: "Jane Bou Jaoude",
+  name: "Jane bou Jaoude",
   // LOCKED: Arabic name (exact spelling from founder)
   nameArabic: "جاين بو جودة",
   // LOCKED: English title
