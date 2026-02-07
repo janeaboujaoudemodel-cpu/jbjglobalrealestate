@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AuthContext";
@@ -37,10 +37,12 @@ import {
   MessageSquare,
   RefreshCw,
   Download,
-  StickyNote
+  Calendar
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import LeadStatusBadge, { PIPELINE_STATUSES } from "@/components/crm/LeadStatusBadge";
+import InlineStatusSelect from "@/components/crm/InlineStatusSelect";
+import AddNoteDialog from "@/components/crm/AddNoteDialog";
 
 interface Lead {
   id: string;
@@ -81,6 +83,8 @@ export default function CRMLeadsInbox() {
   const [search, setSearch] = useState(searchParams.get('search') || '');
   const [statusFilter, setStatusFilter] = useState(searchParams.get('status') || 'all');
   const [sourceFilter, setSourceFilter] = useState(searchParams.get('source') || 'all');
+  const [dateStart, setDateStart] = useState(searchParams.get('date_start') || '');
+  const [dateEnd, setDateEnd] = useState(searchParams.get('date_end') || '');
   const [page, setPage] = useState(1);
   const [debouncedSearch, setDebouncedSearch] = useState(search);
 
@@ -96,12 +100,14 @@ export default function CRMLeadsInbox() {
     if (search) params.set('search', search);
     if (statusFilter !== 'all') params.set('status', statusFilter);
     if (sourceFilter !== 'all') params.set('source', sourceFilter);
+    if (dateStart) params.set('date_start', dateStart);
+    if (dateEnd) params.set('date_end', dateEnd);
     setSearchParams(params, { replace: true });
-  }, [search, statusFilter, sourceFilter, setSearchParams]);
+  }, [search, statusFilter, sourceFilter, dateStart, dateEnd, setSearchParams]);
 
   // Fetch leads with filters
   const { data: leadsData, isLoading, isFetching } = useQuery({
-    queryKey: ['crm-leads-inbox', debouncedSearch, statusFilter, sourceFilter, page],
+    queryKey: ['crm-leads-inbox', debouncedSearch, statusFilter, sourceFilter, dateStart, dateEnd, page],
     queryFn: async () => {
       let query = supabase
         .from('crm_leads')
@@ -120,6 +126,14 @@ export default function CRMLeadsInbox() {
       // Apply source filter
       if (sourceFilter !== 'all') {
         query = query.ilike('source', `%${sourceFilter}%`);
+      }
+
+      // Apply date range filter
+      if (dateStart) {
+        query = query.gte('created_at', `${dateStart}T00:00:00.000Z`);
+      }
+      if (dateEnd) {
+        query = query.lte('created_at', `${dateEnd}T23:59:59.999Z`);
       }
 
       // Pagination
@@ -146,10 +160,12 @@ export default function CRMLeadsInbox() {
     setSearch('');
     setStatusFilter('all');
     setSourceFilter('all');
+    setDateStart('');
+    setDateEnd('');
     setPage(1);
   };
 
-  const hasActiveFilters = search || statusFilter !== 'all' || sourceFilter !== 'all';
+  const hasActiveFilters = search || statusFilter !== 'all' || sourceFilter !== 'all' || dateStart || dateEnd;
 
   const handleRefresh = () => {
     queryClient.invalidateQueries({ queryKey: ['crm-leads-inbox'] });
@@ -160,7 +176,7 @@ export default function CRMLeadsInbox() {
     try {
       let query = supabase
         .from('crm_leads')
-        .select('full_name, email_lower, phone_e164, source, pipeline_stage, created_at, tags');
+        .select('full_name, email_lower, phone_e164, source, pipeline_stage, created_at, updated_at, tags');
 
       if (debouncedSearch) {
         query = query.or(`full_name.ilike.%${debouncedSearch}%,email_lower.ilike.%${debouncedSearch}%,phone_e164.ilike.%${debouncedSearch}%`);
@@ -171,6 +187,12 @@ export default function CRMLeadsInbox() {
       if (sourceFilter !== 'all') {
         query = query.ilike('source', `%${sourceFilter}%`);
       }
+      if (dateStart) {
+        query = query.gte('created_at', `${dateStart}T00:00:00.000Z`);
+      }
+      if (dateEnd) {
+        query = query.lte('created_at', `${dateEnd}T23:59:59.999Z`);
+      }
 
       const { data } = await query.order('created_at', { ascending: false });
       
@@ -179,7 +201,7 @@ export default function CRMLeadsInbox() {
         return;
       }
 
-      const headers = ['Name', 'Email', 'Phone', 'Source', 'Status', 'Created', 'Tags'];
+      const headers = ['Name', 'Email', 'Phone', 'Source', 'Status', 'Created', 'Last Activity', 'Tags'];
       const csvRows = [
         headers.join(','),
         ...data.map(lead => [
@@ -189,6 +211,7 @@ export default function CRMLeadsInbox() {
           lead.source || '',
           lead.pipeline_stage || '',
           lead.created_at ? format(new Date(lead.created_at), 'yyyy-MM-dd') : '',
+          lead.updated_at ? format(new Date(lead.updated_at), 'yyyy-MM-dd') : '',
           `"${(lead.tags || []).join(', ')}"`
         ].join(','))
       ];
@@ -262,58 +285,84 @@ export default function CRMLeadsInbox() {
         {/* Filters */}
         <Card className="bg-zinc-900/80 border-zinc-800 mb-6">
           <CardContent className="p-4">
-            <div className="flex flex-col md:flex-row gap-3">
-              {/* Search */}
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
-                <Input
-                  placeholder="Search by name, email, or phone..."
-                  value={search}
-                  onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                  className="pl-10 bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
-                />
+            <div className="flex flex-col gap-3">
+              {/* Row 1: Search + Status + Source */}
+              <div className="flex flex-col md:flex-row gap-3">
+                {/* Search */}
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                  <Input
+                    placeholder="Search by name, email, or phone..."
+                    value={search}
+                    onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+                    className="pl-10 bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
+                  />
+                </div>
+
+                {/* Status Filter */}
+                <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); setPage(1); }}>
+                  <SelectTrigger className="w-full md:w-[180px] bg-zinc-800 border-zinc-700 text-white">
+                    <SelectValue placeholder="Status" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-zinc-800 border-zinc-700">
+                    {STATUS_OPTIONS.map(opt => (
+                      <SelectItem key={opt.value} value={opt.value} className="text-white hover:bg-zinc-700">
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {/* Source Filter */}
+                <Select value={sourceFilter} onValueChange={(v) => { setSourceFilter(v); setPage(1); }}>
+                  <SelectTrigger className="w-full md:w-[180px] bg-zinc-800 border-zinc-700 text-white">
+                    <SelectValue placeholder="Source" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-zinc-800 border-zinc-700">
+                    {SOURCE_OPTIONS.map(opt => (
+                      <SelectItem key={opt.value} value={opt.value} className="text-white hover:bg-zinc-700">
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
-              {/* Status Filter */}
-              <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); setPage(1); }}>
-                <SelectTrigger className="w-full md:w-[180px] bg-zinc-800 border-zinc-700 text-white">
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent className="bg-zinc-800 border-zinc-700">
-                  {STATUS_OPTIONS.map(opt => (
-                    <SelectItem key={opt.value} value={opt.value} className="text-white hover:bg-zinc-700">
-                      {opt.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              {/* Row 2: Date Range */}
+              <div className="flex flex-col md:flex-row gap-3 items-center">
+                <div className="flex items-center gap-2 text-sm text-zinc-400">
+                  <Calendar className="h-4 w-4" />
+                  <span>Date range:</span>
+                </div>
+                <Input
+                  type="date"
+                  value={dateStart}
+                  onChange={(e) => { setDateStart(e.target.value); setPage(1); }}
+                  className="w-full md:w-[160px] bg-zinc-800 border-zinc-700 text-white"
+                  placeholder="Start date"
+                />
+                <span className="text-zinc-500">to</span>
+                <Input
+                  type="date"
+                  value={dateEnd}
+                  onChange={(e) => { setDateEnd(e.target.value); setPage(1); }}
+                  className="w-full md:w-[160px] bg-zinc-800 border-zinc-700 text-white"
+                  placeholder="End date"
+                />
 
-              {/* Source Filter */}
-              <Select value={sourceFilter} onValueChange={(v) => { setSourceFilter(v); setPage(1); }}>
-                <SelectTrigger className="w-full md:w-[180px] bg-zinc-800 border-zinc-700 text-white">
-                  <SelectValue placeholder="Source" />
-                </SelectTrigger>
-                <SelectContent className="bg-zinc-800 border-zinc-700">
-                  {SOURCE_OPTIONS.map(opt => (
-                    <SelectItem key={opt.value} value={opt.value} className="text-white hover:bg-zinc-700">
-                      {opt.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              {/* Clear Filters */}
-              {hasActiveFilters && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={clearFilters}
-                  className="text-zinc-400 hover:text-white"
-                >
-                  <X className="h-4 w-4 mr-1" />
-                  Clear
-                </Button>
-              )}
+                {/* Clear Filters */}
+                {hasActiveFilters && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={clearFilters}
+                    className="text-zinc-400 hover:text-white ml-auto"
+                  >
+                    <X className="h-4 w-4 mr-1" />
+                    Clear
+                  </Button>
+                )}
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -353,10 +402,12 @@ export default function CRMLeadsInbox() {
                     <TableHeader>
                       <TableRow className="border-zinc-800 hover:bg-transparent">
                         <TableHead className="text-zinc-400">Name</TableHead>
-                        <TableHead className="text-zinc-400">Contact</TableHead>
+                        <TableHead className="text-zinc-400">Phone</TableHead>
+                        <TableHead className="text-zinc-400">Email</TableHead>
                         <TableHead className="text-zinc-400">Source</TableHead>
                         <TableHead className="text-zinc-400">Status</TableHead>
                         <TableHead className="text-zinc-400">Created</TableHead>
+                        <TableHead className="text-zinc-400">Last Activity</TableHead>
                         <TableHead className="text-zinc-400 text-right">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -384,28 +435,32 @@ export default function CRMLeadsInbox() {
                               )}
                             </div>
                           </TableCell>
-                          <TableCell>
-                            <div className="flex flex-col gap-1 text-sm">
-                              {lead.email_lower && (
-                                <span className="text-zinc-400 truncate max-w-[200px]">{lead.email_lower}</span>
-                              )}
-                              {lead.phone_e164 && (
-                                <span className="text-zinc-500">{lead.phone_e164}</span>
-                              )}
-                            </div>
+                          <TableCell className="text-zinc-400 text-sm">
+                            {lead.phone_e164 || '—'}
+                          </TableCell>
+                          <TableCell className="text-zinc-400 text-sm truncate max-w-[180px]">
+                            {lead.email_lower || '—'}
                           </TableCell>
                           <TableCell>
-                            {lead.source && (
+                            {lead.source ? (
                               <Badge variant="secondary" className="bg-zinc-700 text-zinc-300">
                                 {lead.source}
                               </Badge>
+                            ) : (
+                              <span className="text-zinc-500">—</span>
                             )}
                           </TableCell>
-                          <TableCell>
-                            <LeadStatusBadge status={lead.pipeline_stage || 'new'} size="sm" />
+                          <TableCell onClick={(e) => e.stopPropagation()}>
+                            <InlineStatusSelect 
+                              leadId={lead.id} 
+                              currentStatus={lead.pipeline_stage || 'new'} 
+                            />
                           </TableCell>
                           <TableCell className="text-zinc-400 text-sm">
                             {formatDistanceToNow(new Date(lead.created_at), { addSuffix: true })}
+                          </TableCell>
+                          <TableCell className="text-zinc-400 text-sm">
+                            {formatDistanceToNow(new Date(lead.updated_at), { addSuffix: true })}
                           </TableCell>
                           <TableCell className="text-right">
                             <div className="flex items-center justify-end gap-1">
@@ -429,6 +484,10 @@ export default function CRMLeadsInbox() {
                                   <Mail className="h-4 w-4" />
                                 </Button>
                               )}
+                              <AddNoteDialog 
+                                leadId={lead.id} 
+                                leadName={lead.full_name} 
+                              />
                               <Button
                                 variant="ghost"
                                 size="icon"

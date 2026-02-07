@@ -4,9 +4,9 @@ import { useAuth } from "@/contexts/AuthContext";
 
 /**
  * OWNER_EMAIL - The single privileged identity
- * Set via environment variable or fallback to hardcoded owner email
+ * Set via environment variable ONLY - no fallback (fail closed)
  */
-const OWNER_EMAIL = import.meta.env.VITE_OWNER_EMAIL || "janeaboujaoudenails@gmail.com";
+const OWNER_EMAIL = import.meta.env.VITE_OWNER_EMAIL;
 
 interface OwnerGuardProps {
   children: ReactNode;
@@ -44,6 +44,12 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     return <Navigate to={`/auth?redirect=${redirectPath}`} replace />;
   }
 
+  // Fail closed if OWNER_EMAIL not configured
+  if (!OWNER_EMAIL) {
+    console.error('OWNER_EMAIL environment variable not configured');
+    return <Navigate to="/403" replace />;
+  }
+
   // AUTHENTICATED but NOT OWNER → AccessDenied
   const userEmail = user.email?.toLowerCase();
   const ownerEmail = OWNER_EMAIL.toLowerCase();
@@ -73,8 +79,13 @@ export function useIsOwner(): { isOwner: boolean; isLoading: boolean } {
     return { isOwner: false, isLoading: false };
   }
   
-  const ownerEmail = (import.meta.env.VITE_OWNER_EMAIL || "janeaboujaoudenails@gmail.com").toLowerCase();
-  const isOwner = user.email.toLowerCase() === ownerEmail;
+  const ownerEmail = import.meta.env.VITE_OWNER_EMAIL;
+  if (!ownerEmail) {
+    console.error('OWNER_EMAIL environment variable not configured');
+    return { isOwner: false, isLoading: false };
+  }
+  
+  const isOwner = user.email.toLowerCase() === ownerEmail.toLowerCase();
   
   return { isOwner, isLoading: false };
 }
