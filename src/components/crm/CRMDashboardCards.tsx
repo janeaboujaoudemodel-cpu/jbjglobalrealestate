@@ -251,22 +251,22 @@ const CRMDashboardCards = ({ userId, hasOwnerAccess }: CRMDashboardCardsProps) =
     <TooltipProvider>
       <div className="space-y-4">
         {/* Main Stats Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2 md:gap-3 overflow-hidden">
           {cards.map((card, index) => (
             <Tooltip key={index}>
               <TooltipTrigger asChild>
-                <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:shadow-[0_8px_25px_rgba(200,167,102,0.2)] transition-all cursor-help">
-                  <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-3">
-                    <CardTitle className="text-xs font-semibold text-black whitespace-nowrap">
+                <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:shadow-[0_8px_25px_rgba(200,167,102,0.2)] transition-all cursor-help overflow-hidden">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-2 md:px-3">
+                    <CardTitle className="text-xs font-semibold text-black truncate max-w-[70px] md:max-w-none">
                       {card.title}
                     </CardTitle>
                     <card.icon className={`h-4 w-4 ${card.color} flex-shrink-0`} />
                   </CardHeader>
-                  <CardContent className="px-3 pb-3">
-                    <div className="text-xl font-bold text-black">
+                  <CardContent className="px-2 md:px-3 pb-3">
+                    <div className="text-lg md:text-xl font-bold text-black truncate">
                       {loading ? "..." : card.value}
                     </div>
-                    <p className="text-[10px] text-zinc-600 mt-0.5 whitespace-nowrap">
+                    <p className="text-[10px] text-zinc-600 mt-0.5 truncate">
                       {loading ? "" : card.subValue}
                     </p>
                   </CardContent>

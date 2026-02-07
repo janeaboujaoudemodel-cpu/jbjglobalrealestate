@@ -312,6 +312,17 @@ All colors MUST be HSL.
    * ============================================================ */
 
   /* ============================================================
+   * GLOBAL TAB TRIGGER ACTIVE STATE (CHAMPAGNE GRADIENT)
+   * Use: className="tab-trigger-champagne text-black"
+   * Replaces: data-[state=active]:bg-gold
+   * ============================================================ */
+  .tab-trigger-champagne[data-state="active"] {
+    background: linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%);
+    border: 1px solid hsl(var(--gold) / 0.4);
+    color: #000;
+  }
+
+  /* ============================================================
    * GLOBAL FULL-SCREEN HERO SYSTEM (LOCKED)
    * Every hero section MUST occupy exactly 100% of viewport height
    * on ALL devices (desktop, tablet, mobile - portrait & landscape).

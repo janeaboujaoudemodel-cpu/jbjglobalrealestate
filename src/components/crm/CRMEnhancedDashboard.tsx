@@ -220,24 +220,24 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
   return (
     <div className="space-y-6">
       {/* Primary Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 overflow-hidden">
         {primaryCards.map((card, index) => (
-          <Card key={index} className="border-zinc-200 bg-white shadow-md">
+          <Card key={index} className="border-zinc-200 bg-white shadow-md overflow-hidden">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-semibold text-zinc-600">
+              <CardTitle className="text-sm font-semibold text-zinc-600 truncate">
                 {card.title}
               </CardTitle>
-              <div className={`p-2 rounded-lg ${card.bgColor}`}>
+              <div className={`p-2 rounded-lg flex-shrink-0 ${card.bgColor}`}>
                 <card.icon className={`h-5 w-5 ${card.color}`} />
               </div>
             </CardHeader>
             <CardContent>
               <div className="flex items-end justify-between">
-                <div>
-                  <div className="text-2xl font-bold text-zinc-900">
+                <div className="min-w-0 flex-1">
+                  <div className="text-xl md:text-2xl font-bold text-zinc-900 truncate">
                     {loading ? "..." : card.value}
                   </div>
-                  <p className="text-xs text-zinc-500 mt-1">
+                  <p className="text-xs text-zinc-500 mt-1 truncate">
                     {loading ? "" : card.subValue}
                   </p>
                 </div>
