@@ -37,20 +37,20 @@ const BusinessCardCamera = ({
   const [statusMessage, setStatusMessage] = useState('');
   const [cameraError, setCameraError] = useState<string | null>(null);
 
-  // Auto-start camera on component mount with retry logic
+  // NO auto-start - wait for explicit user click
+  // Clean up on unmount only
   useEffect(() => {
-    // Immediate camera start for better UX
-    const initTimer = setTimeout(() => {
-      if (!isCameraReady && !stream) {
-        startCamera();
-      }
-    }, 100);
-    
     return () => {
-      clearTimeout(initTimer);
-      stopCamera();
+      // Stop camera and detection on unmount
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+      if (detectionIntervalRef.current) {
+        clearInterval(detectionIntervalRef.current);
+        detectionIntervalRef.current = null;
+      }
     };
-  }, []);
+  }, [stream]);
 
   const startCamera = useCallback(async () => {
     setCameraError(null);
@@ -193,26 +193,26 @@ const BusinessCardCamera = ({
 
   // Auto-detection simulation (in real app, would use ML for card detection)
   const startAutoDetection = useCallback(() => {
-    if (detectionIntervalRef.current) return;
+    // Guard: don't start if already running or camera not ready
+    if (detectionIntervalRef.current || !isCameraReady) return;
     
     detectionIntervalRef.current = setInterval(() => {
-      if (videoRef.current && isCameraReady && !isProcessing) {
+      // Additional guard inside interval
+      if (videoRef.current && isCameraReady && !isProcessing && stream) {
         // Simulate card detection (in production, use TensorFlow.js or similar)
         // For now, we'll use visual cues to guide the user
         setDetectedCardCount(prev => prev >= 0 ? prev : 0);
       }
     }, 500);
-  }, [isCameraReady, isProcessing]);
+  }, [isCameraReady, isProcessing, stream]);
 
+  // Additional cleanup when stream changes
   useEffect(() => {
-    return () => {
-      if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-      }
-      if (detectionIntervalRef.current) {
-        clearInterval(detectionIntervalRef.current);
-      }
-    };
+    // If stream becomes null, clear detection interval
+    if (!stream && detectionIntervalRef.current) {
+      clearInterval(detectionIntervalRef.current);
+      detectionIntervalRef.current = null;
+    }
   }, [stream]);
 
   // Restart camera when facing mode changes
@@ -432,7 +432,7 @@ const BusinessCardCamera = ({
                   <Camera className="h-5 w-5" />
                   Open Camera
                 </Button>
-                <p className="text-xs text-zinc-400">Camera will open automatically...</p>
+                <p className="text-xs text-zinc-400">Click the button above to start scanning</p>
               </div>
             )}
             

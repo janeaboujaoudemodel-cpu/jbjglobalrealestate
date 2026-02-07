@@ -23,6 +23,11 @@ const VoiceSuite = lazy(() => import("./pages/toolkit/VoiceSuite"));
 const PhotoSuite = lazy(() => import("./pages/toolkit/PhotoSuite"));
 const PDFSuite = lazy(() => import("./pages/toolkit/PDFSuite"));
 const PropertySuite = lazy(() => import("./pages/toolkit/PropertySuite"));
+// NEW: Business Suite Pages
+const RealEstateSuite = lazy(() => import("./pages/business-suite/RealEstateSuite"));
+const BrokerSuite = lazy(() => import("./pages/business-suite/BrokerSuite"));
+const CreativeSuite = lazy(() => import("./pages/business-suite/CreativeSuite"));
+const ProductivitySuite = lazy(() => import("./pages/business-suite/ProductivitySuite"));
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
@@ -114,6 +119,9 @@ import AIVideoTourScriptPage from "./pages/AIVideoTourScriptPage";
 import AIContractReviewerPage from "./pages/AIContractReviewerPage";
 import AIDocumentGeneratorPage from "./pages/AIDocumentGeneratorPage";
 import MyAIHistory from "./pages/MyAIHistory";
+import AICallSummarizerPage from "./pages/AICallSummarizerPage";
+import MeetingCenter from "./pages/MeetingCenter";
+import VoiceAgentSettings from "./pages/VoiceAgentSettings";
 import IntellectualProperty from "./pages/IntellectualProperty";
 import Architecture from "./pages/services/Architecture";
 import InteriorDesign from "./pages/services/InteriorDesign";
@@ -448,6 +456,9 @@ const App = () => (
                 <Route path="/ai-video-tour-script" element={<AIVideoTourScriptPage />} />
                 <Route path="/ai-contract-reviewer" element={<BrokerGuard><AIContractReviewerPage /></BrokerGuard>} />
                 <Route path="/ai-document-generator" element={<AIDocumentGeneratorPage />} />
+                <Route path="/ai-call-summarizer" element={<BrokerGuard><AICallSummarizerPage /></BrokerGuard>} />
+                <Route path="/meeting-center" element={<BrokerGuard><MeetingCenter /></BrokerGuard>} />
+                <Route path="/voice-settings" element={<VoiceAgentSettings />} />
                 <Route path="/document-scanner" element={<ScanSignDocuments />} />
                 <Route path="/scan-sign" element={<Navigate to="/document-scanner" replace />} />
                 <Route path="/scan-sign-documents" element={<Navigate to="/document-scanner" replace />} />
@@ -574,6 +585,29 @@ const App = () => (
                   </Suspense>
                 } />
                 <Route path="/royal-tools" element={<Navigate to="/toolkit" replace />} />
+                
+                {/* Business Suite Routes */}
+                <Route path="/business-suite/real-estate" element={
+                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                    <RealEstateSuite />
+                  </Suspense>
+                } />
+                <Route path="/business-suite/broker" element={
+                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                    <BrokerGuard><BrokerSuite /></BrokerGuard>
+                  </Suspense>
+                } />
+                <Route path="/business-suite/creative" element={
+                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                    <CreativeSuite />
+                  </Suspense>
+                } />
+                <Route path="/business-suite/productivity" element={
+                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                    <ProductivitySuite />
+                  </Suspense>
+                } />
+                
                 {/* NEW: Master Suite Routes */}
                 <Route path="/toolkit/video-suite" element={
                   <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
