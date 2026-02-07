@@ -1,5 +1,5 @@
 import { SEOHead } from "@/components/SEOHead";
-import AIMeetingSummarizer from "@/components/ai-tools/AIMeetingSummarizer";
+import { AIMeetingSummarizerPremium } from "@/components/ai-tools/premium";
 
 const AIMeetingSummarizerPage = () => {
   return (
@@ -9,11 +9,7 @@ const AIMeetingSummarizerPage = () => {
         description="Automatically summarize meetings and extract action items with AI-powered analysis."
         canonicalPath="/ai-meeting-summarizer"
       />
-      <div className="min-h-screen bg-background py-8 md:py-12">
-        <div className="container mx-auto px-4 max-w-5xl">
-          <AIMeetingSummarizer />
-        </div>
-      </div>
+      <AIMeetingSummarizerPremium />
     </>
   );
 };
