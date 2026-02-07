@@ -543,17 +543,17 @@ const Footer = () => {
           {/* Premium Champagne Inner Layer - Wraps Navigation + Tools + Contact - Fills to gold border */}
           <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] m-1 overflow-hidden">
             
-            {/* Navigation Grid Section */}
-            <div className="grid grid-cols-2 lg:grid-cols-4">
+            {/* Navigation Grid Section - 2 Aligned Rows of 4 Columns Each */}
             
-            {/* Column 1: Properties + Services */}
-            <div className="p-2 sm:p-3 md:p-5 border-r border-b lg:border-b-0 border-gold/20">
-              <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
-                {t('footer.properties') || 'Properties'}
-              </h4>
-              {/* ALIGNED: Same min-height as Column 2's Investor Hub section */}
-              <div className="min-h-[72px] sm:min-h-[88px] md:min-h-[110px] mb-3 sm:mb-4 md:mb-6">
-                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
+            {/* ROW 1: Properties | Services | Guides | About */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 border-b border-gold/20">
+              
+              {/* Row 1, Col 1: Properties */}
+              <div className="p-2 sm:p-3 md:p-5 border-r border-gold/20">
+                <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
+                  {t('footer.properties') || 'Properties'}
+                </h4>
+                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 min-h-[100px] sm:min-h-[120px] md:min-h-[160px]">
                   {propertiesLinks.map((link) => (
                     <li key={link.href}>
                       <Link
@@ -567,12 +567,13 @@ const Footer = () => {
                 </ul>
               </div>
               
-              <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
-                Sell
-              </h4>
-              <div className="min-h-[72px] sm:min-h-[88px] md:min-h-[110px] mb-3 sm:mb-4 md:mb-6">
-                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
-                  {sellLinks.map((link) => (
+              {/* Row 1, Col 2: Services (MOVED UP from Row 2) */}
+              <div className="p-2 sm:p-3 md:p-5 border-r border-gold/20 border-b lg:border-b-0">
+                <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
+                  {t('footer.servicesSection') || 'Services'}
+                </h4>
+                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 min-h-[100px] sm:min-h-[120px] md:min-h-[160px]">
+                  {servicesLinks.slice(0, 7).map((link) => (
                     <li key={link.href}>
                       <Link
                         to={link.href}
@@ -585,55 +586,12 @@ const Footer = () => {
                 </ul>
               </div>
               
-              <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
-                {t('footer.servicesSection') || 'Services'}
-              </h4>
-              <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
-                {servicesLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      to={link.href}
-                      className="text-zinc-700 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            {/* Column 2: Investor Hub + Broker Hub */}
-            <div className="p-2 sm:p-3 md:p-5 border-b lg:border-b-0 lg:border-r border-gold/20">
-              <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
-                {t('footer.investorHub') || 'Investor Hub'}
-              </h4>
-              {/* ALIGNED: Same min-height as Column 1's Properties section */}
-              <div className="min-h-[72px] sm:min-h-[88px] md:min-h-[110px] mb-3 sm:mb-4 md:mb-6">
-                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
-                  {investorHubLinks.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        to={link.href}
-                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              
-              {/* Broker Hub section REMOVED - Footer is role-agnostic */}
-            </div>
-
-            {/* Column 3: Guides + Market Intelligence */}
-            <div className="p-2 sm:p-3 md:p-5 border-r border-gold/20">
-              <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
-                {t('footer.guides') || 'Guides'}
-              </h4>
-              {/* ALIGNED: Same min-height as Column 4's About section */}
-              <div className="min-h-[120px] sm:min-h-[148px] md:min-h-[200px] mb-3 sm:mb-4 md:mb-6">
-                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
+              {/* Row 1, Col 3: Guides */}
+              <div className="p-2 sm:p-3 md:p-5 border-r border-gold/20">
+                <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
+                  {t('footer.guides') || 'Guides'}
+                </h4>
+                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 min-h-[100px] sm:min-h-[120px] md:min-h-[160px]">
                   {guidesLinks.map((link) => (
                     <li key={link.href}>
                       <Link
@@ -647,31 +605,12 @@ const Footer = () => {
                 </ul>
               </div>
               
-              <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
-                Market Intelligence
-              </h4>
-              <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
-                {marketIntelLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      to={link.href}
-                      className="text-zinc-700 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Column 4: About + Careers */}
-            <div className="p-2 sm:p-3 md:p-5">
-              <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
-                About
-              </h4>
-              {/* ALIGNED: Same min-height as Column 3's Guides section */}
-              <div className="min-h-[120px] sm:min-h-[148px] md:min-h-[200px] mb-3 sm:mb-4 md:mb-6">
-                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
+              {/* Row 1, Col 4: About */}
+              <div className="p-2 sm:p-3 md:p-5">
+                <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
+                  About
+                </h4>
+                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 min-h-[100px] sm:min-h-[120px] md:min-h-[160px]">
                   {aboutLinks.map((link) => (
                     <li key={link.href}>
                       <Link
@@ -684,40 +623,103 @@ const Footer = () => {
                   ))}
                 </ul>
               </div>
-              
-              <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
-                Careers
-              </h4>
-              <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 mb-4 sm:mb-6">
-                {careerLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      to={link.href}
-                      className="text-zinc-700 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-
-              <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
-                Legal
-              </h4>
-              <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
-                {legalLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      to={link.href}
-                      className="text-zinc-700 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
             </div>
-          </div>
+
+            {/* ROW 2: Sell | Investor Hub | Market Intelligence | Careers + Legal */}
+            <div className="grid grid-cols-2 lg:grid-cols-4">
+              
+              {/* Row 2, Col 1: Sell */}
+              <div className="p-2 sm:p-3 md:p-5 border-r border-gold/20">
+                <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
+                  Sell
+                </h4>
+                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 min-h-[80px] sm:min-h-[100px] md:min-h-[120px]">
+                  {sellLinks.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        to={link.href}
+                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              {/* Row 2, Col 2: Investor Hub (MOVED DOWN from Row 1) */}
+              <div className="p-2 sm:p-3 md:p-5 border-r border-gold/20 border-t lg:border-t-0">
+                <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
+                  {t('footer.investorHub') || 'Investor Hub'}
+                </h4>
+                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 min-h-[80px] sm:min-h-[100px] md:min-h-[120px]">
+                  {investorHubLinks.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        to={link.href}
+                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              {/* Row 2, Col 3: Market Intelligence */}
+              <div className="p-2 sm:p-3 md:p-5 border-r border-gold/20">
+                <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
+                  Market Intelligence
+                </h4>
+                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 min-h-[80px] sm:min-h-[100px] md:min-h-[120px]">
+                  {marketIntelLinks.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        to={link.href}
+                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              {/* Row 2, Col 4: Careers + Legal */}
+              <div className="p-2 sm:p-3 md:p-5">
+                <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
+                  Careers
+                </h4>
+                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 mb-4 sm:mb-5 md:mb-6">
+                  {careerLinks.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        to={link.href}
+                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+
+                <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
+                  Legal
+                </h4>
+                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
+                  {legalLinks.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        to={link.href}
+                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
 
           {/* Internal Divider */}
           <div className="h-[2px] bg-gradient-to-r from-gold/20 via-gold/80 to-gold/20 mx-6" />
